@@ -64,8 +64,11 @@ Deferred until missed in real use: conditionals, history recall
 
 ## The wildcard manager
 
-Libraries are plain text files (one entry per line) in `library/`. The manager
-works on them with an LLM:
+Libraries are YAML files in `library/`: a list of entries, each optionally
+carrying tags and a static weight, so one library can serve tag-based picks
+(AB Wildcard style) as well as plain random ones. A bare list of strings is
+valid YAML too, so the simple case stays simple. The manager works on them with
+an LLM:
 
 - **Missing wildcard:** a template references `__weather__` and no library
   exists, so the LLM generates one *from the template's context* and marks it
@@ -82,10 +85,11 @@ Rules:
   Apply or Discard. Every applied change can be undone.
 - Learned weights move with their entries on rename and move (a loved lynx stays
   loved in `__feline__`).
-- Default models are local, loaded with transformers from
-  `ComfyUI/models/LLM` (currently Qwen3.5-4B, Qwen3.5-2B, Qwen3-VL-4B). List
-  operations are small structured tasks, and Qwen3.5-2B should be enough. A
-  remote model is optional, never required.
+- Models are configurable per role (library manager, `>` enhancement).
+  Defaults are local, loaded with transformers from `ComfyUI/models/LLM`
+  (currently Qwen3.5-4B, Qwen3.5-2B, Qwen3-VL-4B). List operations are small
+  structured tasks, and Qwen3.5-2B should be enough. A remote model is
+  optional, never required.
 
 ## Three layers
 
@@ -102,8 +106,11 @@ capability ceiling stalls for good.
 
 ## Data formats
 
-- `library/<name>.txt`: one entry per line. Generated lists carry a header
-  comment naming the model and date.
+- `library/<name>.yaml`: a list of entries; an entry is a string or
+  `{value, tags, weight}`. Generated lists carry a header comment naming the
+  model and date.
+- `orrery.yaml`: configuration, including the model per role
+  (`models.library`, `models.enhance`).
 - `weights.json`: `{"__animal__=fox": 1.6, …}`, multipliers on top of static
   weights; default 1.0, floor 0.15.
 - `galaxy.jsonl`: one line per image:
@@ -136,10 +143,13 @@ Re-rating reverts the previous delta first. **No numeric rating scale, ever.**
   in the ComfyUI frontend, DynamicPromptComposer, RandomTagWeights, CreaPrompt.
   None of them records picks per image or learns from ratings.
 
+## Decisions (2026-09-23)
+
+- Library format: **YAML** with optional tags and weights.
+- LLM per role (library manager, enhancement): **configurable**.
+
 ## Open questions
 
-- Library format: plain `.txt` only, or also YAML with tags (AB Wildcard style)?
-- Should layer 2 also accept prompts from Pyro's HF prompt datasets as a
-  library source (sampling real human prompts)?
-- Enhancement (`>`): same local model as the manager, or a dedicated prompt
-  enhancer?
+- Should real prompt corpora (HuggingFace prompt datasets such as
+  `xzuyn/Stable-Diffusion-Prompts-Deduped-2.008M`) be usable as a library
+  source, sampling whole human-written prompts instead of composing them?
