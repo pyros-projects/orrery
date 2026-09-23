@@ -133,12 +133,13 @@ def backend_for(home, role: str) -> Backend:
     kind = cfg.get("backend")
     if os.environ.get("ORRERY_FORCE_FAKE_LLM") and kind != "fake":
         raise RuntimeError(f"tests force the fake LLM backend; refusing '{kind}'")
+    temperature = float(cfg.get("temperature", 0.3))  # low: edits need reliable judgement
     if kind == "fake":
         return FakeBackend(cfg.get("replies") or [], name=cfg.get("name", "fake"))
     if kind == "openai":
         return OpenAIBackend(cfg["base_url"], cfg["model"], cfg.get("api_key_env"),
-                             name=cfg.get("name"))
+                             temperature=temperature, name=cfg.get("name"))
     if kind == "transformers":
         return TransformersBackend(cfg["path"], cfg.get("device", "auto"),
-                                   int(cfg.get("max_new_tokens", 768)), name=cfg.get("name"))
+                                   int(cfg.get("max_new_tokens", 768)), temperature, cfg.get("name"))
     raise RuntimeError(f"unknown backend '{kind}' for '{role}' (transformers, openai, fake)")

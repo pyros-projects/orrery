@@ -120,5 +120,46 @@ def test_propose_edit_sends_entries_and_instruction(lib_home):
 
 def test_edit_prompt_describes_the_operation_schema(lib_home):
     prompt = edit_prompt(lib_home.libraries()["animal"], ["style"], "make it specific")
-    for word in ("remove", "add", "rename", "new_lists", "note", "JSON"):
+    for word in ("remove", "add", "rename", "note", "JSON"):
         assert word in prompt
+
+
+def test_parse_ops_reads_per_entry_decisions(lib_home):
+    lib = lib_home.libraries()["animal"]
+    reply = json.dumps({"decisions": [
+        {"entry": "fox", "action": "rename", "to": "arctic fox"},
+        {"entry": "lynx", "action": "move", "to": "feline"},
+        {"entry": "tabby cat", "action": "move", "to": "feline"},
+        {"entry": "heron", "action": "keep"},
+    ], "add": ["ibex"], "note": "moved the cats"})
+    ops = parse_ops(reply, lib)
+    assert ops.rename == [("fox", "arctic fox")]
+    assert ops.remove == ["lynx", "tabby cat"]
+    assert ops.new_lists == [("feline", ["lynx", "tabby cat"])]
+    assert ops.add == ["ibex"] and ops.note == "moved the cats"
+
+
+def test_per_entry_decision_on_unknown_entry_is_rejected(lib_home):
+    lib = lib_home.libraries()["animal"]
+    with pytest.raises(InvalidProposal, match="wolf"):
+        parse_ops('{"decisions": [{"entry": "wolf", "action": "remove"}]}', lib)
+
+
+def test_edit_prompt_asks_for_a_decision_per_entry(lib_home):
+    prompt = edit_prompt(lib_home.libraries()["animal"], [], "move the cats")
+    for word in ("decisions", "every entry", "keep", "remove", "move", "rename", "add"):
+        assert word in prompt
+
+
+def test_edit_prompt_asks_for_a_criterion_before_the_decisions(lib_home):
+    prompt = edit_prompt(lib_home.libraries()["animal"], [], "move the cats")
+    assert "criterion" in prompt
+    assert prompt.index('"criterion"') < prompt.index('"decisions"')
+
+
+def test_criterion_is_parsed_and_shown_in_the_diff(lib_home):
+    lib = lib_home.libraries()["animal"]
+    ops = parse_ops('{"criterion": "members of the cat family", '
+                    '"decisions": [{"entry": "lynx", "action": "remove"}]}', lib)
+    assert ops.criterion == "members of the cat family"
+    assert "understood as: members of the cat family" in diff_text("animal", ops)

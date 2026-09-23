@@ -27,6 +27,7 @@ class Ops:
     rename: list[tuple[str, str]] = field(default_factory=list)
     new_lists: list[tuple[str, list[str]]] = field(default_factory=list)
     note: str = ""
+    criterion: str = ""
 
     def empty(self) -> bool:
         return not (self.remove or self.add or self.rename or self.new_lists)
@@ -50,20 +51,26 @@ def more_prompt(lib: Library, n: int) -> str:
 
 
 def edit_prompt(lib: Library, other_lists: list[str], instruction: str) -> str:
+    """Ask for one decision per entry: small local models classify far better than they plan."""
     others = ", ".join(f"__{n}__" for n in other_lists) or "none"
     return (
-        "You edit wildcard lists for an image and video prompt generator.\n"
+        "You edit a wildcard list for an image and video prompt generator.\n"
         f"List: __{lib.name}__\nEntries: {json.dumps(lib.values(), ensure_ascii=False)}\n"
         f"Other lists: {others}\n"
         f"Instruction from the user (any language): {json.dumps(instruction, ensure_ascii=False)}\n\n"
+        "First write the criterion: the instruction restated as one precise English rule that "
+        "says which entries it selects. Then go through every entry of the list, one by one, and "
+        "decide what the instruction means for it:\n"
+        '- "keep": the instruction does not apply to this entry\n'
+        '- "remove": delete the entry\n'
+        '- "move": take the entry out of this list and put it into the list named in "to" '
+        "(snake_case)\n"
+        '- "rename": replace the entry with the text in "to"\n'
+        "Copy every entry exactly as written in Entries. Brand-new entries go only into \"add\".\n\n"
         "Reply with ONLY a JSON object of this shape:\n"
-        '{"remove": [entries to delete, copied exactly from Entries], '
-        '"add": [new short entries for this list], '
-        '"rename": [{"from": "exact existing entry", "to": "new entry"}], '
-        '"new_lists": [{"name": "snake_case_name", "entries": ["..."]}], '
-        '"note": "one short English sentence describing the change"}\n'
-        "Use empty arrays for unused fields. When the user asks to move entries into a new list, "
-        "put them in both remove and new_lists. Entries are short noun phrases, no numbering.")
+        '{"criterion": "one precise English rule", "decisions": [{"entry": "exact entry", "action": "keep|remove|move|rename", '
+        '"to": "target list or new text"}], "add": ["brand-new entry"], '
+        '"note": "one short English sentence describing the change"}')
 
 
 # --- parsing model output -------------------------------------------------------------------
@@ -108,28 +115,50 @@ def parse_ops(text: str, lib: Library) -> Ops:
             unknown.append(str(raw))
         return found
 
+    def text(raw) -> str:
+        return " ".join(str(raw or "").split())[:MAX_ENTRY]
+
     remove = [e for e in (existing(v) for v in data.get("remove") or []) if e]
     rename = []
+    moved: dict[str, list[str]] = {}
     for pair in data.get("rename") or []:
-        if isinstance(pair, dict) and str(pair.get("to", "")).strip():
+        if isinstance(pair, dict) and text(pair.get("to")):
             old = existing(pair.get("from", ""))
             if old:
-                rename.append((old, " ".join(str(pair["to"]).split())[:MAX_ENTRY]))
+                rename.append((old, text(pair["to"])))
+    for d in data.get("decisions") or []:
+        action = str(d.get("action", "keep")).strip().lower() if isinstance(d, dict) else "keep"
+        if action == "keep":
+            continue
+        entry = existing(d.get("entry", ""))
+        target = list_name(d.get("to")) if action == "move" else text(d.get("to"))
+        if not entry or action not in ("remove", "move", "rename"):
+            continue
+        if action == "remove":
+            remove.append(entry)
+        elif action == "move" and target and target != lib.name:
+            remove.append(entry)
+            moved.setdefault(target, []).append(entry)
+        elif action == "rename" and target:
+            rename.append((entry, target))
     if unknown:
         raise InvalidProposal(f"the model referenced entries that are not in __{lib.name}__: "
                               + ", ".join(repr(u) for u in unknown))
-    new_lists = []
+    new_lists = list(moved.items())
     for raw in data.get("new_lists") or []:
         if isinstance(raw, dict):
             name, entries = list_name(raw.get("name")), _clean(raw.get("entries"))
             if name and entries and name != lib.name:
                 new_lists.append((name, entries))
     add = [a for a in _clean(data.get("add")) if a.lower() not in index]
-    return Ops(remove, add, rename, new_lists, str(data.get("note") or "")[:200])
+    return Ops(list(dict.fromkeys(remove)), add, rename, new_lists, str(data.get("note") or "")[:200],
+               str(data.get("criterion") or "")[:300])
 
 
 def diff_text(name: str, ops: Ops) -> str:
     lines = [f"__{name}__"]
+    if ops.criterion:
+        lines.append(f"understood as: {ops.criterion}")
     lines += [f"  - {v}" for v in ops.remove]
     lines += [f"  + {v}" for v in ops.add]
     lines += [f"  ~ {old} → {new}" for old, new in ops.rename]

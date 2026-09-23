@@ -61,3 +61,12 @@ def test_openai_backend_talks_to_a_compatible_server():
     assert seen["path"] == "/v1/chat/completions"
     assert seen["body"]["model"] == "qwen"
     assert seen["body"]["messages"][-1] == {"role": "user", "content": "make a list"}
+
+
+def test_temperature_comes_from_config_with_a_sober_default(home, monkeypatch):
+    monkeypatch.delenv("ORRERY_FORCE_FAKE_LLM")
+    (home / "orrery.yaml").write_text(
+        "models:\n  library: {backend: transformers, path: /m}\n"
+        "  enhance: {backend: openai, base_url: 'http://x/v1', model: q, temperature: 0.9}\n")
+    assert backend_for(Home(home), "library").temperature == 0.3
+    assert backend_for(Home(home), "enhance").temperature == 0.9

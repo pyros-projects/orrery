@@ -29,3 +29,14 @@ addopts = "-q"
 
 [tool.ruff]
 line-length = 100
+
+[project.optional-dependencies]
+local = ["transformers>=5.9", "torch>=2.12", "accelerate>=1.14"]
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu130" }]
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
