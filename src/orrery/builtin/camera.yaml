@@ -1,0 +1,14 @@
+meta: {source: "MiniMax H3 prompt guide camera vocabulary", builtin: true}
+entries:
+  - push in, small, slow
+  - pull out, small, slow
+  - pan right, large, fast
+  - pan left, small, slow
+  - truck left, small, slow
+  - truck right, small, slow
+  - tilt up, slow
+  - pedestal up, small, slow
+  - zoom in, small, fast
+  - arc, slow
+  - tracking, slow
+  - static

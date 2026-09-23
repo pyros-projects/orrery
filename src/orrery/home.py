@@ -13,6 +13,8 @@ import yaml
 
 from orrery.library import Library, load_libraries
 
+BUILTIN_DIR = Path(__file__).parent / "builtin"
+
 
 @dataclass(frozen=True)
 class Home:
@@ -39,7 +41,8 @@ class Home:
         return self.root / "orrery.yaml"
 
     def libraries(self) -> dict[str, Library]:
-        return load_libraries(self.library_dir)
+        """Built-in libraries (H3 camera, styles, instruments), overridden by the user's files."""
+        return {**load_libraries(BUILTIN_DIR), **load_libraries(self.library_dir)}
 
     def weights(self) -> dict[str, float]:
         if not self.weights_path.exists():

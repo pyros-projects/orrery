@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 from orrery.dsl import MissingLibrary, expand_batch
+from orrery.h3 import compile_scene
 from orrery.home import resolve_home
 
 
@@ -35,6 +36,28 @@ def _cmd_expand(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_compile(args: argparse.Namespace) -> int:
+    home = resolve_home(args.home)
+    try:
+        result = compile_scene(_read_template(args.scene), args.seed, home.libraries(),
+                               home.weights(), target=args.target)
+    except MissingLibrary as err:
+        print(f"orrery: {err}", file=sys.stderr)
+        return 2
+    if args.json:
+        print(json.dumps({
+            "seed": args.seed,
+            "text": result.text,
+            "picks": {p.label: p.value for p in result.picks},
+            "lint": [{"severity": i.severity, "message": i.message} for i in result.lint],
+        }, ensure_ascii=False, indent=2))
+    else:
+        print(result.text)
+    for issue in result.lint:
+        print(f"{issue.severity}: {issue.message}", file=sys.stderr)
+    return 1 if any(i.severity == "error" for i in result.lint) else 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="orrery", description=__doc__)
     parser.add_argument("--home", help="orrery home (default: $ORRERY_HOME or ~/.orrery)")
@@ -46,6 +69,13 @@ def build_parser() -> argparse.ArgumentParser:
     ex.add_argument("-n", type=int, default=1, help="number of consecutive seeds")
     ex.add_argument("--json", action="store_true")
     ex.set_defaults(func=_cmd_expand)
+
+    co = sub.add_parser("compile", help="compile a screenplay (.orr) for a target model")
+    co.add_argument("scene", help="screenplay file or text")
+    co.add_argument("--target", choices=["h3-base", "flat"], default="h3-base")
+    co.add_argument("--seed", type=int, default=0)
+    co.add_argument("--json", action="store_true")
+    co.set_defaults(func=_cmd_compile)
     return parser
 
 
