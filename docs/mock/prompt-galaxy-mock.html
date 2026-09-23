@@ -1,0 +1,1077 @@
+<title>Prompt Galaxy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  :root {
+    color-scheme: dark;
+    --ground: #11121b;
+    --panel: #1a1c29;
+    --panel-2: #222537;
+    --line: #2f3348;
+    --ink: #e7e5f1;
+    --muted: #9391ab;
+    --faint: #5f5d78;
+    --star: #f2b84b;
+    --pick: #5cc8c2;
+    --brace: #b494f5;
+    --enh: #f07aa0;
+    --love: #f06c8e;
+    --like: #f2b84b;
+    --nope: #7c8198;
+    --hate: #c2413a;
+    --display: "Unbounded", "Trebuchet MS", sans-serif;
+    --body: "Figtree", "Segoe UI", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Menlo, monospace;
+  }
+  html, body { background: var(--ground); color: var(--ink); }
+  body { font-family: var(--body); font-size: 15px; line-height: 1.5; padding-inline: 20px; padding-block: 24px 48px; }
+  .wrap { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
+  h1, h2, h3 { text-wrap: balance; margin: 0; }
+  button, input, textarea { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--star); outline-offset: 2px; }
+
+  header.top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; }
+  .mark { font-family: var(--display); font-weight: 700; font-size: clamp(26px, 4vw, 40px); letter-spacing: -0.01em; line-height: 1; }
+  .mark span { color: var(--star); }
+  .sub { color: var(--muted); max-width: 60ch; margin-top: 8px; }
+  .mockflag { font-family: var(--mono); font-size: 12px; color: var(--muted); border: 1px dashed var(--line); padding: 6px 10px; border-radius: 6px; }
+
+  nav.tabs { display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid var(--line); }
+  nav.tabs button { background: none; border: 0; border-bottom: 2px solid transparent; padding: 10px 14px; cursor: pointer; color: var(--muted); font-weight: 600; display: flex; gap: 8px; align-items: baseline; }
+  nav.tabs button .n { font-family: var(--mono); font-size: 12px; color: var(--faint); }
+  nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--star); }
+  nav.tabs button[aria-selected="true"] .n { color: var(--star); }
+
+  .note { border: 1px dashed #4a4561; border-radius: 8px; padding: 10px 14px; color: #c9c5dd; font-size: 14px; background: #171826; max-width: 80ch; }
+  .note b { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--star); margin-right: 8px; font-weight: 600; }
+
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+  .label { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+  /* ---------- Layer 1: DSL ---------- */
+  .dsl { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 16px; }
+  @media (max-width: 860px) { .dsl { grid-template-columns: 1fr; } }
+  .editor { display: flex; flex-direction: column; gap: 12px; }
+  textarea#tpl { width: 100%; box-sizing: border-box; min-height: 150px; resize: vertical; background: #0d0e16; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-family: var(--mono); font-size: 13.5px; line-height: 1.6; color: var(--ink); }
+  .tokens { font-family: var(--mono); font-size: 13px; line-height: 1.7; background: #0d0e16; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; white-space: pre-wrap; word-break: break-word; }
+  .t-var { color: var(--pick); } .t-lib { color: var(--star); } .t-brace { color: var(--brace); } .t-enh { color: var(--enh); } .t-par { color: var(--faint); }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .controls label { display: flex; gap: 6px; align-items: center; color: var(--muted); font-size: 13px; }
+  .controls input[type=number] { width: 84px; background: #0d0e16; border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; font-family: var(--mono); font-size: 13px; }
+  .btn { background: var(--panel-2); border: 1px solid var(--line); border-radius: 7px; padding: 7px 12px; cursor: pointer; font-weight: 600; font-size: 14px; }
+  .btn:hover { border-color: #4a4f6c; }
+  .btn.primary { background: var(--star); color: #1d1606; border-color: var(--star); }
+  .cheat { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .cheat td { padding: 5px 8px; border-top: 1px solid var(--line); vertical-align: top; }
+  .cheat td:first-child { font-family: var(--mono); white-space: nowrap; }
+  .results { display: flex; flex-direction: column; gap: 10px; }
+  .res { background: #151623; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+  .res .top { display: flex; gap: 10px; align-items: baseline; }
+  .seed { font-family: var(--mono); font-size: 12px; color: var(--star); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .res .text { font-size: 14px; }
+  .res .enhanced { font-size: 13px; color: var(--muted); border-left: 2px solid var(--enh); padding-left: 8px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .chip { font-family: var(--mono); font-size: 11.5px; border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; background: #1c1e2d; color: #cfcce2; }
+  .chip i { font-style: normal; color: var(--muted); }
+  .chip.on { border-color: var(--star); color: var(--star); }
+  button.chip { cursor: pointer; }
+  pre.json { font-family: var(--mono); font-size: 12px; background: #0d0e16; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; overflow-x: auto; margin: 0; color: #cfcce2; }
+
+  /* ---------- Layer 2: ComfyUI ---------- */
+  .graphwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+  .graph { position: relative; width: 1080px; height: 520px; background-color: #1b1b1f; background-image: radial-gradient(#2c2c33 1px, transparent 1px); background-size: 18px 18px; }
+  .graph svg { position: absolute; inset: 0; pointer-events: none; }
+  .node { position: absolute; background: #353535; border: 1px solid #4b4b4b; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,.35); font-size: 12.5px; color: #ddd; }
+  .node .hd { padding: 6px 10px; border-radius: 8px 8px 0 0; background: #2a2a2a; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+  .node .hd .dot { width: 9px; height: 9px; border-radius: 50%; background: #777; }
+  .node.gal { border-color: var(--star); }
+  .node.gal .hd { background: #3b3220; color: #ffe2a8; }
+  .node.gal .hd .dot { background: var(--star); }
+  .node .io { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; padding: 6px 0; }
+  .node .in, .node .out { display: flex; flex-direction: column; gap: 5px; }
+  .node .out { align-items: flex-end; }
+  .sock { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: #bbb; white-space: nowrap; }
+  .sock .s { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  .in .sock { margin-left: -5px; } .out .sock { margin-right: -5px; flex-direction: row-reverse; }
+  .w { margin: 4px 10px; background: #222; border-radius: 6px; padding: 4px 8px; display: flex; justify-content: space-between; gap: 10px; font-size: 11.5px; color: #aaa; }
+  .w b { color: #eee; font-weight: 500; font-family: var(--mono); font-size: 11px; }
+  .w.area { display: block; font-family: var(--mono); font-size: 10.5px; line-height: 1.5; color: #d9d2bd; white-space: pre-wrap; max-height: 104px; overflow: hidden; }
+  .c-str { background: #7ab85c; } .c-picks { background: var(--star); } .c-cond { background: #e0a14c; } .c-model { background: #b39ddb; } .c-clip { background: #f3d36b; } .c-vae { background: #ff6e6e; } .c-lat { background: #ff9cf9; } .c-img { background: #64b5f6; }
+
+  /* ---------- Layer 3: Galaxy ---------- */
+  .gal { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .gal { grid-template-columns: 1fr; } }
+  .side { display: flex; flex-direction: column; gap: 14px; }
+  .fam { display: flex; flex-direction: column; gap: 4px; }
+  .fam h3 { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--star); margin-bottom: 4px; word-break: break-all; }
+  .facet { display: grid; grid-template-columns: minmax(0, 1fr) 54px 30px; gap: 8px; align-items: center; background: none; border: 0; padding: 3px 4px; border-radius: 5px; cursor: pointer; text-align: left; font-size: 13px; }
+  .facet:hover { background: #22253a; }
+  .facet.on { background: #2b2640; outline: 1px solid var(--brace); }
+  .facet .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bar { height: 6px; background: #2a2d40; border-radius: 3px; overflow: hidden; }
+  .bar > span { display: block; height: 100%; background: var(--pick); border-radius: 3px; transition: width .35s ease; }
+  .facet .ct { font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+  .stats { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: baseline; }
+  .stat { font-size: 13px; color: var(--muted); }
+  .stat b { color: var(--ink); font-family: var(--mono); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .region { color: var(--love); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+  .card { background: #151623; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; display: flex; flex-direction: column; }
+  .card[data-r="love"] { border-color: var(--love); } .card[data-r="like"] { border-color: var(--like); } .card[data-r="nope"] { opacity: .62; } .card[data-r="hate"] { opacity: .4; border-color: var(--hate); }
+  .card canvas { width: 100%; aspect-ratio: 4 / 3; display: block; max-width: 100%; }
+  .card .meta { padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; }
+  .card .ptxt { font-size: 12px; color: #c4c1d8; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .rate { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
+  .rate button { background: none; border: 0; padding: 7px 0; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--muted); }
+  .rate button + button { border-left: 1px solid var(--line); }
+  .rate button[aria-pressed="true"][data-v="love"] { color: #fff; background: var(--love); }
+  .rate button[aria-pressed="true"][data-v="like"] { color: #1d1606; background: var(--like); }
+  .rate button[aria-pressed="true"][data-v="nope"] { color: #fff; background: var(--nope); }
+  .rate button[aria-pressed="true"][data-v="hate"] { color: #fff; background: var(--hate); }
+  .newbadge { font-family: var(--mono); font-size: 10.5px; color: var(--pick); }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+  /* ---------- Wildcards ---------- */
+  .wild { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .wild { grid-template-columns: 1fr; } }
+  .libs { display: flex; flex-direction: column; gap: 6px; }
+  .lib { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; background: none; border: 1px solid transparent; border-radius: 7px; padding: 6px 8px; cursor: pointer; text-align: left; }
+  .lib:hover { background: #22253a; }
+  .lib[aria-current="true"] { border-color: var(--star); background: #231f2e; }
+  .lib .nm { font-family: var(--mono); font-size: 13px; color: var(--star); overflow: hidden; text-overflow: ellipsis; }
+  .lib .ct { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .gen { font-family: var(--mono); font-size: 10px; color: var(--brace); border: 1px solid #4b3f73; border-radius: 4px; padding: 0 4px; margin-left: 6px; }
+  .miss { font-family: var(--mono); font-size: 12.5px; color: var(--enh); display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+  .libtitle { font-family: var(--mono); font-size: 20px; color: var(--star); font-weight: 600; }
+  .modelsel { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); }
+  select { background: #0d0e16; color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; font: inherit; font-size: 13px; max-width: 100%; }
+  .entries .chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 4px 3px 9px; font-size: 12.5px; }
+  .wbar { width: 26px; height: 4px; background: #2a2d40; border-radius: 2px; overflow: hidden; display: inline-block; }
+  .wbar > span { display: block; height: 100%; background: var(--pick); }
+  .x { background: none; border: 0; color: var(--muted); cursor: pointer; padding: 0 4px; font-size: 14px; line-height: 1; }
+  .x:hover { color: var(--hate); }
+  input.txt { background: #0d0e16; border: 1px solid var(--line); border-radius: 6px; padding: 7px 10px; font-size: 13px; min-width: 0; flex: 1 1 200px; }
+  textarea#instr { width: 100%; box-sizing: border-box; background: #0d0e16; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: 14px; resize: vertical; }
+  .ex { font-family: var(--body); font-size: 12.5px; text-align: left; }
+  .diff { border: 1px solid var(--brace); border-radius: 9px; padding: 12px 14px; background: #1b1830; display: flex; flex-direction: column; gap: 10px; }
+  .diff ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .diff li { font-family: var(--mono); font-size: 12px; border-radius: 6px; padding: 2px 8px; }
+  .d-add { background: #173323; color: #8fe0a0; } .d-rem { background: #3a1b1d; color: #f19b95; text-decoration: line-through; } .d-ren { background: #3a2f16; color: #f5cf85; }
+  .d-new { border: 1px dashed #6b5ca8; border-radius: 8px; padding: 8px 10px; }
+  .d-new b { font-family: var(--mono); color: var(--star); }
+  .status { font-size: 13px; color: var(--muted); }
+  .status.err { color: var(--enh); }
+  .banner { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; border: 1px solid var(--enh); background: #2a1824; border-radius: 8px; padding: 8px 12px; font-size: 13.5px; }
+  .banner code { color: var(--enh); }
+  /* ---------- H3 ---------- */
+  .h3grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 16px; align-items: start; }
+  @media (max-width: 900px) { .h3grid { grid-template-columns: 1fr; } }
+  textarea#h3src { width: 100%; box-sizing: border-box; min-height: 330px; resize: vertical; background: #0d0e16; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-family: var(--mono); font-size: 13px; line-height: 1.6; color: var(--ink); }
+  .timeline { display: flex; gap: 3px; width: 100%; }
+  .seg { background: #262a40; border: 1px solid #3a3f5c; border-radius: 6px; padding: 6px 8px; min-width: 0; font-size: 11.5px; display: flex; flex-direction: column; gap: 2px; }
+  .seg b { font-family: var(--mono); color: var(--star); font-weight: 600; font-size: 11px; }
+  .seg span { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  pre.h3out { white-space: pre-wrap; word-break: break-word; font-family: var(--mono); font-size: 12.5px; line-height: 1.6; background: #0d0e16; border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; margin: 0; color: #d8d5e8; max-height: 520px; overflow-y: auto; }
+  .h3out .f { color: var(--star); } .h3out .s { color: var(--brace); } .h3out .d { color: var(--enh); } .h3out .id { color: var(--pick); } .h3out .al { color: #8fe0a0; }
+  .lint { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; font-size: 13px; }
+  .lint li { padding: 5px 10px; border-radius: 6px; background: #181a28; border-left: 3px solid var(--line); }
+  .lint li.err { border-left-color: var(--hate); } .lint li.warn { border-left-color: var(--star); } .lint li.ok { border-left-color: #5fbf7a; }
+  .seg-tabs { display: flex; gap: 6px; }
+  .seg-tabs button[aria-pressed="true"] { border-color: var(--star); color: var(--star); }
+  section[hidden] { display: none !important; }
+  @media (prefers-reduced-motion: reduce) { .bar > span { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="mark">Prompt <span>Galaxy</span></div>
+      <p class="sub">Three layers, each usable on its own: a prompt language that records every choice, two ComfyUI nodes, and a galaxy that learns where your taste lives.</p>
+    </div>
+    <div class="mockflag">mock · nothing built yet · images are procedural stand-ins</div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Layers">
+    <button role="tab" id="tab-dsl" aria-selected="true" aria-controls="p-dsl"><span class="n">L1</span>Prompt DSL</button>
+    <button role="tab" id="tab-wild" aria-selected="false" aria-controls="p-wild"><span class="n">L1</span>Wildcards</button>
+    <button role="tab" id="tab-h3" aria-selected="false" aria-controls="p-h3"><span class="n">L1b</span>H3 compiler</button>
+    <button role="tab" id="tab-comfy" aria-selected="false" aria-controls="p-comfy"><span class="n">L2</span>ComfyUI nodes</button>
+    <button role="tab" id="tab-gal" aria-selected="false" aria-controls="p-gal"><span class="n">L3</span>Galaxy v0</button>
+  </nav>
+
+  <!-- ================= LAYER 1 ================= -->
+  <section id="p-dsl" role="tabpanel" aria-labelledby="tab-dsl" class="wrap" style="gap:16px">
+    <div class="note"><b>Notiz</b>Schicht 1 ist eine reine Python-Lib plus CLI (<code>pgal expand</code>). Der Parser hier ist in JS nachgebaut, damit du fühlst, wie es sich anfühlt. Jede Expansion liefert <em>Text + Picks</em>, deterministisch aus dem Seed. Das ist der ganze Trick.</div>
+    <div class="dsl">
+      <div class="editor panel">
+        <div class="label">Template</div>
+        <textarea id="tpl" spellcheck="false" aria-label="Prompt template"></textarea>
+        <div class="banner" id="missBanner" hidden></div>
+        <div class="label">Parsed</div>
+        <div class="tokens" id="tokens" aria-live="polite"></div>
+        <div class="controls">
+          <label for="seed">seed <input id="seed" type="number" value="100"></label>
+          <label for="count">×<input id="count" type="number" value="6" min="1" max="24"></label>
+          <button class="btn primary" id="expand">Expand</button>
+          <button class="btn" id="reroll">New seed</button>
+        </div>
+        <table class="cheat" aria-label="Syntax">
+          <tr><td class="t-lib">__animal__</td><td>pick from <code>library/animal.txt</code> (weighted by what you loved)</td></tr>
+          <tr><td class="t-brace">{a|b|c:3}</td><td>inline choice, <code>:3</code> = weight</td></tr>
+          <tr><td class="t-brace">{1-2$$__style__}</td><td>pick 1–2 distinct values</td></tr>
+          <tr><td class="t-var">$hero = …</td><td>bind once, reuse everywhere, the hero stays the same fox</td></tr>
+          <tr><td class="t-enh">&gt; moody</td><td>LLM enhancement (z-explorer), logged as a pick</td></tr>
+          <tr><td class="t-par">: x8 seed=100</td><td>batch count, seed, size (z-explorer)</td></tr>
+        </table>
+      </div>
+      <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+        <div class="toolbar"><div class="label">Expansions</div><span class="stat" id="dslsum"></span></div>
+        <div class="results" id="results"></div>
+        <div class="label">What gets logged (first expansion)</div>
+        <pre class="json" id="json1"></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WILDCARDS ================= -->
+  <section id="p-wild" role="tabpanel" aria-labelledby="tab-wild" class="wrap" style="gap:16px" hidden>
+    <div class="note"><b>Notiz</b>Fehlt eine Wildcard wie <code>__weather__</code>, erzeugt ein LLM die Liste passend zum Template. Semantische Befehle („lösch alle katzenartigen …") kommen als <em>Diff</em> zurück: Nichts ändert sich ohne <em>Apply</em>, und <em>Undo</em> gibt es auch. Gelernte Gewichte aus der Galaxy wandern mit, wenn Einträge umbenannt oder verschoben werden. Die lokalen Modelle stammen aus <code>ComfyUI/models/LLM</code> und sind im Mock simuliert: Sie können nur die Beispielbefehle. <em>Claude · live</em> fragt wirklich, auf deiner Usage.</div>
+    <div class="wild">
+      <aside class="panel libs" aria-label="Libraries">
+        <div class="label">galaxy/library/</div>
+        <div id="libList" style="display:flex;flex-direction:column;gap:2px"></div>
+        <div class="label" style="margin-top:12px">Used in template, missing</div>
+        <div id="missingList" style="display:flex;flex-direction:column;gap:6px"></div>
+      </aside>
+      <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+        <div class="toolbar">
+          <h2 class="libtitle" id="libTitle">__animal__</h2>
+          <label class="modelsel" for="model">Model
+            <select id="model">
+              <option value="qwen35_4b" selected>Qwen3.5-4B · local (simulated)</option>
+              <option value="qwen35_2b">Qwen3.5-2B · local (simulated)</option>
+              <option value="qwen3vl_4b">Qwen3-VL-4B · local (simulated)</option>
+              <option value="claude" id="optClaude" disabled>Claude · live (connecting…)</option>
+            </select>
+          </label>
+        </div>
+        <div class="chips entries" id="entries" aria-label="Entries"></div>
+        <div class="controls">
+          <input class="txt" id="addEntry" placeholder="Add an entry, press Enter" aria-label="Add entry">
+          <button class="btn" id="moreBtn">Generate 8 more</button>
+        </div>
+        <div class="label">Tell the list what to do</div>
+        <textarea id="instr" rows="2" placeholder="e.g. remove everything that can't fly and make those a new list"></textarea>
+        <div class="chips" id="examples"></div>
+        <div class="controls">
+          <button class="btn primary" id="runInstr">Propose change</button>
+          <button class="btn" id="stopBtn" hidden>Stop</button>
+          <button class="btn" id="undoBtn" disabled>Undo last change</button>
+          <span class="status" id="wStatus" aria-live="polite"></span>
+        </div>
+        <div class="diff" id="diff" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= H3 ================= -->
+  <section id="p-h3" role="tabpanel" aria-labelledby="tab-h3" class="wrap" style="gap:16px" hidden>
+    <div class="note"><b>Notiz</b>Links steht ein Drehbuch, rechts kommt heraus, was H3 wirklich frisst. Alles Mechanische berechnet der Writer selbst: Shot-Timestamps, Speaker-IDs, <code>&lt;d&gt;</code>-Tags, die Alignment-Zeile pro Modus (byte-genau wie im offiziellen Guide, inklusive seiner Klammer-Macken), Kamera-Sätze, Soundscape und <code>N/A</code>. Zufall steckt nur in den Slots: Stil, Kamera, Wald, Tier, Instrument. Der Lint prüft den Rest gegen den Guide. Der Densifier, der per lokalem Qwen nur Prosa anreichert, ist im Mock nicht eingebaut.</div>
+    <div class="h3grid">
+      <div class="panel" style="display:flex;flex-direction:column;gap:10px">
+        <div class="toolbar"><div class="label">scene.orr</div>
+          <div class="chips" id="h3ex">
+            <button class="chip" data-m="t2va">T2VA</button><button class="chip" data-m="i2va">I2VA</button><button class="chip" data-m="fl2va">FL2VA</button><button class="chip" data-m="l2va">L2VA</button>
+          </div>
+        </div>
+        <textarea id="h3src" spellcheck="false" aria-label="Screenplay template"></textarea>
+        <div class="controls">
+          <label for="h3seed">seed <input id="h3seed" type="number" value="7"></label>
+          <button class="btn primary" id="h3next">Next variant</button>
+        </div>
+        <div class="label">Picks</div>
+        <div class="chips" id="h3picks"></div>
+        <table class="cheat" aria-label="Screenplay syntax">
+          <tr><td>@h3 t2va 16:9</td><td>target, mode (t2va · i2va · fl2va · l2va), ratio</td></tr>
+          <tr><td>SHOT 5s | push in, small, slow</td><td>duration + camera from the official vocabulary; later shots may start with <code>cut</code>, <code>dissolve</code>, <code>fade</code> or <code>wipe</code></td></tr>
+          <tr><td>NAME (voice, off-screen): …</td><td>a vocal event; IDs and <code>&lt;d&gt;</code> are computed; <code>[German] …</code> for other languages</td></tr>
+          <tr><td>SFX: a; b</td><td>goes into overall_soundscape (<code>SFX: silence</code> = N/A)</td></tr>
+          <tr><td>MUSIC: …</td><td>non_diegetic_music (none = N/A)</td></tr>
+        </table>
+      </div>
+      <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+        <div class="label">Timeline</div>
+        <div class="timeline" id="h3tl"></div>
+        <div class="toolbar">
+          <div class="seg-tabs"><button class="btn" id="outH3" aria-pressed="true">h3-base</button><button class="btn" id="outFlat" aria-pressed="false">flat (Krea2 still)</button></div>
+          <button class="btn" id="h3copy">Copy</button>
+        </div>
+        <pre class="h3out" id="h3out"></pre>
+        <div class="label">Lint against the official guide</div>
+        <ul class="lint" id="h3lint"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LAYER 2 ================= -->
+  <section id="p-comfy" role="tabpanel" aria-labelledby="tab-comfy" class="wrap" style="gap:16px" hidden>
+    <div class="note"><b>Notiz</b>Nur zwei neue Nodes, der Rest ist Standard-ComfyUI. Kein eigenes Frontend, kein Northstar. <em>Galaxy Prompt</em> gibt neben dem Text die Picks aus; <em>Galaxy Log</em> schreibt sie in die PNG-Metadaten und hängt eine Zeile an <code>galaxy.jsonl</code>. Fertig ist Schicht 2, wenn ein echter Workflow 50 Zeilen geloggt hat.</div>
+    <div class="graphwrap">
+      <div class="graph" id="graph">
+        <svg id="wires" width="1080" height="520" aria-hidden="true"></svg>
+
+        <div class="node gal" style="left:24px;top:28px;width:318px">
+          <div class="hd"><span class="dot"></span>Galaxy Prompt</div>
+          <div class="io"><div class="in"></div><div class="out">
+            <div class="sock" data-s="gp-text"><span class="s c-str"></span>text</div>
+            <div class="sock" data-s="gp-picks"><span class="s c-picks"></span>picks</div>
+            <div class="sock" data-s="gp-seed"><span class="s c-str" style="background:#9aa0b5"></span>seed</div>
+          </div></div>
+          <div class="w area" id="nodeTpl"></div>
+          <div class="w"><span>seed</span><b>100</b></div>
+          <div class="w"><span>control_after_generate</span><b>increment</b></div>
+          <div class="w"><span>library</span><b>galaxy/library/</b></div>
+          <div class="w"><span>use_learned_weights</span><b>true</b></div>
+        </div>
+
+        <div class="node" style="left:24px;top:360px;width:220px">
+          <div class="hd"><span class="dot"></span>Load Checkpoint</div>
+          <div class="io"><div class="in"></div><div class="out">
+            <div class="sock" data-s="ck-model"><span class="s c-model"></span>MODEL</div>
+            <div class="sock" data-s="ck-clip"><span class="s c-clip"></span>CLIP</div>
+            <div class="sock" data-s="ck-vae"><span class="s c-vae"></span>VAE</div>
+          </div></div>
+          <div class="w"><span>ckpt_name</span><b>krea2-turbo.safetensors</b></div>
+        </div>
+
+        <div class="node" style="left:398px;top:40px;width:190px">
+          <div class="hd"><span class="dot"></span>CLIP Text Encode</div>
+          <div class="io"><div class="in">
+            <div class="sock" data-s="ce-clip"><span class="s c-clip"></span>clip</div>
+            <div class="sock" data-s="ce-text"><span class="s c-str"></span>text</div>
+          </div><div class="out">
+            <div class="sock" data-s="ce-cond"><span class="s c-cond"></span>COND</div>
+          </div></div>
+        </div>
+
+        <div class="node" style="left:398px;top:200px;width:190px">
+          <div class="hd"><span class="dot"></span>Empty Latent</div>
+          <div class="io"><div class="in"></div><div class="out">
+            <div class="sock" data-s="el-lat"><span class="s c-lat"></span>LATENT</div>
+          </div></div>
+          <div class="w"><span>size</span><b>1216×832</b></div>
+        </div>
+
+        <div class="node" style="left:640px;top:40px;width:190px">
+          <div class="hd"><span class="dot"></span>KSampler</div>
+          <div class="io"><div class="in">
+            <div class="sock" data-s="ks-model"><span class="s c-model"></span>model</div>
+            <div class="sock" data-s="ks-pos"><span class="s c-cond"></span>positive</div>
+            <div class="sock" data-s="ks-lat"><span class="s c-lat"></span>latent</div>
+            <div class="sock" data-s="ks-seed"><span class="s" style="background:#9aa0b5"></span>seed</div>
+          </div><div class="out">
+            <div class="sock" data-s="ks-out"><span class="s c-lat"></span>LATENT</div>
+          </div></div>
+          <div class="w"><span>steps</span><b>8</b></div>
+        </div>
+
+        <div class="node" style="left:640px;top:300px;width:190px">
+          <div class="hd"><span class="dot"></span>VAE Decode</div>
+          <div class="io"><div class="in">
+            <div class="sock" data-s="vd-lat"><span class="s c-lat"></span>samples</div>
+            <div class="sock" data-s="vd-vae"><span class="s c-vae"></span>vae</div>
+          </div><div class="out">
+            <div class="sock" data-s="vd-img"><span class="s c-img"></span>IMAGE</div>
+          </div></div>
+        </div>
+
+        <div class="node gal" style="left:874px;top:170px;width:190px">
+          <div class="hd"><span class="dot"></span>Galaxy Log</div>
+          <div class="io"><div class="in">
+            <div class="sock" data-s="gl-img"><span class="s c-img"></span>images</div>
+            <div class="sock" data-s="gl-picks"><span class="s c-picks"></span>picks</div>
+          </div><div class="out"></div></div>
+          <div class="w"><span>galaxy</span><b>galaxy.jsonl</b></div>
+          <div class="w"><span>png_metadata</span><b>true</b></div>
+          <div class="w"><span>thumbnail</span><b>256px</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel" style="display:flex;flex-direction:column;gap:8px">
+      <div class="label">galaxy.jsonl · one line per image</div>
+      <pre class="json" id="jsonl"></pre>
+    </div>
+  </section>
+
+  <!-- ================= LAYER 3 ================= -->
+  <section id="p-gal" role="tabpanel" aria-labelledby="tab-gal" class="wrap" style="gap:16px" hidden>
+    <div class="note"><b>Notiz</b>love / like / nope / hate verschieben die Gewichte der Werte, die zu diesem Bild geführt haben. Der nächste Batch zieht öfter aus Regionen, die du geliebt hast. Probier's: ein paar Füchse lieben, dann „Next batch". Keine Punkteskala, keine 2D-Karte; die kommt in v1, falls du sie dann noch willst.</div>
+    <div class="panel toolbar">
+      <div class="stats" id="gstats"></div>
+      <div class="controls">
+        <button class="btn primary" id="nextBatch">Next batch ×12 (weighted)</button>
+        <button class="btn" id="clearFilter">Clear filter</button>
+        <button class="btn" id="resetW">Reset weights</button>
+      </div>
+    </div>
+    <div class="gal">
+      <aside class="side panel" id="facets" aria-label="Regions"></aside>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  const LIB = {
+    animal: ["fox", "heron", "lynx", "raven", "stag", "koi", "owl", "hare", "snow leopard", "ocelot", "tabby cat", "badger"],
+    style: ["ukiyo-e woodblock", "oil impasto", "16-bit pixel art", "charcoal sketch", "risograph print", "stained glass"]
+  };
+  const META = { animal: { generated: false }, style: { generated: false } };
+  Object.assign(LIB, {
+    camera: ["push in, small, slow", "pull out, small, slow", "pan right, large, fast", "truck left, small, slow", "tilt up, slow", "arc, slow", "tracking, slow", "static", "pedestal up, small, slow", "zoom in, small, fast"],
+    h3style: ["live-action, cinematic", "2D-animated", "3D CG", "claymation", "watercolor", "vintage film"],
+    instrument: ["cello", "solo piano", "koto", "acoustic guitar", "analog synth pad", "upright bass", "music box"]
+  });
+  Object.assign(META, { camera: { builtin: "H3" }, h3style: { builtin: "H3" }, instrument: { builtin: "H3" } });
+  const DEFAULT_TPL = "$hero = __animal__\n$hero in a {misty|burning|frozen:3} forest, {1-2$$__style__}, $hero's eyes glowing\n> moody, cinematic\n: x6 seed=100 w1216 h832";
+
+  const W = {}; // learned multipliers, key "family=value"
+  const learned = k => (W[k] == null ? 1 : W[k]);
+
+  function rng32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function wpick(items, r) {
+    const tot = items.reduce((s, it) => s + it.w, 0);
+    let x = r() * tot;
+    for (const it of items) { x -= it.w; if (x <= 0) return it; }
+    return items[items.length - 1];
+  }
+  function fnv(s) { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0).toString(16).padStart(8, "0"); }
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  function parse(src) {
+    const out = { bindings: [], body: [], enhance: null, params: { x: 6, seed: 100, w: 1216, h: 832 } };
+    for (const raw of src.split("\n")) {
+      const line = raw.trim();
+      if (!line) continue;
+      let m;
+      if ((m = line.match(/^\$([A-Za-z_]\w*)\s*=\s*(.+)$/))) out.bindings.push({ name: m[1], expr: m[2] });
+      else if (line.startsWith(">")) out.enhance = line.slice(1).trim();
+      else if (line.startsWith(":")) {
+        const p = line.slice(1);
+        if ((m = p.match(/\bx(\d+)/))) out.params.x = +m[1];
+        if ((m = p.match(/seed=(\d+)/))) out.params.seed = +m[1];
+        if ((m = p.match(/\bw(\d+)/))) out.params.w = +m[1];
+        if ((m = p.match(/\bh(\d+)/))) out.params.h = +m[1];
+      } else out.body.push(line);
+    }
+    return out;
+  }
+
+  function expandExpr(expr, ctx) {
+    let s = expr, guard = 0, m;
+    const re = /\{([^{}]*)\}/;
+    while ((m = s.match(re)) && guard++ < 100) s = s.replace(m[0], resolveBrace(m[1], ctx));
+    const libCount = {};
+    s = s.replace(/__(\w+)__/g, (all, name) => {
+      if (!LIB[name]) return "⟨unknown " + all + "⟩";
+      const fam = "__" + name + "__";
+      const it = wpick(LIB[name].map(v => ({ v, w: learned(fam + "=" + v) })), ctx.r);
+      libCount[fam] = (libCount[fam] || 0) + 1;
+      const label = ctx.prefix ? "$" + ctx.prefix + " ← " + fam : fam + (libCount[fam] > 1 ? " #" + libCount[fam] : "");
+      ctx.picks.push({ label, value: it.v, keys: [fam + "=" + it.v] });
+      return it.v;
+    });
+    s = s.replace(/\$([A-Za-z_]\w*)/g, (all, n) => (ctx.vars[n] != null ? ctx.vars[n] : all));
+    return s;
+  }
+  function resolveBrace(inner, ctx) {
+    let m = inner.match(/^(\d+)(?:-(\d+))?\$\$(.+)$/);
+    if (m) {
+      const lo = +m[1], hi = m[2] ? +m[2] : lo;
+      const n = lo + Math.floor(ctx.r() * (hi - lo + 1));
+      const src = m[3].trim();
+      const lm = src.match(/^__(\w+)__$/);
+      const fam = lm ? "__" + lm[1] + "__" : "{" + src + "}";
+      let pool = lm && LIB[lm[1]] ? LIB[lm[1]].slice() : src.split("|").map(x => x.trim());
+      pool = pool.map(v => ({ v, w: learned(fam + "=" + v) }));
+      const got = [];
+      for (let i = 0; i < n && pool.length; i++) { const it = wpick(pool, ctx.r); got.push(it.v); pool.splice(pool.indexOf(it), 1); }
+      ctx.picks.push({ label: fam + " ×" + (lo === hi ? lo : lo + "–" + hi), value: got.join(", "), keys: got.map(v => fam + "=" + v) });
+      return got.join(", ");
+    }
+    const opts = inner.split("|").map(o => { const mm = o.match(/^(.*?):(\d+(?:\.\d+)?)$/); return mm ? { v: mm[1].trim(), w: +mm[2] } : { v: o.trim(), w: 1 }; });
+    const fam = "{" + opts.map(o => o.v).join("|") + "}";
+    const it = wpick(opts.map(o => ({ v: o.v, w: o.w * learned(fam + "=" + o.v) })), ctx.r);
+    ctx.picks.push({ label: fam, value: it.v, keys: [fam + "=" + it.v] });
+    return it.v;
+  }
+  function enhanceMock(text, instr) {
+    const cap = instr.charAt(0).toUpperCase() + instr.slice(1);
+    return cap + " frame: " + text + ". Layered depth, deliberate composition, faint film grain.";
+  }
+  function expandOne(tpl, seed) {
+    const P = parse(tpl);
+    const ctx = { r: rng32(seed * 2654435761 >>> 0), picks: [], vars: {}, prefix: null };
+    for (const b of P.bindings) { ctx.prefix = b.name; ctx.vars[b.name] = expandExpr(b.expr, ctx); }
+    ctx.prefix = null;
+    const text = expandExpr(P.body.join(" "), ctx);
+    const out = { seed, text, picks: ctx.picks, w: P.params.w, h: P.params.h, enhanced: null };
+    if (P.enhance) { out.enhanced = enhanceMock(text, P.enhance); out.picks.push({ label: "> enhance", value: P.enhance, keys: [] }); }
+    return out;
+  }
+
+  function tokenize(src) {
+    return src.split("\n").map(line => {
+      const t = line.trim();
+      if (t.startsWith(">")) return '<span class="t-enh">' + esc(line) + "</span>";
+      if (t.startsWith(":")) return '<span class="t-par">' + esc(line) + "</span>";
+      return esc(line)
+        .replace(/\{[^{}]*\}/g, x => '<span class="t-brace">' + x + "</span>")
+        .replace(/__\w+__/g, x => '<span class="t-lib">' + x + "</span>")
+        .replace(/\$[A-Za-z_]\w*/g, x => '<span class="t-var">' + x + "</span>");
+    }).join("\n");
+  }
+  const picksObj = picks => Object.fromEntries(picks.map(p => [p.label, p.value]));
+  const chipsHtml = picks => picks.map(p => '<span class="chip"><i>' + esc(p.label) + "</i> " + esc(p.value) + "</span>").join("");
+
+  /* ---------- Layer 1 wiring ---------- */
+  const $ = id => document.getElementById(id);
+  const tpl = $("tpl"); tpl.value = DEFAULT_TPL;
+  function renderDSL() {
+    const P = parse(tpl.value);
+    const seedEl = $("seed"), countEl = $("count");
+    const seed = +seedEl.value || P.params.seed;
+    const count = Math.max(1, Math.min(24, +countEl.value || P.params.x));
+    $("tokens").innerHTML = tokenize(tpl.value);
+    renderMissingBanner();
+    const rows = [];
+    for (let i = 0; i < count; i++) rows.push(expandOne(tpl.value, seed + i));
+    $("results").innerHTML = rows.map(r =>
+      '<div class="res"><div class="top"><span class="seed">seed ' + r.seed + '</span><span class="text">' + esc(r.text) + "</span></div>" +
+      (r.enhanced ? '<div class="enhanced">' + esc(r.enhanced) + " <em>(LLM simuliert)</em></div>" : "") +
+      '<div class="chips">' + chipsHtml(r.picks) + "</div></div>").join("");
+    $("dslsum").textContent = count + " expansions · template " + fnv(tpl.value);
+    const first = rows[0];
+    $("json1").textContent = JSON.stringify({ seed: first.seed, text: first.enhanced || first.text, picks: picksObj(first.picks) }, null, 2);
+    renderComfyText();
+  }
+  $("expand").addEventListener("click", renderDSL);
+  $("reroll").addEventListener("click", () => { $("seed").value = Math.floor(Math.random() * 99999); renderDSL(); });
+  tpl.addEventListener("input", renderDSL);
+  $("seed").addEventListener("change", renderDSL);
+  $("count").addEventListener("change", renderDSL);
+
+  /* ---------- Layer 2 wiring ---------- */
+  function renderComfyText() {
+    $("nodeTpl").textContent = tpl.value;
+    const s = expandOne(tpl.value, +$("seed").value || 100);
+    const line = { ts: "2026-09-22T23:41:07Z", image: "galaxy/img/000142.png", seed: s.seed, template: fnv(tpl.value), text: s.enhanced || s.text, picks: picksObj(s.picks), model: "krea2-turbo", size: [s.w, s.h], rating: null };
+    $("jsonl").textContent = JSON.stringify(line);
+  }
+  function drawWires() {
+    const g = $("graph"), svg = $("wires");
+    const gb = g.getBoundingClientRect();
+    const pos = id => { const el = g.querySelector('[data-s="' + id + '"] .s'); if (!el) return null; const b = el.getBoundingClientRect(); return { x: b.left - gb.left + b.width / 2, y: b.top - gb.top + b.height / 2, c: getComputedStyle(el).backgroundColor }; };
+    const links = [["gp-text", "ce-text"], ["gp-picks", "gl-picks"], ["gp-seed", "ks-seed"], ["ck-clip", "ce-clip"], ["ck-model", "ks-model"], ["ck-vae", "vd-vae"], ["ce-cond", "ks-pos"], ["el-lat", "ks-lat"], ["ks-out", "vd-lat"], ["vd-img", "gl-img"]];
+    svg.innerHTML = links.map(([a, b]) => {
+      const p = pos(a), q = pos(b); if (!p || !q) return "";
+      const dx = Math.max(60, Math.abs(q.x - p.x) * 0.5);
+      const hl = a === "gp-picks" ? ' stroke-width="3.5"' : ' stroke-width="2.5"';
+      return '<path d="M' + p.x + " " + p.y + " C" + (p.x + dx) + " " + p.y + " " + (q.x - dx) + " " + q.y + " " + q.x + " " + q.y + '" fill="none" stroke="' + p.c + '"' + hl + ' stroke-opacity=".9"/>';
+    }).join("");
+  }
+
+  /* ---------- Layer 3: galaxy ---------- */
+  const PAL = {
+    misty: ["#7f93a6", "#c7d1da", "#4b5a69", "#e8eef3"],
+    burning: ["#e4572e", "#f3a712", "#5a2418", "#ffd9a0"],
+    frozen: ["#8fd3e6", "#e6f6fa", "#2f6f86", "#ffffff"]
+  };
+  function paint(cv, img) {
+    const W2 = 320, H2 = 240; cv.width = W2; cv.height = H2;
+    const x = cv.getContext("2d");
+    const r = rng32(img.seed * 7919 + 17);
+    const forest = (img.picks.find(p => p.label.startsWith("{misty")) || {}).value || "misty";
+    const pal = PAL[forest] || PAL.misty;
+    const style = ((img.picks.find(p => p.label.startsWith("__style__")) || {}).value || "").split(", ")[0];
+    const grd = x.createLinearGradient(0, 0, 0, H2); grd.addColorStop(0, pal[1]); grd.addColorStop(1, pal[2]);
+    x.fillStyle = grd; x.fillRect(0, 0, W2, H2);
+    if (style === "16-bit pixel art") {
+      const s = 16;
+      for (let yy = 0; yy < H2; yy += s) for (let xx = 0; xx < W2; xx += s) { if (r() < 0.55) { x.fillStyle = pal[Math.floor(r() * 3)]; x.globalAlpha = 0.5 + r() * 0.5; x.fillRect(xx, yy, s, s); } }
+    } else if (style === "ukiyo-e woodblock") {
+      for (let i = 0; i < 5; i++) { x.fillStyle = pal[i % 3]; x.globalAlpha = 0.85; x.beginPath(); const base = 120 + i * 26; x.moveTo(0, base); for (let xx = 0; xx <= W2; xx += 20) x.lineTo(xx, base - Math.sin(xx / 40 + i + r()) * 14); x.lineTo(W2, H2); x.lineTo(0, H2); x.fill(); }
+      x.globalAlpha = 1; x.fillStyle = pal[3]; x.beginPath(); x.arc(70 + r() * 180, 60, 26, 0, 7); x.fill();
+    } else if (style === "charcoal sketch") {
+      x.fillStyle = "#ddd8cf"; x.fillRect(0, 0, W2, H2);
+      x.strokeStyle = "#2a2a2a";
+      for (let i = 0; i < 140; i++) { x.globalAlpha = 0.08 + r() * 0.25; x.lineWidth = 0.5 + r() * 2.5; x.beginPath(); const sx = r() * W2, sy = r() * H2; x.moveTo(sx, sy); x.lineTo(sx + (r() - 0.5) * 70, sy + 20 + r() * 50); x.stroke(); }
+    } else if (style === "risograph print") {
+      for (let yy = 4; yy < H2; yy += 8) for (let xx = 4; xx < W2; xx += 8) { const d = (Math.sin(xx / 37 + r() * 0.6) + Math.cos(yy / 29)) * 1.6 + 2.2; x.globalAlpha = 0.8; x.fillStyle = pal[0]; x.beginPath(); x.arc(xx + 2, yy, Math.max(0.4, d), 0, 7); x.fill(); x.fillStyle = "#f06c8e"; x.globalAlpha = 0.35; x.beginPath(); x.arc(xx - 1, yy + 2, Math.max(0.3, d * 0.8), 0, 7); x.fill(); }
+    } else if (style === "stained glass") {
+      for (let i = 0; i < 26; i++) { x.globalAlpha = 0.85; x.fillStyle = pal[Math.floor(r() * 4)]; x.beginPath(); const cx = r() * W2, cy = r() * H2; x.moveTo(cx, cy); for (let k = 0; k < 4; k++) x.lineTo(cx + (r() - 0.5) * 140, cy + (r() - 0.5) * 120); x.closePath(); x.fill(); x.globalAlpha = 1; x.strokeStyle = "#141414"; x.lineWidth = 3; x.stroke(); }
+    } else {
+      for (let i = 0; i < 22; i++) { x.globalAlpha = 0.25 + r() * 0.35; x.fillStyle = pal[Math.floor(r() * 4)]; x.beginPath(); x.ellipse(r() * W2, r() * H2, 20 + r() * 70, 12 + r() * 40, r() * 3, 0, 7); x.fill(); }
+    }
+    x.globalAlpha = 1;
+    const ex = 90 + r() * 140, ey = 80 + r() * 70;
+    for (const off of [0, 22]) { const g2 = x.createRadialGradient(ex + off, ey, 0, ex + off, ey, 16); g2.addColorStop(0, "rgba(255,244,200,1)"); g2.addColorStop(0.35, "rgba(242,184,75,.85)"); g2.addColorStop(1, "rgba(242,184,75,0)"); x.fillStyle = g2; x.beginPath(); x.arc(ex + off, ey, 16, 0, 7); x.fill(); }
+  }
+
+  const G = { images: [], nextSeed: 100, filter: null, batch: 0 };
+  const DELTA = { love: 0.6, like: 0.25, nope: -0.25, hate: -0.6 };
+  const SCORE = { love: 2, like: 1, nope: -1, hate: -2 };
+  function addBatch(n) {
+    G.batch++;
+    for (let i = 0; i < n; i++) { const e = expandOne(tpl.value, G.nextSeed++); e.rating = null; e.batch = G.batch; G.images.push(e); }
+  }
+  function applyRating(img, v) {
+    const prev = img.rating;
+    const keys = img.picks.flatMap(p => p.keys);
+    if (prev) for (const k of keys) W[k] = Math.max(0.15, learned(k) - DELTA[prev]);
+    img.rating = prev === v ? null : v;
+    if (img.rating) for (const k of keys) W[k] = Math.max(0.15, learned(k) + DELTA[img.rating]);
+    renderGalaxy();
+  }
+  function families() {
+    const fam = new Map();
+    for (const img of G.images) for (const p of img.picks) for (const k of p.keys) {
+      const i = k.indexOf("="); const f = k.slice(0, i), v = k.slice(i + 1);
+      if (!fam.has(f)) fam.set(f, new Map());
+      const m = fam.get(f); m.set(v, (m.get(v) || 0) + 1);
+    }
+    return fam;
+  }
+  function renderGalaxy() {
+    const fam = families();
+    let side = "";
+    for (const [f, vals] of fam) {
+      const allVals = f.startsWith("__") && LIB[f.slice(2, -2)] ? LIB[f.slice(2, -2)] : [...vals.keys()];
+      const ws = allVals.map(v => learned(f + "=" + v)); const mx = Math.max(...ws, 1);
+      side += '<div class="fam"><h3>' + esc(f) + "</h3>" + allVals.map((v, i) => {
+        const key = f + "=" + v; const on = G.filter === key ? " on" : "";
+        return '<button class="facet' + on + '" data-k="' + esc(key) + '"><span class="nm">' + esc(v) + '</span><span class="bar"><span style="width:' + Math.round(ws[i] / mx * 100) + '%"></span></span><span class="ct">' + (vals.get(v) || 0) + "</span></button>";
+      }).join("") + "</div>";
+    }
+    $("facets").innerHTML = '<div class="label">Regions · bar = learned weight · # = images</div>' + side;
+    $("facets").querySelectorAll(".facet").forEach(b => b.addEventListener("click", () => { G.filter = G.filter === b.dataset.k ? null : b.dataset.k; renderGalaxy(); }));
+
+    const shown = G.images.filter(img => !G.filter || img.picks.some(p => p.keys.includes(G.filter)));
+    const grid = $("grid"); grid.innerHTML = "";
+    for (const img of shown.slice().reverse()) {
+      const card = document.createElement("article"); card.className = "card"; if (img.rating) card.dataset.r = img.rating;
+      const cv = document.createElement("canvas"); cv.setAttribute("role", "img"); cv.setAttribute("aria-label", img.text); paint(cv, img);
+      const meta = document.createElement("div"); meta.className = "meta";
+      meta.innerHTML = '<div class="top" style="display:flex;justify-content:space-between;gap:8px"><span class="seed">seed ' + img.seed + "</span>" + (img.batch === G.batch && G.batch > 1 ? '<span class="newbadge">new batch</span>' : "") + '</div><div class="ptxt">' + esc(img.text) + '</div><div class="chips">' + img.picks.filter(p => p.keys.length).map(p => p.keys.map(k => { const v = k.slice(k.indexOf("=") + 1); return '<button class="chip' + (G.filter === k ? " on" : "") + '" data-k="' + esc(k) + '">' + esc(v) + "</button>"; }).join("")).join("") + "</div>";
+      const rate = document.createElement("div"); rate.className = "rate";
+      for (const v of ["love", "like", "nope", "hate"]) { const b = document.createElement("button"); b.dataset.v = v; b.textContent = v; b.setAttribute("aria-pressed", img.rating === v ? "true" : "false"); b.addEventListener("click", () => applyRating(img, v)); rate.appendChild(b); }
+      card.append(cv, meta, rate); grid.appendChild(card);
+    }
+    grid.querySelectorAll("button.chip").forEach(b => b.addEventListener("click", () => { G.filter = G.filter === b.dataset.k ? null : b.dataset.k; renderGalaxy(); }));
+
+    const rated = G.images.filter(i => i.rating);
+    const reg = {};
+    for (const img of rated) {
+      const f1 = (img.picks.find(p => p.label.startsWith("{misty")) || {}).value, a1 = (img.picks.find(p => p.label.includes("__animal__")) || {}).value;
+      if (!f1 || !a1) continue; const k = f1 + " × " + a1; reg[k] = reg[k] || { s: 0, n: 0 }; reg[k].s += SCORE[img.rating]; reg[k].n++;
+    }
+    const best = Object.entries(reg).filter(([, o]) => o.s > 0).sort((a, b) => b[1].s - a[1].s)[0];
+    $("gstats").innerHTML = '<span class="stat">images <b>' + G.images.length + '</b></span><span class="stat">rated <b>' + rated.length + '</b></span><span class="stat">loved <b>' + rated.filter(i => i.rating === "love").length + "</b></span>" +
+      '<span class="stat">strongest region: ' + (best ? '<b class="region">' + esc(best[0]) + "</b>" : "rate a few images") + "</span>" + (G.filter ? '<span class="stat">filter: <b>' + esc(G.filter) + "</b></span>" : "");
+  }
+  $("nextBatch").addEventListener("click", () => { addBatch(12); renderGalaxy(); });
+  $("clearFilter").addEventListener("click", () => { G.filter = null; renderGalaxy(); });
+  $("resetW").addEventListener("click", () => { for (const k in W) delete W[k]; for (const i of G.images) i.rating = null; renderGalaxy(); });
+
+  /* ---------- Wildcards: models, canned local sim, Claude live ---------- */
+  let sampleFn = null;
+  const MODEL_NAMES = { qwen35_4b: "Qwen3.5-4B", qwen35_2b: "Qwen3.5-2B", qwen3vl_4b: "Qwen3-VL-4B", claude: "Claude" };
+  const modelSel = $("model");
+  const modelName = () => MODEL_NAMES[modelSel.value] || modelSel.value;
+  (async () => {
+    let s = null;
+    try { s = window.claude && typeof window.claude.use === "function" ? await window.claude.use("sample") : null; } catch (e) { s = null; }
+    sampleFn = s;
+    const opt = $("optClaude");
+    if (sampleFn) { opt.disabled = false; opt.textContent = "Claude · live (your usage)"; }
+    else { opt.textContent = "Claude · live (not available in this view)"; }
+  })();
+
+  const FELINE = ["lynx", "snow leopard", "ocelot", "tabby cat", "caracal", "cougar", "jaguar", "house cat", "tiger", "lion", "cheetah", "serval"];
+  const CANNED = {
+    weather: ["first snow", "heat shimmer", "monsoon downpour", "ground fog", "thunderhead dusk", "hoarfrost morning", "sun shower", "sandstorm haze", "drizzle at dawn", "aurora night", "hailstorm", "still humid noon"],
+    more_animal: ["pangolin", "axolotl", "manta ray", "ibex", "kingfisher", "wolverine", "red panda", "moth"],
+    more_style: ["gouache storybook", "linocut", "cyanotype", "art nouveau poster", "claymation still", "blueprint drawing", "fresco", "ink wash"],
+    mythic: ["qilin", "kitsune", "thunderbird", "basilisk", "selkie", "wyvern", "simurgh", "jackalope"],
+    specific: { fox: "arctic fox", heron: "grey heron", lynx: "eurasian lynx", raven: "common raven", stag: "red deer stag", koi: "kohaku koi", owl: "barn owl", hare: "mountain hare", badger: "honey badger", "snow leopard": "snow leopard cub", ocelot: "ocelot kitten", "tabby cat": "orange tabby cat" }
+  };
+  const EXAMPLES = [
+    "Lösch alle katzenartigen Tiere und mach daraus eine neue Liste \"feline\"",
+    "Add 8 mythical creatures",
+    "Make every entry more specific"
+  ];
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const uniq = arr => [...new Set(arr.map(s => String(s).trim()).filter(Boolean))];
+  const cleanList = v => Array.isArray(v) ? uniq(v.filter(x => typeof x === "string").map(x => x.slice(0, 60))).slice(0, 40) : [];
+  const libName = s => String(s || "").toLowerCase().replace(/^_+|_+$/g, "").replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+
+  function localSim(kind, p) {
+    if (kind === "gen" && CANNED[p.name]) return CANNED[p.name].slice();
+    if (kind === "more" && CANNED["more_" + p.lib]) return CANNED["more_" + p.lib].filter(e => !LIB[p.lib].includes(e));
+    if (kind === "edit" && p.lib === "animal") {
+      const cur = LIB.animal;
+      if (p.instr === EXAMPLES[0]) { const cats = cur.filter(e => FELINE.includes(e)); return { remove: cats, add: [], rename: [], new_lists: [{ name: "feline", entries: cats }], note: "Moved " + cats.length + " cat-like animals into a new list __feline__." }; }
+      if (p.instr === EXAMPLES[1]) return { remove: [], add: CANNED.mythic.filter(e => !cur.includes(e)), rename: [], new_lists: [], note: "Added mythical creatures." };
+      if (p.instr === EXAMPLES[2]) return { remove: [], add: [], rename: cur.filter(e => CANNED.specific[e]).map(e => ({ from: e, to: CANNED.specific[e] })), new_lists: [], note: "Made entries more specific." };
+    }
+    const err = new Error("local_sim"); err.code = "local_sim"; throw err;
+  }
+  function promptFor(kind, p) {
+    if (kind === "gen") return "Create a wildcard list named __" + p.name + "__ for a text-to-image prompt generator. It is used in this template:\n\n" + tpl.value + "\n\nReply with ONLY a JSON array of 12 distinct, short, vivid entries (1-4 words each), lowercase unless a proper noun, no numbering, spread widely across the space so random picks feel varied.";
+    if (kind === "more") return "This is the wildcard list __" + p.lib + "__ for a text-to-image prompt generator:\n" + JSON.stringify(LIB[p.lib]) + "\n\nReply with ONLY a JSON array of 8 NEW entries in the same spirit and format. No duplicates of existing entries, no numbering.";
+    const others = Object.keys(LIB).filter(k => k !== p.lib).map(k => "__" + k + "__ (" + LIB[k].length + ")").join(", ");
+    return "You edit wildcard lists for a text-to-image prompt generator.\nList: __" + p.lib + "__\nEntries: " + JSON.stringify(LIB[p.lib]) + "\nOther lists: " + (others || "none") + "\nInstruction from the user (any language): " + JSON.stringify(p.instr) +
+      "\n\nReply with ONLY a JSON object of this shape:\n{\"remove\": [entries to delete, copied exactly from Entries], \"add\": [new short entries for this list], \"rename\": [{\"from\": \"exact existing entry\", \"to\": \"new entry\"}], \"new_lists\": [{\"name\": \"snake_case_name\", \"entries\": [\"...\"]}], \"note\": \"one short English sentence describing the change\"}\nUse empty arrays for unused fields. When the user asks to move entries into a new list, put them in both remove and new_lists. Entries are short noun phrases, no numbering.";
+  }
+  let ctl = null;
+  async function callModel(kind, p) {
+    if (modelSel.value !== "claude") { await sleep(650 + Math.random() * 500); return localSim(kind, p); }
+    if (!sampleFn) { const e = new Error("unavailable"); e.code = "not_granted"; throw e; }
+    ctl = new AbortController();
+    $("stopBtn").hidden = false;
+    try { return await sampleFn.json(promptFor(kind, p), { modelTier: "quick", cache: false, signal: ctl.signal }); }
+    finally { $("stopBtn").hidden = true; ctl = null; }
+  }
+  $("stopBtn").addEventListener("click", () => { if (ctl) ctl.abort(); });
+  function errCopy(e) {
+    const c = e && e.code;
+    if (c === "local_sim") return "The simulated local model only knows the example commands. Pick Claude · live for free text.";
+    if (c === "cancelled") return "Stopped.";
+    if (["not_granted", "sampling_disabled", "not_declared", "capability_disabled", "capability_removed"].includes(c)) return "Claude isn't allowed in this view. Use a local model (simulated).";
+    if (c === "rate_limited") return "Too many requests right now. Try again in a moment.";
+    if (c === "invalid_json") return "The answer wasn't valid JSON. Try again or rephrase.";
+    if (c === "refused") return "The model declined this instruction. Rephrase it.";
+    return "Request failed (" + (c || "error") + "). Try again.";
+  }
+  const setStatus = (msg, err) => { const s = $("wStatus"); s.textContent = msg; s.className = "status" + (err ? " err" : ""); };
+
+  const history = [];
+  function snapshot() { history.push(JSON.stringify({ LIB, META, W })); $("undoBtn").disabled = false; }
+  function restore(snap) {
+    const o = JSON.parse(snap);
+    for (const k of Object.keys(LIB)) delete LIB[k]; Object.assign(LIB, o.LIB);
+    for (const k of Object.keys(META)) delete META[k]; Object.assign(META, o.META);
+    for (const k of Object.keys(W)) delete W[k]; Object.assign(W, o.W);
+  }
+  $("undoBtn").addEventListener("click", () => { if (!history.length) return; restore(history.pop()); $("undoBtn").disabled = !history.length; if (!LIB[curLib]) curLib = "animal"; pendingOps = null; renderAllWild(); setStatus("Undone."); });
+
+  let curLib = "animal", pendingOps = null;
+  function missingLibs() { const out = new Set(); for (const m of tpl.value.matchAll(/__(\w+)__/g)) if (!LIB[m[1]]) out.add(m[1]); return [...out]; }
+  function renderMissingBanner() {
+    const miss = missingLibs(), b = $("missBanner");
+    if (!miss.length) { b.hidden = true; b.innerHTML = ""; return; }
+    b.hidden = false;
+    b.innerHTML = "<span>Missing wildcard " + miss.map(n => "<code>__" + esc(n) + "__</code>").join(", ") + "</span>" + '<button class="btn" id="genMissing">Generate with ' + esc(modelName()) + "</button>";
+    $("genMissing").addEventListener("click", () => generateMissing(miss[0], $("genMissing")));
+  }
+  async function generateMissing(name, btn) {
+    if (btn) { btn.disabled = true; btn.textContent = modelName() + " is writing…"; }
+    setStatus("Generating __" + name + "__ with " + modelName() + "…");
+    try {
+      const list = cleanList(await callModel("gen", { name }));
+      if (!list.length) throw Object.assign(new Error("empty"), { code: "invalid_json" });
+      snapshot(); LIB[name] = list; META[name] = { generated: true, by: modelName() }; curLib = name;
+      setStatus("Created __" + name + "__ with " + list.length + " entries.");
+      renderDSL(); renderAllWild();
+    } catch (e) { setStatus(errCopy(e), true); if (btn) { btn.disabled = false; btn.textContent = "Generate with " + modelName(); } renderMissingBanner(); }
+  }
+  function renderLibs() {
+    $("libList").innerHTML = Object.keys(LIB).map(k => '<button class="lib" data-l="' + esc(k) + '" aria-current="' + (k === curLib) + '"><span class="nm">__' + esc(k) + "__" + (META[k] && META[k].generated ? '<span class="gen">LLM</span>' : "") + (META[k] && META[k].builtin ? '<span class="gen">' + esc(META[k].builtin) + "</span>" : "") + '</span><span class="ct">' + LIB[k].length + "</span></button>").join("");
+    $("libList").querySelectorAll(".lib").forEach(b => b.addEventListener("click", () => { curLib = b.dataset.l; pendingOps = null; renderAllWild(); }));
+    const miss = missingLibs();
+    $("missingList").innerHTML = miss.length
+      ? miss.map(n => '<div class="miss"><span>__' + esc(n) + '__</span><button class="btn" data-g="' + esc(n) + '">Generate</button></div>').join("")
+      : '<div class="status">None. Try it:</div><button class="btn" id="insWeather">Put __weather__ into the template</button>';
+    $("missingList").querySelectorAll("[data-g]").forEach(b => b.addEventListener("click", () => generateMissing(b.dataset.g, b)));
+    const ins = $("insWeather");
+    if (ins) ins.addEventListener("click", () => { tpl.value = tpl.value.replace(" forest,", " forest under __weather__,"); if (!/__weather__/.test(tpl.value)) tpl.value += "\n__weather__"; renderDSL(); renderAllWild(); setStatus("Added __weather__ to the template. It's missing, so generate it."); });
+  }
+  function renderEntries() {
+    const fam = "__" + curLib + "__", list = LIB[curLib] || [];
+    $("libTitle").textContent = fam;
+    const mx = Math.max(1, ...list.map(v => learned(fam + "=" + v)));
+    $("entries").innerHTML = list.map(v => { const w = learned(fam + "=" + v); return '<span class="chip">' + esc(v) + '<span class="wbar" title="learned weight ' + w.toFixed(2) + '"><span style="width:' + Math.round(w / mx * 100) + '%"></span></span><button class="x" data-rm="' + esc(v) + '" aria-label="Remove ' + esc(v) + '">×</button></span>'; }).join("") || '<span class="status">Empty list.</span>';
+    $("entries").querySelectorAll("[data-rm]").forEach(b => b.addEventListener("click", () => { snapshot(); LIB[curLib] = LIB[curLib].filter(e => e !== b.dataset.rm); delete W[fam + "=" + b.dataset.rm]; renderAllWild(); }));
+    $("examples").innerHTML = curLib === "animal" ? EXAMPLES.map((t, i) => '<button class="chip ex" data-ex="' + i + '">' + esc(t) + "</button>").join("") : '<span class="status">Examples are written for __animal__; with Claude · live any instruction works on any list.</span>';
+    $("examples").querySelectorAll("[data-ex]").forEach(b => b.addEventListener("click", () => { $("instr").value = EXAMPLES[+b.dataset.ex]; $("instr").focus(); }));
+  }
+  function renderDiff() {
+    const d = $("diff");
+    if (!pendingOps) { d.hidden = true; d.innerHTML = ""; return; }
+    const o = pendingOps, parts = [];
+    parts.push('<div class="toolbar"><span class="label">Proposed by ' + esc(o.by) + '</span><span class="status">' + esc(o.note || "") + "</span></div>");
+    if (o.remove.length) parts.push("<ul>" + o.remove.map(e => '<li class="d-rem">' + esc(e) + "</li>").join("") + "</ul>");
+    if (o.add.length) parts.push("<ul>" + o.add.map(e => '<li class="d-add">+ ' + esc(e) + "</li>").join("") + "</ul>");
+    if (o.rename.length) parts.push("<ul>" + o.rename.map(r => '<li class="d-ren">' + esc(r.from) + " → " + esc(r.to) + "</li>").join("") + "</ul>");
+    for (const nl of o.new_lists) parts.push('<div class="d-new">New list <b>__' + esc(nl.name) + "__</b> · " + nl.entries.length + " entries: " + nl.entries.map(esc).join(", ") + '<div class="status">Tip: use <code>{__' + esc(curLib) + "__|__" + esc(nl.name) + "__}</code> to keep both in play. Learned weights move with the entries.</div></div>");
+    if (!o.remove.length && !o.add.length && !o.rename.length && !o.new_lists.length) parts.push('<div class="status">No changes proposed.</div>');
+    parts.push('<div class="controls"><button class="btn primary" id="applyOps">Apply</button><button class="btn" id="discardOps">Discard</button></div>');
+    d.innerHTML = parts.join(""); d.hidden = false;
+    $("applyOps").addEventListener("click", applyPending);
+    $("discardOps").addEventListener("click", () => { pendingOps = null; renderDiff(); setStatus("Discarded."); });
+  }
+  function normalizeOps(raw, lib) {
+    const r = raw && typeof raw === "object" && !Array.isArray(raw) ? raw : {};
+    const cur = LIB[lib];
+    return {
+      remove: cleanList(r.remove).filter(e => cur.includes(e)),
+      add: cleanList(r.add).filter(e => !cur.includes(e)),
+      rename: (Array.isArray(r.rename) ? r.rename : []).filter(x => x && cur.includes(String(x.from)) && String(x.to || "").trim()).map(x => ({ from: String(x.from), to: String(x.to).trim().slice(0, 60) })),
+      new_lists: (Array.isArray(r.new_lists) ? r.new_lists : []).map(x => ({ name: libName(x && x.name), entries: cleanList(x && x.entries) })).filter(x => x.name && x.entries.length && x.name !== lib),
+      note: typeof r.note === "string" ? r.note.slice(0, 200) : "",
+      by: modelName() + (modelSel.value === "claude" ? " (live)" : " (simulated)")
+    };
+  }
+  function applyPending() {
+    const o = pendingOps; if (!o) return;
+    snapshot();
+    const fam = "__" + curLib + "__";
+    let list = LIB[curLib].slice();
+    for (const r of o.rename) { const i = list.indexOf(r.from); if (i >= 0) { list[i] = r.to; const k = fam + "=" + r.from; if (W[k] != null) { W[fam + "=" + r.to] = W[k]; delete W[k]; } } }
+    for (const nl of o.new_lists) {
+      LIB[nl.name] = uniq([...(LIB[nl.name] || []), ...nl.entries]);
+      META[nl.name] = META[nl.name] || { generated: true, by: o.by };
+      for (const e of nl.entries) { const k = fam + "=" + e; if (W[k] != null) W["__" + nl.name + "__=" + e] = W[k]; }
+    }
+    list = list.filter(e => !o.remove.includes(e));
+    for (const e of o.remove) delete W[fam + "=" + e];
+    LIB[curLib] = uniq([...list, ...o.add]);
+    pendingOps = null;
+    setStatus("Applied. Undo is available.");
+    renderAllWild(); renderDSL();
+  }
+  $("runInstr").addEventListener("click", async () => {
+    const instr = $("instr").value.trim();
+    if (!instr) { setStatus("Write an instruction first, or pick an example.", true); return; }
+    const btn = $("runInstr"); btn.disabled = true;
+    setStatus(modelName() + " is thinking…" + (modelSel.value === "claude" ? " (the first call asks for your permission)" : ""));
+    try { pendingOps = normalizeOps(await callModel("edit", { lib: curLib, instr }), curLib); setStatus("Review the proposal, then Apply or Discard."); renderDiff(); }
+    catch (e) { setStatus(errCopy(e), true); }
+    finally { btn.disabled = false; }
+  });
+  $("moreBtn").addEventListener("click", async () => {
+    const btn = $("moreBtn"); btn.disabled = true;
+    setStatus(modelName() + " is generating…");
+    try {
+      const add = cleanList(await callModel("more", { lib: curLib })).filter(e => !LIB[curLib].includes(e));
+      pendingOps = { remove: [], add, rename: [], new_lists: [], note: add.length + " new entries in the same spirit.", by: modelName() + (modelSel.value === "claude" ? " (live)" : " (simulated)") };
+      setStatus("Review the proposal, then Apply or Discard."); renderDiff();
+    } catch (e) { setStatus(errCopy(e), true); }
+    finally { btn.disabled = false; }
+  });
+  $("addEntry").addEventListener("keydown", e => { if (e.key !== "Enter") return; const v = e.target.value.trim(); if (!v || LIB[curLib].includes(v)) return; snapshot(); LIB[curLib].push(v); e.target.value = ""; renderAllWild(); });
+  modelSel.addEventListener("change", () => { renderMissingBanner(); setStatus("Model: " + modelName() + (modelSel.value === "claude" ? " · live" : " · simulated in this mock")); });
+  function renderAllWild() { renderLibs(); renderEntries(); renderDiff(); }
+
+  /* ---------- H3 compiler: screenplay in, contract out ---------- */
+  const H3EX = {
+    t2va: "@h3 t2va 16:9\nstyle: __h3style__\n$hero = __animal__\n\nSHOT 5s | push in, small, slow\nA {misty|frozen:2|burning} forest at dawn. The $hero steps onto a fallen log, breath visible in the cold air.\nNARRATOR (calm low voice, off-screen): The forest remembers.\nSFX: branches creak under frost; soft footfalls press into snow\n\nSHOT 3s | cut, __camera__\nA close-up of the $hero's eyes glowing amber as snow drifts past.\nSFX: wind hisses through the bare trees\n\nMUSIC: sparse __instrument__ at a slow tempo, fading out",
+    i2va: "@h3 i2va adaptive\nstyle: live-action, cinematic\n\nSHOT 6s | truck right, small, slow\nThe young woman shown in <Picture 1> remains beside the rain-covered train window, preserving her appearance, clothing and seat position. She lifts her gaze from a folded letter toward the passing {city lights|harbor cranes|snowy fields}.\nWOMAN (quiet, breathy voice): I get off at the next station.\nSFX: train wheels keep a steady metallic rhythm; rain ticks against the window\n\nMUSIC: sustained __instrument__ notes at a slow tempo, gradually decreasing in volume",
+    fl2va: "@h3 fl2va adaptive\nstyle: live-action, cinematic\n\nSHOT 8s | pull out, small, slow\nA rain-soaked cyclist begins in the position and framing established by Picture 1, holding a closed black umbrella beside a {silver|red|mint-green} bicycle. She raises the umbrella and presses the runner upward until the canopy opens, then settles into the pose and composition established by Picture 2 at the end of the shot.\nSFX: rain falls steadily on the pavement; the umbrella runner clicks and the canopy snaps open",
+    l2va: "@h3 l2va adaptive\nstyle: live-action, cinematic\n\nSHOT 6s | push in, small, slow\nA close shot begins with an intact {drinking glass|wine glass|porcelain cup} near the edge of a dark wooden table, while the same hand and sleeve visible in <Picture 1> approach from the right. The fingertips strike the rim; it tips, falls and breaks. The fragments settle into the exact broken arrangement and composition established by <Picture 1>.\nSFX: fingertips tap the rim; it scrapes, falls and shatters; small fragments scatter across the floor\n\nMUSIC: a low electronic pulse at a slow tempo, ending right after the break"
+  };
+  const CAM = {
+    "push in": "pushes in", "pull out": "pulls out", "zoom in": "zooms in", "zoom out": "zooms out",
+    "pan left": "pans left", "pan right": "pans right", "truck left": "trucks left", "truck right": "trucks right",
+    "tilt up": "tilts up", "tilt down": "tilts down", "pedestal up": "pedestals up", "pedestal down": "pedestals down",
+    "arc": "arcs around the subject", "tracking": "tracks the moving subject", "static": "holds a static shot",
+    "shake slightly": "shakes slightly", "shake strongly": "shakes strongly", "pov": "shows the subject's point of view",
+    "roll clockwise": "rolls clockwise", "roll counterclockwise": "rolls counterclockwise"
+  };
+  const TRANS = { cut: "the camera cuts to", dissolve: "the shot transitions with a cross-dissolve to", fade: "the shot fades to", wipe: "the shot wipes to" };
+  const capFirst = s => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
+  const lowFirst = s => (s ? s.charAt(0).toLowerCase() + s.slice(1) : s);
+  const endDot = s => { const t = String(s).trim(); return /[.!?]$/.test(t) ? t : t + "."; };
+  const sentenceCase = s => capFirst(String(s).replace(/([.!?]\s+)([a-z])/g, (a, p, c) => p + c.toUpperCase()));
+  const ts = t => { const m = Math.floor(t / 60); return String(m).padStart(2, "0") + ":" + (t - m * 60).toFixed(3).padStart(6, "0"); };
+  function camSentence(spec, lint, no) {
+    const parts = spec.split(",").map(x => x.trim().toLowerCase()).filter(Boolean);
+    if (!parts.length) return "";
+    const motion = parts[0];
+    if (!CAM[motion]) { lint.push(["err", "Shot " + no + ": unknown camera motion \"" + motion + "\". The guide knows: " + Object.keys(CAM).join(", ") + "."]); return ""; }
+    if (motion === "static") return "The camera holds a static shot.";
+    let amp = "", speed = "";
+    for (const mod of parts.slice(1)) {
+      if (mod === "small" || mod === "large") amp = " with " + mod + " amplitude";
+      else if (mod === "slow" || mod === "fast") speed = " at " + mod + " speed";
+      else lint.push(["warn", "Shot " + no + ": camera modifier \"" + mod + "\" is not in the guide (small/large, slow/fast)."]);
+    }
+    return "The camera " + CAM[motion] + amp + speed + ".";
+  }
+  function compileH3(src, seed) {
+    const ctx = { r: rng32(seed * 2654435761 >>> 0), picks: [], vars: {}, prefix: null };
+    const lint = [];
+    const lines = src.split("\n");
+    for (const raw of lines) { const m = raw.trim().match(/^\$([A-Za-z_]\w*)\s*=\s*(.+)$/); if (m) { ctx.prefix = m[1]; ctx.vars[m[1]] = expandExpr(m[2], ctx); } }
+    ctx.prefix = null;
+    const sc = { mode: "t2va", ratio: "", style: "", shots: [], music: null, silence: false };
+    let cur = null;
+    for (const raw of lines) {
+      const line0 = raw.trim();
+      if (!line0 || /^\$[A-Za-z_]\w*\s*=/.test(line0)) continue;
+      const line = expandExpr(line0, ctx);
+      let m;
+      if ((m = line.match(/^@h3\s+(\w+)(?:\s+(\S+))?/i))) { sc.mode = m[1].toLowerCase(); sc.ratio = m[2] || ""; continue; }
+      if ((m = line.match(/^style:\s*(.+)$/i))) { sc.style = m[1].trim(); continue; }
+      if ((m = line.match(/^SHOT\s+(\d+(?:\.\d+)?)\s*s\b\s*(?:\|\s*(.*))?$/i))) {
+        let spec = (m[2] || "").trim(), trans = "cut";
+        const first = spec.split(",")[0].trim().toLowerCase();
+        if (TRANS[first]) { trans = first; spec = spec.split(",").slice(1).join(","); }
+        cur = { dur: +m[1], trans, cam: spec.trim(), items: [], sfx: [] }; sc.shots.push(cur); continue;
+      }
+      if ((m = line.match(/^MUSIC:\s*(.+)$/i))) { sc.music = m[1].trim(); continue; }
+      if ((m = line.match(/^SFX:\s*(.+)$/i))) {
+        const t = m[1].trim();
+        if (/^silence$/i.test(t)) { sc.silence = true; continue; }
+        if (!cur) { lint.push(["warn", "SFX before the first SHOT is ignored."]); continue; }
+        cur.sfx.push(t.split(";").map(x => x.trim()).filter(Boolean)); continue;
+      }
+      if (!cur) { lint.push(["warn", "Ignored text before the first SHOT: " + line.slice(0, 48)]); continue; }
+      if ((m = line.match(/^([A-Z][A-Z0-9 _-]*?)\s*(?:\(([^)]*)\))?\s*:\s*(.+)$/))) { cur.items.push({ type: "voice", name: m[1].trim(), mods: m[2] || "", text: m[3].trim() }); continue; }
+      cur.items.push({ type: "prose", text: line });
+    }
+    let t0 = 0; for (const sh of sc.shots) { sh.start = t0; t0 += sh.dur; }
+    const total = +t0.toFixed(3), N = sc.shots.length, S = total.toFixed(2);
+    const speakers = new Map();
+    function voice(it, no) {
+      const mods = it.mods.split(",").map(x => x.trim()).filter(Boolean);
+      const flags = mods.map(x => x.toLowerCase());
+      const vo = flags.includes("voiceover"), off = flags.includes("off-screen") || flags.includes("offscreen");
+      const desc = mods.filter(x => !/^(voiceover|off-?screen)$/i.test(x)).join(", ");
+      let lang = "English", words = it.text;
+      const lm = words.match(/^\[([A-Za-z ]+)\]\s*(.*)$/); if (lm) { lang = lm[1]; words = lm[2]; }
+      if (!words) lint.push(["err", "Shot " + no + ": " + it.name + " has an empty line."]);
+      const noun = it.name.toLowerCase().replace(/_/g, " ");
+      let sp = speakers.get(it.name), subj;
+      if (!sp) { sp = { id: "S" + (speakers.size + 1) }; speakers.set(it.name, sp); subj = "The " + noun + (desc ? " with a " + desc : "") + " (" + sp.id + ")"; }
+      else subj = "The " + noun + " (" + sp.id + ")";
+      const d = "<d>[" + lang + "] " + words + "</d>";
+      if (vo) return subj + " says in an off-screen voiceover: " + d + " while their lips remain completely closed.";
+      if (off) return subj + " says off-screen: " + d;
+      return subj + " says: " + d;
+    }
+    const shotTexts = sc.shots.map((sh, i) => {
+      const no = i + 1;
+      const body = sh.items.map(it => (it.type === "prose" ? sentenceCase(endDot(it.text)) : voice(it, no))).join(" ");
+      const cam = sh.cam ? camSentence(sh.cam, lint, no) : "";
+      const mm = body.match(/^(.*?[.!?])(\s+|$)([\s\S]*)$/);
+      const first = mm ? mm[1] : body, rest = mm ? mm[3] : "";
+      const head = no === 1
+        ? "[Shot 1] " + (sc.style ? capFirst(sc.style) + ", " + lowFirst(first) : capFirst(first))
+        : "[Shot " + no + "] At " + ts(sh.start) + ", " + TRANS[sh.trans] + " " + lowFirst(first);
+      if (!body) lint.push(["err", "Shot " + no + " has no visible action."]);
+      return [head, cam, rest].filter(Boolean).join(" ");
+    });
+    const sfxLines = sc.shots.flatMap(s => s.sfx);
+    let soundscape = "N/A";
+    if (!sfxLines.length) { if (!sc.silence) lint.push(["err", "No SFX lines: overall_soundscape needs 1–4 sentences. Write SFX: silence only for complete silence."]); }
+    else {
+      const sents = sfxLines.map(items => items.length === 1 ? endDot(capFirst(items[0])) : endDot(capFirst(items.slice(0, -1).join(", ")) + " while " + items[items.length - 1]));
+      soundscape = sents.join(" ");
+      if (sents.length > 4) lint.push(["warn", "overall_soundscape has " + sents.length + " sentences; the guide wants 1–4."]);
+      if (sc.silence) lint.push(["warn", "SFX: silence next to other SFX lines is ignored."]);
+    }
+    let music = "N/A";
+    if (sc.music) {
+      music = endDot(capFirst(sc.music));
+      const mood = sc.music.match(/\b(sad|happy|epic|emotional|melancholic|melancholy|uplifting|tense|dramatic|romantic|hopeful|joyful|nostalgic|heartwarming|mournful|moody)\b/i);
+      if (mood) lint.push(["warn", "MUSIC uses the mood word \"" + mood[1] + "\"; the guide wants instrumentation, tempo and dynamics."]);
+    }
+    let align = "";
+    if (sc.mode === "i2va") align = "For the target video, at 0.00 seconds into the target video, <Picture 1> (from [Shot 1]) is fully referenced.";
+    else if (sc.mode === "fl2va") align = "How the reference pictures align with the target video — Picture 1 (from Shot 1) aligns with the 0.00-second mark of the target video; Picture 2 (from Shot " + N + ") aligns with the " + S + "-second mark of the target video.";
+    else if (sc.mode === "l2va") align = "How the reference pictures align with the target video — <Picture 1> (from [Shot " + N + "]) aligns with the " + S + "-second mark of the target video.";
+    else if (sc.mode !== "t2va") lint.push(["err", "Unknown mode \"" + sc.mode + "\" (t2va, i2va, fl2va, l2va; ref2va comes later)."]);
+    if (!N) lint.push(["err", "No SHOT yet."]);
+    else if (total < 4 || total > 15) lint.push(["err", "Duration " + S + " s is outside H3's 4–15 s."]);
+    const shotHas = (i, re) => sc.shots[i] && re.test(sc.shots[i].items.map(x => x.text).join(" "));
+    if (N && sc.mode === "i2va" && !shotHas(0, /Picture 1/)) lint.push(["warn", "I2VA: anchor <Picture 1> in Shot 1 (first-frame anchor, then the action)."]);
+    if (N && sc.mode === "fl2va") {
+      if (N > 1) lint.push(["warn", "FL2VA: the guide favors a single shot so the model can interpolate."]);
+      if (!shotHas(0, /Picture 1/)) lint.push(["warn", "FL2VA: Shot 1 should start from Picture 1."]);
+      if (!shotHas(N - 1, /Picture 2/)) lint.push(["warn", "FL2VA: the final shot should land on Picture 2."]);
+    }
+    if (N && sc.mode === "l2va" && !shotHas(N - 1, /Picture 1/)) lint.push(["warn", "L2VA: the final shot must converge on <Picture 1>."]);
+    const all = shotTexts.join(" ");
+    if (sc.mode === "t2va" && /Picture \d/.test(all)) lint.push(["warn", "T2VA has no reference pictures; drop the Picture references or switch mode."]);
+    if (/⟨unknown __\w+__⟩/.test(all + soundscape + music)) lint.push(["err", "Unresolved wildcard: create it in the Wildcards tab."]);
+    if (/\([^()]*:\s*\d+(\.\d+)?\)/.test(src)) lint.push(["warn", "CLIP weight syntax like (word:1.2) is inert on H3 (the tokenizer disables weights)."]);
+    const text = (align ? align + "\n\n" : "") + "integrated_multimodal_description: " + shotTexts.join(" ") + "\n\noverall_soundscape: " + soundscape + "\n\nnon_diegetic_music: " + music;
+    const s1 = sc.shots[0];
+    const prose1 = s1 ? s1.items.filter(i => i.type === "prose").map(i => endDot(i.text)).join(" ") : "";
+    const flat = sc.style ? capFirst(sc.style) + ", " + lowFirst(prose1) : prose1;
+    return { text, flat, picks: ctx.picks, lint, sc, total, align };
+  }
+  function hlH3(text, hasAlign) {
+    let h = esc(text);
+    h = h.replace(/(integrated_multimodal_description:|overall_soundscape:|non_diegetic_music:)/g, '<span class="f">$1</span>');
+    h = h.replace(/\[Shot \d+\]( At \d\d:\d\d\.\d{3},)?/g, m => '<span class="s">' + m + "</span>");
+    h = h.replace(/&lt;d&gt;[\s\S]*?&lt;\/d&gt;/g, m => '<span class="d">' + m + "</span>");
+    h = h.replace(/\(S\d+\)/g, m => '<span class="id">' + m + "</span>");
+    if (hasAlign) h = h.replace(/^[^\n]*/, m => '<span class="al">' + m + "</span>");
+    return h;
+  }
+  let h3view = "h3", h3last = null;
+  const h3src = $("h3src"); h3src.value = H3EX.t2va;
+  function renderH3() {
+    const seed = +$("h3seed").value || 7;
+    const res = compileH3(h3src.value, seed); h3last = res;
+    $("h3picks").innerHTML = chipsHtml(res.picks) || '<span class="status">No choices in this template.</span>';
+    $("h3tl").previousElementSibling.textContent = "Timeline · " + res.total + " s · " + res.sc.mode.toUpperCase() + (res.sc.ratio ? " · " + res.sc.ratio : "");
+    $("h3tl").innerHTML = res.sc.shots.map((sh, i) => '<div class="seg" style="flex:' + sh.dur + ' 1 0"><b>Shot ' + (i + 1) + " · " + sh.dur + " s</b><span>" + esc(i ? ts(sh.start) + " · " + sh.trans : "00:00.000") + "</span><span>" + esc(sh.cam || "no camera") + "</span></div>").join("") || '<span class="status">No shots yet.</span>';
+    $("h3out").innerHTML = h3view === "h3" ? hlH3(res.text, !!res.align) : esc(res.flat || "") + '\n\n<span class="status">(a still: audio, later shots and keyframe anchors do not apply)</span>';
+    const L = res.lint.length ? res.lint : [["ok", "All checked rules pass."]];
+    $("h3lint").innerHTML = L.map(([sev, msg]) => '<li class="' + sev + '">' + esc(msg) + "</li>").join("");
+  }
+  h3src.addEventListener("input", renderH3);
+  $("h3seed").addEventListener("change", renderH3);
+  $("h3next").addEventListener("click", () => { $("h3seed").value = (+$("h3seed").value || 7) + 1; renderH3(); });
+  $("h3ex").querySelectorAll("[data-m]").forEach(b => b.addEventListener("click", () => { h3src.value = H3EX[b.dataset.m]; renderH3(); }));
+  function setView(v) { h3view = v; $("outH3").setAttribute("aria-pressed", v === "h3" ? "true" : "false"); $("outFlat").setAttribute("aria-pressed", v === "flat" ? "true" : "false"); renderH3(); }
+  $("outH3").addEventListener("click", () => setView("h3"));
+  $("outFlat").addEventListener("click", () => setView("flat"));
+  $("h3copy").addEventListener("click", async () => {
+    const btn = $("h3copy"), txt = h3last ? (h3view === "h3" ? h3last.text : h3last.flat) : "";
+    try { await navigator.clipboard.writeText(txt); btn.textContent = "Copied"; }
+    catch (e) { const rg = document.createRange(); rg.selectNodeContents($("h3out")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(rg); btn.textContent = "Selected: press Ctrl+C"; }
+    setTimeout(() => { btn.textContent = "Copy"; }, 1800);
+  });
+
+  /* ---------- tabs ---------- */
+  const tabs = [["tab-dsl", "p-dsl"], ["tab-wild", "p-wild"], ["tab-h3", "p-h3"], ["tab-comfy", "p-comfy"], ["tab-gal", "p-gal"]];
+  function show(tabId) {
+    for (const [t, p] of tabs) { const on = t === tabId; $(t).setAttribute("aria-selected", on ? "true" : "false"); $(p).hidden = !on; }
+    if (tabId === "tab-comfy") requestAnimationFrame(drawWires);
+    if (tabId === "tab-gal") renderGalaxy();
+    if (tabId === "tab-wild") renderAllWild();
+    if (tabId === "tab-h3") renderH3();
+  }
+  for (const [t] of tabs) $(t).addEventListener("click", () => show(t));
+  const hash = (location.hash || "").slice(1);
+  window.addEventListener("resize", () => { if (!$("p-comfy").hidden) drawWires(); });
+
+  renderDSL();
+  addBatch(16);
+  if (hash === "comfy") show("tab-comfy"); else if (hash === "galaxy") show("tab-gal"); else if (hash === "wildcards") show("tab-wild"); else if (hash === "h3") show("tab-h3"); else show("tab-dsl");
+})();
+</script>
+
