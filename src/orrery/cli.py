@@ -3,27 +3,37 @@
 import argparse
 import json
 import sys
-from pathlib import Path
 
 from orrery import manager
 from orrery.dsl import MissingLibrary, expand_batch
 from orrery.h3 import compile_scene
 from orrery.home import resolve_home
 from orrery.llm import InvalidProposal, backend_for
+from orrery.presets import (
+    delete_preset,
+    list_presets,
+    load_preset,
+    preset_meta,
+    resolve_template,
+    save_preset,
+    tag_preset,
+)
 
 
-def _read_template(arg: str) -> str:
-    p = Path(arg)
-    return p.read_text(encoding="utf-8") if p.is_file() else arg
+def _msg(err: Exception) -> str:
+    """KeyError str() adds quotes; MissingLibrary has its own message."""
+    if isinstance(err, KeyError) and not isinstance(err, MissingLibrary):
+        return str(err.args[0])
+    return str(err)
 
 
 def _cmd_expand(args: argparse.Namespace) -> int:
     home = resolve_home(args.home)
-    template = _read_template(args.template)
     try:
+        template = resolve_template(home, args.template)
         rows = expand_batch(template, args.seed, args.n, home.libraries(), home.weights())
-    except MissingLibrary as err:
-        print(f"orrery: {err}", file=sys.stderr)
+    except KeyError as err:
+        print(f"orrery: {_msg(err)}", file=sys.stderr)
         return 2
     if args.json:
         print(json.dumps([
@@ -41,10 +51,10 @@ def _cmd_expand(args: argparse.Namespace) -> int:
 def _cmd_compile(args: argparse.Namespace) -> int:
     home = resolve_home(args.home)
     try:
-        result = compile_scene(_read_template(args.scene), args.seed, home.libraries(),
+        result = compile_scene(resolve_template(home, args.scene), args.seed, home.libraries(),
                                home.weights(), target=args.target)
-    except MissingLibrary as err:
-        print(f"orrery: {err}", file=sys.stderr)
+    except KeyError as err:
+        print(f"orrery: {_msg(err)}", file=sys.stderr)
         return 2
     if args.json:
         print(json.dumps({
@@ -83,7 +93,7 @@ def _cmd_lib(args: argparse.Namespace) -> int:
     try:
         return _LIB_ACTIONS[args.action](home, args)
     except (InvalidProposal, RuntimeError, KeyError, FileExistsError) as err:
-        print(f"orrery: {err.args[0] if isinstance(err, KeyError) else err}", file=sys.stderr)
+        print(f"orrery: {_msg(err)}", file=sys.stderr)
         return 3
 
 
@@ -112,7 +122,7 @@ def _lib_show(home, args) -> int:
 
 def _lib_gen(home, args) -> int:
     backend = backend_for(home, "library")
-    template = _read_template(args.template) if args.template else None
+    template = resolve_template(home, args.template) if args.template else None
     print(f"{backend.name} is writing __{args.name}__ …", file=sys.stderr)
     values = manager.propose_new(home, args.name, backend, template, args.n)
     print(f"__{args.name}__ (new)\n" + "\n".join(f"  + {v}" for v in values))
@@ -157,6 +167,35 @@ _LIB_ACTIONS = {"list": _lib_list, "show": _lib_show, "gen": _lib_gen, "more": _
                 "edit": _lib_edit, "undo": _lib_undo}
 
 
+def _cmd_preset(args: argparse.Namespace) -> int:
+    home = resolve_home(args.home)
+    try:
+        if args.action == "list":
+            for name in list_presets(home, tag=args.tag, folder=args.folder):
+                first = load_preset(home, name).strip().splitlines()[:1]
+                tags = preset_meta(home, name).get("tags") or []
+                label = f"@{name}" + (f"  [{', '.join(tags)}]" if tags else "")
+                print(label.ljust(40) + (first[0][:60] if first else ""))
+        elif args.action == "show":
+            print(load_preset(home, args.name), end="")
+        elif args.action == "save":
+            tags = [t.strip() for t in (args.tags or "").split(",") if t.strip()]
+            name = save_preset(home, args.name, resolve_template(home, args.template),
+                               args.overwrite, tags)
+            print(f"Saved @{name}")
+        elif args.action in ("tag", "untag"):
+            change = {"add": args.tags} if args.action == "tag" else {"remove": args.tags}
+            tags = tag_preset(home, args.name, **change)
+            print(f"@{args.name}: " + (", ".join(tags) or "(no tags)"))
+        elif args.action == "rm":
+            delete_preset(home, args.name)
+            print(f"Removed @{args.name}")
+    except (KeyError, FileExistsError, ValueError) as err:
+        print(f"orrery: {_msg(err)}", file=sys.stderr)
+        return 2
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="orrery", description=__doc__)
     parser.add_argument("--home", help="orrery home (default: $ORRERY_HOME or ~/.orrery)")
@@ -196,6 +235,27 @@ def build_parser() -> argparse.ArgumentParser:
     for p in (gen, more, edit):
         p.add_argument("--yes", action="store_true", help="apply without asking")
     lib.set_defaults(func=_cmd_lib)
+
+    preset = sub.add_parser("preset", help="named templates, usable as @name everywhere")
+    preset_sub = preset.add_subparsers(dest="action", required=True)
+    p_list = preset_sub.add_parser("list", help="presets with tags and first line")
+    p_list.add_argument("--tag")
+    p_list.add_argument("--folder")
+    p_show = preset_sub.add_parser("show", help="print a preset")
+    p_show.add_argument("name")
+    p_save = preset_sub.add_parser(
+        "save", help="save a template (text, file, @preset or #hash from galaxy.jsonl)")
+    p_save.add_argument("name")
+    p_save.add_argument("template")
+    p_save.add_argument("--overwrite", action="store_true")
+    p_save.add_argument("--tags", help="comma-separated")
+    for action in ("tag", "untag"):
+        p_tag = preset_sub.add_parser(action, help=f"{action} a preset")
+        p_tag.add_argument("name")
+        p_tag.add_argument("tags", nargs="+")
+    p_rm = preset_sub.add_parser("rm", help="delete a preset")
+    p_rm.add_argument("name")
+    preset.set_defaults(func=_cmd_preset)
     return parser
 
 

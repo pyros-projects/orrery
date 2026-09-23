@@ -35,3 +35,32 @@ def test_learned_weights_from_home_are_applied(home, capsys):
     main(["expand", "__animal__", "-n", "40", "--json"])
     rows = json.loads(capsys.readouterr().out)
     assert sum(r["text"] == "owl" for r in rows) > 30
+
+
+def test_expand_accepts_preset_references(home, capsys):
+    main(["preset", "save", "zoo", "a __animal__ at the zoo"])
+    capsys.readouterr()
+    main(["expand", "@zoo", "--json"])
+    assert json.loads(capsys.readouterr().out)[0]["text"].endswith(" at the zoo")
+
+
+def test_preset_cli_list_show_rm(home, capsys):
+    main(["preset", "save", "zoo", "a __animal__ at the zoo"])
+    main(["preset", "list"])
+    main(["preset", "show", "zoo"])
+    out = capsys.readouterr().out
+    assert "zoo" in out and "a __animal__ at the zoo" in out
+    assert main(["preset", "rm", "zoo"]) == 0
+    assert main(["preset", "show", "zoo"]) == 2
+
+
+def test_preset_cli_folders_and_tags(home, capsys):
+    main(["preset", "save", "h3/forest", "a __animal__", "--tags", "winter,moody"])
+    main(["preset", "save", "beach", "a __animal__ on sand"])
+    main(["preset", "tag", "beach", "summer"])
+    capsys.readouterr()
+    main(["preset", "list", "--tag", "winter"])
+    out = capsys.readouterr().out
+    assert "@h3/forest" in out and "moody" in out and "beach" not in out
+    main(["preset", "list", "--folder", "h3"])
+    assert "@h3/forest" in capsys.readouterr().out

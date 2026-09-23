@@ -14,13 +14,18 @@ from pathlib import Path
 from orrery.dsl import MissingLibrary, expand
 from orrery.h3 import compile_scene
 from orrery.home import Home, resolve_home
+from orrery.presets import list_presets, load_preset, remember_template
 
 TARGETS = ["text", "h3-base", "flat"]
+NO_PRESET = "(none)"
 DEFAULT_TEMPLATE = "$hero = __animal__\n$hero in a {misty|frozen:2|burning} forest"
 
 
-def run_prompt(template: str, seed: int, target: str, home: str = "") -> tuple[str, str, int]:
+def run_prompt(template: str, seed: int, target: str, home: str = "",
+               preset: str = NO_PRESET) -> tuple[str, str, int]:
     h = resolve_home(home or None)
+    if preset and preset != NO_PRESET:
+        template = load_preset(h, preset)
     try:
         if target == "text":
             result = expand(template, seed, h.libraries(), h.weights())
@@ -35,7 +40,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "") -> tuple[s
     data = {
         "seed": seed,
         "target": target,
-        "template": hashlib.sha256(template.encode()).hexdigest()[:16],
+        "template": remember_template(h, template),
         "text": result.text,
         "picks": [{"label": p.label, "value": p.value, "keys": list(p.keys)} for p in result.picks],
         "lint": lint,
@@ -102,15 +107,20 @@ class OrreryPrompt:
                                  "control_after_generate": True}),
                 "target": (TARGETS,),
             },
-            "optional": {"home": ("STRING", {"default": ""})},
+            "optional": {
+                "preset": ([NO_PRESET, *list_presets(resolve_home())],),
+                "home": ("STRING", {"default": ""}),
+            },
         }
 
     @classmethod
-    def IS_CHANGED(cls, template, seed, target, home=""):
-        return f"{seed}:{target}:{hash(template)}:{state_token(resolve_home(home or None))}"
+    def IS_CHANGED(cls, template, seed, target, preset=NO_PRESET, home=""):
+        h = resolve_home(home or None)
+        chosen = load_preset(h, preset) if preset and preset != NO_PRESET else template
+        return f"{seed}:{target}:{hash(chosen)}:{state_token(h)}"
 
-    def run(self, template, seed, target, home=""):
-        return run_prompt(template, seed, target, home)
+    def run(self, template, seed, target, preset=NO_PRESET, home=""):
+        return run_prompt(template, seed, target, home, preset)
 
 
 class OrreryLog:

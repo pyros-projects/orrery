@@ -37,6 +37,14 @@ class Home:
         return self.root / "history"
 
     @property
+    def presets_dir(self) -> Path:
+        return self.root / "presets"
+
+    @property
+    def templates_dir(self) -> Path:
+        return self.root / "templates"
+
+    @property
     def config_path(self) -> Path:
         return self.root / "orrery.yaml"
 

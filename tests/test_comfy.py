@@ -95,3 +95,17 @@ def test_node_pack_imports_from_the_repo_folder(monkeypatch):
     pack = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(pack)
     assert set(pack.NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog"}
+
+
+def test_prompt_node_uses_a_preset_and_remembers_the_template(home):
+    from orrery.presets import recall_template, save_preset
+    save_preset(Home(home), "forest", "a __animal__ in the forest")
+    text, picks, _ = run_prompt("ignored", 1, "text", str(home), preset="forest")
+    assert text.endswith(" in the forest")
+    assert recall_template(Home(home), json.loads(picks)["template"]) == "a __animal__ in the forest"
+
+
+def test_prompt_node_offers_presets_in_a_dropdown(home):
+    from orrery.presets import save_preset
+    save_preset(Home(home), "forest", "x")
+    assert OrreryPrompt.INPUT_TYPES()["optional"]["preset"][0] == ["(none)", "forest"]

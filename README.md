@@ -56,6 +56,39 @@ uv run orrery expand '$hero = __animal__
 $hero in a {misty|frozen} forest' --seed 5 -n 3        # --json for machines
 ```
 
+## Presets and template references
+
+Anywhere a template is expected (CLI arguments, `preset save`), you can pass:
+
+| Reference | Resolves to |
+|---|---|
+| `@forest`, `@h3/winter_forest` | a preset in `~/.orrery/presets/` (folders are path segments) |
+| `#1a2b3c4d5e6f7a8b` | the exact template a `galaxy.jsonl` line recorded (its `template` hash) |
+| a file path | the file's content |
+| anything else | the text itself |
+
+```bash
+uv run orrery preset save h3/winter_forest examples/forest.orr --tags winter,moody
+uv run orrery preset save keeper '#1a2b3c4d5e6f7a8b'   # a template that made a good output
+uv run orrery preset tag keeper portrait
+uv run orrery preset list --tag winter                 # or --folder h3
+uv run orrery compile @h3/winter_forest --seed 7
+```
+
+Tags live in YAML front matter at the top of the preset file and are stripped
+before expansion:
+
+```
+---
+tags: [moody, winter]
+---
+@h3 t2va 16:9
+…
+```
+
+The ComfyUI node records every template it uses under its hash, so each
+galaxy line can be traced back to, and re-run from, its exact template.
+
 ## Wildcard manager
 
 ```bash
@@ -94,7 +127,8 @@ Restart ComfyUI. Nodes under **orrery**:
 
 - **Orrery Prompt**: template, seed, target (`text`, `h3-base`, `flat`) →
   `text`, `picks`, `seed`. Wire `text` into your text encoder or the MiniMax H3
-  prompt input.
+  prompt input. The optional `preset` dropdown replaces the template field
+  (the list refreshes when ComfyUI reloads nodes).
 - **Orrery Log**: `picks` (+ `images`) → saves PNGs with the picks embedded and
   appends one line per output to `~/.orrery/galaxy.jsonl`. For videos saved by
   another node, put the file path into `media_path`.
