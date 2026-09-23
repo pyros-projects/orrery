@@ -23,6 +23,15 @@ _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
 _MULTI = re.compile(r"^(\d+)(?:-(\d+))?\$\$(.+)$")
 _WEIGHTED = re.compile(r"^(.*?):(\d+(?:\.\d+)?)$")
 _LIB_ONLY = re.compile(r"^__(\w+)(?:\[([\w-]+)\])?__$")
+_AN_PREFIXES = ("hour", "honest", "honor", "honour", "heir")
+_A_PREFIXES = ("uni", "use", "usu", "eu", "one ", "once")
+
+
+def _wants_an(word: str) -> bool:
+    w = word.lower()
+    if w.startswith(_AN_PREFIXES):
+        return True
+    return w[:1] in "aeiou" and not w.startswith(_A_PREFIXES)
 
 
 class MissingLibrary(KeyError):
@@ -116,7 +125,16 @@ class Expander:
                 break
             text = text[: m.start()] + self._brace(m.group(1)) + text[m.end():]
         text = _LIB.sub(lambda m: self._library(m.group(1), m.group(2), label_prefix), text)
-        return _VAR.sub(lambda m: self.vars.get(m.group(1), m.group(0)), text)
+        text = _VAR.sub(lambda m: self.vars.get(m.group(1), m.group(0)), text)
+        return self._articles(text)
+
+    def _articles(self, text: str) -> str:
+        """Make a/an agree with picked values ('a axolotl' → 'an axolotl')."""
+        values = {p.value for p in self.picks} | set(self.vars.values())
+        for v in sorted((v for v in values if v), key=len, reverse=True):
+            text = re.sub(r"\b([Aa])n? (?=" + re.escape(v) + r"\b)",
+                          lambda m, v=v: m.group(1) + ("n " if _wants_an(v) else " "), text)
+        return text
 
     def _pool(self, name: str, tag: str | None) -> tuple[str, list[tuple[str, float]]]:
         if name not in self.libraries:

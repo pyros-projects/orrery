@@ -1,0 +1,7 @@
+---
+title: "04 · Bindings: one hero, everywhere"
+lesson: "$name = … is rolled once and reused. The saint stays the same creature everywhere in the prompt, while the shadow rolls a creature of its own."
+tags: [tutorial]
+---
+$hero = __creature__
+a medieval altarpiece of a $hero as a patron saint, gold halo, the $hero blessing tiny kneeling pilgrims, but the shadow the $hero casts on the wall is a __creature__

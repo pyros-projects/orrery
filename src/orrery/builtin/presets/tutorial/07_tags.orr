@@ -1,0 +1,8 @@
+---
+title: "07 · Tags"
+lesson: "__lib[tag]__ only picks entries carrying that tag. One library, many moods: the deep-sea guest and the mythical guest come from the same creature list."
+tags: [tutorial]
+---
+$deep = __creature[deep_sea]__
+$myth = __creature[myth]__
+a museum diorama of a $deep and a $myth sharing a candlelit dinner on the ocean floor, a brass museum placard reading "Unlikely Friends"

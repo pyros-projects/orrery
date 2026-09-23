@@ -1,0 +1,14 @@
+---
+title: "11 · Your first MiniMax H3 scene"
+lesson: "Screenplays compile into H3's full prompt contract: fields, camera sentence, soundscape and music. Try: orrery compile @tutorial/11_h3_first_scene --seed 3"
+tags: [tutorial, h3]
+---
+@h3 t2va 16:9
+style: __h3style__
+$hero = __creature__
+
+SHOT 6s | push in, small, slow
+A $hero waits alone in __place__. Beyond the windows, __weather__.
+SFX: a clock ticks; wind presses against old glass
+
+MUSIC: a slow, sparse __instrument__ line that fades out

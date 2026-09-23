@@ -1,0 +1,8 @@
+---
+title: "10 · Everything at once (still)"
+lesson: "Bindings, tags, weights, nesting and multi-picks together. A rare aurora wins one roll in five; the rest of the time a light from the library takes over."
+tags: [tutorial, woah]
+---
+$beast = __creature[myth]__
+$made_of = __material__
+a {museum|cathedral:2|train station} built entirely from $made_of, a colossal $beast asleep coiled around its {clock tower|bell tower|departure board}, tiny visitors in {Victorian|1970s|far-future} clothing photographing it, {an aurora overhead|__light__:4}, __lens__

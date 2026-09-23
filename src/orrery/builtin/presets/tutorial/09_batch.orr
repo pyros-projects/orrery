@@ -1,0 +1,8 @@
+---
+title: "09 · Batches"
+lesson: "The : line sets batch count, starting seed and size. `orrery expand @tutorial/09_batch` rolls eight seeds from 100 without any flags."
+tags: [tutorial]
+---
+$subject = __creature__
+a $subject posing for {a passport photo|a Renaissance court portrait|a 1980s school yearbook|a collectible trading card}, __light__
+: x8 seed=100 w1024 h1024

@@ -15,13 +15,17 @@ from orrery.presets import (
 )
 
 
+def user_presets(h):
+    return [n for n in list_presets(h) if not n.startswith("tutorial/")]
+
+
 def test_save_list_load_delete(home):
     h = Home(home)
     save_preset(h, "forest", "a __animal__ in a forest")
-    assert list_presets(h) == ["forest"]
+    assert user_presets(h) == ["forest"]
     assert load_preset(h, "forest") == "a __animal__ in a forest"
     delete_preset(h, "forest")
-    assert list_presets(h) == []
+    assert user_presets(h) == []
 
 
 def test_preset_names_are_sanitized(home):
@@ -76,7 +80,7 @@ def test_presets_can_live_in_folders(home):
     assert save_preset(h, "H3/Winter/Forest", "x") == "h3/winter/forest"
     assert (home / "presets" / "h3" / "winter" / "forest.orr").exists()
     save_preset(h, "portrait", "y")
-    assert list_presets(h) == ["h3/winter/forest", "portrait"]
+    assert user_presets(h) == ["h3/winter/forest", "portrait"]
     assert list_presets(h, folder="h3") == ["h3/winter/forest"]
     assert resolve_template(h, "@h3/winter/forest") == "x"
 

@@ -1,0 +1,7 @@
+---
+title: "08 · Composing a brief"
+lesson: "Libraries stack into a full photographer's brief. Every pick is a dial: the galaxy learns which lens, light and film you keep loving."
+tags: [tutorial]
+---
+$subject = __creature__
+{editorial|documentary|fine-art} photograph of a $subject in __place__, __lens__, __light__, shot on {Kodak Portra 400|Ilford HP5 black and white|Fuji Velvia slide film}

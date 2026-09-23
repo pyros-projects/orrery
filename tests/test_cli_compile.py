@@ -38,4 +38,4 @@ def test_lint_errors_go_to_stderr_and_fail(home, tmp_path, capsys):
 
 
 def test_compile_missing_library_exits_2(home, tmp_path, capsys):
-    assert main(["compile", write(tmp_path, "@h3 t2va\nSHOT 5s\nA __weather__.\nSFX: x\n")]) == 2
+    assert main(["compile", write(tmp_path, "@h3 t2va\nSHOT 5s\nA __smell__.\nSFX: x\n")]) == 2

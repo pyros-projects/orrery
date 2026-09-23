@@ -25,6 +25,7 @@ import yaml
 from orrery.home import Home
 
 EXT = ".orr"
+BUILTIN_PRESETS = Path(__file__).parent / "builtin" / "presets"
 _FRONT_MATTER = re.compile(r"\A---\n(.*?)\n---\n?", re.DOTALL)
 
 
@@ -60,18 +61,38 @@ def _path(home: Home, name: str) -> Path:
     return home.presets_dir / f"{clean}{EXT}"
 
 
-def preset_meta(home: Home, name: str) -> dict:
+def _source(home: Home, name: str) -> Path:
+    """The user's preset if present, else the built-in one of that name."""
+    user = _path(home, name)
+    if user.exists():
+        return user
+    builtin = BUILTIN_PRESETS / user.relative_to(home.presets_dir)
+    if builtin.exists():
+        return builtin
+    raise KeyError(f"preset '{name}' does not exist (see: orrery preset list)")
+
+
+def is_builtin(home: Home, name: str) -> bool:
+    return not _path(home, name).exists() and _source(home, name).is_relative_to(BUILTIN_PRESETS)
+
+
+def _writable(home: Home, name: str) -> Path:
     path = _path(home, name)
-    if not path.exists():
-        raise KeyError(f"preset '{name}' does not exist (see: orrery preset list)")
-    return split_front_matter(path.read_text(encoding="utf-8"))[0]
+    if not path.exists() and is_builtin(home, name):
+        clean = preset_name(name)
+        raise ValueError(f"@{clean} is a built-in preset; make it yours first: "
+                         f"orrery preset save {clean} @{clean}")
+    return _source(home, name)
+
+
+def preset_meta(home: Home, name: str) -> dict:
+    return split_front_matter(_source(home, name).read_text(encoding="utf-8"))[0]
 
 
 def list_presets(home: Home, tag: str | None = None, folder: str | None = None) -> list[str]:
-    if not home.presets_dir.exists():
-        return []
-    names = sorted(p.relative_to(home.presets_dir).with_suffix("").as_posix()
-                   for p in home.presets_dir.rglob(f"*{EXT}"))
+    names = sorted({p.relative_to(root).with_suffix("").as_posix()
+                    for root in (BUILTIN_PRESETS, home.presets_dir) if root.exists()
+                    for p in root.rglob(f"*{EXT}")})
     if folder:
         prefix = preset_name(folder) + "/"
         names = [n for n in names if n.startswith(prefix)]
@@ -81,10 +102,7 @@ def list_presets(home: Home, tag: str | None = None, folder: str | None = None) 
 
 
 def load_preset(home: Home, name: str) -> str:
-    path = _path(home, name)
-    if not path.exists():
-        raise KeyError(f"preset '{name}' does not exist (see: orrery preset list)")
-    return split_front_matter(path.read_text(encoding="utf-8"))[1]
+    return split_front_matter(_source(home, name).read_text(encoding="utf-8"))[1]
 
 
 def save_preset(home: Home, name: str, text: str, overwrite: bool = False,
@@ -101,9 +119,7 @@ def save_preset(home: Home, name: str, text: str, overwrite: bool = False,
 
 
 def tag_preset(home: Home, name: str, add=(), remove=()) -> list[str]:
-    path = _path(home, name)
-    if not path.exists():
-        raise KeyError(f"preset '{name}' does not exist (see: orrery preset list)")
+    path = _writable(home, name)
     meta, body = split_front_matter(path.read_text(encoding="utf-8"))
     tags = sorted({*(meta.get("tags") or []), *add} - set(remove))
     if tags:
@@ -115,9 +131,7 @@ def tag_preset(home: Home, name: str, add=(), remove=()) -> list[str]:
 
 
 def delete_preset(home: Home, name: str) -> None:
-    path = _path(home, name)
-    if not path.exists():
-        raise KeyError(f"preset '{name}' does not exist (see: orrery preset list)")
+    path = _writable(home, name)
     path.unlink()
     folder = path.parent
     while folder != home.presets_dir and not any(folder.iterdir()):

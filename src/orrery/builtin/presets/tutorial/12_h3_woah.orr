@@ -1,0 +1,25 @@
+---
+title: "12 · Everything at once (H3)"
+lesson: "Three shots, three transitions, rolled camera and weather, two voices in two languages. The compiler computes timestamps, speaker IDs and <d> tags, and lints the result against the official guide."
+tags: [tutorial, h3, woah]
+---
+@h3 t2va 16:9
+style: live-action, cinematic
+$keeper = __creature__
+
+SHOT 4s | pull out, small, slow
+A lighthouse keeper's kitchen at the edge of the world. Beyond the windows, __weather__ over a black sea. A $keeper in a knitted scarf pours tea for two.
+KEEPER (warm, raspy old voice): The ships stopped coming years ago.
+SFX: a kettle hisses; wind worries the shutters
+
+SHOT 3s | cut, __camera__
+A close-up of the second teacup, steam curling up, the chair across the table still empty.
+SFX: a clock ticks
+
+SHOT 4s | dissolve, arc, slow
+the empty chair, now holding a translucent woman made of sea spray who smiles at the $keeper.
+GHOST (soft, echoing voice): [French] Je suis toujours venue.
+KEEPER: I know.
+SFX: waves swell far below; a single gull cries
+
+MUSIC: a music box melody at a slow tempo, joined by sustained low strings that rise and then fade

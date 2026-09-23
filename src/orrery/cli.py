@@ -5,12 +5,13 @@ import json
 import sys
 
 from orrery import manager
-from orrery.dsl import MissingLibrary, expand_batch
+from orrery.dsl import MissingLibrary, expand_batch, parse
 from orrery.h3 import compile_scene
 from orrery.home import resolve_home
 from orrery.llm import InvalidProposal, backend_for
 from orrery.presets import (
     delete_preset,
+    is_builtin,
     list_presets,
     load_preset,
     preset_meta,
@@ -31,7 +32,10 @@ def _cmd_expand(args: argparse.Namespace) -> int:
     home = resolve_home(args.home)
     try:
         template = resolve_template(home, args.template)
-        rows = expand_batch(template, args.seed, args.n, home.libraries(), home.weights())
+        params = parse(template).params
+        seed = args.seed if args.seed is not None else (params.seed or 0)
+        count = args.n if args.n is not None else (params.count or 1)
+        rows = expand_batch(template, seed, count, home.libraries(), home.weights())
     except KeyError as err:
         print(f"orrery: {_msg(err)}", file=sys.stderr)
         return 2
@@ -172,10 +176,13 @@ def _cmd_preset(args: argparse.Namespace) -> int:
     try:
         if args.action == "list":
             for name in list_presets(home, tag=args.tag, folder=args.folder):
+                meta = preset_meta(home, name)
                 first = load_preset(home, name).strip().splitlines()[:1]
-                tags = preset_meta(home, name).get("tags") or []
+                title = meta.get("title") or (first[0][:60] if first else "")
+                tags = meta.get("tags") or []
                 label = f"@{name}" + (f"  [{', '.join(tags)}]" if tags else "")
-                print(label.ljust(40) + (first[0][:60] if first else ""))
+                mark = "  (built-in)" if is_builtin(home, name) else ""
+                print(label.ljust(44) + title + mark)
         elif args.action == "show":
             print(load_preset(home, args.name), end="")
         elif args.action == "save":
@@ -203,8 +210,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     ex = sub.add_parser("expand", help="expand a template (text or file) with seeded picks")
     ex.add_argument("template")
-    ex.add_argument("--seed", type=int, default=0)
-    ex.add_argument("-n", type=int, default=1, help="number of consecutive seeds")
+    ex.add_argument("--seed", type=int, help="first seed (default: the template's : seed=, else 0)")
+    ex.add_argument("-n", type=int, help="number of consecutive seeds (default: : xN, else 1)")
     ex.add_argument("--json", action="store_true")
     ex.set_defaults(func=_cmd_expand)
 

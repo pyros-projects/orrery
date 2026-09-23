@@ -1,0 +1,26 @@
+meta: {builtin: true}
+entries:
+  - {value: axolotl, tags: [water]}
+  - {value: red panda, tags: [mammal]}
+  - {value: pangolin, tags: [mammal]}
+  - {value: snow leopard, tags: [feline, mammal]}
+  - {value: caracal, tags: [feline, mammal]}
+  - {value: black panther, tags: [feline, mammal]}
+  - {value: barn owl, tags: [bird]}
+  - {value: shoebill stork, tags: [bird]}
+  - {value: hummingbird, tags: [bird]}
+  - {value: raven, tags: [bird]}
+  - {value: manta ray, tags: [water]}
+  - {value: anglerfish, tags: [deep_sea, water]}
+  - {value: vampire squid, tags: [deep_sea, water]}
+  - {value: giant isopod, tags: [deep_sea, water]}
+  - {value: siphonophore, tags: [deep_sea, water]}
+  - {value: praying mantis, tags: [insect]}
+  - {value: atlas moth, tags: [insect]}
+  - {value: stag beetle, tags: [insect]}
+  - {value: kitsune, tags: [myth]}
+  - {value: qilin, tags: [myth]}
+  - {value: griffin, tags: [myth]}
+  - {value: selkie, tags: [myth, water]}
+  - {value: jackalope, tags: [myth]}
+  - {value: basilisk, tags: [myth]}

@@ -26,8 +26,8 @@ def test_expand_reads_a_template_file(home, tmp_path, capsys):
 
 
 def test_missing_library_exits_with_hint(home, capsys):
-    assert main(["expand", "a __weather__ day"]) == 2
-    assert "orrery lib gen weather" in capsys.readouterr().err
+    assert main(["expand", "a __smell__ day"]) == 2
+    assert "orrery lib gen smell" in capsys.readouterr().err
 
 
 def test_learned_weights_from_home_are_applied(home, capsys):

@@ -106,3 +106,14 @@ def test_batch_uses_consecutive_seeds():
     batch = expand_batch("__animal__", 10, 3, LIBS)
     assert [e.seed for e in batch] == [10, 11, 12]
     assert batch[1].text == expand("__animal__", 11, LIBS).text
+
+
+def test_articles_agree_with_the_picked_word():
+    libs = {"c": Library("c", [Entry("axolotl")]), "d": Library("d", [Entry("fox")])}
+    assert expand("a __c__ and an __d__", 1, libs).text == "an axolotl and a fox"
+    assert expand("A __c__ sleeps", 1, libs).text == "An axolotl sleeps"
+
+
+def test_article_exceptions():
+    libs = {"u": Library("u", [Entry("unicorn")]), "h": Library("h", [Entry("hour-long nap")])}
+    assert expand("a __u__, a __h__", 1, libs).text == "a unicorn, an hour-long nap"

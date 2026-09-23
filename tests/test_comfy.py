@@ -25,7 +25,8 @@ SCENE = "@h3 t2va\nSHOT 5s | static\nA __animal__ sleeps.\nSFX: wind\n"
 def test_prompt_node_expands_plain_templates(home):
     text, picks, seed = run_prompt("a __animal__", 4, "text", str(home))
     data = json.loads(picks)
-    assert seed == 4 and text.startswith("a ")
+    value = data["picks"][0]["value"]
+    assert seed == 4 and text in (f"a {value}", f"an {value}")
     assert data["target"] == "text" and data["seed"] == 4
     assert data["picks"][0]["label"] == "__animal__"
     assert data["picks"][0]["keys"] == [f"__animal__={data['picks'][0]['value']}"]
@@ -44,8 +45,8 @@ def test_prompt_node_flat_target(home):
 
 
 def test_prompt_node_names_missing_libraries(home):
-    with pytest.raises(ValueError, match="orrery lib gen weather"):
-        run_prompt("a __weather__ day", 1, "text", str(home))
+    with pytest.raises(ValueError, match="orrery lib gen smell"):
+        run_prompt("a __smell__ day", 1, "text", str(home))
 
 
 def test_state_token_changes_with_libraries_and_weights(home):
@@ -108,4 +109,5 @@ def test_prompt_node_uses_a_preset_and_remembers_the_template(home):
 def test_prompt_node_offers_presets_in_a_dropdown(home):
     from orrery.presets import save_preset
     save_preset(Home(home), "forest", "x")
-    assert OrreryPrompt.INPUT_TYPES()["optional"]["preset"][0] == ["(none)", "forest"]
+    choices = OrreryPrompt.INPUT_TYPES()["optional"]["preset"][0]
+    assert choices[0] == "(none)" and "forest" in choices and "tutorial/01_first_wildcard" in choices

@@ -1,0 +1,6 @@
+---
+title: "06 · Nesting"
+lesson: "Choices can nest. The innermost braces resolve first, so whole phrases, not just words, become part of the roll."
+tags: [tutorial]
+---
+a {{tiny|colossal} {clockwork|origami|glass} {fox|heron|octopus}|lone astronaut in a paper spacesuit} wandering through __place__

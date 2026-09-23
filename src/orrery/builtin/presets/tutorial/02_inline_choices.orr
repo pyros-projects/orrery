@@ -1,0 +1,6 @@
+---
+title: "02 · Inline choices"
+lesson: "{a|b|c} picks one option per seed, right inside the prompt. It is recorded as a pick, just like a library entry."
+tags: [tutorial]
+---
+a paper boat with a tiny lantern on its mast, drifting through {a flooded cathedral|a neon-lit city gutter|the rings of Saturn|a teacup the size of a lake}
