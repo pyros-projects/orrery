@@ -11,3 +11,9 @@ def home(tmp_path, monkeypatch):
     (lib / "style.yaml").write_text("- linocut\n- gouache\n")
     monkeypatch.setenv("ORRERY_HOME", str(root))
     return root
+
+
+@pytest.fixture(autouse=True)
+def _force_fake_llm(monkeypatch):
+    """Never let the test suite load or call a real model (lesson LS-G0010)."""
+    monkeypatch.setenv("ORRERY_FORCE_FAKE_LLM", "1")
