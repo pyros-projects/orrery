@@ -102,7 +102,8 @@ class OrreryPrompt:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "template": ("STRING", {"multiline": True, "default": DEFAULT_TEMPLATE}),
+                "template": ("STRING", {"multiline": True, "default": DEFAULT_TEMPLATE,
+                                        "pysssss.autocomplete": False}),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xFFFFFFFF,
                                  "control_after_generate": True}),
                 "target": (TARGETS,),

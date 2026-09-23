@@ -129,6 +129,11 @@ Restart ComfyUI. Nodes under **orrery**:
   `text`, `picks`, `seed`. Wire `text` into your text encoder or the MiniMax H3
   prompt input. The optional `preset` dropdown replaces the template field
   (the list refreshes when ComfyUI reloads nodes).
+  The template field completes as you type: `__` lists your libraries (size,
+  origin, a few entries), `__creature[` its tags, `$` your bindings, and in
+  `@h3` screenplays `SHOT 5s | ` offers camera moves, transitions and
+  modifiers. ↑/↓ to choose, Enter/Tab to insert, Esc to close. Unknown
+  libraries outline the field in red; hover it to see which.
 - **Orrery Log**: `picks` (+ `images`) → saves PNGs with the picks embedded and
   appends one line per output to `~/.orrery/galaxy.jsonl`. For videos saved by
   another node, put the file path into `media_path`.
@@ -136,6 +141,6 @@ Restart ComfyUI. Nodes under **orrery**:
 ## Development
 
 ```bash
-uv run pytest
+uv run pytest          # also runs the editor completion tests if node is installed
 uv run ruff check src tests comfyui
 ```
