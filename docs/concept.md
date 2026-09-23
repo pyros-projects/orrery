@@ -91,6 +91,14 @@ Rules:
   structured tasks, and Qwen3.5-2B should be enough. A remote model is
   optional, never required.
 
+## MiniMax H3 (must-have)
+
+H3 consumes structured prompt documents (fields, shot timestamps, speaker IDs,
+`<d>` dialogue, alignment lines), not strings. orrery supports it as a compiler
+target: a screenplay-shaped template, a scene model that holds the picks, and
+an `h3-base` writer that computes every mechanical rule deterministically.
+Details: [h3.md](h3.md).
+
 ## Three layers
 
 Each layer is usable on its own. **No layer starts until the previous one has
@@ -101,7 +109,8 @@ capability ceiling stalls for good.
 | Layer | What | Done when |
 |---|---|---|
 | **1. Core library + CLI** | Pure Python, no runtime dependencies for the core: parser, seeded expander returning `(text, picks)`, library loading, learned-weight file. CLI: `orrery expand "…" --seed 5 -n 10`, `orrery lib gen weather`, `orrery lib edit animal "…"` (diff → confirm). LLM ops behind a small backend interface (local transformers first). | Tests pass; the CLI expands real templates; one semantic edit round-trips through diff → apply → undo on a real library. |
-| **2. ComfyUI nodes** | *Orrery Prompt* (template, seed → `text`, `picks`, `seed`) and *Orrery Log* (images + picks → PNG metadata, and one line per image in `galaxy.jsonl`). Standard ComfyUI everywhere else. | One real workflow has logged 50 images. |
+| **1b. H3 compiler** | Screenplay front end, scene model, `h3-base` writer for T2VA/I2VA/FL2VA/L2VA, `flat` writer, lint. `orrery compile scene.orr --target h3-base --seed 7`. Ref2VA and the densifier come after. | Golden tests reproduce the four official guide cases structurally; one compiled prompt runs through H3 in ComfyUI. |
+| **2. ComfyUI nodes** | *Orrery Prompt* (template, seed, target `flat`/`h3-base` → `text`, `picks`, `seed`) and *Orrery Log* (images or video + picks → metadata, and one line per output in `galaxy.jsonl`). The `h3-base` text feeds ComfyUI's MiniMax H3 nodes directly. Standard ComfyUI everywhere else. | One real workflow has logged 50 outputs, at least one of them an H3 video. |
 | **3. Galaxy v0** | A single local HTML page over `galaxy.jsonl` + thumbnails: filter by pick, rate with love/like/nope/hate, ratings update the learned-weight file that layer 1 reads. The wildcard manager lives here as a UI over layer 1's operations. | 100 real images rated, and the next batch visibly shifts toward loved regions. |
 
 ## Data formats
