@@ -1,0 +1,10 @@
+---
+title: "Bring any picture to life (I2VA)"
+note: "Image-to-video for whatever still you feed H3's image input: it starts on <Picture 1>, then gentle motion, a rolled camera move and quiet ambience. A good first test for a new Krea still."
+tags: [h3, i2va]
+---
+@h3 i2va 16:9
+
+SHOT 6s | __camera__
+The scene begins exactly as in <Picture 1>. Then {a light breeze moves hair, fabric and leaves|dust drifts slowly through the light|the light shifts slowly as a cloud passes}, and the main subject {slowly turns toward the camera|blinks and takes a slow breath|looks up at something above the frame}.
+SFX: a light breeze blows; the surroundings murmur faintly

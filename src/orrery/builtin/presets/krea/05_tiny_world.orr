@@ -1,0 +1,7 @@
+---
+title: "Tiny world"
+note: "Scale play: a tabletop diorama photographed with tilt-shift blur, with one real animal towering over it. Tests size and spatial relationships, which Krea's text encoder was trained to describe."
+tags: [krea, photo]
+---
+$beast = __creature__
+a tilt-shift photograph of a tabletop diorama of __place__, hand-built from {cardboard and balsa wood|clay and real moss|plastic toy bricks|folded paper}, tiny figurines of people {waiting in line|taking photos|fleeing in panic}, a real $beast {as tall as the tallest building|peeking in from the edge of the table|asleep across the middle of it}, __light__, shallow depth of field, a blurred living room in the background

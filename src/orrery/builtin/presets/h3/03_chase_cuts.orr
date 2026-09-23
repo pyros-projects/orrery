@@ -1,0 +1,22 @@
+---
+title: "Night market chase"
+note: "Three fast cuts in eight seconds: timestamps, cut verbs, a shaking camera and a fast pan. Tests whether H3 keeps the same thief across cuts. One shouted line in Cantonese."
+tags: [h3, action, cuts]
+---
+@h3 t2va 16:9
+style: live-action, cinematic
+$thief = __creature[mammal]__
+
+SHOT 3s | tracking, fast
+A crowded night market on a bridge in monsoon rain, paper lanterns swinging. A $thief sprints between the stalls with a glowing paper lantern in its mouth, knocking over a crate of oranges.
+SFX: rain hammers on tarpaulins; oranges bounce across wet planks
+
+SHOT 2s | cut, shake strongly
+A stall owner in a yellow raincoat vaulting over his counter to give chase.
+OWNER (hoarse middle-aged male voice): [Cantonese] 站住!
+SFX: a metal gong clatters to the ground
+
+SHOT 3s | cut, pan right, large, fast
+The $thief leaping off the bridge railing onto a passing boat and vanishing under its canopy, the lantern still glowing.
+
+MUSIC: fast taiko drums and a driving upright bass at a quick tempo, building in volume

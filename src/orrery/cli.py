@@ -182,7 +182,7 @@ def _cmd_preset(args: argparse.Namespace) -> int:
                 tags = meta.get("tags") or []
                 label = f"@{name}" + (f"  [{', '.join(tags)}]" if tags else "")
                 mark = "  (built-in)" if is_builtin(home, name) else ""
-                print(label.ljust(44) + title + mark)
+                print(label.ljust(44) + " " + title + mark)
         elif args.action == "show":
             print(load_preset(home, args.name), end="")
         elif args.action == "save":

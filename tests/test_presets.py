@@ -3,6 +3,7 @@ import pytest
 from orrery.home import Home
 from orrery.presets import (
     delete_preset,
+    is_builtin,
     list_presets,
     load_preset,
     preset_meta,
@@ -16,7 +17,7 @@ from orrery.presets import (
 
 
 def user_presets(h):
-    return [n for n in list_presets(h) if not n.startswith("tutorial/")]
+    return [n for n in list_presets(h) if not is_builtin(h, n)]
 
 
 def test_save_list_load_delete(home):
@@ -81,7 +82,9 @@ def test_presets_can_live_in_folders(home):
     assert (home / "presets" / "h3" / "winter" / "forest.orr").exists()
     save_preset(h, "portrait", "y")
     assert user_presets(h) == ["h3/winter/forest", "portrait"]
-    assert list_presets(h, folder="h3") == ["h3/winter/forest"]
+    in_h3 = list_presets(h, folder="h3")
+    assert "h3/winter/forest" in in_h3 and "portrait" not in in_h3
+    assert all(n.startswith("h3/") for n in in_h3)
     assert resolve_template(h, "@h3/winter/forest") == "x"
 
 

@@ -1,0 +1,8 @@
+---
+title: "Explore mediums"
+note: "Krea 2 commits hard to whatever medium it is given and picks one itself when you leave it out. This rolls the medium and records it, so your ratings teach orrery which ones you keep. Run it as a batch."
+tags: [krea, explore]
+---
+$beast = __creature__
+a $beast {riding a bicycle|reading a newspaper on a park bench|carrying an umbrella through a crowd|piloting a paper boat across a puddle}, {retro cartoon illustration|dreamy cinematic still|extremely grainy lo-fi VHS still|risograph print in two inks|ukiyo-e woodblock print|claymation set under studio lights|childish crayon drawing|35mm film photograph|oil painting with thick impasto|flat 2D vector illustration}
+: x8

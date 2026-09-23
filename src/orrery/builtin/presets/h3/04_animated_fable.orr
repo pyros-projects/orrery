@@ -1,0 +1,21 @@
+---
+title: "Animated fable"
+note: "Two non-human characters talk, joined by a fade. Tests lip sync on creatures in claymation, 2D and 3D CG (the style is rolled), plus a very small and a very big voice."
+tags: [h3, animation, dialogue]
+---
+@h3 t2va 16:9
+style: {claymation|2D-animated|3D CG}
+$small = __creature[insect]__
+$big = __creature[bird]__
+
+SHOT 5s | push in, small, slow
+A tiny $small stands on a mushroom in a mossy forest clearing, holding a dewdrop like a lantern. A huge $big lands on a branch above it and peers down.
+GIANT (deep, slow, booming voice): What are you carrying, little one?
+SFX: leaves rustle as the bird lands
+
+SHOT 5s | fade, static
+The $small lifting the dewdrop high, a miniature sunrise glowing orange and gold inside it.
+LITTLE ONE (tiny, squeaky, excited voice): Tomorrow!
+SFX: a soft crystalline chime rings out
+
+MUSIC: a music box melody over pizzicato strings at a slow tempo, quiet throughout

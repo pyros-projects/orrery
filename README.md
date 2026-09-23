@@ -75,6 +75,14 @@ uv run orrery preset list --tag winter                 # or --folder h3
 uv run orrery compile @h3/winter_forest --seed 7
 ```
 
+Built-in presets are read-only (`preset save NAME @NAME` makes a copy yours):
+`tutorial/` walks through the DSL from a first wildcard to a three-shot H3
+scene, `krea/` holds Krea 2 stills (natural language, the medium named, text
+to render in quotes), and `h3/` holds MiniMax H3 scenes (dialogue in German
+and Cantonese, a voiceover, fast cuts, an animated fable, on-screen music, and
+an I2VA starter for your own stills). `orrery preset list --folder krea` shows
+them with their titles.
+
 Tags live in YAML front matter at the top of the preset file and are stripped
 before expansion:
 
