@@ -1,0 +1,14 @@
+@h3 t2va 16:9
+style: __h3style__
+$hero = __animal__
+
+SHOT 5s | push in, small, slow
+A {misty|frozen:2|burning} forest at dawn. The $hero steps onto a fallen log, breath visible in the cold air.
+NARRATOR (calm low voice, off-screen): The forest remembers.
+SFX: branches creak under frost; soft footfalls press into snow
+
+SHOT 3s | cut, __camera__
+A close-up of the $hero's eyes glowing amber as snow drifts past.
+SFX: wind hisses through the bare trees
+
+MUSIC: sparse __instrument__ at a slow tempo, fading out
