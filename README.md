@@ -152,7 +152,8 @@ setting. When the node runs, the model
   never reach the prompt and stay with the library for later top-ups.
 
 Everything a run needs goes to the model in one request (ComfyUI cannot
-safely generate twice in one run), then the model unloads. What it wrote waits
+safely generate twice in one run); ComfyUI moves the model out when the video
+model needs the room, and orrery keeps it for the next run. What it wrote waits
 on top of the Libraries tab under **To review**, marked in violet: **Accept**
 keeps it, **Discard** drops it (a discarded library is written again on the
 next run, so change the directions first). After every run the node refreshes

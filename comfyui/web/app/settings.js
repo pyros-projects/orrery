@@ -25,7 +25,7 @@ export async function openSettings(app) {
       <span class="muted">${HOME_NOTE[h.source](h.home)}</span></div>
     <div class="row spread"><h5 class="label">Language model</h5></div>
     <p class="muted flush">A text encoder that is a whole language model can write: Krea 2's <code>qwen3vl_4b</code> or a Qwen3-VL 8B build.
-      MiniMax H3's encoder is cut short and cannot. The model loads when the node runs, writes, and unloads again.
+      MiniMax H3's encoder is cut short and cannot. The model loads when the node runs and writes once; ComfyUI moves it out when the video model needs the room.
       A text encoder wired into the node's <b>clip</b> input wins over this choice.</p>
     <div class="field"><label class="label" for="oa-llm">Model</label><select class="input" id="oa-llm">${options}</select>
       ${s.files.length ? "" : '<span class="warn">No text encoders found (is this running inside ComfyUI?).</span>'}</div>
