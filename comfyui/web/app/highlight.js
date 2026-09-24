@@ -2,13 +2,20 @@
 
 export const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
+const CLI_ONLY = "CLI only: in ComfyUI, use the Run count and the seed widget";
 const HEAD = /^(\s*)(SHOT\s+[\d.]+\s*s\b|SFX:|MUSIC:|style:|[A-Z][A-Z0-9 _-]*?(?:\s*\([^)]*\))?\s*:(?=\s))/;
 const TOKEN = /(__(\w+)(?:\[[\w-]+\])?__)|(\$[A-Za-z_]\w*)|(\d+(?:-\d+)?\$\$)|([{}|])|([^_${}|]+|[_$])/g;
 
 function line(text, known) {
   if (/^\s*@h3\b/.test(text)) return `<span class="t-head">${esc(text)}</span>`;
   if (/^\s*>/.test(text)) return `<span class="t-enh">${esc(text)}</span>`;
-  if (/^\s*:\s*(x\d|seed=|w\d|h\d)/.test(text)) return `<span class="t-param">${esc(text)}</span>`;
+  if (/^\s*:\s*(x\d|seed=|w\d|h\d)/.test(text)) {
+    return text.replace(/(\S+)|(\s+)/g, (m, word) => {
+      if (!word) return m;
+      if (/^(x\d+|seed=\d+)$/.test(word)) return `<span class="t-cli" title="${CLI_ONLY}">${esc(word)}</span>`;
+      return `<span class="t-param">${esc(word)}</span>`;
+    });
+  }
   let out = "";
   let rest = text;
   const head = text.match(HEAD);

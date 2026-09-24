@@ -1,8 +1,8 @@
 ---
-title: "09 · Batches"
-lesson: "The : line sets batch count, starting seed and size. `orrery expand @tutorial/09_batch` rolls eight seeds from 100 without any flags."
+title: "09 · Batch and size"
+lesson: "The : line holds size and batch. In ComfyUI, w832 h1216 become the node's width and height outputs; wire them into your latent. x8 seed=100 only apply in the CLI: `orrery expand @tutorial/09_batch` rolls eight seeds from 100. In ComfyUI, use the Run count and the seed widget instead."
 tags: [tutorial]
 ---
 $subject = __creature__
 a $subject posing for {a passport photo|a Renaissance court portrait|a 1980s school yearbook|a collectible trading card}, __light__
-: x8 seed=100 w1024 h1024
+: x8 seed=100 w832 h1216

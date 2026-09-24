@@ -138,3 +138,28 @@ export function filterRows(rows, { scope = "all", hash, presetHash, rating, pick
   if (pick) out = out.filter((r) => r.picks.some((p) => p.keys.includes(pick)));
   return out;
 }
+
+// Mirrors orrery.comfy.shape: what the node's width, height and length outputs will carry.
+function h3Canvas(ratio) {
+  const m = /^(\d+(?:\.\d+)?):(\d+(?:\.\d+)?)$/.exec(ratio || "");
+  if (!m || !Number(m[2])) return null;
+  const r = Number(m[1]) / Number(m[2]);
+  let [w, h] = r >= 1 ? [768 * r, 768] : [768, 768 / r];
+  if (w * h > 768 * 1344) { const s = Math.sqrt((768 * 1344) / (w * h)); w *= s; h *= s; }
+  return [Math.max(32, Math.round(w / 32) * 32), Math.max(32, Math.round(h / 32) * 32)];
+}
+
+export function shape(text) {
+  const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+  const params = lines.filter((l) => /^:\s*(x\d|seed=|w\d|h\d)/.test(l)).join(" ");
+  const num = (re) => { const m = re.exec(params); return m ? Number(m[1]) : null; };
+  const header = /^@h3\s+\w+(?:\s+(\S+))?/i.exec(lines[0] || "");
+  const canvas = (header && h3Canvas(header[1])) || [1024, 1024];
+  const seconds = lines.reduce((s, l) => { const m = /^SHOT\s+(\d+(?:\.\d+)?)\s*s\b/i.exec(l); return s + (m ? Number(m[1]) : 0); }, 0);
+  let length = 124;
+  if (seconds) { length = Math.max(5, Math.ceil(seconds * 24 - 1e-9)); length += (((5 - length) % 17) + 17) % 17; }
+  return {
+    width: num(/\bw(\d+)/) ?? canvas[0], height: num(/\bh(\d+)/) ?? canvas[1], length,
+    cli: params.split(/\s+/).filter((w) => /^(x\d+|seed=\d+)$/.test(w)),
+  };
+}

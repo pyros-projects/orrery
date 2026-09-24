@@ -7,11 +7,13 @@ mappings. Everything testable lives here.
 
 import hashlib
 import json
+import math
 import os
+import re
 from datetime import UTC, datetime
 from pathlib import Path
 
-from orrery.dsl import MissingLibrary, expand
+from orrery.dsl import MissingLibrary, expand, parse
 from orrery.h3 import compile_scene
 from orrery.home import Home, resolve_home
 from orrery.presets import list_presets, load_preset, remember_template
@@ -21,8 +23,43 @@ NO_PRESET = "(none)"
 DEFAULT_TEMPLATE = "$hero = __animal__\n$hero in a {misty|frozen:2|burning} forest"
 
 
+H3_FPS = 24
+H3_DEFAULT_LENGTH = 124  # the MiniMax H3 nodes' default: about 5 s
+
+
+def h3_length(seconds: float) -> int:
+    """Frames at 24 fps, snapped up to H3's 17k+5 grid like the MiniMax H3 nodes do."""
+    frames = max(5, math.ceil(seconds * H3_FPS - 1e-9))
+    return frames + (5 - frames) % 17
+
+
+def h3_canvas(ratio: str) -> tuple[int, int] | None:
+    """The MiniMax H3 canvas for a ratio: 768 short edge, 768×1344 area cap, multiples of 32."""
+    m = re.fullmatch(r"(\d+(?:\.\d+)?):(\d+(?:\.\d+)?)", ratio or "")
+    if not m or not float(m.group(2)):
+        return None
+    r = float(m.group(1)) / float(m.group(2))
+    w, h = (768 * r, 768) if r >= 1 else (768, 768 / r)
+    if w * h > 768 * 1344:
+        scale = math.sqrt(768 * 1344 / (w * h))
+        w, h = w * scale, h * scale
+    return max(32, round(w / 32) * 32), max(32, round(h / 32) * 32)
+
+
+def shape(template: str) -> tuple[int, int, int]:
+    """width, height and H3 length for the node's outputs: `: w… h…` wins, then an @h3 ratio."""
+    params = parse(template).params
+    lines = [line.strip() for line in template.splitlines() if line.strip()]
+    header = re.match(r"@h3\s+\w+(?:\s+(\S+))?", lines[0], re.IGNORECASE) if lines else None
+    canvas = (header and h3_canvas(header.group(1) or "")) or (1024, 1024)
+    seconds = sum(float(m.group(1)) for line in lines
+                  if (m := re.match(r"SHOT\s+(\d+(?:\.\d+)?)\s*s\b", line, re.IGNORECASE)))
+    return (params.width or canvas[0], params.height or canvas[1],
+            h3_length(seconds) if seconds else H3_DEFAULT_LENGTH)
+
+
 def run_prompt(template: str, seed: int, target: str, home: str = "",
-               preset: str = NO_PRESET) -> tuple[str, str, int]:
+               preset: str = NO_PRESET) -> tuple[str, str, int, int, int, int]:
     h = resolve_home(home or None)
     if preset and preset != NO_PRESET:
         template = load_preset(h, preset)
@@ -45,7 +82,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         "picks": [{"label": p.label, "value": p.value, "keys": list(p.keys)} for p in result.picks],
         "lint": lint,
     }
-    return result.text, json.dumps(data, ensure_ascii=False), seed
+    return (result.text, json.dumps(data, ensure_ascii=False), seed, *shape(template))
 
 
 def state_token(home: Home) -> str:
@@ -93,8 +130,12 @@ def save_png(image, path: Path | str, picks_json: str) -> None:
 class OrreryPrompt:
     CATEGORY = "orrery"
     FUNCTION = "run"
-    RETURN_TYPES = ("STRING", "STRING", "INT")
-    RETURN_NAMES = ("text", "picks", "seed")
+    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT")
+    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length")
+    OUTPUT_TOOLTIPS = ("", "", "", "From `: w…` in the template, else the @h3 ratio, else 1024.",
+                       "From `: h…` in the template, else the @h3 ratio, else 1024.",
+                       ("Frames at 24 fps for the MiniMax H3 nodes' length input: the sum of the SHOT "
+                        "durations, snapped up to H3's 17k+5 grid (124 without SHOTs)."))
     DESCRIPTION = ("Expands an orrery template (text) or compiles a screenplay (h3-base, flat) "
                    "and outputs the picks that produced it.")
 

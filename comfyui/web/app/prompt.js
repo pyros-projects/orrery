@@ -2,15 +2,17 @@
 import { suggest } from "../orrery-complete.js";
 import { esc, highlight } from "./highlight.js";
 import { icon } from "./icons.js";
-import { folderColor, markPicks, pickerGroups, stats, templateHash } from "./model.js";
+import { folderColor, markPicks, pickerGroups, shape, stats, templateHash } from "./model.js";
 import { thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
 
 function statsHTML(app) {
-  const st = stats(app.text);
+  const st = stats(app.text), out = shape(app.text);
   const outs = (app.data.rows || []).filter((r) => r.template === templateHash(app.text)).length;
   return `${st.h3 ? `<span class="stat"><b>H3</b> · ${st.h3.shots} shot${st.h3.shots === 1 ? "" : "s"} · <b>${st.h3.secs.toFixed(1)} s</b> · ${st.h3.voices} voice${st.h3.voices === 1 ? "" : "s"}</span>` : ""}`
-    + `<span class="stat"><b>${st.rolls}</b> rolls · <b>${st.libs}</b> libraries · <b>${st.binds}</b> bindings</span><span class="grow"></span>`
+    + `<span class="stat"><b>${st.rolls}</b> rolls · <b>${st.libs}</b> libraries · <b>${st.binds}</b> bindings</span>`
+    + `<span class="stat" title="The node's width, height and length outputs">→ <b>${out.width}×${out.height}</b>${st.h3 ? ` · <b>${out.length}</b> frames = ${(out.length / 24).toFixed(2)} s` : ""}</span>`
+    + `${out.cli.length ? `<span class="stat cli" title="In ComfyUI, use the Run count and the seed widget">${esc(out.cli.join(" "))}: CLI only</span>` : ""}<span class="grow"></span>`
     + `${outs ? `<button class="btn ghost" data-act="outputs">${icon("image")}${outs} output${outs === 1 ? "" : "s"}</button>` : ""}`
     + `<button class="btn" data-act="roll">${icon("dice")}Roll 3</button>`;
 }

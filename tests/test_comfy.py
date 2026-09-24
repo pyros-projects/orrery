@@ -14,6 +14,7 @@ from orrery.comfy import (
     log_outputs,
     run_prompt,
     save_png,
+    shape,
     state_token,
 )
 from orrery.home import Home
@@ -23,7 +24,7 @@ SCENE = "@h3 t2va\nSHOT 5s | static\nA __animal__ sleeps.\nSFX: wind\n"
 
 
 def test_prompt_node_expands_plain_templates(home):
-    text, picks, seed = run_prompt("a __animal__", 4, "text", str(home))
+    text, picks, seed, *_ = run_prompt("a __animal__", 4, "text", str(home))
     data = json.loads(picks)
     value = data["picks"][0]["value"]
     assert seed == 4 and text in (f"a {value}", f"an {value}")
@@ -34,13 +35,13 @@ def test_prompt_node_expands_plain_templates(home):
 
 
 def test_prompt_node_compiles_screenplays_for_h3(home):
-    text, picks, _ = run_prompt(SCENE, 1, "h3-base", str(home))
+    text, picks, *_ = run_prompt(SCENE, 1, "h3-base", str(home))
     assert text.startswith("integrated_multimodal_description: [Shot 1] ")
     assert json.loads(picks)["lint"] == []
 
 
 def test_prompt_node_flat_target(home):
-    text, _, _ = run_prompt(SCENE, 1, "flat", str(home))
+    text, *_ = run_prompt(SCENE, 1, "flat", str(home))
     assert text.endswith("sleeps.")
 
 
@@ -58,7 +59,7 @@ def test_state_token_changes_with_libraries_and_weights(home):
 
 
 def test_log_appends_one_galaxy_line_per_output(home):
-    _, picks, _ = run_prompt("a __animal__", 2, "text", str(home))
+    _, picks, *_ = run_prompt("a __animal__", 2, "text", str(home))
     rows = log_outputs(Home(home), picks, ["out/a.png", "out/b.png"])
     lines = (home / "galaxy.jsonl").read_text().splitlines()
     assert len(rows) == len(lines) == 2
@@ -68,7 +69,7 @@ def test_log_appends_one_galaxy_line_per_output(home):
 
 
 def test_log_without_media_still_records_the_picks(home):
-    _, picks, _ = run_prompt("a __animal__", 2, "text", str(home))
+    _, picks, *_ = run_prompt("a __animal__", 2, "text", str(home))
     [row] = log_outputs(Home(home), picks, [])
     assert row["media"] is None
 
@@ -86,7 +87,7 @@ def test_node_classes_declare_comfy_interfaces():
     assert set(NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog"}
     inputs = OrreryPrompt.INPUT_TYPES()["required"]
     assert inputs["target"][0] == ["text", "h3-base", "flat"]
-    assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed")
+    assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length")
     assert OrreryLog.OUTPUT_NODE is True
 
 
@@ -101,7 +102,7 @@ def test_node_pack_imports_from_the_repo_folder(monkeypatch):
 def test_prompt_node_uses_a_preset_and_remembers_the_template(home):
     from orrery.presets import recall_template, save_preset
     save_preset(Home(home), "forest", "a __animal__ in the forest")
-    text, picks, _ = run_prompt("ignored", 1, "text", str(home), preset="forest")
+    text, picks, *_ = run_prompt("ignored", 1, "text", str(home), preset="forest")
     assert text.endswith(" in the forest")
     assert recall_template(Home(home), json.loads(picks)["template"]) == "a __animal__ in the forest"
 
@@ -111,3 +112,21 @@ def test_prompt_node_offers_presets_in_a_dropdown(home):
     save_preset(Home(home), "forest", "x")
     choices = OrreryPrompt.INPUT_TYPES()["optional"]["preset"][0]
     assert choices[0] == "(none)" and "forest" in choices and "tutorial/01_first_wildcard" in choices
+
+
+def test_prompt_node_outputs_size_and_h3_length(home):
+    *_, width, height, length = run_prompt("a __animal__\n: x8 seed=100 w832 h1216", 1, "text", str(home))
+    assert (width, height, length) == (832, 1216, 124)
+
+
+def test_size_defaults_and_h3_ratio(home):
+    assert shape("a fox") == (1024, 1024, 124)
+    assert shape("@h3 t2va 16:9\nSHOT 5s\nA fox.") == (1344, 768, 124)
+    assert shape("@h3 t2va 9:16\nSHOT 5s\nA fox.") == (768, 1344, 124)
+    assert shape("@h3 t2va 21:9\nSHOT 5s\nA fox.")[:2] == (1536, 672)
+    assert shape("@h3 t2va 16:9\n: w1280 h720\nSHOT 5s\nA fox.")[:2] == (1280, 720)
+
+
+def test_h3_length_is_frames_on_the_17k_plus_5_grid(home):
+    assert shape("@h3 t2va\nSHOT 4s | cut\nA.\nSHOT 3s\nB.\nSHOT 4s\nC.")[2] == 277
+    assert shape("@h3 t2va\nSHOT 4s\nA.")[2] == 107

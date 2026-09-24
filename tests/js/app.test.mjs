@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { highlight } from "../../comfyui/web/app/highlight.js";
 import {
-  filterPresets, filterRows, glyph, markPicks, pickerGroups, stats, templateHash,
+  filterPresets, filterRows, glyph, markPicks, pickerGroups, shape, stats, templateHash,
 } from "../../comfyui/web/app/model.js";
 
 const known = new Set(["creature", "place"]);
@@ -29,10 +29,20 @@ test("screenplay lines get keyword colours and html is escaped", () => {
   assert.match(html, /&lt;Picture 1&gt;/);
 });
 
-test("enhance and params lines", () => {
-  const html = highlight("> moody\n: x8 seed=100", known);
+test("enhance line, and the params line marks CLI-only parts", () => {
+  const html = highlight("> moody\n: x8 seed=100 w832 h1216", known);
   assert.match(html, /<span class="t-enh">&gt; moody<\/span>/);
-  assert.match(html, /<span class="t-param">: x8 seed=100<\/span>/);
+  assert.match(html, /<span class="t-cli" title="[^"]*">x8<\/span>/);
+  assert.match(html, /<span class="t-cli" title="[^"]*">seed=100<\/span>/);
+  assert.match(html, /<span class="t-param">w832<\/span>/);
+});
+
+test("shape mirrors the node's width, height and H3 length outputs", () => {
+  assert.deepEqual(shape("a fox"), { width: 1024, height: 1024, length: 124, cli: [] });
+  assert.deepEqual(shape("a fox\n: x8 seed=100 w832 h1216"), { width: 832, height: 1216, length: 124, cli: ["x8", "seed=100"] });
+  assert.deepEqual(shape("@h3 t2va 16:9\nSHOT 5s\nA."), { width: 1344, height: 768, length: 124, cli: [] });
+  assert.deepEqual(shape("@h3 t2va 9:16\nSHOT 4s\nA.\nSHOT 3s\nB.\nSHOT 4s\nC."), { width: 768, height: 1344, length: 277, cli: [] });
+  assert.equal(shape("@h3 t2va 21:9\nSHOT 4s\nA.").width, 1536);
 });
 
 test("template hash matches orrery's sha256 prefix", () => {

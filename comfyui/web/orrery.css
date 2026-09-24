@@ -97,6 +97,8 @@
 .orrery-app .t-kw { font-weight: 500; }
 .orrery-app .t-enh { color: var(--rose); font-style: italic; }
 .orrery-app .t-param { color: var(--faint); }
+.orrery-app .t-cli { color: var(--faint); text-decoration: line-through; text-decoration-color: rgba(157,154,179,.55); cursor: help; }
+.orrery-app .stat.cli { text-decoration: line-through; text-decoration-color: rgba(157,154,179,.4); }
 
 /* prompt tab */
 .orrery-app .pbar { display: flex; align-items: center; gap: 8px; padding: 10px 12px 6px; }

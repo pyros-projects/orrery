@@ -14,13 +14,15 @@ const REF = [
   ["Bindings and extras", [
     ["$hero = __creature__", "roll once on its own line, reuse everywhere as $hero", "$hero = __creature__\n$hero meets another $hero"],
     ["> cinematic, moody", "enhancement note: recorded with the picks, not pasted into the prompt", "> cinematic, moody"],
-    [": x8 seed=100 w1024 h1344", "batch and size for the CLI", ": x8 seed=100"],
+    [": w832 h1216", "size: the node's width and height outputs (wire them into your latent)", ": w832 h1216"],
+    [": x8 seed=100", "CLI only (orrery expand); in ComfyUI use the Run count and the seed widget", ""],
     ["a __creature__", "a/an follows the picked word: “an axolotl”", ""],
   ]],
   ["H3 screenplays", [
     ["@h3 t2va 16:9", "first line: mode (t2va, i2va, fl2va, l2va) and ratio", "@h3 t2va 16:9"],
     ["style: live-action, cinematic", "the look; opens Shot 1", "style: __h3style__"],
     ["SHOT 5s | dissolve, arc, slow", "duration · optional transition · camera · small/large · slow/fast", "SHOT 4s | cut, push in, small, slow"],
+    ["@h3 t2va 9:16", "the ratio sets width and height; all SHOT durations set length, in frames at 24 fps, for the MiniMax H3 latent", ""],
     ["KEEPER (raspy voice, voiceover): [French] Bonjour.", "a line of speech; off-screen or voiceover after the voice", "KEEPER (warm, raspy old voice): The ships stopped coming."],
     ["SFX: rain drums on glass; a gong clatters", "sounds as clauses with verbs; they join into “A while B”", "SFX: wind worries the shutters"],
     ["MUSIC: solo cello at a slow tempo, fading out", "instruments, tempo, dynamics; no mood words", "MUSIC: a slow, sparse __instrument__ line that fades out"],
@@ -31,7 +33,7 @@ const REF = [
 const TIPS = [
   ["Krea 2", 'Write sentences, not tag lists. Name the medium, or Krea picks one for you. Put words to render in quotes: a sign reading "OPEN".'],
   ["H3 cuts", "Start shots 2+ with a noun phrase: the compiler writes “the camera cuts to …” in front of it."],
-  ["H3 length", "All shots together: 4–15 s. Up to four SFX lines."],
+  ["H3 length", "All shots together: 4–15 s. Up to four SFX lines. Wire the node's width, height and length into the MiniMax H3 latent node instead of copying them."],
   ["Weights", "(word:1.2) does nothing on H3 or Krea 2; use {a|b:3} to change the odds instead."],
 ];
 
