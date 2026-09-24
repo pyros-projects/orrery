@@ -25,8 +25,7 @@ export async function renderGalaxy(app) {
     return;
   }
   const s = app.state;
-  const presetHash = app.preset && app.card(app.preset)?.hash;
-  const rows = filterRows(app.data.rows, { scope: s.gScope, hash: templateHash(app.text), presetHash, rating: s.gRating, pick: s.gPick });
+  const rows = filterRows(app.data.rows, { scope: s.gScope, hash: templateHash(app.text), preset: app.preset, rating: s.gRating, pick: s.gPick });
   const open = s.gOpen && app.data.rows.find((r) => r.id === s.gOpen);
   const seg = (k, label) => `<button class="chip" aria-pressed="${s.gScope === k}" data-gs="${k}">${label}</button>`;
   const rch = (k, label) => `<button class="chip" aria-pressed="${s.gRating === k}" data-gr="${k}">${label}</button>`;

@@ -98,18 +98,28 @@ def _library_name(raw) -> str:
 
 # --- presets --------------------------------------------------------------------------------
 
+def _owner(row: dict, by_hash: dict[str, str], known: set[str]) -> str | None:
+    """The preset an output belongs to: the one it was rendered from unchanged (recorded by the
+    node, so it survives later edits of the preset), else the preset whose text matches."""
+    if row.get("preset") in known and not row.get("edited"):
+        return row["preset"]
+    return by_hash.get(row.get("template"))
+
+
 def _outputs(home: Home) -> dict[str, list[str]]:
-    """Galaxy row ids per template hash, newest first."""
+    """Galaxy row ids per owning preset, newest first."""
+    by_hash, known = _preset_by_hash(home), set(ps.list_presets(home))
     by: dict[str, list[str]] = {}
     for row in gx.read_rows(home):
-        by.setdefault(row.get("template"), []).append(row["id"])
+        if owner := _owner(row, by_hash, known):
+            by.setdefault(owner, []).append(row["id"])
     return by
 
 
 def _card(home: Home, name: str, outputs: dict, with_text: bool = False) -> dict:
     meta, text = ps.preset_meta(home, name), ps.load_preset(home, name)
     digest = ps.template_hash(text)
-    ids = outputs.get(digest, [])
+    ids = outputs.get(name, [])
     card = {
         "name": name,
         "folder": name.rsplit("/", 1)[0] if "/" in name else "",
@@ -319,26 +329,26 @@ def library_delete(home: Home, args: dict) -> dict:
 
 # --- galaxy ---------------------------------------------------------------------------------
 
-def _row_json(row: dict, by_hash: dict[str, str]) -> dict:
+def _row_json(row: dict, by_hash: dict[str, str], known: set[str]) -> dict:
     media = row.get("media")
     return {
         "id": row["id"], "ts": row.get("ts"), "seed": row.get("seed"),
         "target": row.get("target"), "template": row.get("template"), "text": row.get("text"),
         "picks": row.get("picks") or [], "rating": row.get("rating"),
         "media_name": Path(media).name if media else None, "kind": row["kind"],
-        "preset": by_hash.get(row.get("template")),
+        "preset": _owner(row, by_hash, known),
     }
 
 
 def galaxy(home: Home, args: dict) -> dict:
-    limit, wanted = _int(args, "limit", 200), args.get("template") or None
+    limit, wanted, owner = _int(args, "limit", 200), args.get("template") or None, args.get("preset") or None
     if limit < 1:
         raise ApiError(400, "'limit' must be at least 1.")
-    rows = [r for r in gx.read_rows(home) if wanted is None or r.get("template") == wanted]
-    rows = rows[:limit]
-    by_hash, weights = _preset_by_hash(home), home.weights()
+    by_hash, known, weights = _preset_by_hash(home), set(ps.list_presets(home)), home.weights()
+    rows = [r for r in gx.read_rows(home) if (wanted is None or r.get("template") == wanted)
+            and (owner is None or _owner(r, by_hash, known) == owner)][:limit]
     keys = sorted({k for r in rows for p in r.get("picks") or [] for k in p.get("keys") or []})
-    return {"rows": [_row_json(r, by_hash) for r in rows],
+    return {"rows": [_row_json(r, by_hash, known) for r in rows],
             "weights": {k: weights.get(k, 1.0) for k in keys}}
 
 
@@ -349,7 +359,7 @@ def galaxy_rate(home: Home, args: dict) -> dict:
         raise ApiError(400, str(err)) from None
     except KeyError as err:
         raise ApiError(404, err.args[0]) from None
-    return {"row": _row_json(row, _preset_by_hash(home)), "weights": weights}
+    return {"row": _row_json(row, _preset_by_hash(home), set(ps.list_presets(home))), "weights": weights}
 
 
 def _file(fn, home: Home, args: dict) -> Path:

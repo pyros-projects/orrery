@@ -16,7 +16,7 @@ from pathlib import Path
 from orrery.dsl import MissingLibrary, expand, parse
 from orrery.h3 import compile_scene
 from orrery.home import Home, resolve_home
-from orrery.presets import list_presets, load_preset, remember_template
+from orrery.presets import list_presets, load_preset, preset_exists, remember_template
 
 TARGETS = ["text", "h3-base", "flat"]
 NO_PRESET = "(none)"
@@ -58,11 +58,25 @@ def shape(template: str) -> tuple[int, int, int]:
             h3_length(seconds) if seconds else H3_DEFAULT_LENGTH)
 
 
+def linked_preset(extra_pnginfo, unique_id) -> str | None:
+    """The preset the node's editor is linked to, from the workflow ComfyUI sends along."""
+    workflow = (extra_pnginfo or {}).get("workflow") or {}
+    graphs = [workflow, *((workflow.get("definitions") or {}).get("subgraphs") or [])]
+    node_id = str(unique_id or "").rsplit(":", 1)[-1]
+    for graph in graphs:
+        for node in graph.get("nodes") or []:
+            if str(node.get("id")) == node_id:
+                return (node.get("properties") or {}).get("orrery_preset") or None
+    return None
+
+
 def run_prompt(template: str, seed: int, target: str, home: str = "",
-               preset: str = NO_PRESET) -> tuple[str, str, int, int, int, int]:
+               preset: str = NO_PRESET, linked: str | None = None) -> tuple[str, str, int, int, int, int]:
     h = resolve_home(home or None)
     if preset and preset != NO_PRESET:
-        template = load_preset(h, preset)
+        template, linked = load_preset(h, preset), preset
+    if linked and not preset_exists(h, linked):
+        linked = None
     try:
         if target == "text":
             result = expand(template, seed, h.libraries(), h.weights())
@@ -78,6 +92,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         "seed": seed,
         "target": target,
         "template": remember_template(h, template),
+        "preset": linked,
+        "edited": bool(linked) and template != load_preset(h, linked),
         "text": result.text,
         "picks": [{"label": p.label, "value": p.value, "keys": list(p.keys)} for p in result.picks],
         "lint": lint,
@@ -104,6 +120,8 @@ def log_outputs(home: Home, picks_json: str, media: list[str]) -> list[dict]:
         "seed": data.get("seed"),
         "target": data.get("target"),
         "template": data.get("template"),
+        "preset": data.get("preset"),
+        "edited": bool(data.get("edited")),
         "text": data.get("text"),
         "picks": data.get("picks", []),
         "rating": None,
@@ -153,16 +171,17 @@ class OrreryPrompt:
                 "preset": ([NO_PRESET, *list_presets(resolve_home())],),
                 "home": ("STRING", {"default": ""}),
             },
+            "hidden": {"unique_id": "UNIQUE_ID", "extra_pnginfo": "EXTRA_PNGINFO"},
         }
 
     @classmethod
-    def IS_CHANGED(cls, template, seed, target, preset=NO_PRESET, home=""):
+    def IS_CHANGED(cls, template, seed, target, preset=NO_PRESET, home="", **_):
         h = resolve_home(home or None)
         chosen = load_preset(h, preset) if preset and preset != NO_PRESET else template
         return f"{seed}:{target}:{hash(chosen)}:{state_token(h)}"
 
-    def run(self, template, seed, target, preset=NO_PRESET, home=""):
-        return run_prompt(template, seed, target, home, preset)
+    def run(self, template, seed, target, preset=NO_PRESET, home="", unique_id=None, extra_pnginfo=None):
+        return run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id))
 
 
 class OrreryLog:

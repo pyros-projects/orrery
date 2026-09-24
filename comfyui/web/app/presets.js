@@ -73,7 +73,7 @@ async function open(app, name) {
   renderPresets(app);
   try {
     const card = app.card(name);
-    const [full, galaxy] = await Promise.all([app.api.preset(name), app.api.galaxy({ template: card.hash })]);
+    const [full, galaxy] = await Promise.all([app.api.preset(name), app.api.galaxy({ preset: name })]);
     if (s.pOpen !== name) return;
     s.pDetail = { name, card, text: full.text, rows: galaxy.rows };
   } catch (e) { s.pOpen = null; app.fail(e); }

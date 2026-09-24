@@ -129,10 +129,10 @@ export function pickerGroups(cards, { query, favorites, recent }) {
   return groups.filter((g) => g[1].length);
 }
 
-export function filterRows(rows, { scope = "all", hash, presetHash, rating, pick }) {
+export function filterRows(rows, { scope = "all", hash, preset, rating, pick }) {
   let out = rows;
   if (scope === "prompt") out = out.filter((r) => r.template === hash);
-  if (scope === "preset") out = out.filter((r) => presetHash && r.template === presetHash);
+  if (scope === "preset") out = out.filter((r) => preset && r.preset === preset);
   if (rating === "unrated") out = out.filter((r) => !r.rating);
   else if (rating) out = out.filter((r) => r.rating === rating);
   if (pick) out = out.filter((r) => r.picks.some((p) => p.keys.includes(pick)));

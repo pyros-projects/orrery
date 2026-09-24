@@ -24,12 +24,12 @@ def ok(home, fn, **args):
     return body
 
 
-def log_row(home, tmp_path, template_text, seed=1, name="a.png", keys=("__animal__=fox",)):
+def log_row(home, tmp_path, template_text, seed=1, name="a.png", keys=("__animal__=fox",), **extra):
     path = tmp_path / name
     Image.new("RGB", (64, 96), "teal").save(path)
     r = {"ts": f"2026-09-24T00:00:0{seed}+00:00", "media": str(path), "seed": seed, "target": "text",
          "template": remember_template(Home(home), template_text), "text": "a fox", "rating": None,
-         "picks": [{"label": "__animal__", "value": "fox", "keys": list(keys)}]}
+         "picks": [{"label": "__animal__", "value": "fox", "keys": list(keys)}], **extra}
     with (home / "galaxy.jsonl").open("a") as f:
         f.write(json.dumps(r) + "\n")
     return row_id(r)
@@ -343,3 +343,22 @@ def test_roll_compiles_screenplays_with_lint(home):
 def test_roll_rejects_bad_input(home, args):
     status, body = api(home, webapi.roll, **args)
     assert status == 400 and body["error"]
+
+
+def test_a_recorded_preset_keeps_its_outputs_after_the_text_changes(home, tmp_path):
+    h = Home(home)
+    save_preset(h, "stills/fox", "a __animal__")
+    kept = log_row(home, tmp_path, "a __animal__", seed=1, name="a.png", preset="stills/fox", edited=False)
+    variant = log_row(home, tmp_path, "a __animal__ at night", seed=2, name="b.png", preset="stills/fox", edited=True)
+    save_preset(h, "stills/fox", "a __animal__ in fog", overwrite=True)
+    card = next(c for c in ok(home, webapi.presets)["presets"] if c["name"] == "stills/fox")
+    assert (card["outputs"], card["thumb"]) == (1, kept)
+    rows = {r["id"]: r for r in ok(home, webapi.galaxy)["rows"]}
+    assert rows[kept]["preset"] == "stills/fox" and rows[variant]["preset"] is None
+    assert [r["id"] for r in ok(home, webapi.galaxy, preset="stills/fox")["rows"]] == [kept]
+
+
+def test_a_recorded_preset_that_no_longer_exists_falls_back_to_the_hash(home, tmp_path):
+    save_preset(Home(home), "stills/owl", "an owl")
+    rid = log_row(home, tmp_path, "an owl", preset="gone/away", edited=False)
+    assert {r["id"]: r for r in ok(home, webapi.galaxy)["rows"]}[rid]["preset"] == "stills/owl"

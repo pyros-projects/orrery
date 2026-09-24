@@ -11,6 +11,7 @@ from orrery.comfy import (
     NODE_CLASS_MAPPINGS,
     OrreryLog,
     OrreryPrompt,
+    linked_preset,
     log_outputs,
     run_prompt,
     save_png,
@@ -18,6 +19,7 @@ from orrery.comfy import (
     state_token,
 )
 from orrery.home import Home
+from orrery.presets import save_preset
 
 REPO = Path(__file__).resolve().parents[1]
 SCENE = "@h3 t2va\nSHOT 5s | static\nA __animal__ sleeps.\nSFX: wind\n"
@@ -130,3 +132,24 @@ def test_size_defaults_and_h3_ratio(home):
 def test_h3_length_is_frames_on_the_17k_plus_5_grid(home):
     assert shape("@h3 t2va\nSHOT 4s | cut\nA.\nSHOT 3s\nB.\nSHOT 4s\nC.")[2] == 277
     assert shape("@h3 t2va\nSHOT 4s\nA.")[2] == 107
+
+
+def test_prompt_node_records_its_linked_preset_and_whether_it_was_edited(home):
+    save_preset(Home(home), "stills/fox", "a __animal__")
+    _, clean, *_ = run_prompt("a __animal__", 1, "text", str(home), linked="stills/fox")
+    _, edited, *_ = run_prompt("a __animal__ at dusk", 1, "text", str(home), linked="stills/fox")
+    _, missing, *_ = run_prompt("a __animal__", 1, "text", str(home), linked="gone/away")
+    assert (json.loads(clean)["preset"], json.loads(clean)["edited"]) == ("stills/fox", False)
+    assert json.loads(edited)["edited"] is True
+    assert json.loads(missing)["preset"] is None
+    [row] = log_outputs(Home(home), clean, ["x.png"])
+    assert (row["preset"], row["edited"]) == ("stills/fox", False)
+
+
+def test_the_linked_preset_is_read_from_the_workflow(home):
+    info = {"workflow": {"nodes": [{"id": 3, "properties": {}}, {"id": 7, "properties": {"orrery_preset": "krea/x"}}],
+                         "definitions": {"subgraphs": [{"nodes": [{"id": 9, "properties": {"orrery_preset": "h3/y"}}]}]}}}
+    assert linked_preset(info, "7") == "krea/x"
+    assert linked_preset(info, "12:9") == "h3/y"
+    assert linked_preset(info, "3") is None
+    assert linked_preset(None, "7") is None

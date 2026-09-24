@@ -72,6 +72,14 @@ def _source(home: Home, name: str) -> Path:
     raise KeyError(f"preset '{name}' does not exist (see: orrery preset list)")
 
 
+def preset_exists(home: Home, name: str) -> bool:
+    try:
+        _source(home, name)
+    except (KeyError, ValueError):
+        return False
+    return True
+
+
 def is_builtin(home: Home, name: str) -> bool:
     return not _path(home, name).exists() and _source(home, name).is_relative_to(BUILTIN_PRESETS)
 
