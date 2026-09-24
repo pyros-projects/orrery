@@ -337,6 +337,13 @@ def test_roll_compiles_screenplays_with_lint(home):
     assert any("4–15" in i["message"] for i in rolls[0]["lint"])
 
 
+def test_roll_shows_every_chunk_of_a_reel_at_one_seed(home):
+    reel = "@h3 t2va\n$hero = __animal__\nCHUNK\nSHOT 5s\nA $hero.\nSFX: x\nCHUNK\nSHOT 5s\nThe $hero naps.\nSFX: y\n"
+    rolls = ok(home, webapi.roll, template=reel, seed=4, target="h3-base")["rolls"]
+    assert [(r["seed"], r["segment"]) for r in rolls] == [(4, 0), (4, 1)]
+    assert "naps" in rolls[1]["text"] and "naps" not in rolls[0]["text"]
+
+
 def test_roll_applies_dials(home):
     rolls = ok(home, webapi.roll, template="$hero = __animal__\na $hero", seed=1, n=2, params={"hero": "lynx"})["rolls"]
     assert [r["text"] for r in rolls] == ["a lynx", "a lynx"]

@@ -7,14 +7,18 @@ import { thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
 
 function statsHTML(app) {
-  const st = stats(app.text), out = shape(app.text);
+  const st = stats(app.text), out = shape(app.text), reel = st.h3?.reel;
   const outs = (app.data.rows || []).filter((r) => r.template === templateHash(app.text)).length;
-  return `${st.h3 ? `<span class="stat"><b>H3</b> · ${st.h3.shots} shot${st.h3.shots === 1 ? "" : "s"} · <b>${st.h3.secs.toFixed(1)} s</b> · ${st.h3.voices} voice${st.h3.voices === 1 ? "" : "s"}</span>` : ""}`
+  const timing = reel
+    ? `<span class="stat" title="Wire Load Latent's clip_index into segment, and set the Motion Context Chain's segments to ${reel.chunks}"><b>Reel</b> · ${reel.chunks} chunk${reel.chunks === 1 ? "" : "s"} · ${reel.secs.map((s) => `<b>${s.toFixed(1)} s</b>`).join(" + ")}</span>`
+    : st.h3 ? `<span class="stat"><b>H3</b> · ${st.h3.shots} shot${st.h3.shots === 1 ? "" : "s"} · <b>${st.h3.secs.toFixed(1)} s</b> · ${st.h3.voices} voice${st.h3.voices === 1 ? "" : "s"}</span>` : "";
+  const frames = reel ? ` · <b>${out.lengths.join(" / ")}</b> frames per chunk` : st.h3 ? ` · <b>${out.length}</b> frames = ${(out.length / 24).toFixed(2)} s` : "";
+  return timing
     + `<span class="stat"><b>${st.rolls}</b> rolls · <b>${st.libs}</b> libraries · <b>${st.binds}</b> bindings${setDials(app) ? ` · <b>${setDials(app)}</b> dialed` : ""}</span>`
-    + `<span class="stat" title="The node's width, height and length outputs">→ <b>${out.width}×${out.height}</b>${st.h3 ? ` · <b>${out.length}</b> frames = ${(out.length / 24).toFixed(2)} s` : ""}</span>`
+    + `<span class="stat" title="The node's width, height and length outputs${reel ? "; from the second chunk on, length includes the frames Motion Context pins" : ""}">→ <b>${out.width}×${out.height}</b>${frames}</span>`
     + `${out.cli.length ? `<span class="stat cli" title="In ComfyUI, use the Run count and the seed widget">${esc(out.cli.join(" "))}: CLI only</span>` : ""}<span class="grow"></span>`
     + `${outs ? `<button class="btn ghost" data-act="outputs">${icon("image")}${outs} output${outs === 1 ? "" : "s"}</button>` : ""}`
-    + `<button class="btn" data-act="roll">${icon("dice")}Roll 3</button>`;
+    + `<button class="btn" data-act="roll">${icon("dice")}${reel && app.bridge.getTarget() !== "text" ? "Roll reel" : "Roll 3"}</button>`;
 }
 
 function chipHTML(app) {
@@ -50,6 +54,7 @@ export function renderPrompt(app) {
   ed.addEventListener("input", () => {
     app.text = ed.value;
     paint();
+    fixReelSeed(app);
     if (dialKey(app.text) !== app.state.dialKey) renderDials(app);
     refreshBar(app);
     complete(app, ed);
@@ -75,6 +80,14 @@ export function renderPrompt(app) {
   renderDials(app);
   wireDials(app);
   renderRolls(app);
+  fixReelSeed(app);
+}
+
+// A reel runs as one clip per queue; a seed that changes between clips would reroll its bindings.
+function fixReelSeed(app) {
+  if (!stats(app.text).h3?.reel || ["fixed", ""].includes(app.bridge.getControl())) return;
+  app.bridge.setControl("fixed");
+  app.toast("Reel: control after generate set to <b>fixed</b>, so every chunk rolls the same bindings");
 }
 
 /* dials: every binding can be turned without editing the template; empty = its default roll */
@@ -175,7 +188,7 @@ function renderRolls(app) {
   if (!box) return;
   const seed = Number(app.bridge.getSeed()) || 0;
   box.innerHTML = app.state.rolls
-    ? app.state.rolls.map((r) => `<div class="roll"><span class="seed">seed ${r.seed}</span>${markPicks(r.text, r.picks)}`
+    ? app.state.rolls.map((r) => `<div class="roll"><span class="seed">${r.segment !== undefined ? `chunk ${r.segment + 1} · ` : ""}seed ${r.seed}</span>${markPicks(r.text, r.picks)}`
       + `${r.lint.map((l) => `<span class="lint ${l.severity}">${esc(l.severity)}: ${esc(l.message)}</span>`).join("")}</div>`).join("")
     : `<div class="empty">Roll 3 shows what this template makes at seeds ${seed}–${seed + 2} for the ${esc(app.bridge.getTarget())} target, without queueing anything.</div>`;
 }

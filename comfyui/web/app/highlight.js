@@ -3,7 +3,7 @@
 export const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
 const CLI_ONLY = "CLI only: in ComfyUI, use the Run count and the seed widget";
-const HEAD = /^(\s*)(SHOT\s+[\d.]+\s*s\b|SFX:|MUSIC:|style:|summary:|voice:|keep:|CAST(?=\s*$)|[A-Z][A-Z0-9 _-]*?(?:\s*\([^)]*\))?\s*:(?=\s))/;
+const HEAD = /^(\s*)(SHOT\s+[\d.]+\s*s\b|SFX:|MUSIC:|style:|summary:|voice:|keep:|context:|CHUNK(?=\s|$)|CAST(?=\s*$)|[A-Z][A-Z0-9 _-]*?(?:\s*\([^)]*\))?\s*:(?=\s))/;
 const TOKEN = /(__(\w+)(?:\[[\w-]+\])?__)|(\$[A-Za-z_]\w*)|(\d+(?:-\d+)?\$\$)|([{}|])|([^_${}|]+|[_$])/g;
 
 function line(text, known) {

@@ -63,7 +63,7 @@ test("stats count rolls, libraries, bindings and H3 timing", () => {
   const s = stats("$a = __creature__\n{x|y} in __place__ and __creature__");
   assert.deepEqual([s.rolls, s.libs, s.binds, s.h3], [4, 2, 1, null]);
   const h = stats("@h3 t2va\nSHOT 3s | static\nA.\nNARRATOR (voiceover): Hi\nSHOT 2.5s | cut, arc\nB.\nSFX: wind");
-  assert.deepEqual(h.h3, { shots: 2, secs: 5.5, voices: 1 });
+  assert.deepEqual(h.h3, { shots: 2, secs: 5.5, voices: 1, reel: null });
   const r = stats("@h3 ref2va\nCAST\nMAYA (video 1): a woman\nDOG (image 1): a dog\nSHOT 5s\nMAYA waves.\nMAYA (warm): Hi.\nSFX: wind");
   assert.equal(r.h3.voices, 1);
 });
@@ -127,4 +127,19 @@ test("applyDials mirrors orrery's override", () => {
   const t = "$hero = __animal__\n  $place = {a|b}\n$hero in $place";
   assert.equal(applyDials(t, { hero: "owl", place: " " }), "$hero = owl\n  $place = {a|b}\n$hero in $place");
   assert.equal(applyDials(t, {}), t);
+});
+
+test("reels: chunk timing, per-chunk lengths, keywords are not voices", () => {
+  const reel = "@h3 t2va 16:9\nLORA: <lora:a:1>\ncontext: 22\nCHUNK\nSHOT 5s\nA.\nHANDOFF: b\nCHUNK the hall\nSHOT 3s\nB.\nSHOT 1s\nC.";
+  const st = stats(reel);
+  assert.deepEqual([st.h3.voices, st.h3.reel], [0, { chunks: 2, secs: [5, 4] }]);
+  const out = shape(reel);
+  assert.deepEqual([out.length, out.lengths], [124, [124, 124]]);
+  assert.deepEqual(shape(reel.replace("context: 22", "context: 56")).lengths, [124, 158]);
+  assert.equal(stats("@h3 t2va\nSHOT 5s\nA.").h3.reel, null);
+});
+
+test("reel lines are keywords", () => {
+  const html = highlight("CHUNK the hall\nHANDOFF: the door\nLORA: <lora:a:1>\ncontext: 22", known);
+  for (const kw of ["CHUNK", "HANDOFF:", "LORA:", "context:"]) assert.match(html, new RegExp(`<span class="t-kw">${kw}`));
 });

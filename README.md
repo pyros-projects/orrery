@@ -147,11 +147,14 @@ ln -s ~/projects/private/orrery/comfyui ~/repos/comfy-ui/custom_nodes/orrery
 
 Restart ComfyUI. Nodes under **orrery**:
 
-- **Orrery Prompt**: seed and target (`text`, `h3-base`, `flat`) →
-  `text`, `picks`, `seed`, `width`, `height`, `length`. Wire `text` into your
-  text encoder or the MiniMax H3 prompt input; `width`/`height` come from
-  `: w… h…` or the `@h3` ratio, `length` is the screenplay's duration in frames
-  for the H3 latent. The node is the whole of orrery, in five tabs (⤢ opens the
+- **Orrery Prompt**: seed and target (`text`, `h3-base`, `flat`), optional
+  `segment` → `text`, `picks`, `seed`, `width`, `height`, `length`, `loras`.
+  Wire `text` into your text encoder or the MiniMax H3 prompt input;
+  `width`/`height` come from `: w… h…` or the `@h3` ratio, `length` is the
+  screenplay's duration in frames for the H3 latent, `loras` carries the
+  `LORA:` lines for LoRA Text Loader. For H3 Motion Context chains, a reel
+  (`CHUNK` blocks, see `docs/h3.md` 1d) writes one chunk per clip: wire Load
+  Latent's `clip_index` into `segment`. The node is the whole of orrery, in five tabs (⤢ opens the
   same app over the canvas, Esc brings it back):
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `$` bindings, camera words after

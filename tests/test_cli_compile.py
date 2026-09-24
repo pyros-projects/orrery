@@ -26,7 +26,7 @@ def test_compile_flat_target(home, tmp_path, capsys):
 def test_compile_json_has_text_picks_and_lint(home, tmp_path, capsys):
     main(["compile", write(tmp_path, SCENE), "--json"])
     data = json.loads(capsys.readouterr().out)
-    assert set(data) == {"text", "picks", "lint", "seed"}
+    assert set(data) == {"text", "picks", "lint", "seed", "loras"}
     assert "__animal__" in data["picks"]
 
 
@@ -50,3 +50,20 @@ def test_compile_set_overrides_a_binding(home, capsys):
     scene = "@h3 t2va\n$hero = __animal__\nSHOT 5s\nA $hero sleeps.\nSFX: wind\n"
     assert main(["compile", scene, "--set", "$hero=lynx"]) == 0
     assert "A lynx sleeps." in capsys.readouterr().out
+
+
+REEL = "@h3 t2va\nLORA: <lora:a:1>\nCHUNK\nSHOT 5s\nA fox.\nSFX: x\nCHUNK\nSHOT 4s\nA heron.\nSFX: y\n"
+
+
+def test_compile_prints_every_chunk_of_a_reel(home, capsys):
+    assert main(["compile", REEL]) == 0
+    out = capsys.readouterr().out
+    assert "# CHUNK 1/2 · 5.00 s · 124 frames · <lora:a:1>" in out
+    assert "# CHUNK 2/2 · 4.92 s · 124 frames · <lora:a:1>" in out
+    assert out.index("A fox.") < out.index("A heron.")
+
+
+def test_compile_segment_prints_one_chunk(home, capsys):
+    assert main(["compile", REEL, "--segment", "1"]) == 0
+    out = capsys.readouterr().out
+    assert "A heron." in out and "A fox." not in out and "# CHUNK" not in out

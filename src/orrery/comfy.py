@@ -29,7 +29,7 @@ H3_DEFAULT_LENGTH = 124  # the MiniMax H3 nodes' default: about 5 s
 
 def h3_length(seconds: float) -> int:
     """Frames at 24 fps, snapped up to H3's 17k+5 grid like the MiniMax H3 nodes do."""
-    frames = max(5, math.ceil(seconds * H3_FPS - 1e-9))
+    frames = max(5, math.ceil(seconds * H3_FPS - 1e-4))
     return frames + (5 - frames) % 17
 
 
@@ -83,7 +83,7 @@ def dial_values(params: str) -> dict[str, str]:
 
 def run_prompt(template: str, seed: int, target: str, home: str = "",
                preset: str = NO_PRESET, linked: str | None = None,
-               params: str = "") -> tuple[str, str, int, int, int, int]:
+               params: str = "", segment: int = 0) -> tuple[str, str, int, int, int, int, str]:
     h = resolve_home(home or None)
     if preset and preset != NO_PRESET:
         template, linked = load_preset(h, preset), preset
@@ -97,7 +97,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
             result = expand(source, seed, h.libraries(), h.weights())
             lint = []
         else:
-            result = compile_scene(source, seed, h.libraries(), h.weights(), target=target)
+            result = compile_scene(source, seed, h.libraries(), h.weights(), target=target, segment=segment)
             lint = [{"severity": i.severity, "message": i.message} for i in result.lint]
     except MissingLibrary as err:
         raise ValueError(str(err)) from err
@@ -114,7 +114,15 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         "picks": [{"label": p.label, "value": p.value, "keys": list(p.keys)} for p in result.picks],
         "lint": lint,
     }
-    return (result.text, json.dumps(data, ensure_ascii=False), seed, *shape(source))
+    width, height, length = shape(source)
+    loras = ""
+    if target != "text":
+        loras = result.loras
+        if result.scene.shots:
+            length = h3_length(result.scene.duration)
+        if result.chunks:
+            data["segment"], data["chunks"] = result.segment, result.chunks
+    return (result.text, json.dumps(data, ensure_ascii=False), seed, width, height, length, loras)
 
 
 def state_token(home: Home) -> str:
@@ -141,6 +149,7 @@ def log_outputs(home: Home, picks_json: str, media: list[str]) -> list[dict]:
         "params": data.get("params") or {},
         "text": data.get("text"),
         "picks": data.get("picks", []),
+        **({"segment": data["segment"], "chunks": data["chunks"]} if data.get("chunks") else {}),
         "rating": None,
     } for m in (media or [None])]
     home.root.mkdir(parents=True, exist_ok=True)
@@ -165,12 +174,14 @@ def save_png(image, path: Path | str, picks_json: str) -> None:
 class OrreryPrompt:
     CATEGORY = "orrery"
     FUNCTION = "run"
-    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT")
-    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length")
+    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "STRING")
+    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "loras")
     OUTPUT_TOOLTIPS = ("", "", "", "From `: w…` in the template, else the @h3 ratio, else 1024.",
                        "From `: h…` in the template, else the @h3 ratio, else 1024.",
                        ("Frames at 24 fps for the MiniMax H3 nodes' length input: the sum of the SHOT "
-                        "durations, snapped up to H3's 17k+5 grid (124 without SHOTs)."))
+                        "durations (in a reel: the chunk's, plus the pinned context from the second "
+                        "chunk on), snapped up to H3's 17k+5 grid (124 without SHOTs)."),
+                       "The LORA: lines (global, plus the chunk's in a reel) for LoRA Text Loader.")
     DESCRIPTION = ("Expands an orrery template (text) or compiles a screenplay (h3-base, flat) "
                    "and outputs the picks that produced it.")
 
@@ -189,19 +200,23 @@ class OrreryPrompt:
                 "home": ("STRING", {"default": ""}),
                 "params": ("STRING", {"default": "", "tooltip": "The dials: JSON {binding: expression}, "
                                                                 "set in the Prompt tab."}),
+                "segment": ("INT", {"default": 0, "min": 0, "max": 9999, "forceInput": True,
+                                    "tooltip": "Which CHUNK of a reel to write, from 0: wire H3 Motion "
+                                               "Context's Load Latent clip_index. Plain screenplays ignore it."}),
             },
             "hidden": {"unique_id": "UNIQUE_ID", "extra_pnginfo": "EXTRA_PNGINFO"},
         }
 
     @classmethod
-    def IS_CHANGED(cls, template, seed, target, preset=NO_PRESET, home="", params="", **_):
+    def IS_CHANGED(cls, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, **_):
         h = resolve_home(home or None)
         chosen = load_preset(h, preset) if preset and preset != NO_PRESET else template
-        return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{state_token(h)}"
+        return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{segment}:{state_token(h)}"
 
-    def run(self, template, seed, target, preset=NO_PRESET, home="", params="", unique_id=None,
+    def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, unique_id=None,
             extra_pnginfo=None):
-        return run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id), params)
+        return run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id), params,
+                          segment)
 
 
 class OrreryLog:

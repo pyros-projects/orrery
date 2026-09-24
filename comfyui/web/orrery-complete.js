@@ -3,7 +3,8 @@
 // suggest(text, caret, data) -> { items: [{ insert, detail, preview }], replaceFrom }
 // Accepting an item replaces text[replaceFrom:caret] with item.insert.
 
-const KEYWORDS = ["SHOT ", "SFX: ", "MUSIC: ", "style: ", "summary: ", "CAST", "voice: ", "keep: "];
+const KEYWORDS = ["SHOT ", "SFX: ", "MUSIC: ", "style: ", "summary: ", "CAST", "voice: ", "keep: ",
+  "CHUNK", "HANDOFF: ", "LORA: ", "context: "];
 const NONE = { items: [], replaceFrom: 0 };
 
 const startsWith = (word, prefix) => word.toLowerCase().startsWith(prefix.toLowerCase());

@@ -14,7 +14,7 @@ from orrery import presets as ps
 from orrery import uistate
 from orrery.completion import completion_data
 from orrery.dsl import MissingLibrary, expand, override
-from orrery.h3 import compile_scene
+from orrery.h3 import compile_scene, count_chunks
 from orrery.home import BUILTIN_DIR, Home, resolve_home
 from orrery.library import Entry, Library, load_library, save_library
 from orrery.manager import list_name
@@ -389,18 +389,22 @@ def roll(home: Home, args: dict) -> dict:
         raise ApiError(400, "'params' must be an object of binding: expression.")
     text = override(text, {str(k): str(v) for k, v in params.items()})
     libs, weights, rolls = home.libraries(), home.weights(), []
-    for s in range(seed, seed + n):
+    chunks = count_chunks(text) if target != "text" else 0
+    # a reel shows every chunk at one seed; anything else shows n seeds
+    runs = [(seed, k) for k in range(chunks)] if chunks else [(s, None) for s in range(seed, seed + n)]
+    for s, segment in runs:
         try:
             if target == "text":
                 result, lint = expand(text, s, libs, weights), []
             else:
-                result = compile_scene(text, s, libs, weights, target=target)
+                result = compile_scene(text, s, libs, weights, target=target, segment=segment or 0)
                 lint = [{"severity": i.severity, "message": i.message} for i in result.lint]
         except MissingLibrary as err:
             raise ApiError(400, str(err), library=err.name) from None
         rolls.append({"seed": s, "text": result.text, "lint": lint,
                       "picks": [{"label": p.label, "value": p.value, "keys": list(p.keys)}
-                                for p in result.picks]})
+                                for p in result.picks],
+                      **({"segment": segment} if segment is not None else {})})
     return {"rolls": rolls}
 
 

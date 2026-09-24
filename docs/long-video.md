@@ -1,7 +1,8 @@
 # Long H3 videos: the cast is the memory
 
-Status: concept, agreed 2026-09-24. This is orrery's end stage; Ref2VA stage
-R1 is its first building block. Sources: a design chat between Pyro and Codie
+Status: agreed 2026-09-24. This is orrery's end stage. Built: R1 (Ref2VA), and
+the reel on H3 Motion Context (stage 4, without memory lists). The engine is H3
+Motion Context, which Pyro's workflow uses; Contex Loop stays an option. Sources: a design chat between Pyro and Codie
 (a Garamonde virtual tour chained from 10 s clips with 1 s overlap), the
 installed `ComfyUI-H3RefMods`, `comfyui-minimaxh3-contex-loop` and
 `ComfyUI-H3-Motion-Context` packs, and the official full-reference guide.
@@ -33,30 +34,48 @@ and where each chunk is, so **the bookkeeper becomes the compiler**.
 ## The reel
 
 ```
-@h3 reel 16:9 · context 22f
+@h3 ref2va 16:9 lite
 style: live-action, cinematic, photorealistic
+context: 22
+LORA: <lora:minimax_h3_fl2va_turbo:0.5>
 
 CAST
 MAYA (refmod maya_canon): a young blonde woman, in a light-pink shirt
 SALON (refmod salon_noir_canon): a double-height salon, with a curved staircase and a black grand piano
-LIBRARY (refmod bibliotheque_canon): a crimson library, with thousands of books and a brass ladder
 
-CHUNK 10s @SALON
+CHUNK the salon
+SHOT 10s | tracking, slow
 MAYA crosses SALON toward the staircase …
 HANDOFF: the bottom of the curved staircase fills the lower foreground
 
-CHUNK 10s @SALON > LIBRARY
+CHUNK the library
+LORA: <lora:Motion_Repair:1>
+SHOT 7s | push in, small, slow
 …
 ```
 
-Per chunk orrery emits:
+The whole reel expands once per run, so bindings and handoffs are the same in
+every chunk; `segment` (Load Latent's `clip_index`, from 0) picks the chunk.
+Per chunk orrery emits (built):
 
-- the prompt: descriptions only for the cast members present, the handoff
-  sentence as the close of chunk N and the opening of chunk N+1;
-- the length in frames, context included;
-- the **memory list**: global, the places and people the chunk mentions, and
-  optionally the previous chunk as "recent". The retrieval query for this
-  RefMod-RAG is the screenplay itself.
+- the prompt: the chunk's shots, the previous handoff as its opening sentence
+  and its own handoff as its closing one;
+- the length in frames: from the second chunk on, Shot 1 also covers the
+  `context` frames Motion Context pins and trims (default 22);
+- the `loras` output: the `LORA:` lines before the first `CHUNK` plus the
+  chunk's own, for LoRA Text Loader;
+- the picks of the head, the chunk and its handoffs only, so ratings teach the
+  galaxy what was in the clip.
+
+Still planned: the **memory list** per chunk (global, the places and people it
+mentions, optionally the previous chunk as "recent"); the retrieval query for
+this RefMod-RAG is the screenplay itself.
+
+Wiring in the Motion Context workflow: Load Latent `clip_index` → Orrery
+`segment`; `text` → Reference to Video `prompt`; `length` → its `length`;
+`loras` → LoRA Text Loader. Set the Chain node's `segments` to the number of
+chunks (the node's stats line shows it), and keep the Orrery seed fixed (the
+node does that for a reel).
 
 ```
 reel ──orrery──▶ Contex Loop plan (prompts, lengths, seeds)
@@ -103,7 +122,8 @@ H3 ──▶ Review Gate / Galaxy ♥ ──▶ "make canon" ──▶ new RefMo
    connected. Declarations stay the source of truth.
 3. **R3, the cast describes itself:** Qwen3-VL (Krea 2's text encoder) writes a
    member's description from its reference image.
-4. **Reel:** `CHUNK`, `HANDOFF`, the Contex Loop plan writer, memory lists.
+4. **Reel (built, on Motion Context):** `CHUNK`, `HANDOFF`, `LORA:`, `context:`,
+   the `segment` input. Open: memory lists, a Contex Loop plan writer if needed.
 5. **Memory router and canon:** the per-chunk RefMod node, "make canon" from
    the galaxy.
 

@@ -90,7 +90,7 @@ def test_node_classes_declare_comfy_interfaces():
     assert set(NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog"}
     inputs = OrreryPrompt.INPUT_TYPES()["required"]
     assert inputs["target"][0] == ["text", "h3-base", "flat"]
-    assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length")
+    assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length", "loras")
     assert OrreryLog.OUTPUT_NODE is True
 
 
@@ -118,7 +118,7 @@ def test_prompt_node_offers_presets_in_a_dropdown(home):
 
 
 def test_prompt_node_outputs_size_and_h3_length(home):
-    *_, width, height, length = run_prompt("a __animal__\n: x8 seed=100 w832 h1216", 1, "text", str(home))
+    *_, width, height, length, _ = run_prompt("a __animal__\n: x8 seed=100 w832 h1216", 1, "text", str(home))
     assert (width, height, length) == (832, 1216, 124)
 
 
@@ -199,3 +199,38 @@ def test_the_node_takes_dials_and_reruns_when_they_change(home):
     a = OrreryPrompt.IS_CHANGED("$a = x\n$a", 1, "text", params='{"a": "y"}')
     b = OrreryPrompt.IS_CHANGED("$a = x\n$a", 1, "text", params='{"a": "z"}')
     assert a != b
+
+
+REEL = """@h3 t2va 16:9
+LORA: <lora:all:1>
+$hero = __animal__
+CHUNK
+SHOT 5s
+A $hero sleeps.
+SFX: wind
+CHUNK
+LORA: <lora:two:0.5>
+SHOT 4s
+The $hero wakes.
+SFX: birds
+"""
+
+
+def test_the_node_writes_the_chunk_its_segment_asks_for(home):
+    from orrery.comfy import h3_length
+    text, picks, _, width, height, length, loras = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
+    data = json.loads(picks)
+    assert "wakes" in text and "sleeps" not in text
+    assert (data["segment"], data["chunks"]) == (1, 2)
+    assert (width, height, length) == (1344, 768, h3_length(4 + 22 / 24))
+    assert loras == "<lora:all:1> <lora:two:0.5>"
+    first = run_prompt(REEL, 1, "h3-base", str(home))
+    assert first[5] == h3_length(5) and json.loads(first[1])["segment"] == 0
+
+
+def test_the_node_declares_segment_and_loras():
+    optional = OrreryPrompt.INPUT_TYPES()["optional"]
+    assert optional["segment"][0] == "INT" and optional["segment"][1]["forceInput"]
+    assert OrreryPrompt.RETURN_NAMES[-1] == "loras" and len(OrreryPrompt.RETURN_TYPES) == 7
+    a = OrreryPrompt.IS_CHANGED(REEL, 1, "h3-base", segment=0)
+    assert a != OrreryPrompt.IS_CHANGED(REEL, 1, "h3-base", segment=1)

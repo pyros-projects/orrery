@@ -5,8 +5,9 @@ import json
 import sys
 
 from orrery import manager
+from orrery.comfy import h3_length
 from orrery.dsl import MissingLibrary, bindings, expand_batch, override, parse
-from orrery.h3 import compile_scene
+from orrery.h3 import compile_scene, count_chunks
 from orrery.home import resolve_home
 from orrery.llm import InvalidProposal, backend_for
 from orrery.presets import (
@@ -71,23 +72,35 @@ def _cmd_expand(args: argparse.Namespace) -> int:
 def _cmd_compile(args: argparse.Namespace) -> int:
     home = resolve_home(args.home)
     try:
-        result = compile_scene(_dials(resolve_template(home, args.scene), args.set), args.seed,
-                               home.libraries(), home.weights(), target=args.target)
-    except KeyError as err:
+        scene = _dials(resolve_template(home, args.scene), args.set)
+        chunks = count_chunks(scene)
+        segments = [args.segment or 0] if args.segment is not None or not chunks else range(chunks)
+        results = [compile_scene(scene, args.seed, home.libraries(), home.weights(), target=args.target,
+                                 segment=k) for k in segments]
+    except (KeyError, ValueError) as err:
         print(f"orrery: {_msg(err)}", file=sys.stderr)
         return 2
-    if args.json:
-        print(json.dumps({
-            "seed": args.seed,
-            "text": result.text,
-            "picks": {p.label: p.value for p in result.picks},
-            "lint": [{"severity": i.severity, "message": i.message} for i in result.lint],
-        }, ensure_ascii=False, indent=2))
-    else:
-        print(result.text)
-    for issue in result.lint:
-        print(f"{issue.severity}: {issue.message}", file=sys.stderr)
-    return 1 if any(i.severity == "error" for i in result.lint) else 0
+    whole_reel = len(results) > 1 or (chunks and args.segment is None)
+    for n, result in enumerate(results, start=1):
+        if args.json:
+            print(json.dumps({
+                "seed": args.seed,
+                **({"segment": result.segment} if chunks else {}),
+                "text": result.text,
+                "loras": result.loras,
+                "picks": {p.label: p.value for p in result.picks},
+                "lint": [{"severity": i.severity, "message": i.message} for i in result.lint],
+            }, ensure_ascii=False, indent=2))
+        elif whole_reel:
+            secs = result.scene.duration
+            lora = f" · {result.loras}" if result.loras else ""
+            print(f"{'' if n == 1 else chr(10)}# CHUNK {n}/{chunks} · {secs:.2f} s · {h3_length(secs)} frames{lora}\n")
+            print(result.text)
+        else:
+            print(result.text)
+        for issue in result.lint:
+            print(f"{issue.severity}: {issue.message}", file=sys.stderr)
+    return 1 if any(i.severity == "error" for r in results for i in r.lint) else 0
 
 
 LIB_HELP = """LLM-powered wildcard libraries. Configure the model in <home>/orrery.yaml:
@@ -239,6 +252,7 @@ def build_parser() -> argparse.ArgumentParser:
     co.add_argument("--seed", type=int, default=0)
     co.add_argument("--json", action="store_true")
     co.add_argument("--set", action="append", default=[], metavar="NAME=VALUE", help=dial_help)
+    co.add_argument("--segment", type=int, help="a reel's chunk, from 0 (default: print every chunk)")
     co.set_defaults(func=_cmd_compile)
 
     lib = sub.add_parser("lib", help="LLM-powered wildcard libraries", description=LIB_HELP,

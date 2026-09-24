@@ -68,8 +68,8 @@ export function stats(text) {
     const shots = [...text.matchAll(/^\s*SHOT\s+([\d.]+)\s*s/gm)];
     const firstShot = text.search(/^\s*SHOT\b/m);
     const voices = new Set([...text.slice(Math.max(firstShot, 0)).matchAll(/^\s*([A-Z][A-Z0-9 _-]*?)\s*(?:\([^)]*\))?\s*:\s/gm)]
-      .map((m) => m[1]).filter((n) => !["SFX", "MUSIC", "SHOT"].includes(n)));
-    h3 = { shots: shots.length, secs: shots.reduce((s, m) => s + Number(m[1]), 0), voices: voices.size };
+      .map((m) => m[1]).filter((n) => !["SFX", "MUSIC", "SHOT", "LORA", "HANDOFF"].includes(n)));
+    h3 = { shots: shots.length, secs: shots.reduce((s, m) => s + Number(m[1]), 0), voices: voices.size, reel: reelSecs(text) };
   }
   return { rolls, libs: new Set(libs.map((m) => m[1])).size, binds, h3 };
 }
@@ -140,6 +140,22 @@ export function filterRows(rows, { scope = "all", hash, preset, rating, pick }) 
   return out;
 }
 
+// A reel's CHUNKs and the seconds of their shots (without the pinned context), or null.
+function reelSecs(text) {
+  let secs = null;
+  for (const l of text.split("\n").map((x) => x.trim())) {
+    if (/^CHUNK\b/.test(l)) (secs ??= []).push(0);
+    const m = /^SHOT\s+(\d+(?:\.\d+)?)\s*s\b/i.exec(l);
+    if (m && secs) secs[secs.length - 1] += Number(m[1]);
+  }
+  return secs && { chunks: secs.length, secs };
+}
+
+function h3Length(seconds) {
+  const frames = Math.max(5, Math.ceil(seconds * 24 - 1e-4));
+  return frames + ((((5 - frames) % 17) + 17) % 17);
+}
+
 // Mirrors orrery.comfy.shape: what the node's width, height and length outputs will carry.
 function h3Canvas(ratio) {
   const m = /^(\d+(?:\.\d+)?):(\d+(?:\.\d+)?)$/.exec(ratio || "");
@@ -157,11 +173,14 @@ export function shape(text) {
   const header = /^@h3\s+\w+(.*)$/i.exec(lines[0] || "");
   const canvas = (header && header[1].split(/\s+/).map(h3Canvas).find(Boolean)) || [1024, 1024];
   const seconds = lines.reduce((s, l) => { const m = /^SHOT\s+(\d+(?:\.\d+)?)\s*s\b/i.exec(l); return s + (m ? Number(m[1]) : 0); }, 0);
-  let length = 124;
-  if (seconds) { length = Math.max(5, Math.ceil(seconds * 24 - 1e-9)); length += (((5 - length) % 17) + 17) % 17; }
+  const reel = header ? reelSecs(text) : null;
+  const ctx = Number((/^context:\s*(\d+)/im.exec(text) || [0, 22])[1]);
+  const lengths = reel && reel.secs.map((s, i) => (s ? h3Length(s + (i ? ctx / 24 : 0)) : 124));
+  const length = lengths ? lengths[0] : seconds ? h3Length(seconds) : 124;
   return {
     width: num(/\bw(\d+)/) ?? canvas[0], height: num(/\bh(\d+)/) ?? canvas[1], length,
     cli: params.split(/\s+/).filter((w) => /^(x\d+|seed=\d+)$/.test(w)),
+    ...(lengths ? { lengths } : {}),
   };
 }
 

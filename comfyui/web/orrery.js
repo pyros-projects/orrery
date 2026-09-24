@@ -46,6 +46,7 @@ function mount(node) {
     getSeed: () => find("seed")?.value ?? 0,
     setSeed: (seed) => set("seed", seed),
     setControl: (mode) => set("control_after_generate", mode),
+    getControl: () => find("control_after_generate")?.value ?? "",
     getTarget: () => find("target")?.value || "text",
     getParams: () => { try { return JSON.parse(params?.value || "{}") || {}; } catch { return {}; } },
     setParams: (values) => set("params", Object.keys(values).length ? JSON.stringify(values) : ""),

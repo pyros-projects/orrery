@@ -76,3 +76,8 @@ test("cast keywords at line start in screenplays", () => {
   assert.ok(items.includes("CAST"));
   assert.ok(at("@h3 ref2va\nCAST\nA (image 1): a dancer\nv").items.some((i) => i.insert === "voice: "));
 });
+
+test("reel keywords at line start in screenplays", () => {
+  const items = at("@h3 t2va\nSHOT 5s\nA.\n").items.map((i) => i.insert);
+  assert.ok(["CHUNK", "HANDOFF: ", "LORA: ", "context: "].every((k) => at(`@h3 t2va\n${k[0]}`).items.some((i) => i.insert === k)), items.join());
+});
