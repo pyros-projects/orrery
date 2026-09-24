@@ -20,6 +20,7 @@ _BRACE = re.compile(r"\{([^{}]*)\}")
 _LIB = re.compile(r"__(\w+)(?:\[([\w-]+)\])?__")
 _VAR = re.compile(r"\$([A-Za-z_]\w*)")
 _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
+_BINDING_LINE = re.compile(r"^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$")
 _MULTI = re.compile(r"^(\d+)(?:-(\d+))?\$\$(.+)$")
 _WEIGHTED = re.compile(r"^(.*?):(\d+(?:\.\d+)?)$")
 _LIB_ONLY = re.compile(r"^__(\w+)(?:\[([\w-]+)\])?__$")
@@ -90,6 +91,23 @@ def parse(template: str) -> _Parsed:
         else:
             parsed.body.append(line)
     return parsed
+
+
+def bindings(template: str) -> list[tuple[str, str]]:
+    """A template's bindings, in order: its dials, with their default expressions."""
+    return parse(template).bindings
+
+
+def override(template: str, values: Mapping[str, str]) -> str:
+    """Turn dials: each named binding (`hero` or `$hero`) gets a new expression, which may itself
+    use the DSL. Empty values keep the default; unknown names are ignored."""
+    wanted = {k.strip().lstrip("$"): v.strip() for k, v in values.items() if v and v.strip()}
+
+    def swap(line: str) -> str:
+        m = _BINDING_LINE.match(line)
+        return f"{m.group(1)}${m.group(2)}{m.group(3)}{wanted[m.group(2)]}" if m and m.group(2) in wanted else line
+
+    return "\n".join(swap(line) for line in template.split("\n"))
 
 
 def _parse_params(text: str) -> Params:

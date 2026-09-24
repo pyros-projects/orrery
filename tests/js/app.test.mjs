@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { highlight } from "../../comfyui/web/app/highlight.js";
 import {
-  filterPresets, filterRows, glyph, markPicks, pickerGroups, shape, stats, templateHash,
+  applyDials, dials, filterPresets, filterRows, glyph, markPicks, pickerGroups, shape, stats, templateHash,
 } from "../../comfyui/web/app/model.js";
 
 const known = new Set(["creature", "place"]);
@@ -113,4 +113,18 @@ test("galaxy rows filter by scope, rating and pick", () => {
   const owned = [{ id: "1", template: "aaa", preset: "krea/x", rating: null, picks: [] }, { id: "2", template: "bbb", preset: null, rating: null, picks: [] }];
   assert.deepEqual(filterRows(owned, { scope: "preset", preset: "krea/x" }).map(r => r.id), ["1"]);
   assert.deepEqual(filterRows(owned, { scope: "preset", preset: null }).map(r => r.id), []);
+});
+
+test("dials are the bindings, with choices for a library or a brace", () => {
+  const d = dials("$hero = __creature[myth]__\n  $mood = {calm|eerie:3}\n$n = {1-2$$a|b}\n$x = a fox\n$hero at dusk");
+  assert.deepEqual(d.map((x) => x.name), ["hero", "mood", "n", "x"]);
+  assert.deepEqual(d[0], { name: "hero", expr: "__creature[myth]__", lib: "creature", tag: "myth", options: [] });
+  assert.deepEqual(d[1].options, ["calm", "eerie"]);
+  assert.deepEqual([d[2].lib, d[2].options, d[3].options], [null, [], []]);
+});
+
+test("applyDials mirrors orrery's override", () => {
+  const t = "$hero = __animal__\n  $place = {a|b}\n$hero in $place";
+  assert.equal(applyDials(t, { hero: "owl", place: " " }), "$hero = owl\n  $place = {a|b}\n$hero in $place");
+  assert.equal(applyDials(t, {}), t);
 });

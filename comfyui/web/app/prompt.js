@@ -2,7 +2,7 @@
 import { suggest } from "../orrery-complete.js";
 import { esc, highlight } from "./highlight.js";
 import { icon } from "./icons.js";
-import { folderColor, markPicks, pickerGroups, shape, stats, templateHash } from "./model.js";
+import { applyDials, dials, folderColor, markPicks, pickerGroups, shape, stats, templateHash } from "./model.js";
 import { thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
 
@@ -10,7 +10,7 @@ function statsHTML(app) {
   const st = stats(app.text), out = shape(app.text);
   const outs = (app.data.rows || []).filter((r) => r.template === templateHash(app.text)).length;
   return `${st.h3 ? `<span class="stat"><b>H3</b> · ${st.h3.shots} shot${st.h3.shots === 1 ? "" : "s"} · <b>${st.h3.secs.toFixed(1)} s</b> · ${st.h3.voices} voice${st.h3.voices === 1 ? "" : "s"}</span>` : ""}`
-    + `<span class="stat"><b>${st.rolls}</b> rolls · <b>${st.libs}</b> libraries · <b>${st.binds}</b> bindings</span>`
+    + `<span class="stat"><b>${st.rolls}</b> rolls · <b>${st.libs}</b> libraries · <b>${st.binds}</b> bindings${setDials(app) ? ` · <b>${setDials(app)}</b> dialed` : ""}</span>`
     + `<span class="stat" title="The node's width, height and length outputs">→ <b>${out.width}×${out.height}</b>${st.h3 ? ` · <b>${out.length}</b> frames = ${(out.length / 24).toFixed(2)} s` : ""}</span>`
     + `${out.cli.length ? `<span class="stat cli" title="In ComfyUI, use the Run count and the seed widget">${esc(out.cli.join(" "))}: CLI only</span>` : ""}<span class="grow"></span>`
     + `${outs ? `<button class="btn ghost" data-act="outputs">${icon("image")}${outs} output${outs === 1 ? "" : "s"}</button>` : ""}`
@@ -33,11 +33,12 @@ export function renderPrompt(app) {
     <div class="pbar">
       <button class="pchip" data-act="pick" aria-haspopup="listbox" aria-expanded="${app.state.pick}">${chipHTML(app)}</button>
       <button class="icon-btn" data-act="revert" title="Revert to the saved preset" ${card && d ? "" : "disabled"}>${icon("undo")}</button>
-      <button class="btn" data-act="save" ${card && d ? "" : "disabled"}>${icon("save")}${card?.builtin ? "Save a copy" : "Save"}</button>
+      <button class="btn" data-act="save" ${card && (d || setDials(app)) ? "" : "disabled"}>${icon("save")}${card?.builtin ? "Save a copy" : "Save"}</button>
       <button class="btn primary" data-act="saveas">Save as…</button>
     </div>
     ${card?.note ? `<p class="pnote"><b>${esc(card.title)}.</b> ${esc(card.note)}</p>` : '<p class="pnote">Type a template, or open a preset. <b>__</b> lists your libraries, <b>$</b> your bindings.</p>'}
     <div class="editor"><pre class="hl" aria-hidden="true"></pre><textarea spellcheck="false" aria-label="Template"></textarea></div>
+    <div class="dials"></div>
     <div class="pfoot">${statsHTML(app)}</div>
     <div class="scroll"><div class="rolls"></div></div>
     ${app.state.pick ? pickerHTML(app) : ""}`;
@@ -49,6 +50,7 @@ export function renderPrompt(app) {
   ed.addEventListener("input", () => {
     app.text = ed.value;
     paint();
+    if (dialKey(app.text) !== app.state.dialKey) renderDials(app);
     refreshBar(app);
     complete(app, ed);
   });
@@ -64,20 +66,75 @@ export function renderPrompt(app) {
     if (act === "pick") { app.state.pick = !app.state.pick; app.state.pickQ = ""; app.state.pickI = 0; renderPrompt(app); app.$("#oa-pq")?.focus(); }
     if (act === "revert") revert(app);
     if (act === "save") save(app);
-    if (act === "saveas") openSave(app, { text: app.text, from: app.preset, link: true });
+    if (act === "saveas") openSave(app, { text: applyDials(app.text, app.bridge.getParams()), from: app.preset, link: true });
     if (act === "roll") roll(app);
     if (act === "outputs") { app.state.gScope = "prompt"; app.go("galaxy"); }
     if (act === "browse") app.go("presets");
   };
   if (app.state.pick) wirePicker(app);
+  renderDials(app);
+  wireDials(app);
   renderRolls(app);
+}
+
+/* dials: every binding can be turned without editing the template; empty = its default roll */
+
+const dialKey = (text) => dials(text).map((d) => `${d.name}=${d.expr}`).join("\n");
+const setDials = (app) => Object.keys(app.bridge.getParams()).length;
+
+function dialChoices(app, d) {
+  if (d.options.length) return d.options;
+  if (!d.lib) return [];
+  if (!app.data.libraries) {
+    app.libsLoading ??= app.api.libraries().then((r) => { app.data.libraries = r.libraries; renderDials(app); })
+      .catch(() => { app.data.libraries = []; });
+    return [];
+  }
+  const lib = app.data.libraries.find((l) => l.name === d.lib);
+  return (lib?.entries || []).filter((e) => !d.tag || e.tags.includes(d.tag)).map((e) => e.value);
+}
+
+function renderDials(app) {
+  const box = app.view.querySelector(".dials");
+  if (!box) return;
+  const list = dials(app.text), values = app.bridge.getParams();
+  const kept = Object.fromEntries(Object.entries(values).filter(([k]) => list.some((d) => d.name === k)));
+  if (Object.keys(kept).length !== Object.keys(values).length) app.bridge.setParams(kept);
+  app.state.dialKey = dialKey(app.text);
+  box.innerHTML = list.length ? `<span class="label" title="Turn a binding without editing the template. Empty means its default roll; saving bakes the dials in.">Dials</span>`
+    + list.map((d) => {
+      const v = kept[d.name] || "", id = `oa-${app.uid}-dl-${d.name}`;
+      return `<label class="dial${v ? " on" : ""}" title="$${esc(d.name)} = ${esc(d.expr)}"><span class="dn">$${esc(d.name)}</span>`
+        + `<input class="dv" data-dial="${esc(d.name)}" list="${id}" value="${esc(v)}" placeholder="${esc(d.expr)}" spellcheck="false" autocomplete="off">`
+        + `<button type="button" class="mini" data-dreset="${esc(d.name)}" aria-label="Back to the default roll">${icon("x")}</button>`
+        + `<datalist id="${id}">${dialChoices(app, d).map((c) => `<option value="${esc(c)}"></option>`).join("")}</datalist></label>`;
+    }).join("") : "";
+}
+
+function wireDials(app) {
+  const box = app.view.querySelector(".dials");
+  const put = (name, value) => {
+    const values = app.bridge.getParams();
+    if (value.trim()) values[name] = value.trim(); else delete values[name];
+    app.bridge.setParams(values);
+    box.querySelector(`[data-dial="${CSS.escape(name)}"]`)?.closest(".dial").classList.toggle("on", !!value.trim());
+    refreshBar(app);
+  };
+  box.addEventListener("input", (e) => { if (e.target.dataset.dial) put(e.target.dataset.dial, e.target.value); });
+  box.addEventListener("click", (e) => {
+    const r = e.target.closest("[data-dreset]");
+    if (!r) return;
+    e.preventDefault();
+    box.querySelector(`[data-dial="${CSS.escape(r.dataset.dreset)}"]`).value = "";
+    put(r.dataset.dreset, "");
+  });
 }
 
 function refreshBar(app) {
   const card = app.preset && app.card(app.preset), d = app.dirty();
   app.view.querySelector(".pchip").innerHTML = chipHTML(app);
   app.view.querySelector('[data-act="revert"]').disabled = !(card && d);
-  app.view.querySelector('[data-act="save"]').disabled = !(card && d);
+  app.view.querySelector('[data-act="save"]').disabled = !(card && (d || setDials(app)));
   app.view.querySelector(".pfoot").innerHTML = statsHTML(app);
 }
 
@@ -91,10 +148,13 @@ function revert(app) {
 async function save(app) {
   const card = app.card(app.preset);
   if (!card) return;
-  if (card.builtin) return openSave(app, { text: app.text, from: card.name, copyOf: true, link: true });
+  const text = applyDials(app.text, app.bridge.getParams());
+  if (card.builtin) return openSave(app, { text, from: card.name, copyOf: true, link: true });
   try {
-    await app.api.savePreset({ name: card.name, text: app.text, title: card.title, tags: card.tags, note: card.note, overwrite: true });
-    app.base = app.text;
+    await app.api.savePreset({ name: card.name, text, title: card.title, tags: card.tags, note: card.note, overwrite: true });
+    app.text = text;
+    app.base = text;
+    app.bridge.setParams({});
     await app.refreshPresets();
     renderPrompt(app);
     app.toast(`Saved <b>@${esc(card.name)}</b>`);
@@ -104,7 +164,7 @@ async function save(app) {
 async function roll(app) {
   const seed = Number(app.bridge.getSeed()) || 0;
   try {
-    const { rolls } = await app.api.roll({ template: app.text, seed, n: 3, target: app.bridge.getTarget() });
+    const { rolls } = await app.api.roll({ template: app.text, seed, n: 3, target: app.bridge.getTarget(), params: app.bridge.getParams() });
     app.state.rolls = rolls;
   } catch (e) { app.state.rolls = null; app.fail(e); }
   renderRolls(app);

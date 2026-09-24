@@ -179,3 +179,23 @@ def test_log_saves_a_video_with_its_picks_and_records_it(home, tmp_path, monkeyp
     row = json.loads((home / "galaxy.jsonl").read_text().splitlines()[-1])
     assert row["media"] == path
     assert "video" in OrreryLog.INPUT_TYPES()["optional"]
+
+
+def test_dials_change_a_preset_without_editing_it(home):
+    save_preset(Home(home), "stills/fox", "$hero = __animal__\na $hero at dusk")
+    text, picks, *_ = run_prompt("$hero = __animal__\na $hero at dusk", 1, "text", str(home),
+                                 linked="stills/fox", params='{"hero": "lynx", "gone": "x"}')
+    data = json.loads(picks)
+    assert text == "a lynx at dusk"
+    assert (data["preset"], data["edited"], data["params"]) == ("stills/fox", False, {"hero": "lynx"})
+    from orrery.presets import recall_template
+    assert recall_template(Home(home), data["template"]) == "$hero = __animal__\na $hero at dusk"
+    [row] = log_outputs(Home(home), picks, ["x.png"])
+    assert row["params"] == {"hero": "lynx"}
+
+
+def test_the_node_takes_dials_and_reruns_when_they_change(home):
+    assert "params" in OrreryPrompt.INPUT_TYPES()["optional"]
+    a = OrreryPrompt.IS_CHANGED("$a = x\n$a", 1, "text", params='{"a": "y"}')
+    b = OrreryPrompt.IS_CHANGED("$a = x\n$a", 1, "text", params='{"a": "z"}')
+    assert a != b

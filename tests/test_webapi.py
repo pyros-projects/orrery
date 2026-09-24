@@ -287,7 +287,7 @@ def test_galaxy_rows_name_their_preset_and_filter_by_template(home, tmp_path):
     rows = ok(home, webapi.galaxy)["rows"]
     assert [r["seed"] for r in rows] == [2, 1]
     assert set(rows[0]) == {"id", "ts", "seed", "target", "template", "text", "picks", "rating",
-                            "media_name", "kind", "preset"}
+                            "media_name", "kind", "preset", "params"}
     assert rows[1]["preset"] == "tutorial/01_first_wildcard" and rows[0]["preset"] is None
     assert rows[1]["media_name"] == "1.png" and rows[1]["kind"] == "image"
     only = ok(home, webapi.galaxy, template=template_hash(lesson))["rows"]
@@ -335,6 +335,17 @@ def test_roll_compiles_screenplays_with_lint(home):
                target="h3-base")["rolls"]
     assert len(rolls) == 1 and rolls[0]["text"].startswith("integrated_multimodal_description")
     assert any("4–15" in i["message"] for i in rolls[0]["lint"])
+
+
+def test_roll_applies_dials(home):
+    rolls = ok(home, webapi.roll, template="$hero = __animal__\na $hero", seed=1, n=2, params={"hero": "lynx"})["rolls"]
+    assert [r["text"] for r in rolls] == ["a lynx", "a lynx"]
+
+
+def test_galaxy_rows_carry_their_dials(home, tmp_path):
+    log_row(home, tmp_path, "$hero = __animal__\na $hero", params={"hero": "lynx"})
+    [row] = ok(home, webapi.galaxy)["rows"]
+    assert row["params"] == {"hero": "lynx"}
 
 
 @pytest.mark.parametrize("args", [{"template": "a __smell__", "seed": 1},

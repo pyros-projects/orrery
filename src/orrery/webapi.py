@@ -13,7 +13,7 @@ from orrery import galaxy as gx
 from orrery import presets as ps
 from orrery import uistate
 from orrery.completion import completion_data
-from orrery.dsl import MissingLibrary, expand
+from orrery.dsl import MissingLibrary, expand, override
 from orrery.h3 import compile_scene
 from orrery.home import BUILTIN_DIR, Home, resolve_home
 from orrery.library import Entry, Library, load_library, save_library
@@ -334,7 +334,7 @@ def _row_json(row: dict, by_hash: dict[str, str], known: set[str]) -> dict:
     return {
         "id": row["id"], "ts": row.get("ts"), "seed": row.get("seed"),
         "target": row.get("target"), "template": row.get("template"), "text": row.get("text"),
-        "picks": row.get("picks") or [], "rating": row.get("rating"),
+        "picks": row.get("picks") or [], "rating": row.get("rating"), "params": row.get("params") or {},
         "media_name": Path(media).name if media else None, "kind": row["kind"],
         "preset": _owner(row, by_hash, known),
     }
@@ -384,6 +384,10 @@ def roll(home: Home, args: dict) -> dict:
     n, target = min(max(_int(args, "n", 3), 1), MAX_ROLLS), args.get("target") or "text"
     if target not in TARGETS:
         raise ApiError(400, f"'target' must be one of {', '.join(TARGETS)}.")
+    params = args.get("params") or {}
+    if not isinstance(params, dict):
+        raise ApiError(400, "'params' must be an object of binding: expression.")
+    text = override(text, {str(k): str(v) for k, v in params.items()})
     libs, weights, rolls = home.libraries(), home.weights(), []
     for s in range(seed, seed + n):
         try:

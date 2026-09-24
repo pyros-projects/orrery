@@ -1,7 +1,7 @@
 // Galaxy tab: every logged output; ratings move the learned weights of its picks.
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
-import { FACTORS, filterRows, markPicks, templateHash } from "./model.js";
+import { applyDials, FACTORS, filterRows, markPicks, templateHash } from "./model.js";
 import { copyText } from "./parts.js";
 import { openSave } from "./save.js";
 
@@ -99,7 +99,7 @@ function detailHTML(app, r) {
       <div><span class="label">Picks · click one to see every output that shares it</span><div class="picklist">
         ${r.picks.map((p) => p.keys.map((k) => `<button class="pick" data-gpick="${esc(k)}"><span>${esc(k.split("=").slice(1).join("="))}<small>${esc(p.label)}</small></span>`
           + `<span class="wv ${w(k) > 1.001 ? "up" : w(k) < 0.999 ? "dn" : ""}">×${w(k).toFixed(2)}</span></button>`).join("")).join("")}</div></div>
-      <div class="stat">template #${esc(r.template)}${r.preset ? ` · @${esc(r.preset)}` : ""} · ${esc((r.ts || "").replace("T", " ").slice(0, 16))} · ${esc(r.target || "")}</div>
+      <div class="stat">template #${esc(r.template)}${r.preset ? ` · @${esc(r.preset)}` : ""}${Object.entries(r.params || {}).map(([k, v]) => ` · $${esc(k)} = ${esc(v)}`).join("")} · ${esc((r.ts || "").replace("T", " ").slice(0, 16))} · ${esc(r.target || "")}</div>
     </div></div></aside>`;
 }
 
@@ -146,12 +146,13 @@ async function onClick(app, e, open) {
       app.base = open.preset ? text : null;
       app.bridge.setSeed(open.seed);
       app.bridge.setControl("fixed");
+      app.bridge.setParams(open.params || {});
     } catch (err) { return app.fail(err); }
     app.go("prompt");
     app.toast(`Template and seed ${open.seed} restored · control after generate set to <b>fixed</b>, so the next run reproduces it`);
   }
   if (act === "save") {
-    try { openSave(app, { text: await templateOf(app, open), from: open.preset }); } catch (err) { app.fail(err); }
+    try { openSave(app, { text: applyDials(await templateOf(app, open), open.params), from: open.preset }); } catch (err) { app.fail(err); }
   }
   if (act === "copyp") copyText(app, open.text || "", "Prompt");
   if (act === "copys") copyText(app, String(open.seed), "Seed");

@@ -34,6 +34,7 @@ export class OrreryApp {
     };
     this.data = { presets: [], favorites: new Set(), recent: [], completion: null, libraries: null, rows: null, weights: {} };
     this.base = null;
+    this.uid = Math.random().toString(36).slice(2, 8);  // keeps element ids unique across nodes
     this.root = document.createElement("div");
     this.root.className = "orrery-app";
     this.root.innerHTML = `<div class="app-head"><div class="brand">${LOGO}orrery</div><nav class="tabs" role="tablist"></nav>`
@@ -103,13 +104,14 @@ export class OrreryApp {
   }
 
   async loadPreset(name, { quiet = false, tab = true } = {}) {
-    const prev = { preset: this.preset, base: this.base, text: this.text };
+    const prev = { preset: this.preset, base: this.base, text: this.text, params: this.bridge.getParams() };
     const wasDirty = this.dirty();
     try {
       const p = await this.api.preset(name);
       this.preset = p.name;
       this.base = p.text;
       this.text = p.text;
+      this.bridge.setParams({});
     } catch (e) { return this.fail(e); }
     this.state.rolls = null;
     this.state.pick = false;
@@ -118,7 +120,9 @@ export class OrreryApp {
     this.render();
     if (!quiet) {
       this.toast(`Loaded <b>@${esc(name)}</b>`, wasDirty ? {
-        label: "Undo", run: () => { this.preset = prev.preset; this.base = prev.base; this.text = prev.text; this.render(); },
+        label: "Undo", run: () => {
+          this.preset = prev.preset; this.base = prev.base; this.text = prev.text; this.bridge.setParams(prev.params); this.render();
+        },
       } : null);
     }
   }

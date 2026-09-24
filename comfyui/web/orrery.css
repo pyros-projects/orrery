@@ -127,6 +127,16 @@
 .orrery-app .ac li span:last-child { color: var(--faint); font-family: var(--ui); }
 .orrery-app .ac li.on { background: var(--hover); }
 .orrery-app .ac .pv { padding: 5px 10px; border-top: 1px solid var(--line); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.orrery-app .dials { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px 0; flex: none; max-height: 96px; overflow-y: auto; }
+.orrery-app .dials:empty { display: none; }
+.orrery-app .dial { display: inline-flex; align-items: center; background: var(--well); border: 1px solid var(--line); border-radius: 7px; font: 12px var(--mono); max-width: 100%; }
+.orrery-app .dial .dn { color: var(--rose); padding: 4px 7px 4px 8px; border-right: 1px solid var(--line); white-space: nowrap; }
+.orrery-app .dial .dv { background: none; border: 0; color: var(--ink); font: inherit; padding: 4px 8px; width: 18ch; min-width: 0; outline: none; }
+.orrery-app .dial .dv::placeholder { color: var(--faint); }
+.orrery-app .dial:focus-within { border-color: #4a4c63; }
+.orrery-app .dial.on { border-color: rgba(240,122,160,.55); background: rgba(240,122,160,.08); }
+.orrery-app .dial .mini { display: none; margin-right: 4px; }
+.orrery-app .dial.on .mini { display: inline-flex; }
 .orrery-app .pfoot { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px; flex: none; }
 .orrery-app .rolls { display: grid; gap: 6px; padding: 0 12px 12px; }
 .orrery-app.big .rolls { grid-template-columns: repeat(3, 1fr); }

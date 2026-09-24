@@ -64,3 +64,14 @@ def test_preset_cli_folders_and_tags(home, capsys):
     assert "@h3/forest" in out and "moody" in out and "beach" not in out
     main(["preset", "list", "--folder", "h3"])
     assert "@h3/forest" in capsys.readouterr().out
+
+
+def test_set_overrides_a_binding(home, capsys):
+    assert main(["expand", "$hero = __animal__\n$hero at dawn", "--set", "hero=a lighthouse keeper"]) == 0
+    assert "a lighthouse keeper at dawn" in capsys.readouterr().out
+
+
+def test_set_names_an_unknown_binding_and_the_known_ones(home, capsys):
+    assert main(["expand", "$hero = __animal__\n$hero", "--set", "villain=x"]) == 2
+    err = capsys.readouterr().err
+    assert "$villain" in err and "$hero" in err

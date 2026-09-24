@@ -56,6 +56,14 @@ uv run orrery expand '$hero = __animal__
 $hero in a {misty|frozen} forest' --seed 5 -n 3        # --json for machines
 ```
 
+A template's bindings are its **dials**: turn one from outside without editing
+the template, with a value or any DSL expression. A preset stays a preset; the
+galaxy records the dials next to its picks.
+
+```bash
+uv run orrery compile @effects/subsurface_travel --set start="upper back" --set 'entity=__bh_entity__'
+```
+
 ## Presets and template references
 
 Anywhere a template is expected (CLI arguments, `preset save`), you can pass:
@@ -148,8 +156,11 @@ Restart ComfyUI. Nodes under **orrery**:
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `$` bindings, camera words after
     `SHOT 5s |`). Open a preset from the bar above it; ● marks unsaved
-    edits; Save, Save as…, Revert. **Roll 3** shows three expansions at the
-    next seeds without queueing anything.
+    edits; Save, Save as…, Revert. Under the editor, every binding is a
+    **dial**: pick a library entry or choice, or type any expression; empty
+    means its default roll. Saving bakes the dials in, and a galaxy output
+    restores them. **Roll 3** shows three expansions at the next seeds
+    without queueing anything.
   - **Presets**: every preset with your newest output as its preview; search,
     folders, favorites, recents, a sample roll and the template per preset.
   - **Libraries**: edit wildcard lists by hand: entries, tags, weights, and

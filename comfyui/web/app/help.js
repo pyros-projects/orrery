@@ -13,6 +13,7 @@ const REF = [
   ]],
   ["Bindings and extras", [
     ["$hero = __creature__", "roll once on its own line, reuse everywhere as $hero", "$hero = __creature__\n$hero meets another $hero"],
+    ["$hero → dial", "every binding is a dial under the editor: pick an entry or type any expression, empty = its default roll; Save bakes dials in (CLI: --set hero=owl)", ""],
     ["> cinematic, moody", "enhancement note: recorded with the picks, not pasted into the prompt", "> cinematic, moody"],
     [": w832 h1216", "size: the node's width and height outputs (wire them into your latent)", ": w832 h1216"],
     [": x8 seed=100", "CLI only (orrery expand); in ComfyUI use the Run count and the seed widget", ""],

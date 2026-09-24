@@ -2,7 +2,7 @@ from collections import Counter
 
 import pytest
 
-from orrery.dsl import MissingLibrary, expand, expand_batch
+from orrery.dsl import MissingLibrary, bindings, expand, expand_batch, override
 from orrery.library import Entry, Library
 
 LIBS = {
@@ -117,3 +117,23 @@ def test_articles_agree_with_the_picked_word():
 def test_article_exceptions():
     libs = {"u": Library("u", [Entry("unicorn")]), "h": Library("h", [Entry("hour-long nap")])}
     assert expand("a __u__, a __h__", 1, libs).text == "a unicorn, an hour-long nap"
+
+
+# --- dials: a template's bindings are its parameters ------------------------------------------
+
+def test_bindings_list_names_and_defaults_in_order():
+    assert bindings("$a = x\n  $b = {y|z}\ntext $a") == [("a", "x"), ("b", "{y|z}")]
+
+
+def test_override_replaces_a_binding_and_keeps_everything_else():
+    t = "$hero = __animal__\n  $place = {forest|city}\n$hero in the $place"
+    out = override(t, {"hero": "owl"})
+    assert out == "$hero = owl\n  $place = {forest|city}\n$hero in the $place"
+    assert expand(out, 1, LIBS).text.startswith("owl in the ")
+
+
+def test_override_skips_empty_values_accepts_a_dollar_and_dsl():
+    t = "$hero = __animal__\n$hero"
+    assert override(t, {"hero": "  "}) == t
+    assert override(t, {"$hero": "__animal[feline]__"}) == "$hero = __animal[feline]__\n$hero"
+    assert expand(override(t, {"hero": "__animal[feline]__"}), 3, LIBS).text in ("lynx", "ocelot")

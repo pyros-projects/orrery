@@ -164,3 +164,22 @@ export function shape(text) {
     cli: params.split(/\s+/).filter((w) => /^(x\d+|seed=\d+)$/.test(w)),
   };
 }
+
+// Dials: a template's bindings are its parameters. Mirrors orrery.dsl.bindings / override.
+const BINDING_LINE = /^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$/;
+
+export function dials(text) {
+  return text.split("\n").map((l) => BINDING_LINE.exec(l)).filter(Boolean).map((m) => {
+    const expr = m[4].trim(), lib = /^__(\w+)(?:\[([\w-]+)\])?__$/.exec(expr), brace = /^\{([^{}]*)\}$/.exec(expr);
+    const options = brace && !brace[1].includes("$$") ? brace[1].split("|").map((o) => o.replace(/:\d+(\.\d+)?$/, "").trim()).filter(Boolean) : [];
+    return { name: m[2], expr, lib: lib ? lib[1] : null, tag: lib ? lib[2] || null : null, options };
+  });
+}
+
+export function applyDials(text, values) {
+  const set = Object.fromEntries(Object.entries(values || {}).map(([k, v]) => [k.replace(/^\$/, ""), String(v).trim()]).filter(([, v]) => v));
+  return text.split("\n").map((l) => {
+    const m = BINDING_LINE.exec(l);
+    return m && set[m[2]] ? `${m[1]}$${m[2]}${m[3]}${set[m[2]]}` : l;
+  }).join("\n");
+}

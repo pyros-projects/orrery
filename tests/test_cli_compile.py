@@ -44,3 +44,9 @@ def test_lint_warnings_do_not_fail(home, tmp_path, capsys):
 
 def test_compile_missing_library_exits_2(home, tmp_path, capsys):
     assert main(["compile", write(tmp_path, "@h3 t2va\nSHOT 5s\nA __smell__.\nSFX: x\n")]) == 2
+
+
+def test_compile_set_overrides_a_binding(home, capsys):
+    scene = "@h3 t2va\n$hero = __animal__\nSHOT 5s\nA $hero sleeps.\nSFX: wind\n"
+    assert main(["compile", scene, "--set", "$hero=lynx"]) == 0
+    assert "A lynx sleeps." in capsys.readouterr().out

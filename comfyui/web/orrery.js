@@ -28,8 +28,8 @@ function hide(widget) {
 function mount(node) {
   loadStyles();
   const find = (name) => node.widgets?.find((w) => w.name === name);
-  const template = find("template"), preset = find("preset"), home = find("home");
-  [template, preset, home].forEach(hide);
+  const template = find("template"), preset = find("preset"), home = find("home"), params = find("params");
+  [template, preset, home, params].forEach(hide);
   node.properties = node.properties || {};
 
   const set = (name, value) => {
@@ -47,6 +47,8 @@ function mount(node) {
     setSeed: (seed) => set("seed", seed),
     setControl: (mode) => set("control_after_generate", mode),
     getTarget: () => find("target")?.value || "text",
+    getParams: () => { try { return JSON.parse(params?.value || "{}") || {}; } catch { return {}; } },
+    setParams: (values) => set("params", Object.keys(values).length ? JSON.stringify(values) : ""),
     home: () => home?.value || "",
     forwardWheel: (e) => app.canvas?.processMouseWheel?.(e),
     takeLegacyPreset: () => {

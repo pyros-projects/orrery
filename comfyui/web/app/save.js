@@ -69,7 +69,7 @@ export function openSave(app, { text, from = null, copyOf = false, link = false 
       try {
         const saved = await app.api.savePreset({ name: st.name.trim(), text, title: st.title, tags: st.tags, note: st.note, overwrite: st.overwrite });
         await app.refreshPresets();
-        if (link) { app.preset = saved.name; app.base = text; }
+        if (link) { app.preset = saved.name; app.base = text; app.text = text; app.bridge.setParams({}); }
         app.closeSheet();
         app.render();
         app.toast(`Saved <b>@${esc(saved.name)}</b>${st.overwrite ? " (overwritten)" : ""}`);

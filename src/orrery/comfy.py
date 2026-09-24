@@ -13,7 +13,7 @@ import re
 from datetime import UTC, datetime
 from pathlib import Path
 
-from orrery.dsl import MissingLibrary, expand, parse
+from orrery.dsl import MissingLibrary, bindings, expand, override, parse
 from orrery.h3 import compile_scene
 from orrery.home import Home, resolve_home
 from orrery.presets import list_presets, load_preset, preset_exists, remember_template
@@ -71,19 +71,33 @@ def linked_preset(extra_pnginfo, unique_id) -> str | None:
     return None
 
 
+def dial_values(params: str) -> dict[str, str]:
+    """The node's params widget: JSON {binding: expression}; blanks and bad JSON count as unset."""
+    try:
+        values = json.loads(params) if params and params.strip() else {}
+    except json.JSONDecodeError:
+        print("[orrery] warn: the dials are not valid JSON and are ignored.")
+        return {}
+    return {str(k).lstrip("$"): str(v).strip() for k, v in values.items() if str(v).strip()} if isinstance(values, dict) else {}
+
+
 def run_prompt(template: str, seed: int, target: str, home: str = "",
-               preset: str = NO_PRESET, linked: str | None = None) -> tuple[str, str, int, int, int, int]:
+               preset: str = NO_PRESET, linked: str | None = None,
+               params: str = "") -> tuple[str, str, int, int, int, int]:
     h = resolve_home(home or None)
     if preset and preset != NO_PRESET:
         template, linked = load_preset(h, preset), preset
     if linked and not preset_exists(h, linked):
         linked = None
+    known = {name for name, _ in bindings(template)}
+    dials = {k: v for k, v in dial_values(params).items() if k in known}
+    source = override(template, dials)
     try:
         if target == "text":
-            result = expand(template, seed, h.libraries(), h.weights())
+            result = expand(source, seed, h.libraries(), h.weights())
             lint = []
         else:
-            result = compile_scene(template, seed, h.libraries(), h.weights(), target=target)
+            result = compile_scene(source, seed, h.libraries(), h.weights(), target=target)
             lint = [{"severity": i.severity, "message": i.message} for i in result.lint]
     except MissingLibrary as err:
         raise ValueError(str(err)) from err
@@ -95,11 +109,12 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         "template": remember_template(h, template),
         "preset": linked,
         "edited": bool(linked) and template != load_preset(h, linked),
+        "params": dials,
         "text": result.text,
         "picks": [{"label": p.label, "value": p.value, "keys": list(p.keys)} for p in result.picks],
         "lint": lint,
     }
-    return (result.text, json.dumps(data, ensure_ascii=False), seed, *shape(template))
+    return (result.text, json.dumps(data, ensure_ascii=False), seed, *shape(source))
 
 
 def state_token(home: Home) -> str:
@@ -123,6 +138,7 @@ def log_outputs(home: Home, picks_json: str, media: list[str]) -> list[dict]:
         "template": data.get("template"),
         "preset": data.get("preset"),
         "edited": bool(data.get("edited")),
+        "params": data.get("params") or {},
         "text": data.get("text"),
         "picks": data.get("picks", []),
         "rating": None,
@@ -171,18 +187,21 @@ class OrreryPrompt:
             "optional": {
                 "preset": ([NO_PRESET, *list_presets(resolve_home())],),
                 "home": ("STRING", {"default": ""}),
+                "params": ("STRING", {"default": "", "tooltip": "The dials: JSON {binding: expression}, "
+                                                                "set in the Prompt tab."}),
             },
             "hidden": {"unique_id": "UNIQUE_ID", "extra_pnginfo": "EXTRA_PNGINFO"},
         }
 
     @classmethod
-    def IS_CHANGED(cls, template, seed, target, preset=NO_PRESET, home="", **_):
+    def IS_CHANGED(cls, template, seed, target, preset=NO_PRESET, home="", params="", **_):
         h = resolve_home(home or None)
         chosen = load_preset(h, preset) if preset and preset != NO_PRESET else template
-        return f"{seed}:{target}:{hash(chosen)}:{state_token(h)}"
+        return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{state_token(h)}"
 
-    def run(self, template, seed, target, preset=NO_PRESET, home="", unique_id=None, extra_pnginfo=None):
-        return run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id))
+    def run(self, template, seed, target, preset=NO_PRESET, home="", params="", unique_id=None,
+            extra_pnginfo=None):
+        return run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id), params)
 
 
 class OrreryLog:

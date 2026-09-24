@@ -5,7 +5,7 @@ import json
 import sys
 
 from orrery import manager
-from orrery.dsl import MissingLibrary, expand_batch, parse
+from orrery.dsl import MissingLibrary, bindings, expand_batch, override, parse
 from orrery.h3 import compile_scene
 from orrery.home import resolve_home
 from orrery.llm import InvalidProposal, backend_for
@@ -28,10 +28,26 @@ def _msg(err: Exception) -> str:
     return str(err)
 
 
+def _dials(template: str, pairs: list[str]) -> str:
+    """`--set NAME=VALUE` pairs applied to the template's bindings."""
+    values = {}
+    for pair in pairs:
+        name, sep, value = pair.partition("=")
+        if not sep:
+            raise KeyError(f"--set takes NAME=VALUE, not {pair!r}")
+        values[name.strip().lstrip("$")] = value
+    known = [name for name, _ in bindings(template)]
+    for name in values:
+        if name not in known:
+            listed = ", ".join(f"${n}" for n in known) or "none"
+            raise KeyError(f"there is no binding ${name} to set (this template has: {listed})")
+    return override(template, values)
+
+
 def _cmd_expand(args: argparse.Namespace) -> int:
     home = resolve_home(args.home)
     try:
-        template = resolve_template(home, args.template)
+        template = _dials(resolve_template(home, args.template), args.set)
         params = parse(template).params
         seed = args.seed if args.seed is not None else (params.seed or 0)
         count = args.n if args.n is not None else (params.count or 1)
@@ -55,8 +71,8 @@ def _cmd_expand(args: argparse.Namespace) -> int:
 def _cmd_compile(args: argparse.Namespace) -> int:
     home = resolve_home(args.home)
     try:
-        result = compile_scene(resolve_template(home, args.scene), args.seed, home.libraries(),
-                               home.weights(), target=args.target)
+        result = compile_scene(_dials(resolve_template(home, args.scene), args.set), args.seed,
+                               home.libraries(), home.weights(), target=args.target)
     except KeyError as err:
         print(f"orrery: {_msg(err)}", file=sys.stderr)
         return 2
@@ -214,12 +230,15 @@ def build_parser() -> argparse.ArgumentParser:
     ex.add_argument("-n", type=int, help="number of consecutive seeds (default: : xN, else 1)")
     ex.add_argument("--json", action="store_true")
     ex.set_defaults(func=_cmd_expand)
+    dial_help = "turn a dial: give binding $NAME a new expression (repeatable)"
+    ex.add_argument("--set", action="append", default=[], metavar="NAME=VALUE", help=dial_help)
 
     co = sub.add_parser("compile", help="compile a screenplay (.orr) for a target model")
     co.add_argument("scene", help="screenplay file or text")
     co.add_argument("--target", choices=["h3-base", "flat"], default="h3-base")
     co.add_argument("--seed", type=int, default=0)
     co.add_argument("--json", action="store_true")
+    co.add_argument("--set", action="append", default=[], metavar="NAME=VALUE", help=dial_help)
     co.set_defaults(func=_cmd_compile)
 
     lib = sub.add_parser("lib", help="LLM-powered wildcard libraries", description=LIB_HELP,
