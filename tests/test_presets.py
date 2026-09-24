@@ -9,8 +9,10 @@ from orrery.presets import (
     preset_meta,
     recall_template,
     remember_template,
+    rename_preset,
     resolve_template,
     save_preset,
+    set_meta,
     tag_preset,
     template_hash,
 )
@@ -127,3 +129,33 @@ def test_template_files_with_front_matter_are_stripped_when_resolved(home, tmp_p
     f = tmp_path / "scene.orr"
     f.write_text("---\ntags: [x]\n---\na __animal__\n")
     assert resolve_template(Home(home), str(f)) == "a __animal__\n"
+
+
+def test_rename_moves_a_user_preset(home):
+    h = Home(home)
+    save_preset(h, "stills/a", "x")
+    assert rename_preset(h, "stills/a", "h3/b") == "h3/b"
+    assert load_preset(h, "h3/b") == "x"
+    assert not (home / "presets" / "stills").exists()
+
+
+def test_rename_refuses_builtins_and_existing_targets(home):
+    h = Home(home)
+    with pytest.raises(ValueError, match="built-in"):
+        rename_preset(h, "tutorial/01_first_wildcard", "mine")
+    save_preset(h, "a", "1")
+    save_preset(h, "b", "2")
+    with pytest.raises(FileExistsError):
+        rename_preset(h, "a", "b")
+
+
+def test_set_meta_updates_and_removes_fields(home):
+    h = Home(home)
+    save_preset(h, "a", "x")
+    set_meta(h, "a", {"title": "A", "tags": ["moody"], "note": "n"})
+    assert preset_meta(h, "a") == {"title": "A", "tags": ["moody"], "note": "n"}
+    set_meta(h, "a", {"note": "", "tags": []})
+    assert preset_meta(h, "a") == {"title": "A"}
+    assert load_preset(h, "a") == "x"
+    with pytest.raises(ValueError, match="built-in"):
+        set_meta(h, "tutorial/01_first_wildcard", {"title": "x"})
