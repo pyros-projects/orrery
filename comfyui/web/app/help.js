@@ -28,6 +28,15 @@ const REF = [
     ["MUSIC: solo cello at a slow tempo, fading out", "instruments, tempo, dynamics; no mood words", "MUSIC: a slow, sparse __instrument__ line that fades out"],
     ["<Picture 1>", "I2VA: anchor the start frame in Shot 1", "The scene begins exactly as in <Picture 1>."],
   ]],
+  ["Cast and Ref2VA", [
+    ["CAST", "names your references once; mention them by name in shots and the summary", "CAST\nMAYA (image 1): the young blonde woman, in a light-pink shirt"],
+    ["DOG (image 2, image 3): the white Samoyed, with a curved tail", "sources in parentheses (image N, video N, video N + audio, refmod NAME), then the description; later mentions use the part before the first comma", ""],
+    ["voice: audio 1", "on the line after a member: the voice timbre it speaks with", ""],
+    ["keep: partial - only the fur colour is kept", "optional retention marker and reason (full, partial, transfer, weak)", ""],
+    ["summary: MAYA feeds DOG in CAFE.", "ref2va's summary; the task types are added for you", "summary: "],
+    ["SHOT 5s | from image 5", "ref2va: the shot begins from a reference picture (to image N: ends on it)", ""],
+    ["[audio 1]", "a reference slot in prose; orrery writes the label the node uses", ""],
+  ]],
 ];
 
 const TIPS = [
@@ -35,6 +44,7 @@ const TIPS = [
   ["H3 cuts", "Start shots 2+ with a noun phrase: the compiler writes “the camera cuts to …” in front of it."],
   ["H3 length", "All shots together: 4–15 s. Up to four SFX lines. Wire the node's width, height and length into the MiniMax H3 latent node instead of copying them."],
   ["Weights", "(word:1.2) does nothing on H3 or Krea 2; use {a|b:3} to change the odds instead."],
+  ["Ref2VA labels", "orrery numbers <Subject N>, <Picture i>, <Video k> and <Audio j> exactly like the Reference to Video node: images and videos by slot, audio after the video soundtracks. In the other modes, cast names expand to their descriptions."],
 ];
 
 export function renderHelp(app) {

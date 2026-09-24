@@ -66,7 +66,8 @@ export function stats(text) {
   let h3 = null;
   if (/^\s*@h3/.test(text)) {
     const shots = [...text.matchAll(/^\s*SHOT\s+([\d.]+)\s*s/gm)];
-    const voices = new Set([...text.matchAll(/^\s*([A-Z][A-Z0-9 _-]*?)\s*(?:\([^)]*\))?\s*:\s/gm)]
+    const firstShot = text.search(/^\s*SHOT\b/m);
+    const voices = new Set([...text.slice(Math.max(firstShot, 0)).matchAll(/^\s*([A-Z][A-Z0-9 _-]*?)\s*(?:\([^)]*\))?\s*:\s/gm)]
       .map((m) => m[1]).filter((n) => !["SFX", "MUSIC", "SHOT"].includes(n)));
     h3 = { shots: shots.length, secs: shots.reduce((s, m) => s + Number(m[1]), 0), voices: voices.size };
   }

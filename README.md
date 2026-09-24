@@ -125,6 +125,12 @@ mechanical parts of the official guide (alignment lines, timestamps, speaker
 IDs, `<d>` tags, camera sentences, `N/A`) and lints the rest; lint errors exit
 with status 1. Built-in libraries: `__camera__`, `__h3style__`, `__instrument__`.
 
+`@h3 ref2va` screenplays name their references once in a `CAST` block and
+compile to the six full-reference sections, with every label numbered the way
+the Reference to Video node numbers its inputs. `@h3/07_ref2va_sitcom` is the
+official example as a screenplay. The long-video plan built on the cast is in
+[docs/long-video.md](docs/long-video.md).
+
 ## ComfyUI
 
 ```bash
@@ -134,8 +140,10 @@ ln -s ~/projects/private/orrery/comfyui ~/repos/comfy-ui/custom_nodes/orrery
 Restart ComfyUI. Nodes under **orrery**:
 
 - **Orrery Prompt**: seed and target (`text`, `h3-base`, `flat`) →
-  `text`, `picks`, `seed`. Wire `text` into your text encoder or the MiniMax H3
-  prompt input. The node is the whole of orrery, in five tabs (⤢ opens the
+  `text`, `picks`, `seed`, `width`, `height`, `length`. Wire `text` into your
+  text encoder or the MiniMax H3 prompt input; `width`/`height` come from
+  `: w… h…` or the `@h3` ratio, `length` is the screenplay's duration in frames
+  for the H3 latent. The node is the whole of orrery, in five tabs (⤢ opens the
   same app over the canvas, Esc brings it back):
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `$` bindings, camera words after

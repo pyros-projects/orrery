@@ -70,3 +70,9 @@ test("missing libraries are reported", () => {
   assert.deepEqual(missingLibraries("a __creature__ in __weather2__ and __creature[myth]__", DATA),
                    ["weather2"]);
 });
+
+test("cast keywords at line start in screenplays", () => {
+  const items = at("@h3 ref2va\nC").items.map((i) => i.insert);
+  assert.ok(items.includes("CAST"));
+  assert.ok(at("@h3 ref2va\nCAST\nA (image 1): a dancer\nv").items.some((i) => i.insert === "voice: "));
+});

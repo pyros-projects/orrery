@@ -29,6 +29,13 @@ test("screenplay lines get keyword colours and html is escaped", () => {
   assert.match(html, /&lt;Picture 1&gt;/);
 });
 
+test("screenplay cast lines are keywords", () => {
+  const html = highlight("CAST\nsummary: MAYA meets DOG.\nvoice: audio 1", known);
+  assert.match(html, /<span class="t-kw">CAST<\/span>/);
+  assert.match(html, /<span class="t-kw">summary:<\/span>/);
+  assert.match(html, /<span class="t-kw">voice:<\/span>/);
+});
+
 test("enhance line, and the params line marks CLI-only parts", () => {
   const html = highlight("> moody\n: x8 seed=100 w832 h1216", known);
   assert.match(html, /<span class="t-enh">&gt; moody<\/span>/);
@@ -56,6 +63,8 @@ test("stats count rolls, libraries, bindings and H3 timing", () => {
   assert.deepEqual([s.rolls, s.libs, s.binds, s.h3], [4, 2, 1, null]);
   const h = stats("@h3 t2va\nSHOT 3s | static\nA.\nNARRATOR (voiceover): Hi\nSHOT 2.5s | cut, arc\nB.\nSFX: wind");
   assert.deepEqual(h.h3, { shots: 2, secs: 5.5, voices: 1 });
+  const r = stats("@h3 ref2va\nCAST\nMAYA (video 1): a woman\nDOG (image 1): a dog\nSHOT 5s\nMAYA waves.\nMAYA (warm): Hi.\nSFX: wind");
+  assert.equal(r.h3.voices, 1);
 });
 
 test("picks are marked once each, longest first", () => {

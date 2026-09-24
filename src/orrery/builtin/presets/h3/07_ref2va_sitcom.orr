@@ -1,0 +1,35 @@
+---
+title: "Sitcom café (Ref2VA)"
+note: "The official full-reference example as a screenplay. Wire MiniMax H3 Reference to Video with ref_image_1 (the café), ref_image_2–4 (the dog), ref_video_1 (the woman), ref_video_2 (the man) and ref_audio_1 (her voice). CAST names the references once; orrery numbers every label."
+tags: [h3, ref2va, dialogue]
+---
+@h3 ref2va 16:9
+style: realistic multi-camera sitcom style with warm indoor lighting
+summary: The target video shows MAYA eating a cookie in CAFE. LEO enters with DOG, which lunges toward the cookie. The three-shot exchange uses [audio 1] as the voice-timbre reference for MAYA and ends with a canned audience laugh.
+
+CAST
+CAFE (image 1): the coffee-shop environment, featuring an exposed brick wall, an orange tufted sofa with patterned pillows, a neon sign, and a wooden coffee table
+keep: fully_preserved - the exposed brick wall, orange tufted sofa, patterned pillows, neon sign, and wooden coffee table are retained.
+DOG (image 2, image 3, image 4): the fluffy white Samoyed, with thick white fur, pointed ears, a dark nose, and a curved tail
+keep: fully_preserved - the Samoyed's thick white fur, pointed ears, dark nose, and curved tail are retained.
+MAYA (video 1): the young blonde woman, with long blonde hair and a light-pink button-down shirt with rolled-up sleeves
+voice: audio 1, containing a spoken English vocal layer
+keep: fully_preserved - the blonde woman's identity, long hair, and light-pink shirt are retained.
+LEO (video 2): the young man, with short wavy brown hair and a dark-grey hoodie with drawstrings
+keep: fully_preserved - the young man's short wavy brown hair and dark-grey hoodie are retained.
+
+SHOT 3s | static
+A medium shot establishes CAFE under warm amber pendant lights, with the neon sign glowing softly above the sofa and steam rising from a cup on the coffee table. MAYA sits on the sofa holding a chocolate-chip cookie, halfway through a bite. From the left, LEO enters holding the leash of DOG. The dog spots the cookie, lunges toward it and pulls the leash taut, its thick tail swinging. MAYA jerks her hand back and lifts the cookie above her shoulder.
+MAYA (light annoyance): Hey! Watch your dog!
+She closes her lips and guards the cookie with both hands while LEO leans back and pulls the dog away from the table.
+SFX: soft indoor coffee-shop room tone continues throughout the scene; a ceramic cup clinks against a saucer
+
+SHOT 2s | cut, push in, small, slow
+A close-up of LEO, now sitting beside MAYA on the orange sofa in CAFE and holding DOG securely in his arms, the dog's front paws resting on his forearm.
+LEO (casual young male voice): He just likes cookies more than me.
+He closes his mouth into an apologetic smile, glances at the cookie, and strokes the dog's thick white fur while the dog keeps staring at it.
+
+SHOT 3s | cut, static
+A close-up of MAYA in CAFE, framed against the exposed brick wall, the warm light catching her long blonde hair. Her annoyance softens as she looks toward the Samoyed, and the corner of her mouth lifts.
+MAYA (an amused cadence): Well, he has good taste at least.
+She smiles and raises the cookie in a small toast-like gesture toward the dog. A classic canned audience laugh begins immediately after the line and continues through the final frame.
