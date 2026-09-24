@@ -50,6 +50,7 @@ test("shape mirrors the node's width, height and H3 length outputs", () => {
   assert.deepEqual(shape("@h3 t2va 16:9\nSHOT 5s\nA."), { width: 1344, height: 768, length: 124, cli: [] });
   assert.deepEqual(shape("@h3 t2va 9:16\nSHOT 4s\nA.\nSHOT 3s\nB.\nSHOT 4s\nC."), { width: 768, height: 1344, length: 277, cli: [] });
   assert.equal(shape("@h3 t2va 21:9\nSHOT 4s\nA.").width, 1536);
+  assert.equal(shape("@h3 ref2va lite 9:16\nSHOT 4s\nA.").height, 1344);
 });
 
 test("template hash matches orrery's sha256 prefix", () => {

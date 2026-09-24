@@ -49,8 +49,8 @@ def warnings(result):
 
 def test_t2va_has_no_alignment_line_and_fields_in_order():
     text = h3(BAKER).text
-    assert text.startswith("integrated_multimodal_description: [Shot 1] Live-action, cinematic, "
-                           "a medium-wide shot frames a baker")
+    assert text.startswith("integrated_multimodal_description: [Shot 1] Live-action, cinematic. "
+                           "A medium-wide shot frames a baker")
     assert text.index("\n\noverall_soundscape: ") < text.index("\n\nnon_diegetic_music: ")
 
 
@@ -140,15 +140,29 @@ def test_transitions():
 
 def test_soundscape_sentences_and_silence():
     two = h3("@h3 t2va\nSHOT 5s\nA.\nSFX: rain falls; a door creaks\nSFX: thunder rolls\n")
-    assert "overall_soundscape: Rain falls while a door creaks. Thunder rolls." in two.text
+    assert "overall_soundscape: Rain falls and a door creaks. Thunder rolls." in two.text
     silent = h3("@h3 t2va\nSHOT 5s\nA.\nSFX: silence\n")
     assert "overall_soundscape: N/A" in silent.text and not errors(silent)
     missing = h3("@h3 t2va\nSHOT 5s\nA.\n")
     assert not errors(missing) and any("SFX" in m for m in warnings(missing))
 
 
+def test_soundscape_lists_noun_phrases_with_and():
+    res = h3("@h3 t2va\nSHOT 5s\nA.\nSFX: restrained breathing; subtle internal shifting; soft surface tension\n")
+    assert ("overall_soundscape: Restrained breathing, subtle internal shifting, and soft surface tension."
+            in res.text)
+
+
+def test_style_opens_shot_1_as_its_own_sentence():
+    res = h3("@h3 t2va\nstyle: live-action, cinematic body horror, photorealistic\nSHOT 5s\n"
+             "The host initially appears completely normal.\nSFX: x\n")
+    assert ("[Shot 1] Live-action, cinematic body horror, photorealistic. The host initially appears "
+            "completely normal.") in res.text
+
+
 def test_music_absent_is_na_and_mood_words_warn():
     assert h3("@h3 t2va\nSHOT 5s\nA.\nSFX: x\n").text.endswith("non_diegetic_music: N/A")
+    assert h3("@h3 t2va\nSHOT 5s\nA.\nSFX: x\nMUSIC: N/A\n").text.endswith("non_diegetic_music: N/A")
     moody = h3("@h3 t2va\nSHOT 5s\nA.\nSFX: x\nMUSIC: an epic sad score\n")
     assert any("epic" in m for m in warnings(moody))
 

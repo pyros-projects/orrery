@@ -189,6 +189,20 @@ SFX: wind
     assert "MAYA" not in text
 
 
+def test_later_mentions_use_the_head_noun_even_without_a_comma():
+    src = """@h3 t2va
+CAST
+HOST: an adult human facing the camera
+ENTITY: a compact humanoid alien with an elongated head and large dark eyes
+SHOT 5s
+HOST stands still. ENTITY moves inside HOST. ENTITY reaches the mouth.
+SFX: breathing
+"""
+    text = h3(src).text
+    assert ("An adult human facing the camera stands still. A compact humanoid alien with an elongated head "
+            "and large dark eyes moves inside the adult human. The compact humanoid alien reaches the mouth.") in text
+
+
 def test_flat_target_uses_cast_descriptions():
     src = """@h3 ref2va
 summary: DOG naps.

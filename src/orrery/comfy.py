@@ -50,8 +50,9 @@ def shape(template: str) -> tuple[int, int, int]:
     """width, height and H3 length for the node's outputs: `: w… h…` wins, then an @h3 ratio."""
     params = parse(template).params
     lines = [line.strip() for line in template.splitlines() if line.strip()]
-    header = re.match(r"@h3\s+\w+(?:\s+(\S+))?", lines[0], re.IGNORECASE) if lines else None
-    canvas = (header and h3_canvas(header.group(1) or "")) or (1024, 1024)
+    header = re.match(r"@h3\s+\w+(.*)$", lines[0], re.IGNORECASE) if lines else None
+    ratio = next((t for t in header.group(1).split() if h3_canvas(t)), "") if header else ""
+    canvas = h3_canvas(ratio) or (1024, 1024)
     seconds = sum(float(m.group(1)) for line in lines
                   if (m := re.match(r"SHOT\s+(\d+(?:\.\d+)?)\s*s\b", line, re.IGNORECASE)))
     return (params.width or canvas[0], params.height or canvas[1],

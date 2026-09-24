@@ -32,6 +32,7 @@ _SOURCE = re.compile(r"^(image|video|audio)\s+(\d+)(\s*\+\s*audio)?$|^refmod\s+(
 _VOICE = re.compile(r"^(?:(audio)\s+(\d+)|video\s+(\d+)\s+audio)\s*(?:,\s*(.*))?$", re.IGNORECASE)
 _KEEP = re.compile(r"^([A-Za-z_ -]+?)\s*(?:[-–—:,]\s*(.*))?$")
 _BRACKET = re.compile(r"\[(image|video|audio)\s+(\d+)(\s+audio)?\]", re.IGNORECASE)
+_DETAIL = re.compile(r"\s+(?:with|wearing|in|who|whose|that|holding|carrying|facing|dressed)\s", re.IGNORECASE)
 
 
 @dataclass(frozen=True)
@@ -55,8 +56,10 @@ class Member:
 
     @property
     def short(self) -> str:
-        """The head for later mentions: 'a young woman' becomes 'the young woman'."""
-        return re.sub(r"^(an?)\s+", "the ", self.head, flags=re.IGNORECASE)
+        """The head noun phrase for later mentions: 'a young woman' becomes 'the young woman', and
+        'a compact alien with an elongated head' becomes 'the compact alien'."""
+        noun = _DETAIL.split(self.head, maxsplit=1)[0] or self.head
+        return re.sub(r"^(an?)\s+", "the ", noun, flags=re.IGNORECASE)
 
 
 def parse_member(name: str, spec: str, text: str) -> Member:
@@ -149,9 +152,10 @@ class Names:
     description, the first mention in a shot where the member speaks with its speaker ID.
     Other modes: the full description on first mention, then the head noun phrase."""
 
-    def __init__(self, cast: list[Member], labels: Labels | None = None) -> None:
+    def __init__(self, cast: list[Member], labels: Labels | None = None, describe: bool = True) -> None:
         self.members = {m.name: m for m in cast}
         self.labels = labels
+        self.describe = describe  # False: labels only, the descriptions live in definitions (lite)
         self.introduced: set[str] = set()
         self.appears: dict[str, list[int]] = {m.name: [] for m in cast}
         self.pattern = (re.compile(r"\b(" + "|".join(re.escape(n) for n in sorted(self.members, key=len, reverse=True)) + r")\b")
@@ -183,7 +187,7 @@ class Names:
             if name in speakers and name not in tagged:
                 tagged.add(name)
                 label += f" ({speakers[name]})"
-            if name in self.introduced:
+            if name in self.introduced or not self.describe:
                 return label
             self.introduced.add(name)
             return f"{label}, {member.head}{member.tail}{closing}"

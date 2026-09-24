@@ -32,6 +32,8 @@ from orrery.cast import (
     Names,
     article,
     attach,
+    bracket_sources,
+    oxford,
     parse_member,
 )
 from orrery.dsl import Expander, Pick
@@ -60,7 +62,8 @@ MOOD_WORDS = re.compile(
     r"\b(sad|happy|epic|emotional|melancholic|melancholy|uplifting|tense|dramatic|romantic|"
     r"hopeful|joyful|nostalgic|heartwarming|mournful|moody)\b", re.IGNORECASE)
 
-_HEADER = re.compile(r"^@h3\s+(\w+)(?:\s+(\S+))?", re.IGNORECASE)
+_HEADER = re.compile(r"^@h3\s+(\w+)(.*)$", re.IGNORECASE)
+_RATIO = re.compile(r"^\d+(?:\.\d+)?:\d+(?:\.\d+)?$")
 _STYLE = re.compile(r"^style:\s*(.+)$", re.IGNORECASE)
 _SUMMARY = re.compile(r"^summary:\s*(.+)$", re.IGNORECASE)
 _ATTRIBUTE = re.compile(r"^(voice|keep):\s*(.+)$")
@@ -110,6 +113,7 @@ class Scene:
     silence: bool = False
     cast: list[Member] = field(default_factory=list)
     summary: str = ""
+    lite: bool = False  # `lite` in the header: <Subject N> = … definitions over the base fields
 
     @property
     def duration(self) -> float:
@@ -137,7 +141,12 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue]) -> Scene:
             continue
         line = ex.expr(raw)
         if m := _HEADER.match(line):
-            scene.mode, scene.ratio = m.group(1).lower(), m.group(2) or ""
+            scene.mode = m.group(1).lower()
+            for token in m.group(2).split():
+                if token.lower() == "lite":
+                    scene.lite = True
+                elif _RATIO.match(token):
+                    scene.ratio = token
         elif m := _STYLE.match(line):
             scene.style = m.group(1).strip()
         elif m := _SUMMARY.match(line):
@@ -248,7 +257,7 @@ class _Speakers:
     member's ID before its line). Cast members speak as their description or, in ref2va, as
     <Subject N> (Sx); everyone else as "The <role> with a <voice> (Sx)"."""
 
-    def __init__(self, scene: Scene, labels: Labels | None = None) -> None:
+    def __init__(self, scene: Scene, labels: Labels | None = None, sep: str | None = None) -> None:
         self.ids: dict[str, str] = {}
         for shot in scene.shots:
             for it in shot.items:
@@ -256,6 +265,7 @@ class _Speakers:
                     self.ids[it.name] = f"S{len(self.ids) + 1}"
         self.cast = {m.name: m for m in scene.cast}
         self.labels = labels
+        self.sep = sep or ("," if labels else ":")
         self.seen: set[str] = set()
 
     def in_shot(self, shot: Shot) -> dict[str, str]:
@@ -273,7 +283,7 @@ class _Speakers:
             lang, words = m.group(1), m.group(2)
         if not words:
             lint.append(Issue("warn", f"Shot {shot_no}: {v.name} has an empty line."))
-        sid, sep, first = self.ids[v.name], ("," if self.labels else ":"), v.name not in self.seen
+        sid, sep, first = self.ids[v.name], self.sep, v.name not in self.seen
         self.seen.add(v.name)
         d = f"<d>[{lang}] {words}</d>"
         if member := self.cast.get(v.name):
@@ -322,10 +332,10 @@ def _alignment(scene: Scene) -> str:
 
 
 def render_shots(scene: Scene, lint: list[Issue], speakers: _Speakers, names: Names,
-                 labels: Labels | None = None) -> list[str]:
-    """One string per shot. With labels (ref2va) the style is not folded into Shot 1, cast
-    names become <Subject N>, `[image 2]`-style sources become labels, and frame anchors are
-    spelled out."""
+                 labels: Labels | None = None, style: str = "") -> list[str]:
+    """One string per shot; `style` opens Shot 1 as its own sentence. With labels (ref2va and
+    lite) cast names become <Subject N>, `[image 2]`-style sources become labels, and frame
+    anchors are spelled out."""
     shots = []
     for i, shot in enumerate(scene.shots, start=1):
         speaking, tagged, parts = speakers.in_shot(shot) if labels else {}, set(), []
@@ -345,7 +355,7 @@ def render_shots(scene: Scene, lint: list[Issue], speakers: _Speakers, names: Na
         m = _FIRST_SENTENCE.match(body)
         first, rest = (m.group(1), m.group(2)) if m else (body, "")
         if i == 1:
-            head = "[Shot 1] " + (f"{_cap(scene.style)}, {_low(first)}" if scene.style and not labels else _cap(first))
+            head = "[Shot 1] " + " ".join(p for p in (style and _end(_cap(style)), _cap(first)) if p)
         else:
             head = f"[Shot {i}] At {timestamp(shot.start)}, {TRANSITIONS[shot.transition]} {_low(first)}"
         camera = camera_sentence(shot.camera, i, lint) if shot.camera else ""
@@ -356,8 +366,7 @@ def render_shots(scene: Scene, lint: list[Issue], speakers: _Speakers, names: Na
 def soundscape(scene: Scene, lint: list[Issue]) -> str:
     sfx = [items for shot in scene.shots for items in shot.sfx]
     if sfx:
-        sentences = [_end(_cap(it[0])) if len(it) == 1
-                     else _end(_cap(", ".join(it[:-1])) + " while " + it[-1]) for it in sfx]
+        sentences = [_end(_cap(oxford(it))) for it in sfx]
         joined = " ".join(sentences)
         if len(sentences) > 4:
             lint.append(Issue("warn", f"overall_soundscape has {len(sentences)} sentences; "
@@ -372,7 +381,7 @@ def soundscape(scene: Scene, lint: list[Issue]) -> str:
 
 
 def music(scene: Scene, lint: list[Issue]) -> str:
-    if not scene.music:
+    if not scene.music or scene.music.strip().rstrip(".").upper() in ("N/A", "NONE"):
         return "N/A"
     if m := MOOD_WORDS.search(scene.music):
         lint.append(Issue("warn", f"MUSIC uses the mood word \"{m.group(1)}\"; the guide wants "
@@ -380,12 +389,31 @@ def music(scene: Scene, lint: list[Issue]) -> str:
     return _end(_cap(scene.music))
 
 
+def _fields(scene: Scene, lint: list[Issue], shots: list[str]) -> str:
+    return (f"integrated_multimodal_description: {' '.join(shots)}\n\n"
+            f"overall_soundscape: {soundscape(scene, lint)}\n\nnon_diegetic_music: {music(scene, lint)}")
+
+
 def write_h3_base(scene: Scene, lint: list[Issue]) -> str:
-    shots = render_shots(scene, lint, _Speakers(scene), Names(scene.cast))
-    fields = (f"integrated_multimodal_description: {' '.join(shots)}\n\n"
-              f"overall_soundscape: {soundscape(scene, lint)}\n\nnon_diegetic_music: {music(scene, lint)}")
-    align = _alignment(scene)
-    return f"{align}\n\n{fields}" if align else fields
+    shots = render_shots(scene, lint, _Speakers(scene), Names(scene.cast), style=scene.style)
+    return "\n\n".join(p for p in (_alignment(scene), _fields(scene, lint, shots)) if p)
+
+
+def write_h3_lite(scene: Scene, lint: list[Issue]) -> str:
+    """`<Subject N> = description of <Picture i>` lines, then the base fields with every cast
+    mention as its label."""
+    prose = [it for shot in scene.shots for it in shot.items if isinstance(it, str)]
+    labels = Labels(scene.cast, [s for text in prose for s in bracket_sources(text)])
+    shots = render_shots(scene, lint, _Speakers(scene, labels, sep=":"), Names(scene.cast, labels, describe=False),
+                         labels, style=scene.style)
+    definitions = []
+    for m in scene.cast:
+        subject, phrase = f"<Subject {labels.subjects[m.name]}>", labels.sources_phrase(m)
+        definitions.append(f"{subject} = {m.head}{' of ' + phrase if phrase else ''}{m.tail}")
+        if m.voice:
+            definitions.append(f"{labels.label(m.voice)} = the voice of {subject}")
+    align = "" if scene.mode == "ref2va" else _alignment(scene)
+    return "\n\n".join(p for p in ("\n".join(definitions), align, _fields(scene, lint, shots)) if p)
 
 
 def write_flat(scene: Scene) -> str:
@@ -444,13 +472,14 @@ def _cast_lint(scene: Scene, lint: list[Issue]) -> None:
                 lint.append(Issue("warn", f"{m.name} uses {src.kind} {src.index}; the Reference to Video node "
                                           f"takes {src.kind} 1–{MAX_SLOTS[src.kind]}."))
         if not ref and (m.voice or any(s.kind != "refmod" for s in m.sources)):
+            still = "" if scene.lite else f"; in {scene.mode} its name still expands to its description"
             lint.append(Issue("warn", f"{m.name}: image, video and audio references only take effect in "
-                                      f"ref2va; in {scene.mode} its name still expands to its description."))
+                                      f"ref2va{still}."))
         if m.voice and not any(isinstance(it, Voice) and it.name == m.name for s in scene.shots for it in s.items):
             lint.append(Issue("warn", f"{m.name} has a voice reference but never speaks."))
     if not ref and any(s.first_frame or s.last_frame for s in scene.shots):
         lint.append(Issue("warn", "Frame anchors (from/to image N) only take effect in ref2va."))
-    if ref and not scene.summary:
+    if ref and not scene.lite and not scene.summary:
         lint.append(Issue("warn", "ref2va reads best with a summary: line (one short paragraph about the "
                                   "target video, using CAST names)."))
 
@@ -463,7 +492,9 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
     if target == "flat":
         text = write_flat(scene)
     elif target == "h3-base":
-        if scene.mode == "ref2va":
+        if scene.lite:
+            text = write_h3_lite(scene, lint)
+        elif scene.mode == "ref2va":
             from orrery.h3_ref import write_h3_ref
             text = write_h3_ref(scene, lint)
         else:

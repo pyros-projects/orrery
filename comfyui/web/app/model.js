@@ -154,8 +154,8 @@ export function shape(text) {
   const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
   const params = lines.filter((l) => /^:\s*(x\d|seed=|w\d|h\d)/.test(l)).join(" ");
   const num = (re) => { const m = re.exec(params); return m ? Number(m[1]) : null; };
-  const header = /^@h3\s+\w+(?:\s+(\S+))?/i.exec(lines[0] || "");
-  const canvas = (header && h3Canvas(header[1])) || [1024, 1024];
+  const header = /^@h3\s+\w+(.*)$/i.exec(lines[0] || "");
+  const canvas = (header && header[1].split(/\s+/).map(h3Canvas).find(Boolean)) || [1024, 1024];
   const seconds = lines.reduce((s, l) => { const m = /^SHOT\s+(\d+(?:\.\d+)?)\s*s\b/i.exec(l); return s + (m ? Number(m[1]) : 0); }, 0);
   let length = 124;
   if (seconds) { length = Math.max(5, Math.ceil(seconds * 24 - 1e-9)); length += (((5 - length) % 17) + 17) % 17; }
