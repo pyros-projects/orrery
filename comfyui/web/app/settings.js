@@ -1,18 +1,29 @@
-// Settings sheet: the language model orrery uses (a text encoder from ComfyUI's text_encoders
-// folder, as in Pixaroma's prompt nodes) and how many entries a library it creates starts with.
+// Settings sheet: where orrery keeps its libraries, presets and galaxy (the home folder), and the
+// language model it uses (a text encoder from ComfyUI's text_encoders folder, as in Pixaroma's
+// prompt nodes) with how many entries a library it creates starts with.
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
 
 const gb = (bytes) => (bytes ? `${(bytes / 1e9).toFixed(1)} GB` : "");
 
+const HOME_NOTE = {
+  env: (h) => `ORRERY_HOME is set to <code>${esc(h)}</code> and wins over this setting; unset it to use the folder below.`,
+  setting: () => "Libraries, presets, the galaxy and these settings live here. Existing files are not moved when you change it.",
+  default: () => "Libraries, presets, the galaxy and these settings live here; empty means <code>~/.orrery</code>. Existing files are not moved when you change it.",
+};
+
 export async function openSettings(app) {
-  let s;
-  try { s = await app.api.llm(); } catch (e) { return app.fail(e); }
+  let s, h;
+  try { [s, h] = await Promise.all([app.api.llm(), app.api.homeFolder()]); } catch (e) { return app.fail(e); }
   const options = [`<option value="">None: unknown libraries stay an error</option>`]
     .concat(s.files.map((f) => `<option value="${esc(f.name)}" ${f.name === s.file ? "selected" : ""} ${f.can_write ? "" : "disabled"}>`
       + `${esc(f.name)}${f.size ? ` · ${gb(f.size)}` : ""}${f.can_write ? "" : " · can't write"}</option>`)).join("");
   const sheet = app.openSheet(`<form class="panel">
-    <div class="row spread"><h4>Language model</h4></div>
+    <div class="row spread"><h4>Settings</h4></div>
+    <div class="field"><label class="label" for="oa-home">Orrery home folder</label>
+      <input class="input mono" id="oa-home" value="${esc(h.setting || h.home)}" placeholder="/path/to/orrery" ${h.source === "env" ? "disabled" : ""} spellcheck="false">
+      <span class="muted">${HOME_NOTE[h.source](h.home)}</span></div>
+    <div class="row spread"><h5 class="label">Language model</h5></div>
     <p class="muted flush">A text encoder that is a whole language model can write: Krea 2's <code>qwen3vl_4b</code> or a Qwen3-VL 8B build.
       MiniMax H3's encoder is cut short and cannot. The model loads when the node runs, writes, and unloads again.
       A text encoder wired into the node's <b>clip</b> input wins over this choice.</p>
@@ -26,10 +37,17 @@ export async function openSettings(app) {
   sheet.querySelector("form").addEventListener("submit", async (e) => {
     e.preventDefault();
     try {
+      const wanted = sheet.querySelector("#oa-home").value.trim();
+      if (h.source !== "env" && wanted !== (h.setting || h.home)) {
+        const moved = await app.api.saveHomeFolder(wanted);
+        Object.assign(app.data, { libraries: null, rows: null });
+        await Promise.all([app.refreshPresets(), app.refreshCompletion()]);
+        app.toast(`Home folder: <b>${esc(moved.home)}</b>`);
+      }
       app.data.llm = await app.api.saveLlm({ file: sheet.querySelector("#oa-llm").value, entries: Number(sheet.querySelector("#oa-llm-n").value) || 12 });
       app.closeSheet();
       app.render();
-      app.toast(app.data.llm.file ? `Language model: <b>${esc(app.data.llm.file)}</b>` : "No language model: unknown libraries stay an error");
+      if (app.data.llm.file !== s.file) app.toast(app.data.llm.file ? `Language model: <b>${esc(app.data.llm.file)}</b>` : "No language model: unknown libraries stay an error");
     } catch (err) { app.fail(err); }
   });
 }

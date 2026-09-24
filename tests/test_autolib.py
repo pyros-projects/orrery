@@ -65,3 +65,9 @@ def test_the_answer_budget_grows_with_what_is_asked(home):
     backend.max_length = 768
     ensure_libraries(Home(home), "__scenes:20__(at least 30 words each) and __props__", backend, default_n=12)
     assert backend.max_length >= 20 * 60 + 12 * 60
+
+
+def test_a_library_in_a_new_folder_gets_the_folder_too(home):
+    ensure_libraries(Home(home), "__film/genre__", FakeBackend([json.dumps(["noir", "western"])]), default_n=2)
+    assert (home / "library" / "film" / "genre.yaml").exists()
+    assert Home(home).libraries()["film/genre"].values() == ["noir", "western"]

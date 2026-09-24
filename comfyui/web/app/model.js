@@ -61,7 +61,7 @@ export const templateHash = (text) => sha256(new TextEncoder().encode(text)).sli
 
 export function stats(raw) {
   const text = raw.replace(/<lora:[^<>]*>/g, "<lora>");
-  const libs = [...text.matchAll(/__(\w+)(?:\[[\w-]+\])?(?::\d+)?__/g)];
+  const libs = [...text.matchAll(/__(\w+(?:\/\w+)*)(?:\[[\w-]+\])?(?::\d+)?__/g)];
   const rolls = (text.match(/\{/g) || []).length + libs.length;
   const binds = (text.match(/^\s*\$\w+\s*=/gm) || []).length;
   let h3 = null;
@@ -198,7 +198,7 @@ const BINDING_LINE = /^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$/;
 export function dials(text) {
   const seen = new Set();  // a binding set in several chunks is one dial; override() turns them all
   return text.split("\n").map((l) => BINDING_LINE.exec(l)).filter((m) => m && !seen.has(m[2]) && seen.add(m[2])).map((m) => {
-    const expr = m[4].trim(), lib = /^__(\w+)(?:\[([\w-]+)\])?(?::\d+)?__(?:\([^()]*\))?$/.exec(expr), brace = /^\{([^{}]*)\}$/.exec(expr);
+    const expr = m[4].trim(), lib = /^__(\w+(?:\/\w+)*)(?:\[([\w-]+)\])?(?::\d+)?__(?:\([^()]*\))?$/.exec(expr), brace = /^\{([^{}]*)\}$/.exec(expr);
     const options = brace && !brace[1].includes("$$") ? brace[1].split("|").map((o) => o.replace(/:\d+(\.\d+)?$/, "").trim()).filter(Boolean) : [];
     return { name: m[2], expr, lib: lib ? lib[1] : null, tag: lib ? lib[2] || null : null, options };
   });
@@ -212,23 +212,22 @@ export function applyDials(text, values) {
   }).join("\n");
 }
 
-// The Libraries list: what the language model wrote and waits for review first, then folders by
-// name prefix (couture_form, couture_house → couture: form, house) when two or more share one, then
-// the rest. Each item carries the name without its folder prefix.
+// The Libraries list: what the language model wrote and waits for review first, then folders, then
+// the rest. A folder is a real one (film/genre → film: genre) or, for flat names such as the
+// built-ins, a shared prefix (couture_form, couture_house → couture: form, house; "curator" joins
+// curator_line). Each item carries its name without the folder.
 export function libraryGroups(libs) {
   const review = libs.filter((l) => l.pending || (l.pending_entries || []).length);
   const rest = libs.filter((l) => !review.includes(l));
-  const prefix = (name) => name.split("_")[0];  // "curator" joins curator_line's folder
-  const counts = rest.reduce((c, l) => ({ ...c, [prefix(l.name)]: (c[prefix(l.name)] || 0) + 1 }), {});
+  const dir = (name) => (name.includes("/") ? name.slice(0, name.lastIndexOf("/")) : null);
+  const prefix = (name) => name.split("_")[0];
+  const counts = rest.filter((l) => !dir(l.name)).reduce((c, l) => ({ ...c, [prefix(l.name)]: (c[prefix(l.name)] || 0) + 1 }), {});
+  const keyOf = (l) => dir(l.name) ?? (counts[prefix(l.name)] > 1 ? prefix(l.name) : "");
+  const short = (l, key) => (key && l.name !== key ? l.name.slice(key.length + 1) : l.name);
   const byName = (a, b) => a.name.localeCompare(b.name);
-  const folders = [...new Set(rest.map((l) => prefix(l.name)).filter((p) => p && counts[p] > 1))].sort();
-  const item = (l, strip) => ({ lib: l, short: strip && l.name !== strip ? l.name.slice(strip.length + 1) : l.name });
+  const keys = [...new Set(rest.map(keyOf))].sort((a, b) => (!a) - (!b) || a.localeCompare(b));
   return [
-    ...(review.length ? [{ key: "review", items: [...review].sort(byName).map((l) => item(l)) }] : []),
-    ...folders.map((f) => ({ key: f, items: rest.filter((l) => prefix(l.name) === f).sort(byName).map((l) => item(l, f)) })),
-    ...(() => {
-      const loose = rest.filter((l) => !folders.includes(prefix(l.name))).sort(byName);
-      return loose.length ? [{ key: "", items: loose.map((l) => item(l)) }] : [];
-    })(),
+    ...(review.length ? [{ key: "review", items: [...review].sort(byName).map((l) => ({ lib: l, short: l.name })) }] : []),
+    ...keys.map((k) => ({ key: k, items: rest.filter((l) => keyOf(l) === k).sort(byName).map((l) => ({ lib: l, short: short(l, k) })) })),
   ];
 }

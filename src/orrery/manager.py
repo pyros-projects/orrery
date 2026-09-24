@@ -14,7 +14,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from orrery.home import Home
-from orrery.library import Entry, Library, load_library, save_library
+from orrery.library import Entry, Library, load_library
 from orrery.llm import Backend, InvalidProposal, extract_json
 
 MAX_ENTRY = 80
@@ -89,7 +89,9 @@ def _clean(values) -> list[str]:
 
 
 def list_name(raw) -> str:
-    return re.sub(r"[^a-z0-9]+", "_", str(raw or "").lower()).strip("_")
+    """A usable library name: lower-case words and _, folders kept as `film/genre`."""
+    parts = (re.sub(r"[^a-z0-9]+", "_", part.lower()).strip("_") for part in str(raw or "").split("/"))
+    return "/".join(p for p in parts if p)
 
 
 def parse_list(text: str) -> list[str]:
@@ -213,18 +215,16 @@ def _library(home: Home, name: str) -> Library:
 
 def propose_new(home: Home, name: str, backend: Backend, template: str | None = None,
                 n: int = 12) -> list[str]:
-    if (home.library_dir / f"{name}.yaml").exists():
+    if home.library_file(name):
         raise FileExistsError(f"library __{name}__ already exists (use: orrery lib more {name})")
     return parse_list(backend.complete(gen_prompt(name, template, n)))
 
 
 def create_library(home: Home, name: str, values: list[str], model_name: str) -> Library:
-    path = home.library_dir / f"{name}.yaml"
-    home.library_dir.mkdir(parents=True, exist_ok=True)
-    _snapshot(home, [path], f"gen {name}")
+    _snapshot(home, [home.library_path(name)], f"gen {name}")
     lib = Library(name, [Entry(v) for v in values],
                   {"generated_by": model_name, "created": datetime.now(UTC).date().isoformat()})
-    save_library(lib, path)
+    home.write_library(lib)
     return lib
 
 
@@ -248,23 +248,23 @@ def propose_edit(home: Home, name: str, instruction: str, backend: Backend) -> O
 
 def apply_ops(home: Home, name: str, ops: Ops, by: str) -> None:
     lib = _library(home, name)
-    path = home.library_dir / f"{name}.yaml"
-    new_paths = [home.library_dir / f"{n}.yaml" for n, _ in ops.new_lists]
-    home.library_dir.mkdir(parents=True, exist_ok=True)
-    _snapshot(home, [path, *new_paths, home.weights_path], f"edit {name}")
+    path = home.library_path(name)
+    new_paths = [home.library_path(n) for n, _ in ops.new_lists]
+    _snapshot(home, [path, path.with_suffix(".txt"), *new_paths, home.weights_path], f"edit {name}")
 
     by_value = {e.value: e for e in lib.entries}
     renamed = dict(ops.rename)
     entries = [replace(e, value=renamed.get(e.value, e.value))
                for e in lib.entries if e.value not in ops.remove]
     entries += [Entry(v) for v in ops.add if v not in {e.value for e in entries}]
-    save_library(Library(name, entries, {k: v for k, v in lib.meta.items() if k != "builtin"}), path)
+    home.write_library(Library(name, entries, {k: v for k, v in lib.meta.items() if k != "builtin"}))
 
     for (new_name, values), new_path in zip(ops.new_lists, new_paths, strict=True):
-        target = load_library(new_path) if new_path.exists() else Library(new_name, [], {"generated_by": by})
+        existing = home.library_file(new_name)
+        target = load_library(existing, new_name) if existing else Library(new_name, [], {"generated_by": by})
         have = set(target.values())
         target.entries += [by_value.get(v, Entry(v)) for v in values if v not in have]
-        save_library(target, new_path)
+        home.write_library(target)
 
     weights, family = home.weights(), f"__{name}__"
     for old, new in ops.rename:

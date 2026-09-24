@@ -116,3 +116,11 @@ test("lora tags never count as missing libraries", () => {
 test("a minimum count does not hide a missing library", () => {
   assert.deepEqual(missingLibraries("__creature:30__ and __shoes:20__", DATA), ["shoes"]);
 });
+
+test("__folder/ completes the libraries in that folder", () => {
+  const data = { ...DATA, libraries: [...DATA.libraries, { name: "film/genre", count: 4, source: "user", tags: [], sample: ["noir"] }] };
+  const inFolder = suggest("a __film/", 9, data).items.map((i) => i.insert);
+  assert.deepEqual(inFolder, ["__film/genre__"]);
+  assert.ok(suggest("a __fi", 6, data).items.some((i) => i.insert === "__film/genre__"));
+  assert.deepEqual(missingLibraries("__film/genre__ and __film/new__", data), ["film/new"]);
+});

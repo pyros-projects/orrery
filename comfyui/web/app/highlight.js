@@ -4,7 +4,7 @@ export const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "
 
 const CLI_ONLY = "CLI only: in ComfyUI, use the Run count and the seed widget";
 const HEAD = /^(\s*)(SHOT\s+[\d.]+\s*s\b|SFX:|MUSIC:|style:|summary:|voice:|keep:|context:|CHUNK(?=\s|$)|CAST(?=\s*$)|[A-Z][A-Z0-9 _-]*?(?:\s*\([^)]*\))?\s*:(?=\s))/;
-const TOKEN = /(__(\w+)(?:\[[\w-]+\])?(?::\d+)?__(?:\([^()]*\))?)|(\$[A-Za-z_]\w*(?:~\d+)?)|(\d+(?:-\d+)?\$\$)|([{}|])|([^_${}|]+|[_$])/g;
+const TOKEN = /(__(\w+(?:\/\w+)*)(?:\[[\w-]+\])?(?::\d+)?__(?:\([^()]*\))?)|(\$[A-Za-z_]\w*(?:~\d+)?)|(\d+(?:-\d+)?\$\$)|([{}|])|([^_${}|]+|[_$])/g;
 
 const TO_MAKE = "Not a library yet: the language model creates it when the node runs";
 

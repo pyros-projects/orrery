@@ -192,3 +192,14 @@ test("directions after a library belong to it", () => {
   assert.match(highlight("__film__(30 words, the set)", known), /<span class="t-lib t-miss">__film__\(30 words, the set\)<\/span>/);
   assert.equal(dials("$s = __film:5__(long)")[0].lib, "film");
 });
+
+test("libraries in folders: highlighted, counted, dialed and grouped by their folder", () => {
+  const withFilm = new Set([...known, "film/genre"]);
+  assert.match(highlight("a __film/genre__ noir", withFilm), /<span class="t-lib">__film\/genre__<\/span>/);
+  assert.equal(stats("__film/genre__ and __film/moods:3__").libs, 2);
+  assert.equal(dials("$g = __film/genre__")[0].lib, "film/genre");
+  const lib = (name) => ({ name, entries: [], pending: false, pending_entries: [] });
+  const groups = libraryGroups([lib("film/genre"), lib("style"), lib("film/moods"), lib("couture_form"), lib("couture_house")]);
+  assert.deepEqual(groups.map((g) => [g.key, g.items.map((i) => i.short)]),
+    [["couture", ["form", "house"]], ["film", ["genre", "moods"]], ["", ["style"]]]);
+});

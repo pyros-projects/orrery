@@ -15,7 +15,7 @@ from datetime import UTC, datetime
 
 from orrery.dsl import library_directions, wanted_libraries
 from orrery.home import Home
-from orrery.library import Entry, Library, save_library
+from orrery.library import Entry, Library
 from orrery.llm import Backend, InvalidProposal, extract_json
 from orrery.manager import _snapshot, parse_list
 
@@ -79,27 +79,26 @@ def ensure_libraries(home: Home, template: str, backend: Backend | None, default
     if hasattr(backend, "max_length"):  # room for every entry, long ones included (~60 tokens each)
         backend.max_length = max(backend.max_length, 256 + 60 * sum(n.count for n in wanted))
     answers, notes = _answers(backend.complete(prompt_for(wanted)), wanted), []
-    home.library_dir.mkdir(parents=True, exist_ok=True)
     for n in wanted:
         known = {v.lower() for v in n.existing}
         values = [v for v in answers.get(n.name, []) if v.lower() not in known][:n.count]
         if not values:
             continue
-        path = home.library_dir / f"{n.name}.yaml"
+        path = home.library_path(n.name)
         if n.existing:
             lib = home.libraries()[n.name]
-            _snapshot(home, [path], f"top up {n.name}")
+            _snapshot(home, [path, path.with_suffix(".txt")], f"top up {n.name}")
             meta = {k: v for k, v in lib.meta.items() if k != "builtin"}
             meta["pending_entries"] = [*meta.get("pending_entries", []), *values]
             if n.directions:
                 meta["directions"] = n.directions
-            save_library(Library(n.name, [*lib.entries, *(Entry(v) for v in values)], meta), path)
+            home.write_library(Library(n.name, [*lib.entries, *(Entry(v) for v in values)], meta))
             notes.append(f"Added {len(values)} entries to __{n.name}__ ({backend.name}), now "
                          f"{len(lib.entries) + len(values)}; review them in Libraries.")
         else:
             _snapshot(home, [path], f"gen {n.name}")
             meta = {"generated_by": backend.name, "created": datetime.now(UTC).date().isoformat(), "pending": True,
                     **({"directions": n.directions} if n.directions else {})}
-            save_library(Library(n.name, [Entry(v) for v in values], meta), path)
+            home.write_library(Library(n.name, [Entry(v) for v in values], meta))
             notes.append(f"Created __{n.name}__ with {len(values)} entries ({backend.name}); review it in Libraries.")
     return notes

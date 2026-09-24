@@ -39,3 +39,22 @@ def test_builtin_h3_libraries_are_available(home):
 def test_user_library_overrides_builtin(home):
     (home / "library" / "camera.yaml").write_text("- tracking, slow\n")
     assert Home(home).libraries()["camera"].values() == ["tracking, slow"]
+
+
+# --- the home folder setting: a pointer outside the home, so it can move the home ---------------
+
+def test_the_ui_setting_points_to_the_home_unless_env_or_explicit_win(tmp_path, monkeypatch):
+    from orrery.home import home_source, resolve_home, set_home_setting
+    monkeypatch.delenv("ORRERY_HOME", raising=False)
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "config"))
+    monkeypatch.setenv("HOME", str(tmp_path / "user"))
+    assert home_source() == (tmp_path / "user" / ".orrery", "default")
+    set_home_setting(str(tmp_path / "shared" / "orrery"))
+    assert (tmp_path / "shared" / "orrery").is_dir()
+    assert home_source() == (tmp_path / "shared" / "orrery", "setting") and resolve_home().root == tmp_path / "shared" / "orrery"
+    monkeypatch.setenv("ORRERY_HOME", str(tmp_path / "env"))
+    assert home_source()[1] == "env"
+    assert resolve_home(tmp_path / "node").root == tmp_path / "node"
+    monkeypatch.delenv("ORRERY_HOME")
+    set_home_setting("")
+    assert home_source()[1] == "default"

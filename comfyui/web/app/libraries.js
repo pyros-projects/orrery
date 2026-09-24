@@ -58,7 +58,7 @@ export async function renderLibraries(app) {
   app.view.innerHTML = `<div class="libs">
     <div class="liblist"><label class="search">${icon("search")}<input class="input" id="oa-ls" placeholder="Library or entry…" value="${esc(s.libSearch)}"></label>
       <div class="scroll"><ul>${listHTML(app, libs, L.name)}</ul></div>
-      <div class="addrow">${s.libNew !== null ? '<input class="input mono" id="oa-newlib" placeholder="name, e.g. weather2">' : `<button class="btn wide" data-lact="new">${icon("plus")}New library</button>`}</div></div>
+      <div class="addrow">${s.libNew !== null ? '<input class="input mono" id="oa-newlib" placeholder="name or folder/name, e.g. film/genre">' : `<button class="btn wide" data-lact="new">${icon("plus")}New library</button>`}</div></div>
     <div class="libmain">
       <div class="libhead"><h3>__${esc(L.name)}__</h3><span class="stat">${L.entries.length} entries</span>
         ${ro ? '<button class="btn primary" data-lact="own">Make it mine</button>' : `<button class="btn ghost danger" data-lact="del">${icon("trash")}Delete</button>`}</div>
@@ -132,7 +132,8 @@ function wire(app, L) {
     if (fold) {
       const open = s.libOpen ??= new Set(), k = fold.dataset.lfold;
       if (open.has(k)) open.delete(k); else open.add(k);
-      if (!open.has(k) && libBy(app, s.lib)?.name.startsWith(`${k}_`)) s.lib = null;
+      const current = libBy(app, s.lib)?.name || "";
+      if (!open.has(k) && (current.startsWith(`${k}_`) || current.startsWith(`${k}/`))) s.lib = null;
       return renderLibraries(app);
     }
     const t = e.target.closest("[data-ltag]");
@@ -223,7 +224,8 @@ async function review(app, L, act) {
 }
 
 async function createLibrary(app, raw) {
-  const s = app.state, name = raw.trim().toLowerCase().replace(/[^\w]+/g, "_");
+  // folder/name like __film/genre__: each part lower-case words and _
+  const s = app.state, name = raw.trim().toLowerCase().split("/").map((p) => p.replace(/[^\w]+/g, "_").replace(/^_+|_+$/g, "")).filter(Boolean).join("/");
   s.libNew = null;
   if (!name) return renderLibraries(app);
   if (libBy(app, name)) { s.lib = name; return renderLibraries(app); }

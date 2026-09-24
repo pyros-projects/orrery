@@ -10,7 +10,7 @@ const NONE = { items: [], replaceFrom: 0 };
 const startsWith = (word, prefix) => word.toLowerCase().startsWith(prefix.toLowerCase());
 
 function libraryItems(before, data) {
-  let m = before.match(/(?:^|[^\w])(__(\w+)\[([\w-]*))$/);
+  let m = before.match(/(?:^|[^\w])(__([\w/]+)\[([\w-]*))$/);
   if (m) {
     const lib = data.libraries.find((l) => l.name === m[2]);
     const tags = (lib?.tags ?? []).filter((t) => startsWith(t, m[3]));
@@ -19,7 +19,7 @@ function libraryItems(before, data) {
       replaceFrom: before.length - m[1].length,
     };
   }
-  m = before.match(/(?:^|[^\w])(__(\w*))$/);
+  m = before.match(/(?:^|[^\w])(__([\w/]*))$/);
   if (!m) return null;
   return {
     items: data.libraries
@@ -115,6 +115,6 @@ export function suggest(text, caret, data) {
 
 export function missingLibraries(text, data) {
   const known = new Set(data.libraries.map((l) => l.name));
-  const names = [...text.replace(/<lora:[^<>]*>/g, "").matchAll(/__(\w+)(?:\[[\w-]+\])?(?::\d+)?__/g)].map((m) => m[1]);
+  const names = [...text.replace(/<lora:[^<>]*>/g, "").matchAll(/__(\w+(?:\/\w+)*)(?:\[[\w-]+\])?(?::\d+)?__/g)].map((m) => m[1]);
   return [...new Set(names)].filter((n) => !known.has(n));
 }

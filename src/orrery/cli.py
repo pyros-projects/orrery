@@ -9,6 +9,7 @@ from orrery.comfy import h3_length
 from orrery.dsl import MissingLibrary, bindings, expand_batch, override, parse
 from orrery.h3 import compile_scene
 from orrery.home import resolve_home
+from orrery.library import library_files
 from orrery.llm import InvalidProposal, backend_for
 from orrery.presets import (
     delete_preset,
@@ -139,7 +140,7 @@ def _cmd_lib(args: argparse.Namespace) -> int:
 
 
 def _lib_list(home, args) -> int:
-    user = {p.stem for p in home.library_dir.glob("*.yaml")} if home.library_dir.exists() else set()
+    user = set(library_files(home.library_dir))
     for name, lib in sorted(home.libraries().items()):
         if name not in user:
             mark = "builtin"

@@ -19,13 +19,13 @@ from orrery.rng import Rng, weighted_pick
 _BRACE = re.compile(r"\{([^{}]*)\}")
 # __name[tag]:N__(directions): N = at least N entries; (directions) guide the model that writes the
 # library and never reach the prompt
-_LIB = re.compile(r"__(\w+)(?:\[([\w-]+)\])?(?::(\d+))?__(?:\(([^()]*)\))?")
+_LIB = re.compile(r"__(\w+(?:/\w+)*)(?:\[([\w-]+)\])?(?::(\d+))?__(?:\(([^()]*)\))?")
 _VAR = re.compile(r"\$([A-Za-z_]\w*)(?:~(\d+))?")  # $x, or $x~N: x as it was N clips ago
 _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
 _BINDING_LINE = re.compile(r"^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$")
 _MULTI = re.compile(r"^(\d+)(?:-(\d+))?\$\$(.+)$")
 _WEIGHTED = re.compile(r"^(.*?):(\d+(?:\.\d+)?)$")
-_LIB_ONLY = re.compile(r"^__(\w+)(?:\[([\w-]+)\])?(?::\d+)?__(?:\([^()]*\))?$")
+_LIB_ONLY = re.compile(r"^__(\w+(?:/\w+)*)(?:\[([\w-]+)\])?(?::\d+)?__(?:\([^()]*\))?$")
 _LORA_TAG = re.compile(r"<lora:[^<>]*>")  # opaque: LoRA file names may contain __
 _HIDDEN = re.compile("\x00(\\d+)\x00")
 _AN_PREFIXES = ("hour", "honest", "honor", "honour", "heir")

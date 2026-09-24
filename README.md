@@ -43,13 +43,22 @@ Qwen3.5-4B handles semantic edits; 2B is too weak for them.
 
 | Syntax | Meaning |
 |---|---|
-| `__animal__` | one entry from `library/animal.yaml`, weighted by learned weights |
+| `__animal__` | one entry from `library/animal.yaml` (or `animal.txt`, one entry per line), weighted by learned weights |
+| `__film/genre__` | a library in a folder: `library/film/genre.yaml` or `.txt`, as in z-explorer |
 | `__animal[feline]__` | only entries tagged `feline` |
 | `{a\|b\|c:3}` | inline choice; `:3` is a static weight |
 | `{1-2$$__style__}` | pick 1–2 distinct values |
 | `$hero = __animal__` | bind once, reuse everywhere |
 | `> moody, cinematic` | enhancement instruction (recorded, not yet executed) |
 | `: x8 seed=100 w1216 h832` | batch parameters |
+
+Libraries live in the home folder (`~/.orrery` unless set otherwise, see
+below) under `library/`, in any subfolders. Plain `.txt` wildcard files work as
+they are (one entry per line, `#` comments), so Dynamic Prompts collections can
+be dropped in; the first edit in the node turns one into YAML. When a name exists
+as both, the YAML wins. The home folder is set in the node's gear (a pointer in
+`~/.config/orrery/home`); `ORRERY_HOME`, `--home` and a node's own home field win
+over it.
 
 ```bash
 uv run orrery expand '$hero = __animal__

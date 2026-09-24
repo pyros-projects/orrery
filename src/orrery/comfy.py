@@ -18,6 +18,7 @@ from orrery.comfy_llm import ComfyBackend, can_write, llm_config
 from orrery.dsl import MissingLibrary, bindings, expand, override, parse, wanted_libraries
 from orrery.h3 import compile_scene
 from orrery.home import Home, resolve_home
+from orrery.library import library_files
 from orrery.loras import lora_files, lora_stack
 from orrery.presets import list_presets, load_preset, preset_exists, remember_template
 from orrery.reel import ReelEnd
@@ -158,10 +159,9 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
 def state_token(home: Home) -> str:
     """Changes whenever a library or the learned weights change, so ComfyUI re-runs the node."""
     digest = hashlib.sha256()
-    files = sorted(home.library_dir.glob("*.yaml")) if home.library_dir.exists() else []
-    for f in [*files, home.weights_path]:
+    for f in [*library_files(home.library_dir).values(), home.weights_path]:
         if f.exists():
-            digest.update(f.name.encode() + f.read_bytes())
+            digest.update(f.as_posix().encode() + f.read_bytes())
     return digest.hexdigest()[:16]
 
 

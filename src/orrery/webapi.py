@@ -17,8 +17,8 @@ from orrery.comfy_llm import can_write, llm_config, text_encoders
 from orrery.completion import completion_data
 from orrery.dsl import MissingLibrary, expand, override
 from orrery.h3 import compile_scene
-from orrery.home import BUILTIN_DIR, Home, resolve_home
-from orrery.library import Entry, Library, load_library, save_library
+from orrery.home import BUILTIN_DIR, Home, home_setting, home_source, resolve_home, set_home_setting
+from orrery.library import NAME, Entry, Library, load_library
 from orrery.loras import lora_files, lora_stack
 from orrery.manager import list_name
 from orrery.reel import split_reel
@@ -94,7 +94,8 @@ def _user_preset(home: Home, raw) -> str:
 
 
 def _library_name(raw) -> str:
-    name = list_name(raw)
+    """A library name as given when it is already one (film/genre, Film_Genre), else made usable."""
+    name = str(raw or "").strip() if NAME.match(str(raw or "").strip()) else list_name(raw)
     if not name:
         raise ApiError(400, f"'{raw}' is not a usable library name. Use letters, digits and _.")
     return name
@@ -241,7 +242,7 @@ def template(home: Home, args: dict) -> dict:
 def _source(home: Home, name: str, lib: Library) -> str:
     if lib.meta.get("generated_by"):
         return "llm"
-    return "user" if (home.library_dir / f"{name}.yaml").exists() else "builtin"
+    return "user" if home.library_file(name) else "builtin"
 
 
 def _library_json(home: Home, name: str, lib: Library, weights: dict) -> dict:
@@ -291,62 +292,60 @@ def libraries(home: Home, args: dict) -> dict:
 
 def library_save(home: Home, args: dict) -> dict:
     name = _library_name(args.get("name"))
-    path = home.library_dir / f"{name}.yaml"
-    if not path.exists() and (BUILTIN_DIR / f"{name}.yaml").exists():
+    path = home.library_file(name)
+    if not path and (BUILTIN_DIR / f"{name}.yaml").exists():
         raise ApiError(403, f"__{name}__ is built-in. Make it yours first.")
     entries, renames = _entries(args.get("entries")), args.get("renames") or {}
     if not isinstance(renames, dict):
         raise ApiError(400, "'renames' must map old entries to new ones.")
-    meta = load_library(path).meta if path.exists() else {}
-    home.library_dir.mkdir(parents=True, exist_ok=True)
-    save_library(Library(name, entries, {k: v for k, v in meta.items() if k != "builtin"}), path)
+    meta = load_library(path, name).meta if path else {}
+    path = home.write_library(Library(name, entries, {k: v for k, v in meta.items() if k != "builtin"}))
     weights, family = home.weights(), f"__{name}__"
     moved = [(o, n) for o, n in renames.items() if f"{family}={o}" in weights]
     for old, new in moved:
         weights[f"{family}={new}"] = weights.pop(f"{family}={old}")
     if moved:
         home.save_weights(weights)
-    return _library_json(home, name, load_library(path), weights)
+    return _library_json(home, name, load_library(path, name), weights)
 
 
 def library_own(home: Home, args: dict) -> dict:
     name = _library_name(args.get("name"))
-    path = home.library_dir / f"{name}.yaml"
-    if not path.exists():
+    path = home.library_file(name)
+    if not path:
         builtin = BUILTIN_DIR / f"{name}.yaml"
         if not builtin.exists():
             raise ApiError(404, f"There is no library __{name}__.")
-        lib = load_library(builtin)
-        home.library_dir.mkdir(parents=True, exist_ok=True)
-        save_library(Library(name, lib.entries,
-                             {k: v for k, v in lib.meta.items() if k != "builtin"}), path)
-    return _library_json(home, name, load_library(path), home.weights())
+        lib = load_library(builtin, name)
+        path = home.write_library(Library(name, lib.entries, {k: v for k, v in lib.meta.items() if k != "builtin"}))
+    return _library_json(home, name, load_library(path, name), home.weights())
 
 
 def library_delete(home: Home, args: dict) -> dict:
     name = _library_name(args.get("name"))
-    path = home.library_dir / f"{name}.yaml"
-    if not path.exists():
+    path = home.library_file(name)
+    if not path:
         if (BUILTIN_DIR / f"{name}.yaml").exists():
             raise ApiError(403, f"__{name}__ is built-in and can't be deleted.")
         raise ApiError(404, f"There is no library __{name}__.")
-    path.unlink()
+    for twin in (path.with_suffix(".yaml"), path.with_suffix(".txt")):
+        twin.unlink(missing_ok=True)
     return {"ok": True}
 
 
 def _user_library(home: Home, args: dict) -> tuple[str, Path, Library]:
     name = _library_name(args.get("name"))
-    path = home.library_dir / f"{name}.yaml"
-    if not path.exists():
+    path = home.library_file(name)
+    if not path:
         raise ApiError(404, f"There is no library __{name}__ of yours.")
-    return name, path, load_library(path)
+    return name, path, load_library(path, name)
 
 
 def library_accept(home: Home, args: dict) -> dict:
     """Keep what the language model wrote: a new library, or the entries it added."""
     name, path, lib = _user_library(home, args)
-    save_library(Library(name, lib.entries, {k: v for k, v in lib.meta.items() if k not in ("pending", "pending_entries")}), path)
-    return _library_json(home, name, load_library(path), home.weights())
+    path = home.write_library(Library(name, lib.entries, {k: v for k, v in lib.meta.items() if k not in ("pending", "pending_entries")}))
+    return _library_json(home, name, load_library(path, name), home.weights())
 
 
 def library_discard(home: Home, args: dict) -> dict:
@@ -356,9 +355,9 @@ def library_discard(home: Home, args: dict) -> dict:
         path.unlink()
         return {"ok": True, "deleted": name}
     added = set(lib.meta.get("pending_entries") or [])
-    save_library(Library(name, [e for e in lib.entries if e.value not in added],
-                         {k: v for k, v in lib.meta.items() if k != "pending_entries"}), path)
-    return _library_json(home, name, load_library(path), home.weights())
+    path = home.write_library(Library(name, [e for e in lib.entries if e.value not in added],
+                                      {k: v for k, v in lib.meta.items() if k != "pending_entries"}))
+    return _library_json(home, name, load_library(path, name), home.weights())
 
 
 # --- galaxy ---------------------------------------------------------------------------------
@@ -494,6 +493,22 @@ def frequency(home: Home, args: dict) -> dict:
     }
 
 
+# --- home folder ----------------------------------------------------------------------------
+
+def home_settings(home: Home, args: dict) -> dict:
+    """Where orrery lives when a node's home field is empty, and why."""
+    folder, source = home_source()
+    return {"home": str(folder), "source": source, "setting": home_setting()}
+
+
+def home_save(home: Home, args: dict) -> dict:
+    try:
+        set_home_setting(str(args.get("path") or ""))
+    except ValueError as err:
+        raise ApiError(400, str(err)) from None
+    return home_settings(home, {})
+
+
 # --- llm settings ---------------------------------------------------------------------------
 
 def llm_settings(home: Home, args: dict) -> dict:
@@ -536,6 +551,8 @@ ROUTES = [
     ("GET", "/orrery/galaxy/media", galaxy_media),
     ("POST", "/orrery/roll", roll),
     ("POST", "/orrery/frequency", frequency),
+    ("GET", "/orrery/home", home_settings),
+    ("POST", "/orrery/home", home_save),
     ("GET", "/orrery/llm", llm_settings),
     ("POST", "/orrery/llm", llm_save),
     ("POST", "/orrery/library/accept", library_accept),

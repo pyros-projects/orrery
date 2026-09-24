@@ -10,10 +10,13 @@ Two accepted shapes:
       - first snow
 """
 
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
 import yaml
+
+NAME = re.compile(r"^\w+(?:/\w+)*$")  # a library name: film/genre, or a flat one
 
 
 @dataclass(frozen=True)
@@ -45,8 +48,15 @@ def _entry(raw) -> Entry:
     raise ValueError(f"not a library entry: {raw!r}")
 
 
-def load_library(path: Path) -> Library:
+def _text_entries(text: str) -> list[str]:
+    """A plain wildcard file (Dynamic Prompts style): one entry per line, # comments."""
+    return [line.strip() for line in text.splitlines() if line.strip() and not line.strip().startswith("#")]
+
+
+def load_library(path: Path, name: str | None = None) -> Library:
     path = Path(path)
+    if path.suffix == ".txt":
+        return Library(name or path.stem, [Entry(v) for v in _text_entries(path.read_text(encoding="utf-8"))], {})
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
     meta: dict = {}
     if isinstance(data, dict):
@@ -56,7 +66,7 @@ def load_library(path: Path) -> Library:
         data = []
     if not isinstance(data, list):
         raise TypeError(f"{path}: expected a list of entries")
-    return Library(path.stem, [_entry(x) for x in data], meta)
+    return Library(name or path.stem, [_entry(x) for x in data], meta)
 
 
 def _dump_entry(e: Entry):
@@ -79,8 +89,19 @@ def save_library(lib: Library, path: Path) -> None:
     )
 
 
-def load_libraries(directory: Path) -> dict[str, Library]:
+def library_files(directory: Path) -> dict[str, Path]:
+    """Every library file under a folder, by name: `film/genre` is film/genre.yaml or .txt (YAML wins)."""
     directory = Path(directory)
     if not directory.is_dir():
         return {}
-    return {p.stem: load_library(p) for p in sorted(directory.glob("*.yaml"))}
+    found: dict[str, Path] = {}
+    for suffix in (".txt", ".yaml"):  # yaml second, so it replaces a txt of the same name
+        for p in sorted(directory.rglob(f"*{suffix}")):
+            name = p.relative_to(directory).with_suffix("").as_posix()
+            if NAME.match(name):
+                found[name] = p
+    return dict(sorted(found.items()))
+
+
+def load_libraries(directory: Path) -> dict[str, Library]:
+    return {name: load_library(p, name) for name, p in library_files(directory).items()}

@@ -41,7 +41,7 @@ export class OrreryApp {
     this.root = document.createElement("div");
     this.root.className = "orrery-app";
     this.root.innerHTML = `<div class="app-head"><div class="brand">${LOGO}orrery</div><nav class="tabs" role="tablist"></nav>`
-      + `<button class="icon-btn gear-btn" title="Language model and settings">${icon("gear")}</button><button class="icon-btn big-btn"></button></div><section class="view"></section><div class="sheet-host"></div><div class="toast-host"></div>`;
+      + `<button class="icon-btn gear-btn" title="Settings: home folder, language model">${icon("gear")}</button><button class="icon-btn big-btn"></button></div><section class="view"></section><div class="sheet-host"></div><div class="toast-host"></div>`;
     this.view = this.$(".view");
     this.$(".tabs").addEventListener("click", (e) => { const t = e.target.closest("[data-tab]"); if (t) this.go(t.dataset.tab); });
     this.$(".big-btn").addEventListener("click", () => this.setBig(!this.state.big));

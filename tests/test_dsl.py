@@ -2,7 +2,7 @@ from collections import Counter
 
 import pytest
 
-from orrery.dsl import MissingLibrary, bindings, expand, expand_batch, override
+from orrery.dsl import MissingLibrary, bindings, expand, expand_batch, override, wanted_libraries
 from orrery.library import Entry, Library
 
 LIBS = {
@@ -184,3 +184,12 @@ def test_directions_after_a_library_are_for_the_model_and_left_out():
     e = expand("a __animal__(small ones only) here and __style:4__(inks)", 1, LIBS)
     assert "(" not in e.text and " here and " in e.text
     assert library_directions("__film__(30 words) and __film__ and __x:3__(bright)") == {"film": "30 words", "x": "bright"}
+
+
+def test_libraries_in_folders_expand_and_are_wanted():
+    from orrery.dsl import library_directions
+    libs = {**LIBS, "film/genre": Library("film/genre", [Entry("noir")])}
+    e = expand("a __film/genre__ film", 1, libs)
+    assert e.text == "a noir film" and e.picks[0].label == "__film/genre__"
+    assert wanted_libraries("__film/genre:5__ and __film/new_one__(dark)") == {"film/genre": 5, "film/new_one": 0}
+    assert library_directions("__film/new_one__(dark)") == {"film/new_one": "dark"}

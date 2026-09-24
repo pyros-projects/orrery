@@ -50,6 +50,7 @@ def test_routes_cover_the_contract():
         ("GET", "/orrery/galaxy/thumb"), ("GET", "/orrery/galaxy/media"), ("POST", "/orrery/roll"),
         ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
         ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/discard"),
+        ("GET", "/orrery/home"), ("POST", "/orrery/home"),
     }
 
 
@@ -434,6 +435,34 @@ def test_llm_made_libraries_are_accepted_or_discarded(home):
     (lib / "shoes2.yaml").write_text("meta: {pending: true}\nentries: [clog]\n")
     ok(home, webapi.library_discard, name="shoes2")
     assert not (lib / "shoes2.yaml").exists()
+
+
+def test_folder_and_text_libraries_through_the_api(home):
+    lib = home / "library"
+    (lib / "film").mkdir()
+    (lib / "film" / "genre.txt").write_text("noir\nwestern\n")
+    listed = {l["name"]: l for l in ok(home, webapi.libraries)["libraries"]}
+    assert listed["film/genre"]["source"] == "user" and [e["value"] for e in listed["film/genre"]["entries"]] == ["noir", "western"]
+    ok(home, webapi.library_save, name="film/genre", entries=[{"value": "noir", "tags": ["dark"]}, {"value": "western"}])
+    assert (lib / "film" / "genre.yaml").exists() and not (lib / "film" / "genre.txt").exists()
+    ok(home, webapi.library_save, name="Film/New Moods", entries=[{"value": "tense"}])
+    assert (lib / "film" / "new_moods.yaml").exists()
+    (lib / "film" / "old.txt").write_text("x\n")
+    ok(home, webapi.library_delete, name="film/old")
+    assert not (lib / "film" / "old.txt").exists()
+    status, _ = api(home, webapi.library_save, name="../escape", entries=[{"value": "x"}])
+    assert status == 400 or not (home.parent / "escape.yaml").exists()
+
+
+def test_the_home_folder_is_read_and_set_through_the_api(home, monkeypatch, tmp_path):
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "config"))
+    body = ok(home, webapi.home_settings)
+    assert body["source"] == "env" and body["setting"] == ""
+    monkeypatch.delenv("ORRERY_HOME")
+    body = ok(home, webapi.home_save, path=str(tmp_path / "elsewhere"))
+    assert (body["home"], body["source"], body["setting"]) == (str(tmp_path / "elsewhere"), "setting", str(tmp_path / "elsewhere"))
+    status, _ = api(home, webapi.home_save, path="relative/path")
+    assert status == 400
 
 
 def test_roll_applies_dials(home):
