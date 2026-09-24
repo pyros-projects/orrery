@@ -63,5 +63,5 @@ def test_lora_files_come_from_comfyui_and_are_empty_outside_it(home, monkeypatch
     fake = types.ModuleType("folder_paths")
     fake.get_filename_list = lambda kind: ["a\\b.safetensors"] if kind == "loras" else ["nope"]
     monkeypatch.setitem(sys.modules, "folder_paths", fake)
-    assert lora_files() == ["a/b.safetensors"]
+    assert lora_files() == ["a\\b.safetensors"]  # as ComfyUI spells it: get_full_path reads it back
     assert completion_data(Home(home))["loras"] == [{"name": "b", "folder": "a"}]

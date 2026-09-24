@@ -17,6 +17,7 @@ from orrery.dsl import MissingLibrary, expand, override
 from orrery.h3 import compile_scene, count_chunks
 from orrery.home import BUILTIN_DIR, Home, resolve_home
 from orrery.library import Entry, Library, load_library, save_library
+from orrery.loras import lora_files, lora_stack
 from orrery.manager import list_name
 
 TARGETS = ("text", "h3-base", "flat")
@@ -399,6 +400,8 @@ def roll(home: Home, args: dict) -> dict:
             else:
                 result = compile_scene(text, s, libs, weights, target=target, segment=segment or 0)
                 lint = [{"severity": i.severity, "message": i.message} for i in result.lint]
+                if result.loras and (files := lora_files()):
+                    lint += [{"severity": "warn", "message": w} for w in lora_stack(result.loras, files)[1]]
         except MissingLibrary as err:
             raise ApiError(400, str(err), library=err.name) from None
         rolls.append({"seed": s, "text": result.text, "lint": lint,

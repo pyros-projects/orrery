@@ -23,8 +23,10 @@ Effort: **S** = an evening for an agent, verifiable by tests; **M** = a stage;
 - **LoRAs as coordinates.** `@style(0.8)`, `{@ink|@clay}` and strength ranges
   `@style(0.4-0.9)`, recorded as picks, with a `loras` output for a LoRA stack
   node. *Why:* LoRA dials are Pyro's main lever, and a dial that isn't recorded
-  can't learn. The syntax comes from z-explorer. · M · needs a LoRA-applying
-  output.
+  can't learn. The syntax comes from z-explorer. · M · partly built
+  (2026-09-24): `LORA:` lines, the `lora_stack` output, completion of your
+  LoRA files, and `{<lora:a:1.00>|<lora:b:1.00>}` rolls and records the real
+  tags. Open: strength ranges and the short `@style(0.8)` form.
 - **Numeric ranges.** `{0.4-0.9}` and `{2-6}` roll a number and bin it for
   learning (e.g. `0.4–0.5`). *Why:* strength, CFG and time of day are dials
   too. · S

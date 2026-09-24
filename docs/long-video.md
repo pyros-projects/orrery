@@ -62,8 +62,8 @@ Per chunk orrery emits (built):
   and its own handoff as its closing one;
 - the length in frames: from the second chunk on, Shot 1 also covers the
   `context` frames Motion Context pins and trims (default 22);
-- the `loras` output: the `LORA:` lines before the first `CHUNK` plus the
-  chunk's own, for LoRA Text Loader;
+- the `lora_stack` output: the `LORA:` lines before the first `CHUNK` plus the
+  chunk's own, as a LORA_STACK;
 - the picks of the head, the chunk and its handoffs only, so ratings teach the
   galaxy what was in the clip.
 
@@ -73,7 +73,8 @@ this RefMod-RAG is the screenplay itself.
 
 Wiring in the Motion Context workflow: Load Latent `clip_index` → Orrery
 `segment`; `text` → Reference to Video `prompt`; `length` → its `length`;
-`loras` → LoRA Text Loader. Set the Chain node's `segments` to the number of
+`lora_stack` → the `lora_stack` input of Lora Loader (LoraManager) or any
+other stack loader. Set the Chain node's `segments` to the number of
 chunks (the node's stats line shows it), and keep the Orrery seed fixed (the
 node does that for a reel).
 

@@ -16,6 +16,7 @@ from pathlib import Path
 from orrery.dsl import MissingLibrary, bindings, expand, override, parse
 from orrery.h3 import compile_scene
 from orrery.home import Home, resolve_home
+from orrery.loras import lora_files, lora_stack
 from orrery.presets import list_presets, load_preset, preset_exists, remember_template
 
 TARGETS = ["text", "h3-base", "flat"]
@@ -83,7 +84,7 @@ def dial_values(params: str) -> dict[str, str]:
 
 def run_prompt(template: str, seed: int, target: str, home: str = "",
                preset: str = NO_PRESET, linked: str | None = None,
-               params: str = "", segment: int = 0) -> tuple[str, str, int, int, int, int, str]:
+               params: str = "", segment: int = 0) -> tuple[str, str, int, int, int, int, list]:
     h = resolve_home(home or None)
     if preset and preset != NO_PRESET:
         template, linked = load_preset(h, preset), preset
@@ -101,6 +102,10 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
             lint = [{"severity": i.severity, "message": i.message} for i in result.lint]
     except MissingLibrary as err:
         raise ValueError(str(err)) from err
+    stack: list = []
+    if target != "text" and result.loras:
+        stack, warnings = lora_stack(result.loras, lora_files())
+        lint += [{"severity": "warn", "message": w} for w in warnings]
     for issue in lint:
         print(f"[orrery] {issue['severity']}: {issue['message']}")
     data = {
@@ -115,14 +120,12 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         "lint": lint,
     }
     width, height, length = shape(source)
-    loras = ""
     if target != "text":
-        loras = result.loras
         if result.scene.shots:
             length = h3_length(result.scene.duration)
         if result.chunks:
             data["segment"], data["chunks"] = result.segment, result.chunks
-    return (result.text, json.dumps(data, ensure_ascii=False), seed, width, height, length, loras)
+    return (result.text, json.dumps(data, ensure_ascii=False), seed, width, height, length, stack)
 
 
 def state_token(home: Home) -> str:
@@ -174,14 +177,15 @@ def save_png(image, path: Path | str, picks_json: str) -> None:
 class OrreryPrompt:
     CATEGORY = "orrery"
     FUNCTION = "run"
-    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "STRING")
-    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "loras")
+    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "LORA_STACK")
+    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "lora_stack")
     OUTPUT_TOOLTIPS = ("", "", "", "From `: w…` in the template, else the @h3 ratio, else 1024.",
                        "From `: h…` in the template, else the @h3 ratio, else 1024.",
                        ("Frames at 24 fps for the MiniMax H3 nodes' length input: the sum of the SHOT "
                         "durations (in a reel: the chunk's, plus the pinned context from the second "
                         "chunk on), snapped up to H3's 17k+5 grid (124 without SHOTs)."),
-                       "The LORA: lines (global, plus the chunk's in a reel) for LoRA Text Loader.")
+                       ("The LORA: lines (global, plus the chunk's in a reel) as a LORA_STACK for any "
+                        "loader with a lora_stack input (LoraManager, Efficiency, Easy-Use …)."))
     DESCRIPTION = ("Expands an orrery template (text) or compiles a screenplay (h3-base, flat) "
                    "and outputs the picks that produced it.")
 

@@ -344,6 +344,18 @@ def test_roll_shows_every_chunk_of_a_reel_at_one_seed(home):
     assert "naps" in rolls[1]["text"] and "naps" not in rolls[0]["text"]
 
 
+def test_roll_warns_about_loras_it_cannot_find(home, monkeypatch):
+    import sys
+    import types
+    module = types.ModuleType("folder_paths")
+    module.get_filename_list = lambda kind: ["x/all.safetensors"] if kind == "loras" else []
+    monkeypatch.setitem(sys.modules, "folder_paths", module)
+    text = "@h3 t2va\nLORA: <lora:all:1> <lora:gone:1>\nSHOT 5s\nA.\nSFX: x\n"
+    [roll] = ok(home, webapi.roll, template=text, seed=1, n=1, target="h3-base")["rolls"]
+    assert [i["message"] for i in roll["lint"] if "lora" in i["message"].lower()] == [
+        next(i["message"] for i in roll["lint"] if "gone" in i["message"])]
+
+
 def test_roll_applies_dials(home):
     rolls = ok(home, webapi.roll, template="$hero = __animal__\na $hero", seed=1, n=2, params={"hero": "lynx"})["rolls"]
     assert [r["text"] for r in rolls] == ["a lynx", "a lynx"]
