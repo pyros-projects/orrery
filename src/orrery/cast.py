@@ -19,18 +19,19 @@ from dataclasses import dataclass, field
 from orrery.dsl import _wants_an
 
 MAX_SLOTS = {"image": 9, "video": 3, "audio": 3}
-KEEP = {"full": "fully_preserved", "partial": "partially_preserved",
-        "transfer": "attribute_transfer", "weak": "weak_reference"}
+KEEP = {  # any of these spellings (spaces, hyphens or underscores) name a retention marker
+    "fully_preserved": "fully_preserved", "fully": "fully_preserved", "full": "fully_preserved",
+    "preserved": "fully_preserved",
+    "partially_preserved": "partially_preserved", "partially": "partially_preserved", "partial": "partially_preserved",
+    "attribute_transfer": "attribute_transfer", "transfer": "attribute_transfer", "attribute": "attribute_transfer",
+    "weak_reference": "weak_reference", "weak": "weak_reference",
+}
 
 MEMBER = re.compile(r"^([A-Z][A-Z0-9 _-]*?)\s*(?:\(([^)]*)\))?\s*:\s*(.+)$")
 _SOURCE = re.compile(r"^(image|video|audio)\s+(\d+)(\s*\+\s*audio)?$|^refmod\s+([\w.-]+)$", re.IGNORECASE)
 _VOICE = re.compile(r"^(?:(audio)\s+(\d+)|video\s+(\d+)\s+audio)\s*(?:,\s*(.*))?$", re.IGNORECASE)
-_KEEP = re.compile(r"^(\w+)\s*-\s*(.+)$")
+_KEEP = re.compile(r"^([A-Za-z_ -]+?)\s*(?:[-–—:,]\s*(.*))?$")
 _BRACKET = re.compile(r"\[(image|video|audio)\s+(\d+)(\s+audio)?\]", re.IGNORECASE)
-
-
-class CastError(ValueError):
-    pass
 
 
 @dataclass(frozen=True)
@@ -49,7 +50,8 @@ class Member:
     sources: list[Source] = field(default_factory=list)
     voice: Source | None = None  # an audio slot, or a video's soundtrack (kind "video", soundtrack True)
     voice_note: str = ""
-    keep: tuple[str, str] | None = None
+    keep: tuple[str, str | None] | None = None  # (marker, reason or None for the default)
+    problems: list[str] = field(default_factory=list)  # advice for lint; parsing never fails
 
     @property
     def short(self) -> str:
@@ -63,9 +65,9 @@ def parse_member(name: str, spec: str, text: str) -> Member:
     for raw in filter(None, (s.strip() for s in (spec or "").split(","))):
         m = _SOURCE.match(raw)
         if not m:
-            raise CastError(f"{member.name}: \"{raw}\" is not a reference "
-                            "(image N, video N, video N + audio, audio N, refmod NAME).")
-        if m.group(4):
+            member.problems.append(f"{member.name}: \"{raw}\" is not a reference orrery knows (image N, "
+                                   "video N, video N + audio, audio N, refmod NAME), so it is left out.")
+        elif m.group(4):
             member.sources.append(Source("refmod", name=m.group(4)))
         else:
             member.sources.append(Source(m.group(1).lower(), int(m.group(2)), soundtrack=bool(m.group(3))))
@@ -76,18 +78,24 @@ def attach(member: Member, key: str, value: str) -> None:
     if key == "voice":
         m = _VOICE.match(value.strip())
         if not m:
-            raise CastError(f"{member.name}: voice takes \"audio N\" or \"video N audio\", "
-                            f"optionally followed by a comma and a note; got \"{value}\".")
+            member.problems.append(f"{member.name}: voice takes \"audio N\" or \"video N audio\" "
+                                   f"(then optionally a comma and a note); \"{value}\" is left out.")
+            return
         member.voice = (Source("audio", int(m.group(2))) if m.group(1)
                         else Source("video", int(m.group(3)), soundtrack=True))
         member.voice_note = (m.group(4) or "").strip()
     elif key == "keep":
-        m = _KEEP.match(value.strip())
-        marker = m and KEEP.get(m.group(1).lower(), m.group(1).lower())
-        if not m or marker not in KEEP.values():
-            raise CastError(f"{member.name}: keep takes \"<marker> - <reason>\" with a marker of "
-                            f"{', '.join(KEEP.values())} (or {', '.join(KEEP)}).")
-        member.keep = (marker, m.group(2).strip())
+        member.keep = parse_keep(value)
+
+
+def parse_keep(value: str) -> tuple[str, str | None]:
+    """`full`, `partially preserved - only her face`, `weak: a hint`, or just a reason."""
+    text = value.strip()
+    m = _KEEP.match(text)
+    marker = m and KEEP.get(re.sub(r"[\s-]+", "_", m.group(1).strip().lower()))
+    if marker:
+        return marker, (m.group(2) or "").strip() or None
+    return "fully_preserved", text or None
 
 
 def oxford(items: list[str]) -> str:

@@ -334,7 +334,7 @@ def test_roll_compiles_screenplays_with_lint(home):
     rolls = ok(home, webapi.roll, template="@h3 t2va\nSHOT 2s\nA __animal__.\n", seed=1, n=1,
                target="h3-base")["rolls"]
     assert len(rolls) == 1 and rolls[0]["text"].startswith("integrated_multimodal_description")
-    assert any(i["severity"] == "error" for i in rolls[0]["lint"])
+    assert any("4–15" in i["message"] for i in rolls[0]["lint"])
 
 
 @pytest.mark.parametrize("args", [{"template": "a __smell__", "seed": 1},

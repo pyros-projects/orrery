@@ -27,7 +27,6 @@ from dataclasses import dataclass, field
 from orrery.cast import (
     MAX_SLOTS,
     MEMBER,
-    CastError,
     Labels,
     Member,
     Names,
@@ -178,17 +177,15 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue]) -> Scene:
 
 
 def _cast_line(scene: Scene, line: str, lint: list[Issue]) -> None:
-    try:
-        if (m := _ATTRIBUTE.match(line)) and scene.cast:
-            attach(scene.cast[-1], m.group(1), m.group(2))
-        elif m := MEMBER.match(line):
-            if any(c.name == m.group(1).strip() for c in scene.cast):
-                raise CastError(f"{m.group(1).strip()} is in the CAST twice.")
-            scene.cast.append(parse_member(m.group(1), m.group(2), m.group(3).rstrip(".")))
-        else:
-            lint.append(Issue("warn", f"Ignored CAST line (write NAME (sources): description): {line[:48]}"))
-    except CastError as err:
-        lint.append(Issue("error", str(err)))
+    if (m := _ATTRIBUTE.match(line)) and scene.cast:
+        attach(scene.cast[-1], m.group(1), m.group(2))
+    elif m := MEMBER.match(line):
+        if any(c.name == m.group(1).strip() for c in scene.cast):
+            lint.append(Issue("warn", f"{m.group(1).strip()} is in the CAST twice; the first one counts."))
+            return
+        scene.cast.append(parse_member(m.group(1), m.group(2), m.group(3).rstrip(".")))
+    else:
+        lint.append(Issue("warn", f"Ignored CAST line (write NAME (sources): description): {line[:48]}"))
 
 
 def _anchors(spec: str) -> tuple[str, dict[str, tuple[int, str]]]:
@@ -227,9 +224,9 @@ def camera_sentence(spec: str, shot_no: int, lint: list[Issue]) -> str:
         return ""
     motion, mods = parts[0], parts[1:]
     if motion not in CAMERA:
-        lint.append(Issue("error", f"Shot {shot_no}: unknown camera motion \"{motion}\". "
-                                   f"The guide knows: {', '.join(CAMERA)}."))
-        return ""
+        lint.append(Issue("warn", f"Shot {shot_no}: \"{motion}\" is not in the guide's camera vocabulary "
+                                  f"({', '.join(CAMERA)}); it goes in as written."))
+        return f"Camera movement: {spec.strip()}."
     if motion == "static":
         return "The camera holds a static shot."
     amplitude = speed = ""
@@ -275,7 +272,7 @@ class _Speakers:
         if m := _LANG.match(words):
             lang, words = m.group(1), m.group(2)
         if not words:
-            lint.append(Issue("error", f"Shot {shot_no}: {v.name} has an empty line."))
+            lint.append(Issue("warn", f"Shot {shot_no}: {v.name} has an empty line."))
         sid, sep, first = self.ids[v.name], ("," if self.labels else ":"), v.name not in self.seen
         self.seen.add(v.name)
         d = f"<d>[{lang}] {words}</d>"
@@ -344,7 +341,7 @@ def render_shots(scene: Scene, lint: list[Issue], speakers: _Speakers, names: Na
             parts.append(f"The shot ends on <Picture {shot.last_frame[0]}>.")
         body = " ".join(parts)
         if not body:
-            lint.append(Issue("error", f"Shot {i} has no visible action."))
+            lint.append(Issue("warn", f"Shot {i} has no visible action."))
         m = _FIRST_SENTENCE.match(body)
         first, rest = (m.group(1), m.group(2)) if m else (body, "")
         if i == 1:
@@ -369,8 +366,8 @@ def soundscape(scene: Scene, lint: list[Issue]) -> str:
             lint.append(Issue("warn", "SFX: silence next to other SFX lines is ignored."))
         return joined
     if not scene.silence:
-        lint.append(Issue("error", "No SFX lines: overall_soundscape needs 1–4 sentences. "
-                                   "Write SFX: silence only for complete silence."))
+        lint.append(Issue("warn", "No SFX lines, so overall_soundscape is N/A; the guide suggests 1–4 "
+                                  "sentences of ambience (SFX: silence says the silence is intended)."))
     return "N/A"
 
 
@@ -404,13 +401,13 @@ def write_flat(scene: Scene) -> str:
 def _scene_lint(src: str, scene: Scene, lint: list[Issue]) -> None:
     n = len(scene.shots)
     if scene.mode not in MODES:
-        lint.append(Issue("error", f"Unknown mode \"{scene.mode}\" ({', '.join(MODES)})."))
+        lint.append(Issue("warn", f"Unknown mode \"{scene.mode}\" ({', '.join(MODES)}); compiled like t2va."))
     _cast_lint(scene, lint)
     if not n:
         lint.append(Issue("error", "No SHOT yet."))
         return
     if not 4 <= scene.duration <= 15:
-        lint.append(Issue("error", f"Duration {scene.duration:.2f} s is outside H3's 4–15 s."))
+        lint.append(Issue("warn", f"Duration {scene.duration:.2f} s is outside H3's trained 4–15 s."))
 
     def mentions(i: int, pattern: str) -> bool:
         return any(re.search(pattern, it if isinstance(it, str) else it.text)
@@ -438,25 +435,24 @@ def _scene_lint(src: str, scene: Scene, lint: list[Issue]) -> None:
 def _cast_lint(scene: Scene, lint: list[Issue]) -> None:
     ref = scene.mode == "ref2va"
     for m in scene.cast:
+        lint.extend(Issue("warn", problem) for problem in m.problems)
         for src in m.sources:
             if src.kind == "refmod":
                 lint.append(Issue("warn", f"{m.name} uses refmod {src.name}: orrery does not load RefMods yet, "
                                           f"so apply it with the H3 RefMod nodes. The prompt already describes {m.name}."))
             elif src.index > MAX_SLOTS[src.kind]:
-                lint.append(Issue("error", f"{m.name} uses {src.kind} {src.index}; the Reference to Video node "
-                                           f"takes {src.kind} 1–{MAX_SLOTS[src.kind]}."))
+                lint.append(Issue("warn", f"{m.name} uses {src.kind} {src.index}; the Reference to Video node "
+                                          f"takes {src.kind} 1–{MAX_SLOTS[src.kind]}."))
         if not ref and (m.voice or any(s.kind != "refmod" for s in m.sources)):
             lint.append(Issue("warn", f"{m.name}: image, video and audio references only take effect in "
                                       f"ref2va; in {scene.mode} its name still expands to its description."))
-        if ref and not m.sources:
-            lint.append(Issue("error", f"{m.name} has no reference: give it (image N), (video N) or (refmod NAME)."))
         if m.voice and not any(isinstance(it, Voice) and it.name == m.name for s in scene.shots for it in s.items):
             lint.append(Issue("warn", f"{m.name} has a voice reference but never speaks."))
     if not ref and any(s.first_frame or s.last_frame for s in scene.shots):
         lint.append(Issue("warn", "Frame anchors (from/to image N) only take effect in ref2va."))
     if ref and not scene.summary:
-        lint.append(Issue("error", "ref2va needs a summary: line (one short paragraph about the target video, "
-                                   "using CAST names)."))
+        lint.append(Issue("warn", "ref2va reads best with a summary: line (one short paragraph about the "
+                                  "target video, using CAST names)."))
 
 
 def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],

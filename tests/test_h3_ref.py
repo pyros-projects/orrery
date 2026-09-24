@@ -202,7 +202,7 @@ SFX: fire crackles
     assert flat == "The fluffy white Samoyed, with a curved tail, naps by the fire. The fluffy white Samoyed snores."
 
 
-def test_ref2va_lint():
+def test_ref2va_lint_advises_without_errors():
     base = """@h3 ref2va
 CAST
 {cast}
@@ -210,12 +210,49 @@ SHOT 5s
 A dances. B waits.
 SFX: wind
 """
-    res = h3(base.format(cast="A (image 12): the dancer\nB: the drummer\nvoice: audio 1"))
+    res = h3(base.format(cast="A (image 12, photo 3): the dancer\nkeep: fully preserved\nB: the drummer\nvoice: audio 1\nkeep: whatever"))
     msgs = " ".join(i.message for i in res.lint)
     assert "summary:" in msgs
-    assert "B has no reference" in msgs
-    assert "image 12" in msgs
+    assert "image 12" in msgs and "photo 3" in msgs
     assert "voice" in msgs and "never speaks" in msgs
+    assert not errors(res)
+
+
+def test_text_only_subjects_are_fine_in_ref2va():
+    src = """@h3 ref2va
+summary: CAFE hums.
+CAST
+CAFE: the coffee-shop environment, featuring an exposed brick wall
+SHOT 5s
+CAFE hums with morning chatter.
+SFX: cups clink
+"""
+    res = h3(src)
+    assert "<Subject 1> is the coffee-shop environment, featuring an exposed brick wall." in res.text
+    assert not any("CAFE" in i.message for i in res.lint)
+
+
+def test_keep_is_forgiving():
+    src = """@h3 ref2va
+summary: A B C D dance.
+CAST
+A (image 1): the dancer
+keep: full
+B (image 2): the drummer
+keep: partially preserved - only the drum kit is kept
+C (image 3): the singer
+keep: weak: a vague resemblance
+D (image 4): the bassist
+keep: only the red bass
+SHOT 5s
+A, B, C and D play.
+SFX: music plays
+"""
+    ret = sections(h3(src).text)[1]["retention_analysis"]
+    assert "<Subject 1> (appears in [Shot 1]): fully_preserved - the defined appearance of the dancer is retained." in ret
+    assert "<Subject 2> (appears in [Shot 1]): partially_preserved - only the drum kit is kept" in ret
+    assert "<Subject 3> (appears in [Shot 1]): weak_reference - a vague resemblance" in ret
+    assert "<Subject 4> (appears in [Shot 1]): fully_preserved - only the red bass" in ret
 
 
 def test_refmods_are_described_but_not_loaded_yet():

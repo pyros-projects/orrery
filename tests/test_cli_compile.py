@@ -31,10 +31,15 @@ def test_compile_json_has_text_picks_and_lint(home, tmp_path, capsys):
 
 
 def test_lint_errors_go_to_stderr_and_fail(home, tmp_path, capsys):
-    code = main(["compile", write(tmp_path, "@h3 t2va\nSHOT 2s\nA.\n")])
+    code = main(["compile", write(tmp_path, "@h3 t2va\nstyle: live-action\n")])
     err = capsys.readouterr().err
     assert code == 1
-    assert "error:" in err and "4–15" in err
+    assert "error:" in err and "SHOT" in err
+
+
+def test_lint_warnings_do_not_fail(home, tmp_path, capsys):
+    assert main(["compile", write(tmp_path, "@h3 t2va\nSHOT 2s\nA.\n")]) == 0
+    assert "4–15" in capsys.readouterr().err
 
 
 def test_compile_missing_library_exits_2(home, tmp_path, capsys):

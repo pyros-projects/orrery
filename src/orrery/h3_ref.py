@@ -62,7 +62,8 @@ def write_h3_ref(scene: Scene, lint: list[Issue]) -> str:
         if not shots_in:
             lint.append(Issue("warn", f"{m.name} is in the CAST but appears in no shot."))
         where = ", ".join(f"[Shot {i}]" for i in sorted(shots_in)) or "no shot"
-        marker, reason = m.keep or (DEFAULT_KEEP[0], DEFAULT_KEEP[1].format(who=m.short))
+        marker, reason = m.keep or (DEFAULT_KEEP[0], None)
+        reason = reason or DEFAULT_KEEP[1].format(who=m.short)
         subjects.append(f"<Subject {labels.subjects[m.name]}> (appears in {where}): {marker} - {reason}")
     retention = subjects + retention
 

@@ -127,9 +127,10 @@ def test_camera_static_and_modifier_order():
     assert "The camera pans left with large amplitude at slow speed." in text
 
 
-def test_unknown_camera_motion_is_a_lint_error():
-    src = "@h3 t2va\nSHOT 5s | spin wildly\nA.\nSFX: x\n"
-    assert any("spin wildly" in m for m in errors(h3(src)))
+def test_unknown_camera_motion_is_kept_in_words_and_warned():
+    res = h3("@h3 t2va\nSHOT 5s | spin wildly\nA.\nSFX: x\n")
+    assert "Camera movement: spin wildly." in res.text
+    assert not errors(res) and any("spin wildly" in m for m in warnings(res))
 
 
 def test_transitions():
@@ -143,7 +144,7 @@ def test_soundscape_sentences_and_silence():
     silent = h3("@h3 t2va\nSHOT 5s\nA.\nSFX: silence\n")
     assert "overall_soundscape: N/A" in silent.text and not errors(silent)
     missing = h3("@h3 t2va\nSHOT 5s\nA.\n")
-    assert any("SFX" in m for m in errors(missing))
+    assert not errors(missing) and any("SFX" in m for m in warnings(missing))
 
 
 def test_music_absent_is_na_and_mood_words_warn():
@@ -152,9 +153,15 @@ def test_music_absent_is_na_and_mood_words_warn():
     assert any("epic" in m for m in warnings(moody))
 
 
-def test_duration_outside_4_to_15_seconds_is_an_error():
-    assert any("4–15" in m for m in errors(h3("@h3 t2va\nSHOT 3s\nA.\nSFX: x\n")))
-    assert any("4–15" in m for m in errors(h3("@h3 t2va\nSHOT 16s\nA.\nSFX: x\n")))
+def test_duration_outside_4_to_15_seconds_warns():
+    assert any("4–15" in m for m in warnings(h3("@h3 t2va\nSHOT 3s\nA.\nSFX: x\n")))
+    assert any("4–15" in m for m in warnings(h3("@h3 t2va\nSHOT 16s\nA.\nSFX: x\n")))
+
+
+def test_only_an_empty_screenplay_is_an_error():
+    assert errors(h3("@h3 t2va\nstyle: live-action\n"))
+    sloppy = h3("@h3 x9va\nSHOT 20s | wobble\nNARRATOR: \n")
+    assert sloppy.text and not errors(sloppy)
 
 
 def test_keyframe_anchor_warnings():
