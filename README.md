@@ -137,10 +137,18 @@ setting. When the node runs, the model
 - creates a library the template names but you don't have (`__runway_shoes__`),
   with the number of entries set in the gear, using the lines around it as
   context;
-- tops up `__name:30__` to at least 30 entries, once.
+- tops up `__name:30__` to at least 30 entries, once;
+- follows directions written right after the library:
+  `__film_scene__(at least 30 words, describe set, actions, characters)`. They
+  never reach the prompt and stay with the library for later top-ups.
 
-It loads for that, writes, and unloads. Everything it writes is marked as
-LLM-made and can be undone with `orrery lib undo`.
+Everything a run needs goes to the model in one request (ComfyUI cannot
+safely generate twice in one run), then the model unloads. What it wrote waits
+on top of the Libraries tab under **To review**, marked in violet: **Accept**
+keeps it, **Discard** drops it (a discarded library is written again on the
+next run, so change the directions first). After every run the node refreshes
+its libraries and points at anything new to review. Writes can also be undone
+with `orrery lib undo`.
 
 ## MiniMax H3 screenplays
 
@@ -183,7 +191,8 @@ Restart ComfyUI. Nodes under **orrery**:
   same app over the canvas, Esc brings it back):
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `$` bindings, camera words after
-    `SHOT 5s |`, your LoRA files after `LORA:`). Open a preset from the bar above it; ● marks unsaved
+    `SHOT 5s |`, your LoRA files after `LORA:`). **New** starts a fresh H3
+    screenplay or Krea prompt linked to no preset. Open a preset from the bar above it; ● marks unsaved
     edits; Save, Save as…, Revert. Under the editor, every binding is a
     **dial**: pick a library entry or choice, or type any expression; empty
     means its default roll. Saving bakes the dials in, and a galaxy output
@@ -196,8 +205,10 @@ Restart ComfyUI. Nodes under **orrery**:
   - **Presets**: every preset with your newest output as its preview; search,
     folders, favorites, recents, a sample roll and the template per preset.
   - **Libraries**: edit wildcard lists by hand: entries, tags, weights, and
-    the weight each entry learned from your ratings. Built-ins become yours
-    with **Make it mine**.
+    the weight each entry learned from your ratings. Libraries that share a
+    name prefix sit in a folder (`couture_form`, `couture_house` → couture);
+    what the language model wrote waits on top for review. Built-ins become
+    yours with **Make it mine**.
   - **Galaxy**: every logged output. love / like / nope / hate multiply the
     learned weight of each pick by 1.5 / 1.2 / 0.8 / 0.5 (re-rating replaces
     the factor). **Use template + seed** restores an output and sets the seed
