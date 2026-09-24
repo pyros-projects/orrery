@@ -13,8 +13,7 @@ if str(_SRC) not in sys.path:
     sys.path.insert(0, str(_SRC))
 
 from orrery.comfy import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
-from orrery.completion import completion_data
-from orrery.home import resolve_home
+from orrery.webapi import register
 
 WEB_DIRECTORY = "./web"
 
@@ -25,8 +24,6 @@ except ImportError:  # imported outside ComfyUI
     PromptServer = None
 
 if PromptServer is not None:
-    @PromptServer.instance.routes.get("/orrery/completions")
-    async def _completions(request):
-        return web.json_response(completion_data(resolve_home(request.query.get("home") or None)))
+    register(PromptServer.instance.routes, web)
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]

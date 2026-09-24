@@ -411,3 +411,27 @@ ROUTES = [
     ("GET", "/orrery/galaxy/media", galaxy_media),
     ("POST", "/orrery/roll", roll),
 ]
+
+
+def _handler(fn, method: str, web):
+    async def handle(request):
+        args = dict(request.query)
+        if method == "POST":
+            try:
+                body = await request.json()
+            except ValueError:
+                body = None
+            if not isinstance(body, dict):
+                return web.json_response({"error": "Send a JSON object."}, status=400)
+            args.update(body)
+        status, result = call(fn, args)
+        if isinstance(result, Path):
+            return web.FileResponse(result)
+        return web.json_response(result, status=status)
+    return handle
+
+
+def register(routes, web) -> None:
+    """Attach ROUTES to an aiohttp route table, e.g. ComfyUI's PromptServer.instance.routes."""
+    for method, path, fn in ROUTES:
+        routes.route(method, path)(_handler(fn, method, web))

@@ -1,3 +1,4 @@
+import asyncio
 import json
 from pathlib import Path
 
@@ -8,7 +9,7 @@ from orrery import webapi
 from orrery.galaxy import row_id
 from orrery.home import Home
 from orrery.presets import load_preset, preset_meta, remember_template, save_preset, template_hash
-from orrery.webapi import ROUTES, ApiError, call
+from orrery.webapi import ROUTES, ApiError, call, register
 
 CARD = {"name", "folder", "title", "note", "tags", "builtin", "hash", "outputs", "thumb"}
 
@@ -66,6 +67,57 @@ def test_call_uses_the_home_argument(home, tmp_path):
     other = tmp_path / "elsewhere"
     status, _ = call(webapi.favorite, {"home": str(other), "name": "a", "on": True})
     assert status == 200 and (other / "ui.json").exists()
+
+
+class FakeRoutes:
+    def __init__(self):
+        self.handlers = {}
+
+    def route(self, method, path):
+        def attach(fn):
+            self.handlers[(method, path)] = fn
+            return fn
+        return attach
+
+
+class FakeWeb:
+    @staticmethod
+    def json_response(data, status=200):
+        return ("json", status, data)
+
+    @staticmethod
+    def FileResponse(path):
+        return ("file", path)
+
+
+class FakeRequest:
+    def __init__(self, query=None, body=None, broken=False):
+        self.query, self._body, self._broken = query or {}, body, broken
+
+    async def json(self):
+        if self._broken:
+            raise ValueError("Expecting value")
+        return self._body
+
+
+def test_register_attaches_every_route_through_one_adapter(home, tmp_path):
+    routes = FakeRoutes()
+    register(routes, FakeWeb)
+    assert set(routes.handlers) == {(m, p) for m, p, _ in ROUTES}
+
+    def hit(method, path, **request):
+        return asyncio.run(routes.handlers[(method, path)](FakeRequest(**request)))
+
+    q = {"home": str(home)}
+    assert hit("POST", "/orrery/favorite", query=q, body={"name": "a", "on": True}) == \
+        ("json", 200, {"favorites": ["a"]})
+    kind, status, body = hit("GET", "/orrery/presets", query=q)
+    assert (kind, status) == ("json", 200) and body["favorites"] == []
+    assert hit("GET", "/orrery/preset", query={**q, "name": "nope"})[1] == 404
+    assert hit("POST", "/orrery/recent", query=q, broken=True)[1] == 400
+    assert hit("POST", "/orrery/recent", query=q, body=["a"])[1] == 400
+    rid = log_row(home, tmp_path, "a __animal__")
+    assert hit("GET", "/orrery/galaxy/media", query={**q, "id": rid}) == ("file", tmp_path / "a.png")
 
 
 # --- presets --------------------------------------------------------------------------------
