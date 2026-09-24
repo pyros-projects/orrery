@@ -160,7 +160,7 @@ Restart ComfyUI. Nodes under **orrery**:
   screenplay's duration in frames for the H3 latent, `lora_stack` carries the
   `LORA:` lines as a LORA_STACK for any loader with a `lora_stack` input
   (LoraManager, Efficiency, Easy-Use …); unknown or ambiguous names are
-  reported in the log and in Roll 3. For H3 Motion Context chains, a reel
+  reported in the log and in the Test tab. For H3 Motion Context chains, a reel
   (`CHUNK` blocks, `repeat N|forever`, `$x~N`; see `docs/h3.md` 1d) writes one
   clip per run: `segment` counts up by itself, and `load_index`/`save_index`
   go into Load and Save Latent's `clip_index`. The node is the whole of orrery, in five tabs (⤢ opens the
@@ -171,8 +171,12 @@ Restart ComfyUI. Nodes under **orrery**:
     edits; Save, Save as…, Revert. Under the editor, every binding is a
     **dial**: pick a library entry or choice, or type any expression; empty
     means its default roll. Saving bakes the dials in, and a galaxy output
-    restores them. **Roll 3** shows three expansions at the next seeds
-    without queueing anything.
+    restores them. **Test** jumps to the Test tab and rolls.
+  - **Test**: what the template makes, without queueing anything. **Rolls**
+    shows three seeds (a reel: six clips at one seed, pageable through a
+    forever loop). **Frequencies** rolls it 50, 200 or 500 times, across seeds
+    or across a reel's clips, and shows how often every value comes up, plus
+    how often each lint warning fires.
   - **Presets**: every preset with your newest output as its preview; search,
     folders, favorites, recents, a sample roll and the template per preset.
   - **Libraries**: edit wildcard lists by hand: entries, tags, weights, and

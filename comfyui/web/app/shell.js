@@ -7,9 +7,11 @@ import { icon, LOGO } from "./icons.js";
 import { renderLibraries } from "./libraries.js";
 import { renderPresets } from "./presets.js";
 import { renderPrompt } from "./prompt.js";
+import { renderTest } from "./test.js";
 
 const TABS = [
   ["prompt", "Prompt", renderPrompt],
+  ["test", "Test", renderTest],
   ["presets", "Presets", renderPresets],
   ["libraries", "Libraries", renderLibraries],
   ["galaxy", "Galaxy", renderGalaxy],
@@ -27,7 +29,7 @@ export class OrreryApp {
     this.api = client(() => bridge.home());
     this.state = {
       tab: bridge.props.orrery_tab || "prompt", big: false,
-      pick: false, pickQ: "", pickI: 0, rolls: null,
+      pick: false, pickQ: "", pickI: 0,
       pFilter: "all", pSearch: "", pOpen: null, pDetail: null, pConfirm: false, pRoll: null,
       lib: null, libSearch: "", libTag: null, libNew: null,
       gScope: "all", gRating: null, gPick: null, gOpen: null,
@@ -113,7 +115,7 @@ export class OrreryApp {
       this.text = p.text;
       this.bridge.setParams({});
     } catch (e) { return this.fail(e); }
-    this.state.rolls = null;
+    if (this.state.test) Object.assign(this.state.test, { rolls: null, freq: null, offset: 0, start: 0 });
     this.state.pick = false;
     this.api.recent(name).then((r) => { this.data.recent = r.recent; }).catch(() => {});
     if (tab) this.state.tab = "prompt";

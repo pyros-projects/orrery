@@ -63,7 +63,7 @@ export function renderHelp(app) {
   const known = app.known();
   const lessons = app.data.presets.filter((p) => p.name.startsWith("tutorial/"));
   app.view.innerHTML = `<div class="scroll"><div class="help">
-    <section><h5 class="label">Lessons · open one, press Roll 3, change something</h5>
+    <section><h5 class="label">Lessons · open one, press Test, change something</h5>
       <div class="lessons">${lessons.map((p) => {
         const [num, ...rest] = p.title.split(" · ");
         return `<button class="lesson" data-load="${esc(p.name)}"><span class="ln">${esc(rest.length ? num : "")}</span><span>${esc(rest.join(" · ") || p.title)}</span></button>`;

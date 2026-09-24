@@ -161,3 +161,7 @@ test("repeated chunks count as clips; forever has no end", () => {
 test("history references are coloured as variables", () => {
   assert.match(highlight("$look~1 walks back", known), /<span class="t-var">\$look~1<\/span>/);
 });
+
+test("a binding repeated in several chunks is one dial", () => {
+  assert.deepEqual(dials("$a = x\nCHUNK\n$b = __creature__\nCHUNK\n$b = __creature__\n$a = y").map((d) => d.name), ["a", "b"]);
+});

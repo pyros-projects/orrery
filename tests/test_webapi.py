@@ -48,6 +48,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/library/own"), ("POST", "/orrery/library/delete"),
         ("GET", "/orrery/galaxy"), ("POST", "/orrery/galaxy/rate"),
         ("GET", "/orrery/galaxy/thumb"), ("GET", "/orrery/galaxy/media"), ("POST", "/orrery/roll"),
+        ("POST", "/orrery/frequency"),
     }
 
 
@@ -354,6 +355,49 @@ def test_roll_warns_about_loras_it_cannot_find(home, monkeypatch):
     [roll] = ok(home, webapi.roll, template=text, seed=1, n=1, target="h3-base")["rolls"]
     assert [i["message"] for i in roll["lint"] if "lora" in i["message"].lower()] == [
         next(i["message"] for i in roll["lint"] if "gone" in i["message"])]
+
+
+def test_roll_pages_through_the_clips_of_a_forever_loop(home):
+    reel = "@h3 t2va\nCHUNK a\nSHOT 5s\nA.\nSFX: x\nCHUNK b repeat forever\nSHOT 5s\nB.\nSFX: y\n"
+    rolls = ok(home, webapi.roll, template=reel, seed=2, target="h3-base", start=10)["rolls"]
+    assert [r["segment"] for r in rolls] == list(range(10, 10 + webapi.ROLL_CLIPS))
+
+
+def freq_table(body):
+    return {entry["label"]: {v["value"]: v["count"] for v in entry["values"]} for entry in body["labels"]}
+
+
+def test_frequency_counts_every_value_over_many_seeds(home):
+    body = ok(home, webapi.frequency, template="a __animal__ in {mist|snow:3}", seed=1, n=200)
+    table = freq_table(body)
+    assert body["runs"] == 200
+    assert set(table["__animal__"]) == {"fox", "heron", "owl"} and sum(table["__animal__"].values()) == 200
+    assert 120 < table["{mist|snow}"]["snow"] < 180
+    counts = [v["count"] for v in body["labels"][0]["values"]]
+    assert counts == sorted(counts, reverse=True)
+
+
+def test_frequency_counts_multi_picks_value_by_value_and_applies_dials(home):
+    body = ok(home, webapi.frequency, template="$a = __animal__\n{2$$__style__} $a", seed=1, n=50,
+              params={"a": "lynx"})
+    table = freq_table(body)
+    assert sum(table["__style__ ×2"].values()) == 100 and "$a ← __animal__" not in table
+
+
+def test_frequency_across_the_clips_of_a_reel(home):
+    reel = "@h3 t2va\n$w = {pool|garage}\nCHUNK a\nSHOT 5s\nA.\nSFX: x\nCHUNK b repeat forever\n$n = {1|2|3}\nSHOT 5s\nB $n.\nSFX: y\n"
+    body = ok(home, webapi.frequency, template=reel, seed=3, n=40, target="h3-base", across="clips")
+    table = freq_table(body)
+    assert body["runs"] == 40 and len(table["{pool|garage}"]) == 1
+    assert sum(table["{1|2|3}"].values()) == 39
+
+
+def test_frequency_counts_lint_and_caps_the_runs(home):
+    body = ok(home, webapi.frequency, template="@h3 t2va\nSHOT 2s\nA.\nSFX: x\n", seed=1, n=5000, target="h3-base")
+    assert body["runs"] == webapi.MAX_FREQUENCY
+    assert any("4–15" in m["message"] and m["count"] == body["runs"] for m in body["lint"])
+    status, _ = api(home, webapi.frequency, template="a", seed=1, across="clips")
+    assert status == 400
 
 
 def test_roll_applies_dials(home):

@@ -42,6 +42,7 @@ export function client(home) {
     galaxy: (query = {}) => call("galaxy", { query }),
     rate: (id, rating) => call("galaxy/rate", { body: { id, rating } }),
     roll: (body) => call("roll", { body }),
+    frequency: (body) => call("frequency", { body }),
     thumbURL: (id) => url("galaxy/thumb", { id }),
     mediaURL: (id) => url("galaxy/media", { id }),
   };

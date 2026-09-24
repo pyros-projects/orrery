@@ -113,8 +113,7 @@
 .orrery-app .pchip .caret { margin-left: auto; color: var(--faint); display: inline-flex; }
 .orrery-app .pnote { margin: 0 12px 8px; color: var(--muted); font-size: 12.5px; line-height: 1.5; max-width: 80ch; }
 .orrery-app .pnote b { color: var(--ink); font-weight: 500; }
-.orrery-app .editor { position: relative; margin: 0 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--well); height: 210px; flex: none; }
-.orrery-app.big .editor { height: 330px; }
+.orrery-app .editor { position: relative; margin: 0 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--well); flex: 1 1 auto; min-height: 210px; }
 .orrery-app .editor pre, .orrery-app .editor textarea { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 10px 12px; font: 12.5px/1.65 var(--mono); letter-spacing: 0;
   white-space: pre-wrap; overflow-wrap: anywhere; border: 0; border-radius: 8px; tab-size: 2; scrollbar-gutter: stable; }
 .orrery-app .editor pre { overflow: hidden; color: #d6d3e3; pointer-events: none; background: none; }
@@ -143,7 +142,20 @@
 .orrery-app .dial .mini { display: none; margin-right: 4px; }
 .orrery-app .dial.on .mini { display: inline-flex; }
 .orrery-app .pfoot { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px; flex: none; }
-.orrery-app .rolls { display: grid; gap: 6px; padding: 0 12px 12px; }
+.orrery-app .rolls { display: grid; gap: 6px; padding: 10px 12px 12px; }
+.orrery-app .scroll.busy { opacity: .5; pointer-events: none; }
+.orrery-app .fsum { margin: 10px 12px 0; font: 11.5px var(--mono); }
+.orrery-app .flint { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 12px 0; }
+.orrery-app .flint b { color: var(--ink); font-weight: 500; }
+.orrery-app .freq { display: grid; gap: 16px; padding: 12px 12px 16px; }
+.orrery-app.big .freq { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); align-items: start; }
+.orrery-app .fgroup h5 { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin: 0 0 6px; font-weight: 500; }
+.orrery-app .fgroup h5 code { font: 12px var(--mono); color: var(--teal); overflow-wrap: anywhere; }
+.orrery-app .fbar { position: relative; display: flex; justify-content: space-between; gap: 10px; padding: 3px 8px; margin-bottom: 2px; border-radius: 5px; font-size: 12.5px; overflow: hidden; }
+.orrery-app .fbar::before { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--w); background: var(--brass-soft); border-radius: 5px; }
+.orrery-app .fbar > span { position: relative; }
+.orrery-app .fbar .fv { overflow-wrap: anywhere; }
+.orrery-app .fbar .fc { font: 11.5px var(--mono); color: var(--muted); white-space: nowrap; }
 .orrery-app.big .rolls { grid-template-columns: repeat(3, 1fr); }
 .orrery-app .roll { background: #1b1c24; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12.5px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
 .orrery-app .roll .seed { display: block; margin-bottom: 3px; font: 11px var(--mono); color: var(--faint); }

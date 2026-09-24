@@ -1,10 +1,11 @@
-// Prompt tab: preset bar, highlighted editor with completion, and Roll 3.
+// Prompt tab: preset bar, the highlighted editor with completion, dials, and a way into Test.
 import { suggest } from "../orrery-complete.js";
 import { esc, highlight } from "./highlight.js";
 import { icon } from "./icons.js";
-import { applyDials, dials, folderColor, markPicks, pickerGroups, shape, stats, templateHash } from "./model.js";
+import { applyDials, dials, folderColor, pickerGroups, shape, stats, templateHash } from "./model.js";
 import { thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
+import { runRolls } from "./test.js";
 
 function statsHTML(app) {
   const st = stats(app.text), out = shape(app.text), reel = st.h3?.reel;
@@ -21,7 +22,7 @@ function statsHTML(app) {
     + `<span class="stat" title="The node's width, height and length outputs${reel ? "; from the second chunk on, length includes the frames Motion Context pins" : ""}">→ <b>${out.width}×${out.height}</b>${frames}</span>`
     + `${out.cli.length ? `<span class="stat cli" title="In ComfyUI, use the Run count and the seed widget">${esc(out.cli.join(" "))}: CLI only</span>` : ""}<span class="grow"></span>`
     + `${outs ? `<button class="btn ghost" data-act="outputs">${icon("image")}${outs} output${outs === 1 ? "" : "s"}</button>` : ""}`
-    + `<button class="btn" data-act="roll">${icon("dice")}${reel && app.bridge.getTarget() !== "text" ? "Roll reel" : "Roll 3"}</button>`;
+    + `<button class="btn" data-act="test" title="Roll it in the Test tab: a few seeds, or a reel's clips">${icon("dice")}Test</button>`;
 }
 
 function chipHTML(app) {
@@ -47,7 +48,6 @@ export function renderPrompt(app) {
     <div class="editor"><pre class="hl" aria-hidden="true"></pre><textarea spellcheck="false" aria-label="Template"></textarea></div>
     <div class="dials"></div>
     <div class="pfoot">${statsHTML(app)}</div>
-    <div class="scroll"><div class="rolls"></div></div>
     ${app.state.pick ? pickerHTML(app) : ""}`;
 
   const ed = app.view.querySelector("textarea"), pre = app.view.querySelector("pre.hl");
@@ -75,14 +75,13 @@ export function renderPrompt(app) {
     if (act === "revert") revert(app);
     if (act === "save") save(app);
     if (act === "saveas") openSave(app, { text: applyDials(app.text, app.bridge.getParams()), from: app.preset, link: true });
-    if (act === "roll") roll(app);
+    if (act === "test") { app.go("test"); runRolls(app); }
     if (act === "outputs") { app.state.gScope = "prompt"; app.go("galaxy"); }
     if (act === "browse") app.go("presets");
   };
   if (app.state.pick) wirePicker(app);
   renderDials(app);
   wireDials(app);
-  renderRolls(app);
   fixReelSeed(app);
 }
 
@@ -175,25 +174,6 @@ async function save(app) {
     renderPrompt(app);
     app.toast(`Saved <b>@${esc(card.name)}</b>`);
   } catch (e) { app.fail(e); }
-}
-
-async function roll(app) {
-  const seed = Number(app.bridge.getSeed()) || 0;
-  try {
-    const { rolls } = await app.api.roll({ template: app.text, seed, n: 3, target: app.bridge.getTarget(), params: app.bridge.getParams() });
-    app.state.rolls = rolls;
-  } catch (e) { app.state.rolls = null; app.fail(e); }
-  renderRolls(app);
-}
-
-function renderRolls(app) {
-  const box = app.view.querySelector(".rolls");
-  if (!box) return;
-  const seed = Number(app.bridge.getSeed()) || 0;
-  box.innerHTML = app.state.rolls
-    ? app.state.rolls.map((r) => `<div class="roll"><span class="seed">${r.segment !== undefined ? `clip ${r.segment + 1} · ` : ""}seed ${r.seed}</span>${markPicks(r.text, r.picks)}`
-      + `${r.lint.map((l) => `<span class="lint ${l.severity}">${esc(l.severity)}: ${esc(l.message)}</span>`).join("")}</div>`).join("")
-    : `<div class="empty">Roll 3 shows what this template makes at seeds ${seed}–${seed + 2} for the ${esc(app.bridge.getTarget())} target, without queueing anything.</div>`;
 }
 
 /* quick picker */

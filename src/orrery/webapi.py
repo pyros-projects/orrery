@@ -7,6 +7,7 @@ UI can show. The contract lives in docs/plan-node-app.md.
 
 import re
 import traceback
+from collections import Counter
 from pathlib import Path
 
 from orrery import galaxy as gx
@@ -382,38 +383,84 @@ def galaxy_media(home: Home, args: dict) -> Path:
 # --- roll -----------------------------------------------------------------------------------
 
 ROLL_CLIPS = 6  # Roll on a reel shows this many clips at most
+MAX_FREQUENCY = 500  # runs a frequency count may take
+MAX_FREQUENCY_CLIPS = 200  # clips, when counting across a reel (each clip recomputes the ones before)
 
 
-def roll(home: Home, args: dict) -> dict:
-    text, seed = _text(args, "template"), _int(args, "seed", 0)
-    n, target = min(max(_int(args, "n", 3), 1), MAX_ROLLS), args.get("target") or "text"
+def _template_for(args: dict) -> tuple[str, str]:
+    """(template with the dials applied, target) from a roll or frequency request."""
+    text, target = _text(args, "template"), args.get("target") or "text"
     if target not in TARGETS:
         raise ApiError(400, f"'target' must be one of {', '.join(TARGETS)}.")
     params = args.get("params") or {}
     if not isinstance(params, dict):
         raise ApiError(400, "'params' must be an object of binding: expression.")
-    text = override(text, {str(k): str(v) for k, v in params.items()})
-    libs, weights, rolls = home.libraries(), home.weights(), []
+    return override(text, {str(k): str(v) for k, v in params.items()}), target
+
+
+def _run(home: Home, text: str, seed: int, target: str, segment: int):
+    """One expansion or compile, and its lint (LoRA warnings included when ComfyUI knows the files)."""
+    try:
+        if target == "text":
+            return expand(text, seed, home.libraries(), home.weights()), []
+        result = compile_scene(text, seed, home.libraries(), home.weights(), target=target, segment=segment)
+    except MissingLibrary as err:
+        raise ApiError(400, str(err), library=err.name) from None
+    except ValueError as err:
+        raise ApiError(400, str(err)) from None
+    lint = [{"severity": i.severity, "message": i.message} for i in result.lint]
+    if result.loras and (files := lora_files()):
+        lint += [{"severity": "warn", "message": w} for w in lora_stack(result.loras, files)[1]]
+    return result, lint
+
+
+def roll(home: Home, args: dict) -> dict:
+    text, target = _template_for(args)
+    seed, n = _int(args, "seed", 0), min(max(_int(args, "n", 3), 1), MAX_ROLLS)
     reel = split_reel(text) if target != "text" else None
-    # a reel shows its clips at one seed (the first few when it repeats); anything else shows n seeds
-    shown = min(reel.segments or ROLL_CLIPS, ROLL_CLIPS) if reel else 0
-    runs = [(seed, k) for k in range(shown)] if reel else [(s, None) for s in range(seed, seed + n)]
+    # a reel shows its clips at one seed, from `start` (a few at a time); anything else shows n seeds
+    start = max(_int(args, "start", 0), 0)
+    end = start + ROLL_CLIPS if reel and reel.segments is None else min(start + ROLL_CLIPS, reel.segments) if reel else 0
+    runs = [(seed, k) for k in range(start, end)] if reel else [(s, None) for s in range(seed, seed + n)]
+    rolls = []
     for s, segment in runs:
-        try:
-            if target == "text":
-                result, lint = expand(text, s, libs, weights), []
-            else:
-                result = compile_scene(text, s, libs, weights, target=target, segment=segment or 0)
-                lint = [{"severity": i.severity, "message": i.message} for i in result.lint]
-                if result.loras and (files := lora_files()):
-                    lint += [{"severity": "warn", "message": w} for w in lora_stack(result.loras, files)[1]]
-        except MissingLibrary as err:
-            raise ApiError(400, str(err), library=err.name) from None
+        result, lint = _run(home, text, s, target, segment or 0)
         rolls.append({"seed": s, "text": result.text, "lint": lint,
                       "picks": [{"label": p.label, "value": p.value, "keys": list(p.keys)}
                                 for p in result.picks],
                       **({"segment": segment} if segment is not None else {})})
     return {"rolls": rolls}
+
+
+def frequency(home: Home, args: dict) -> dict:
+    """How often each value comes up: over n seeds, or over the first n clips of a reel at one seed."""
+    text, target = _template_for(args)
+    seed, n, across = _int(args, "seed", 0), min(max(_int(args, "n", 200), 1), MAX_FREQUENCY), args.get("across") or "seeds"
+    reel = split_reel(text) if target != "text" else None
+    if across == "clips":
+        if not reel:
+            raise ApiError(400, "Counting across clips needs a reel (CHUNK lines) and a screenplay target.")
+        n = min(n, MAX_FREQUENCY_CLIPS, reel.segments or MAX_FREQUENCY_CLIPS)
+        runs = [(seed, k) for k in range(n)]
+    elif across == "seeds":
+        segment = max(_int(args, "segment", 0), 0) if reel else 0
+        runs = [(s, segment) for s in range(seed, seed + n)]
+    else:
+        raise ApiError(400, "'across' must be seeds or clips.")
+    counts: dict[str, Counter] = {}
+    lint: Counter = Counter()
+    for s, segment in runs:
+        result, issues = _run(home, text, s, target, segment)
+        for p in result.picks:
+            for key in p.keys:
+                counts.setdefault(p.label, Counter())[key.split("=", 1)[1]] += 1
+        lint.update({i["message"] for i in issues})
+    return {
+        "runs": len(runs),
+        "labels": [{"label": label, "values": [{"value": v, "count": c} for v, c in values.most_common()]}
+                   for label, values in counts.items()],
+        "lint": [{"message": m, "count": c} for m, c in lint.most_common()],
+    }
 
 
 ROUTES = [
@@ -436,6 +483,7 @@ ROUTES = [
     ("GET", "/orrery/galaxy/thumb", galaxy_thumb),
     ("GET", "/orrery/galaxy/media", galaxy_media),
     ("POST", "/orrery/roll", roll),
+    ("POST", "/orrery/frequency", frequency),
 ]
 
 
