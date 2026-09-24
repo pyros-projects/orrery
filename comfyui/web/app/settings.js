@@ -31,6 +31,8 @@ export async function openSettings(app) {
       ${s.files.length ? "" : '<span class="warn">No text encoders found (is this running inside ComfyUI?).</span>'}</div>
     <div class="field"><label class="label" for="oa-llm-n">A library it creates starts with</label>
       <div class="row"><input class="input narrow" id="oa-llm-n" type="number" min="1" max="200" value="${s.entries}"><span class="muted">entries · <code>__name:30__</code> asks for at least 30</span></div></div>
+    <div class="field"><label class="label" for="oa-llm-t">Max tokens</label>
+      <div class="row"><input class="input narrow" id="oa-llm-t" type="number" min="64" max="131072" step="500" value="${s.max_tokens}"><span class="muted">the longest answer it may write in one run; long entries need room</span></div></div>
     <div class="acts"><button type="button" class="btn ghost" data-cancel>Cancel</button><button class="btn primary">${icon("save")}Save</button></div>
   </form>`);
   sheet.querySelector("[data-cancel]").onclick = () => app.closeSheet();
@@ -44,7 +46,8 @@ export async function openSettings(app) {
         await Promise.all([app.refreshPresets(), app.refreshCompletion()]);
         app.toast(`Home folder: <b>${esc(moved.home)}</b>`);
       }
-      app.data.llm = await app.api.saveLlm({ file: sheet.querySelector("#oa-llm").value, entries: Number(sheet.querySelector("#oa-llm-n").value) || 12 });
+      app.data.llm = await app.api.saveLlm({ file: sheet.querySelector("#oa-llm").value, entries: Number(sheet.querySelector("#oa-llm-n").value) || 12,
+        max_tokens: Number(sheet.querySelector("#oa-llm-t").value) || 16000 });
       app.closeSheet();
       app.render();
       if (app.data.llm.file !== s.file) app.toast(app.data.llm.file ? `Language model: <b>${esc(app.data.llm.file)}</b>` : "No language model: unknown libraries stay an error");

@@ -17,8 +17,6 @@ from orrery.home import Home
 from orrery.library import Entry, Library, load_library
 from orrery.llm import Backend, InvalidProposal, extract_json
 
-MAX_ENTRY = 80
-
 
 @dataclass
 class Ops:
@@ -81,7 +79,7 @@ def _clean(values) -> list[str]:
     for v in values if isinstance(values, list) else []:
         if not isinstance(v, str):
             continue
-        v = " ".join(v.split())[:MAX_ENTRY]
+        v = " ".join(v.split())  # any length: an entry can be a word or a whole saga
         if v and v.lower() not in seen:
             seen.add(v.lower())
             out.append(v)
@@ -118,7 +116,7 @@ def parse_ops(text: str, lib: Library) -> Ops:
         return found
 
     def text(raw) -> str:
-        return " ".join(str(raw or "").split())[:MAX_ENTRY]
+        return " ".join(str(raw or "").split())
 
     remove = [e for e in (existing(v) for v in data.get("remove") or []) if e]
     rename = []

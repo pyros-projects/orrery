@@ -53,12 +53,15 @@ def prompt_for(wanted: list[Need]) -> str:
                 "no duplicates" if n.existing else f"{n.count} entries")
         lines.append(f"- __{n.name}__: {what}.\n  Used in: {n.context}"
                      + (f"\n  Directions: {n.directions}" if n.directions else ""))
+    # The default style comes first and the directions last, where a small model weighs them most: a list
+    # with directions can ask for anything, a word or a whole saga, and orrery keeps it whole.
     return ("You write wildcard lists for a text-to-image and text-to-video prompt generator.\n\n"
+            "Default style for every list: short and vivid entries (1-4 words), lowercase unless a proper noun.\n\n"
             + "\n".join(lines)
-            + "\n\nEntries are distinct and spread widely across the space so random picks feel varied; "
-            "keep them short and vivid (1-4 words), lowercase unless a proper noun, unless a list's directions "
-            "ask otherwise. Reply with ONLY a JSON object mapping each list name (without underscores) to a "
-            "JSON array of its entries.")
+            + "\n\nDirections win: where a list has Directions, its entries follow them exactly, even where they "
+            "conflict with the default style (length, form, case, language). Entries are distinct and spread widely "
+            "across the space so random picks feel varied. Reply with ONLY a JSON object mapping each list name "
+            "(without underscores) to a JSON array of its entries.")
 
 
 def _answers(reply: str, wanted: list[Need]) -> dict[str, list[str]]:
@@ -76,8 +79,6 @@ def ensure_libraries(home: Home, template: str, backend: Backend | None, default
     wanted = needs(home, template, default_n) if backend is not None else []
     if not wanted:
         return []
-    if hasattr(backend, "max_length"):  # room for every entry, long ones included (~60 tokens each)
-        backend.max_length = max(backend.max_length, 256 + 60 * sum(n.count for n in wanted))
     answers, notes = _answers(backend.complete(prompt_for(wanted)), wanted), []
     for n in wanted:
         known = {v.lower() for v in n.existing}

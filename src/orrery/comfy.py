@@ -90,7 +90,7 @@ def llm_for(home: Home, clip=None, seed: int = 0) -> ComfyBackend | None:
     """The active language model: a text encoder on the node's clip input, else the one chosen in
     orrery's settings, else none."""
     cfg = llm_config(home)
-    options = {"temperature": float(cfg["temperature"]), "max_length": int(cfg["max_length"]), "seed": seed}
+    options = {"temperature": float(cfg["temperature"]), "max_length": int(cfg["max_tokens"]), "seed": seed}
     if clip is not None:
         return ComfyBackend(clip=clip, **options)
     if cfg["file"] and can_write(cfg["file"]):

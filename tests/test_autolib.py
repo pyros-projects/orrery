@@ -60,14 +60,24 @@ def test_what_the_model_writes_waits_for_review(home):
     assert libs["animal"].meta["pending_entries"] == ["lynx", "otter"]
 
 
-def test_the_answer_budget_grows_with_what_is_asked(home):
-    backend = FakeBackend([json.dumps({"scenes": ["x"] * 20, "props": ["y"] * 12})])
-    backend.max_length = 768
-    ensure_libraries(Home(home), "__scenes:20__(at least 30 words each) and __props__", backend, default_n=12)
-    assert backend.max_length >= 20 * 60 + 12 * 60
-
-
 def test_a_library_in_a_new_folder_gets_the_folder_too(home):
     ensure_libraries(Home(home), "__film/genre__", FakeBackend([json.dumps(["noir", "western"])]), default_n=2)
     assert (home / "library" / "film" / "genre.yaml").exists()
     assert Home(home).libraries()["film/genre"].values() == ["noir", "western"]
+
+
+def test_a_lists_directions_win_over_the_default_style(home):
+    from orrery.autolib import Need, prompt_for
+    prompt = prompt_for([Need("film/mood", 20, "__film/mood__", "at least one sentence, cinematic moods"),
+                         Need("props", 12, "__props__")])
+    default, lists = prompt.index("Default style"), prompt.index("__film/mood__")
+    assert default < lists  # the default first, the lists and their directions after it
+    assert "1-4 words" in prompt[default:lists]
+    assert "Directions: at least one sentence, cinematic moods" in prompt[lists:]
+    assert "Directions win" in prompt[lists:]
+
+
+def test_entries_of_any_length_are_kept_whole(home):
+    saga = "Harry Potter and the Philosopher's Stone. " + "The boy who lived goes back to Hogwarts. " * 400
+    ensure_libraries(Home(home), "__saga__", FakeBackend([json.dumps([saga.strip(), "b"])]), default_n=2)
+    assert Home(home).libraries()["saga"].values()[0] == " ".join(saga.split())

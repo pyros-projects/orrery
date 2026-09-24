@@ -514,7 +514,7 @@ def home_save(home: Home, args: dict) -> dict:
 def llm_settings(home: Home, args: dict) -> dict:
     cfg = llm_config(home)
     return {"file": cfg["file"], "clip_type": cfg["clip_type"], "entries": int(cfg["entries"]),
-            "files": text_encoders()}
+            "max_tokens": int(cfg["max_tokens"]), "files": text_encoders()}
 
 
 def llm_save(home: Home, args: dict) -> dict:
@@ -523,7 +523,8 @@ def llm_save(home: Home, args: dict) -> dict:
         raise ApiError(400, f"{file} is a truncated text encoder (MiniMax H3's): it loads but cannot write. "
                             "Pick a Qwen3-VL build such as Krea 2's qwen3vl_4b.")
     config = home.config()
-    llm = {**(config.get("llm") or {}), "file": file, "entries": min(max(_int(args, "entries", 12), 1), 200)}
+    llm = {**(config.get("llm") or {}), "file": file, "entries": min(max(_int(args, "entries", 12), 1), 200),
+           "max_tokens": min(max(_int(args, "max_tokens", 16000), 64), 131072)}
     if args.get("clip_type"):
         llm["clip_type"] = str(args["clip_type"])
     home.save_config({**config, "llm": llm})

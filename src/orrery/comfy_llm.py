@@ -10,6 +10,7 @@ The choice lives in orrery.yaml, set from the node's settings:
       file: qwen3vl_4b_bf16.safetensors   # a file in ComfyUI's text_encoders folder
       clip_type: minimax                  # how ComfyUI loads it; minimax suits Qwen3-VL builds
       entries: 12                         # a library the LLM creates starts with this many
+      max_tokens: 16000                   # the longest answer it may write
 
 A text encoder wired into the node's `clip` input wins over the setting. orrery never unloads a
 model itself: ComfyUI moves the encoder out when the video model needs the room, and unloading it
@@ -20,7 +21,7 @@ warnings). A loaded encoder is kept for the next run, one at a time, as Pixaroma
 import re
 from pathlib import Path
 
-DEFAULTS = {"file": None, "clip_type": "minimax", "entries": 12, "temperature": 0.3, "max_length": 768}
+DEFAULTS = {"file": None, "clip_type": "minimax", "entries": 12, "temperature": 0.3, "max_tokens": 16000}
 TRUNCATED = re.compile(r"minimax[_-]?h3|_h3_int|h3_te", re.IGNORECASE)  # encoders that cannot generate
 _THINK_BLOCK = re.compile(r"<think>.*?</think>", re.DOTALL)
 _CACHE: dict[tuple[str, str], object] = {}  # (file, clip_type) → the loaded encoder; one entry
@@ -70,7 +71,7 @@ class ComfyBackend:
     """orrery's Backend protocol (`complete`) on a ComfyUI text encoder."""
 
     def __init__(self, file: str | None = None, clip=None, clip_type: str = "minimax",
-                 temperature: float = 0.3, max_length: int = 768, seed: int = 0) -> None:
+                 temperature: float = 0.3, max_length: int = 16000, seed: int = 0) -> None:
         self.file, self._clip, self.clip_type = file, clip, clip_type
         self.temperature, self.max_length, self.seed = temperature, max_length, seed
         self.name = Path(file).stem if file else "the wired text encoder"

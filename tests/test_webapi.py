@@ -413,9 +413,10 @@ def test_llm_settings_list_text_encoders_and_are_saved(home, monkeypatch):
     assert (body["file"], body["entries"]) == (None, 12)
     assert [(f["name"], f["can_write"]) for f in body["files"]] == [
         ("qwen3vl_4b_bf16.safetensors", True), ("qwen3vl_32b_minimax_h3_int8_convrot.safetensors", False)]
-    ok(home, webapi.llm_save, file="qwen3vl_4b_bf16.safetensors", entries=20)
+    assert body["max_tokens"] == 16000
+    ok(home, webapi.llm_save, file="qwen3vl_4b_bf16.safetensors", entries=20, max_tokens=4000)
     body = ok(home, webapi.llm_settings)
-    assert (body["file"], body["entries"]) == ("qwen3vl_4b_bf16.safetensors", 20)
+    assert (body["file"], body["entries"], body["max_tokens"]) == ("qwen3vl_4b_bf16.safetensors", 20, 4000)
     status, _ = api(home, webapi.llm_save, file="qwen3vl_32b_minimax_h3_int8_convrot.safetensors")
     assert status == 400
 

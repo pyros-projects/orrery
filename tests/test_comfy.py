@@ -298,3 +298,12 @@ def test_the_node_leaves_unloading_to_comfyui(home, monkeypatch):
     backend.release = lambda: pytest.fail("orrery must not unload the model itself")
     monkeypatch.setattr(comfy, "llm_for", lambda h, clip=None, **_: backend)
     run_prompt("a model in __runway_shoes__", 1, "text", str(home))
+
+
+def test_the_llm_answers_within_the_max_tokens_setting(home):
+    from orrery.comfy import llm_for
+    from orrery.home import Home as H
+    H(home).save_config({"llm": {"file": "qwen3vl_4b_bf16.safetensors", "max_tokens": 9000}})
+    assert llm_for(H(home)).max_length == 9000
+    H(home).save_config({"llm": {"file": "qwen3vl_4b_bf16.safetensors"}})
+    assert llm_for(H(home)).max_length == 16000
