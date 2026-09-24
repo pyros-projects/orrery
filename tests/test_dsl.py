@@ -137,3 +137,18 @@ def test_override_skips_empty_values_accepts_a_dollar_and_dsl():
     assert override(t, {"hero": "  "}) == t
     assert override(t, {"$hero": "__animal[feline]__"}) == "$hero = __animal[feline]__\n$hero"
     assert expand(override(t, {"hero": "__animal[feline]__"}), 3, LIBS).text in ("lynx", "ocelot")
+
+
+# --- lora tags are opaque: LoRA file names may contain __ -------------------------------------
+
+def test_lora_tags_are_not_expanded():
+    e = expand("<lora:bf16__apply_to_fl2va__toward:1.00> a __animal__", 1, LIBS)
+    assert e.text.startswith("<lora:bf16__apply_to_fl2va__toward:1.00> a")
+    assert [p.label for p in e.picks] == ["__animal__"]
+
+
+def test_a_choice_between_lora_tags_records_the_real_tags():
+    e = expand("{<lora:a__b__:1.00>|<lora:c:0.50>}", 2, LIBS)
+    [pick] = e.picks
+    assert e.text in ("<lora:a__b__:1.00>", "<lora:c:0.50>") and pick.value == e.text
+    assert pick.label == "{<lora:a__b__:1.00>|<lora:c:0.50>}" and pick.keys == (f"{pick.label}={e.text}",)

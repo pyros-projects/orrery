@@ -23,12 +23,14 @@ function line(text, known) {
     out = esc(head[1]) + `<span class="t-kw">${esc(head[2])}</span>`;
     rest = text.slice(head[0].length);
   }
-  return out + rest.replace(TOKEN, (m, lib, name, v, multi, brace) => {
-    if (lib) return `<span class="t-lib${known.has(name) ? "" : " t-miss"}">${esc(lib)}</span>`;
-    if (v) return `<span class="t-var">${esc(v)}</span>`;
-    if (multi || brace) return `<span class="t-brace">${esc(m)}</span>`;
-    return esc(m);
-  });
+  // <lora:…> tags are opaque (file names may contain __), like orrery's expander treats them
+  return out + rest.split(/(<lora:[^<>]*>)/).map((part, i) => (i % 2 ? `<span class="t-lora">${esc(part)}</span>`
+    : part.replace(TOKEN, (m, lib, name, v, multi, brace) => {
+      if (lib) return `<span class="t-lib${known.has(name) ? "" : " t-miss"}">${esc(lib)}</span>`;
+      if (v) return `<span class="t-var">${esc(v)}</span>`;
+      if (multi || brace) return `<span class="t-brace">${esc(m)}</span>`;
+      return esc(m);
+    }))).join("");
 }
 
 export function highlight(src, known) {

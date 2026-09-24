@@ -143,3 +143,10 @@ test("reel lines are keywords", () => {
   const html = highlight("CHUNK the hall\nHANDOFF: the door\nLORA: <lora:a:1>\ncontext: 22", known);
   for (const kw of ["CHUNK", "HANDOFF:", "LORA:", "context:"]) assert.match(html, new RegExp(`<span class="t-kw">${kw}`));
 });
+
+test("lora tags are coloured as loras, not as libraries, and are not counted", () => {
+  const html = highlight("LORA: <lora:bf16__apply__x:1.00> __creature__", known);
+  assert.match(html, /<span class="t-lora">&lt;lora:bf16__apply__x:1.00&gt;<\/span>/);
+  assert.doesNotMatch(html, /t-miss/);
+  assert.deepEqual([stats("LORA: <lora:a__b__c:1.00>").libs, stats("LORA: <lora:a__b__c:1.00>").rolls], [0, 0]);
+});

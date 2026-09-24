@@ -92,6 +92,7 @@
 .orrery-app .t-lib { color: var(--teal); }
 .orrery-app .t-miss { color: var(--danger); text-decoration: underline wavy var(--danger); text-underline-offset: 3px; }
 .orrery-app .t-var { color: var(--rose); }
+.orrery-app .t-lora { color: var(--sky); }
 .orrery-app .t-brace { color: var(--violet); }
 .orrery-app .t-kw, .orrery-app .t-head { color: var(--sky); }
 .orrery-app .t-kw { font-weight: 500; }
@@ -124,7 +125,11 @@
 .orrery-app .ac { position: absolute; z-index: 20; min-width: 240px; max-width: 340px; background: #1f2029; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.5); overflow: hidden; font-size: 12px; }
 .orrery-app .ac ul { list-style: none; margin: 0; padding: 3px 0; max-height: 200px; overflow-y: auto; }
 .orrery-app .ac li { display: flex; justify-content: space-between; gap: 14px; padding: 4px 10px; cursor: pointer; font-family: var(--mono); }
-.orrery-app .ac li span:last-child { color: var(--faint); font-family: var(--ui); }
+.orrery-app .ac li span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.orrery-app .ac li span:last-child { color: var(--faint); font-family: var(--ui); white-space: nowrap; }
+.orrery-app .ac.wide { max-width: min(480px, calc(100% - 8px)); }
+.orrery-app .ac.wide ul { max-height: 260px; }
+.orrery-app .ac.wide .pv { white-space: normal; overflow-wrap: anywhere; font-family: var(--mono); }
 .orrery-app .ac li.on { background: var(--hover); }
 .orrery-app .ac .pv { padding: 5px 10px; border-top: 1px solid var(--line); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .orrery-app .dials { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px 0; flex: none; max-height: 96px; overflow-y: auto; }

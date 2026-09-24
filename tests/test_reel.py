@@ -97,3 +97,8 @@ def test_plain_scenes_take_loras_and_ignore_the_segment():
     r = h3(src, segment=4)
     assert (r.loras, r.chunks) == ("<lora:a:1>", 0)
     assert not [i for i in r.lint if "CAST" in i.message] and "lora" not in r.text
+
+
+def test_lora_lines_keep_names_with_double_underscores():
+    r = h3("@h3 t2va\nLORA: <lora:bf16__apply_to_fl2va__toward:1.00>\nSHOT 5s\nA.\nSFX: x\n")
+    assert r.loras == "<lora:bf16__apply_to_fl2va__toward:1.00>"

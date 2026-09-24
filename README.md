@@ -163,7 +163,7 @@ Restart ComfyUI. Nodes under **orrery**:
   same app over the canvas, Esc brings it back):
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `$` bindings, camera words after
-    `SHOT 5s |`). Open a preset from the bar above it; ● marks unsaved
+    `SHOT 5s |`, your LoRA files after `LORA:`). Open a preset from the bar above it; ● marks unsaved
     edits; Save, Save as…, Revert. Under the editor, every binding is a
     **dial**: pick a library entry or choice, or type any expression; empty
     means its default roll. Saving bakes the dials in, and a galaxy output

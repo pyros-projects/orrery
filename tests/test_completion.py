@@ -1,11 +1,13 @@
 import shutil
 import subprocess
+import sys
+import types
 from pathlib import Path
 
 import pytest
 
 from orrery.comfy import OrreryPrompt
-from orrery.completion import completion_data
+from orrery.completion import completion_data, lora_files
 from orrery.home import Home
 
 REPO = Path(__file__).resolve().parents[1]
@@ -45,3 +47,21 @@ def test_frontend_completion_logic():
     result = subprocess.run(["node", "--test", *files],
                             capture_output=True, text=True, check=False)
     assert result.returncode == 0, result.stdout + result.stderr
+
+
+def test_loras_are_named_the_way_lora_manager_resolves_them(home):
+    files = ["minimax/turbo/H3-PK-Parasyte-Turbo.safetensors", "Motion_Repair.safetensors", "style/indie90s_h3.ckpt"]
+    assert completion_data(Home(home), loras=files)["loras"] == [
+        {"name": "H3-PK-Parasyte-Turbo", "folder": "minimax/turbo"},
+        {"name": "indie90s_h3", "folder": "style"},
+        {"name": "Motion_Repair", "folder": ""},
+    ]
+
+
+def test_lora_files_come_from_comfyui_and_are_empty_outside_it(home, monkeypatch):
+    assert completion_data(Home(home))["loras"] == [] and lora_files() == []
+    fake = types.ModuleType("folder_paths")
+    fake.get_filename_list = lambda kind: ["a\\b.safetensors"] if kind == "loras" else ["nope"]
+    monkeypatch.setitem(sys.modules, "folder_paths", fake)
+    assert lora_files() == ["a/b.safetensors"]
+    assert completion_data(Home(home))["loras"] == [{"name": "b", "folder": "a"}]

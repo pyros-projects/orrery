@@ -78,12 +78,34 @@ function keywordItems(before, line) {
   };
 }
 
+// LORA: lines: your LoRA files as <lora:name:1.00>, the syntax LoraManager's LoRA Text Loader
+// reads; any part of the name matches, prefix matches first.
+const LORA_CAP = 80;
+
+function loraItems(before, line, data) {
+  const m = /^\s*LORA:(.*)$/.exec(line);
+  if (!m) return null;
+  const token = /(?:^|[\s>])([^\s>]*)$/.exec(m[1])[1];
+  const query = token.replace(/^<(?:l(?:o(?:r(?:a(?::)?)?)?)?)?/i, "").toLowerCase();
+  if (query.includes(":")) return null;
+  const hits = (data.loras || []).filter((l) => l.name.toLowerCase().includes(query));
+  const ranked = [...hits.filter((l) => l.name.toLowerCase().startsWith(query)), ...hits.filter((l) => !l.name.toLowerCase().startsWith(query))];
+  return {
+    kind: "lora",
+    items: ranked.slice(0, LORA_CAP).map((l) => ({
+      insert: `<lora:${l.name}:1.00>`, label: l.name, detail: l.folder || "lora", preview: l.folder ? `${l.folder}/${l.name}` : l.name,
+    })),
+    replaceFrom: before.length - token.length,
+  };
+}
+
 export function suggest(text, caret, data) {
   if (!data) return NONE;
   const before = text.slice(0, caret);
   const line = before.slice(before.lastIndexOf("\n") + 1);
   const screenplay = text.trimStart().startsWith("@h3");
-  const found = libraryItems(before, data)
+  const found = (screenplay ? loraItems(before, line, data) : null)
+    ?? libraryItems(before, data)
     ?? bindingItems(before, text)
     ?? (screenplay ? shotItems(before, line, data) ?? keywordItems(before, line) : null)
     ?? NONE;
@@ -93,6 +115,6 @@ export function suggest(text, caret, data) {
 
 export function missingLibraries(text, data) {
   const known = new Set(data.libraries.map((l) => l.name));
-  const names = [...text.matchAll(/__(\w+)(?:\[[\w-]+\])?__/g)].map((m) => m[1]);
+  const names = [...text.replace(/<lora:[^<>]*>/g, "").matchAll(/__(\w+)(?:\[[\w-]+\])?__/g)].map((m) => m[1]);
   return [...new Set(names)].filter((n) => !known.has(n));
 }

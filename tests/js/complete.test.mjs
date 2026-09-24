@@ -10,6 +10,11 @@ const DATA = {
   ],
   h3: { camera: ["push in", "pull out", "arc", "static"], modifiers: ["small", "large", "slow", "fast"],
         transitions: ["cut", "dissolve", "fade", "wipe"] },
+  loras: [
+    { name: "H3-PK-Parasyte-Turbo", folder: "minimax/turbo" },
+    { name: "indie90s_style_h3_ep35", folder: "style" },
+    { name: "Motion_Repair", folder: "" },
+  ],
 };
 
 const at = (text) => suggest(text, text.length, DATA);
@@ -80,4 +85,30 @@ test("cast keywords at line start in screenplays", () => {
 test("reel keywords at line start in screenplays", () => {
   const items = at("@h3 t2va\nSHOT 5s\nA.\n").items.map((i) => i.insert);
   assert.ok(["CHUNK", "HANDOFF: ", "LORA: ", "context: "].every((k) => at(`@h3 t2va\n${k[0]}`).items.some((i) => i.insert === k)), items.join());
+});
+
+test("LORA: lists your loras in the syntax LoRA Text Loader reads", () => {
+  const s = at("@h3 t2va\nLORA: ");
+  assert.deepEqual(s.items.map((i) => i.insert), ["<lora:H3-PK-Parasyte-Turbo:1.00>", "<lora:indie90s_style_h3_ep35:1.00>", "<lora:Motion_Repair:1.00>"]);
+  assert.deepEqual(s.items.map((i) => i.detail), ["minimax/turbo", "style", "lora"]);
+  assert.deepEqual([s.kind, s.items[0].label, s.items[0].preview], ["lora", "H3-PK-Parasyte-Turbo", "minimax/turbo/H3-PK-Parasyte-Turbo"]);
+  assert.equal(s.replaceFrom, "@h3 t2va\nLORA: ".length);
+});
+
+test("LORA: filters by any part of the name, prefix matches first", () => {
+  assert.deepEqual(at("@h3 t2va\nLORA: mot").items.map((i) => i.insert), ["<lora:Motion_Repair:1.00>"]);
+  const h3 = at("@h3 t2va\nLORA: <lora:h3");
+  assert.deepEqual(h3.items.map((i) => i.insert), ["<lora:H3-PK-Parasyte-Turbo:1.00>", "<lora:indie90s_style_h3_ep35:1.00>"]);
+  assert.equal(h3.replaceFrom, "@h3 t2va\nLORA: ".length);
+});
+
+test("LORA: completes the next lora on the same line, not inside a strength", () => {
+  const next = at("@h3 t2va\nCHUNK\nLORA: <lora:Motion_Repair:1.00> ind");
+  assert.deepEqual(next.items.map((i) => i.insert), ["<lora:indie90s_style_h3_ep35:1.00>"]);
+  assert.equal(at("@h3 t2va\nLORA: <lora:Motion_Repair:0.").items.length, 0);
+  assert.equal(at("a fox\nLORA: mo").items.length, 0);
+});
+
+test("lora tags never count as missing libraries", () => {
+  assert.deepEqual(missingLibraries("LORA: <lora:bf16__apply__x:1.00> __weather2__", DATA), ["weather2"]);
 });

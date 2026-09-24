@@ -24,6 +24,8 @@ _BINDING_LINE = re.compile(r"^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$")
 _MULTI = re.compile(r"^(\d+)(?:-(\d+))?\$\$(.+)$")
 _WEIGHTED = re.compile(r"^(.*?):(\d+(?:\.\d+)?)$")
 _LIB_ONLY = re.compile(r"^__(\w+)(?:\[([\w-]+)\])?__$")
+_LORA_TAG = re.compile(r"<lora:[^<>]*>")  # opaque: LoRA file names may contain __
+_HIDDEN = re.compile("\x00(\\d+)\x00")
 _AN_PREFIXES = ("hour", "honest", "honor", "honour", "heir")
 _A_PREFIXES = ("uni", "use", "usu", "eu", "one ", "once")
 
@@ -137,6 +139,18 @@ class Expander:
         return self.vars[name]
 
     def expr(self, text: str, label_prefix: str = "") -> str:
+        tags: list[str] = []
+        text = _LORA_TAG.sub(lambda m: tags.append(m.group(0)) or f"\x00{len(tags) - 1}\x00", text)
+        first = len(self.picks)
+        text = self._expand(text, label_prefix)
+        if not tags:
+            return text
+        show = lambda s: _HIDDEN.sub(lambda m: tags[int(m.group(1))], s)
+        self.picks[first:] = [Pick(show(p.label), show(p.value), tuple(show(k) for k in p.keys))
+                              for p in self.picks[first:]]
+        return show(text)
+
+    def _expand(self, text: str, label_prefix: str) -> str:
         for _ in range(200):
             m = _BRACE.search(text)
             if not m:

@@ -264,12 +264,12 @@ function complete(app, ta) {
 
 function drawCompletion(app) {
   app.view.querySelector(".ac")?.remove();
-  const { items, i, ta } = app.ac, { x, y } = caretPoint(ta), item = items[i];
+  const { items, i, ta, kind } = app.ac, { x, y } = caretPoint(ta), item = items[i], wide = kind === "lora";
   const box = document.createElement("div");
-  box.className = "ac";
-  box.style.left = `${Math.max(4, Math.min(x + 8, ta.clientWidth - 250))}px`;
+  box.className = wide ? "ac wide" : "ac";
+  box.style.left = `${Math.max(4, Math.min(x + 8, ta.clientWidth - (wide ? 480 : 250)))}px`;
   box.style.top = `${y + 12}px`;
-  box.innerHTML = `<ul>${items.map((it, n) => `<li class="${n === i ? "on" : ""}" data-i="${n}"><span>${esc(it.insert.trim())}</span><span>${esc(it.detail)}</span></li>`).join("")}</ul>`
+  box.innerHTML = `<ul>${items.map((it, n) => `<li class="${n === i ? "on" : ""}" data-i="${n}"><span>${esc((it.label ?? it.insert).trim())}</span><span>${esc(it.detail)}</span></li>`).join("")}</ul>`
     + `${item.preview ? `<div class="pv">${esc(item.preview)}</div>` : ""}`;
   box.addEventListener("mousedown", (e) => {
     const li = e.target.closest("[data-i]");

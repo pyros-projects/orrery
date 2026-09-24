@@ -59,7 +59,8 @@ function sha256(bytes) {
 
 export const templateHash = (text) => sha256(new TextEncoder().encode(text)).slice(0, 16);
 
-export function stats(text) {
+export function stats(raw) {
+  const text = raw.replace(/<lora:[^<>]*>/g, "<lora>");
   const libs = [...text.matchAll(/__(\w+)(?:\[[\w-]+\])?__/g)];
   const rolls = (text.match(/\{/g) || []).length + libs.length;
   const binds = (text.match(/^\s*\$\w+\s*=/gm) || []).length;

@@ -42,7 +42,7 @@ const REF = [
   ["Reels (H3 Motion Context)", [
     ["CHUNK the salon", "one Motion Context clip; everything before the first CHUNK (style, CAST, bindings) holds for every chunk", "CHUNK\nSHOT 5s | push in, slow\n"],
     ["HANDOFF: MAYA reaches the door", "closes this chunk and opens the next with the same words", "HANDOFF: "],
-    ["LORA: <lora:name:0.8>", "the loras output, for LoRA Text Loader: lines before the first CHUNK always, a chunk's own only there", "LORA: "],
+    ["LORA: <lora:name:0.8>", "the loras output, for LoRA Text Loader: lines before the first CHUNK always, a chunk's own only there; after LORA: the editor lists your LoRA files", "LORA: "],
     ["context: 22", "the frames Motion Context pins (5, 22, 39, 56); from the second chunk on, Shot 1 and length include them", "context: 22"],
     ["segment ← clip_index", "wire Load Latent's clip_index into the node's segment input; the seed stays fixed so bindings hold", ""],
   ]],
