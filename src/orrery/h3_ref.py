@@ -35,7 +35,9 @@ def write_h3_ref(scene: Scene, lint: list[Issue]) -> str:
     definitions, retention, types = [], [], set()
     for m in scene.cast:
         phrase = labels.sources_phrase(m)
-        definitions.append(f"<Subject {labels.subjects[m.name]}> is {m.head}{' in ' + phrase if phrase else ''}{m.tail}.")
+        noun, detail = m.split_head() if phrase else (m.head, "")
+        detail = f",{detail}" if detail else ""
+        definitions.append(f"<Subject {labels.subjects[m.name]}> is {noun}{' in ' + phrase if phrase else ''}{detail}{m.tail}.")
         if m.sources:
             types.add("reference generation")
     for i, shot in enumerate(scene.shots, start=1):

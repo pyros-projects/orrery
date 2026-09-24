@@ -303,3 +303,8 @@ A waves.
 SFX: wind
 """
     assert any("350" in i.message for i in h3(src).lint)
+
+
+def test_full_definitions_put_the_picture_after_the_head_noun():
+    src = "@h3 ref2va\nsummary: VICTIM waits.\nCAST\nVICTIM (image 1): an arrogant young man in an expensive suit\nSHOT 5s\nVICTIM waits.\nSFX: x\n"
+    assert "<Subject 1> is an arrogant young man in <Picture 1>, in an expensive suit." in h3(src).text

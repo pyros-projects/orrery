@@ -65,3 +65,13 @@ def test_lite_can_come_before_or_after_the_ratio():
     assert shape("@h3 ref2va lite 9:16\nSHOT 5s\nA.\n")[:2] == shape("@h3 ref2va 9:16 lite\nSHOT 5s\nA.\n")[:2]
     assert shape("@h3 ref2va lite 9:16\nSHOT 5s\nA.\n")[:2] == (768, 1344)
     assert h3("@h3 ref2va lite 9:16\nSHOT 5s\nA.\nSFX: x\n").scene.ratio == "9:16"
+
+
+def test_the_picture_follows_the_head_noun_when_there_is_no_comma():
+    src = "@h3 ref2va lite\nCAST\nVICTIM (image 1): an arrogant young man in an expensive suit\nSHOT 5s\nVICTIM waits.\nSFX: x\n"
+    assert h3(src).text.startswith("<Subject 1> = an arrogant young man of <Picture 1> in an expensive suit\n")
+
+
+def test_music_right_after_the_cast_is_music():
+    res = h3("@h3 t2va lite\nCAST\nKEEPER: an old keeper\nMUSIC: a low cello drone\nSHOT 5s\nKEEPER waits.\nSFX: x\n")
+    assert res.text.endswith("non_diegetic_music: A low cello drone.") and "MUSIC" not in res.text

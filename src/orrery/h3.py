@@ -191,6 +191,8 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue]) -> Scene:
                 lint.append(Issue("warn", "HANDOFF only works inside a CHUNK; it is ignored."))
         elif m := _CONTEXT.match(line):
             scene.context = int(m.group(1))
+        elif (m := _MUSIC.match(line)) and cur is None and in_cast:
+            (scene.chunks[-1] if scene.chunks else scene).music = m.group(1).strip()
         elif line == "CAST" and cur is None:
             in_cast = True
         elif in_cast and cur is None and not _SHOT.match(line):
@@ -481,7 +483,8 @@ def write_h3_lite(scene: Scene, lint: list[Issue]) -> str:
     definitions = []
     for m in scene.cast:
         subject, phrase = f"<Subject {labels.subjects[m.name]}>", labels.sources_phrase(m)
-        definitions.append(f"{subject} = {m.head}{' of ' + phrase if phrase else ''}{m.tail}")
+        noun, detail = m.split_head() if phrase else (m.head, "")
+        definitions.append(f"{subject} = {noun}{' of ' + phrase if phrase else ''}{detail}{m.tail}")
         if m.voice:
             definitions.append(f"{labels.label(m.voice)} = the voice of {subject}")
     align = "" if scene.mode == "ref2va" else _alignment(scene)

@@ -54,12 +54,16 @@ class Member:
     keep: tuple[str, str | None] | None = None  # (marker, reason or None for the default)
     problems: list[str] = field(default_factory=list)  # advice for lint; parsing never fails
 
+    def split_head(self) -> tuple[str, str]:
+        """The head as (noun phrase, detail): 'a man in a suit' → ('a man', ' in a suit')."""
+        m = _DETAIL.search(self.head)
+        return (self.head[:m.start()], self.head[m.start():]) if m and m.start() else (self.head, "")
+
     @property
     def short(self) -> str:
         """The head noun phrase for later mentions: 'a young woman' becomes 'the young woman', and
         'a compact alien with an elongated head' becomes 'the compact alien'."""
-        noun = _DETAIL.split(self.head, maxsplit=1)[0] or self.head
-        return re.sub(r"^(an?)\s+", "the ", noun, flags=re.IGNORECASE)
+        return re.sub(r"^(an?)\s+", "the ", self.split_head()[0], flags=re.IGNORECASE)
 
 
 def parse_member(name: str, spec: str, text: str) -> Member:
