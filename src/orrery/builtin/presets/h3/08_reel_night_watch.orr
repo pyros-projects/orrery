@@ -1,0 +1,31 @@
+---
+title: "Reel: the night watch"
+note: "A three-clip reel for H3 Motion Context. Wire Load Latent's clip_index into segment and set the Chain's segments to 3; the keeper and the rolled storm stay the same in every clip, and each handoff links two clips."
+tags: [h3, reel, motion_context]
+---
+@h3 t2va 16:9
+style: live-action, cinematic
+context: 22
+$storm = {a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}
+
+MUSIC: a low, sustained cello drone at a slow tempo
+
+CAST
+KEEPER: an old lighthouse keeper, in a yellow oilskin coat and a knitted cap
+
+CHUNK the stairs
+SHOT 8s | tracking, slow
+KEEPER climbs the iron spiral stairs of the lighthouse by lantern light while $storm batters the tower.
+SFX: boots ring on iron steps; wind howls against the walls
+HANDOFF: KEEPER reaches the small door of the lamp room at the top of the stairs
+
+CHUNK the lamp
+SHOT 7s | push in, small, slow
+KEEPER opens the door and lights the great lamp; the lens begins to turn and throws a sweeping beam out into $storm.
+SFX: a match strikes; gears grind as the lens starts to turn
+HANDOFF: the sweeping beam passes over the dark sea
+
+CHUNK the ship
+SHOT 8s | pull out, slow
+Far below, the beam finds a small fishing boat fighting the waves, and the boat turns toward the light.
+SFX: waves crash against the rocks; a distant ship's horn answers

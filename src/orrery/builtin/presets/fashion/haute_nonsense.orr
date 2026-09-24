@@ -1,0 +1,8 @@
+---
+title: "Haute nonsense"
+note: "OneButtonPrompt's spirit: a fictional house strings together two or three snobby adjectives and shapes that make no sense, and Krea has to decide what that looks like. Run it as a batch and rate; the galaxy learns which adjectives turn into clothes."
+tags: [fashion, krea, explore]
+---
+$house = __couture_house__
+a high-fashion runway photograph from the $house {autumn-winter|spring-summer|resort} show at __couture_venue__, a model walking toward the camera in a {2-3$$__couture_adjective__} look: __couture_form__ in __couture_material__, with {1-2$$__couture_form__}, harsh runway flash, the front row blurred in the dark, shot on a long lens
+: x8 w832 h1216

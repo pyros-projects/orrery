@@ -88,8 +88,13 @@ Built-in presets are read-only (`preset save NAME @NAME` makes a copy yours):
 scene, `krea/` holds Krea 2 stills (natural language, the medium named, text
 to render in quotes), and `h3/` holds MiniMax H3 scenes (dialogue in German
 and Cantonese, a voiceover, fast cuts, an animated fable, on-screen music, and
-an I2VA starter for your own stills). `orrery preset list --folder krea` shows
-them with their titles.
+an I2VA starter for your own stills, and a three-clip reel for H3 Motion
+Context). `effects/` and `curator/` are Ito-style body-horror operators in the
+lite format (Codie's subsurface travel, body suit and mirror replacement; the
+Curator's paper, glass, clay and elastic lessons), each binding a dial over the
+`bh_*` libraries. `fashion/` strings snobby adjectives and impossible shapes
+into runway looks for Krea and H3 (`couture_*` libraries). `orrery preset list
+--folder krea` shows them with their titles.
 
 Tags live in YAML front matter at the top of the preset file and are stripped
 before expansion:

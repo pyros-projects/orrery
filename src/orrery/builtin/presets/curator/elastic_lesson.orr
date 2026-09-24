@@ -1,0 +1,21 @@
+---
+title: "The Elastic Lesson"
+note: "Improper Bodies: a rubber band stretches normally, then endlessly, and the body of VICTIM loses its structural limit. From Codie's tested prompt. VICTIM is your ref image 1; delete (image 1) for text only."
+tags: [curator, h3, body_horror, ito]
+---
+@h3 ref2va 16:9 lite
+style: live-action, cinematic surreal body horror, photorealistic
+$curator = __curator__
+$victim = __bh_victim__
+$room = __bh_room__
+
+CAST
+CURATOR: $curator
+VICTIM (image 1): $victim
+
+SHOT 10s | push in, small, slow
+VICTIM stands facing CURATOR in $room, a rubber band lying on a small table. CURATOR stretches the band once and releases it; it snaps back normally.
+CURATOR (soft, polite voice): __curator_line__
+CURATOR whispers something ceremonial and stretches it again; this time it keeps extending far beyond what should be possible without breaking. CURATOR lightly touches VICTIM on the wrist. As VICTIM recoils, the forearm stretches too far, and then the fingers, the shoulder and the neck follow the same impossible elasticity; the body keeps its human surface but has lost its structural limit. Every attempt to steady themself creates a new exaggerated extension. In the final moment VICTIM reaches for the table and the arm extends across an impossible distance while the rest of the body strains behind it, and CURATOR watches calmly.
+SFX: quiet room ambience; one ordinary rubber-band snap; a prolonged stretching tension; distressed breathing
+MUSIC: N/A

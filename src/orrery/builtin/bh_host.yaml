@@ -1,0 +1,9 @@
+meta: {source: "orrery body-horror pack: who the effect happens to (reads well after 'of <Picture 1>')", builtin: true}
+entries:
+  - the person
+  - {value: the woman, tags: [female]}
+  - {value: the man, tags: [male]}
+  - {value: the young woman, tags: [female]}
+  - {value: the young man, tags: [male]}
+  - {value: the older woman, tags: [female]}
+  - {value: the older man, tags: [male]}

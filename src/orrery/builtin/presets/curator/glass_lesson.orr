@@ -1,0 +1,22 @@
+---
+title: "The Glass Lesson"
+note: "Improper Bodies: a glass is dropped twice; the second time it shatters, and the body of VICTIM starts behaving like glass, rigid and brittle, the skin still human. From Codie's tested prompt. VICTIM is your ref image 1; delete (image 1) for text only."
+tags: [curator, h3, body_horror, ito]
+---
+@h3 ref2va 16:9 lite
+style: live-action, cinematic surreal body horror, photorealistic
+$curator = __curator__
+$victim = __bh_victim__
+$room = __bh_room__
+$touch = {side of the neck|jaw|back of one hand}
+
+CAST
+CURATOR: $curator
+VICTIM (image 1): $victim
+
+SHOT 10s | push in, small, slow
+VICTIM sits rigidly at a small table in $room while CURATOR stands beside them in formal black clothing, a drinking glass resting near one hand. CURATOR lifts the glass and lets it drop once; it bounces and rolls without breaking.
+CURATOR (soft, polite voice): __curator_line__
+CURATOR picks it up again, whispers a few measured words and drops it a second time; this time it shatters sharply across the floor. CURATOR turns and lightly touches VICTIM on the $touch. The posture of VICTIM stiffens; the skin keeps its human appearance, but the body begins behaving like glass, rigid, brittle and under dangerous internal tension. Fine cracking patterns spread beneath the surface of the neck and jaw, then into the shoulders and chest, and one arm lifts and halts at a fixed angle, too rigid to bend. In the final moment VICTIM turns their head too quickly and a fine fracture line races across one cheek; they freeze, terrified to move, while CURATOR crouches calmly beside the broken glass.
+SFX: quiet room ambience; one soft glass impact; one sharp glass shattering; faint brittle crackling with every small movement
+MUSIC: N/A

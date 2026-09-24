@@ -1,0 +1,22 @@
+---
+title: "Subsurface travel"
+note: "Codie's alien operator: something travels under the skin of HOST and surfaces at the end of its path. Every binding is a dial: route, skin, motion and reveal roll from the bh_ libraries, so ratings learn which mechanics H3 does best. HOST is your ref image 1; delete (image 1) for text only."
+tags: [effects, h3, body_horror, ito]
+---
+@h3 ref2va 16:9 lite
+style: live-action, cinematic body horror, photorealistic
+$host = __bh_host__
+$entity = __bh_entity__
+$route = __bh_route__
+$surface = __bh_surface__
+$motion = __bh_motion__
+$reveal = __bh_reveal__
+
+CAST
+HOST (image 1): $host
+ENTITY: $entity
+
+SHOT 10s | push in, slow
+HOST stands facing the camera, framed from the waist up, and at first appears completely normal. A localized pressure begins beneath the skin as ENTITY starts moving inside HOST, travelling $route. Throughout the movement HOST keeps $surface, and ENTITY is perceived only as a three-dimensional shape pressing outward from within. The movement stays $motion, and the areas it has already passed slowly return to their original form. In the final phase ENTITY reaches the end of its path and $reveal.
+SFX: restrained breathing; subtle internal shifting; soft surface tension following the moving shape
+MUSIC: N/A

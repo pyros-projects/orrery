@@ -1,0 +1,19 @@
+---
+title: "Mirror replacement"
+note: "Pyro's stronger mirror: the reflection climbs out, opens HOST's mouth impossibly wide and slides inside. Dial the ending; the trapped-original one is Codie's favourite. HOST is your ref image 1; delete (image 1) for text only."
+tags: [effects, h3, body_horror, ito]
+---
+@h3 ref2va 16:9 lite
+style: live-action, cinematic surreal body horror, photorealistic
+$host = __bh_host__
+$room = {a dim apartment bathroom at night|a narrow hotel corridor with a full-length mirror|an empty dance studio lined with mirrors}
+$ending = {the reflection in the mirror is now the original, hammering silently on the inside of the glass|the mirror behind them now shows an empty room|the new reflection lags a full second behind every movement}
+
+CAST
+HOST (image 1): $host
+DOUBLE: the mirror reflection, identical except for a smile that arrives too early
+
+SHOT 10s | push in, slow
+HOST stands alone before a tall mirror in $room, in a medium shot that holds both HOST and DOUBLE. At first everything is normal; then DOUBLE smiles a little too early and lifts one hand before HOST does. DOUBLE places both hands against the inside of the glass and climbs out in one smooth, impossible motion, as though the mirror were a flexible membrane, and steps fully into the room while HOST freezes. DOUBLE calmly raises one hand to the jaw of HOST and, with controlled unnatural strength, opens the mouth far wider than a human mouth can open. DOUBLE leans forward and slides head-first into the open mouth, shoulders and torso following in one continuous movement. HOST sways but stays standing, slowly closes their mouth and straightens. In the final moment HOST lifts their head wearing the exact unnerving smile of DOUBLE, and $ending.
+SFX: quiet room ambience; light breathing; soft glass-contact sounds at the mirror surface; a smooth, unnatural sliding sound
+MUSIC: N/A

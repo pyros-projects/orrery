@@ -1,0 +1,8 @@
+---
+title: "Magazine cover"
+note: "Typography meets nonsense: a masthead and a cover line in quotes, so Krea letters them, over a model in a rolled look. The cover line names the adjective the galaxy is learning."
+tags: [fashion, krea, text]
+---
+$adjective = __couture_adjective__
+a glossy fashion magazine cover, the masthead "{VOID|OBJET|ÉPOQUE|SILHOUETTE|NOTHING}" in huge high-contrast serif letters across the top, __couture_model__ wearing __couture_form__ in __couture_material__, a cover line on the left reading "the $adjective issue", a small barcode in the corner, studio flash, printed paper texture
+: w832 h1216
