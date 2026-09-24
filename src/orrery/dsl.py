@@ -10,7 +10,7 @@ Every expansion returns the text *and* the picks that produced it. Pick keys
 """
 
 import re
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 
 from orrery.library import Library
@@ -18,7 +18,7 @@ from orrery.rng import Rng, weighted_pick
 
 _BRACE = re.compile(r"\{([^{}]*)\}")
 _LIB = re.compile(r"__(\w+)(?:\[([\w-]+)\])?__")
-_VAR = re.compile(r"\$([A-Za-z_]\w*)")
+_VAR = re.compile(r"\$([A-Za-z_]\w*)(?:~(\d+))?")  # $x, or $x~N: x as it was N clips ago
 _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
 _BINDING_LINE = re.compile(r"^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$")
 _MULTI = re.compile(r"^(\d+)(?:-(\d+))?\$\$(.+)$")
@@ -130,6 +130,8 @@ class Expander:
         self.weights = weights or {}
         self.picks: list[Pick] = []
         self.vars: dict[str, str] = {}
+        # (name, clips back) → that clip's value; set by reels. Without it, $x~N is $x.
+        self.history: Callable[[str, int], str | None] | None = None
 
     def learned(self, key: str) -> float:
         return float(self.weights.get(key, 1.0))
@@ -157,8 +159,15 @@ class Expander:
                 break
             text = text[: m.start()] + self._brace(m.group(1)) + text[m.end():]
         text = _LIB.sub(lambda m: self._library(m.group(1), m.group(2), label_prefix), text)
-        text = _VAR.sub(lambda m: self.vars.get(m.group(1), m.group(0)), text)
+        text = _VAR.sub(self._var, text)
         return self._articles(text)
+
+    def _var(self, m: re.Match) -> str:
+        name, back = m.group(1), m.group(2)
+        value = self.history(name, int(back)) if back is not None and self.history else None
+        if value is None:
+            value = self.vars.get(name)
+        return m.group(0) if value is None else value
 
     def _articles(self, text: str) -> str:
         """Make a/an agree with picked values ('a axolotl' → 'an axolotl')."""

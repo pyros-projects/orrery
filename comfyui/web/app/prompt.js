@@ -9,8 +9,11 @@ import { openSave } from "./save.js";
 function statsHTML(app) {
   const st = stats(app.text), out = shape(app.text), reel = st.h3?.reel;
   const outs = (app.data.rows || []).filter((r) => r.template === templateHash(app.text)).length;
+  const forever = reel && reel.clips === Infinity;
+  const how = !reel ? "" : "Wire load_index into Load Latent's clip_index and save_index into Save Latent's. The segment widget counts up by itself (increment): "
+    + (forever ? "Run (Instant) plays clip after clip until you stop it." : `a Run count of ${reel.clips} plays the whole reel; after the last clip nothing downstream runs.`);
   const timing = reel
-    ? `<span class="stat" title="Wire Load Latent's clip_index into segment, and set the Motion Context Chain's segments to ${reel.chunks}"><b>Reel</b> · ${reel.chunks} chunk${reel.chunks === 1 ? "" : "s"} · ${reel.secs.map((s) => `<b>${s.toFixed(1)} s</b>`).join(" + ")}</span>`
+    ? `<span class="stat" title="${esc(how)}"><b>Reel</b> · ${reel.secs.map((s, i) => `<b>${s.toFixed(1)} s</b>${reel.repeats[i] === 1 ? "" : ` ×${reel.repeats[i] === Infinity ? "∞" : reel.repeats[i]}`}`).join(" + ")} · <b>${forever ? "∞" : reel.clips}</b> clip${reel.clips === 1 ? "" : "s"}</span>`
     : st.h3 ? `<span class="stat"><b>H3</b> · ${st.h3.shots} shot${st.h3.shots === 1 ? "" : "s"} · <b>${st.h3.secs.toFixed(1)} s</b> · ${st.h3.voices} voice${st.h3.voices === 1 ? "" : "s"}</span>` : "";
   const frames = reel ? ` · <b>${out.lengths.join(" / ")}</b> frames per chunk` : st.h3 ? ` · <b>${out.length}</b> frames = ${(out.length / 24).toFixed(2)} s` : "";
   return timing
@@ -188,7 +191,7 @@ function renderRolls(app) {
   if (!box) return;
   const seed = Number(app.bridge.getSeed()) || 0;
   box.innerHTML = app.state.rolls
-    ? app.state.rolls.map((r) => `<div class="roll"><span class="seed">${r.segment !== undefined ? `chunk ${r.segment + 1} · ` : ""}seed ${r.seed}</span>${markPicks(r.text, r.picks)}`
+    ? app.state.rolls.map((r) => `<div class="roll"><span class="seed">${r.segment !== undefined ? `clip ${r.segment + 1} · ` : ""}seed ${r.seed}</span>${markPicks(r.text, r.picks)}`
       + `${r.lint.map((l) => `<span class="lint ${l.severity}">${esc(l.severity)}: ${esc(l.message)}</span>`).join("")}</div>`).join("")
     : `<div class="empty">Roll 3 shows what this template makes at seeds ${seed}–${seed + 2} for the ${esc(app.bridge.getTarget())} target, without queueing anything.</div>`;
 }

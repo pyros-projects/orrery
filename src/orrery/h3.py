@@ -20,8 +20,6 @@ Speaker names are role nouns (WOMAN, NARRATOR, BAKER): the guide identifies
 speakers by description, so they render as "The woman … (S1)".
 """
 
-import copy
-import dataclasses
 import re
 from collections.abc import Mapping
 from dataclasses import dataclass, field
@@ -75,7 +73,6 @@ _MUSIC = re.compile(r"^MUSIC:\s*(.+)$", re.IGNORECASE)
 _SFX = re.compile(r"^SFX:\s*(.+)$", re.IGNORECASE)
 _VOICE = re.compile(r"^([A-Z][A-Z0-9 _-]*?)\s*(?:\(([^)]*)\))?\s*:\s*(.+)$")
 _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
-_CHUNK = re.compile(r"^CHUNK\b\s*(.*)$")
 _HANDOFF = re.compile(r"^HANDOFF:\s*(.+)$")
 _LORA = re.compile(r"^LORA:\s*(.+)$")
 _CONTEXT = re.compile(r"^context:\s*(\d+)\s*f?$", re.IGNORECASE)
@@ -111,15 +108,6 @@ class Shot:
     start: float = 0.0
     first_frame: tuple[int, str] | None = None  # ref2va: (image slot, what it shows)
     last_frame: tuple[int, str] | None = None
-    chunk: int = -1  # the reel CHUNK it belongs to
-
-
-@dataclass
-class Chunk:
-    title: str = ""
-    loras: list[str] = field(default_factory=list)
-    music: str | None = None
-    handoff: str | None = None
 
 
 @dataclass
@@ -134,9 +122,7 @@ class Scene:
     summary: str = ""
     lite: bool = False  # `lite` in the header: <Subject N> = … definitions over the base fields
     loras: list[str] = field(default_factory=list)
-    chunks: list[Chunk] = field(default_factory=list)
-    context: int | None = None  # frames Motion Context pins at the start of every chunk after the first
-    pick_owners: list[tuple] = field(default_factory=list)  # parallel to the picks: ("head",) | (kind, chunk)
+    context: int | None = None  # frames Motion Context pins at the start of every reel segment after the first
 
     @property
     def duration(self) -> float:
@@ -152,26 +138,25 @@ class Compiled:
     loras: str = ""
     chunks: int = 0  # a reel's number of CHUNKs; 0 for a plain screenplay
     segment: int = 0
+    segments: int | None = 0  # a reel's clips, counting repeats; None when a CHUNK repeats forever
 
 
 # --- front end ------------------------------------------------------------------------------
 
-def parse_scene(src: str, ex: Expander, lint: list[Issue]) -> Scene:
+def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = False) -> Scene:
+    """`expanded`: the lines are already expanded and their bindings bound (reels do that)."""
     lines = [raw.strip() for raw in src.splitlines()]
-    for line in lines:
-        if m := _BINDING.match(line):
-            ex.bind(m.group(1), m.group(2))
+    if not expanded:
+        for line in lines:
+            if m := _BINDING.match(line):
+                ex.bind(m.group(1), m.group(2))
     scene, cur, in_cast = Scene(), None, False
     loose: list[str] = []  # prose before any SHOT: the implicit shot, or ignored
     loose_sfx: list[list[str]] = []
-    scene.pick_owners = [("head",)] * len(ex.picks)
     for raw in lines:
         if not raw or _BINDING.match(raw) or _DSL_ONLY.match(raw):
             continue
-        chunk = len(scene.chunks) - (0 if _CHUNK.match(raw) else 1)
-        owner = ("head",) if chunk < 0 else ("handoff" if _HANDOFF.match(raw) else "chunk", chunk)
-        line = ex.expr(raw)
-        scene.pick_owners += [owner] * (len(ex.picks) - len(scene.pick_owners))
+        line = raw if expanded else ex.expr(raw)
         if m := _HEADER.match(line):
             scene.mode = m.group(1).lower()
             for token in m.group(2).split():
@@ -183,20 +168,14 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue]) -> Scene:
             scene.style = m.group(1).strip()
         elif m := _SUMMARY.match(line):
             scene.summary = m.group(1).strip()
-        elif m := _CHUNK.match(line):
-            scene.chunks.append(Chunk(m.group(1).strip()))
-            cur, in_cast = None, False
         elif m := _LORA.match(line):
-            (scene.chunks[-1].loras if scene.chunks else scene.loras).append(m.group(1).strip())
-        elif m := _HANDOFF.match(line):
-            if scene.chunks:
-                scene.chunks[-1].handoff = m.group(1).strip().rstrip(".")
-            else:
-                lint.append(Issue("warn", "HANDOFF only works inside a CHUNK; it is ignored."))
+            scene.loras.append(m.group(1).strip())
+        elif _HANDOFF.match(line):
+            lint.append(Issue("warn", "HANDOFF only works inside a CHUNK; it is ignored."))
         elif m := _CONTEXT.match(line):
             scene.context = int(m.group(1))
         elif (m := _MUSIC.match(line)) and cur is None and in_cast:
-            (scene.chunks[-1] if scene.chunks else scene).music = m.group(1).strip()
+            scene.music = m.group(1).strip()
         elif line == "CAST" and cur is None:
             in_cast = True
         elif in_cast and cur is None and not _SHOT.match(line):
@@ -207,13 +186,10 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue]) -> Scene:
             if head in TRANSITIONS:
                 transition, spec = head, ",".join(spec.split(",")[1:]).strip()
             cur = Shot(float(m.group(1)), transition, spec, first_frame=anchors.get("from"),
-                       last_frame=anchors.get("to"), chunk=len(scene.chunks) - 1)
+                       last_frame=anchors.get("to"))
             scene.shots.append(cur)
         elif m := _MUSIC.match(line):
-            if scene.chunks:
-                scene.chunks[-1].music = m.group(1).strip()
-            else:
-                scene.music = m.group(1).strip()
+            scene.music = m.group(1).strip()
         elif m := _SFX.match(line):
             body = m.group(1).strip()
             if body.lower() == "silence":
@@ -226,7 +202,7 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue]) -> Scene:
             cur.items.append(Voice(m.group(1).strip(), m.group(2) or "", m.group(3).strip()))
         else:
             cur.items.append(line)
-    if not scene.shots and loose and not scene.chunks:
+    if not scene.shots and loose:
         implicit = Shot(IMPLICIT_SECONDS, sfx=loose_sfx)
         for line in loose:
             m = _VOICE.match(line)
@@ -258,29 +234,6 @@ def _clause(text: str) -> str:
     """A handoff as the end of "The shot ends as …": lower-case unless it opens with a NAME."""
     text = text.strip().rstrip(".")
     return text if re.match(r"[A-Z][A-Z0-9_-]+\b", text) else _low(text)
-
-
-def select_chunk(scene: Scene, index: int) -> Scene:
-    """Chunk `index` of a reel as a scene of its own: the previous handoff opens it, its own closes
-    it, and from the second chunk on Shot 1 also covers the frames Motion Context pins."""
-    n = len(scene.chunks)
-    if not 0 <= index < n:
-        raise ValueError(f"The reel has {n} chunks; segment {index} is past its end (segments count "
-                         "from 0, like Load Latent's clip_index).")
-    chunk = scene.chunks[index]
-    shots = [copy.deepcopy(s) for s in scene.shots if s.chunk == index]
-    before = scene.chunks[index - 1].handoff if index else None
-    if shots and before:
-        shots[0].items.insert(0, f"The shot opens as {_clause(before)}")
-    if shots and chunk.handoff:
-        shots[-1].items.append(f"The shot ends as {_clause(chunk.handoff)}")
-    context = DEFAULT_CONTEXT if scene.context is None else scene.context
-    if shots and index and context:
-        shots[0].duration += context / H3_FPS
-    t = 0.0
-    for shot in shots:
-        shot.start, t = t, t + shot.duration
-    return dataclasses.replace(scene, shots=shots, music=chunk.music or scene.music, loras=scene.loras + chunk.loras)
 
 
 def _anchors(spec: str) -> tuple[str, dict[str, tuple[int, str]]]:
@@ -571,23 +524,18 @@ def _cast_lint(scene: Scene, lint: list[Issue]) -> None:
                                   "target video, using CAST names)."))
 
 
-def count_chunks(src: str) -> int:
-    return sum(1 for line in src.splitlines() if _CHUNK.match(line.strip()))
-
-
 def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                   weights: Mapping[str, float] | None = None, target: str = "h3-base",
                   segment: int = 0) -> Compiled:
-    """`segment` picks the CHUNK of a reel; the whole reel expands every time, so its bindings
-    and handoffs are the same in every chunk. Plain screenplays ignore it."""
-    ex = Expander(seed, libraries, weights)
+    """`segment` picks a reel's clip (see orrery.reel); plain screenplays ignore it."""
+    from orrery.reel import build_segment, split_reel
     lint: list[Issue] = []
-    full = parse_scene(src, ex, lint)
-    scene, picks = full, ex.picks
-    if full.chunks:
-        scene = select_chunk(full, segment)
-        mine = {("head",), ("chunk", segment), ("handoff", segment), ("handoff", segment - 1)}
-        picks = [p for p, owner in zip(ex.picks, full.pick_owners, strict=True) if owner in mine]
+    reel = split_reel(src)
+    if reel:
+        scene, picks = build_segment(reel, seed, libraries, weights, segment, lint)
+    else:
+        ex = Expander(seed, libraries, weights)
+        scene, picks = parse_scene(src, ex, lint), ex.picks
     if target == "flat":
         text = write_flat(scene)
     elif target == "h3-base":
@@ -601,5 +549,5 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
         _scene_lint(src, scene, lint)
     else:
         raise ValueError(f"unknown target {target!r} (h3-base, flat)")
-    return Compiled(text, picks, lint, scene, " ".join(scene.loras), len(full.chunks),
-                    segment if full.chunks else 0)
+    return Compiled(text, picks, lint, scene, " ".join(scene.loras), len(reel.blocks) if reel else 0,
+                    segment if reel else 0, reel.segments if reel else 0)

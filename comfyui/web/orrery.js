@@ -32,6 +32,17 @@ function mount(node) {
   [template, preset, home, params].forEach(hide);
   node.properties = node.properties || {};
 
+  // the control_after_generate combo that belongs to an INT widget (seed and segment each have one)
+  const controlOf = (name) => {
+    const i = node.widgets?.findIndex((w) => w.name === name) ?? -1;
+    const w = node.widgets?.[i];
+    return w?.linkedWidgets?.find((l) => l.name === "control_after_generate")
+      ?? (node.widgets?.[i + 1]?.name === "control_after_generate" ? node.widgets[i + 1] : null);
+  };
+  // A new node plays a reel clip after clip; configure() restores a saved workflow's choice later.
+  const segmentControl = controlOf("segment");
+  if (segmentControl) segmentControl.value = "increment";
+
   const set = (name, value) => {
     const w = find(name);
     if (!w) return;
@@ -45,8 +56,8 @@ function mount(node) {
     setText: (text) => set("template", text),
     getSeed: () => find("seed")?.value ?? 0,
     setSeed: (seed) => set("seed", seed),
-    setControl: (mode) => set("control_after_generate", mode),
-    getControl: () => find("control_after_generate")?.value ?? "",
+    setControl: (mode) => { const c = controlOf("seed"); if (c) { c.value = mode; node.setDirtyCanvas?.(true, true); } },
+    getControl: () => controlOf("seed")?.value ?? "",
     getTarget: () => find("target")?.value || "text",
     getParams: () => { try { return JSON.parse(params?.value || "{}") || {}; } catch { return {}; } },
     setParams: (values) => set("params", Object.keys(values).length ? JSON.stringify(values) : ""),

@@ -18,6 +18,7 @@ from orrery.h3 import compile_scene
 from orrery.home import Home, resolve_home
 from orrery.loras import lora_files, lora_stack
 from orrery.presets import list_presets, load_preset, preset_exists, remember_template
+from orrery.reel import ReelEnd
 
 TARGETS = ["text", "h3-base", "flat"]
 NO_PRESET = "(none)"
@@ -84,7 +85,7 @@ def dial_values(params: str) -> dict[str, str]:
 
 def run_prompt(template: str, seed: int, target: str, home: str = "",
                preset: str = NO_PRESET, linked: str | None = None,
-               params: str = "", segment: int = 0) -> tuple[str, str, int, int, int, int, list]:
+               params: str = "", segment: int = 0) -> tuple[str, str, int, int, int, int, list, int, int]:
     h = resolve_home(home or None)
     if preset and preset != NO_PRESET:
         template, linked = load_preset(h, preset), preset
@@ -124,8 +125,9 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         if result.scene.shots:
             length = h3_length(result.scene.duration)
         if result.chunks:
-            data["segment"], data["chunks"] = result.segment, result.chunks
-    return (result.text, json.dumps(data, ensure_ascii=False), seed, width, height, length, stack)
+            data["segment"], data["chunks"], data["segments"] = result.segment, result.chunks, result.segments
+    return (result.text, json.dumps(data, ensure_ascii=False), seed, width, height, length, stack,
+            segment, segment + 1)
 
 
 def state_token(home: Home) -> str:
@@ -177,15 +179,17 @@ def save_png(image, path: Path | str, picks_json: str) -> None:
 class OrreryPrompt:
     CATEGORY = "orrery"
     FUNCTION = "run"
-    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "LORA_STACK")
-    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "lora_stack")
+    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "LORA_STACK", "INT", "INT")
+    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "lora_stack", "load_index", "save_index")
     OUTPUT_TOOLTIPS = ("", "", "", "From `: w…` in the template, else the @h3 ratio, else 1024.",
                        "From `: h…` in the template, else the @h3 ratio, else 1024.",
                        ("Frames at 24 fps for the MiniMax H3 nodes' length input: the sum of the SHOT "
                         "durations (in a reel: the chunk's, plus the pinned context from the second "
                         "chunk on), snapped up to H3's 17k+5 grid (124 without SHOTs)."),
                        ("The LORA: lines (global, plus the chunk's in a reel) as a LORA_STACK for any "
-                        "loader with a lora_stack input (LoraManager, Efficiency, Easy-Use …)."))
+                        "loader with a lora_stack input (LoraManager, Efficiency, Easy-Use …)."),
+                       "The segment: wire it into H3 Motion Context Load Latent's clip_index.",
+                       "The segment + 1: wire it into H3 Motion Context Save Latent's clip_index.")
     DESCRIPTION = ("Expands an orrery template (text) or compiles a screenplay (h3-base, flat) "
                    "and outputs the picks that produced it.")
 
@@ -204,9 +208,10 @@ class OrreryPrompt:
                 "home": ("STRING", {"default": ""}),
                 "params": ("STRING", {"default": "", "tooltip": "The dials: JSON {binding: expression}, "
                                                                 "set in the Prompt tab."}),
-                "segment": ("INT", {"default": 0, "min": 0, "max": 9999, "forceInput": True,
-                                    "tooltip": "Which CHUNK of a reel to write, from 0: wire H3 Motion "
-                                               "Context's Load Latent clip_index. Plain screenplays ignore it."}),
+                "segment": ("INT", {"default": 0, "min": 0, "max": 99999, "control_after_generate": True,
+                                    "tooltip": "The reel's clip to write, from 0. With increment, every queued "
+                                               "run plays the next clip; load_index and save_index drive H3 "
+                                               "Motion Context. Plain screenplays ignore it."}),
             },
             "hidden": {"unique_id": "UNIQUE_ID", "extra_pnginfo": "EXTRA_PNGINFO"},
         }
@@ -219,8 +224,16 @@ class OrreryPrompt:
 
     def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, unique_id=None,
             extra_pnginfo=None):
-        return run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id), params,
-                          segment)
+        try:
+            return run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id), params,
+                              segment)
+        except ReelEnd as end:
+            try:
+                from comfy_execution.graph_utils import ExecutionBlocker  # ComfyUI
+            except ImportError:
+                raise end from None
+            print(f"[orrery] {end} The reel is done, so nothing downstream runs.")
+            return tuple(ExecutionBlocker(None) for _ in self.RETURN_TYPES)
 
 
 class OrreryLog:

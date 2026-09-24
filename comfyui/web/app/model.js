@@ -141,15 +141,22 @@ export function filterRows(rows, { scope = "all", hash, preset, rating, pick }) 
   return out;
 }
 
-// A reel's CHUNKs and the seconds of their shots (without the pinned context), or null.
+// A reel's CHUNKs: the seconds of their shots (without the pinned context), how often each plays
+// (Infinity for forever) and the clips in all. Null without CHUNK lines. Mirrors orrery.reel.
 function reelSecs(text) {
   let secs = null;
+  const repeats = [];
   for (const l of text.split("\n").map((x) => x.trim())) {
-    if (/^CHUNK\b/.test(l)) (secs ??= []).push(0);
+    const c = /^CHUNK\b(.*)$/.exec(l);
+    if (c) {
+      (secs ??= []).push(0);
+      const r = /\brepeat\s+(\d+|forever)\s*$/i.exec(c[1]);
+      repeats.push(!r ? 1 : r[1].toLowerCase() === "forever" ? Infinity : Math.max(1, Number(r[1])));
+    }
     const m = /^SHOT\s+(\d+(?:\.\d+)?)\s*s\b/i.exec(l);
     if (m && secs) secs[secs.length - 1] += Number(m[1]);
   }
-  return secs && { chunks: secs.length, secs };
+  return secs && { chunks: secs.length, secs, repeats, clips: repeats.reduce((a, b) => a + b, 0) };
 }
 
 function h3Length(seconds) {

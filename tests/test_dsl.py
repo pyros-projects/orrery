@@ -152,3 +152,15 @@ def test_a_choice_between_lora_tags_records_the_real_tags():
     [pick] = e.picks
     assert e.text in ("<lora:a__b__:1.00>", "<lora:c:0.50>") and pick.value == e.text
     assert pick.label == "{<lora:a__b__:1.00>|<lora:c:0.50>}" and pick.keys == (f"{pick.label}={e.text}",)
+
+
+
+# --- history: $x~N ---------------------------------------------------------------------------
+
+def test_history_asks_the_callback_and_falls_back_to_the_current_value():
+    from orrery.dsl import Expander
+    ex = Expander(1, LIBS)
+    ex.bind("hero", "owl")
+    assert ex.expr("$hero and $hero~1") == "owl and owl"
+    ex.history = lambda name, back: {("hero", 1): "fox", ("hero", 2): "heron"}.get((name, back))
+    assert ex.expr("$hero, $hero~1, $hero~2, $gone~1") == "owl, fox, heron, $gone~1"

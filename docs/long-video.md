@@ -71,12 +71,15 @@ Still planned: the **memory list** per chunk (global, the places and people it
 mentions, optionally the previous chunk as "recent"); the retrieval query for
 this RefMod-RAG is the screenplay itself.
 
-Wiring in the Motion Context workflow: Load Latent `clip_index` → Orrery
-`segment`; `text` → Reference to Video `prompt`; `length` → its `length`;
+Wiring in the Motion Context workflow: Orrery `load_index` → Load Latent
+`clip_index`, `save_index` → Save Latent `clip_index` (orrery counts the
+segments itself, so the Chain node's buttons are not needed); `text` →
+Reference to Video `prompt`; `length` → its `length`;
 `lora_stack` → the `lora_stack` input of Lora Loader (LoraManager) or any
-other stack loader. Set the Chain node's `segments` to the number of
-chunks (the node's stats line shows it), and keep the Orrery seed fixed (the
-node does that for a reel).
+other stack loader. Queue with a Run count of the reel's clips (the stats line
+shows it), or Run (Instant) for `repeat forever`; the Orrery seed stays fixed
+(the node does that for a reel). `CHUNK … repeat N|forever` and `$x~N` make
+loops such as `fashion/runway_loop`.
 
 ```
 reel ──orrery──▶ Contex Loop plan (prompts, lengths, seeds)

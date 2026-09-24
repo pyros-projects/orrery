@@ -14,11 +14,12 @@ from orrery import presets as ps
 from orrery import uistate
 from orrery.completion import completion_data
 from orrery.dsl import MissingLibrary, expand, override
-from orrery.h3 import compile_scene, count_chunks
+from orrery.h3 import compile_scene
 from orrery.home import BUILTIN_DIR, Home, resolve_home
 from orrery.library import Entry, Library, load_library, save_library
 from orrery.loras import lora_files, lora_stack
 from orrery.manager import list_name
+from orrery.reel import split_reel
 
 TARGETS = ("text", "h3-base", "flat")
 MAX_ROLLS = 12
@@ -380,6 +381,9 @@ def galaxy_media(home: Home, args: dict) -> Path:
 
 # --- roll -----------------------------------------------------------------------------------
 
+ROLL_CLIPS = 6  # Roll on a reel shows this many clips at most
+
+
 def roll(home: Home, args: dict) -> dict:
     text, seed = _text(args, "template"), _int(args, "seed", 0)
     n, target = min(max(_int(args, "n", 3), 1), MAX_ROLLS), args.get("target") or "text"
@@ -390,9 +394,10 @@ def roll(home: Home, args: dict) -> dict:
         raise ApiError(400, "'params' must be an object of binding: expression.")
     text = override(text, {str(k): str(v) for k, v in params.items()})
     libs, weights, rolls = home.libraries(), home.weights(), []
-    chunks = count_chunks(text) if target != "text" else 0
-    # a reel shows every chunk at one seed; anything else shows n seeds
-    runs = [(seed, k) for k in range(chunks)] if chunks else [(s, None) for s in range(seed, seed + n)]
+    reel = split_reel(text) if target != "text" else None
+    # a reel shows its clips at one seed (the first few when it repeats); anything else shows n seeds
+    shown = min(reel.segments or ROLL_CLIPS, ROLL_CLIPS) if reel else 0
+    runs = [(seed, k) for k in range(shown)] if reel else [(s, None) for s in range(seed, seed + n)]
     for s, segment in runs:
         try:
             if target == "text":

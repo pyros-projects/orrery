@@ -1,10 +1,14 @@
-"""Reels: one screenplay, one chunk per Motion Context clip. The whole reel expands once, so
-bindings hold across clips; `segment` (Load Latent's clip_index) picks the chunk to write."""
+"""Reels: one screenplay, one CHUNK per Motion Context clip. The head is the world and rolls
+once; every segment rolls its chunk with its own seed, so a repeated chunk varies; `$x~N` is
+x as it was N clips ago. `segment` (from 0) picks the clip to write."""
+
+import re
 
 import pytest
 
 from orrery.h3 import compile_scene
 from orrery.library import Entry, Library
+from orrery.reel import split_reel
 
 FOX = {"animal": Library("animal", [Entry("fox")])}
 MANY = {"animal": Library("animal", [Entry(a) for a in ("fox", "heron", "owl", "lynx", "hare")])}
@@ -88,7 +92,7 @@ def test_picks_belong_to_the_chunk_they_came_from():
 
 
 def test_a_segment_past_the_end_is_a_clear_error():
-    with pytest.raises(ValueError, match="3 chunks"):
+    with pytest.raises(ValueError, match="3 segments"):
         h3(REEL, segment=3)
 
 
@@ -102,3 +106,71 @@ def test_plain_scenes_take_loras_and_ignore_the_segment():
 def test_lora_lines_keep_names_with_double_underscores():
     r = h3("@h3 t2va\nLORA: <lora:bf16__apply_to_fl2va__toward:1.00>\nSHOT 5s\nA.\nSFX: x\n")
     assert r.loras == "<lora:bf16__apply_to_fl2va__toward:1.00>"
+
+
+
+# --- repeat and history ------------------------------------------------------------------------
+
+LOOP = """@h3 t2va
+$venue = {pool|garage|greenhouse|salt flat}
+CHUNK intro
+$n = {1|2|3|4|5|6|7|8|9}
+SHOT 5s
+Intro at the $venue, N$n.
+SFX: x
+HANDOFF: door $n opens
+CHUNK walk repeat 3
+$n = {1|2|3|4|5|6|7|8|9}
+SHOT 5s
+Walk at the $venue, N$n P$n~1 Q$n~2.
+SFX: y
+HANDOFF: door $n opens
+CHUNK outro
+SHOT 5s
+Outro at the $venue, last P$n~1.
+SFX: z
+"""
+
+
+def number(text, tag):
+    m = re.search(rf"\b{tag}(\d)", text)
+    return m and m.group(1)
+
+
+def test_repeats_count_as_segments():
+    assert split_reel(LOOP).segments == 5
+    assert ["Intro" in h3(LOOP, segment=0).text, *("Walk at" in h3(LOOP, segment=k).text for k in (1, 2, 3)),
+            "Outro" in h3(LOOP, segment=4).text] == [True] * 5
+    with pytest.raises(ValueError, match="5 segments"):
+        h3(LOOP, segment=5)
+
+
+def test_the_world_holds_and_every_segment_rolls_its_chunk_anew():
+    for seed in range(1, 6):
+        texts = [h3(LOOP, seed, k).text for k in range(5)]
+        assert len({re.search(r"at the (\w+ ?\w*),", t).group(1) for t in texts}) == 1
+        assert len({number(t, "N") for t in texts[:4]}) > 1, seed
+
+
+def test_history_looks_back_n_clips_and_clamps_at_the_first():
+    for seed in range(1, 6):
+        t = [h3(LOOP, seed, k).text for k in range(5)]
+        n = [number(x, "N") for x in t]
+        assert [number(t[k], "P") for k in (1, 2, 3)] == [n[0], n[1], n[2]]
+        assert [number(t[k], "Q") for k in (1, 2, 3)] == [n[0], n[0], n[1]]
+        assert number(t[4], "P") == n[3]
+
+
+def test_a_repetition_opens_with_the_handoff_of_the_clip_before():
+    t = [h3(LOOP, 2, k).text for k in range(4)]
+    for k in (1, 2, 3):
+        assert f"The shot opens as door {number(t[k - 1], 'N')} opens." in t[k]
+
+
+def test_forever_repeats_without_end_and_chunks_after_it_warn():
+    forever = LOOP.replace("repeat 3", "repeat forever")
+    assert split_reel(forever).segments is None
+    far = h3(forever, segment=57)
+    assert "Walk at" in far.text and far.segment == 57
+    assert any("never" in i.message for i in far.lint)
+    assert h3(forever, 3, 9).text == h3(forever, 3, 9).text

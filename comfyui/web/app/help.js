@@ -40,11 +40,13 @@ const REF = [
     ["[audio 1]", "a reference slot in prose; orrery writes the label the node uses", ""],
   ]],
   ["Reels (H3 Motion Context)", [
-    ["CHUNK the salon", "one Motion Context clip; everything before the first CHUNK (style, CAST, bindings) holds for every chunk", "CHUNK\nSHOT 5s | push in, slow\n"],
+    ["CHUNK the salon", "one Motion Context clip; everything before the first CHUNK (style, CAST, bindings) is the world and holds for every clip", "CHUNK\nSHOT 5s | push in, slow\n"],
+    ["CHUNK the walk repeat 8", "plays this chunk 8 times (repeat forever: until you stop); bindings inside a chunk roll anew every clip", "CHUNK the walk repeat forever\n"],
+    ["$look~1", "$look as it was one clip ago (~2: two clips); the model who walks back keeps her look", "$look~1"],
     ["HANDOFF: MAYA reaches the door", "closes this chunk and opens the next with the same words", "HANDOFF: "],
     ["LORA: <lora:name:0.8>", "the lora_stack output, for any loader with a lora_stack input: lines before the first CHUNK always, a chunk's own only there; after LORA: the editor lists your LoRA files; <lora:name:model:clip> sets both strengths", "LORA: "],
     ["context: 22", "the frames Motion Context pins (5, 22, 39, 56); from the second chunk on, Shot 1 and length include them", "context: 22"],
-    ["segment ← clip_index", "wire Load Latent's clip_index into the node's segment input; the seed stays fixed so bindings hold", ""],
+    ["load_index · save_index", "wire them into Load and Save Latent's clip_index; segment counts up by itself, so Run count N (or Run Instant) plays the reel", ""],
   ]],
 ];
 

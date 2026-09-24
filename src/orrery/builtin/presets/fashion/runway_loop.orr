@@ -1,0 +1,28 @@
+---
+title: "Runway loop"
+note: "An endless show for H3 Motion Context: every clip, the last model turns and walks back in her look ($look~1) while the next one comes in wearing a new one ($look). Wire load_index and save_index into Load and Save Latent, then Run (Instant); rate the looks in the galaxy and the show learns your taste."
+tags: [fashion, h3, reel, motion_context]
+---
+@h3 t2va 9:16
+style: live-action, cinematic fashion film
+context: 22
+$house = __couture_house__
+$venue = __couture_venue__
+
+MUSIC: a heavy techno pulse at a slow tempo with a distorted kick drum
+
+CHUNK the opening
+$model = __couture_model__
+$look = __couture_form__ in __couture_material__
+SHOT 6s | tracking, slow
+The $house show at $venue opens: $model walks down the runway toward the camera wearing $look, a {2$$__couture_adjective__} look. Camera flashes burst from both sides while the front row watches in silence.
+SFX: sharp heel strikes on a hard floor; a rapid ripple of camera shutters
+HANDOFF: the model reaches the end of the runway and pauses
+
+CHUNK the rotation repeat forever
+$model = __couture_model__
+$look = __couture_form__ in __couture_material__
+SHOT 6s | static
+At the end of the runway, $model~1 turns and walks back in $look~1, while $model walks toward the camera wearing $look, a {2$$__couture_adjective__} look, and the two pass each other without a glance.
+SFX: two sets of heel strikes cross on the hard floor; camera shutters ripple
+HANDOFF: the new model reaches the end of the runway and pauses

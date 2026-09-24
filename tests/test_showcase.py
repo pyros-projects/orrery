@@ -1,9 +1,10 @@
 import pytest
 
 from orrery.dsl import expand
-from orrery.h3 import compile_scene, count_chunks
+from orrery.h3 import compile_scene
 from orrery.home import Home
 from orrery.presets import BUILTIN_PRESETS, load_preset, preset_meta
+from orrery.reel import split_reel
 
 MINIMUM = {"krea": 5, "h3": 5, "effects": 3, "curator": 4, "fashion": 5}
 FOLDERS = tuple(MINIMUM)
@@ -34,7 +35,8 @@ def test_every_showcase_preset_runs_clean_across_seeds(home, name):
     for seed in SEEDS:
         outs = []
         if screenplay:
-            for segment in range(max(count_chunks(text), 1)):
+            reel = split_reel(text)
+            for segment in range(1 if not reel else (reel.segments or 6)):
                 result = compile_scene(text, seed, libs, weights, segment=segment)
                 assert result.lint == [], (seed, segment, result.lint)
                 outs.append(result.text)

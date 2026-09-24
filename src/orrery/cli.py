@@ -7,7 +7,7 @@ import sys
 from orrery import manager
 from orrery.comfy import h3_length
 from orrery.dsl import MissingLibrary, bindings, expand_batch, override, parse
-from orrery.h3 import compile_scene, count_chunks
+from orrery.h3 import compile_scene
 from orrery.home import resolve_home
 from orrery.llm import InvalidProposal, backend_for
 from orrery.presets import (
@@ -20,6 +20,7 @@ from orrery.presets import (
     save_preset,
     tag_preset,
 )
+from orrery.reel import split_reel
 
 
 def _msg(err: Exception) -> str:
@@ -69,23 +70,28 @@ def _cmd_expand(args: argparse.Namespace) -> int:
     return 0
 
 
+FOREVER_SHOWN = 6  # clips printed for a reel that repeats forever
+
+
 def _cmd_compile(args: argparse.Namespace) -> int:
     home = resolve_home(args.home)
     try:
         scene = _dials(resolve_template(home, args.scene), args.set)
-        chunks = count_chunks(scene)
-        segments = [args.segment or 0] if args.segment is not None or not chunks else range(chunks)
+        reel = split_reel(scene)
+        total = reel.segments if reel else 0
+        segments = ([args.segment or 0] if args.segment is not None or not reel
+                    else range(total if total is not None else FOREVER_SHOWN))
         results = [compile_scene(scene, args.seed, home.libraries(), home.weights(), target=args.target,
                                  segment=k) for k in segments]
     except (KeyError, ValueError) as err:
         print(f"orrery: {_msg(err)}", file=sys.stderr)
         return 2
-    whole_reel = len(results) > 1 or (chunks and args.segment is None)
+    whole_reel = bool(reel) and args.segment is None
     for n, result in enumerate(results, start=1):
         if args.json:
             print(json.dumps({
                 "seed": args.seed,
-                **({"segment": result.segment} if chunks else {}),
+                **({"segment": result.segment} if reel else {}),
                 "text": result.text,
                 "loras": result.loras,
                 "picks": {p.label: p.value for p in result.picks},
@@ -94,7 +100,9 @@ def _cmd_compile(args: argparse.Namespace) -> int:
         elif whole_reel:
             secs = result.scene.duration
             lora = f" · {result.loras}" if result.loras else ""
-            print(f"{'' if n == 1 else chr(10)}# CHUNK {n}/{chunks} · {secs:.2f} s · {h3_length(secs)} frames{lora}\n")
+            of = "∞" if total is None else total
+            print(f"{'' if n == 1 else chr(10)}# SEGMENT {n}/{of} · {reel.label(result.segment)} · {secs:.2f} s · "
+                  f"{h3_length(secs)} frames{lora}\n")
             print(result.text)
         else:
             print(result.text)
@@ -252,7 +260,8 @@ def build_parser() -> argparse.ArgumentParser:
     co.add_argument("--seed", type=int, default=0)
     co.add_argument("--json", action="store_true")
     co.add_argument("--set", action="append", default=[], metavar="NAME=VALUE", help=dial_help)
-    co.add_argument("--segment", type=int, help="a reel's chunk, from 0 (default: print every chunk)")
+    co.add_argument("--segment", type=int, help="a reel's clip, from 0 (default: every clip, the first "
+                                                "few of a forever loop)")
     co.set_defaults(func=_cmd_compile)
 
     lib = sub.add_parser("lib", help="LLM-powered wildcard libraries", description=LIB_HELP,

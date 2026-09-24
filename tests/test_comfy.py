@@ -90,8 +90,8 @@ def test_node_classes_declare_comfy_interfaces():
     assert set(NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog"}
     inputs = OrreryPrompt.INPUT_TYPES()["required"]
     assert inputs["target"][0] == ["text", "h3-base", "flat"]
-    assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length", "lora_stack")
-    assert OrreryPrompt.RETURN_TYPES[-1] == "LORA_STACK"
+    assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length", "lora_stack",
+                                         "load_index", "save_index")
     assert OrreryLog.OUTPUT_NODE is True
 
 
@@ -119,7 +119,7 @@ def test_prompt_node_offers_presets_in_a_dropdown(home):
 
 
 def test_prompt_node_outputs_size_and_h3_length(home):
-    *_, width, height, length, _ = run_prompt("a __animal__\n: x8 seed=100 w832 h1216", 1, "text", str(home))
+    *_, width, height, length, _, _, _ = run_prompt("a __animal__\n: x8 seed=100 w832 h1216", 1, "text", str(home))
     assert (width, height, length) == (832, 1216, 124)
 
 
@@ -226,7 +226,7 @@ def fake_loras(monkeypatch, files):
 def test_the_node_writes_the_chunk_its_segment_asks_for(home, monkeypatch):
     from orrery.comfy import h3_length
     fake_loras(monkeypatch, ["x/all.safetensors", "two.safetensors"])
-    text, picks, _, width, height, length, stack = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
+    text, picks, _, width, height, length, stack, *_ = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
     data = json.loads(picks)
     assert "wakes" in text and "sleeps" not in text
     assert (data["segment"], data["chunks"]) == (1, 2)
@@ -238,14 +238,32 @@ def test_the_node_writes_the_chunk_its_segment_asks_for(home, monkeypatch):
 
 def test_unresolved_loras_are_left_out_and_reported(home, monkeypatch):
     fake_loras(monkeypatch, ["x/all.safetensors"])
-    *_, picks, _, _, _, _, stack = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
+    _, picks, _, _, _, _, stack, *_ = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
     assert stack == [("x/all.safetensors", 1.0, 1.0)]
     assert any("two" in i["message"] for i in json.loads(picks)["lint"])
 
 
-def test_the_node_declares_segment_and_lora_stack():
+def test_the_node_counts_segments_and_outputs_motion_context_indices(home):
     optional = OrreryPrompt.INPUT_TYPES()["optional"]
-    assert optional["segment"][0] == "INT" and optional["segment"][1]["forceInput"]
-    assert OrreryPrompt.RETURN_NAMES[-1] == "lora_stack" and len(OrreryPrompt.RETURN_TYPES) == 7
+    assert optional["segment"][0] == "INT" and optional["segment"][1]["control_after_generate"]
+    assert "forceInput" not in optional["segment"][1]
+    assert OrreryPrompt.RETURN_NAMES[6:] == ("lora_stack", "load_index", "save_index")
+    assert OrreryPrompt.RETURN_TYPES[6:] == ("LORA_STACK", "INT", "INT")
+    *_, load, save = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
+    assert (load, save) == (1, 2)
+
+
+def test_past_the_end_of_a_reel_blocks_the_rest_of_the_graph(home, monkeypatch):
+    blocker = types.ModuleType("comfy_execution.graph_utils")
+
+    class ExecutionBlocker:
+        def __init__(self, message):
+            self.message = message
+
+    blocker.ExecutionBlocker = ExecutionBlocker
+    monkeypatch.setitem(sys.modules, "comfy_execution", types.ModuleType("comfy_execution"))
+    monkeypatch.setitem(sys.modules, "comfy_execution.graph_utils", blocker)
+    outputs = OrreryPrompt().run(REEL, 1, "h3-base", home=str(home), segment=2)
+    assert len(outputs) == 9 and all(isinstance(o, ExecutionBlocker) and o.message is None for o in outputs)
     a = OrreryPrompt.IS_CHANGED(REEL, 1, "h3-base", segment=0)
     assert a != OrreryPrompt.IS_CHANGED(REEL, 1, "h3-base", segment=1)

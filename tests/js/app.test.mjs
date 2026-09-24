@@ -132,7 +132,7 @@ test("applyDials mirrors orrery's override", () => {
 test("reels: chunk timing, per-chunk lengths, keywords are not voices", () => {
   const reel = "@h3 t2va 16:9\nLORA: <lora:a:1>\ncontext: 22\nCHUNK\nSHOT 5s\nA.\nHANDOFF: b\nCHUNK the hall\nSHOT 3s\nB.\nSHOT 1s\nC.";
   const st = stats(reel);
-  assert.deepEqual([st.h3.voices, st.h3.reel], [0, { chunks: 2, secs: [5, 4] }]);
+  assert.deepEqual([st.h3.voices, st.h3.reel], [0, { chunks: 2, secs: [5, 4], repeats: [1, 1], clips: 2 }]);
   const out = shape(reel);
   assert.deepEqual([out.length, out.lengths], [124, [124, 124]]);
   assert.deepEqual(shape(reel.replace("context: 22", "context: 56")).lengths, [124, 158]);
@@ -149,4 +149,15 @@ test("lora tags are coloured as loras, not as libraries, and are not counted", (
   assert.match(html, /<span class="t-lora">&lt;lora:bf16__apply__x:1.00&gt;<\/span>/);
   assert.doesNotMatch(html, /t-miss/);
   assert.deepEqual([stats("LORA: <lora:a__b__c:1.00>").libs, stats("LORA: <lora:a__b__c:1.00>").rolls], [0, 0]);
+});
+
+test("repeated chunks count as clips; forever has no end", () => {
+  const loop = "@h3 t2va\nCHUNK intro\nSHOT 5s\nA.\nCHUNK walk repeat 8\nSHOT 6s\nB.";
+  assert.deepEqual(stats(loop).h3.reel, { chunks: 2, secs: [5, 6], repeats: [1, 8], clips: 9 });
+  const forever = stats(loop.replace("repeat 8", "repeat forever")).h3.reel;
+  assert.deepEqual([forever.repeats, forever.clips], [[1, Infinity], Infinity]);
+});
+
+test("history references are coloured as variables", () => {
+  assert.match(highlight("$look~1 walks back", known), /<span class="t-var">\$look~1<\/span>/);
 });
