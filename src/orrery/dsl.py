@@ -17,13 +17,15 @@ from orrery.library import Library
 from orrery.rng import Rng, weighted_pick
 
 _BRACE = re.compile(r"\{([^{}]*)\}")
-_LIB = re.compile(r"__(\w+)(?:\[([\w-]+)\])?(?::(\d+))?__")  # __name[tag]:N__, N = at least N entries
+# __name[tag]:N__(directions): N = at least N entries; (directions) guide the model that writes the
+# library and never reach the prompt
+_LIB = re.compile(r"__(\w+)(?:\[([\w-]+)\])?(?::(\d+))?__(?:\(([^()]*)\))?")
 _VAR = re.compile(r"\$([A-Za-z_]\w*)(?:~(\d+))?")  # $x, or $x~N: x as it was N clips ago
 _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
 _BINDING_LINE = re.compile(r"^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$")
 _MULTI = re.compile(r"^(\d+)(?:-(\d+))?\$\$(.+)$")
 _WEIGHTED = re.compile(r"^(.*?):(\d+(?:\.\d+)?)$")
-_LIB_ONLY = re.compile(r"^__(\w+)(?:\[([\w-]+)\])?(?::\d+)?__$")
+_LIB_ONLY = re.compile(r"^__(\w+)(?:\[([\w-]+)\])?(?::\d+)?__(?:\([^()]*\))?$")
 _LORA_TAG = re.compile(r"<lora:[^<>]*>")  # opaque: LoRA file names may contain __
 _HIDDEN = re.compile("\x00(\\d+)\x00")
 _AN_PREFIXES = ("hour", "honest", "honor", "honour", "heir")
@@ -101,6 +103,11 @@ def wanted_libraries(template: str) -> dict[str, int]:
     for m in _LIB.finditer(_LORA_TAG.sub("", template)):
         wanted[m.group(1)] = max(wanted.get(m.group(1), 0), int(m.group(3) or 0))
     return wanted
+
+
+def library_directions(template: str) -> dict[str, str]:
+    """What the template tells the model about each library it may write: `__name__(directions)`."""
+    return {m.group(1): m.group(4).strip() for m in _LIB.finditer(_LORA_TAG.sub("", template)) if m.group(4)}
 
 
 def bindings(template: str) -> list[tuple[str, str]]:

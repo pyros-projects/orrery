@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { highlight } from "../../comfyui/web/app/highlight.js";
 import {
-  applyDials, dials, filterPresets, filterRows, glyph, markPicks, pickerGroups, shape, stats, templateHash,
+  applyDials, dials, filterPresets, libraryGroups, filterRows, glyph, markPicks, pickerGroups, shape, stats, templateHash,
 } from "../../comfyui/web/app/model.js";
 
 const known = new Set(["creature", "place"]);
@@ -172,4 +172,23 @@ test("__name:N__ is a library everywhere; with an LLM an unknown one is to be ma
   assert.match(highlight("a __shoes__", known, { llm: true }), /<span class="t-lib t-new" title="[^"]*">__shoes__<\/span>/);
   assert.equal(stats("__creature:30__ and __shoes__").libs, 2);
   assert.deepEqual(dials("$s = __shoes:20__")[0].lib, "shoes");
+});
+
+test("libraries group: review first, then folders by prefix, then the rest", () => {
+  const lib = (name, extra = {}) => ({ name, entries: [], pending: false, pending_entries: [], ...extra });
+  const groups = libraryGroups([lib("couture_form"), lib("animal"), lib("couture_house"), lib("film_scene", { pending: true }),
+    lib("bh_route"), lib("style", { pending_entries: ["ink"] }), lib("bh_host"), lib("h3style")]);
+  assert.deepEqual(groups.map((g) => [g.key, g.items.map((i) => i.short)]), [
+    ["review", ["film_scene", "style"]],
+    ["bh", ["host", "route"]],
+    ["couture", ["form", "house"]],
+    ["", ["animal", "h3style"]],
+  ]);
+  const withRoot = libraryGroups([lib("curator"), lib("curator_line"), lib("h3style")]);
+  assert.deepEqual(withRoot.map((g) => [g.key, g.items.map((i) => i.short)]), [["curator", ["curator", "line"]], ["", ["h3style"]]]);
+});
+
+test("directions after a library belong to it", () => {
+  assert.match(highlight("__film__(30 words, the set)", known), /<span class="t-lib t-miss">__film__\(30 words, the set\)<\/span>/);
+  assert.equal(dials("$s = __film:5__(long)")[0].lib, "film");
 });

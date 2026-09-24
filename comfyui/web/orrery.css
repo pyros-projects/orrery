@@ -231,10 +231,10 @@
 .orrery-app .entries { width: 100%; border-collapse: collapse; }
 .orrery-app .entries th { text-align: left; padding: 8px 12px 6px; position: sticky; top: 0; background: var(--surface); z-index: 1; }
 .orrery-app .entries td { padding: 3px 12px; border-top: 1px solid #272836; vertical-align: middle; }
-.orrery-app .entries td.v input { background: transparent; border: 1px solid transparent; border-radius: 6px; padding: 4px 6px; width: 100%; font: 12.5px var(--mono); }
-.orrery-app .entries td.v input:not(:disabled):hover { border-color: var(--line); }
-.orrery-app .entries td.v input:focus { border-color: var(--brass); outline: none; background: #1a1b23; }
-.orrery-app .entries td.v input:disabled { opacity: 1; }
+.orrery-app .entries td.v textarea { display: block; background: transparent; border: 1px solid transparent; border-radius: 6px; padding: 4px 6px; width: 100%; font: 12.5px/1.45 var(--mono); color: inherit; resize: none; overflow: hidden; overflow-wrap: anywhere; }
+.orrery-app .entries td.v textarea:not(:disabled):hover { border-color: var(--line); }
+.orrery-app .entries td.v textarea:focus { border-color: var(--brass); outline: none; background: #1a1b23; }
+.orrery-app .entries td.v textarea:disabled { opacity: 1; }
 .orrery-app .entries td.v { width: 48%; }
 .orrery-app .entries td.t { white-space: nowrap; }
 .orrery-app .entries td.w input { width: 56px; background: #1a1b23; border: 1px solid var(--line); border-radius: 6px; padding: 3px 5px; font: 12px var(--mono); text-align: right; }
@@ -335,3 +335,24 @@
 .orrery-parked .i { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; }
 .orrery-app .input.narrow { width: 90px; }
 .orrery-app select.input { appearance: auto; }
+.orrery-app .liblist .grp { padding: 10px 10px 4px; font: 600 10.5px var(--ui); letter-spacing: .06em; text-transform: uppercase; color: var(--faint); display: flex; gap: 6px; align-items: center; }
+.orrery-app .liblist .grp.review { color: var(--violet); }
+.orrery-app .liblist .fold-btn { display: flex; align-items: center; gap: 6px; width: 100%; padding: 0; color: inherit; font: inherit; letter-spacing: inherit; text-transform: inherit; background: none; border: 0; }
+.orrery-app .liblist .fold-btn .i { width: 13px; height: 13px; transition: transform .15s; }
+.orrery-app .liblist .fold-btn .i.rot { transform: rotate(-90deg); }
+.orrery-app .liblist .fold-btn .lc { margin-left: auto; }
+.orrery-app .liblist button.inset { padding-left: 22px; }
+.orrery-app .liblist .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; background: var(--line); }
+.orrery-app .liblist .dot.user { background: var(--teal); }
+.orrery-app .liblist .dot.llm { background: var(--violet); }
+.orrery-app .pend-chip { font: 600 10px var(--mono); color: var(--violet); background: rgba(180,148,245,.14); border-radius: 4px; padding: 1px 5px; flex: none; }
+.orrery-app .banner.review { border-color: rgba(180,148,245,.45); background: rgba(180,148,245,.08); color: var(--ink); display: flex; align-items: center; gap: 8px; }
+.orrery-app .banner.review > .i { color: var(--violet); flex: none; }
+.orrery-app .entries tr.pend td { background: rgba(180,148,245,.07); }
+.orrery-app .entries tr.pend td:first-child { box-shadow: inset 3px 0 0 var(--violet); }
+.orrery-app .pbar { position: relative; }
+.orrery-app .newpop { right: 12px; left: auto; top: 46px; width: 260px; padding: 4px; }
+.orrery-app .newpop button { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; width: 100%; padding: 7px 10px; border-radius: 6px; text-align: left; }
+.orrery-app .newpop button:hover { background: var(--hover); }
+.orrery-app .newpop b { font-weight: 500; }
+.orrery-app .newpop .muted { font-size: 11.5px; }

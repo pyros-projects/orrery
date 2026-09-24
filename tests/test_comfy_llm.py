@@ -18,3 +18,24 @@ def test_reasoning_is_stripped_and_an_unfinished_thought_is_no_answer():
 def test_truncated_encoders_cannot_write():
     assert not can_write("qwen3vl_32b_minimax_h3_int8_convrot.safetensors")
     assert can_write("qwen3vl_4b_bf16.safetensors") and can_write("qwen3-vl-8b-heretic-1.3.0_fp8_e4m3fn.safetensors")
+
+
+class FakeClip:
+    def tokenize(self, text, **_):
+        return text
+
+    def generate(self, tokens, **_):
+        return [1, 2]
+
+    def decode(self, ids):
+        return '["a"]'
+
+
+def test_the_engine_writes_once_per_run():
+    import pytest
+
+    from orrery.comfy_llm import ComfyBackend
+    backend = ComfyBackend(clip=FakeClip())
+    assert backend.complete("list") == '["a"]'
+    with pytest.raises(RuntimeError, match="once"):
+        backend.complete("again")

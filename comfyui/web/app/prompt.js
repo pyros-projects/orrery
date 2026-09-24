@@ -44,6 +44,8 @@ export function renderPrompt(app) {
       <button class="icon-btn" data-act="revert" title="Revert to the saved preset" ${card && d ? "" : "disabled"}>${icon("undo")}</button>
       <button class="btn" data-act="save" ${card && (d || setDials(app)) ? "" : "disabled"}>${icon("save")}${card?.builtin ? "Save a copy" : "Save"}</button>
       <button class="btn primary" data-act="saveas">Save as…</button>
+      <button class="btn" data-act="new" aria-haspopup="menu" aria-expanded="${!!app.state.newMenu}">${icon("plus")}New</button>
+      ${app.state.newMenu ? `<div class="pop newpop" role="menu">${Object.entries(STARTERS).map(([k, s]) => `<button role="menuitem" data-new="${k}"><b>${esc(s.label)}</b><span class="muted">${esc(s.hint)}</span></button>`).join("")}</div>` : ""}
     </div>
     ${card?.note ? `<p class="pnote"><b>${esc(card.title)}.</b> ${esc(card.note)}</p>` : '<p class="pnote">Type a template, or open a preset. <b>__</b> lists your libraries, <b>$</b> your bindings.</p>'}
     <div class="editor"><pre class="hl" aria-hidden="true"></pre><textarea spellcheck="false" aria-label="Template"></textarea></div>
@@ -77,6 +79,9 @@ export function renderPrompt(app) {
     if (act === "save") save(app);
     if (act === "saveas") openSave(app, { text: applyDials(app.text, app.bridge.getParams()), from: app.preset, link: true });
     if (act === "test") { app.go("test"); runRolls(app); }
+    if (act === "new") { app.state.newMenu = !app.state.newMenu; return renderPrompt(app); }
+    const starter = e.target.closest("[data-new]")?.dataset.new;
+    if (starter) startNew(app, starter);
     if (act === "outputs") { app.state.gScope = "prompt"; app.go("galaxy"); }
     if (act === "browse") app.go("presets");
   };
@@ -144,6 +149,38 @@ function wireDials(app) {
     box.querySelector(`[data-dial="${CSS.escape(r.dataset.dreset)}"]`).value = "";
     put(r.dataset.dreset, "");
   });
+}
+
+// Fresh templates: no preset linked, so nothing can be overwritten by accident.
+const STARTERS = {
+  h3: {
+    label: "H3 screenplay", hint: "@h3 header, one shot, sound", target: "h3-base",
+    text: "@h3 t2va 16:9\nstyle: live-action, cinematic\n\nSHOT 5s | push in, slow\nWhat the camera sees, and what happens in it.\nSFX: the ambience; one clear sound\n",
+  },
+  krea: {
+    label: "Krea prompt", hint: "a still, medium named, size", target: "text",
+    text: "a photograph of {a quiet street|an empty diner|a greenhouse} at {dawn|dusk}, 35mm film, soft grain\n: w832 h1216\n",
+  },
+};
+
+function startNew(app, kind) {
+  const s = STARTERS[kind], prev = { preset: app.preset, base: app.base, text: app.text, params: app.bridge.getParams(), target: app.bridge.getTarget() };
+  const hadWork = app.dirty();
+  app.preset = null;
+  app.base = null;
+  app.text = s.text;
+  app.bridge.setParams({});
+  app.bridge.setTarget(s.target);
+  app.state.newMenu = false;
+  renderPrompt(app);
+  app.view.querySelector("textarea")?.focus();
+  app.toast(`New ${esc(s.label)}, not linked to a preset`, hadWork || prev.preset ? {
+    label: "Undo",
+    run: () => {
+      app.preset = prev.preset; app.base = prev.base; app.text = prev.text;
+      app.bridge.setParams(prev.params); app.bridge.setTarget(prev.target); renderPrompt(app);
+    },
+  } : null);
 }
 
 function refreshBar(app) {

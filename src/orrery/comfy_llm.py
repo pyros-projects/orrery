@@ -72,6 +72,7 @@ class ComfyBackend:
         self.owned = clip is None  # only a model we loaded is ours to unload
         self.temperature, self.max_length, self.seed = temperature, max_length, seed
         self.name = Path(file).stem if file else "the wired text encoder"
+        self.used = False
 
     def _load(self):
         import comfy.sd  # ComfyUI
@@ -83,6 +84,11 @@ class ComfyBackend:
                                   clip_type=kind, model_options={})
 
     def complete(self, prompt: str) -> str:
+        # ComfyUI 0.37 keeps a fixed KV cache and CUDA graph per execution: a second generate in the
+        # same run reads stale buffers and trips a device-side assert that kills the whole process.
+        if self.used:
+            raise RuntimeError("orrery asks the language model once per run; a second request was refused.")
+        self.used = True
         if self._clip is None:
             self._clip = self._load()
         tokens = self._clip.tokenize(chat(prompt), skip_template=True, min_length=1, thinking=False)

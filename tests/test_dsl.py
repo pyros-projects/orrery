@@ -177,3 +177,10 @@ def test_wanted_libraries_with_their_minimum_and_context():
     from orrery.dsl import wanted_libraries
     t = "$a = __animal__\na __shoes:20__ on <lora:x__skip__y:1> __animal:5__\nnothing here"
     assert wanted_libraries(t) == {"animal": 5, "shoes": 20}
+
+
+def test_directions_after_a_library_are_for_the_model_and_left_out():
+    from orrery.dsl import library_directions
+    e = expand("a __animal__(small ones only) here and __style:4__(inks)", 1, LIBS)
+    assert "(" not in e.text and " here and " in e.text
+    assert library_directions("__film__(30 words) and __film__ and __x:3__(bright)") == {"film": "30 words", "x": "bright"}

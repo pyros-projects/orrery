@@ -12,7 +12,7 @@ def test_an_unknown_library_is_created_with_the_default_count(home):
     notes = ensure_libraries(Home(home), "a model in __runway_shoes__", backend, default_n=12)
     lib = Home(home).libraries()["runway_shoes"]
     assert len(lib.entries) == 12 and lib.meta["generated_by"] == "qwen3vl_4b"
-    assert notes == ["Created __runway_shoes__ with 12 entries (qwen3vl_4b)."]
+    assert notes == ["Created __runway_shoes__ with 12 entries (qwen3vl_4b); review it in Libraries."]
     assert "a model in __runway_shoes__" in backend.prompts[0] and "12" in backend.prompts[0]
 
 
@@ -21,7 +21,7 @@ def test_a_minimum_tops_up_an_existing_library_once(home):
     notes = ensure_libraries(Home(home), "a __animal:6__", backend, default_n=12)
     values = Home(home).libraries()["animal"].values()
     assert values[:3] == ["fox", "heron", "owl"] and len(values) == 6 and "fox" not in values[3:]
-    assert notes == ["Added 3 entries to __animal__ (fake), now 6."]
+    assert notes == ["Added 3 entries to __animal__ (fake), now 6; review them in Libraries."]
     assert ensure_libraries(Home(home), "a __animal:6__", backend, default_n=12) == []
 
 
@@ -31,3 +31,37 @@ def test_nothing_happens_without_a_model_or_when_all_is_there(home):
     backend = FakeBackend(["[]"])
     assert ensure_libraries(Home(home), "a __animal__ and __style__", backend, default_n=12) == []
     assert backend.prompts == []
+
+
+def test_everything_the_template_asks_for_comes_from_one_call(home):
+    reply = {"runway_shoes": [f"shoe {i}" for i in range(4)], "runway_hats": [f"hat {i}" for i in range(4)],
+             "animal": ["lynx", "otter"]}
+    backend = FakeBackend([json.dumps(reply)])
+    notes = ensure_libraries(Home(home), "__runway_shoes__ and __runway_hats__ on an __animal:5__", backend, default_n=4)
+    assert len(backend.prompts) == 1
+    libs = Home(home).libraries()
+    assert libs["runway_hats"].values() == [f"hat {i}" for i in range(4)] and len(libs["animal"].entries) == 5
+    assert len(notes) == 3
+
+
+def test_directions_reach_the_model_and_stay_with_the_library(home):
+    backend = FakeBackend([json.dumps(["a long scene"] * 3 + ["another long scene", "a third one"])])
+    ensure_libraries(Home(home), "SHOT 5s\n__film_scene__(at least 30 words, describe set and characters)", backend,
+                     default_n=5)
+    assert "at least 30 words, describe set and characters" in backend.prompts[0]
+    assert Home(home).libraries()["film_scene"].meta["directions"] == "at least 30 words, describe set and characters"
+
+
+def test_what_the_model_writes_waits_for_review(home):
+    ensure_libraries(Home(home), "__runway_shoes__", FakeBackend([json.dumps(["mule", "boot"])]), default_n=2)
+    ensure_libraries(Home(home), "__animal:5__", FakeBackend([json.dumps(["lynx", "otter"])]), default_n=2)
+    libs = Home(home).libraries()
+    assert libs["runway_shoes"].meta["pending"] is True
+    assert libs["animal"].meta["pending_entries"] == ["lynx", "otter"]
+
+
+def test_the_answer_budget_grows_with_what_is_asked(home):
+    backend = FakeBackend([json.dumps({"scenes": ["x"] * 20, "props": ["y"] * 12})])
+    backend.max_length = 768
+    ensure_libraries(Home(home), "__scenes:20__(at least 30 words each) and __props__", backend, default_n=12)
+    assert backend.max_length >= 20 * 60 + 12 * 60

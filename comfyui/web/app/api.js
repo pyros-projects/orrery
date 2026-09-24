@@ -39,6 +39,8 @@ export function client(home) {
     saveLibrary: (body) => call("library/save", { body }),
     ownLibrary: (name) => call("library/own", { body: { name } }),
     deleteLibrary: (name) => call("library/delete", { body: { name } }),
+    acceptLibrary: (name) => call("library/accept", { body: { name } }),
+    discardLibrary: (name) => call("library/discard", { body: { name } }),
     galaxy: (query = {}) => call("galaxy", { query }),
     rate: (id, rating) => call("galaxy/rate", { body: { id, rating } }),
     roll: (body) => call("roll", { body }),
@@ -46,6 +48,7 @@ export function client(home) {
     llm: () => call("llm"),
     saveLlm: (body) => call("llm", { body }),
     thumbURL: (id) => url("galaxy/thumb", { id }),
+    onRunDone: (fn) => { api.addEventListener("execution_success", fn); return () => api.removeEventListener("execution_success", fn); },
     mediaURL: (id) => url("galaxy/media", { id }),
   };
 }

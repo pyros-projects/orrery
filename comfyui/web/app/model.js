@@ -198,7 +198,7 @@ const BINDING_LINE = /^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$/;
 export function dials(text) {
   const seen = new Set();  // a binding set in several chunks is one dial; override() turns them all
   return text.split("\n").map((l) => BINDING_LINE.exec(l)).filter((m) => m && !seen.has(m[2]) && seen.add(m[2])).map((m) => {
-    const expr = m[4].trim(), lib = /^__(\w+)(?:\[([\w-]+)\])?(?::\d+)?__$/.exec(expr), brace = /^\{([^{}]*)\}$/.exec(expr);
+    const expr = m[4].trim(), lib = /^__(\w+)(?:\[([\w-]+)\])?(?::\d+)?__(?:\([^()]*\))?$/.exec(expr), brace = /^\{([^{}]*)\}$/.exec(expr);
     const options = brace && !brace[1].includes("$$") ? brace[1].split("|").map((o) => o.replace(/:\d+(\.\d+)?$/, "").trim()).filter(Boolean) : [];
     return { name: m[2], expr, lib: lib ? lib[1] : null, tag: lib ? lib[2] || null : null, options };
   });
@@ -210,4 +210,25 @@ export function applyDials(text, values) {
     const m = BINDING_LINE.exec(l);
     return m && set[m[2]] ? `${m[1]}$${m[2]}${m[3]}${set[m[2]]}` : l;
   }).join("\n");
+}
+
+// The Libraries list: what the language model wrote and waits for review first, then folders by
+// name prefix (couture_form, couture_house → couture: form, house) when two or more share one, then
+// the rest. Each item carries the name without its folder prefix.
+export function libraryGroups(libs) {
+  const review = libs.filter((l) => l.pending || (l.pending_entries || []).length);
+  const rest = libs.filter((l) => !review.includes(l));
+  const prefix = (name) => name.split("_")[0];  // "curator" joins curator_line's folder
+  const counts = rest.reduce((c, l) => ({ ...c, [prefix(l.name)]: (c[prefix(l.name)] || 0) + 1 }), {});
+  const byName = (a, b) => a.name.localeCompare(b.name);
+  const folders = [...new Set(rest.map((l) => prefix(l.name)).filter((p) => p && counts[p] > 1))].sort();
+  const item = (l, strip) => ({ lib: l, short: strip && l.name !== strip ? l.name.slice(strip.length + 1) : l.name });
+  return [
+    ...(review.length ? [{ key: "review", items: [...review].sort(byName).map((l) => item(l)) }] : []),
+    ...folders.map((f) => ({ key: f, items: rest.filter((l) => prefix(l.name) === f).sort(byName).map((l) => item(l, f)) })),
+    ...(() => {
+      const loose = rest.filter((l) => !folders.includes(prefix(l.name))).sort(byName);
+      return loose.length ? [{ key: "", items: loose.map((l) => item(l)) }] : [];
+    })(),
+  ];
 }

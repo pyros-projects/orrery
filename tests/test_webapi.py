@@ -49,6 +49,7 @@ def test_routes_cover_the_contract():
         ("GET", "/orrery/galaxy"), ("POST", "/orrery/galaxy/rate"),
         ("GET", "/orrery/galaxy/thumb"), ("GET", "/orrery/galaxy/media"), ("POST", "/orrery/roll"),
         ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
+        ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/discard"),
     }
 
 
@@ -416,6 +417,23 @@ def test_llm_settings_list_text_encoders_and_are_saved(home, monkeypatch):
     assert (body["file"], body["entries"]) == ("qwen3vl_4b_bf16.safetensors", 20)
     status, _ = api(home, webapi.llm_save, file="qwen3vl_32b_minimax_h3_int8_convrot.safetensors")
     assert status == 400
+
+
+def test_llm_made_libraries_are_accepted_or_discarded(home):
+    lib = home / "library"
+    (lib / "runway_shoes.yaml").write_text("meta: {generated_by: qwen, pending: true, directions: short}\nentries: [mule, boot]\n")
+    (lib / "animal.yaml").write_text("meta: {pending_entries: [lynx]}\nentries: [fox, heron, owl, lynx]\n")
+    listed = {l["name"]: l for l in ok(home, webapi.libraries)["libraries"]}
+    assert listed["runway_shoes"]["pending"] and listed["runway_shoes"]["directions"] == "short"
+    assert listed["animal"]["pending_entries"] == ["lynx"] and not listed["animal"]["pending"]
+    ok(home, webapi.library_accept, name="runway_shoes")
+    ok(home, webapi.library_discard, name="animal")
+    listed = {l["name"]: l for l in ok(home, webapi.libraries)["libraries"]}
+    assert not listed["runway_shoes"]["pending"] and listed["runway_shoes"]["directions"] == "short"
+    assert [e["value"] for e in listed["animal"]["entries"]] == ["fox", "heron", "owl"] and listed["animal"]["pending_entries"] == []
+    (lib / "shoes2.yaml").write_text("meta: {pending: true}\nentries: [clog]\n")
+    ok(home, webapi.library_discard, name="shoes2")
+    assert not (lib / "shoes2.yaml").exists()
 
 
 def test_roll_applies_dials(home):

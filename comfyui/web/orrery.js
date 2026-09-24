@@ -59,6 +59,7 @@ function mount(node) {
     setControl: (mode) => { const c = controlOf("seed"); if (c) { c.value = mode; node.setDirtyCanvas?.(true, true); } },
     getControl: () => controlOf("seed")?.value ?? "",
     getTarget: () => find("target")?.value || "text",
+    setTarget: (target) => set("target", target),
     getParams: () => { try { return JSON.parse(params?.value || "{}") || {}; } catch { return {}; } },
     setParams: (values) => set("params", Object.keys(values).length ? JSON.stringify(values) : ""),
     home: () => home?.value || "",

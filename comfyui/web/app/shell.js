@@ -80,7 +80,25 @@ export class OrreryApp {
     const legacy = this.bridge.takeLegacyPreset();
     if (legacy) await this.loadPreset(legacy, { quiet: true });
     else if (this.preset) await this.fetchBase();
+    this.stopListening = this.api.onRunDone(() => this.afterRun());
     this.render();
+  }
+
+  // A run may have let the language model write libraries: refresh, and point at anything to review.
+  async afterRun() {
+    const before = new Set((this.data.libraries || []).filter((l) => l.pending || (l.pending_entries || []).length).map((l) => l.name));
+    let libs;
+    try { libs = (await this.api.libraries()).libraries; } catch { return; }
+    this.data.libraries = libs;
+    this.data.libStale = false;
+    this.refreshCompletion().catch(() => {});
+    const fresh = libs.filter((l) => (l.pending || (l.pending_entries || []).length) && !before.has(l.name));
+    if (this.state.tab === "libraries") this.render();
+    if (fresh.length) {
+      this.toast(`The language model wrote ${fresh.map((l) => `<b>__${esc(l.name)}__</b>`).join(", ")}`, {
+        label: "Review", run: () => { this.state.lib = fresh[0].name; this.go("libraries"); },
+      });
+    }
   }
   async fetchBase() {
     try { this.base = (await this.api.preset(this.preset)).text; } catch { this.base = null; }
@@ -198,6 +216,7 @@ export class OrreryApp {
   }
 
   destroy() {
+    this.stopListening?.();
     clearTimeout(this.toastTimer);
     this.overlay?.remove();
     this.parked?.remove();

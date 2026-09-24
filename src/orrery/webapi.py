@@ -252,6 +252,9 @@ def _library_json(home: Home, name: str, lib: Library, weights: dict) -> dict:
         "entries": [{"value": e.value, "tags": list(e.tags), "weight": e.weight,
                      "learned": weights.get(f"{family}={e.value}", 1.0)} for e in lib.entries],
         "tags": sorted({t for e in lib.entries for t in e.tags}),
+        "pending": bool(lib.meta.get("pending")),
+        "pending_entries": list(lib.meta.get("pending_entries") or []),
+        "directions": str(lib.meta.get("directions") or ""),
     }
 
 
@@ -329,6 +332,33 @@ def library_delete(home: Home, args: dict) -> dict:
         raise ApiError(404, f"There is no library __{name}__.")
     path.unlink()
     return {"ok": True}
+
+
+def _user_library(home: Home, args: dict) -> tuple[str, Path, Library]:
+    name = _library_name(args.get("name"))
+    path = home.library_dir / f"{name}.yaml"
+    if not path.exists():
+        raise ApiError(404, f"There is no library __{name}__ of yours.")
+    return name, path, load_library(path)
+
+
+def library_accept(home: Home, args: dict) -> dict:
+    """Keep what the language model wrote: a new library, or the entries it added."""
+    name, path, lib = _user_library(home, args)
+    save_library(Library(name, lib.entries, {k: v for k, v in lib.meta.items() if k not in ("pending", "pending_entries")}), path)
+    return _library_json(home, name, load_library(path), home.weights())
+
+
+def library_discard(home: Home, args: dict) -> dict:
+    """Drop what the language model wrote: the whole library if it made it, else the entries it added."""
+    name, path, lib = _user_library(home, args)
+    if lib.meta.get("pending"):
+        path.unlink()
+        return {"ok": True, "deleted": name}
+    added = set(lib.meta.get("pending_entries") or [])
+    save_library(Library(name, [e for e in lib.entries if e.value not in added],
+                         {k: v for k, v in lib.meta.items() if k != "pending_entries"}), path)
+    return _library_json(home, name, load_library(path), home.weights())
 
 
 # --- galaxy ---------------------------------------------------------------------------------
@@ -508,6 +538,8 @@ ROUTES = [
     ("POST", "/orrery/frequency", frequency),
     ("GET", "/orrery/llm", llm_settings),
     ("POST", "/orrery/llm", llm_save),
+    ("POST", "/orrery/library/accept", library_accept),
+    ("POST", "/orrery/library/discard", library_discard),
 ]
 
 
