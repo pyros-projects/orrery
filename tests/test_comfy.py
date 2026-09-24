@@ -267,3 +267,24 @@ def test_past_the_end_of_a_reel_blocks_the_rest_of_the_graph(home, monkeypatch):
     assert len(outputs) == 9 and all(isinstance(o, ExecutionBlocker) and o.message is None for o in outputs)
     a = OrreryPrompt.IS_CHANGED(REEL, 1, "h3-base", segment=0)
     assert a != OrreryPrompt.IS_CHANGED(REEL, 1, "h3-base", segment=1)
+
+
+def test_the_node_lets_its_llm_create_missing_libraries(home, monkeypatch):
+    from orrery import comfy
+    from orrery.llm import FakeBackend
+    backend = FakeBackend([json.dumps(["velvet mule", "chrome boot", "paper sandal"])], name="qwen3vl_4b")
+    monkeypatch.setattr(comfy, "llm_for", lambda h, clip=None, **_: backend)
+    text, picks, *_ = run_prompt("a model in __runway_shoes:3__", 1, "text", str(home))
+    assert text.split(" in ")[1] in ("velvet mule", "chrome boot", "paper sandal")
+    assert any("Created __runway_shoes__" in i["message"] for i in json.loads(picks)["lint"])
+
+
+def test_without_an_llm_a_missing_library_still_names_the_fix(home, monkeypatch):
+    from orrery import comfy
+    monkeypatch.setattr(comfy, "llm_for", lambda h, clip=None, **_: None)
+    with pytest.raises(ValueError, match="runway_shoes"):
+        run_prompt("a model in __runway_shoes__", 1, "text", str(home))
+
+
+def test_the_node_takes_an_optional_clip_as_its_llm():
+    assert OrreryPrompt.INPUT_TYPES()["optional"]["clip"][0] == "CLIP"

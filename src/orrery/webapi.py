@@ -13,6 +13,7 @@ from pathlib import Path
 from orrery import galaxy as gx
 from orrery import presets as ps
 from orrery import uistate
+from orrery.comfy_llm import can_write, llm_config, text_encoders
 from orrery.completion import completion_data
 from orrery.dsl import MissingLibrary, expand, override
 from orrery.h3 import compile_scene
@@ -463,6 +464,27 @@ def frequency(home: Home, args: dict) -> dict:
     }
 
 
+# --- llm settings ---------------------------------------------------------------------------
+
+def llm_settings(home: Home, args: dict) -> dict:
+    cfg = llm_config(home)
+    return {"file": cfg["file"], "clip_type": cfg["clip_type"], "entries": int(cfg["entries"]),
+            "files": text_encoders()}
+
+
+def llm_save(home: Home, args: dict) -> dict:
+    file = args.get("file") or None
+    if file and not can_write(file):
+        raise ApiError(400, f"{file} is a truncated text encoder (MiniMax H3's): it loads but cannot write. "
+                            "Pick a Qwen3-VL build such as Krea 2's qwen3vl_4b.")
+    config = home.config()
+    llm = {**(config.get("llm") or {}), "file": file, "entries": min(max(_int(args, "entries", 12), 1), 200)}
+    if args.get("clip_type"):
+        llm["clip_type"] = str(args["clip_type"])
+    home.save_config({**config, "llm": llm})
+    return llm_settings(home, {})
+
+
 ROUTES = [
     ("GET", "/orrery/completions", lambda home, args: completion_data(home)),
     ("GET", "/orrery/presets", presets),
@@ -484,6 +506,8 @@ ROUTES = [
     ("GET", "/orrery/galaxy/media", galaxy_media),
     ("POST", "/orrery/roll", roll),
     ("POST", "/orrery/frequency", frequency),
+    ("GET", "/orrery/llm", llm_settings),
+    ("POST", "/orrery/llm", llm_save),
 ]
 
 

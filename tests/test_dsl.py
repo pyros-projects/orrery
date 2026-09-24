@@ -164,3 +164,16 @@ def test_history_asks_the_callback_and_falls_back_to_the_current_value():
     assert ex.expr("$hero and $hero~1") == "owl and owl"
     ex.history = lambda name, back: {("hero", 1): "fox", ("hero", 2): "heron"}.get((name, back))
     assert ex.expr("$hero, $hero~1, $hero~2, $gone~1") == "owl, fox, heron, $gone~1"
+
+
+# --- __name:N__ asks for at least N entries; expansion ignores the number -----------------------
+
+def test_a_minimum_count_expands_like_the_plain_library():
+    e = expand("a __animal:30__ in __style[x]:5__", 1, {**LIBS, "style": Library("style", [Entry("ink", ("x",))])})
+    assert [p.label for p in e.picks] == ["__animal__", "__style[x]__"] and e.text.endswith(" in ink")
+
+
+def test_wanted_libraries_with_their_minimum_and_context():
+    from orrery.dsl import wanted_libraries
+    t = "$a = __animal__\na __shoes:20__ on <lora:x__skip__y:1> __animal:5__\nnothing here"
+    assert wanted_libraries(t) == {"animal": 5, "shoes": 20}

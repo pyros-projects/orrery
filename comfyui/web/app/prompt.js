@@ -19,6 +19,7 @@ function statsHTML(app) {
   const frames = reel ? ` · <b>${out.lengths.join(" / ")}</b> frames per chunk` : st.h3 ? ` · <b>${out.length}</b> frames = ${(out.length / 24).toFixed(2)} s` : "";
   return timing
     + `<span class="stat"><b>${st.rolls}</b> rolls · <b>${st.libs}</b> libraries · <b>${st.binds}</b> bindings${setDials(app) ? ` · <b>${setDials(app)}</b> dialed` : ""}</span>`
+    + `${app.llmActive() ? `<span class="stat" title="Unknown __libraries__ and __name:N__ are made by this model when the node runs">LLM <b>${esc(app.data.llm.file.replace(/\.[a-z]+$/, ""))}</b></span>` : ""}`
     + `<span class="stat" title="The node's width, height and length outputs${reel ? "; from the second chunk on, length includes the frames Motion Context pins" : ""}">→ <b>${out.width}×${out.height}</b>${frames}</span>`
     + `${out.cli.length ? `<span class="stat cli" title="In ComfyUI, use the Run count and the seed widget">${esc(out.cli.join(" "))}: CLI only</span>` : ""}<span class="grow"></span>`
     + `${outs ? `<button class="btn ghost" data-act="outputs">${icon("image")}${outs} output${outs === 1 ? "" : "s"}</button>` : ""}`
@@ -51,7 +52,7 @@ export function renderPrompt(app) {
     ${app.state.pick ? pickerHTML(app) : ""}`;
 
   const ed = app.view.querySelector("textarea"), pre = app.view.querySelector("pre.hl");
-  const paint = () => { pre.innerHTML = `${highlight(app.text, app.known())}\n`; };
+  const paint = () => { pre.innerHTML = `${highlight(app.text, app.known(), { llm: app.llmActive() })}\n`; };
   ed.value = app.text;
   paint();
   ed.addEventListener("input", () => {

@@ -165,3 +165,11 @@ test("history references are coloured as variables", () => {
 test("a binding repeated in several chunks is one dial", () => {
   assert.deepEqual(dials("$a = x\nCHUNK\n$b = __creature__\nCHUNK\n$b = __creature__\n$a = y").map((d) => d.name), ["a", "b"]);
 });
+
+test("__name:N__ is a library everywhere; with an LLM an unknown one is to be made", () => {
+  assert.match(highlight("a __creature:30__", known), /<span class="t-lib">__creature:30__<\/span>/);
+  assert.match(highlight("a __shoes:20__", known), /t-lib t-miss/);
+  assert.match(highlight("a __shoes__", known, { llm: true }), /<span class="t-lib t-new" title="[^"]*">__shoes__<\/span>/);
+  assert.equal(stats("__creature:30__ and __shoes__").libs, 2);
+  assert.deepEqual(dials("$s = __shoes:20__")[0].lib, "shoes");
+});

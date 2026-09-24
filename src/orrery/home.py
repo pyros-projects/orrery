@@ -73,6 +73,10 @@ class Home:
             return {}
         return yaml.safe_load(self.config_path.read_text()) or {}
 
+    def save_config(self, config: dict) -> None:
+        self.root.mkdir(parents=True, exist_ok=True)
+        write_atomic(self.config_path, yaml.safe_dump(config, sort_keys=False, allow_unicode=True))
+
 
 def resolve_home(explicit: Path | str | None = None) -> Home:
     if explicit:

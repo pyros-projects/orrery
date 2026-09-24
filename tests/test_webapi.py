@@ -48,7 +48,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/library/own"), ("POST", "/orrery/library/delete"),
         ("GET", "/orrery/galaxy"), ("POST", "/orrery/galaxy/rate"),
         ("GET", "/orrery/galaxy/thumb"), ("GET", "/orrery/galaxy/media"), ("POST", "/orrery/roll"),
-        ("POST", "/orrery/frequency"),
+        ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
     }
 
 
@@ -397,6 +397,24 @@ def test_frequency_counts_lint_and_caps_the_runs(home):
     assert body["runs"] == webapi.MAX_FREQUENCY
     assert any("4–15" in m["message"] and m["count"] == body["runs"] for m in body["lint"])
     status, _ = api(home, webapi.frequency, template="a", seed=1, across="clips")
+    assert status == 400
+
+
+def test_llm_settings_list_text_encoders_and_are_saved(home, monkeypatch):
+    import sys
+    import types
+    module = types.ModuleType("folder_paths")
+    module.get_filename_list = lambda kind: ["qwen3vl_4b_bf16.safetensors", "qwen3vl_32b_minimax_h3_int8_convrot.safetensors"] if kind == "text_encoders" else []
+    module.get_full_path = lambda kind, name: None
+    monkeypatch.setitem(sys.modules, "folder_paths", module)
+    body = ok(home, webapi.llm_settings)
+    assert (body["file"], body["entries"]) == (None, 12)
+    assert [(f["name"], f["can_write"]) for f in body["files"]] == [
+        ("qwen3vl_4b_bf16.safetensors", True), ("qwen3vl_32b_minimax_h3_int8_convrot.safetensors", False)]
+    ok(home, webapi.llm_save, file="qwen3vl_4b_bf16.safetensors", entries=20)
+    body = ok(home, webapi.llm_settings)
+    assert (body["file"], body["entries"]) == ("qwen3vl_4b_bf16.safetensors", 20)
+    status, _ = api(home, webapi.llm_save, file="qwen3vl_32b_minimax_h3_int8_convrot.safetensors")
     assert status == 400
 
 

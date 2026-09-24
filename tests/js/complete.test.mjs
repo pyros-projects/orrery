@@ -112,3 +112,7 @@ test("LORA: completes the next lora on the same line, not inside a strength", ()
 test("lora tags never count as missing libraries", () => {
   assert.deepEqual(missingLibraries("LORA: <lora:bf16__apply__x:1.00> __weather2__", DATA), ["weather2"]);
 });
+
+test("a minimum count does not hide a missing library", () => {
+  assert.deepEqual(missingLibraries("__creature:30__ and __shoes:20__", DATA), ["shoes"]);
+});

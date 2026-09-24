@@ -7,6 +7,7 @@ import { icon, LOGO } from "./icons.js";
 import { renderLibraries } from "./libraries.js";
 import { renderPresets } from "./presets.js";
 import { renderPrompt } from "./prompt.js";
+import { openSettings } from "./settings.js";
 import { renderTest } from "./test.js";
 
 const TABS = [
@@ -34,16 +35,17 @@ export class OrreryApp {
       lib: null, libSearch: "", libTag: null, libNew: null,
       gScope: "all", gRating: null, gPick: null, gOpen: null,
     };
-    this.data = { presets: [], favorites: new Set(), recent: [], completion: null, libraries: null, rows: null, weights: {} };
+    this.data = { presets: [], favorites: new Set(), recent: [], completion: null, libraries: null, rows: null, weights: {}, llm: null };
     this.base = null;
     this.uid = Math.random().toString(36).slice(2, 8);  // keeps element ids unique across nodes
     this.root = document.createElement("div");
     this.root.className = "orrery-app";
     this.root.innerHTML = `<div class="app-head"><div class="brand">${LOGO}orrery</div><nav class="tabs" role="tablist"></nav>`
-      + `<button class="icon-btn big-btn"></button></div><section class="view"></section><div class="sheet-host"></div><div class="toast-host"></div>`;
+      + `<button class="icon-btn gear-btn" title="Language model and settings">${icon("gear")}</button><button class="icon-btn big-btn"></button></div><section class="view"></section><div class="sheet-host"></div><div class="toast-host"></div>`;
     this.view = this.$(".view");
     this.$(".tabs").addEventListener("click", (e) => { const t = e.target.closest("[data-tab]"); if (t) this.go(t.dataset.tab); });
     this.$(".big-btn").addEventListener("click", () => this.setBig(!this.state.big));
+    this.$(".gear-btn").addEventListener("click", () => openSettings(this));
     this.isolate();
     // A preview that fails to load (file moved, video without frames) becomes a quiet placeholder.
     this.root.addEventListener("error", (e) => {
@@ -67,12 +69,14 @@ export class OrreryApp {
   }
   card(name) { return this.data.presets.find((p) => p.name === name); }
   known() { return new Set((this.data.completion?.libraries || []).map((l) => l.name)); }
+  llmActive() { return !!this.data.llm?.file; }
   dirty() { return this.preset ? this.base !== null && this.text !== this.base : this.text.trim() !== ""; }
 
   async start() {
     if (this.started) return;
     this.started = true;
-    await Promise.all([this.refreshPresets(), this.refreshCompletion()]).catch((e) => this.fail(e));
+    await Promise.all([this.refreshPresets(), this.refreshCompletion(),
+      this.api.llm().then((l) => { this.data.llm = l; }).catch(() => {})]).catch((e) => this.fail(e));
     const legacy = this.bridge.takeLegacyPreset();
     if (legacy) await this.loadPreset(legacy, { quiet: true });
     else if (this.preset) await this.fetchBase();

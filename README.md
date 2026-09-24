@@ -126,6 +126,22 @@ diff, and writes nothing until you confirm (`--yes` skips the question).
 Every change can be undone, and learned weights move with renamed or moved
 entries.
 
+### The language model in ComfyUI
+
+In the node, the gear picks orrery's language model: a text encoder from
+ComfyUI's `text_encoders` folder that is a whole LLM, such as Krea 2's
+`qwen3vl_4b` or a Qwen3-VL 8B build (MiniMax H3's encoder is cut short and
+cannot write). A text encoder wired into the node's `clip` input wins over the
+setting. When the node runs, the model
+
+- creates a library the template names but you don't have (`__runway_shoes__`),
+  with the number of entries set in the gear, using the lines around it as
+  context;
+- tops up `__name:30__` to at least 30 entries, once.
+
+It loads for that, writes, and unloads. Everything it writes is marked as
+LLM-made and can be undone with `orrery lib undo`.
+
 ## MiniMax H3 screenplays
 
 ```bash

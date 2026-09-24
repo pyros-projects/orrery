@@ -43,6 +43,8 @@ export function client(home) {
     rate: (id, rating) => call("galaxy/rate", { body: { id, rating } }),
     roll: (body) => call("roll", { body }),
     frequency: (body) => call("frequency", { body }),
+    llm: () => call("llm"),
+    saveLlm: (body) => call("llm", { body }),
     thumbURL: (id) => url("galaxy/thumb", { id }),
     mediaURL: (id) => url("galaxy/media", { id }),
   };

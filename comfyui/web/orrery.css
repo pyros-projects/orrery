@@ -92,6 +92,7 @@
 .orrery-app .t-lib { color: var(--teal); }
 .orrery-app .t-miss { color: var(--danger); text-decoration: underline wavy var(--danger); text-underline-offset: 3px; }
 .orrery-app .t-var { color: var(--rose); }
+.orrery-app .t-lib.t-new { text-decoration: underline dashed var(--violet); text-underline-offset: 3px; }
 .orrery-app .t-lora { color: var(--sky); }
 .orrery-app .t-brace { color: var(--violet); }
 .orrery-app .t-kw, .orrery-app .t-head { color: var(--sky); }
@@ -332,3 +333,5 @@
 .orrery-overlay .frame { width: 100%; max-width: 1320px; margin: 0 auto; height: 100%; }
 .orrery-parked { border: 1px dashed #333548; border-radius: 10px; padding: 26px; text-align: center; color: #9d9ab3; font: 13px/1.45 "Orrery Sans", system-ui, sans-serif; display: flex; gap: 6px; align-items: center; justify-content: center; }
 .orrery-parked .i { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.orrery-app .input.narrow { width: 90px; }
+.orrery-app select.input { appearance: auto; }

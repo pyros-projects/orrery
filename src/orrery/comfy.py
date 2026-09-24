@@ -13,7 +13,9 @@ import re
 from datetime import UTC, datetime
 from pathlib import Path
 
-from orrery.dsl import MissingLibrary, bindings, expand, override, parse
+from orrery.autolib import ensure_libraries
+from orrery.comfy_llm import ComfyBackend, can_write, llm_config
+from orrery.dsl import MissingLibrary, bindings, expand, override, parse, wanted_libraries
 from orrery.h3 import compile_scene
 from orrery.home import Home, resolve_home
 from orrery.loras import lora_files, lora_stack
@@ -83,9 +85,34 @@ def dial_values(params: str) -> dict[str, str]:
     return {str(k).lstrip("$"): str(v).strip() for k, v in values.items() if str(v).strip()} if isinstance(values, dict) else {}
 
 
+def llm_for(home: Home, clip=None, seed: int = 0) -> ComfyBackend | None:
+    """The active language model: a text encoder on the node's clip input, else the one chosen in
+    orrery's settings, else none."""
+    cfg = llm_config(home)
+    options = {"temperature": float(cfg["temperature"]), "max_length": int(cfg["max_length"]), "seed": seed}
+    if clip is not None:
+        return ComfyBackend(clip=clip, **options)
+    if cfg["file"] and can_write(cfg["file"]):
+        return ComfyBackend(file=cfg["file"], clip_type=cfg["clip_type"], **options)
+    return None
+
+
+def _llm_work(home: Home, template: str, clip, seed: int) -> list[str]:
+    """Let the LLM create or top up the libraries the template asks for; unloads it afterwards."""
+    libraries = home.libraries()
+    if all(name in libraries and len(libraries[name].entries) >= n for name, n in wanted_libraries(template).items()):
+        return []
+    backend = llm_for(home, clip, seed=seed)
+    try:
+        return ensure_libraries(home, template, backend, int(llm_config(home)["entries"]))
+    finally:
+        if release := getattr(backend, "release", None):
+            release()
+
+
 def run_prompt(template: str, seed: int, target: str, home: str = "",
                preset: str = NO_PRESET, linked: str | None = None,
-               params: str = "", segment: int = 0) -> tuple[str, str, int, int, int, int, list, int, int]:
+               params: str = "", segment: int = 0, clip=None) -> tuple[str, str, int, int, int, int, list, int, int]:
     h = resolve_home(home or None)
     if preset and preset != NO_PRESET:
         template, linked = load_preset(h, preset), preset
@@ -94,6 +121,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     known = {name for name, _ in bindings(template)}
     dials = {k: v for k, v in dial_values(params).items() if k in known}
     source = override(template, dials)
+    notes = _llm_work(h, source, clip, seed)
     try:
         if target == "text":
             result = expand(source, seed, h.libraries(), h.weights())
@@ -102,7 +130,9 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
             result = compile_scene(source, seed, h.libraries(), h.weights(), target=target, segment=segment)
             lint = [{"severity": i.severity, "message": i.message} for i in result.lint]
     except MissingLibrary as err:
-        raise ValueError(str(err)) from err
+        raise ValueError(f"{err}, or pick a language model in orrery's settings (the gear in the node) "
+                         "and it is created when the node runs") from err
+    lint = [{"severity": "info", "message": n} for n in notes] + lint
     stack: list = []
     if target != "text" and result.loras:
         stack, warnings = lora_stack(result.loras, lora_files())
@@ -208,6 +238,8 @@ class OrreryPrompt:
                 "home": ("STRING", {"default": ""}),
                 "params": ("STRING", {"default": "", "tooltip": "The dials: JSON {binding: expression}, "
                                                                 "set in the Prompt tab."}),
+                "clip": ("CLIP", {"tooltip": "Optional: a text encoder that can write (Krea 2's Qwen3-VL) "
+                                             "as the language model, in place of the one in orrery's settings."}),
                 "segment": ("INT", {"default": 0, "min": 0, "max": 99999, "control_after_generate": True,
                                     "tooltip": "The reel's clip to write, from 0. With increment, every queued "
                                                "run plays the next clip; load_index and save_index drive H3 "
@@ -222,11 +254,11 @@ class OrreryPrompt:
         chosen = load_preset(h, preset) if preset and preset != NO_PRESET else template
         return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{segment}:{state_token(h)}"
 
-    def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, unique_id=None,
-            extra_pnginfo=None):
+    def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, clip=None,
+            unique_id=None, extra_pnginfo=None):
         try:
             return run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id), params,
-                              segment)
+                              segment, clip)
         except ReelEnd as end:
             try:
                 from comfy_execution.graph_utils import ExecutionBlocker  # ComfyUI
