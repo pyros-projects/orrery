@@ -1,5 +1,6 @@
 import json
 
+import av
 import pytest
 from PIL import Image
 
@@ -96,15 +97,39 @@ def test_thumbnail_is_a_small_cached_webp(home, tmp_path):
     assert thumbnail(Home(home), row_id(r)).stat().st_mtime_ns == mtime
 
 
-def test_videos_and_missing_files_have_no_thumbnail(home, tmp_path):
-    video = tmp_path / "clip.mp4"
-    video.write_bytes(b"\x00")
-    rows = [row(str(video), seed=1), row(str(tmp_path / "gone.png"), seed=2), row(None, seed=3)]
+def clip(tmp_path, name="clip.mp4"):
+    """48 frames at 24 fps: red, then green, then blue, a third each."""
+    path = tmp_path / name
+    with av.open(str(path), "w") as out:
+        stream = out.add_stream("mpeg4", rate=24)
+        stream.width, stream.height, stream.pix_fmt = 64, 48, "yuv420p"
+        for i in range(48):
+            color = (255, 0, 0) if i < 16 else (0, 255, 0) if i < 32 else (0, 0, 255)
+            for packet in stream.encode(av.VideoFrame.from_image(Image.new("RGB", (64, 48), color))):
+                out.mux(packet)
+        for packet in stream.encode():
+            out.mux(packet)
+    return str(path)
+
+
+def test_video_thumbnail_is_the_frame_a_third_in(home, tmp_path):
+    r = row(clip(tmp_path))
+    write_rows(home, [r])
+    with Image.open(thumbnail(Home(home), row_id(r))) as im:
+        assert im.format == "WEBP"
+        red, green, blue = im.convert("RGB").getpixel((im.width // 2, im.height // 2))
+    assert green > 150 and red < 100 and blue < 100
+
+
+def test_broken_and_missing_media_have_no_thumbnail(home, tmp_path):
+    broken = tmp_path / "broken.mp4"
+    broken.write_bytes(b"\x00")
+    rows = [row(str(broken), seed=1), row(str(tmp_path / "gone.png"), seed=2), row(None, seed=3)]
     write_rows(home, rows)
     for r in rows:
         with pytest.raises(KeyError):
             thumbnail(Home(home), row_id(r))
-    assert media_path(Home(home), row_id(rows[0])) == video
+    assert media_path(Home(home), row_id(rows[0])) == broken
     assert [r["kind"] for r in read_rows(Home(home))] == ["none", "image", "video"]
 
 

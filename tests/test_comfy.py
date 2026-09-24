@@ -1,6 +1,7 @@
 import importlib.util
 import json
 import sys
+import types
 from pathlib import Path
 
 import numpy as np
@@ -153,3 +154,28 @@ def test_the_linked_preset_is_read_from_the_workflow(home):
     assert linked_preset(info, "12:9") == "h3/y"
     assert linked_preset(info, "3") is None
     assert linked_preset(None, "7") is None
+
+
+class FakeVideo:
+    def __init__(self):
+        self.saved = None
+
+    def save_to(self, path, metadata=None, **_):
+        Path(path).write_bytes(b"video")
+        self.saved = (path, metadata)
+
+
+def test_log_saves_a_video_with_its_picks_and_records_it(home, tmp_path, monkeypatch):
+    folder = types.SimpleNamespace(
+        get_output_directory=lambda: str(tmp_path),
+        get_save_image_path=lambda prefix, out, w=0, h=0: (str(tmp_path), "orrery", 7, "", prefix))
+    monkeypatch.setitem(sys.modules, "folder_paths", folder)
+    _, picks, *_ = run_prompt("a __animal__", 3, "text", str(home))
+    video = FakeVideo()
+    ui = OrreryLog().log(picks, video=video, home=str(home))["ui"]
+    path, metadata = video.saved
+    assert path.endswith("orrery_00007_.mp4") and metadata["orrery"]["seed"] == 3
+    assert ui == {"images": [{"filename": "orrery_00007_.mp4", "subfolder": "", "type": "output"}], "animated": (True,)}
+    row = json.loads((home / "galaxy.jsonl").read_text().splitlines()[-1])
+    assert row["media"] == path
+    assert "video" in OrreryLog.INPUT_TYPES()["optional"]

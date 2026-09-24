@@ -48,7 +48,7 @@ function detailHTML(app) {
   if (!d || d.name !== s.pOpen) return `<aside class="detail"><div class="head"><button class="icon-btn" data-pact="close" aria-label="Close">${icon("back")}</button><b>Loading…</b></div></aside>`;
   const c = d.card;
   const strip = d.rows.length
-    ? d.rows.map((r) => (r.kind === "video" ? `<div class="vid">${icon("film")}</div>` : `<img loading="lazy" src="${esc(app.api.thumbURL(r.id))}" alt="">`)).join("")
+    ? d.rows.map((r) => `<span class="sthumb ${r.kind}"><img loading="lazy" src="${esc(app.api.thumbURL(r.id))}" alt="">${r.kind === "video" ? `<span class="play">${icon("play", "fill")}</span>` : ""}</span>`).join("")
     : `${glyph(c.name, folderColor(c.folder))}<span class="muted hint">No outputs yet. Your first render becomes this preset's preview.</span>`;
   return `<aside class="detail">
     <div class="head"><button class="icon-btn" data-pact="close" aria-label="Close">${icon(s.big ? "x" : "back")}</button><b>${esc(c.title)}</b><span class="pname">@${esc(c.name)}</span></div>
@@ -75,7 +75,7 @@ async function open(app, name) {
     const card = app.card(name);
     const [full, galaxy] = await Promise.all([app.api.preset(name), app.api.galaxy({ preset: name })]);
     if (s.pOpen !== name) return;
-    s.pDetail = { name, card, text: full.text, rows: galaxy.rows };
+    s.pDetail = { name, card, text: full.text, rows: galaxy.rows.filter((r) => r.kind !== "none") };
   } catch (e) { s.pOpen = null; app.fail(e); }
   if (app.state.tab === "presets") renderPresets(app);
 }

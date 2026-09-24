@@ -91,21 +91,45 @@ def media_path(home: Home, rid: str) -> Path:
     return Path(media)
 
 
+def _poster(src: Path):
+    """The frame a third of the way in: past fades and hand-off frames, before the ending."""
+    import av  # ComfyUI ships PyAV
+
+    try:
+        with av.open(str(src)) as container:
+            stream = container.streams.video[0]
+            seconds = (float(stream.duration * stream.time_base) if stream.duration
+                       else (container.duration or 0) / av.time_base)
+            target = seconds / 3
+            if target:
+                container.seek(int(target / stream.time_base), stream=stream)
+            for frame in container.decode(stream):
+                if frame.time is None or frame.time >= target - 1e-3:
+                    return frame.to_image()
+    except (av.error.FFmpegError, IndexError, OSError) as err:
+        raise KeyError(f"no frame could be read from {src.name}: {err}") from err
+    raise KeyError(f"{src.name} has no video frames")
+
+
 def thumbnail(home: Home, rid: str) -> Path:
     src = media_path(home, rid)
-    if media_kind(src) != "image":
-        raise KeyError(f"galaxy output {rid} is not an image")
+    kind = media_kind(src)
+    if kind not in ("image", "video"):
+        raise KeyError(f"galaxy output {rid} has no picture to preview")
     out = home.root / "thumbs" / f"{rid}.webp"
     if out.exists() and out.stat().st_mtime >= src.stat().st_mtime:
         return out
     from PIL import Image  # ComfyUI ships Pillow; the CLI never needs it
 
-    out.parent.mkdir(parents=True, exist_ok=True)
-    tmp = out.with_name(out.name + ".tmp")
-    with Image.open(src) as im:
+    im = _poster(src) if kind == "video" else Image.open(src)
+    try:
         im.thumbnail((THUMB_SIZE, THUMB_SIZE))
         if im.mode not in ("RGB", "RGBA"):
             im = im.convert("RGBA" if "A" in im.getbands() else "RGB")
+        out.parent.mkdir(parents=True, exist_ok=True)
+        tmp = out.with_name(out.name + ".tmp")
         im.save(tmp, "WEBP", quality=82)
+    finally:
+        im.close()
     os.replace(tmp, out)
     return out

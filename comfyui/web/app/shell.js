@@ -42,6 +42,16 @@ export class OrreryApp {
     this.$(".tabs").addEventListener("click", (e) => { const t = e.target.closest("[data-tab]"); if (t) this.go(t.dataset.tab); });
     this.$(".big-btn").addEventListener("click", () => this.setBig(!this.state.big));
     this.isolate();
+    // A preview that fails to load (file moved, video without frames) becomes a quiet placeholder.
+    this.root.addEventListener("error", (e) => {
+      if (e.target.tagName !== "IMG" || e.target.dataset.failed) return;
+      const ph = document.createElement("div");
+      ph.className = "missing";
+      ph.innerHTML = icon("image");
+      if (e.target.dataset.gopen) ph.dataset.gopen = e.target.dataset.gopen;
+      e.target.dataset.failed = "1";
+      e.target.replaceWith(ph);
+    }, true);
   }
 
   $(sel) { return this.root.querySelector(sel); }

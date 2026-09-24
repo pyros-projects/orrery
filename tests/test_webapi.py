@@ -362,3 +362,11 @@ def test_a_recorded_preset_that_no_longer_exists_falls_back_to_the_hash(home, tm
     save_preset(Home(home), "stills/owl", "an owl")
     rid = log_row(home, tmp_path, "an owl", preset="gone/away", edited=False)
     assert {r["id"]: r for r in ok(home, webapi.galaxy)["rows"]}[rid]["preset"] == "stills/owl"
+
+
+def test_cards_preview_and_count_only_outputs_with_a_file(home, tmp_path):
+    save_preset(Home(home), "stills/owl", "an owl")
+    shown = log_row(home, tmp_path, "an owl", seed=1)
+    log_row(home, tmp_path, "an owl", seed=2, name="b.png", media=None)
+    card = next(c for c in ok(home, webapi.presets)["presets"] if c["name"] == "stills/owl")
+    assert (card["outputs"], card["thumb"]) == (1, shown)

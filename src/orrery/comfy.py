@@ -189,8 +189,9 @@ class OrreryLog:
     FUNCTION = "log"
     OUTPUT_NODE = True
     RETURN_TYPES = ()
-    DESCRIPTION = ("Saves images with their picks embedded and appends one line per output to "
-                   "galaxy.jsonl. For videos saved elsewhere, pass the file path as media_path.")
+    DESCRIPTION = ("Saves images (PNG) or a video (MP4, e.g. from Create Video) with their picks "
+                   "embedded and appends one line per output to galaxy.jsonl. For files saved by "
+                   "another node, pass the path as media_path.")
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -198,14 +199,27 @@ class OrreryLog:
             "required": {"picks": ("STRING", {"forceInput": True})},
             "optional": {
                 "images": ("IMAGE",),
+                "video": ("VIDEO", {"tooltip": "A video (with its audio), e.g. from Create Video; "
+                                              "saved as MP4 in place of Save Video."}),
                 "filename_prefix": ("STRING", {"default": "orrery"}),
                 "media_path": ("STRING", {"default": ""}),
                 "home": ("STRING", {"default": ""}),
             },
         }
 
-    def log(self, picks, images=None, filename_prefix="orrery", media_path="", home=""):
+    def log(self, picks, images=None, video=None, filename_prefix="orrery", media_path="", home=""):
         media, ui = [], []
+        if video is not None:
+            import folder_paths  # ComfyUI
+
+            folder, name, counter, subfolder, _ = folder_paths.get_save_image_path(
+                filename_prefix, folder_paths.get_output_directory())
+            file = f"{name}_{counter:05}_.mp4"
+            video.save_to(os.path.join(folder, file), metadata={"orrery": json.loads(picks)})
+            media.append(os.path.join(folder, file))
+            log_outputs(resolve_home(home or None), picks, media)
+            return {"ui": {"images": [{"filename": file, "subfolder": subfolder, "type": "output"}],
+                           "animated": (True,)}}
         if images is not None:
             import folder_paths  # ComfyUI
 

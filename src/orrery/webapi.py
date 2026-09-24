@@ -107,11 +107,11 @@ def _owner(row: dict, by_hash: dict[str, str], known: set[str]) -> str | None:
 
 
 def _outputs(home: Home) -> dict[str, list[str]]:
-    """Galaxy row ids per owning preset, newest first."""
+    """Ids of galaxy rows with a picture or video file, per owning preset, newest first."""
     by_hash, known = _preset_by_hash(home), set(ps.list_presets(home))
     by: dict[str, list[str]] = {}
     for row in gx.read_rows(home):
-        if owner := _owner(row, by_hash, known):
+        if row["kind"] in ("image", "video") and (owner := _owner(row, by_hash, known)):
             by.setdefault(owner, []).append(row["id"])
     return by
 

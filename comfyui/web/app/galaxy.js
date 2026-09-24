@@ -40,12 +40,38 @@ export async function renderGalaxy(app) {
       ${open ? detailHTML(app, open) : ""}
     </div>`;
   app.view.onclick = (e) => onClick(app, e, open);
+  hoverPlay(app.view);
+}
+
+// Videos play muted while the pointer rests on their card.
+function hoverPlay(view) {
+  view.querySelectorAll(".vthumb").forEach((box) => {
+    box.addEventListener("mouseenter", () => {
+      if (box.querySelector("video")) return;
+      const v = document.createElement("video");
+      Object.assign(v, { src: box.dataset.video, muted: true, loop: true, playsInline: true, autoplay: true });
+      v.dataset.gopen = box.querySelector("img")?.dataset.gopen || "";
+      box.appendChild(v);
+    });
+    box.addEventListener("mouseleave", () => box.querySelector("video")?.remove());
+  });
 }
 
 function media(app, r, big) {
-  if (r.kind === "video") return big ? `<video class="big" src="${esc(app.api.mediaURL(r.id))}" controls loop muted playsinline></video>` : `<div class="vid" data-gopen="${r.id}">${icon("film")}</div>`;
-  if (r.kind !== "image") return `<div class="vid">${icon("image")}</div>`;
-  return big ? `<img class="big" src="${esc(app.api.mediaURL(r.id))}" alt="">` : `<img loading="lazy" src="${esc(app.api.thumbURL(r.id))}" alt="${esc(r.text)}" data-gopen="${r.id}">`;
+  if (r.kind === "none") {
+    return big
+      ? `<div class="nofile">${icon("film")}<span>No file was logged for this run. For videos, wire Create Video into Orrery Log's <b>video</b> input.</span></div>`
+      : `<div class="textcard" data-gopen="${r.id}">${esc((r.text || "").replace(/^[\s\S]*?\[Shot 1\]\s*/, "").slice(0, 220))}</div>`;
+  }
+  if (big) {
+    return r.kind === "video"
+      ? `<video class="big" src="${esc(app.api.mediaURL(r.id))}" poster="${esc(app.api.thumbURL(r.id))}" controls loop playsinline></video>`
+      : `<img class="big" src="${esc(app.api.mediaURL(r.id))}" alt="">`;
+  }
+  const img = `<img loading="lazy" src="${esc(app.api.thumbURL(r.id))}" alt="${esc(r.text || "")}" data-gopen="${r.id}">`;
+  return r.kind === "video"
+    ? `<div class="vthumb" data-video="${esc(app.api.mediaURL(r.id))}">${img}<span class="play">${icon("play", "fill")}</span></div>`
+    : img;
 }
 
 function rateButtons(r, pad = "") {
