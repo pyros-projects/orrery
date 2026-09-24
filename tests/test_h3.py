@@ -210,3 +210,26 @@ def test_flat_writer_is_style_plus_first_shot_prose():
     assert r.text == ("Live-action, cinematic, a medium-wide shot frames a baker opening the shutters "
                       "of a small street bakery before sunrise. The middle-aged baker places a fresh "
                       "loaf on the wooden counter.")
+
+
+# --- templates without SHOT lines (a Krea prompt on the H3 target) ---------------------------
+
+KREA = "$look = post-ironic\na high-fashion runway photograph, a model in a $look look, harsh flash\n: x8 w832 h1216\n> moody"
+
+
+def test_a_template_without_shots_is_one_five_second_shot():
+    r = h3(KREA)
+    assert r.text.startswith("integrated_multimodal_description: [Shot 1] A high-fashion runway photograph, "
+                             "a model in a post-ironic look, harsh flash.\n")
+    assert r.scene.duration == 5 and not errors(r)
+    assert ": x8" not in r.text and "moody" not in r.text
+
+
+def test_flat_writes_the_prose_of_a_template_without_shots():
+    flat = compile_scene(KREA, 1, LIBS, target="flat").text
+    assert flat == "A high-fashion runway photograph, a model in a post-ironic look, harsh flash."
+
+
+def test_stray_prose_before_the_first_shot_still_warns():
+    r = h3("@h3 t2va\nloose words\nSHOT 5s\nA.\nSFX: x\n")
+    assert "loose words" not in r.text and any("before the first SHOT" in m for m in warnings(r))

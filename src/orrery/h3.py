@@ -79,8 +79,10 @@ _CHUNK = re.compile(r"^CHUNK\b\s*(.*)$")
 _HANDOFF = re.compile(r"^HANDOFF:\s*(.+)$")
 _LORA = re.compile(r"^LORA:\s*(.+)$")
 _CONTEXT = re.compile(r"^context:\s*(\d+)\s*f?$", re.IGNORECASE)
+_DSL_ONLY = re.compile(r"^(>|:\s*(x\d|seed=|w\d|h\d))")  # enhance and params lines of plain templates
 H3_FPS = 24
 DEFAULT_CONTEXT = 22  # H3 Motion Context's default context_length, in frames
+IMPLICIT_SECONDS = 5.0  # a template without SHOT lines is one shot of H3's default length
 _LANG = re.compile(r"^\[([A-Za-z ]+)\]\s*(.*)$")
 _CLIP_WEIGHT = re.compile(r"\([^()]*:\s*\d+(?:\.\d+)?\)")
 _FIRST_SENTENCE = re.compile(r"^(.*?[.!?])(?:\s+|$)(.*)$", re.DOTALL)
@@ -160,9 +162,11 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue]) -> Scene:
         if m := _BINDING.match(line):
             ex.bind(m.group(1), m.group(2))
     scene, cur, in_cast = Scene(), None, False
+    loose: list[str] = []  # prose before any SHOT: the implicit shot, or ignored
+    loose_sfx: list[list[str]] = []
     scene.pick_owners = [("head",)] * len(ex.picks)
     for raw in lines:
-        if not raw or _BINDING.match(raw):
+        if not raw or _BINDING.match(raw) or _DSL_ONLY.match(raw):
             continue
         chunk = len(scene.chunks) - (0 if _CHUNK.match(raw) else 1)
         owner = ("head",) if chunk < 0 else ("handoff" if _HANDOFF.match(raw) else "chunk", chunk)
@@ -214,16 +218,24 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue]) -> Scene:
             body = m.group(1).strip()
             if body.lower() == "silence":
                 scene.silence = True
-            elif cur is None:
-                lint.append(Issue("warn", "SFX before the first SHOT is ignored."))
             else:
-                cur.sfx.append([x.strip() for x in body.split(";") if x.strip()])
+                (cur.sfx if cur else loose_sfx).append([x.strip() for x in body.split(";") if x.strip()])
         elif cur is None:
-            lint.append(Issue("warn", f"Ignored text before the first SHOT: {line[:48]}"))
+            loose.append(line)
         elif m := _VOICE.match(line):
             cur.items.append(Voice(m.group(1).strip(), m.group(2) or "", m.group(3).strip()))
         else:
             cur.items.append(line)
+    if not scene.shots and loose and not scene.chunks:
+        implicit = Shot(IMPLICIT_SECONDS, sfx=loose_sfx)
+        for line in loose:
+            m = _VOICE.match(line)
+            implicit.items.append(Voice(m.group(1).strip(), m.group(2) or "", m.group(3).strip()) if m else line)
+        scene.shots.append(implicit)
+    else:
+        lint.extend(Issue("warn", f"Ignored text before the first SHOT: {line[:48]}") for line in loose)
+        if loose_sfx:
+            lint.append(Issue("warn", "SFX before the first SHOT is ignored."))
     t = 0.0
     for shot in scene.shots:
         shot.start, t = t, t + shot.duration

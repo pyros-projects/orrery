@@ -51,6 +51,7 @@ const REF = [
 const TIPS = [
   ["Krea 2", 'Write sentences, not tag lists. Name the medium, or Krea picks one for you. Put words to render in quotes: a sign reading "OPEN".'],
   ["H3 cuts", "Start shots 2+ with a noun phrase: the compiler writes “the camera cuts to …” in front of it."],
+  ["Any prompt on H3", "A template without SHOT lines (a Krea prompt, say) compiles for h3-base as one 5 s shot. Add a SHOT line when you want to set the duration or the camera."],
   ["H3 length", "All shots together: 4–15 s. Up to four SFX lines. Wire the node's width, height and length into the MiniMax H3 latent node instead of copying them."],
   ["Weights", "(word:1.2) does nothing on H3 or Krea 2; use {a|b:3} to change the odds instead."],
   ["Ref2VA labels", "orrery numbers <Subject N>, <Picture i>, <Video k> and <Audio j> exactly like the Reference to Video node: images and videos by slot, audio after the video soundtracks. In the other modes, cast names expand to their descriptions."],
