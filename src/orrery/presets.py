@@ -130,13 +130,39 @@ def tag_preset(home: Home, name: str, add=(), remove=()) -> list[str]:
     return tags
 
 
+def _prune(home: Home, folder: Path) -> None:
+    while folder != home.presets_dir and folder.exists() and not any(folder.iterdir()):
+        folder.rmdir()
+        folder = folder.parent
+
+
 def delete_preset(home: Home, name: str) -> None:
     path = _writable(home, name)
     path.unlink()
-    folder = path.parent
-    while folder != home.presets_dir and not any(folder.iterdir()):
-        folder.rmdir()
-        folder = folder.parent
+    _prune(home, path.parent)
+
+
+def rename_preset(home: Home, name: str, to: str) -> str:
+    src, dst = _writable(home, name), _path(home, to)
+    if dst.exists():
+        raise FileExistsError(f"preset '{preset_name(to)}' already exists")
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    src.rename(dst)
+    _prune(home, src.parent)
+    return preset_name(to)
+
+
+def set_meta(home: Home, name: str, updates: dict) -> dict:
+    """Set front matter fields; an empty value removes the field."""
+    path = _writable(home, name)
+    meta, body = split_front_matter(path.read_text(encoding="utf-8"))
+    for key, value in updates.items():
+        if value in (None, "", [], ()):
+            meta.pop(key, None)
+        else:
+            meta[key] = value
+    path.write_text(_join_front_matter(meta, body), encoding="utf-8")
+    return meta
 
 
 def remember_template(home: Home, text: str) -> str:

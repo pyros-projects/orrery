@@ -16,6 +16,14 @@ from orrery.library import Library, load_libraries
 BUILTIN_DIR = Path(__file__).parent / "builtin"
 
 
+def write_atomic(path: Path, text: str) -> None:
+    """Write via a temp file and rename, so readers never see half a file."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(text, encoding="utf-8")
+    os.replace(tmp, path)
+
+
 @dataclass(frozen=True)
 class Home:
     root: Path
@@ -58,8 +66,7 @@ class Home:
         return {k: float(v) for k, v in json.loads(self.weights_path.read_text()).items()}
 
     def save_weights(self, weights: dict[str, float]) -> None:
-        self.root.mkdir(parents=True, exist_ok=True)
-        self.weights_path.write_text(json.dumps(weights, indent=2, sort_keys=True))
+        write_atomic(self.weights_path, json.dumps(weights, indent=2, sort_keys=True))
 
     def config(self) -> dict:
         if not self.config_path.exists():
