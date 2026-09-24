@@ -1,0 +1,93 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { highlight } from "../../comfyui/web/app/highlight.js";
+import {
+  filterPresets, filterRows, glyph, markPicks, pickerGroups, stats, templateHash,
+} from "../../comfyui/web/app/model.js";
+
+const known = new Set(["creature", "place"]);
+
+test("libraries are coloured, unknown ones flagged", () => {
+  const html = highlight("a __creature__ in __nowhere__", known);
+  assert.match(html, /<span class="t-lib">__creature__<\/span>/);
+  assert.match(html, /<span class="t-lib t-miss">__nowhere__<\/span>/);
+});
+
+test("bindings, braces and multi-picks are coloured", () => {
+  const html = highlight("$hero = {1-2$$a|b}", known);
+  assert.match(html, /<span class="t-var">\$hero<\/span>/);
+  assert.match(html, /<span class="t-brace">1-2\$\$<\/span>/);
+  assert.equal((html.match(/t-brace/g) || []).length, 4);
+});
+
+test("screenplay lines get keyword colours and html is escaped", () => {
+  const html = highlight("@h3 t2va 16:9\nSHOT 5s | push in\nKEEPER (warm voice): Hi\nSFX: rain\nThe start of <Picture 1>.", known);
+  assert.match(html, /<span class="t-head">@h3 t2va 16:9<\/span>/);
+  assert.match(html, /<span class="t-kw">SHOT 5s<\/span>/);
+  assert.match(html, /<span class="t-kw">KEEPER \(warm voice\):<\/span>/);
+  assert.match(html, /<span class="t-kw">SFX:<\/span>/);
+  assert.match(html, /&lt;Picture 1&gt;/);
+});
+
+test("enhance and params lines", () => {
+  const html = highlight("> moody\n: x8 seed=100", known);
+  assert.match(html, /<span class="t-enh">&gt; moody<\/span>/);
+  assert.match(html, /<span class="t-param">: x8 seed=100<\/span>/);
+});
+
+test("template hash matches orrery's sha256 prefix", () => {
+  assert.equal(templateHash("a __creature__"), "f8ad7a7fd793fbc4");
+  assert.equal(templateHash(""), "e3b0c44298fc1c14");
+  assert.equal(templateHash("Späti 🌙\n$x = {a|b}"), "7fe816c6c2103fe3");
+});
+
+test("stats count rolls, libraries, bindings and H3 timing", () => {
+  const s = stats("$a = __creature__\n{x|y} in __place__ and __creature__");
+  assert.deepEqual([s.rolls, s.libs, s.binds, s.h3], [4, 2, 1, null]);
+  const h = stats("@h3 t2va\nSHOT 3s | static\nA.\nNARRATOR (voiceover): Hi\nSHOT 2.5s | cut, arc\nB.\nSFX: wind");
+  assert.deepEqual(h.h3, { shots: 2, secs: 5.5, voices: 1 });
+});
+
+test("picks are marked once each, longest first", () => {
+  const html = markPicks("a red panda and a panda", [{ value: "red panda" }, { value: "panda" }]);
+  assert.equal(html, "a <mark>red panda</mark> and a <mark>panda</mark>");
+  assert.equal(markPicks("wax, marble", [{ value: "wax, marble" }]), "<mark>wax</mark>, <mark>marble</mark>");
+});
+
+test("glyph is deterministic per key", () => {
+  assert.equal(glyph("krea/a", "#fff"), glyph("krea/a", "#fff"));
+  assert.notEqual(glyph("krea/a", "#fff"), glyph("krea/b", "#fff"));
+  assert.match(glyph("x", "#fff"), /^<svg/);
+});
+
+const cards = [
+  { name: "krea/tiny", folder: "krea", title: "Tiny world", note: "diorama", tags: ["krea"], text: "", builtin: true },
+  { name: "stills/forest", folder: "stills", title: "Forest", note: "", tags: ["moody"], text: "", builtin: false },
+  { name: "top", folder: "", title: "Top", note: "", tags: [], text: "", builtin: false },
+];
+
+test("preset filters: favorites, recent order, folder, search", () => {
+  const fav = new Set(["stills/forest"]);
+  const recent = ["top", "krea/tiny"];
+  assert.deepEqual(filterPresets(cards, { filter: "fav", favorites: fav }).map(c => c.name), ["stills/forest"]);
+  assert.deepEqual(filterPresets(cards, { filter: "recent", recent }).map(c => c.name), ["top", "krea/tiny"]);
+  assert.deepEqual(filterPresets(cards, { filter: "f:mine" }).map(c => c.name), ["top"]);
+  assert.deepEqual(filterPresets(cards, { filter: "all", search: "DIORAMA" }).map(c => c.name), ["krea/tiny"]);
+});
+
+test("picker groups favorites and recents first, folders after", () => {
+  const groups = pickerGroups(cards, { query: "", favorites: new Set(["krea/tiny"]), recent: ["top"] });
+  assert.deepEqual(groups.map(g => g[0]), ["Favorites", "Recent", "krea", "stills", "mine"]);
+  assert.deepEqual(pickerGroups(cards, { query: "forest", favorites: new Set(), recent: [] }).map(g => g[0]), ["stills"]);
+});
+
+test("galaxy rows filter by scope, rating and pick", () => {
+  const rows = [
+    { id: "1", template: "aaa", rating: "love", picks: [{ keys: ["__c__=fox"] }] },
+    { id: "2", template: "bbb", rating: null, picks: [{ keys: ["__c__=owl"] }] },
+  ];
+  assert.deepEqual(filterRows(rows, { scope: "prompt", hash: "bbb" }).map(r => r.id), ["2"]);
+  assert.deepEqual(filterRows(rows, { scope: "all", rating: "unrated" }).map(r => r.id), ["2"]);
+  assert.deepEqual(filterRows(rows, { scope: "all", rating: "love" }).map(r => r.id), ["1"]);
+  assert.deepEqual(filterRows(rows, { scope: "all", pick: "__c__=owl" }).map(r => r.id), ["2"]);
+});

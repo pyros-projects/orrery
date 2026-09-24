@@ -1,0 +1,29 @@
+// Syntax colouring for orrery templates. Pure: returns HTML for a <pre> under the editor.
+
+export const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+
+const HEAD = /^(\s*)(SHOT\s+[\d.]+\s*s\b|SFX:|MUSIC:|style:|[A-Z][A-Z0-9 _-]*?(?:\s*\([^)]*\))?\s*:(?=\s))/;
+const TOKEN = /(__(\w+)(?:\[[\w-]+\])?__)|(\$[A-Za-z_]\w*)|(\d+(?:-\d+)?\$\$)|([{}|])|([^_${}|]+|[_$])/g;
+
+function line(text, known) {
+  if (/^\s*@h3\b/.test(text)) return `<span class="t-head">${esc(text)}</span>`;
+  if (/^\s*>/.test(text)) return `<span class="t-enh">${esc(text)}</span>`;
+  if (/^\s*:\s*(x\d|seed=|w\d|h\d)/.test(text)) return `<span class="t-param">${esc(text)}</span>`;
+  let out = "";
+  let rest = text;
+  const head = text.match(HEAD);
+  if (head) {
+    out = esc(head[1]) + `<span class="t-kw">${esc(head[2])}</span>`;
+    rest = text.slice(head[0].length);
+  }
+  return out + rest.replace(TOKEN, (m, lib, name, v, multi, brace) => {
+    if (lib) return `<span class="t-lib${known.has(name) ? "" : " t-miss"}">${esc(lib)}</span>`;
+    if (v) return `<span class="t-var">${esc(v)}</span>`;
+    if (multi || brace) return `<span class="t-brace">${esc(m)}</span>`;
+    return esc(m);
+  });
+}
+
+export function highlight(src, known) {
+  return src.split("\n").map((l) => line(l, known)).join("\n");
+}

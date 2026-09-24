@@ -1,0 +1,289 @@
+/* orrery node app. Everything is scoped under .orrery-app / .orrery-overlay so ComfyUI's own
+   classes (.btn, .card, .toast …) and ours never meet. */
+
+@font-face { font-family: "Orrery Sans"; src: url("./fonts/InstrumentSans.woff2") format("woff2"); font-weight: 400 700; font-display: swap; }
+@font-face { font-family: "Orrery Serif"; src: url("./fonts/InstrumentSerif-Italic.woff2") format("woff2"); font-style: italic; font-display: swap; }
+@font-face { font-family: "Orrery Mono"; src: url("./fonts/JetBrainsMono.woff2") format("woff2"); font-weight: 400 600; font-display: swap; }
+
+.orrery-app, .orrery-overlay {
+  --ground: #0f1016; --surface: #20212b; --raised: #292a36; --hover: #30313f; --line: #333548; --well: #16171e; --card: #1c1d26;
+  --ink: #ebe8f2; --muted: #9d9ab3; --faint: #686680;
+  --brass: #e2b45c; --brass-soft: rgba(226,180,92,.14); --brass-ink: #1d1507;
+  --teal: #5cc8c2; --violet: #b494f5; --rose: #f07aa0; --sky: #7fb4ff; --danger: #e5645a;
+  --love: #f06c8e; --like: #f2b84b; --nope: #8a8fa6; --hate: #c9453d;
+  --ui: "Orrery Sans", "Instrument Sans", system-ui, "Segoe UI", sans-serif;
+  --mono: "Orrery Mono", "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --serif: "Orrery Serif", Georgia, serif;
+  color-scheme: dark;
+}
+.orrery-app { position: relative; box-sizing: border-box; width: 100%; height: 100%; min-height: 560px; display: flex; flex-direction: column; overflow: hidden;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; font: 13px/1.45 var(--ui); text-align: left; }
+.orrery-app *, .orrery-app *::before, .orrery-app *::after { box-sizing: border-box; }
+.orrery-app.big { border-radius: 14px; min-height: 0; }
+.orrery-app button, .orrery-app input, .orrery-app textarea { font: inherit; color: inherit; margin: 0; }
+.orrery-app button { cursor: pointer; background: none; border: 0; padding: 0; }
+.orrery-app button:disabled { cursor: default; opacity: .4; }
+.orrery-app :focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.orrery-app .i { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.orrery-app .i.fill { fill: currentColor; }
+.orrery-app .mono { font-family: var(--mono); }
+.orrery-app .muted { color: var(--muted); }
+.orrery-app .flex { display: inline-flex; }
+.orrery-app .flush { margin: 0; }
+.orrery-app .grow { flex: 1; }
+.orrery-app .empty { padding: 28px 16px; text-align: center; color: var(--faint); }
+.orrery-app mark { background: rgba(92,200,194,.13); color: #8fe0db; border-radius: 3px; padding: 0 2px; }
+.orrery-app code { font: 11.5px var(--mono); color: var(--teal); background: #262734; border-radius: 4px; padding: 1px 4px; }
+.orrery-app .label { font: 600 10.5px/1.2 var(--ui); letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
+.orrery-app .scroll { overflow-y: auto; min-height: 0; flex: 1; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+@media (prefers-reduced-motion: reduce) { .orrery-app *, .orrery-overlay * { transition: none !important; animation: none !important; } }
+
+/* head and tabs */
+.orrery-app .app-head { display: flex; align-items: center; gap: 10px; padding: 0 8px 0 12px; border-bottom: 1px solid var(--line); background: #1d1e27; flex: none; }
+.orrery-app .brand { display: flex; align-items: center; gap: 7px; font: italic 400 19px/1 var(--serif); padding-right: 4px; }
+.orrery-app .brand svg { width: 20px; height: 20px; }
+.orrery-app .tabs { display: flex; gap: 2px; flex: 1; overflow-x: auto; scrollbar-width: none; }
+.orrery-app .tab { padding: 11px 10px 10px; color: var(--muted); font-weight: 500; border-bottom: 2px solid transparent; white-space: nowrap; display: flex; gap: 6px; align-items: center; }
+.orrery-app .tab:hover { color: var(--ink); }
+.orrery-app .tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--brass); }
+.orrery-app .tab .n { font: 500 10.5px/1 var(--mono); color: var(--faint); background: var(--raised); border-radius: 999px; padding: 3px 6px; }
+.orrery-app .icon-btn { border: 1px solid transparent; border-radius: 7px; padding: 6px; color: var(--muted); display: inline-flex; }
+.orrery-app .icon-btn:not(:disabled):hover { color: var(--ink); background: var(--hover); }
+.orrery-app .view { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+
+/* controls */
+.orrery-app .btn { background: var(--raised); border: 1px solid var(--line); border-radius: 7px; padding: 5px 11px; display: inline-flex; align-items: center; gap: 6px; font-weight: 500; white-space: nowrap; }
+.orrery-app .btn:not(:disabled):hover { background: var(--hover); }
+.orrery-app .btn.primary { background: var(--brass); border-color: var(--brass); color: var(--brass-ink); }
+.orrery-app .btn.primary:not(:disabled):hover { background: #ecc16c; }
+.orrery-app .btn.ghost { background: none; border-color: transparent; color: var(--muted); }
+.orrery-app .btn.ghost:not(:disabled):hover { color: var(--ink); background: var(--hover); }
+.orrery-app .btn.danger { color: var(--danger); }
+.orrery-app .btn.slim { padding: 2px 8px; }
+.orrery-app .btn.wide { width: 100%; justify-content: center; }
+.orrery-app .chip { display: inline-flex; align-items: center; gap: 5px; background: var(--raised); border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px; font-size: 12px; color: var(--muted); white-space: nowrap; }
+.orrery-app button.chip:hover { color: var(--ink); }
+.orrery-app .chip[aria-pressed="true"] { background: var(--brass-soft); border-color: var(--brass); color: var(--ink); }
+.orrery-app .chip .sw { width: 7px; height: 7px; border-radius: 50%; }
+.orrery-app .tagchip { font: 500 11px/1 var(--mono); color: var(--muted); background: #262734; border-radius: 5px; padding: 3px 6px; display: inline-flex; gap: 4px; align-items: center; }
+.orrery-app .tagchip button { color: var(--faint); display: inline-flex; }
+.orrery-app .tagchip .i { width: 11px; height: 11px; }
+.orrery-app .input { background: #1a1b23; border: 1px solid var(--line); border-radius: 7px; padding: 6px 9px; width: 100%; }
+.orrery-app .input:focus { border-color: var(--brass); outline: none; }
+.orrery-app .search { position: relative; flex: 1; min-width: 150px; display: block; }
+.orrery-app .search .i { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); color: var(--faint); }
+.orrery-app .search .input { padding-left: 30px; }
+.orrery-app .mini { color: var(--faint); padding: 3px; border-radius: 5px; display: inline-flex; }
+.orrery-app .mini:hover { color: var(--ink); background: var(--hover); }
+.orrery-app .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.orrery-app .row.nowrap { flex-wrap: nowrap; }
+.orrery-app .row.spread { justify-content: space-between; }
+.orrery-app .row.center { justify-content: center; }
+.orrery-app .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 10px 12px; border-bottom: 1px solid var(--line); flex: none; }
+.orrery-app .bar.flat { border-bottom: 0; padding-bottom: 0; }
+.orrery-app .bar .sep { width: 1px; height: 18px; background: var(--line); margin: 0 2px; }
+.orrery-app .stat { font: 11.5px var(--mono); color: var(--faint); display: inline-flex; gap: 4px; align-items: center; }
+.orrery-app .stat b { color: var(--muted); font-weight: 500; }
+.orrery-app .warn { color: var(--brass); font-size: 12px; }
+.orrery-app .warn.bad { color: var(--danger); }
+.orrery-app .codebox { background: var(--well); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font: 12px/1.65 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; margin: 6px 0 0; color: #d6d3e3; }
+
+/* syntax colours */
+.orrery-app .t-lib { color: var(--teal); }
+.orrery-app .t-miss { color: var(--danger); text-decoration: underline wavy var(--danger); text-underline-offset: 3px; }
+.orrery-app .t-var { color: var(--rose); }
+.orrery-app .t-brace { color: var(--violet); }
+.orrery-app .t-kw, .orrery-app .t-head { color: var(--sky); }
+.orrery-app .t-kw { font-weight: 500; }
+.orrery-app .t-enh { color: var(--rose); font-style: italic; }
+.orrery-app .t-param { color: var(--faint); }
+
+/* prompt tab */
+.orrery-app .pbar { display: flex; align-items: center; gap: 8px; padding: 10px 12px 6px; }
+.orrery-app .pchip { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; background: var(--raised); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; text-align: left; }
+.orrery-app .pchip:hover { border-color: #4a4c63; }
+.orrery-app .fold { font: 500 11px/1 var(--mono); padding: 3px 6px; border-radius: 5px; background: color-mix(in srgb, var(--c) 16%, transparent); color: var(--c); flex: none; }
+.orrery-app .ptitle { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.orrery-app .pname { font: 11.5px var(--mono); color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.orrery-app .dirty { color: var(--brass); font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; }
+.orrery-app .dirty::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--brass); }
+.orrery-app .pchip .caret { margin-left: auto; color: var(--faint); display: inline-flex; }
+.orrery-app .pnote { margin: 0 12px 8px; color: var(--muted); font-size: 12.5px; line-height: 1.5; max-width: 80ch; }
+.orrery-app .pnote b { color: var(--ink); font-weight: 500; }
+.orrery-app .editor { position: relative; margin: 0 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--well); height: 210px; flex: none; }
+.orrery-app.big .editor { height: 330px; }
+.orrery-app .editor pre, .orrery-app .editor textarea { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 10px 12px; font: 12.5px/1.65 var(--mono); letter-spacing: 0;
+  white-space: pre-wrap; overflow-wrap: anywhere; border: 0; border-radius: 8px; tab-size: 2; scrollbar-gutter: stable; }
+.orrery-app .editor pre { overflow: hidden; color: #d6d3e3; pointer-events: none; background: none; }
+.orrery-app .editor textarea { background: transparent; color: transparent; caret-color: var(--brass); resize: none; overflow-y: auto; outline: none; box-shadow: none;
+  scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+.orrery-app .editor textarea::selection { background: rgba(226,180,92,.28); color: transparent; }
+.orrery-app .editor:focus-within { border-color: #4a4c63; }
+.orrery-app .ac { position: absolute; z-index: 20; min-width: 240px; max-width: 340px; background: #1f2029; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.5); overflow: hidden; font-size: 12px; }
+.orrery-app .ac ul { list-style: none; margin: 0; padding: 3px 0; max-height: 200px; overflow-y: auto; }
+.orrery-app .ac li { display: flex; justify-content: space-between; gap: 14px; padding: 4px 10px; cursor: pointer; font-family: var(--mono); }
+.orrery-app .ac li span:last-child { color: var(--faint); font-family: var(--ui); }
+.orrery-app .ac li.on { background: var(--hover); }
+.orrery-app .ac .pv { padding: 5px 10px; border-top: 1px solid var(--line); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.orrery-app .pfoot { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px; flex: none; }
+.orrery-app .rolls { display: grid; gap: 6px; padding: 0 12px 12px; }
+.orrery-app.big .rolls { grid-template-columns: repeat(3, 1fr); }
+.orrery-app .roll { background: #1b1c24; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12.5px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; display: grid; gap: 4px; align-content: start; }
+.orrery-app .roll .seed { font: 11px var(--mono); color: var(--faint); }
+.orrery-app .lint { font: 11px var(--mono); color: var(--brass); }
+.orrery-app .lint.error { color: var(--danger); }
+
+/* quick picker */
+.orrery-app .pop { position: absolute; z-index: 30; left: 12px; right: 12px; top: 92px; background: #1f2029; border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 16px 50px rgba(0,0,0,.55); display: flex; flex-direction: column; max-height: min(390px, calc(100% - 104px)); }
+.orrery-app .pop .search { margin: 8px; flex: none; }
+.orrery-app .pop ul { list-style: none; margin: 0; padding: 0 4px 6px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+.orrery-app .pop .grp { padding: 8px 8px 4px; }
+.orrery-app .pop li button { width: 100%; display: flex; align-items: center; gap: 9px; border-radius: 7px; padding: 5px 8px; text-align: left; }
+.orrery-app .pop li button.on, .orrery-app .pop li button:hover { background: var(--hover); }
+.orrery-app .pop .th { width: 30px; height: 30px; border-radius: 6px; overflow: hidden; flex: none; background: #15161c; }
+.orrery-app .pop .th img, .orrery-app .pop .th svg { width: 100%; height: 100%; object-fit: cover; display: block; }
+.orrery-app .pop .tt { min-width: 0; display: flex; flex-direction: column; }
+.orrery-app .pop .tt span:first-child { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.orrery-app .pop .foot { border-top: 1px solid var(--line); padding: 6px 8px; display: flex; justify-content: space-between; align-items: center; color: var(--faint); font-size: 11.5px; }
+
+/* presets and galaxy grids */
+.orrery-app .split { display: grid; grid-template-columns: minmax(0, 1fr); flex: 1; min-height: 0; }
+.orrery-app .split > .scroll { min-height: 0; }
+.orrery-app.big .split.has-detail { grid-template-columns: minmax(0, 1fr) 420px; }
+.orrery-app .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; padding: 12px; align-content: start; }
+.orrery-app.big .grid { grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); }
+.orrery-app .card { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 9px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: border-color .15s, transform .15s; }
+.orrery-app .card:hover { border-color: #4b4d66; transform: translateY(-1px); }
+.orrery-app .card.sel { border-color: var(--brass); box-shadow: 0 0 0 1px var(--brass); }
+.orrery-app .thumb { aspect-ratio: 4 / 5; background: #14151b; position: relative; overflow: hidden; }
+.orrery-app .thumb img, .orrery-app .thumb svg.glyph { width: 100%; height: 100%; object-fit: cover; display: block; }
+.orrery-app .card .cap { padding: 7px 9px 8px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.orrery-app .card .cap b { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.orrery-app .card .cap span { font-size: 11.5px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.orrery-app .star { position: absolute; top: 6px; right: 6px; background: rgba(15,16,22,.65); border-radius: 7px; padding: 5px; color: #cfcde0; display: inline-flex; backdrop-filter: blur(4px); }
+.orrery-app .star.on { color: var(--brass); }
+.orrery-app .badge { position: absolute; left: 6px; bottom: 6px; background: rgba(15,16,22,.72); border-radius: 6px; padding: 2px 6px; font: 500 10.5px/1.4 var(--mono); color: #d8d5e6; display: inline-flex; gap: 4px; align-items: center; backdrop-filter: blur(4px); }
+.orrery-app .badge .i { width: 12px; height: 12px; }
+.orrery-app .lock { position: absolute; top: 8px; left: 8px; color: #cfcde0; opacity: .7; display: inline-flex; }
+.orrery-app .detail { border-left: 1px solid var(--line); background: var(--card); display: flex; flex-direction: column; min-height: 0; }
+.orrery-app:not(.big) .detail { position: absolute; inset: 44px 0 0 0; z-index: 15; border-left: 0; }
+.orrery-app .detail .head { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-bottom: 1px solid var(--line); flex: none; }
+.orrery-app .detail .head b { font-size: 14px; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.orrery-app .detail .body { padding: 12px; display: grid; gap: 12px; }
+.orrery-app .strip { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: thin; align-items: center; }
+.orrery-app .strip img, .orrery-app .strip svg, .orrery-app .strip .vid { height: 150px; border-radius: 8px; flex: none; }
+.orrery-app .strip svg { width: 120px; }
+.orrery-app .strip .hint { max-width: 26ch; }
+.orrery-app .confirm { background: rgba(229,100,90,.1); border: 1px solid rgba(229,100,90,.35); border-radius: 8px; padding: 8px 10px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.orrery-app .vid { aspect-ratio: 4 / 5; min-width: 110px; display: grid; place-items: center; color: var(--faint); background: #14151b; cursor: zoom-in; }
+.orrery-app .vid .i { width: 28px; height: 28px; }
+
+/* libraries tab */
+.orrery-app .libs { display: grid; grid-template-columns: 190px minmax(0, 1fr); flex: 1; min-height: 0; }
+.orrery-app.big .libs { grid-template-columns: 250px minmax(0, 1fr); }
+.orrery-app .liblist { border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; }
+.orrery-app .liblist .search { margin: 10px; flex: none; }
+.orrery-app .liblist ul { list-style: none; margin: 0; padding: 0 6px; }
+.orrery-app .liblist li button { width: 100%; border-radius: 7px; padding: 6px 8px; display: flex; align-items: center; gap: 6px; text-align: left; }
+.orrery-app .liblist li button:hover { background: var(--hover); }
+.orrery-app .liblist li button.on { background: var(--brass-soft); }
+.orrery-app .liblist .ln { font: 12px var(--mono); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.orrery-app .liblist .lc { font: 11px var(--mono); color: var(--faint); }
+.orrery-app .src { font: 600 9.5px/1 var(--ui); letter-spacing: .06em; text-transform: uppercase; border-radius: 4px; padding: 3px 4px; }
+.orrery-app .src.builtin { color: var(--muted); background: #2a2b37; }
+.orrery-app .src.user { color: var(--teal); background: rgba(92,200,194,.12); }
+.orrery-app .src.llm { color: var(--violet); background: rgba(180,148,245,.12); }
+.orrery-app .libmain { display: flex; flex-direction: column; min-height: 0; }
+.orrery-app .libhead { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line); flex: none; }
+.orrery-app .libhead h3 { margin: 0; font: 500 15px var(--mono); color: var(--teal); flex: 1; }
+.orrery-app .banner { margin: 10px 12px 0; padding: 8px 10px; border-radius: 8px; background: #23242f; border: 1px solid var(--line); color: var(--muted); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 12.5px; flex: none; }
+.orrery-app .banner b { color: var(--ink); font-weight: 500; }
+.orrery-app .entries { width: 100%; border-collapse: collapse; }
+.orrery-app .entries th { text-align: left; padding: 8px 12px 6px; position: sticky; top: 0; background: var(--surface); z-index: 1; }
+.orrery-app .entries td { padding: 3px 12px; border-top: 1px solid #272836; vertical-align: middle; }
+.orrery-app .entries td.v input { background: transparent; border: 1px solid transparent; border-radius: 6px; padding: 4px 6px; width: 100%; font: 12.5px var(--mono); }
+.orrery-app .entries td.v input:not(:disabled):hover { border-color: var(--line); }
+.orrery-app .entries td.v input:focus { border-color: var(--brass); outline: none; background: #1a1b23; }
+.orrery-app .entries td.v input:disabled { opacity: 1; }
+.orrery-app .entries td.t { white-space: nowrap; }
+.orrery-app .entries td.w input { width: 56px; background: #1a1b23; border: 1px solid var(--line); border-radius: 6px; padding: 3px 5px; font: 12px var(--mono); text-align: right; }
+.orrery-app .learn { display: flex; align-items: center; gap: 6px; font: 11px var(--mono); color: var(--faint); min-width: 92px; }
+.orrery-app .learn .bar2 { flex: 1; height: 5px; border-radius: 3px; background: #2a2b37; position: relative; overflow: hidden; min-width: 40px; }
+.orrery-app .learn .bar2 i { position: absolute; top: 0; bottom: 0; background: var(--teal); border-radius: 3px; }
+.orrery-app .learn .bar2 i.down { background: var(--nope); }
+.orrery-app .learn.up { color: var(--teal); }
+.orrery-app .learn.dn { color: var(--nope); }
+.orrery-app .addrow { display: flex; gap: 6px; padding: 10px 12px; border-top: 1px solid var(--line); flex: none; }
+.orrery-app .ask { margin: 0 12px 12px; display: flex; gap: 8px; align-items: center; border: 1px dashed #3d3f58; border-radius: 8px; padding: 7px 10px; color: var(--faint); font-size: 12px; flex: none; }
+.orrery-app .ask .i { color: var(--violet); }
+.orrery-app .tagadd { width: 64px; background: transparent; border: 1px dashed var(--line); border-radius: 5px; font: 11px var(--mono); padding: 2px 5px; color: var(--muted); }
+
+/* galaxy tab */
+.orrery-app .rule { font-size: 11.5px; color: var(--faint); padding: 10px 12px 0; margin: 0; }
+.orrery-app .rule b { font-weight: 500; }
+.orrery-app .rule .love { color: var(--love); } .orrery-app .rule .like { color: var(--like); }
+.orrery-app .rule .nope { color: var(--nope); } .orrery-app .rule .hate { color: var(--hate); }
+.orrery-app .gcard { position: relative; border-radius: 9px; overflow: hidden; background: #14151b; border: 1px solid var(--line); }
+.orrery-app .gcard img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; cursor: zoom-in; }
+.orrery-app .gcard .rate { position: absolute; left: 6px; right: 6px; bottom: 34px; display: flex; justify-content: center; gap: 4px; opacity: 0; transition: opacity .15s; }
+.orrery-app .gcard:hover .rate, .orrery-app .gcard:focus-within .rate, .orrery-app .gcard.rated .rate { opacity: 1; }
+.orrery-app .rbtn { background: rgba(15,16,22,.78); border: 1px solid rgba(255,255,255,.08); border-radius: 999px; padding: 6px; color: #d8d5e6; display: inline-flex; backdrop-filter: blur(6px); transition: transform .1s; }
+.orrery-app .rbtn:hover { transform: scale(1.08); }
+.orrery-app .rbtn.love.on, .orrery-app .rbtn.love:hover { color: var(--love); }
+.orrery-app .rbtn.like.on, .orrery-app .rbtn.like:hover { color: var(--like); }
+.orrery-app .rbtn.nope.on, .orrery-app .rbtn.nope:hover { color: var(--nope); }
+.orrery-app .rbtn.hate.on, .orrery-app .rbtn.hate:hover { color: var(--hate); }
+.orrery-app .rbtn.on { background: rgba(15,16,22,.92); border-color: currentColor; }
+.orrery-app .gcard .gfoot { display: flex; justify-content: space-between; gap: 6px; padding: 6px 8px; font: 11px var(--mono); color: var(--faint); background: var(--card); }
+.orrery-app .gcard .gfoot span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.orrery-app .gcard.r-love { border-color: var(--love); } .orrery-app .gcard.r-like { border-color: var(--like); }
+.orrery-app .gcard.r-nope { opacity: .75; } .orrery-app .gcard.r-hate { opacity: .5; }
+.orrery-app .gdetail .big { width: 100%; border-radius: 10px; display: block; max-height: 62vh; object-fit: contain; background: #0c0c11; }
+.orrery-app .prose { line-height: 1.6; }
+.orrery-app .picklist { display: grid; gap: 4px; margin-top: 6px; }
+.orrery-app .pick { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 7px; padding: 5px 8px; text-align: left; font-size: 12px; }
+.orrery-app .pick:hover { border-color: var(--teal); }
+.orrery-app .pick small { display: block; font: 11px var(--mono); color: var(--faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.orrery-app .pick .wv { font: 11.5px var(--mono); color: var(--faint); }
+.orrery-app .pick .wv.up { color: var(--teal); } .orrery-app .pick .wv.dn { color: var(--nope); }
+
+/* help tab */
+.orrery-app .help { padding: 12px; display: grid; gap: 18px; }
+.orrery-app.big .help { grid-template-columns: 1fr 1fr; align-items: start; }
+.orrery-app .help section { display: grid; gap: 8px; }
+.orrery-app .help h5 { margin: 0; }
+.orrery-app .lessons { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 6px; }
+.orrery-app .lesson { display: flex; gap: 8px; align-items: baseline; text-align: left; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; }
+.orrery-app .lesson:hover { border-color: var(--brass); }
+.orrery-app .lesson .ln { font: 500 11px var(--mono); color: var(--brass); }
+.orrery-app .ref { display: grid; gap: 6px; }
+.orrery-app .refrow { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+.orrery-app .refrow .codebox { padding: 5px 9px; font-size: 11.5px; margin: 0; }
+.orrery-app .refrow .muted { font-size: 12px; }
+.orrery-app .tips { display: grid; gap: 6px; }
+.orrery-app .tips p { margin: 0; color: var(--muted); font-size: 12.5px; }
+.orrery-app .tips b { color: var(--ink); font-weight: 500; }
+
+/* sheet, toast */
+.orrery-app .sheet { position: absolute; inset: 0; z-index: 40; background: rgba(12,12,17,.55); display: flex; align-items: flex-end; justify-content: center; backdrop-filter: blur(2px); }
+.orrery-app .sheet .panel { width: 100%; max-width: 560px; background: #1f2029; border: 1px solid var(--line); border-bottom: 0; border-radius: 14px 14px 0 0; padding: 14px 14px 12px; display: grid; gap: 11px;
+  box-shadow: 0 -10px 40px rgba(0,0,0,.5); animation: orrery-up .18s ease-out; max-height: 100%; overflow-y: auto; }
+.orrery-app.big .sheet { align-items: center; }
+.orrery-app.big .sheet .panel { border-radius: 14px; border-bottom: 1px solid var(--line); }
+@keyframes orrery-up { from { transform: translateY(24px); opacity: 0; } }
+.orrery-app .panel h4 { margin: 0; font: italic 400 21px/1.1 var(--serif); }
+.orrery-app .field { display: grid; gap: 5px; }
+.orrery-app .namebox { display: flex; align-items: center; background: #1a1b23; border: 1px solid var(--line); border-radius: 7px; }
+.orrery-app .namebox:focus-within { border-color: var(--brass); }
+.orrery-app .namebox span { padding-left: 9px; font: 12.5px var(--mono); color: var(--faint); }
+.orrery-app .namebox input { background: none; border: 0; padding: 6px 9px 6px 2px; font: 12.5px var(--mono); width: 100%; outline: none; }
+.orrery-app .panel .acts { display: flex; justify-content: flex-end; gap: 8px; }
+.orrery-app .toast { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 50; background: #2b2c39; border: 1px solid #3c3e55; border-radius: 9px; padding: 7px 8px 7px 12px;
+  display: flex; gap: 10px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,.5); max-width: calc(100% - 24px); font-size: 12.5px; animation: orrery-up .18s ease-out; }
+.orrery-app .toast .btn { padding: 3px 9px; }
+
+/* big view */
+.orrery-overlay { position: fixed; inset: 0; z-index: 2000; background: rgba(8,8,12,.72); backdrop-filter: blur(6px); padding: 16px; display: flex; }
+.orrery-overlay .frame { width: 100%; max-width: 1320px; margin: 0 auto; height: 100%; }
+.orrery-parked { border: 1px dashed #333548; border-radius: 10px; padding: 26px; text-align: center; color: #9d9ab3; font: 13px/1.45 "Orrery Sans", system-ui, sans-serif; display: flex; gap: 6px; align-items: center; justify-content: center; }
+.orrery-parked .i { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; }

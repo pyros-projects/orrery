@@ -41,6 +41,7 @@ def test_node_pack_serves_its_frontend():
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
 def test_frontend_completion_logic():
-    result = subprocess.run(["node", "--test", str(REPO / "tests" / "js" / "complete.test.mjs")],
+    files = sorted(str(f) for f in (REPO / "tests" / "js").glob("*.test.mjs"))
+    result = subprocess.run(["node", "--test", *files],
                             capture_output=True, text=True, check=False)
     assert result.returncode == 0, result.stdout + result.stderr
