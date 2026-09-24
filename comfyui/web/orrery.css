@@ -128,9 +128,9 @@
 .orrery-app .pfoot { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px; flex: none; }
 .orrery-app .rolls { display: grid; gap: 6px; padding: 0 12px 12px; }
 .orrery-app.big .rolls { grid-template-columns: repeat(3, 1fr); }
-.orrery-app .roll { background: #1b1c24; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12.5px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; display: grid; gap: 4px; align-content: start; }
-.orrery-app .roll .seed { font: 11px var(--mono); color: var(--faint); }
-.orrery-app .lint { font: 11px var(--mono); color: var(--brass); }
+.orrery-app .roll { background: #1b1c24; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12.5px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+.orrery-app .roll .seed { display: block; margin-bottom: 3px; font: 11px var(--mono); color: var(--faint); }
+.orrery-app .lint { display: block; margin-top: 4px; font: 11px var(--mono); color: var(--brass); }
 .orrery-app .lint.error { color: var(--danger); }
 
 /* quick picker */
@@ -205,6 +205,7 @@
 .orrery-app .entries td.v input:not(:disabled):hover { border-color: var(--line); }
 .orrery-app .entries td.v input:focus { border-color: var(--brass); outline: none; background: #1a1b23; }
 .orrery-app .entries td.v input:disabled { opacity: 1; }
+.orrery-app .entries td.v { width: 48%; }
 .orrery-app .entries td.t { white-space: nowrap; }
 .orrery-app .entries td.w input { width: 56px; background: #1a1b23; border: 1px solid var(--line); border-radius: 6px; padding: 3px 5px; font: 12px var(--mono); text-align: right; }
 .orrery-app .learn { display: flex; align-items: center; gap: 6px; font: 11px var(--mono); color: var(--faint); min-width: 92px; }
@@ -239,6 +240,7 @@
 .orrery-app .gcard.r-love { border-color: var(--love); } .orrery-app .gcard.r-like { border-color: var(--like); }
 .orrery-app .gcard.r-nope { opacity: .75; } .orrery-app .gcard.r-hate { opacity: .5; }
 .orrery-app .gdetail .big { width: 100%; border-radius: 10px; display: block; max-height: 62vh; object-fit: contain; background: #0c0c11; }
+.orrery-app:not(.big) .gdetail .big { max-height: 320px; }
 .orrery-app .prose { line-height: 1.6; }
 .orrery-app .picklist { display: grid; gap: 4px; margin-top: 6px; }
 .orrery-app .pick { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 7px; padding: 5px 8px; text-align: left; font-size: 12px; }

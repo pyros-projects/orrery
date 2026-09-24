@@ -133,15 +133,28 @@ ln -s ~/projects/private/orrery/comfyui ~/repos/comfy-ui/custom_nodes/orrery
 
 Restart ComfyUI. Nodes under **orrery**:
 
-- **Orrery Prompt**: template, seed, target (`text`, `h3-base`, `flat`) →
+- **Orrery Prompt**: seed and target (`text`, `h3-base`, `flat`) →
   `text`, `picks`, `seed`. Wire `text` into your text encoder or the MiniMax H3
-  prompt input. The optional `preset` dropdown replaces the template field
-  (the list refreshes when ComfyUI reloads nodes).
-  The template field completes as you type: `__` lists your libraries (size,
-  origin, a few entries), `__creature[` its tags, `$` your bindings, and in
-  `@h3` screenplays `SHOT 5s | ` offers camera moves, transitions and
-  modifiers. ↑/↓ to choose, Enter/Tab to insert, Esc to close. Unknown
-  libraries outline the field in red; hover it to see which.
+  prompt input. The node is the whole of orrery, in five tabs (⤢ opens the
+  same app over the canvas, Esc brings it back):
+  - **Prompt**: the template editor with syntax colours and completion
+    (`__` libraries, `__creature[` tags, `$` bindings, camera words after
+    `SHOT 5s |`). Open a preset from the bar above it; ● marks unsaved
+    edits; Save, Save as…, Revert. **Roll 3** shows three expansions at the
+    next seeds without queueing anything.
+  - **Presets**: every preset with your newest output as its preview; search,
+    folders, favorites, recents, a sample roll and the template per preset.
+  - **Libraries**: edit wildcard lists by hand: entries, tags, weights, and
+    the weight each entry learned from your ratings. Built-ins become yours
+    with **Make it mine**.
+  - **Galaxy**: every logged output. love / like / nope / hate multiply the
+    learned weight of each pick by 1.5 / 1.2 / 0.8 / 0.5 (re-rating replaces
+    the factor). **Use template + seed** restores an output and sets the seed
+    to fixed.
+  - **Help**: the DSL at a glance, the tutorial lessons, writing tips.
+
+  Workflows that used the old `preset` dropdown open with that preset loaded
+  into the editor.
 - **Orrery Log**: `picks` (+ `images`) → saves PNGs with the picks embedded and
   appends one line per output to `~/.orrery/galaxy.jsonl`. For videos saved by
   another node, put the file path into `media_path`.
