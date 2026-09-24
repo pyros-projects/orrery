@@ -98,16 +98,11 @@ def llm_for(home: Home, clip=None, seed: int = 0) -> ComfyBackend | None:
 
 
 def _llm_work(home: Home, template: str, clip, seed: int) -> list[str]:
-    """Let the LLM create or top up the libraries the template asks for; unloads it afterwards."""
+    """Let the LLM create or top up the libraries the template asks for. ComfyUI unloads it."""
     libraries = home.libraries()
     if all(name in libraries and len(libraries[name].entries) >= n for name, n in wanted_libraries(template).items()):
         return []
-    backend = llm_for(home, clip, seed=seed)
-    try:
-        return ensure_libraries(home, template, backend, int(llm_config(home)["entries"]))
-    finally:
-        if release := getattr(backend, "release", None):
-            release()
+    return ensure_libraries(home, template, llm_for(home, clip, seed=seed), int(llm_config(home)["entries"]))
 
 
 def run_prompt(template: str, seed: int, target: str, home: str = "",

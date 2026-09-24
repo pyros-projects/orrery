@@ -288,3 +288,13 @@ def test_without_an_llm_a_missing_library_still_names_the_fix(home, monkeypatch)
 
 def test_the_node_takes_an_optional_clip_as_its_llm():
     assert OrreryPrompt.INPUT_TYPES()["optional"]["clip"][0] == "CLIP"
+
+
+def test_the_node_leaves_unloading_to_comfyui(home, monkeypatch):
+    """Unloading right after generate frees tensors ComfyUI's CUDA graph still holds: a warning flood."""
+    from orrery import comfy
+    from orrery.llm import FakeBackend
+    backend = FakeBackend([json.dumps(["velvet mule"])])
+    backend.release = lambda: pytest.fail("orrery must not unload the model itself")
+    monkeypatch.setattr(comfy, "llm_for", lambda h, clip=None, **_: backend)
+    run_prompt("a model in __runway_shoes__", 1, "text", str(home))

@@ -11,8 +11,10 @@ The choice lives in orrery.yaml, set from the node's settings:
       clip_type: minimax                  # how ComfyUI loads it; minimax suits Qwen3-VL builds
       entries: 12                         # a library the LLM creates starts with this many
 
-A text encoder wired into the node's `clip` input wins over the setting and is never unloaded,
-because the rest of the graph still needs it.
+A text encoder wired into the node's `clip` input wins over the setting. orrery never unloads a
+model itself: ComfyUI moves the encoder out when the video model needs the room, and unloading it
+right after generate frees tensors ComfyUI's CUDA graph still holds (a flood of CUDAMallocAsync
+warnings). A loaded encoder is kept for the next run, one at a time, as Pixaroma does.
 """
 
 import re
@@ -21,6 +23,7 @@ from pathlib import Path
 DEFAULTS = {"file": None, "clip_type": "minimax", "entries": 12, "temperature": 0.3, "max_length": 768}
 TRUNCATED = re.compile(r"minimax[_-]?h3|_h3_int|h3_te", re.IGNORECASE)  # encoders that cannot generate
 _THINK_BLOCK = re.compile(r"<think>.*?</think>", re.DOTALL)
+_CACHE: dict[tuple[str, str], object] = {}  # (file, clip_type) → the loaded encoder; one entry
 
 
 def can_write(file_name: str) -> bool:
@@ -69,7 +72,6 @@ class ComfyBackend:
     def __init__(self, file: str | None = None, clip=None, clip_type: str = "minimax",
                  temperature: float = 0.3, max_length: int = 768, seed: int = 0) -> None:
         self.file, self._clip, self.clip_type = file, clip, clip_type
-        self.owned = clip is None  # only a model we loaded is ours to unload
         self.temperature, self.max_length, self.seed = temperature, max_length, seed
         self.name = Path(file).stem if file else "the wired text encoder"
         self.used = False
@@ -83,6 +85,13 @@ class ComfyBackend:
         return comfy.sd.load_clip(ckpt_paths=[path], embedding_directory=folder_paths.get_folder_paths("embeddings"),
                                   clip_type=kind, model_options={})
 
+    def _cached(self):
+        key = (self.file, self.clip_type)
+        if key not in _CACHE:
+            _CACHE.clear()  # one encoder at a time: a new choice lets the old one go
+            _CACHE[key] = self._load()
+        return _CACHE[key]
+
     def complete(self, prompt: str) -> str:
         # ComfyUI 0.37 keeps a fixed KV cache and CUDA graph per execution: a second generate in the
         # same run reads stale buffers and trips a device-side assert that kills the whole process.
@@ -90,7 +99,7 @@ class ComfyBackend:
             raise RuntimeError("orrery asks the language model once per run; a second request was refused.")
         self.used = True
         if self._clip is None:
-            self._clip = self._load()
+            self._clip = self._cached()
         tokens = self._clip.tokenize(chat(prompt), skip_template=True, min_length=1, thinking=False)
         try:
             ids = self._clip.generate(tokens, do_sample=True, max_length=self.max_length,
@@ -103,16 +112,3 @@ class ComfyBackend:
                                "Qwen3-VL build in orrery's settings.") from err
         out = self._clip.decode(ids)
         return strip_reasoning(out if isinstance(out, str) else str(out or ""))
-
-    def release(self) -> None:
-        """Give the VRAM back: unload first, then empty the cache (the cache alone frees nothing)."""
-        if not self.owned or self._clip is None:
-            return
-        import comfy.model_management as mm  # ComfyUI
-
-        try:
-            mm.unload_model_and_clones(self._clip.patcher)
-        except Exception:  # noqa: BLE001 - older ComfyUI
-            mm.unload_all_models()
-        mm.soft_empty_cache()
-        self._clip = None

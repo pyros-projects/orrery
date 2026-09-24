@@ -39,3 +39,13 @@ def test_the_engine_writes_once_per_run():
     assert backend.complete("list") == '["a"]'
     with pytest.raises(RuntimeError, match="once"):
         backend.complete("again")
+
+
+def test_a_loaded_encoder_is_reused_by_the_next_run(monkeypatch):
+    from orrery import comfy_llm
+    loads = []
+    monkeypatch.setattr(comfy_llm.ComfyBackend, "_load", lambda self: loads.append(self.file) or FakeClip())
+    comfy_llm._CACHE.clear()
+    for _ in range(2):
+        comfy_llm.ComfyBackend(file="qwen3vl_4b_bf16.safetensors").complete("list")
+    assert loads == ["qwen3vl_4b_bf16.safetensors"]
