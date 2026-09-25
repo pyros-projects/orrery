@@ -24,8 +24,12 @@ function statsHTML(app) {
     + `${out.cli.length ? `<span class="stat cli" title="In ComfyUI, use the Run count and the seed widget">${esc(out.cli.join(" "))}: CLI only</span>` : ""}<span class="grow"></span>`
     + `${outs ? `<button class="btn ghost" data-act="outputs">${icon("image")}${outs} output${outs === 1 ? "" : "s"}</button>` : ""}`
     + `<button class="btn" data-act="test" title="Roll it in the Test tab: a few seeds, or a reel's clips">${icon("dice")}Test</button>`
+    + `<label class="rep" title="How many runs Generate queues, one after another; seed and segment step between them as their control after generate says, so a reel plays that many clips">×<input type="number" min="1" max="999" value="${repeats(app)}" data-rep aria-label="Runs per Generate"></label>`
     + `<button class="btn primary" data-act="generate" title="Queue only what this node feeds, up to its Save nodes; their files go to the galaxy">${icon("play")}Generate</button>`;
 }
+
+// Runs per Generate, kept in the node's properties so the workflow remembers it.
+const repeats = (app) => Math.min(999, Math.max(1, Math.floor(Number(app.bridge.props.repeat) || 1)));
 
 function chipHTML(app) {
   const card = app.preset && app.card(app.preset), d = app.dirty();
@@ -81,8 +85,10 @@ export function renderPrompt(app) {
     if (act === "saveas") openSave(app, { text: applyDials(app.text, app.bridge.getParams()), from: app.preset, link: true });
     if (act === "test") { app.go("test"); runRolls(app); }
     if (act === "generate") {
-      app.bridge.generate().then((n) => {
+      const runs = repeats(app);
+      app.bridge.generate(runs).then((n) => {
         if (!n) app.toast("Nothing to generate: connect this node's outputs toward a Save or Preview node.");
+        else if (runs > 1) app.toast(`Queued <b>${runs}</b> runs`);
       }).catch((err) => app.fail(err));
     }
     if (act === "new") { app.state.newMenu = !app.state.newMenu; return renderPrompt(app); }
@@ -90,6 +96,11 @@ export function renderPrompt(app) {
     if (starter) startNew(app, starter);
     if (act === "outputs") { app.state.gScope = "prompt"; app.go("galaxy"); }
     if (act === "browse") app.go("presets");
+  };
+  app.view.onchange = (e) => {
+    if (e.target.dataset.rep === undefined) return;
+    app.bridge.props.repeat = Number(e.target.value) || 1;
+    e.target.value = repeats(app);
   };
   if (app.state.pick) wirePicker(app);
   renderDials(app);

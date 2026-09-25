@@ -144,6 +144,8 @@
 .orrery-app .dial .mini { display: none; margin-right: 4px; }
 .orrery-app .dial.on .mini { display: inline-flex; }
 .orrery-app .pfoot { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px; flex: none; }
+.orrery-app .rep { display: inline-flex; align-items: center; gap: 3px; color: var(--muted); }
+.orrery-app .rep input { width: 3.4em; background: var(--raised); border: 1px solid var(--line); border-radius: 7px; padding: 4px 6px; color: inherit; font: inherit; text-align: right; }
 .orrery-app .rolls { display: grid; gap: 6px; padding: 10px 12px 12px; }
 .orrery-app .scroll.busy { opacity: .5; pointer-events: none; }
 .orrery-app .fsum { margin: 10px 12px 0; font: 11.5px var(--mono); }

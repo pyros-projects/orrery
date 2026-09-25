@@ -79,9 +79,10 @@ function mount(node) {
     nodeId: () => String(node.id),
     downstream: () => downstream(graphOf(node), node.id),
     // Queue only the outputs this node feeds (ComfyUI's partial execution): its branch, not the whole canvas.
-    generate: async () => {
+    // runs > 1 is ComfyUI's batch count: that many queue items, control after generate stepping between them.
+    generate: async (runs = 1) => {
       const { outputs } = downstream(graphOf(node), node.id);
-      if (outputs.length) await app.queuePrompt(0, 1, { queueNodeIds: outputs.map(String) });
+      if (outputs.length) await app.queuePrompt(0, runs, { queueNodeIds: outputs.map(String) });
       return outputs.length;
     },
     forwardWheel: (e) => app.canvas?.processMouseWheel?.(e),
