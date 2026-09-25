@@ -1,0 +1,20 @@
+---
+title: "Feature migration"
+note: "Codie's operator: one feature leaves its place and travels across HOST's skin to a new one, where it keeps working. Codie's lint: a migration needs a source and a target, so both are dials. The two states: blank skin where it was, the feature alive where it arrives. HOST is your ref image 1; delete (image 1) for text only."
+tags: [effects, h3, body_horror, ito]
+---
+@h3 ref2va 16:9 lite
+style: live-action, cinematic surreal body horror, photorealistic
+$host = __bh_host__
+$room = __bh_room__
+$feature = {the mouth|the left eye|a small dark mole beneath the eye}
+$target = {the palm of the right hand|the side of the neck|the inside of the forearm}
+$ending = {it settles into $target and opens, alive, while the old place stays smooth and blank|HOST raises the hand to the camera, and $feature looks back from $target|HOST touches the blank skin where it used to be, and a faint line begins to form there again}
+
+CAST
+HOST (image 1): $host
+
+SHOT 10s | push in, slow
+HOST stands facing the camera in $room, framed from the chest up, one hand raised with the palm open beside the face. $feature begins to slide slowly out of its place, moving across the skin like a reflection gliding over glass, while the skin it leaves behind closes smooth and featureless. It travels steadily down along the jaw and the neck, a small living shape crossing the surface of the body in one continuous path. HOST holds very still, breathing carefully, and turns the raised hand to watch it arrive. In the final moment $ending.
+SFX: quiet room ambience; restrained breathing; a soft sliding sound across the skin; a small wet settling as the feature arrives
+MUSIC: N/A

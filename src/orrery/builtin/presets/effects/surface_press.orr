@@ -1,0 +1,20 @@
+---
+title: "Surface press"
+note: "Codie's operator: something presses outward from inside HOST, and the skin stretches over it like a membrane, crisp enough to read a palm or a face. Dial what presses, where, and the ending. The two states H3 needs: smooth skin, then a sharp relief that keeps its shape. HOST is your ref image 1; delete (image 1) for text only."
+tags: [effects, h3, body_horror, ito]
+---
+@h3 ref2va 16:9 lite
+style: live-action, cinematic surreal body horror, photorealistic
+$host = __bh_host__
+$room = __bh_room__
+$presser = {an open hand|a face|five fingertips}
+$where = {the chest|the stomach|the inside of the forearm}
+$ending = {HOST presses their own palm against it from outside, palm to palm through the skin|the shape withdraws and the skin settles smooth, then a second shape presses out right beside it|the pressing face slowly opens its mouth beneath the stretched skin}
+
+CAST
+HOST (image 1): $host
+
+SHOT 10s | push in, slow
+HOST stands facing the camera in $room, framed from the waist up, dressed so that $where is bare and clearly visible. The skin of $where begins to bulge outward from inside, slowly, as if something behind it were leaning against a sheet of rubber. The bulge sharpens into $presser, and the skin stretches thin and glossy over it, following every contour exactly while staying intact. HOST holds completely still and looks down at it. The shape presses harder; the skin around it pulls taut in fine radiating creases, then relaxes a little as the pressure eases, and presses again, patient and deliberate. HOST lifts one trembling hand toward it but stops a few centimetres away. In the final moment $ending.
+SFX: quiet room ambience; shallow breathing; the soft squeak of stretched skin; a slow deep pressure sound from inside the body
+MUSIC: N/A

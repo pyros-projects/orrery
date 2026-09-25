@@ -118,7 +118,10 @@ an I2VA starter for your own stills, and a three-clip reel for H3 Motion
 Context). `effects/` holds Ito-style body-horror operators in the lite format,
 from Codie's H3 tests: subsurface travel, body suit, mirror replacement, living
 paper, glass body, living clay, elastic body, hollow vessel, filament, human
-drawer and zipper spine, each with dials over its origin, room and ending. They
+drawer and zipper spine, plus his operators surface press, feature migration,
+feature multiply, pattern takeover, organic aperture and organic interface,
+each with dials over its origin, room and ending; `@include` one into a reel
+chunk to use it as an operator. They
 follow Codie's rule for H3: turn an abstract property into a visible action
 with two states (elastic: two fixed points moving apart; clay: a press and a
 dent that stays). `characters/` holds seven sets of ten detailed people

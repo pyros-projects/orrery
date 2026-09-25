@@ -1,0 +1,19 @@
+---
+title: "Pattern takeover"
+note: "Codie's operator, with a bow to Uzumaki: a pattern crawls from the world onto HOST's skin and replaces its texture wherever it passes. Dial the pattern, where it comes from and the ending. The two states: plain skin, then skin that is the pattern, with a clean advancing edge. HOST is your ref image 1; delete (image 1) for text only."
+tags: [effects, h3, body_horror, ito]
+---
+@h3 ref2va 16:9 lite
+style: live-action, cinematic surreal body horror, photorealistic
+$host = __bh_host__
+$pattern = {tight black spirals|the faded floral print of old wallpaper|tiny handwritten lines of text|a fine honeycomb of hexagons}
+$origin = {the wall HOST leans against|the pages of an open book in HOST's hands|a small tattoo on HOST's wrist}
+$ending = {the pattern reaches the eyes and the irises become part of it|HOST steps back, and where the body was the pattern now covers the empty air in a person-shaped outline|the whole pattern begins to move, slowly turning across the body}
+
+CAST
+HOST (image 1): $host
+
+SHOT 10s | push in, slow
+HOST stands in a dim room, framed from the waist up, one hand resting on $origin, which is covered in $pattern. The pattern starts to creep off it and onto the skin of the hand, a clean advancing edge moving a few centimetres at a time, and wherever it passes the skin simply becomes $pattern, flat and exact, as though printed from the inside. HOST pulls the hand away, but the pattern keeps travelling up the wrist, across the forearm and over the shoulder, its edge sharp against the untouched skin. It reaches the neck and climbs along the jaw. HOST touches the changed skin and it feels exactly like skin. In the final moment $ending.
+SFX: quiet room ambience; uneasy breathing; a dry whispering sound like ink spreading across paper; the rustle of fabric
+MUSIC: N/A

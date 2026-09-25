@@ -1,0 +1,20 @@
+---
+title: "Organic aperture"
+note: "Codie's operator: a round opening irises open in HOST's body like a camera shutter made of skin, and what is inside is not anatomy. Dial where it opens, what it shows (Codie: opening, layered tissue or cavity) and the ending. The two states: a faint spiral crease, then an open aperture. HOST is your ref image 1; delete (image 1) for text only."
+tags: [effects, h3, body_horror, ito]
+---
+@h3 ref2va 16:9 lite
+style: live-action, cinematic surreal body horror, photorealistic
+$host = __bh_host__
+$room = __bh_room__
+$where = {the centre of the palm|the middle of the forehead|the sternum}
+$inside = {a smooth dark cavity far deeper than the body could hold|soft concentric pale layers folding inward like the inside of a flower|a small darkness scattered with faint points of light}
+$ending = {the aperture closes again, leaving only a small spiral scar|something inside the opening blinks|HOST raises it to the camera and looks through it as through a spyglass}
+
+CAST
+HOST (image 1): $host
+
+SHOT 10s | push in, slow
+HOST stands facing the camera in $room, framed from the chest up, $where bare and clearly visible. A faint spiral crease appears in the skin of $where. The crease deepens into overlapping curved flaps of skin that rotate outward in one smooth motion, exactly like the blades of a camera iris, and a perfectly round opening widens to the size of a coin, then of a palm. There is no blood and no wound; the edges are clean, soft and alive. Inside is $inside. HOST stares at it, breath held, and the rim of the aperture slowly contracts and relaxes like a pupil adjusting to the light. In the final moment $ending.
+SFX: quiet room ambience; held breath; a soft sliding of skin over skin as the aperture turns open; a faint hollow air tone from inside
+MUSIC: N/A

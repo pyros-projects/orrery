@@ -1,0 +1,20 @@
+---
+title: "Feature multiply"
+note: "Codie's operator: HOST's eyes multiply, one opening at a time in a precise row, each blinking slightly out of time with the others. Dial where the row runs, how many and the ending. The two states: one pair of eyes, then an orderly row that H3 can count. HOST is your ref image 1; delete (image 1) for text only."
+tags: [effects, h3, body_horror, ito]
+---
+@h3 ref2va 16:9 lite
+style: live-action, cinematic surreal body horror, photorealistic
+$host = __bh_host__
+$room = __bh_room__
+$row = {down the side of the neck|across the forehead|along the inside of the forearm}
+$count = {four|seven|a dozen}
+$ending = {all the eyes blink together once, perfectly in time for the first time|every eye turns at once to look straight into the camera|the newest eye opens last and it is a different colour from all the others}
+
+CAST
+HOST (image 1): $host
+
+SHOT 10s | push in, slow
+HOST stands facing the camera in $room, framed from the chest up, calm and ordinary. A thin line appears on the skin $row and opens like an eyelid: a perfectly formed human eye looks out, glistening, and blinks. A moment later a second line opens beside it, then a third, each eye appearing in the same neat row at the same careful distance, until there are $count of them. They blink slightly out of time with one another, and each one looks in its own direction. HOST's own eyes stay wide and still, as if afraid that moving them would wake the others. In the final moment $ending.
+SFX: quiet room ambience; shallow breathing; a soft moist click each time an eye opens; overlapping blinks like tiny wet shutters
+MUSIC: N/A

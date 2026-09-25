@@ -1,0 +1,6 @@
+meta: {source: "orrery body-horror pack: objects a body can grow into, with their surface and sound (organic_interface)", builtin: true}
+entries:
+  - {value: the brass handle of an old door, props: {surface: polished brass, sfx: "a faint metallic creak as brass and skin settle"}}
+  - {value: the armrest of a wooden chair, props: {surface: dark wood grain, sfx: "the slow creak of settling wood"}}
+  - {value: the iron rail of a staircase, props: {surface: cold black iron, sfx: "a low ringing of iron"}}
+  - {value: the edge of a marble tabletop, props: {surface: veined white marble, sfx: "a dry grinding of stone"}}
