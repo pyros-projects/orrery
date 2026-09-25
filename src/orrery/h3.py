@@ -22,7 +22,7 @@ speakers by description, so they render as "The woman … (S1)".
 
 import re
 from collections.abc import Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from orrery.cast import (
     MAX_SLOTS,
@@ -76,7 +76,8 @@ _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
 _HANDOFF = re.compile(r"^HANDOFF:\s*(.+)$")
 _LORA = re.compile(r"^LORA:\s*(.+)$")
 _CONTEXT = re.compile(r"^context:\s*(\d+)\s*f?$", re.IGNORECASE)
-_DSL_ONLY = re.compile(r"^(>|:\s*(x\d|seed=|w\d|h\d))")  # enhance and params lines of plain templates
+_DSL_ONLY = re.compile(r"^:\s*(x\d|seed=|w\d|h\d)")  # params lines of plain templates
+_ENHANCE = re.compile(r"^>\s*(.+)$")
 H3_FPS = 24
 DEFAULT_CONTEXT = 22  # H3 Motion Context's default context_length, in frames
 IMPLICIT_SECONDS = 5.0  # a template without SHOT lines is one shot of H3's default length
@@ -109,6 +110,7 @@ class Shot:
     first_frame: tuple[int, str] | None = None  # ref2va: (image slot, what it shows)
     last_frame: tuple[int, str] | None = None
     continues: int | None = None  # ref2va: the video slot this shot continues (`after video N`)
+    enhance: str = ""  # a `> instruction` inside the shot: the language model rewrites its prose
 
 
 @dataclass
@@ -124,6 +126,7 @@ class Scene:
     lite: bool = False  # `lite` in the header: <Subject N> = … definitions over the base fields
     loras: list[str] = field(default_factory=list)
     context: int | None = None  # frames Motion Context pins at the start of every reel segment after the first
+    enhance: str = ""  # a `> instruction` before the first shot: for every shot without its own
 
     @property
     def duration(self) -> float:
@@ -140,6 +143,7 @@ class Compiled:
     chunks: int = 0  # a reel's number of CHUNKs; 0 for a plain screenplay
     segment: int = 0
     segments: int | None = 0  # a reel's clips, counting repeats; None when a CHUNK repeats forever
+    refs: list[int] = field(default_factory=list)  # packed: the original image slots, in their new order
 
 
 # --- front end ------------------------------------------------------------------------------
@@ -160,7 +164,12 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
         line = raw if expanded else ex.expr(raw)
         if not line.strip():  # a `? cond:` line that does not hold
             continue
-        if m := _HEADER.match(line):
+        if m := _ENHANCE.match(line):
+            if cur is None:
+                scene.enhance = m.group(1).strip()
+            else:
+                cur.enhance = m.group(1).strip()
+        elif m := _HEADER.match(line):
             scene.mode = m.group(1).lower()
             for token in m.group(2).split():
                 if token.lower() == "lite":
@@ -530,10 +539,53 @@ def _cast_lint(scene: Scene, lint: list[Issue]) -> None:
                                   "target video, using CAST names)."))
 
 
+_IMAGE_BRACKET = re.compile(r"\[image\s+(\d+)\]", re.IGNORECASE)
+
+
+def image_slots(scene: Scene) -> list[int]:
+    """The reference-image slots a scene uses: CAST sources, frame anchors and [image N] in prose."""
+    used = {s.index for m in scene.cast for s in m.sources if s.kind == "image"}
+    used |= {a[0] for shot in scene.shots for a in (shot.first_frame, shot.last_frame) if a}
+    texts = [scene.summary, *(it for shot in scene.shots for it in shot.items if isinstance(it, str))]
+    used |= {int(n) for text in texts for n in _IMAGE_BRACKET.findall(text)}
+    return sorted(used)
+
+
+def pack_images(scene: Scene) -> list[int]:
+    """Renumber the images a scene uses to 1, 2, 3 … as Orrery Refs hands them to Reference to Video,
+    which counts only the images wired. Returns the original slots in their new order."""
+    used = image_slots(scene)
+    new = {old: i for i, old in enumerate(used, start=1)}
+    bracket = lambda text: _IMAGE_BRACKET.sub(lambda m: f"[image {new[int(m.group(1))]}]", text)
+    for m in scene.cast:
+        m.sources = [replace(s, index=new[s.index]) if s.kind == "image" else s for s in m.sources]
+    for shot in scene.shots:
+        shot.first_frame = (new[shot.first_frame[0]], shot.first_frame[1]) if shot.first_frame else None
+        shot.last_frame = (new[shot.last_frame[0]], shot.last_frame[1]) if shot.last_frame else None
+        shot.items = [bracket(it) if isinstance(it, str) else it for it in shot.items]
+    scene.summary = bracket(scene.summary)
+    return used
+
+
+def render_scene(scene: Scene, target: str, lint: list[Issue]) -> str:
+    """The prompt for a parsed scene; again after its prose was rewritten (`> enhance`)."""
+    if target == "flat":
+        return write_flat(scene)
+    if target != "h3-base":
+        raise ValueError(f"unknown target {target!r} (h3-base, flat)")
+    if scene.lite:
+        return write_h3_lite(scene, lint)
+    if scene.mode == "ref2va":
+        from orrery.h3_ref import write_h3_ref
+        return write_h3_ref(scene, lint)
+    return write_h3_base(scene, lint)
+
+
 def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                   weights: Mapping[str, float] | None = None, target: str = "h3-base",
-                  segment: int = 0) -> Compiled:
-    """`segment` picks a reel's clip (see orrery.reel); plain screenplays ignore it."""
+                  segment: int = 0, packed: bool = False) -> Compiled:
+    """`segment` picks a reel's clip (see orrery.reel); plain screenplays ignore it. `packed`: the
+    images are renumbered to the ones this clip uses (Orrery Refs hands on only those)."""
     from orrery.reel import build_segment, split_reel
     lint: list[Issue] = []
     reel = split_reel(src)
@@ -542,18 +594,9 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
     else:
         ex = Expander(seed, libraries, weights)
         scene, picks = parse_scene(src, ex, lint), ex.picks
-    if target == "flat":
-        text = write_flat(scene)
-    elif target == "h3-base":
-        if scene.lite:
-            text = write_h3_lite(scene, lint)
-        elif scene.mode == "ref2va":
-            from orrery.h3_ref import write_h3_ref
-            text = write_h3_ref(scene, lint)
-        else:
-            text = write_h3_base(scene, lint)
+    refs = pack_images(scene) if packed else []
+    text = render_scene(scene, target, lint)
+    if target == "h3-base":
         _scene_lint(src, scene, lint)
-    else:
-        raise ValueError(f"unknown target {target!r} (h3-base, flat)")
     return Compiled(text, picks, lint, scene, " ".join(scene.loras), len(reel.blocks) if reel else 0,
-                    segment if reel else 0, reel.segments if reel else 0)
+                    segment if reel else 0, reel.segments if reel else 0, refs)

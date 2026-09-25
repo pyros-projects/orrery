@@ -41,9 +41,11 @@ def fill(text: str, texts: dict[str, str]) -> str:
     return _FILLED.sub(put, text)
 
 
-def request(wanted: list[Need], directions: list[str], context: str, frames: int = 0) -> str:
-    """The one request of a run: libraries to write, slots to fill, and the clip to continue."""
-    if not directions:
+def request(wanted: list[Need], directions: list[str], context: str, frames: int = 0,
+            rewrites: list[tuple[str, str]] = ()) -> str:
+    """The one request of a run: libraries to write, slots to fill, passages to rewrite (`> …`,
+    as (instruction, passage)), and the clip to continue."""
+    if not directions and not rewrites:
         return prompt_for(wanted)
     keys = {d: f"slot {i}" for i, d in enumerate(directions, start=1)}
     shown = SLOT.sub(lambda m: f"[{keys[m.group(1)]}]" if m.group(1) in keys else m.group(0), context)
@@ -54,14 +56,49 @@ def request(wanted: list[Need], directions: list[str], context: str, frames: int
                      "same people and place, and move the story on instead of retelling it.")
     if wanted:
         parts.append("Wildcard lists to write:\n" + "\n".join(library_lines(wanted)) + f"\n{LIST_RULES}")
-    parts.append(f"The prompt, with each part you write marked [slot N]:\n\n{shown.strip()}")
-    labels = " Name people and things by their labels (<Subject N>, <Video N> …) as the prompt does." \
-        if re.search(r"<(?:Subject|Picture|Video|Audio) \d+>", context) else ""
-    parts.append(f"Parts to write, each as prose that fits where it stands and follows its directions exactly.{labels}\n"
-                 + "\n".join(f'- "{keys[d]}": {d}' for d in directions))
-    reply = ("each list name (without underscores) to a JSON array of its entries, and " if wanted else "")
-    parts.append(f'Reply with ONLY a JSON object mapping {reply}each part ("slot 1", …) to its text.')
+    replies = ["each list name (without underscores) to a JSON array of its entries"] if wanted else []
+    if directions:
+        parts.append(f"The prompt, with each part you write marked [slot N]:\n\n{shown.strip()}")
+        labels = " Name people and things by their labels (<Subject N>, <Video N> …) as the prompt does." \
+            if re.search(r"<(?:Subject|Picture|Video|Audio) \d+>", context) else ""
+        parts.append(f"Parts to write, each as prose that fits where it stands and follows its directions exactly.{labels}\n"
+                     + "\n".join(f'- "{keys[d]}": {d}' for d in directions))
+        replies.append('each part ("slot 1", …) to its text')
+    if rewrites:
+        parts.append("Passages to rewrite, each following its instruction. Keep every UPPERCASE name, every <label> "
+                     "and every [keep N] marker exactly as written, keep the same events in the same order, and add "
+                     "concrete visual and sensory detail in the present tense:\n"
+                     + "\n".join(f'- "rewrite {i}" ({instruction}): {passage}'
+                                  for i, (instruction, passage) in enumerate(rewrites, start=1)))
+        replies.append('each rewrite ("rewrite 1", …) to its new passage')
+    parts.append(f"Reply with ONLY a JSON object mapping {', and '.join(replies)}.")
     return "\n\n".join(parts)
+
+
+def keep_marks(passage: str) -> tuple[str, list[str]]:
+    """A passage to rewrite with its slots as [keep N] markers, and the slots to put back."""
+    kept: list[str] = []
+    return SLOT.sub(lambda m: kept.append(m.group(0)) or f"[keep {len(kept)}]", passage), kept
+
+
+def put_back(rewritten: str, kept: list[str]) -> str | None:
+    """The rewrite with its slots back in place; None when the model lost a marker."""
+    for i, slot in enumerate(kept, start=1):
+        if f"[keep {i}]" not in rewritten:
+            return None
+        rewritten = rewritten.replace(f"[keep {i}]", slot)
+    return rewritten
+
+
+def rewrites_in(reply: str, count: int) -> list[str | None]:
+    """The rewritten passages in a reply, in order; None where the model wrote none."""
+    try:
+        data = extract_json(reply)
+    except InvalidProposal:
+        return [None] * count
+    data = data if isinstance(data, dict) else {}
+    return [" ".join(v.split()) if isinstance(v := data.get(f"rewrite {i}"), str) and v.strip() else None
+            for i in range(1, count + 1)]
 
 
 def write(home: Home, wanted: list[Need], directions: list[str], reply: str,

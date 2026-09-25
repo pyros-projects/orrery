@@ -17,7 +17,7 @@ from orrery.autolib import needs
 from orrery.chain import DEFAULT_CHAIN, load, previous_clip
 from orrery.comfy_llm import ComfyBackend, can_write, llm_config
 from orrery.dsl import MissingLibrary, bindings, expand, override, parse, wanted_libraries
-from orrery.h3 import compile_scene
+from orrery.h3 import compile_scene, image_slots, render_scene
 from orrery.h3_ref import word_issue
 from orrery.home import Home, resolve_home
 from orrery.library import library_files
@@ -31,7 +31,7 @@ from orrery.presets import (
     resolve_includes,
 )
 from orrery.reel import ReelEnd
-from orrery.slots import SLOT, fill, request, slots, write
+from orrery.slots import SLOT, fill, keep_marks, put_back, request, rewrites_in, slots, write
 
 TARGETS = ["text", "h3-base", "flat"]
 NO_PRESET = "(none)"
@@ -118,11 +118,30 @@ def _count(frames) -> int:
     return len(frames) if frames is not None else 0
 
 
+def _passages(result, target: str) -> list[tuple[str, str, object]]:
+    """What `> instructions` ask to rewrite: (instruction, passage, put the rewrite in its place).
+    A text prompt is one passage; in a screenplay, each prose line of a shot in scope, never dialogue."""
+    if target == "text":
+        if not result.enhance:
+            return []
+        return [(result.enhance, result.text, lambda new: setattr(result, "text", new))]
+    out = []
+    for shot in result.scene.shots:
+        instruction = shot.enhance or result.scene.enhance
+        for i, item in enumerate(shot.items if instruction else []):
+            if isinstance(item, str) and item.strip():
+                out.append((instruction, item, lambda new, items=shot.items, i=i: items.__setitem__(i, new)))
+    return out
+
+
 def run_prompt(template: str, seed: int, target: str, home: str = "",
                preset: str = NO_PRESET, linked: str | None = None,
                params: str = "", segment: int = 0, clip=None,
-               frames=None) -> tuple[str, str, int, int, int, int, list, int, int]:
-    """`frames`: the previous clip's stills, which the model sees when it writes `--…--` slots."""
+               frames=None, packed: bool = False,
+               wired: int | None = None) -> tuple[str, str, int, int, int, int, list, int, int]:
+    """`frames`: the previous clip's stills, which the model sees when it writes `--…--` slots.
+    `packed`: Orrery Refs routes the images per clip; `wired`: the reference images Reference to
+    Video has (both from the graph, see `wiring`)."""
     h = resolve_home(home or None)
     if preset and preset != NO_PRESET:
         template, linked = load_preset(h, preset), preset
@@ -155,18 +174,48 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
             result = expand(source, seed, h.libraries(), h.weights())
             lint = []
         else:
-            result = compile_scene(source, seed, h.libraries(), h.weights(), target=target, segment=segment)
+            result = compile_scene(source, seed, h.libraries(), h.weights(), target=target, segment=segment,
+                                   packed=packed)
             lint = [{"severity": i.severity, "message": i.message} for i in result.lint]
+            needed = len(result.refs) if packed else max(image_slots(result.scene), default=0)
+            if wired is not None and wired < needed:
+                lint.append({"severity": "warn", "message": f"This clip uses {needed} reference images, but Reference "
+                                                            f"to Video has {wired} wired: <Picture {wired + 1}> and up "
+                                                            "point at nothing."})
     except MissingLibrary as err:
         raise ValueError(f"{err}, or pick a language model in orrery's settings (the gear in the node) "
                          "and it is created when the node runs") from err
     todo = slots(result.text)
-    if todo and not wanted:
+    passages = _passages(result, target)
+    enhanced: list[dict] = []
+    if passages and wanted:
+        lint.append({"severity": "info", "message": "The > enhance instructions run on the next run; this one "
+                                                    "writes the missing libraries."})
+    elif passages and backend is None:
+        backend = llm_for(h, clip, seed=seed)
+        if backend is None:
+            lint.append({"severity": "warn", "message": "> enhance needs a language model: pick one in orrery's "
+                                                        "settings (the gear in the node); the prompt stays as written."})
+    if (todo or (passages and backend is not None)) and not wanted:
+        marked = [keep_marks(passage) for _, passage, _ in passages] if backend is not None else []
+        prompt = request([], todo, result.text, _count(frames),
+                         [(instruction, text) for (instruction, _, _), (text, _) in zip(passages, marked, strict=False)])
         try:
-            texts, _ = write(h, [], todo, backend.complete(request([], todo, result.text, _count(frames)),
-                                                          images=frames), backend)
+            reply = backend.complete(prompt, images=frames)
+            texts, _ = write(h, [], todo, reply, backend)
+            for (instruction, before, place), (_, kept), new in zip(passages, marked, rewrites_in(reply, len(marked)),
+                                                                    strict=False):
+                after = put_back(new, kept) if new else None
+                if after is None:
+                    lint.append({"severity": "warn", "message": f"> {instruction}: the language model left a passage "
+                                                                "as it was."})
+                    continue
+                place(after)
+                enhanced.append({"instruction": instruction, "before": before, "after": after})
+            if enhanced and target != "text":
+                result.text = render_scene(result.scene, target, [])
         except InvalidProposal as err:
-            lint.append({"severity": "warn", "message": f"The language model wrote no slots ({err})."})
+            lint.append({"severity": "warn", "message": f"The language model wrote no slots or rewrites ({err})."})
     unanswered = [missed[k] for k in todo if k in missed] if wanted else [d for d in todo if d not in texts]
     lint += [{"severity": "warn", "message": f"--{d}-- got no text from the language model; its directions stand in."}
              for d in unanswered]
@@ -193,6 +242,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         "text": result.text,
         "picks": [{"label": p.label, "value": p.value, "keys": list(p.keys)} for p in result.picks],
         "lint": lint,
+        **({"refs": result.refs} if target != "text" and packed else {}),
+        **({"enhanced": enhanced} if enhanced else {}),
     }
     width, height, length = shape(source)
     if target != "text":
@@ -306,7 +357,7 @@ class OrreryPrompt:
                     "H3 Motion Context's latent_path (default h3_context): where the chain of clips lives. From "
                     "the second segment on the model watches the previous clip when it writes --…-- slots.")}),
             },
-            "hidden": {"unique_id": "UNIQUE_ID", "extra_pnginfo": "EXTRA_PNGINFO"},
+            "hidden": {"unique_id": "UNIQUE_ID", "extra_pnginfo": "EXTRA_PNGINFO", "prompt": "PROMPT"},
         }
 
     @classmethod
@@ -317,11 +368,12 @@ class OrreryPrompt:
         return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{segment}:{latent_path}:{state_token(h)}"
 
     def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, clip=None,
-            latent_path=DEFAULT_CHAIN, unique_id=None, extra_pnginfo=None):
+            latent_path=DEFAULT_CHAIN, unique_id=None, extra_pnginfo=None, prompt=None):
         stills, tail, audio = _previous(latent_path, segment)
+        packed, wired = wiring(prompt, unique_id)
         try:
             return (*run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
-                                params, segment, clip, stills), tail, audio)
+                                params, segment, clip, stills, packed, wired), tail, audio)
         except ReelEnd as end:
             try:
                 from comfy_execution.graph_utils import ExecutionBlocker  # ComfyUI
@@ -385,5 +437,59 @@ class OrreryLog:
         return {"ui": {"images": ui}}
 
 
-NODE_CLASS_MAPPINGS = {"OrreryPrompt": OrreryPrompt, "OrreryLog": OrreryLog}
-NODE_DISPLAY_NAME_MAPPINGS = {"OrreryPrompt": "Orrery Prompt", "OrreryLog": "Orrery Log"}
+REF2VA = "MiniMaxH3ReferenceToVideo"
+
+
+def wiring(prompt: dict | None, unique_id) -> tuple[bool, int | None]:
+    """What the node's graph says (R2): whether an Orrery Refs reads its picks (then the images are
+    packed per clip), and how many reference images the Reference to Video node its text reaches
+    (directly or through a few text nodes) has wired; None when there is none."""
+    if not prompt or unique_id is None:
+        return False, None
+    uid = str(unique_id)
+    link = lambda v: (str(v[0]), v[1]) if isinstance(v, list) and len(v) == 2 else None
+    packed = any(n.get("class_type") == "OrreryRefs" and link(n.get("inputs", {}).get("picks")) == (uid, 1)
+                 for n in prompt.values())
+    reach = {(uid, 0)}
+    for _ in range(3):  # through Text Concatenate and friends
+        reach |= {(str(nid), i) for nid, n in prompt.items() if n.get("class_type") != REF2VA
+                  for v in n.get("inputs", {}).values() if link(v) in reach for i in range(4)}
+    wired = [sum(1 for k, v in n["inputs"].items() if "ref_image" in k and link(v))
+             for n in prompt.values() if n.get("class_type") == REF2VA and link(n.get("inputs", {}).get("prompt")) in reach]
+    return packed, (max(wired) if wired else None)
+
+
+class OrreryRefs:
+    """Hands Reference to Video only the reference images the current clip's CAST uses, packed in
+    order, so a reel's chunks don't all see every image. Orrery Prompt notices it and renumbers
+    <Picture N> to match."""
+
+    CATEGORY = "orrery"
+    FUNCTION = "route"
+    SLOTS = 9
+    RETURN_TYPES = ("IMAGE",) * SLOTS
+    RETURN_NAMES = tuple(f"ref_{i}" for i in range(1, SLOTS + 1))
+    OUTPUT_TOOLTIPS = ("Wire ref_1 into Reference to Video ref_image_0, ref_2 into ref_image_1, and so on.",
+                       *("",) * (SLOTS - 1))
+    DESCRIPTION = ("Routes the reference images per reel clip: wire every image as image_N (N as in the CAST's "
+                   "(image N)) and the Orrery Prompt's picks; the clip's images come out packed as ref_1, ref_2 …")
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {"picks": ("STRING", {"forceInput": True})},
+                "optional": {f"image_{i}": ("IMAGE",) for i in range(1, cls.SLOTS + 1)}}
+
+    def route(self, picks, **images):
+        refs = json.loads(picks or "{}").get("refs")
+        if refs is None:  # nothing packed: pass the images through as wired
+            order = [images.get(f"image_{i}") for i in range(1, self.SLOTS + 1)]
+        else:
+            missing = [f"image_{n}" for n in refs if images.get(f"image_{n}") is None]
+            if missing:
+                raise ValueError(f"This clip's CAST uses {', '.join(missing)}, but nothing is wired into it.")
+            order = [images[f"image_{n}"] for n in refs]
+        return tuple(order[:self.SLOTS] + [None] * (self.SLOTS - len(order)))
+
+
+NODE_CLASS_MAPPINGS = {"OrreryPrompt": OrreryPrompt, "OrreryLog": OrreryLog, "OrreryRefs": OrreryRefs}
+NODE_DISPLAY_NAME_MAPPINGS = {"OrreryPrompt": "Orrery Prompt", "OrreryLog": "Orrery Log", "OrreryRefs": "Orrery Refs"}

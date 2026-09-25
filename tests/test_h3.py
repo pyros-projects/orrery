@@ -252,3 +252,21 @@ def test_a_guarded_sfx_line_joins_the_soundscape_only_when_it_holds():
     for seed in range(10):
         text = compile_scene(src, seed, libs).text
         assert ("in rain" in text) == ("rain on the roof" in text.lower()), text
+
+
+def test_an_enhance_line_belongs_to_its_shot_or_to_the_whole_scene():
+    src = "@h3 t2va 16:9\n> keep it quiet\nSHOT 5s\nA fox waits.\nSFX: wind\nSHOT 5s | cut\n> make it eerie\nThe fox runs.\nSFX: wind\n"
+    scene = compile_scene(src, 1, {}).scene
+    assert scene.enhance == "keep it quiet"
+    assert [s.enhance for s in scene.shots] == ["", "make it eerie"]
+
+
+def test_packing_renumbers_the_images_a_scene_uses_to_one_two_three():
+    src = ("@h3 ref2va 16:9\nsummary: A meets B.\nCAST\nA (image 4): a woman\nB (image 7): a man\n"
+           "SHOT 5s | from image 6 (the door)\nA opens the door of [image 6] for B.\nSFX: a creak\n")
+    result = compile_scene(src, 1, {}, packed=True)
+    assert result.refs == [4, 6, 7]
+    assert "<Subject 1> is a woman in <Picture 1>." in result.text
+    assert "<Subject 2> is a man in <Picture 3>." in result.text
+    assert "<Picture 2> is the first frame of [Shot 1]" in result.text and "<Picture 4>" not in result.text
+    assert compile_scene(src, 1, {}).refs == []

@@ -72,6 +72,14 @@ Per chunk orrery emits (built):
   only in what was asked for; `previous`/`previous_audio`, the last 3 s of that
   clip, for `SHOT … | after video 1` (`[video continuation]`).
 
+Built (2026-09-25): **Orrery Refs** routes the reference images per chunk. Wire
+every image as `image_N` (N as in the CAST's `(image N)`) and the prompt's
+`picks`; each clip gets only the images its CAST uses, packed as `ref_1`,
+`ref_2` …, and the prompt node, seeing the router in its graph, renumbers
+`<Picture N>` to match (Reference to Video counts only the images wired). The
+node also reads its graph for R2: it warns when the Reference to Video its text
+reaches has fewer reference images wired than the clip uses.
+
 Still planned: the **memory list** per chunk (global, the places and people it
 mentions, optionally the previous chunk as "recent"); the retrieval query for
 this RefMod-RAG is the screenplay itself.

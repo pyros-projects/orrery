@@ -193,6 +193,10 @@ setting. When the node runs, the model
   --what WASHER does in the next 5 seconds, moving the story on--
   ```
 
+  In a reel with per-chunk CASTs, put **Orrery Refs** between your images and
+  Reference to Video: it hands each clip only the images its CAST uses, and
+  the prompt renumbers `<Picture N>` to match.
+
   A slot the model leaves out keeps its directions as text (and a warning), so
   a queued chain never breaks on one bad answer. The chain is found under
   `output/h3_context`; wire a string into `latent_path` if yours lives

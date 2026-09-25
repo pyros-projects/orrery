@@ -87,7 +87,7 @@ def test_save_png_embeds_the_picks(tmp_path):
 
 
 def test_node_classes_declare_comfy_interfaces():
-    assert set(NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog"}
+    assert set(NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs"}
     inputs = OrreryPrompt.INPUT_TYPES()["required"]
     assert inputs["target"][0] == ["text", "h3-base", "flat"]
     assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length", "lora_stack",
@@ -100,7 +100,7 @@ def test_node_pack_imports_from_the_repo_folder(monkeypatch):
     spec = importlib.util.spec_from_file_location("orrery_pack", REPO / "comfyui" / "__init__.py")
     pack = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(pack)
-    assert set(pack.NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog"}
+    assert set(pack.NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs"}
 
 
 def test_prompt_node_uses_a_preset_and_remembers_the_template(home):
@@ -399,3 +399,60 @@ def test_the_node_expands_includes_with_their_params(home):
     save_preset(Home(home), "parts/hat", "$colour = {red|blue}\na $colour hat")
     text, *_ = run_prompt("A man in\n@include parts/hat\n  colour = green", 1, "text", str(home))
     assert text == "A man in a green hat"
+
+
+def test_enhance_rewrites_a_text_prompt_and_keeps_the_original(home, monkeypatch):
+    backend = fake_llm(monkeypatch, {"rewrite 1": "a fox in a misty field at dusk, low sun, film grain"})
+    text, picks, *_ = run_prompt("a fox in a field\n> moody, cinematic", 1, "text", str(home))
+    assert text == "a fox in a misty field at dusk, low sun, film grain"
+    assert json.loads(picks)["enhanced"] == [{"instruction": "moody, cinematic", "before": "a fox in a field",
+                                               "after": text}]
+    assert "moody, cinematic" in backend.prompts[0]
+
+
+def test_enhance_rewrites_shot_prose_but_not_dialogue(home, monkeypatch):
+    backend = fake_llm(monkeypatch, {"rewrite 1": "FOX crouches low in the wet grass, ears flat.", "slot 1": "it rains"})
+    src = ("@h3 t2va 16:9\nCAST\nFOX: a red fox\nSHOT 5s\n> make it eerie\nFOX waits.\n"
+           "FOX (low voice): Not yet.\nThen --what the sky does--.\nSFX: wind\n")
+    text, *_ = run_prompt(src, 1, "h3-base", str(home))
+    assert len(backend.prompts) == 1 and "Not yet" not in backend.prompts[0].split("Passages to rewrite")[1]
+    assert "crouches low in the wet grass" in text and "Not yet." in text and "Then it rains." in text
+
+
+def test_without_its_libraries_enhance_waits_for_the_next_run(home, monkeypatch):
+    fake_llm(monkeypatch, {"mood": ["A hush."]})
+    _, picks, *_ = run_prompt("__mood__ over a field\n> moody", 1, "text", str(home))
+    assert any("enhance" in i["message"] for i in json.loads(picks)["lint"])
+
+
+REF_REEL = "@h3 ref2va 16:9\nsummary: A waits.\nCAST\nA (image 3): a woman\nSHOT 5s\nA waits.\nSFX: wind\n"
+
+
+def test_orrery_refs_hands_on_only_the_images_the_clip_uses():
+    from orrery.comfy import OrreryRefs
+    imgs = {f"image_{i}": f"img{i}" for i in range(1, 8)}
+    out = OrreryRefs().route(json.dumps({"refs": [3, 6]}), **imgs)
+    assert out[:3] == ("img3", "img6", None) and len(out) == 9
+    assert OrreryRefs().route(json.dumps({}), **imgs)[:2] == ("img1", "img2")  # nothing packed: as wired
+    with pytest.raises(ValueError, match="image_6"):
+        OrreryRefs().route(json.dumps({"refs": [3, 6]}), image_3="img3")
+
+
+def test_the_node_packs_labels_when_orrery_refs_reads_its_picks(home):
+    graph = {"9": {"class_type": "OrreryPrompt", "inputs": {}},
+             "12": {"class_type": "OrreryRefs", "inputs": {"picks": ["9", 1], "image_3": ["5", 0]}},
+             "20": {"class_type": "MiniMaxH3ReferenceToVideo",
+                    "inputs": {"prompt": ["9", 0], "ref_images.ref_image_0": ["12", 0]}}}
+    text, picks, *_ = OrreryPrompt().run(REF_REEL, 1, "h3-base", home=str(home), prompt=graph, unique_id="9")
+    assert "<Picture 1>" in text and json.loads(picks)["refs"] == [3]
+    assert not [i for i in json.loads(picks)["lint"] if "reference image" in i["message"]]
+
+
+def test_the_node_warns_when_fewer_references_are_wired_than_the_screenplay_uses(home):
+    graph = {"9": {"class_type": "OrreryPrompt", "inputs": {}},
+             "20": {"class_type": "MiniMaxH3ReferenceToVideo",
+                    "inputs": {"prompt": ["15", 0], "ref_images.ref_image_0": ["5", 0]}},
+             "15": {"class_type": "Text Concatenate", "inputs": {"text_a": ["9", 0]}}}
+    text, picks, *_ = OrreryPrompt().run(REF_REEL, 1, "h3-base", home=str(home), prompt=graph, unique_id="9")
+    assert "<Picture 3>" in text
+    assert any("3 reference images" in i["message"] for i in json.loads(picks)["lint"])
