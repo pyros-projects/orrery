@@ -214,8 +214,8 @@ export function applyDials(text, values) {
 
 // The Libraries list: what the language model wrote and waits for review first, then folders, then
 // the rest. A folder is a real one (film/genre → film: genre) or, for flat names such as the
-// built-ins, a shared prefix (couture_form, couture_house → couture: form, house; "curator" joins
-// curator_line). Each item carries its name without the folder.
+// built-ins, a shared prefix (couture_form, couture_house → couture: form, house). Each item carries
+// its name without the folder.
 export function libraryGroups(libs) {
   const review = libs.filter((l) => l.pending || (l.pending_entries || []).length);
   const rest = libs.filter((l) => !review.includes(l));

@@ -1,0 +1,19 @@
+---
+title: "Living clay"
+note: "Codie's soft body: HOST's body behaves like dense clay and keeps every impression, and HOST begins to sculpt their own face, curious rather than afraid. Dial where it sags first and the final gesture. The visible pair: a press, and a handprint that stays. HOST is your ref image 1; delete (image 1) for text only."
+tags: [effects, h3, body_horror, ito]
+---
+@h3 ref2va 16:9 lite
+style: live-action, cinematic surreal body horror, photorealistic
+$host = __bh_host__
+$room = __bh_room__
+$sag = {one shoulder|the upper arm|one side of the chest}
+$ending = {HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains|HOST compresses the face between both palms and lets go, leaving a narrower, newly sculpted face that still blinks|HOST pinches the chin and draws it slowly downward into a long soft point, then looks calmly into the camera}
+
+CAST
+HOST (image 1): $host
+
+SHOT 10s | push in, slow
+HOST stands facing the camera in $room, framed from the waist up, firm and naturally proportioned. $sag slowly sinks several centimetres, the surrounding body following like dense soft clay giving way to gravity. HOST reaches across and presses the softened area; each fingertip leaves a deep rounded dent that stays exactly where it was made. HOST places both hands on the sides of the torso and pushes the body back into shape; the waist narrows under the palms, and broad hand-shaped depressions remain. HOST releases it, and the torso holds its new sculpted form. The softness reaches the face: one cheek sags, HOST pushes it up with a palm, and the jawline changes with it and stays. Curious now, HOST slides the fingertips up toward the temple, nudges the nose slightly to one side and compresses the chin upward; every change remains, while the eyes stay alive inside the altered face. In the final moment $ending.
+SFX: quiet room ambience; restrained breathing; dense soft pressure sounds; muted material shifting under each touch
+MUSIC: N/A

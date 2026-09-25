@@ -1,0 +1,19 @@
+---
+title: "Elastic body"
+note: "Codie's fixed version, the one that fired in Pyro's tests: the hand stays gripping an anchor while HOST walks away, so the arm has to stretch across the room. Two fixed points moving apart are hard for H3 to ignore; 'the arm is stretchy' was not. Dial the anchor, the space and the ending. HOST is your ref image 1; delete (image 1) for text only."
+tags: [effects, h3, body_horror, ito]
+---
+@h3 ref2va 16:9 lite
+style: live-action, cinematic surreal body horror, photorealistic
+$host = __bh_host__
+$anchor = {a heavy vertical metal pole|an iron stair railing|a steel door handle}
+$space = {a large dim warehouse|a long empty office corridor|an empty dance studio}
+$ending = {HOST reaches toward the camera for balance, and the arm lengthens straight at the lens until the hand fills the foreground while the body stays several metres away|HOST lets go, and the long arm snaps back across the room, overshoots into a short thick stump beside the shoulder, then stretches out again|HOST takes one step toward the camera, and the leading leg stretches far ahead while the torso stays behind, the whole body drawn out across the room}
+
+CAST
+HOST (image 1): $host
+
+SHOT 10s | pull out, slow
+HOST stands beside $anchor in $space, framed from the knees up, and grips it firmly with the right hand. The hand stays fixed there for the rest of the shot. HOST takes one slow step backward: the body moves away while the gripping hand stays exactly in place, and the right arm visibly lengthens between the fixed hand and the retreating shoulder. HOST takes another step back, and the distance between wrist and shoulder doubles, the arm keeping one continuous human shape. The camera pulls back with HOST, keeping both the fixed hand and the retreating body in frame, as the arm stretches across several metres of empty space. HOST looks along its impossible length, then pulls sideways on the forearm with the free hand; the arm bends into a huge smooth curve and swings back straight with a delayed elastic rebound. In the final moment $ending.
+SFX: quiet room ambience; footsteps moving away from the fixed hand; continuous rubber-like tension as the arm lengthens; a deep elastic twang on the sideways pull
+MUSIC: N/A

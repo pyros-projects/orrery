@@ -1,0 +1,22 @@
+meta: {source: "orrery characters: people of a rain-soaked neon city", builtin: true}
+entries:
+  - value: "a back-alley street medic in her forties, Vietnamese, calm hands and exhausted eyes, with __characters/cyberpunk/hair__, __characters/cyberpunk/augment__, wearing __characters/cyberpunk/outfit__"
+    props: {gender: female, age: 40s, role: medic}
+  - value: "a netrunner in his twenties, skinny and pale from living indoors, with __characters/cyberpunk/hair__, __characters/cyberpunk/augment__, wearing __characters/cyberpunk/outfit__ and a nest of cables at the neck"
+    props: {gender: male, age: 20s, role: hacker}
+  - value: "a corporate fixer in her fifties, silver-tongued and immaculate, with __characters/cyberpunk/hair__, __characters/cyberpunk/augment__, wearing __characters/cyberpunk/outfit__ over a silk shirt"
+    props: {gender: female, age: 50s, role: fixer}
+  - value: "a noodle-stand cook in his sixties, heavy-set and cheerful, with __characters/cyberpunk/hair__, __characters/cyberpunk/augment__, wearing __characters/cyberpunk/outfit__ under a steam-dampened apron"
+    props: {gender: male, age: 60s, role: cook}
+  - value: "a courier in their twenties, wiry and fast, with __characters/cyberpunk/hair__, __characters/cyberpunk/augment__, wearing __characters/cyberpunk/outfit__ and gel-wheel skates"
+    props: {gender: nonbinary, age: 20s, role: courier}
+  - value: "a burned-out detective in his forties, Black, broad and rumpled, with __characters/cyberpunk/hair__, __characters/cyberpunk/augment__, wearing __characters/cyberpunk/outfit__ and a dead cigarette he chews for comfort"
+    props: {gender: male, age: 40s, role: detective}
+  - value: "a black-market surgeon in her thirties, Nigerian, surgical mask around the chin, with __characters/cyberpunk/hair__, __characters/cyberpunk/augment__, wearing __characters/cyberpunk/outfit__"
+    props: {gender: female, age: 30s, role: medic}
+  - value: "a bodyguard in her twenties, Korean, compact and utterly still, with __characters/cyberpunk/hair__, __characters/cyberpunk/augment__, wearing __characters/cyberpunk/outfit__, scanning every exit"
+    props: {gender: female, age: 20s, role: muscle}
+  - value: "a scrap scavenger in his fifties, sun-leathered and missing two fingers, with __characters/cyberpunk/hair__, __characters/cyberpunk/augment__, wearing __characters/cyberpunk/outfit__ and a sack of salvaged chips"
+    props: {gender: male, age: 50s, role: scavenger}
+  - value: "a karaoke-bar owner in her seventies, Japanese, tiny and fearless, with __characters/cyberpunk/hair__, __characters/cyberpunk/augment__, wearing __characters/cyberpunk/outfit__ and a pearl necklace from a better decade"
+    props: {gender: female, age: 70s, role: owner}

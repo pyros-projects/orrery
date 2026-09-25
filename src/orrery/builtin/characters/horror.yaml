@@ -1,0 +1,22 @@
+meta: {source: "orrery characters: people who belong in horror; the two Katamori curators are Codie's identity cores from Improper Bodies", builtin: true}
+entries:
+  - value: "Katamori Shizuka, an unusually tall and slender Japanese woman in her late thirties with pale skin, a long refined face, straight shoulder-length black hair with a precise centre part, calm dark brown eyes and subtly elongated fingers, wearing a fitted high-collared black coat over an ivory blouse and carrying a small black leather notebook"
+    props: {gender: female, age: 30s, role: curator}
+  - value: "Katamori Reiji, an exceptionally tall and lean Japanese man in his early forties with pale skin, a long symmetrical face, black hair brushed back from the forehead, attentive dark brown eyes and arms that reach slightly too low, wearing a fitted black three-piece suit under a long black overcoat with a thin silver measuring chain at the waistcoat pocket"
+    props: {gender: male, age: 40s, role: curator}
+  - value: "a night porter of an empty hotel in his sixties, stooped and courteous, with __characters/looks/hair__, a ring of forty keys on his belt and __characters/horror/wrongness__"
+    props: {gender: male, age: 60s, role: keeper}
+  - value: "a smiling neighbour in her fifties who always knows when you are home, with __characters/looks/hair__, a cardigan buttoned wrong and __characters/horror/wrongness__"
+    props: {gender: female, age: 50s, role: stranger}
+  - value: "a mannequin restorer in his forties, soft-spoken and meticulous, with __characters/looks/hair__, plaster dust in the creases of his hands and __characters/horror/wrongness__"
+    props: {gender: male, age: 40s, role: craftsman}
+  - value: "a door-to-door saleswoman in her thirties, bright lipstick and a sample case she never opens, with __characters/looks/hair__, a name tag with no name on it and __characters/horror/wrongness__"
+    props: {gender: female, age: 30s, role: stranger}
+  - value: "a lighthouse keeper in his seventies who has not slept in years, with __characters/looks/hair__, salt-cracked skin, a lantern he never puts down and __characters/horror/wrongness__"
+    props: {gender: male, age: 70s, role: keeper}
+  - value: "a hospice nurse in her forties, gentle and endlessly patient, with __characters/looks/hair__, cold hands she warms on her own neck and __characters/horror/wrongness__"
+    props: {gender: female, age: 40s, role: caretaker}
+  - value: "a photographer of the recently deceased in their thirties, courteous and pale, with __characters/looks/hair__, a wooden plate camera on a tripod and __characters/horror/wrongness__"
+    props: {gender: nonbinary, age: 30s, role: craftsman}
+  - value: "an elderly twin in her eighties who speaks for her absent sister, with __characters/looks/hair__, two teacups always set and __characters/horror/wrongness__"
+    props: {gender: female, age: 80s, role: stranger}

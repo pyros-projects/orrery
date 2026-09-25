@@ -1,0 +1,19 @@
+---
+title: "Living paper"
+note: "Codie's origami body: crisp creases fold the torso and arms into planes of living paper while HOST stays calm. Dial the first crease and the ending. Codie's rule for H3: turn a material into a visible action with two states, a crease line and an angle change. HOST is your ref image 1; delete (image 1) for text only."
+tags: [effects, h3, body_horror, ito]
+---
+@h3 ref2va 16:9 lite
+style: live-action, cinematic surreal body horror, photorealistic
+$host = __bh_host__
+$room = __bh_room__
+$crease = {down the centre of the torso from the sternum to the navel|diagonally from one shoulder to the opposite hip|across the chest from one armpit to the other}
+$ending = {HOST presses one imperfect crease in the chest with the flattened hand until it becomes perfectly straight, and studies the corrected body with calm satisfaction|HOST folds the flattened forearm neatly against itself like a closed card and holds it up to the light|HOST turns sideways, and in profile the folded body is only a few centimetres thick}
+
+CAST
+HOST (image 1): $host
+
+SHOT 10s | push in, slow
+HOST stands facing the camera in $room, framed from the knees up, fully human and naturally proportioned. A perfectly straight crease forms $crease, and the body bends inward along it like thick living paper: the two sides rotate toward each other in one smooth, controlled movement, and the chest becomes flatter while keeping its human surface. A second crease forms across the abdomen, and the waist becomes a clean geometric hinge while HOST stays balanced and upright. One forearm flattens from wrist to elbow into a broad thin plane; the hand follows, fingers arranging themselves along the same flat surface. HOST raises the arm and studies it, and a new fold forms naturally at the elbow. The head stays fully three-dimensional above the folded architecture. In the final moment $ending.
+SFX: quiet room ambience; restrained breathing; soft dry folding sounds; crisp paper tension each time a plane settles
+MUSIC: N/A

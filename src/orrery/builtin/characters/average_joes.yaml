@@ -1,0 +1,22 @@
+meta: {source: "orrery characters: ordinary people, the best hosts for quiet horror and slice-of-life scenes", builtin: true}
+entries:
+  - value: "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+    props: {gender: female, age: 50s}
+  - value: "a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__"
+    props: {gender: male, age: 20s}
+  - value: "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+    props: {gender: male, age: 70s}
+  - value: "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+    props: {gender: female, age: 20s}
+  - value: "a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__"
+    props: {gender: male, age: 40s}
+  - value: "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+    props: {gender: male, age: 30s}
+  - value: "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+    props: {gender: female, age: 60s}
+  - value: "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+    props: {gender: nonbinary, age: 20s}
+  - value: "a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__"
+    props: {gender: male, age: 50s}
+  - value: "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+    props: {gender: female, age: 30s}

@@ -1,0 +1,22 @@
+meta: {source: "orrery characters: gothic figures, from Victorian mourning to the club at 3 a.m.", builtin: true}
+entries:
+  - value: "a young widow in her twenties, porcelain-pale with dark-rimmed grey eyes and a black cameo at the throat, with __characters/gothic/hair__, wearing __characters/gothic/attire__, a pressed white lily in one gloved hand"
+    props: {gender: female, age: 20s, role: mourner}
+  - value: "a gaunt church organist in his fifties, long-fingered and hunched, with __characters/gothic/hair__, a hymn stained with candle wax always in his pocket, wearing __characters/gothic/attire__"
+    props: {gender: male, age: 50s, role: musician}
+  - value: "a taxidermist in her forties, precise and unsmiling, with __characters/gothic/hair__, a jeweller's loupe on a chain and faint smears of formaldehyde on her cuffs, wearing __characters/gothic/attire__"
+    props: {gender: female, age: 40s, role: craftsman}
+  - value: "a goth club DJ in his twenties, tall and languid, with __characters/gothic/hair__, black lipstick, silver rings on every finger and headphones slung around the neck, wearing __characters/gothic/attire__"
+    props: {gender: male, age: 20s, role: musician}
+  - value: "a funeral director in her sixties, serene and immaculate, with __characters/gothic/hair__, gentle hands and a pocket watch that runs seven minutes slow, wearing __characters/gothic/attire__"
+    props: {gender: female, age: 60s, role: undertaker}
+  - value: "a consumptive poet in his thirties, feverishly beautiful, with __characters/gothic/hair__, ink on his lips from chewing pens and a cough he hides in a lace handkerchief, wearing __characters/gothic/attire__"
+    props: {gender: male, age: 30s, role: artist}
+  - value: "a cellist in her thirties, Korean, still as a statue until she plays, with __characters/gothic/hair__, scarred fingertips and a black ribbon tied around one wrist, wearing __characters/gothic/attire__"
+    props: {gender: female, age: 30s, role: musician}
+  - value: "an aristocratic recluse in his seventies, tall and bloodless, with __characters/gothic/hair__, a signet ring worn thin and a silver-topped cane he does not need, wearing __characters/gothic/attire__"
+    props: {gender: male, age: 70s, role: aristocrat}
+  - value: "a perfumer of dark scents in their thirties, androgynous and heavy-lidded, with __characters/gothic/hair__, stained fingertips and tiny glass vials on a bandolier, wearing __characters/gothic/attire__"
+    props: {gender: nonbinary, age: 30s, role: craftsman}
+  - value: "a lace-maker in her eighties, tiny and bird-boned, with __characters/gothic/hair__, clouded but watchful eyes and a bobbin pillow hugged to her chest, wearing __characters/gothic/attire__"
+    props: {gender: female, age: 80s, role: craftsman}

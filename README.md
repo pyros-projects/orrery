@@ -104,10 +104,17 @@ scene, `krea/` holds Krea 2 stills (natural language, the medium named, text
 to render in quotes), and `h3/` holds MiniMax H3 scenes (dialogue in German
 and Cantonese, a voiceover, fast cuts, an animated fable, on-screen music, and
 an I2VA starter for your own stills, and a three-clip reel for H3 Motion
-Context). `effects/` and `curator/` are Ito-style body-horror operators in the
-lite format (Codie's subsurface travel, body suit and mirror replacement; the
-Curator's paper, glass, clay and elastic lessons), each binding a dial over the
-`bh_*` libraries. `fashion/` strings snobby adjectives and impossible shapes
+Context). `effects/` holds Ito-style body-horror operators in the lite format,
+from Codie's H3 tests: subsurface travel, body suit, mirror replacement, living
+paper, glass body, living clay, elastic body, hollow vessel, filament, human
+drawer and zipper spine, each with dials over its origin, room and ending. They
+follow Codie's rule for H3: turn an abstract property into a visible action
+with two states (elastic: two fixed points moving apart; clay: a press and a
+dent that stays). `characters/` holds seven sets of ten detailed people
+(`average_joes`, `models`, `gothic`, `cyberpunk`, `horror`, `noir`, `fantasy`),
+each with `gender` and `age` properties and hair and clothes rolled from nested
+libraries: `__characters/noir#gender:female__`. The two Katamori curators live
+in `__characters/horror#role:curator__`. `fashion/` strings snobby adjectives and impossible shapes
 into runway looks for Krea and H3 (`couture_*` libraries). `orrery preset list
 --folder krea` shows them with their titles.
 

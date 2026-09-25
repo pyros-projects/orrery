@@ -1,0 +1,19 @@
+---
+title: "Hollow vessel"
+note: "Codie's empty body: a tap on the chest answers with a deep resonance, and HOST turns out to be far larger inside than outside. Dial the sound and the ending. H3 needs the visible pair: pressure on the body, and a resonance that answers. HOST is your ref image 1; delete (image 1) for text only."
+tags: [effects, h3, body_horror, ito]
+---
+@h3 ref2va 16:9 lite
+style: live-action, cinematic surreal body horror, photorealistic
+$host = __bh_host__
+$room = __bh_room__
+$sound = {a deep hollow resonance like a ceramic vessel|a low tone like wind across the mouth of a bottle|a booming echo like a stone dropped into a cistern}
+$ending = {HOST exhales slowly through the open mouth for an impossibly long time, the tone rising from far below the body|HOST speaks one quiet word, and it echoes back from inside the chest a moment later|HOST drops a small pebble into the open mouth, and it falls for three full seconds before a faint distant splash}
+
+CAST
+HOST (image 1): $host
+
+SHOT 10s | push in, slow
+HOST stands facing the camera in $room, framed from the waist up, solid and naturally proportioned. HOST takes a normal breath, then a second, and the chest answers with an unusual inner resonance. HOST pauses, places a palm on the sternum and taps gently with the fingertips: $sound answers from inside the torso. The body still looks completely human. HOST presses a hand against the abdomen; the surface yields slightly and springs back while a low tone travels through the empty space inside. HOST bends slowly forward and the torso creaks softly like a hollow vessel changing orientation, then straightens. HOST raises a hand to the throat and draws in a breath that resonates down through the chest in a long descending tone. In the final moment $ending.
+SFX: quiet room ambience; breathing with a deep inner resonance; hollow taps on the chest; long vessel-like echoes
+MUSIC: N/A

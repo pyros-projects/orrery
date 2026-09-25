@@ -1,0 +1,19 @@
+---
+title: "Filament"
+note: "Codie's third take on the thread effect: 'thread' made H3 pull loose fibres out of dark clothing, so a pale filament now leaves bare skin, and every length pulled out visibly removes body volume. Dial where it starts (the neck and the cheek are sturdiest when clothes get in the way) and its colour. HOST is your ref image 1; delete (image 1) for text only."
+tags: [effects, h3, body_horror, ito]
+---
+@h3 ref2va 16:9 lite
+style: live-action, cinematic surreal body horror, photorealistic
+$host = __bh_host__
+$room = __bh_room__
+$origin = {a tiny point in the skin at the centre of the sternum|the skin at the side of the neck|a small point in the skin just below one cheekbone}
+$colour = {pale|ivory|silver-white}
+
+CAST
+HOST (image 1): $host
+
+SHOT 10s | push in, slow
+HOST stands facing the camera in $room, framed from the waist up, dressed so that the neck and upper chest are clearly visible. A single fine $colour filament emerges from $origin, clearly growing out of the body itself. HOST pinches it between two fingers and pulls steadily outward, and the body changes in direct response: a narrow band of HOST unwinds and becomes the same continuous filament, and every new length pulled out removes another visible strip of volume. The unwinding path travels across the chest toward one shoulder, which shrinks and simplifies; the upper arm thins from shoulder to elbow. Loops of $colour filament gather around the feet. The body does not tear or bleed; it is smoothly converted into one continuous strand. HOST pauses, a great length stretched between hand and body. In the final moment the loose end begins moving on its own and draws another short length out of HOST, and HOST lowers their gaze toward it.
+SFX: quiet room ambience; restrained breathing; a continuous fine sliding sound as the filament leaves the body; soft loops landing on the floor
+MUSIC: N/A

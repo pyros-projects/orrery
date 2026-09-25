@@ -1,0 +1,19 @@
+---
+title: "Zipper spine"
+note: "Codie's back door: a seam down the spine becomes a living zipper, and the opened back shows a passage much deeper than a body. Dial what lies inside and the ending. The visible pair: the zipper opens, and depth appears where the ribs should be. HOST is your ref image 1; delete (image 1) for text only."
+tags: [effects, h3, body_horror, ito]
+---
+@h3 ref2va 16:9 lite
+style: live-action, cinematic surreal body horror, photorealistic
+$host = __bh_host__
+$room = __bh_room__
+$inside = {a narrow vertical corridor descending into darkness|a dim staircase leading down and away|a long hallway with a single lit doorway far away}
+$ending = {a faint movement appears deep inside and comes slightly closer before HOST can close the zipper|a pale hand reaches up from the dark interior toward the opening|a small light switches on far down inside}
+
+CAST
+HOST (image 1): $host
+
+SHOT 10s | push in, slow
+HOST stands with their back to the camera in $room, framed from the hips up. A narrow seam appears along the spine from the base of the neck downward, and small interlocking teeth organise along both sides of it into a perfect living zipper; a small pull tab forms at the nape. HOST reaches behind the head, finds the tab and slowly pulls it down. The back opens along the centreline, the two sides hinging outward around the ribs like flexible panels, and inside is not anatomy but $inside, far deeper than the torso. HOST stops at the lower back and turns the head over one shoulder toward the camera while the open back stays perfectly still. In the final moment $ending.
+SFX: quiet room ambience; restrained breathing; a precise zipper sound; the soft separation of the back; a distant hollow room tone from the impossible interior
+MUSIC: N/A

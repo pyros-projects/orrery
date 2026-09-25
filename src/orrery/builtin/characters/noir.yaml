@@ -1,0 +1,22 @@
+meta: {source: "orrery characters: rain, smoke and bad decisions in a 1940s city", builtin: true}
+entries:
+  - value: "a private detective in his forties with a broken nose and a tired jaw, a flask he rarely drinks from, with __characters/looks/hair__, wearing __characters/noir/attire__"
+    props: {gender: male, age: 40s, role: detective}
+  - value: "a nightclub singer in her thirties with a voice like smoke and eyes that never quite trust you, with __characters/looks/hair__, wearing __characters/noir/attire__"
+    props: {gender: female, age: 30s, role: singer}
+  - value: "a crooked police captain in his fifties, heavy-lidded and generous with other people's money, with __characters/looks/hair__, wearing __characters/noir/attire__"
+    props: {gender: male, age: 50s, role: cop}
+  - value: "a newspaper photographer in her twenties, quick and nosy, a flashbulb camera at her hip, with __characters/looks/hair__, wearing __characters/noir/attire__"
+    props: {gender: female, age: 20s, role: reporter}
+  - value: "a nervous bookkeeper for the mob in his thirties, sweating through his collar, ledger clutched to his chest, with __characters/looks/hair__, wearing __characters/noir/attire__"
+    props: {gender: male, age: 30s, role: informant}
+  - value: "a wealthy widow in her sixties, composed and dangerous, pearls at the throat and a small pistol in her purse, with __characters/looks/hair__, wearing __characters/noir/attire__"
+    props: {gender: female, age: 60s, role: client}
+  - value: "a Chinatown herbalist in his seventies who hears everything and sells some of it, with __characters/looks/hair__, wearing __characters/noir/attire__"
+    props: {gender: male, age: 70s, role: informant}
+  - value: "a femme fatale in her twenties with a beauty mark and a lie ready for every question, with __characters/looks/hair__, wearing __characters/noir/attire__"
+    props: {gender: female, age: 20s, role: client}
+  - value: "a boxer past his prime in his thirties, cauliflower ears and gentle eyes, with __characters/looks/hair__, wearing __characters/noir/attire__"
+    props: {gender: male, age: 30s, role: muscle}
+  - value: "a switchboard operator in her forties who listens in on every call, with __characters/looks/hair__, wearing __characters/noir/attire__ and a headset around her neck"
+    props: {gender: female, age: 40s, role: informant}

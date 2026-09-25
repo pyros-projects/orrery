@@ -1,0 +1,22 @@
+meta: {source: "orrery characters: fashion models, for runway, editorial and cover shoots", builtin: true}
+entries:
+  - value: "a towering Sudanese runway model in her twenties, with deep ebony skin, razor cheekbones and an unhurried predator's walk, with __characters/models/hair__, wearing __characters/models/look__"
+    props: {gender: female, age: 20s}
+  - value: "a freckled Irish editorial model in her twenties, with pale translucent skin, a gap-toothed grin and eyebrows bleached almost invisible, with __characters/models/hair__, wearing __characters/models/look__"
+    props: {gender: female, age: 20s}
+  - value: "a lean Korean menswear model in his twenties, with a long jaw, sleepy half-closed eyes and a single silver ear cuff, with __characters/models/hair__, wearing __characters/models/look__"
+    props: {gender: male, age: 20s}
+  - value: "a silver-haired former supermodel in her sixties, with fine lines she refuses to hide and a gaze that still owns the room, with __characters/models/hair__, wearing __characters/models/look__"
+    props: {gender: female, age: 60s}
+  - value: "a broad-shouldered Samoan model in his thirties, with traditional tattoos from ribs to knee and a calm, amused stare, with __characters/models/hair__, wearing __characters/models/look__"
+    props: {gender: male, age: 30s}
+  - value: "an androgynous Danish model in their twenties, with glass-pale eyes, sharp collarbones and no expression at all, with __characters/models/hair__, wearing __characters/models/look__"
+    props: {gender: nonbinary, age: 20s}
+  - value: "a Brazilian plus-size model in her thirties, with warm olive skin, a dimpled laugh and a stride that fills the runway, with __characters/models/hair__, wearing __characters/models/look__"
+    props: {gender: female, age: 30s}
+  - value: "a weathered Nigerian model in his fifties, with a close white beard and a stillness that makes photographers lower their cameras, with __characters/models/hair__, wearing __characters/models/look__"
+    props: {gender: male, age: 50s}
+  - value: "a Japanese model in her twenties with vitiligo patterning her face like a map, with dark knowing eyes, with __characters/models/hair__, wearing __characters/models/look__"
+    props: {gender: female, age: 20s}
+  - value: "a gaunt Russian model in his twenties, with hollow cheeks, a broken nose set slightly crooked and eyes like wet slate, with __characters/models/hair__, wearing __characters/models/look__"
+    props: {gender: male, age: 20s}

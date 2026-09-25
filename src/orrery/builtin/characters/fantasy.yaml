@@ -1,0 +1,22 @@
+meta: {source: "orrery characters: knights, witches and wanderers", builtin: true}
+entries:
+  - value: "a grizzled knight in her fifties, broad as a door, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+    props: {gender: female, age: 50s, role: warrior}
+  - value: "a hedge witch in her seventies, tiny and sharp-tongued, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__ and a belt of drying herbs"
+    props: {gender: female, age: 70s, role: witch}
+  - value: "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+    props: {gender: male, age: 30s, role: scholar}
+  - value: "a dwarven blacksmith in his sixties, soot-black arms and a braided beard, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+    props: {gender: male, age: 60s, role: craftsman}
+  - value: "a young thief in her twenties, quick-fingered and grinning, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+    props: {gender: female, age: 20s, role: rogue}
+  - value: "an exiled prince in his twenties, beautiful and brittle, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__ and a crown he keeps in a sack"
+    props: {gender: male, age: 20s, role: noble}
+  - value: "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+    props: {gender: nonbinary, age: 40s, role: healer}
+  - value: "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+    props: {gender: male, age: 30s, role: bard}
+  - value: "a sea priestess in her forties, salt-crusted and serene, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__ and a string of shells"
+    props: {gender: female, age: 40s, role: priest}
+  - value: "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+    props: {gender: female, age: 30s, role: warrior}
