@@ -1,6 +1,6 @@
 @h3 t2va 16:9
 style: __h3style__
-$hero = __animal__
+$hero = __creature__
 
 SHOT 5s | push in, small, slow
 A {misty|frozen:2|burning} forest at dawn. The $hero steps onto a fallen log, breath visible in the cold air.

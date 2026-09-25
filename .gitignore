@@ -4,3 +4,9 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 /galaxy/
+
+# agent skills installed locally (readme-craft and friends), not part of orrery
+.agents/
+.claude/
+.devin/
+skills-lock.json

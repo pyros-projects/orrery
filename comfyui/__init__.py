@@ -1,6 +1,7 @@
 """ComfyUI node pack for orrery.
 
-Link this folder into ComfyUI:
+Clone the repository into ComfyUI's custom_nodes (its __init__.py loads this one), or link this
+folder there:
     ln -s /path/to/orrery/comfyui /path/to/ComfyUI/custom_nodes/orrery
 It puts the repo's src/ on the path, so ComfyUI's Python only needs PyYAML.
 """

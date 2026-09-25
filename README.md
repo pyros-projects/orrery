@@ -86,8 +86,8 @@ run to be different, and a little better than the last, orrery is for you.
 ## Quick Start
 
 ```bash
+cd /path/to/ComfyUI/custom_nodes
 git clone https://github.com/pyros-projects/orrery.git
-ln -s "$PWD/orrery/comfyui" /path/to/ComfyUI/custom_nodes/orrery
 ```
 
 Restart ComfyUI and add **orrery → Orrery Prompt**. Wire its `text` output into
@@ -100,9 +100,13 @@ screenplay, or a Krea prompt, each with a quickstart in its comments.
 
 ### ComfyUI
 
-Link the `comfyui` folder into ComfyUI's `custom_nodes`, as in Quick Start. It
-adds the repo's `src/` to the path itself, and its only dependency, PyYAML,
-ships with ComfyUI. On Windows use a junction:
+Clone the repository into ComfyUI's `custom_nodes`, as in Quick Start. Its only
+dependency, PyYAML, ships with ComfyUI. To keep the repository elsewhere, link
+its `comfyui` folder instead:
+
+```bash
+ln -s /path/to/orrery/comfyui /path/to/ComfyUI/custom_nodes/orrery
+```
 
 ```bat
 mklink /J C:\path\to\ComfyUI\custom_nodes\orrery C:\path\to\orrery\comfyui

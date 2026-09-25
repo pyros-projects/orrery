@@ -3,6 +3,8 @@
 Everything the Orrery Prompt node puts out, the five tabs of its app, Generate and Restart, and Orrery Log.
 
 ```bash
+cd /path/to/ComfyUI/custom_nodes && git clone https://github.com/pyros-projects/orrery.git
+# or keep it elsewhere and link its node folder:
 ln -s /path/to/orrery/comfyui /path/to/ComfyUI/custom_nodes/orrery   # Windows: mklink /J …\custom_nodes\orrery …\orrery\comfyui
 ```
 
