@@ -56,8 +56,9 @@ export async function renderLibraries(app) {
   const tags = [...new Set(L.entries.flatMap((e) => e.tags))].sort();
   if (s.libShownFor !== L.name) { s.libShownFor = L.name; s.libShown = LIB_PAGE; }
   const { rows, total } = entryPage(L.entries, { name: L.name, query: s.libSearch, tag: s.libTag, shown: s.libShown });
-  app.view.innerHTML = `<div class="libs">
-    <div class="liblist"><label class="search">${icon("search")}<input class="input" id="oa-ls" placeholder="Library or entry…" value="${esc(s.libSearch)}"></label>
+  const width = Number(app.bridge.props.libWidth) || 0;
+  app.view.innerHTML = `<div class="libs"${width ? ` style="--libw:${width}px"` : ""}>
+    <div class="liblist"><div class="libgrip" role="separator" aria-orientation="vertical" aria-label="Library list width" tabindex="0" title="Drag to resize (or ← →)"></div><label class="search">${icon("search")}<input class="input" id="oa-ls" placeholder="Library or entry…" value="${esc(s.libSearch)}"></label>
       <div class="scroll"><ul>${listHTML(app, libs, L.name)}</ul></div>
       <div class="addrow">${s.libNew !== null ? '<input class="input mono" id="oa-newlib" placeholder="name or folder/name, e.g. film/genre">' : `<button class="btn wide" data-lact="new">${icon("plus")}New library</button>`}</div></div>
     <div class="libmain">
@@ -66,7 +67,7 @@ export async function renderLibraries(app) {
       ${reviewHTML(L)}
       ${ro ? `<div class="banner">${icon("lock")}Built-in and read-only. <b>Make it mine</b> copies it into your library folder, where yours wins over the built-in.</div>` : ""}
       ${tags.length ? `<div class="bar flat"><span class="label">Tags</span>${tags.map((t) => `<button class="chip" aria-pressed="${s.libTag === t}" data-ltag="${esc(t)}">${esc(t)}</button>`).join("")}</div>` : ""}
-      <div class="scroll"><table class="entries"><thead><tr><th class="label">Entry</th><th class="label">Tags</th><th class="label" title="Static weight in the file">Weight</th><th class="label" title="Learned from your galaxy ratings">Learned</th><th></th></tr></thead><tbody>
+      <div class="scroll"><table class="entries"><colgroup><col class="cv"><col><col class="cw"><col class="cl"><col class="cx"></colgroup><thead><tr><th class="label">Entry</th><th class="label">Tags</th><th class="label" title="Static weight in the file">Weight</th><th class="label" title="Learned from your galaxy ratings">Learned</th><th></th></tr></thead><tbody>
       ${rows.map(({ e, i }) => rowHTML(e, i, ro, (L.pending_entries || []).includes(e.value))).join("") || '<tr><td colspan="5" class="empty">No entries yet. Add some below.</td></tr>'}
       </tbody></table>${total > rows.length ? `<div class="addrow"><button class="btn ghost wide" data-lact="more">Show ${Math.min(LIB_PAGE, total - rows.length)} more of ${total - rows.length}</button></div>` : ""}</div>
       ${ro ? "" : `<div class="addrow"><input class="input" id="oa-add" placeholder="Add entries: one per line or comma-separated, then ↵"><button class="btn" data-lact="add">${icon("plus")}Add</button></div>`}
@@ -86,8 +87,8 @@ function rowHTML(e, i, ro, fresh) {
   const lw = e.learned ?? 1, pct = Math.min(50, (Math.abs(Math.log(lw)) / Math.log(4)) * 50);
   const bar = lw >= 1 ? `left:50%;width:${pct}%` : `left:${50 - pct}%;width:${pct}%`;
   return `<tr class="${fresh ? "pend" : ""}"><td class="v"><textarea rows="1" data-ev="${i}" ${ro ? "disabled" : ""} aria-label="Entry" spellcheck="false">${esc(e.value)}</textarea></td>
-    <td class="t"><div class="row nowrap">${e.tags.map((t) => `<span class="tagchip">${esc(t)}${ro ? "" : `<button data-rmtag="${i}" data-tag="${esc(t)}" aria-label="Remove tag">${icon("x")}</button>`}</span>`).join("")}`
-    + Object.entries(e.props || {}).map(([k, v]) => `<span class="tagchip prop" title="__name#${esc(k)}:${esc(v)}__ picks it">${esc(k)}:${esc(v)}${ro ? "" : `<button data-rmprop="${i}" data-key="${esc(k)}" aria-label="Remove property">${icon("x")}</button>`}</span>`).join("")
+    <td class="t"><div class="row">${e.tags.map((t) => `<span class="tagchip">${esc(t)}${ro ? "" : `<button data-rmtag="${i}" data-tag="${esc(t)}" aria-label="Remove tag">${icon("x")}</button>`}</span>`).join("")}`
+    + Object.entries(e.props || {}).map(([k, v]) => `<span class="tagchip prop" tabindex="0" title="${esc(k)}: ${esc(v)}&#10;&#10;__name#${esc(k)}:…__ filters on it · click to read it all"><span class="pv"><b>${esc(k)}</b> ${esc(v)}</span>${ro ? "" : `<button data-rmprop="${i}" data-key="${esc(k)}" aria-label="Remove property">${icon("x")}</button>`}</span>`).join("")
     + `${ro ? "" : `<input class="tagadd" data-addtag="${i}" placeholder="+ tag or key:value">`}</div></td>
     <td class="w"><input type="number" step="0.1" min="0" value="${e.weight}" data-ew="${i}" ${ro ? "disabled" : ""} aria-label="Weight"></td>
     <td><span class="learn ${lw > 1.001 ? "up" : lw < 0.999 ? "dn" : ""}"><span class="bar2"><i class="${lw < 1 ? "down" : ""}" style="${bar}"></i></span>×${lw.toFixed(2)}</span></td>
@@ -117,7 +118,35 @@ async function commit(app, L, entries, { renames, message } = {}) {
 // Properties ride along: the save replaces the whole list, and a property left out would be gone.
 const plain = (L) => L.entries.map((e) => ({ value: e.value, tags: [...e.tags], weight: e.weight, props: { ...(e.props || {}) } }));
 
+// The library list is as wide as you drag it; the node remembers the width.
+function wireGrip(app) {
+  const libs = app.view.querySelector(".libs"), grip = app.view.querySelector(".libgrip");
+  if (!libs || !grip) return;
+  const set = (px) => {
+    const w = Math.round(Math.min(Math.max(px, 140), libs.clientWidth * 0.6));
+    libs.style.setProperty("--libw", `${w}px`);
+    app.bridge.props.libWidth = w;
+  };
+  const refit = () => app.view.querySelectorAll(".entries textarea").forEach(fit);
+  grip.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    grip.setPointerCapture(e.pointerId);
+    const left = libs.getBoundingClientRect().left;
+    const move = (m) => set(m.clientX - left);
+    const up = () => { grip.removeEventListener("pointermove", move); grip.removeEventListener("pointerup", up); refit(); };
+    grip.addEventListener("pointermove", move);
+    grip.addEventListener("pointerup", up);
+  });
+  grip.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault();
+    set(app.view.querySelector(".liblist").offsetWidth + (e.key === "ArrowLeft" ? -16 : 16));
+    refit();
+  });
+}
+
 function wire(app, L) {
+  wireGrip(app);
   const s = app.state;
   const ls = app.$("#oa-ls");
   ls.addEventListener("input", () => {

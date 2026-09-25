@@ -43,7 +43,7 @@ def test_routes_cover_the_contract():
         ("GET", "/orrery/completions"), ("GET", "/orrery/presets"), ("GET", "/orrery/preset"),
         ("POST", "/orrery/preset/save"), ("POST", "/orrery/preset/delete"),
         ("POST", "/orrery/preset/rename"), ("POST", "/orrery/preset/meta"),
-        ("POST", "/orrery/favorite"), ("POST", "/orrery/recent"), ("GET", "/orrery/template"),
+        ("POST", "/orrery/favorite"), ("POST", "/orrery/recent"), ("POST", "/orrery/ui"), ("GET", "/orrery/template"),
         ("GET", "/orrery/libraries"), ("POST", "/orrery/library/save"),
         ("POST", "/orrery/library/own"), ("POST", "/orrery/library/delete"), ("POST", "/orrery/library/rename"), ("POST", "/orrery/galaxy/capture"),
         ("GET", "/orrery/galaxy"), ("POST", "/orrery/galaxy/rate"),
@@ -115,7 +115,9 @@ def test_register_attaches_every_route_through_one_adapter(home, tmp_path):
     assert hit("POST", "/orrery/favorite", query=q, body={"name": "a", "on": True}) == \
         ("json", 200, {"favorites": ["a"]})
     kind, status, body = hit("GET", "/orrery/presets", query=q)
-    assert (kind, status) == ("json", 200) and body["favorites"] == []
+    assert (kind, status) == ("json", 200) and body["favorites"] == [] and body["quickstart"] is True
+    assert hit("POST", "/orrery/ui", query=q, body={"quickstart": False}) == ("json", 200, {"quickstart": False})
+    assert hit("GET", "/orrery/presets", query=q)[2]["quickstart"] is False
     assert hit("GET", "/orrery/preset", query={**q, "name": "nope"})[1] == 404
     assert hit("POST", "/orrery/recent", query=q, broken=True)[1] == 400
     assert hit("POST", "/orrery/recent", query=q, body=["a"])[1] == 400

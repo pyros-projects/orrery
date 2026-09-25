@@ -59,8 +59,11 @@ function sha256(bytes) {
 
 export const templateHash = (text) => sha256(new TextEncoder().encode(text)).slice(0, 16);
 
+// `# …` lines are comments (as in wildcard files): the node drops them before anything rolls.
+export const stripComments = (text) => text.split("\n").filter((l) => !/^\s*#/.test(l)).join("\n");
+
 export function stats(raw) {
-  const text = raw.replace(/<lora:[^<>]*>/g, "<lora>");
+  const text = stripComments(raw).replace(/<lora:[^<>]*>/g, "<lora>");
   const libs = [...text.matchAll(/__(\w+(?:\/\w+)*)(?:\[[\w-]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__/g)];
   const rolls = (text.match(/\{/g) || []).length + libs.length;
   const binds = (text.match(/^\s*\$\w+\s*=/gm) || []).length;
@@ -176,7 +179,8 @@ function h3Canvas(ratio, megapixels) {
   return [Math.max(32, Math.round(w / 32) * 32), Math.max(32, Math.round(h / 32) * 32)];
 }
 
-export function shape(text) {
+export function shape(raw) {
+  const text = stripComments(raw);
   const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
   const params = lines.filter((l) => /^:\s*(x\d|seed=|w\d|h\d)/.test(l)).join(" ");
   const num = (re) => { const m = re.exec(params); return m ? Number(m[1]) : null; };

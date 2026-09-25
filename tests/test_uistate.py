@@ -5,12 +5,13 @@ from orrery.uistate import (
     load_ui,
     rename_everywhere,
     set_favorite,
+    set_quickstart,
     touch_recent,
 )
 
 
 def test_a_fresh_home_has_no_favorites_or_recents(home):
-    assert load_ui(Home(home)) == {"favorites": [], "recent": []}
+    assert load_ui(Home(home)) == {"favorites": [], "recent": [], "quickstart": True}
 
 
 def test_favorites_toggle_on_and_off(home):
@@ -35,11 +36,22 @@ def test_rename_and_forget_update_both_lists(home):
     set_favorite(h, "old", True)
     touch_recent(h, "old")
     rename_everywhere(h, "old", "new")
-    assert load_ui(h) == {"favorites": ["new"], "recent": ["new"]}
+    assert load_ui(h) == {"favorites": ["new"], "recent": ["new"], "quickstart": True}
     forget(h, "new")
-    assert load_ui(h) == {"favorites": [], "recent": []}
+    assert load_ui(h) == {"favorites": [], "recent": [], "quickstart": True}
 
 
 def test_writes_leave_no_temp_files(home):
     set_favorite(Home(home), "x", True)
     assert sorted(p.name for p in home.iterdir() if p.is_file()) == ["ui.json"]
+
+
+def test_quickstart_is_on_until_turned_off_and_survives_other_writes(home):
+    h = Home(home)
+    assert set_quickstart(h, False) is False
+    set_favorite(h, "a", True)
+    touch_recent(h, "a")
+    rename_everywhere(h, "a", "b")
+    forget(h, "b")
+    assert load_ui(h)["quickstart"] is False
+    assert set_quickstart(h, True) is True

@@ -124,3 +124,11 @@ test("__folder/ completes the libraries in that folder", () => {
   assert.ok(suggest("a __fi", 6, data).items.some((i) => i.insert === "__film/genre__"));
   assert.deepEqual(missingLibraries("__film/genre__ and __film/new__", data), ["film/new"]);
 });
+
+test("comments neither complete nor count as missing libraries", () => {
+  assert.deepEqual(missingLibraries("# try __nothing__ here\n__creature__", DATA), []);
+  const text = "# __cre";
+  assert.equal(suggest(text, text.length, DATA).items.length, 0);
+  const h3 = "# a comment first\n@h3 t2va\nSHOT 5s | ";
+  assert.ok(suggest(h3, h3.length, DATA).items.some((i) => i.insert === "push in"));
+});

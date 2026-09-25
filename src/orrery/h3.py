@@ -36,7 +36,7 @@ from orrery.cast import (
     oxford,
     parse_member,
 )
-from orrery.dsl import Expander, Pick
+from orrery.dsl import Expander, Pick, strip_comments
 from orrery.library import Library
 
 CAMERA = {
@@ -588,6 +588,7 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
     images are renumbered to the ones this clip uses (Orrery Refs hands on only those)."""
     from orrery.reel import build_segment, split_reel
     lint: list[Issue] = []
+    src = strip_comments(src)
     reel = split_reel(src)
     if reel:
         scene, picks = build_segment(reel, seed, libraries, weights, segment, lint)

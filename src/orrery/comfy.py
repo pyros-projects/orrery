@@ -17,7 +17,15 @@ from orrery import runs
 from orrery.autolib import needs
 from orrery.chain import DEFAULT_CHAIN, load, previous_clip
 from orrery.comfy_llm import ComfyBackend, can_write, llm_config
-from orrery.dsl import MissingLibrary, bindings, expand, override, parse, wanted_libraries
+from orrery.dsl import (
+    MissingLibrary,
+    bindings,
+    expand,
+    override,
+    parse,
+    strip_comments,
+    wanted_libraries,
+)
 from orrery.h3 import compile_scene, image_slots, render_scene
 from orrery.h3_ref import word_issue
 from orrery.home import Home, resolve_home
@@ -164,7 +172,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         linked = None
     known = {name for name, _ in bindings(template)}
     dials = {k: v for k, v in dial_values(params).items() if k in known}
-    source = resolve_includes(h, override(template, dials))
+    source = strip_comments(resolve_includes(h, override(template, dials)))  # the hash keeps the comments
 
     # One request per run (ComfyUI cannot safely generate twice): libraries still missing and the
     # slots go together, the slots then seeing the template; otherwise the slots see the compiled prompt.

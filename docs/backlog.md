@@ -49,7 +49,6 @@ Effort: **S** = an evening for an agent, verifiable by tests; **M** = a stage;
 - **Batch coverage.** `: x8 unique=__creature__` gives eight different
   creatures in eight rolls (stratified, not independent). *Why:* a batch should
   map a region, not resample it. · S
-- **Comments.** `# …` lines are ignored. · S
 
 ## 2. The learning loop and exploration strategy
 

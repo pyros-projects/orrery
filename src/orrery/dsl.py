@@ -87,9 +87,18 @@ class _Parsed:
     params: Params
 
 
+_COMMENT = re.compile(r"^[ \t]*#.*(?:\r?\n|$)", re.MULTILINE)
+
+
+def strip_comments(template: str) -> str:
+    """A line whose first character (after indentation) is `#` is a comment, as in wildcard files.
+    `#key:value` inside `__lib__` never starts a line, so filters are untouched."""
+    return _COMMENT.sub("", template)
+
+
 def parse(template: str) -> _Parsed:
     parsed = _Parsed([], [], None, Params())
-    for raw in template.splitlines():
+    for raw in strip_comments(template).splitlines():
         line = raw.strip()
         if not line:
             continue

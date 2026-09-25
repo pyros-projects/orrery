@@ -270,3 +270,10 @@ def test_packing_renumbers_the_images_a_scene_uses_to_one_two_three():
     assert "<Subject 2> is a man in <Picture 3>." in result.text
     assert "<Picture 2> is the first frame of [Shot 1]" in result.text and "<Picture 4>" not in result.text
     assert compile_scene(src, 1, {}).refs == []
+
+
+def test_comments_may_open_a_screenplay_and_sit_between_its_lines():
+    src = "# Quickstart\n# SHOT 9s | pan left\n@h3 t2va 16:9\n# one shot\nSHOT 5s | static\nA fox waits.\n# SFX: thunder\nSFX: wind"
+    out = compile_scene(src, 1, {})
+    assert "A fox waits." in out.text and "thunder" not in out.text and "Quickstart" not in out.text
+    assert "9s" not in out.text and "pans" not in out.text

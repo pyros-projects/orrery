@@ -2,9 +2,10 @@
 import { suggest } from "../orrery-complete.js";
 import { esc, highlight } from "./highlight.js";
 import { icon } from "./icons.js";
-import { applyDials, dials, folderColor, pickerGroups, shape, stats, templateHash } from "./model.js";
+import { applyDials, dials, folderColor, pickerGroups, shape, stats, stripComments, templateHash } from "./model.js";
 import { thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
+import { STARTERS } from "./starters.js";
 import { runRolls } from "./test.js";
 
 function statsHTML(app) {
@@ -193,23 +194,13 @@ function wireDials(app) {
 }
 
 // Fresh templates: no preset linked, so nothing can be overwritten by accident.
-const STARTERS = {
-  h3: {
-    label: "H3 screenplay", hint: "@h3 header, one shot, sound", target: "h3-base",
-    text: "@h3 t2va 16:9\nstyle: live-action, cinematic\n\nSHOT 5s | push in, slow\nWhat the camera sees, and what happens in it.\nSFX: the ambience; one clear sound\n",
-  },
-  krea: {
-    label: "Krea prompt", hint: "a still, medium named, size", target: "text",
-    text: "a photograph of {a quiet street|an empty diner|a greenhouse} at {dawn|dusk}, 35mm film, soft grain\n: w832 h1216\n",
-  },
-};
 
 function startNew(app, kind) {
   const s = STARTERS[kind], prev = { preset: app.preset, base: app.base, text: app.text, params: app.bridge.getParams(), target: app.bridge.getTarget() };
   const hadWork = app.dirty();
   app.preset = null;
   app.base = null;
-  app.text = s.text;
+  app.text = app.data.quickstart === false ? stripComments(s.text).trimStart() : s.text;  // the gear turns it off
   app.bridge.setParams({});
   app.bridge.setTarget(s.target);
   app.state.newMenu = false;

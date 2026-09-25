@@ -352,3 +352,9 @@ def test_a_filter_can_depend_on_what_was_rolled_before():
     assert seen == {"a whale in a kelp forest", "a goat in a scree slope"}
     kinds = {expand("$k = {ocean|mountain}\n__place#habitat:$k__", s, libs).text for s in range(20)}
     assert kinds == {"a kelp forest", "a scree slope"}
+
+
+def test_hash_lines_are_comments_and_filters_are_not():
+    libs = {"animal": Library("animal", [Entry("fox", props=(("size", "small"),)), Entry("bear", props=(("size", "big"),))])}
+    template = "# quickstart: __missing__ rolls a library, $x = __animal__ binds one\n  # indented too\n$a = __animal#size:big__\n#$a = __animal#size:small__\na $a in the snow"
+    assert expand(template, 1, libs).text == "a bear in the snow"

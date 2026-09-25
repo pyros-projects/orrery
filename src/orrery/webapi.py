@@ -159,6 +159,7 @@ def presets(home: Home, args: dict) -> dict:
         "presets": [_card(home, n, outputs) for n in names],
         "favorites": [n for n in ui["favorites"] if n in known],
         "recent": [n for n in ui["recent"] if n in known],
+        "quickstart": ui["quickstart"],
     }
 
 
@@ -214,6 +215,13 @@ def favorite(home: Home, args: dict) -> dict:
 
 def recent(home: Home, args: dict) -> dict:
     return {"recent": uistate.touch_recent(home, _preset_name(args.get("name")))}
+
+
+def ui_save(home: Home, args: dict) -> dict:
+    """App preferences kept in the home: `quickstart` (New templates open with their comments)."""
+    if "quickstart" in args:
+        uistate.set_quickstart(home, bool(args["quickstart"]))
+    return {"quickstart": uistate.load_ui(home)["quickstart"]}
 
 
 def _preset_by_hash(home: Home) -> dict[str, str]:
@@ -591,6 +599,7 @@ ROUTES = [
     ("POST", "/orrery/preset/meta", preset_meta),
     ("POST", "/orrery/favorite", favorite),
     ("POST", "/orrery/recent", recent),
+    ("POST", "/orrery/ui", ui_save),
     ("GET", "/orrery/template", template),
     ("GET", "/orrery/libraries", libraries),
     ("POST", "/orrery/library/save", library_save),

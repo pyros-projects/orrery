@@ -57,6 +57,7 @@ Qwen3.5-4B handles semantic edits; 2B is too weak for them.
 | `? $w.kind=rain,snow: …` | a line kept only when the condition holds (`!=` for not); works for SFX lines too |
 | `{? $w.kind=rain: wet\|dry}` | a choice made by a condition instead of the dice |
 | `> moody, cinematic` | enhancement instruction (recorded, not yet executed) |
+| `# a note` | a comment: a line starting with `#` never reaches the model (filters like `__lib#key:value__` are not comments) |
 | `: x8 seed=100 w1216 h832` | batch parameters |
 
 Libraries live in the home folder (`~/.orrery` unless set otherwise, see
@@ -287,8 +288,11 @@ Restart ComfyUI. Nodes under **orrery**:
   same app over the canvas, Esc brings it back):
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `$` bindings, camera words after
-    `SHOT 5s |`, your LoRA files after `LORA:`). **New** starts a fresh H3
-    screenplay or Krea prompt linked to no preset. Open a preset from the bar above it; ● marks unsaved
+    `SHOT 5s |`, your LoRA files after `LORA:`). **New** starts a fresh
+    template linked to no preset: an H3 scene, an H3 reel for Motion Context,
+    H3 references (ref2va), H3 keyframes (i2va, fl2va, l2va) or a Krea prompt,
+    each with a quickstart of the essentials as `#` comments on top (the gear
+    turns the quickstart off). Open a preset from the bar above it; ● marks unsaved
     edits; Save, Save as…, Revert. Under the editor, every binding is a
     **dial**: pick a library entry or choice, or type any expression; empty
     means its default roll. Saving bakes the dials in, and a galaxy output
@@ -304,7 +308,8 @@ Restart ComfyUI. Nodes under **orrery**:
     the weight each entry learned from your ratings. Libraries that share a
     name prefix sit in a folder (`couture_form`, `couture_house` → couture);
     what the language model wrote waits on top for review. Built-ins become
-    yours with **Make it mine**.
+    yours with **Make it mine**. Drag the list's edge to widen it; a long
+    property opens when you click it.
   - **Galaxy**: every logged output. love / like / nope / hate multiply the
     learned weight of each pick by 1.5 / 1.2 / 0.8 / 0.5 (re-rating replaces
     the factor). **Use template + seed** restores an output and sets the seed

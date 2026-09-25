@@ -247,3 +247,24 @@ test("generate finds the output nodes downstream of the orrery node, and whether
   nodes[0].targets.push(41); nodes.push({ id: 41, type: "OrreryLog", output: true, targets: [] });
   assert.deepEqual(downstream(nodes, 9), { outputs: [31, 41], log: true });
 });
+
+test("# lines are comments: grey, and nothing in them rolls, counts or opens a screenplay", () => {
+  const src = "# Quickstart: __ideas__ and $x = __animal__\n@h3 t2va 16:9 0.6MP\n# SHOT 9s | pan left\nSHOT 5s | static\nA fox.";
+  assert.match(highlight(src, new Set()), /<span class="t-comment"># Quickstart: __ideas__ and \$x = __animal__<\/span>/);
+  const st = stats(src);
+  assert.deepEqual([st.rolls, st.libs, st.binds, st.h3.shots, st.h3.secs], [0, 0, 0, 1, 5]);
+  assert.deepEqual([shape(src).width, shape(src).height], [1024, 576]);
+  assert.deepEqual(dials(src), []);
+});
+
+test("every New template opens with a quickstart and its dials come from code, not from comments", async () => {
+  const { STARTERS } = await import("../../comfyui/web/app/starters.js");
+  for (const [kind, s] of Object.entries(STARTERS)) {
+    assert.match(s.text, /^# .+quickstart/i, kind);
+    const code = s.text.split("\n").filter((l) => l && !l.startsWith("#"));
+    assert.ok(code.length > 1, kind);
+    assert.equal(dials(s.text).length, dials(code.join("\n")).length, kind);
+    if (s.target === "h3-base") assert.ok(stats(s.text).h3, kind);
+  }
+  assert.equal(stats(STARTERS.reel.text).h3.reel.chunks, 2);
+});

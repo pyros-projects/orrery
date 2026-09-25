@@ -99,11 +99,14 @@ function loraItems(before, line, data) {
   };
 }
 
+const uncommented = (text) => text.split("\n").filter((l) => !/^\s*#/.test(l)).join("\n");  // `# …` lines
+
 export function suggest(text, caret, data) {
   if (!data) return NONE;
   const before = text.slice(0, caret);
   const line = before.slice(before.lastIndexOf("\n") + 1);
-  const screenplay = text.trimStart().startsWith("@h3");
+  if (/^\s*#/.test(line)) return NONE;
+  const screenplay = uncommented(text).trimStart().startsWith("@h3");
   const found = (screenplay ? loraItems(before, line, data) : null)
     ?? libraryItems(before, data)
     ?? bindingItems(before, text)
@@ -115,6 +118,6 @@ export function suggest(text, caret, data) {
 
 export function missingLibraries(text, data) {
   const known = new Set(data.libraries.map((l) => l.name));
-  const names = [...text.replace(/<lora:[^<>]*>/g, "").matchAll(/__(\w+(?:\/\w+)*)(?:\[[\w-]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__/g)].map((m) => m[1]);
+  const names = [...uncommented(text).replace(/<lora:[^<>]*>/g, "").matchAll(/__(\w+(?:\/\w+)*)(?:\[[\w-]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__/g)].map((m) => m[1]);
   return [...new Set(names)].filter((n) => !known.has(n));
 }

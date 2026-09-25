@@ -492,3 +492,10 @@ def test_a_reel_tells_the_app_which_segment_runs(home, monkeypatch):
     monkeypatch.setitem(sys.modules, "comfy_execution.graph_utils", blocker)
     OrreryPrompt().run(reel, 1, "h3-base", home=str(home), segment=3, unique_id="427")
     assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": 3, "end": True})]
+
+
+def test_comments_neither_roll_nor_ask_for_libraries(home):
+    src = "# Quickstart: __no_such_library__ would be written by the language model\n@h3 t2va 16:9 0.6MP\nSHOT 5s\nA fox runs.\nSFX: wind"
+    outputs = OrreryPrompt().run(src, 1, "h3-base", home=str(home))
+    data = json.loads(outputs[1])
+    assert "Quickstart" not in outputs[0] and (outputs[3], outputs[4]) == (1024, 576) and data["megapixels"] == 0.6

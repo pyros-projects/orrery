@@ -9,6 +9,7 @@ const TOKEN = /(__(\w+(?:\/\w+)*)(?:\[[\w-]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?
 const TO_MAKE = "Not a library yet: the language model creates it when the node runs";
 
 function line(text, known, llm) {
+  if (/^\s*#/.test(text)) return `<span class="t-comment">${esc(text)}</span>`;
   if (/^\s*@h3\b/.test(text)) return `<span class="t-head">${esc(text)}</span>`;
   if (/^\s*>/.test(text)) return `<span class="t-enh">${esc(text)}</span>`;
   if (/^\s*:\s*(x\d|seed=|w\d|h\d)/.test(text)) {

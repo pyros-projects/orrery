@@ -110,6 +110,7 @@ export class OrreryApp {
     this.data.presets = d.presets;
     this.data.favorites = new Set(d.favorites);
     this.data.recent = d.recent;
+    this.data.quickstart = d.quickstart !== false;
   }
   async refreshCompletion() { this.data.completion = await this.api.completions(); }
 

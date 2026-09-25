@@ -34,6 +34,7 @@ export function client(home) {
     deletePreset: (name) => call("preset/delete", { body: { name } }),
     favorite: (name, on) => call("favorite", { body: { name, on } }),
     recent: (name) => call("recent", { body: { name } }),
+    saveUi: (body) => call("ui", { body }),
     template: (hash) => call("template", { query: { hash } }),
     libraries: () => call("libraries"),
     saveLibrary: (body) => call("library/save", { body }),
