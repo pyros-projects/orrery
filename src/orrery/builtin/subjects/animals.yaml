@@ -1,0 +1,22 @@
+meta: {source: "orrery pack: animals that carry an image on their own, with the sound they make (sfx) and where they live (habitat)", builtin: true}
+entries:
+  - {value: "a snow leopard", props: {habitat: mountain, sfx: "a low chuffing breath"}}
+  - {value: "a barn owl", props: {habitat: forest, sfx: "a rasping screech and silent wingbeats"}}
+  - {value: "a red fox", props: {habitat: forest, sfx: "a sharp bark and snow crunching"}}
+  - {value: "an elephant matriarch", props: {habitat: savanna, sfx: "a deep rumble and a trumpet call"}}
+  - {value: "a humpback whale", props: {habitat: ocean, sfx: "a long haunting whale song"}}
+  - {value: "a hummingbird", props: {habitat: garden, sfx: "the high buzz of wings"}}
+  - {value: "a black panther", props: {habitat: jungle, sfx: "a low growl and rustling leaves"}}
+  - {value: "a pair of flamingos", props: {habitat: lake, sfx: "honking calls and splashing"}}
+  - {value: "a stag with enormous antlers", props: {habitat: forest, sfx: "a roaring bellow echoing in the trees"}}
+  - {value: "a manta ray", props: {habitat: ocean, sfx: "a muffled underwater hush"}}
+  - {value: "a wolf", props: {habitat: forest, sfx: "a lone howl"}}
+  - {value: "a peacock with its tail fanned", props: {habitat: garden, sfx: "a piercing call and rattling feathers"}}
+  - {value: "a giant tortoise", props: {habitat: island, sfx: "a slow scrape of shell on rock"}}
+  - {value: "an octopus", props: {habitat: ocean, sfx: "bubbles and a soft suction"}}
+  - {value: "a raven", props: {habitat: mountain, sfx: "a deep croak"}}
+  - {value: "a polar bear", props: {habitat: ice, sfx: "heavy paws on snow and a huff"}}
+  - {value: "a chameleon shifting colour", props: {habitat: jungle, sfx: "insects and dripping leaves"}}
+  - {value: "a herd of wild horses", props: {habitat: plains, sfx: "thundering hooves and whinnying"}}
+  - {value: "a jellyfish trailing long glowing threads", props: {habitat: ocean, sfx: "a deep underwater silence"}}
+  - {value: "a mountain gorilla", props: {habitat: jungle, sfx: "a chest beat and a soft grunt"}}

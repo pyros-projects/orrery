@@ -1,0 +1,15 @@
+---
+title: "11 · World swap"
+note: "Two places that have nothing to do with each other, joined in one continuous take by a visible action instead of a cut: stagehands strike the set, a giant hand swaps the diorama, the sky tears open (transitions/between, Pyro's stagehand idea and nineteen more, each with its own sound). For the endless version, see loops/set_change."
+tags: [h3, transition]
+---
+@h3 t2va 16:9
+style: live-action, cinematic, photorealistic, one continuous steady take gliding forward
+$from = __world/landscapes__
+$to = {__world/landscapes__|__tour/rooms__}
+$shift = __transitions/between__
+
+SHOT 10s | tracking, slow
+The camera glides forward at eye level through $from. Midway, $shift. The camera glides on into $to without ever stopping, as if this were the most ordinary thing in the world.
+SFX: $from.sfx; $shift.sfx; $to.sfx
+MUSIC: N/A

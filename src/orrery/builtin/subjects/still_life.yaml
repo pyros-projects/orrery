@@ -1,0 +1,22 @@
+meta: {source: "orrery pack: objects with a story in them, for still lifes and product-shot surrealism", builtin: true}
+entries:
+  - {value: "a porcelain teacup mended with veins of gold", props: {sfx: "a spoon ringing once against porcelain"}}
+  - {value: "a stack of love letters tied with faded red ribbon", props: {sfx: "paper whispering as a page lifts"}}
+  - {value: "an old pocket watch with its back open, gears exposed", props: {sfx: "a tiny fast ticking"}}
+  - {value: "a single pomegranate split open, seeds spilling like jewels", props: {sfx: "a wet soft crack"}}
+  - {value: "a brass diving helmet with barnacles on its faceplate", props: {sfx: "water dripping from brass"}}
+  - {value: "a candle burnt down to a pool of wax on an antique silver holder", props: {sfx: "a flame guttering"}}
+  - {value: "a child's tin robot missing one arm", props: {sfx: "a clockwork whirr winding down"}}
+  - {value: "a glass jar holding a tiny thunderstorm", props: {sfx: "a muffled thunder rumbling inside glass"}}
+  - {value: "a typewriter with a half-written page still in it", props: {sfx: "a single key strike and the bell"}}
+  - {value: "a bouquet of dried roses in a cracked blue vase", props: {sfx: "brittle petals falling onto wood"}}
+  - {value: "an astronaut's glove lying on sand", props: {sfx: "wind hissing across sand"}}
+  - {value: "a violin with one broken string curling in the air", props: {sfx: "a string snapping and humming"}}
+  - {value: "a chess game abandoned mid-move beside a cold cup of coffee", props: {sfx: "a chess piece tipping over"}}
+  - {value: "a birdcage with its door open and a single feather inside", props: {sfx: "a small hinge creaking"}}
+  - {value: "a stack of old leather-bound books with a key tucked into one", props: {sfx: "a heavy cover thumping shut"}}
+  - {value: "a snow globe with a tiny version of the room it stands in", props: {sfx: "glass and swirling liquid"}}
+  - {value: "a paper boat stranded on a rain-wet windowsill", props: {sfx: "rain tapping on glass"}}
+  - {value: "an antique compass whose needle spins without stopping", props: {sfx: "a needle whirring softly"}}
+  - {value: "a ceramic mask cracked down the middle", props: {sfx: "a fine crack spreading"}}
+  - {value: "a bowl of lemons, one of them glowing from inside", props: {sfx: "a faint electric hum"}}

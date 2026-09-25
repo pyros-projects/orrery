@@ -1,0 +1,15 @@
+---
+title: "10 · Impossible camera"
+note: "One unbroken camera move that no real camera could make: from a wide view the camera flies through a keyhole, a dewdrop or a bird's pupil and comes out somewhere else entirely, at another scale. H3 reads it as one continuous shot because it is written as one path with a clear before and after, not as a cut."
+tags: [h3, camera]
+---
+@h3 t2va 16:9
+style: live-action, cinematic, photorealistic, one unbroken camera move
+$start = __world/landscapes__
+$portal = __scale/portals__
+$end = {__world/landscapes__|__tour/rooms__}
+
+SHOT 10s | push in, large, slow
+The camera begins wide over $start, then descends toward one tiny detail in it, $portal, pushing in without a single cut until the detail fills the frame. $portal.out, and the camera emerges into $end, at a completely different scale, still moving forward in the same smooth motion.
+SFX: $start.sfx; a hush as the camera closes in; $end.sfx
+MUSIC: N/A

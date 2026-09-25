@@ -1,0 +1,15 @@
+---
+title: "09 · Drone flight"
+note: "One drone shot over a landscape that reads at a glance: the land, the light and the move each roll (the move's camera spec rides along as a property), and the soundscape comes from the land and the weather, so it always fits. For an endless flight across the world, see loops/drone_odyssey."
+tags: [h3, drone, landscape]
+---
+@h3 t2va 16:9
+style: live-action aerial cinematography, photorealistic, smooth gimbal-stabilised drone footage
+$land = __world/landscapes__
+$sky = __world/weather__
+$move = __drone/moves__
+
+SHOT 10s | $move.shot
+Over $land, in $sky, the drone $move. The scale reads from small things in the frame: a road, a boat, a single tree, a figure standing still. The light moves across the land as the drone flies.
+SFX: $land.sfx; $sky.sfx
+MUSIC: N/A
