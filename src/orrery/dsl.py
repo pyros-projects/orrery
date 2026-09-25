@@ -19,13 +19,14 @@ from orrery.rng import Rng, weighted_pick
 _BRACE = re.compile(r"\{([^{}]*)\}")
 # __name[tag]:N__(directions): N = at least N entries; (directions) guide the model that writes the
 # library and never reach the prompt
-_LIB = re.compile(r"__(\w+(?:/\w+)*)(?:\[([\w-]+)\])?(?::(\d+))?__(?:\(([^()]*)\))?")
+_LIB = re.compile(r"__(\w+(?:/\w+)*)(?:\[([\w-]+)\])?((?:#[\w-]+:[\w-]+)*)(?::(\d+))?__(?:\(([^()]*)\))?")
 _VAR = re.compile(r"\$([A-Za-z_]\w*)(?:~(\d+))?")  # $x, or $x~N: x as it was N clips ago
 _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
 _BINDING_LINE = re.compile(r"^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$")
 _MULTI = re.compile(r"^(\d+)(?:-(\d+))?\$\$(.+)$")
 _WEIGHTED = re.compile(r"^(.*?):(\d+(?:\.\d+)?)$")
-_LIB_ONLY = re.compile(r"^__(\w+(?:/\w+)*)(?:\[([\w-]+)\])?(?::\d+)?__(?:\([^()]*\))?$")
+_LIB_ONLY = re.compile(r"^__(\w+(?:/\w+)*)(?:\[([\w-]+)\])?((?:#[\w-]+:[\w-]+)*)(?::\d+)?__(?:\([^()]*\))?$")
+_PROP = re.compile(r"#([\w-]+):([\w-]+)")
 _LORA_TAG = re.compile(r"<lora:[^<>]*>")  # opaque: LoRA file names may contain __
 _HIDDEN = re.compile("\x00(\\d+)\x00")
 _AN_PREFIXES = ("hour", "honest", "honor", "honour", "heir")
@@ -101,18 +102,18 @@ def wanted_libraries(template: str) -> dict[str, int]:
     """Every library a template uses, with the entries it asks for (`__name:N__`, else 0)."""
     wanted: dict[str, int] = {}
     for m in _LIB.finditer(_LORA_TAG.sub("", template)):
-        wanted[m.group(1)] = max(wanted.get(m.group(1), 0), int(m.group(3) or 0))
+        wanted[m.group(1)] = max(wanted.get(m.group(1), 0), int(m.group(4) or 0))
     return wanted
 
 
 def library_directions(template: str) -> dict[str, str]:
     """What the template tells the model about each library it may write: `__name__(directions)`."""
-    return {m.group(1): m.group(4).strip() for m in _LIB.finditer(_LORA_TAG.sub("", template)) if m.group(4)}
+    return {m.group(1): m.group(5).strip() for m in _LIB.finditer(_LORA_TAG.sub("", template)) if m.group(5)}
 
 
 def without_directions(text: str) -> str:
     """The text with every `__name__(directions)` cut back to `__name__`."""
-    return _LIB.sub(lambda m: m.group(0).split("(", 1)[0] if m.group(4) is not None else m.group(0), text)
+    return _LIB.sub(lambda m: m.group(0).split("(", 1)[0] if m.group(5) is not None else m.group(0), text)
 
 
 def bindings(template: str) -> list[tuple[str, str]]:
@@ -138,6 +139,10 @@ def _parse_params(text: str) -> Params:
         return int(m.group(1)) if m else None
 
     return Params(grab(r"\bx(\d+)"), grab(r"\bseed=(\d+)"), grab(r"\bw(\d+)"), grab(r"\bh(\d+)"))
+
+
+def _label(name: str, tag: str | None, props: str | None) -> str:
+    return f"__{name}{f'[{tag}]' if tag else ''}{props or ''}__"
 
 
 class Expander:
@@ -179,7 +184,7 @@ class Expander:
             if not m:
                 break
             text = text[: m.start()] + self._brace(m.group(1)) + text[m.end():]
-        text = _LIB.sub(lambda m: self._library(m.group(1), m.group(2), label_prefix), text)
+        text = _LIB.sub(lambda m: self._library(m.group(1), m.group(2), label_prefix, m.group(3)), text)
         text = _VAR.sub(self._var, text)
         return self._articles(text)
 
@@ -198,17 +203,22 @@ class Expander:
                           lambda m, v=v: m.group(1) + ("n " if _wants_an(v) else " "), text)
         return text
 
-    def _pool(self, name: str, tag: str | None) -> tuple[str, list[tuple[str, float]]]:
+    def _pool(self, name: str, tag: str | None, props: str = "") -> tuple[str, list[tuple[str, float]]]:
+        """The entries a pick draws from: those with the tag and every `#key:value` property (any case)."""
         if name not in self.libraries:
             raise MissingLibrary(name)
         family = f"__{name}__"
-        entries = [e for e in self.libraries[name].entries if tag is None or tag in e.tags]
+        wanted = [(k, v.casefold()) for k, v in _PROP.findall(props or "")]
+        entries = [e for e in self.libraries[name].entries if (tag is None or tag in e.tags)
+                   and all((e.prop(k) or "").casefold() == v for k, v in wanted)]
+        if not entries:
+            raise ValueError(f"{_label(name, tag, props)} matches no entry")
         return family, [(e.value, e.weight * self.learned(f"{family}={e.value}")) for e in entries]
 
-    def _library(self, name: str, tag: str | None, label_prefix: str) -> str:
-        family, pool = self._pool(name, tag)
+    def _library(self, name: str, tag: str | None, label_prefix: str, props: str = "") -> str:
+        family, pool = self._pool(name, tag, props)
         value = pool[weighted_pick([w for _, w in pool], self.rng)][0]
-        label = label_prefix + (f"__{name}[{tag}]__" if tag else family)
+        label = label_prefix + _label(name, tag, props)
         self.picks.append(Pick(label, value, (f"{family}={value}",)))
         return self._nested(name, value, label_prefix)
 
@@ -245,7 +255,7 @@ class Expander:
     def _multi(self, lo: int, hi: int, source: str) -> str:
         n = lo + int(self.rng.random() * (hi - lo + 1))
         if lm := _LIB_ONLY.match(source):
-            family, pool = self._pool(lm.group(1), lm.group(2))
+            family, pool = self._pool(lm.group(1), lm.group(2), lm.group(3))
         else:
             family = "{" + source + "}"
             pool = [(v.strip(), self.learned(f"{family}={v.strip()}")) for v in source.split("|")]

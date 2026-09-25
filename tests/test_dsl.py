@@ -254,3 +254,33 @@ def test_an_entry_comes_out_trimmed_whatever_its_braces_chose():
     libs = _libs(hair=["{|red} perm{|, and a clip}"])
     assert {expand("a __hair__.", s, libs).text for s in range(40)} == {
         "a perm.", "a red perm.", "a perm, and a clip.", "a red perm, and a clip."}
+
+
+PEOPLE = {"people": Library("people", [
+    Entry("Mara", props=(("gender", "female"), ("age", "30s"))),
+    Entry("Ines", ("pilot",), props=(("gender", "Female"), ("age", "60s"))),
+    Entry("Tomas", props=(("gender", "male"), ("age", "30s"))),
+])}
+
+
+def test_properties_filter_the_entries_a_pick_draws_from():
+    seen = {expand("__people#gender:female__", s, PEOPLE).text for s in range(30)}
+    assert seen == {"Mara", "Ines"}  # values match whatever their case
+    assert {expand("__people#gender:female#age:30s__", s, PEOPLE).text for s in range(10)} == {"Mara"}
+
+
+def test_properties_combine_with_tags_and_counts():
+    assert expand("__people[pilot]#gender:female:2__", 1, PEOPLE).text == "Ines"
+
+
+def test_the_pick_label_names_the_filter():
+    assert expand("__people#age:60s__", 1, PEOPLE).picks[0].label == "__people#age:60s__"
+
+
+def test_a_filter_nothing_matches_says_so():
+    with pytest.raises(ValueError, match=r"__people#gender:robot__ matches no entry"):
+        expand("__people#gender:robot__", 1, PEOPLE)
+
+
+def test_a_filtered_library_is_still_wanted_by_its_name():
+    assert wanted_libraries("__people#gender:female:3__(tall ones)") == {"people": 3}

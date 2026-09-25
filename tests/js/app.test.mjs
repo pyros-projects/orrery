@@ -203,3 +203,11 @@ test("libraries in folders: highlighted, counted, dialed and grouped by their fo
   assert.deepEqual(groups.map((g) => [g.key, g.items.map((i) => i.short)]),
     [["couture", ["form", "house"]], ["film", ["genre", "moods"]], ["", ["style"]]]);
 });
+
+test("property filters are part of a library everywhere", () => {
+  const withPeople = new Set([...known, "characters/cyberpunk"]);
+  assert.match(highlight("a __characters/cyberpunk#gender:female__ runs", withPeople),
+    /<span class="t-lib">__characters\/cyberpunk#gender:female__<\/span>/);
+  assert.equal(stats("__characters/cyberpunk#gender:female#age:30s:2__").libs, 1);
+  assert.equal(dials("$hero = __characters/cyberpunk#gender:female__")[0].lib, "characters/cyberpunk");
+});

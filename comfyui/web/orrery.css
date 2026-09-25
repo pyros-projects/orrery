@@ -68,6 +68,7 @@
 .orrery-app .tagchip { font: 500 11px/1 var(--mono); color: var(--muted); background: #262734; border-radius: 5px; padding: 3px 6px; display: inline-flex; gap: 4px; align-items: center; }
 .orrery-app .tagchip button { color: var(--faint); display: inline-flex; }
 .orrery-app .tagchip .i { width: 11px; height: 11px; }
+.orrery-app .tagchip.prop { color: var(--violet); background: rgba(180,148,245,.12); }
 .orrery-app .input { background: #1a1b23; border: 1px solid var(--line); border-radius: 7px; padding: 6px 9px; width: 100%; }
 .orrery-app .input:focus { border-color: var(--brass); outline: none; }
 .orrery-app .search { position: relative; flex: 1; min-width: 150px; display: block; }

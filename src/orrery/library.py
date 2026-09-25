@@ -24,6 +24,10 @@ class Entry:
     value: str
     tags: tuple[str, ...] = ()
     weight: float = 1.0
+    props: tuple[tuple[str, str], ...] = ()  # (key, value) pairs, sorted; `__lib#key:value__` filters on them
+
+    def prop(self, key: str) -> str | None:
+        return next((v for k, v in self.props if k == key), None)
 
 
 @dataclass
@@ -44,6 +48,7 @@ def _entry(raw) -> Entry:
             str(raw["value"]).strip(),
             tuple(str(t) for t in raw.get("tags") or ()),
             float(raw.get("weight", 1.0)),
+            tuple(sorted((str(k), str(v)) for k, v in (raw.get("props") or {}).items())),
         )
     raise ValueError(f"not a library entry: {raw!r}")
 
@@ -70,13 +75,15 @@ def load_library(path: Path, name: str | None = None) -> Library:
 
 
 def _dump_entry(e: Entry):
-    if not e.tags and e.weight == 1.0:
+    if not e.tags and e.weight == 1.0 and not e.props:
         return e.value
     out: dict = {"value": e.value}
     if e.tags:
         out["tags"] = list(e.tags)
     if e.weight != 1.0:
         out["weight"] = e.weight
+    if e.props:
+        out["props"] = dict(e.props)
     return out
 
 

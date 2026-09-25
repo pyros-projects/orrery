@@ -86,7 +86,8 @@ function rowHTML(e, i, ro, fresh) {
   const bar = lw >= 1 ? `left:50%;width:${pct}%` : `left:${50 - pct}%;width:${pct}%`;
   return `<tr class="${fresh ? "pend" : ""}"><td class="v"><textarea rows="1" data-ev="${i}" ${ro ? "disabled" : ""} aria-label="Entry" spellcheck="false">${esc(e.value)}</textarea></td>
     <td class="t"><div class="row nowrap">${e.tags.map((t) => `<span class="tagchip">${esc(t)}${ro ? "" : `<button data-rmtag="${i}" data-tag="${esc(t)}" aria-label="Remove tag">${icon("x")}</button>`}</span>`).join("")}`
-    + `${ro ? "" : `<input class="tagadd" data-addtag="${i}" placeholder="+ tag">`}</div></td>
+    + Object.entries(e.props || {}).map(([k, v]) => `<span class="tagchip prop" title="__name#${esc(k)}:${esc(v)}__ picks it">${esc(k)}:${esc(v)}${ro ? "" : `<button data-rmprop="${i}" data-key="${esc(k)}" aria-label="Remove property">${icon("x")}</button>`}</span>`).join("")
+    + `${ro ? "" : `<input class="tagadd" data-addtag="${i}" placeholder="+ tag or key:value">`}</div></td>
     <td class="w"><input type="number" step="0.1" min="0" value="${e.weight}" data-ew="${i}" ${ro ? "disabled" : ""} aria-label="Weight"></td>
     <td><span class="learn ${lw > 1.001 ? "up" : lw < 0.999 ? "dn" : ""}"><span class="bar2"><i class="${lw < 1 ? "down" : ""}" style="${bar}"></i></span>×${lw.toFixed(2)}</span></td>
     <td>${ro ? "" : `<button class="mini" data-rm="${i}" aria-label="Delete entry">${icon("x")}</button>`}</td></tr>`;
@@ -94,7 +95,7 @@ function rowHTML(e, i, ro, fresh) {
 
 // Every edit saves the whole list; the previous list is kept for Undo.
 async function commit(app, L, entries, { renames, message } = {}) {
-  const before = L.entries.map((e) => ({ value: e.value, tags: [...e.tags], weight: e.weight }));
+  const before = plain(L);
   try {
     const saved = await app.api.saveLibrary({ name: L.name, entries, ...(renames ? { renames } : {}) });
     app.data.libraries = app.data.libraries.map((l) => (l.name === L.name ? saved : l));
@@ -112,7 +113,8 @@ async function commit(app, L, entries, { renames, message } = {}) {
   }
 }
 
-const plain = (L) => L.entries.map((e) => ({ value: e.value, tags: [...e.tags], weight: e.weight }));
+// Properties ride along: the save replaces the whole list, and a property left out would be gone.
+const plain = (L) => L.entries.map((e) => ({ value: e.value, tags: [...e.tags], weight: e.weight, props: { ...(e.props || {}) } }));
 
 function wire(app, L) {
   const s = app.state;
@@ -142,6 +144,12 @@ function wire(app, L) {
     if (rm) {
       const entries = plain(L), [gone] = entries.splice(Number(rm.dataset.rm), 1);
       return commit(app, L, entries, { message: `Removed <b>${esc(gone.value)}</b>` });
+    }
+    const rp = e.target.closest("[data-rmprop]");
+    if (rp) {
+      const entries = plain(L);
+      delete entries[Number(rp.dataset.rmprop)].props[rp.dataset.key];
+      return commit(app, L, entries);
     }
     const rt = e.target.closest("[data-rmtag]");
     if (rt) {
@@ -202,7 +210,9 @@ function wire(app, L) {
     if (t.dataset.addtag !== undefined && e.key === "Enter" && t.value.trim()) {
       const entries = plain(L), entry = entries[Number(t.dataset.addtag)];
       const tag = t.value.trim().toLowerCase().replace(/\s+/g, "_");
-      if (!entry.tags.includes(tag)) entry.tags.push(tag);
+      const [key, ...rest] = tag.split(":");  // key:value is a property, filtered by __name#key:value__
+      if (rest.length && key && rest.join(":")) entry.props[key] = rest.join(":");
+      else if (!entry.tags.includes(tag)) entry.tags.push(tag);
       commit(app, L, entries);
     }
     if (t.id === "oa-add" && e.key === "Enter") { e.preventDefault(); addEntries(app, L); }

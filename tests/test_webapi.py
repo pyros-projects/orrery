@@ -236,7 +236,7 @@ def test_libraries_carry_source_tags_and_learned_weights(home):
     by = libs(home)
     assert (by["animal"]["source"], by["creature"]["source"], by["gen"]["source"]) == ("user", "builtin", "llm")
     fox = by["animal"]["entries"][0]
-    assert fox == {"value": "fox", "tags": [], "weight": 1.0, "learned": 1.5}
+    assert fox == {"value": "fox", "tags": [], "weight": 1.0, "props": {}, "learned": 1.5}
     assert "deep_sea" in by["creature"]["tags"]
 
 
@@ -244,7 +244,7 @@ def test_library_save_creates_edits_and_validates(home):
     lib = ok(home, webapi.library_save, name="Weather 2",
              entries=[{"value": " fog ", "tags": ["Cold"], "weight": 2}, {"value": "rain"}])
     assert lib["name"] == "weather_2" and lib["source"] == "user"
-    assert lib["entries"][0] == {"value": "fog", "tags": ["cold"], "weight": 2.0, "learned": 1.0}
+    assert lib["entries"][0] == {"value": "fog", "tags": ["cold"], "weight": 2.0, "props": {}, "learned": 1.0}
     assert api(home, webapi.library_save, name="w", entries=[{"value": "a"}, {"value": "A"}])[0] == 400
     assert api(home, webapi.library_save, name="w", entries=[{"value": " "}])[0] == 400
     assert api(home, webapi.library_save, name="w", entries=[{"value": "a", "weight": -1}])[0] == 400
@@ -510,3 +510,12 @@ def test_cards_preview_and_count_only_outputs_with_a_file(home, tmp_path):
     log_row(home, tmp_path, "an owl", seed=2, name="b.png", media=None)
     card = next(c for c in ok(home, webapi.presets)["presets"] if c["name"] == "stills/owl")
     assert (card["outputs"], card["thumb"]) == (1, shown)
+
+
+def test_properties_travel_through_the_libraries_tab(home):
+    """The tab saves the whole list; properties it did not send back would be lost on the first edit."""
+    lib = ok(home, webapi.library_save, name="people",
+             entries=[{"value": "Mara", "props": {"Gender": "female", "age": "30s"}}, {"value": "Tomas"}])
+    assert lib["entries"][0]["props"] == {"age": "30s", "gender": "female"} and lib["entries"][1]["props"] == {}
+    assert api(home, webapi.library_save, name="people",
+               entries=[{"value": "Mara", "props": {"gender": "fem ale!"}}])[0] == 400

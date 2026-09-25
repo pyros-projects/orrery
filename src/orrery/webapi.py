@@ -250,13 +250,16 @@ def _library_json(home: Home, name: str, lib: Library, weights: dict) -> dict:
     return {
         "name": name,
         "source": _source(home, name, lib),
-        "entries": [{"value": e.value, "tags": list(e.tags), "weight": e.weight,
+        "entries": [{"value": e.value, "tags": list(e.tags), "weight": e.weight, "props": dict(e.props),
                      "learned": weights.get(f"{family}={e.value}", 1.0)} for e in lib.entries],
         "tags": sorted({t for e in lib.entries for t in e.tags}),
         "pending": bool(lib.meta.get("pending")),
         "pending_entries": list(lib.meta.get("pending_entries") or []),
         "directions": str(lib.meta.get("directions") or ""),
     }
+
+
+_WORD = re.compile(r"[\w-]+")  # what `__lib#key:value__` can name
 
 
 def _entries(raw) -> list[Entry]:
@@ -280,7 +283,13 @@ def _entries(raw) -> list[Entry]:
             raise ApiError(400, f"The weight of '{value}' can't be negative.")
         tags = dict.fromkeys(re.sub(r"\s+", "_", str(t).strip().lower())
                              for t in item.get("tags") or [] if str(t).strip())
-        out.append(Entry(value, tuple(tags), weight))
+        props = {}
+        for key, val in (item.get("props") or {}).items():
+            key, val = (re.sub(r"\s+", "_", str(x).strip()) for x in (key, val))
+            if not (_WORD.fullmatch(key) and _WORD.fullmatch(val)):
+                raise ApiError(400, f"A property of '{value}' is a word and a value, like gender:female.")
+            props[key.lower()] = val
+        out.append(Entry(value, tuple(tags), weight, tuple(sorted(props.items()))))
     return out
 
 

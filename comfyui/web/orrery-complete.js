@@ -115,6 +115,6 @@ export function suggest(text, caret, data) {
 
 export function missingLibraries(text, data) {
   const known = new Set(data.libraries.map((l) => l.name));
-  const names = [...text.replace(/<lora:[^<>]*>/g, "").matchAll(/__(\w+(?:\/\w+)*)(?:\[[\w-]+\])?(?::\d+)?__/g)].map((m) => m[1]);
+  const names = [...text.replace(/<lora:[^<>]*>/g, "").matchAll(/__(\w+(?:\/\w+)*)(?:\[[\w-]+\])?(?:#[\w-]+:[\w-]+)*(?::\d+)?__/g)].map((m) => m[1]);
   return [...new Set(names)].filter((n) => !known.has(n));
 }

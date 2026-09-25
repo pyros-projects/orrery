@@ -73,3 +73,12 @@ def test_writing_a_library_makes_its_folder_and_retires_a_text_twin(tmp_path):
     assert not (home.library_dir / "film" / "genre.txt").exists()
     home.write_library(Library("new/deep/list", [Entry("x")]))
     assert (home.library_dir / "new" / "deep" / "list.yaml").exists() and home.library_file("nope") is None
+
+
+def test_entries_can_carry_properties_that_survive_a_round_trip(tmp_path):
+    path = tmp_path / "people.yaml"
+    path.write_text("- {value: a tall courier, props: {gender: female, age: 30s}}\n- a plain clerk\n")
+    lib = load_library(path)
+    assert dict(lib.entries[0].props) == {"gender": "female", "age": "30s"} and lib.entries[1].props == ()
+    save_library(lib, path)
+    assert dict(load_library(path).entries[0].props) == {"gender": "female", "age": "30s"}
