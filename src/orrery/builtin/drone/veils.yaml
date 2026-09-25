@@ -1,0 +1,8 @@
+meta: {source: "orrery pack: what a drone flies into at the end of one clip (value) and out of at the start of the next (out)", builtin: true}
+entries:
+  - {value: "a towering bank of white cloud", props: {out: "the drone bursts out of the cloud into open air"}}
+  - {value: "the drifting spray of a huge waterfall", props: {out: "the spray thins and falls away behind the drone"}}
+  - {value: "the black mouth of a tunnel through a mountain", props: {out: "the drone shoots out of the tunnel into daylight"}}
+  - {value: "the blinding disc of the low sun", props: {out: "the glare fades and the land below comes into focus"}}
+  - {value: "a column of smoke rising from a valley", props: {out: "the smoke tears apart and the view clears"}}
+  - {value: "a wall of falling snow", props: {out: "the snow thins to single flakes and the land opens up"}}

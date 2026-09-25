@@ -6,7 +6,7 @@ from orrery.home import Home
 from orrery.presets import BUILTIN_PRESETS, load_preset, preset_meta
 from orrery.reel import split_reel
 
-MINIMUM = {"krea": 5, "h3": 5, "effects": 17, "fashion": 5}
+MINIMUM = {"krea": 5, "h3": 5, "effects": 17, "fashion": 5, "loops": 5}
 FOLDERS = tuple(MINIMUM)
 SEEDS = range(30)
 SHOWCASE = [f"{folder}/{p.stem}" for folder in FOLDERS
@@ -30,7 +30,7 @@ def test_every_showcase_preset_runs_clean_across_seeds(home, name):
     h = Home(home)
     text = load_preset(h, name)
     screenplay = text.lstrip().startswith("@h3")
-    assert screenplay == (name.split("/")[0] in ("h3", "effects") or "h3" in preset_meta(h, name)["tags"])
+    assert screenplay == (name.split("/")[0] in ("h3", "effects", "loops") or "h3" in preset_meta(h, name)["tags"])
     libs, weights = h.libraries(), h.weights()
     for seed in SEEDS:
         outs = []

@@ -1,0 +1,26 @@
+---
+title: "Set change"
+note: "Pyro's idea taken all the way: one continuous walk through places that have nothing to do with each other, and every clip changes the set in front of the camera by a visible action instead of a cut. Stagehands strike it, a giant hand swaps the diorama, the sky tears open, a train passes, the whole place is a painted flat that falls over (transitions/between, twenty of them, each with its own sound). Loop it on Motion Context with Run (Instant)."
+tags: [loops, h3, reel, motion_context]
+---
+@h3 t2va 16:9
+context: 22
+style: live-action, cinematic, photorealistic, one continuous steady take gliding forward at walking pace
+MUSIC: N/A
+
+CHUNK the first place
+$place = {__world/landscapes__:2|__tour/rooms__}
+SHOT 10s | tracking, slow
+The camera glides forward at eye level through $place, taking it in. Light and air move through it; nothing else happens yet.
+SFX: $place.sfx
+HANDOFF: the camera glides on through $place
+
+CHUNK the set change repeat forever
+$from = $place~1
+$place = {__world/landscapes__:2|__tour/rooms__}
+$to = $place
+$shift = __transitions/between__
+SHOT 10s | tracking, slow
+The camera keeps gliding forward at the same steady pace. $shift. The camera glides on into $place as if nothing unusual had happened.
+SFX: $shift.sfx; $place.sfx
+HANDOFF: the camera glides on through $place

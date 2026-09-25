@@ -1,0 +1,14 @@
+meta: {source: "orrery pack: weather and hour as one visible, audible state (kind, sfx, light)", builtin: true}
+entries:
+  - {value: "first light before sunrise, the sky pale lemon over blue shadows", props: {kind: clear, light: dawn, sfx: "the first birds and a stillness"}}
+  - {value: "golden hour with long raking shadows and warm backlight", props: {kind: clear, light: golden, sfx: "evening insects and a soft breeze"}}
+  - {value: "the blue hour after sunset, the last light fading into deep blue", props: {kind: clear, light: blue, sfx: "crickets starting and the day's wind dropping"}}
+  - {value: "a thunderstorm rolling in, lightning flickering inside black cloud", props: {kind: storm, light: storm, sfx: "rolling thunder and the first heavy drops"}}
+  - {value: "drifting morning fog that hides and reveals the land", props: {kind: fog, light: soft, sfx: "muffled, damp silence and dripping"}}
+  - {value: "soft snowfall in windless grey light", props: {kind: snow, light: soft, sfx: "the hush of falling snow"}}
+  - {value: "a sun shower, bright rain glittering in low sunlight", props: {kind: rain, light: golden, sfx: "light rain pattering while birds keep singing"}}
+  - {value: "a full moon night, silver light and hard black shadows", props: {kind: clear, light: moon, sfx: "night insects and an owl far away"}}
+  - {value: "a dust storm advancing as a brown wall across the land", props: {kind: dust, light: storm, sfx: "a rising roar of wind and hissing sand"}}
+  - {value: "shafts of light breaking through clouds after rain", props: {kind: clearing, light: rays, sfx: "dripping and water running off everything"}}
+  - {value: "high noon under a fierce white sun and heat shimmer", props: {kind: heat, light: hard, sfx: "cicadas screaming in the heat"}}
+  - {value: "a sky full of stars and the Milky Way arching overhead", props: {kind: clear, light: stars, sfx: "a deep night silence and faint wind"}}

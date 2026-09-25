@@ -1,0 +1,12 @@
+meta: {source: "orrery pack: tiny details a camera dives into at the end of a clip (value) and bursts out of at the start of the next (out), Powers of Ten style", builtin: true}
+entries:
+  - {value: "a single dewdrop hanging from a blade of grass", props: {out: "the camera bursts out through the dewdrop's shimmering skin"}}
+  - {value: "the black pupil of a bird's eye", props: {out: "the darkness of the pupil opens like a camera iris"}}
+  - {value: "a soap bubble drifting past, its skin swirling with colour", props: {out: "the bubble pops around the camera in a spray of light"}}
+  - {value: "a keyhole glowing with light from the other side", props: {out: "the camera squeezes through the keyhole into brightness"}}
+  - {value: "a hairline crack in an old stone wall", props: {out: "the crack widens into a canyon and the camera flies out of it"}}
+  - {value: "a glowing ember at the heart of a campfire", props: {out: "the ember's glow blooms outward into a whole sky"}}
+  - {value: "a snowflake settling on dark wool", props: {out: "the ice crystal's arms grow into glittering bridges around the camera"}}
+  - {value: "a raindrop running down a window pane", props: {out: "the camera tumbles out of the raindrop into open air"}}
+  - {value: "a sunlit pinhole in a green leaf", props: {out: "the camera passes through the pinhole into a new light"}}
+  - {value: "the lens of an old brass telescope", props: {out: "the view inside the lens becomes the world around the camera"}}

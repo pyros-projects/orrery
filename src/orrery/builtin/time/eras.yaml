@@ -1,0 +1,11 @@
+meta: {source: "orrery pack: one place through time, each era by what you would see and hear there (era for filtering)", builtin: true}
+entries:
+  - {value: "gas lamps, mud and cobbles, horse-drawn carts, men in top hats and women in long skirts, a blacksmith's forge smoking", props: {era: "1850", sfx: "hooves on cobbles, a hammer on an anvil and street criers"}}
+  - {value: "the first electric street lamps, a tram rattling past, flat caps and cloche hats, the first cars sharing the street with carts", props: {era: "1920", sfx: "a tram bell, a car horn and a gramophone through an open window"}}
+  - {value: "chrome cars with fins, a milk bar with a neon sign, children on bicycles and washing lines between the houses", props: {era: "1955", sfx: "a rock and roll jukebox and bicycle bells"}}
+  - {value: "concrete and orange paint, a phone box, flared jeans, a boombox on a stoop and graffiti starting on the walls", props: {era: "1978", sfx: "a disco beat from a boombox and a passing motorbike"}}
+  - {value: "satellite dishes, a video rental shop, neon tubes and people with mobile phones the size of bricks", props: {era: "1995", sfx: "a dial-up screech from a window and traffic"}}
+  - {value: "glass shopfronts, e-scooters, people looking down at their phones and a food delivery rider weaving through", props: {era: "2025", sfx: "scooter whine, phone notifications and distant construction"}}
+  - {value: "vertical gardens climbing every wall, quiet electric pods gliding along a green strip, holographic shop signs", props: {era: "2070", sfx: "a soft electric hum, birdsong and a chiming transit announcement"}}
+  - {value: "enormous translucent towers grown rather than built, drones carrying people, the old street preserved under a glass canopy", props: {era: "2200", sfx: "a deep resonant hum and wind moving between towers"}}
+  - {value: "empty ruins swallowed by a young forest, deer grazing where the street was, one old lamp post still standing", props: {era: "3000", sfx: "wind in the trees, a stream and birds"}}

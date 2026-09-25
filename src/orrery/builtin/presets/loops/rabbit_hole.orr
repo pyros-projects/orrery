@@ -1,0 +1,25 @@
+---
+title: "Rabbit hole"
+note: "Powers of Ten as an endless loop: every clip finds a tiny detail (a dewdrop, a keyhole, a bird's pupil, a crack in a wall), dives into it, and the next clip bursts out of it into a different world at a different scale ($portal~1.out). One continuous macro-to-vast camera. Loop it on Motion Context with Run (Instant)."
+tags: [loops, h3, reel, motion_context]
+---
+@h3 t2va 16:9
+context: 22
+style: live-action, cinematic macro and wide cinematography, photorealistic, one unbroken camera move
+MUSIC: N/A
+
+CHUNK the first world
+$world = __world/landscapes__
+$portal = __scale/portals__
+SHOT 10s | push in, large, slow
+The camera drifts through $world, then slowly lowers toward a tiny detail in it: $portal. It pushes closer and closer until the detail fills the frame completely and the camera passes into it.
+SFX: $world.sfx; the sound narrowing to a hush as the camera closes in
+HANDOFF: the camera dives into $portal
+
+CHUNK the next world repeat forever
+$world = {__world/landscapes__:2|__tour/rooms__}
+$portal = __scale/portals__
+SHOT 10s | push in, large, slow
+$portal~1.out, and the camera is somewhere entirely different: $world, seen at a completely new scale. It drifts through it, then finds a tiny detail, $portal, and pushes in until the detail fills the frame and the camera passes into it.
+SFX: $world.sfx; the sound narrowing to a hush as the camera closes in
+HANDOFF: the camera dives into $portal

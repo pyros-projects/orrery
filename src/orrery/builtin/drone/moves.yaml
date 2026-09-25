@@ -1,0 +1,12 @@
+meta: {source: "orrery pack: drone moves; the shot property is the camera spec for the SHOT line", builtin: true}
+entries:
+  - {value: "skims a few metres above the surface toward the horizon, then climbs steeply to reveal the whole expanse at once", props: {shot: "push in, large, slow"}}
+  - {value: "rises slowly from ground level past the foreground until the land opens out below", props: {shot: "pedestal up, large, slow"}}
+  - {value: "orbits a single striking landmark in one long unbroken circle", props: {shot: "arc, large, slow"}}
+  - {value: "looks straight down and glides forward, turning the land below into a moving abstract pattern", props: {shot: "tracking, slow"}}
+  - {value: "dives from high above in a fast FPV plunge and pulls out just above the ground", props: {shot: "push in, large, fast"}}
+  - {value: "flies backward away from a close detail until it becomes a tiny point in the vast land", props: {shot: "pull out, large, slow"}}
+  - {value: "threads low through a narrow gap between rocks or trees and bursts out into open space", props: {shot: "tracking, fast"}}
+  - {value: "follows a river, road or coastline, banking gently with each curve", props: {shot: "tracking, slow"}}
+  - {value: "hovers almost still while weather and light move across the land", props: {shot: "static"}}
+  - {value: "crests a ridge low and slow, the view beyond appearing inch by inch", props: {shot: "tilt up, small, slow"}}

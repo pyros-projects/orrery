@@ -1,0 +1,29 @@
+---
+title: "Drone odyssey"
+note: "An endless drone flight over the world. Every clip rolls a landscape, a light and a drone move whose camera spec rides along as a property (SHOT … | $move.shot), and the drone passes from one land to the next through cloud, spray, a tunnel or the sun (drone/veils, $veil~1.out opens the next clip). The sound follows the land and the weather. Loop it on Motion Context with Run (Instant)."
+tags: [loops, h3, reel, motion_context]
+---
+@h3 t2va 16:9
+context: 22
+style: live-action aerial cinematography, photorealistic, smooth gimbal-stabilised drone footage
+MUSIC: N/A
+
+CHUNK takeoff
+$land = __world/landscapes__
+$sky = __world/weather__
+$move = __drone/moves__
+$veil = __drone/veils__
+SHOT 10s | $move.shot
+Over $land, in $sky, the drone $move. The scale reads from small things in the frame: a road, a boat, a single tree. In the final second the drone flies straight into $veil.
+SFX: $land.sfx; $sky.sfx
+HANDOFF: the drone flies straight into $veil
+
+CHUNK onward repeat forever
+$land = __world/landscapes__
+$sky = __world/weather__
+$move = __drone/moves__
+$veil = __drone/veils__
+SHOT 10s | $move.shot
+$veil~1.out, and below lies $land in $sky. The drone $move, the scale reading from small things in the frame. In the final second the drone flies straight into $veil.
+SFX: $land.sfx; $sky.sfx
+HANDOFF: the drone flies straight into $veil

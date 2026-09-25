@@ -1,0 +1,72 @@
+---
+title: "Time machine"
+note: "One place, nine eras, one locked camera: the reel stays on the same spot while a time-lapse rushes it from 1850 to the year 3000, and every clip is a new era with its own people, vehicles and sound (time/eras, one per chunk by its era property). Dial $place for a harbour, a village square or your own street. Nine clips on Motion Context."
+tags: [loops, h3, reel, motion_context]
+---
+@h3 t2va 16:9
+context: 22
+style: live-action, cinematic, photorealistic, a camera locked on a tripod at head height
+$place = {a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}
+MUSIC: N/A
+
+CHUNK 1850
+$era = __time/eras#era:1850__
+SHOT 10s | static
+$place in 1850: $era. People go about the day in front of the fixed camera. In the last seconds a time-lapse begins: days and nights flicker past faster and faster.
+SFX: $era.sfx
+HANDOFF: days and nights flicker past faster and faster over $place
+
+CHUNK 1920
+$era = __time/eras#era:1920__
+SHOT 10s | static
+The flickering slows and settles on $place in the 1920s: $era. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again.
+SFX: $era.sfx
+HANDOFF: days and nights flicker past faster and faster over $place
+
+CHUNK 1955
+$era = __time/eras#era:1955__
+SHOT 10s | static
+The flickering slows and settles on $place in the 1950s: $era. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again.
+SFX: $era.sfx
+HANDOFF: days and nights flicker past faster and faster over $place
+
+CHUNK 1978
+$era = __time/eras#era:1978__
+SHOT 10s | static
+The flickering slows and settles on $place in the late 1970s: $era. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again.
+SFX: $era.sfx
+HANDOFF: days and nights flicker past faster and faster over $place
+
+CHUNK 1995
+$era = __time/eras#era:1995__
+SHOT 10s | static
+The flickering slows and settles on $place in the mid 1990s: $era. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again.
+SFX: $era.sfx
+HANDOFF: days and nights flicker past faster and faster over $place
+
+CHUNK 2025
+$era = __time/eras#era:2025__
+SHOT 10s | static
+The flickering slows and settles on $place today: $era. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again.
+SFX: $era.sfx
+HANDOFF: days and nights flicker past faster and faster over $place
+
+CHUNK 2070
+$era = __time/eras#era:2070__
+SHOT 10s | static
+The flickering slows and settles on $place in 2070: $era. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again.
+SFX: $era.sfx
+HANDOFF: days and nights flicker past faster and faster over $place
+
+CHUNK 2200
+$era = __time/eras#era:2200__
+SHOT 10s | static
+The flickering slows and settles on $place in 2200: $era. A few people pass close to the camera. In the last seconds the time-lapse starts again, faster than ever.
+SFX: $era.sfx
+HANDOFF: days and nights flicker past faster and faster over $place
+
+CHUNK 3000
+$era = __time/eras#era:3000__
+SHOT 10s | static
+The flickering slows for the last time and settles on where $place used to be, in the year 3000: $era. Nothing moves but the leaves and the grazing deer. The shot holds in the quiet.
+SFX: $era.sfx

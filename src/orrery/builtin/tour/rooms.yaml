@@ -1,0 +1,18 @@
+meta: {source: "orrery pack: rooms for an endless tour, each with what it sounds like", builtin: true}
+entries:
+  - {value: "a double-height library with rolling brass ladders and reading lamps", props: {sfx: "pages turning and a chair creaking"}}
+  - {value: "a long hall of mirrors where every candle multiplies into infinity", props: {sfx: "light footsteps and a soft diffuse echo"}}
+  - {value: "a ballroom with a sprung wooden floor and couples turning slowly", props: {sfx: "a slow waltz and shoes brushing wood"}}
+  - {value: "an indoor swimming pool under a glass roof, light rippling on the tiles", props: {sfx: "water lapping and a splash echoing under glass"}}
+  - {value: "a winter garden of palms and orchids around a stone fountain", props: {sfx: "a splashing fountain and tropical birds"}}
+  - {value: "a private cinema of red velvet seats, a film flickering on the screen", props: {sfx: "a projector rattling and muffled film dialogue"}}
+  - {value: "a vaulted wine cellar lit by candles between oak barrels", props: {sfx: "dripping and a cork pulled somewhere in the dark"}}
+  - {value: "a kitchen of copper pots and steam where cooks move in a quick choreography", props: {sfx: "sizzling pans, clattering and a shouted order"}}
+  - {value: "a spiral stairwell winding up a tall tower around an empty core", props: {sfx: "footsteps ringing up and down the spiral"}}
+  - {value: "a cabinet of curiosities crowded with specimens, globes and brass instruments", props: {sfx: "a clock ticking and a music box winding down"}}
+  - {value: "a bar of backlit bottles where a bartender pours in slow ritual", props: {sfx: "ice clinking, a cocktail shaker and low talk"}}
+  - {value: "a gallery of empty picture frames, one of them showing a moving landscape", props: {sfx: "a hush and faint wind coming from inside one frame"}}
+  - {value: "a music room where a grand piano plays itself", props: {sfx: "a slow melancholy piano piece"}}
+  - {value: "a dormitory of identical beds under high windows", props: {sfx: "a clock and wind at the windows"}}
+  - {value: "an observatory dome opening onto a night full of stars", props: {sfx: "gears grinding as the dome turns"}}
+  - {value: "a flooded ground floor where furniture floats in knee-deep water", props: {sfx: "water sloshing and furniture bumping gently"}}

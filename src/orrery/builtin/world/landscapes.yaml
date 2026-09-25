@@ -1,0 +1,34 @@
+meta: {source: "orrery pack: landscapes that read at a glance from the air and from the ground; terrain and sound as properties", builtin: true}
+entries:
+  - {value: "a salt flat after rain, a perfect mirror of the sky stretching to the horizon", props: {terrain: flat, sfx: "a thin wind over wet salt and utter silence beyond it"}}
+  - {value: "a black-sand beach on a volcanic island, sea stacks standing in the surf", props: {terrain: coast, sfx: "heavy Atlantic waves booming against basalt"}}
+  - {value: "a fjord between sheer granite walls, a thread of waterfall falling into dark water", props: {terrain: water, sfx: "distant falling water echoing off the cliffs"}}
+  - {value: "terraced rice paddies filled with water, each terrace holding a strip of sky", props: {terrain: hills, sfx: "frogs, trickling water between terraces, a distant rooster"}}
+  - {value: "a slot canyon of striped red sandstone, light falling in a single shaft", props: {terrain: canyon, sfx: "wind moaning through the narrow rock and trickling sand"}}
+  - {value: "a glacier tongue calving into a turquoise lagoon full of floating ice", props: {terrain: ice, sfx: "the deep crack and roar of calving ice, then water lapping"}}
+  - {value: "a boreal forest of snow-loaded spruce under a pale winter sun", props: {terrain: forest, sfx: "snow sliding off branches in soft thumps, a raven calling"}}
+  - {value: "rows of lavender running toward a lone stone farmhouse", props: {terrain: fields, sfx: "bees humming over the lavender and cicadas in the heat"}}
+  - {value: "karst peaks rising out of river mist, fishing boats small below them", props: {terrain: water, sfx: "a boat engine putt-putting far away and water against hulls"}}
+  - {value: "a tidal island crowned by a stone abbey, the sea retreating across wet sand", props: {terrain: coast, sfx: "gulls and the hiss of shallow water draining over sand"}}
+  - {value: "a river of glowing lava winding down a black volcano at night", props: {terrain: volcano, sfx: "a low rumble, hissing and the crack of cooling crust"}}
+  - {value: "a bamboo forest with stalks towering into a green ceiling", props: {terrain: forest, sfx: "bamboo creaking and knocking together in the wind"}}
+  - {value: "white gypsum dunes rippling under a hard blue sky", props: {terrain: desert, sfx: "fine sand hissing across the dune crests"}}
+  - {value: "a coral atoll ringed by turquoise shallows and a line of white surf", props: {terrain: coast, sfx: "surf on the reef and wind in palm fronds"}}
+  - {value: "a mangrove maze of tangled roots and brown mirror water", props: {terrain: water, sfx: "dripping, clicking crabs and a heron's croak"}}
+  - {value: "a mountain pass where a switchback road coils up a bare green slope", props: {terrain: mountain, sfx: "mountain wind and cowbells somewhere below"}}
+  - {value: "a sea of clouds with dark peaks breaking through it at sunrise", props: {terrain: mountain, sfx: "high thin wind and nothing else"}}
+  - {value: "a frozen lake under green aurora curtains, cracks glowing in the ice", props: {terrain: ice, sfx: "the eerie singing and pinging of lake ice"}}
+  - {value: "a coast of hexagonal basalt columns stepping down into the sea", props: {terrain: coast, sfx: "waves sucking and spilling between the columns"}}
+  - {value: "an alpine valley meadow blazing with wildflowers under glaciers", props: {terrain: mountain, sfx: "a meltwater stream, marmot whistles and insects"}}
+  - {value: "a flooded forest where the trunks stand in still black water", props: {terrain: forest, sfx: "drips, a paddle dipping and distant howler monkeys"}}
+  - {value: "a giant sinkhole with a whole rainforest growing at its bottom", props: {terrain: forest, sfx: "birdsong echoing inside the rock walls"}}
+  - {value: "a waterfall plunging off the edge of a flat-topped table mountain into cloud", props: {terrain: mountain, sfx: "a thundering fall muffled by mist"}}
+  - {value: "a crater lake of impossible blue inside a ring of scree", props: {terrain: water, sfx: "wind across the crater rim and small stones clattering"}}
+  - {value: "tea plantations combed across rolling hills in morning haze", props: {terrain: hills, sfx: "pickers calling to each other and birds in the hedges"}}
+  - {value: "a ghost town half swallowed by sand dunes, doors open to the desert", props: {terrain: desert, sfx: "sand whispering through empty rooms and a loose shutter banging"}}
+  - {value: "an iceberg-strewn bay where humpback whales surface between the ice", props: {terrain: ice, sfx: "whale blows, the slap of flukes and grinding ice"}}
+  - {value: "a canyon river of emerald water between orange cliffs, a lone kayak on it", props: {terrain: canyon, sfx: "rushing rapids echoing off the canyon walls"}}
+  - {value: "a savanna with one acacia tree and a herd of elephants crossing it", props: {terrain: fields, sfx: "elephants rumbling, dry grass rustling and distant birds"}}
+  - {value: "a lighthouse on a lone rock in a storm-whipped sea", props: {terrain: coast, sfx: "storm wind, waves exploding on rock and a foghorn"}}
+  - {value: "a highland moor of heather and standing stones under racing clouds", props: {terrain: fields, sfx: "wind flattening the heather and a curlew crying"}}
+  - {value: "a cherry orchard in full bloom, petals drifting over a mossy temple roof", props: {terrain: hills, sfx: "a temple bell, soft wind and falling petals"}}

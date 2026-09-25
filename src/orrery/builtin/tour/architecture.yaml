@@ -1,0 +1,14 @@
+meta: {source: "orrery pack: the building an endless tour moves through, written as a continuity bible (Codie's Garamonde method); ambience as sfx", builtin: true}
+entries:
+  - {value: "a Belle Époque townhouse turned private club: dark walnut, black marble, burgundy velvet, aged brass and warm amber practical light", props: {sfx: "hushed conversation, glassware and a piano somewhere far away"}}
+  - {value: "a gothic cathedral turned night club: vaulted stone, red stained glass, candle racks, black velvet and slow haze", props: {sfx: "a darkwave bassline bleeding through thick stone"}}
+  - {value: "a brutalist concrete museum: raw board-marked concrete, slit windows, cool daylight and deep shadow", props: {sfx: "footsteps echoing off concrete and a ventilation hum"}}
+  - {value: "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying", props: {sfx: "the deep throb of engines and a jazz band two decks away"}}
+  - {value: "a traditional Japanese ryokan: tatami, paper screens, cedar beams and garden light", props: {sfx: "a trickling water basin, wind chimes and soft footsteps on tatami"}}
+  - {value: "a Moorish palace: carved stucco, zellige tiles, horseshoe arches and fountains in the courtyards", props: {sfx: "splashing fountains and swallows under the arches"}}
+  - {value: "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light", props: {sfx: "dripping water, pigeons and a door creaking in a draught"}}
+  - {value: "a mid-century modern villa: floor-to-ceiling glass, teak, travertine and a garden that runs inside", props: {sfx: "a record playing softly and wind in the garden"}}
+  - {value: "a flooded underground palace: marble columns standing in still water, candles floating on it", props: {sfx: "dripping echoes and water lapping against stone"}}
+  - {value: "a retro-futurist space station: white curved panels, orange upholstery and round windows onto Earth", props: {sfx: "an air-recycling hum and soft electronic chimes"}}
+  - {value: "a Victorian natural history museum at night: glass cases, whale skeleton, green reading lamps", props: {sfx: "a clock ticking, creaking floorboards and the hum of display lights"}}
+  - {value: "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues", props: {sfx: "dripping condensation, birds inside and rain on the glass"}}

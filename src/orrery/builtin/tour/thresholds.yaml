@@ -1,0 +1,14 @@
+meta: {source: "orrery pack: handoff compositions that end one clip and open the next (value: the final framing; open: how the next clip passes through it)", builtin: true}
+entries:
+  - {value: "a pair of closed velvet curtains six metres ahead, centred in the frame", props: {open: "the curtains part silently to both sides and the camera glides through"}}
+  - {value: "two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera", props: {open: "the mirrored doors swing inward and the camera's own reflection slides away"}}
+  - {value: "the bottom three steps of a wide staircase filling the lower foreground", props: {open: "the camera rises smoothly up the staircase"}}
+  - {value: "a round porthole window with fog swirling beyond the glass", props: {open: "the camera drifts through the porthole as if the glass were water"}}
+  - {value: "a sliding paper screen glowing with warm light from the other side", props: {open: "the screen slides open with a soft wooden sound"}}
+  - {value: "a narrow gap between two bookcases with a sliver of light beyond", props: {open: "the bookcases slide apart like a secret door"}}
+  - {value: "closed brass elevator doors with a floor dial above them", props: {open: "the dial swings, a chime sounds and the doors open"}}
+  - {value: "an archway hung with strings of glass beads", props: {open: "the camera passes through the beads, which ripple and chime"}}
+  - {value: "a dark doorway with a single lit candle standing on the floor before it", props: {open: "the camera passes the candle into the dark, and the dark brightens into a room"}}
+  - {value: "the edge of a balcony railing over a large hall below", props: {open: "the camera floats out over the railing and descends into the hall"}}
+  - {value: "a round steel vault door standing slightly ajar", props: {open: "the vault door swings open on its hinge with a heavy sigh"}}
+  - {value: "a tall arched window at night, the room reflected in its dark glass", props: {open: "the camera flies through the reflection as the glass turns to mist"}}

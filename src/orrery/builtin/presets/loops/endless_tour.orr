@@ -1,0 +1,26 @@
+---
+title: "Endless tour"
+note: "Codie's Garamonde method as a loop that never ends. The building is described again in every clip (a continuity bible, never 'the same room'), each clip ends on a simple, exactly framed threshold (curtains, mirrored doors, a stair foot) and the next clip opens it ($thr~1.open). Every clip rolls a new room and threshold. Wire load_index/save_index into Motion Context and Run (Instant); dial $house to stay in one building."
+tags: [loops, h3, reel, motion_context]
+---
+@h3 t2va 16:9
+context: 22
+style: live-action, cinematic, photorealistic, one smooth stabilised take at eye level
+$house = __tour/architecture__
+MUSIC: N/A
+
+CHUNK the entrance
+$room = __tour/rooms__
+$thr = __tour/thresholds__
+SHOT 10s | push in, slow
+The camera glides at eye level into $room, inside $house. It moves no faster than a slow walk and never shakes. Nobody looks at the camera; the room simply goes on around it. In the final second the camera turns slightly and comes to rest exactly facing $thr.
+SFX: $room.sfx; $house.sfx
+HANDOFF: the camera rests squarely facing $thr
+
+CHUNK the next room repeat forever
+$room = __tour/rooms__
+$thr = __tour/thresholds__
+SHOT 10s | tracking, slow
+$thr~1.open, into $room, inside $house. The camera glides on at eye level, taking in the room from one side to the other without hurrying, while the life of the room goes on around it and nobody looks at the camera. In the final second it turns slightly and comes to rest exactly facing $thr.
+SFX: $room.sfx; $house.sfx
+HANDOFF: the camera rests squarely facing $thr

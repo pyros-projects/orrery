@@ -11,8 +11,9 @@ SETS = sorted(n for n in BUILTIN if n.startswith("characters/") and n.count("/")
 @pytest.mark.parametrize("name", sorted(BUILTIN))
 def test_every_builtin_library_expands_clean(home, name):
     libs = Home(home).libraries()
+    needs = "".join(f"${n} = the {n} place\n" for n in BUILTIN[name].meta.get("needs", []))  # bindings it reads
     for seed in range(40):
-        text = expand(f"__{name}__", seed, libs).text
+        text = expand(f"{needs}__{name}__", seed, libs).text
         assert "__" not in text and "{" not in text and "$" not in text and "  " not in text, (seed, text)
 
 
