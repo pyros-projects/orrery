@@ -20,7 +20,11 @@ _BRACE = re.compile(r"\{([^{}]*)\}")
 # __name[tag]:N__(directions): N = at least N entries; (directions) guide the model that writes the
 # library and never reach the prompt
 _LIB = re.compile(r"__(\w+(?:/\w+)*)(?:\[([\w-]+)\])?((?:#[\w-]+:[\w-]+)*)(?::(\d+))?__(?:\(([^()]*)\))?")
-_VAR = re.compile(r"\$([A-Za-z_]\w*)(?:~(\d+))?")  # $x, or $x~N: x as it was N clips ago
+_VAR = re.compile(r"\$([A-Za-z_]\w*)(?:~(\d+))?(?:\.([A-Za-z_][\w-]*))?")  # $x, $x~N (N clips ago), $x.field
+# `$w.kind=rain,snow`, `$w!=x`: a condition on a binding's text or on a property of its pick
+_COND = r"\$([A-Za-z_]\w*)(?:\.([A-Za-z_][\w-]*))?\s*(!=|=)\s*([\w-]+(?:\s*,\s*[\w-]+)*)"
+_GUARD = re.compile(rf"^\?\s*{_COND}\s*:\s*(.*)$", re.DOTALL)  # ? cond: a line kept only when it holds
+_IF = re.compile(rf"^\?\s*{_COND}\s*:(.*)$", re.DOTALL)  # {? cond: then|else}
 _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
 _BINDING_LINE = re.compile(r"^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$")
 _MULTI = re.compile(r"^(\d+)(?:-(\d+))?\$\$(.+)$")
@@ -173,16 +177,33 @@ class Expander:
         self.vars: dict[str, str] = {}
         # (name, clips back) → that clip's value; set by reels. Without it, $x~N is $x.
         self.history: Callable[[str, int], str | None] | None = None
+        self.var_props: dict[str, dict[str, str]] = {}  # a binding → the properties of the picks it rolled
+        self._props_seen: dict[str, str] = {}
         self._within: list[str] = []  # the libraries whose entry is being expanded, outermost first
 
     def learned(self, key: str) -> float:
         return float(self.weights.get(key, 1.0))
 
     def bind(self, name: str, expr: str) -> str:
+        self._props_seen = {}
         self.vars[name] = self.expr(expr, label_prefix=f"${name} ← ")
+        self.var_props[name] = self._props_seen
         return self.vars[name]
 
+    def holds(self, name: str, field: str | None, op: str, values: str) -> bool:
+        actual = (self.var_props.get(name, {}).get(field) if field else self.vars.get(name)) or ""
+        hit = actual.strip().casefold() in {v.strip().casefold() for v in values.split(",")}
+        return hit if op == "=" else not hit
+
+    def guarded(self, line: str) -> str | None:
+        """A `? cond: rest` line: its rest when the condition holds, else None. Other lines as they are."""
+        if not (m := _GUARD.match(line.strip())):
+            return line
+        return m.group(5) if self.holds(*m.group(1, 2, 3, 4)) else None
+
     def expr(self, text: str, label_prefix: str = "") -> str:
+        if "\n" not in text and (text := self.guarded(text)) is None:
+            return ""
         tags: list[str] = []
         text = _LORA_TAG.sub(lambda m: tags.append(m.group(0)) or f"\x00{len(tags) - 1}\x00", text)
         first = len(self.picks)
@@ -205,7 +226,9 @@ class Expander:
         return self._articles(text)
 
     def _var(self, m: re.Match) -> str:
-        name, back = m.group(1), m.group(2)
+        name, back, field = m.group(1), m.group(2), m.group(3)
+        if field:  # a property of the pick behind the binding; empty when it has none
+            return "" if back is not None else self.var_props.get(name, {}).get(field, "")
         value = self.history(name, int(back)) if back is not None and self.history else None
         if value is None:
             value = self.vars.get(name)
@@ -229,14 +252,16 @@ class Expander:
                    and all((e.prop(k) or "").casefold() == v for k, v in wanted)]
         if not entries:
             raise ValueError(f"{_label(name, tag, props)} matches no entry")
-        return family, [(e.value, e.weight * self.learned(f"{family}={e.value}")) for e in entries]
+        return family, [(e.value, e.weight * self.learned(f"{family}={e.value}"), e.props) for e in entries]
 
     def _library(self, name: str, tag: str | None, label_prefix: str, props: str = "") -> str:
         family, pool = self._pool(name, tag, props)
-        value = pool[weighted_pick([w for _, w in pool], self.rng)][0]
+        value, _, entry_props = pool[weighted_pick([w for _, w, _ in pool], self.rng)]
         label = label_prefix + _label(name, tag, props)
         self.picks.append(Pick(label, value, (f"{family}={value}",)))
-        return self._nested(name, value, label_prefix)
+        text = self._nested(name, value, label_prefix)
+        self._props_seen.update(entry_props)  # after the nested picks: the outer library's fields win
+        return text
 
     def _nested(self, name: str, value: str, label_prefix: str) -> str:
         """An entry is a template itself, as in Dynamic Prompts: its libraries, braces and $vars expand."""
@@ -253,6 +278,9 @@ class Expander:
             self._within.pop()
 
     def _brace(self, inner: str) -> str:
+        if m := _IF.match(inner.strip()):
+            then, _, otherwise = m.group(5).partition("|")
+            return (then if self.holds(*m.group(1, 2, 3, 4)) else otherwise).strip()
         if m := _MULTI.match(inner):
             return self._multi(int(m.group(1)), int(m.group(2) or m.group(1)), m.group(3).strip())
         raws = inner.split("|")
@@ -274,7 +302,8 @@ class Expander:
     def _multi(self, lo: int, hi: int, source: str) -> str:
         n = lo + int(self.rng.random() * (hi - lo + 1))
         if lm := _LIB_ONLY.match(source):
-            family, pool = self._pool(lm.group(1), lm.group(2), lm.group(3))
+            family, pool3 = self._pool(lm.group(1), lm.group(2), lm.group(3))
+            pool = [(v, w) for v, w, _ in pool3]
         else:
             options = [(dp.group(2).strip(), float(dp.group(1))) if (dp := _DP_WEIGHT.match(v)) else (v.strip(), 1.0)
                        for v in source.split("|")]
@@ -296,7 +325,7 @@ def expand(template: str, seed: int, libraries: Mapping[str, Library],
     ex = Expander(seed, libraries, weights)
     for name, expr in parsed.bindings:
         ex.bind(name, expr)
-    text = ex.expr(" ".join(parsed.body))
+    text = ex.expr(" ".join(line for raw in parsed.body if (line := ex.guarded(raw)) is not None))
     if parsed.enhance:
         ex.picks.append(Pick("> enhance", parsed.enhance))
     return Expansion(seed, text, ex.picks, parsed.params, parsed.enhance)

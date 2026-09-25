@@ -126,6 +126,7 @@ def build_segment(reel: Reel, seed: int, libraries: Mapping[str, Library],
         block = reel.blocks[reel.locate(t)[0]]
         ex = Expander(derive(seed, t), libraries, weights)
         ex.vars = dict(world.vars)
+        ex.var_props = dict(world.var_props)
 
         def back(name: str, n: int) -> str | None:
             target = max(t - n, 0)

@@ -51,6 +51,9 @@ Qwen3.5-4B handles semantic edits; 2B is too weak for them.
 | `{\|red }car` | an empty option makes a word optional; the other options keep their spaces |
 | `{1-2$$__style__}` | pick 1–2 distinct values |
 | `$hero = __animal__` | bind once, reuse everywhere |
+| `$w.sfx` | a property of the entry `$w` rolled (empty if it has none): the sound follows the weather |
+| `? $w.kind=rain,snow: …` | a line kept only when the condition holds (`!=` for not); works for SFX lines too |
+| `{? $w.kind=rain: wet\|dry}` | a choice made by a condition instead of the dice |
 | `> moody, cinematic` | enhancement instruction (recorded, not yet executed) |
 | `: x8 seed=100 w1216 h832` | batch parameters |
 

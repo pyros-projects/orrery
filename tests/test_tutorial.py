@@ -22,21 +22,21 @@ def tutorial(home):
     return list_presets(Home(home), folder="tutorial")
 
 
-def test_twelve_tutorial_presets_ship_in_order(home):
+def test_thirteen_tutorial_presets_ship_in_order(home):
     names = tutorial(home)
-    assert len(names) == 12
+    assert len(names) == 13
     assert names == sorted(names)
     assert names[0] == "tutorial/01_first_wildcard"
 
 
-@pytest.mark.parametrize("n", range(12))
+@pytest.mark.parametrize("n", range(13))
 def test_every_lesson_has_title_lesson_and_tag(home, n):
     meta = preset_meta(Home(home), tutorial(home)[n])
     assert meta["title"] and len(meta["lesson"]) > 40
     assert "tutorial" in meta["tags"]
 
 
-@pytest.mark.parametrize("n", range(12))
+@pytest.mark.parametrize("n", range(13))
 def test_every_lesson_runs_clean_across_seeds(home, n):
     h = Home(home)
     text = load_preset(h, tutorial(home)[n])

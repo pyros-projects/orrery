@@ -285,8 +285,8 @@ def _entries(raw) -> list[Entry]:
                              for t in item.get("tags") or [] if str(t).strip())
         props = {}
         for key, val in (item.get("props") or {}).items():
-            key, val = (re.sub(r"\s+", "_", str(x).strip()) for x in (key, val))
-            if not (_WORD.fullmatch(key) and _WORD.fullmatch(val)):
+            key, val = re.sub(r"\s+", "_", str(key).strip()), " ".join(str(val).split())
+            if not (_WORD.fullmatch(key) and val):  # a word key; the value is any text ($w.sfx reads it)
                 raise ApiError(400, f"A property of '{value}' is a word and a value, like gender:female.")
             props[key.lower()] = val
         out.append(Entry(value, tuple(tags), weight, tuple(sorted(props.items()))))

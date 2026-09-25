@@ -158,6 +158,8 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
         if not raw or _BINDING.match(raw) or _DSL_ONLY.match(raw):
             continue
         line = raw if expanded else ex.expr(raw)
+        if not line.strip():  # a `? cond:` line that does not hold
+            continue
         if m := _HEADER.match(line):
             scene.mode = m.group(1).lower()
             for token in m.group(2).split():

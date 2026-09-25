@@ -1,8 +1,8 @@
-meta: {builtin: true}
+meta: {builtin: true, source: "orrery: weather, each with its kind and the sound it makes ($w.sfx)"}
 entries:
-  - first snow
-  - monsoon rain
-  - thick fog
-  - a gathering thunderstorm
-  - heat shimmer
-  - a glittering sun shower
+  - {value: first snow, props: {kind: snow, sfx: "snow squeaks softly under every step"}}
+  - {value: monsoon rain, props: {kind: rain, sfx: "heavy rain drums on awnings and gutters"}}
+  - {value: thick fog, props: {kind: fog, sfx: "a foghorn moans far away through the muffled air"}}
+  - {value: a gathering thunderstorm, props: {kind: storm, sfx: "thunder rolls closer over the rooftops"}}
+  - {value: heat shimmer, props: {kind: heat, sfx: "cicadas buzz in the still, hot air"}}
+  - {value: a glittering sun shower, props: {kind: rain, sfx: "light rain patters while birds keep singing"}}

@@ -242,3 +242,13 @@ def test_a_mid_sentence_entry_does_not_break_the_shot_into_sentences():
     src = "@h3 t2va 9:16\nSHOT 6s | static\nA woman doing __pose__ at __place__\nSFX: wind\n"
     text = compile_scene(src, 1, libs).text
     assert "at a wooded frisbee golf course." in text and "At A" not in text
+
+
+def test_a_guarded_sfx_line_joins_the_soundscape_only_when_it_holds():
+    from orrery.library import Entry, Library
+    libs = {"weather": Library("weather", [Entry("rain", props=(("kind", "rain"),)),
+                                           Entry("sun", props=(("kind", "sun"),))])}
+    src = "@h3 t2va 16:9\n$w = __weather__\nSHOT 5s\nA street in $w.\n? $w.kind=rain: SFX: rain on the roof\nSFX: distant traffic\n"
+    for seed in range(10):
+        text = compile_scene(src, seed, libs).text
+        assert ("in rain" in text) == ("rain on the roof" in text.lower()), text

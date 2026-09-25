@@ -1,0 +1,18 @@
+---
+title: "13 · Properties and conditions"
+lesson: "Entries can carry properties. __characters/noir#gender:female__ picks only entries that have that one; $w.sfx reads a property of whatever $w rolled, so the sound matches the weather; {? $w.kind=rain,storm: …|…} chooses by it, and a line starting with ? $w.kind=snow: is kept only when it holds."
+tags: [tutorial]
+---
+@h3 t2va 16:9
+style: live-action, cinematic noir
+$w = __weather__
+$lead = __characters/noir#gender:female__
+
+CAST
+LEAD: $lead
+
+SHOT 6s | tracking, slow
+LEAD walks alone down an empty street in $w, {? $w.kind=rain,storm: the collar turned up against the water|the coat buttoned to the chin}.
+? $w.kind=snow: Her breath hangs white in the air.
+SFX: $w.sfx
+SFX: distant traffic

@@ -319,3 +319,24 @@ def test_dynamic_prompts_weights_are_read_too():
     assert set(counts) == {"red", "blue"} and 2.2 < counts["red"] / counts["blue"] < 4.2
     assert expand("{2::a|b}", 1, {}).picks[0].label == "{a|b}"
     assert set(expand("{2$$3::x|1::y|z}", 1, {}).text.split(", ")) <= {"x", "y", "z"}
+
+
+WEATHER = {"weather": Library("weather", [
+    Entry("heavy snow", props=(("kind", "snow"), ("sfx", "footsteps crunch in fresh snow"))),
+    Entry("summer rain", props=(("kind", "rain"), ("sfx", "rain drums on a tin roof"))),
+])}
+
+
+def test_a_binding_reads_the_properties_of_its_pick():
+    """Sound follows picture: $w.sfx belongs to the weather $w rolled."""
+    seen = {expand("$w = __weather__\nA street in $w; $w.sfx.", s, WEATHER).text for s in range(20)}
+    assert seen == {"A street in heavy snow; footsteps crunch in fresh snow.",
+                    "A street in summer rain; rain drums on a tin roof."}
+    assert expand("$w = __weather__\n[$w.missing]", 1, WEATHER).text == "[]"
+
+
+def test_lines_and_choices_can_depend_on_a_property():
+    t = "$w = __weather__\n? $w.kind=snow: Breath fogs in the cold.\nThe street is {? $w.kind=rain,drizzle: wet|dry}."
+    seen = {expand(t, s, WEATHER).text for s in range(20)}
+    assert seen == {"Breath fogs in the cold. The street is dry.", "The street is wet."}
+    assert expand("$w = __weather__\n? $w.kind!=snow: Umbrellas.", 2, WEATHER).text in ("", "Umbrellas.")

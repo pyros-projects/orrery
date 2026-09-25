@@ -518,7 +518,10 @@ def test_properties_travel_through_the_libraries_tab(home):
              entries=[{"value": "Mara", "props": {"Gender": "female", "age": "30s"}}, {"value": "Tomas"}])
     assert lib["entries"][0]["props"] == {"age": "30s", "gender": "female"} and lib["entries"][1]["props"] == {}
     assert api(home, webapi.library_save, name="people",
-               entries=[{"value": "Mara", "props": {"gender": "fem ale!"}}])[0] == 400
+               entries=[{"value": "Mara", "props": {"a key!": "female"}}])[0] == 400
+    lib = ok(home, webapi.library_save, name="rainfall",
+             entries=[{"value": "snow", "props": {"sfx": "footsteps  crunch in snow"}}])
+    assert lib["entries"][0]["props"] == {"sfx": "footsteps crunch in snow"}
 
 
 def test_renaming_through_the_tab_reports_what_followed(home):

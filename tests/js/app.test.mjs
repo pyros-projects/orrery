@@ -225,3 +225,7 @@ test("a big library shows a page at a time, and a search shows only matching ent
 test("dynamic prompts weights are no part of a dial's choices", () => {
   assert.deepEqual(dials("$c = {3::red|1::blue|green}")[0].options, ["red", "blue", "green"]);
 });
+
+test("a property of a binding is coloured as part of the variable", () => {
+  assert.match(highlight("steps: $w.sfx", known), /<span class="t-var">\$w\.sfx<\/span>/);
+});
