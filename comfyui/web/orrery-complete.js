@@ -9,7 +9,34 @@ const NONE = { items: [], replaceFrom: 0 };
 
 const startsWith = (word, prefix) => word.toLowerCase().startsWith(prefix.toLowerCase());
 
+// A library reference up to where a property filter starts: __lib, __lib[tag], earlier #key:value.
+const LIB_HEAD = String.raw`__([\w/]+)(?:\[[\w-]+\])?(?:#[\w-]+:\$?[\w.-]+)*`;
+
+// After __lib#key: the values that library's entries carry; after __lib# its keys.
+function propItems(before, data) {
+  let m = before.match(new RegExp(String.raw`(?:^|[^\w])${LIB_HEAD}#([\w-]+):([\w.-]*)$`));
+  if (m) {
+    const values = (data.libraries.find((l) => l.name === m[1])?.props?.[m[2]] ?? []).filter((v) => startsWith(v.value, m[3]));
+    return {
+      items: values.map((v) => ({ insert: `#${m[2]}:${v.value}__`, label: v.value, detail: `${v.count}×`, preview: v.sample })),
+      replaceFrom: before.length - m[2].length - m[3].length - 2,
+    };
+  }
+  m = before.match(new RegExp(String.raw`(?:^|[^\w])${LIB_HEAD}#([\w-]*)$`));
+  if (!m) return null;
+  const props = data.libraries.find((l) => l.name === m[1])?.props ?? {};
+  return {
+    items: Object.keys(props).filter((k) => startsWith(k, m[2])).map((k) => ({
+      insert: `#${k}:`, label: `#${k}`, detail: `${props[k].length} value${props[k].length === 1 ? "" : "s"}`,
+      preview: props[k].slice(0, 6).map((v) => v.value).join(", ") + (props[k].length > 6 ? ", …" : ""),
+    })),
+    replaceFrom: before.length - m[2].length - 1,
+  };
+}
+
 function libraryItems(before, data) {
+  const props = propItems(before, data);
+  if (props) return props;
   let m = before.match(/(?:^|[^\w])(__([\w/]+)\[([\w-]*))$/);
   if (m) {
     const lib = data.libraries.find((l) => l.name === m[2]);

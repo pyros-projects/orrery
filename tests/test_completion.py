@@ -65,3 +65,12 @@ def test_lora_files_come_from_comfyui_and_are_empty_outside_it(home, monkeypatch
     monkeypatch.setitem(sys.modules, "folder_paths", fake)
     assert lora_files() == ["a\\b.safetensors"]  # as ComfyUI spells it: get_full_path reads it back
     assert completion_data(Home(home))["loras"] == [{"name": "b", "folder": "a"}]
+
+
+def test_libraries_carry_the_property_values_a_filter_can_name(home):
+    libs = {lib["name"]: lib for lib in completion_data(Home(home))["libraries"]}
+    cat = next(v for v in libs["scp/archetype_test"]["props"]["id"] if v["value"] == "SCP-529")
+    assert cat["count"] == 1 and cat["sample"].startswith("a small grey tabby cat")  # the entry, to preview
+    assert "cite" not in libs["scp/archetype_test"]["props"]  # sentences cannot be filtered on
+    kinds = [v["value"] for v in libs["world/weather"]["props"]["kind"]]
+    assert kinds == sorted(set(kinds), key=kinds.index) and "rain" in kinds  # most common first, unique

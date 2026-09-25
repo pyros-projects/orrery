@@ -84,7 +84,7 @@ export function renderHelp(app) {
     ${REF.map(([h, rows]) => `<section><h5 class="label">${h}</h5><div class="ref">${rows.map(([code, what, ex]) => `<div class="refrow"><pre class="codebox">${highlight(code, known)}</pre>`
       + `<span class="muted">${esc(what)}</span>${ex ? `<button class="btn ghost" data-insert="${esc(ex)}" title="Add to the end of your template">${icon("plus")}Insert</button>` : "<span></span>"}</div>`).join("")}</div></section>`).join("")}
     <section><h5 class="label">Writing for the models</h5><div class="tips">${TIPS.map(([k, t]) => `<p><b>${k}.</b> ${esc(t)}</p>`).join("")}</div></section>
-    <section><h5 class="label">Keys in the editor</h5><p class="muted flush"><code>__</code> libraries · <code>__name[</code> tags · <code>$</code> bindings · <code>SHOT 5s |</code> camera words · ↑↓ choose · ↵ or Tab insert · Esc close</p></section>
+    <section><h5 class="label">Keys in the editor</h5><p class="muted flush"><code>__</code> libraries · <code>__name[</code> tags · <code>__name#</code> properties and their values · <code>$</code> bindings · <code>SHOT 5s |</code> camera words · ↑↓ choose · ↵ or Tab insert · Esc close</p></section>
   </div></div>`;
   app.view.onclick = (e) => {
     const lesson = e.target.closest("[data-load]");

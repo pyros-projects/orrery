@@ -4,7 +4,9 @@ import { suggest, missingLibraries } from "../../comfyui/web/orrery-complete.js"
 
 const DATA = {
   libraries: [
-    { name: "creature", count: 24, source: "builtin", tags: ["deep_sea", "myth"], sample: ["axolotl"] },
+    { name: "creature", count: 24, source: "builtin", tags: ["deep_sea", "myth"], sample: ["axolotl"],
+      props: { habitat: [{ value: "sea", count: 9, sample: "a manta ray" }, { value: "forest", count: 6, sample: "a red fox" }],
+               size: [{ value: "small", count: 3, sample: "an axolotl" }] } },
     { name: "camera", count: 12, source: "builtin", tags: [], sample: [] },
     { name: "animal", count: 12, source: "user", tags: [], sample: ["fox"] },
   ],
@@ -131,4 +133,15 @@ test("comments neither complete nor count as missing libraries", () => {
   assert.equal(suggest(text, text.length, DATA).items.length, 0);
   const h3 = "# a comment first\n@h3 t2va\nSHOT 5s | ";
   assert.ok(suggest(h3, h3.length, DATA).items.some((i) => i.insert === "push in"));
+});
+
+test("after __lib# the library's property keys, after #key: its values", () => {
+  const keys = suggest("a __creature#", 13, DATA);
+  assert.deepEqual(keys.items.map((i) => i.insert), ["#habitat:", "#size:"]);
+  assert.equal(keys.replaceFrom, 12);
+  const text = "a __creature[myth]#size:small#habitat:s";
+  const values = suggest(text, text.length, DATA);
+  assert.deepEqual(values.items.map((i) => [i.insert, i.label, i.detail, i.preview]), [["#habitat:sea__", "sea", "9×", "a manta ray"]]);
+  assert.equal(text.slice(0, values.replaceFrom), "a __creature[myth]#size:small");
+  assert.deepEqual(suggest("__animal#", 9, DATA).items, []);  // a library without properties offers nothing
 });
