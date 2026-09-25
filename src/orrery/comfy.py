@@ -13,6 +13,7 @@ import re
 from datetime import UTC, datetime
 from pathlib import Path
 
+from orrery import runs
 from orrery.autolib import needs
 from orrery.chain import DEFAULT_CHAIN, load, previous_clip
 from orrery.comfy_llm import ComfyBackend, can_write, llm_config
@@ -372,8 +373,11 @@ class OrreryPrompt:
         stills, tail, audio = _previous(latent_path, segment)
         packed, wired = wiring(prompt, unique_id)
         try:
-            return (*run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
-                                params, segment, clip, stills, packed, wired), tail, audio)
+            outputs = run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
+                                 params, segment, clip, stills, packed, wired)
+            if (prompt_id := runs.current_prompt()) and unique_id is not None:
+                runs.remember(prompt_id, unique_id, outputs[1])  # for Generate: Save nodes log to the galaxy
+            return (*outputs, tail, audio)
         except ReelEnd as end:
             try:
                 from comfy_execution.graph_utils import ExecutionBlocker  # ComfyUI

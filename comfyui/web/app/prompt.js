@@ -23,7 +23,8 @@ function statsHTML(app) {
     + `<span class="stat" title="The node's width, height and length outputs${reel ? "; from the second chunk on, length includes the frames Motion Context pins" : ""}">→ <b>${out.width}×${out.height}</b>${frames}</span>`
     + `${out.cli.length ? `<span class="stat cli" title="In ComfyUI, use the Run count and the seed widget">${esc(out.cli.join(" "))}: CLI only</span>` : ""}<span class="grow"></span>`
     + `${outs ? `<button class="btn ghost" data-act="outputs">${icon("image")}${outs} output${outs === 1 ? "" : "s"}</button>` : ""}`
-    + `<button class="btn" data-act="test" title="Roll it in the Test tab: a few seeds, or a reel's clips">${icon("dice")}Test</button>`;
+    + `<button class="btn" data-act="test" title="Roll it in the Test tab: a few seeds, or a reel's clips">${icon("dice")}Test</button>`
+    + `<button class="btn primary" data-act="generate" title="Queue only what this node feeds, up to its Save nodes; their files go to the galaxy">${icon("play")}Generate</button>`;
 }
 
 function chipHTML(app) {
@@ -79,6 +80,11 @@ export function renderPrompt(app) {
     if (act === "save") save(app);
     if (act === "saveas") openSave(app, { text: applyDials(app.text, app.bridge.getParams()), from: app.preset, link: true });
     if (act === "test") { app.go("test"); runRolls(app); }
+    if (act === "generate") {
+      app.bridge.generate().then((n) => {
+        if (!n) app.toast("Nothing to generate: connect this node's outputs toward a Save or Preview node.");
+      }).catch((err) => app.fail(err));
+    }
     if (act === "new") { app.state.newMenu = !app.state.newMenu; return renderPrompt(app); }
     const starter = e.target.closest("[data-new]")?.dataset.new;
     if (starter) startNew(app, starter);

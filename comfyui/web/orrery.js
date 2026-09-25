@@ -1,5 +1,6 @@
 // The Orrery Prompt node becomes one app: prompt, presets, libraries, galaxy, help.
 import { app } from "../../scripts/app.js";
+import { downstream } from "./app/model.js";
 import { OrreryApp } from "./app/shell.js";
 
 const NO_PRESET = "(none)";
@@ -23,6 +24,18 @@ function hide(widget) {
   widget.computeSize = () => [0, -4];
   const el = widget.element || widget.inputEl;
   if (el) el.style.display = "none";
+}
+
+// The graph as the Generate button sees it: which node feeds which, and which ones are outputs.
+function graphOf(node) {
+  const g = node.graph || app.graph;
+  const linkOf = (id) => (g.links?.get ? g.links.get(id) : g.links?.[id]);
+  return (g._nodes || g.nodes || []).map((n) => ({
+    id: n.id,
+    type: n.comfyClass || n.type,
+    output: !!n.constructor?.nodeData?.output_node,
+    targets: (n.outputs || []).flatMap((o) => (o.links || []).map((l) => linkOf(l)?.target_id)).filter((t) => t != null),
+  }));
 }
 
 function mount(node) {
@@ -63,6 +76,14 @@ function mount(node) {
     getParams: () => { try { return JSON.parse(params?.value || "{}") || {}; } catch { return {}; } },
     setParams: (values) => set("params", Object.keys(values).length ? JSON.stringify(values) : ""),
     home: () => home?.value || "",
+    nodeId: () => String(node.id),
+    downstream: () => downstream(graphOf(node), node.id),
+    // Queue only the outputs this node feeds (ComfyUI's partial execution): its branch, not the whole canvas.
+    generate: async () => {
+      const { outputs } = downstream(graphOf(node), node.id);
+      if (outputs.length) await app.queuePrompt(0, 1, { queueNodeIds: outputs.map(String) });
+      return outputs.length;
+    },
     forwardWheel: (e) => app.canvas?.processMouseWheel?.(e),
     takeLegacyPreset: () => {
       const name = preset?.value;

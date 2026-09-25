@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { highlight } from "../../comfyui/web/app/highlight.js";
 import {
-  applyDials, dials, entryPage, filterPresets, libraryGroups, filterRows, glyph, markPicks, pickerGroups, shape, stats, templateHash,
+  applyDials, dials, downstream, entryPage, filterPresets, libraryGroups, filterRows, glyph, markPicks, pickerGroups, shape, stats, templateHash,
 } from "../../comfyui/web/app/model.js";
 
 const known = new Set(["creature", "place"]);
@@ -228,4 +228,18 @@ test("dynamic prompts weights are no part of a dial's choices", () => {
 
 test("a property of a binding is coloured as part of the variable", () => {
   assert.match(highlight("steps: $w.sfx", known), /<span class="t-var">\$w\.sfx<\/span>/);
+});
+
+test("generate finds the output nodes downstream of the orrery node, and whether Orrery Log is there", () => {
+  const nodes = [
+    { id: 9, type: "OrreryPrompt", output: false, targets: [12, 20] },
+    { id: 12, type: "CLIPTextEncode", output: false, targets: [30] },
+    { id: 20, type: "EmptyImage", output: false, targets: [31] },
+    { id: 30, type: "KSampler", output: false, targets: [31] },
+    { id: 31, type: "SaveImage", output: true, targets: [] },
+    { id: 40, type: "SaveImage", output: true, targets: [] },  // not downstream
+  ];
+  assert.deepEqual(downstream(nodes, 9), { outputs: [31], log: false });
+  nodes[0].targets.push(41); nodes.push({ id: 41, type: "OrreryLog", output: true, targets: [] });
+  assert.deepEqual(downstream(nodes, 9), { outputs: [31, 41], log: true });
 });

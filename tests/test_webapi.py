@@ -45,7 +45,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/preset/rename"), ("POST", "/orrery/preset/meta"),
         ("POST", "/orrery/favorite"), ("POST", "/orrery/recent"), ("GET", "/orrery/template"),
         ("GET", "/orrery/libraries"), ("POST", "/orrery/library/save"),
-        ("POST", "/orrery/library/own"), ("POST", "/orrery/library/delete"), ("POST", "/orrery/library/rename"),
+        ("POST", "/orrery/library/own"), ("POST", "/orrery/library/delete"), ("POST", "/orrery/library/rename"), ("POST", "/orrery/galaxy/capture"),
         ("GET", "/orrery/galaxy"), ("POST", "/orrery/galaxy/rate"),
         ("GET", "/orrery/galaxy/thumb"), ("GET", "/orrery/galaxy/media"), ("POST", "/orrery/roll"),
         ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
@@ -529,3 +529,21 @@ def test_renaming_through_the_tab_reports_what_followed(home):
     out = ok(home, webapi.library_rename, name="film_moods", to="film/moods")
     assert out == {"name": "film/moods", "weights": 0, "libraries": [], "presets": []}
     assert api(home, webapi.library_rename, name="camera", to="cam")[0] == 400
+
+
+def test_outputs_of_ordinary_save_nodes_reach_the_galaxy(home, tmp_path, monkeypatch):
+    """Generate without Orrery Log: the node remembers its picks per prompt; the browser reports the files."""
+    from orrery import runs
+    out = tmp_path / "output"
+    (out / "video").mkdir(parents=True)
+    (out / "video" / "clip_00001_.mp4").write_bytes(b"x")
+    monkeypatch.setattr(webapi, "_output_dir", lambda: out)
+    runs.remember("p1", "9", json.dumps({"seed": 7, "text": "a fox", "picks": [], "template": "abc"}))
+    media = [{"filename": "clip_00001_.mp4", "subfolder": "video", "type": "output"},
+             {"filename": "preview.png", "subfolder": "", "type": "temp"}]
+    assert ok(home, webapi.galaxy_capture, prompt_id="p1", node="9", media=media) == {"logged": 1}
+    rows = [json.loads(line) for line in (home / "galaxy.jsonl").read_text().splitlines()]
+    assert rows[-1]["media"] == str(out / "video" / "clip_00001_.mp4") and rows[-1]["seed"] == 7
+    assert api(home, webapi.galaxy_capture, prompt_id="nope", node="9", media=media)[0] == 404
+    bad = [{"filename": "../../etc/passwd", "subfolder": "", "type": "output"}]
+    assert ok(home, webapi.galaxy_capture, prompt_id="p1", node="9", media=bad) == {"logged": 0}

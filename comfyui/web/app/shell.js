@@ -81,6 +81,7 @@ export class OrreryApp {
     if (legacy) await this.loadPreset(legacy, { quiet: true });
     else if (this.preset) await this.fetchBase();
     this.stopListening = this.api.onRunDone(() => this.afterRun());
+    this.stopCapture = this.api.onExecuted((e) => this.capture(e.detail || {}));
     this.render();
   }
 
@@ -220,8 +221,23 @@ export class OrreryApp {
     }, { passive: false });
   }
 
+  // Generate without Orrery Log: when a Save node downstream of this node writes files, they go to the
+  // galaxy with this run's picks (the node remembered them under the prompt id).
+  async capture(detail) {
+    const { outputs, log } = this.bridge.downstream?.() || { outputs: [], log: true };
+    if (log || !outputs.map(String).includes(String(detail.display_node ?? detail.node))) return;
+    const out = detail.output || {};
+    const media = ["images", "gifs", "videos", "audio"].flatMap((k) => out[k] || []).filter((m) => m && m.filename);
+    if (!media.length || !detail.prompt_id) return;
+    try {
+      const res = await this.api.captureOutputs({ prompt_id: detail.prompt_id, node: this.bridge.nodeId(), media });
+      if (res.logged) { this.data.rows = null; if (this.state.tab === "galaxy") this.render(); }
+    } catch { /* an older run or a restarted ComfyUI: nothing to log */ }
+  }
+
   destroy() {
     this.stopListening?.();
+    this.stopCapture?.();
     clearTimeout(this.toastTimer);
     this.overlay?.remove();
     this.parked?.remove();

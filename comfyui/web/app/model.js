@@ -242,3 +242,18 @@ export function entryPage(entries, { name = "", query = "", tag = null, shown = 
     .filter(({ e }) => (!tag || e.tags.includes(tag)) && (!q || name.includes(q) || e.value.toLowerCase().includes(q)));
   return { rows: rows.slice(0, shown), total: rows.length };
 }
+
+// Generate: the output nodes downstream of the orrery node (only those are queued), and whether an
+// Orrery Log is among them (then it logs to the galaxy itself). `nodes`: {id, type, output, targets}.
+export function downstream(nodes, start) {
+  const byId = new Map(nodes.map((n) => [n.id, n])), seen = new Set([start]), queue = [start], outputs = [];
+  while (queue.length) {
+    for (const t of byId.get(queue.shift())?.targets || []) {
+      if (seen.has(t)) continue;
+      seen.add(t); queue.push(t);
+      if (byId.get(t)?.output) outputs.push(t);
+    }
+  }
+  outputs.sort((a, b) => a - b);
+  return { outputs, log: outputs.some((id) => byId.get(id)?.type === "OrreryLog") };
+}

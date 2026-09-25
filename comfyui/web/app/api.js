@@ -52,6 +52,8 @@ export function client(home) {
     saveLlm: (body) => call("llm", { body }),
     thumbURL: (id) => url("galaxy/thumb", { id }),
     onRunDone: (fn) => { api.addEventListener("execution_success", fn); return () => api.removeEventListener("execution_success", fn); },
+    onExecuted: (fn) => { api.addEventListener("executed", fn); return () => api.removeEventListener("executed", fn); },
+    captureOutputs: (body) => call("galaxy/capture", { body }),
     mediaURL: (id) => url("galaxy/media", { id }),
   };
 }

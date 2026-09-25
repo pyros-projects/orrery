@@ -404,6 +404,34 @@ def galaxy(home: Home, args: dict) -> dict:
             "weights": {k: weights.get(k, 1.0) for k in keys}}
 
 
+def _output_dir() -> Path:
+    import folder_paths  # ComfyUI
+
+    return Path(folder_paths.get_output_directory())
+
+
+def galaxy_capture(home: Home, args: dict) -> dict:
+    """Log the files a prompt's Save nodes wrote with the picks the Orrery node remembered for that
+    prompt (Generate without Orrery Log). Only saved outputs, never temp previews or paths outside."""
+    from orrery import runs
+    from orrery.comfy import log_outputs
+
+    picks = runs.recall(str(args.get("prompt_id") or ""), str(args.get("node") or ""))
+    if picks is None:
+        raise ApiError(404, "orrery has no run for that prompt (ComfyUI restarted since?).")
+    root = _output_dir().resolve()
+    paths = []
+    for item in args.get("media") or []:
+        if not isinstance(item, dict) or item.get("type") != "output":
+            continue
+        path = (root / str(item.get("subfolder") or "") / str(item.get("filename") or "")).resolve()
+        if path.is_relative_to(root) and path.is_file():
+            paths.append(str(path))
+    if paths:
+        log_outputs(home, picks, paths)
+    return {"logged": len(paths)}
+
+
 def galaxy_rate(home: Home, args: dict) -> dict:
     try:
         row, weights = gx.rate(home, str(args.get("id") or ""), args.get("rating"))
@@ -570,6 +598,7 @@ ROUTES = [
     ("POST", "/orrery/library/delete", library_delete),
     ("POST", "/orrery/library/rename", library_rename),
     ("GET", "/orrery/galaxy", galaxy),
+    ("POST", "/orrery/galaxy/capture", galaxy_capture),
     ("POST", "/orrery/galaxy/rate", galaxy_rate),
     ("GET", "/orrery/galaxy/thumb", galaxy_thumb),
     ("GET", "/orrery/galaxy/media", galaxy_media),
