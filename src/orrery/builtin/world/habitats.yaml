@@ -1,0 +1,16 @@
+meta: {source: "orrery pack: places by habitat, so an animal lands where it lives (__world/habitats#habitat:$animal.habitat__)", builtin: true}
+entries:
+  - {value: "a high rocky ridge above the clouds", props: {habitat: mountain, sfx: "thin mountain wind"}}
+  - {value: "a snowy scree slope under grey peaks", props: {habitat: mountain, sfx: "wind and small stones clattering"}}
+  - {value: "a misty old-growth forest of moss-covered trunks", props: {habitat: forest, sfx: "dripping leaves and distant birds"}}
+  - {value: "a snowy forest clearing at dusk", props: {habitat: forest, sfx: "snow hush and a creaking branch"}}
+  - {value: "golden savanna grass under a wide sky", props: {habitat: savanna, sfx: "dry grass rustling and cicadas"}}
+  - {value: "a watering hole ringed by acacia trees", props: {habitat: savanna, sfx: "lapping water and weaver birds"}}
+  - {value: "deep blue open water with shafts of sunlight", props: {habitat: ocean, sfx: "a deep underwater hush"}}
+  - {value: "a coral reef crowded with small fish", props: {habitat: ocean, sfx: "the crackle of the reef underwater"}}
+  - {value: "a flowering garden full of foxgloves and roses", props: {habitat: garden, sfx: "bees and a fountain"}}
+  - {value: "a dense rainforest understory after rain", props: {habitat: jungle, sfx: "dripping, frogs and distant howler monkeys"}}
+  - {value: "a pink salt lake shimmering in the heat", props: {habitat: lake, sfx: "shallow water splashing and bird calls"}}
+  - {value: "a volcanic island shore of black rock", props: {habitat: island, sfx: "surf and wind over rock"}}
+  - {value: "an ice floe on a dark polar sea", props: {habitat: ice, sfx: "creaking ice and cold wind"}}
+  - {value: "an endless windswept steppe", props: {habitat: plains, sfx: "wind flattening the grass"}}

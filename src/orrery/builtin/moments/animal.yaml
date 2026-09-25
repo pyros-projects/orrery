@@ -1,0 +1,10 @@
+meta: {source: "orrery pack: ten seconds of an animal, one visible action (its own call comes from the animal's sfx)", builtin: true}
+entries:
+  - {value: "lifts its head, sniffs the air and looks straight at the camera", props: {sfx: "a soft snort"}}
+  - {value: "walks slowly across the frame and disappears behind something", props: {sfx: "footfalls on the ground"}}
+  - {value: "shakes water from its body in a burst of spray", props: {sfx: "a spray of droplets"}}
+  - {value: "stretches, yawns wide and settles down again", props: {sfx: "a lazy exhale"}}
+  - {value: "freezes, listening, then bolts out of frame", props: {sfx: "a sudden scramble"}}
+  - {value: "plays with something small, batting it back and forth", props: {sfx: "light scuffling"}}
+  - {value: "calls out once and waits for an answer that comes from far away", props: {sfx: "an answering call in the distance"}}
+  - {value: "approaches the camera curiously until its nose almost touches the lens", props: {sfx: "sniffing close to the microphone"}}

@@ -1,0 +1,30 @@
+---
+title: "One button · clip"
+note: "One button for MiniMax H3: a person, an animal, an object or a landscape; a moment that happens to it (a visible action with a beginning and an end, never a frozen pose); a place; fifty-odd video looks (film stocks, capture devices, animation techniques), each with its own camera move and music. The sound is assembled from the place, the subject and the moment, so it always belongs to the picture. A landscape gets a drone flight instead of a hero. $wild is the insanity dial: unhinged adds a surreal twist that moves."
+tags: [onebutton, h3]
+---
+@h3 t2va 16:9
+$wild = {tame:3|curious:2|unhinged}
+$kind = {person:3|animal:2|thing:1|place:2}
+$who = __characters/{average_joes|models|gothic|cyberpunk|horror|noir|fantasy}__
+$subject = {? $kind=person: $who|{? $kind=animal: __subjects/animals__|__subjects/still_life__}}
+$twist = {? $wild=unhinged: , __subjects/twists__|}
+$act = {? $kind=person: __moments/person__|{? $kind=animal: __moments/animal__|__moments/thing__}}
+$place = {? $kind=animal: __world/habitats#habitat:$subject.habitat__|{__world/landscapes__:2|__tour/rooms__}}
+$land = __world/landscapes__
+$sky = __world/weather__
+$move = __drone/moves__
+$look = __looks/video__
+style: $look
+
+CAST
+? $kind=person,animal,thing: HERO: $subject$twist
+
+SHOT 10s | {? $kind=place: $move.shot|$look.shot}
+? $kind=place: Over $land{? $look.hour!=own: , in $sky|}, the camera $move, the scale reading from small things in the frame.
+? $kind=person,animal,thing: In $place, HERO $act.
+? $kind=place: SFX: $land.sfx
+? $kind=person,animal,thing: SFX: $place.sfx
+? $kind=animal,thing: SFX: $subject.sfx
+? $kind=person,animal,thing: SFX: $act.sfx
+MUSIC: $look.music

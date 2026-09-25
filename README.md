@@ -53,6 +53,7 @@ Qwen3.5-4B handles semantic edits; 2B is too weak for them.
 | `$hero = __animal__` | bind once, reuse everywhere |
 | `@include effects/living_clay` + indented `room = the salon` | embed a preset where it stands; indented `key = value` lines turn its dials, so a preset is an operator with parameters (its `@h3` line gives way to yours) |
 | `$w.sfx` | a property of the entry `$w` rolled (empty if it has none): the sound follows the weather |
+| `__world/habitats#habitat:$animal.habitat__` | a filter that depends on what was rolled before (`#key:$var` or `#key:$var.field`): the manta ray lands in the sea, never on a beach |
 | `? $w.kind=rain,snow: …` | a line kept only when the condition holds (`!=` for not); works for SFX lines too |
 | `{? $w.kind=rain: wet\|dry}` | a choice made by a condition instead of the dice |
 | `> moody, cinematic` | enhancement instruction (recorded, not yet executed) |
@@ -114,8 +115,9 @@ Built-in presets are read-only (`preset save NAME @NAME` makes a copy yours):
 scene, `krea/` holds Krea 2 stills (natural language, the medium named, text
 to render in quotes), and `h3/` holds MiniMax H3 scenes (dialogue in German
 and Cantonese, a voiceover, fast cuts, an animated fable, on-screen music, and
-an I2VA starter for your own stills, and a three-clip reel for H3 Motion
-Context). `effects/` holds Ito-style body-horror operators in the lite format,
+an I2VA starter for your own stills, a three-clip reel for H3 Motion
+Context, a drone flight, an impossible camera move that dives into a dewdrop
+and comes out elsewhere, and a world swap inside one take). `effects/` holds Ito-style body-horror operators in the lite format,
 from Codie's H3 tests: subsurface travel, body suit, mirror replacement, living
 paper, glass body, living clay, elastic body, hollow vessel, filament, human
 drawer and zipper spine, plus his operators surface press, feature migration,
@@ -129,7 +131,23 @@ dent that stays). `characters/` holds seven sets of ten detailed people
 each with `gender` and `age` properties and hair and clothes rolled from nested
 libraries: `__characters/noir#gender:female__`. The two Katamori curators live
 in `__characters/horror#role:curator__`. `fashion/` strings snobby adjectives and impossible shapes
-into runway looks for Krea and H3 (`couture_*` libraries). `orrery preset list
+into runway looks for Krea and H3 (`couture_*` libraries). `loops/` holds H3 Motion Context reels
+that never end (`repeat forever`, Run (Instant)): an endless tour through one
+building (Codie's Garamonde method: the building described again in every
+clip, each clip ending on a framed threshold the next one opens), a set change
+where stagehands strike one place and reveal the next (Pyro's tested idea and
+nineteen more mechanisms in `__transitions/between__`), a drone odyssey, a
+rabbit hole that dives into ever smaller details and comes out at a new scale,
+and a time machine over one street corner from 1850 to 3000. `onebutton/` is
+OneButtonPrompt's promise without its slop: `still` (Krea) and `clip` (H3)
+roll a person, animal, object, idea or landscape, a moment that happens to it,
+a place it belongs in, a look and a composition, and `$wild` dials from tame
+to unhinged. They draw on the pack libraries: `world/` (landscapes, weather,
+habitats), `looks/` (fifty-odd video looks with their own camera, sound and
+music, still looks by family), `moments/`, `subjects/`, `frame/`, `drone/`,
+`tour/`, `transitions/`, `scale/` and `time/`. Styles are named by medium,
+era, format and defects, never by artist: that is what MiniMax H3 follows, and
+it keeps the pack free of borrowed names. `orrery preset list
 --folder krea` shows them with their titles.
 
 Tags live in YAML front matter at the top of the preset file and are stripped

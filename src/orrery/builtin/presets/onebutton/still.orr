@@ -1,0 +1,16 @@
+---
+title: "One button · still"
+note: "OneButtonPrompt's promise for Krea 2, you never see the same picture twice, without its slop: no quality tags, no adjective stacks, no name-dropping. Five kinds of subject (people from the character sets, animals, objects with a story, abstract ideas, landscapes), thirty-eight looks, compositions, light and three sentence shapes. $wild is the insanity dial: tame keeps it real, curious sometimes adds a surreal twist, unhinged always twists and puts an impossible idea in the background. Photos, and only photos, get an optical look (shallow focus, telephoto, tilt-shift …) described as what it does to the picture."
+tags: [onebutton, krea]
+---
+$wild = {tame:3|curious:2|unhinged}
+$kind = {person:3|animal:2|thing:2|idea:2|place:2}
+$who = __characters/{average_joes|models|gothic|cyberpunk|horror|noir|fantasy}__
+$subject = {? $kind=person: $who|{? $kind=animal: __subjects/animals__|{? $kind=thing: __subjects/still_life__|{? $kind=idea: __subjects/concepts__|__world/landscapes__}}}}
+$look = __looks/still__
+$twist = {? $wild=tame: |{? $wild=curious: {:3|, __subjects/twists__}|, __subjects/twists__}}
+$lens = {? $look.family=photo: , with __frame/optics__|}
+$beyond = {? $wild=unhinged: , with __subjects/concepts__ in the background|}
+$frame = __frame/compositions__
+$light = __light__
+{$subject$twist, $frame, lit by $light$beyond. The picture is $look$lens.|The picture is $look$lens: $subject$twist, $frame, lit by $light$beyond.|$subject$twist, lit by $light, $frame$beyond. The picture is $look$lens.}

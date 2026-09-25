@@ -10,3 +10,5 @@ entries:
   - {value: "a raindrop running down a window pane", props: {out: "the camera tumbles out of the raindrop into open air"}}
   - {value: "a sunlit pinhole in a green leaf", props: {out: "the camera passes through the pinhole into a new light"}}
   - {value: "the lens of an old brass telescope", props: {out: "the view inside the lens becomes the world around the camera"}}
+  - {value: "a small oil painting on an easel standing there, a landscape in a gilded frame", props: {out: "the brushstrokes filling the frame loosen, deepen and turn into real light, air and distance"}}
+  - {value: "an old photograph lying face up on the ground", props: {out: "the grain of the photograph swells into real texture and colour floods into it"}}

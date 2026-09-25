@@ -5,13 +5,13 @@ tags: [loops, h3, reel, motion_context]
 ---
 @h3 t2va 16:9
 context: 22
-style: live-action, cinematic, photorealistic, one continuous steady take gliding forward at walking pace
+style: live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace
 MUSIC: N/A
 
 CHUNK the first place
 $place = {__world/landscapes__:2|__tour/rooms__}
 SHOT 10s | tracking, slow
-The camera glides forward at eye level through $place, taking it in. Light and air move through it; nothing else happens yet.
+The camera glides forward at eye level through $place, taking it in. Light and air move through it, and nothing else happens yet.
 SFX: $place.sfx
 HANDOFF: the camera glides on through $place
 

@@ -4,7 +4,7 @@ note: "Two places that have nothing to do with each other, joined in one continu
 tags: [h3, transition]
 ---
 @h3 t2va 16:9
-style: live-action, cinematic, photorealistic, one continuous steady take gliding forward
+style: live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward
 $from = __world/landscapes__
 $to = {__world/landscapes__|__tour/rooms__}
 $shift = __transitions/between__

@@ -6,7 +6,7 @@ from orrery.home import Home
 from orrery.presets import BUILTIN_PRESETS, load_preset, preset_meta
 from orrery.reel import split_reel
 
-MINIMUM = {"krea": 5, "h3": 5, "effects": 17, "fashion": 5, "loops": 5}
+MINIMUM = {"krea": 5, "h3": 5, "effects": 17, "fashion": 5, "loops": 5, "onebutton": 2}
 FOLDERS = tuple(MINIMUM)
 SEEDS = range(30)
 SHOWCASE = [f"{folder}/{p.stem}" for folder in FOLDERS

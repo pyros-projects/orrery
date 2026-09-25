@@ -1,0 +1,10 @@
+meta: {source: "orrery pack: ten seconds of an object, something happens to it or around it (its own sound comes from the object's sfx)", builtin: true}
+entries:
+  - {value: "stands still while the light around it changes from morning to night in a few seconds", props: {sfx: "time rushing softly"}}
+  - {value: "begins to rotate slowly on its own, catching the light", props: {sfx: "a faint mechanical whirr"}}
+  - {value: "trembles, then lifts gently off the surface and hovers", props: {sfx: "a low humming tone"}}
+  - {value: "is slowly covered by falling snow until only its outline remains", props: {sfx: "the hush of falling snow"}}
+  - {value: "casts a shadow that moves differently from the object itself", props: {sfx: "a quiet room and a clock"}}
+  - {value: "is picked up by a hand, turned over once and set down again", props: {sfx: "a gentle knock on wood"}}
+  - {value: "fills with water that rises and spills over its edges", props: {sfx: "trickling and overflowing water"}}
+  - {value: "cracks down the middle, and light pours out of the crack", props: {sfx: "a fine crack and a soft rush of air"}}

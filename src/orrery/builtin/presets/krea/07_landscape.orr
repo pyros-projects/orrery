@@ -1,0 +1,11 @@
+---
+title: "Landscape plate"
+note: "Landscapes that look photographed or painted by someone who walked there: a place from the world pack, its weather and hour, a vantage, one small thing that gives the scale, and a medium landscape photographers and painters actually use (a large-format transparency, infrared film, a platinum print, a woodblock print, an ink scroll). Dial $medium to lock a look, $scale to leave the land empty."
+tags: [krea, landscape, photo]
+---
+$land = __world/landscapes__
+$sky = __world/weather__
+$vantage = {seen from a high ridge|seen from the air, looking straight down|at eye level from the valley floor|from water level|from far across a valley}
+$scale = {:2|, one small figure in a red coat standing on it for scale|, a lone cabin with a single lit window|, a line of power pylons marching into the distance|, a small boat leaving a long wake|, a road winding through it with one car on it|, a flock of birds lifting off together}
+$medium = {a large-format colour transparency, sharp from the nearest stone to the far ridge, calm true colour|a slide-film photograph with saturated greens and deep blue shadows|an infrared colour photograph where every leaf and blade of grass turns red and pink against a dark sky|a black-and-white fine-art print with deep blacks, glowing whites and a full range of silver greys between|a platinum print on soft cotton paper, warm brown-grey tones and gentle highlights|a cyanotype in deep Prussian blue with brushed white edges|a nineteenth-century romantic oil painting, the land glowing in golden haze and tiny figures dwarfed by it|a Japanese woodblock print with flat colour, fine carved outlines and a sky graded from indigo to white|an ink-and-wash landscape scroll, the land rising out of empty mist|a brushy gouache matte painting for an old adventure film}
+{$land, $vantage, in $sky$scale. The picture is $medium.|The picture is $medium: $land, $vantage, in $sky$scale.}

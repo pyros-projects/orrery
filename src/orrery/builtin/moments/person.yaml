@@ -1,0 +1,14 @@
+meta: {source: "orrery pack: ten seconds of a person, one visible action with a beginning and an end, and its sound", builtin: true}
+entries:
+  - {value: "turns slowly and looks straight into the camera as the wind lifts their hair", props: {sfx: "wind and a single breath"}}
+  - {value: "laughs at something off-screen, tries to stop, and laughs again", props: {sfx: "a burst of laughter and a hand clapping once"}}
+  - {value: "reads a letter, lowers it and stares into the distance", props: {sfx: "paper rustling"}}
+  - {value: "strikes a match, lights a candle and watches the flame steady", props: {sfx: "the scratch and flare of a match"}}
+  - {value: "runs, stumbles, catches themselves and keeps running", props: {sfx: "fast footsteps and heavy breathing"}}
+  - {value: "dances alone, eyes closed, lost in a song only they can hear", props: {sfx: "feet sliding on the floor and a faint melody"}}
+  - {value: "opens a door and steps back, surprised by what is on the other side", props: {sfx: "a door creaking open and a sharp intake of breath"}}
+  - {value: "ties a red ribbon to a branch and lets go of it in the wind", props: {sfx: "fabric snapping in the wind"}}
+  - {value: "writes something on a fogged window with one finger, then wipes it away", props: {sfx: "a squeak of skin on wet glass"}}
+  - {value: "catches a falling cup a centimetre above the floor and exhales", props: {sfx: "a quick grab and a relieved laugh"}}
+  - {value: "shields their eyes against the light and points at something far away", props: {sfx: "wind and a distant call"}}
+  - {value: "walks toward the camera and past it without noticing it", props: {sfx: "footsteps approaching and fading"}}

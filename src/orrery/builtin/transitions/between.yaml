@@ -3,20 +3,20 @@ entries:
   - {value: "dozens of stagehands in black run into frame and strike $from piece by piece, carrying off walls, trees and props, until $to stands revealed behind it", props: {sfx: "hurried footsteps, rolling casters and props thudding into place"}}
   - {value: "a giant hand reaches in from above, lifts all of $from away like a diorama and sets $to down in its place", props: {sfx: "a deep wooden scrape and a soft thud"}}
   - {value: "$from peels away from the top like old wallpaper, curling down to reveal $to behind it", props: {sfx: "a long tearing of paper"}}
-  - {value: "a free-standing door frame stands alone in $from; the camera passes through it and comes out in $to", props: {sfx: "a door latch clicking and the sound of the new place rushing in"}}
+  - {value: "a free-standing door frame stands alone in $from, and the camera passes through it and comes out in $to", props: {sfx: "a door latch clicking and the sound of the new place rushing in"}}
   - {value: "water floods $from and the camera sinks beneath the surface, then rises out of the water into $to", props: {sfx: "a muffled underwater rush and a splash on surfacing"}}
   - {value: "$from folds flat like the page of a pop-up book, and the next page unfolds into $to", props: {sfx: "a heavy paper page turning and card creaking upright"}}
   - {value: "a theatre curtain drops across $from and rises again a moment later on $to", props: {sfx: "the swish of heavy velvet and a single cough from an unseen audience"}}
   - {value: "the camera slides behind a pillar in $from and emerges from the other side into $to", props: {sfx: "the room tone changing in an instant"}}
   - {value: "the sky over $from tears open like paper, and $to pours in through the rip until it fills everything", props: {sfx: "ripping paper and a rising wind"}}
-  - {value: "a wall of fog rolls through $from until everything is white; as it thins, $to has taken its place", props: {sfx: "the world going muffled and slowly coming back"}}
-  - {value: "every light in $from goes out; in the dark a match flares and its small glow shows $to", props: {sfx: "a power-down hum, darkness and the scratch of a match"}}
+  - {value: "a wall of fog rolls through $from until everything is white, and as it thins, $to has taken its place", props: {sfx: "the world going muffled and slowly coming back"}}
+  - {value: "every light in $from goes out, then a match flares in the dark and its small glow shows $to", props: {sfx: "a power-down hum, darkness and the scratch of a match"}}
   - {value: "$from turns away on a giant stage revolve, carrying $to around into view", props: {sfx: "a slow grinding of machinery beneath the floor"}}
   - {value: "time rushes forward: plants overgrow $from and crumble it to ruins, and out of the ruins $to grows up", props: {sfx: "days and nights whooshing past and creaking growth"}}
-  - {value: "the camera tilts down into a puddle that reflects $from; the reflection ripples and becomes $to, and the camera rises into it", props: {sfx: "a single drop falling and rippling water"}}
-  - {value: "a long train thunders between the camera and $from; when the last carriage has passed, $to stands there", props: {sfx: "a passing train roaring and fading"}}
+  - {value: "the camera tilts down into a puddle that reflects $from, the reflection ripples and becomes $to, and the camera rises into it", props: {sfx: "a single drop falling and rippling water"}}
+  - {value: "a long train thunders between the camera and $from, and when the last carriage has passed, $to stands there", props: {sfx: "a passing train roaring and fading"}}
   - {value: "$from cracks like a pane of glass and the pieces fall away, showing $to behind them", props: {sfx: "a high crack and a rain of glass tinkling"}}
   - {value: "a huge flock of starlings pours across the frame over $from, and when it disperses the camera is over $to", props: {sfx: "the roar of thousands of wingbeats"}}
-  - {value: "$from is only a painted backdrop; it falls forward flat onto the floor, revealing $to built behind it", props: {sfx: "a huge flat slapping down and dust settling"}}
-  - {value: "the camera pushes into a snow globe standing in $from; the snow swirls around the lens and settles into $to", props: {sfx: "a glassy shake and swirling hush"}}
+  - {value: "$from turns out to be a painted backdrop that falls forward flat onto the floor, revealing $to built behind it", props: {sfx: "a huge flat slapping down and dust settling"}}
+  - {value: "the camera pushes into a snow globe standing in $from, and the snow swirls around the lens and settles into $to", props: {sfx: "a glassy shake and swirling hush"}}
   - {value: "everything in $from rises gently into the air and drifts away like dust, leaving $to underneath", props: {sfx: "a soft rising whoosh, like a held breath released"}}

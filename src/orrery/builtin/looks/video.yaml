@@ -1,0 +1,106 @@
+meta: {source: "orrery pack: video looks written for MiniMax H3 (medium word first, how the look moves; shot = camera spec, sfx and music seeds, hour: own when the look brings its own time of day). Adapted from NO8D's Krea style library (MIT) and rewritten for motion and sound. Capture formats and animation techniques follow what ostris's 1,000-clip H3 probe (the hoodtronik style atlas) shows rendering, described instead of named", builtin: true}
+entries:
+  - value: "Live-action, cinematic, shot on bleach-bypass film: colour drained almost to silver, dense inky shadows, hard metallic sheen on wet skin and steel, and fine grain crawling across the frame"
+    props: {medium: live, shot: "tracking, fast", sfx: "boots on gravel and clipped breathing close to the microphone", music: "Low sustained strings over a slow, heavy drum pulse that builds and cuts off abruptly."}
+  - value: "Live-action, cinematic, filmed in the minutes after sunset: a deep cobalt sky darkening during the shot, warm tungsten windows lighting up one by one against the cool ambient light"
+    props: {hour: own, medium: live, shot: "truck right, small, slow", sfx: "a low city hum, distant traffic and footsteps on damp pavement", music: "Sparse electric-piano chords at a slow tempo over a soft synth pad that gradually widens."}
+  - value: "Live-action, black-and-white 1940s film noir: one hard low key light carving faces out of black, venetian-blind shadows sliding across the walls as people move, smoke drifting through the beams"
+    props: {medium: live, shot: "push in, small, slow", sfx: "rain against the window and a match striking", music: "A muted trumpet over brushed snare and upright bass at a slow tempo."}
+  - value: "Vintage film, 1960s Kodachrome home movie: saturated reds and deep blues, crisp grain, bright daylight, and the gentle gate weave and flicker of a small-gauge reel"
+    props: {hour: own, medium: live, shot: "pan left, small, slow", sfx: "wind, gulls and distant voices carrying across open space", music: "A light ukulele strum at a moderate tempo with brushed percussion."}
+  - value: "Vintage film, 16mm colour negative: grain crawling across every surface, highlights blooming with soft halation, exposure breathing a little from frame to frame"
+    props: {medium: live, shot: "tracking, slow", sfx: "close room tone, clothing rustle and small objects being handled", music: "A fingerpicked acoustic guitar at a slow tempo, recorded dry and close."}
+  - value: "Security-camera footage from a fixed high corner mount: a wide barrel-distorted view, flat fluorescent light, blocky compression, washed-out colour and a timestamp ticking in the corner, the picture stuttering at a low frame rate"
+    props: {medium: live, shot: "static", sfx: "an electrical hum and thin, far-away footsteps", music: "N/A"}
+  - value: "Live-action, black-and-white observational documentary: rich grey tones, visible grain, natural light and people going about real work, unposed"
+    props: {medium: live, shot: "tracking, slow", sfx: "the work itself: tools, machinery and wind", music: "N/A"}
+  - value: "Live-action nature documentary: telephoto compression, shallow depth of field isolating the animal against its habitat, crisp detail in fur, feathers and water"
+    props: {medium: live, shot: "tracking, slow", sfx: "wind in the grass, insects and the animal's own breathing close up", music: "Low sustained strings and a soft marimba pattern at a slow tempo."}
+  - value: "Live-action, cinematic, lit by a sun just above the horizon: warm amber light raking across everything, long shadows, backlit dust glowing, flare blooming as the camera moves against the sun"
+    props: {hour: own, medium: live, shot: "arc, small, slow", sfx: "crickets starting and a light breeze in the leaves", music: "Warm acoustic-guitar arpeggios at a moderate tempo with a soft string pad."}
+  - value: "Live-action, cinematic neon-noir at night: magenta and cyan light cutting across the frame in hard bands, rain and steam catching the colour, wet pavement mirroring flickering signs"
+    props: {hour: own, medium: live, shot: "push in, small, slow", sfx: "heavy rain on metal awnings, buzzing neon and tyres hissing past", music: "A slow analog synth-bass pulse with long reverb pads and a muted arpeggio."}
+  - value: "Live-action, cinematic, graded with a cold green cast: desaturated skin, crushed blacks, hard light separating figures from dark backgrounds, clinical fluorescent highlights"
+    props: {medium: live, shot: "tracking, fast", sfx: "a fluorescent hum, ventilation drone and sharp footsteps on hard floors", music: "A pulsing electronic bass at a fast tempo with metallic percussion."}
+  - value: "Live-action, cinematic, in a heavy sun-bleached amber grade: ochre midtones, muddy brown-black shadows, hot blown highlights, heat shimmer and dust in harsh overhead sun"
+    props: {hour: own, medium: live, shot: "pan right, large, slow", sfx: "cicadas, a distant dog and dry wind rattling a loose sign", music: "A slow nylon-string guitar figure over a low accordion drone."}
+  - value: "Vintage film with strong halation: every bright source bleeding a warm red-orange glow into its surroundings, soft edges and gentle contrast, the glow blooming as lights pass"
+    props: {medium: live, shot: "truck left, small, slow", sfx: "a candle fluttering and a clock ticking", music: "A slow music-box melody over a warm sustained string chord."}
+  - value: "Live-action, storybook-symmetrical: centred planar framing, sets in coordinated pastel palettes, flat even light, deadpan faces square to the camera, every movement starting and stopping on a clean beat"
+    props: {medium: live, shot: "truck right, fast", sfx: "crisp close foley: a latch clicking, a teacup on a saucer, a desk bell", music: "A plucked harpsichord and pizzicato strings at a brisk tempo."}
+  - value: "Live-action classic Hollywood suspense: frames that hold information back, hard light isolating the subject in shadow, a watching vantage through doorways and stair rails"
+    props: {medium: live, shot: "push in, small, slow", sfx: "a loud clock and a floorboard creaking upstairs", music: "A short repeating low-string ostinato at a moderate tempo, rising and stopping abruptly."}
+  - value: "Live-action underwater: sunlight caustics rippling over every surface, visibility falling off into blue haze, particles drifting through shafts of light, hair and fabric moving weightlessly"
+    props: {hour: own, medium: live, shot: "tracking, slow", sfx: "muffled water ambience and bursts of rising bubbles", music: "A slow ambient synth pad with a single low piano note every few seconds."}
+  - value: "Live-action 1980s genre film: thick haze swallowing the background, a single hard coloured beam of a torch or headlights cutting through it, warm grain, low angles making ordinary places loom"
+    props: {hour: own, medium: live, shot: "push in, small, slow", sfx: "crickets, a bike chain clicking and a light bulb buzzing and popping", music: "An analog synthesizer arpeggio at a moderate tempo over a low swelling drone."}
+  - value: "Live-action vérité documentary: available light exactly as it falls, focus briefly hunting before it lands, subtle grain and unposed gestures caught mid-motion"
+    props: {medium: live, shot: "shake slightly", sfx: "overheard conversation and the bustle of the place", music: "N/A"}
+  - value: "Claymation stop-motion: soft clay characters with visible fingerprints, warm studio light on a miniature set, motion stepping at about twelve poses a second while the clay surface shifts between frames"
+    props: {medium: animation, shot: "push in, small, slow", sfx: "exaggerated squelchy footsteps, a spring boing and a teacup clink", music: "A jaunty brass band with pizzicato strings at a moderate tempo."}
+  - value: "2D-animated, hand-painted cel animation: soft watercolour backgrounds full of natural detail, clean character lines, and wind moving through grass, cloud and hair in layered waves"
+    props: {medium: animation, shot: "pan right, small, slow", sfx: "wind in tall grass, birdsong and a nearby stream", music: "A solo piano melody at a moderate tempo, joined by light strings and woodwinds."}
+  - value: "2D-animated 1980s cel anime: soft painted cels with muted gradients, rounded linework, limited animation holding on key poses, speed lines for fast moves and highlights that bloom"
+    props: {medium: animation, shot: "pan left, small, slow", sfx: "night city ambience, passing cars and a distant railway crossing bell", music: "A mellow city-pop groove with electric piano, slap bass and drum machine."}
+  - value: "3D CG in the look of a 1996 console game: low-polygon forms, low-resolution textures that swim as surfaces move, jittering vertices, flat light and a short draw distance fading into fog"
+    props: {medium: animation, shot: "tracking, slow", sfx: "low-bit sampled footsteps and a looping ambient hum", music: "A looping lo-fi synth pad and sparse sampled piano at a slow tempo."}
+  - value: "2D-animated 1930s rubber-hose cartoon: jointless tube limbs, white gloves, pie-cut eyes, thick outlines in black and white, everything bobbing on the beat under dust, scratches and flicker"
+    props: {medium: animation, shot: "static", sfx: "boings, slide whistles and woodblock hits on every bounce", music: "An upbeat 1930s jazz band with tuba, banjo and clarinet at a fast tempo."}
+  - value: "Grainy VHS home video: soft smeared colour, chroma bleeding past every edge, tracking lines rolling up through the frame, a blinking date stamp in the corner and the picture wobbling as the camcorder moves"
+    props: {medium: live, shot: "shake slightly", sfx: "tape hiss, handling noise on the camcorder microphone and people talking over each other", music: "N/A"}
+  - value: "2000s MiniDV camcorder footage through a fisheye adapter: a bulging wide view, crisp interlaced digital video, a blown-out sky, the camera running low and close alongside the action"
+    props: {medium: live, shot: "tracking, fast", sfx: "wheels roaring over concrete, sharp clacks and friends shouting", music: "A scrappy punk-rock guitar riff over pounding drums at a fast tempo."}
+  - value: "Dashcam footage through a windscreen: a wide view with the bonnet edge along the bottom of the frame, road vibration in the picture, reflections of the dashboard sliding across the glass and a timestamp with a speed readout burned into the corner"
+    props: {medium: live, shot: "tracking, slow", sfx: "engine drone, tyre noise and an indicator ticking", music: "N/A"}
+  - value: "Found footage from a handheld camcorder in night-vision mode: a grainy green-and-black image, eyes glowing white, a red REC dot blinking in the corner and the light falling off into darkness a few metres ahead"
+    props: {hour: own, medium: live, shot: "shake slightly", sfx: "heavy breathing close to the microphone, footsteps and something shifting just out of sight", music: "N/A"}
+  - value: "Thermal-imaging camera footage: a monochrome heat palette where warm bodies glow white-hot against cool blue and violet surroundings, breath and footprints glowing and slowly fading as things move"
+    props: {medium: live, shot: "pan right, small, slow", sfx: "wind and faint crackling radio chatter", music: "A low pulsing synth drone at a slow tempo."}
+  - value: "X-ray-scan footage: everything rendered as glowing translucent blue-white structure on black, bones, wires and inner mechanisms visible through skin and casing as they move"
+    props: {medium: live, shot: "static", sfx: "the hum of scanning equipment and a slow electronic beep", music: "A sparse, cold ambient synth pad at a slow tempo."}
+  - value: "Black-and-white silent-era footage: undercranked, slightly sped-up motion, heavy flicker, scratches and dust drifting across the frame and a soft iris vignette closing in on the edges"
+    props: {medium: live, shot: "static", sfx: "the clatter of a film projector", music: "A lively upright-piano accompaniment at a brisk tempo, as played in a picture house."}
+  - value: "Vintage film, three-strip Technicolor: jewel-saturated reds and emerald greens, glowing skin, skies that look painted, soft studio light and dense grain"
+    props: {medium: live, shot: "pedestal up, small, slow", sfx: "birdsong and a gentle breeze", music: "A lush studio orchestra with soaring strings at a moderate tempo."}
+  - value: "Live-action 1970s grindhouse print: grainy 35mm with crushed shadows and faded warm colour, scratches, splices and burn marks, the picture jumping at a reel change"
+    props: {medium: live, shot: "zoom in, large, fast", sfx: "a howling wind over the rattle of the projector", music: "A funky wah-wah guitar and a driving bass line at a fast tempo."}
+  - value: "Shot-on-video 1970s multi-camera sitcom: flat, bright three-point lighting, soft smeary videotape colour, a set with three walls and actors playing to an unseen audience"
+    props: {medium: live, shot: "static", sfx: "a live studio audience laughing and applauding", music: "A short, bouncy sting with electric piano and bass."}
+  - value: "Black-and-white archival newsreel footage: high contrast, heavy scratches and flicker, a bold title card at the start and a hurried, slightly jerky camera"
+    props: {medium: live, shot: "pan left, small, fast", sfx: "the crackle of an optical soundtrack and a crowd cheering", music: "A bold brass fanfare march at a brisk tempo."}
+  - value: "2D-animated in flat mid-century modern design: geometric shapes, simplified rounded characters, flat colour fields in a limited palette, graphic textured backgrounds and snappy limited animation"
+    props: {medium: animation, shot: "truck right, small, fast", sfx: "woodblock ticks and a cymbal swish on every move", music: "A cool jazz combo with walking bass and vibraphone at a brisk tempo."}
+  - value: "Stop-motion holiday puppetry: fuzzy fabric-and-rubber puppets with round painted faces, cotton-wool snow, miniature sets glowing with tiny bulbs and charmingly jerky motion"
+    props: {medium: animation, shot: "push in, small, slow", sfx: "sleigh bells and crunching snow", music: "A warm celesta and glockenspiel melody over soft strings."}
+  - value: "2D-animated in early-2000s Flash-cartoon style: rigid tweened limbs, bold vector outlines, flat gradient fills and stepped, low-frame-rate motion"
+    props: {medium: animation, shot: "static", sfx: "cartoon pops, whooshes and a squeaky rubber honk", music: "A bouncy chiptune loop at a fast tempo."}
+  - value: "2D-animated late-night comedy cartoon: flat muted colours, deadpan character posing, deliberately crude wobbly linework and long awkward holds"
+    props: {medium: animation, shot: "static", sfx: "a fridge hum and an awkward silence broken by a single cough", music: "N/A"}
+  - value: "2D-animated 1980s Saturday-morning cartoon: bold cel-shaded colours, glowing laser-effect linework, heroic poses and backgrounds that loop behind running figures"
+    props: {medium: animation, shot: "truck left, large, fast", sfx: "laser zaps and a whooshing energy charge", music: "A driving synth-rock theme with electric guitar at a fast tempo."}
+  - value: "2D-animated action anime: dynamic speed lines, sharp cel shading, hard impact-frame poses flashing between moves and debris hanging in the air"
+    props: {medium: animation, shot: "arc, large, fast", sfx: "whooshes, heavy impacts and a rising energy hum", music: "Fast electric guitar and taiko drums building to a climax."}
+  - value: "2D-animated in the style of an ancient Egyptian tomb painting: flat figures in strict profile, ochre, lapis and malachite pigments on cracked plaster, patterned borders, and figures gliding along their painted register"
+    props: {medium: animation, shot: "truck right, small, slow", sfx: "wind moving through stone corridors and a sistrum rattling", music: "A low reed flute over a frame drum at a slow tempo."}
+  - value: "2D-animated newspaper comic strip: heavy inked crosshatching in black and white, halftone dots in the shadows, panel borders and hand-lettered sound effects bursting out of the action"
+    props: {medium: animation, shot: "static", sfx: "paper rustling and exaggerated hits on every action", music: "A plucky upright bass and brushed snare at a brisk tempo."}
+  - value: "2D-animated chalk drawing on a blackboard: bright coloured chalk lines drawing themselves, dust and smudges trailing every movement and an eraser wiping clear the way for the next drawing"
+    props: {medium: animation, shot: "static", sfx: "chalk scratching and tapping on the board", music: "A light pizzicato and xylophone tune at a moderate tempo."}
+  - value: "Watercolor storybook illustration come to life: loose washes with white paper showing through, fine ink contours and colour blooming outward at the edges as things move"
+    props: {medium: animation, shot: "pan right, small, slow", sfx: "pages turning and a soft breeze", music: "A gentle solo piano and clarinet at a slow tempo."}
+  - value: "2D-animated animator's pencil test: rough graphite drawings on paper with blue construction lines, red correction marks and registration holes, the lines boiling slightly from frame to frame"
+    props: {medium: animation, shot: "static", sfx: "a pencil scratching and paper flipping", music: "N/A"}
+  - value: "Silhouette cutout animation: black paper figures with articulated joints moving against glowing coloured backgrounds on layered glass planes"
+    props: {medium: animation, shot: "truck left, small, slow", sfx: "paper rustling softly", music: "A delicate harp and flute melody at a slow tempo."}
+  - value: "Paint-on-glass animation: oil paint smeared and repainted frame by frame on backlit glass, forms melting into one another and brushstrokes shimmering as they move"
+    props: {medium: animation, shot: "push in, small, slow", sfx: "a low wind and wet brushstrokes", music: "A slow, swelling string chord with a solo cello."}
+  - value: "Sand animation on a light table: pictures drawn in dark sand against a warm glowing backlight, a hand sweeping one picture into the next, grains trickling at the edges"
+    props: {medium: animation, shot: "static", sfx: "sand hissing under sweeping fingers", music: "A solo cello at a slow tempo."}
+  - value: "Stop-motion collage animation assembled from torn magazine photographs: jittering paper cut-outs with ragged white edges, mismatched scale and print textures, shapes swapped frame by frame"
+    props: {medium: animation, shot: "static", sfx: "paper tearing and scissors snipping", music: "A jittery hand-played percussion loop with toy piano."}
+  - value: "Stop-motion in needle-felted wool: fuzzy soft figures with stray fibres catching the light, a miniature set of felt and yarn and gentle stepped motion"
+    props: {medium: animation, shot: "push in, small, slow", sfx: "soft muffled footsteps and wool rustling", music: "A gentle music box and acoustic guitar at a slow tempo."}
+  - value: "Stop-motion with plastic toy bricks and little block figures: a glossy plastic sheen, studs on every surface, stiff clicking poses and a world built entirely of bricks"
+    props: {medium: animation, shot: "tracking, slow", sfx: "plastic clicks and tiny clattering footsteps", music: "An upbeat pop-rock tune at a fast tempo."}
+  - value: "3D CG voxel world: everything built from coloured cubes, blocky trees and water, pixelated textures and a square sun"
+    props: {medium: animation, shot: "pan left, small, slow", sfx: "blocky thuds and a soft wind", music: "Sparse, gentle ambient piano notes at a slow tempo."}

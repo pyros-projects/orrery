@@ -1,0 +1,40 @@
+meta: {source: "orrery pack: still looks for Krea 2, medium first, no names; family (photo, paint, print, draw, craft, comic, anime) lets a template add a lens only to photos", builtin: true}
+entries:
+  - {value: "a 35mm street photograph on grainy colour negative film, slightly underexposed, with deep shadows and one warm practical light", props: {family: photo}}
+  - {value: "a direct-flash party snapshot: harsh on-camera flash, hard shadows behind the subject, red-eye glints and a dark background falling off to black", props: {family: photo}}
+  - {value: "a high-key studio photograph on seamless white, soft wraparound light and almost no shadow", props: {family: photo}}
+  - {value: "a low-key portrait lit by a single hard source from the side, most of the frame lost in black", props: {family: photo}}
+  - {value: "a cross-processed film photograph with cyan shadows, yellow highlights and punchy, clipped contrast", props: {family: photo}}
+  - {value: "a long-exposure night photograph where moving lights smear into ribbons and still things stay razor sharp", props: {family: photo}}
+  - {value: "a colour infrared photograph on false-colour film: foliage turned candy pink and red, skies deep blue, skin pale and waxy", props: {family: photo}}
+  - {value: "a wet-plate collodion tintype: silvery tones on black metal, a shallow plane of focus, swirling edges and chemical streaks", props: {family: photo}}
+  - {value: "a cyanotype print in deep Prussian blue and white, with brushed edges where the chemistry was painted on", props: {family: photo}}
+  - {value: "an instant-film photograph with a white border, soft focus, washed teal shadows and a warm colour cast", props: {family: photo}}
+  - {value: "a large-format black-and-white landscape photograph with a full tonal range from paper white to deep black and needle-sharp detail", props: {family: photo}}
+  - {value: "a tilt-shift photograph that turns a real scene into what looks like a toy miniature, only a thin band in focus", props: {family: photo}}
+  - {value: "a Dutch Golden Age oil painting: a dark umber background, one window light, and textures of silver, glass and fruit rendered with obsessive care", props: {family: paint}}
+  - {value: "an impressionist plein-air oil painting of broken, flickering brushstrokes and coloured shadows", props: {family: paint}}
+  - {value: "a Japanese ukiyo-e woodblock print with flat colour areas, fine black keylines, a textured paper grain and gradated sky", props: {family: print}}
+  - {value: "an Art Nouveau lithograph poster with flowing whiplash lines, an ornamental frame and a muted gold-and-sage palette", props: {family: print}}
+  - {value: "a cubist painting that breaks the subject into overlapping planes seen from several angles at once, in ochre and grey", props: {family: paint}}
+  - {value: "a pop art print of flat saturated colour, bold black outlines and visible Ben-Day dots", props: {family: print}}
+  - {value: "a Soviet constructivist poster of diagonal red and black blocks, photomontage and bold sans-serif shapes", props: {family: print}}
+  - {value: "a 1960s psychedelic concert poster in vibrating complementary colours, with melting lettering-like shapes filling every space", props: {family: print}}
+  - {value: "a Bauhaus composition of primary colours, circles, bars and a strict grid on off-white paper", props: {family: print}}
+  - {value: "a Chinese ink-wash painting on rice paper: a few confident strokes, soft wet gradients and a great deal of empty space", props: {family: draw}}
+  - {value: "a copperplate etching of fine crosshatched lines, plate tone in the margins and warm black ink", props: {family: draw}}
+  - {value: "a charcoal drawing with smudged soft shadows, erased highlights and the grain of heavy paper", props: {family: draw}}
+  - {value: "a technical blueprint of white linework on cyan, with dimension lines and section cuts", props: {family: draw}}
+  - {value: "a gouache children's-book illustration with matte opaque colour, simple shapes and small hand-painted textures", props: {family: draw}}
+  - {value: "a layered paper-cut diorama lit from behind, each paper layer casting a soft shadow on the next", props: {family: craft}}
+  - {value: "a stained-glass window of jewel-coloured panes held in black lead lines, light glowing through it", props: {family: craft}}
+  - {value: "a quilling artwork of tightly coiled paper strips standing on their edges, full of tiny curled detail", props: {family: craft}}
+  - {value: "a folded origami sculpture in crisp textured paper photographed on a plain background", props: {family: craft}}
+  - {value: "a claymation still of soft clay figures with visible fingerprints on a miniature handmade set", props: {family: craft}}
+  - {value: "a white marble sculpture carved in high detail, soft gallery light on polished stone", props: {family: craft}}
+  - {value: "an isometric miniature diorama, a tidy cutaway world on a floating square base", props: {family: craft}}
+  - {value: "a ligne claire comic panel with clean even black outlines, flat colours and precise architectural backgrounds", props: {family: comic}}
+  - {value: "a crosshatched black-and-white graphic novel page with heavy spotted blacks and dramatic ink work", props: {family: comic}}
+  - {value: "a 1950s pulp magazine cover painted in lurid colour with dramatic lighting and a worn, creased paper texture", props: {family: comic}}
+  - {value: "a 1980s cel anime frame with soft painted gradients, rounded linework and a hazy film-grain glow", props: {family: anime}}
+  - {value: "a watercolour anime key visual with luminous skies, detailed painted backgrounds and clean character lines", props: {family: anime}}

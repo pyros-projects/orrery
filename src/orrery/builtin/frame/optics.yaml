@@ -1,0 +1,12 @@
+meta: {source: "orrery pack: what a lens does to a photograph, described as what you see in it (focal lengths and camera names alone barely move image models)", builtin: true}
+entries:
+  - "a very shallow depth of field, the background melting into soft round blur"
+  - "a wide-angle view, near things looming large and the edges of the frame stretching outward"
+  - "a long telephoto view, the background stacked close behind the subject and flattened"
+  - "macro close focus, only a thin sliver sharp and everything around it dissolving"
+  - "a tilt-shift blur at the top and bottom of the frame, so the whole scene looks like a miniature model"
+  - "a fisheye curve bending every straight line around the centre"
+  - "anamorphic lens flare streaking horizontally across the frame and oval highlights in the blur"
+  - "the soft, slightly smeared focus of a pinhole camera, the corners falling off into dark vignette"
+  - "deep focus, everything from the nearest pebble to the far horizon sharp"
+  - "a hazy, glowing softness from a diffusion filter, every highlight wrapped in a halo"

@@ -4,7 +4,7 @@ note: "One unbroken camera move that no real camera could make: from a wide view
 tags: [h3, camera]
 ---
 @h3 t2va 16:9
-style: live-action, cinematic, photorealistic, one unbroken camera move
+style: live-action, cinematic, photorealistic, one continuous unbroken ten-second shot
 $start = __world/landscapes__
 $portal = __scale/portals__
 $end = {__world/landscapes__|__tour/rooms__}

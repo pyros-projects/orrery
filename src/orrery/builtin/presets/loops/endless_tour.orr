@@ -5,7 +5,7 @@ tags: [loops, h3, reel, motion_context]
 ---
 @h3 t2va 16:9
 context: 22
-style: live-action, cinematic, photorealistic, one smooth stabilised take at eye level
+style: live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level
 $house = __tour/architecture__
 MUSIC: N/A
 
@@ -13,7 +13,7 @@ CHUNK the entrance
 $room = __tour/rooms__
 $thr = __tour/thresholds__
 SHOT 10s | push in, slow
-The camera glides at eye level into $room, inside $house. It moves no faster than a slow walk and never shakes. Nobody looks at the camera; the room simply goes on around it. In the final second the camera turns slightly and comes to rest exactly facing $thr.
+The camera glides at eye level into $room, inside $house. It moves no faster than a slow walk and never shakes. Nobody looks at the camera, and the room simply goes on around it. In the final second the camera turns slightly and comes to rest exactly facing $thr.
 SFX: $room.sfx; $house.sfx
 HANDOFF: the camera rests squarely facing $thr
 
