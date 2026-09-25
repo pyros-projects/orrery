@@ -138,14 +138,16 @@ clip, each clip ending on a framed threshold the next one opens), a set change
 where stagehands strike one place and reveal the next (Pyro's tested idea and
 nineteen more mechanisms in `__transitions/between__`), a drone odyssey, a
 rabbit hole that dives into ever smaller details and comes out at a new scale,
-and a time machine over one street corner from 1850 to 3000. `onebutton/` is
+a time machine over one street corner from 1850 to 3000, and the Backrooms: a
+found-footage walk on a 1990s camcorder that noclips from one empty level to
+the next. `onebutton/` is
 OneButtonPrompt's promise without its slop: `still` (Krea) and `clip` (H3)
 roll a person, animal, object, idea or landscape, a moment that happens to it,
 a place it belongs in, a look and a composition, and `$wild` dials from tame
 to unhinged. They draw on the pack libraries: `world/` (landscapes, weather,
 habitats), `looks/` (fifty-odd video looks with their own camera, sound and
 music, still looks by family), `moments/`, `subjects/`, `frame/`, `drone/`,
-`tour/`, `transitions/`, `scale/` and `time/`. Styles are named by medium,
+`tour/`, `transitions/`, `scale/`, `time/` and `backrooms/`. Styles are named by medium,
 era, format and defects, never by artist: that is what MiniMax H3 follows, and
 it keeps the pack free of borrowed names. `orrery preset list
 --folder krea` shows them with their titles.

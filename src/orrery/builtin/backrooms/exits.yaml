@@ -1,0 +1,10 @@
+meta: {source: "orrery pack: how the camera leaves one level in the final second (value, a clause) and arrives in the next (open), the noclip handoff of loops/backrooms", builtin: true}
+entries:
+  - {value: "the camera walks straight into a wall and sinks through it, the picture tearing into glitches", props: {open: "The camera stumbles out of a wall"}}
+  - {value: "the damp carpet gives way under the camera and it drops through the floor into darkness", props: {open: "The camera drops out of a ceiling tile and lands with a jolt"}}
+  - {value: "the camera pushes open a plain door at the end of the room onto total darkness", props: {open: "The door clicks shut behind the camera"}}
+  - {value: "the lights go out panel by panel toward the camera until the frame is black", props: {open: "The lights stutter back on, panel by panel"}}
+  - {value: "the camera steps into still water that is far deeper than it looked and sinks", props: {open: "The camera rises dripping out of shallow water"}}
+  - {value: "the camera steps into an elevator and its doors slide shut", props: {open: "The elevator doors slide open"}}
+  - {value: "the camera crawls into a dark vent at floor level", props: {open: "The camera crawls out of a vent at floor level"}}
+  - {value: "the tape rolls and the picture dissolves into VHS static", props: {open: "The static clears as the tape picks up again"}}

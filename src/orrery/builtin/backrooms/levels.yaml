@@ -1,0 +1,15 @@
+meta: {source: "orrery pack: liminal spaces for an endless found-footage walk; empty, ordinary and wrong (start: the classic yellow rooms that open the loop)", builtin: true}
+entries:
+  - {value: "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it", props: {start: "yes", sfx: "the loud, even buzz of fluorescent lights and the soft squelch of damp carpet"}}
+  - {value: "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere", props: {sfx: "water lapping gently and a long, hollow echo"}}
+  - {value: "an endless concrete parking garage, empty numbered bays and low ceilings under flickering orange sodium lights", props: {sfx: "a ventilation drone and water dripping into a puddle"}}
+  - {value: "a hotel corridor that runs on for ever, patterned red carpet, identical numbered doors and wall lamps at even intervals", props: {sfx: "a television muffled behind one of the doors and an ice machine humming"}}
+  - {value: "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights", props: {sfx: "soft background music from ceiling speakers and a distant escalator running"}}
+  - {value: "a vast open-plan office of grey cubicles, old monitors glowing green on every desk", props: {sfx: "the high whine of old monitors and a photocopier running by itself"}}
+  - {value: "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs", props: {sfx: "a clock ticking loudly and a floor polisher somewhere far away"}}
+  - {value: "a concrete stairwell that goes down floor after floor, the same number painted on every landing", props: {sfx: "footsteps echoing from far below"}}
+  - {value: "narrow maintenance tunnels lined with dripping pipes, valves and dim caged bulbs", props: {sfx: "pipes clanking and steam hissing"}}
+  - {value: "a huge, dim hall of carpet and square support pillars with no walls in sight", props: {sfx: "a very low hum and an almost total silence"}}
+  - {value: "an empty indoor play area of coloured ball pits and plastic tubes, half the lights switched off", props: {sfx: "a buzzing arcade machine and a single ball rolling somewhere"}}
+  - {value: "an airport gate lounge at night, rows of empty seats and departure boards showing nothing", props: {sfx: "an announcement chime with no announcement and an empty baggage belt turning"}}
+  - {value: "a 24-hour laundromat where every machine is turning and no one is there", props: {sfx: "dryers tumbling and a fluorescent tube ticking"}}

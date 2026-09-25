@@ -1,0 +1,27 @@
+---
+title: "Backrooms"
+note: "An endless found-footage walk through the Backrooms: empty, ordinary places that go on for ever, filmed on a 1990s camcorder with the same date stamp in every clip. Each clip starts in the yellow rooms or wherever the last one fell, walks through a new level and noclips out in its final second (through a wall, the floor, a door, the dark, deep water, an elevator, a vent, tape static). Sometimes something happens far away. The fluorescent hum does the rest. Loop it on Motion Context with Run (Instant)."
+tags: [loops, h3, reel, motion_context, horror]
+---
+@h3 t2va 16:9
+context: 22
+style: found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp "JUN 14 1996 3:12 AM" in the lower corner, handheld at chest height and swaying gently with each step
+MUSIC: N/A
+
+CHUNK the yellow rooms
+$level = __backrooms/levels#start:yes__
+$exit = __backrooms/exits__
+$glimpse = {:3|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}
+SHOT 10s | push in, slow
+The camera operator walks slowly forward through $level. The place is completely empty and goes on in every direction$glimpse.
+SFX: $level.sfx; the camera operator's breathing and footsteps close to the microphone
+HANDOFF: $exit
+
+CHUNK the next level repeat forever
+$level = __backrooms/levels__
+$exit = __backrooms/exits__
+$glimpse = {:3|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}
+SHOT 10s | push in, slow
+$exit~1.open, into $level. The camera operator walks slowly on. The place is completely empty and goes on in every direction$glimpse.
+SFX: $level.sfx; the camera operator's breathing and footsteps close to the microphone
+HANDOFF: $exit
