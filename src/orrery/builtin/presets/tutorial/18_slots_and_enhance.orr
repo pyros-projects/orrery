@@ -1,0 +1,9 @@
+---
+title: "18 · Slots and > enhance"
+lesson: "Two more jobs for the language model. A --slot-- is written where it stands, after everything else has rolled, so the model sees the whole prompt around it. A line starting with > asks it to rewrite the rolled prompt. In an H3 screenplay a > before the first SHOT rewrites the prose of every shot and a > inside a SHOT only that shot's; dialogue is never touched. Both need a language model in the gear; the command line keeps them as written."
+tags: [tutorial, llm]
+---
+# The slot is written first; then > rewrites the whole prompt around it.
+$who = __characters/average_joes__
+a 35mm photograph of $who on the last night bus, --one small object in their hands that tells their story, 4 to 8 words--, sodium light through rain-streaked windows
+> rewrite it as one flowing sentence a photographer would say, keeping every detail

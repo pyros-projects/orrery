@@ -1,0 +1,10 @@
+---
+title: "14 · Filters that follow a roll"
+lesson: "A filter can read what was rolled before it: __world/habitats#habitat:$animal.habitat__ keeps only the places whose habitat matches the animal's, so the manta ray swims in the sea and never lands on a beach. {|golden |misty } leaves a word out now and then. Lines starting with # are comments: notes for you that never reach the model."
+tags: [tutorial]
+---
+# The animal is rolled first; its habitat property then filters the places.
+$animal = __subjects/animals__
+$home = __world/habitats#habitat:$animal.habitat__
+# An empty option makes the next word optional.
+a wildlife photograph of $animal in $home, {|golden |misty }morning light, long telephoto lens, crisp detail in fur, feathers and water

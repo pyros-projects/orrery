@@ -17,7 +17,8 @@ const REF = [
   ["Bindings and extras", [
     ["$hero = __creature__", "roll once on its own line, reuse everywhere as $hero", "$hero = __creature__\n$hero meets another $hero"],
     ["$hero → dial", "every binding is a dial under the editor: pick an entry or type any expression, empty = its default roll; Save bakes dials in (CLI: --set hero=owl)", ""],
-    ["> cinematic, moody", "enhancement note: recorded with the picks, not pasted into the prompt", "> cinematic, moody"],
+    ["> make it moody and cinematic", "with a language model set (the gear), it rewrites the rolled prompt as asked; in a screenplay a > before the first SHOT covers every shot's prose, one inside a SHOT only that shot, never dialogue", "> make it moody and cinematic"],
+    ["--one detail, 5 to 8 words--", "a slot the language model writes where it stands, seeing the whole rolled prompt (and, in a reel, the clip before)", ""],
     [": w832 h1216", "size: the node's width and height outputs (wire them into your latent)", ": w832 h1216"],
     [": x8 seed=100", "CLI only (orrery expand); in ComfyUI use the Run count and the seed widget", ""],
     ["a __creature__", "a/an follows the picked word: “an axolotl”", ""],

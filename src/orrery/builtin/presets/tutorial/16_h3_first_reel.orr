@@ -1,0 +1,26 @@
+---
+title: "16 · Your first endless reel (H3)"
+lesson: "A reel is one screenplay for a chain of clips on H3 Motion Context. Everything before the first CHUNK (style, CAST, bindings) holds for every clip; each run writes one CHUNK, and repeat forever plays the second one again and again, rolling a new room every time. HANDOFF is how one clip ends and the next begins; $room~1 is the room of the clip before. Wire load_index and save_index into Motion Context's Load and Save Latent, set Generate to ×10 and watch the segment count up; Restart goes back to the first clip."
+tags: [tutorial, h3, reel]
+---
+@h3 t2va 16:9
+style: live-action, cinematic, one continuous unbroken ten-second shot, lantern light
+context: 22
+MUSIC: N/A
+
+CAST
+KEEPER: an old lighthouse keeper, in a yellow oilskin coat and a knitted cap
+
+CHUNK the first room
+$room = __tour/rooms__
+SHOT 10s | push in, slow
+KEEPER walks slowly through $room, holding up a lantern, and stops in front of a closed door.
+SFX: $room.sfx; slow footsteps
+HANDOFF: KEEPER stands at a closed door, the lantern raised
+
+CHUNK the next room repeat forever
+$room = __tour/rooms__
+SHOT 10s | push in, slow
+KEEPER opens the door and leaves $room~1 behind, walks slowly through $room with the lantern raised, and stops in front of the next closed door.
+SFX: $room.sfx; a door creaking open
+HANDOFF: KEEPER stands at a closed door, the lantern raised

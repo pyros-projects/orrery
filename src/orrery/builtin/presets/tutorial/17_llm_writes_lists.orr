@@ -1,0 +1,9 @@
+---
+title: "17 · The language model writes your lists"
+lesson: "With a language model set in the gear (Krea 2's qwen3vl_4b, or a Qwen3-VL build), a library that does not exist yet is written the first time the node runs, using the lines around it as context. :20 tops a library up to at least 20 entries; words in parentheses right after it are directions for the model and never reach the prompt. New lists wait in the Libraries tab under To review until you Accept or Discard them."
+tags: [tutorial, llm]
+---
+# Needs a language model: the gear → Model. Without one, unknown libraries are an error.
+$shoe = __runway_shoes:20__
+$venue = __unusual_runway_venue__(a surprising place for a fashion show, 4 to 8 words)
+a runway photograph: a model walks through $venue in $shoe, direct on-camera flash, a crowded front row blurred at the edges

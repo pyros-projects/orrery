@@ -3,7 +3,7 @@ import json
 import pytest
 
 from orrery.cli import main
-from orrery.dsl import expand
+from orrery.dsl import expand, wanted_libraries
 from orrery.h3 import compile_scene
 from orrery.home import Home
 from orrery.presets import (
@@ -22,26 +22,41 @@ def tutorial(home):
     return list_presets(Home(home), folder="tutorial")
 
 
-def test_thirteen_tutorial_presets_ship_in_order(home):
+LESSONS = 18
+
+
+def test_eighteen_tutorial_presets_ship_in_order(home):
     names = tutorial(home)
-    assert len(names) == 13
+    assert len(names) == LESSONS
     assert names == sorted(names)
     assert names[0] == "tutorial/01_first_wildcard"
 
 
-@pytest.mark.parametrize("n", range(13))
+@pytest.mark.parametrize("n", range(LESSONS))
 def test_every_lesson_has_title_lesson_and_tag(home, n):
     meta = preset_meta(Home(home), tutorial(home)[n])
     assert meta["title"] and len(meta["lesson"]) > 40
     assert "tutorial" in meta["tags"]
 
 
-@pytest.mark.parametrize("n", range(13))
+@pytest.mark.parametrize("n", range(LESSONS))
 def test_every_lesson_runs_clean_across_seeds(home, n):
     h = Home(home)
-    text = load_preset(h, tutorial(home)[n])
+    name = tutorial(home)[n]
+    text = load_preset(h, name)
+    if "llm" in preset_meta(h, name)["tags"]:  # the lists the language model would write, stubbed
+        for lib, least in wanted_libraries(text).items():
+            path = h.library_dir / f"{lib}.txt"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("\n".join(f"{lib} {i}" for i in range(max(least, 3))) + "\n")
     libs, weights = h.libraries(), h.weights()
     for seed in SEEDS:
+        if "CHUNK" in text:  # a reel: its first clip and one that reads the clip before ($x~1)
+            for segment in (0, 1 + seed % 3):
+                result = compile_scene(text, seed, libs, weights, segment=segment)
+                assert result.lint == [], (seed, segment, result.lint)
+                assert "__" not in result.text and "$" not in result.text, (seed, segment, result.text)
+            continue
         if text.lstrip().startswith("@h3"):
             result = compile_scene(text, seed, libs, weights)
             assert result.lint == [], (seed, result.lint)

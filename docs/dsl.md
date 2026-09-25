@@ -17,7 +17,8 @@ Every construct of orrery's template language, where libraries live, how Dynamic
 | `__world/habitats#habitat:$animal.habitat__` | a filter that depends on what was rolled before (`#key:$var` or `#key:$var.field`): the manta ray lands in the sea, never on a beach |
 | `? $w.kind=rain,snow: …` | a line kept only when the condition holds (`!=` for not); works for SFX lines too |
 | `{? $w.kind=rain: wet\|dry}` | a choice made by a condition instead of the dice |
-| `> moody, cinematic` | enhancement instruction (recorded, not yet executed) |
+| `> make it moody and cinematic` | with a language model set in the node, it rewrites the rolled prompt as asked; in a screenplay a `>` before the first `SHOT` rewrites every shot's prose and one inside a `SHOT` only that shot's, never dialogue. The CLI records it with the picks |
+| `--one detail, 5 to 8 words--` | a slot: the language model writes it where it stands, after everything else has rolled (see [wildcard-manager.md](wildcard-manager.md)) |
 | `# a note` | a comment: a line starting with `#` never reaches the model (filters like `__lib#key:value__` are not comments) |
 | `: x8 seed=100 w1216 h832` | batch parameters |
 

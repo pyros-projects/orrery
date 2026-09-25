@@ -20,8 +20,9 @@ uv run orrery compile @h3/winter_forest --seed 7
 ```
 
 Built-in presets are read-only (`preset save NAME @NAME` makes a copy yours):
-`tutorial/` walks through the DSL from a first wildcard to a three-shot H3
-scene, `krea/` holds Krea 2 stills (natural language, the medium named, text
+`tutorial/` walks through the DSL in eighteen lessons, from a first wildcard
+to a three-shot H3 scene, an endless reel and the language model's lists,
+slots and `>` rewrites, `krea/` holds Krea 2 stills (natural language, the medium named, text
 to render in quotes), and `h3/` holds MiniMax H3 scenes (dialogue in German
 and Cantonese, a voiceover, fast cuts, an animated fable, on-screen music, and
 an I2VA starter for your own stills, a three-clip reel for H3 Motion
