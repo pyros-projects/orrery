@@ -19,7 +19,7 @@ from orrery.rng import Rng, weighted_pick
 _BRACE = re.compile(r"\{([^{}]*)\}")
 # __name[tag]:N__(directions): N = at least N entries; (directions) guide the model that writes the
 # library and never reach the prompt
-_LIB = re.compile(r"__(\w+(?:/\w+)*)(?:\[([\w-]+)\])?((?:#[\w-]+:[\w-]+)*)(?::(\d+))?__(?:\(([^()]*)\))?")
+_LIB = re.compile(r"__(\w+(?:/\w+)*)(?:\[([\w-]+)\])?((?:#[\w-]+:\$?[\w.-]+)*)(?::(\d+))?__(?:\(([^()]*)\))?")
 _VAR = re.compile(r"\$([A-Za-z_]\w*)(?:~(\d+))?(?:\.([A-Za-z_][\w-]*))?")  # $x, $x~N (N clips ago), $x.field
 # `$w.kind=rain,snow`, `$w!=x`: a condition on a binding's text or on a property of its pick
 _COND = r"\$([A-Za-z_]\w*)(?:\.([A-Za-z_][\w-]*))?\s*(!=|=)\s*([\w-]+(?:\s*,\s*[\w-]+)*)"
@@ -30,8 +30,8 @@ _BINDING_LINE = re.compile(r"^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$")
 _MULTI = re.compile(r"^(\d+)(?:-(\d+))?\$\$(.+)$")
 _WEIGHTED = re.compile(r"^(.*?):(\d+(?:\.\d+)?)$")
 _DP_WEIGHT = re.compile(r"^\s*(\d+(?:\.\d+)?)::(.*)$", re.DOTALL)  # Dynamic Prompts: {3::red|1::blue}
-_LIB_ONLY = re.compile(r"^__(\w+(?:/\w+)*)(?:\[([\w-]+)\])?((?:#[\w-]+:[\w-]+)*)(?::\d+)?__(?:\([^()]*\))?$")
-_PROP = re.compile(r"#([\w-]+):([\w-]+)")
+_LIB_ONLY = re.compile(r"^__(\w+(?:/\w+)*)(?:\[([\w-]+)\])?((?:#[\w-]+:\$?[\w.-]+)*)(?::\d+)?__(?:\([^()]*\))?$")
+_PROP = re.compile(r"#([\w-]+):(\$?[\w.-]+)")  # a value may be $var or $var.field
 _ARTICLE = re.compile(r"(?:A|An|The) ")
 _LORA_TAG = re.compile(r"<lora:[^<>]*>")  # opaque: LoRA file names may contain __
 _HIDDEN = re.compile("\x00(\\d+)\x00")
@@ -251,12 +251,19 @@ class Expander:
         if name not in self.libraries:
             raise MissingLibrary(name)
         family = f"__{name}__"
-        wanted = [(k, v.casefold()) for k, v in _PROP.findall(props or "")]
+        wanted = [(k, self._resolve(v).casefold()) for k, v in _PROP.findall(props or "")]
         entries = [e for e in self.libraries[name].entries if (tag is None or tag in e.tags)
                    and all((e.prop(k) or "").casefold() == v for k, v in wanted)]
         if not entries:
             raise ValueError(f"{_label(name, tag, props)} matches no entry")
         return family, [(e.value, e.weight * self.learned(f"{family}={e.value}"), e.props) for e in entries]
+
+    def _resolve(self, value: str) -> str:
+        """A filter value: as written, or `$var` / `$var.field` from what was rolled before."""
+        if not value.startswith("$"):
+            return value
+        name, _, field = value[1:].partition(".")
+        return (self.var_props.get(name, {}).get(field) if field else self.vars.get(name)) or ""
 
     def _library(self, name: str, tag: str | None, label_prefix: str, props: str = "") -> str:
         family, pool = self._pool(name, tag, props)

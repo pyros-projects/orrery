@@ -340,3 +340,15 @@ def test_lines_and_choices_can_depend_on_a_property():
     seen = {expand(t, s, WEATHER).text for s in range(20)}
     assert seen == {"Breath fogs in the cold. The street is dry.", "The street is wet."}
     assert expand("$w = __weather__\n? $w.kind!=snow: Umbrellas.", 2, WEATHER).text in ("", "Umbrellas.")
+
+
+def test_a_filter_can_depend_on_what_was_rolled_before():
+    """Codie's dependent choice: the place follows the animal's habitat."""
+    libs = {"animal": Library("animal", [Entry("a whale", props=(("habitat", "ocean"),)),
+                                         Entry("a goat", props=(("habitat", "mountain"),))]),
+            "place": Library("place", [Entry("a kelp forest", props=(("habitat", "ocean"),)),
+                                       Entry("a scree slope", props=(("habitat", "mountain"),))])}
+    seen = {expand("$a = __animal__\n$a in __place#habitat:$a.habitat__", s, libs).text for s in range(20)}
+    assert seen == {"a whale in a kelp forest", "a goat in a scree slope"}
+    kinds = {expand("$k = {ocean|mountain}\n__place#habitat:$k__", s, libs).text for s in range(20)}
+    assert kinds == {"a kelp forest", "a scree slope"}
