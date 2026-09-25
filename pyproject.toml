@@ -2,6 +2,7 @@
 name = "orrery"
 version = "0.1.0"
 description = "Prompt DSL that records every pick, an LLM wildcard manager, and a MiniMax H3 compiler"
+license = "MIT"
 authors = [
     { name = "pyros-projects", email = "pyros.sd.models@gmail.com" }
 ]

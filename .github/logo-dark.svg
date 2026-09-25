@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="120" height="120" role="img" aria-label="orrery">
+  <circle cx="20" cy="20" r="4.5" fill="#e2b45c"/>
+  <ellipse cx="20" cy="20" rx="17" ry="7" fill="none" stroke="#e2b45c" stroke-opacity=".55" stroke-width="1.1" transform="rotate(-24 20 20)"/>
+  <circle cx="35" cy="13" r="2.6" fill="#5cc8c2"/>
+</svg>

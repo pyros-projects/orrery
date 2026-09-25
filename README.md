@@ -1,330 +1,269 @@
-# orrery
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset=".github/logo-light.svg">
+    <img alt="orrery" src=".github/logo-light.svg" width="100">
+  </picture>
 
-A prompt language whose every expansion records which choices produced which
-text, an LLM wildcard manager that edits your libraries in plain language, and
-a compiler that turns screenplays into MiniMax H3 prompts.
+  <h1>orrery</h1>
+  <p>Endless prompt variety that learns your taste, from Krea stills to multi-clip MiniMax H3 videos, right inside ComfyUI.</p>
+</div>
 
-```
-$hero = __animal__
-$hero in a {misty|frozen:3} forest, {1-2$$__style__}
-```
+<div align="center">
 
-Status: v0 (CLI + ComfyUI nodes). Design: [docs/concept.md](docs/concept.md),
-[docs/h3.md](docs/h3.md), [docs/plan-v0.md](docs/plan-v0.md). Mock:
-[docs/mock/](docs/mock/prompt-galaxy-mock.html).
+[![License: MIT][license-shield]][license-url]
+[![Version][version-shield]][version-url]
+[![Python 3.13+][python-shield]][python-url]
+[![ComfyUI custom node][comfyui-shield]][comfyui-url]
+[![MiniMax H3][h3-shield]][h3-url]
 
-## Setup
+</div>
+
+<div align="center">
+  <a href="#quick-start">Quick Start</a> &middot;
+  <a href="#features">Features</a> &middot;
+  <a href="#documentation">Docs</a> &middot;
+  <a href="docs/h3.md">H3 guide</a> &middot;
+  <a href="https://github.com/pyros-projects/orrery/issues/new">Report Bug</a>
+</div>
+
+<br>
+
+---
+
+<div align="center">
+  <img src=".github/showcase.png" alt="The orrery node in ComfyUI: the Backrooms preset, an endless found-footage reel, with its variables, reel timing and Generate ×N" width="820">
+</div>
+
+## Why orrery?
+
+Wildcard generators roll blindly. You get variety, but you cannot tell which
+choice made the image you loved, and the lists never get better. MiniMax H3
+adds a second chore: its prompts are structured screenplays with timed shots,
+camera moves, voices, sound, reference labels and continuity from one clip to
+the next, and writing them by hand is slow and easy to get wrong.
+
+If you prompt Krea 2, MiniMax H3 or any other model in ComfyUI and want every
+run to be different, and a little better than the last, orrery is for you.
+
+## Features
+
+- **Learns your taste.** Rate outputs as love, like, nope or hate, and the
+  choices behind them come up more or less often from then on.
+- **Writes MiniMax H3 screenplays for you.** You write shots, camera moves,
+  lines and sounds like a script; orrery turns them into H3's official prompt
+  format and warns about what the model would ignore.
+- **Makes videos that go on for ever.** Reels chain clips through H3 Motion
+  Context, each clip opening where the last one ended; queue ten clips with
+  one click, watch which one is rendering, restart from the top.
+- **Ships a content pack worth pressing Generate for.** 63 presets and 878
+  hand-written entries: drone odysseys, set changes, the Backrooms, a time
+  machine, one-click random stills and clips, a creature test for H3.
+- **Keeps random coherent.** The sound matches the place, the animal lands in
+  a habitat it lives in, and a film look brings its own camera move and music.
+- **Writes the lists you don't have.** Name a wildcard list that doesn't exist
+  and a local language model creates it; edit lists in plain language and
+  approve every change first.
+- **Traces every output back.** Each output remembers its template, seed and
+  every choice it rolled: re-run it exactly, or change one choice and keep the
+  rest.
+- **One node, a whole app.** Editor with syntax colours and completion, test
+  rolls and frequency counts, a library editor and the rated gallery, inside
+  ComfyUI.
+- **Uses the wildcards you already have.** Dynamic Prompts syntax works as it
+  is, and whole wildcard packs import with their cross-references intact.
+
+## When to Use
+
+| Situation | orrery? |
+|---|---|
+| You prompt image or video models in ComfyUI and want variety that improves with your ratings | Yes |
+| You make MiniMax H3 videos, single scenes or long chains of clips | Yes |
+| You have Dynamic Prompts or Civitai wildcard folders | Yes, they drop in |
+| You want an image or video generator | No: orrery writes prompts, your models render them |
+| You use H3 through a hosted API (MiniMax Hub, fal) | No: hosted endpoints rewrite prompts before the model sees them; orrery targets local ComfyUI |
+
+## Quick Start
 
 ```bash
-cd ~/projects/private/orrery
+git clone https://github.com/pyros-projects/orrery.git
+ln -s "$PWD/orrery/comfyui" /path/to/ComfyUI/custom_nodes/orrery
+```
+
+Restart ComfyUI and add **orrery → Orrery Prompt**. Wire its `text` output into
+your prompt input (and `width`, `height`, `length` into the latent for H3),
+open a preset such as `@onebutton/clip` or `@loops/backrooms`, and press
+**Generate**. **New** starts a blank H3 scene, reel, reference or keyframe
+screenplay, or a Krea prompt, each with a quickstart in its comments.
+
+## Install
+
+### ComfyUI
+
+Link the `comfyui` folder into ComfyUI's `custom_nodes`, as in Quick Start. It
+adds the repo's `src/` to the path itself, and its only dependency, PyYAML,
+ships with ComfyUI. On Windows use a junction:
+
+```bat
+mklink /J C:\path\to\ComfyUI\custom_nodes\orrery C:\path\to\orrery\comfyui
+```
+
+### Command line
+
+```bash
+cd orrery
 uv sync                  # core: only PyYAML
-uv sync --extra local    # + torch/transformers for local LLMs in the wildcard manager
+uv sync --extra local    # + torch and transformers for a local language model
 ```
 
-Everything lives in the **orrery home** (`$ORRERY_HOME`, default `~/.orrery`):
-`library/*.yaml`, `weights.json`, `galaxy.jsonl`, `orrery.yaml`, `history/`.
-The CLI and the ComfyUI nodes share it.
+### Prerequisites
 
-`~/.orrery/orrery.yaml` picks the model for the wildcard manager:
+| Requirement | Notes |
+|---|---|
+| Python | 3.13+ |
+| ComfyUI | tested with frontend 1.53 |
+| MiniMax H3 nodes | only for video: Reference to Video, and Motion Context for reels |
+| A language model | optional: a text encoder that is a whole LLM, such as Krea 2's `qwen3vl_4b`, lets the node write libraries and `--slots--` |
 
-```yaml
-models:
-  library:
-    backend: transformers
-    path: /home/pyro/repos/comfy-ui/models/LLM/Qwen3.5-4B
-    device: auto        # cpu while ComfyUI needs the VRAM
-    temperature: 0.3
+MiniMax H3's open weights are licensed outside the EU, the UK, South Korea and
+the US; check the model's license for where you are. orrery itself ships no
+model.
+
+## Usage
+
+### The template language
+
+```text
+$hero = __subjects/animals__
+a photograph of $hero in a {misty|frozen:3} forest at dawn, 35mm film
 ```
 
-Any OpenAI-compatible server works too (`backend: openai`, `base_url`, `model`).
-Qwen3.5-4B handles semantic edits; 2B is too weak for them.
-
-## Prompt DSL
+```bash
+uv run orrery expand '$hero = __subjects/animals__
+a photograph of $hero in a {misty|frozen:3} forest at dawn, 35mm film' --seed 5 -n 3
+```
 
 | Syntax | Meaning |
 |---|---|
-| `__animal__` | one entry from `library/animal.yaml` (or `animal.txt`, one entry per line), weighted by learned weights |
-| `__film/genre__` | a library in a folder: `library/film/genre.yaml` or `.txt`, as in z-explorer |
-| `__animal[feline]__` | only entries tagged `feline` |
-| `__characters/cyberpunk#gender:female__` | only entries with that property (`props: {gender: female}` in the YAML, or `gender:female` typed into an entry's tag field); several `#key:value` must all match, in any case |
-| `{a\|b\|c:3}` | inline choice; `:3` is a static weight (Dynamic Prompts' `{3::c\|a\|b}` works too) |
-| `{\|red }car` | an empty option makes a word optional; the other options keep their spaces |
-| `{1-2$$__style__}` | pick 1–2 distinct values |
-| `$hero = __animal__` | bind once, reuse everywhere |
-| `@include effects/living_clay` + indented `room = the salon` | embed a preset where it stands; indented `key = value` lines turn its dials, so a preset is an operator with parameters (its `@h3` line gives way to yours) |
-| `$w.sfx` | a property of the entry `$w` rolled (empty if it has none): the sound follows the weather |
-| `__world/habitats#habitat:$animal.habitat__` | a filter that depends on what was rolled before (`#key:$var` or `#key:$var.field`): the manta ray lands in the sea, never on a beach |
-| `? $w.kind=rain,snow: …` | a line kept only when the condition holds (`!=` for not); works for SFX lines too |
-| `{? $w.kind=rain: wet\|dry}` | a choice made by a condition instead of the dice |
-| `> moody, cinematic` | enhancement instruction (recorded, not yet executed) |
-| `# a note` | a comment: a line starting with `#` never reaches the model (filters like `__lib#key:value__` are not comments) |
-| `: x8 seed=100 w1216 h832` | batch parameters |
+| `__animal__`, `__film/genre__` | one entry from a library (a YAML or plain `.txt` wildcard file) |
+| `__animal[feline]__`, `__characters/noir#gender:female__` | only entries with that tag or property |
+| `{a\|b\|c:3}` | an inline choice, weighted (`{3::c\|a\|b}` works too) |
+| `$hero = __animal__` | roll once, reuse everywhere |
+| `$w.sfx` | a property of what was rolled: the sound follows the weather |
+| `? $w.kind=rain,snow: …` | a line kept only when the condition holds |
+| `@include effects/living_clay` | embed another preset, overriding its variables |
+| `# a note` | a comment; it never reaches the model |
 
-Libraries live in the home folder (`~/.orrery` unless set otherwise, see
-below) under `library/`, in any subfolders. Plain `.txt` wildcard files work as
-they are (one entry per line, `#` comments), so Dynamic Prompts collections can
-be dropped in; the first edit in the node turns one into YAML. An entry is a
-template itself: `__80s/Women/80s_sports__` or `{a|b}` inside it expand too,
-as in Dynamic Prompts (a library that comes back to itself is an error).
-Library names are word characters and `/`: a file with `-` or spaces in its
-path is not found. When a name exists
-as both, the YAML wins. `orrery lib import FOLDER [--into dp] [--merge NAME]`
-brings in a whole pack: names become word characters (`80s-pack/daily-wear.txt`
-is `__80s_pack/daily_wear__`), references between its files follow, readmes and
-duplicate files are skipped, and `--merge` turns a folder of one-prompt files
-into one library. `orrery lib mv OLD NEW` (or Rename in the Libraries tab)
-moves a library into a folder or a new name; its learned weights and every
-`__OLD__` in your libraries and presets follow. The Libraries tab rereads the folder whenever you open it and
-shows big libraries 200 entries at a time; its search filters the entries. The home folder is set in the node's gear (a pointer in
-`~/.config/orrery/home`); `ORRERY_HOME`, `--home` and a node's own home field win
-over it.
+→ [The full language](docs/dsl.md): libraries, conditions, dependent filters,
+variables you turn from outside, and importing wildcard packs.
 
-```bash
-uv run orrery expand '$hero = __animal__
-$hero in a {misty|frozen} forest' --seed 5 -n 3        # --json for machines
+### A MiniMax H3 screenplay
+
+```text
+@h3 t2va 16:9 0.6MP
+style: live-action nature documentary, telephoto, crisp detail
+$animal = __subjects/animals__
+
+SHOT 5s | push in, small, slow
+In __world/habitats#habitat:$animal.habitat__, $animal lifts its head and turns toward the sound of thunder.
+NARRATOR (calm low voice, voiceover): Every storm is news out here.
+SFX: $animal.sfx; distant thunder rolling in
+
+SHOT 3s | cut, static
+A close-up as the first heavy raindrops hit the ground around it.
+SFX: rain beginning to fall
 ```
 
-A template's bindings are its **dials**: turn one from outside without editing
-the template, with a value or any DSL expression. A preset stays a preset; the
-galaxy records the dials next to its picks.
+orrery writes the official H3 prompt from it: camera sentences, timestamps,
+speaker IDs, `<d>` dialogue tags, the soundscape and the music field. `0.6MP`
+sizes the canvas by area. The same file compiles on the command line with
+`uv run orrery compile scene.orr --seed 7`.
 
-```bash
-uv run orrery compile @effects/subsurface_travel --set start="upper back" --set 'entity=__bh_entity__'
+→ [H3 screenplays](docs/h3.md): every mode (t2va, i2va, fl2va, l2va, ref2va),
+casts of reference images and videos, and lint.
+
+### An endless reel
+
+```text
+CHUNK the next room repeat forever
+$room = __tour/rooms__
+SHOT 10s | push in, slow
+The door swings open and the camera glides into $room, and comes to rest facing a closed door.
+HANDOFF: the camera rests squarely facing a closed door
 ```
 
-## Presets and template references
+Each run writes one clip. Wire `load_index` and `save_index` into Motion
+Context's Load and Save Latent, set Generate to ×10, and the reel plays clip
+after clip, every one opening on the frame the last one closed on.
 
-Anywhere a template is expected (CLI arguments, `preset save`), you can pass:
+## Documentation
 
-| Reference | Resolves to |
+| Guide | What is in it |
 |---|---|
-| `@forest`, `@h3/winter_forest` | a preset in `~/.orrery/presets/` (folders are path segments) |
-| `#1a2b3c4d5e6f7a8b` | the exact template a `galaxy.jsonl` line recorded (its `template` hash) |
-| a file path | the file's content |
-| anything else | the text itself |
+| [The prompt language](docs/dsl.md) | every construct, libraries and wildcard packs, variables you turn from outside |
+| [H3 screenplays](docs/h3.md) | modes, casts, reels, the compiler's output and lint |
+| [Presets and the content pack](docs/presets.md) | template references, saving presets, what ships built in |
+| [The ComfyUI nodes](docs/comfyui.md) | outputs, the app's five tabs, Generate and Restart |
+| [The wildcard manager](docs/wildcard-manager.md) | editing libraries in plain language, the language model in ComfyUI |
+| [Configuration](docs/configuration.md) | the orrery home folder and model settings |
 
-```bash
-uv run orrery preset save h3/winter_forest examples/forest.orr --tags winter,moody
-uv run orrery preset save keeper '#1a2b3c4d5e6f7a8b'   # a template that made a good output
-uv run orrery preset tag keeper portrait
-uv run orrery preset list --tag winter                 # or --folder h3
-uv run orrery compile @h3/winter_forest --seed 7
-```
+## How It Works
 
-Built-in presets are read-only (`preset save NAME @NAME` makes a copy yours):
-`tutorial/` walks through the DSL from a first wildcard to a three-shot H3
-scene, `krea/` holds Krea 2 stills (natural language, the medium named, text
-to render in quotes), and `h3/` holds MiniMax H3 scenes (dialogue in German
-and Cantonese, a voiceover, fast cuts, an animated fable, on-screen music, and
-an I2VA starter for your own stills, a three-clip reel for H3 Motion
-Context, a drone flight, an impossible camera move that dives into a dewdrop
-and comes out elsewhere, and a world swap inside one take, and an entity test that shows how H3
-renders five non-human SCP entities, with a dial for naming them). `effects/` holds Ito-style body-horror operators in the lite format,
-from Codie's H3 tests: subsurface travel, body suit, mirror replacement, living
-paper, glass body, living clay, elastic body, hollow vessel, filament, human
-drawer and zipper spine, plus his operators surface press, feature migration,
-feature multiply, pattern takeover, organic aperture and organic interface,
-each with dials over its origin, room and ending; `@include` one into a reel
-chunk to use it as an operator. They
-follow Codie's rule for H3: turn an abstract property into a visible action
-with two states (elastic: two fixed points moving apart; clay: a press and a
-dent that stays). `characters/` holds seven sets of ten detailed people
-(`average_joes`, `models`, `gothic`, `cyberpunk`, `horror`, `noir`, `fantasy`),
-each with `gender` and `age` properties and hair and clothes rolled from nested
-libraries: `__characters/noir#gender:female__`. The two Katamori curators live
-in `__characters/horror#role:curator__`. `fashion/` strings snobby adjectives and impossible shapes
-into runway looks for Krea and H3 (`couture_*` libraries). `loops/` holds H3 Motion Context reels
-that never end (`repeat forever`, Run (Instant)): an endless tour through one
-building (Codie's Garamonde method: the building described again in every
-clip, each clip ending on a framed threshold the next one opens), a set change
-where stagehands strike one place and reveal the next (Pyro's tested idea and
-nineteen more mechanisms in `__transitions/between__`), a drone odyssey, a
-rabbit hole that dives into ever smaller details and comes out at a new scale,
-a time machine over one street corner from 1850 to 3000, and the Backrooms: a
-found-footage walk on a 1990s camcorder that noclips from one empty level to
-the next. `onebutton/` is
-OneButtonPrompt's promise without its slop: `still` (Krea) and `clip` (H3)
-roll a person, animal, object, idea or landscape, a moment that happens to it,
-a place it belongs in, a look and a composition, and `$wild` dials from tame
-to unhinged. They draw on the pack libraries: `world/` (landscapes, weather,
-habitats), `looks/` (fifty-odd video looks with their own camera, sound and
-music, still looks by family), `moments/`, `subjects/`, `frame/`, `drone/`,
-`tour/`, `transitions/`, `scale/`, `time/` and `backrooms/`. One library is
-licensed differently: `scp/entities` is adapted from the SCP Wiki and is
-CC BY-SA 3.0, each entry carrying its article's citation in `cite`. Videos
-made from it are adaptations as well: credit the cite and share them under
-CC BY-SA. Styles are named by medium,
-era, format and defects, never by artist: that is what MiniMax H3 follows, and
-it keeps the pack free of borrowed names. `orrery preset list
---folder krea` shows them with their titles.
+Every roll records which library entry or choice produced which words. Rating
+an output multiplies the learned weight of each of its picks, and those
+weights shape the next rolls. H3 screenplays pass through a scene model, so a
+loved pick stays loved whether it became a Krea still or an H3 video.
 
-Tags live in YAML front matter at the top of the preset file and are stripped
-before expansion:
-
-```
----
-tags: [moody, winter]
----
-@h3 t2va 16:9
-…
-```
-
-The ComfyUI node records every template it uses under its hash, so each
-galaxy line can be traced back to, and re-run from, its exact template.
-
-## Wildcard manager
-
-```bash
-uv run orrery lib list
-uv run orrery lib show animal                  # entries with learned weights
-uv run orrery lib gen weather --template scene.orr
-uv run orrery lib more style -n 8
-uv run orrery lib edit animal 'Lösch alle katzenartigen Tiere und mach daraus eine neue Liste "feline"'
-uv run orrery lib undo
-```
-
-The model only proposes. orrery shows how it understood the instruction and a
-diff, and writes nothing until you confirm (`--yes` skips the question).
-Every change can be undone, and learned weights move with renamed or moved
-entries.
-
-### The language model in ComfyUI
-
-In the node, the gear picks orrery's language model: a text encoder from
-ComfyUI's `text_encoders` folder that is a whole LLM, such as Krea 2's
-`qwen3vl_4b` or a Qwen3-VL 8B build (MiniMax H3's encoder is cut short and
-cannot write). A text encoder wired into the node's `clip` input wins over the
-setting. When the node runs, the model
-
-- creates a library the template names but you don't have (`__runway_shoes__`),
-  with the number of entries set in the gear, using the lines around it as
-  context;
-- tops up `__name:30__` to at least 30 entries, once;
-- follows directions written right after the library:
-  `__film_scene__(at least 30 words, describe set, actions, characters)`. They
-  never reach the prompt and stay with the library for later top-ups. A
-  library with directions gets only its directions, and an entry may be any
-  length (**Max tokens** in the gear, 16000 by default, bounds one answer); one
-  without gets the lines around it and a default of 1-4 lowercase words.
-- writes `--directions--` slots where they stand, seeing the whole compiled
-  prompt around them. From a reel's second segment on it also watches the clip
-  before (H3 Motion Context's Chain Video, one frame a second and the last one)
-  and continues it; the node's `previous` and `previous_audio` outputs hand the
-  last 3 s of that clip to the Reference to Video node's `ref_video`, for
-  `SHOT … | after video 1`:
-
-  ```
-  CHUNK next repeat forever
-  SHOT 5s | after video 1, tracking, slow
-  --what WASHER does in the next 5 seconds, moving the story on--
-  ```
-
-  In a reel with per-chunk CASTs, put **Orrery Refs** between your images and
-  Reference to Video: it hands each clip only the images its CAST uses, and
-  the prompt renumbers `<Picture N>` to match.
-
-  A slot the model leaves out keeps its directions as text (and a warning), so
-  a queued chain never breaks on one bad answer. The chain is found under
-  `output/h3_context`; wire a string into `latent_path` if yours lives
-  elsewhere.
-
-**Generate** (next to Test in the Prompt tab) queues only what this node feeds,
-up to its Save and Preview nodes, and the files those Save nodes write go to
-the galaxy with this run's picks, so Orrery Log is optional. The `×` field
-beside it queues that many runs in a row, seed and segment stepping between
-them. For a reel the bar shows the segment being generated (or the next one),
-and **Restart** cancels this node's queued and running clips, sets segment to
-0 and generates from the start; other jobs in the queue stay.
-
-Everything a run needs goes to the model in one request (ComfyUI cannot
-safely generate twice in one run); ComfyUI moves the model out when the video
-model needs the room, and orrery keeps it for the next run. What it wrote waits
-on top of the Libraries tab under **To review**, marked in violet: **Accept**
-keeps it, **Discard** drops it (a discarded library is written again on the
-next run, so change the directions first). After every run the node refreshes
-its libraries and points at anything new to review. Writes can also be undone
-with `orrery lib undo`.
-
-## MiniMax H3 screenplays
-
-```bash
-uv run orrery compile examples/forest.orr --seed 7              # h3-base
-uv run orrery compile examples/forest.orr --target flat         # a still for image models
-```
-
-See [docs/h3.md](docs/h3.md) for the syntax. The compiler computes the
-mechanical parts of the official guide (alignment lines, timestamps, speaker
-IDs, `<d>` tags, camera sentences, `N/A`) and lints the rest; lint errors exit
-with status 1. Built-in libraries: `__camera__`, `__h3style__`, `__instrument__`.
-
-`@h3 ref2va` screenplays name their references once in a `CAST` block and
-compile to the six full-reference sections, with every label numbered the way
-the Reference to Video node numbers its inputs. `@h3/07_ref2va_sitcom` is the
-official example as a screenplay. The long-video plan built on the cast is in
-[docs/long-video.md](docs/long-video.md).
-
-## ComfyUI
-
-```bash
-ln -s ~/projects/private/orrery/comfyui ~/repos/comfy-ui/custom_nodes/orrery
-```
-
-Restart ComfyUI. Nodes under **orrery**:
-
-- **Orrery Prompt**: seed and target (`text`, `h3-base`, `flat`), optional
-  `segment` → `text`, `picks`, `seed`, `width`, `height`, `length`, `lora_stack`,
-  `load_index`, `save_index`, `previous`, `previous_audio`, `megapixels`.
-  Wire `text` into your text encoder or the MiniMax H3 prompt input;
-  `width`/`height` come from `: w… h…` or the `@h3` ratio (`@h3 ref2va 16:9 0.6MP`
-  sizes the canvas by area, and `megapixels` puts that out for resolution and
-  scale nodes), `length` is the
-  screenplay's duration in frames for the H3 latent, `lora_stack` carries the
-  `LORA:` lines as a LORA_STACK for any loader with a `lora_stack` input
-  (LoraManager, Efficiency, Easy-Use …); unknown or ambiguous names are
-  reported in the log and in the Test tab. For H3 Motion Context chains, a reel
-  (`CHUNK` blocks, `repeat N|forever`, `$x~N`; see `docs/h3.md` 1d) writes one
-  clip per run: `segment` counts up by itself, and `load_index`/`save_index`
-  go into Load and Save Latent's `clip_index`. The node is the whole of orrery, in five tabs (⤢ opens the
-  same app over the canvas, Esc brings it back):
-  - **Prompt**: the template editor with syntax colours and completion
-    (`__` libraries, `__creature[` tags, `$` bindings, camera words after
-    `SHOT 5s |`, your LoRA files after `LORA:`). **New** starts a fresh
-    template linked to no preset: an H3 scene, an H3 reel for Motion Context,
-    H3 references (ref2va), H3 keyframes (i2va, fl2va, l2va) or a Krea prompt,
-    each with a quickstart of the essentials as `#` comments on top (the gear
-    turns the quickstart off). Open a preset from the bar above it; ● marks unsaved
-    edits; Save, Save as…, Revert. Under the editor, every binding is a
-    **dial**: pick a library entry or choice, or type any expression; empty
-    means its default roll. Saving bakes the dials in, and a galaxy output
-    restores them. **Test** jumps to the Test tab and rolls.
-  - **Test**: what the template makes, without queueing anything. **Rolls**
-    shows three seeds (a reel: six clips at one seed, pageable through a
-    forever loop). **Frequencies** rolls it 50, 200 or 500 times, across seeds
-    or across a reel's clips, and shows how often every value comes up, plus
-    how often each lint warning fires.
-  - **Presets**: every preset with your newest output as its preview; search,
-    folders, favorites, recents, a sample roll and the template per preset.
-  - **Libraries**: edit wildcard lists by hand: entries, tags, weights, and
-    the weight each entry learned from your ratings. Libraries that share a
-    name prefix sit in a folder (`couture_form`, `couture_house` → couture);
-    what the language model wrote waits on top for review. Built-ins become
-    yours with **Make it mine**. Drag the list's edge to widen it; a long
-    property opens when you click it.
-  - **Galaxy**: every logged output. love / like / nope / hate multiply the
-    learned weight of each pick by 1.5 / 1.2 / 0.8 / 0.5 (re-rating replaces
-    the factor). **Use template + seed** restores an output and sets the seed
-    to fixed.
-  - **Help**: the DSL at a glance, the tutorial lessons, writing tips.
-
-  Workflows that used the old `preset` dropdown open with that preset loaded
-  into the editor.
-- **Orrery Log**: `picks` (+ `images`) → saves PNGs with the picks embedded and
-  appends one line per output to `~/.orrery/galaxy.jsonl`. For videos saved by
-  another node, put the file path into `media_path`.
+→ [The design](docs/concept.md)
 
 ## Development
 
 ```bash
-uv run pytest          # also runs the editor completion tests if node is installed
-uv run ruff check src tests comfyui
+uv run pytest                                              # Python tests
+node --test tests/js/app.test.mjs tests/js/complete.test.mjs   # the node app
+uv run ruff check src tests
 ```
+
+## Contributing
+
+Issues and pull requests are welcome. Please run the tests above before you
+open a pull request, and describe presets and library entries by what the
+camera sees, not by artist or brand names.
+
+## License
+
+MIT, see [LICENSE](LICENSE). One library is licensed differently:
+`src/orrery/builtin/scp/entities.yaml` is adapted from the SCP Wiki under
+CC BY-SA 3.0, and every entry carries its article's citation.
+
+## Acknowledgments
+
+- [MiniMax H3](https://huggingface.co/MiniMaxAI) and its prompt guide, which
+  the screenplay compiler follows
+- [Dynamic Prompts](https://github.com/adieyal/sd-dynamic-prompts), whose
+  wildcard syntax orrery speaks
+- [ComfyUI-NO8D-controls](https://github.com/no8d/ComfyUI-NO8D-controls) (MIT),
+  whose Krea style library the video looks were adapted from, and
+  [OneButtonPrompt](https://github.com/AIrjen/OneButtonPrompt), which inspired
+  the one-button presets
+- ostris's 1,000-clip H3 style probe and hoodtronik's
+  [style atlas](https://hoodtronik.github.io/minimax-h3-style-atlas/), which
+  show what H3 renders
+- The SCP Wiki authors credited in `scp/entities`
+- Codie, for the continuity method behind the endless tours and the
+  body-horror operators
+
+---
+
+Crafted with [Readme Craft](https://github.com/motiful/readme-craft)
+
+[license-shield]: https://img.shields.io/badge/License-MIT-green.svg
+[license-url]: LICENSE
+[version-shield]: https://img.shields.io/badge/version-0.1.0-blue.svg
+[version-url]: pyproject.toml
+[python-shield]: https://img.shields.io/badge/python-3.13%2B-3776AB.svg
+[python-url]: https://www.python.org
+[comfyui-shield]: https://img.shields.io/badge/ComfyUI-custom%20node-5cc8c2.svg
+[comfyui-url]: https://github.com/comfyanonymous/ComfyUI
+[h3-shield]: https://img.shields.io/badge/MiniMax%20H3-screenplays-e2b45c.svg
+[h3-url]: docs/h3.md
