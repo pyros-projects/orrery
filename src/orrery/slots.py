@@ -21,6 +21,7 @@ from orrery.home import Home
 from orrery.llm import Backend, InvalidProposal, extract_json
 
 SLOT = re.compile(r"--(?=[^\s-])([^\n]*?[^\s-])--")
+_FILLED = re.compile(SLOT.pattern + r"(\.?)")  # a period the compiler set after the slot
 
 
 def slots(text: str) -> list[str]:
@@ -34,7 +35,10 @@ def slots(text: str) -> list[str]:
 
 def fill(text: str, texts: dict[str, str]) -> str:
     """The text with each slot replaced by what was written for it, else by its directions."""
-    return SLOT.sub(lambda m: texts.get(m.group(1)) or m.group(1), text)
+    def put(m: re.Match) -> str:
+        written = texts.get(m.group(1)) or m.group(1)
+        return written if written.endswith((".", "!", "?")) else written + m.group(2)
+    return _FILLED.sub(put, text)
 
 
 def request(wanted: list[Need], directions: list[str], context: str, frames: int = 0) -> str:
@@ -51,7 +55,9 @@ def request(wanted: list[Need], directions: list[str], context: str, frames: int
     if wanted:
         parts.append("Wildcard lists to write:\n" + "\n".join(library_lines(wanted)) + f"\n{LIST_RULES}")
     parts.append(f"The prompt, with each part you write marked [slot N]:\n\n{shown.strip()}")
-    parts.append("Parts to write, each as prose that fits where it stands and follows its directions exactly:\n"
+    labels = " Name people and things by their labels (<Subject N>, <Video N> …) as the prompt does." \
+        if re.search(r"<(?:Subject|Picture|Video|Audio) \d+>", context) else ""
+    parts.append(f"Parts to write, each as prose that fits where it stands and follows its directions exactly.{labels}\n"
                  + "\n".join(f'- "{keys[d]}": {d}' for d in directions))
     reply = ("each list name (without underscores) to a JSON array of its entries, and " if wanted else "")
     parts.append(f'Reply with ONLY a JSON object mapping {reply}each part ("slot 1", …) to its text.')

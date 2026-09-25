@@ -60,3 +60,13 @@ def test_a_reply_without_json_is_no_answer_at_all(tmp_path):
     from orrery.llm import InvalidProposal
     with pytest.raises(InvalidProposal):
         write(Home(tmp_path), [], ["what happens next"], "I cannot see the video.", FakeBackend([]))
+
+
+def test_a_text_that_ends_a_sentence_takes_the_place_of_the_period_after_it():
+    assert fill("[Shot 1] --what happens next--. Then", {"what happens next": "He climbs on."}) == "[Shot 1] He climbs on. Then"
+    assert fill("A --b--, c", {"b": "Yes!"}) == "A Yes!, c"
+
+
+def test_labels_in_the_prompt_are_asked_for_in_the_text():
+    assert "<Subject N>" in request([], ["what <Subject 1> does"], "--what <Subject 1> does--")
+    assert "<Subject N>" not in request([], ["what he does"], "--what he does--")
