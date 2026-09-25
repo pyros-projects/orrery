@@ -1,4 +1,5 @@
 // The Orrery Prompt node becomes one app: prompt, presets, libraries, galaxy, help.
+import { api } from "../../scripts/api.js";
 import { app } from "../../scripts/app.js";
 import { downstream } from "./app/model.js";
 import { OrreryApp } from "./app/shell.js";
@@ -63,6 +64,7 @@ function mount(node) {
     w.callback?.(value);
     node.setDirtyCanvas?.(true, true);
   };
+  const batch = { id: 0, done: null };  // the Generate loop that is queueing right now
   const bridge = {
     props: node.properties,
     getText: () => template?.value ?? "",
@@ -79,11 +81,34 @@ function mount(node) {
     nodeId: () => String(node.id),
     downstream: () => downstream(graphOf(node), node.id),
     // Queue only the outputs this node feeds (ComfyUI's partial execution): its branch, not the whole canvas.
-    // runs > 1 is ComfyUI's batch count: that many queue items, control after generate stepping between them.
+    // One queue item per run, so control after generate steps seed and segment between them, and a newer
+    // Generate or Restart stops the loop between two runs (ComfyUI's batch count cannot be stopped).
     generate: async (runs = 1) => {
       const { outputs } = downstream(graphOf(node), node.id);
-      if (outputs.length) await app.queuePrompt(0, runs, { queueNodeIds: outputs.map(String) });
-      return outputs.length;
+      if (!outputs.length) return 0;
+      const id = ++batch.id;
+      batch.done = (async () => {
+        let queued = 0;
+        for (; queued < runs && id === batch.id; queued++) await app.queuePrompt(0, 1, { queueNodeIds: outputs.map(String) });
+        return queued;
+      })();
+      return batch.done;  // how many runs went into the queue
+    },
+    stopGenerate: async () => { batch.id++; await batch.done?.catch(() => {}); },
+    getSegment: () => find("segment")?.value ?? 0,
+    setSegment: (value) => set("segment", value),
+    // Restart: dequeue this node's pending runs and interrupt its running one; other jobs stay queued.
+    cancelRuns: async () => {
+      const q = await (await api.fetchApi("/queue")).json();
+      const wf = (node.graph?.rootGraph || app.rootGraph || app.graph)?.id;
+      const ours = (item) => (!wf || item[3]?.extra_pnginfo?.workflow?.id === wf)
+        && Object.entries(item[2] || {}).some(([k, n]) => n?.class_type === "OrreryPrompt" && (k === String(node.id) || k.endsWith(`:${node.id}`)));
+      const post = (path, body) => api.fetchApi(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const pending = (q.queue_pending || []).filter(ours).map((i) => i[1]);
+      const running = (q.queue_running || []).filter(ours).map((i) => i[1]);
+      if (pending.length) await post("/queue", { delete: pending });
+      for (const id of running) await post("/interrupt", { prompt_id: id });
+      return pending.length + running.length;
     },
     forwardWheel: (e) => app.canvas?.processMouseWheel?.(e),
     takeLegacyPreset: () => {
@@ -107,8 +132,20 @@ function mount(node) {
   // configure() (a loaded workflow's values and properties) runs after nodeCreated.
   setTimeout(() => orrery.start(), 0);
 
+  // Which reel segment runs: the node announces it; a finished, failed or stopped prompt ends it.
+  const mine = (id) => id != null && (String(id) === String(node.id) || String(id).endsWith(`:${node.id}`));
+  const onSegment = ({ detail }) => { if (mine(detail?.node)) orrery.showRun(detail); };
+  const onDone = ({ detail }) => orrery.runDone(detail?.prompt_id);
+  const ENDS = ["execution_success", "execution_error", "execution_interrupted"];
+  api.addEventListener("orrery.segment", onSegment);
+  ENDS.forEach((e) => api.addEventListener(e, onDone));
+  const segment = find("segment"), segmentChanged = segment?.callback;
+  if (segment) segment.callback = function (...args) { const r = segmentChanged?.apply(this, args); orrery.refreshRun(); return r; };
+
   const onRemoved = node.onRemoved;
   node.onRemoved = function (...args) {
+    api.removeEventListener("orrery.segment", onSegment);
+    ENDS.forEach((e) => api.removeEventListener(e, onDone));
     orrery.destroy();
     return onRemoved?.apply(this, args);
   };

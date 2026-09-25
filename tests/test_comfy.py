@@ -473,3 +473,22 @@ def test_the_node_puts_out_megapixels(home):
     assert outputs[-1] == 0.6 and json.loads(outputs[1])["megapixels"] == 0.6
     outputs = OrreryPrompt().run("@h3 t2va 9:16\nSHOT 5s\nA fox runs.\nSFX: wind", 1, "h3-base", home=str(home))
     assert outputs[-1] == round(768 * 1344 / 1e6, 3)
+
+
+def test_a_reel_tells_the_app_which_segment_runs(home, monkeypatch):
+    sent = []
+    server = types.ModuleType("server")
+    server.PromptServer = types.SimpleNamespace(instance=types.SimpleNamespace(send_sync=lambda e, d: sent.append((e, d))))
+    monkeypatch.setitem(sys.modules, "server", server)
+    reel = "@h3 t2va\nCHUNK a\nSHOT 5s\nA fox.\nCHUNK b repeat 2\nSHOT 5s\nThe fox again."
+    OrreryPrompt().run(reel, 1, "h3-base", home=str(home), segment=2, unique_id="427")
+    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": 2, "end": False})]
+    sent.clear()
+    OrreryPrompt().run("@h3 t2va\nSHOT 5s\nA fox.", 1, "h3-base", home=str(home), unique_id="427")
+    assert sent == []  # not a reel: nothing to count
+    blocker = types.ModuleType("comfy_execution.graph_utils")
+    blocker.ExecutionBlocker = lambda v: v
+    monkeypatch.setitem(sys.modules, "comfy_execution", types.ModuleType("comfy_execution"))
+    monkeypatch.setitem(sys.modules, "comfy_execution.graph_utils", blocker)
+    OrreryPrompt().run(reel, 1, "h3-base", home=str(home), segment=3, unique_id="427")
+    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": 3, "end": True})]

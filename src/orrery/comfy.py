@@ -281,6 +281,18 @@ def _previous(latent_path: str, segment: int):
     return load(path) if path else (None, None, None)
 
 
+def _announce(unique_id, segment: int, end: bool = False) -> None:
+    """Tell the node's app which reel segment runs (or that the reel is over), so Generate can show it."""
+    if unique_id is None:
+        return
+    try:
+        from server import PromptServer  # ComfyUI
+    except ImportError:
+        return
+    PromptServer.instance.send_sync("orrery.segment", {"node": str(unique_id), "prompt_id": runs.current_prompt(),
+                                                       "segment": segment, "end": end})
+
+
 def state_token(home: Home) -> str:
     """Changes whenever a library, a preset or the learned weights change, so ComfyUI re-runs the node."""
     digest = hashlib.sha256()
@@ -395,13 +407,17 @@ class OrreryPrompt:
                                  params, segment, clip, stills, packed, wired)
             if (prompt_id := runs.current_prompt()) and unique_id is not None:
                 runs.remember(prompt_id, unique_id, outputs[1])  # for Generate: Save nodes log to the galaxy
-            return (*outputs, tail, audio, json.loads(outputs[1])["megapixels"])
+            data = json.loads(outputs[1])
+            if "segments" in data:  # a reel
+                _announce(unique_id, data["segment"])
+            return (*outputs, tail, audio, data["megapixels"])
         except ReelEnd as end:
             try:
                 from comfy_execution.graph_utils import ExecutionBlocker  # ComfyUI
             except ImportError:
                 raise end from None
             print(f"[orrery] {end} The reel is done, so nothing downstream runs.")
+            _announce(unique_id, segment, end=True)
             return tuple(ExecutionBlocker(None) for _ in self.RETURN_TYPES)
 
 

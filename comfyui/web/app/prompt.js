@@ -24,6 +24,10 @@ function statsHTML(app) {
     + `${out.cli.length ? `<span class="stat cli" title="In ComfyUI, use the Run count and the seed widget">${esc(out.cli.join(" "))}: CLI only</span>` : ""}<span class="grow"></span>`
     + `${outs ? `<button class="btn ghost" data-act="outputs">${icon("image")}${outs} output${outs === 1 ? "" : "s"}</button>` : ""}`
     + `<button class="btn" data-act="test" title="Roll it in the Test tab: a few seeds, or a reel's clips">${icon("dice")}Test</button>`
+    + (reel ? (app.run
+      ? `<span class="stat live" title="The reel segment this node is generating now">Generating segment <b>${app.run.segment}</b></span>`
+      : `<span class="stat" title="The segment Generate plays next: the node's segment widget">Next segment <b>${esc(String(app.bridge.getSegment()))}</b></span>`)
+      + `<button class="btn" data-act="restart" title="Cancel this node's queued and running clips, set segment to 0 and generate from the start">${icon("undo")}Restart</button>` : "")
     + `<label class="rep" title="How many runs Generate queues, one after another; seed and segment step between them as their control after generate says, so a reel plays that many clips">×<input type="number" min="1" max="999" value="${repeats(app)}" data-rep aria-label="Runs per Generate"></label>`
     + `<button class="btn primary" data-act="generate" title="Queue only what this node feeds, up to its Save nodes; their files go to the galaxy">${icon("play")}Generate</button>`;
 }
@@ -88,9 +92,11 @@ export function renderPrompt(app) {
       const runs = repeats(app);
       app.bridge.generate(runs).then((n) => {
         if (!n) app.toast("Nothing to generate: connect this node's outputs toward a Save or Preview node.");
-        else if (runs > 1) app.toast(`Queued <b>${runs}</b> runs`);
+        else if (runs > 1 && n === runs) app.toast(`Queued <b>${runs}</b> runs`);  // fewer: Restart stopped it and says so
+        refreshFoot(app);
       }).catch((err) => app.fail(err));
     }
+    if (act === "restart") restart(app);
     if (act === "new") { app.state.newMenu = !app.state.newMenu; return renderPrompt(app); }
     const starter = e.target.closest("[data-new]")?.dataset.new;
     if (starter) startNew(app, starter);
@@ -106,6 +112,24 @@ export function renderPrompt(app) {
   renderDials(app);
   wireDials(app);
   fixReelSeed(app);
+}
+
+async function restart(app) {
+  try {
+    await app.bridge.stopGenerate();
+    const cancelled = await app.bridge.cancelRuns();
+    app.run = null;
+    app.bridge.setSegment(0);
+    const runs = repeats(app);
+    if (!(await app.bridge.generate(runs))) return app.toast("Nothing to generate: connect this node's outputs toward a Save or Preview node.");
+    app.toast(`Restarted at segment <b>0</b>${runs > 1 ? ` · ${runs} runs queued` : ""}${cancelled ? ` · cancelled ${cancelled} earlier run${cancelled === 1 ? "" : "s"} of this node` : ""}`);
+    refreshFoot(app);
+  } catch (err) { app.fail(err); }
+}
+
+export function refreshFoot(app) {
+  const foot = app.view.querySelector(".pfoot");
+  if (foot) foot.innerHTML = statsHTML(app);
 }
 
 // A reel runs as one clip per queue; a seed that changes between clips would reroll its bindings.
@@ -205,7 +229,7 @@ function refreshBar(app) {
   app.view.querySelector(".pchip").innerHTML = chipHTML(app);
   app.view.querySelector('[data-act="revert"]').disabled = !(card && d);
   app.view.querySelector('[data-act="save"]').disabled = !(card && (d || setDials(app)));
-  app.view.querySelector(".pfoot").innerHTML = statsHTML(app);
+  refreshFoot(app);
 }
 
 function revert(app) {

@@ -6,7 +6,7 @@ import { esc } from "./highlight.js";
 import { icon, LOGO } from "./icons.js";
 import { renderLibraries } from "./libraries.js";
 import { renderPresets } from "./presets.js";
-import { renderPrompt } from "./prompt.js";
+import { refreshFoot, renderPrompt } from "./prompt.js";
 import { openSettings } from "./settings.js";
 import { renderTest } from "./test.js";
 
@@ -37,6 +37,7 @@ export class OrreryApp {
     };
     this.data = { presets: [], favorites: new Set(), recent: [], completion: null, libraries: null, rows: null, weights: {}, llm: null };
     this.base = null;
+    this.run = null;  // {segment, prompt}: the reel segment this node is generating right now
     this.uid = Math.random().toString(36).slice(2, 8);  // keeps element ids unique across nodes
     this.root = document.createElement("div");
     this.root.className = "orrery-app";
@@ -234,6 +235,18 @@ export class OrreryApp {
       if (res.logged) { this.data.rows = null; if (this.state.tab === "galaxy") this.render(); }
     } catch { /* an older run or a restarted ComfyUI: nothing to log */ }
   }
+
+  showRun(d) {
+    this.run = d.end ? null : { segment: d.segment, prompt: d.prompt_id };
+    if (d.end) this.toast(`Segment <b>${d.segment}</b> is past the end of the reel, so nothing ran. Restart plays it from the beginning.`);
+    this.refreshRun();
+  }
+  runDone(prompt) {
+    if (!this.run || (prompt && this.run.prompt && prompt !== this.run.prompt)) return;
+    this.run = null;
+    this.refreshRun();
+  }
+  refreshRun() { if (this.state.tab === "prompt") refreshFoot(this); }
 
   destroy() {
     this.stopListening?.();

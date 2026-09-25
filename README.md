@@ -229,7 +229,11 @@ setting. When the node runs, the model
 
 **Generate** (next to Test in the Prompt tab) queues only what this node feeds,
 up to its Save and Preview nodes, and the files those Save nodes write go to
-the galaxy with this run's picks, so Orrery Log is optional.
+the galaxy with this run's picks, so Orrery Log is optional. The `×` field
+beside it queues that many runs in a row, seed and segment stepping between
+them. For a reel the bar shows the segment being generated (or the next one),
+and **Restart** cancels this node's queued and running clips, sets segment to
+0 and generates from the start; other jobs in the queue stay.
 
 Everything a run needs goes to the model in one request (ComfyUI cannot
 safely generate twice in one run); ComfyUI moves the model out when the video

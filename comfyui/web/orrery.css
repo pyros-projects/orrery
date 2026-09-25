@@ -144,6 +144,9 @@
 .orrery-app .dial .mini { display: none; margin-right: 4px; }
 .orrery-app .dial.on .mini { display: inline-flex; }
 .orrery-app .pfoot { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px; flex: none; }
+.orrery-app .stat.live b { color: var(--brass); }
+.orrery-app .stat.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--brass); display: inline-block; margin-right: 6px; animation: oa-pulse 1.2s ease-in-out infinite; }
+@keyframes oa-pulse { 50% { opacity: .25; } }
 .orrery-app .rep { display: inline-flex; align-items: center; gap: 3px; color: var(--muted); }
 .orrery-app .rep input { width: 3.4em; background: var(--raised); border: 1px solid var(--line); border-radius: 7px; padding: 4px 6px; color: inherit; font: inherit; text-align: right; }
 .orrery-app .rolls { display: grid; gap: 6px; padding: 10px 12px 12px; }
