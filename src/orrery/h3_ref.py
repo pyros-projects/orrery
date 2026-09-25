@@ -41,6 +41,12 @@ def write_h3_ref(scene: Scene, lint: list[Issue]) -> str:
         if m.sources:
             types.add("reference generation")
     for i, shot in enumerate(scene.shots, start=1):
+        if shot.continues:
+            video = f"<Video {shot.continues}>"
+            definitions.append(f"{video} is the preceding clip; [Shot {i}] continues it from its final frame.")
+            retention.append(f"{video} (continuation source): fully_preserved - [Shot {i}] picks up where {video} "
+                             "ends, with its place, people, light and motion.")
+            types.add("video continuation")
         for anchor, edge, verb in ((shot.first_frame, "first", "begins from"), (shot.last_frame, "last", "ends on")):
             if anchor:
                 index, shows = anchor

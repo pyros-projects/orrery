@@ -160,6 +160,29 @@ Steam rises in CAFE.
     assert s["detailed_description"].rstrip().endswith("The shot ends on <Picture 3>.")
 
 
+def test_after_video_continues_the_previous_clip():
+    src = """@h3 ref2va
+summary: WASHER finishes the window.
+CAST
+WASHER (image 1): the window washer, in a red overall
+SHOT 5s | after video 1, tracking, slow
+WASHER climbs to the next pane.
+SFX: wind
+"""
+    _, s = sections(h3(src).text)
+    assert "<Video 1> is the preceding clip; [Shot 1] continues it from its final frame." in s["subject_definitions"]
+    assert s["summary"].startswith("[video continuation + reference generation] ")
+    assert ("<Video 1> (continuation source): fully_preserved - [Shot 1] picks up where <Video 1> ends, "
+            "with its place, people, light and motion.") in s["retention_analysis"]
+    assert "[Shot 1] The shot continues from the end of <Video 1>." in s["detailed_description"]
+    assert "The camera tracks the moving subject at slow speed." in s["detailed_description"]
+
+
+def test_after_video_outside_ref2va_is_flagged():
+    result = compile_scene("@h3 t2va\nSHOT 5s | after video 1\nA man waits.\nSFX: rain\n", 1, {})
+    assert any("after video N" in i.message for i in result.lint)
+
+
 def test_bracketed_sources_in_prose_become_labels():
     src = """@h3 ref2va
 summary: A moves like [video 1].

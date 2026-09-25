@@ -91,7 +91,7 @@ def test_node_classes_declare_comfy_interfaces():
     inputs = OrreryPrompt.INPUT_TYPES()["required"]
     assert inputs["target"][0] == ["text", "h3-base", "flat"]
     assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length", "lora_stack",
-                                         "load_index", "save_index")
+                                         "load_index", "save_index", "previous", "previous_audio")
     assert OrreryLog.OUTPUT_NODE is True
 
 
@@ -247,8 +247,8 @@ def test_the_node_counts_segments_and_outputs_motion_context_indices(home):
     optional = OrreryPrompt.INPUT_TYPES()["optional"]
     assert optional["segment"][0] == "INT" and optional["segment"][1]["control_after_generate"]
     assert "forceInput" not in optional["segment"][1]
-    assert OrreryPrompt.RETURN_NAMES[6:] == ("lora_stack", "load_index", "save_index")
-    assert OrreryPrompt.RETURN_TYPES[6:] == ("LORA_STACK", "INT", "INT")
+    assert OrreryPrompt.RETURN_NAMES[6:9] == ("lora_stack", "load_index", "save_index")
+    assert OrreryPrompt.RETURN_TYPES[6:9] == ("LORA_STACK", "INT", "INT")
     *_, load, save = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
     assert (load, save) == (1, 2)
 
@@ -264,7 +264,8 @@ def test_past_the_end_of_a_reel_blocks_the_rest_of_the_graph(home, monkeypatch):
     monkeypatch.setitem(sys.modules, "comfy_execution", types.ModuleType("comfy_execution"))
     monkeypatch.setitem(sys.modules, "comfy_execution.graph_utils", blocker)
     outputs = OrreryPrompt().run(REEL, 1, "h3-base", home=str(home), segment=2)
-    assert len(outputs) == 9 and all(isinstance(o, ExecutionBlocker) and o.message is None for o in outputs)
+    assert len(outputs) == len(OrreryPrompt.RETURN_TYPES)
+    assert all(isinstance(o, ExecutionBlocker) and o.message is None for o in outputs)
     a = OrreryPrompt.IS_CHANGED(REEL, 1, "h3-base", segment=0)
     assert a != OrreryPrompt.IS_CHANGED(REEL, 1, "h3-base", segment=1)
 
@@ -307,3 +308,80 @@ def test_the_llm_answers_within_the_max_tokens_setting(home):
     assert llm_for(H(home)).max_length == 9000
     H(home).save_config({"llm": {"file": "qwen3vl_4b_bf16.safetensors"}})
     assert llm_for(H(home)).max_length == 16000
+
+
+def fake_llm(monkeypatch, reply):
+    from orrery import comfy
+    from orrery.llm import FakeBackend
+    backend = FakeBackend([json.dumps(reply) if not isinstance(reply, str) else reply], name="qwen3vl_4b")
+    monkeypatch.setattr(comfy, "llm_for", lambda h, clip=None, **_: backend)
+    return backend
+
+
+def test_the_llm_writes_a_slot_where_it_stands(home, monkeypatch):
+    backend = fake_llm(monkeypatch, {"slot 1": "a woman drops her keys"})
+    text, *_ = run_prompt("A street at dawn, --what happens next--.", 1, "text", str(home))
+    assert text == "A street at dawn, a woman drops her keys."
+    assert len(backend.prompts) == 1 and "A street at dawn, [slot 1]." in backend.prompts[0]
+
+
+def test_a_slot_and_a_missing_library_share_the_one_request(home, monkeypatch):
+    backend = fake_llm(monkeypatch, {"mood": ["A hush.", "A storm."], "slot 1": "she runs"})
+    text, *_ = run_prompt("__mood__(one sentence) Then --what happens next--.", 1, "text", str(home))
+    assert len(backend.prompts) == 1
+    assert text.endswith("Then she runs.") and text.split(" Then")[0] in ("A hush.", "A storm.")
+
+
+def test_the_model_sees_the_clip_it_continues(home, monkeypatch):
+    backend = fake_llm(monkeypatch, {"slot 1": "he lets go"})
+    frames = [object()] * 6
+    run_prompt("--what happens next--", 1, "text", str(home), frames=frames)
+    assert backend.images[0] is frames and "6 images" in backend.prompts[0]
+
+
+def test_frames_alone_ask_the_model_nothing(home, monkeypatch):
+    backend = fake_llm(monkeypatch, {})
+    run_prompt("a quiet street", 1, "text", str(home), frames=[object()])
+    assert backend.prompts == []
+
+
+def test_without_an_llm_a_slot_names_the_fix(home, monkeypatch):
+    from orrery import comfy
+    monkeypatch.setattr(comfy, "llm_for", lambda h, clip=None, **_: None)
+    with pytest.raises(ValueError, match="language model"):
+        run_prompt("--what happens next--", 1, "text", str(home))
+
+
+def test_an_unusable_answer_keeps_the_directions_and_says_so(home, monkeypatch):
+    """A failed run would leave a gap in a Motion Context chain; the directions stand in instead."""
+    fake_llm(monkeypatch, "I cannot see anything.")
+    text, picks, *_ = run_prompt("A street, --a woman drops her keys--.", 1, "text", str(home))
+    assert text == "A street, a woman drops her keys."
+    assert any(i["severity"] == "warn" and "slot" in i["message"] for i in json.loads(picks)["lint"])
+
+
+def test_the_node_hands_on_the_previous_clip_for_ref2va():
+    assert OrreryPrompt.RETURN_NAMES[-2:] == ("previous", "previous_audio")
+    assert OrreryPrompt.RETURN_TYPES[-2:] == ("IMAGE", "AUDIO")
+    assert OrreryPrompt.INPUT_TYPES()["optional"]["latent_path"][1]["forceInput"] is True
+
+
+def test_outside_a_chain_there_is_no_previous_clip(home):
+    outputs = OrreryPrompt().run("a quiet street", 1, "text", home=str(home), segment=2)
+    assert len(outputs) == len(OrreryPrompt.RETURN_TYPES) and outputs[-2:] == (None, None)
+
+
+def test_only_slots_in_the_played_chunk_can_go_unanswered(home, monkeypatch):
+    fake_llm(monkeypatch, {"mood": ["A hush."], "slot 1": "she runs"})
+    reel = """@h3 t2va
+CHUNK one
+SHOT 5s
+__mood__ --what happens next--
+SFX: rain
+CHUNK two
+SHOT 5s
+--a later scene--
+SFX: rain
+"""
+    _, picks, *_ = run_prompt(reel, 1, "h3-base", str(home), segment=0)
+    assert not [i for i in json.loads(picks)["lint"] if "got no text" in i["message"]]

@@ -30,7 +30,7 @@ class InvalidProposal(ValueError):
 class Backend(Protocol):
     name: str
 
-    def complete(self, prompt: str) -> str: ...
+    def complete(self, prompt: str, images=None) -> str: ...  # images: frames the model sees, if it can
 
 
 def extract_json(text: str):
@@ -57,9 +57,11 @@ class FakeBackend:
         self.replies = list(replies) or ["[]"]
         self.name = name
         self.prompts: list[str] = []
+        self.images: list = []
 
-    def complete(self, prompt: str) -> str:
+    def complete(self, prompt: str, images=None) -> str:
         self.prompts.append(prompt)
+        self.images.append(images)
         return self.replies[min(len(self.prompts) - 1, len(self.replies) - 1)]
 
 
@@ -74,7 +76,9 @@ class OpenAIBackend:
         self.temperature, self.max_tokens = temperature, max_tokens
         self.name = name or model
 
-    def complete(self, prompt: str) -> str:
+    def complete(self, prompt: str, images=None) -> str:
+        if images is not None:
+            raise ValueError(f"{self.name} cannot see images; pick a Qwen3-VL text encoder in ComfyUI.")
         body = json.dumps({
             "model": self.model,
             "messages": [{"role": "user", "content": prompt}],
@@ -113,7 +117,9 @@ class TransformersBackend:
             # Qwen3.5 checkpoints are natively multimodal; text generation still works.
             self._model = transformers.AutoModelForImageTextToText.from_pretrained(self.path, **kwargs)
 
-    def complete(self, prompt: str) -> str:
+    def complete(self, prompt: str, images=None) -> str:
+        if images is not None:
+            raise ValueError(f"{self.name} cannot see images; pick a Qwen3-VL text encoder in ComfyUI.")
         if self._model is None:
             self._load()
         tok = self._tokenizer

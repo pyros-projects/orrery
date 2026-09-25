@@ -153,6 +153,23 @@ setting. When the node runs, the model
   library with directions gets only its directions, and an entry may be any
   length (**Max tokens** in the gear, 16000 by default, bounds one answer); one
   without gets the lines around it and a default of 1-4 lowercase words.
+- writes `--directions--` slots where they stand, seeing the whole compiled
+  prompt around them. From a reel's second segment on it also watches the clip
+  before (H3 Motion Context's Chain Video, one frame a second and the last one)
+  and continues it; the node's `previous` and `previous_audio` outputs hand the
+  last 3 s of that clip to the Reference to Video node's `ref_video`, for
+  `SHOT … | after video 1`:
+
+  ```
+  CHUNK next repeat forever
+  SHOT 5s | after video 1, tracking, slow
+  --what WASHER does in the next 5 seconds, moving the story on--
+  ```
+
+  A slot the model leaves out keeps its directions as text (and a warning), so
+  a queued chain never breaks on one bad answer. The chain is found under
+  `output/h3_context`; wire a string into `latent_path` if yours lives
+  elsewhere.
 
 Everything a run needs goes to the model in one request (ComfyUI cannot
 safely generate twice in one run); ComfyUI moves the model out when the video

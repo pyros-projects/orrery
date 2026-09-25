@@ -67,7 +67,7 @@ _RATIO = re.compile(r"^\d+(?:\.\d+)?:\d+(?:\.\d+)?$")
 _STYLE = re.compile(r"^style:\s*(.+)$", re.IGNORECASE)
 _SUMMARY = re.compile(r"^summary:\s*(.+)$", re.IGNORECASE)
 _ATTRIBUTE = re.compile(r"^(voice|keep):\s*(.+)$")
-_ANCHOR = re.compile(r"\b(from|to)\s+image\s+(\d+)(?:\s*\(([^)]*)\))?", re.IGNORECASE)
+_ANCHOR = re.compile(r"\b(from|to)\s+image\s+(\d+)(?:\s*\(([^)]*)\))?|\b(after)\s+video\s+(\d+)", re.IGNORECASE)
 _SHOT = re.compile(r"^SHOT\s+(\d+(?:\.\d+)?)\s*s\b\s*(?:\|\s*(.*))?$", re.IGNORECASE)
 _MUSIC = re.compile(r"^MUSIC:\s*(.+)$", re.IGNORECASE)
 _SFX = re.compile(r"^SFX:\s*(.+)$", re.IGNORECASE)
@@ -108,6 +108,7 @@ class Shot:
     start: float = 0.0
     first_frame: tuple[int, str] | None = None  # ref2va: (image slot, what it shows)
     last_frame: tuple[int, str] | None = None
+    continues: int | None = None  # ref2va: the video slot this shot continues (`after video N`)
 
 
 @dataclass
@@ -186,7 +187,7 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
             if head in TRANSITIONS:
                 transition, spec = head, ",".join(spec.split(",")[1:]).strip()
             cur = Shot(float(m.group(1)), transition, spec, first_frame=anchors.get("from"),
-                       last_frame=anchors.get("to"))
+                       last_frame=anchors.get("to"), continues=anchors["after"][0] if "after" in anchors else None)
             scene.shots.append(cur)
         elif m := _MUSIC.match(line):
             scene.music = m.group(1).strip()
@@ -237,7 +238,8 @@ def _clause(text: str) -> str:
 
 
 def _anchors(spec: str) -> tuple[str, dict[str, tuple[int, str]]]:
-    found = {m.group(1).lower(): (int(m.group(2)), (m.group(3) or "").strip()) for m in _ANCHOR.finditer(spec)}
+    found = {(m.group(1) or m.group(4)).lower(): (int(m.group(2) or m.group(5)), (m.group(3) or "").strip())
+             for m in _ANCHOR.finditer(spec)}
     rest = ", ".join(p.strip() for p in _ANCHOR.sub("", spec).split(",") if p.strip())
     return rest, found
 
@@ -386,6 +388,8 @@ def render_shots(scene: Scene, lint: list[Issue], speakers: _Speakers, names: Na
                 parts.append(speakers.render(it, i, lint, names, tagged))
         if labels and shot.first_frame:
             parts.insert(0, f"The shot begins from <Picture {shot.first_frame[0]}>.")
+        if labels and shot.continues:
+            parts.insert(0, f"The shot continues from the end of <Video {shot.continues}>.")
         if labels and shot.last_frame:
             parts.append(f"The shot ends on <Picture {shot.last_frame[0]}>.")
         body = " ".join(parts)
@@ -517,8 +521,8 @@ def _cast_lint(scene: Scene, lint: list[Issue]) -> None:
                                       f"ref2va{still}."))
         if m.voice and not any(isinstance(it, Voice) and it.name == m.name for s in scene.shots for it in s.items):
             lint.append(Issue("warn", f"{m.name} has a voice reference but never speaks."))
-    if not ref and any(s.first_frame or s.last_frame for s in scene.shots):
-        lint.append(Issue("warn", "Frame anchors (from/to image N) only take effect in ref2va."))
+    if not ref and any(s.first_frame or s.last_frame or s.continues for s in scene.shots):
+        lint.append(Issue("warn", "Frame anchors (from/to image N, after video N) only take effect in ref2va."))
     if ref and not scene.lite and not scene.summary:
         lint.append(Issue("warn", "ref2va reads best with a summary: line (one short paragraph about the "
                                   "target video, using CAST names)."))

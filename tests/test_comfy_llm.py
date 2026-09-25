@@ -49,3 +49,23 @@ def test_a_loaded_encoder_is_reused_by_the_next_run(monkeypatch):
     for _ in range(2):
         comfy_llm.ComfyBackend(file="qwen3vl_4b_bf16.safetensors").complete("list")
     assert loads == ["qwen3vl_4b_bf16.safetensors"]
+
+
+def test_frames_go_first_in_the_user_turn_one_vision_block_each():
+    text = chat("What happens next?", images=3)
+    block = "<|vision_start|><|image_pad|><|vision_end|>"
+    assert text.startswith(f"<|im_start|>user\n{block * 3}\nWhat happens next?")
+
+
+def test_the_engine_hands_the_frames_to_the_tokenizer():
+    from orrery.comfy_llm import ComfyBackend
+    seen = {}
+
+    class SeeingClip(FakeClip):
+        def tokenize(self, text, **kwargs):
+            seen.update(kwargs, text=text)
+            return text
+
+    frames = [object(), object()]
+    ComfyBackend(clip=SeeingClip()).complete("next?", images=frames)
+    assert seen["image"] is frames and seen["text"].count("<|image_pad|>") == 2

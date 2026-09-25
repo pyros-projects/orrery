@@ -13,15 +13,18 @@ import re
 from datetime import UTC, datetime
 from pathlib import Path
 
-from orrery.autolib import ensure_libraries
+from orrery.autolib import needs
+from orrery.chain import DEFAULT_CHAIN, load, previous_clip
 from orrery.comfy_llm import ComfyBackend, can_write, llm_config
 from orrery.dsl import MissingLibrary, bindings, expand, override, parse, wanted_libraries
 from orrery.h3 import compile_scene
 from orrery.home import Home, resolve_home
 from orrery.library import library_files
+from orrery.llm import InvalidProposal
 from orrery.loras import lora_files, lora_stack
 from orrery.presets import list_presets, load_preset, preset_exists, remember_template
 from orrery.reel import ReelEnd
+from orrery.slots import SLOT, fill, request, slots, write
 
 TARGETS = ["text", "h3-base", "flat"]
 NO_PRESET = "(none)"
@@ -98,17 +101,21 @@ def llm_for(home: Home, clip=None, seed: int = 0) -> ComfyBackend | None:
     return None
 
 
-def _llm_work(home: Home, template: str, clip, seed: int) -> list[str]:
-    """Let the LLM create or top up the libraries the template asks for. ComfyUI unloads it."""
+def _missing_libraries(home: Home, template: str) -> bool:
     libraries = home.libraries()
-    if all(name in libraries and len(libraries[name].entries) >= n for name, n in wanted_libraries(template).items()):
-        return []
-    return ensure_libraries(home, template, llm_for(home, clip, seed=seed), int(llm_config(home)["entries"]))
+    return not all(name in libraries and len(libraries[name].entries) >= n
+                   for name, n in wanted_libraries(template).items())
+
+
+def _count(frames) -> int:
+    return len(frames) if frames is not None else 0
 
 
 def run_prompt(template: str, seed: int, target: str, home: str = "",
                preset: str = NO_PRESET, linked: str | None = None,
-               params: str = "", segment: int = 0, clip=None) -> tuple[str, str, int, int, int, int, list, int, int]:
+               params: str = "", segment: int = 0, clip=None,
+               frames=None) -> tuple[str, str, int, int, int, int, list, int, int]:
+    """`frames`: the previous clip's stills, which the model sees when it writes `--…--` slots."""
     h = resolve_home(home or None)
     if preset and preset != NO_PRESET:
         template, linked = load_preset(h, preset), preset
@@ -117,7 +124,25 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     known = {name for name, _ in bindings(template)}
     dials = {k: v for k, v in dial_values(params).items() if k in known}
     source = override(template, dials)
-    notes = _llm_work(h, source, clip, seed)
+
+    # One request per run (ComfyUI cannot safely generate twice): libraries still missing and the
+    # slots go together, the slots then seeing the template; otherwise the slots see the compiled prompt.
+    written, missing = slots(source), _missing_libraries(h, source)
+    backend = llm_for(h, clip, seed=seed) if written or missing else None
+    if written and backend is None:
+        raise ValueError("--…-- slots are written by a language model: pick one in orrery's settings (the gear in "
+                         "the node) or wire a text encoder into its clip input")
+    texts: dict[str, str] = {}
+    notes: list[str] = []
+    missed: dict[str, str] = {}  # marker → directions of the slots the combined answer left out
+    wanted = needs(h, source, int(llm_config(h)["entries"])) if missing and backend is not None else []
+    if wanted:
+        see = frames if written else None
+        reply = backend.complete(request(wanted, written, source, _count(see)), images=see)
+        answered, notes = write(h, wanted, written, reply, backend)
+        texts = {f"slot {i}": answered.get(d) or d for i, d in enumerate(written, start=1)}
+        missed = {f"slot {i}": d for i, d in enumerate(written, start=1) if d not in answered}
+        source = SLOT.sub(lambda m: f"--slot {written.index(m.group(1)) + 1}--", source)  # survives the compile
     try:
         if target == "text":
             result = expand(source, seed, h.libraries(), h.weights())
@@ -128,6 +153,17 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     except MissingLibrary as err:
         raise ValueError(f"{err}, or pick a language model in orrery's settings (the gear in the node) "
                          "and it is created when the node runs") from err
+    todo = slots(result.text)
+    if todo and not wanted:
+        try:
+            texts, _ = write(h, [], todo, backend.complete(request([], todo, result.text, _count(frames)),
+                                                          images=frames), backend)
+        except InvalidProposal as err:
+            lint.append({"severity": "warn", "message": f"The language model wrote no slots ({err})."})
+    unanswered = [missed[k] for k in todo if k in missed] if wanted else [d for d in todo if d not in texts]
+    lint += [{"severity": "warn", "message": f"--{d}-- got no text from the language model; its directions stand in."}
+             for d in unanswered]
+    result.text = fill(result.text, texts)
     lint = [{"severity": "info", "message": n} for n in notes] + lint
     stack: list = []
     if target != "text" and result.loras:
@@ -154,6 +190,16 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
             data["segment"], data["chunks"], data["segments"] = result.segment, result.chunks, result.segments
     return (result.text, json.dumps(data, ensure_ascii=False), seed, width, height, length, stack,
             segment, segment + 1)
+
+
+def _previous(latent_path: str, segment: int):
+    """(stills, tail, audio) of the clip before this segment in the Motion Context chain, else Nones."""
+    try:
+        import folder_paths  # ComfyUI
+    except ImportError:
+        return None, None, None
+    path = previous_clip(Path(folder_paths.get_output_directory()), latent_path or DEFAULT_CHAIN, segment)
+    return load(path) if path else (None, None, None)
 
 
 def state_token(home: Home) -> str:
@@ -204,8 +250,9 @@ def save_png(image, path: Path | str, picks_json: str) -> None:
 class OrreryPrompt:
     CATEGORY = "orrery"
     FUNCTION = "run"
-    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "LORA_STACK", "INT", "INT")
-    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "lora_stack", "load_index", "save_index")
+    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "LORA_STACK", "INT", "INT", "IMAGE", "AUDIO")
+    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "lora_stack", "load_index", "save_index",
+                    "previous", "previous_audio")
     OUTPUT_TOOLTIPS = ("", "", "", "From `: w…` in the template, else the @h3 ratio, else 1024.",
                        "From `: h…` in the template, else the @h3 ratio, else 1024.",
                        ("Frames at 24 fps for the MiniMax H3 nodes' length input: the sum of the SHOT "
@@ -214,7 +261,10 @@ class OrreryPrompt:
                        ("The LORA: lines (global, plus the chunk's in a reel) as a LORA_STACK for any "
                         "loader with a lora_stack input (LoraManager, Efficiency, Easy-Use …)."),
                        "The segment: wire it into H3 Motion Context Load Latent's clip_index.",
-                       "The segment + 1: wire it into H3 Motion Context Save Latent's clip_index.")
+                       "The segment + 1: wire it into H3 Motion Context Save Latent's clip_index.",
+                       ("The last 3 s of the clip before this segment (H3 Motion Context's Chain Video), for the "
+                        "Reference to Video node's ref_video; None in the first segment, which ref2va skips."),
+                       "The soundtrack of `previous`, for the Reference to Video node's ref_video_audio.")
     DESCRIPTION = ("Expands an orrery template (text) or compiles a screenplay (h3-base, flat) "
                    "and outputs the picks that produced it.")
 
@@ -239,21 +289,26 @@ class OrreryPrompt:
                                     "tooltip": "The reel's clip to write, from 0. With increment, every queued "
                                                "run plays the next clip; load_index and save_index drive H3 "
                                                "Motion Context. Plain screenplays ignore it."}),
+                "latent_path": ("STRING", {"forceInput": True, "tooltip": (
+                    "H3 Motion Context's latent_path (default h3_context): where the chain of clips lives. From "
+                    "the second segment on the model watches the previous clip when it writes --…-- slots.")}),
             },
             "hidden": {"unique_id": "UNIQUE_ID", "extra_pnginfo": "EXTRA_PNGINFO"},
         }
 
     @classmethod
-    def IS_CHANGED(cls, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, **_):
+    def IS_CHANGED(cls, template, seed, target, preset=NO_PRESET, home="", params="", segment=0,
+                   latent_path=DEFAULT_CHAIN, **_):
         h = resolve_home(home or None)
         chosen = load_preset(h, preset) if preset and preset != NO_PRESET else template
-        return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{segment}:{state_token(h)}"
+        return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{segment}:{latent_path}:{state_token(h)}"
 
     def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, clip=None,
-            unique_id=None, extra_pnginfo=None):
+            latent_path=DEFAULT_CHAIN, unique_id=None, extra_pnginfo=None):
+        stills, tail, audio = _previous(latent_path, segment)
         try:
-            return run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id), params,
-                              segment, clip)
+            return (*run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
+                                params, segment, clip, stills), tail, audio)
         except ReelEnd as end:
             try:
                 from comfy_execution.graph_utils import ExecutionBlocker  # ComfyUI

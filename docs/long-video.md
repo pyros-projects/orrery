@@ -65,7 +65,12 @@ Per chunk orrery emits (built):
 - the `lora_stack` output: the `LORA:` lines before the first `CHUNK` plus the
   chunk's own, as a LORA_STACK;
 - the picks of the head, the chunk and its handoffs only, so ratings teach the
-  galaxy what was in the clip.
+  galaxy what was in the clip;
+- `--…--` slots written by the language model, which from the second segment
+  on watches the previous clip from Chain Video (one frame a second and the
+  last one): the semantic memory grounded in what H3 actually rendered, not
+  only in what was asked for; `previous`/`previous_audio`, the last 3 s of that
+  clip, for `SHOT … | after video 1` (`[video continuation]`).
 
 Still planned: the **memory list** per chunk (global, the places and people it
 mentions, optionally the previous chunk as "recent"); the retrieval query for
@@ -76,7 +81,8 @@ Wiring in the Motion Context workflow: Orrery `load_index` → Load Latent
 segments itself, so the Chain node's buttons are not needed); `text` →
 Reference to Video `prompt`; `length` → its `length`;
 `lora_stack` → the `lora_stack` input of Lora Loader (LoraManager) or any
-other stack loader. Queue with a Run count of the reel's clips (the stats line
+other stack loader; `previous` → Reference to Video `ref_video_0`,
+`previous_audio` → `ref_video_audio_0`. Queue with a Run count of the reel's clips (the stats line
 shows it), or Run (Instant) for `repeat forever`; the Orrery seed stays fixed
 (the node does that for a reel). `CHUNK … repeat N|forever` and `$x~N` make
 loops such as `fashion/runway_loop`.

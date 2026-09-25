@@ -49,7 +49,7 @@ def needs(home: Home, template: str, default_n: int) -> list[Need]:
     return out
 
 
-def prompt_for(wanted: list[Need]) -> str:
+def library_lines(wanted: list[Need]) -> list[str]:
     lines = []
     for n in wanted:
         what = (f"{n.count} NEW entries in the spirit of the existing ones {json.dumps(n.existing, ensure_ascii=False)}, "
@@ -59,15 +59,22 @@ def prompt_for(wanted: list[Need]) -> str:
         guide = (f"Directions: {n.directions}" if n.directions
                  else f"Used in: {n.context}\n  Style: {DEFAULT_STYLE}")
         lines.append(f"- __{n.name}__: {what}.\n  {guide}")
+    return lines
+
+
+LIST_RULES = ("Every entry follows its list's Directions or Style exactly. Entries are distinct and spread widely "
+              "across the space so random picks feel varied.")
+
+
+def prompt_for(wanted: list[Need]) -> str:
     return ("You write wildcard lists for a text-to-image and text-to-video prompt generator.\n\n"
-            + "\n".join(lines)
-            + "\n\nEvery entry follows its list's Directions or Style exactly. Entries are distinct and spread widely "
-            "across the space so random picks feel varied. Reply with ONLY a JSON object mapping each list name "
+            + "\n".join(library_lines(wanted))
+            + f"\n\n{LIST_RULES} Reply with ONLY a JSON object mapping each list name "
             "(without underscores) to a JSON array of its entries.")
 
 
-def _answers(reply: str, wanted: list[Need]) -> dict[str, list[str]]:
-    data = extract_json(reply)
+def lists_in(data, wanted: list[Need]) -> dict[str, list[str]]:
+    """The lists in a parsed reply, keyed by library name."""
     if isinstance(data, list) and len(wanted) == 1:  # small models answer one list with a bare array
         data = {wanted[0].name: data}
     if not isinstance(data, dict):
@@ -76,12 +83,21 @@ def _answers(reply: str, wanted: list[Need]) -> dict[str, list[str]]:
             for n in wanted if data.get(n.name) or data.get(f"__{n.name}__")}
 
 
+def _answers(reply: str, wanted: list[Need]) -> dict[str, list[str]]:
+    return lists_in(extract_json(reply), wanted)
+
+
 def ensure_libraries(home: Home, template: str, backend: Backend | None, default_n: int = 12) -> list[str]:
     """Create or top up what the template asks for, in one request; one note per library written."""
     wanted = needs(home, template, default_n) if backend is not None else []
     if not wanted:
         return []
-    answers, notes = _answers(backend.complete(prompt_for(wanted)), wanted), []
+    return write_lists(home, wanted, _answers(backend.complete(prompt_for(wanted)), wanted), backend)
+
+
+def write_lists(home: Home, wanted: list[Need], answers: dict[str, list[str]], backend: Backend) -> list[str]:
+    """Write what the model answered, for review; one note per library written."""
+    notes: list[str] = []
     for n in wanted:
         known = {v.lower() for v in n.existing}
         values = [v for v in answers.get(n.name, []) if v.lower() not in known][:n.count]

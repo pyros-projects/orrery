@@ -24,6 +24,7 @@ from pathlib import Path
 DEFAULTS = {"file": None, "clip_type": "minimax", "entries": 12, "temperature": 0.3, "max_tokens": 16000}
 TRUNCATED = re.compile(r"minimax[_-]?h3|_h3_int|h3_te", re.IGNORECASE)  # encoders that cannot generate
 _THINK_BLOCK = re.compile(r"<think>.*?</think>", re.DOTALL)
+VISION = "<|vision_start|><|image_pad|><|vision_end|>"  # the tokenizer fills each with the next frame
 _CACHE: dict[tuple[str, str], object] = {}  # (file, clip_type) → the loaded encoder; one entry
 
 
@@ -32,10 +33,11 @@ def can_write(file_name: str) -> bool:
     return not TRUNCATED.search(file_name or "")
 
 
-def chat(prompt: str) -> str:
-    """One user turn in Qwen's chat format, thinking off; used with skip_template, so a
-    model's own conditioning template (Krea's "Describe the image…") stays out."""
-    return f"<|im_start|>user\n{prompt.strip()}\n/no_think<|im_end|>\n<|im_start|>assistant\n"
+def chat(prompt: str, images: int = 0) -> str:
+    """One user turn in Qwen's chat format, thinking off, the frames first; used with skip_template,
+    so a model's own conditioning template (Krea's "Describe the image…") stays out."""
+    frames = VISION * images + "\n" if images else ""
+    return f"<|im_start|>user\n{frames}{prompt.strip()}\n/no_think<|im_end|>\n<|im_start|>assistant\n"
 
 
 def strip_reasoning(text: str) -> str:
@@ -93,7 +95,8 @@ class ComfyBackend:
             _CACHE[key] = self._load()
         return _CACHE[key]
 
-    def complete(self, prompt: str) -> str:
+    def complete(self, prompt: str, images=None) -> str:
+        """The model's answer; `images` (an IMAGE batch) are frames it sees, one vision block each."""
         # ComfyUI 0.37 keeps a fixed KV cache and CUDA graph per execution: a second generate in the
         # same run reads stale buffers and trips a device-side assert that kills the whole process.
         if self.used:
@@ -101,7 +104,9 @@ class ComfyBackend:
         self.used = True
         if self._clip is None:
             self._clip = self._cached()
-        tokens = self._clip.tokenize(chat(prompt), skip_template=True, min_length=1, thinking=False)
+        frames = {"image": images} if images is not None and len(images) else {}
+        tokens = self._clip.tokenize(chat(prompt, len(images) if frames else 0), skip_template=True, min_length=1,
+                                     thinking=False, **frames)
         try:
             ids = self._clip.generate(tokens, do_sample=True, max_length=self.max_length,
                                       temperature=self.temperature, top_k=64, top_p=0.95, min_p=0.05,
