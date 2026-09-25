@@ -45,12 +45,16 @@ test("enhance line, and the params line marks CLI-only parts", () => {
 });
 
 test("shape mirrors the node's width, height and H3 length outputs", () => {
-  assert.deepEqual(shape("a fox"), { width: 1024, height: 1024, length: 124, cli: [] });
-  assert.deepEqual(shape("a fox\n: x8 seed=100 w832 h1216"), { width: 832, height: 1216, length: 124, cli: ["x8", "seed=100"] });
-  assert.deepEqual(shape("@h3 t2va 16:9\nSHOT 5s\nA."), { width: 1344, height: 768, length: 124, cli: [] });
-  assert.deepEqual(shape("@h3 t2va 9:16\nSHOT 4s\nA.\nSHOT 3s\nB.\nSHOT 4s\nC."), { width: 768, height: 1344, length: 277, cli: [] });
+  assert.deepEqual(shape("a fox"), { width: 1024, height: 1024, length: 124, megapixels: 1.049, cli: [] });
+  assert.deepEqual(shape("a fox\n: x8 seed=100 w832 h1216"), { width: 832, height: 1216, length: 124, megapixels: 1.012, cli: ["x8", "seed=100"] });
+  assert.deepEqual(shape("@h3 t2va 16:9\nSHOT 5s\nA."), { width: 1344, height: 768, length: 124, megapixels: 1.032, cli: [] });
+  assert.deepEqual(shape("@h3 t2va 9:16\nSHOT 4s\nA.\nSHOT 3s\nB.\nSHOT 4s\nC."), { width: 768, height: 1344, length: 277, megapixels: 1.032, cli: [] });
   assert.equal(shape("@h3 t2va 21:9\nSHOT 4s\nA.").width, 1536);
   assert.equal(shape("@h3 ref2va lite 9:16\nSHOT 4s\nA.").height, 1344);
+  const mp = shape("@h3 ref2va 16:9 0.6MP\nSHOT 4s\nA.");
+  assert.deepEqual([mp.width, mp.height, mp.megapixels], [1024, 576, 0.6]);
+  assert.deepEqual([shape("@h3 t2va 0.5mp\nSHOT 4s\nA.").width, shape("@h3 t2va 0.5mp\nSHOT 4s\nA.").height], [704, 704]);
+  assert.deepEqual([shape("@h3 t2va 16:9 0.6MP\n: w1216 h832\nA.").width, shape("@h3 t2va 16:9 0.6MP\n: w1216 h832\nA.").height], [1216, 832]);
 });
 
 test("template hash matches orrery's sha256 prefix", () => {

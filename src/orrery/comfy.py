@@ -49,12 +49,26 @@ def h3_length(seconds: float) -> int:
     return frames + (5 - frames) % 17
 
 
-def h3_canvas(ratio: str) -> tuple[int, int] | None:
-    """The MiniMax H3 canvas for a ratio: 768 short edge, 768×1344 area cap, multiples of 32."""
+_MP = re.compile(r"(\d+(?:\.\d+)?)\s*mp", re.IGNORECASE)
+
+
+def header_megapixels(template: str) -> float | None:
+    """`0.6MP` in the @h3 line: the canvas area in megapixels."""
+    first = next((line.strip() for line in template.splitlines() if line.strip()), "")
+    header = re.match(r"@h3\s+\w+(.*)$", first, re.IGNORECASE)
+    return next((float(m.group(1)) for t in header.group(1).split() if (m := _MP.fullmatch(t))), None) if header else None
+
+
+def h3_canvas(ratio: str, megapixels: float | None = None) -> tuple[int, int] | None:
+    """The MiniMax H3 canvas for a ratio: 768 short edge, 768×1344 area cap, multiples of 32. With
+    megapixels, the area is that many pixels in the ratio's shape (square without a ratio)."""
     m = re.fullmatch(r"(\d+(?:\.\d+)?):(\d+(?:\.\d+)?)", ratio or "")
-    if not m or not float(m.group(2)):
+    if (not m or not float(m.group(2))) and not megapixels:
         return None
-    r = float(m.group(1)) / float(m.group(2))
+    r = float(m.group(1)) / float(m.group(2)) if m and float(m.group(2)) else 1.0
+    if megapixels:
+        w, h = math.sqrt(megapixels * 1e6 * r), math.sqrt(megapixels * 1e6 / r)
+        return max(32, round(w / 32) * 32), max(32, round(h / 32) * 32)
     w, h = (768 * r, 768) if r >= 1 else (768, 768 / r)
     if w * h > 768 * 1344:
         scale = math.sqrt(768 * 1344 / (w * h))
@@ -68,7 +82,7 @@ def shape(template: str) -> tuple[int, int, int]:
     lines = [line.strip() for line in template.splitlines() if line.strip()]
     header = re.match(r"@h3\s+\w+(.*)$", lines[0], re.IGNORECASE) if lines else None
     ratio = next((t for t in header.group(1).split() if h3_canvas(t)), "") if header else ""
-    canvas = h3_canvas(ratio) or (1024, 1024)
+    canvas = h3_canvas(ratio, header_megapixels(template)) or (1024, 1024)
     seconds = sum(float(m.group(1)) for line in lines
                   if (m := re.match(r"SHOT\s+(\d+(?:\.\d+)?)\s*s\b", line, re.IGNORECASE)))
     return (params.width or canvas[0], params.height or canvas[1],
@@ -247,6 +261,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         **({"enhanced": enhanced} if enhanced else {}),
     }
     width, height, length = shape(source)
+    data["megapixels"] = header_megapixels(source) or round(width * height / 1e6, 3)
     if target != "text":
         if result.scene.shots:
             length = h3_length(result.scene.duration)
@@ -315,9 +330,10 @@ def save_png(image, path: Path | str, picks_json: str) -> None:
 class OrreryPrompt:
     CATEGORY = "orrery"
     FUNCTION = "run"
-    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "LORA_STACK", "INT", "INT", "IMAGE", "AUDIO")
+    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "LORA_STACK", "INT", "INT", "IMAGE", "AUDIO",
+                    "FLOAT")
     RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "lora_stack", "load_index", "save_index",
-                    "previous", "previous_audio")
+                    "previous", "previous_audio", "megapixels")
     OUTPUT_TOOLTIPS = ("", "", "", "From `: w…` in the template, else the @h3 ratio, else 1024.",
                        "From `: h…` in the template, else the @h3 ratio, else 1024.",
                        ("Frames at 24 fps for the MiniMax H3 nodes' length input: the sum of the SHOT "
@@ -329,7 +345,9 @@ class OrreryPrompt:
                        "The segment + 1: wire it into H3 Motion Context Save Latent's clip_index.",
                        ("The last 3 s of the clip before this segment (H3 Motion Context's Chain Video), for the "
                         "Reference to Video node's ref_video; None in the first segment, which ref2va skips."),
-                       "The soundtrack of `previous`, for the Reference to Video node's ref_video_audio.")
+                       "The soundtrack of `previous`, for the Reference to Video node's ref_video_audio.",
+                       ("The canvas area: `0.6MP` from the @h3 line, else width × height, for resolution and "
+                        "scale nodes that take megapixels."))
     DESCRIPTION = ("Expands an orrery template (text) or compiles a screenplay (h3-base, flat) "
                    "and outputs the picks that produced it.")
 
@@ -377,7 +395,7 @@ class OrreryPrompt:
                                  params, segment, clip, stills, packed, wired)
             if (prompt_id := runs.current_prompt()) and unique_id is not None:
                 runs.remember(prompt_id, unique_id, outputs[1])  # for Generate: Save nodes log to the galaxy
-            return (*outputs, tail, audio)
+            return (*outputs, tail, audio, json.loads(outputs[1])["megapixels"])
         except ReelEnd as end:
             try:
                 from comfy_execution.graph_utils import ExecutionBlocker  # ComfyUI

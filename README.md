@@ -243,9 +243,11 @@ Restart ComfyUI. Nodes under **orrery**:
 
 - **Orrery Prompt**: seed and target (`text`, `h3-base`, `flat`), optional
   `segment` → `text`, `picks`, `seed`, `width`, `height`, `length`, `lora_stack`,
-  `load_index`, `save_index`.
+  `load_index`, `save_index`, `previous`, `previous_audio`, `megapixels`.
   Wire `text` into your text encoder or the MiniMax H3 prompt input;
-  `width`/`height` come from `: w… h…` or the `@h3` ratio, `length` is the
+  `width`/`height` come from `: w… h…` or the `@h3` ratio (`@h3 ref2va 16:9 0.6MP`
+  sizes the canvas by area, and `megapixels` puts that out for resolution and
+  scale nodes), `length` is the
   screenplay's duration in frames for the H3 latent, `lora_stack` carries the
   `LORA:` lines as a LORA_STACK for any loader with a `lora_stack` input
   (LoraManager, Efficiency, Easy-Use …); unknown or ambiguous names are

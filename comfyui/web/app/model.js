@@ -165,10 +165,12 @@ function h3Length(seconds) {
 }
 
 // Mirrors orrery.comfy.shape: what the node's width, height and length outputs will carry.
-function h3Canvas(ratio) {
+function h3Canvas(ratio, megapixels) {
   const m = /^(\d+(?:\.\d+)?):(\d+(?:\.\d+)?)$/.exec(ratio || "");
-  if (!m || !Number(m[2])) return null;
-  const r = Number(m[1]) / Number(m[2]);
+  if ((!m || !Number(m[2])) && !megapixels) return null;
+  const r = m && Number(m[2]) ? Number(m[1]) / Number(m[2]) : 1;
+  const snap = (v) => Math.max(32, Math.round(v / 32) * 32);
+  if (megapixels) return [snap(Math.sqrt(megapixels * 1e6 * r)), snap(Math.sqrt((megapixels * 1e6) / r))];
   let [w, h] = r >= 1 ? [768 * r, 768] : [768, 768 / r];
   if (w * h > 768 * 1344) { const s = Math.sqrt((768 * 1344) / (w * h)); w *= s; h *= s; }
   return [Math.max(32, Math.round(w / 32) * 32), Math.max(32, Math.round(h / 32) * 32)];
@@ -179,14 +181,18 @@ export function shape(text) {
   const params = lines.filter((l) => /^:\s*(x\d|seed=|w\d|h\d)/.test(l)).join(" ");
   const num = (re) => { const m = re.exec(params); return m ? Number(m[1]) : null; };
   const header = /^@h3\s+\w+(.*)$/i.exec(lines[0] || "");
-  const canvas = (header && header[1].split(/\s+/).map(h3Canvas).find(Boolean)) || [1024, 1024];
+  const tokens = header ? header[1].split(/\s+/) : [];
+  const mp = tokens.map((t) => /^(\d+(?:\.\d+)?)mp$/i.exec(t)).find(Boolean);
+  const megapixels = mp ? Number(mp[1]) : null;
+  const canvas = h3Canvas(tokens.find((t) => h3Canvas(t)), megapixels) || [1024, 1024];
   const seconds = lines.reduce((s, l) => { const m = /^SHOT\s+(\d+(?:\.\d+)?)\s*s\b/i.exec(l); return s + (m ? Number(m[1]) : 0); }, 0);
   const reel = header ? reelSecs(text) : null;
   const ctx = Number((/^context:\s*(\d+)/im.exec(text) || [0, 22])[1]);
   const lengths = reel && reel.secs.map((s, i) => (s ? h3Length(s + (i ? ctx / 24 : 0)) : 124));
   const length = lengths ? lengths[0] : seconds ? h3Length(seconds) : 124;
+  const width = num(/\bw(\d+)/) ?? canvas[0], height = num(/\bh(\d+)/) ?? canvas[1];
   return {
-    width: num(/\bw(\d+)/) ?? canvas[0], height: num(/\bh(\d+)/) ?? canvas[1], length,
+    width, height, length, megapixels: megapixels ?? Math.round((width * height) / 1e3) / 1e3,
     cli: params.split(/\s+/).filter((w) => /^(x\d+|seed=\d+)$/.test(w)),
     ...(lengths ? { lengths } : {}),
   };

@@ -20,7 +20,7 @@ function statsHTML(app) {
   return timing
     + `<span class="stat"><b>${st.rolls}</b> rolls · <b>${st.libs}</b> libraries · <b>${st.binds}</b> bindings${setDials(app) ? ` · <b>${setDials(app)}</b> dialed` : ""}</span>`
     + `${app.llmActive() ? `<span class="stat" title="Unknown __libraries__ and __name:N__ are made by this model when the node runs">LLM <b>${esc(app.data.llm.file.replace(/\.[a-z]+$/, ""))}</b></span>` : ""}`
-    + `<span class="stat" title="The node's width, height and length outputs${reel ? "; from the second chunk on, length includes the frames Motion Context pins" : ""}">→ <b>${out.width}×${out.height}</b>${frames}</span>`
+    + `<span class="stat" title="The node's width, height, length and megapixels outputs${reel ? "; from the second chunk on, length includes the frames Motion Context pins" : ""}">→ <b>${out.width}×${out.height}</b> · ${out.megapixels} MP${frames}</span>`
     + `${out.cli.length ? `<span class="stat cli" title="In ComfyUI, use the Run count and the seed widget">${esc(out.cli.join(" "))}: CLI only</span>` : ""}<span class="grow"></span>`
     + `${outs ? `<button class="btn ghost" data-act="outputs">${icon("image")}${outs} output${outs === 1 ? "" : "s"}</button>` : ""}`
     + `<button class="btn" data-act="test" title="Roll it in the Test tab: a few seeds, or a reel's clips">${icon("dice")}Test</button>`

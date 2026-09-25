@@ -91,7 +91,7 @@ def test_node_classes_declare_comfy_interfaces():
     inputs = OrreryPrompt.INPUT_TYPES()["required"]
     assert inputs["target"][0] == ["text", "h3-base", "flat"]
     assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length", "lora_stack",
-                                         "load_index", "save_index", "previous", "previous_audio")
+                                         "load_index", "save_index", "previous", "previous_audio", "megapixels")
     assert OrreryLog.OUTPUT_NODE is True
 
 
@@ -361,14 +361,14 @@ def test_an_unusable_answer_keeps_the_directions_and_says_so(home, monkeypatch):
 
 
 def test_the_node_hands_on_the_previous_clip_for_ref2va():
-    assert OrreryPrompt.RETURN_NAMES[-2:] == ("previous", "previous_audio")
-    assert OrreryPrompt.RETURN_TYPES[-2:] == ("IMAGE", "AUDIO")
+    assert OrreryPrompt.RETURN_NAMES[-3:-1] == ("previous", "previous_audio")
+    assert OrreryPrompt.RETURN_TYPES[-3:-1] == ("IMAGE", "AUDIO")
     assert OrreryPrompt.INPUT_TYPES()["optional"]["latent_path"][1]["forceInput"] is True
 
 
 def test_outside_a_chain_there_is_no_previous_clip(home):
     outputs = OrreryPrompt().run("a quiet street", 1, "text", home=str(home), segment=2)
-    assert len(outputs) == len(OrreryPrompt.RETURN_TYPES) and outputs[-2:] == (None, None)
+    assert len(outputs) == len(OrreryPrompt.RETURN_TYPES) and outputs[-3:-1] == (None, None)
 
 
 def test_only_slots_in_the_played_chunk_can_go_unanswered(home, monkeypatch):
@@ -456,3 +456,20 @@ def test_the_node_warns_when_fewer_references_are_wired_than_the_screenplay_uses
     text, picks, *_ = OrreryPrompt().run(REF_REEL, 1, "h3-base", home=str(home), prompt=graph, unique_id="9")
     assert "<Picture 3>" in text
     assert any("3 reference images" in i["message"] for i in json.loads(picks)["lint"])
+
+
+def test_megapixels_in_the_header_set_the_canvas_by_area():
+    w, h, _ = shape("@h3 ref2va 16:9 0.6MP\nSHOT 5s\nA fox.")
+    assert (w, h) == (1024, 576) and w % 32 == 0 and h % 32 == 0
+    w, h, _ = shape("@h3 t2va 9:16 1mp\nSHOT 5s\nA fox.")
+    assert abs(w * h / 1e6 - 1.0) < 0.05 and h > w
+    assert shape("@h3 t2va 0.5MP\nSHOT 5s\nA fox.")[:2] == (704, 704)  # no ratio: square
+    assert shape("@h3 t2va 16:9 0.6MP\n: w1216 h832\nSHOT 5s\nA fox.")[:2] == (1216, 832)
+
+
+def test_the_node_puts_out_megapixels(home):
+    assert OrreryPrompt.RETURN_NAMES[-1] == "megapixels" and OrreryPrompt.RETURN_TYPES[-1] == "FLOAT"
+    outputs = OrreryPrompt().run("@h3 t2va 16:9 0.6MP\nSHOT 5s\nA fox runs.\nSFX: wind", 1, "h3-base", home=str(home))
+    assert outputs[-1] == 0.6 and json.loads(outputs[1])["megapixels"] == 0.6
+    outputs = OrreryPrompt().run("@h3 t2va 9:16\nSHOT 5s\nA fox runs.\nSFX: wind", 1, "h3-base", home=str(home))
+    assert outputs[-1] == round(768 * 1344 / 1e6, 3)
