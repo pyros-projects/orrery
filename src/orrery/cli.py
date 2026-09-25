@@ -18,6 +18,7 @@ from orrery.presets import (
     list_presets,
     load_preset,
     preset_meta,
+    resolve_includes,
     resolve_template,
     save_preset,
     tag_preset,
@@ -51,7 +52,7 @@ def _dials(template: str, pairs: list[str]) -> str:
 def _cmd_expand(args: argparse.Namespace) -> int:
     home = resolve_home(args.home)
     try:
-        template = _dials(resolve_template(home, args.template), args.set)
+        template = resolve_includes(home, _dials(resolve_template(home, args.template), args.set))
         params = parse(template).params
         seed = args.seed if args.seed is not None else (params.seed or 0)
         count = args.n if args.n is not None else (params.count or 1)
@@ -78,7 +79,7 @@ FOREVER_SHOWN = 6  # clips printed for a reel that repeats forever
 def _cmd_compile(args: argparse.Namespace) -> int:
     home = resolve_home(args.home)
     try:
-        scene = _dials(resolve_template(home, args.scene), args.set)
+        scene = resolve_includes(home, _dials(resolve_template(home, args.scene), args.set))
         reel = split_reel(scene)
         total = reel.segments if reel else 0
         segments = ([args.segment or 0] if args.segment is not None or not reel

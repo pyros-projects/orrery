@@ -187,6 +187,40 @@ def recall_template(home: Home, digest: str) -> str | None:
     return path.read_text(encoding="utf-8") if path.exists() else None
 
 
+_INCLUDE = re.compile(r"^@include\s+@?([\w/-]+)\s*$")
+_PARAM = re.compile(r"^\s+\$?([A-Za-z_]\w*)\s*=\s*(.+)$")
+_H3_HEADER = re.compile(r"^\s*@h3\b")
+
+
+def resolve_includes(home: Home, template: str, _within: tuple[str, ...] = ()) -> str:
+    """`@include folder/name` embeds that preset where it stands; indented `key = value` lines under
+    it turn its dials (its `$key` bindings, `KEY` works too). Under a template that has its own
+    `@h3` line, the included one's header is dropped. Includes nest; a loop is an error."""
+    if "@include" not in template:
+        return template
+    from orrery.dsl import bindings, override
+
+    lines, out, i = template.split("\n"), [], 0
+    has_header = any(_H3_HEADER.match(line) for line in lines)
+    while i < len(lines):
+        m = _INCLUDE.match(lines[i].strip())
+        if not m:
+            out.append(lines[i])
+            i += 1
+            continue
+        name, params, i = m.group(1), {}, i + 1
+        while i < len(lines) and (p := _PARAM.match(lines[i])):
+            params[p.group(1)] = p.group(2).strip()
+            i += 1
+        if name in _within:
+            raise ValueError("A preset includes itself: " + " → ".join([*_within, name]))
+        body = resolve_includes(home, load_preset(home, name), (*_within, name))
+        known = {n for n, _ in bindings(body)}
+        body = override(body, {k if k in known else k.lower(): v for k, v in params.items()})
+        out.extend(line for line in body.split("\n") if not (has_header and _H3_HEADER.match(line)))
+    return "\n".join(out)
+
+
 def resolve_template(home: Home, arg: str) -> str:
     """`@preset`, `#hash`, a file path, or the template text itself (front matter stripped)."""
     ref = arg.strip()

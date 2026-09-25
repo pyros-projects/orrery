@@ -436,7 +436,7 @@ MAX_FREQUENCY = 500  # runs a frequency count may take
 MAX_FREQUENCY_CLIPS = 200  # clips, when counting across a reel (each clip recomputes the ones before)
 
 
-def _template_for(args: dict) -> tuple[str, str]:
+def _template_for(home: Home, args: dict) -> tuple[str, str]:
     """(template with the dials applied, target) from a roll or frequency request."""
     text, target = _text(args, "template"), args.get("target") or "text"
     if target not in TARGETS:
@@ -444,7 +444,10 @@ def _template_for(args: dict) -> tuple[str, str]:
     params = args.get("params") or {}
     if not isinstance(params, dict):
         raise ApiError(400, "'params' must be an object of binding: expression.")
-    return override(text, {str(k): str(v) for k, v in params.items()}), target
+    try:
+        return ps.resolve_includes(home, override(text, {str(k): str(v) for k, v in params.items()})), target
+    except (KeyError, FileNotFoundError, ValueError) as err:
+        raise ApiError(400, str(err)) from None
 
 
 def _run(home: Home, text: str, seed: int, target: str, segment: int):
@@ -464,7 +467,7 @@ def _run(home: Home, text: str, seed: int, target: str, segment: int):
 
 
 def roll(home: Home, args: dict) -> dict:
-    text, target = _template_for(args)
+    text, target = _template_for(home, args)
     seed, n = _int(args, "seed", 0), min(max(_int(args, "n", 3), 1), MAX_ROLLS)
     reel = split_reel(text) if target != "text" else None
     # a reel shows its clips at one seed, from `start` (a few at a time); anything else shows n seeds
@@ -483,7 +486,7 @@ def roll(home: Home, args: dict) -> dict:
 
 def frequency(home: Home, args: dict) -> dict:
     """How often each value comes up: over n seeds, or over the first n clips of a reel at one seed."""
-    text, target = _template_for(args)
+    text, target = _template_for(home, args)
     seed, n, across = _int(args, "seed", 0), min(max(_int(args, "n", 200), 1), MAX_FREQUENCY), args.get("across") or "seeds"
     reel = split_reel(text) if target != "text" else None
     if across == "clips":

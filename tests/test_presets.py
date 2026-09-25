@@ -159,3 +159,29 @@ def test_set_meta_updates_and_removes_fields(home):
     assert load_preset(h, "a") == "x"
     with pytest.raises(ValueError, match="built-in"):
         set_meta(h, "tutorial/01_first_wildcard", {"title": "x"})
+
+
+def test_include_embeds_a_preset_and_its_params_turn_its_dials(home):
+    from orrery.dsl import expand
+    from orrery.presets import resolve_includes, save_preset
+    h = Home(home)
+    save_preset(h, "parts/hat", "$colour = {red|blue}\na $colour hat")
+    text = resolve_includes(h, "A man in\n@include parts/hat\n  colour = green\nwalks by.")
+    assert expand(text, 1, {}).text == "A man in a green hat walks by."
+
+
+def test_an_included_screenplay_drops_its_header_under_the_includers(home):
+    from orrery.presets import resolve_includes, save_preset
+    h = Home(home)
+    save_preset(h, "fx/wave", "@h3 t2va 16:9 lite\nSHOT 5s\nA wave rises.\nSFX: surf")
+    text = resolve_includes(h, "@h3 t2va 9:16\n@include fx/wave")
+    assert text.count("@h3") == 1 and "9:16" in text and "A wave rises." in text
+
+
+def test_includes_nest_but_never_loop(home):
+    from orrery.presets import resolve_includes, save_preset
+    h = Home(home)
+    save_preset(h, "a", "A\n@include b")
+    save_preset(h, "b", "B\n@include a")
+    with pytest.raises(ValueError, match="a → b → a"):
+        resolve_includes(h, "@include a")

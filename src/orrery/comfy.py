@@ -23,7 +23,13 @@ from orrery.home import Home, resolve_home
 from orrery.library import library_files
 from orrery.llm import InvalidProposal
 from orrery.loras import lora_files, lora_stack
-from orrery.presets import list_presets, load_preset, preset_exists, remember_template
+from orrery.presets import (
+    list_presets,
+    load_preset,
+    preset_exists,
+    remember_template,
+    resolve_includes,
+)
 from orrery.reel import ReelEnd
 from orrery.slots import SLOT, fill, request, slots, write
 
@@ -124,7 +130,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         linked = None
     known = {name for name, _ in bindings(template)}
     dials = {k: v for k, v in dial_values(params).items() if k in known}
-    source = override(template, dials)
+    source = resolve_includes(h, override(template, dials))
 
     # One request per run (ComfyUI cannot safely generate twice): libraries still missing and the
     # slots go together, the slots then seeing the template; otherwise the slots see the compiled prompt.
@@ -209,9 +215,10 @@ def _previous(latent_path: str, segment: int):
 
 
 def state_token(home: Home) -> str:
-    """Changes whenever a library or the learned weights change, so ComfyUI re-runs the node."""
+    """Changes whenever a library, a preset or the learned weights change, so ComfyUI re-runs the node."""
     digest = hashlib.sha256()
-    for f in [*library_files(home.library_dir).values(), home.weights_path]:
+    presets = sorted(home.presets_dir.rglob("*.orr")) if home.presets_dir.exists() else []  # @include
+    for f in [*library_files(home.library_dir).values(), home.weights_path, *presets]:
         if f.exists():
             digest.update(f.as_posix().encode() + f.read_bytes())
     return digest.hexdigest()[:16]

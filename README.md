@@ -51,6 +51,7 @@ Qwen3.5-4B handles semantic edits; 2B is too weak for them.
 | `{\|red }car` | an empty option makes a word optional; the other options keep their spaces |
 | `{1-2$$__style__}` | pick 1–2 distinct values |
 | `$hero = __animal__` | bind once, reuse everywhere |
+| `@include effects/living_clay` + indented `room = the salon` | embed a preset where it stands; indented `key = value` lines turn its dials, so a preset is an operator with parameters (its `@h3` line gives way to yours) |
 | `$w.sfx` | a property of the entry `$w` rolled (empty if it has none): the sound follows the weather |
 | `? $w.kind=rain,snow: …` | a line kept only when the condition holds (`!=` for not); works for SFX lines too |
 | `{? $w.kind=rain: wet\|dry}` | a choice made by a condition instead of the dice |

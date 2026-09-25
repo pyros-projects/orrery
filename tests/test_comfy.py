@@ -392,3 +392,10 @@ def test_the_word_count_is_taken_after_the_slots_are_filled(home, monkeypatch):
     src = "@h3 ref2va 16:9\nsummary: A waits.\nCAST\nA (image 1): a man\nSHOT 5s\nA waits. --what happens--\nSFX: wind\n"
     _, picks, *_ = run_prompt(src, 1, "h3-base", str(home))
     assert not [i for i in json.loads(picks)["lint"] if "words" in i["message"]]
+
+
+def test_the_node_expands_includes_with_their_params(home):
+    from orrery.presets import save_preset
+    save_preset(Home(home), "parts/hat", "$colour = {red|blue}\na $colour hat")
+    text, *_ = run_prompt("A man in\n@include parts/hat\n  colour = green", 1, "text", str(home))
+    assert text == "A man in a green hat"
