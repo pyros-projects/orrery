@@ -18,6 +18,7 @@ from orrery.chain import DEFAULT_CHAIN, load, previous_clip
 from orrery.comfy_llm import ComfyBackend, can_write, llm_config
 from orrery.dsl import MissingLibrary, bindings, expand, override, parse, wanted_libraries
 from orrery.h3 import compile_scene
+from orrery.h3_ref import word_issue
 from orrery.home import Home, resolve_home
 from orrery.library import library_files
 from orrery.llm import InvalidProposal
@@ -164,6 +165,11 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     lint += [{"severity": "warn", "message": f"--{d}-- got no text from the language model; its directions stand in."}
              for d in unanswered]
     result.text = fill(result.text, texts)
+    if texts and "\ndetailed_description:\n" in result.text:  # count what the model wrote too
+        lint = [i for i in lint if not i["message"].startswith("detailed_description has")]
+        described = result.text.split("\ndetailed_description:\n", 1)[1].split("\n\noverall_soundscape:", 1)[0]
+        if issue := word_issue(described):
+            lint.append({"severity": issue.severity, "message": issue.message})
     lint = [{"severity": "info", "message": n} for n in notes] + lint
     stack: list = []
     if target != "text" and result.loras:

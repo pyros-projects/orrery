@@ -26,6 +26,15 @@ def _style_sentence(style: str) -> str:
     return f"The target video uses {article(style)} {style}{noun}."
 
 
+def word_issue(description: str) -> Issue | None:
+    """The guide's length for detailed_description; run again once `--…--` slots are filled."""
+    words = len(description.split())
+    if WORDS[0] <= words <= WORDS[1]:
+        return None
+    return Issue("warn", f"detailed_description has {words} words; the guide asks {WORDS[0]}–{WORDS[1]} "
+                         "for generation (dialogue-dense scenes may run longer).")
+
+
 def write_h3_ref(scene: Scene, lint: list[Issue]) -> str:
     prose = [it for shot in scene.shots for it in shot.items if isinstance(it, str)]
     labels = Labels(scene.cast, [s for text in [scene.summary, *prose] for s in bracket_sources(text)])
@@ -78,10 +87,8 @@ def write_h3_ref(scene: Scene, lint: list[Issue]) -> str:
     prefix = " + ".join(t for t in TASK_ORDER if t in types) or "reference generation"
     summary = f"[{prefix}] {names.plain(labels.brackets(scene.summary))}".rstrip()
     description = "\n".join(p for p in (_style_sentence(scene.style), *shots) if p)
-    words = len(description.split())
-    if not WORDS[0] <= words <= WORDS[1]:
-        lint.append(Issue("warn", f"detailed_description has {words} words; the guide asks {WORDS[0]}–{WORDS[1]} "
-                                  "for generation (dialogue-dense scenes may run longer)."))
+    if issue := word_issue(description):
+        lint.append(issue)
     parts = {
         "subject_definitions": "\n".join(definitions),
         "summary": summary,

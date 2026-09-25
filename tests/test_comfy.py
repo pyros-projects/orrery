@@ -385,3 +385,10 @@ SFX: rain
 """
     _, picks, *_ = run_prompt(reel, 1, "h3-base", str(home), segment=0)
     assert not [i for i in json.loads(picks)["lint"] if "got no text" in i["message"]]
+
+
+def test_the_word_count_is_taken_after_the_slots_are_filled(home, monkeypatch):
+    fake_llm(monkeypatch, {"slot 1": " ".join(["word"] * 360)})
+    src = "@h3 ref2va 16:9\nsummary: A waits.\nCAST\nA (image 1): a man\nSHOT 5s\nA waits. --what happens--\nSFX: wind\n"
+    _, picks, *_ = run_prompt(src, 1, "h3-base", str(home))
+    assert not [i for i in json.loads(picks)["lint"] if "words" in i["message"]]
