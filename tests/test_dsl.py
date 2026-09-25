@@ -293,3 +293,21 @@ def test_directions_stay_out_of_pick_labels_and_learned_keys():
     brace = picks[0]
     assert brace.label == "{__a__|__b__}" and "(" not in brace.value
     assert all("(" not in k for k in brace.keys)
+
+
+def test_an_entry_that_ends_a_sentence_loses_its_period_when_the_line_goes_on():
+    libs = _libs(pose=["Panicked run: hair flying, conveying fear."], place=["a wooded frisbee course."],
+                 pause=["She waits..."])
+    assert expand("doing __pose__ at __place__", 1, libs).text == (
+        "doing Panicked run: hair flying, conveying fear at a wooded frisbee course.")
+    assert expand("__pose__", 1, libs).text == "Panicked run: hair flying, conveying fear."
+    assert expand("__place__. Then", 1, libs).text == "a wooded frisbee course. Then"
+    assert expand("__pause__ now", 1, libs).text == "She waits... now"  # an ellipsis is meant
+    assert expand("__place__ Then it rains.", 1, libs).text == "a wooded frisbee course. Then it rains."
+
+
+def test_a_mid_sentence_entry_starts_with_a_small_article():
+    libs = _libs(place=["A wooded frisbee course.", "Tokyo Tower at night."])
+    seen = {expand("she runs at __place__", s, libs).text for s in range(20)}
+    assert seen == {"she runs at a wooded frisbee course.", "she runs at Tokyo Tower at night."}
+    assert expand("__place__", 3, _libs(place=["A wooded frisbee course."])).text == "A wooded frisbee course."

@@ -27,6 +27,7 @@ _MULTI = re.compile(r"^(\d+)(?:-(\d+))?\$\$(.+)$")
 _WEIGHTED = re.compile(r"^(.*?):(\d+(?:\.\d+)?)$")
 _LIB_ONLY = re.compile(r"^__(\w+(?:/\w+)*)(?:\[([\w-]+)\])?((?:#[\w-]+:[\w-]+)*)(?::\d+)?__(?:\([^()]*\))?$")
 _PROP = re.compile(r"#([\w-]+):([\w-]+)")
+_ARTICLE = re.compile(r"(?:A|An|The) ")
 _LORA_TAG = re.compile(r"<lora:[^<>]*>")  # opaque: LoRA file names may contain __
 _HIDDEN = re.compile("\x00(\\d+)\x00")
 _AN_PREFIXES = ("hour", "honest", "honor", "honour", "heir")
@@ -141,6 +142,20 @@ def _parse_params(text: str) -> Params:
     return Params(grab(r"\bx(\d+)"), grab(r"\bseed=(\d+)"), grab(r"\bw(\d+)"), grab(r"\bh(\d+)"))
 
 
+def _mid_line(value: str, m: re.Match) -> str:
+    """A picked sentence that the sentence around it goes on after loses its final period, so
+    `doing __pose__ at __place__` stays one sentence. It stays before a capital (a new sentence),
+    another pick (unknown), at the end of the line, and as an ellipsis."""
+    rest = m.string[m.end():].split("\n", 1)[0].lstrip()
+    goes_on = bool(rest) and (rest[0].islower() or rest[0].isdigit() or rest[0] in ".,;:)!?")
+    if goes_on and value.endswith(".") and not value.endswith(".."):
+        value = value[:-1]
+    before = m.string[:m.start()].rsplit("\n", 1)[-1].rstrip()
+    if before and (before[-1].islower() or before[-1] == ",") and _ARTICLE.match(value):
+        value = value[0].lower() + value[1:]  # "at A wooded course" reads "at a wooded course"
+    return value
+
+
 def _label(name: str, tag: str | None, props: str | None) -> str:
     return f"__{name}{f'[{tag}]' if tag else ''}{props or ''}__"
 
@@ -184,8 +199,8 @@ class Expander:
             if not m:
                 break
             text = text[: m.start()] + self._brace(m.group(1)) + text[m.end():]
-        text = _LIB.sub(lambda m: self._library(m.group(1), m.group(2), label_prefix, m.group(3)), text)
-        text = _VAR.sub(self._var, text)
+        text = _LIB.sub(lambda m: _mid_line(self._library(m.group(1), m.group(2), label_prefix, m.group(3)), m), text)
+        text = _VAR.sub(lambda m: _mid_line(self._var(m), m), text)
         return self._articles(text)
 
     def _var(self, m: re.Match) -> str:

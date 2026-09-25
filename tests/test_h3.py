@@ -233,3 +233,12 @@ def test_flat_writes_the_prose_of_a_template_without_shots():
 def test_stray_prose_before_the_first_shot_still_warns():
     r = h3("@h3 t2va\nloose words\nSHOT 5s\nA.\nSFX: x\n")
     assert "loose words" not in r.text and any("before the first SHOT" in m for m in warnings(r))
+
+
+def test_a_mid_sentence_entry_does_not_break_the_shot_into_sentences():
+    from orrery.library import Entry, Library
+    libs = {"pose": Library("pose", [Entry("Panicked run with a panicked expression.")]),
+            "place": Library("place", [Entry("A wooded frisbee golf course.")])}
+    src = "@h3 t2va 9:16\nSHOT 6s | static\nA woman doing __pose__ at __place__\nSFX: wind\n"
+    text = compile_scene(src, 1, libs).text
+    assert "at a wooded frisbee golf course." in text and "At A" not in text
