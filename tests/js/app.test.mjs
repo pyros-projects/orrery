@@ -221,3 +221,7 @@ test("a big library shows a page at a time, and a search shows only matching ent
   assert.deepEqual([hit.total, hit.rows[0].i], [1, 4242]);
   assert.equal(entryPage(entries, { name: "pyro/general_prompts", query: "general" }).total, 7071);  // the name matched
 });
+
+test("dynamic prompts weights are no part of a dial's choices", () => {
+  assert.deepEqual(dials("$c = {3::red|1::blue|green}")[0].options, ["red", "blue", "green"]);
+});

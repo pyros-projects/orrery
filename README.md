@@ -47,7 +47,7 @@ Qwen3.5-4B handles semantic edits; 2B is too weak for them.
 | `__film/genre__` | a library in a folder: `library/film/genre.yaml` or `.txt`, as in z-explorer |
 | `__animal[feline]__` | only entries tagged `feline` |
 | `__characters/cyberpunk#gender:female__` | only entries with that property (`props: {gender: female}` in the YAML, or `gender:female` typed into an entry's tag field); several `#key:value` must all match, in any case |
-| `{a\|b\|c:3}` | inline choice; `:3` is a static weight |
+| `{a\|b\|c:3}` | inline choice; `:3` is a static weight (Dynamic Prompts' `{3::c\|a\|b}` works too) |
 | `{\|red }car` | an empty option makes a word optional; the other options keep their spaces |
 | `{1-2$$__style__}` | pick 1–2 distinct values |
 | `$hero = __animal__` | bind once, reuse everywhere |

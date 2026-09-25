@@ -311,3 +311,11 @@ def test_a_mid_sentence_entry_starts_with_a_small_article():
     seen = {expand("she runs at __place__", s, libs).text for s in range(20)}
     assert seen == {"she runs at a wooded frisbee course.", "she runs at Tokyo Tower at night."}
     assert expand("__place__", 3, _libs(place=["A wooded frisbee course."])).text == "A wooded frisbee course."
+
+
+def test_dynamic_prompts_weights_are_read_too():
+    """`{3::red|1::blue}` (Dynamic Prompts) weighs like orrery's `{red:3|blue}`."""
+    counts = Counter(expand("{3::red|1::blue}", s, {}).text for s in range(400))
+    assert set(counts) == {"red", "blue"} and 2.2 < counts["red"] / counts["blue"] < 4.2
+    assert expand("{2::a|b}", 1, {}).picks[0].label == "{a|b}"
+    assert set(expand("{2$$3::x|1::y|z}", 1, {}).text.split(", ")) <= {"x", "y", "z"}

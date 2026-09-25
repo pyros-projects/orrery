@@ -25,6 +25,7 @@ _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
 _BINDING_LINE = re.compile(r"^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$")
 _MULTI = re.compile(r"^(\d+)(?:-(\d+))?\$\$(.+)$")
 _WEIGHTED = re.compile(r"^(.*?):(\d+(?:\.\d+)?)$")
+_DP_WEIGHT = re.compile(r"^\s*(\d+(?:\.\d+)?)::(.*)$", re.DOTALL)  # Dynamic Prompts: {3::red|1::blue}
 _LIB_ONLY = re.compile(r"^__(\w+(?:/\w+)*)(?:\[([\w-]+)\])?((?:#[\w-]+:[\w-]+)*)(?::\d+)?__(?:\([^()]*\))?$")
 _PROP = re.compile(r"#([\w-]+):([\w-]+)")
 _ARTICLE = re.compile(r"(?:A|An|The) ")
@@ -258,8 +259,9 @@ class Expander:
         keep = len(raws) > 1 and any(not raw.strip() for raw in raws)  # `{|red }car`: an optional word
         options = []
         for raw in raws:
-            wm = _WEIGHTED.match(raw)
-            value, weight = (wm.group(1), float(wm.group(2))) if wm else (raw, 1.0)
+            wm, dp = _WEIGHTED.match(raw), _DP_WEIGHT.match(raw)
+            value, weight = (dp.group(2), float(dp.group(1))) if dp else \
+                (wm.group(1), float(wm.group(2))) if wm else (raw, 1.0)
             options.append((value if keep else value.strip(), weight))
         # Labels and learned keys leave `(directions)` out: editing them must not rename the choice.
         family = without_directions("{" + "|".join(v for v, _ in options) + "}")
@@ -274,8 +276,10 @@ class Expander:
         if lm := _LIB_ONLY.match(source):
             family, pool = self._pool(lm.group(1), lm.group(2), lm.group(3))
         else:
-            family = without_directions("{" + source + "}")
-            pool = [(v.strip(), self.learned(f"{family}={without_directions(v.strip())}")) for v in source.split("|")]
+            options = [(dp.group(2).strip(), float(dp.group(1))) if (dp := _DP_WEIGHT.match(v)) else (v.strip(), 1.0)
+                       for v in source.split("|")]
+            family = without_directions("{" + "|".join(v for v, _ in options) + "}")
+            pool = [(v, w * self.learned(f"{family}={without_directions(v)}")) for v, w in options]
         chosen: list[str] = []
         while pool and len(chosen) < n:
             i = weighted_pick([w for _, w in pool], self.rng)
