@@ -1,0 +1,15 @@
+---
+title: "Entity test (SCP)"
+note: "How well does H3 render things that are not human? Five SCP Wiki entities chosen to test different things: stretched humanoid anatomy (096), regenerating flesh in acid (682), an eyeless predator that speaks with a human voice (939), soft-body slime (999) and colossal scale (3000). Each gets its own cell, one visible action, a camera move and sound. $named = yes puts the SCP number in front of the description, to test whether H3 knows them by name (same seed, flip the dial). $look switches cinematic and security-camera footage. The scp/ library is CC BY-SA 3.0: credit the entity's cite when you share what you make."
+tags: [h3, scp, creature, test]
+---
+@h3 t2va 16:9
+$entity = __scp/entities__
+$named = {no|yes}
+$look = {cinematic:2|cctv}
+style: {? $look=cctv: security-camera footage from a fixed high corner mount, wide and slightly barrel-distorted, flat light, blocky compression and a timestamp in the corner|live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, crisp detail in skin, slime and scales}
+MUSIC: N/A
+
+SHOT 10s | {? $look=cctv: static|$entity.shot}
+In $entity.cell waits {? $named=yes: $entity.id, $entity|$entity}. It $entity.act.
+SFX: $entity.sfx
