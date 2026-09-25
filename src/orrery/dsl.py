@@ -178,6 +178,8 @@ class Expander:
         # (name, clips back) → that clip's value; set by reels. Without it, $x~N is $x.
         self.history: Callable[[str, int], str | None] | None = None
         self.var_props: dict[str, dict[str, str]] = {}  # a binding → the properties of the picks it rolled
+        # (name, clips back) → that clip's properties of the binding; set by reels, for $x~N.field
+        self.history_props: Callable[[str, int], dict[str, str]] | None = None
         self._props_seen: dict[str, str] = {}
         self._within: list[str] = []  # the libraries whose entry is being expanded, outermost first
 
@@ -227,8 +229,10 @@ class Expander:
 
     def _var(self, m: re.Match) -> str:
         name, back, field = m.group(1), m.group(2), m.group(3)
-        if field:  # a property of the pick behind the binding; empty when it has none
-            return "" if back is not None else self.var_props.get(name, {}).get(field, "")
+        if field:  # a property of the pick behind the binding (N clips back with ~N); empty when it has none
+            if back is not None:
+                return (self.history_props(name, int(back)) if self.history_props else self.var_props.get(name, {})).get(field, "")
+            return self.var_props.get(name, {}).get(field, "")
         value = self.history(name, int(back)) if back is not None and self.history else None
         if value is None:
             value = self.vars.get(name)

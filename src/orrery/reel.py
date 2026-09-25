@@ -121,6 +121,7 @@ def build_segment(reel: Reel, seed: int, libraries: Mapping[str, Library],
     head = [world.expr(line.strip()) for line in reel.head if line.strip() and not BINDING.match(line.strip())]
 
     history: list[dict[str, str]] = []  # every earlier segment's bindings, recomputed
+    history_props: list[dict[str, dict[str, str]]] = []  # and the properties of what they rolled
 
     def expander(t: int) -> tuple[Expander, Block]:
         block = reel.blocks[reel.locate(t)[0]]
@@ -133,13 +134,17 @@ def build_segment(reel: Reel, seed: int, libraries: Mapping[str, Library],
             return ex.vars.get(name) if target >= t else history[target].get(name)
 
         ex.history = back
+        ex.history_props = lambda name, n: (ex.var_props if max(t - n, 0) >= t
+                                            else history_props[max(t - n, 0)]).get(name, {})
         for line in block.lines:
             if m := BINDING.match(line.strip()):
                 ex.bind(m.group(1), m.group(2))
         return ex, block
 
     for t in range(segment + 1):
-        history.append(dict(expander(t)[0].vars))
+        ex_t = expander(t)[0]
+        history.append(dict(ex_t.vars))
+        history_props.append(dict(ex_t.var_props))
 
     def expand(t: int) -> tuple[list[str], str | None, list[Pick], list[Pick]]:
         ex, block = expander(t)

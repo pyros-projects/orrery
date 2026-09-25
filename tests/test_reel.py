@@ -174,3 +174,17 @@ def test_forever_repeats_without_end_and_chunks_after_it_warn():
     assert "Walk at" in far.text and far.segment == 57
     assert any("never" in i.message for i in far.lint)
     assert h3(forever, 3, 9).text == h3(forever, 3, 9).text
+
+
+def test_a_property_of_an_earlier_clip_is_read_with_its_history():
+    """An endless tour: this clip opens the threshold the last one ended on ($thr~1.open)."""
+    from orrery.library import Entry, Library
+    libs = {"thr": Library("thr", [Entry("velvet curtains", props=(("open", "the curtains part"),)),
+                                   Entry("mirrored doors", props=(("open", "the mirrored doors swing inward"),))])}
+    src = ("@h3 t2va 16:9\nCHUNK the tour repeat forever\n$thr = __thr__\nSHOT 5s\n"
+           "Opening: $thr~1.open. Ending before $thr.\nSFX: footsteps\n")
+    for seg in (1, 2, 3):
+        now = compile_scene(src, 5, libs, segment=seg).text
+        before = compile_scene(src, 5, libs, segment=seg - 1).text
+        ended = "velvet curtains" if "before velvet curtains" in before else "mirrored doors"
+        assert ("the curtains part" if ended == "velvet curtains" else "the mirrored doors swing inward") in now
