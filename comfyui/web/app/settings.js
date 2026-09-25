@@ -32,7 +32,7 @@ export async function openSettings(app) {
     <div class="field"><label class="label" for="oa-llm-n">A library it creates starts with</label>
       <div class="row"><input class="input narrow" id="oa-llm-n" type="number" min="1" max="200" value="${s.entries}"><span class="muted">entries · <code>__name:30__</code> asks for at least 30</span></div></div>
     <div class="field"><label class="label" for="oa-llm-t">Max tokens</label>
-      <div class="row"><input class="input narrow" id="oa-llm-t" type="number" min="64" max="131072" step="500" value="${s.max_tokens}"><span class="muted">the longest answer it may write in one run; long entries need room</span></div></div>
+      <div class="row"><input class="input narrow" id="oa-llm-t" type="number" min="500" max="131072" step="500" value="${s.max_tokens}"><span class="muted">the longest answer it may write in one run; long entries need room</span></div></div>
     <div class="acts"><button type="button" class="btn ghost" data-cancel>Cancel</button><button class="btn primary">${icon("save")}Save</button></div>
   </form>`);
   sheet.querySelector("[data-cancel]").onclick = () => app.closeSheet();
