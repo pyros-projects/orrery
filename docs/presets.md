@@ -27,8 +27,9 @@ to render in quotes), and `h3/` holds MiniMax H3 scenes (dialogue in German
 and Cantonese, a voiceover, fast cuts, an animated fable, on-screen music, and
 an I2VA starter for your own stills, a three-clip reel for H3 Motion
 Context, a drone flight, an impossible camera move that dives into a dewdrop
-and comes out elsewhere, and a world swap inside one take, and an entity test that shows how H3
-renders five non-human SCP entities, with a dial for naming them). `effects/` holds Ito-style body-horror operators in the lite format,
+and comes out elsewhere, and a world swap inside one take, an entity test that shows how H3
+renders five non-human SCP entities, with a dial for naming them, and an
+archetype test that checks where H3 pulls an unfamiliar design). `effects/` holds Ito-style body-horror operators in the lite format,
 from Codie's H3 tests: subsurface travel, body suit, mirror replacement, living
 paper, glass body, living clay, elastic body, hollow vessel, filament, human
 drawer and zipper spine, plus his operators surface press, feature migration,
@@ -59,8 +60,8 @@ to unhinged. They draw on the pack libraries: `world/` (landscapes, weather,
 habitats), `looks/` (fifty-odd video looks with their own camera, sound and
 music, still looks by family), `moments/`, `subjects/`, `frame/`, `drone/`,
 `tour/`, `transitions/`, `scale/`, `time/` and `backrooms/`. One library is
-licensed differently: `scp/entities` is adapted from the SCP Wiki and is
-CC BY-SA 3.0, each entry carrying its article's citation in `cite`. Videos
+licensed differently: the `scp/` libraries are adapted from the SCP Wiki and
+are CC BY-SA 3.0, each entry carrying its article's citation in `cite`. Videos
 made from it are adaptations as well: credit the cite and share them under
 CC BY-SA. Styles are named by medium,
 era, format and defects, never by artist: that is what MiniMax H3 follows, and

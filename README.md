@@ -236,9 +236,9 @@ camera sees, not by artist or brand names.
 
 ## License
 
-MIT, see [LICENSE](LICENSE). One library is licensed differently:
-`src/orrery/builtin/scp/entities.yaml` is adapted from the SCP Wiki under
-CC BY-SA 3.0, and every entry carries its article's citation.
+MIT, see [LICENSE](LICENSE). The libraries in `src/orrery/builtin/scp/` are
+licensed differently: they are adapted from the SCP Wiki under CC BY-SA 3.0,
+and every entry carries its article's citation.
 
 ## Acknowledgments
 
@@ -253,7 +253,7 @@ CC BY-SA 3.0, and every entry carries its article's citation.
 - ostris's 1,000-clip H3 style probe and hoodtronik's
   [style atlas](https://hoodtronik.github.io/minimax-h3-style-atlas/), which
   show what H3 renders
-- The SCP Wiki authors credited in `scp/entities`
+- The SCP Wiki authors credited in the `scp/` libraries
 - Codie, for the continuity method behind the endless tours and the
   body-horror operators
 

@@ -20,9 +20,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-The library src/orrery/builtin/scp/entities.yaml is adapted from the SCP Wiki
-and is licensed separately under CC BY-SA 3.0; see the file's meta and the
-citation on each entry.
+The libraries in src/orrery/builtin/scp/ are adapted from the SCP Wiki and are
+licensed separately under CC BY-SA 3.0; see each file's meta and the citation
+on each entry.
 
 The video looks in src/orrery/builtin/looks/video.yaml are adapted from the
 Krea style library of ComfyUI-NO8D-controls

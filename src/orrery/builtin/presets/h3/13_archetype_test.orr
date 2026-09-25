@@ -1,0 +1,15 @@
+---
+title: "Archetype test (SCP, round 2)"
+note: "Does H3 pull an unfamiliar design toward the nearest familiar one, and can a description written against that pull escape it? Five SCP Wiki entities, each a different pull: a whole cat (529), real dragons (1762), one half of a hybrid winning (111), a cartoon (131), a plain stag (2845). $version = counter describes the archetype-breaking features first, as things you can see; naive is the plain description. Same seed, flip $version: the setting and the action stay word for word the same. Each entry's pull and watch properties (Libraries → scp/archetype_test) hold the prediction to check. The look is fixed to live-action so nothing else changes. CC BY-SA 3.0: credit the entity's cite when you share what you make."
+tags: [h3, scp, creature, test]
+---
+@h3 t2va 16:9
+$entity = __scp/archetype_test__
+$version = {counter|naive}
+$describe = {? $version=naive: $entity.naive|$entity}
+style: live-action, photorealistic, one continuous unbroken ten-second shot on 35mm film, everything real and physically present in the room
+MUSIC: N/A
+
+SHOT 10s | $entity.shot
+In $entity.cell, the camera finds $describe. $entity.act
+SFX: $entity.sfx
