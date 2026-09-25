@@ -3,6 +3,7 @@
 import argparse
 import json
 import sys
+from pathlib import Path
 
 from orrery import manager
 from orrery.comfy import h3_length
@@ -205,8 +206,28 @@ def _lib_undo(home, args) -> int:
     return 0
 
 
+def _lib_import(home, args) -> int:
+    from orrery.importer import plan_import, run_import
+
+    plan = plan_import(Path(args.src), set(home.libraries()), into=args.into, merge=args.merge)
+    entries = sum(len(v) for v in plan.libraries.values())
+    for name in list(plan.libraries)[:20]:
+        print(f"  __{name}__".ljust(48) + f"{len(plan.libraries[name]):>6}")
+    if len(plan.libraries) > 20:
+        print(f"  … and {len(plan.libraries) - 20} more")
+    reasons: dict[str, int] = {}
+    for _, reason in plan.skipped:
+        reasons[reason.split(" ")[0]] = reasons.get(reason.split(" ")[0], 0) + 1
+    skipped = ", ".join(f"{n} {r}" for r, n in sorted(reasons.items())) or "nothing"
+    verb = "Would import" if args.dry_run else "Imported"
+    print(f"{verb} {len(plan.libraries)} libraries ({entries} entries); {len(plan.renamed)} renamed; skipped {skipped}.")
+    if not args.dry_run:
+        run_import(home, plan)
+    return 0
+
+
 _LIB_ACTIONS = {"list": _lib_list, "show": _lib_show, "gen": _lib_gen, "more": _lib_more,
-                "edit": _lib_edit, "undo": _lib_undo}
+                "edit": _lib_edit, "undo": _lib_undo, "import": _lib_import}
 
 
 def _cmd_preset(args: argparse.Namespace) -> int:
@@ -282,6 +303,11 @@ def build_parser() -> argparse.ArgumentParser:
     edit.add_argument("name")
     edit.add_argument("instruction")
     lib_sub.add_parser("undo", help="restore the state before the last change")
+    imp = lib_sub.add_parser("import", help="import a folder of wildcard .txt files (names cleaned, references kept)")
+    imp.add_argument("src", help="the folder the pack's own __references__ start from")
+    imp.add_argument("--into", help="put everything under this folder, e.g. dp")
+    imp.add_argument("--merge", metavar="NAME", help="merge every line of every file into one library NAME")
+    imp.add_argument("--dry-run", action="store_true", help="show what would be imported")
     for p in (gen, more, edit):
         p.add_argument("--yes", action="store_true", help="apply without asking")
     lib.set_defaults(func=_cmd_lib)

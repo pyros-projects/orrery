@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { highlight } from "../../comfyui/web/app/highlight.js";
 import {
-  applyDials, dials, filterPresets, libraryGroups, filterRows, glyph, markPicks, pickerGroups, shape, stats, templateHash,
+  applyDials, dials, entryPage, filterPresets, libraryGroups, filterRows, glyph, markPicks, pickerGroups, shape, stats, templateHash,
 } from "../../comfyui/web/app/model.js";
 
 const known = new Set(["creature", "place"]);
@@ -210,4 +210,14 @@ test("property filters are part of a library everywhere", () => {
     /<span class="t-lib">__characters\/cyberpunk#gender:female__<\/span>/);
   assert.equal(stats("__characters/cyberpunk#gender:female#age:30s:2__").libs, 1);
   assert.equal(dials("$hero = __characters/cyberpunk#gender:female__")[0].lib, "characters/cyberpunk");
+});
+
+test("a big library shows a page at a time, and a search shows only matching entries", () => {
+  const entries = Array.from({ length: 7071 }, (_, i) => ({ value: i === 4242 ? "neon pink tee" : `prompt ${i}`, tags: [] }));
+  const page = entryPage(entries, { name: "pyro/general_prompts" });
+  assert.equal(page.rows.length, 200); assert.equal(page.total, 7071);
+  assert.equal(entryPage(entries, { name: "pyro/general_prompts", shown: 400 }).rows.length, 400);
+  const hit = entryPage(entries, { name: "pyro/general_prompts", query: "Neon" });
+  assert.deepEqual([hit.total, hit.rows[0].i], [1, 4242]);
+  assert.equal(entryPage(entries, { name: "pyro/general_prompts", query: "general" }).total, 7071);  // the name matched
 });

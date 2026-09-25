@@ -62,7 +62,12 @@ template itself: `__80s/Women/80s_sports__` or `{a|b}` inside it expand too,
 as in Dynamic Prompts (a library that comes back to itself is an error).
 Library names are word characters and `/`: a file with `-` or spaces in its
 path is not found. When a name exists
-as both, the YAML wins. The home folder is set in the node's gear (a pointer in
+as both, the YAML wins. `orrery lib import FOLDER [--into dp] [--merge NAME]`
+brings in a whole pack: names become word characters (`80s-pack/daily-wear.txt`
+is `__80s_pack/daily_wear__`), references between its files follow, readmes and
+duplicate files are skipped, and `--merge` turns a folder of one-prompt files
+into one library. The Libraries tab rereads the folder whenever you open it and
+shows big libraries 200 entries at a time; its search filters the entries. The home folder is set in the node's gear (a pointer in
 `~/.config/orrery/home`); `ORRERY_HOME`, `--home` and a node's own home field win
 over it.
 

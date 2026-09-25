@@ -2,7 +2,7 @@
 // language model wrote waits on top for review; the rest is grouped into folders by name prefix.
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
-import { libraryGroups } from "./model.js";
+import { entryPage, libraryGroups, LIB_PAGE } from "./model.js";
 
 async function ensure(app) {
   if (app.data.libraries && !app.data.libStale) return;
@@ -54,7 +54,8 @@ export async function renderLibraries(app) {
   s.lib = L.name;
   const ro = L.source === "builtin";
   const tags = [...new Set(L.entries.flatMap((e) => e.tags))].sort();
-  const rows = L.entries.map((e, i) => ({ e, i })).filter(({ e }) => !s.libTag || e.tags.includes(s.libTag));
+  if (s.libShownFor !== L.name) { s.libShownFor = L.name; s.libShown = LIB_PAGE; }
+  const { rows, total } = entryPage(L.entries, { name: L.name, query: s.libSearch, tag: s.libTag, shown: s.libShown });
   app.view.innerHTML = `<div class="libs">
     <div class="liblist"><label class="search">${icon("search")}<input class="input" id="oa-ls" placeholder="Library or entry…" value="${esc(s.libSearch)}"></label>
       <div class="scroll"><ul>${listHTML(app, libs, L.name)}</ul></div>
@@ -67,7 +68,7 @@ export async function renderLibraries(app) {
       ${tags.length ? `<div class="bar flat"><span class="label">Tags</span>${tags.map((t) => `<button class="chip" aria-pressed="${s.libTag === t}" data-ltag="${esc(t)}">${esc(t)}</button>`).join("")}</div>` : ""}
       <div class="scroll"><table class="entries"><thead><tr><th class="label">Entry</th><th class="label">Tags</th><th class="label" title="Static weight in the file">Weight</th><th class="label" title="Learned from your galaxy ratings">Learned</th><th></th></tr></thead><tbody>
       ${rows.map(({ e, i }) => rowHTML(e, i, ro, (L.pending_entries || []).includes(e.value))).join("") || '<tr><td colspan="5" class="empty">No entries yet. Add some below.</td></tr>'}
-      </tbody></table></div>
+      </tbody></table>${total > rows.length ? `<div class="addrow"><button class="btn ghost wide" data-lact="more">Show ${Math.min(LIB_PAGE, total - rows.length)} more of ${total - rows.length}</button></div>` : ""}</div>
       ${ro ? "" : `<div class="addrow"><input class="input" id="oa-add" placeholder="Add entries: one per line or comma-separated, then ↵"><button class="btn" data-lact="add">${icon("plus")}Add</button></div>`}
       <div class="ask">${icon("spark")}<span>Ask the LLM, e.g. “remove all cats and make them a new list feline”: coming in stage 5. It runs in the ComfyUI queue and shows a diff before anything changes.</span></div>
     </div></div>`;
@@ -185,6 +186,7 @@ function wire(app, L) {
         },
       });
     }
+    if (act === "more") { s.libShown += LIB_PAGE; return renderLibraries(app); }
     if (act === "new") { s.libNew = ""; renderLibraries(app); app.$("#oa-newlib").focus(); }
     if (act === "accept" || act === "discard") return review(app, L, act);
     if (act === "add") addEntries(app, L);

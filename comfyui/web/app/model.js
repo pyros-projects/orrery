@@ -231,3 +231,14 @@ export function libraryGroups(libs) {
     ...keys.map((k) => ({ key: k, items: rest.filter((l) => keyOf(l) === k).sort(byName).map((l) => ({ lib: l, short: short(l, k) })) })),
   ];
 }
+
+// Libraries tab: a big library (a folder of wildcards merged into one) shows a page at a time, and a
+// search that is not the library's own name shows only the entries that match it.
+export const LIB_PAGE = 200;
+
+export function entryPage(entries, { name = "", query = "", tag = null, shown = LIB_PAGE } = {}) {
+  const q = query.trim().toLowerCase();
+  const rows = entries.map((e, i) => ({ e, i }))
+    .filter(({ e }) => (!tag || e.tags.includes(tag)) && (!q || name.includes(q) || e.value.toLowerCase().includes(q)));
+  return { rows: rows.slice(0, shown), total: rows.length };
+}

@@ -121,6 +121,11 @@ export class OrreryApp {
     TABS.find(([k]) => k === this.state.tab)[2](this);
   }
   go(tab) {
+    // Opening Libraries reads the folder again: files added outside the node show up without a reload.
+    if (tab === "libraries" && this.state.tab !== "libraries") {
+      this.data.libStale = true;
+      this.refreshCompletion().catch(() => {});
+    }
     this.state.tab = tab;
     this.state.pick = false;
     this.bridge.props.orrery_tab = tab;
