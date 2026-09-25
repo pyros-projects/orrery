@@ -66,15 +66,23 @@ def test_a_library_in_a_new_folder_gets_the_folder_too(home):
     assert Home(home).libraries()["film/genre"].values() == ["noir", "western"]
 
 
-def test_a_lists_directions_win_over_the_default_style(home):
+def test_a_list_with_directions_gets_only_its_directions(home):
     from orrery.autolib import Need, prompt_for
     prompt = prompt_for([Need("film/mood", 20, "__film/mood__", "at least one sentence, cinematic moods"),
                          Need("props", 12, "__props__")])
-    default, lists = prompt.index("Default style"), prompt.index("__film/mood__")
-    assert default < lists  # the default first, the lists and their directions after it
-    assert "1-4 words" in prompt[default:lists]
-    assert "Directions: at least one sentence, cinematic moods" in prompt[lists:]
-    assert "Directions win" in prompt[lists:]
+    mood = next(b for b in prompt.split("\n- ") if b.startswith("__film/mood__"))
+    props = next(b for b in prompt.split("\n- ") if b.startswith("__props__"))
+    assert "Directions: at least one sentence, cinematic moods" in mood and "1-4 words" not in mood
+    assert "Used in" not in mood  # the template line would pull it toward a short phrase that fits the slot
+    assert "1-4 words" in props  # the default style, only where there are no directions
+    assert prompt.count("1-4 words") == 1
+
+
+def test_the_context_leaves_out_the_directions_of_other_lists(home):
+    from orrery.autolib import needs
+    wanted = needs(Home(home), "a __genre__(like 'action film', 'documentary') scene of __props__", 12)
+    props = next(n for n in wanted if n.name == "props")
+    assert props.context == "a __genre__ scene of __props__"
 
 
 def test_entries_of_any_length_are_kept_whole(home):

@@ -110,6 +110,11 @@ def library_directions(template: str) -> dict[str, str]:
     return {m.group(1): m.group(4).strip() for m in _LIB.finditer(_LORA_TAG.sub("", template)) if m.group(4)}
 
 
+def without_directions(text: str) -> str:
+    """The text with every `__name__(directions)` cut back to `__name__`."""
+    return _LIB.sub(lambda m: m.group(0).split("(", 1)[0] if m.group(4) is not None else m.group(0), text)
+
+
 def bindings(template: str) -> list[tuple[str, str]]:
     """A template's bindings, in order: its dials, with their default expressions."""
     return parse(template).bindings

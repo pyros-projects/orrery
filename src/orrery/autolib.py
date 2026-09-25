@@ -13,11 +13,13 @@ import json
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 
-from orrery.dsl import library_directions, wanted_libraries
+from orrery.dsl import library_directions, wanted_libraries, without_directions
 from orrery.home import Home
 from orrery.library import Entry, Library
 from orrery.llm import Backend, InvalidProposal, extract_json
 from orrery.manager import _snapshot, parse_list
+
+DEFAULT_STYLE = "short and vivid entries (1-4 words), lowercase unless a proper noun"
 
 
 @dataclass
@@ -31,7 +33,8 @@ class Need:
 
 def _context(template: str, name: str) -> str:
     """The template lines that use the library: what the model needs to know what it is for."""
-    return "\n".join(line for line in template.splitlines() if f"__{name}" in line) or template
+    lines = "\n".join(line for line in template.splitlines() if f"__{name}" in line) or template
+    return without_directions(lines).strip()  # one list's directions are not another's
 
 
 def needs(home: Home, template: str, default_n: int) -> list[Need]:
@@ -51,15 +54,14 @@ def prompt_for(wanted: list[Need]) -> str:
     for n in wanted:
         what = (f"{n.count} NEW entries in the spirit of the existing ones {json.dumps(n.existing, ensure_ascii=False)}, "
                 "no duplicates" if n.existing else f"{n.count} entries")
-        lines.append(f"- __{n.name}__: {what}.\n  Used in: {n.context}"
-                     + (f"\n  Directions: {n.directions}" if n.directions else ""))
-    # The default style comes first and the directions last, where a small model weighs them most: a list
-    # with directions can ask for anything, a word or a whole saga, and orrery keeps it whole.
+        # A list with directions gets nothing but them: a default style beside them, or the template line
+        # with its slot mid-sentence, still pulls small models toward short phrases, however it is ranked.
+        guide = (f"Directions: {n.directions}" if n.directions
+                 else f"Used in: {n.context}\n  Style: {DEFAULT_STYLE}")
+        lines.append(f"- __{n.name}__: {what}.\n  {guide}")
     return ("You write wildcard lists for a text-to-image and text-to-video prompt generator.\n\n"
-            "Default style for every list: short and vivid entries (1-4 words), lowercase unless a proper noun.\n\n"
             + "\n".join(lines)
-            + "\n\nDirections win: where a list has Directions, its entries follow them exactly, even where they "
-            "conflict with the default style (length, form, case, language). Entries are distinct and spread widely "
+            + "\n\nEvery entry follows its list's Directions or Style exactly. Entries are distinct and spread widely "
             "across the space so random picks feel varied. Reply with ONLY a JSON object mapping each list name "
             "(without underscores) to a JSON array of its entries.")
 

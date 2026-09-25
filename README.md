@@ -149,10 +149,10 @@ setting. When the node runs, the model
 - tops up `__name:30__` to at least 30 entries, once;
 - follows directions written right after the library:
   `__film_scene__(at least 30 words, describe set, actions, characters)`. They
-  never reach the prompt and stay with the library for later top-ups. Without
-  directions entries default to 1-4 lowercase words; directions win wherever
-  they conflict, and an entry may be any length (**Max tokens** in the gear,
-  16000 by default, bounds one answer).
+  never reach the prompt and stay with the library for later top-ups. A
+  library with directions gets only its directions, and an entry may be any
+  length (**Max tokens** in the gear, 16000 by default, bounds one answer); one
+  without gets the lines around it and a default of 1-4 lowercase words.
 
 Everything a run needs goes to the model in one request (ComfyUI cannot
 safely generate twice in one run); ComfyUI moves the model out when the video
