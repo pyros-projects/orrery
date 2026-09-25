@@ -11,8 +11,8 @@ from collections import Counter
 from pathlib import Path
 
 from orrery import galaxy as gx
+from orrery import manager, uistate
 from orrery import presets as ps
-from orrery import uistate
 from orrery.comfy_llm import can_write, llm_config, text_encoders
 from orrery.completion import completion_data
 from orrery.dsl import MissingLibrary, expand, override
@@ -342,6 +342,16 @@ def library_delete(home: Home, args: dict) -> dict:
     return {"ok": True}
 
 
+def library_rename(home: Home, args: dict) -> dict:
+    """Rename a library of yours; weights, references in your libraries and presets follow."""
+    name, to = _library_name(args.get("name")), _library_name(args.get("to"))
+    try:
+        summary = manager.rename_library(home, name, to)
+    except ValueError as err:
+        raise ApiError(400, str(err)) from None
+    return {"name": to, **summary}
+
+
 def _user_library(home: Home, args: dict) -> tuple[str, Path, Library]:
     name = _library_name(args.get("name"))
     path = home.library_file(name)
@@ -555,6 +565,7 @@ ROUTES = [
     ("POST", "/orrery/library/save", library_save),
     ("POST", "/orrery/library/own", library_own),
     ("POST", "/orrery/library/delete", library_delete),
+    ("POST", "/orrery/library/rename", library_rename),
     ("GET", "/orrery/galaxy", galaxy),
     ("POST", "/orrery/galaxy/rate", galaxy_rate),
     ("GET", "/orrery/galaxy/thumb", galaxy_thumb),

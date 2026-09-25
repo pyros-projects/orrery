@@ -39,6 +39,7 @@ export function client(home) {
     saveLibrary: (body) => call("library/save", { body }),
     ownLibrary: (name) => call("library/own", { body: { name } }),
     deleteLibrary: (name) => call("library/delete", { body: { name } }),
+    renameLibrary: (name, to) => call("library/rename", { body: { name, to } }),
     acceptLibrary: (name) => call("library/accept", { body: { name } }),
     discardLibrary: (name) => call("library/discard", { body: { name } }),
     galaxy: (query = {}) => call("galaxy", { query }),

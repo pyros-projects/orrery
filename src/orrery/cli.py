@@ -226,8 +226,16 @@ def _lib_import(home, args) -> int:
     return 0
 
 
+def _lib_mv(home, args) -> int:
+    summary = manager.rename_library(home, args.name, args.to)
+    print(f"Renamed __{args.name}__ to __{args.to}__: {summary['weights']} learned weights, "
+          f"libraries {', '.join(summary['libraries']) or 'none'}, presets {', '.join(summary['presets']) or 'none'} "
+          "updated (orrery lib undo reverts it).")
+    return 0
+
+
 _LIB_ACTIONS = {"list": _lib_list, "show": _lib_show, "gen": _lib_gen, "more": _lib_more,
-                "edit": _lib_edit, "undo": _lib_undo, "import": _lib_import}
+                "edit": _lib_edit, "undo": _lib_undo, "import": _lib_import, "mv": _lib_mv}
 
 
 def _cmd_preset(args: argparse.Namespace) -> int:
@@ -303,6 +311,9 @@ def build_parser() -> argparse.ArgumentParser:
     edit.add_argument("name")
     edit.add_argument("instruction")
     lib_sub.add_parser("undo", help="restore the state before the last change")
+    mv = lib_sub.add_parser("mv", help="rename a library; weights, references and presets follow")
+    mv.add_argument("name")
+    mv.add_argument("to")
     imp = lib_sub.add_parser("import", help="import a folder of wildcard .txt files (names cleaned, references kept)")
     imp.add_argument("src", help="the folder the pack's own __references__ start from")
     imp.add_argument("--into", help="put everything under this folder, e.g. dp")

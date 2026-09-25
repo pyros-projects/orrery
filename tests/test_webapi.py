@@ -45,7 +45,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/preset/rename"), ("POST", "/orrery/preset/meta"),
         ("POST", "/orrery/favorite"), ("POST", "/orrery/recent"), ("GET", "/orrery/template"),
         ("GET", "/orrery/libraries"), ("POST", "/orrery/library/save"),
-        ("POST", "/orrery/library/own"), ("POST", "/orrery/library/delete"),
+        ("POST", "/orrery/library/own"), ("POST", "/orrery/library/delete"), ("POST", "/orrery/library/rename"),
         ("GET", "/orrery/galaxy"), ("POST", "/orrery/galaxy/rate"),
         ("GET", "/orrery/galaxy/thumb"), ("GET", "/orrery/galaxy/media"), ("POST", "/orrery/roll"),
         ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
@@ -519,3 +519,10 @@ def test_properties_travel_through_the_libraries_tab(home):
     assert lib["entries"][0]["props"] == {"age": "30s", "gender": "female"} and lib["entries"][1]["props"] == {}
     assert api(home, webapi.library_save, name="people",
                entries=[{"value": "Mara", "props": {"gender": "fem ale!"}}])[0] == 400
+
+
+def test_renaming_through_the_tab_reports_what_followed(home):
+    ok(home, webapi.library_save, name="film_moods", entries=[{"value": "a hush"}])
+    out = ok(home, webapi.library_rename, name="film_moods", to="film/moods")
+    assert out == {"name": "film/moods", "weights": 0, "libraries": [], "presets": []}
+    assert api(home, webapi.library_rename, name="camera", to="cam")[0] == 400

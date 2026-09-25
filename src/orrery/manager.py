@@ -14,7 +14,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from orrery.home import Home
-from orrery.library import Entry, Library, load_library
+from orrery.library import NAME, Entry, Library, library_files, load_library
 from orrery.llm import Backend, InvalidProposal, extract_json
 
 
@@ -183,6 +183,36 @@ def _snapshot(home: Home, files: list[Path], action: str) -> None:
             (folder / rel).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(f, folder / rel)
     (folder / "manifest.json").write_text(json.dumps(manifest, indent=2))
+
+
+def rename_library(home: Home, old: str, new: str) -> dict:
+    """Move a library of yours to a new name (folders included) and carry along everything that
+    names it: learned weights, `__old__` in your other libraries and in your presets. Undoable."""
+    mine = library_files(home.library_dir)
+    if old not in mine:
+        raise ValueError(f"__{old}__ is built-in or missing; make it yours before renaming it.")
+    if not NAME.fullmatch(new):
+        raise ValueError(f"'{new}' is not a library name: word characters and / only.")
+    if new in home.libraries():
+        raise ValueError(f"__{new}__ exists already.")
+    ref = re.compile(rf"__{re.escape(old)}(?=[\[#:]|__)")
+    sources = [f for f in (home.library_dir / f"{old}{ext}" for ext in (".yaml", ".txt")) if f.exists()]
+    targets = [home.library_dir / f"{new}{f.suffix}" for f in sources]
+    libraries = {n: f for n, f in mine.items() if n != old and ref.search(f.read_text(encoding="utf-8"))}
+    presets = sorted(f for f in home.presets_dir.rglob("*.orr") if ref.search(f.read_text(encoding="utf-8"))) \
+        if home.presets_dir.exists() else []
+    _snapshot(home, [*sources, *targets, *libraries.values(), *presets, home.weights_path], f"rename {old} → {new}")
+    for src, dst in zip(sources, targets, strict=True):
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        src.rename(dst)
+    for f in [*libraries.values(), *presets]:
+        f.write_text(ref.sub(f"__{new}", f.read_text(encoding="utf-8")), encoding="utf-8")
+    weights = home.weights()
+    moved = {k: v for k, v in weights.items() if ref.search(k)}
+    if moved:
+        home.save_weights({ref.sub(f"__{new}", k) if k in moved else k: v for k, v in weights.items()})
+    return {"weights": len(moved), "libraries": sorted(libraries),
+            "presets": [f.relative_to(home.presets_dir).with_suffix("").as_posix() for f in presets]}
 
 
 def undo(home: Home) -> str | bool:

@@ -61,8 +61,8 @@ export async function renderLibraries(app) {
       <div class="scroll"><ul>${listHTML(app, libs, L.name)}</ul></div>
       <div class="addrow">${s.libNew !== null ? '<input class="input mono" id="oa-newlib" placeholder="name or folder/name, e.g. film/genre">' : `<button class="btn wide" data-lact="new">${icon("plus")}New library</button>`}</div></div>
     <div class="libmain">
-      <div class="libhead"><h3>__${esc(L.name)}__</h3><span class="stat">${L.entries.length} entries</span>
-        ${ro ? '<button class="btn primary" data-lact="own">Make it mine</button>' : `<button class="btn ghost danger" data-lact="del">${icon("trash")}Delete</button>`}</div>
+      <div class="libhead">${s.libRen === L.name ? `<input class="input mono" id="oa-ren" value="${esc(L.name)}" aria-label="New name" spellcheck="false">` : `<h3>__${esc(L.name)}__</h3>`}<span class="stat">${L.entries.length} entries</span>
+        ${ro ? '<button class="btn primary" data-lact="own">Make it mine</button>' : `<button class="btn ghost" data-lact="ren">Rename</button><button class="btn ghost danger" data-lact="del">${icon("trash")}Delete</button>`}</div>
       ${reviewHTML(L)}
       ${ro ? `<div class="banner">${icon("lock")}Built-in and read-only. <b>Make it mine</b> copies it into your library folder, where yours wins over the built-in.</div>` : ""}
       ${tags.length ? `<div class="bar flat"><span class="label">Tags</span>${tags.map((t) => `<button class="chip" aria-pressed="${s.libTag === t}" data-ltag="${esc(t)}">${esc(t)}</button>`).join("")}</div>` : ""}
@@ -187,6 +187,7 @@ function wire(app, L) {
       });
     }
     if (act === "more") { s.libShown += LIB_PAGE; return renderLibraries(app); }
+    if (act === "ren") { s.libRen = L.name; renderLibraries(app); const r = app.$("#oa-ren"); r.focus(); r.select(); return; }
     if (act === "new") { s.libNew = ""; renderLibraries(app); app.$("#oa-newlib").focus(); }
     if (act === "accept" || act === "discard") return review(app, L, act);
     if (act === "add") addEntries(app, L);
@@ -219,8 +220,29 @@ function wire(app, L) {
     }
     if (t.id === "oa-add" && e.key === "Enter") { e.preventDefault(); addEntries(app, L); }
     if (t.id === "oa-newlib" && e.key === "Enter") createLibrary(app, t.value);
+    if (t.id === "oa-ren" && e.key === "Enter") renameLibrary(app, L.name, t.value.trim());
+    if (t.id === "oa-ren" && e.key === "Escape") { e.preventDefault(); s.libRen = null; renderLibraries(app); }
     if (t.id === "oa-newlib" && e.key === "Escape") { e.preventDefault(); s.libNew = null; renderLibraries(app); }
   };
+}
+
+// Renaming carries the learned weights and every __reference__ in your libraries and presets.
+async function renameLibrary(app, from, to) {
+  const s = app.state;
+  s.libRen = null;
+  if (!to || to === from) return renderLibraries(app);
+  let out;
+  try { out = await app.api.renameLibrary(from, to); } catch (err) { renderLibraries(app); return app.fail(err); }
+  Object.assign(app.data, { libStale: true });
+  s.lib = out.name;
+  app.refreshCompletion().catch(() => {});
+  await renderLibraries(app);
+  const moved = [out.weights && `${out.weights} learned weight${out.weights === 1 ? "" : "s"}`,
+    out.libraries.length && `${out.libraries.length} librar${out.libraries.length === 1 ? "y" : "ies"}`,
+    out.presets.length && `${out.presets.length} preset${out.presets.length === 1 ? "" : "s"}`].filter(Boolean).join(", ");
+  app.toast(`Renamed to <b>__${esc(out.name)}__</b>${moved ? ` · updated ${moved}` : ""}`, {
+    label: "Undo", run: () => renameLibrary(app, out.name, from),
+  });
 }
 
 async function review(app, L, act) {

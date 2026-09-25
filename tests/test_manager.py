@@ -163,3 +163,32 @@ def test_criterion_is_parsed_and_shown_in_the_diff(lib_home):
                     '"decisions": [{"entry": "lynx", "action": "remove"}]}', lib)
     assert ops.criterion == "members of the cat family"
     assert "understood as: members of the cat family" in diff_text("animal", ops)
+
+
+def test_renaming_a_library_carries_its_weights_references_and_presets(home):
+    from orrery.manager import rename_library, undo
+    h = Home(home)
+    (h.library_dir / "film_moods.yaml").write_text("- a hush\n- a storm\n")
+    (h.library_dir / "scene.txt").write_text("{a|b} __film_moods__ over __film_moods#tone:dark__\n")
+    (h.presets_dir / "mine").mkdir(parents=True)
+    (h.presets_dir / "mine" / "rainy.orr").write_text("a street in __film_moods__\n")
+    h.save_weights({"__film_moods__=a hush": 1.5, "__other__=x": 0.8})
+    summary = rename_library(h, "film_moods", "film/moods")
+    assert (h.library_dir / "film" / "moods.yaml").exists() and not (h.library_dir / "film_moods.yaml").exists()
+    assert (h.library_dir / "scene.txt").read_text() == "{a|b} __film/moods__ over __film/moods#tone:dark__\n"
+    assert (h.presets_dir / "mine" / "rainy.orr").read_text() == "a street in __film/moods__\n"
+    assert h.weights() == {"__film/moods__=a hush": 1.5, "__other__=x": 0.8}
+    assert summary == {"weights": 1, "libraries": ["scene"], "presets": ["mine/rainy"]}
+    undo(h)
+    assert (h.library_dir / "film_moods.yaml").exists() and not (h.library_dir / "film" / "moods.yaml").exists()
+    assert "__film_moods__" in (h.library_dir / "scene.txt").read_text()
+
+
+def test_a_rename_refuses_builtins_and_taken_names(home):
+    from orrery.manager import rename_library
+    h = Home(home)
+    (h.library_dir / "mine.yaml").write_text("- x\n")
+    with pytest.raises(ValueError, match="built-in"):
+        rename_library(h, "camera", "cam")
+    with pytest.raises(ValueError, match="exists"):
+        rename_library(h, "mine", "camera")
