@@ -284,3 +284,12 @@ def test_a_filter_nothing_matches_says_so():
 
 def test_a_filtered_library_is_still_wanted_by_its_name():
     assert wanted_libraries("__people#gender:female:3__(tall ones)") == {"people": 3}
+
+
+def test_directions_stay_out_of_pick_labels_and_learned_keys():
+    """Editing the directions must not rename a choice, or its learned weights would be lost."""
+    libs = _libs(a=["apple"], b=["pear"])
+    picks = expand("{__a__(round fruit)|__b__(long fruit)}", 1, libs).picks
+    brace = picks[0]
+    assert brace.label == "{__a__|__b__}" and "(" not in brace.value
+    assert all("(" not in k for k in brace.keys)

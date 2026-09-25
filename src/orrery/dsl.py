@@ -246,10 +246,12 @@ class Expander:
             wm = _WEIGHTED.match(raw)
             value, weight = (wm.group(1), float(wm.group(2))) if wm else (raw, 1.0)
             options.append((value if keep else value.strip(), weight))
-        family = "{" + "|".join(v for v, _ in options) + "}"
-        weights = [w * self.learned(f"{family}={v}") for v, w in options]
+        # Labels and learned keys leave `(directions)` out: editing them must not rename the choice.
+        family = without_directions("{" + "|".join(v for v, _ in options) + "}")
+        weights = [w * self.learned(f"{family}={without_directions(v)}") for v, w in options]
         value = options[weighted_pick(weights, self.rng)][0]
-        self.picks.append(Pick(family, value, (f"{family}={value}",)))
+        shown = without_directions(value)
+        self.picks.append(Pick(family, shown, (f"{family}={shown}",)))
         return value
 
     def _multi(self, lo: int, hi: int, source: str) -> str:
@@ -257,15 +259,15 @@ class Expander:
         if lm := _LIB_ONLY.match(source):
             family, pool = self._pool(lm.group(1), lm.group(2), lm.group(3))
         else:
-            family = "{" + source + "}"
-            pool = [(v.strip(), self.learned(f"{family}={v.strip()}")) for v in source.split("|")]
+            family = without_directions("{" + source + "}")
+            pool = [(v.strip(), self.learned(f"{family}={without_directions(v.strip())}")) for v in source.split("|")]
         chosen: list[str] = []
         while pool and len(chosen) < n:
             i = weighted_pick([w for _, w in pool], self.rng)
             chosen.append(pool.pop(i)[0])
         span = str(lo) if lo == hi else f"{lo}–{hi}"
-        self.picks.append(Pick(f"{family} ×{span}", ", ".join(chosen),
-                               tuple(f"{family}={v}" for v in chosen)))
+        self.picks.append(Pick(f"{family} ×{span}", without_directions(", ".join(chosen)),
+                               tuple(f"{family}={without_directions(v)}" for v in chosen)))
         return ", ".join(chosen)
 
 
