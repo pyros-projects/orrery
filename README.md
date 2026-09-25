@@ -47,6 +47,7 @@ Qwen3.5-4B handles semantic edits; 2B is too weak for them.
 | `__film/genre__` | a library in a folder: `library/film/genre.yaml` or `.txt`, as in z-explorer |
 | `__animal[feline]__` | only entries tagged `feline` |
 | `{a\|b\|c:3}` | inline choice; `:3` is a static weight |
+| `{\|red }car` | an empty option makes a word optional; the other options keep their spaces |
 | `{1-2$$__style__}` | pick 1–2 distinct values |
 | `$hero = __animal__` | bind once, reuse everywhere |
 | `> moody, cinematic` | enhancement instruction (recorded, not yet executed) |
@@ -55,7 +56,11 @@ Qwen3.5-4B handles semantic edits; 2B is too weak for them.
 Libraries live in the home folder (`~/.orrery` unless set otherwise, see
 below) under `library/`, in any subfolders. Plain `.txt` wildcard files work as
 they are (one entry per line, `#` comments), so Dynamic Prompts collections can
-be dropped in; the first edit in the node turns one into YAML. When a name exists
+be dropped in; the first edit in the node turns one into YAML. An entry is a
+template itself: `__80s/Women/80s_sports__` or `{a|b}` inside it expand too,
+as in Dynamic Prompts (a library that comes back to itself is an error).
+Library names are word characters and `/`: a file with `-` or spaces in its
+path is not found. When a name exists
 as both, the YAML wins. The home folder is set in the node's gear (a pointer in
 `~/.config/orrery/home`); `ORRERY_HOME`, `--home` and a node's own home field win
 over it.

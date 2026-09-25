@@ -152,6 +152,7 @@ class Expander:
         self.vars: dict[str, str] = {}
         # (name, clips back) → that clip's value; set by reels. Without it, $x~N is $x.
         self.history: Callable[[str, int], str | None] | None = None
+        self._within: list[str] = []  # the libraries whose entry is being expanded, outermost first
 
     def learned(self, key: str) -> float:
         return float(self.weights.get(key, 1.0))
@@ -209,15 +210,32 @@ class Expander:
         value = pool[weighted_pick([w for _, w in pool], self.rng)][0]
         label = label_prefix + (f"__{name}[{tag}]__" if tag else family)
         self.picks.append(Pick(label, value, (f"{family}={value}",)))
-        return value
+        return self._nested(name, value, label_prefix)
+
+    def _nested(self, name: str, value: str, label_prefix: str) -> str:
+        """An entry is a template itself, as in Dynamic Prompts: its libraries, braces and $vars expand."""
+        if "__" not in value and "{" not in value and "$" not in value:
+            return value
+        if name in self._within:
+            raise ValueError("A library comes back to itself: " + " → ".join([*self._within, name]))
+        self._within.append(name)
+        try:
+            return " ".join(self.expr(value, label_prefix).split())  # `{|red} perm` leaves no stray space
+        except MissingLibrary as err:
+            raise ValueError(f"Library __{err.name}__ is missing; an entry of __{name}__ uses it.") from err
+        finally:
+            self._within.pop()
 
     def _brace(self, inner: str) -> str:
         if m := _MULTI.match(inner):
             return self._multi(int(m.group(1)), int(m.group(2) or m.group(1)), m.group(3).strip())
+        raws = inner.split("|")
+        keep = len(raws) > 1 and any(not raw.strip() for raw in raws)  # `{|red }car`: an optional word
         options = []
-        for raw in inner.split("|"):
+        for raw in raws:
             wm = _WEIGHTED.match(raw)
-            options.append((wm.group(1).strip(), float(wm.group(2))) if wm else (raw.strip(), 1.0))
+            value, weight = (wm.group(1), float(wm.group(2))) if wm else (raw, 1.0)
+            options.append((value if keep else value.strip(), weight))
         family = "{" + "|".join(v for v, _ in options) + "}"
         weights = [w * self.learned(f"{family}={v}") for v, w in options]
         value = options[weighted_pick(weights, self.rng)][0]

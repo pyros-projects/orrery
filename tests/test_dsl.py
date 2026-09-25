@@ -193,3 +193,64 @@ def test_libraries_in_folders_expand_and_are_wanted():
     assert e.text == "a noir film" and e.picks[0].label == "__film/genre__"
     assert wanted_libraries("__film/genre:5__ and __film/new_one__(dark)") == {"film/genre": 5, "film/new_one": 0}
     assert library_directions("__film/new_one__(dark)") == {"film/new_one": "dark"}
+
+
+def _libs(**lists):
+    return {name.replace("__", "/"): Library(name.replace("__", "/"), [Entry(v) for v in values])
+            for name, values in lists.items()}
+
+
+EIGHTIES = _libs(**{
+    "80s__Women__80s_clothes": [
+        "__80s/Women/80s_sports__",
+        ("{|__80s/colors/80s_colors__ }__80s/Women/80s_shirts__, {|__80s/colors/80s_colors__ }"
+         "{__80s/Women/80s_skirts__|__80s/Women/80s_pants__}"),
+    ],
+    "80s__Women__80s_sports": ["leg warmers and a leotard"],
+    "80s__Women__80s_shirts": ["off-shoulder sweatshirt"],
+    "80s__Women__80s_skirts": ["ra-ra skirt"],
+    "80s__Women__80s_pants": ["acid-wash jeans"],
+    "80s__colors__80s_colors": ["neon pink"],
+})
+
+
+def test_an_entry_is_a_template_itself_as_in_dynamic_prompts():
+    seen = {expand("a woman in __80s/Women/80s_clothes__", seed, EIGHTIES).text for seed in range(60)}
+    assert "a woman in leg warmers and a leotard" in seen
+    assert "a woman in neon pink off-shoulder sweatshirt, neon pink ra-ra skirt" in seen
+    assert "a woman in off-shoulder sweatshirt, acid-wash jeans" in seen
+    assert not any("__" in s or "{" in s or "  " in s for s in seen)
+
+
+def test_the_picks_record_every_level():
+    labels = {p.label for p in expand("__80s/Women/80s_clothes__", 1, EIGHTIES).picks}
+    assert "__80s/Women/80s_clothes__" in labels
+    assert labels & {"__80s/Women/80s_sports__", "__80s/Women/80s_shirts__"}
+
+
+def test_an_empty_option_keeps_the_spaces_of_the_others():
+    """`{|red }car`: the optional-word idiom; everywhere else options are trimmed as before."""
+    assert {expand("{|red }car", s, {}).text for s in range(20)} == {"car", "red car"}
+    assert {expand("x {a | b} y", s, {}).text for s in range(20)} == {"x a y", "x b y"}
+
+
+def test_a_library_that_comes_back_to_itself_is_an_error():
+    libs = _libs(a=["__b__"], b=["__a__"])
+    with pytest.raises(ValueError, match="a → b → a"):
+        expand("__a__", 1, libs)
+
+
+def test_a_missing_library_inside_an_entry_names_where_it_is_used():
+    with pytest.raises(ValueError, match=r"__nope__.*__outfit__"):
+        expand("__outfit__", 1, _libs(outfit=["__nope__ shoes"]))
+
+
+def test_several_picks_from_a_library_are_expanded_too():
+    text = expand("{2$$__outfit__}", 1, _libs(outfit=["{red|red} hat", "__shoe__"], shoe=["boots"])).text
+    assert sorted(text.split(", ")) == ["boots", "red hat"]
+
+
+def test_an_entry_comes_out_trimmed_whatever_its_braces_chose():
+    libs = _libs(hair=["{|red} perm{|, and a clip}"])
+    assert {expand("a __hair__.", s, libs).text for s in range(40)} == {
+        "a perm.", "a red perm.", "a perm, and a clip.", "a red perm, and a clip."}
