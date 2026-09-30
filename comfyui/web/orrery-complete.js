@@ -34,6 +34,17 @@ function propItems(before, data) {
   };
 }
 
+// Where a query hits a library name: 0 at its start, 1 at the start of a folder or word (after / or _),
+// 2 anywhere else, -1 nowhere.
+function nameRank(name, query) {
+  const n = name.toLowerCase(), q = query.toLowerCase();
+  if (n.startsWith(q)) return 0;
+  let at = n.indexOf(q);
+  if (at < 0) return -1;
+  for (; at >= 0; at = n.indexOf(q, at + 1)) if ("/_".includes(n[at - 1])) return 1;
+  return 2;
+}
+
 function libraryItems(before, data) {
   const props = propItems(before, data);
   if (props) return props;
@@ -50,9 +61,10 @@ function libraryItems(before, data) {
   if (!m) return null;
   return {
     items: data.libraries
-      .filter((l) => startsWith(l.name, m[2]))
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .map((l) => ({
+      .map((l) => ({ l, rank: nameRank(l.name, m[2]) }))
+      .filter((x) => x.rank >= 0)
+      .sort((a, b) => a.rank - b.rank || a.l.name.localeCompare(b.l.name))
+      .map(({ l }) => ({
         insert: `__${l.name}__`,
         detail: `${l.count} · ${l.source}`,
         preview: l.sample.join(", ") + (l.count > l.sample.length ? ", …" : ""),

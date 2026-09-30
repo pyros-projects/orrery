@@ -127,6 +127,16 @@ test("__folder/ completes the libraries in that folder", () => {
   assert.deepEqual(missingLibraries("__film/genre__ and __film/new__", data), ["film/new"]);
 });
 
+test("__ matches any part of a library name: start first, then a folder or word start, then anywhere", () => {
+  const libs = ["chair", "hair_color", "80s/Women/80s_hair", "builder/face_hair_female", "animal"];
+  const data = { ...DATA, libraries: libs.map((name) => ({ name, count: 1, source: "user", tags: [], sample: [] })) };
+  const want = ["__hair_color__", "__80s/Women/80s_hair__", "__builder/face_hair_female__", "__chair__"];
+  const s = suggest("a __hai", 7, data);
+  assert.deepEqual(s.items.map((i) => i.insert), want);
+  assert.equal(s.replaceFrom, 2);
+  assert.deepEqual(suggest("a __HAI", 7, data).items.map((i) => i.insert), want);
+});
+
 test("comments neither complete nor count as missing libraries", () => {
   assert.deepEqual(missingLibraries("# try __nothing__ here\n__creature__", DATA), []);
   const text = "# __cre";
