@@ -55,7 +55,9 @@ run to be different, and a little better than the last, orrery is for you.
   format and warns about what the model would ignore.
 - **Makes videos that go on for ever.** Reels chain clips through H3 Motion
   Context, each clip opening where the last one ended; queue ten clips with
-  one click, watch which one is rendering, restart from the top.
+  one click, watch which one is rendering, restart from the top. `SEND:` hands
+  frames of an early clip to the later ones as references, so a face or an
+  outfit holds for the whole reel.
 - **Ships a content pack worth pressing Generate for.** 68 presets and 878
   hand-written entries: drone odysseys, set changes, the Backrooms, a time
   machine, one-click random stills and clips, a creature test for H3.

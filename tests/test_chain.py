@@ -59,3 +59,19 @@ def test_ref2va_gets_the_last_three_seconds():
     from orrery.chain import tail_start
     assert tail_start(120, 24.0) == 48
     assert tail_start(50, 24.0) == 0
+
+
+def test_a_segments_own_clip_is_found_by_its_segment(tmp_path):
+    """SEND: reads the sending segment's own clip: segment 0 is Chain Video's clip 1."""
+    from orrery.chain import clip_file
+    run, folders = chain(tmp_path, 3)
+    assert clip_file(tmp_path, "h3_context", 0) == run / folders[0] / "video.mp4"
+    assert clip_file(tmp_path, "h3_context", 2) == run / folders[2] / "video.mp4"
+    assert clip_file(tmp_path, "h3_context", 3) is None
+
+
+def test_sent_frames_past_the_clip_are_dropped_and_the_last_stands_in():
+    from orrery.chain import frame_picks
+    assert frame_picks(48, [2, 5, 40]) == ([2, 5, 40], [])
+    assert frame_picks(48, [2, 47, 48, 60]) == ([2, 47], [48, 60])
+    assert frame_picks(48, [60, 70]) == ([47], [60, 70])

@@ -80,6 +80,15 @@ every image as `image_N` (N as in the CAST's `(image N)`) and the prompt's
 node also reads its graph for R2: it warns when the Reference to Video its text
 reaches has fewer reference images wired than the clip uses.
 
+Built (2026-09-30): **`SEND:`** anchors identity across a reel. Inside a
+`CHUNK`, `SEND: frame 0 to image 3` (or `frames 2, 5, 34-46`) makes those frames
+of that chunk's clip, as Chain Video keeps it, reference `image 3` for every
+later clip. Bound in the CAST (`GIRL (image 1, image 3)`), each later clip sees
+how she looked when the reel began instead of a copy of a copy. Orrery Refs
+fetches the frames from the chain the prompt's `latent_path` names; before the
+sending clip exists, the image is left out of the clip. Details in
+[h3.md](h3.md#1d-reels-chunk-for-h3-motion-context).
+
 Still planned: the **memory list** per chunk (global, the places and people it
 mentions, optionally the previous chunk as "recent"); the retrieval query for
 this RefMod-RAG is the screenplay itself.

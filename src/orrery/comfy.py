@@ -161,10 +161,10 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                preset: str = NO_PRESET, linked: str | None = None,
                params: str = "", segment: int = 0, clip=None,
                frames=None, packed: bool = False,
-               wired: int | None = None) -> tuple[str, str, int, int, int, int, list, int, int]:
+               wired: int | None = None, chain: str = DEFAULT_CHAIN) -> tuple[str, str, int, int, int, int, list, int, int]:
     """`frames`: the previous clip's stills, which the model sees when it writes `--…--` slots.
     `packed`: Orrery Refs routes the images per clip; `wired`: the reference images Reference to
-    Video has (both from the graph, see `wiring`)."""
+    Video has (both from the graph, see `wiring`). `chain`: the Motion Context chain SEND: reads."""
     h = resolve_home(home or None)
     if preset and preset != NO_PRESET:
         template, linked = load_preset(h, preset), preset
@@ -266,6 +266,9 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         "picks": [{"label": p.label, "value": p.value, "keys": list(p.keys)} for p in result.picks],
         "lint": lint,
         **({"refs": result.refs} if target != "text" and packed else {}),
+        **({"sends": {"chain": chain, "slots": result.send_slots,
+                      "ready": {str(k): v for k, v in result.sends.items()}}}
+           if target != "text" and result.send_slots else {}),
         **({"enhanced": enhanced} if enhanced else {}),
     }
     width, height, length = shape(source)
@@ -412,10 +415,13 @@ class OrreryPrompt:
         packed, wired = wiring(prompt, unique_id)
         try:
             outputs = run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
-                                 params, segment, clip, stills, packed, wired)
+                                 params, segment, clip, stills, packed, wired, latent_path or DEFAULT_CHAIN)
+            data = json.loads(outputs[1])
+            if "sends" in data and not packed:
+                raise ValueError("This reel SENDs frames as reference images, which Orrery Refs fetches: wire this "
+                                 "node's picks into an Orrery Refs, and its ref outputs into Reference to Video.")
             if (prompt_id := runs.current_prompt()) and unique_id is not None:
                 runs.remember(prompt_id, unique_id, outputs[1])  # for Generate: Save nodes log to the galaxy
-            data = json.loads(outputs[1])
             if "segments" in data:  # a reel
                 _announce(unique_id, data["segment"])
             return (*outputs, tail, audio, data["megapixels"])
@@ -508,7 +514,7 @@ def wiring(prompt: dict | None, unique_id) -> tuple[bool, int | None]:
 class OrreryRefs:
     """Hands Reference to Video only the reference images the current clip's CAST uses, packed in
     order, so a reel's chunks don't all see every image. Orrery Prompt notices it and renumbers
-    <Picture N> to match."""
+    <Picture N> to match. Images a SEND: line fills come from the sending clip in the chain."""
 
     CATEGORY = "orrery"
     FUNCTION = "route"
@@ -523,18 +529,62 @@ class OrreryRefs:
     @classmethod
     def INPUT_TYPES(cls):
         return {"required": {"picks": ("STRING", {"forceInput": True})},
-                "optional": {f"image_{i}": ("IMAGE",) for i in range(1, cls.SLOTS + 1)}}
+                "optional": {f"image_{i}": ("IMAGE",) for i in range(1, cls.SLOTS + 1)},
+                "hidden": {"prompt": "PROMPT", "unique_id": "UNIQUE_ID"}}
 
-    def route(self, picks, **images):
-        refs = json.loads(picks or "{}").get("refs")
+    def route(self, picks, prompt=None, unique_id=None, **images):
+        data = json.loads(picks or "{}")
+        refs, sends = data.get("refs"), data.get("sends") or {}
+        clash = sorted(n for n in sends.get("slots", []) if images.get(f"image_{n}") is not None)
+        if clash:
+            raise ValueError(f"image {clash[0]} is wired into Orrery Refs and also filled by a SEND: line; "
+                             "unwire it, or send to an image nothing is wired into.")
         if refs is None:  # nothing packed: pass the images through as wired
             order = [images.get(f"image_{i}") for i in range(1, self.SLOTS + 1)]
         else:
+            ready = sends.get("ready", {})
+            for n in refs:
+                if str(n) in ready:
+                    images[f"image_{n}"] = self._sent(n, ready[str(n)], sends.get("chain") or DEFAULT_CHAIN)
             missing = [f"image_{n}" for n in refs if images.get(f"image_{n}") is None]
             if missing:
                 raise ValueError(f"This clip's CAST uses {', '.join(missing)}, but nothing is wired into it.")
             order = [images[f"image_{n}"] for n in refs]
+            self._warn_batches(order, prompt, unique_id)
         return tuple(order[:self.SLOTS] + [None] * (self.SLOTS - len(order)))
+
+    @staticmethod
+    def _sent(n: int, send: dict, latent_path: str):
+        """The frames a SEND: line names, from the sending segment's clip in the chain."""
+        import folder_paths  # ComfyUI
+
+        from orrery import chain
+
+        segment = send["segment"]
+        path = chain.clip_file(Path(folder_paths.get_output_directory()), latent_path, segment)
+        if path is None:
+            raise ValueError(f"image {n} is sent from segment {segment}, but the chain {latent_path!r} has no clip for "
+                             f"segment {segment}: render the reel from that chunk on, or check the Orrery Prompt's "
+                             "latent_path.")
+        batch, dropped = chain.frames(path, send["frames"])
+        if dropped:
+            many = len(dropped) > 1
+            print(f"[orrery] SEND to image {n}: frame{'s' if many else ''} {', '.join(map(str, dropped))} "
+                  f"{'are' if many else 'is'} past the end of segment {segment}'s clip, so "
+                  f"{'they are' if many else 'it is'} left out.")
+        return batch
+
+    @staticmethod
+    def _warn_batches(order: list, prompt, unique_id) -> None:
+        """Reference to Video reads the first image of each reference only: say so when a batch goes there."""
+        link = lambda v: (str(v[0]), v[1]) if isinstance(v, list) and len(v) == 2 else None
+        for k, img in enumerate(order):
+            if img is None or getattr(img, "shape", (1,))[0] < 2 or not prompt or unique_id is None:
+                continue
+            if any(n.get("class_type") == REF2VA and (str(unique_id), k) in {link(v) for v in n.get("inputs", {}).values()}
+                   for n in prompt.values()):
+                print(f"[orrery] ref_{k + 1} carries {img.shape[0]} frames, but Reference to Video reads only the first "
+                      "image of a reference; send several stills to several images for ref2va.")
 
 
 NODE_CLASS_MAPPINGS = {"OrreryPrompt": OrreryPrompt, "OrreryLog": OrreryLog, "OrreryRefs": OrreryRefs}

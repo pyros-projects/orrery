@@ -72,7 +72,7 @@ export function stats(raw) {
     const shots = [...text.matchAll(/^\s*SHOT\s+([\d.]+)\s*s/gm)];
     const firstShot = text.search(/^\s*SHOT\b/m);
     const voices = new Set([...text.slice(Math.max(firstShot, 0)).matchAll(/^\s*([A-Z][A-Z0-9 _-]*?)\s*(?:\([^)]*\))?\s*:\s/gm)]
-      .map((m) => m[1]).filter((n) => !["SFX", "MUSIC", "SHOT", "LORA", "HANDOFF"].includes(n)));
+      .map((m) => m[1]).filter((n) => !["SFX", "MUSIC", "SHOT", "LORA", "HANDOFF", "SEND"].includes(n)));
     h3 = { shots: shots.length, secs: shots.reduce((s, m) => s + Number(m[1]), 0), voices: voices.size, reel: reelSecs(text) };
   }
   return { rolls, libs: new Set(libs.map((m) => m[1])).size, binds, h3 };

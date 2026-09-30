@@ -86,7 +86,7 @@ test("cast keywords at line start in screenplays", () => {
 
 test("reel keywords at line start in screenplays", () => {
   const items = at("@h3 t2va\nSHOT 5s\nA.\n").items.map((i) => i.insert);
-  assert.ok(["CHUNK", "HANDOFF: ", "LORA: ", "context: "].every((k) => at(`@h3 t2va\n${k[0]}`).items.some((i) => i.insert === k)), items.join());
+  assert.ok(["CHUNK", "HANDOFF: ", "SEND: ", "LORA: ", "context: "].every((k) => at(`@h3 t2va\n${k[0]}`).items.some((i) => i.insert === k)), items.join());
 });
 
 test("LORA: lists your loras in the syntax LoRA Text Loader reads", () => {

@@ -34,6 +34,9 @@ const REEL = `# H3 REEL · quickstart: one screenplay, one clip per run, chained
 # HANDOFF: …    how this clip ends and the next one opens (the next may paraphrase it)
 # $x~1          binding x as it was one clip ago · $x~1.open one of its properties
 # context: 22   frames Motion Context pins: 5, 22, 39 or 56
+# SEND: frame 0 to image 3      ref2va reels: this clip's frame 0 (after the pinned frames) is image 3 for
+#   every later clip; bind it in the CAST, NAME (image 1, image 3), and wire the picks into Orrery Refs ·
+#   frames 2, 5, 34-46 sends several at once · it keeps a face or an outfit the same across clips
 # Tips: describe recurring people and places again in every clip, the model has no memory ·
 #       end each clip on a simple, framed state (a closed door, curtains, the foot of a stair) ·
 #       no per-clip music: lay one score over the whole film afterwards
@@ -69,6 +72,8 @@ const REF = `# H3 REF2VA · quickstart: for the MiniMax H3 Reference to Video no
 # SHOT 4s | after video 1  continues <Video 1> from its last frame (wire the node's previous output)
 # --directions--           a slot the language model writes when the node runs
 # Orrery Refs between your images and the node hands each clip only the references its CAST uses
+# In a reel: SEND: frame 0 to image 3 inside a CHUNK makes that clip's frame 0 image 3 for the clips
+#   after it (Orrery Refs fetches it from Chain Video; leave its image_3 unwired)
 # @h3 ref2va 16:9 lite     writes <Subject N> = … lines instead of the six full sections
 # Tip: the guide wants 350–500 words of shot description, so write rich prose (the lint counts)
 @h3 ref2va 16:9
@@ -111,7 +116,7 @@ a 35mm photograph of {a quiet street|an empty diner|a greenhouse} at {dawn|dusk}
 
 export const STARTERS = {
   h3: { label: "H3 scene", hint: "t2va: shots, camera, voices, sound", target: "h3-base", text: SCENE },
-  reel: { label: "H3 reel", hint: "several clips on Motion Context: CHUNK, HANDOFF", target: "h3-base", text: REEL },
+  reel: { label: "H3 reel", hint: "several clips on Motion Context: CHUNK, HANDOFF, SEND", target: "h3-base", text: REEL },
   ref: { label: "H3 references", hint: "ref2va: a CAST from images, videos, voices", target: "h3-base", text: REF },
   keyframes: { label: "H3 keyframes", hint: "i2va, fl2va, l2va: start or end on a still", target: "h3-base", text: KEYFRAMES },
   krea: { label: "Krea prompt", hint: "a still: medium first, size", target: "text", text: KREA },

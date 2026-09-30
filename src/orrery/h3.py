@@ -74,6 +74,7 @@ _SFX = re.compile(r"^SFX:\s*(.+)$", re.IGNORECASE)
 _VOICE = re.compile(r"^([A-Z][A-Z0-9 _-]*?)\s*(?:\(([^)]*)\))?\s*:\s*(.+)$")
 _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
 _HANDOFF = re.compile(r"^HANDOFF:\s*(.+)$")
+_SEND_LINE = re.compile(r"^SEND:")
 _LORA = re.compile(r"^LORA:\s*(.+)$")
 _CONTEXT = re.compile(r"^context:\s*(\d+)\s*f?$", re.IGNORECASE)
 _DSL_ONLY = re.compile(r"^:\s*(x\d|seed=|w\d|h\d)")  # params lines of plain templates
@@ -144,6 +145,8 @@ class Compiled:
     segment: int = 0
     segments: int | None = 0  # a reel's clips, counting repeats; None when a CHUNK repeats forever
     refs: list[int] = field(default_factory=list)  # packed: the original image slots, in their new order
+    sends: dict[int, dict] = field(default_factory=dict)  # sent images that exist in this segment (Reel.ready)
+    send_slots: list[int] = field(default_factory=list)  # every image a SEND: line of the reel fills
 
 
 # --- front end ------------------------------------------------------------------------------
@@ -184,6 +187,8 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
             scene.loras.append(m.group(1).strip())
         elif _HANDOFF.match(line):
             lint.append(Issue("warn", "HANDOFF only works inside a CHUNK; it is ignored."))
+        elif _SEND_LINE.match(line):
+            raise ValueError("SEND: belongs inside a CHUNK: it sends frames of that chunk's clip to the clips after it.")
         elif m := _CONTEXT.match(line):
             scene.context = int(m.group(1))
         elif (m := _MUSIC.match(line)) and cur is None and in_cast:
@@ -567,6 +572,24 @@ def pack_images(scene: Scene) -> list[int]:
     return used
 
 
+def withhold_images(scene: Scene, missing: set[int], lint: list[Issue]) -> None:
+    """Leave out of this clip the images a SEND: line fills later: CAST sources and frame anchors go,
+    and a [image N] in prose is flagged, since it points at nothing yet."""
+    if not missing:
+        return
+    for m in scene.cast:
+        m.sources = [s for s in m.sources if not (s.kind == "image" and s.index in missing)]
+    for shot in scene.shots:
+        if shot.first_frame and shot.first_frame[0] in missing:
+            shot.first_frame = None
+        if shot.last_frame and shot.last_frame[0] in missing:
+            shot.last_frame = None
+    texts = [scene.summary, *(it for shot in scene.shots for it in shot.items if isinstance(it, str))]
+    for n in sorted({int(x) for text in texts for x in _IMAGE_BRACKET.findall(text)} & missing):
+        lint.append(Issue("warn", f"[image {n}] is mentioned before the SEND: line that fills it has played, "
+                                  "so in this clip it points at nothing."))
+
+
 def render_scene(scene: Scene, target: str, lint: list[Issue]) -> str:
     """The prompt for a parsed scene; again after its prose was rewritten (`> enhance`)."""
     if target == "flat":
@@ -590,8 +613,15 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
     lint: list[Issue] = []
     src = strip_comments(src)
     reel = split_reel(src)
+    sends: dict[int, dict] = {}
     if reel:
         scene, picks = build_segment(reel, seed, libraries, weights, segment, lint)
+        if reel.send_slots:
+            if scene.mode != "ref2va":
+                raise ValueError("SEND: hands frames to Reference to Video as reference images, so it needs an "
+                                 "@h3 ref2va screenplay.")
+            sends = reel.ready(segment)
+            withhold_images(scene, set(reel.send_slots) - set(sends), lint)
     else:
         ex = Expander(seed, libraries, weights)
         scene, picks = parse_scene(src, ex, lint), ex.picks
@@ -600,4 +630,5 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
     if target == "h3-base":
         _scene_lint(src, scene, lint)
     return Compiled(text, picks, lint, scene, " ".join(scene.loras), len(reel.blocks) if reel else 0,
-                    segment if reel else 0, reel.segments if reel else 0, refs)
+                    segment if reel else 0, reel.segments if reel else 0, refs,
+                    sends, reel.send_slots if reel else [])

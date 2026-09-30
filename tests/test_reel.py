@@ -188,3 +188,98 @@ def test_a_property_of_an_earlier_clip_is_read_with_its_history():
         before = compile_scene(src, 5, libs, segment=seg - 1).text
         ended = "velvet curtains" if "before velvet curtains" in before else "mirrored doors"
         assert ("the curtains part" if ended == "velvet curtains" else "the mirrored doors swing inward") in now
+
+
+# --- SEND: frames of a clip as reference images for later clips -------------------------------
+
+SEND_REEL = """@h3 ref2va 16:9 lite
+style: live-action, cinematic
+CAST
+GIRL (image 1, image 3): the young woman, in a pink tracksuit
+
+CHUNK the pose repeat 2
+SHOT 5s | push in, slow
+GIRL stretches on a mat.
+SEND: frame 0 to image 3
+SEND: frames 2, 5, 34-36 to image 4
+
+CHUNK the walk
+SHOT 4s | static
+GIRL walks to the window.
+"""
+
+
+def ref2va(src, segment=0):
+    return compile_scene(src, 1, {}, target="h3-base", segment=segment, packed=True)
+
+
+def test_send_lines_belong_to_their_chunk_and_list_frames_in_order():
+    from orrery.reel import Send
+    reel = split_reel(SEND_REEL)
+    assert reel.blocks[0].sends == [Send([0], 3), Send([2, 5, 34, 35, 36], 4)]
+    assert not any("SEND" in line for block in reel.blocks for line in block.lines)
+    assert reel.send_slots == [3, 4]
+
+
+def test_a_sent_image_exists_from_the_segment_after_its_chunk_first_plays():
+    reel = split_reel(SEND_REEL)
+    assert reel.ready(0) == {}
+    first = {3: {"segment": 0, "frames": [0]}, 4: {"segment": 0, "frames": [2, 5, 34, 35, 36]}}
+    assert reel.ready(1) == first  # the chunk's second repetition still sends its first clip
+    assert reel.ready(2) == first
+
+
+def test_before_it_exists_a_sent_image_is_left_out_of_the_clip():
+    before = ref2va(SEND_REEL, segment=0)
+    assert before.refs == [1]
+    assert "<Subject 1> = the young woman of <Picture 1>, in a pink tracksuit" in before.text
+    assert "<Picture 2>" not in before.text
+    after = ref2va(SEND_REEL, segment=2)
+    assert after.refs == [1, 3]
+    assert "<Picture 1> and <Picture 2>" in after.text
+    assert after.sends == {3: {"segment": 0, "frames": [0]}, 4: {"segment": 0, "frames": [2, 5, 34, 35, 36]}}
+    assert after.send_slots == [3, 4]
+
+
+def test_a_frame_anchor_on_a_sent_image_waits_for_it():
+    full = SEND_REEL.replace(" lite", "")
+    later = full.replace("SHOT 4s | static", "SHOT 4s | from image 3, static")
+    assert "<Picture 2> is the first frame of [Shot 1]" in ref2va(later, segment=2).text
+    early = full.replace("SHOT 5s | push in, slow", "SHOT 5s | from image 3, push in, slow")
+    assert "first frame" not in ref2va(early, segment=0).text
+
+
+def test_a_bracket_before_its_image_exists_is_flagged():
+    src = SEND_REEL.replace("GIRL stretches on a mat.", "GIRL stretches like in [image 3].")
+    lint = [i.message for i in ref2va(src, segment=0).lint]
+    assert any("[image 3]" in m and "SEND" in m for m in lint)
+
+
+@pytest.mark.parametrize("line, words", [
+    ("SEND: frames 5-2 to image 3", "5-2"),
+    ("SEND: frames a, 2 to image 3", "a"),
+    ("SEND: frame 0 to image 10", "1–9"),
+    ("SEND: frame 0 to picture 3", "image N"),
+    ("SEND: frame to image 3", "frame"),
+])
+def test_malformed_send_lines_are_clear_errors(line, words):
+    with pytest.raises(ValueError, match=re.escape(words)):
+        split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", line))
+
+
+def test_two_sends_to_one_image_are_an_error():
+    src = SEND_REEL.replace("GIRL walks to the window.", "GIRL walks to the window.\nSEND: frame 9 to image 3")
+    with pytest.raises(ValueError, match="image 3"):
+        split_reel(src)
+
+
+def test_send_outside_a_chunk_or_outside_ref2va_is_an_error():
+    head = SEND_REEL.replace("CAST\n", "SEND: frame 0 to image 5\nCAST\n")
+    with pytest.raises(ValueError, match="inside a CHUNK"):
+        ref2va(head)
+    plain = "@h3 ref2va 16:9\nSHOT 5s\nA fox.\nSEND: frame 0 to image 3\n"
+    with pytest.raises(ValueError, match="inside a CHUNK"):
+        ref2va(plain)
+    t2va = SEND_REEL.replace("@h3 ref2va 16:9 lite", "@h3 t2va 16:9")
+    with pytest.raises(ValueError, match="ref2va"):
+        ref2va(t2va)

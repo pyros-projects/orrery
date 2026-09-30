@@ -159,7 +159,7 @@ test("applyDials mirrors orrery's override", () => {
 });
 
 test("reels: chunk timing, per-chunk lengths, keywords are not voices", () => {
-  const reel = "@h3 t2va 16:9\nLORA: <lora:a:1>\ncontext: 22\nCHUNK\nSHOT 5s\nA.\nHANDOFF: b\nCHUNK the hall\nSHOT 3s\nB.\nSHOT 1s\nC.";
+  const reel = "@h3 t2va 16:9\nLORA: <lora:a:1>\ncontext: 22\nCHUNK\nSHOT 5s\nA.\nHANDOFF: b\nSEND: frame 0 to image 3\nCHUNK the hall\nSHOT 3s\nB.\nSHOT 1s\nC.";
   const st = stats(reel);
   assert.deepEqual([st.h3.voices, st.h3.reel], [0, { chunks: 2, secs: [5, 4], repeats: [1, 1], clips: 2 }]);
   const out = shape(reel);

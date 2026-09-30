@@ -499,3 +499,96 @@ def test_comments_neither_roll_nor_ask_for_libraries(home):
     outputs = OrreryPrompt().run(src, 1, "h3-base", home=str(home))
     data = json.loads(outputs[1])
     assert "Quickstart" not in outputs[0] and (outputs[3], outputs[4]) == (1024, 576) and data["megapixels"] == 0.6
+
+
+# --- SEND: frames of a clip as reference images for later clips -------------------------------
+
+SEND_REEL = """@h3 ref2va 16:9 lite
+CAST
+GIRL (image 1, image 3): the young woman, in a pink tracksuit
+CHUNK the pose
+SHOT 5s | push in, slow
+GIRL stretches on a mat.
+SEND: frame 0 to image 3
+SEND: frames 2, 5, 34-36 to image 4
+CHUNK the walk
+SHOT 4s | static
+GIRL walks to the window.
+"""
+REFS_GRAPH = {"9": {"class_type": "OrreryPrompt", "inputs": {}},
+              "12": {"class_type": "OrreryRefs", "inputs": {"picks": ["9", 1], "image_1": ["5", 0]}},
+              "20": {"class_type": "MiniMaxH3ReferenceToVideo",
+                     "inputs": {"prompt": ["9", 0], "ref_images.ref_image_0": ["12", 0], "ref_images.ref_image_1": ["12", 1]}}}
+
+
+def test_the_picks_tell_orrery_refs_what_is_sent_and_from_which_chain(home):
+    _, picks, *_ = OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), segment=0,
+                                      latent_path="reels/one", prompt=REFS_GRAPH, unique_id="9")
+    data = json.loads(picks)
+    assert data["refs"] == [1] and data["sends"] == {"chain": "reels/one", "slots": [3, 4], "ready": {}}
+    _, picks, *_ = OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), segment=1,
+                                      latent_path="reels/one", prompt=REFS_GRAPH, unique_id="9")
+    data = json.loads(picks)
+    assert data["refs"] == [1, 3]
+    assert data["sends"]["ready"] == {"3": {"segment": 0, "frames": [0]}, "4": {"segment": 0, "frames": [2, 5, 34, 35, 36]}}
+
+
+def test_a_reel_that_sends_needs_orrery_refs(home):
+    graph = {"9": {"class_type": "OrreryPrompt", "inputs": {}}}
+    with pytest.raises(ValueError, match="Orrery Refs"):
+        OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), prompt=graph, unique_id="9")
+
+
+def send_chain(tmp_path, monkeypatch, clips=2, dropped=()):
+    """A Chain Video with `clips` clips under a fake ComfyUI output folder; frames() returns a marker."""
+    run = tmp_path / "h3_context" / "chain_video" / "run_1"
+    folders = [f"clip_{i:05d}" for i in range(1, clips + 1)]
+    for folder in folders:
+        (run / folder).mkdir(parents=True)
+        (run / folder / "video.mp4").write_bytes(b"")
+    (run.parent / "active.json").write_text(json.dumps({"run": "run_1"}))
+    (run / "clips.json").write_text(json.dumps({"clips": [{"folder": f} for f in folders]}))
+    monkeypatch.setitem(sys.modules, "folder_paths", types.SimpleNamespace(get_output_directory=lambda: str(tmp_path)))
+    from orrery import chain as ch
+
+    class Batch:
+        def __init__(self, path, wanted):
+            self.label, self.shape = f"{Path(path).parent.name}:{wanted}", (len(wanted), 8, 8, 3)
+
+    monkeypatch.setattr(ch, "frames", lambda path, wanted: (Batch(path, wanted), list(dropped)))
+
+
+def sends(ready, slots=(3, 4), refs=(1, 3)):
+    return json.dumps({"refs": list(refs), "sends": {"chain": "h3_context", "slots": list(slots), "ready": ready}})
+
+
+def test_orrery_refs_fills_a_sent_image_with_its_frames(tmp_path, monkeypatch):
+    from orrery.comfy import OrreryRefs
+    send_chain(tmp_path, monkeypatch)
+    out = OrreryRefs().route(sends({"3": {"segment": 1, "frames": [0]}}), image_1="img1")
+    assert out[0] == "img1" and out[1].label == "clip_00002:[0]" and out[2] is None
+
+
+def test_orrery_refs_refuses_a_slot_both_wired_and_sent(tmp_path, monkeypatch):
+    from orrery.comfy import OrreryRefs
+    send_chain(tmp_path, monkeypatch)
+    with pytest.raises(ValueError, match="image 3"):
+        OrreryRefs().route(sends({}, refs=[1]), image_1="img1", image_3="img3")
+
+
+def test_orrery_refs_says_when_the_chain_lacks_the_sending_clip(tmp_path, monkeypatch):
+    from orrery.comfy import OrreryRefs
+    send_chain(tmp_path, monkeypatch, clips=1)
+    with pytest.raises(ValueError, match="no clip for segment 4"):
+        OrreryRefs().route(sends({"3": {"segment": 4, "frames": [0]}}), image_1="img1")
+
+
+def test_orrery_refs_warns_about_dropped_frames_and_batches_for_reference_to_video(tmp_path, monkeypatch, capsys):
+    from orrery.comfy import OrreryRefs
+    send_chain(tmp_path, monkeypatch, dropped=[60])
+    graph = {"12": {"class_type": "OrreryRefs", "inputs": {}},
+             "20": {"class_type": "MiniMaxH3ReferenceToVideo", "inputs": {"ref_images.ref_image_1": ["12", 1]}}}
+    OrreryRefs().route(sends({"3": {"segment": 0, "frames": [2, 5, 60]}}), prompt=graph, unique_id="12", image_1="img1")
+    said = capsys.readouterr().out
+    assert "60" in said and "past the end" in said
+    assert "reads only the first" in said
