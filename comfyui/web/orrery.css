@@ -302,6 +302,39 @@
 .orrery-app .gcard.r-nope { opacity: .75; } .orrery-app .gcard.r-hate { opacity: .5; }
 .orrery-app .gdetail .big { width: 100%; border-radius: 10px; display: block; max-height: 62vh; object-fit: contain; background: #0c0c11; }
 .orrery-app:not(.big) .gdetail .big { max-height: 320px; }
+/* galaxy folders and selection */
+.orrery-app .gal { --galw: 170px; display: grid; grid-template-columns: var(--galw) minmax(0, 1fr); flex: 1; min-height: 0; }
+.orrery-app.big .gal:not([style*="--galw"]) { --galw: 230px; }
+.orrery-app .gtree { border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; position: relative; }
+.orrery-app .gtree > .scroll { flex: 1; min-height: 0; padding: 8px 0; }
+.orrery-app .gtree ul { list-style: none; margin: 0; padding: 0 6px; }
+.orrery-app .gtree ul ul { padding: 0; }
+.orrery-app .gtree .gfolders { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--line); }
+.orrery-app .gtree .addrow { padding: 8px; }
+.orrery-app .gf { display: flex; align-items: center; gap: 5px; padding: 4px 6px; border-radius: 7px; border: 1px dashed transparent; cursor: pointer; color: var(--muted); user-select: none; }
+.orrery-app .gf:hover { background: var(--hover); color: var(--ink); }
+.orrery-app .gf.on { background: var(--brass-soft); color: var(--ink); }
+.orrery-app .gf.dropping { border-color: var(--brass); background: var(--brass-soft); color: var(--ink); }
+.orrery-app .gf .i { width: 14px; height: 14px; }
+.orrery-app .gf .ln { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12.5px; }
+.orrery-app .gf .lc { font: 11px var(--mono); color: var(--faint); }
+.orrery-app .gf .tw { padding: 1px; }
+.orrery-app .gf .tw .i { width: 12px; height: 12px; transition: transform .15s; }
+.orrery-app .gf .tw .i.rot { transform: rotate(-90deg); }
+.orrery-app .gf .tw.leaf { visibility: hidden; }
+.orrery-app .gf .gfx { display: none; }
+.orrery-app .gf:hover .gfx, .orrery-app .gf:focus-within .gfx { display: inline-flex; }
+.orrery-app .gf .gren { flex: 1; min-width: 0; padding: 2px 6px; font-size: 12px; }
+.orrery-app .gmain { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.orrery-app .selbar { background: var(--brass-soft); }
+.orrery-app .selbar b { font-weight: 600; margin-right: 4px; }
+.orrery-app .gsel { position: absolute; right: 6px; top: 6px; z-index: 2; width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center;
+  background: rgba(15,16,22,.72); border: 1px solid rgba(255,255,255,.28); color: transparent; opacity: 0; transition: opacity .15s; backdrop-filter: blur(4px); }
+.orrery-app .gsel .i { width: 13px; height: 13px; stroke-width: 2.6; }
+.orrery-app .gcard:hover .gsel, .orrery-app .gsel:focus-visible, .orrery-app .gal.selecting .gsel { opacity: 1; }
+.orrery-app .gsel.on { background: var(--brass); border-color: var(--brass); color: var(--brass-ink); }
+.orrery-app .gcard.picked { border-color: var(--brass); box-shadow: 0 0 0 1px var(--brass); }
+.orrery-app .gal.dragging .gcard { cursor: grabbing; }
 .orrery-app .prose { line-height: 1.6; }
 .orrery-app .picklist { display: grid; gap: 4px; margin-top: 6px; }
 .orrery-app .pick { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 7px; padding: 5px 8px; text-align: left; font-size: 12px; }

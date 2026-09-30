@@ -2,7 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { highlight } from "../../comfyui/web/app/highlight.js";
 import {
-  applyDials, dials, downstream, entryPage, filterPresets, libraryGroups, filterRows, glyph, markPicks, pickerGroups, shape, stats, templateHash,
+  applyDials, dials, downstream, entryPage, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
+  rangeIds, shape, stats, templateHash,
 } from "../../comfyui/web/app/model.js";
 
 const known = new Set(["creature", "place"]);
@@ -117,6 +118,30 @@ test("galaxy rows filter by scope, rating and pick", () => {
   const owned = [{ id: "1", template: "aaa", preset: "krea/x", rating: null, picks: [] }, { id: "2", template: "bbb", preset: null, rating: null, picks: [] }];
   assert.deepEqual(filterRows(owned, { scope: "preset", preset: "krea/x" }).map(r => r.id), ["1"]);
   assert.deepEqual(filterRows(owned, { scope: "preset", preset: null }).map(r => r.id), []);
+});
+
+test("galaxy folders become a tree: parents first, children sorted by name, own counts", () => {
+  const tree = folderTree([{ path: "b", count: 2 }, { path: "a/z", count: 1 }, { path: "a", count: 0 }, { path: "a/Y/deep", count: 4 }]);
+  const flat = (nodes, depth = 0) => nodes.flatMap((n) => [`${"  ".repeat(depth)}${n.name}:${n.count}`, ...flat(n.children, depth + 1)]);
+  assert.deepEqual(flat(tree), ["a:0", "  Y:0", "    deep:4", "  z:1", "b:2"]);
+  assert.equal(tree[0].children[0].children[0].path, "a/Y/deep");
+});
+
+test("shift-click selects from the anchor to the card, in the order shown", () => {
+  const ids = ["a", "b", "c", "d"];
+  assert.deepEqual(rangeIds(ids, "b", "d"), ["b", "c", "d"]);
+  assert.deepEqual(rangeIds(ids, "d", "b"), ["b", "c", "d"]);
+  assert.deepEqual(rangeIds(ids, "gone", "c"), ["c"]);
+  assert.deepEqual(rangeIds(ids, null, "a"), ["a"]);
+});
+
+test("a folder dropped on a folder nests; on the top level it moves up; never into itself", () => {
+  assert.equal(folderDropPath("a/b", "c"), "c/b");
+  assert.equal(folderDropPath("a/b", ""), "b");
+  assert.equal(folderDropPath("a/b", "a"), null);
+  assert.equal(folderDropPath("a", "a/b"), null);
+  assert.equal(folderDropPath("a", "a"), null);
+  assert.equal(folderDropPath("ab", "a"), "a/ab");
 });
 
 test("dials are the bindings, with choices for a library or a brace", () => {

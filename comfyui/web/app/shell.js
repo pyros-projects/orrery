@@ -34,6 +34,7 @@ export class OrreryApp {
       pFilter: "all", pSearch: "", pOpen: null, pDetail: null, pConfirm: false, pRoll: null,
       lib: null, libSearch: "", libTag: null, libNew: null,
       gScope: "all", gRating: null, gPick: null, gOpen: null,
+      gFolder: null, gSel: new Set(), gAnchor: null, gFold: new Set(), gNew: false, gRen: null, gDrag: null,
     };
     this.data = { presets: [], favorites: new Set(), recent: [], completion: null, libraries: null, rows: null, weights: {}, llm: null };
     this.base = null;
@@ -115,7 +116,7 @@ export class OrreryApp {
   async refreshCompletion() { this.data.completion = await this.api.completions(); }
 
   render() {
-    const n = { presets: this.data.presets.length, libraries: this.data.completion?.libraries.length, galaxy: this.data.rows?.length };
+    const n = { presets: this.data.presets.length, libraries: this.data.completion?.libraries.length, galaxy: this.data.gTotal ?? this.data.rows?.length };
     this.$(".tabs").innerHTML = TABS.map(([k, label]) => `<button class="tab" role="tab" aria-selected="${this.state.tab === k}" data-tab="${k}">`
       + `${label}${n[k] ? `<span class="n">${n[k]}</span>` : ""}</button>`).join("");
     const big = this.$(".big-btn");
@@ -233,7 +234,7 @@ export class OrreryApp {
     if (!media.length || !detail.prompt_id) return;
     try {
       const res = await this.api.captureOutputs({ prompt_id: detail.prompt_id, node: this.bridge.nodeId(), media });
-      if (res.logged) { this.data.rows = null; if (this.state.tab === "galaxy") this.render(); }
+      if (res.logged) { this.data.rows = null; this.data.gRows = null; if (this.state.tab === "galaxy") this.render(); }
     } catch { /* an older run or a restarted ComfyUI: nothing to log */ }
   }
 

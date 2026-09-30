@@ -53,7 +53,15 @@ Restart ComfyUI. Nodes under **orrery**:
   - **Galaxy**: every logged output. love / like / nope / hate multiply the
     learned weight of each pick by 1.5 / 1.2 / 0.8 / 0.5 (re-rating replaces
     the factor). **Use template + seed** restores an output and sets the seed
-    to fixed.
+    to fixed. Folders on the left sort outputs without moving their files:
+    drag cards onto a folder (a selected card brings the whole selection),
+    drag a folder onto another to nest it, double-click to rename. Removing
+    a folder moves what is in it up a level. Select with the checkbox,
+    Shift-click for a range, Ctrl/Cmd-click for one more; then **Export
+    pairs** copies each picture or video into `~/.orrery/export/<name>/`
+    with a `.txt` of the prompt that made it (training pairs), and
+    **Delete** takes outputs out of the galaxy and moves their files to
+    `~/.orrery/trash/`. Learned weights stay.
   - **Help**: the DSL at a glance, the tutorial lessons, writing tips.
 
   Workflows that used the old `preset` dropdown open with that preset loaded

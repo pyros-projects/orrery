@@ -144,6 +144,43 @@ export function filterRows(rows, { scope = "all", hash, preset, rating, pick }) 
   return out;
 }
 
+// The galaxy's folders ([{path, count}]) as a tree of {path, name, count, children}, sorted by name.
+export function folderTree(folders) {
+  const nodes = new Map();
+  const node = (path) => {
+    if (!nodes.has(path)) nodes.set(path, { path, name: path.split("/").pop(), count: 0, children: [] });
+    return nodes.get(path);
+  };
+  for (const f of folders) {
+    const parts = f.path.split("/");
+    for (let i = 1; i < parts.length; i++) node(parts.slice(0, i).join("/"));
+    node(f.path).count = f.count;
+  }
+  const roots = [];
+  for (const n of nodes.values()) {
+    const cut = n.path.lastIndexOf("/");
+    (cut < 0 ? roots : nodes.get(n.path.slice(0, cut)).children).push(n);
+  }
+  const sort = (list) => { list.sort((a, b) => a.name.localeCompare(b.name)); list.forEach((n) => sort(n.children)); return list; };
+  return sort(roots);
+}
+
+// Shift-click: the cards from the anchor to the clicked one, in the order shown; without an anchor
+// on screen, just the clicked card.
+export function rangeIds(ids, anchor, id) {
+  const a = ids.indexOf(anchor), b = ids.indexOf(id);
+  return a < 0 || b < 0 ? [id] : ids.slice(Math.min(a, b), Math.max(a, b) + 1);
+}
+
+// Where a folder lands when dropped on another ("" is the top level), or null when it would move
+// into itself or stay where it is.
+export function folderDropPath(path, target) {
+  if (target === path || target.startsWith(`${path}/`)) return null;
+  const name = path.split("/").pop();
+  const to = target ? `${target}/${name}` : name;
+  return to === path ? null : to;
+}
+
 // A reel's CHUNKs: the seconds of their shots (without the pinned context), how often each plays
 // (Infinity for forever) and the clips in all. Null without CHUNK lines. Mirrors orrery.reel.
 function reelSecs(text) {

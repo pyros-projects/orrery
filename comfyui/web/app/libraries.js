@@ -3,6 +3,7 @@
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
 import { entryPage, libraryGroups, LIB_PAGE } from "./model.js";
+import { resizable } from "./parts.js";
 
 async function ensure(app) {
   if (app.data.libraries && !app.data.libStale) return;
@@ -120,28 +121,9 @@ const plain = (L) => L.entries.map((e) => ({ value: e.value, tags: [...e.tags], 
 
 // The library list is as wide as you drag it; the node remembers the width.
 function wireGrip(app) {
-  const libs = app.view.querySelector(".libs"), grip = app.view.querySelector(".libgrip");
-  if (!libs || !grip) return;
-  const set = (px) => {
-    const w = Math.round(Math.min(Math.max(px, 140), libs.clientWidth * 0.6));
-    libs.style.setProperty("--libw", `${w}px`);
-    app.bridge.props.libWidth = w;
-  };
-  const refit = () => app.view.querySelectorAll(".entries textarea").forEach(fit);
-  grip.addEventListener("pointerdown", (e) => {
-    e.preventDefault();
-    grip.setPointerCapture(e.pointerId);
-    const left = libs.getBoundingClientRect().left;
-    const move = (m) => set(m.clientX - left);
-    const up = () => { grip.removeEventListener("pointermove", move); grip.removeEventListener("pointerup", up); refit(); };
-    grip.addEventListener("pointermove", move);
-    grip.addEventListener("pointerup", up);
-  });
-  grip.addEventListener("keydown", (e) => {
-    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-    e.preventDefault();
-    set(app.view.querySelector(".liblist").offsetWidth + (e.key === "ArrowLeft" ? -16 : 16));
-    refit();
+  resizable(app, {
+    box: app.view.querySelector(".libs"), grip: app.view.querySelector(".libgrip"), list: app.view.querySelector(".liblist"),
+    cssVar: "--libw", prop: "libWidth", done: () => app.view.querySelectorAll(".entries textarea").forEach(fit),
   });
 }
 
