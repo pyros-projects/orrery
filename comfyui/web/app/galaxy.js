@@ -8,6 +8,7 @@ import { copyText, resizable } from "./parts.js";
 import { openSave } from "./save.js";
 
 const RATE_ICON = { love: "heart", like: "up", nope: "down", hate: "ban" };
+const MEDIA = "application/x-orrery-media";
 const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
 const parentOf = (path) => (path.includes("/") ? path.slice(0, path.lastIndexOf("/")) : "");
 const inside = (path, folder) => path === folder || path.startsWith(`${folder}/`);
@@ -80,6 +81,7 @@ export async function renderGalaxy(app) {
     s.gRenText = null;
     renderGalaxy(app);
   };
+  hookMediaDrop();
   resizable(app, { box: gal, grip: gal.querySelector(".ggrip"), list: gal.querySelector(".gtree"), cssVar: "--galw", prop: "galWidth" });
   wireDrag(app, gal);
   wireInputs(app);
@@ -140,7 +142,7 @@ function media(app, r, big) {
   if (big) {
     return r.kind === "video"
       ? `<video class="big" src="${esc(app.api.mediaURL(r.id))}" poster="${esc(app.api.thumbURL(r.id))}" controls loop playsinline></video>`
-      : `<img class="big" src="${esc(app.api.mediaURL(r.id))}" alt="">`;
+      : `<img class="big" src="${esc(app.api.mediaURL(r.id))}" alt="" data-gmedia="${r.id}" title="Drag onto the canvas like the file itself">`;
   }
   const img = `<img loading="lazy" draggable="false" src="${esc(app.api.thumbURL(r.id))}" alt="${esc(r.text || "")}" data-gopen="${r.id}">`;
   return r.kind === "video"
@@ -372,7 +374,12 @@ function wireDrag(app, gal) {
     return s.gDrag.folder !== undefined && folderDropPath(s.gDrag.folder, el.dataset.drop) === null ? null : el;
   };
   gal.addEventListener("dragstart", (e) => {
-    const card = e.target.closest?.("[data-gcard]"), folder = e.target.closest?.(".gf.sub");
+    const card = e.target.closest?.("[data-gcard]"), folder = e.target.closest?.(".gf.sub"), big = e.target.closest?.("[data-gmedia]");
+    if (big) {
+      const row = app.data.gRows.find((r) => r.id === big.dataset.gmedia);
+      if (row?.media_name) e.dataTransfer.setData(MEDIA, JSON.stringify({ url: app.api.mediaURL(row.id), name: row.media_name }));
+      return;
+    }
     if (card) {
       const id = card.dataset.gcard;
       s.gDrag = { ids: s.gSel.has(id) ? [...s.gSel] : [id] };
@@ -407,6 +414,38 @@ function wireDrag(app, gal) {
     if (drag.ids) moveOutputs(app, drag.ids, to);
     else moveFolder(app, drag.folder, folderDropPath(drag.folder, to));
   });
+}
+
+// The detail picture dragged out of the app arrives as the file itself. Left alone, ComfyUI fetches
+// the picture's URL and names the upload after it, which fails; so the drop is caught first, the file
+// is fetched under its own name, and the drop is handed to ComfyUI again, now carrying that file (a
+// new Load Image node, a Load Image node's new picture, or the workflow the picture carries).
+let dropHooked = false;
+
+function hookMediaDrop() {
+  if (dropHooked) return;
+  dropHooked = true;
+  document.addEventListener("drop", (e) => {
+    const raw = e.dataTransfer?.types?.includes(MEDIA) ? e.dataTransfer.getData(MEDIA) : "";
+    if (!raw) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    if (!e.target.closest?.(".orrery-app")) dropAsFile(e, JSON.parse(raw));
+  }, true);
+}
+
+async function dropAsFile(e, { url, name }) {
+  const { target, clientX, clientY, screenX, screenY } = e;
+  let file;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`the galaxy answered ${res.status}`);
+    const blob = await res.blob();
+    file = new File([blob], name, { type: blob.type });
+  } catch (err) { console.warn("[orrery] the output could not be fetched for the drop", err); return; }
+  const dataTransfer = new DataTransfer();
+  dataTransfer.items.add(file);
+  target.dispatchEvent(new DragEvent("drop", { bubbles: true, cancelable: true, composed: true, clientX, clientY, screenX, screenY, dataTransfer }));
 }
 
 // --- clicks ------------------------------------------------------------------------------------

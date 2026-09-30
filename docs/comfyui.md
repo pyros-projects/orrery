@@ -61,7 +61,9 @@ Restart ComfyUI. Nodes under **orrery**:
     pairs** copies each picture or video into `~/.orrery/export/<name>/`
     with a `.txt` of the prompt that made it (training pairs), and
     **Delete** takes outputs out of the galaxy and moves their files to
-    `~/.orrery/trash/`. Learned weights stay.
+    `~/.orrery/trash/`. Learned weights stay. The big picture of an open
+    output drags onto the canvas like the file itself: a new Load Image node,
+    a Load Image node's new picture, or the workflow the picture carries.
   - **Help**: the DSL at a glance, the tutorial lessons, writing tips.
 
   Workflows that used the old `preset` dropdown open with that preset loaded
