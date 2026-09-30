@@ -85,7 +85,7 @@ def write_h3_ref(scene: Scene, lint: list[Issue]) -> str:
     retention = subjects + retention
 
     prefix = " + ".join(t for t in TASK_ORDER if t in types) or "reference generation"
-    summary = f"[{prefix}] {names.plain(labels.brackets(scene.summary))}".rstrip()
+    summary = f"[{prefix}] {names.plain(labels.brackets(scene.summary))}".rstrip() if scene.summary.strip() else ""
     description = "\n".join(p for p in (_style_sentence(scene.style), *shots) if p)
     if issue := word_issue(description):
         lint.append(issue)
@@ -97,4 +97,4 @@ def write_h3_ref(scene: Scene, lint: list[Issue]) -> str:
         "overall_soundscape": soundscape(scene, lint),
         "non_diegetic_music": music(scene, lint),
     }
-    return "\n\n".join(f"{k}:\n{v}" for k, v in parts.items())
+    return "\n\n".join(f"{k}:\n{v}" for k, v in parts.items() if v)  # an empty section is left out; H3 copes

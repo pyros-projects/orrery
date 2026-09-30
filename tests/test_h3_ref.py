@@ -331,3 +331,16 @@ SFX: wind
 def test_full_definitions_put_the_picture_after_the_head_noun():
     src = "@h3 ref2va\nsummary: VICTIM waits.\nCAST\nVICTIM (image 1): an arrogant young man in an expensive suit\nSHOT 5s\nVICTIM waits.\nSFX: x\n"
     assert "<Subject 1> is an arrogant young man in <Picture 1>, in an expensive suit." in h3(src).text
+
+
+def test_empty_sections_are_left_out():
+    """H3 copes without them; an empty subject_definitions or a summary that is only its task prefix is noise."""
+    bare = h3("@h3 ref2va 2:3\nSHOT 5s | push in, slow\nA girl stretches in a living room.\nSFX: foley sound\n").text
+    names, _ = sections(bare)
+    assert names == ["detailed_description", "overall_soundscape", "non_diegetic_music"]
+    cast = h3("@h3 ref2va\nCAST\nA (image 1): a woman\nSHOT 5s\nA waits.\nSFX: wind\n").text
+    names, _ = sections(cast)
+    assert names == ["subject_definitions", "retention_analysis", "detailed_description", "overall_soundscape",
+                     "non_diegetic_music"]
+    summed = h3("@h3 ref2va\nsummary: A waits.\nCAST\nA (image 1): a woman\nSHOT 5s\nA waits.\nSFX: wind\n").text
+    assert sections(summed)[1]["summary"].startswith("[reference generation] ")

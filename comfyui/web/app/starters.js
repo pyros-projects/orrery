@@ -10,7 +10,8 @@ const SCENE = `# H3 SCENE · quickstart (# lines are comments: they never reach 
 # SHOT 3s | cut, static         a later shot: cut (default), dissolve, fade or wipe
 # Prose: what the camera sees and what happens in it, a visible action, never a frozen pose
 # NAME (warm low voice): Line.  speech, about 2.5 words a second · [German] Text for other languages
-# SFX: rain on a tin roof; a door slams     sound next to its cause · SFX: silence for none
+# SFX: rain on a tin roof; a door slams     sound next to its cause · SFX: silence for none ·
+#                                            no SFX: natural foley and ambience that fit the scene
 # MUSIC: solo cello at a slow tempo         the score; leave it out and there is none
 # __lib__ rolls a library · {a|b:2} a weighted choice · $x = __lib__ binds once · $x.sfx a property
 # Tips: name the look by medium, era and defects, not by artist · say what is there, no negatives ·

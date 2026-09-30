@@ -144,7 +144,9 @@ def test_soundscape_sentences_and_silence():
     silent = h3("@h3 t2va\nSHOT 5s\nA.\nSFX: silence\n")
     assert "overall_soundscape: N/A" in silent.text and not errors(silent)
     missing = h3("@h3 t2va\nSHOT 5s\nA.\n")
-    assert not errors(missing) and any("SFX" in m for m in warnings(missing))
+    assert "overall_soundscape: Natural foley and ambient sound that fit the scene." in missing.text
+    assert not errors(missing) and not any("SFX" in m for m in warnings(missing))
+    assert any("SFX" in i.message for i in missing.lint if i.severity == "info")
 
 
 def test_soundscape_lists_noun_phrases_with_and():

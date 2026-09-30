@@ -422,6 +422,9 @@ def render_shots(scene: Scene, lint: list[Issue], speakers: _Speakers, names: Na
     return shots
 
 
+DEFAULT_SOUNDSCAPE = "Natural foley and ambient sound that fit the scene."  # without SFX lines H3 still wants sound
+
+
 def soundscape(scene: Scene, lint: list[Issue]) -> str:
     sfx = [items for shot in scene.shots for items in shot.sfx]
     if sfx:
@@ -433,10 +436,11 @@ def soundscape(scene: Scene, lint: list[Issue]) -> str:
         if scene.silence:
             lint.append(Issue("warn", "SFX: silence next to other SFX lines is ignored."))
         return joined
-    if not scene.silence:
-        lint.append(Issue("warn", "No SFX lines, so overall_soundscape is N/A; the guide suggests 1–4 "
-                                  "sentences of ambience (SFX: silence says the silence is intended)."))
-    return "N/A"
+    if scene.silence:
+        return "N/A"
+    lint.append(Issue("info", "No SFX lines, so overall_soundscape asks for natural foley and ambience; SFX: lines "
+                              "choose the sounds, SFX: silence means none."))
+    return DEFAULT_SOUNDSCAPE
 
 
 def music(scene: Scene, lint: list[Issue]) -> str:
