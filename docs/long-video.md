@@ -78,7 +78,8 @@ every image as `image_N` (N as in the CAST's `(image N)`) and the prompt's
 `ref_2` …, and the prompt node, seeing the router in its graph, renumbers
 `<Picture N>` to match (Reference to Video counts only the images wired). The
 node also reads its graph for R2: it warns when the Reference to Video its text
-reaches has fewer reference images wired than the clip uses.
+reaches has fewer reference images wired than the clip uses. The tutorial:
+[orrery-refs.md](orrery-refs.md).
 
 Built (2026-09-30): **`SEND:`** anchors identity across a reel. Inside a
 `CHUNK`, `SEND: frame 0 to image 3` (or `frames 2, 5, 34-46`) makes those frames

@@ -49,7 +49,7 @@ setting. When the node runs, the model
 
   In a reel with per-chunk CASTs, put **Orrery Refs** between your images and
   Reference to Video: it hands each clip only the images its CAST uses, and
-  the prompt renumbers `<Picture N>` to match.
+  the prompt renumbers `<Picture N>` to match ([tutorial](orrery-refs.md)).
 
   A slot the model leaves out keeps its directions as text (and a warning), so
   a queued chain never breaks on one bad answer. The chain is found under

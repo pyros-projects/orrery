@@ -208,6 +208,7 @@ after clip, every one opening on the frame the last one closed on.
 |---|---|
 | [The prompt language](docs/dsl.md) | every construct, libraries and wildcard packs, variables you turn from outside |
 | [H3 screenplays](docs/h3.md) | modes, casts, reels, the compiler's output and lint |
+| [Orrery Refs](docs/orrery-refs.md) | a tutorial: reference images per clip, numbers that match, frames of earlier clips with `SEND:` |
 | [Presets and the content pack](docs/presets.md) | template references, saving presets, what ships built in |
 | [The ComfyUI nodes](docs/comfyui.md) | outputs, the app's five tabs, Generate and Restart |
 | [The wildcard manager](docs/wildcard-manager.md) | editing libraries in plain language, the language model in ComfyUI |

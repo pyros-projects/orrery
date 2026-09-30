@@ -1,6 +1,6 @@
 # The ComfyUI nodes
 
-Everything the Orrery Prompt node puts out, the five tabs of its app, Generate and Restart, and Orrery Log.
+Everything the Orrery Prompt node puts out, the five tabs of its app, Generate and Restart, Orrery Log and Orrery Refs.
 
 ```bash
 cd /path/to/ComfyUI/custom_nodes && git clone https://github.com/pyros-projects/orrery.git
@@ -71,3 +71,8 @@ Restart ComfyUI. Nodes under **orrery**:
 - **Orrery Log**: `picks` (+ `images`) → saves PNGs with the picks embedded and
   appends one line per output to `~/.orrery/galaxy.jsonl`. For videos saved by
   another node, put the file path into `media_path`.
+- **Orrery Refs**: `picks` + `image_1` … `image_9` → `ref_1` … `ref_9`, between
+  your reference images and MiniMax H3 Reference to Video. Every clip gets only
+  the images its screenplay uses, packed from `ref_1` and numbered as the prompt
+  numbers them, plus the frames of earlier clips a reel `SEND:`s. The tutorial:
+  [orrery-refs.md](orrery-refs.md).
