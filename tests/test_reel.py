@@ -20,16 +20,16 @@ $hero = __animal__
 
 CHUNK the salon
 LORA: <lora:first:1>
-SHOT 5s | push in, slow
+SHOT 5s: push in, slow
 A $hero crosses a salon.
 SFX: footsteps
 HANDOFF: the $hero reaches the staircase
 
 CHUNK
-SHOT 4s | static
+SHOT 4s: static
 The $hero climbs the stairs.
 SFX: creaking wood
-SHOT 2s | cut
+SHOT 2s: cut
 A landing with a tall window.
 MUSIC: a slow cello line
 
@@ -198,13 +198,13 @@ CAST
 GIRL (image 1, image 3): the young woman, in a pink tracksuit
 
 CHUNK the pose repeat 2
-SHOT 5s | push in, slow
+SHOT 5s: push in, slow
 GIRL stretches on a mat.
 SEND: frame 0 to image 3
 SEND: frames 2, 5, 34-36 to image 4
 
 CHUNK the walk
-SHOT 4s | static
+SHOT 4s: static
 GIRL walks to the window.
 """
 
@@ -243,9 +243,9 @@ def test_before_it_exists_a_sent_image_is_left_out_of_the_clip():
 
 def test_a_frame_anchor_on_a_sent_image_waits_for_it():
     full = SEND_REEL.replace(" lite", "")
-    later = full.replace("SHOT 4s | static", "SHOT 4s | from image 3, static")
+    later = full.replace("SHOT 4s: static", "SHOT 4s: from image 3, static")
     assert "<Picture 2> is the first frame of [Shot 1]" in ref2va(later, segment=2).text
-    early = full.replace("SHOT 5s | push in, slow", "SHOT 5s | from image 3, push in, slow")
+    early = full.replace("SHOT 5s: push in, slow", "SHOT 5s: from image 3, push in, slow")
     assert "first frame" not in ref2va(early, segment=0).text
 
 

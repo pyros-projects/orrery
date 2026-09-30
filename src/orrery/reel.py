@@ -4,12 +4,12 @@
     $venue = __couture_venue__             the head is the world: it rolls once per seed
     CHUNK the opening
     $look = __couture_form__               a chunk rolls anew in every segment it plays
-    SHOT 6s | tracking, slow
+    SHOT 6s: tracking, slow
     …
     HANDOFF: the model reaches the end of the runway
     CHUNK the rotation repeat forever      repeat N | forever: one segment per repetition
     $look = __couture_form__
-    SHOT 6s | static
+    SHOT 6s: static
     A model in $look~1 walks back while one in $look walks in.   $x~N: x as it was N clips ago
     SEND: frame 0 to image 3               this clip's frame 0 is image 3 for every later clip
 

@@ -23,7 +23,7 @@ from orrery.home import Home
 from orrery.presets import save_preset
 
 REPO = Path(__file__).resolve().parents[1]
-SCENE = "@h3 t2va\nSHOT 5s | static\nA __animal__ sleeps.\nSFX: wind\n"
+SCENE = "@h3 t2va\nSHOT 5s: static\nA __animal__ sleeps.\nSFX: wind\n"
 
 
 def test_prompt_node_expands_plain_templates(home):
@@ -132,7 +132,7 @@ def test_size_defaults_and_h3_ratio(home):
 
 
 def test_h3_length_is_frames_on_the_17k_plus_5_grid(home):
-    assert shape("@h3 t2va\nSHOT 4s | cut\nA.\nSHOT 3s\nB.\nSHOT 4s\nC.")[2] == 277
+    assert shape("@h3 t2va\nSHOT 4s: cut\nA.\nSHOT 3s\nB.\nSHOT 4s\nC.")[2] == 277
     assert shape("@h3 t2va\nSHOT 4s\nA.")[2] == 107
 
 
@@ -507,12 +507,12 @@ SEND_REEL = """@h3 ref2va 16:9 lite
 CAST
 GIRL (image 1, image 3): the young woman, in a pink tracksuit
 CHUNK the pose
-SHOT 5s | push in, slow
+SHOT 5s: push in, slow
 GIRL stretches on a mat.
 SEND: frame 0 to image 3
 SEND: frames 2, 5, 34-36 to image 4
 CHUNK the walk
-SHOT 4s | static
+SHOT 4s: static
 GIRL walks to the window.
 """
 REFS_GRAPH = {"9": {"class_type": "OrreryPrompt", "inputs": {}},

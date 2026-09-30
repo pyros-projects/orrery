@@ -39,11 +39,11 @@ setting. When the node runs, the model
   before (H3 Motion Context's Chain Video, one frame a second and the last one)
   and continues it; the node's `previous` and `previous_audio` outputs hand the
   last 3 s of that clip to the Reference to Video node's `ref_video`, for
-  `SHOT … | after video 1`:
+  `SHOT …: after video 1`:
 
   ```
   CHUNK next repeat forever
-  SHOT 5s | after video 1, tracking, slow
+  SHOT 5s: after video 1, tracking, slow
   --what WASHER does in the next 5 seconds, moving the story on--
   ```
 

@@ -20,7 +20,7 @@ style: $look
 CAST
 ? $kind=person,animal,thing: HERO: $subject$twist
 
-SHOT 10s | {? $kind=place: $move.shot|$look.shot}
+SHOT 10s: {? $kind=place: $move.shot|$look.shot}
 ? $kind=place: Over $land{? $look.hour!=own: , in $sky|}, the camera $move, the scale reading from small things in the frame.
 ? $kind=person,animal,thing: In $place, HERO $act.
 ? $kind=place: SFX: $land.sfx

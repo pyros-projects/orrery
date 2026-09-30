@@ -170,12 +170,12 @@ variables you turn from outside, and importing wildcard packs.
 style: live-action nature documentary, telephoto, crisp detail
 $animal = __subjects/animals__
 
-SHOT 5s | push in, small, slow
+SHOT 5s: push in, small, slow
 In __world/habitats#habitat:$animal.habitat__, $animal lifts its head and turns toward the sound of thunder.
 NARRATOR (calm low voice, voiceover): Every storm is news out here.
 SFX: $animal.sfx; distant thunder rolling in
 
-SHOT 3s | cut, static
+SHOT 3s: cut, static
 A close-up as the first heavy raindrops hit the ground around it.
 SFX: rain beginning to fall
 ```
@@ -193,7 +193,7 @@ casts of reference images and videos, and lint.
 ```text
 CHUNK the next room repeat forever
 $room = __tour/rooms__
-SHOT 10s | push in, slow
+SHOT 10s: push in, slow
 The door swings open and the camera glides into $room, and comes to rest facing a closed door.
 HANDOFF: the camera rests squarely facing a closed door
 ```

@@ -13,14 +13,14 @@ KEEPER: an old lighthouse keeper, in a yellow oilskin coat and a knitted cap
 
 CHUNK the first room
 $room = __tour/rooms__
-SHOT 10s | push in, slow
+SHOT 10s: push in, slow
 KEEPER walks slowly through $room, holding up a lantern, and stops in front of a closed door.
 SFX: $room.sfx; slow footsteps
 HANDOFF: KEEPER stands at a closed door, the lantern raised
 
 CHUNK the next room repeat forever
 $room = __tour/rooms__
-SHOT 10s | push in, slow
+SHOT 10s: push in, slow
 KEEPER opens the door and leaves $room~1 behind, walks slowly through $room with the lantern raised, and stops in front of the next closed door.
 SFX: $room.sfx; a door creaking open
 HANDOFF: KEEPER stands at a closed door, the lantern raised

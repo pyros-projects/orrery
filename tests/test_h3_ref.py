@@ -29,12 +29,12 @@ MAYA (light annoyance): Hey! Watch your dog!
 She closes her lips and guards the cookie while LEO pulls the dog back.
 SFX: soft indoor coffee-shop room tone continues throughout the scene
 
-SHOT 2s | cut
+SHOT 2s: cut
 A close-up of LEO, sitting beside MAYA on the orange sofa in CAFE and holding DOG securely in his arms.
 LEO (casual young male voice): He just likes cookies more than me.
 He closes his mouth into an apologetic smile and strokes the dog's thick white fur.
 
-SHOT 3s | cut
+SHOT 3s: cut
 A close-up of MAYA in CAFE. Her annoyance softens as she looks toward the Samoyed.
 MAYA (an amused cadence): Well, he has good taste at least.
 She smiles and raises the cookie in a small toast-like gesture. A classic canned audience laugh begins immediately after the line and continues through the final frame.
@@ -144,10 +144,10 @@ def test_frame_anchors_become_pictures_with_keyframe_completion():
 summary: CAFE wakes up.
 CAST
 CAFE (image 1): the café, with a tall window
-SHOT 5s | from image 2 (the café at dawn), push in, small, slow
+SHOT 5s: from image 2 (the café at dawn), push in, small, slow
 CAFE fills with morning light.
 SFX: a kettle hisses
-SHOT 3s | cut, to image 3
+SHOT 3s: cut, to image 3
 Steam rises in CAFE.
 """
     _, s = sections(h3(src).text)
@@ -165,7 +165,7 @@ def test_after_video_continues_the_previous_clip():
 summary: WASHER finishes the window.
 CAST
 WASHER (image 1): the window washer, in a red overall
-SHOT 5s | after video 1, tracking, slow
+SHOT 5s: after video 1, tracking, slow
 WASHER climbs to the next pane.
 SFX: wind
 """
@@ -179,7 +179,7 @@ SFX: wind
 
 
 def test_after_video_outside_ref2va_is_flagged():
-    result = compile_scene("@h3 t2va\nSHOT 5s | after video 1\nA man waits.\nSFX: rain\n", 1, {})
+    result = compile_scene("@h3 t2va\nSHOT 5s: after video 1\nA man waits.\nSFX: rain\n", 1, {})
     assert any("after video N" in i.message for i in result.lint)
 
 
@@ -335,7 +335,7 @@ def test_full_definitions_put_the_picture_after_the_head_noun():
 
 def test_empty_sections_are_left_out():
     """H3 copes without them; an empty subject_definitions or a summary that is only its task prefix is noise."""
-    bare = h3("@h3 ref2va 2:3\nSHOT 5s | push in, slow\nA girl stretches in a living room.\nSFX: foley sound\n").text
+    bare = h3("@h3 ref2va 2:3\nSHOT 5s: push in, slow\nA girl stretches in a living room.\nSFX: foley sound\n").text
     names, _ = sections(bare)
     assert names == ["detailed_description", "overall_soundscape", "non_diegetic_music"]
     cast = h3("@h3 ref2va\nCAST\nA (image 1): a woman\nSHOT 5s\nA waits.\nSFX: wind\n").text

@@ -100,7 +100,7 @@ starts from, a mug on `image_7` that the prose mentions.
 style: live-action, cinematic
 CAST
 MAYA (image 1): the young woman, in a pink shirt
-SHOT 5s | from image 5 (the kitchen at dawn), push in, slow
+SHOT 5s: from image 5 (the kitchen at dawn), push in, slow
 MAYA pours coffee into the mug from [image 7].
 SFX: coffee pouring; a fridge hums
 ```
@@ -121,7 +121,7 @@ would say `<Picture 5>` and `<Picture 7>` and need seven images wired.
 What counts as "used":
 
 - every image source of a CAST member (`MAYA (image 1)`, `DOG (image 2, image 3)`),
-- frame anchors: `SHOT … | from image N` and `SHOT … | to image N`,
+- frame anchors: `SHOT …: from image N` and `SHOT …: to image N`,
 - `[image N]` anywhere in the prose or the `summary:` line.
 
 ## 5. Lesson 2: a reel where every clip has its own references
@@ -140,14 +140,14 @@ MAYA (image 1): the young woman, in a pink shirt
 CHUNK the cafe
 CAST
 CAFE (image 4): the coffee shop, with a brick wall and an orange sofa
-SHOT 5s | push in, slow
+SHOT 5s: push in, slow
 MAYA sits on the sofa in CAFE and sips her coffee.
 SFX: espresso machine hiss; low chatter
 
 CHUNK the park
 CAST
 DOG (image 2, image 3): the white Samoyed, with a curved tail
-SHOT 5s | tracking, slow
+SHOT 5s: tracking, slow
 MAYA throws a ball and DOG races after it across the grass.
 SFX: a dog barking; wind in the trees
 ```
@@ -180,14 +180,14 @@ CAST
 GIRL (image 1, image 2): the young dancer, in a red tracksuit and white sneakers
 
 CHUNK the warm-up
-SHOT 6s | push in, small, slow
+SHOT 6s: push in, small, slow
 GIRL stretches her arms above her head in the middle of the studio.
 SFX: sneakers squeaking on wood
 SEND: frame 12 to image 2
 HANDOFF: she drops into a low crouch
 
 CHUNK the routine repeat 4
-SHOT 6s | tracking, slow
+SHOT 6s: tracking, slow
 GIRL spins and kicks across the studio floor.
 SFX: sneakers squeaking on wood; a bass beat from a phone speaker
 ```
@@ -234,7 +234,7 @@ It also works without a CAST. With only
 
 ```
 CHUNK the first pose
-SHOT 7s | push in, small, slow
+SHOT 7s: push in, small, slow
 SEND: frame 0 to image 1
 …
 ```
@@ -300,7 +300,7 @@ Reference to Video and keep their own numbering:
 | video with its sound | `NAME (video 1 + audio)` | `ref_video_0` + `ref_video_audio_0` | `<Video 1>`, its sound `<Audio 1>` |
 | audio | `voice: audio 1` | `ref_audio_0` | `<Audio …>` after the video soundtracks |
 | RefMod | `NAME (refmod NAME)` | the H3 RefMod nodes on the model (orrery does not load RefMods) | none: a text-only `<Subject N>`, described in words |
-| the previous clip | `SHOT … \| after video 1` | Orrery Prompt `previous` → `ref_video_0`, `previous_audio` → `ref_video_audio_0` | `<Video 1>` |
+| the previous clip | `SHOT …: after video 1` | Orrery Prompt `previous` → `ref_video_0`, `previous_audio` → `ref_video_audio_0` | `<Video 1>` |
 
 `previous` and `SEND:` work together: `previous` hands the last three seconds
 of the clip before (continuation), `SEND:` hands chosen frames of any earlier

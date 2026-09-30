@@ -10,6 +10,6 @@ $look = {cinematic:2|cctv}
 style: {? $look=cctv: security-camera footage from a fixed high corner mount, wide and slightly barrel-distorted, flat light, blocky compression and a timestamp in the corner|live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, crisp detail in skin, slime and scales}
 MUSIC: N/A
 
-SHOT 10s | {? $look=cctv: static|$entity.shot}
+SHOT 10s: {? $look=cctv: static|$entity.shot}
 In $entity.cell waits {? $named=yes: $entity.id, $entity|$entity}. It $entity.act.
 SFX: $entity.sfx

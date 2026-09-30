@@ -44,13 +44,13 @@ MAYA (refmod maya_canon): a young blonde woman, in a light-pink shirt
 SALON (refmod salon_noir_canon): a double-height salon, with a curved staircase and a black grand piano
 
 CHUNK the salon
-SHOT 10s | tracking, slow
+SHOT 10s: tracking, slow
 MAYA crosses SALON toward the staircase …
 HANDOFF: the bottom of the curved staircase fills the lower foreground
 
 CHUNK the library
 LORA: <lora:Motion_Repair:1>
-SHOT 7s | push in, small, slow
+SHOT 7s: push in, small, slow
 …
 ```
 
@@ -70,7 +70,7 @@ Per chunk orrery emits (built):
   on watches the previous clip from Chain Video (one frame a second and the
   last one): the semantic memory grounded in what H3 actually rendered, not
   only in what was asked for; `previous`/`previous_audio`, the last 3 s of that
-  clip, for `SHOT … | after video 1` (`[video continuation]`).
+  clip, for `SHOT …: after video 1` (`[video continuation]`).
 
 Built (2026-09-25): **Orrery Refs** routes the reference images per chunk. Wire
 every image as `image_N` (N as in the CAST's `(image N)`) and the prompt's

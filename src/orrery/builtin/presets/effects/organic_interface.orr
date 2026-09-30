@@ -12,7 +12,7 @@ $ending = {HOST pulls hard, and the object comes along with the hand as a single
 CAST
 HOST (image 1): $host
 
-SHOT 10s | push in, slow
+SHOT 10s: push in, slow
 HOST rests one hand on $thing, framed from the waist up in a quiet dim room. When HOST tries to lift the hand, the fingers do not come away: at the point of contact the skin has already become $thing.surface, flowing seamlessly into the object with no line where one ends and the other begins. HOST pulls gently, then harder; the joined surface stretches slightly and holds. The change spreads a few centimetres up the wrist in a clean even edge, the skin turning into $thing.surface as it passes. HOST stares at the hand, now visibly part of $thing, and presses the free hand against the boundary. In the final moment $ending.
 SFX: quiet room ambience; strained breathing; $thing.sfx; a slow tension as the hand pulls
 MUSIC: N/A

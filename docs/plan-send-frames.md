@@ -34,7 +34,7 @@ SEND: frames 2, 5, 34-46 to image 4
 
 An image sent by a chunk exists from the segment after the one where that chunk
 first plays. Before that, orrery leaves it out of the clip: the CAST members lose
-that source, frame anchors on it (`SHOT … | from image N`) go, and nothing in
+that source, frame anchors on it (`SHOT …: from image N`) go, and nothing in
 the prompt points at a `<Picture>` that is not there. An `[image N]` in prose
 before the image exists stays as written and is flagged in lint.
 

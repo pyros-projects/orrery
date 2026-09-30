@@ -12,7 +12,7 @@ MUSIC: N/A
 CHUNK the entrance
 $room = __tour/rooms__
 $thr = __tour/thresholds__
-SHOT 10s | push in, slow
+SHOT 10s: push in, slow
 The camera glides at eye level into $room, inside $house. It moves no faster than a slow walk and never shakes. Nobody looks at the camera, and the room simply goes on around it. In the final second the camera turns slightly and comes to rest exactly facing $thr.
 SFX: $room.sfx; $house.sfx
 HANDOFF: the camera rests squarely facing $thr
@@ -20,7 +20,7 @@ HANDOFF: the camera rests squarely facing $thr
 CHUNK the next room repeat forever
 $room = __tour/rooms__
 $thr = __tour/thresholds__
-SHOT 10s | tracking, slow
+SHOT 10s: tracking, slow
 $thr~1.open, into $room, inside $house. The camera glides on at eye level, taking in the room from one side to the other without hurrying, while the life of the room goes on around it and nobody looks at the camera. In the final second it turns slightly and comes to rest exactly facing $thr.
 SFX: $room.sfx; $house.sfx
 HANDOFF: the camera rests squarely facing $thr

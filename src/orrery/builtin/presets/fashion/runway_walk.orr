@@ -11,11 +11,11 @@ $look = {2$$__couture_adjective__}
 CAST
 MODEL: __couture_model__
 
-SHOT 6s | tracking, slow
+SHOT 6s: tracking, slow
 MODEL walks down the runway at __couture_venue__ in a $look look from $house: __couture_form__ in __couture_material__. Camera flashes burst from both sides while the front row watches in total silence.
 SFX: sharp heel strikes on a hard floor; a rapid ripple of camera shutters
 
-SHOT 4s | cut, static
+SHOT 4s: cut, static
 A close-up of MODEL stopping at the end of the runway, holding a blank stare for a beat, then turning away.
 SFX: a single cough in the audience
 

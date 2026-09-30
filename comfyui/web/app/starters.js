@@ -4,10 +4,10 @@
 const SCENE = `# H3 SCENE · quickstart (# lines are comments: they never reach the model)
 # @h3 <mode> [ratio] [0.6MP]    t2va i2va fl2va l2va ref2va · 0.6MP sizes width × height by area
 # style: …                      medium first: live-action, 2D-animated, claymation, vintage film …
-# SHOT 5s | push in, small, slow
+# SHOT 5s: push in, small, slow
 #     camera: push in, pull out, zoom in/out, pan/truck left/right, tilt/pedestal up/down, arc,
 #     tracking, static, shake slightly/strongly, roll · then small/large and slow/fast
-# SHOT 3s | cut, static         a later shot: cut (default), dissolve, fade or wipe
+# SHOT 3s: cut, static         a later shot: cut (default), dissolve, fade or wipe
 # Prose: what the camera sees and what happens in it, a visible action, never a frozen pose
 # NAME (warm low voice): Line.  speech, about 2.5 words a second · [German] Text for other languages
 # SFX: rain on a tin roof; a door slams     sound next to its cause · SFX: silence for none ·
@@ -20,7 +20,7 @@ const SCENE = `# H3 SCENE · quickstart (# lines are comments: they never reach 
 style: live-action, cinematic
 $who = __characters/average_joes__
 
-SHOT 5s | push in, small, slow
+SHOT 5s: push in, small, slow
 $who sits alone in a laundromat at night and looks up as the lights flicker.
 SFX: dryers tumbling; a fluorescent tube buzzing
 `;
@@ -50,14 +50,14 @@ $house = __tour/architecture__
 
 CHUNK the first room
 $room = __tour/rooms__
-SHOT 10s | push in, slow
+SHOT 10s: push in, slow
 The camera glides into $room, inside $house, and in the final second comes to rest facing a closed door.
 SFX: $room.sfx; $house.sfx
 HANDOFF: the camera rests squarely facing a closed door
 
 CHUNK the next room repeat forever
 $room = __tour/rooms__
-SHOT 10s | push in, slow
+SHOT 10s: push in, slow
 The door swings open and the camera glides into $room, inside $house, and in the final second comes to rest facing a closed door.
 SFX: $room.sfx; $house.sfx
 HANDOFF: the camera rests squarely facing a closed door
@@ -70,8 +70,8 @@ const REF = `# H3 REF2VA · quickstart: for the MiniMax H3 Reference to Video no
 #   voice: audio 1         the timbre the member above speaks with
 #   keep: fully_preserved - what stays   (partially_preserved, attribute_transfer, weak_reference)
 # summary: The target video shows NAME … (the task prefix is added for you)
-# SHOT 4s | from image 3   the shot starts on <Picture 3> · to image 3: it ends on it
-# SHOT 4s | after video 1  continues <Video 1> from its last frame (wire the node's previous output)
+# SHOT 4s: from image 3   the shot starts on <Picture 3> · to image 3: it ends on it
+# SHOT 4s: after video 1  continues <Video 1> from its last frame (wire the node's previous output)
 # --directions--           a slot the language model writes when the node runs
 # Orrery Refs between your images and the node hands each clip only the references its CAST uses
 # In a reel: SEND: frame 0 to image 3 inside a CHUNK makes that clip's frame 0 image 3 for the clips
@@ -88,7 +88,7 @@ PLACE (image 1): the street, with wet cobblestones and warm shop windows
 HERO (image 2): the woman, with short black hair and a red raincoat
 keep: fully_preserved - her face, short black hair and red raincoat are retained.
 
-SHOT 5s | tracking, slow
+SHOT 5s: tracking, slow
 HERO walks through PLACE, turns her head toward a shop window and smiles.
 SFX: footsteps on wet stone; distant traffic
 `;
@@ -102,7 +102,7 @@ const KEYFRAMES = `# H3 KEYFRAMES · quickstart
 #       the subject's first action) · a small camera move brings a still to life
 @h3 i2va 16:9
 
-SHOT 5s | push in, small, slow
+SHOT 5s: push in, small, slow
 The scene begins exactly as in <Picture 1>. Then a light breeze moves hair and fabric, and the main subject slowly turns toward the camera.
 SFX: a light breeze; faint room tone
 `;

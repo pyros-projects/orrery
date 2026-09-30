@@ -15,7 +15,7 @@ CAST
 HOST (image 1): the skinny and pretty woman
 ENTITY: a gaunt humanoid figure, with long jointed limbs
 
-SHOT 8s | push in, small, slow
+SHOT 8s: push in, small, slow
 HOST stands framed from the waist up. A pressure moves beneath her skin as ENTITY shifts inside HOST.
 SFX: quiet room ambience; skin-like stretching sounds
 MUSIC: N/A

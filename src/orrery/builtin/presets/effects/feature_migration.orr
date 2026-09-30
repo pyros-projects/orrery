@@ -14,7 +14,7 @@ $ending = {it settles into $target and opens, alive, while the old place stays s
 CAST
 HOST (image 1): $host
 
-SHOT 10s | push in, slow
+SHOT 10s: push in, slow
 HOST stands facing the camera in $room, framed from the chest up, one hand raised with the palm open beside the face. $feature begins to slide slowly out of its place, moving across the skin like a reflection gliding over glass, while the skin it leaves behind closes smooth and featureless. It travels steadily down along the jaw and the neck, a small living shape crossing the surface of the body in one continuous path. HOST holds very still, breathing carefully, and turns the raised hand to watch it arrive. In the final moment $ending.
 SFX: quiet room ambience; restrained breathing; a soft sliding sound across the skin; a small wet settling as the feature arrives
 MUSIC: N/A

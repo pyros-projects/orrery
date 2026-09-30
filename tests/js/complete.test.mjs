@@ -48,19 +48,24 @@ test("$ lists bindings defined in the template", () => {
   assert.deepEqual(at(text).items.map((i) => i.insert), ["$hero"]);
 });
 
-test("camera vocabulary after SHOT |", () => {
-  const first = at("@h3 t2va\nSHOT 5s | pu").items.map((i) => i.insert);
+test("camera vocabulary after SHOT 5s:", () => {
+  const first = at("@h3 t2va\nSHOT 5s: pu").items.map((i) => i.insert);
   assert.ok(first.includes("push in") && first.includes("pull out"));
-  const mods = at("@h3 t2va\nSHOT 5s | push in, s").items.map((i) => i.insert);
+  const mods = at("@h3 t2va\nSHOT 5s: push in, s").items.map((i) => i.insert);
   assert.deepEqual(mods, ["small", "slow"]);
 });
 
+test("the colon opens the camera words at once, and the old | still works", () => {
+  assert.ok(at("@h3 t2va\nSHOT 5s:").items.some((i) => i.insert === "push in"));
+  assert.ok(at("@h3 t2va\nSHOT 5s | pu").items.some((i) => i.insert === "push in"));
+});
+
 test("a fully typed word is not offered again", () => {
-  assert.ok(!at("@h3 t2va\nSHOT 5s | push in").items.some((i) => i.insert === "push in"));
+  assert.ok(!at("@h3 t2va\nSHOT 5s: push in").items.some((i) => i.insert === "push in"));
 });
 
 test("transitions are offered first on later shots", () => {
-  const items = at("@h3 t2va\nSHOT 3s\nA.\nSHOT 3s | ").items.map((i) => i.insert);
+  const items = at("@h3 t2va\nSHOT 3s\nA.\nSHOT 3s: ").items.map((i) => i.insert);
   assert.ok(items.includes("dissolve") && items.includes("push in"));
 });
 
@@ -141,7 +146,7 @@ test("comments neither complete nor count as missing libraries", () => {
   assert.deepEqual(missingLibraries("# try __nothing__ here\n__creature__", DATA), []);
   const text = "# __cre";
   assert.equal(suggest(text, text.length, DATA).items.length, 0);
-  const h3 = "# a comment first\n@h3 t2va\nSHOT 5s | ";
+  const h3 = "# a comment first\n@h3 t2va\nSHOT 5s: ";
   assert.ok(suggest(h3, h3.length, DATA).items.some((i) => i.insert === "push in"));
 });
 

@@ -2,7 +2,7 @@ import json
 
 from orrery.cli import main
 
-SCENE = "@h3 t2va\nSHOT 5s | push in, small, slow\nA __animal__ sleeps.\nSFX: wind\n"
+SCENE = "@h3 t2va\nSHOT 5s: push in, small, slow\nA __animal__ sleeps.\nSFX: wind\n"
 
 
 def write(tmp_path, text):

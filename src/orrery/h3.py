@@ -8,11 +8,11 @@ soundscape and `N/A` rules. Randomness only ever fills slots.
 
     @h3 t2va 16:9
     style: live-action, cinematic
-    SHOT 5s | push in, small, slow
+    SHOT 5s: push in, small, slow
     A misty forest at dawn.
     NARRATOR (calm voice, off-screen): The forest remembers.
     SFX: branches creak under frost; soft footfalls on snow
-    SHOT 3s | cut, static
+    SHOT 3s: cut, static
     A close-up of glowing eyes.
     MUSIC: sparse cello at a slow tempo, fading out
 
@@ -68,7 +68,7 @@ _STYLE = re.compile(r"^style:\s*(.+)$", re.IGNORECASE)
 _SUMMARY = re.compile(r"^summary:\s*(.+)$", re.IGNORECASE)
 _ATTRIBUTE = re.compile(r"^(voice|keep):\s*(.+)$")
 _ANCHOR = re.compile(r"\b(from|to)\s+image\s+(\d+)(?:\s*\(([^)]*)\))?|\b(after)\s+video\s+(\d+)", re.IGNORECASE)
-_SHOT = re.compile(r"^SHOT\s+(\d+(?:\.\d+)?)\s*s\b\s*(?:\|\s*(.*))?$", re.IGNORECASE)
+_SHOT = re.compile(r"^SHOT\s+(\d+(?:\.\d+)?)\s*s\b\s*(?:[:|]\s*(.*))?$", re.IGNORECASE)  # `|`: the older spelling
 _MUSIC = re.compile(r"^MUSIC:\s*(.+)$", re.IGNORECASE)
 _SFX = re.compile(r"^SFX:\s*(.+)$", re.IGNORECASE)
 _VOICE = re.compile(r"^([A-Z][A-Z0-9 _-]*?)\s*(?:\(([^)]*)\))?\s*:\s*(.+)$")

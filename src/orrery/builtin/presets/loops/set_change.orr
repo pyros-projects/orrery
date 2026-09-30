@@ -10,7 +10,7 @@ MUSIC: N/A
 
 CHUNK the first place
 $place = {__world/landscapes__:2|__tour/rooms__}
-SHOT 10s | tracking, slow
+SHOT 10s: tracking, slow
 The camera glides forward at eye level through $place, taking it in. Light and air move through it, and nothing else happens yet.
 SFX: $place.sfx
 HANDOFF: the camera glides on through $place
@@ -20,7 +20,7 @@ $from = $place~1
 $place = {__world/landscapes__:2|__tour/rooms__}
 $to = $place
 $shift = __transitions/between__
-SHOT 10s | tracking, slow
+SHOT 10s: tracking, slow
 The camera keeps gliding forward at the same steady pace. $shift. The camera glides on into $place as if nothing unusual had happened.
 SFX: $shift.sfx; $place.sfx
 HANDOFF: the camera glides on through $place

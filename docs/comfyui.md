@@ -28,7 +28,7 @@ Restart ComfyUI. Nodes under **orrery**:
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `__creature#` properties and their
     values, `$` bindings, camera words after
-    `SHOT 5s |`, your LoRA files after `LORA:`). **New** starts a fresh
+    `SHOT 5s:`, your LoRA files after `LORA:`). **New** starts a fresh
     template linked to no preset: an H3 scene, an H3 reel for Motion Context,
     H3 references (ref2va), H3 keyframes (i2va, fl2va, l2va) or a Krea prompt,
     each with a quickstart of the essentials as `#` comments on top (the gear

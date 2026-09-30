@@ -85,7 +85,7 @@ function bindingItems(before, text) {
 }
 
 function shotItems(before, line, data) {
-  const m = line.match(/^\s*SHOT\s+[\d.]+s?\s*\|(.*)$/i);
+  const m = line.match(/^\s*SHOT\s+[\d.]+s?\s*[:|](.*)$/i);  // `|`: the older spelling
   if (!m) return null;
   const segments = m[1].split(",");
   const fragment = segments.pop().trimStart();

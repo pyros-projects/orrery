@@ -22,9 +22,10 @@ test("bindings, braces and multi-picks are coloured", () => {
 });
 
 test("screenplay lines get keyword colours and html is escaped", () => {
-  const html = highlight("@h3 t2va 16:9\nSHOT 5s | push in\nKEEPER (warm voice): Hi\nSFX: rain\nThe start of <Picture 1>.", known);
+  const html = highlight("@h3 t2va 16:9\nSHOT 5s: push in\nKEEPER (warm voice): Hi\nSFX: rain\nThe start of <Picture 1>.", known);
   assert.match(html, /<span class="t-head">@h3 t2va 16:9<\/span>/);
-  assert.match(html, /<span class="t-kw">SHOT 5s<\/span>/);
+  assert.match(html, /<span class="t-kw">SHOT 5s:<\/span>/);
+  assert.match(highlight("@h3 t2va\nSHOT 5s | push in", known), /<span class="t-kw">SHOT 5s<\/span>/);
   assert.match(html, /<span class="t-kw">KEEPER \(warm voice\):<\/span>/);
   assert.match(html, /<span class="t-kw">SFX:<\/span>/);
   assert.match(html, /&lt;Picture 1&gt;/);
@@ -67,7 +68,7 @@ test("template hash matches orrery's sha256 prefix", () => {
 test("stats count rolls, libraries, bindings and H3 timing", () => {
   const s = stats("$a = __creature__\n{x|y} in __place__ and __creature__");
   assert.deepEqual([s.rolls, s.libs, s.binds, s.h3], [4, 2, 1, null]);
-  const h = stats("@h3 t2va\nSHOT 3s | static\nA.\nNARRATOR (voiceover): Hi\nSHOT 2.5s | cut, arc\nB.\nSFX: wind");
+  const h = stats("@h3 t2va\nSHOT 3s: static\nA.\nNARRATOR (voiceover): Hi\nSHOT 2.5s: cut, arc\nB.\nSFX: wind");
   assert.deepEqual(h.h3, { shots: 2, secs: 5.5, voices: 1, reel: null });
   const r = stats("@h3 ref2va\nCAST\nMAYA (video 1): a woman\nDOG (image 1): a dog\nSHOT 5s\nMAYA waves.\nMAYA (warm): Hi.\nSFX: wind");
   assert.equal(r.h3.voices, 1);
@@ -274,7 +275,7 @@ test("generate finds the output nodes downstream of the orrery node, and whether
 });
 
 test("# lines are comments: grey, and nothing in them rolls, counts or opens a screenplay", () => {
-  const src = "# Quickstart: __ideas__ and $x = __animal__\n@h3 t2va 16:9 0.6MP\n# SHOT 9s | pan left\nSHOT 5s | static\nA fox.";
+  const src = "# Quickstart: __ideas__ and $x = __animal__\n@h3 t2va 16:9 0.6MP\n# SHOT 9s: pan left\nSHOT 5s: static\nA fox.";
   assert.match(highlight(src, new Set()), /<span class="t-comment"># Quickstart: __ideas__ and \$x = __animal__<\/span>/);
   const st = stats(src);
   assert.deepEqual([st.rolls, st.libs, st.binds, st.h3.shots, st.h3.secs], [0, 0, 0, 1, 5]);
