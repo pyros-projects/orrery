@@ -144,7 +144,7 @@ class Compiled:
     chunks: int = 0  # a reel's number of CHUNKs; 0 for a plain screenplay
     segment: int = 0
     segments: int | None = 0  # a reel's clips, counting repeats; None when a CHUNK repeats forever
-    refs: list[int] = field(default_factory=list)  # packed: the original image slots, in their new order
+    refs: list[int] = field(default_factory=list)  # packed: the original image slots, in their new order (sent ones the prompt does not name last)
     sends: dict[int, dict] = field(default_factory=dict)  # sent images that exist in this segment (Reel.ready)
     send_slots: list[int] = field(default_factory=list)  # every image a SEND: line of the reel fills
 
@@ -626,6 +626,8 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
         ex = Expander(seed, libraries, weights)
         scene, picks = parse_scene(src, ex, lint), ex.picks
     refs = pack_images(scene) if packed else []
+    if packed:  # sent images reach Orrery Refs whether the prompt names them or not, after the ones it does
+        refs += [n for n in sorted(sends) if n not in refs]
     text = render_scene(scene, target, lint)
     if target == "h3-base":
         _scene_lint(src, scene, lint)

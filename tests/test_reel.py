@@ -235,7 +235,7 @@ def test_before_it_exists_a_sent_image_is_left_out_of_the_clip():
     assert "<Subject 1> = the young woman of <Picture 1>, in a pink tracksuit" in before.text
     assert "<Picture 2>" not in before.text
     after = ref2va(SEND_REEL, segment=2)
-    assert after.refs == [1, 3]
+    assert after.refs == [1, 3, 4]  # image 4 is sent but named by nothing: it follows the ones the prompt uses
     assert "<Picture 1> and <Picture 2>" in after.text
     assert after.sends == {3: {"segment": 0, "frames": [0]}, 4: {"segment": 0, "frames": [2, 5, 34, 35, 36]}}
     assert after.send_slots == [3, 4]
@@ -283,3 +283,12 @@ def test_send_outside_a_chunk_or_outside_ref2va_is_an_error():
     t2va = SEND_REEL.replace("@h3 ref2va 16:9 lite", "@h3 t2va 16:9")
     with pytest.raises(ValueError, match="ref2va"):
         ref2va(t2va)
+
+
+def test_without_a_cast_a_sent_image_still_reaches_the_refs():
+    """ref_1 of every clip after the first is the first clip's frame 0, named in the prompt or not."""
+    src = ("@h3 ref2va 2:3\nCHUNK a\nSHOT 5s\nA girl stretches.\nSEND: frame 0 to image 1\n"
+           "CHUNK b\nSHOT 5s\nShe walks.\nCHUNK c\nSHOT 5s\nShe turns.\n")
+    assert ref2va(src, segment=0).refs == []
+    assert ref2va(src, segment=1).refs == [1] and ref2va(src, segment=2).refs == [1]
+    assert "<Picture" not in ref2va(src, segment=1).text

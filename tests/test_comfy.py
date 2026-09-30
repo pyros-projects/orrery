@@ -529,7 +529,7 @@ def test_the_picks_tell_orrery_refs_what_is_sent_and_from_which_chain(home):
     _, picks, *_ = OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), segment=1,
                                       latent_path="reels/one", prompt=REFS_GRAPH, unique_id="9")
     data = json.loads(picks)
-    assert data["refs"] == [1, 3]
+    assert data["refs"] == [1, 3, 4]
     assert data["sends"]["ready"] == {"3": {"segment": 0, "frames": [0]}, "4": {"segment": 0, "frames": [2, 5, 34, 35, 36]}}
 
 
@@ -592,3 +592,28 @@ def test_orrery_refs_warns_about_dropped_frames_and_batches_for_reference_to_vid
     said = capsys.readouterr().out
     assert "60" in said and "past the end" in said
     assert "reads only the first" in said
+
+
+def test_an_empty_ref_blocks_a_preview_but_stays_none_for_reference_to_video(monkeypatch):
+    """Segment 0 of a reel that sends has nothing on the sent refs yet: Reference to Video skips None,
+    but Preview Image would crash on it, so outputs only nodes other than it read are blocked instead."""
+    from orrery.comfy import OrreryRefs
+    blocker = types.ModuleType("comfy_execution.graph_utils")
+
+    class ExecutionBlocker:
+        def __init__(self, message):
+            self.message = message
+
+    blocker.ExecutionBlocker = ExecutionBlocker
+    monkeypatch.setitem(sys.modules, "comfy_execution", types.ModuleType("comfy_execution"))
+    monkeypatch.setitem(sys.modules, "comfy_execution.graph_utils", blocker)
+    graph = {"12": {"class_type": "OrreryRefs", "inputs": {}},
+             "20": {"class_type": "MiniMaxH3ReferenceToVideo", "inputs": {"ref_images.ref_image_0": ["12", 0],
+                                                                         "ref_images.ref_image_1": ["12", 1]}},
+             "30": {"class_type": "PreviewImage", "inputs": {"images": ["12", 1]}},
+             "31": {"class_type": "PreviewImage", "inputs": {"images": ["12", 2]}}}
+    out = OrreryRefs().route(sends({}, refs=[1]), prompt=graph, unique_id="12", image_1="img1")
+    assert out[0] == "img1"
+    assert out[1] is None  # Reference to Video reads it (and a preview too): None, which it skips
+    assert isinstance(out[2], ExecutionBlocker) and out[2].message is None  # only a preview: blocked
+    assert out[3] is None  # read by nothing

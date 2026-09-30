@@ -551,7 +551,29 @@ class OrreryRefs:
                 raise ValueError(f"This clip's CAST uses {', '.join(missing)}, but nothing is wired into it.")
             order = [images[f"image_{n}"] for n in refs]
             self._warn_batches(order, prompt, unique_id)
-        return tuple(order[:self.SLOTS] + [None] * (self.SLOTS - len(order)))
+        out = order[:self.SLOTS] + [None] * (self.SLOTS - len(order))
+        return tuple(self._blocked(v, self._readers(prompt, unique_id, k)) for k, v in enumerate(out))
+
+    @staticmethod
+    def _readers(prompt, unique_id, k: int) -> list[str]:
+        """The class types of the nodes that read output k, from the graph."""
+        if not prompt or unique_id is None:
+            return []
+        link = lambda v: (str(v[0]), v[1]) if isinstance(v, list) and len(v) == 2 else None
+        return [n.get("class_type") for n in prompt.values()
+                if (str(unique_id), k) in {link(v) for v in n.get("inputs", {}).values()}]
+
+    @staticmethod
+    def _blocked(value, readers: list[str]):
+        """An empty ref that only nodes other than Reference to Video read (a preview, say) is blocked, so
+        they skip this clip instead of failing on None; Reference to Video itself skips None."""
+        if value is not None or not readers or REF2VA in readers:
+            return value
+        try:
+            from comfy_execution.graph_utils import ExecutionBlocker  # ComfyUI
+        except ImportError:
+            return None
+        return ExecutionBlocker(None)
 
     @staticmethod
     def _sent(n: int, send: dict, latent_path: str):
@@ -574,15 +596,13 @@ class OrreryRefs:
                   f"{'they are' if many else 'it is'} left out.")
         return batch
 
-    @staticmethod
-    def _warn_batches(order: list, prompt, unique_id) -> None:
+    @classmethod
+    def _warn_batches(cls, order: list, prompt, unique_id) -> None:
         """Reference to Video reads the first image of each reference only: say so when a batch goes there."""
-        link = lambda v: (str(v[0]), v[1]) if isinstance(v, list) and len(v) == 2 else None
         for k, img in enumerate(order):
-            if img is None or getattr(img, "shape", (1,))[0] < 2 or not prompt or unique_id is None:
+            if img is None or getattr(img, "shape", (1,))[0] < 2:
                 continue
-            if any(n.get("class_type") == REF2VA and (str(unique_id), k) in {link(v) for v in n.get("inputs", {}).values()}
-                   for n in prompt.values()):
+            if REF2VA in cls._readers(prompt, unique_id, k):
                 print(f"[orrery] ref_{k + 1} carries {img.shape[0]} frames, but Reference to Video reads only the first "
                       "image of a reference; send several stills to several images for ref2va.")
 

@@ -43,9 +43,13 @@ before the image exists stays as written and is flagged in lint.
 Orrery Refs, already between the images and Reference to Video, fills the sent
 images itself: it reads the sending chunk's clip from Chain Video (the chain the
 Orrery Prompt's `latent_path` names) and hands the frames on as that image,
-packed like any other image the clip uses. A sent image reaches the outputs when
-the clip uses it (a CAST source, a frame anchor or `[image N]`), exactly like a
-wired one.
+packed like any other image. The outputs are the images the clip names (a CAST
+source, a frame anchor or `[image N]`), in `<Picture N>` order, then every
+other sent image that exists, named or not (amended 2026-09-30: SEND works
+without a CAST; `SEND: frame 0 to image 1` alone makes `ref_1` the first clip's
+frame 0 in every later clip). An empty output is `None` for Reference to Video,
+which skips it, and an execution blocker for any other node, so a preview on a
+ref that is empty in segment 0 waits instead of failing the run.
 
 Reference to Video reads only the first image of each reference. When a sent
 image with several frames is wired into it, Orrery Refs warns in the console:
@@ -77,5 +81,4 @@ Each stops the run with a sentence that names the fix:
 
 ## Out of scope
 
-Sending without a CAST binding, automatic anchors without `SEND:`, sending to
-reference videos.
+Automatic anchors without `SEND:`, sending to reference videos.
