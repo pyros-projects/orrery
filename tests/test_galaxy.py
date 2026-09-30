@@ -4,7 +4,21 @@ import av
 import pytest
 from PIL import Image
 
-from orrery.galaxy import FACTORS, media_path, rate, read_rows, row_id, thumbnail
+from orrery.galaxy import (
+    FACTORS,
+    add_folder,
+    delete,
+    delete_folder,
+    export,
+    folders,
+    media_path,
+    move,
+    rate,
+    read_rows,
+    rename_folder,
+    row_id,
+    thumbnail,
+)
 from orrery.home import Home
 
 
@@ -139,3 +153,137 @@ def test_media_is_served_only_for_recorded_rows(home, tmp_path):
     assert media_path(Home(home), row_id(r)).name == "a.png"
     with pytest.raises(KeyError):
         media_path(Home(home), "../../etc/pa")
+
+
+# --- folders, delete, export ---------------------------------------------------------------
+
+def rows_by_id(home):
+    return {r["id"]: r for r in read_rows(Home(home))}
+
+
+def three(home, tmp_path):
+    rs = [row(image(tmp_path, f"{n}.png", (32, 32)), seed=i) for i, n in enumerate("abc", 1)]
+    write_rows(home, rs)
+    return [row_id(r) for r in rs]
+
+
+def test_move_sets_and_clears_a_folder_and_keeps_the_folder(home, tmp_path):
+    a, b, c = three(home, tmp_path)
+    assert move(Home(home), [a, b], " portraits / Demons ") == 2
+    got = rows_by_id(home)
+    assert got[a]["folder"] == got[b]["folder"] == "portraits/Demons" and "folder" not in got[c]
+    move(Home(home), [a, b], "")
+    assert "folder" not in rows_by_id(home)[a]
+    assert folders(Home(home)) == [{"path": "portraits", "count": 0}, {"path": "portraits/Demons", "count": 0}]
+
+
+def test_move_rejects_unknown_ids_no_ids_and_bad_folder_names(home, tmp_path):
+    a, _, _ = three(home, tmp_path)
+    with pytest.raises(KeyError):
+        move(Home(home), [a, "000000000000"], "x")
+    with pytest.raises(ValueError):
+        move(Home(home), [], "x")
+    for bad in ("a//b", "../up", "a/./b", "x" * 61, "tab\there"):
+        with pytest.raises(ValueError):
+            move(Home(home), [a], bad)
+    assert "folder" not in rows_by_id(home)[a]
+
+
+def test_folders_list_saved_and_used_ones_with_parents_and_own_counts(home, tmp_path):
+    a, b, _ = three(home, tmp_path)
+    add_folder(Home(home), "empty")
+    move(Home(home), [a], "x/y/z")
+    move(Home(home), [b], "x")
+    assert folders(Home(home)) == [{"path": "empty", "count": 0}, {"path": "x", "count": 1},
+                                   {"path": "x/y", "count": 0}, {"path": "x/y/z", "count": 1}]
+    with pytest.raises(FileExistsError):
+        add_folder(Home(home), "x/y")
+    with pytest.raises(ValueError):
+        add_folder(Home(home), " / ")
+
+
+def test_renaming_a_folder_moves_its_subfolders_and_outputs(home, tmp_path):
+    a, b, c = three(home, tmp_path)
+    move(Home(home), [a], "a/b")
+    move(Home(home), [b], "a/b/deep")
+    move(Home(home), [c], "a/bb")
+    add_folder(Home(home), "c")
+    rename_folder(Home(home), "a/b", "c/b")
+    got = rows_by_id(home)
+    assert (got[a]["folder"], got[b]["folder"], got[c]["folder"]) == ("c/b", "c/b/deep", "a/bb")
+    assert [f["path"] for f in folders(Home(home))] == ["a", "a/bb", "c", "c/b", "c/b/deep"]
+
+
+def test_a_folder_cannot_move_into_itself_or_onto_another(home, tmp_path):
+    a, b, _ = three(home, tmp_path)
+    move(Home(home), [a], "a")
+    move(Home(home), [b], "b")
+    with pytest.raises(ValueError):
+        rename_folder(Home(home), "a", "a/inside")
+    with pytest.raises(FileExistsError):
+        rename_folder(Home(home), "a", "b")
+    with pytest.raises(KeyError):
+        rename_folder(Home(home), "nope", "c")
+
+
+def test_deleting_a_folder_moves_its_contents_up_one_level(home, tmp_path):
+    a, b, c = three(home, tmp_path)
+    move(Home(home), [a], "top/mid")
+    move(Home(home), [b], "top/mid/low")
+    move(Home(home), [c], "solo")
+    delete_folder(Home(home), "top/mid")
+    got = rows_by_id(home)
+    assert (got[a]["folder"], got[b]["folder"]) == ("top", "top/low")
+    delete_folder(Home(home), "solo")
+    assert "folder" not in rows_by_id(home)[c]
+    assert [f["path"] for f in folders(Home(home))] == ["top", "top/low"]
+    with pytest.raises(KeyError):
+        delete_folder(Home(home), "solo")
+
+
+def test_delete_drops_rows_moves_files_to_the_trash_and_keeps_weights(home, tmp_path):
+    a, b, c = three(home, tmp_path)
+    rate(Home(home), a, "love")
+    thumbnail(Home(home), a)
+    (home / "trash").mkdir()
+    (home / "trash" / "a.png").write_bytes(b"older")
+    assert delete(Home(home), [a, b]) == 2
+    assert list(rows_by_id(home)) == [c]
+    assert sorted(p.name for p in (home / "trash").iterdir()) == ["a.png", "a_2.png", "b.png"]
+    assert not (tmp_path / "a.png").exists() and (tmp_path / "c.png").exists()
+    assert not (home / "thumbs" / f"{a}.webp").exists()
+    assert Home(home).weights()["__animal__=fox"] == pytest.approx(1.5)
+
+
+def test_delete_keeps_a_file_another_row_still_shows_and_forgives_a_missing_one(home, tmp_path):
+    shared = image(tmp_path, "shared.png", (32, 32))
+    rs = [row(shared, seed=1), row(shared, seed=2), row(str(tmp_path / "gone.png"), seed=3)]
+    write_rows(home, rs)
+    delete(Home(home), [row_id(rs[0]), row_id(rs[2])])
+    assert (tmp_path / "shared.png").exists()
+    assert list(rows_by_id(home)) == [row_id(rs[1])]
+
+
+def test_export_writes_media_and_prompt_sidecar_pairs(home, tmp_path):
+    a, b, _ = three(home, tmp_path)
+    video = row(clip(tmp_path), seed=7)
+    missing = row(str(tmp_path / "gone.png"), seed=8)
+    rs = [json.loads(line) for line in (home / "galaxy.jsonl").read_text().splitlines()] + [video, missing]
+    rs[0]["text"] = "  a fox in the snow\n"
+    write_rows(home, rs)
+    out = export(Home(home), [a, b, row_id(video), row_id(missing)], "fox set")
+    assert out == {"path": str(home / "export" / "fox set"), "exported": 3, "skipped": 1}
+    folder = home / "export" / "fox set"
+    assert sorted(p.name for p in folder.iterdir()) == ["a.png", "a.txt", "b.png", "b.txt", "clip.mp4", "clip.txt"]
+    assert (folder / "a.txt").read_text(encoding="utf-8") == "a fox in the snow\n"
+    assert (folder / "a.png").read_bytes() == (tmp_path / "a.png").read_bytes()
+    export(Home(home), [a], "fox set")
+    assert (folder / "a_2.png").exists() and (folder / "a_2.txt").exists()
+
+
+def test_export_names_are_one_plain_folder(home, tmp_path):
+    a, _, _ = three(home, tmp_path)
+    for bad in ("", "../x", "a/b", ".hidden", "x" * 81):
+        with pytest.raises(ValueError):
+            export(Home(home), [a], bad)
+    assert not (home / "export").exists()

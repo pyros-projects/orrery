@@ -396,20 +396,78 @@ def _row_json(row: dict, by_hash: dict[str, str], known: set[str]) -> dict:
         "target": row.get("target"), "template": row.get("template"), "text": row.get("text"),
         "picks": row.get("picks") or [], "rating": row.get("rating"), "params": row.get("params") or {},
         "media_name": Path(media).name if media else None, "kind": row["kind"],
-        "preset": _owner(row, by_hash, known),
+        "preset": _owner(row, by_hash, known), "folder": row.get("folder") or "",
     }
 
 
+def _gx(fn, *args):
+    """Run a galaxy edit, turning its errors into answers: bad input 400, unknown 404, taken 409."""
+    try:
+        return fn(*args)
+    except FileExistsError as err:
+        raise ApiError(409, str(err)) from None
+    except (ValueError, TypeError) as err:
+        raise ApiError(400, str(err)) from None
+    except KeyError as err:
+        raise ApiError(404, err.args[0]) from None
+
+
+def _folder_list(home: Home, rows: list[dict] | None = None) -> dict:
+    rows = gx.read_rows(home) if rows is None else rows
+    return {"folders": gx.folders(home, rows), "total": len(rows),
+            "unsorted": sum(1 for r in rows if not r.get("folder"))}
+
+
 def galaxy(home: Home, args: dict) -> dict:
+    """Outputs, newest first; `folder` shows one folder's own outputs ('' the unsorted ones)."""
     limit, wanted, owner = _int(args, "limit", 200), args.get("template") or None, args.get("preset") or None
     if limit < 1:
         raise ApiError(400, "'limit' must be at least 1.")
+    folder = None if args.get("folder") is None else _gx(gx.clean_folder, args["folder"])
     by_hash, known, weights = _preset_by_hash(home), set(ps.list_presets(home)), home.weights()
-    rows = [r for r in gx.read_rows(home) if (wanted is None or r.get("template") == wanted)
-            and (owner is None or _owner(r, by_hash, known) == owner)][:limit]
+    every = gx.read_rows(home)
+    rows = [r for r in every if (wanted is None or r.get("template") == wanted)
+            and (owner is None or _owner(r, by_hash, known) == owner)
+            and (folder is None or (r.get("folder") or "") == folder)][:limit]
     keys = sorted({k for r in rows for p in r.get("picks") or [] for k in p.get("keys") or []})
     return {"rows": [_row_json(r, by_hash, known) for r in rows],
-            "weights": {k: weights.get(k, 1.0) for k in keys}}
+            "weights": {k: weights.get(k, 1.0) for k in keys}, **_folder_list(home, every)}
+
+
+def _ids(args: dict) -> list[str]:
+    ids = args.get("ids")
+    if not isinstance(ids, list) or not ids or not all(isinstance(i, str) for i in ids):
+        raise ApiError(400, "'ids' must be a list of galaxy output ids.")
+    return ids
+
+
+def galaxy_move(home: Home, args: dict) -> dict:
+    return {"moved": _gx(gx.move, home, _ids(args), args.get("folder") or ""), **_folder_list(home)}
+
+
+def galaxy_delete(home: Home, args: dict) -> dict:
+    """Outputs leave the galaxy; their files go to the home's trash."""
+    return {"deleted": _gx(gx.delete, home, _ids(args)), **_folder_list(home)}
+
+
+def galaxy_export(home: Home, args: dict) -> dict:
+    """Picture or video + prompt .txt pairs in export/<name>/, for training other models."""
+    return _gx(gx.export, home, _ids(args), args.get("name"))
+
+
+def galaxy_folder_add(home: Home, args: dict) -> dict:
+    _gx(gx.add_folder, home, args.get("path"))
+    return _folder_list(home)
+
+
+def galaxy_folder_rename(home: Home, args: dict) -> dict:
+    _gx(gx.rename_folder, home, args.get("path"), args.get("to"))
+    return _folder_list(home)
+
+
+def galaxy_folder_delete(home: Home, args: dict) -> dict:
+    _gx(gx.delete_folder, home, args.get("path"))
+    return _folder_list(home)
 
 
 def _output_dir() -> Path:
@@ -611,6 +669,12 @@ ROUTES = [
     ("POST", "/orrery/galaxy/rate", galaxy_rate),
     ("GET", "/orrery/galaxy/thumb", galaxy_thumb),
     ("GET", "/orrery/galaxy/media", galaxy_media),
+    ("POST", "/orrery/galaxy/move", galaxy_move),
+    ("POST", "/orrery/galaxy/delete", galaxy_delete),
+    ("POST", "/orrery/galaxy/export", galaxy_export),
+    ("POST", "/orrery/galaxy/folder/add", galaxy_folder_add),
+    ("POST", "/orrery/galaxy/folder/rename", galaxy_folder_rename),
+    ("POST", "/orrery/galaxy/folder/delete", galaxy_folder_delete),
     ("POST", "/orrery/roll", roll),
     ("POST", "/orrery/frequency", frequency),
     ("GET", "/orrery/home", home_settings),

@@ -41,6 +41,18 @@ class Home:
         return self.root / "galaxy.jsonl"
 
     @property
+    def galaxy_folders_path(self) -> Path:
+        return self.root / "galaxy_folders.json"
+
+    @property
+    def trash_dir(self) -> Path:
+        return self.root / "trash"
+
+    @property
+    def export_dir(self) -> Path:
+        return self.root / "export"
+
+    @property
     def history_dir(self) -> Path:
         return self.root / "history"
 

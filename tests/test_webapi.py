@@ -48,6 +48,9 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/library/own"), ("POST", "/orrery/library/delete"), ("POST", "/orrery/library/rename"), ("POST", "/orrery/galaxy/capture"),
         ("GET", "/orrery/galaxy"), ("POST", "/orrery/galaxy/rate"),
         ("GET", "/orrery/galaxy/thumb"), ("GET", "/orrery/galaxy/media"), ("POST", "/orrery/roll"),
+        ("POST", "/orrery/galaxy/move"), ("POST", "/orrery/galaxy/delete"), ("POST", "/orrery/galaxy/export"),
+        ("POST", "/orrery/galaxy/folder/add"), ("POST", "/orrery/galaxy/folder/rename"),
+        ("POST", "/orrery/galaxy/folder/delete"),
         ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
         ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/discard"),
         ("GET", "/orrery/home"), ("POST", "/orrery/home"),
@@ -292,7 +295,7 @@ def test_galaxy_rows_name_their_preset_and_filter_by_template(home, tmp_path):
     rows = ok(home, webapi.galaxy)["rows"]
     assert [r["seed"] for r in rows] == [2, 1]
     assert set(rows[0]) == {"id", "ts", "seed", "target", "template", "text", "picks", "rating",
-                            "media_name", "kind", "preset", "params"}
+                            "media_name", "kind", "preset", "params", "folder"}
     assert rows[1]["preset"] == "tutorial/01_first_wildcard" and rows[0]["preset"] is None
     assert rows[1]["media_name"] == "1.png" and rows[1]["kind"] == "image"
     only = ok(home, webapi.galaxy, template=template_hash(lesson))["rows"]
@@ -317,6 +320,56 @@ def test_rate_returns_the_row_and_its_weights(home, tmp_path):
     assert body["weights"] == {"__animal__=fox": 1.5}
     assert api(home, webapi.galaxy_rate, id=rid, rating="meh")[0] == 400
     assert api(home, webapi.galaxy_rate, id="000000000000", rating="love")[0] == 404
+
+
+def test_galaxy_filters_by_folder_and_lists_folders_with_counts(home, tmp_path):
+    a = log_row(home, tmp_path, "a __animal__", seed=1, name="1.png")
+    b = log_row(home, tmp_path, "a __animal__", seed=2, name="2.png")
+    log_row(home, tmp_path, "a __animal__", seed=3, name="3.png")
+    body = ok(home, webapi.galaxy_move, ids=[a, b], folder="foxes/snow")
+    assert body["moved"] == 2 and body["total"] == 3 and body["unsorted"] == 1
+    assert body["folders"] == [{"path": "foxes", "count": 0}, {"path": "foxes/snow", "count": 2}]
+    everything = ok(home, webapi.galaxy)
+    assert len(everything["rows"]) == 3 and everything["folders"] == body["folders"]
+    assert {r["folder"] for r in everything["rows"]} == {"foxes/snow", ""}
+    assert [r["id"] for r in ok(home, webapi.galaxy, folder="foxes/snow")["rows"]] == [b, a]
+    assert len(ok(home, webapi.galaxy, folder="")["rows"]) == 1
+    assert ok(home, webapi.galaxy, folder="foxes")["rows"] == []
+    assert api(home, webapi.galaxy, folder="a//b")[0] == 400
+
+
+def test_galaxy_move_delete_and_export_check_their_input(home, tmp_path):
+    a = log_row(home, tmp_path, "a __animal__")
+    for bad in ({}, {"ids": "x"}, {"ids": []}, {"ids": [1]}):
+        assert api(home, webapi.galaxy_move, folder="x", **bad)[0] == 400
+    assert api(home, webapi.galaxy_move, ids=["000000000000"], folder="x")[0] == 404
+    assert api(home, webapi.galaxy_move, ids=[a], folder="../x")[0] == 400
+    assert api(home, webapi.galaxy_export, ids=[a], name="../x")[0] == 400
+    out = ok(home, webapi.galaxy_export, ids=[a], name="set")
+    assert out == {"path": str(home / "export" / "set"), "exported": 1, "skipped": 0}
+    assert (home / "export" / "set" / "a.txt").read_text() == "a fox\n"
+    body = ok(home, webapi.galaxy_delete, ids=[a])
+    assert body["deleted"] == 1 and body["total"] == 0
+    assert (home / "trash" / "a.png").exists()
+    assert api(home, webapi.galaxy_delete, ids=[a])[0] == 404
+
+
+def test_galaxy_folders_are_added_renamed_and_deleted(home, tmp_path):
+    a = log_row(home, tmp_path, "a __animal__")
+    assert ok(home, webapi.galaxy_folder_add, path="keep")["folders"] == [{"path": "keep", "count": 0}]
+    assert api(home, webapi.galaxy_folder_add, path="keep")[0] == 409
+    assert api(home, webapi.galaxy_folder_add, path="")[0] == 400
+    ok(home, webapi.galaxy_move, ids=[a], folder="old")
+    body = ok(home, webapi.galaxy_folder_rename, path="old", to="keep/old")
+    assert [f["path"] for f in body["folders"]] == ["keep", "keep/old"]
+    assert api(home, webapi.galaxy_folder_rename, path="keep", to="keep/old/x")[0] == 400
+    assert api(home, webapi.galaxy_folder_rename, path="nope", to="x")[0] == 404
+    ok(home, webapi.galaxy_folder_add, path="other")
+    assert api(home, webapi.galaxy_folder_rename, path="other", to="keep")[0] == 409
+    body = ok(home, webapi.galaxy_folder_delete, path="keep")
+    assert [f["path"] for f in body["folders"]] == ["old", "other"]
+    assert ok(home, webapi.galaxy, folder="old")["rows"][0]["id"] == a
+    assert api(home, webapi.galaxy_folder_delete, path="keep")[0] == 404
 
 
 def test_thumb_and_media_return_files(home, tmp_path):
