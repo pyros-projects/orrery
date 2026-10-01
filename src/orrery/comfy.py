@@ -490,6 +490,27 @@ class OrreryLog:
 
 
 REF2VA = "MiniMaxH3ReferenceToVideo"
+PREVIEW_HEIGHT = 512
+
+
+def stack_preview(images: list):
+    """Every frame of `images` (IMAGE batches) as one batch for a Preview Image: scaled to one height and
+    centred on a neutral grey of the widest width. ComfyUI only (torch)."""
+    import comfy.utils
+    import torch
+
+    scaled = []
+    for batch in images:
+        for frame in batch:
+            width = max(1, round(frame.shape[1] * PREVIEW_HEIGHT / frame.shape[0]))
+            scaled.append(comfy.utils.common_upscale(frame[None, ..., :3].movedim(-1, 1), width, PREVIEW_HEIGHT,
+                                                     "bilinear", "disabled").movedim(1, -1)[0])
+    widest = max(f.shape[1] for f in scaled)
+    out = torch.full((len(scaled), PREVIEW_HEIGHT, widest, 3), 0.5)
+    for i, frame in enumerate(scaled):
+        x = (widest - frame.shape[1]) // 2
+        out[i, :, x:x + frame.shape[1]] = frame
+    return out
 
 
 def wiring(prompt: dict | None, unique_id) -> tuple[bool, int | None]:
@@ -519,12 +540,15 @@ class OrreryRefs:
     CATEGORY = "orrery"
     FUNCTION = "route"
     SLOTS = 9
-    RETURN_TYPES = ("IMAGE",) * SLOTS
-    RETURN_NAMES = tuple(f"ref_{i}" for i in range(1, SLOTS + 1))
+    RETURN_TYPES = ("IMAGE",) * (SLOTS + 1)
+    RETURN_NAMES = (*(f"ref_{i}" for i in range(1, SLOTS + 1)), "preview")
     OUTPUT_TOOLTIPS = ("Wire ref_1 into Reference to Video ref_image_0, ref_2 into ref_image_1, and so on.",
-                       *("",) * (SLOTS - 1))
+                       *("",) * (SLOTS - 1),
+                       ("Every image this clip gets, as one batch for a Preview Image; skipped when there is none. "
+                        "Preview here, not on the ref_N that go into Reference to Video: an empty one is None there."))
     DESCRIPTION = ("Routes the reference images per reel clip: wire every image as image_N (N as in the CAST's "
-                   "(image N)) and the Orrery Prompt's picks; the clip's images come out packed as ref_1, ref_2 …")
+                   "(image N)) and the Orrery Prompt's picks; the clip's images come out packed as ref_1, ref_2 …, "
+                   "and all of them together on preview, for a Preview Image.")
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -552,7 +576,13 @@ class OrreryRefs:
             order = [images[f"image_{n}"] for n in refs]
             self._warn_batches(order, prompt, unique_id)
         out = order[:self.SLOTS] + [None] * (self.SLOTS - len(order))
-        return tuple(self._blocked(v, self._readers(prompt, unique_id, k)) for k, v in enumerate(out))
+        shown = [img for img in out if img is not None]
+        try:
+            preview = stack_preview(shown) if shown else None
+        except ImportError:  # outside ComfyUI
+            preview = None
+        return (*(self._blocked(v, self._readers(prompt, unique_id, k)) for k, v in enumerate(out)),
+                self._blocked(preview, self._readers(prompt, unique_id, self.SLOTS)))
 
     @staticmethod
     def _readers(prompt, unique_id, k: int) -> list[str]:

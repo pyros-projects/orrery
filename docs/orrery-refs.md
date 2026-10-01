@@ -52,6 +52,7 @@ the same reel, named by a `SEND:` line (lesson 3).
 | input | `picks` | the Orrery Prompt's `picks` output (required) |
 | inputs | `image_1` … `image_9` | your reference images: `image_N` is the `(image N)` of the CAST |
 | outputs | `ref_1` … `ref_9` | into Reference to Video: `ref_1` → `ref_image_0`, `ref_2` → `ref_image_1`, … |
+| output | `preview` | every image this clip gets, as one batch, for a Preview Image |
 
 Two numbers to keep apart:
 
@@ -84,6 +85,8 @@ Orrery Prompt ──── picks ──────────────┘  
 4. **Text**: Orrery Prompt `text` → Reference to Video `prompt`, directly or
    through text nodes (Text Concatenate and friends are fine).
 5. **Header**: the screenplay starts with `@h3 ref2va` (or `@h3 ref2va … lite`).
+6. **Preview** (optional): `preview` → Preview Image shows every reference the
+   clip gets. Keep previews off the `ref_N` themselves (section 7 says why).
 
 Nothing else to set. When the Orrery Prompt notices that an Orrery Refs reads
 its `picks`, it packs the numbering by itself; when it notices that the
@@ -261,9 +264,8 @@ anchors from many clips stay cheap.
 - Pick a frame where the face is clear and sharp, not necessarily frame 0. A
   fast move at the start of a clip blurs it.
 - To look before you choose, send a range once (`SEND: frames 0-47 to image 9`)
-  and put a Preview Image on the ref it comes out on (after the images the clip
-  uses, see section 7), with nothing else on that ref: the batch shows every
-  frame. Then send the one you like.
+  and look at it on `preview`: every frame of the batch is there. Then send the
+  one you like.
 - A batch to Reference to Video counts as one picture: it reads only the first
   image of each reference. For several stills in ref2va, send them to several
   images (`SEND: frame 12 to image 2` and `SEND: frame 40 to image 3`). A batch
@@ -281,9 +283,17 @@ For every clip, Orrery Refs fills `ref_1`, `ref_2`, … in this order:
 2. **Every other sent image that exists**, named or not, in `image N` order.
    The prompt does not label these.
 3. **The rest is empty.** An empty ref that Reference to Video reads is `None`,
-   which it skips. An empty ref that only other nodes read (a Preview Image, for
-   instance) is blocked, so those nodes wait for a clip that has an image
-   instead of failing the run.
+   which it skips. An empty ref that only other nodes read is blocked, so those
+   nodes wait for a clip that has an image instead of failing the run.
+
+**`preview`** carries every image of `ref_1` … `ref_9` in that order, every frame
+of a batch included, scaled to 512 px high and centred on neutral grey at a
+common width, so one Preview Image shows the whole clip's references. In a clip
+without any it is blocked: the preview waits. Preview there, not on a `ref_N`
+that also goes into Reference to Video: an output hands every node it feeds the
+same value, so an empty one is `None` for both, and Preview Image fails on
+`None`. A plain white or black stand-in is no way out either: Reference to
+Video would take it as a real reference.
 
 When nothing tells the Orrery Prompt that an Orrery Refs reads its `picks` (the
 `picks` pass through another node first, or the target is `text`), nothing is
@@ -325,9 +335,9 @@ ComfyUI console.
 | `[orrery] SEND to image 5: frame 60 is past the end of segment 1's clip, so it is left out.` (console) | the clip is shorter than the frame number | pick an earlier frame; with none left, the last frame stands in |
 | `[orrery] ref_2 carries 5 frames, but Reference to Video reads only the first image of a reference; …` (console) | a batch goes into Reference to Video | send single frames to several images |
 
-If a Preview Image still fails on an empty ref, that ref goes into Reference to
-Video as well: in that clip the ref stays `None`, so that Reference to Video
-can run. Give the preview a ref of its own, or take it off.
+If a Preview Image fails on an empty ref (`'NoneType' object is not
+subscriptable`), that ref goes into Reference to Video as well, so it stays
+`None`. Move the preview to `preview`.
 
 ## 10. Limits
 

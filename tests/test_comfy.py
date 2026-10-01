@@ -432,7 +432,7 @@ def test_orrery_refs_hands_on_only_the_images_the_clip_uses():
     from orrery.comfy import OrreryRefs
     imgs = {f"image_{i}": f"img{i}" for i in range(1, 8)}
     out = OrreryRefs().route(json.dumps({"refs": [3, 6]}), **imgs)
-    assert out[:3] == ("img3", "img6", None) and len(out) == 9
+    assert out[:3] == ("img3", "img6", None) and len(out) == 10
     assert OrreryRefs().route(json.dumps({}), **imgs)[:2] == ("img1", "img2")  # nothing packed: as wired
     with pytest.raises(ValueError, match="image_6"):
         OrreryRefs().route(json.dumps({"refs": [3, 6]}), image_3="img3")
@@ -617,3 +617,26 @@ def test_an_empty_ref_blocks_a_preview_but_stays_none_for_reference_to_video(mon
     assert out[1] is None  # Reference to Video reads it (and a preview too): None, which it skips
     assert isinstance(out[2], ExecutionBlocker) and out[2].message is None  # only a preview: blocked
     assert out[3] is None  # read by nothing
+
+
+def test_the_preview_output_shows_every_ref_of_the_clip_and_waits_when_there_is_none(monkeypatch):
+    """ref_N go to Reference to Video, which needs None for an empty one; previews take `preview` instead."""
+    from orrery import comfy
+    from orrery.comfy import OrreryRefs
+    assert OrreryRefs.RETURN_NAMES[-1] == "preview" and len(OrreryRefs.RETURN_TYPES) == 10
+    blocker = types.ModuleType("comfy_execution.graph_utils")
+
+    class ExecutionBlocker:
+        def __init__(self, message):
+            self.message = message
+
+    blocker.ExecutionBlocker = ExecutionBlocker
+    monkeypatch.setitem(sys.modules, "comfy_execution", types.ModuleType("comfy_execution"))
+    monkeypatch.setitem(sys.modules, "comfy_execution.graph_utils", blocker)
+    monkeypatch.setattr(comfy, "stack_preview", lambda images: ("stacked", tuple(images)))
+    graph = {"12": {"class_type": "OrreryRefs", "inputs": {}},
+             "30": {"class_type": "PreviewImage", "inputs": {"images": ["12", 9]}}}
+    out = OrreryRefs().route(json.dumps({"refs": [3, 6]}), prompt=graph, unique_id="12", image_3="img3", image_6="img6")
+    assert out[9] == ("stacked", ("img3", "img6"))
+    empty = OrreryRefs().route(json.dumps({"refs": []}), prompt=graph, unique_id="12")
+    assert isinstance(empty[9], ExecutionBlocker)
