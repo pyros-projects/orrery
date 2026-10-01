@@ -2,11 +2,12 @@
 import { suggest } from "../orrery-complete.js";
 import { esc, highlight } from "./highlight.js";
 import { icon } from "./icons.js";
-import { applyDials, dials, folderColor, pickerGroups, shape, stats, stripComments, sweepPlan, templateHash } from "./model.js";
+import { applyDials, chunkInfo, dials, folderColor, pickerGroups, shape, stats, stripComments, sweepPlan, templateHash } from "./model.js";
 import { thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
 import { STARTERS } from "./starters.js";
 import { runRolls } from "./test.js";
+import { layoutTimeline, loadChain, scrollTimeline, wireTimeline } from "./timeline.js";
 
 function statsHTML(app) {
   const st = stats(app.text), out = shape(app.text), reel = st.h3?.reel, plan = sweepPlan(app.text);
@@ -28,6 +29,7 @@ function statsHTML(app) {
     + (reel ? (app.run
       ? `<span class="stat live" title="The reel segment this node is generating now">Generating segment <b>${app.run.segment}</b></span>`
       : `<span class="stat" title="The segment Generate plays next: the node's segment widget">Next segment <b>${esc(String(app.bridge.getSegment()))}</b></span>`)
+      + `<button class="btn ghost" data-act="jump" title="Scroll the editor to the chunk that plays the next segment">${icon("jump")}Jump</button>`
       + `<button class="btn" data-act="restart" title="Cancel this node's queued and running clips, set segment to 0 and generate from the start">${icon("undo")}Restart</button>` : "")
     + (app.state.sweepQueue
       ? `<button class="btn primary" data-act="stopsweep" title="Stop queueing the sweep; what is queued already still runs">${icon("x")}Stop<small class="sweep">${app.state.sweepQueue.done}/${app.state.sweepQueue.total} queued</small></button>`
@@ -63,13 +65,14 @@ export function renderPrompt(app) {
       ${app.state.newMenu ? `<div class="pop newpop" role="menu">${Object.entries(STARTERS).map(([k, s]) => `<button role="menuitem" data-new="${k}"><b>${esc(s.label)}</b><span class="muted">${esc(s.hint)}</span></button>`).join("")}</div>` : ""}
     </div>
     ${card?.note ? `<p class="pnote"><b>${esc(card.title)}.</b> ${esc(card.note)}</p>` : '<p class="pnote">Type a template, or open a preset. <b>__</b> lists your libraries, <b>$</b> your bindings.</p>'}
-    <div class="editor"><pre class="hl" aria-hidden="true"></pre><textarea spellcheck="false" aria-label="Template"></textarea></div>
+    <div class="edrow"><div class="editor${app.data.dividers === false ? " nodiv" : ""}"><pre class="hl" aria-hidden="true"></pre><textarea spellcheck="false" aria-label="Template"></textarea></div>
+      ${app.data.timeline === false ? "" : '<div class="timeline" hidden aria-label="The reel\'s clips"><div class="tl-track"></div></div>'}</div>
     <div class="dials"></div>
     <div class="pfoot">${statsHTML(app)}</div>
     ${app.state.pick ? pickerHTML(app) : ""}`;
 
   const ed = app.view.querySelector("textarea"), pre = app.view.querySelector("pre.hl");
-  const paint = () => { pre.innerHTML = `${highlight(app.text, app.known(), { llm: app.llmActive() })}\n`; };
+  const paint = () => paintEditor(app);
   ed.value = app.text;
   ed.readOnly = !!app.state.sweepQueue;
   paint();
@@ -81,7 +84,12 @@ export function renderPrompt(app) {
     refreshBar(app);
     complete(app, ed);
   });
-  ed.addEventListener("scroll", () => { pre.scrollTop = ed.scrollTop; });
+  ed.addEventListener("scroll", () => { pre.scrollTop = ed.scrollTop; scrollTimeline(app); });
+  app.edResize?.disconnect();
+  app.edResize = new ResizeObserver(() => layoutTimeline(app, chunkInfo(app.text)));  // wrapped lines move the chunks
+  app.edResize.observe(ed);
+  wireTimeline(app);
+  if (app.data.timeline !== false && chunkInfo(app.text)) loadChain(app).then(paint);
   ed.addEventListener("keydown", (e) => completionKey(app, e));
   ed.addEventListener("blur", () => setTimeout(() => closeCompletion(app), 120));
   ed.addEventListener("focus", () => app.refreshCompletion().then(paint).catch(() => {}));
@@ -106,6 +114,7 @@ export function renderPrompt(app) {
       }).catch((err) => app.fail(err));
     }
     if (act === "restart") restart(app);
+    if (act === "jump") jumpToChunk(app);
     if (act === "new") { app.state.newMenu = !app.state.newMenu; return renderPrompt(app); }
     const starter = e.target.closest("[data-new]")?.dataset.new;
     if (starter) startNew(app, starter);
@@ -173,6 +182,39 @@ function generateSweep(app, cancelled = 0) {
   sheet.querySelector("[data-cancel]").onclick = () => app.closeSheet();
   sheet.querySelector("form").onsubmit = (e) => { e.preventDefault(); app.closeSheet(); go().catch((err) => app.fail(err)); };
   sheet.querySelector("button.primary").focus();
+}
+
+// The highlight with the reel's chunk dividers, the next segment's chunk marked, and the timeline level with them.
+function paintEditor(app) {
+  const pre = app.view.querySelector(".editor pre.hl");
+  if (!pre) return;
+  const chunks = chunkInfo(app.text);
+  pre.innerHTML = `${highlight(app.text, app.known(), { llm: app.llmActive(), chunks, segment: chunks && Number(app.bridge.getSegment()) })}\n`;
+  layoutTimeline(app, chunks);
+  if (chunks && app.data.timeline !== false && app.data.chain === undefined) {  // a reel typed or pasted in
+    app.data.chain = null;
+    loadChain(app).then(() => paintEditor(app));
+  }
+}
+
+// The segment moved or a run finished: the marked chunk, the timeline and the footer follow.
+export function refreshReel(app, { chain = false } = {}) {
+  if (app.state.tab !== "prompt") return;
+  refreshFoot(app);
+  if (chain && app.data.timeline !== false && chunkInfo(app.text)) loadChain(app).then(() => paintEditor(app));
+  else paintEditor(app);
+}
+
+// Jump: the caret and the view to the CHUNK line of the segment Generate plays next.
+function jumpToChunk(app) {
+  const segment = Number(app.bridge.getSegment()), chunks = chunkInfo(app.text) || [];
+  const i = chunks.findIndex((c) => c.first !== null && segment >= c.first && segment <= c.last);
+  if (i < 0) return app.toast(`No chunk plays segment <b>${segment}</b>: the reel ends before it. Restart plays it from the beginning.`);
+  const ed = app.view.querySelector(".editor textarea"), head = app.view.querySelectorAll(".editor .chunkinfo")[i];
+  const at = app.text.split("\n").slice(0, chunks[i].line).reduce((n, l) => n + l.length + 1, 0);
+  ed.focus({ preventScroll: true });
+  ed.setSelectionRange(at, at);
+  ed.scrollTop = Math.max(0, head.offsetTop - 10 - head.offsetHeight);  // one line of what comes before
 }
 
 export function refreshFoot(app) {

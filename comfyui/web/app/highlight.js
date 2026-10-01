@@ -37,7 +37,18 @@ function line(text, known, llm) {
     }))).join("");
 }
 
-// options.llm: a language model is set, so unknown libraries are to be made, not missing
-export function highlight(src, known, { llm = false } = {}) {
-  return src.split("\n").map((l) => line(l, known, llm)).join("\n");
+// The divider on a CHUNK line: absolutely placed, so the text keeps its place under the textarea's caret;
+// first in the line, so its static top is the line's top.
+function chunkLine(html, c, segment) {
+  const now = segment !== null && c.first !== null && segment >= c.first && segment <= c.last;
+  const turn = now && c.repeat > 1 ? ` ${segment - c.first + 1}/${c.repeat === Infinity ? "∞" : c.repeat}` : "";
+  const label = `${now ? `▶ next${turn} · ` : ""}${c.label}`;
+  return `<span class="chunkline${now ? " now" : ""}"><span class="chunkinfo"><span>${esc(label)}</span></span>${html}</span>`;
+}
+
+// options.llm: a language model is set, so unknown libraries are to be made, not missing.
+// options.chunks (model.chunkInfo): CHUNK lines get dividers; the one playing options.segment is marked.
+export function highlight(src, known, { llm = false, chunks = null, segment = null } = {}) {
+  const at = new Map((chunks || []).map((c) => [c.line, c]));
+  return src.split("\n").map((l, i) => (at.has(i) ? chunkLine(line(l, known, llm), at.get(i), segment) : line(l, known, llm))).join("\n");
 }

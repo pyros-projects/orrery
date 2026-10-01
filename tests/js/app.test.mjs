@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { highlight } from "../../comfyui/web/app/highlight.js";
 import {
   applyDials, dials, downstream, entryPage, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
-  rangeIds, shape, stats, sweepPlan, templateHash,
+  chunkInfo, chunkLabel, rangeIds, shape, stats, sweepPlan, templateHash,
 } from "../../comfyui/web/app/model.js";
 
 const known = new Set(["creature", "place"]);
@@ -307,4 +307,46 @@ test("a LoRA sweep is planned like the node does: product, solo turns, zero is o
   assert.deepEqual(plan("<lora:s:0.5,1.0:0.5,1.0>"), [4, "4", "s"]);
   assert.equal(sweepPlan("a cat <lora:b:0.8> <lora:d:0.4:0.7>"), null);
   assert.equal(sweepPlan("# <lora:a:0.5,1.0>\na cat"), null);
+});
+
+const REEL_TEXT = `@h3 t2va 16:9
+# CHUNK in a comment is no chunk
+CHUNK the opening
+SHOT 5s: push in
+A.
+CHUNK the walk repeat 4
+SHOT 4s: static
+B.
+SHOT 1s: cut
+C.
+CHUNK the end
+SHOT 10s: static
+D.`;
+
+test("every CHUNK line knows its segments, where it sits in the film and what is left", () => {
+  const info = chunkInfo(REEL_TEXT);
+  assert.deepEqual(info.map((c) => [c.line, c.first, c.last, c.secs, c.start, c.end, c.left]),
+    [[2, 0, 0, 5, 0, 5, 30], [5, 1, 4, 5, 5, 25, 10], [10, 5, 5, 10, 25, 35, 0]]);
+  assert.equal(chunkLabel(info[0]), "seg 0 · 0:00 → 0:05 · 0:30 left");
+  assert.equal(chunkLabel(info[1]), "seg 1–4 · 4 × 5 s · 0:05 → 0:25 · 0:10 left");
+  assert.equal(chunkLabel(info[2]), "seg 5 · 0:25 → 0:35 · the end");
+  assert.equal(chunkInfo("@h3 t2va\nSHOT 5s\nA."), null);
+  const sends = chunkInfo("CHUNK a\nSHOT 5s\nSEND: frame 0 to image 1\nSEND: frames -1 to image 3 for segment 4+\nSEND: frame 9 to image 1 for segment 9\nA.");
+  assert.deepEqual(sends[0].images, [1, 3]);
+});
+
+test("a chunk that repeats forever runs on, and the ones after it never play", () => {
+  const info = chunkInfo("CHUNK a\nSHOT 5s\nA.\nCHUNK b repeat forever\nSHOT 6s\nB.\nCHUNK c\nSHOT 5s\nC.");
+  assert.equal(chunkLabel(info[1]), "seg 1 → ∞ · 6 s each · from 0:05");
+  assert.equal(chunkLabel(info[2]), "never plays: a chunk before it repeats forever");
+  assert.equal(chunkLabel(info[0]), "seg 0 · 0:00 → 0:05");
+});
+
+test("CHUNK lines get a divider with their label, and the next segment's chunk is marked", () => {
+  const info = chunkInfo(REEL_TEXT);
+  const html = highlight(REEL_TEXT, new Set(), { chunks: info, segment: 2 });
+  assert.equal(html.split("\n").length, REEL_TEXT.split("\n").length);  // no extra lines: the caret stays put
+  assert.match(html, /<span class="chunkline"><span class="chunkinfo"><span>seg 0 · 0:00 → 0:05 · 0:30 left<\/span><\/span><span class="t-kw">CHUNK<\/span> the opening<\/span>/);
+  assert.match(html, /<span class="chunkline now"><span class="chunkinfo"><span>▶ next 2\/4 · seg 1–4 [^<]*<\/span><\/span><span class="t-kw">CHUNK<\/span> the walk repeat 4/);
+  assert.doesNotMatch(highlight(REEL_TEXT, new Set()), /chunkinfo/);
 });

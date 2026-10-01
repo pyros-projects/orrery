@@ -54,6 +54,8 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
         ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/discard"),
         ("GET", "/orrery/home"), ("POST", "/orrery/home"),
+        ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("GET", "/orrery/chain/video"),
+        ("GET", "/orrery/anchor"),
     }
 
 
@@ -119,7 +121,8 @@ def test_register_attaches_every_route_through_one_adapter(home, tmp_path):
         ("json", 200, {"favorites": ["a"]})
     kind, status, body = hit("GET", "/orrery/presets", query=q)
     assert (kind, status) == ("json", 200) and body["favorites"] == [] and body["quickstart"] is True
-    assert hit("POST", "/orrery/ui", query=q, body={"quickstart": False}) == ("json", 200, {"quickstart": False})
+    assert hit("POST", "/orrery/ui", query=q, body={"quickstart": False}) == \
+        ("json", 200, {"quickstart": False, "dividers": True, "timeline": True})
     assert hit("GET", "/orrery/presets", query=q)[2]["quickstart"] is False
     assert hit("GET", "/orrery/preset", query={**q, "name": "nope"})[1] == 404
     assert hit("POST", "/orrery/recent", query=q, broken=True)[1] == 400
@@ -602,3 +605,57 @@ def test_outputs_of_ordinary_save_nodes_reach_the_galaxy(home, tmp_path, monkeyp
     assert api(home, webapi.galaxy_capture, prompt_id="nope", node="9", media=media)[0] == 404
     bad = [{"filename": "../../etc/passwd", "subfolder": "", "type": "output"}]
     assert ok(home, webapi.galaxy_capture, prompt_id="p1", node="9", media=bad) == {"logged": 0}
+
+
+# --- the timeline: the chain's clips and the sent frames ----------------------------------------
+
+def fake_chain(output, clips=2):
+    import av
+    run = output / "h3_context" / "chain_video" / "run_1"
+    run.mkdir(parents=True)
+    folders = []
+    for i in range(1, clips + 1):
+        folder = run / f"clip_{i:05d}_abc"
+        folder.mkdir()
+        with av.open(str(folder / "video.mp4"), "w") as out:
+            stream = out.add_stream("mpeg4", rate=24)
+            stream.width, stream.height, stream.pix_fmt = 64, 48, "yuv420p"
+            for _ in range(24):
+                for packet in stream.encode(av.VideoFrame.from_image(Image.new("RGB", (64, 48), (40 * i, 0, 0)))):
+                    out.mux(packet)
+            for packet in stream.encode():
+                out.mux(packet)
+        folders.append({"folder": folder.name, "frames": 24})
+    (run.parent / "active.json").write_text(json.dumps({"run": "run_1"}))
+    (run / "clips.json").write_text(json.dumps({"clips": folders}))
+
+
+def test_the_chain_lists_its_clips_by_segment_and_serves_them(home, tmp_path, monkeypatch):
+    out = tmp_path / "out"
+    fake_chain(out)
+    monkeypatch.setattr(webapi, "_output_dir", lambda: out)
+    body = ok(home, webapi.chain)
+    assert body == {"latent_path": "h3_context", "clips": [{"segment": 0, "frames": 24, "version": "clip_00001_abc"},
+                                                          {"segment": 1, "frames": 24, "version": "clip_00002_abc"}]}
+    assert ok(home, webapi.chain_video, segment="1").name == "video.mp4"
+    thumb = ok(home, webapi.chain_thumb, segment="0")
+    assert thumb.suffix == ".webp" and thumb.is_file()
+    assert api(home, webapi.chain_video, segment="5")[0] == 404
+    assert ok(home, webapi.chain, latent_path="nowhere") == {"latent_path": "nowhere", "clips": []}
+    assert api(home, webapi.chain, latent_path="../../etc")[0] in (400, 200)
+
+
+def test_an_anchor_is_served_by_image_number(home):
+    import numpy as np
+
+    from orrery import anchors
+    anchors.save(Home(home), 3, np.zeros((2, 8, 8, 3), dtype=np.float32))
+    assert ok(home, webapi.anchor, image="3").name == "0000.png"
+    assert api(home, webapi.anchor, image="4")[0] == 404
+    assert api(home, webapi.anchor, image="x")[0] == 400
+
+
+def test_the_editor_switches_travel_with_the_presets_and_are_saved(home):
+    assert ok(home, webapi.presets)["dividers"] is True and ok(home, webapi.presets)["timeline"] is True
+    assert ok(home, webapi.ui_save, timeline=False) == {"quickstart": True, "dividers": True, "timeline": False}
+    assert ok(home, webapi.presets)["timeline"] is False

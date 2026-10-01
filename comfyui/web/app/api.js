@@ -62,5 +62,9 @@ export function client(home) {
     onExecuted: (fn) => { api.addEventListener("executed", fn); return () => api.removeEventListener("executed", fn); },
     captureOutputs: (body) => call("galaxy/capture", { body }),
     mediaURL: (id) => url("galaxy/media", { id }),
+    chain: (latent_path) => call("chain", { query: latent_path ? { latent_path } : {} }),
+    chainThumbURL: (segment, latent_path, v) => url("chain/thumb", { segment, ...(latent_path ? { latent_path } : {}), v: v ?? "" }),
+    chainVideoURL: (segment, latent_path, v) => url("chain/video", { segment, ...(latent_path ? { latent_path } : {}), v: v ?? "" }),
+    anchorURL: (image, v) => url("anchor", { image, v: v ?? "" }),
   };
 }

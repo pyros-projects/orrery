@@ -5,6 +5,7 @@ comfyui/__init__.py registers ROUTES with ComfyUI's server. `call` turns ApiErro
 UI can show. The contract lives in docs/plan-node-app.md.
 """
 
+import hashlib
 import re
 import traceback
 from collections import Counter
@@ -13,6 +14,7 @@ from pathlib import Path
 from orrery import galaxy as gx
 from orrery import manager, uistate
 from orrery import presets as ps
+from orrery.chain import DEFAULT_CHAIN
 from orrery.comfy_llm import can_write, llm_config, text_encoders
 from orrery.completion import completion_data
 from orrery.dsl import MissingLibrary, expand, override
@@ -159,7 +161,7 @@ def presets(home: Home, args: dict) -> dict:
         "presets": [_card(home, n, outputs) for n in names],
         "favorites": [n for n in ui["favorites"] if n in known],
         "recent": [n for n in ui["recent"] if n in known],
-        "quickstart": ui["quickstart"],
+        **{flag: ui[flag] for flag in uistate.FLAGS},
     }
 
 
@@ -218,10 +220,13 @@ def recent(home: Home, args: dict) -> dict:
 
 
 def ui_save(home: Home, args: dict) -> dict:
-    """App preferences kept in the home: `quickstart` (New templates open with their comments)."""
-    if "quickstart" in args:
-        uistate.set_quickstart(home, bool(args["quickstart"]))
-    return {"quickstart": uistate.load_ui(home)["quickstart"]}
+    """App switches kept in the home: `quickstart` (New templates open with their comments),
+    `dividers` (chunk dividers in the editor), `timeline` (the reel's clips beside it)."""
+    for flag in uistate.FLAGS:
+        if flag in args:
+            uistate.set_flag(home, flag, bool(args[flag]))
+    ui = uistate.load_ui(home)
+    return {flag: ui[flag] for flag in uistate.FLAGS}
 
 
 def _preset_by_hash(home: Home) -> dict[str, str]:
@@ -523,6 +528,50 @@ def galaxy_media(home: Home, args: dict) -> Path:
     return _file(gx.media_path, home, args)
 
 
+# --- the timeline: the chain's clips and the sent frames ------------------------------------
+
+def _latent_path(args: dict) -> str:
+    return str(args.get("latent_path") or DEFAULT_CHAIN)
+
+
+def chain(home: Home, args: dict) -> dict:
+    """The clips H3 Motion Context's Chain Video holds for this reel, by segment."""
+    from orrery.chain import listing
+
+    return {"latent_path": _latent_path(args), "clips": listing(_output_dir(), _latent_path(args))}
+
+
+def chain_video(home: Home, args: dict) -> Path:
+    from orrery.chain import clip_file
+
+    path = clip_file(_output_dir(), _latent_path(args), _int(args, "segment", -1))
+    if path is None:
+        raise ApiError(404, f"the chain has no clip for segment {args.get('segment')}.")
+    return path
+
+
+def chain_thumb(home: Home, args: dict) -> Path:
+    src = chain_video(home, args)
+    digest = hashlib.sha1(str(src).encode("utf-8")).hexdigest()[:16]
+    try:
+        return gx.thumb_file(src, home.root / "thumbs" / f"chain-{digest}.webp")
+    except KeyError as err:
+        raise ApiError(404, err.args[0]) from None
+
+
+def anchor(home: Home, args: dict) -> Path:
+    """The first frame stored for a sent image (Orrery Refs' anchors)."""
+    from orrery import anchors
+
+    image = str(args.get("image") or "")
+    if not image.isdigit():
+        raise ApiError(400, "'image' must be an image number.")
+    path = anchors.folder(home, int(image)) / "0000.png"
+    if not path.is_file():
+        raise ApiError(404, f"image {image} has no stored anchor yet.")
+    return path
+
+
 # --- roll -----------------------------------------------------------------------------------
 
 ROLL_CLIPS = 6  # Roll on a reel shows this many clips at most
@@ -669,6 +718,10 @@ ROUTES = [
     ("POST", "/orrery/galaxy/rate", galaxy_rate),
     ("GET", "/orrery/galaxy/thumb", galaxy_thumb),
     ("GET", "/orrery/galaxy/media", galaxy_media),
+    ("GET", "/orrery/chain", chain),
+    ("GET", "/orrery/chain/thumb", chain_thumb),
+    ("GET", "/orrery/chain/video", chain_video),
+    ("GET", "/orrery/anchor", anchor),
     ("POST", "/orrery/galaxy/move", galaxy_move),
     ("POST", "/orrery/galaxy/delete", galaxy_delete),
     ("POST", "/orrery/galaxy/export", galaxy_export),

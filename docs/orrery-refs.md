@@ -287,7 +287,9 @@ otherwise hand on the older run's frames.
 ### Keeping a character across runs
 
 Every frame Orrery Refs fetches for a `SEND:` is also stored as that image's
-**anchor**, in the orrery home under `anchors/image_N/`. The `keep_sent` switch
+**anchor**, in the orrery home under `anchors/image_N/`. The Prompt tab's
+timeline shows each anchor beside the chunk whose `SEND:` fills it, so you
+see what a run handed on without a preview node. The `keep_sent` switch
 on Orrery Refs decides what a run does with them:
 
 - **Off** (the default): fresh frames from this run's chain, which replace the

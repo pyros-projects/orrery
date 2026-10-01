@@ -199,6 +199,56 @@ function reelSecs(text) {
   return secs && { chunks: secs.length, secs, repeats, clips: repeats.reduce((a, b) => a + b, 0) };
 }
 
+// Each CHUNK line of a reel, for the editor's dividers and the timeline: the line it is on, its
+// title, the images its SEND: lines fill, the segments it plays (last Infinity when it repeats forever; first null when a chunk before
+// it does), the seconds of one clip (Chain Video keeps them without the pinned context), where it starts
+// and ends in the film, the seconds left after it (null when the film runs forever) and a label.
+// Null without CHUNK lines. Mirrors orrery.reel.
+export function chunkInfo(text) {
+  const out = [];
+  text.split("\n").forEach((raw, line) => {
+    const l = raw.trim(), c = /^CHUNK\b\s*(.*)$/.exec(l);
+    if (c) {
+      const r = /^(.*?)\s*\brepeat\s+(\d+|forever)\s*$/i.exec(c[1]);
+      const repeat = !r ? 1 : r[2].toLowerCase() === "forever" ? Infinity : Math.max(1, Number(r[2]));
+      out.push({ line, title: (r ? r[1] : c[1]).trim(), repeat, secs: 0, images: [] });
+    }
+    const m = /^SHOT\s+(\d+(?:\.\d+)?)\s*s\b/i.exec(l), send = /^SEND:.*\bto\s+image\s+(\d+)/i.exec(l);
+    if (m && out.length) out[out.length - 1].secs += Number(m[1]);
+    if (send && out.length && !out[out.length - 1].images.includes(Number(send[1]))) out[out.length - 1].images.push(Number(send[1]));
+  });
+  if (!out.length) return null;
+  let segment = 0, at = 0;
+  for (const c of out) {
+    if (segment === null) Object.assign(c, { first: null, last: null, start: null, end: null });
+    else {
+      Object.assign(c, { first: segment, last: segment + c.repeat - 1, start: at, end: at + c.secs * c.repeat });
+      segment = c.repeat === Infinity ? null : segment + c.repeat;
+      at = c.end;
+    }
+  }
+  for (const c of out) {
+    c.left = segment === null || c.end === null ? null : at - c.end;
+    c.label = chunkLabel(c);
+  }
+  return out;
+}
+
+const clock = (secs) => {
+  const s = Math.round(secs * 10) / 10, m = Math.floor(s / 60), r = Math.round((s - m * 60) * 10) / 10;
+  return `${m}:${Number.isInteger(r) ? String(r).padStart(2, "0") : r.toFixed(1).padStart(4, "0")}`;
+};
+const span = (secs) => `${Math.round(secs * 100) / 100} s`;
+
+// `seg 4 · 0:20 → 0:25 · 1:35 left`, `seg 1–4 · 4 × 5 s · …`, `seg 7 → ∞ · 6 s each · from 0:35`
+export function chunkLabel(c) {
+  if (c.first === null) return "never plays: a chunk before it repeats forever";
+  if (c.repeat === Infinity) return `seg ${c.first} → ∞ · ${span(c.secs)} each · from ${clock(c.start)}`;
+  const segs = c.repeat > 1 ? `seg ${c.first}–${c.last} · ${c.repeat} × ${span(c.secs)}` : `seg ${c.first}`;
+  const left = c.left === null ? "" : c.left > 0 ? ` · ${clock(c.left)} left` : " · the end";
+  return `${segs} · ${clock(c.start)} → ${clock(c.end)}${left}`;
+}
+
 function h3Length(seconds) {
   const frames = Math.max(5, Math.ceil(seconds * 24 - 1e-4));
   return frames + ((((5 - frames) % 17) + 17) % 17);

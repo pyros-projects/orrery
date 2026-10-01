@@ -91,6 +91,11 @@ fetches the frames from the chain the prompt's `latent_path` names; before the
 sending clip exists, the image is left out of the clip. Details in
 [h3.md](h3.md#1d-reels-chunk-for-h3-motion-context).
 
+Built (2026-10-01): the Prompt tab marks every `CHUNK` with its segments, its
+place in the film and the runtime left, highlights the chunk the next segment
+plays (**Jump** goes there), and shows a timeline of the chain's clips and the
+sent anchors beside the editor ([comfyui.md](comfyui.md)).
+
 Still planned: the **memory list** per chunk (global, the places and people it
 mentions, optionally the previous chunk as "recent"); the retrieval query for
 this RefMod-RAG is the screenplay itself.

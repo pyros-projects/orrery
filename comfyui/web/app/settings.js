@@ -36,6 +36,10 @@ export async function openSettings(app) {
     <div class="row spread"><h5 class="label">Editor</h5></div>
     <label class="check"><input type="checkbox" id="oa-qs" ${app.data.quickstart !== false ? "checked" : ""}>
       <span><b>New</b> templates open with a quickstart: the essentials as <code># …</code> comments above the template</span></label>
+    <label class="check"><input type="checkbox" id="oa-div" ${app.data.dividers !== false ? "checked" : ""}>
+      <span><b>Chunk dividers</b>: a reel's CHUNK lines say which segments they play, when, and how much film is left; the chunk of the next segment is marked</span></label>
+    <label class="check"><input type="checkbox" id="oa-tl" ${app.data.timeline !== false ? "checked" : ""}>
+      <span><b>Timeline</b>: beside a reel, each chunk's clips as Chain Video keeps them, and the frames its <code>SEND:</code> lines handed on</span></label>
     <div class="acts"><button type="button" class="btn ghost" data-cancel>Cancel</button><button class="btn primary">${icon("save")}Save</button></div>
   </form>`);
   sheet.querySelector("[data-cancel]").onclick = () => app.closeSheet();
@@ -49,8 +53,8 @@ export async function openSettings(app) {
         await Promise.all([app.refreshPresets(), app.refreshCompletion()]);
         app.toast(`Home folder: <b>${esc(moved.home)}</b>`);
       }
-      const quickstart = sheet.querySelector("#oa-qs").checked;
-      if (quickstart !== (app.data.quickstart !== false)) app.data.quickstart = (await app.api.saveUi({ quickstart })).quickstart;
+      const flags = { quickstart: sheet.querySelector("#oa-qs").checked, dividers: sheet.querySelector("#oa-div").checked, timeline: sheet.querySelector("#oa-tl").checked };
+      if (Object.entries(flags).some(([k, on]) => on !== (app.data[k] !== false))) Object.assign(app.data, await app.api.saveUi(flags));
       app.data.llm = await app.api.saveLlm({ file: sheet.querySelector("#oa-llm").value, entries: Number(sheet.querySelector("#oa-llm-n").value) || 12,
         max_tokens: Number(sheet.querySelector("#oa-llm-t").value) || 16000 });
       app.closeSheet();

@@ -37,6 +37,17 @@ Restart ComfyUI. Nodes under **orrery**:
     **dial**: pick a library entry or choice, or type any expression; empty
     means its default roll. Saving bakes the dials in, and a galaxy output
     restores them. **Test** jumps to the Test tab and rolls.
+    In a reel, every `CHUNK` line carries a divider that says which segments
+    it plays, when and how much film is left (`seg 1–4 · 4 × 5 s · 0:05 →
+    0:25 · 1:35 left`); the chunk that plays the node's `segment` next is
+    marked (`▶ next`), and **Jump** beside *Next segment* puts the caret
+    there. Beside the editor, the **timeline** lines up each chunk's clips
+    as H3 Motion Context's Chain Video keeps them (hover plays one, a click
+    opens it; dashed boxes are segments not rendered yet) and, under a chunk
+    with `SEND:` lines, the frames Orrery Refs last sent to each image (its
+    anchors). It reads the chain from the string wired into `latent_path`,
+    else `h3_context`, and refreshes after every run. The gear turns
+    dividers and timeline off.
   - **Test**: what the template makes, without queueing anything. **Rolls**
     shows three seeds (a reel: six clips at one seed, pageable through a
     forever loop). **Frequencies** rolls it 50, 200 or 500 times, across seeds

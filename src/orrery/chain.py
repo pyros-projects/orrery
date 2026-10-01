@@ -22,10 +22,8 @@ def previous_clip(output: Path | str, latent_path: str, segment: int) -> Path | 
     return clip_file(output, latent_path, segment - 1) if segment >= 1 else None
 
 
-def clip_file(output: Path | str, latent_path: str, index: int) -> Path | None:
-    """The video file of segment `index`'s own clip (Chain Video's clip index + 1), or None."""
-    if index < 0:
-        return None
+def _active(output: Path | str, latent_path: str) -> tuple[Path, list[dict]] | None:
+    """The chain's active run folder and its clips, or None (no chain, or a path outside the output)."""
     output = Path(output).resolve()
     folder = (output / latent_path).resolve()
     if not folder.is_relative_to(output):
@@ -36,12 +34,35 @@ def clip_file(output: Path | str, latent_path: str, index: int) -> Path | None:
     try:
         run = (root / json.loads((root / "active.json").read_text(encoding="utf-8"))["run"]).resolve()
         clips = json.loads((run / "clips.json").read_text(encoding="utf-8"))["clips"]
-        path = (run / clips[index]["folder"] / "video.mp4").resolve() if len(clips) > index else None
     except (OSError, ValueError, KeyError, TypeError):
         return None
-    if path is None or not run.is_relative_to(root) or not path.is_relative_to(run) or not path.is_file():
+    return (run, clips) if run.is_relative_to(root) and isinstance(clips, list) else None
+
+
+def _video(run: Path, clip) -> Path | None:
+    try:
+        path = (run / clip["folder"] / "video.mp4").resolve()
+    except (KeyError, TypeError):
         return None
-    return path
+    return path if path.is_relative_to(run) and path.is_file() else None
+
+
+def clip_file(output: Path | str, latent_path: str, index: int) -> Path | None:
+    """The video file of segment `index`'s own clip (Chain Video's clip index + 1), or None."""
+    active = _active(output, latent_path) if index >= 0 else None
+    if active is None or len(active[1]) <= index:
+        return None
+    return _video(active[0], active[1][index])
+
+
+def listing(output: Path | str, latent_path: str) -> list[dict]:
+    """The clips the chain holds, by segment, each with a version that changes when it is rendered again."""
+    active = _active(output, latent_path)
+    if active is None:
+        return []
+    run, clips = active
+    return [{"segment": i, "frames": clip.get("frames"), "version": clip.get("folder")}
+            for i, clip in enumerate(clips) if isinstance(clip, dict) and _video(run, clip)]
 
 
 def frame_picks(count: int, spans: list[list[int]]) -> tuple[list[int], list]:

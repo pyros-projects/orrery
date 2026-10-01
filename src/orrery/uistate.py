@@ -1,5 +1,6 @@
-"""What the node app remembers between sessions: favorite and recently opened presets, and
-whether New templates open with their quickstart comments."""
+"""What the node app remembers between sessions: favorite and recently opened presets, and its
+switches: New templates open with their quickstart comments, the editor draws chunk dividers and
+shows the reel's clips beside it. Every switch is on until turned off."""
 
 import json
 
@@ -7,6 +8,7 @@ from orrery.home import Home, write_atomic
 
 RECENT_MAX = 12
 LISTS = ("favorites", "recent")  # preset names, followed by renames and deletes
+FLAGS = ("quickstart", "dividers", "timeline")
 
 
 def _path(home: Home):
@@ -17,7 +19,7 @@ def load_ui(home: Home) -> dict:
     path = _path(home)
     data = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
     return {"favorites": list(data.get("favorites") or []), "recent": list(data.get("recent") or []),
-            "quickstart": data.get("quickstart") is not False}
+            **{flag: data.get(flag) is not False for flag in FLAGS}}
 
 
 def _save(home: Home, data: dict) -> dict:
@@ -37,8 +39,10 @@ def touch_recent(home: Home, name: str) -> list[str]:
     return _save(home, data)["recent"]
 
 
-def set_quickstart(home: Home, on: bool) -> bool:
-    return _save(home, {**load_ui(home), "quickstart": bool(on)})["quickstart"]
+def set_flag(home: Home, flag: str, on: bool) -> bool:
+    if flag not in FLAGS:
+        raise ValueError(f"unknown switch {flag!r}")
+    return _save(home, {**load_ui(home), flag: bool(on)})[flag]
 
 
 def rename_everywhere(home: Home, old: str, new: str) -> None:

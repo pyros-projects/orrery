@@ -6,7 +6,7 @@ import { esc } from "./highlight.js";
 import { icon, LOGO } from "./icons.js";
 import { renderLibraries } from "./libraries.js";
 import { renderPresets } from "./presets.js";
-import { refreshFoot, renderPrompt } from "./prompt.js";
+import { refreshReel, renderPrompt } from "./prompt.js";
 import { openSettings } from "./settings.js";
 import { renderTest } from "./test.js";
 
@@ -89,6 +89,7 @@ export class OrreryApp {
 
   // A run may have let the language model write libraries: refresh, and point at anything to review.
   async afterRun() {
+    refreshReel(this, { chain: true });  // Chain Video may hold a new clip, Orrery Refs new anchors
     const before = new Set((this.data.libraries || []).filter((l) => l.pending || (l.pending_entries || []).length).map((l) => l.name));
     let libs;
     try { libs = (await this.api.libraries()).libraries; } catch { return; }
@@ -112,6 +113,8 @@ export class OrreryApp {
     this.data.favorites = new Set(d.favorites);
     this.data.recent = d.recent;
     this.data.quickstart = d.quickstart !== false;
+    this.data.dividers = d.dividers !== false;
+    this.data.timeline = d.timeline !== false;
   }
   async refreshCompletion() { this.data.completion = await this.api.completions(); }
 
@@ -256,7 +259,7 @@ export class OrreryApp {
     this.run = null;
     this.refreshRun();
   }
-  refreshRun() { if (this.state.tab === "prompt") refreshFoot(this); }
+  refreshRun() { refreshReel(this); }
 
   destroy() {
     this.stopListening?.();

@@ -140,6 +140,14 @@ function mount(node) {
       return batch.done;
     },
     stopGenerate: async () => { batch.id++; await batch.done?.catch(() => {}); },
+    // The chain the reel's clips live in: the string wired into latent_path, else Motion Context's default.
+    latentPath: () => {
+      const input = node.inputs?.find((i) => i.name === "latent_path"), g = node.graph || app.graph;
+      const link = input?.link != null && (g.links?.get ? g.links.get(input.link) : g.links?.[input.link]);
+      const source = link && g.getNodeById?.(link.origin_id);
+      const text = source?.widgets?.find((w) => typeof w.value === "string" && w.value.trim());
+      return text ? text.value.trim() : "";
+    },
     getSegment: () => find("segment")?.value ?? 0,
     setSegment: (value) => set("segment", value),
     // Restart: dequeue this node's pending runs and interrupt its running one; other jobs stay queued.
