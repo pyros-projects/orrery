@@ -1,6 +1,9 @@
 // The film beside the editor: each CHUNK's clips as H3 Motion Context's Chain Video keeps them, and
 // the frames its SEND: lines handed on (Orrery Refs' anchors), level with the chunk's lines.
 import { icon } from "./icons.js";
+import { shape } from "./model.js";
+
+const GAP = 3, MAX_H = 180, SEND_ROW = 26;
 
 // The clips the chain holds, fetched again after every run.
 export async function loadChain(app) {
@@ -29,16 +32,17 @@ function sendHTML(app, n) {
   return `<div class="tl-send" title="Image ${n}: the frames Orrery Refs last sent to it"><img alt="" src="${app.api.anchorURL(n, app.data.anchorV)}"><span>→ image ${n}</span></div>`;
 }
 
-// The fewest columns whose 16:9 thumbs fit the chunk's height, and their height (cropped when tighter).
-function fit(n, width, height) {
-  const most = Math.max(1, Math.min(6, n));
-  let cols = 1, h = 0;
-  for (; cols <= most; cols++) {
-    const rows = Math.ceil(n / cols), natural = ((width - (cols - 1) * 3) / cols) * 9 / 16;
-    h = Math.min(natural, (height - (rows - 1) * 3) / rows);
-    if (h >= natural - 0.5 || cols === most) break;
+// The largest thumbs of the clips' aspect ratio (width / height) that fit n of them into the chunk,
+// and the columns that make it: landscape stacks, portrait sits side by side. At most MAX_H tall.
+export function fitThumbs(n, width, height, ratio) {
+  let cols = 1, w = 0;
+  for (let c = 1; c <= Math.max(1, n); c++) {
+    const rows = Math.ceil(n / c);
+    const cw = Math.min((width - (c - 1) * GAP) / c, ((height - (rows - 1) * GAP) / rows) * ratio);
+    if (cw > w) [cols, w] = [c, cw];
   }
-  return [cols, Math.round(Math.max(16, Math.min(h, 90)))];
+  w = Math.max(4, Math.min(w, MAX_H * ratio));
+  return { cols, w: Math.floor(w), h: Math.floor(w / ratio) };
 }
 
 // Blocks level with the CHUNK lines the highlight drew; the track follows the textarea's scroll.
@@ -52,15 +56,17 @@ export function layoutTimeline(app, chunks) {
   const end = pre.scrollHeight;
   const clips = new Map((app.data.chain?.clips || []).map((c) => [c.segment, c]));
   const segment = Number(app.bridge.getSegment());
+  // Chain Video keeps one frame size per chain; before it holds any, the size the template asks for
+  const { width, height } = app.data.chain?.width && app.data.chain?.height ? app.data.chain : shape(app.text);
   const track = box.querySelector(".tl-track");
   track.style.height = `${end}px`;
   track.innerHTML = chunks.map((c, i) => {
-    const top = heads[i] ?? 0, height = (heads[i + 1] ?? end) - top;
+    const top = heads[i] ?? 0, rowsH = (heads[i + 1] ?? end) - top;
     const segs = segmentsOf(c, clips);
     const now = c.first !== null && segment >= c.first && segment <= c.last;
-    const [cols, clipH] = fit(segs.length, box.clientWidth - 10, height - 9 - c.images.length * 26);
-    return `<div class="tl-chunk${now ? " now" : ""}" style="top:${top}px;height:${height}px">`
-      + `<div class="tl-clips" style="--cols:${cols};--clip-h:${clipH}px">${segs.map((s) => clipHTML(app, s, clips.get(s), segment)).join("")}</div>`
+    const fit = fitThumbs(segs.length, box.clientWidth - 10, rowsH - 9 - c.images.length * SEND_ROW, width / height);
+    return `<div class="tl-chunk${now ? " now" : ""}" style="top:${top}px;height:${rowsH}px">`
+      + `<div class="tl-clips" style="--cols:${fit.cols};--clip-w:${fit.w}px;--clip-h:${fit.h}px">${segs.map((s) => clipHTML(app, s, clips.get(s), segment)).join("")}</div>`
       + c.images.map((n) => sendHTML(app, n)).join("") + "</div>";
   }).join("");
   track.style.transform = `translateY(${-ed.scrollTop}px)`;

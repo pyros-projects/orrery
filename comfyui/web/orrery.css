@@ -144,8 +144,8 @@
 .orrery-app .tl-track { position: absolute; left: 0; right: 0; top: 0; }
 .orrery-app .tl-chunk { position: absolute; left: 0; right: 0; border-top: 1px dashed #3d3f56; padding: 4px 5px; display: flex; flex-direction: column; gap: 4px; overflow: hidden; }
 .orrery-app .tl-chunk.now { border-top: 1px solid var(--brass); background: var(--brass-soft); }
-.orrery-app .tl-clips { display: grid; grid-template-columns: repeat(var(--cols), 1fr); gap: 3px; }
-.orrery-app .tl-clip { position: relative; height: var(--clip-h); border-radius: 4px; overflow: hidden; background: #22232e; border: 1px solid transparent; }
+.orrery-app .tl-clips { display: grid; grid-template-columns: repeat(var(--cols), var(--clip-w)); gap: 3px; justify-content: center; }
+.orrery-app .tl-clip { position: relative; width: var(--clip-w); height: var(--clip-h); padding: 0; border-radius: 4px; overflow: hidden; background: #22232e; border: 1px solid transparent; }
 .orrery-app .tl-clip.empty { background: none; border: 1px dashed #3d3f56; cursor: default; }
 .orrery-app .tl-clip.empty:disabled { opacity: 1; }
 .orrery-app .tl-clip.now { border-color: var(--brass); }
@@ -155,8 +155,8 @@
 .orrery-app .tl-clip .n { position: absolute; left: 3px; bottom: 2px; z-index: 2; font: 500 9.5px/1 var(--mono); color: #fff; text-shadow: 0 0 3px #000, 0 0 2px #000; }
 .orrery-app .tl-clip.empty .n { color: var(--faint); text-shadow: none; }
 .orrery-app .tl-send { display: flex; align-items: center; gap: 5px; font: 10px/1 var(--mono); color: var(--teal); min-width: 0; }
-.orrery-app .tl-send img, .orrery-app .tl-send .missing { width: 34px; height: 22px; object-fit: cover; border-radius: 3px; flex: none; background: #22232e; }
-.orrery-app .tl-send .missing { aspect-ratio: auto; cursor: default; }
+.orrery-app .tl-send img { width: auto; height: auto; max-width: 40px; max-height: 22px; border-radius: 3px; flex: none; background: #22232e; }
+.orrery-app .tl-send .missing { width: 34px; height: 22px; aspect-ratio: auto; border-radius: 3px; flex: none; cursor: default; }
 .orrery-app .tl-send .missing .i { width: 12px; height: 12px; }
 .orrery-app .tl-video { width: 100%; max-height: 60vh; border-radius: 8px; background: #000; }
 .orrery-app .ac { position: absolute; z-index: 20; min-width: 240px; max-width: 340px; background: #1f2029; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.5); overflow: hidden; font-size: 12px; }

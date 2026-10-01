@@ -627,7 +627,7 @@ def fake_chain(output, clips=2):
                 out.mux(packet)
         folders.append({"folder": folder.name, "frames": 24})
     (run.parent / "active.json").write_text(json.dumps({"run": "run_1"}))
-    (run / "clips.json").write_text(json.dumps({"clips": folders}))
+    (run / "clips.json").write_text(json.dumps({"settings": [64, 48, "24", 48000, 2], "clips": folders}))
 
 
 def test_the_chain_lists_its_clips_by_segment_and_serves_them(home, tmp_path, monkeypatch):
@@ -635,13 +635,14 @@ def test_the_chain_lists_its_clips_by_segment_and_serves_them(home, tmp_path, mo
     fake_chain(out)
     monkeypatch.setattr(webapi, "_output_dir", lambda: out)
     body = ok(home, webapi.chain)
-    assert body == {"latent_path": "h3_context", "clips": [{"segment": 0, "frames": 24, "version": "clip_00001_abc"},
-                                                          {"segment": 1, "frames": 24, "version": "clip_00002_abc"}]}
+    assert body == {"latent_path": "h3_context", "width": 64, "height": 48,  # Chain Video keeps one size per chain
+                    "clips": [{"segment": 0, "frames": 24, "version": "clip_00001_abc"},
+                              {"segment": 1, "frames": 24, "version": "clip_00002_abc"}]}
     assert ok(home, webapi.chain_video, segment="1").name == "video.mp4"
     thumb = ok(home, webapi.chain_thumb, segment="0")
     assert thumb.suffix == ".webp" and thumb.is_file()
     assert api(home, webapi.chain_video, segment="5")[0] == 404
-    assert ok(home, webapi.chain, latent_path="nowhere") == {"latent_path": "nowhere", "clips": []}
+    assert ok(home, webapi.chain, latent_path="nowhere") == {"latent_path": "nowhere", "width": None, "height": None, "clips": []}
     assert api(home, webapi.chain, latent_path="../../etc")[0] in (400, 200)
 
 

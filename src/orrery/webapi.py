@@ -538,7 +538,7 @@ def chain(home: Home, args: dict) -> dict:
     """The clips H3 Motion Context's Chain Video holds for this reel, by segment."""
     from orrery.chain import listing
 
-    return {"latent_path": _latent_path(args), "clips": listing(_output_dir(), _latent_path(args))}
+    return {"latent_path": _latent_path(args), **listing(_output_dir(), _latent_path(args))}
 
 
 def chain_video(home: Home, args: dict) -> Path:

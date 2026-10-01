@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { highlight } from "../../comfyui/web/app/highlight.js";
+import { fitThumbs } from "../../comfyui/web/app/timeline.js";
 import {
   applyDials, dials, downstream, entryPage, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
   chunkInfo, chunkLabel, rangeIds, shape, stats, sweepPlan, templateHash,
@@ -349,4 +350,15 @@ test("CHUNK lines get a divider with their label, and the next segment's chunk i
   assert.match(html, /<span class="chunkline"><span class="chunkinfo"><span>seg 0 · 0:00 → 0:05 · 0:30 left<\/span><\/span><span class="t-kw">CHUNK<\/span> the opening<\/span>/);
   assert.match(html, /<span class="chunkline now"><span class="chunkinfo"><span>▶ next 2\/4 · seg 1–4 [^<]*<\/span><\/span><span class="t-kw">CHUNK<\/span> the walk repeat 4/);
   assert.doesNotMatch(highlight(REEL_TEXT, new Set()), /chunkinfo/);
+});
+
+test("timeline thumbs keep the clips' aspect ratio, portrait as well as landscape, and always fit their chunk", () => {
+  assert.deepEqual(fitThumbs(1, 120, 74, 16 / 9), { cols: 1, w: 120, h: 67 });
+  assert.deepEqual(fitThumbs(1, 120, 74, 9 / 16), { cols: 1, w: 41, h: 74 });
+  assert.deepEqual(fitThumbs(4, 120, 53, 9 / 16), { cols: 4, w: 27, h: 49 });  // portrait repeats side by side
+  assert.deepEqual(fitThumbs(1, 120, 400, 9 / 16), { cols: 1, w: 101, h: 180 });  // a tall chunk stops at 180 px
+  for (const ratio of [16 / 9, 1, 9 / 16]) {
+    const { cols, w, h } = fitThumbs(20, 120, 53, ratio), rows = Math.ceil(20 / cols);
+    assert.ok(cols * w + (cols - 1) * 3 <= 120 && rows * h + (rows - 1) * 3 <= 53, `ratio ${ratio}`);
+  }
 });
