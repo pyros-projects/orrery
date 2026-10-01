@@ -52,7 +52,8 @@ the same reel, named by a `SEND:` line (lesson 3).
 | input | `picks` | the Orrery Prompt's `picks` output (required) |
 | inputs | `image_1` … `image_9` | your reference images: `image_N` is the `(image N)` of the CAST |
 | outputs | `ref_1` … `ref_9` | into Reference to Video: `ref_1` → `ref_image_0`, `ref_2` → `ref_image_1`, … |
-| output | `preview` | every image this clip gets, as one batch, for a Preview Image |
+| output | `preview` | every image this clip gets, each labelled with its ref, as one batch for a Preview Image |
+| switch | `keep_sent` | on: sent images come from their stored anchors, from segment 0 on (lesson 3) |
 
 Two numbers to keep apart:
 
@@ -278,7 +279,30 @@ clip was never rendered and Orrery Refs stops with a message instead of taking
 the wrong frames.
 
 It decodes only up to the last frame a `SEND:` names and keeps only those, so
-anchors from many clips stay cheap.
+anchors from many clips stay cheap. Orrery Refs runs on every queue, even when
+nothing about its inputs changed: after a Restart the chain holds new clips
+while the `picks` are the same as last time, and ComfyUI's cache would
+otherwise hand on the older run's frames.
+
+### Keeping a character across runs
+
+Every frame Orrery Refs fetches for a `SEND:` is also stored as that image's
+**anchor**, in the orrery home under `anchors/image_N/`. The `keep_sent` switch
+on Orrery Refs decides what a run does with them:
+
+- **Off** (the default): fresh frames from this run's chain, which replace the
+  anchors. Before the sending clip exists, the image is not there.
+- **On**: every sent image that has an anchor uses it, from segment 0 and for
+  the whole run (within its `for segment …`, if it has one), in the prompt and
+  on the refs. This run's frames do not replace it. Images without an anchor
+  are fetched as usual, and stored.
+
+So a reel whose dancer you like can hand her to the next one: switch
+`keep_sent` on, change the story, keep the `SEND:` line that fills her image,
+and every clip of the new reel starts from her, segment 0 included. To let go,
+switch it off: the next run fetches fresh frames and they become the anchors.
+The anchors belong to an image number, not to a template, so they hold across
+edits as long as the character keeps her `image N`.
 
 ### Choosing the frame
 
@@ -309,8 +333,10 @@ For every clip, Orrery Refs fills `ref_1`, `ref_2`, … in this order:
 
 **`preview`** carries every image of `ref_1` … `ref_9` in that order, every frame
 of a batch included, scaled to 512 px high and centred on neutral grey at a
-common width, so one Preview Image shows the whole clip's references. In a clip
-without any it is blocked: the preview waits. Preview there, not on a `ref_N`
+common width, so one Preview Image shows the whole clip's references. Each
+image carries its ref (`ref_1`, `ref_2`, …) in white with a black edge in the
+corner. A clip without any shows one grey frame that says `no refs`, so the
+preview never keeps an older clip's images on screen. Preview there, not on a `ref_N`
 that also goes into Reference to Video: an output hands every node it feeds the
 same value, so an empty one is `None` for both, and Preview Image fails on
 `None`. A plain white or black stand-in is no way out either: Reference to
@@ -349,6 +375,7 @@ ComfyUI console.
 | `image 3 is wired into Orrery Refs and also filled by a SEND: line; …` | a sent image has a wire as well | unwire `image_3`, or send to a free image |
 | `image 3 is sent from segment 0, but the chain 'h3_context' has no clip for segment 0: …` | the sending clip is not in the chain | render the reel from that chunk on (Restart), or check `latent_path` |
 | `This reel SENDs frames as reference images, which Orrery Refs fetches: …` | no Orrery Refs reads the prompt's `picks` | wire `picks` into Orrery Refs |
+| `image 3 is held (keep_sent), but it has no stored anchor: …` | `keep_sent` is on for an image that was never fetched | run once with `keep_sent` off, then switch it on |
 | `SEND: hands frames to Reference to Video as reference images, so it needs an @h3 ref2va screenplay.` | `SEND:` in another mode | switch the header to `@h3 ref2va` |
 | `SEND: belongs inside a CHUNK: …` | `SEND:` before the first `CHUNK` or in a screenplay without chunks | move it into the chunk whose clip it sends |
 | `image 3 is sent for segment 5 by two SEND: lines (CHUNK 1 and CHUNK 3); …` | two lines fill one image in the same segment | give each a `for segment …` that leaves the other out, or send to two images |

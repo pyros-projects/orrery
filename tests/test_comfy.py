@@ -525,7 +525,7 @@ def test_the_picks_tell_orrery_refs_what_is_sent_and_from_which_chain(home):
     _, picks, *_ = OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), segment=0,
                                       latent_path="reels/one", prompt=REFS_GRAPH, unique_id="9")
     data = json.loads(picks)
-    assert data["refs"] == [1] and data["sends"] == {"chain": "reels/one", "slots": [3, 4], "ready": {}}
+    assert data["refs"] == [1] and data["sends"] == {"chain": "reels/one", "home": str(home), "slots": [3, 4], "ready": {}}
     _, picks, *_ = OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), segment=1,
                                       latent_path="reels/one", prompt=REFS_GRAPH, unique_id="9")
     data = json.loads(picks)
@@ -544,8 +544,9 @@ def send_chain(tmp_path, monkeypatch, clips=2, dropped=()):
     """A Chain Video with `clips` clips under a fake ComfyUI output folder; frames() returns a marker."""
     run = tmp_path / "h3_context" / "chain_video" / "run_1"
     folders = [f"clip_{i:05d}" for i in range(1, clips + 1)]
+    run.mkdir(parents=True)
     for folder in folders:
-        (run / folder).mkdir(parents=True)
+        (run / folder).mkdir()
         (run / folder / "video.mp4").write_bytes(b"")
     (run.parent / "active.json").write_text(json.dumps({"run": "run_1"}))
     (run / "clips.json").write_text(json.dumps({"clips": [{"folder": f} for f in folders]}))
@@ -557,10 +558,15 @@ def send_chain(tmp_path, monkeypatch, clips=2, dropped=()):
             self.label, self.shape = f"{Path(path).parent.name}:{wanted}", (len(wanted), 8, 8, 3)
 
     monkeypatch.setattr(ch, "frames", lambda path, wanted: (Batch(path, wanted), list(dropped)))
+    from orrery import anchors
+    saved = []
+    monkeypatch.setattr(anchors, "save", lambda home, n, frames: saved.append((str(home.root), n, frames.label)))
+    return saved
 
 
-def sends(ready, slots=(3, 4), refs=(1, 3)):
-    return json.dumps({"refs": list(refs), "sends": {"chain": "h3_context", "slots": list(slots), "ready": ready}})
+def sends(ready, slots=(3, 4), refs=(1, 3), home="/nowhere"):
+    return json.dumps({"refs": list(refs), "sends": {"chain": "h3_context", "home": home, "slots": list(slots),
+                                                     "ready": ready}})
 
 
 def test_orrery_refs_fills_a_sent_image_with_its_frames(tmp_path, monkeypatch):
@@ -621,7 +627,7 @@ def test_an_empty_ref_blocks_a_preview_but_stays_none_for_reference_to_video(mon
     assert out[3] is None  # read by nothing
 
 
-def test_the_preview_output_shows_every_ref_of_the_clip_and_waits_when_there_is_none(monkeypatch):
+def test_the_preview_output_shows_every_ref_of_the_clip_labelled(monkeypatch):
     """ref_N go to Reference to Video, which needs None for an empty one; previews take `preview` instead."""
     from orrery import comfy
     from orrery.comfy import OrreryRefs
@@ -635,10 +641,61 @@ def test_the_preview_output_shows_every_ref_of_the_clip_and_waits_when_there_is_
     blocker.ExecutionBlocker = ExecutionBlocker
     monkeypatch.setitem(sys.modules, "comfy_execution", types.ModuleType("comfy_execution"))
     monkeypatch.setitem(sys.modules, "comfy_execution.graph_utils", blocker)
-    monkeypatch.setattr(comfy, "stack_preview", lambda images: ("stacked", tuple(images)))
+    monkeypatch.setattr(comfy, "stack_preview", lambda labelled: ("stacked", tuple(labelled)))
     graph = {"12": {"class_type": "OrreryRefs", "inputs": {}},
              "30": {"class_type": "PreviewImage", "inputs": {"images": ["12", 9]}}}
     out = OrreryRefs().route(json.dumps({"refs": [3, 6]}), prompt=graph, unique_id="12", image_3="img3", image_6="img6")
-    assert out[9] == ("stacked", ("img3", "img6"))
+    assert out[9] == ("stacked", (("ref_1", "img3"), ("ref_2", "img6")))
     empty = OrreryRefs().route(json.dumps({"refs": []}), prompt=graph, unique_id="12")
-    assert isinstance(empty[9], ExecutionBlocker)
+    assert empty[9] == ("stacked", ())  # a grey "no refs" frame, so the preview never shows an older clip's refs
+
+
+def test_orrery_refs_always_runs_so_a_new_chain_is_never_hidden_by_the_cache():
+    from orrery.comfy import OrreryRefs
+    assert OrreryRefs.IS_CHANGED(picks="x") != OrreryRefs.IS_CHANGED(picks="x")  # NaN: ComfyUI never reuses it
+
+
+def test_a_fetched_sent_image_is_kept_as_the_anchor_of_its_image(tmp_path, monkeypatch):
+    from orrery.comfy import OrreryRefs
+    saved = send_chain(tmp_path, monkeypatch)
+    OrreryRefs().route(sends({"3": {"segment": 1, "frames": [[0, 0]]}}, home=str(tmp_path)), image_1="img1")
+    assert saved == [(str(tmp_path), 3, "clip_00002:[[0, 0]]")]
+
+
+def test_a_held_image_comes_from_its_anchor_not_the_chain(tmp_path, monkeypatch):
+    from orrery import anchors, comfy
+    from orrery.comfy import OrreryRefs
+    saved = send_chain(tmp_path, monkeypatch, clips=0)
+    monkeypatch.setattr(anchors, "load", lambda home, n: f"anchor{n}@{home.root.name}" if n == 3 else None)
+    monkeypatch.setattr(comfy, "to_image", lambda array: array)
+    out = OrreryRefs().route(sends({"3": {"held": True}}, home=str(tmp_path)), image_1="img1")
+    assert out[1] == f"anchor3@{tmp_path.name}" and saved == []  # held: no chain read, nothing overwritten
+    with pytest.raises(ValueError, match="image 4"):
+        OrreryRefs().route(sends({"4": {"held": True}}, refs=(1, 4), home=str(tmp_path)), image_1="img1")
+
+
+def test_keep_sent_on_orrery_refs_holds_the_stored_anchors_from_segment_0(home, monkeypatch):
+    from orrery import anchors
+    monkeypatch.setattr(anchors, "stored", lambda h: {3})
+    graph = {**REFS_GRAPH, "12": {"class_type": "OrreryRefs", "inputs": {"picks": ["9", 1], "image_1": ["5", 0],
+                                                                         "keep_sent": True}}}
+    _, picks, *_ = OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), segment=0, prompt=graph, unique_id="9")
+    data = json.loads(picks)
+    assert data["refs"] == [1, 3] and data["sends"]["ready"] == {"3": {"held": True}}
+    assert data["sends"]["home"] == str(home)
+    _, picks, *_ = OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), segment=0, prompt=REFS_GRAPH, unique_id="9")
+    assert json.loads(picks)["sends"]["ready"] == {}
+
+
+def test_the_preview_frames_carry_their_ref_in_white_with_a_black_edge():
+    from orrery.comfy import preview_frames
+    blue = np.zeros((1, 64, 64, 3), dtype=np.float32)
+    blue[..., 2] = 1.0
+    red = np.zeros((2, 96, 160, 3), dtype=np.float32)
+    red[..., 0] = 1.0
+    frames = preview_frames([("ref_1", blue), ("ref_2", red)])
+    assert frames.shape == (3, 512, 853, 3)
+    corner = frames[0, :70, :260]
+    assert (corner >= 0.99).all(axis=-1).any() and (corner <= 0.01).all(axis=-1).any()  # white text, black edge
+    empty = preview_frames([])
+    assert empty.shape[0] == 1 and abs(float(empty[0, -1, -1, 0]) - 0.5) < 0.01

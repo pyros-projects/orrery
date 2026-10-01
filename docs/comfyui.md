@@ -75,5 +75,7 @@ Restart ComfyUI. Nodes under **orrery**:
   your reference images and MiniMax H3 Reference to Video. Every clip gets only
   the images its screenplay uses, packed from `ref_1` and numbered as the prompt
   numbers them, plus the frames of earlier clips a reel `SEND:`s; `preview` shows
-  them all in one Preview Image. The tutorial:
+  them all in one Preview Image, each labelled with its ref. Sent frames are kept
+  as anchors in the orrery home; `keep_sent` on holds them from segment 0 for the
+  next run, so a character stays. The tutorial:
   [orrery-refs.md](orrery-refs.md).

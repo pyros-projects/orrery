@@ -610,7 +610,7 @@ def render_scene(scene: Scene, target: str, lint: list[Issue]) -> str:
 
 def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                   weights: Mapping[str, float] | None = None, target: str = "h3-base",
-                  segment: int = 0, packed: bool = False) -> Compiled:
+                  segment: int = 0, packed: bool = False, held: set[int] | frozenset = frozenset()) -> Compiled:
     """`segment` picks a reel's clip (see orrery.reel); plain screenplays ignore it. `packed`: the
     images are renumbered to the ones this clip uses (Orrery Refs hands on only those)."""
     from orrery.reel import build_segment, split_reel
@@ -624,11 +624,12 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
             if scene.mode != "ref2va":
                 raise ValueError("SEND: hands frames to Reference to Video as reference images, so it needs an "
                                  "@h3 ref2va screenplay.")
-            sends = reel.ready(segment)
+            sends = reel.ready(segment, set(held) & set(reel.send_slots))
             withhold_images(scene, set(reel.send_slots) - set(sends), lint)
             for block, start in zip(reel.blocks, reel.starts(), strict=True):
                 for send in block.sends:
-                    early = [lo for lo, _ in send.segments or [] if start is not None and lo <= start]
+                    early = [lo for lo, _ in send.segments or []
+                             if start is not None and lo <= start and send.image not in held]
                     if early:
                         lint.append(Issue("warn", f"SEND: to image {send.image} lists segment {min(early)}, but its "
                                                   f"frames come from segment {start}: up to segment {start} the clips "

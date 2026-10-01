@@ -87,6 +87,16 @@ segments an image exists in; several `SEND:` lines may fill one image as long
 as no segment gets two (an error names the segment), and a listed segment
 before the frame exists is flagged in lint.
 
+## Amendment 2026-10-01: anchors, keep_sent, no cache, labelled preview
+
+Orrery Refs runs on every queue (ComfyUI's cache handed on an older run's
+frames after a Restart). Every fetched sent image is stored as that image's
+anchor in `<home>/anchors/image_N/`; with `keep_sent` on, an image that has one
+uses it from segment 0 for the whole run (within its `for segment …`) and is
+not replaced; off, fresh frames replace the anchors. The Orrery Prompt reads
+the switch from the graph so the prompt names held images. `preview` labels
+each image with its ref and shows a grey `no refs` frame for a clip without any.
+
 ## Out of scope
 
 Automatic anchors without `SEND:`, sending to reference videos.

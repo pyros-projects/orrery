@@ -168,14 +168,18 @@ class Reel:
                 start = None if block.repeat is None else start + block.repeat
         return out
 
-    def ready(self, segment: int) -> dict[int, dict]:
+    def ready(self, segment: int, held: set[int] | frozenset = frozenset()) -> dict[int, dict]:
         """The sent images that exist in `segment`, each with the segment its frames come from: sent by a
-        chunk that first played before it, for a segment its `for` lists (any later one without)."""
+        chunk that first played before it, for a segment its `for` lists (any later one without). A `held`
+        image (Orrery Refs' keep_sent, with a stored anchor) exists from segment 0 within its `for` list,
+        and comes from that anchor instead."""
         out: dict[int, dict] = {}
         for block, start in zip(self.blocks, self.starts(), strict=True):
             for send in block.sends:
-                if any(lo <= segment and (hi is None or segment <= hi) for lo, hi in fills(send, start)):
-                    out[send.image] = {"segment": start, "frames": [list(f) for f in send.frames]}
+                spans = (send.segments or [[0, None]]) if send.image in held else fills(send, start)
+                if any(lo <= segment and (hi is None or segment <= hi) for lo, hi in spans):
+                    out[send.image] = ({"held": True} if send.image in held
+                                       else {"segment": start, "frames": [list(f) for f in send.frames]})
         return out
 
     def label(self, segment: int) -> str:

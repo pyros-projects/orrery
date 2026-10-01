@@ -13,7 +13,7 @@ import re
 from datetime import UTC, datetime
 from pathlib import Path
 
-from orrery import runs
+from orrery import anchors, runs
 from orrery.autolib import needs
 from orrery.chain import DEFAULT_CHAIN, load, previous_clip
 from orrery.comfy_llm import ComfyBackend, can_write, llm_config
@@ -161,10 +161,12 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                preset: str = NO_PRESET, linked: str | None = None,
                params: str = "", segment: int = 0, clip=None,
                frames=None, packed: bool = False,
-               wired: int | None = None, chain: str = DEFAULT_CHAIN) -> tuple[str, str, int, int, int, int, list, int, int]:
+               wired: int | None = None, chain: str = DEFAULT_CHAIN,
+               keep: bool = False) -> tuple[str, str, int, int, int, int, list, int, int]:
     """`frames`: the previous clip's stills, which the model sees when it writes `--…--` slots.
     `packed`: Orrery Refs routes the images per clip; `wired`: the reference images Reference to
-    Video has (both from the graph, see `wiring`). `chain`: the Motion Context chain SEND: reads."""
+    Video has (both from the graph, see `wiring`). `chain`: the Motion Context chain SEND: reads;
+    `keep`: Orrery Refs' keep_sent, so sent images with a stored anchor are held from segment 0."""
     h = resolve_home(home or None)
     if preset and preset != NO_PRESET:
         template, linked = load_preset(h, preset), preset
@@ -198,7 +200,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
             lint = []
         else:
             result = compile_scene(source, seed, h.libraries(), h.weights(), target=target, segment=segment,
-                                   packed=packed)
+                                   packed=packed, held=anchors.stored(h) if keep else frozenset())
             lint = [{"severity": i.severity, "message": i.message} for i in result.lint]
             needed = len(result.refs) if packed else max(image_slots(result.scene), default=0)
             if wired is not None and wired < needed:
@@ -266,7 +268,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         "picks": [{"label": p.label, "value": p.value, "keys": list(p.keys)} for p in result.picks],
         "lint": lint,
         **({"refs": result.refs} if target != "text" and packed else {}),
-        **({"sends": {"chain": chain, "slots": result.send_slots,
+        **({"sends": {"chain": chain, "home": str(h.root), "slots": result.send_slots,
                       "ready": {str(k): v for k, v in result.sends.items()}}}
            if target != "text" and result.send_slots else {}),
         **({"enhanced": enhanced} if enhanced else {}),
@@ -412,10 +414,10 @@ class OrreryPrompt:
     def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, clip=None,
             latent_path=DEFAULT_CHAIN, unique_id=None, extra_pnginfo=None, prompt=None):
         stills, tail, audio = _previous(latent_path, segment)
-        packed, wired = wiring(prompt, unique_id)
+        packed, wired, keep = wiring(prompt, unique_id)
         try:
             outputs = run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
-                                 params, segment, clip, stills, packed, wired, latent_path or DEFAULT_CHAIN)
+                                 params, segment, clip, stills, packed, wired, latent_path or DEFAULT_CHAIN, keep)
             data = json.loads(outputs[1])
             if "sends" in data and not packed:
                 raise ValueError("This reel SENDs frames as reference images, which Orrery Refs fetches: wire this "
@@ -491,51 +493,73 @@ class OrreryLog:
 
 REF2VA = "MiniMaxH3ReferenceToVideo"
 PREVIEW_HEIGHT = 512
+LABEL_SIZE = 40
 
 
-def stack_preview(images: list):
-    """Every frame of `images` (IMAGE batches) as one batch for a Preview Image: scaled to one height and
-    centred on a neutral grey of the widest width. ComfyUI only (torch)."""
-    import comfy.utils
-    import torch
+def preview_frames(labelled: list[tuple[str, object]]):
+    """Every frame of each (label, IMAGE batch) as one float array for a Preview Image: scaled to one
+    height, the label in white with a black edge in the corner, centred on neutral grey at the widest
+    width. Without any, one grey frame that says so."""
+    import numpy as np
+    from PIL import Image, ImageDraw, ImageFont
 
-    scaled = []
-    for batch in images:
-        for frame in batch:
-            width = max(1, round(frame.shape[1] * PREVIEW_HEIGHT / frame.shape[0]))
-            scaled.append(comfy.utils.common_upscale(frame[None, ..., :3].movedim(-1, 1), width, PREVIEW_HEIGHT,
-                                                     "bilinear", "disabled").movedim(1, -1)[0])
-    widest = max(f.shape[1] for f in scaled)
-    out = torch.full((len(scaled), PREVIEW_HEIGHT, widest, 3), 0.5)
-    for i, frame in enumerate(scaled):
-        x = (widest - frame.shape[1]) // 2
-        out[i, :, x:x + frame.shape[1]] = frame
+    font = ImageFont.load_default(size=LABEL_SIZE)
+    shots = []
+    for label, batch in labelled or [("no refs", np.full((1, PREVIEW_HEIGHT, PREVIEW_HEIGHT, 3), 0.5, np.float32))]:
+        array = batch.cpu().numpy() if hasattr(batch, "cpu") else np.asarray(batch)
+        for frame in array:
+            pic = Image.fromarray(np.clip(frame[..., :3] * 255.0 + 0.5, 0, 255).astype(np.uint8))
+            pic = pic.resize((max(1, round(pic.width * PREVIEW_HEIGHT / pic.height)), PREVIEW_HEIGHT), Image.BILINEAR)
+            ImageDraw.Draw(pic).text((14, 10), label, font=font, fill="white", stroke_width=4, stroke_fill="black")
+            shots.append(np.asarray(pic, dtype=np.float32) / 255.0)
+    widest = max(shot.shape[1] for shot in shots)
+    out = np.full((len(shots), PREVIEW_HEIGHT, widest, 3), 0.5, dtype=np.float32)
+    for i, shot in enumerate(shots):
+        x = (widest - shot.shape[1]) // 2
+        out[i, :, x:x + shot.shape[1]] = shot
     return out
 
 
-def wiring(prompt: dict | None, unique_id) -> tuple[bool, int | None]:
+def stack_preview(labelled: list[tuple[str, object]]):
+    """preview_frames as an IMAGE batch. ComfyUI only (torch)."""
+    import torch
+
+    return torch.from_numpy(preview_frames(labelled))
+
+
+def to_image(array):
+    """A float array (frames, height, width, 3) as an IMAGE batch. ComfyUI only (torch)."""
+    import torch
+
+    return torch.from_numpy(array)
+
+
+def wiring(prompt: dict | None, unique_id) -> tuple[bool, int | None, bool]:
     """What the node's graph says (R2): whether an Orrery Refs reads its picks (then the images are
-    packed per clip), and how many reference images the Reference to Video node its text reaches
-    (directly or through a few text nodes) has wired; None when there is none."""
+    packed per clip), how many reference images the Reference to Video node its text reaches
+    (directly or through a few text nodes) has wired (None when there is none), and whether that
+    Orrery Refs has keep_sent on."""
     if not prompt or unique_id is None:
-        return False, None
+        return False, None, False
     uid = str(unique_id)
     link = lambda v: (str(v[0]), v[1]) if isinstance(v, list) and len(v) == 2 else None
-    packed = any(n.get("class_type") == "OrreryRefs" and link(n.get("inputs", {}).get("picks")) == (uid, 1)
-                 for n in prompt.values())
+    readers = [n for n in prompt.values()
+               if n.get("class_type") == "OrreryRefs" and link(n.get("inputs", {}).get("picks")) == (uid, 1)]
+    packed, keep = bool(readers), any(n.get("inputs", {}).get("keep_sent") is True for n in readers)
     reach = {(uid, 0)}
     for _ in range(3):  # through Text Concatenate and friends
         reach |= {(str(nid), i) for nid, n in prompt.items() if n.get("class_type") != REF2VA
                   for v in n.get("inputs", {}).values() if link(v) in reach for i in range(4)}
     wired = [sum(1 for k, v in n["inputs"].items() if "ref_image" in k and link(v))
              for n in prompt.values() if n.get("class_type") == REF2VA and link(n.get("inputs", {}).get("prompt")) in reach]
-    return packed, (max(wired) if wired else None)
+    return packed, (max(wired) if wired else None), keep
 
 
 class OrreryRefs:
     """Hands Reference to Video only the reference images the current clip's CAST uses, packed in
     order, so a reel's chunks don't all see every image. Orrery Prompt notices it and renumbers
-    <Picture N> to match. Images a SEND: line fills come from the sending clip in the chain."""
+    <Picture N> to match. Images a SEND: line fills come from the sending clip in the chain, and are
+    kept as that image's anchor; with keep_sent on they come from the anchor instead."""
 
     CATEGORY = "orrery"
     FUNCTION = "route"
@@ -544,8 +568,9 @@ class OrreryRefs:
     RETURN_NAMES = (*(f"ref_{i}" for i in range(1, SLOTS + 1)), "preview")
     OUTPUT_TOOLTIPS = ("Wire ref_1 into Reference to Video ref_image_0, ref_2 into ref_image_1, and so on.",
                        *("",) * (SLOTS - 1),
-                       ("Every image this clip gets, as one batch for a Preview Image; skipped when there is none. "
-                        "Preview here, not on the ref_N that go into Reference to Video: an empty one is None there."))
+                       ("Every image this clip gets, labelled with its ref, as one batch for a Preview Image (grey when "
+                        "there is none). Preview here, not on the ref_N that go into Reference to Video: an empty one "
+                        "is None there."))
     DESCRIPTION = ("Routes the reference images per reel clip: wire every image as image_N (N as in the CAST's "
                    "(image N)) and the Orrery Prompt's picks; the clip's images come out packed as ref_1, ref_2 …, "
                    "and all of them together on preview, for a Preview Image.")
@@ -553,10 +578,20 @@ class OrreryRefs:
     @classmethod
     def INPUT_TYPES(cls):
         return {"required": {"picks": ("STRING", {"forceInput": True})},
-                "optional": {f"image_{i}": ("IMAGE",) for i in range(1, cls.SLOTS + 1)},
+                "optional": {**{f"image_{i}": ("IMAGE",) for i in range(1, cls.SLOTS + 1)},
+                             "keep_sent": ("BOOLEAN", {"default": False, "tooltip": (
+                                 "On: every SEND: image with a stored anchor (the frames last fetched for it) uses that "
+                                 "anchor from segment 0 and for the whole run, so a character you liked stays. "
+                                 "Off: fresh frames from this run's chain, which replace the anchors.")})},
                 "hidden": {"prompt": "PROMPT", "unique_id": "UNIQUE_ID"}}
 
-    def route(self, picks, prompt=None, unique_id=None, **images):
+    @classmethod
+    def IS_CHANGED(cls, **_):
+        """Always run: the chain behind a SEND: changes while the picks stay the same (a reel rendered again
+        from Restart), and a cached output would hand on an older run's frames."""
+        return float("NaN")
+
+    def route(self, picks, prompt=None, unique_id=None, keep_sent=False, **images):
         data = json.loads(picks or "{}")
         refs, sends = data.get("refs"), data.get("sends") or {}
         clash = sorted(n for n in sends.get("slots", []) if images.get(f"image_{n}") is not None)
@@ -567,18 +602,27 @@ class OrreryRefs:
             order = [images.get(f"image_{i}") for i in range(1, self.SLOTS + 1)]
         else:
             ready = sends.get("ready", {})
+            home = Home(Path(sends["home"])) if sends.get("home") else resolve_home(None)
             for n in refs:
-                if str(n) in ready:
+                if str(n) not in ready:
+                    continue
+                if ready[str(n)].get("held"):
+                    held = anchors.load(home, n)
+                    if held is None:
+                        raise ValueError(f"image {n} is held (keep_sent), but it has no stored anchor: switch keep_sent "
+                                         "off for a run that sends it, then on again.")
+                    images[f"image_{n}"] = to_image(held)
+                else:
                     images[f"image_{n}"] = self._sent(n, ready[str(n)], sends.get("chain") or DEFAULT_CHAIN)
+                    anchors.save(home, n, images[f"image_{n}"])
             missing = [f"image_{n}" for n in refs if images.get(f"image_{n}") is None]
             if missing:
                 raise ValueError(f"This clip's CAST uses {', '.join(missing)}, but nothing is wired into it.")
             order = [images[f"image_{n}"] for n in refs]
             self._warn_batches(order, prompt, unique_id)
         out = order[:self.SLOTS] + [None] * (self.SLOTS - len(order))
-        shown = [img for img in out if img is not None]
         try:
-            preview = stack_preview(shown) if shown else None
+            preview = stack_preview([(f"ref_{k + 1}", img) for k, img in enumerate(out) if img is not None])
         except ImportError:  # outside ComfyUI
             preview = None
         return (*(self._blocked(v, self._readers(prompt, unique_id, k)) for k, v in enumerate(out)),

@@ -355,3 +355,11 @@ def test_a_listed_segment_before_the_frame_exists_is_flagged():
     src = SEND_REEL.replace("GIRL walks to the window.", "GIRL walks to the window.\nSEND: frame 0 to image 5 for segment 1+")
     lint = [i.message for i in ref2va(src, segment=0).lint]
     assert any("image 5" in m and "segment 1" in m for m in lint)
+
+
+def test_a_held_image_exists_from_segment_0_within_its_for_list():
+    reel = split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", "SEND: frame 0 to image 3 for segment 2+"))
+    assert reel.ready(0, held={3, 4}) == {4: {"held": True}}
+    assert reel.ready(2, held={3})[3] == {"held": True}
+    held = compile_scene(SEND_REEL, 1, {}, target="h3-base", segment=0, packed=True, held={3})
+    assert held.refs == [1, 3] and "<Picture 1> and <Picture 2>" in held.text and held.sends == {3: {"held": True}}
