@@ -487,7 +487,7 @@ async function onClick(app, e, open, rows) {
   if (act === "delete") return confirmDelete(app);
   if (act === "export") return openExport(app);
   if (!open) return;
-  if (act === "use") {
+  if (act === "use" && !app.busy()) {
     try {
       const text = await templateOf(app, open);
       app.text = text;

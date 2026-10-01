@@ -27,6 +27,8 @@ const REF = [
     ["{? $w.kind=rain: wet|dry}", "a choice made by a condition instead of the dice", ""],
     ["@include effects/living_clay", "embeds a preset where it stands; indented key = value lines under it turn its dials", "@include "],
     ["# a note", "a comment: a note for you that never reaches the model", "# "],
+    ["<lora:style:0.5,0.7,1.0>", "a LoRA sweep: Generate runs once per strength, one seed for all; 0-1;0.1 is a range with a step, several swept LoRAs combine, and outputs go to a galaxy folder sweeps/…", ""],
+    ["<lora:a:0.5,1.0:solo>", "solo: the solo LoRAs take turns, the others off (2 + 2 runs, not 2 × 2); <lora:a:test> is 1.0,0.7,0.5:solo", ""],
     [": w832 h1216", "size: the node's width and height outputs (wire them into your latent)", ": w832 h1216"],
     [": x8 seed=100", "CLI only (orrery expand); in ComfyUI use the Run count and the seed widget", ""],
     ["a __creature__", "a/an follows the picked word: “an axolotl”", ""],

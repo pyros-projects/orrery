@@ -406,3 +406,4 @@
 .orrery-app .newpop button:hover { background: var(--hover); }
 .orrery-app .newpop b { font-weight: 500; }
 .orrery-app .newpop .muted { font-size: 11.5px; }
+.orrery-app .btn small.sweep { font-weight: 400; opacity: .75; margin-left: 2px; }

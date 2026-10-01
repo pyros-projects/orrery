@@ -699,3 +699,41 @@ def test_the_preview_frames_carry_their_ref_in_white_with_a_black_edge():
     assert (corner >= 0.99).all(axis=-1).any() and (corner <= 0.01).all(axis=-1).any()  # white text, black edge
     empty = preview_frames([])
     assert empty.shape[0] == 1 and abs(float(empty[0, -1, -1, 0]) - 0.5) < 0.01
+
+
+# --- LoRA sweeps -------------------------------------------------------------------------------
+
+SWEEP = "a cat on a roof <lora:a:0.5,1.0:solo><lora:b:0.7:solo>"
+
+
+def test_a_sweep_run_writes_its_tags_records_them_and_names_its_galaxy_folder(home):
+    text, picks, seed, *_ = OrreryPrompt().run(SWEEP, 5, "text", home=str(home), sweep="1|sweeps/a 2026-10-01 14.03")
+    data = json.loads(picks)
+    assert text == "a cat on a roof <lora:a:1>" and seed == 5
+    assert {"label": "<lora:a>", "value": "1", "keys": ["<lora:a>=1"]} in data["picks"]
+    assert {"label": "<lora:b>", "value": "off", "keys": ["<lora:b>=off"]} in data["picks"]
+    assert data["folder"] == "sweeps/a 2026-10-01 14.03" and data["sweep"] == {"run": 1, "runs": 3}
+
+
+def test_run_without_generate_takes_the_first_and_says_how_many_there_are(home):
+    text, picks, *_ = OrreryPrompt().run(SWEEP, 5, "text", home=str(home))
+    assert text == "a cat on a roof <lora:a:0.5>"
+    assert any("3 runs" in i["message"] and "Generate" in i["message"] for i in json.loads(picks)["lint"])
+    with pytest.raises(ValueError, match="run 7"):
+        OrreryPrompt().run(SWEEP, 5, "text", home=str(home), sweep="7|x")
+
+
+def test_every_sweep_run_is_a_new_run_for_comfyui():
+    a = OrreryPrompt.IS_CHANGED(SWEEP, 5, "text", sweep="0|x")
+    assert a != OrreryPrompt.IS_CHANGED(SWEEP, 5, "text", sweep="1|x")
+
+
+def test_a_logged_sweep_output_lands_in_its_folder(home, tmp_path):
+    from orrery.comfy import log_outputs
+    _, picks, *_ = OrreryPrompt().run(SWEEP, 5, "text", home=str(home), sweep="2|sweeps/a 2026-10-01 14.03")
+    [row] = log_outputs(Home(home), picks, [str(tmp_path / "x.png")])
+    assert row["folder"] == "sweeps/a 2026-10-01 14.03"
+    data = json.loads(picks)
+    data["folder"] = "../escape"
+    [row] = log_outputs(Home(home), json.dumps(data), [str(tmp_path / "y.png")])
+    assert "folder" not in row

@@ -14,6 +14,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from orrery import anchors, runs
+from orrery import sweep as sweeps
 from orrery.autolib import needs
 from orrery.chain import DEFAULT_CHAIN, load, previous_clip
 from orrery.comfy_llm import ComfyBackend, can_write, llm_config
@@ -162,11 +163,12 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                params: str = "", segment: int = 0, clip=None,
                frames=None, packed: bool = False,
                wired: int | None = None, chain: str = DEFAULT_CHAIN,
-               keep: bool = False) -> tuple[str, str, int, int, int, int, list, int, int]:
+               keep: bool = False, sweep: str = "") -> tuple[str, str, int, int, int, int, list, int, int]:
     """`frames`: the previous clip's stills, which the model sees when it writes `--…--` slots.
     `packed`: Orrery Refs routes the images per clip; `wired`: the reference images Reference to
     Video has (both from the graph, see `wiring`). `chain`: the Motion Context chain SEND: reads;
-    `keep`: Orrery Refs' keep_sent, so sent images with a stored anchor are held from segment 0."""
+    `keep`: Orrery Refs' keep_sent, so sent images with a stored anchor are held from segment 0.
+    `sweep`: "run|galaxy folder", set by Generate for each run of a LoRA sweep (see orrery.sweep)."""
     h = resolve_home(home or None)
     if preset and preset != NO_PRESET:
         template, linked = load_preset(h, preset), preset
@@ -175,6 +177,15 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     known = {name for name, _ in bindings(template)}
     dials = {k: v for k, v in dial_values(params).items() if k in known}
     source = strip_comments(resolve_includes(h, override(template, dials)))  # the hash keeps the comments
+    plan, sweep_picks, sweep_data, folder = sweeps.runs(source), [], None, ""
+    if plan:  # a LoRA sweep: this queue item is one of its runs (the first, from ComfyUI's own Run)
+        index, _, folder = (sweep or "").partition("|")
+        i = int(index) if index.strip().isdigit() else 0
+        if i >= len(plan):
+            raise ValueError(f"LoRA sweep run {i} does not exist: this template sweeps {len(plan)} runs "
+                             f"({sweeps.formula(source)}).")
+        sweep_picks, sweep_data = sweeps.picks(source, plan[i]), {"run": i, "runs": len(plan)}
+        source_sweep, source = source, sweeps.apply(source, plan[i])
 
     # One request per run (ComfyUI cannot safely generate twice): libraries still missing and the
     # slots go together, the slots then seeing the template; otherwise the slots see the compiled prompt.
@@ -251,6 +262,9 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         if issue := word_issue(described):
             lint.append({"severity": issue.severity, "message": issue.message})
     lint = [{"severity": "info", "message": n} for n in notes] + lint
+    if plan and not sweep:
+        lint.append({"severity": "info", "message": f"LoRA sweep: {len(plan)} runs ({sweeps.formula(source_sweep)}); "
+                                                     "Generate runs them all, Run takes the first."})
     stack: list = []
     if target != "text" and result.loras:
         stack, warnings = lora_stack(result.loras, lora_files())
@@ -265,7 +279,9 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         "edited": bool(linked) and template != load_preset(h, linked),
         "params": dials,
         "text": result.text,
-        "picks": [{"label": p.label, "value": p.value, "keys": list(p.keys)} for p in result.picks],
+        "picks": [{"label": p.label, "value": p.value, "keys": list(p.keys)} for p in result.picks] + sweep_picks,
+        **({"sweep": sweep_data} if sweep_data else {}),
+        **({"folder": folder.strip()} if sweep_data and folder.strip() else {}),
         "lint": lint,
         **({"refs": result.refs} if target != "text" and packed else {}),
         **({"sends": {"chain": chain, "home": str(h.root), "slots": result.send_slots,
@@ -316,6 +332,16 @@ def state_token(home: Home) -> str:
     return digest.hexdigest()[:16]
 
 
+def _galaxy_folder(name) -> str:
+    """A sweep's galaxy folder, when it is a valid one."""
+    from orrery.galaxy import clean_folder
+
+    try:
+        return clean_folder(name) if name else ""
+    except (ValueError, TypeError):
+        return ""
+
+
 def log_outputs(home: Home, picks_json: str, media: list[str]) -> list[dict]:
     data = json.loads(picks_json)
     ts = datetime.now(UTC).isoformat(timespec="seconds")
@@ -331,6 +357,7 @@ def log_outputs(home: Home, picks_json: str, media: list[str]) -> list[dict]:
         "text": data.get("text"),
         "picks": data.get("picks", []),
         **({"segment": data["segment"], "chunks": data["chunks"]} if data.get("chunks") else {}),
+        **({"folder": folder} if (folder := _galaxy_folder(data.get("folder"))) else {}),
         "rating": None,
     } for m in (media or [None])]
     home.root.mkdir(parents=True, exist_ok=True)
@@ -400,24 +427,27 @@ class OrreryPrompt:
                 "latent_path": ("STRING", {"forceInput": True, "tooltip": (
                     "H3 Motion Context's latent_path (default h3_context): where the chain of clips lives. From "
                     "the second segment on the model watches the previous clip when it writes --…-- slots.")}),
+                "sweep": ("STRING", {"default": "", "tooltip": (
+                    "Set by Generate for each run of a LoRA sweep (run|galaxy folder); empty runs the first.")}),
             },
             "hidden": {"unique_id": "UNIQUE_ID", "extra_pnginfo": "EXTRA_PNGINFO", "prompt": "PROMPT"},
         }
 
     @classmethod
     def IS_CHANGED(cls, template, seed, target, preset=NO_PRESET, home="", params="", segment=0,
-                   latent_path=DEFAULT_CHAIN, **_):
+                   latent_path=DEFAULT_CHAIN, sweep="", **_):
         h = resolve_home(home or None)
         chosen = load_preset(h, preset) if preset and preset != NO_PRESET else template
-        return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{segment}:{latent_path}:{state_token(h)}"
+        return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{segment}:{latent_path}:{sweep}:{state_token(h)}"
 
     def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, clip=None,
-            latent_path=DEFAULT_CHAIN, unique_id=None, extra_pnginfo=None, prompt=None):
+            latent_path=DEFAULT_CHAIN, sweep="", unique_id=None, extra_pnginfo=None, prompt=None):
         stills, tail, audio = _previous(latent_path, segment)
         packed, wired, keep = wiring(prompt, unique_id)
         try:
             outputs = run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
-                                 params, segment, clip, stills, packed, wired, latent_path or DEFAULT_CHAIN, keep)
+                                 params, segment, clip, stills, packed, wired, latent_path or DEFAULT_CHAIN, keep,
+                                 sweep)
             data = json.loads(outputs[1])
             if "sends" in data and not packed:
                 raise ValueError("This reel SENDs frames as reference images, which Orrery Refs fetches: wire this "

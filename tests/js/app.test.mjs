@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { highlight } from "../../comfyui/web/app/highlight.js";
 import {
   applyDials, dials, downstream, entryPage, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
-  rangeIds, shape, stats, templateHash,
+  rangeIds, shape, stats, sweepPlan, templateHash,
 } from "../../comfyui/web/app/model.js";
 
 const known = new Set(["creature", "place"]);
@@ -293,4 +293,18 @@ test("every New template opens with a quickstart and its dials come from code, n
     if (s.target === "h3-base") assert.ok(stats(s.text).h3, kind);
   }
   assert.equal(stats(STARTERS.reel.text).h3.reel.chunks, 2);
+});
+
+test("a LoRA sweep is planned like the node does: product, solo turns, zero is off, doubles once", () => {
+  const plan = (t) => { const p = sweepPlan(t); return p && [p.runs, p.formula, p.first]; };
+  assert.deepEqual(plan("<lora:a:0.5,1.0><lora:b:0.3,1>"), [4, "2 × 2", "a"]);
+  assert.deepEqual(plan("<lora:AmateurHour_01_rank16:0.5,1.0:solo><lora:AmateurHour_H3_000017500:0.5,1.0:solo>"),
+    [4, "2 + 2", "AmateurHour_01_rank16"]);
+  assert.deepEqual(plan("<lora:c:0.2,0.4><lora:a:0.5:solo><lora:b:0.7,0.9:solo>"), [6, "2 × (1 + 2)", "c"]);
+  assert.deepEqual(plan("<lora:a:0,1:solo><lora:b:0,1:solo>"), [3, "2 + 2", "a"]);
+  assert.deepEqual(plan("<lora:H3-Icy-real-v1_000004200:test>"), [3, "3", "H3-Icy-real-v1_000004200"]);
+  assert.deepEqual(plan("<lora:relim_v2_lora_500:0-1;0.1>"), [11, "11", "relim_v2_lora_500"]);
+  assert.deepEqual(plan("<lora:s:0.5,1.0:0.5,1.0>"), [4, "4", "s"]);
+  assert.equal(sweepPlan("a cat <lora:b:0.8> <lora:d:0.4:0.7>"), null);
+  assert.equal(sweepPlan("# <lora:a:0.5,1.0>\na cat"), null);
 });

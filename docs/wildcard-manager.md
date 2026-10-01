@@ -64,6 +64,31 @@ them. For a reel the bar shows the segment being generated (or the next one),
 and **Restart** cancels this node's queued and running clips, sets segment to
 0 and generates from the start; other jobs in the queue stay.
 
+**LoRA sweeps.** A LoRA tag with several strengths, in a text prompt or on a
+`LORA:` line, makes Generate run once per strength:
+
+```
+<lora:relim_v2_lora_500:0.5,0.6,0.7>                      3 runs
+<lora:relim_v2_lora_500:0-1;0.1>                          0, 0.1 … 1: 11 runs
+<lora:style_x:0.5,1.0:1.0>                                the model strength swept, CLIP fixed
+<lora:a:0.5,1.0><lora:b:0.5,1.0>                          they combine: 2 × 2 = 4 runs
+<lora:a:0.5,1.0:solo><lora:b:0.5,1.0:solo>                they take turns: 2 + 2 = 4 runs
+<lora:H3-Icy-real-v1_000004200:test>                      the macro: 1.0,0.7,0.5:solo
+```
+
+Swept LoRAs combine, the first in the text changing slowest; `solo` ones take
+turns with the other solo LoRAs off, and combined ones run with every turn.
+Strength 0 is off (the tag leaves the prompt), and identical runs run once, so
+`0,1` on two solo LoRAs gives one bare baseline. The button says what it will
+do (`Generate ×4 · sweep 2 + 2`) and asks first above 50 runs. One seed holds
+for the whole sweep; the `×` field becomes the number of seeds, each running
+the whole sweep. A reel's segment stays, so every run renders the same clip.
+While the runs are being queued, the editor waits (each queue item reads the
+template) and **Stop** ends the queueing. Every output records the swept
+strengths as picks (`<lora:a>` = 0.5, or off) and lands in a galaxy folder
+`sweeps/<first swept LoRA> <date> <time>`. ComfyUI's own Run takes the first
+run.
+
 Everything a run needs goes to the model in one request (ComfyUI cannot
 safely generate twice in one run); ComfyUI moves the model out when the video
 model needs the room, and orrery keeps it for the next run. What it wrote waits

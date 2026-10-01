@@ -28,6 +28,15 @@ function hide(widget) {
 }
 
 // The graph as the Generate button sees it: which node feeds which, and which ones are outputs.
+// The seed for the next sweep, as the seed's control after generate would step it.
+function nextSeed(widget, mode) {
+  const seed = Number(widget?.value) || 0;
+  if (mode === "increment") return seed + 1;
+  if (mode === "decrement") return Math.max(0, seed - 1);
+  if (mode === "randomize") return Math.floor(Math.random() * 2 ** 32);
+  return seed;
+}
+
 function graphOf(node) {
   const g = node.graph || app.graph;
   const linkOf = (id) => (g.links?.get ? g.links.get(id) : g.links?.[id]);
@@ -43,7 +52,7 @@ function mount(node) {
   loadStyles();
   const find = (name) => node.widgets?.find((w) => w.name === name);
   const template = find("template"), preset = find("preset"), home = find("home"), params = find("params");
-  [template, preset, home, params].forEach(hide);
+  [template, preset, home, params, find("sweep")].forEach(hide);
   node.properties = node.properties || {};
 
   // the control_after_generate combo that belongs to an INT widget (seed and segment each have one)
@@ -65,18 +74,20 @@ function mount(node) {
     node.setDirtyCanvas?.(true, true);
   };
   const batch = { id: 0, done: null };  // the Generate loop that is queueing right now
+  const sweep = { on: false };  // a LoRA sweep is being queued: the template and the dials hold still
   const bridge = {
     props: node.properties,
     getText: () => template?.value ?? "",
-    setText: (text) => set("template", text),
+    setText: (text) => { if (!sweep.on) set("template", text); },
     getSeed: () => find("seed")?.value ?? 0,
-    setSeed: (seed) => set("seed", seed),
-    setControl: (mode) => { const c = controlOf("seed"); if (c) { c.value = mode; node.setDirtyCanvas?.(true, true); } },
+    setSeed: (seed) => { if (!sweep.on) set("seed", seed); },
+    setControl: (mode) => { const c = controlOf("seed"); if (c && !sweep.on) { c.value = mode; node.setDirtyCanvas?.(true, true); } },
     getControl: () => controlOf("seed")?.value ?? "",
     getTarget: () => find("target")?.value || "text",
-    setTarget: (target) => set("target", target),
+    setTarget: (target) => { if (!sweep.on) set("target", target); },
     getParams: () => { try { return JSON.parse(params?.value || "{}") || {}; } catch { return {}; } },
-    setParams: (values) => set("params", Object.keys(values).length ? JSON.stringify(values) : ""),
+    setParams: (values) => { if (!sweep.on) set("params", Object.keys(values).length ? JSON.stringify(values) : ""); },
+    sweeping: () => sweep.on,
     home: () => home?.value || "",
     nodeId: () => String(node.id),
     downstream: () => downstream(graphOf(node), node.id),
@@ -93,6 +104,40 @@ function mount(node) {
         return queued;
       })();
       return batch.done;  // how many runs went into the queue
+    },
+    // A LoRA sweep: every run once per seed, the seed and the segment held still within a sweep and the
+    // seed stepping between seeds as its control says; each queue item tells the node its run and the
+    // galaxy folder through the hidden sweep widget, which is empty again afterwards.
+    // Every queue item reads the template when it is queued, so it is locked until the last one is in.
+    generateSweep: async (count, seeds, folder, progress = () => {}) => {
+      const { outputs } = downstream(graphOf(node), node.id);
+      if (!outputs.length) return 0;
+      const id = ++batch.id;
+      const seedControl = controlOf("seed"), segmentControl = controlOf("segment");
+      batch.done = (async () => {
+        const was = [seedControl?.value, segmentControl?.value];
+        let queued = 0;
+        sweep.on = true;
+        try {
+          if (seedControl) seedControl.value = "fixed";
+          if (segmentControl) segmentControl.value = "fixed";
+          for (let s = 0; s < seeds && id === batch.id; s++) {
+            if (s > 0) set("seed", nextSeed(find("seed"), was[0]));
+            for (let i = 0; i < count && id === batch.id; i++) {
+              set("sweep", `${i}|${folder}`);
+              await app.queuePrompt(0, 1, { queueNodeIds: outputs.map(String) });
+              progress(++queued);
+            }
+          }
+        } finally {
+          if (seedControl) seedControl.value = was[0];
+          if (segmentControl) segmentControl.value = was[1];
+          set("sweep", "");
+          sweep.on = false;
+        }
+        return queued;
+      })();
+      return batch.done;
     },
     stopGenerate: async () => { batch.id++; await batch.done?.catch(() => {}); },
     getSegment: () => find("segment")?.value ?? 0,

@@ -304,3 +304,59 @@ export function downstream(nodes, start) {
   outputs.sort((a, b) => a - b);
   return { outputs, log: outputs.some((id) => byId.get(id)?.type === "OrreryLog") };
 }
+
+// LoRA sweeps (mirrors orrery/sweep.py): a tag with several strengths runs once per strength; swept
+// LoRAs combine, solo ones take turns, 0 is off and identical runs run once. The node does the runs;
+// this only counts them for the Generate button. Null without a sweep.
+const SWEEP_MACROS = { test: ["1.0,0.7,0.5", true] };
+const SWEEP_NUM = String.raw`-?(?:\d+(?:\.\d*)?|\.\d+)`;
+const SWEEP_ITEM = new RegExp(String.raw`^(${SWEEP_NUM})(?:\s*-\s*(${SWEEP_NUM})\s*;\s*(${SWEEP_NUM}))?$`);
+const round4 = (x) => Math.round(x * 1e4) / 1e4;
+
+function sweepValues(spec) {
+  const out = [];
+  for (const part of spec.split(",").map((p) => p.trim())) {
+    const m = SWEEP_ITEM.exec(part);
+    if (!m) return null;  // the node says what is wrong with it
+    const first = Number(m[1]);
+    if (m[2] === undefined) { out.push(round4(first)); continue; }
+    const last = Number(m[2]), step = Number(m[3]);
+    if (!(step > 0) || last < first) return null;
+    const count = Math.floor((last - first) / step + 1e-9) + 1;
+    if (out.length + count > 1000) return null;
+    for (let i = 0; i < count; i++) out.push(round4(first + i * step));
+  }
+  return out;
+}
+
+function sweptTag(content) {
+  let [name, ...rest] = content.split(":");
+  let solo = false;
+  const macro = SWEEP_MACROS[rest[0]?.trim().toLowerCase()];
+  if (macro) { rest = [macro[0], ...rest.slice(1)]; solo = macro[1]; }
+  if (rest.length && rest[rest.length - 1].trim().toLowerCase() === "solo") { solo = true; rest = rest.slice(0, -1); }
+  if (!rest.length || rest.length > 2 || (!solo && !rest.some((r) => /[,;]/.test(r)))) return null;
+  const model = sweepValues(rest[0]), clip = rest.length === 2 ? sweepValues(rest[1]) : [null];
+  if (!model || !clip) return null;
+  return { name: name.trim(), solo, variants: model.flatMap((m) => clip.map((c) => [m, c])) };
+}
+
+export function sweepPlan(text) {
+  const seen = new Map();
+  for (const m of stripComments(text).matchAll(/<lora:([^<>]+)>/g)) {
+    if (!seen.has(m[0])) { const t = sweptTag(m[1]); if (t) seen.set(m[0], t); }
+  }
+  const tags = [...seen.values()];
+  if (!tags.length) return null;
+  const off = ([m, c]) => m === 0 && (c === null || c === 0);
+  const combined = tags.filter((t) => !t.solo), solos = tags.filter((t) => t.solo);
+  const combos = combined.reduce((acc, t) => acc.flatMap((a) => t.variants.map((v) => [...a, off(v) ? null : v])), [[]]);
+  const turns = solos.length ? solos.flatMap((s, i) => s.variants.map((v) => [i, off(v) ? null : v])) : [[-1, null]];
+  const keys = new Set();
+  for (const [i, v] of turns) for (const combo of combos) keys.add(JSON.stringify([combo, solos.map((_, j) => (j === i ? v : null))]));
+  const counts = (list) => list.map((t) => String(t.variants.length));
+  const sum = counts(solos).join(" + ");
+  const formula = !combined.length ? sum
+    : counts(combined).join(" × ") + (solos.length > 1 ? ` × (${sum})` : solos.length ? ` × ${sum}` : "");
+  return { runs: keys.size, formula, first: tags[0].name };
+}

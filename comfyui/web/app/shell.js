@@ -136,7 +136,15 @@ export class OrreryApp {
     this.render();
   }
 
+  // While a LoRA sweep is being queued, every queue item reads the template: nothing may change it.
+  busy() {
+    if (!this.bridge.sweeping?.()) return false;
+    this.toast("A LoRA sweep is being queued; wait until it is in, or press Stop.");
+    return true;
+  }
+
   async loadPreset(name, { quiet = false, tab = true } = {}) {
+    if (this.busy()) return;
     const prev = { preset: this.preset, base: this.base, text: this.text, params: this.bridge.getParams() };
     const wasDirty = this.dirty();
     try {

@@ -66,6 +66,9 @@ run to be different, and a little better than the last, orrery is for you.
 - **Writes the lists you don't have.** Name a wildcard list that doesn't exist
   and a local language model creates it; edit lists in plain language and
   approve every change first.
+- **Tests your LoRAs.** `<lora:style:0.5,0.7,1.0>` or `0-1;0.1` and one click
+  runs every strength on the same seed, several LoRAs combined or in turns,
+  the whole sweep in a galaxy folder of its own to compare and rate.
 - **Traces every output back.** Each output remembers its template, seed and
   every choice it rolled: re-run it exactly, or change one choice and keep the
   rest.
