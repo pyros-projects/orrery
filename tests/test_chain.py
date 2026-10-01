@@ -72,6 +72,14 @@ def test_a_segments_own_clip_is_found_by_its_segment(tmp_path):
 
 def test_sent_frames_past_the_clip_are_dropped_and_the_last_stands_in():
     from orrery.chain import frame_picks
-    assert frame_picks(48, [2, 5, 40]) == ([2, 5, 40], [])
-    assert frame_picks(48, [2, 47, 48, 60]) == ([2, 47], [48, 60])
-    assert frame_picks(48, [60, 70]) == ([47], [60, 70])
+    assert frame_picks(48, [[2, 2], [5, 5], [40, 40]]) == ([2, 5, 40], [])
+    assert frame_picks(48, [[2, 2], [47, 48], [60, 60]]) == ([2, 47], [48, 60])
+    assert frame_picks(48, [[60, 60], [70, 70]]) == ([47], [60, 70])
+
+
+def test_negative_frames_count_back_from_the_end_of_the_clip():
+    from orrery.chain import frame_picks
+    assert frame_picks(48, [[-1, -1]]) == ([47], [])
+    assert frame_picks(48, [[-3, -1]]) == ([45, 46, 47], [])
+    assert frame_picks(48, [[44, -1]]) == ([44, 45, 46, 47], [])
+    assert frame_picks(48, [[-100, -100]]) == ([47], [-100])

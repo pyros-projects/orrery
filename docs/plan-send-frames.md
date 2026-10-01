@@ -79,6 +79,14 @@ Each stops the run with a sentence that names the fix:
   test clips, Orrery Prompt → Orrery Refs → preview, checking per segment which
   frames arrive on which reference.
 
+## Amendment 2026-10-01: negative frames and `for segment`
+
+`frame -1` is the clip's last frame (ranges may mix signs: `10--1`), resolved
+against each clip's length. `… for segment 4+` / `4-8` / `4, 6, 7` limits the
+segments an image exists in; several `SEND:` lines may fill one image as long
+as no segment gets two (an error names the segment), and a listed segment
+before the frame exists is flagged in lint.
+
 ## Out of scope
 
 Automatic anchors without `SEND:`, sending to reference videos.

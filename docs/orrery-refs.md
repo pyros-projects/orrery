@@ -212,6 +212,8 @@ repetitions of the routine.
 ```
 SEND: frame 0 to image 3
 SEND: frames 2, 5, 34-46 to image 4
+SEND: frame -1 to image 5 for segment 4+
+SEND: frames -24--1 to image 6 for segments 4, 6, 7, 12
 ```
 
 - **Where**: inside a `CHUNK`, any number of lines, in `@h3 ref2va` screenplays.
@@ -219,13 +221,32 @@ SEND: frames 2, 5, 34-46 to image 4
   Video keeps it: from the second clip on, the frames Motion Context pins are
   trimmed off, so frame 0 is always the first new frame. Single frames and
   ranges mix; `frame` and `frames` are the same word.
+- **Negative frames** count from the clip's end: `-1` is the last, `-2` the one
+  before. Ranges may mix signs: `-24--1` is the last second, `10--1` runs from
+  frame 10 to the end. orrery resolves them against each clip's real length.
 - **Several frames** become one image batch on that image, in the order written.
 - **A chunk that repeats** sends from the first time it plays, so the anchor
   holds still.
 - **Timing**: the image exists from the segment after the one where the chunk
-  first plays. Before that it is left out: CAST sources and frame anchors on it
-  go, and an `[image N]` in prose is flagged in lint.
-- **Each image** comes from one `SEND:` line.
+  first plays. Where it does not exist it is left out: CAST sources and frame
+  anchors on it go, and an `[image N]` in prose is flagged in lint.
+- **`for segment …`** limits the clips that get it, by the node's segment
+  numbers (from 0, as "Generating segment N" shows them): `4`, `4+` (4 and every
+  one after), `4-8`, or a list such as `2, 4-8, 12+`; `segment` and `segments`
+  are the same word. A listed segment before the frame exists goes without it,
+  and lint says so.
+- **One image, several lines**: fine, as long as no segment gets two. That
+  re-anchors an image mid-reel, for a new outfit, say:
+
+  ```
+  CHUNK the old look repeat 4
+  SEND: frame 0 to image 3 for segments 1-4
+  …
+  CHUNK the new look
+  SEND: frame -1 to image 3 for segment 5+
+  ```
+
+  Segments 1–4 see the old look, every clip from 5 on the new one.
 
 ### With or without a CAST
 
@@ -330,9 +351,10 @@ ComfyUI console.
 | `This reel SENDs frames as reference images, which Orrery Refs fetches: …` | no Orrery Refs reads the prompt's `picks` | wire `picks` into Orrery Refs |
 | `SEND: hands frames to Reference to Video as reference images, so it needs an @h3 ref2va screenplay.` | `SEND:` in another mode | switch the header to `@h3 ref2va` |
 | `SEND: belongs inside a CHUNK: …` | `SEND:` before the first `CHUNK` or in a screenplay without chunks | move it into the chunk whose clip it sends |
-| `image 3 is sent twice (CHUNK 1 and CHUNK 3); …` | two lines fill one image | send to two images |
+| `image 3 is sent for segment 5 by two SEND: lines (CHUNK 1 and CHUNK 3); …` | two lines fill one image in the same segment | give each a `for segment …` that leaves the other out, or send to two images |
+| `SEND: to image 5 lists segment 2, but its frames come from segment 3: …` (lint) | a `for` names segments before the frame exists | fine if intended; those clips go without it |
 | `[image 3] is mentioned before the SEND: line that fills it has played, …` (lint) | the prose names a sent image in a clip before it exists | fine if intended; it points at nothing in that clip |
-| `[orrery] SEND to image 5: frame 60 is past the end of segment 1's clip, so it is left out.` (console) | the clip is shorter than the frame number | pick an earlier frame; with none left, the last frame stands in |
+| `[orrery] SEND to image 5: frame 60 is not in segment 1's clip, so it is left out.` (console) | the clip is shorter than the frame number (or a negative one reaches before its start) | pick another frame; with none left, the last frame stands in |
 | `[orrery] ref_2 carries 5 frames, but Reference to Video reads only the first image of a reference; …` (console) | a batch goes into Reference to Video | send single frames to several images |
 
 If a Preview Image fails on an empty ref (`'NoneType' object is not

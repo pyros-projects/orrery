@@ -216,7 +216,7 @@ def ref2va(src, segment=0):
 def test_send_lines_belong_to_their_chunk_and_list_frames_in_order():
     from orrery.reel import Send
     reel = split_reel(SEND_REEL)
-    assert reel.blocks[0].sends == [Send([0], 3), Send([2, 5, 34, 35, 36], 4)]
+    assert reel.blocks[0].sends == [Send([[0, 0]], 3), Send([[2, 2], [5, 5], [34, 36]], 4)]
     assert not any("SEND" in line for block in reel.blocks for line in block.lines)
     assert reel.send_slots == [3, 4]
 
@@ -224,7 +224,7 @@ def test_send_lines_belong_to_their_chunk_and_list_frames_in_order():
 def test_a_sent_image_exists_from_the_segment_after_its_chunk_first_plays():
     reel = split_reel(SEND_REEL)
     assert reel.ready(0) == {}
-    first = {3: {"segment": 0, "frames": [0]}, 4: {"segment": 0, "frames": [2, 5, 34, 35, 36]}}
+    first = {3: {"segment": 0, "frames": [[0, 0]]}, 4: {"segment": 0, "frames": [[2, 2], [5, 5], [34, 36]]}}
     assert reel.ready(1) == first  # the chunk's second repetition still sends its first clip
     assert reel.ready(2) == first
 
@@ -237,7 +237,7 @@ def test_before_it_exists_a_sent_image_is_left_out_of_the_clip():
     after = ref2va(SEND_REEL, segment=2)
     assert after.refs == [1, 3, 4]  # image 4 is sent but named by nothing: it follows the ones the prompt uses
     assert "<Picture 1> and <Picture 2>" in after.text
-    assert after.sends == {3: {"segment": 0, "frames": [0]}, 4: {"segment": 0, "frames": [2, 5, 34, 35, 36]}}
+    assert after.sends == {3: {"segment": 0, "frames": [[0, 0]]}, 4: {"segment": 0, "frames": [[2, 2], [5, 5], [34, 36]]}}
     assert after.send_slots == [3, 4]
 
 
@@ -292,3 +292,66 @@ def test_without_a_cast_a_sent_image_still_reaches_the_refs():
     assert ref2va(src, segment=0).refs == []
     assert ref2va(src, segment=1).refs == [1] and ref2va(src, segment=2).refs == [1]
     assert "<Picture" not in ref2va(src, segment=1).text
+
+
+def test_negative_frames_count_from_the_end_and_ranges_may_mix_signs():
+    from orrery.reel import Send, parse_send
+    assert parse_send("frame -1 to image 5") == Send([[-1, -1]], 5)
+    assert parse_send("frames -24--1, 10--1, 3 to image 6") == Send([[-24, -1], [10, -1], [3, 3]], 6)
+    with pytest.raises(ValueError, match="-1--5"):
+        parse_send("frames -1--5 to image 6")
+
+
+def test_for_segment_takes_numbers_ranges_and_a_plus():
+    from orrery.reel import parse_send
+    assert parse_send("frame 0 to image 5 for segment 4+").segments == [[4, None]]
+    assert parse_send("frame 0 to image 5 for segments 4, 6, 7, 12").segments == [[4, 4], [6, 6], [7, 7], [12, 12]]
+    assert parse_send("frame 0 to image 5 for segments 2, 4-8, 12+").segments == [[2, 2], [4, 8], [12, None]]
+    assert parse_send("frame 0 to image 5").segments is None
+    for bad, words in (("for segment 8-4", "8-4"), ("for segment x", '"x"'), ("for segments", "segment")):
+        with pytest.raises(ValueError, match=re.escape(words)):
+            parse_send(f"frame 0 to image 5 {bad}")
+
+
+REANCHOR = """@h3 ref2va 16:9 lite
+CAST
+GIRL (image 1, image 3): the young dancer
+CHUNK the old look repeat 4
+SHOT 5s: static
+GIRL dances.
+SEND: frame 0 to image 3 for segments 1-4
+CHUNK the new look
+SHOT 5s: static
+GIRL changes her outfit.
+SEND: frame -1 to image 3 for segment 5+
+CHUNK the finale repeat forever
+SHOT 5s: static
+GIRL bows.
+"""
+
+
+def test_an_image_exists_only_in_the_segments_its_send_lists():
+    reel = split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", "SEND: frame 0 to image 3 for segment 2+"))
+    assert 3 not in reel.ready(1) and reel.ready(2)[3] == {"segment": 0, "frames": [[0, 0]]}
+    picked = split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", "SEND: frame 0 to image 3 for segments 1, 3"))
+    assert [3 in picked.ready(t) for t in range(5)] == [False, True, False, True, False]
+
+
+def test_several_sends_may_fill_one_image_in_different_segments():
+    reel = split_reel(REANCHOR)
+    assert reel.send_slots == [3]
+    assert [reel.ready(t).get(3, {}).get("segment") for t in range(8)] == [None, 0, 0, 0, 0, 4, 4, 4]
+    assert reel.ready(6)[3]["frames"] == [[-1, -1]]
+    assert ref2va(REANCHOR, segment=0).refs == [1] and ref2va(REANCHOR, segment=6).refs == [1, 3]
+
+
+def test_two_sends_claiming_one_segment_for_one_image_are_an_error():
+    clash = REANCHOR.replace("for segments 1-4", "for segments 1-5")
+    with pytest.raises(ValueError, match="segment 5"):
+        split_reel(clash)
+
+
+def test_a_listed_segment_before_the_frame_exists_is_flagged():
+    src = SEND_REEL.replace("GIRL walks to the window.", "GIRL walks to the window.\nSEND: frame 0 to image 5 for segment 1+")
+    lint = [i.message for i in ref2va(src, segment=0).lint]
+    assert any("image 5" in m and "segment 1" in m for m in lint)

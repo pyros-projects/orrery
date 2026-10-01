@@ -626,6 +626,13 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                                  "@h3 ref2va screenplay.")
             sends = reel.ready(segment)
             withhold_images(scene, set(reel.send_slots) - set(sends), lint)
+            for block, start in zip(reel.blocks, reel.starts(), strict=True):
+                for send in block.sends:
+                    early = [lo for lo, _ in send.segments or [] if start is not None and lo <= start]
+                    if early:
+                        lint.append(Issue("warn", f"SEND: to image {send.image} lists segment {min(early)}, but its "
+                                                  f"frames come from segment {start}: up to segment {start} the clips "
+                                                  "go without it."))
     else:
         ex = Expander(seed, libraries, weights)
         scene, picks = parse_scene(src, ex, lint), ex.picks

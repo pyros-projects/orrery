@@ -12,6 +12,7 @@
     SHOT 6s: static
     A model in $look~1 walks back while one in $look walks in.   $x~N: x as it was N clips ago
     SEND: frame 0 to image 3               this clip's frame 0 is image 3 for every later clip
+    SEND: frame -1 to image 4 for segment 6+          its last frame, only for segments 6, 7, 8 …
 
 A segment is one clip. Its seed derives from the node's seed and the segment number, so every
 clip is reproducible and a repeated chunk still varies; `$x~N` recomputes the earlier clip's
@@ -19,9 +20,11 @@ bindings instead of remembering them. The previous segment's handoff opens this 
 closes it, and from the second segment on Shot 1 also covers the frames Motion Context pins.
 
 `SEND:` hands frames of a chunk's clip (counted from 0 in the clip Chain Video keeps, the pinned
-frames trimmed off) to later clips as a reference image, the CAST's `image N`; several frames make
-one image batch. A chunk that repeats sends from the first time it plays. Orrery Refs fetches the
-frames; until they exist, the compiler leaves the image out of the clip.
+frames trimmed off; -1 is the last) to later clips as a reference image, the CAST's `image N`;
+several frames make one image batch. A chunk that repeats sends from the first time it plays.
+`for segment 4+` / `4, 6, 7` / `2-5` limits the clips that get it, so several lines may fill one
+image in turns. Orrery Refs fetches the frames; where they do not exist, the compiler leaves the
+image out of the clip.
 """
 
 import hashlib
@@ -38,8 +41,11 @@ REPEAT = re.compile(r"^(.*?)\s*\brepeat\s+(\d+|forever)\s*$", re.IGNORECASE)
 HANDOFF = re.compile(r"^HANDOFF:\s*(.+)$")
 SEND = re.compile(r"^SEND:\s*(.*)$")
 _SEND = re.compile(r"^frames?\b\s*(?P<frames>.*?)\s*\bto\s+(?P<target>.+?)\s*$", re.IGNORECASE)
+_FOR = re.compile(r"\s+for\s+", re.IGNORECASE)
 _TARGET = re.compile(r"^image\s+(\d+)$", re.IGNORECASE)
-_FRAMES = re.compile(r"(\d+)(?:\s*-\s*(\d+))?")
+_FRAMES = re.compile(r"(-?\d+)(?:\s*-\s*(-?\d+))?")
+_SEGMENTS = re.compile(r"^segments?\b\s*(.*)$", re.IGNORECASE)
+_SEGMENT = re.compile(r"(\d+)(?:\s*(\+)|\s*-\s*(\d+))?")
 SEND_SLOTS = 9  # Reference to Video takes nine reference images, ref_image_0 to ref_image_8
 MAX_SEND_FRAMES = 3600  # the longest clip Reference to Video makes
 BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
@@ -51,28 +57,55 @@ class ReelEnd(ValueError):
 
 @dataclass
 class Send:
-    frames: list[int]  # counted from 0 in the chunk's clip, in the order written
+    frames: list[list[int]]  # [first, last] spans in the order written; negative counts from the clip's end
     image: int  # the reference image they become: the CAST's `image N`
+    segments: list[list[int | None]] | None = None  # `for segment …`: [lo, hi] spans, hi None for `N+`
 
 
-def parse_frames(spec: str) -> list[int]:
-    """`2, 5, 34-46` → [2, 5, 34, 35, …, 46]."""
-    frames: list[int] = []
+def parse_frames(spec: str) -> list[list[int]]:
+    """`2, 5, 34-46, -24--1` → [[2, 2], [5, 5], [34, 46], [-24, -1]]: resolved against the clip's length
+    when Orrery Refs reads it, so -1 is the last frame and 10--1 runs from frame 10 to the end."""
+    spans: list[list[int]] = []
+    total = 0
     for part in (p.strip() for p in spec.split(",")):
         m = _FRAMES.fullmatch(part)
         if not m:
-            raise ValueError(f'SEND: "{part}" is not a frame; frames are numbers from 0, or ranges like 34-46.')
-        first, last = int(m.group(1)), int(m.group(2) or m.group(1))
-        if last < first:
-            raise ValueError(f"SEND: the range {part} runs backwards; write it as {last}-{first}.")
-        frames.extend(range(first, last + 1))
-        if len(frames) > MAX_SEND_FRAMES:
-            raise ValueError(f"SEND: {spec} names more than {MAX_SEND_FRAMES} frames, longer than any clip.")
-    return frames
+            raise ValueError(f'SEND: "{part}" is not a frame; frames are numbers from 0 (-1 the last), '
+                             "or ranges like 34-46 and -24--1.")
+        first = int(m.group(1))
+        last = int(m.group(2)) if m.group(2) is not None else first
+        if (first < 0) == (last < 0):
+            if last < first:
+                raise ValueError(f"SEND: the range {part} runs backwards; write it as {last}-{first}.")
+            total += last - first + 1
+            if total > MAX_SEND_FRAMES:
+                raise ValueError(f"SEND: {spec} names more than {MAX_SEND_FRAMES} frames, longer than any clip.")
+        spans.append([first, last])
+    return spans
+
+
+def parse_segments(text: str) -> list[list[int | None]]:
+    """`segment 4+` → [[4, None]]; `segments 2, 4-8, 12` → [[2, 2], [4, 8], [12, 12]]."""
+    m = _SEGMENTS.match(text.strip())
+    if not m or not m.group(1).strip():
+        raise ValueError('SEND: "for" takes segments: "for segment 4+", "for segments 4, 6, 7" or "for segments 2-5".')
+    spans: list[list[int | None]] = []
+    for part in (p.strip() for p in m.group(1).split(",")):
+        s = _SEGMENT.fullmatch(part)
+        if not s:
+            raise ValueError(f'SEND: "{part}" is not a segment; segments count from 0: 4, 4+ (and on), 4-8.')
+        lo = int(s.group(1))
+        hi = None if s.group(2) else int(s.group(3) or s.group(1))
+        if hi is not None and hi < lo:
+            raise ValueError(f"SEND: the segments {part} run backwards; write them as {hi}-{lo}.")
+        spans.append([lo, hi])
+    return spans
 
 
 def parse_send(text: str) -> Send:
-    m = _SEND.match(text.strip())
+    body, *rest = _FOR.split(text.strip(), maxsplit=1)
+    segments = parse_segments(rest[0]) if rest else None
+    m = _SEND.match(body)
     if not m or not m.group("frames"):
         raise ValueError(f'"SEND: {text.strip()}": write it as "SEND: frame 0 to image 3" '
                          'or "SEND: frames 2, 5, 34-46 to image 4".')
@@ -82,7 +115,7 @@ def parse_send(text: str) -> Send:
     image = int(target.group(1))
     if not 1 <= image <= SEND_SLOTS:
         raise ValueError(f"SEND: image {image} does not exist; Reference to Video takes image 1–{SEND_SLOTS}.")
-    return Send(parse_frames(m.group("frames")), image)
+    return Send(parse_frames(m.group("frames")), image, segments)
 
 
 @dataclass
@@ -123,21 +156,26 @@ class Reel:
     @property
     def send_slots(self) -> list[int]:
         """Every image a SEND: line fills."""
-        return sorted(send.image for block in self.blocks for send in block.sends)
+        return sorted({send.image for block in self.blocks for send in block.sends})
+
+    def starts(self) -> list[int | None]:
+        """The segment each chunk first plays in; None for chunks after one that repeats forever."""
+        out: list[int | None] = []
+        start: int | None = 0
+        for block in self.blocks:
+            out.append(start)
+            if start is not None:
+                start = None if block.repeat is None else start + block.repeat
+        return out
 
     def ready(self, segment: int) -> dict[int, dict]:
-        """The sent images that exist in `segment`: those of chunks that first played before it, each
-        with the segment its frames come from."""
+        """The sent images that exist in `segment`, each with the segment its frames come from: sent by a
+        chunk that first played before it, for a segment its `for` lists (any later one without)."""
         out: dict[int, dict] = {}
-        start = 0
-        for block in self.blocks:
-            if start >= segment:
-                break
+        for block, start in zip(self.blocks, self.starts(), strict=True):
             for send in block.sends:
-                out[send.image] = {"segment": start, "frames": list(send.frames)}
-            if block.repeat is None:
-                break
-            start += block.repeat
+                if any(lo <= segment and (hi is None or segment <= hi) for lo, hi in fills(send, start)):
+                    out[send.image] = {"segment": start, "frames": [list(f) for f in send.frames]}
         return out
 
     def label(self, segment: int) -> str:
@@ -167,14 +205,27 @@ def split_reel(src: str) -> Reel | None:
             blocks[-1].sends.append(parse_send(send.group(1)))
         else:
             (blocks[-1].lines if blocks else head).append(raw)
-    sender: dict[int, int] = {}
-    for i, block in enumerate(blocks):
+    reel = Reel(head, blocks)
+    claims: dict[int, list[tuple[int, list]]] = {}  # image → (chunk, segment spans) of each SEND: line
+    for i, (block, start) in enumerate(zip(blocks, reel.starts(), strict=True)):
         for send in block.sends:
-            if send.image in sender:
-                raise ValueError(f"image {send.image} is sent twice (CHUNK {sender[send.image] + 1} and CHUNK {i + 1}); "
-                                 "each image comes from one SEND: line.")
-            sender[send.image] = i
-    return Reel(head, blocks)
+            spans = fills(send, start)
+            for j, other in claims.get(send.image, []):
+                for (lo, hi), (olo, ohi) in ((a, b) for a in spans for b in other):
+                    first, ends = max(lo, olo), [x for x in (hi, ohi) if x is not None]
+                    if first <= min(ends, default=first):
+                        raise ValueError(f"image {send.image} is sent for segment {first} by two SEND: lines (CHUNK "
+                                         f"{j + 1} and CHUNK {i + 1}); give each segment one, with for segment ….")
+            claims.setdefault(send.image, []).append((i, spans))
+    return reel
+
+
+def fills(send: Send, start: int | None) -> list[list[int | None]]:
+    """The segments a SEND: line fills: those its `for` lists (all, without) after the one it is sent from."""
+    if start is None:
+        return []
+    first = start + 1
+    return [[max(lo, first), hi] for lo, hi in (send.segments or [[first, None]]) if hi is None or hi >= max(lo, first)]
 
 
 def derive(seed: int, segment: int) -> int:

@@ -39,6 +39,7 @@ const REEL = `# H3 REEL · quickstart: one screenplay, one clip per run, chained
 #   every later clip; wire the picks into Orrery Refs, and the frame comes out there from the next clip
 #   on, after the images the prompt names · NAME (image 1, image 3) in the CAST names it in the prompt
 #   too · frames 2, 5, 34-46 sends several at once · it keeps a face or an outfit the same across clips
+#   frame -1 is the last · … for segment 4+ (or 4-8, or 4, 6, 7) gives it to those clips only
 # Tips: describe recurring people and places again in every clip, the model has no memory ·
 #       end each clip on a simple, framed state (a closed door, curtains, the foot of a stair) ·
 #       no per-clip music: lay one score over the whole film afterwards

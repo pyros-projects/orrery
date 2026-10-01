@@ -622,7 +622,7 @@ class OrreryRefs:
         if dropped:
             many = len(dropped) > 1
             print(f"[orrery] SEND to image {n}: frame{'s' if many else ''} {', '.join(map(str, dropped))} "
-                  f"{'are' if many else 'is'} past the end of segment {segment}'s clip, so "
+                  f"{'are' if many else 'is'} not in segment {segment}'s clip, so "
                   f"{'they are' if many else 'it is'} left out.")
         return batch
 

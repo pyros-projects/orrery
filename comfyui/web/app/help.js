@@ -58,6 +58,7 @@ const REF = [
     ["$look~1", "$look as it was one clip ago (~2: two clips); the model who walks back keeps her look", "$look~1"],
     ["HANDOFF: MAYA reaches the door", "closes this chunk and opens the next with the same words", "HANDOFF: "],
     ["SEND: frames 2, 5, 34-46 to image 4", "ref2va: those frames of this chunk's clip (from 0, at 24 fps) become image 4 for every later clip; wire the picks into Orrery Refs and they come out there, after the images the prompt names; GIRL (image 1, image 4) in the CAST names them in the prompt too", "SEND: frame 0 to image "],
+    ["SEND: frame -1 to image 5 for segment 4+", "-1 is the clip's last frame (-24--1 its last second); for segment 4+ / 4-8 / 4, 6, 7 gives it to those clips only, so several lines can fill one image in turns", "SEND: frame -1 to image "],
     ["LORA: <lora:name:0.8>", "the lora_stack output, for any loader with a lora_stack input: lines before the first CHUNK always, a chunk's own only there; after LORA: the editor lists your LoRA files; <lora:name:model:clip> sets both strengths", "LORA: "],
     ["context: 22", "the frames Motion Context pins (5, 22, 39, 56); from the second chunk on, Shot 1 and length include them", "context: 22"],
     ["load_index · save_index", "wire them into Load and Save Latent's clip_index; segment counts up by itself, so Run count N (or Run Instant) plays the reel", ""],

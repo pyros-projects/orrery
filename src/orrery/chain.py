@@ -44,33 +44,47 @@ def clip_file(output: Path | str, latent_path: str, index: int) -> Path | None:
     return path
 
 
-def frame_picks(count: int, wanted: list[int]) -> tuple[list[int], list[int]]:
-    """(the frames kept, those past a clip of `count` frames); with none kept the last one stands in."""
-    kept, dropped = [f for f in wanted if f < count], [f for f in wanted if f >= count]
+def frame_picks(count: int, spans: list[list[int]]) -> tuple[list[int], list]:
+    """(the frames kept, those outside a clip of `count` frames, as written) for SEND: spans; a negative
+    frame counts from the end (-1 the last). With none kept the last frame stands in."""
+    kept, dropped = [], []
+    for first, last in spans:
+        a, b = (first + count if first < 0 else first), (last + count if last < 0 else last)
+        for i in range(a, b + 1):
+            if 0 <= i < count:
+                kept.append(i)
+            else:
+                dropped.append(i - count if first < 0 and last < 0 else i)
+        if a > b:
+            dropped.append(f"{first}-{last}")
     return (kept or ([count - 1] if count else [])), dropped
 
 
-def frames(path: Path, wanted: list[int]):
-    """(the frames a SEND: names as one IMAGE batch, those past the clip's end). Decodes only up to the
-    last frame named, and keeps only those, not the whole clip. ComfyUI only (torch)."""
+def frames(path: Path, spans: list[list[int]]):
+    """(the frames a SEND: names as one IMAGE batch, those outside the clip). Reads the clip's length from
+    the container (counting packets when it has none), then decodes only up to the last frame named and
+    keeps only those, not the whole clip. ComfyUI only (torch)."""
     import av
     import numpy as np
     import torch
 
-    want, got, count, last = set(wanted), {}, 0, None
+    with av.open(str(path)) as container:
+        stream = container.streams.video[0]
+        count = stream.frames or sum(1 for packet in container.demux(stream) if packet.size)
+    picks, dropped = frame_picks(count, spans)
+    if not picks:
+        raise ValueError(f"{path} has no video frames.")
+    want, got, last = set(picks), {}, None
     with av.open(str(path)) as container:
         for i, frame in enumerate(container.decode(container.streams.video[0])):
-            count, last = i + 1, frame
+            last = frame
             if i in want:
                 got[i] = frame.to_ndarray(format="rgb24")
             if i >= max(want):
                 break
-    picks, dropped = frame_picks(count, wanted)
-    if not picks:
-        raise ValueError(f"{path} has no video frames.")
-    if picks[0] not in got:  # the last frame, standing in
-        got[picks[0]] = last.to_ndarray(format="rgb24")
-    return torch.from_numpy(np.stack([got[i] for i in picks])).float() / 255.0, dropped
+    dropped += [i for i in picks if i not in got]  # the container counted more frames than it holds
+    kept = [got[i] for i in picks if i in got] or [last.to_ndarray(format="rgb24")]
+    return torch.from_numpy(np.stack(kept)).float() / 255.0, dropped
 
 
 def still_indices(frames: int, fps: float) -> list[int]:
