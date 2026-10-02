@@ -700,23 +700,33 @@ class Expander:
         return show(edges[k] + int(rng.random() * (edges[k + 1] - edges[k]))), labels[k]
 
     def _lora(self, tag: str) -> str:
-        """`<lora:style:0.4-0.9>` (and `:0.2-0.5` for CLIP): a strength rolled per run and recorded as a
-        pick of `<lora:style>`; any other tag as it is."""
+        """A LoRA tag with its strengths as values: `<lora:style:0.4-0.9>` rolls one, `<lora:style:{0.5|0.7}>`
+        and `<lora:style:$s>` take what rolled (a grid axis may fix it), `:…` after it the CLIP's. Such a
+        strength is a pick of `<lora:style>`, as a LoRA sweep records it; any other tag as it is. The name
+        stays as written (file names may hold __)."""
         if self._where and (swept := sweep_tags(tag)):  # a sweep runs only where the template writes it
             first = swept[0].variants()[0]
             where, grid = self._where[-1]
             shown = sweep_tag(swept[0], first) if first[0] or first[1] else ""
             self.warn(f"{tag} in {where} is a sweep, and a sweep runs only where the template writes it: it takes "
-                      f"{shown or 'it off'} there. To run every entry, write : grid {grid}.")
+                      f"{shown or 'it off'} there. To run every entry, write @grid {grid}.")
             return shown
         m = _LORA_PARTS.fullmatch(tag)
-        if not m or not any(part and _RANGE.fullmatch(part) for part in (m.group(2), m.group(3))):
+        parts = [m.group(2), m.group(3)] if m else []
+        rolled = [p is not None and any(c in p for c in ("{", "$", "__")) for p in parts]
+        before = len(self.picks)
+        parts = [self.expr(p) if r else p for p, r in zip(parts, rolled, strict=True)]
+        del self.picks[before:]  # the strength learns as `<lora:style>`, not as a `{0.5|0.7}` every LoRA shares
+        if not m or not any(rolled) and not any(p and _RANGE.fullmatch(p) for p in parts):
             return tag
         label, out, keys = f"<lora:{m.group(1).strip()}>", [], []
-        for which, part in (("", m.group(2)), (" clip", m.group(3))):
+        for which, part, was in (("", parts[0], rolled[0]), (" clip", parts[1], rolled[1])):
             if part is None:
                 continue
-            if r := _RANGE.fullmatch(part):
+            if was and not _RANGE.fullmatch(part):
+                keys.append(f"{label}{which}={part.strip()}")
+                out.append(part.strip())
+            elif r := _RANGE.fullmatch(part):
                 value, bin_ = self._number(r.group(1), r.group(2), label + which)
                 keys.append(f"{label}{which}={bin_}")
                 out.append(value)

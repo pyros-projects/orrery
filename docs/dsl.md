@@ -16,6 +16,7 @@ Every construct of orrery's template language, where libraries live, how Dynamic
 | `{0.4-0.9}`, `{2-6}` | a number in between (both included), at the decimals written; recorded as a pick that learns per value, or per tenth of a finer range (`0.40–0.44`) |
 | `<lora:style:0.4-0.9>` | a LoRA strength rolled per run, recorded as the pick `<lora:style>` (`:0.2-0.5` after it for CLIP); with a step (`0-1;0.1`) or a list it is a sweep instead ([wildcard-manager.md](wildcard-manager.md)) |
 | `@style(0.8)` | short for `<lora:style:0.8>`, with every strength form: `@style(0.4-0.9)`, `@style(0.5,0.7)`, `@style(1.0:0.5)` |
+| `<lora:style:{0.5\|0.7}>`, `<lora:style:$s>` | a strength is a value like any other: a choice, a binding, a grid axis (`@grid {0.5\|0.7}` is a LoRA sweep in grid form). It is recorded as the pick `<lora:style>`; the name stays as written |
 | `$hero = __animal__` | bind once, reuse everywhere |
 | `@lib crowd` + indented lines | a library of this template's own, `__crowd__`: each indented line an entry (a template itself; `- ` before it allowed). It shadows a library of the same name, travels with the preset, and the language model never writes it |
 | `@include effects/living_clay` + indented `room = the salon` | embed a preset where it stands; indented `key = value` lines turn its dials, so a preset is an operator with parameters (its `@h3` line gives way to yours) |

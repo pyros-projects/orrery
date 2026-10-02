@@ -216,3 +216,23 @@ def prepare(source: str, seed: int, libraries: Mapping[str, Library], cell: int 
     if found and cell is not None:
         source = apply_grid(source, found, cell)
     return apply_unique(source, seed, libraries, {a.expr for a in found})
+
+
+def plan(source: str, libraries: Mapping[str, Library]) -> dict:
+    """What Generate queues for a template: the LoRA sweep's runs (the outer loop) times the grid's
+    cells, how they come about (`2 × grid 3 × 2`, `(1 + 2) × grid 4`) and a name for the galaxy folder;
+    {"runs": 0} when it is one run."""
+    from orrery import sweep as sweeps
+    from orrery.dsl import strip_comments, with_inline
+
+    source, libraries = with_inline(long_form(strip_comments(source)), libraries)
+    loras = sweeps.runs(source)
+    found = axes(source, libraries) if parse(source).params.grid is not None else []
+    if not loras and not found:
+        return {"runs": 0}
+    lora = sweeps.formula(source) if loras else ""
+    parts = ([f"({lora})" if "+" in lora and found else lora] if loras else []) + \
+        ([f"grid {formula(found)}"] if found else [])
+    return {"runs": max(len(loras), 1) * (cells(found) if found else 1), "formula": " × ".join(parts),
+            "first": sweeps.tags(source)[0].name if loras else " × ".join(a.text for a in found).replace("/", "-")}
+

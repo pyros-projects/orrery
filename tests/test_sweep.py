@@ -105,3 +105,30 @@ def test_an_off_tag_leaves_one_space_between_what_stood_on_either_side():
     assert "a cat on a roof <lora:a:1> at night <lora:c:1> and more" in texts
     assert sweep.apply("<lora:a:0,1> starts", sweep.runs("<lora:a:0,1> starts")[0]) == "starts"
     assert sweep.apply("ends <lora:a:0,1>", sweep.runs("ends <lora:a:0,1>")[0]) == "ends"
+
+
+@pytest.mark.parametrize("template, runs, formula, first", [
+    ("<lora:a:0.5,1.0><lora:b:0.3,1>", 4, "2 × 2", "a"),
+    ("<lora:AmateurHour_01_rank16:0.5,1.0:solo><lora:AmateurHour_H3_000017500:0.5,1.0:solo>", 4, "2 + 2",
+     "AmateurHour_01_rank16"),
+    ("<lora:c:0.2,0.4><lora:a:0.5:solo><lora:b:0.7,0.9:solo>", 6, "2 × (1 + 2)", "c"),
+    ("<lora:a:0,1:solo><lora:b:0,1:solo>", 3, "2 + 2", "a"),
+    ("<lora:H3-Icy-real-v1_000004200:test>", 3, "3", "H3-Icy-real-v1_000004200"),
+    ("<lora:relim_v2_lora_500:0-1;0.1>", 11, "11", "relim_v2_lora_500"),
+    ("<lora:s:0.5,1.0:0.5,1.0>", 4, "4", "s"),
+    ("a @x(0.5,1.0)", 2, "2", "x"),
+])
+def test_generate_plans_a_lora_sweep_as_the_node_runs_it(template, runs, formula, first):
+    """Product, solo turns, zero is off, doubles once: what the app used to work out itself."""
+    from orrery.batch import plan
+
+    assert plan(template, {}) == {"runs": runs, "formula": formula, "first": first}
+
+
+@pytest.mark.parametrize("template", ["a cat <lora:b:0.8> <lora:d:0.4:0.7>", "# <lora:a:0.5,1.0>\na cat",
+                                      "a <lora:x:0.4-0.9>", "a <lora:x:{0.5|0.7}>"])
+def test_one_run_is_no_plan(template):
+    from orrery.batch import plan
+
+    assert plan(template, {}) == {"runs": 0}
+

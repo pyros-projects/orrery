@@ -17,7 +17,7 @@ from orrery import presets as ps
 from orrery.chain import DEFAULT_CHAIN
 from orrery.comfy_llm import can_write, llm_config, text_encoders
 from orrery.completion import completion_data
-from orrery.dsl import MissingLibrary, expand, override, parse, strip_comments
+from orrery.dsl import MissingLibrary, expand, override
 from orrery.h3 import compile_scene
 from orrery.home import BUILTIN_DIR, Home, home_setting, home_source, resolve_home, set_home_setting
 from orrery.library import NAME, Entry, Library, load_library
@@ -638,21 +638,13 @@ def _run(home: Home, text: str, seed: int, target: str, segment: int):
     return result, lint
 
 
-def grid_plan(home: Home, args: dict) -> dict:
-    """A template's `: grid`: its axes and how many runs it makes (no grid: 0 cells)."""
+def generate_plan(home: Home, args: dict) -> dict:
+    """What Generate queues: a LoRA sweep's runs times a grid's cells (orrery.batch.plan)."""
     from orrery import batch
-    from orrery.loras import long_form
 
     text, _ = _template_for(home, args)
-    source = long_form(strip_comments(text))
-    if parse(source).params.grid is None:
-        return {"cells": 0, "formula": "", "axes": []}
     try:
-        from orrery.dsl import with_inline
-
-        found = batch.axes(*with_inline(source, home.libraries()))
-        return {"cells": batch.cells(found), "formula": batch.formula(found),
-                "axes": [{"text": a.text, "count": len(a.options)} for a in found]}
+        return batch.plan(text, home.libraries())
     except ValueError as err:
         raise ApiError(400, str(err)) from None
 
@@ -780,7 +772,7 @@ ROUTES = [
     ("POST", "/orrery/galaxy/folder/rename", galaxy_folder_rename),
     ("POST", "/orrery/galaxy/folder/delete", galaxy_folder_delete),
     ("POST", "/orrery/roll", roll),
-    ("POST", "/orrery/grid", grid_plan),
+    ("POST", "/orrery/plan", generate_plan),
     ("POST", "/orrery/frequency", frequency),
     ("GET", "/orrery/home", home_settings),
     ("POST", "/orrery/home", home_save),

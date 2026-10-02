@@ -172,7 +172,7 @@ def test_a_sweep_in_an_entry_takes_its_first_strength_and_says_to_grid_instead()
     e = expand("a fox __sets__", 1, one("<lora:ink:0.5,1.0>"))
     assert e.text == "a fox <lora:ink:0.5>"
     [warning] = e.warnings
-    assert "<lora:ink:0.5,1.0> in an entry of __sets__ is a sweep" in warning and ": grid __sets__" in warning
+    assert "<lora:ink:0.5,1.0> in an entry of __sets__ is a sweep" in warning and "@grid __sets__" in warning
     assert expand("a fox __sets__", 1, one("<lora:ink:0-1;0.5>")).text.strip() == "a fox"  # its first strength is off
     assert expand("a fox <lora:ink:0.5,1.0>", 1, LIBS).warnings == []  # in the template it is a sweep, as ever
     h3 = compile_scene("@h3 t2va\nLORA: __sets__\nSHOT 5s: static\nA fox.", 1, one("<lora:ink:0.5,1.0>"))
@@ -205,3 +205,20 @@ def test_a_screenplay_and_the_writers_keep_directives_out_of_the_prose():
     h3 = compile_scene("@h3 t2va\n@size 832x1216\n@rng 1\nSHOT 5s: static\nA fox.", 1, LIBS)
     assert "@size" not in h3.text and "@rng" not in h3.text
     assert apply("describe", "# note\na photo\n@size 832x1216\n", "A fox in snow.") == "# note\nA fox in snow.\n@size 832x1216\n"
+
+
+# --- LoRA strengths are values (phase 7) -----------------------------------------------------
+
+def test_a_lora_strength_takes_a_choice_or_a_binding_and_learns_as_the_lora():
+    e = expand("a fox <lora:ink:{0.5|0.7}> <lora:clay:{0.5|0.7}>", 3, LIBS)
+    assert [p.label for p in e.picks] == ["<lora:ink>", "<lora:clay>"]  # not a `{0.5|0.7}` both would share
+    assert e.text == f"a fox <lora:ink:{e.picks[0].value}> <lora:clay:{e.picks[1].value}>"
+    assert expand("$s = {0.3|0.9}\n<lora:ink:$s>", 1, LIBS).text in ("<lora:ink:0.3>", "<lora:ink:0.9>")
+    assert expand("<lora:my__file:{1.0}:{0.4}>", 1, LIBS).text == "<lora:my__file:1.0:0.4>"  # the name stays as written
+
+
+def test_a_grid_over_a_lora_strength_is_a_lora_sweep():
+    t = "a fox <lora:ink:{0.5|0.7|1.0}>\n@grid {0.5|0.7|1.0}"
+    assert [expand(t, 1, LIBS, cell=c).text for c in range(3)] == ["a fox <lora:ink:0.5>", "a fox <lora:ink:0.7>",
+                                                                   "a fox <lora:ink:1.0>"]
+    assert batch.plan(t, LIBS) == {"runs": 3, "formula": "grid 3", "first": "{0.5|0.7|1.0}"}

@@ -2,7 +2,7 @@
 import { inlineLibraries, suggest } from "../orrery-complete.js";
 import { esc, highlight } from "./highlight.js";
 import { icon } from "./icons.js";
-import { applyDials, chunkInfo, dials, folderColor, pickerGroups, shape, stats, stripComments, sweepPlan, matches, templateHash } from "./model.js";
+import { applyDials, chunkInfo, dials, folderColor, pickerGroups, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
 import { thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
 import { STARTERS } from "./starters.js";
@@ -12,7 +12,7 @@ import { layoutTimeline, loadChain, scrollTimeline, wireTimeline } from "./timel
 import { openWrite, writeMenuHTML } from "./write.js";
 
 function statsHTML(app) {
-  const st = stats(app.text), out = shape(app.text), reel = st.h3?.reel, plan = planOf(app), grid = gridOf(app);
+  const st = stats(app.text), out = shape(app.text), reel = st.h3?.reel, plan = planOf(app), planned = planData(app);
   const wired = /^\s*(:\s*.*\b[wh]\d|@size\b)/m.test(app.text) ? [] : app.bridge.frames?.() || [];  // `@size` wins
   const outs = (app.data.rows || []).filter((r) => r.template === templateHash(app.text)).length;
   const forever = reel && reel.clips === Infinity;
@@ -28,7 +28,7 @@ function statsHTML(app) {
     + (wired.length
       ? `<span class="stat" title="Width and height take the shape of the ${wired[0].replace("_", " ")} wired into the node, at the header's megapixels or H3's canvas area, so H3 does not stretch or crop it; the size is known when the node runs">→ size from the <b>${wired[0].replace("_", " ")}</b>${headerMP(app.text) ? ` · ${out.megapixels} MP` : ""}${frames}</span>`
       : `<span class="stat" title="The node's width, height, length and megapixels outputs${reel ? "; from the second chunk on, length includes the 22 frames the clip continues from" : ""}">→ <b>${out.width}×${out.height}</b> · ${out.megapixels} MP${frames}</span>`)
-    + (grid?.error ? `<span class="stat warn" title="${esc(grid.error)}">${esc(grid.error)}</span>` : "")
+    + (planned?.error ? `<span class="stat warn" title="${esc(planned.error)}">${esc(planned.error)}</span>` : "")
     + `${out.cli.length ? `<span class="stat cli" title="In ComfyUI, use the Run count and the seed widget">${esc(out.cli.join(" "))}: CLI only</span>` : ""}<span class="grow"></span>`
     + `${outs ? `<button class="btn ghost" data-act="outputs">${icon("image")}${outs} output${outs === 1 ? "" : "s"}</button>` : ""}`
     + `<button class="btn" data-act="test" title="Roll it in the Test tab: a few seeds, or a reel's clips">${icon("dice")}Test</button>`
@@ -135,15 +135,7 @@ export function renderPrompt(app) {
     if (act === "saveas") openSave(app, { text: applyDials(app.text, app.bridge.getParams()), from: app.preset, link: true });
     if (act === "test") { app.go("test"); runRolls(app); }
     if (act === "stopsweep") return app.bridge.stopGenerate();
-    if (act === "generate" && planOf(app)) return generateSweep(app);
-    if (act === "generate") {
-      const runs = repeats(app);
-      app.bridge.generate(runs).then((n) => {
-        if (!n) app.toast("Nothing to generate: connect this node's outputs toward a Save or Preview node.");
-        else if (runs > 1 && n === runs) app.toast(`Queued <b>${runs}</b> runs`);  // fewer: Restart stopped it and says so
-        refreshFoot(app);
-      }).catch((err) => app.fail(err));
-    }
+    if (act === "generate") return generate(app);
     if (act === "restart") restart(app);
     if (act === "jump") jumpToChunk(app);
     if (act === "tlview") { app.bridge.props.orrery_tl_view = cellsView(app) ? "beside" : "below"; return renderPrompt(app); }
@@ -167,7 +159,18 @@ export function renderPrompt(app) {
   wireDials(app);
   fixReelSeed(app);
   fixUniqueSeed(app);
-  refreshGrid(app);
+  refreshPlan(app);
+}
+
+async function generate(app) {
+  await ensurePlan(app);
+  if (planOf(app)) return generateSweep(app);
+  const runs = repeats(app);
+  app.bridge.generate(runs).then((n) => {
+    if (!n) app.toast("Nothing to generate: connect this node's outputs toward a Save or Preview node.");
+    else if (runs > 1 && n === runs) app.toast(`Queued <b>${runs}</b> runs`);  // fewer: Restart stopped it and says so
+    refreshFoot(app);
+  }).catch((err) => app.fail(err));
 }
 
 async function restart(app) {
@@ -176,6 +179,7 @@ async function restart(app) {
     const cancelled = await app.bridge.cancelRuns();
     app.run = null;
     app.bridge.setSegment(0);
+    await ensurePlan(app);
     if (planOf(app)) return generateSweep(app, cancelled);
     const runs = repeats(app);
     if (!(await app.bridge.generate(runs))) return app.toast("Nothing to generate: connect this node's outputs toward a Save or Preview node.");
@@ -256,7 +260,7 @@ function jumpToChunk(app) {
 }
 
 export function refreshFoot(app) {
-  refreshGrid(app);  // a dial or an edit can change the grid's count
+  refreshPlan(app);  // a dial or an edit can change what Generate queues
   const foot = app.view.querySelector(".pfoot");
   if (foot) foot.innerHTML = statsHTML(app);
 }
@@ -268,27 +272,36 @@ function fixUniqueSeed(app) {
   app.toast("@unique: control after generate set to <b>increment</b>, so each run of a batch gets another value");
 }
 
-// A `: grid`'s cells are counted by the server (it knows the libraries); the count, or why the grid
-// cannot run, is kept for the template and dials it was counted for.
-const gridKey = (app) => `${app.text}\n${JSON.stringify(app.bridge.getParams())}`;
-const gridOf = (app) => (app.data.grid?.key === gridKey(app) ? app.data.grid : null);
-const planOf = (app) => { const g = gridOf(app); return sweepPlan(app.text, g && !g.error ? g : null); };
+// What Generate queues (a LoRA sweep's runs times a grid's cells) is planned by the server, which knows
+// the libraries; the plan, or why it cannot run, is kept for the template and dials it was made for.
+const planKey = (app) => `${app.text}\n${JSON.stringify(app.bridge.getParams())}`;
+const planData = (app) => (app.data.plan?.key === planKey(app) ? app.data.plan : null);
+const planOf = (app) => { const p = planData(app); return p && !p.error && p.runs ? p : null; };
 
-function refreshGrid(app) {
-  if (!/^\s*(:\s*grid|@grid)\b/m.test(stripComments(app.text))) { app.data.grid = null; return; }
-  const key = gridKey(app);
-  if (app.data.grid?.key === key || app.state.gridKey === key) return;
-  app.state.gridKey = key;
-  clearTimeout(app.state.gridTimer);
-  app.state.gridTimer = setTimeout(async () => {
-    let got;
-    try { got = await app.api.grid({ template: app.text, target: app.bridge.getTarget(), params: app.bridge.getParams() }); }
-    catch (err) { got = { error: err.message }; }
-    if (gridKey(app) !== key) return;
-    app.state.gridKey = null;
-    app.data.grid = { ...got, key };
+async function fetchPlan(app) {
+  const key = planKey(app);
+  let got;
+  try { got = await app.api.plan({ template: app.text, target: app.bridge.getTarget(), params: app.bridge.getParams() }); }
+  catch (err) { got = { error: err.message }; }
+  if (planKey(app) === key) app.data.plan = { ...got, key };
+}
+
+function refreshPlan(app) {
+  if (!PLAN_HINT.test(stripComments(app.text))) { app.data.plan = null; return; }
+  const key = planKey(app);
+  if (app.data.plan?.key === key || app.state.planKey === key) return;
+  app.state.planKey = key;
+  clearTimeout(app.state.planTimer);
+  app.state.planTimer = setTimeout(async () => {
+    await fetchPlan(app);
+    if (app.state.planKey === key) app.state.planKey = null;
     if (app.state.tab === "prompt") refreshFoot(app);
   }, 250);
+}
+
+// Generate can come before the plan: it waits for it.
+async function ensurePlan(app) {
+  if (PLAN_HINT.test(stripComments(app.text)) && !planData(app)) await fetchPlan(app);
 }
 
 // A reel runs as one clip per queue; a seed that changes between clips would reroll its bindings.

@@ -364,7 +364,7 @@ def test_a_field_is_a_template_rolled_once_when_it_is_bound():
 def test_a_sweep_in_a_field_takes_its_first_strength_and_says_to_grid_the_binding():
     libs = {"pose": Library("pose", [Entry("split", props=(("loras", "<lora:split:0.5,1.0>"),))])}
     e = expand("$p = __pose__\n$p.loras", 1, libs)
-    assert e.text == "<lora:split:0.5>" and "in $p.loras is a sweep" in e.warnings[0] and ": grid $p" in e.warnings[0]
+    assert e.text == "<lora:split:0.5>" and "in $p.loras is a sweep" in e.warnings[0] and "@grid $p" in e.warnings[0]
 
 
 def test_a_filter_can_depend_on_what_was_rolled_before():

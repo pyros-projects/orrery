@@ -59,7 +59,7 @@ def test_routes_cover_the_contract():
         ("GET", "/orrery/history"),
         ("GET", "/orrery/writers"),
         ("POST", "/orrery/writers"),
-        ("POST", "/orrery/grid"),
+        ("POST", "/orrery/plan"),
     }
 
 
@@ -677,12 +677,13 @@ def test_the_history_lists_runs_newest_first_and_searches(home):
     assert ok(home, webapi.history_runs, q="heron", offset="1")["runs"][0]["seed"] == 1
 
 
-def test_the_grid_counts_its_runs_for_generate(home):
-    body = ok(home, webapi.grid_plan, template="a __animal__ at {dawn|noon}\n: grid __animal__ × {dawn|noon}")
-    assert body == {"cells": 6, "formula": "3 × 2", "axes": [{"text": "__animal__", "count": 3},
-                                                             {"text": "{dawn|noon}", "count": 2}]}
-    assert ok(home, webapi.grid_plan, template="a __animal__")["cells"] == 0
-    status, body = api(home, webapi.grid_plan, template="a __animal__\n: grid __style__")
+def test_generate_plans_a_lora_sweep_times_a_grid(home):
+    body = ok(home, webapi.generate_plan, template="a __animal__ at {dawn|noon} @x(0.5,1.0)\n@grid __animal__ × {dawn|noon}")
+    assert body == {"runs": 12, "formula": "2 × grid 3 × 2", "first": "x"}
+    assert ok(home, webapi.generate_plan, template="a __animal__ at {dawn|noon}\n@grid {dawn|noon}") == \
+        {"runs": 2, "formula": "grid 2", "first": "{dawn|noon}"}
+    assert ok(home, webapi.generate_plan, template="a __animal__")["runs"] == 0
+    status, body = api(home, webapi.generate_plan, template="a __animal__\n@grid __style__")
     assert status == 400 and "doesn't use it" in body["error"]
 
 

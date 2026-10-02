@@ -95,8 +95,9 @@ once (see below). Sweeps sweep only where the template writes them: one in an
 entry takes its first strength and warns.
 
 **Grids.** `@grid __style__ × {dawn|noon}` sweeps picks the way a LoRA sweep
-sweeps strengths: one run per combination, everything else rolled the same, so
-the cells compare. The server counts the cells (it knows the libraries), the
+sweeps strengths, and a LoRA strength can be one of its axes
+(`<lora:x:{0.5|0.7}>` with `@grid {0.5|0.7}`): one run per combination, everything else rolled the same, so
+the cells compare. The server plans both (it knows the libraries), the
 button says `Generate ×12 · sweep 2 × grid 3 × 2` with a LoRA sweep in the
 template too (its runs the outer loop), and the outputs land in the same kind
 of galaxy folder. A grid that cannot run says why in the footer.
