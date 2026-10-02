@@ -1,0 +1,24 @@
+name: Task
+description: A technical or organisational task
+labels: ["type:task", "status:ready-for-refinement"]
+
+body:
+  - type: textarea
+    id: task_description
+    attributes:
+      label: Task
+      description: What should be done? One slice is at most 8 hours of work for a person; split anything bigger.
+      placeholder: A short description of the task.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance criteria
+      description: When is the task done?
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
