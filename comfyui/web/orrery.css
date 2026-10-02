@@ -99,6 +99,7 @@
 .orrery-app .t-var { color: var(--rose); }
 .orrery-app .t-lib.t-new { text-decoration: underline dashed var(--violet); text-underline-offset: 3px; }
 .orrery-app .t-lora { color: var(--sky); }
+.orrery-app .t-esc { color: var(--muted); }
 .orrery-app .t-brace { color: var(--violet); }
 .orrery-app .t-kw, .orrery-app .t-head { color: var(--sky); }
 .orrery-app .t-kw { font-weight: 500; }

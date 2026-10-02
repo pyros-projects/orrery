@@ -10,7 +10,7 @@ Every construct of orrery's template language, where libraries live, how Dynamic
 | `__characters/cyberpunk#gender:female__` | only entries with that property (`props: {gender: female}` in the YAML, or `gender:female` typed into an entry's tag field); several `#key:value` must all match, in any case |
 | `{a\|b\|c:3}` | inline choice; `:3` is a static weight (Dynamic Prompts' `{3::c\|a\|b}` works too) |
 | `{\|red }car` | an empty option makes a word optional; the other options keep their spaces |
-| `{1-2$$__style__}` | pick 1–2 distinct values |
+| `{1-2$$__style__}` | pick 1–2 distinct values, joined with `, `; `{2$$ and $$a\|b\|c}` joins them with ` and ` (Dynamic Prompts' form) |
 | `{0.4-0.9}`, `{2-6}` | a number in between (both included), at the decimals written; recorded as a pick that learns per value, or per tenth of a finer range (`0.40–0.44`) |
 | `<lora:style:0.4-0.9>` | a LoRA strength rolled per run, recorded as the pick `<lora:style>` (`:0.2-0.5` after it for CLIP); with a step (`0-1;0.1`) or a list it is a sweep instead ([wildcard-manager.md](wildcard-manager.md)) |
 | `@style(0.8)` | short for `<lora:style:0.8>`, with every strength form: `@style(0.4-0.9)`, `@style(0.5,0.7)`, `@style(1.0:0.5)` |
@@ -22,6 +22,7 @@ Every construct of orrery's template language, where libraries live, how Dynamic
 | `{? $w.kind=rain: wet\|dry}` | a choice made by a condition instead of the dice |
 | `> make it moody and cinematic` | with a language model set in the node, it rewrites the rolled prompt as asked; in a screenplay a `>` before the first `SHOT` rewrites every shot's prose and one inside a `SHOT` only that shot's, never dialogue. The CLI records it with the picks |
 | `--one detail, 5 to 8 words--` | a slot: the language model writes it where it stands, after everything else has rolled (see [wildcard-manager.md](wildcard-manager.md)) |
+| `\{` `\}` `\|` `\$` `\__` `\@` `\#` `\\` | the character as written, not syntax: `a sign reading \{OPEN\}`, `\__init__` |
 | `# a note` | a comment: a line starting with `#` never reaches the model (filters like `__lib#key:value__` are not comments) |
 | `: x8 seed=100 w1216 h832` | batch parameters (`x8` and `seed=` are for the CLI; in ComfyUI the Run count and the seed widget) |
 | `: grid __style__ × {dawn\|noon}` | every combination, one run each (3 styles × 2 = 6); everything else rolls the same in all of them. Axes: a library (with its `[tags]`), a choice, or a binding (`$hero`). Generate in the node queues them all, times a LoRA sweep; the CLI prints every cell per seed; Test rolls the axes like any pick |

@@ -11,7 +11,7 @@ from pathlib import PurePosixPath
 
 TAG = re.compile(r"<lora:([^:<>]+):([^:<>]+)(?::([^:<>]+))?>")
 # @style(0.8) is <lora:style:0.8>; @style(0.4-0.9), @style(0.5,0.7), @style(1.0:0.5) as their long forms
-SHORT = re.compile(r"(?<![\w@<])@([\w./\\-]+)\(([^()<>]*)\)")
+SHORT = re.compile(r"(?<![\w@<\\])@([\w./\\-]+)\(([^()<>]*)\)")
 NOT_LORAS = {"include", "h3"}
 EXTENSIONS = (".safetensors", ".ckpt", ".pt", ".bin")
 

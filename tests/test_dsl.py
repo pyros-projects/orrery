@@ -409,3 +409,23 @@ def test_a_name_that_is_not_bound_stays_as_written_and_warns():
     assert e.text == "[$b] [owl] [$nope] [] $5 off"
     assert [w.split(" is not bound")[0] for w in e.warnings] == ["$b", "$nope"]
     assert expand("$b = owl\n$a = $b\n[$a]", 1, {}).warnings == []
+
+
+# --- second pass: bugs (docs/plan-dsl-2.md, phase 1) -------------------------------------------
+
+def test_a_weighted_optional_keeps_its_space():
+    assert {expand("a fox{ in the rain:3|:7}", s, {}).text for s in range(40)} == {"a fox", "a fox in the rain"}
+
+
+def test_dynamic_prompts_joiner():
+    assert expand("{2$$ and $$a|b|c}", 1, {}).text.count(" and ") == 1
+    three = expand("{3$$ / $$__style__}", 1, LIBS)
+    assert sorted(three.text.split(" / ")) == ["cyanotype", "gouache", "linocut"] and three.picks[0].value == three.text
+
+
+def test_a_backslash_writes_the_character_as_it_is():
+    e = expand("json \\{a|b\\} and \\__init__ and \\$HOME, one \\\\ and \\<lora:x:1> and \\@x(1)", 1, LIBS)
+    assert e.text == "json {a|b} and __init__ and $HOME, one \\ and <lora:x:1> and @x(1)" and not e.picks and not e.warnings
+    assert wanted_libraries("a \\__init__ and __animal__") == {"animal": 0}
+    libs = {"sign": Library("sign", [Entry("a sign reading \\{OPEN\\}")])}
+    assert expand("$s = __sign__\n$s, again $s", 1, libs).text == "a sign reading {OPEN}, again a sign reading {OPEN}"

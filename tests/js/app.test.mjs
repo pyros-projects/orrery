@@ -410,3 +410,10 @@ test("Generate plans a grid's cells, alone or times a LoRA sweep", () => {
   assert.equal(sweepPlan("a <lora:x:0.4-0.9>"), null);  // a range rolls per run: no sweep
 });
 
+
+test("a backslash keeps a character from being syntax, in the editor too", () => {
+  const html = highlight("\\{a|b\\} \\__init__ __creature__ \\@x(1)", known);
+  assert.match(html, /<span class="t-esc"[^>]*>\\\{<\/span>/);
+  assert.doesNotMatch(html, /t-lib[^"]*">__init__/);
+  assert.equal(longForm("\\@x(1) @y(2)"), "\\@x(1) <lora:y:2>");
+});

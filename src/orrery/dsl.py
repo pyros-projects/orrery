@@ -24,7 +24,7 @@ _BRACE = re.compile(r"\{([^{}]*)\}")
 FIX = "\x1f"  # FIX n FIX inside a library or a brace: the draw lands on option n (grids, unique=; see orrery.batch)
 # __name[tags]:N__(directions): N = at least N entries; (directions) guide the model that writes the
 # library and never reach the prompt. [tags]: `myth` · `myth,!bird` (all, none of) · `water|deep_sea` (either).
-_LIB = re.compile(r"__(\w+(?:/\w+)*)(?:\[([\w,|!-]+)\])?((?:#[\w-]+:\$?[\w.-]+)*)(?::(\d+))?(?:\x1f(\d+)\x1f)?__"
+_LIB = re.compile(r"(?<!\\)__(\w+(?:/\w+)*)(?:\[([\w,|!-]+)\])?((?:#[\w-]+:\$?[\w.-]+)*)(?::(\d+))?(?:\x1f(\d+)\x1f)?__"
                   r"(?:\(([^()]*)\))?")
 _VAR = re.compile(r"\$([A-Za-z_]\w*)(?:~(\d+))?(?:\.([A-Za-z_][\w-]*))?")  # $x, $x~N (N clips ago), $x.field
 # `$w.kind=rain,snow`, `$w!=x`: a condition on a binding's text or on a property of its pick
@@ -33,7 +33,9 @@ _GUARD = re.compile(rf"^\?\s*{_COND}\s*:\s*(.*)$", re.DOTALL)  # ? cond: a line 
 _IF = re.compile(rf"^\?\s*{_COND}\s*:(.*)$", re.DOTALL)  # {? cond: then|else}
 _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
 _BINDING_LINE = re.compile(r"^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$")
-_MULTI = re.compile(r"^(\d+)(?:-(\d+))?\$\$(.+)$")
+_MULTI = re.compile(r"^(\d+)(?:-(\d+))?\$\$(?:(.*?)\$\$)?(.+)$")  # {2$$ and $$a|b|c}: Dynamic Prompts' joiner
+_ESCAPE = re.compile(r"\\([{}|$_@#\[\]\\<>])")  # \{ \__ \$ …: the character as written
+_ESCAPED = re.compile("\ue000(\\d+)\ue001")
 _WEIGHTED = re.compile(r"^(.*?):(\d+(?:\.\d+)?)$")
 _DP_WEIGHT = re.compile(r"^\s*(\d+(?:\.\d+)?)::(.*)$", re.DOTALL)  # Dynamic Prompts: {3::red|1::blue}
 _LIB_ONLY = re.compile(r"^__(\w+(?:/\w+)*)(?:\[([\w,|!-]+)\])?((?:#[\w-]+:\$?[\w.-]+)*)(?::\d+)?__(?:\([^()]*\))?$")
@@ -244,6 +246,8 @@ class Expander:
         self._within: list[str] = []  # the libraries whose entry is being expanded, outermost first
         self._where: list[tuple[str, str]] = []  # (what is being expanded, the grid that would run all of it)
         self._fields_open: list[str] = []  # the fields being rolled, so two that read each other are caught
+        self._depth = 0  # expressions within expressions (an entry, a field): escapes come back at 0
+        self._escaped: list[str] = []
         self.warnings: list[str] = []  # a reel's expanders share their world's list
 
     def warn(self, message: str) -> None:
@@ -309,16 +313,27 @@ class Expander:
     def expr(self, text: str, label_prefix: str = "") -> str:
         if "\n" not in text and (text := self.guarded(text)) is None:
             return ""
-        tags: list[str] = []
-        text = _LORA_TAG.sub(lambda m: tags.append(self._lora(m.group(0))) or f"\x00{len(tags) - 1}\x00", text)
-        first = len(self.picks)
-        text = self._expand(text, label_prefix)
-        if not tags:
-            return text
-        show = lambda s: _HIDDEN.sub(lambda m: tags[int(m.group(1))], s)
-        self.picks[first:] = [Pick(show(p.label), show(p.value), tuple(show(k) for k in p.keys))
-                              for p in self.picks[first:]]
-        return show(text)
+        outermost, first = not self._depth, len(self.picks)
+        self._depth += 1
+        try:
+            # escaped characters wait as placeholders until the outermost expression is done, so no
+            # later pass (an entry's text, a binding's value) reads them as syntax
+            text = _ESCAPE.sub(lambda m: self._escaped.append(m.group(1)) or f"\ue000{len(self._escaped) - 1}\ue001", text)
+            tags: list[str] = []
+            text = _LORA_TAG.sub(lambda m: tags.append(self._lora(m.group(0))) or f"\x00{len(tags) - 1}\x00", text)
+            text = self._expand(text, label_prefix)
+        finally:
+            self._depth -= 1
+        shows = []
+        if tags:
+            shows.append(lambda s: _HIDDEN.sub(lambda m: tags[int(m.group(1))], s))
+        if outermost and self._escaped:
+            shows.append(lambda s: _ESCAPED.sub(lambda m: self._escaped[int(m.group(1))], s))
+        for show in shows:
+            self.picks[first:] = [Pick(show(p.label), show(p.value), tuple(show(k) for k in p.keys))
+                                  for p in self.picks[first:]]
+            text = show(text)
+        return text
 
     def _expand(self, text: str, label_prefix: str) -> str:
         for _ in range(MAX_CHOICES):
@@ -424,20 +439,22 @@ class Expander:
             then, otherwise = (split_options(m.group(5), 1) + [""])[:2]
             return (then if self.holds(*m.group(1, 2, 3, 4)) else otherwise).strip()
         if m := _MULTI.match(inner):
-            return self._multi(int(m.group(1)), int(m.group(2) or m.group(1)), m.group(3).strip())
+            return self._multi(int(m.group(1)), int(m.group(2) or m.group(1)), m.group(4).strip(),
+                               ", " if m.group(3) is None else m.group(3))
         if m := _RANGE.fullmatch(inner):
             family = "{" + inner.strip() + "}"
             value, bin_ = self._number(m.group(1), m.group(2), family)
             self.picks.append(Pick(family, value, (f"{family}={bin_}",)))
             return value
         raws = split_options(inner)
-        keep = len(raws) > 1 and any(not raw.strip() for raw in raws)  # `{|red }car`: an optional word
         options = []
         for raw in raws:
             wm, dp = _WEIGHTED.match(raw), _DP_WEIGHT.match(raw)
-            value, weight = (dp.group(2), float(dp.group(1))) if dp else \
-                (wm.group(1), float(wm.group(2))) if wm else (raw, 1.0)
-            options.append((value if keep else value.strip(), weight))
+            options.append((dp.group(2), float(dp.group(1))) if dp else
+                           (wm.group(1), float(wm.group(2))) if wm else (raw, 1.0))
+        # `{|red }car`, `{ in the rain:3|:7}`: an empty option makes the others optional words, spaces kept
+        if not (len(options) > 1 and any(not value.strip() for value, _ in options)):
+            options = [(value.strip(), weight) for value, weight in options]
         # Labels and learned keys leave `(directions)` out: editing them must not rename the choice.
         family = without_directions("{" + "|".join(v for v, _ in options) + "}")
         weights = [w * self.learned(f"{family}={without_directions(v)}") for v, w in options]
@@ -447,7 +464,7 @@ class Expander:
         self.picks.append(Pick(family, shown, (f"{family}={shown}",)))
         return value
 
-    def _multi(self, lo: int, hi: int, source: str) -> str:
+    def _multi(self, lo: int, hi: int, source: str, joiner: str = ", ") -> str:
         n = lo + int(self.rng.random() * (hi - lo + 1))
         if lm := _LIB_ONLY.match(source):
             family, pool3 = self._pool(lm.group(1), lm.group(2), lm.group(3))
@@ -462,9 +479,9 @@ class Expander:
             i = weighted_pick([w for _, w in pool], self.rng)
             chosen.append(pool.pop(i)[0])
         span = str(lo) if lo == hi else f"{lo}–{hi}"
-        self.picks.append(Pick(f"{family} ×{span}", without_directions(", ".join(chosen)),
+        self.picks.append(Pick(f"{family} ×{span}", without_directions(joiner.join(chosen)),
                                tuple(f"{family}={without_directions(v)}" for v in chosen)))
-        return ", ".join(chosen)
+        return joiner.join(chosen)
 
 
     def _number(self, lo: str, hi: str, family: str) -> tuple[str, str]:
