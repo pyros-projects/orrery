@@ -10,9 +10,18 @@ import re
 from pathlib import PurePosixPath
 
 TAG = re.compile(r"<lora:([^:<>]+):([^:<>]+)(?::([^:<>]+))?>")
+# @style(0.8) is <lora:style:0.8>; @style(0.4-0.9), @style(0.5,0.7), @style(1.0:0.5) as their long forms
+SHORT = re.compile(r"(?<![\w@<])@([\w./\\-]+)\(([^()<>]*)\)")
+NOT_LORAS = {"include", "h3"}
 EXTENSIONS = (".safetensors", ".ckpt", ".pt", ".bin")
 
 Stack = list[tuple[str, float, float]]
+
+
+def long_form(text: str) -> str:
+    """Every `@name(strength)` as the `<lora:name:strength>` that LoRA loaders and orrery's sweeps read."""
+    return SHORT.sub(lambda m: m.group(0) if m.group(1).lower() in NOT_LORAS else f"<lora:{m.group(1)}:{m.group(2).strip()}>",
+                     text or "")
 
 
 def lora_files() -> list[str]:

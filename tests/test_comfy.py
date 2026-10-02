@@ -798,6 +798,24 @@ def test_run_without_generate_takes_the_first_and_says_how_many_there_are(home):
         OrreryPrompt().run(SWEEP, 5, "text", home=str(home), sweep="7|x")
 
 
+GRID = "a __animal__ in __style__\n: grid __style__"
+
+
+def test_a_grid_runs_one_cell_per_sweep_run_and_multiplies_with_a_lora_sweep(home):
+    texts = [OrreryPrompt().run(GRID, 5, "text", home=str(home), sweep=f"{i}|g")[0] for i in range(2)]
+    animal = texts[0].split()[1]
+    assert texts == [f"a {animal} in linocut", f"a {animal} in gouache"]
+    both = GRID.replace("__style__\n", "__style__ @x(0.5,1.0)\n")
+    runs = [OrreryPrompt().run(both, 5, "text", home=str(home), sweep=f"{i}|g") for i in range(4)]
+    assert [r[0].split(" in ")[1] for r in runs] == ["linocut <lora:x:0.5>", "gouache <lora:x:0.5>",
+                                                     "linocut <lora:x:1>", "gouache <lora:x:1>"]
+    assert json.loads(runs[3][1])["sweep"] == {"run": 3, "runs": 4}
+    lint = json.loads(OrreryPrompt().run(both, 5, "text", home=str(home))[1])["lint"]
+    assert any("LoRA sweep and grid: 4 runs (2 × 2)" in i["message"] for i in lint)
+    with pytest.raises(ValueError, match="run 4"):
+        OrreryPrompt().run(both, 5, "text", home=str(home), sweep="4|g")
+
+
 def test_every_sweep_run_is_a_new_run_for_comfyui():
     a = OrreryPrompt.IS_CHANGED(SWEEP, 5, "text", sweep="0|x")
     assert a != OrreryPrompt.IS_CHANGED(SWEEP, 5, "text", sweep="1|x")

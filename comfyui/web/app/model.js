@@ -62,9 +62,31 @@ export const templateHash = (text) => sha256(new TextEncoder().encode(text)).sli
 // `# …` lines are comments (as in wildcard files): the node drops them before anything rolls.
 export const stripComments = (text) => text.split("\n").filter((l) => !/^\s*#/.test(l)).join("\n");
 
+// `@style(0.8)` is `<lora:style:0.8>`, as orrery.loras.long_form writes it (not @include or @h3).
+export const longForm = (text) => text.replace(/(?<![\w@<])@([\w./\\-]+)\(([^()<>]*)\)/g,
+  (m, name, spec) => (/^(include|h3)$/i.test(name) ? m : `<lora:${name}:${spec.trim()}>`));
+
+// A brace's options: split at `|`, but not inside `[...]` (`{__a[x|y]__|b}` has two). Mirrors orrery.dsl.split_options.
+export function splitOptions(inner) {
+  const out = [];
+  let depth = 0, start = 0;
+  [...inner].forEach((ch, i) => {
+    if (ch === "[") depth++;
+    else if (ch === "]" && depth) depth--;
+    else if (ch === "|" && !depth) { out.push(inner.slice(start, i)); start = i + 1; }
+  });
+  return [...out, inner.slice(start)];
+}
+
+// `[myth]` · `[myth,!bird]` every term holds · `[water|deep_sea]` either does. Mirrors orrery.dsl.tags_match.
+export const tagsMatch = (spec, tags) => !spec || spec.split(",").every((term) => {
+  const alts = term.split("|").filter(Boolean);
+  return !alts.length || alts.some((a) => (a.startsWith("!") ? !tags.includes(a.slice(1)) : tags.includes(a)));
+});
+
 export function stats(raw) {
-  const text = stripComments(raw).replace(/<lora:[^<>]*>/g, "<lora>");
-  const libs = [...text.matchAll(/__(\w+(?:\/\w+)*)(?:\[[\w-]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__/g)];
+  const text = longForm(stripComments(raw)).replace(/<lora:[^<>]*>/g, "<lora>");
+  const libs = [...text.matchAll(/__(\w+(?:\/\w+)*)(?:\[[\w,|!-]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__/g)];
   const rolls = (text.match(/\{/g) || []).length + libs.length;
   const binds = (text.match(/^\s*\$\w+\s*=/gm) || []).length;
   let h3 = null;
@@ -306,8 +328,9 @@ const BINDING_LINE = /^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$/;
 export function dials(text) {
   const seen = new Set();  // a binding set in several chunks is one dial; override() turns them all
   return text.split("\n").map((l) => BINDING_LINE.exec(l)).filter((m) => m && !seen.has(m[2]) && seen.add(m[2])).map((m) => {
-    const expr = m[4].trim(), lib = /^__(\w+(?:\/\w+)*)(?:\[([\w-]+)\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\([^()]*\))?$/.exec(expr), brace = /^\{([^{}]*)\}$/.exec(expr);
-    const options = brace && !brace[1].includes("$$") ? brace[1].split("|").map((o) => o.replace(/:\d+(\.\d+)?$/, "").replace(/^\s*\d+(\.\d+)?::/, "").trim()).filter(Boolean) : [];
+    const expr = m[4].trim(), lib = /^__(\w+(?:\/\w+)*)(?:\[([\w,|!-]+)\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\([^()]*\))?$/.exec(expr), brace = /^\{([^{}]*)\}$/.exec(expr);
+    const range = brace && /^\s*-?\d+(\.\d+)?\s*-\s*-?\d+(\.\d+)?\s*$/.test(brace[1]);  // {0.4-0.9} rolls a number: no list
+    const options = brace && !range && !brace[1].includes("$$") ? splitOptions(brace[1]).map((o) => o.replace(/:\d+(\.\d+)?$/, "").replace(/^\s*\d+(\.\d+)?::/, "").trim()).filter(Boolean) : [];
     return { name: m[2], expr, lib: lib ? lib[1] : null, tag: lib ? lib[2] || null : null, options };
   });
 }
@@ -402,9 +425,19 @@ function sweptTag(content) {
   return { name: name.trim(), solo, variants: model.flatMap((m) => clip.map((c) => [m, c])) };
 }
 
-export function sweepPlan(text) {
+// What Generate queues: the LoRA sweep's runs, times the `: grid`'s cells when the server counted them
+// (`grid`: {cells, formula, axes} from /orrery/grid). Mirrors orrery.comfy's sweep: LoRA runs outside.
+export function sweepPlan(text, grid = null) {
+  const lora = loraPlan(text);
+  if (!grid?.cells) return lora;
+  const axes = grid.axes.map((a) => a.text).join(" × ").replace(/\//g, "-");
+  if (!lora) return { runs: grid.cells, formula: `grid ${grid.formula}`, first: axes };
+  return { runs: lora.runs * grid.cells, formula: `${/\+/.test(lora.formula) ? `(${lora.formula})` : lora.formula} × grid ${grid.formula}`, first: lora.first };
+}
+
+function loraPlan(text) {
   const seen = new Map();
-  for (const m of stripComments(text).matchAll(/<lora:([^<>]+)>/g)) {
+  for (const m of longForm(stripComments(text)).matchAll(/<lora:([^<>]+)>/g)) {
     if (!seen.has(m[0])) { const t = sweptTag(m[1]); if (t) seen.set(m[0], t); }
   }
   const tags = [...seen.values()];

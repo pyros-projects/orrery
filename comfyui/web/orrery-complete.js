@@ -10,7 +10,7 @@ const NONE = { items: [], replaceFrom: 0 };
 const startsWith = (word, prefix) => word.toLowerCase().startsWith(prefix.toLowerCase());
 
 // A library reference up to where a property filter starts: __lib, __lib[tag], earlier #key:value.
-const LIB_HEAD = String.raw`__([\w/]+)(?:\[[\w-]+\])?(?:#[\w-]+:\$?[\w.-]+)*`;
+const LIB_HEAD = String.raw`__([\w/]+)(?:\[[\w,|!-]+\])?(?:#[\w-]+:\$?[\w.-]+)*`;
 
 // After __lib#key: the values that library's entries carry; after __lib# its keys.
 function propItems(before, data) {
@@ -48,12 +48,13 @@ function nameRank(name, query) {
 function libraryItems(before, data) {
   const props = propItems(before, data);
   if (props) return props;
-  let m = before.match(/(?:^|[^\w])(__([\w/]+)\[([\w-]*))$/);
+  // the tag being typed, after any others: [myth,!bi… · [water|de…
+  let m = before.match(/(?:^|[^\w])(__([\w/]+)\[((?:[\w-]*[,|])*!?)([\w-]*))$/);
   if (m) {
     const lib = data.libraries.find((l) => l.name === m[2]);
-    const tags = (lib?.tags ?? []).filter((t) => startsWith(t, m[3]));
+    const tags = (lib?.tags ?? []).filter((t) => startsWith(t, m[4]));
     return {
-      items: tags.map((t) => ({ insert: `__${m[2]}[${t}]__`, detail: "tag", preview: "" })),
+      items: tags.map((t) => ({ insert: `__${m[2]}[${m[3]}${t}]__`, detail: "tag", preview: "" })),
       replaceFrom: before.length - m[1].length,
     };
   }
@@ -157,6 +158,6 @@ export function suggest(text, caret, data) {
 
 export function missingLibraries(text, data) {
   const known = new Set(data.libraries.map((l) => l.name));
-  const names = [...uncommented(text).replace(/<lora:[^<>]*>/g, "").matchAll(/__(\w+(?:\/\w+)*)(?:\[[\w-]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__/g)].map((m) => m[1]);
+  const names = [...uncommented(text).replace(/<lora:[^<>]*>/g, "").matchAll(/__(\w+(?:\/\w+)*)(?:\[[\w,|!-]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__/g)].map((m) => m[1]);
   return [...new Set(names)].filter((n) => !known.has(n));
 }

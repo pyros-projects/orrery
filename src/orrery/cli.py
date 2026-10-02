@@ -57,17 +57,18 @@ def _cmd_expand(args: argparse.Namespace) -> int:
         seed = args.seed if args.seed is not None else (params.seed or 0)
         count = args.n if args.n is not None else (params.count or 1)
         rows = expand_batch(template, seed, count, home.libraries(), home.weights())
-    except KeyError as err:
+    except (KeyError, ValueError) as err:  # a missing library, a grid or a range that does not hold
         print(f"orrery: {_msg(err)}", file=sys.stderr)
         return 2
     if args.json:
         print(json.dumps([
-            {"seed": e.seed, "text": e.text, "picks": {p.label: p.value for p in e.picks}}
+            {"seed": e.seed, **({} if e.cell is None else {"cell": e.cell}), "text": e.text,
+             "picks": {p.label: p.value for p in e.picks}}
             for e in rows
         ], ensure_ascii=False, indent=2))
         return 0
     for e in rows:
-        print(f"[{e.seed}] {e.text}")
+        print(f"[{e.seed}{'' if e.cell is None else f' · grid {e.cell + 1}'}] {e.text}")
         if e.picks:
             print("     " + " · ".join(f"{p.label}: {p.value}" for p in e.picks))
     return 0

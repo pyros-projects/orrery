@@ -5,7 +5,7 @@ import { fitThumbs } from "../../comfyui/web/app/timeline.js";
 import { writerBlock } from "../../comfyui/web/app/write.js";
 import {
   applyDials, dials, downstream, entryPage, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
-  chunkInfo, chunkLabel, splitCells, rangeIds, shape, stats, sweepPlan, templateHash,
+  chunkInfo, chunkLabel, splitCells, rangeIds, shape, stats, sweepPlan, templateHash, longForm, splitOptions, tagsMatch,
 } from "../../comfyui/web/app/model.js";
 
 const known = new Set(["creature", "place"]);
@@ -390,3 +390,23 @@ test("the Write menu offers a writer only where it can write", () => {
   assert.match(writerBlock(app("a photo of a fox"), "describe"), /first_frame/);
   assert.equal(writerBlock(app("a photo of a fox", { frames: ["last_frame"] }), "describe"), "");
 });
+
+test("tag algebra, brace options and the LoRA short form mirror the expander", () => {
+  assert.ok(tagsMatch("myth,!bird", ["myth"]) && !tagsMatch("myth,!bird", ["myth", "bird"]));
+  assert.ok(tagsMatch("water|deep_sea", ["deep_sea"]) && !tagsMatch("water|deep_sea", ["myth"]) && tagsMatch(null, []));
+  assert.deepEqual(splitOptions("__a[x|y]__|b"), ["__a[x|y]__", "b"]);
+  assert.equal(longForm("@ink(0.8) @include x @h3(1)"), "<lora:ink:0.8> @include x @h3(1)");
+  const html = highlight("a __creature[myth,!bird]__ @ink(0.4-0.9)", known);
+  assert.match(html, /<span class="t-lib">__creature\[myth,!bird\]__<\/span>/);
+  assert.match(html, /<span class="t-lora">@ink\(0\.4-0\.9\)<\/span>/);
+  assert.deepEqual(dials("$s = {0.4-0.9}\n$t = {a|__b[x|y]__}").map((d) => d.options), [[], ["a", "__b[x|y]__"]]);
+});
+
+test("Generate plans a grid's cells, alone or times a LoRA sweep", () => {
+  const grid = { cells: 6, formula: "3 × 2", axes: [{ text: "__style__", count: 3 }, { text: "{dawn|noon}", count: 2 }] };
+  assert.deepEqual(sweepPlan("a __style__ at {dawn|noon}", grid), { runs: 6, formula: "grid 3 × 2", first: "__style__ × {dawn|noon}" });
+  assert.deepEqual(sweepPlan("a @x(0.5,1.0) __style__", grid), { runs: 12, formula: "2 × grid 3 × 2", first: "x" });
+  assert.equal(sweepPlan("a @x(0.5,1.0)").runs, 2);  // the short form sweeps too
+  assert.equal(sweepPlan("a <lora:x:0.4-0.9>"), null);  // a range rolls per run: no sweep
+});
+

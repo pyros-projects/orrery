@@ -14,6 +14,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from orrery import anchors, history, runs, uistate
+from orrery import batch as batches
 from orrery import sweep as sweeps
 from orrery.autolib import needs
 from orrery.chain import DEFAULT_CHAIN, load, previous_clip
@@ -35,7 +36,7 @@ from orrery.h3_ref import word_issue
 from orrery.home import Home, resolve_home
 from orrery.library import library_files
 from orrery.llm import InvalidProposal
-from orrery.loras import lora_files, lora_stack
+from orrery.loras import long_form, lora_files, lora_stack
 from orrery.presets import (
     list_presets,
     load_preset,
@@ -245,7 +246,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     `packed`: Orrery Refs routes the images per clip; `wired`: the reference images Reference to
     Video has (both from the graph, see `wiring`). `chain`: the Motion Context chain SEND: reads;
     `keep`: Orrery Refs' keep_sent, so sent images with a stored anchor are held from segment 0.
-    `sweep`: "run|galaxy folder", set by Generate for each run of a LoRA sweep (see orrery.sweep).
+    `sweep`: "run|galaxy folder", set by Generate for each run of a LoRA sweep (orrery.sweep) or a
+    `: grid` (orrery.batch); the LoRA runs are the outer loop, the grid's cells the inner one.
     `continued`: an Orrery Continue reads the picks, which pins 22 frames whatever `context:` says.
     `sizes`: (width, height) of the frames wired into first_frame and last_frame, or None."""
     h = resolve_home(home or None)
@@ -255,16 +257,23 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         linked = None
     known = {name for name, _ in bindings(template)}
     dials = {k: v for k, v in dial_values(params).items() if k in known}
-    source = strip_comments(resolve_includes(h, override(template, dials)))  # the hash keeps the comments
-    plan, sweep_picks, sweep_data, folder = sweeps.runs(source), [], None, ""
-    if plan:  # a LoRA sweep: this queue item is one of its runs (the first, from ComfyUI's own Run)
+    source = long_form(strip_comments(resolve_includes(h, override(template, dials))))  # the hash keeps the comments
+    plan, sweep_picks, sweep_data, folder, cell = sweeps.runs(source), [], None, "", None
+    grid = batches.axes(source, h.libraries()) if parse(source).params.grid is not None else []
+    cells = batches.cells(grid) if grid else 1
+    planned = sweep_formula(source, grid)
+    if plan or grid:  # a LoRA sweep or a grid: this queue item is one of its runs (the first, from ComfyUI's own Run)
         index, _, folder = (sweep or "").partition("|")
         i = int(index) if index.strip().isdigit() else 0
-        if i >= len(plan):
-            raise ValueError(f"LoRA sweep run {i} does not exist: this template sweeps {len(plan)} runs "
-                             f"({sweeps.formula(source)}).")
-        sweep_picks, sweep_data = sweeps.picks(source, plan[i]), {"run": i, "runs": len(plan)}
-        source_sweep, source = source, sweeps.apply(source, plan[i])
+        total = max(len(plan), 1) * cells
+        if i >= total:
+            raise ValueError(f"Sweep run {i} does not exist: this template sweeps {total} runs ({planned}).")
+        lora_run, cell = divmod(i, cells)
+        if plan:
+            sweep_picks = sweeps.picks(source, plan[lora_run])
+            source = sweeps.apply(source, plan[lora_run])
+        cell = cell if grid else None
+        sweep_data = {"run": i, "runs": total}
 
     # One request per run (ComfyUI cannot safely generate twice): libraries still missing and the
     # slots go together, the slots then seeing the template; otherwise the slots see the compiled prompt.
@@ -286,11 +295,11 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         source = SLOT.sub(lambda m: f"--slot {written.index(m.group(1)) + 1}--", source)  # survives the compile
     try:
         if target == "text":
-            result = expand(source, seed, h.libraries(), h.weights())
+            result = expand(source, seed, h.libraries(), h.weights(), cell=cell)
             lint = []
         else:
             result = compile_scene(source, seed, h.libraries(), h.weights(), target=target, segment=segment,
-                                   packed=packed, held=anchors.stored(h) if keep else frozenset())
+                                   packed=packed, held=anchors.stored(h) if keep else frozenset(), cell=cell)
             lint = [{"severity": i.severity, "message": i.message} for i in result.lint]
             needed = len(result.refs) if packed else max(image_slots(result.scene), default=0)
             if wired is not None and wired < needed:
@@ -341,8 +350,9 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         if issue := word_issue(described):
             lint.append({"severity": issue.severity, "message": issue.message})
     lint = [{"severity": "info", "message": n} for n in notes] + lint
-    if plan and not sweep:
-        lint.append({"severity": "info", "message": f"LoRA sweep: {len(plan)} runs ({sweeps.formula(source_sweep)}); "
+    if (plan or grid) and not sweep:
+        what = "LoRA sweep" if not grid else "Grid" if not plan else "LoRA sweep and grid"
+        lint.append({"severity": "info", "message": f"{what}: {max(len(plan), 1) * cells} runs ({planned}); "
                                                      "Generate runs them all, Run takes the first."})
     stack: list = []
     if target != "text" and result.loras:
@@ -420,6 +430,12 @@ def state_token(home: Home) -> str:
         if f.exists():
             digest.update(f.as_posix().encode() + f.read_bytes())
     return digest.hexdigest()[:16]
+
+
+def sweep_formula(source: str, grid: list) -> str:
+    """How a template's runs come about: the LoRA sweep's formula, the grid's, or both multiplied."""
+    parts = [f"({f})" if "+" in (f := sweeps.formula(source)) and grid else f] if sweeps.runs(source) else []
+    return " × ".join(parts + ([batches.formula(grid)] if grid else []))
 
 
 def _galaxy_folder(name) -> str:

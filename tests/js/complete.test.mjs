@@ -160,3 +160,11 @@ test("after __lib# the library's property keys, after #key: its values", () => {
   assert.equal(text.slice(0, values.replaceFrom), "a __creature[myth]#size:small");
   assert.deepEqual(suggest("__animal#", 9, DATA).items, []);  // a library without properties offers nothing
 });
+
+test("a tag after others completes in place: [myth,!de…", () => {
+  const s = at("a __creature[myth,!de");
+  assert.deepEqual(s.items.map((i) => i.insert), ["__creature[myth,!deep_sea]__"]);
+  assert.equal(s.replaceFrom, 2);
+  assert.deepEqual(at("__creature[deep_sea|m").items.map((i) => i.insert), ["__creature[deep_sea|myth]__"]);
+});
+

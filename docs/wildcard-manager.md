@@ -87,7 +87,15 @@ While the runs are being queued, the editor waits (each queue item reads the
 template) and **Stop** ends the queueing. Every output records the swept
 strengths as picks (`<lora:a>` = 0.5, or off) and lands in a galaxy folder
 `sweeps/<first swept LoRA> <date> <time>`. ComfyUI's own Run takes the first
-run.
+run. `@style(0.5,0.7)` is short for the tag and sweeps the same; a range without
+a step, `<lora:style:0.4-0.9>`, rolls a strength per run instead.
+
+**Grids.** `: grid __style__ × {dawn|noon}` sweeps picks the way a LoRA sweep
+sweeps strengths: one run per combination, everything else rolled the same, so
+the cells compare. The server counts the cells (it knows the libraries), the
+button says `Generate ×12 · sweep 2 × grid 3 × 2` with a LoRA sweep in the
+template too (its runs the outer loop), and the outputs land in the same kind
+of galaxy folder. A grid that cannot run says why in the footer.
 
 Everything a run needs goes to the model in one request (ComfyUI cannot
 safely generate twice in one run); ComfyUI moves the model out when the video

@@ -17,7 +17,7 @@ from orrery import presets as ps
 from orrery.chain import DEFAULT_CHAIN
 from orrery.comfy_llm import can_write, llm_config, text_encoders
 from orrery.completion import completion_data
-from orrery.dsl import MissingLibrary, expand, override
+from orrery.dsl import MissingLibrary, expand, override, parse, strip_comments
 from orrery.h3 import compile_scene
 from orrery.home import BUILTIN_DIR, Home, home_setting, home_source, resolve_home, set_home_setting
 from orrery.library import NAME, Entry, Library, load_library
@@ -637,6 +637,23 @@ def _run(home: Home, text: str, seed: int, target: str, segment: int):
     return result, lint
 
 
+def grid_plan(home: Home, args: dict) -> dict:
+    """A template's `: grid`: its axes and how many runs it makes (no grid: 0 cells)."""
+    from orrery import batch
+    from orrery.loras import long_form
+
+    text, _ = _template_for(home, args)
+    source = long_form(strip_comments(text))
+    if parse(source).params.grid is None:
+        return {"cells": 0, "formula": "", "axes": []}
+    try:
+        found = batch.axes(source, home.libraries())
+        return {"cells": batch.cells(found), "formula": batch.formula(found),
+                "axes": [{"text": a.text, "count": len(a.options)} for a in found]}
+    except ValueError as err:
+        raise ApiError(400, str(err)) from None
+
+
 def roll(home: Home, args: dict) -> dict:
     text, target = _template_for(home, args)
     seed, n = _int(args, "seed", 0), min(max(_int(args, "n", 3), 1), MAX_ROLLS)
@@ -760,6 +777,7 @@ ROUTES = [
     ("POST", "/orrery/galaxy/folder/rename", galaxy_folder_rename),
     ("POST", "/orrery/galaxy/folder/delete", galaxy_folder_delete),
     ("POST", "/orrery/roll", roll),
+    ("POST", "/orrery/grid", grid_plan),
     ("POST", "/orrery/frequency", frequency),
     ("GET", "/orrery/home", home_settings),
     ("POST", "/orrery/home", home_save),

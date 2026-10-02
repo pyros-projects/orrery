@@ -75,3 +75,11 @@ def test_set_names_an_unknown_binding_and_the_known_ones(home, capsys):
     assert main(["expand", "$hero = __animal__\n$hero", "--set", "villain=x"]) == 2
     err = capsys.readouterr().err
     assert "$villain" in err and "$hero" in err
+
+
+def test_expand_runs_every_grid_cell_at_each_seed(home, capsys):
+    assert main(["expand", "a __animal__ in __style__\n: grid __style__", "--seed", "4", "-n", "2", "--json"]) == 0
+    rows = json.loads(capsys.readouterr().out)
+    assert [(r["seed"], r["cell"]) for r in rows] == [(4, 0), (4, 1), (5, 0), (5, 1)]
+    assert main(["expand", "a __animal__\n: grid __style__"]) == 2 and "doesn't use it" in capsys.readouterr().err
+

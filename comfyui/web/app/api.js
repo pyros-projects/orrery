@@ -55,6 +55,7 @@ export function client(home) {
     renameFolder: (path, to) => call("galaxy/folder/rename", { body: { path, to } }),
     deleteFolder: (path) => call("galaxy/folder/delete", { body: { path } }),
     roll: (body) => call("roll", { body }),
+    grid: (body) => call("grid", { body }),
     frequency: (body) => call("frequency", { body }),
     homeFolder: () => call("home"),
     saveHomeFolder: (path) => call("home", { body: { path } }),

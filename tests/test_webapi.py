@@ -59,6 +59,7 @@ def test_routes_cover_the_contract():
         ("GET", "/orrery/history"),
         ("GET", "/orrery/writers"),
         ("POST", "/orrery/writers"),
+        ("POST", "/orrery/grid"),
     }
 
 
@@ -674,6 +675,15 @@ def test_the_history_lists_runs_newest_first_and_searches(home):
     assert body["total"] == 3 and [r["seed"] for r in body["runs"]] == [3, 2, 1]
     assert [r["seed"] for r in ok(home, webapi.history_runs, q="heron", limit="1")["runs"]] == [3]
     assert ok(home, webapi.history_runs, q="heron", offset="1")["runs"][0]["seed"] == 1
+
+
+def test_the_grid_counts_its_runs_for_generate(home):
+    body = ok(home, webapi.grid_plan, template="a __animal__ at {dawn|noon}\n: grid __animal__ × {dawn|noon}")
+    assert body == {"cells": 6, "formula": "3 × 2", "axes": [{"text": "__animal__", "count": 3},
+                                                             {"text": "{dawn|noon}", "count": 2}]}
+    assert ok(home, webapi.grid_plan, template="a __animal__")["cells"] == 0
+    status, body = api(home, webapi.grid_plan, template="a __animal__\n: grid __style__")
+    assert status == 400 and "doesn't use it" in body["error"]
 
 
 def test_the_writer_texts_are_read_edited_and_reset(home):

@@ -2,7 +2,7 @@
 import { suggest } from "../orrery-complete.js";
 import { esc, highlight } from "./highlight.js";
 import { icon } from "./icons.js";
-import { applyDials, chunkInfo, dials, folderColor, pickerGroups, shape, stats, stripComments, sweepPlan, templateHash } from "./model.js";
+import { applyDials, chunkInfo, dials, folderColor, pickerGroups, shape, stats, stripComments, sweepPlan, tagsMatch, templateHash } from "./model.js";
 import { thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
 import { STARTERS } from "./starters.js";
@@ -12,7 +12,7 @@ import { layoutTimeline, loadChain, scrollTimeline, wireTimeline } from "./timel
 import { openWrite, writeMenuHTML } from "./write.js";
 
 function statsHTML(app) {
-  const st = stats(app.text), out = shape(app.text), reel = st.h3?.reel, plan = sweepPlan(app.text);
+  const st = stats(app.text), out = shape(app.text), reel = st.h3?.reel, plan = planOf(app), grid = gridOf(app);
   const wired = /^\s*:\s*.*\b[wh]\d/m.test(app.text) ? [] : app.bridge.frames?.() || [];  // `: w… h…` wins
   const outs = (app.data.rows || []).filter((r) => r.template === templateHash(app.text)).length;
   const forever = reel && reel.clips === Infinity;
@@ -28,6 +28,7 @@ function statsHTML(app) {
     + (wired.length
       ? `<span class="stat" title="Width and height take the shape of the ${wired[0].replace("_", " ")} wired into the node, at the header's megapixels or H3's canvas area, so H3 does not stretch or crop it; the size is known when the node runs">→ size from the <b>${wired[0].replace("_", " ")}</b>${headerMP(app.text) ? ` · ${out.megapixels} MP` : ""}${frames}</span>`
       : `<span class="stat" title="The node's width, height, length and megapixels outputs${reel ? "; from the second chunk on, length includes the 22 frames the clip continues from" : ""}">→ <b>${out.width}×${out.height}</b> · ${out.megapixels} MP${frames}</span>`)
+    + (grid?.error ? `<span class="stat warn" title="${esc(grid.error)}">${esc(grid.error)}</span>` : "")
     + `${out.cli.length ? `<span class="stat cli" title="In ComfyUI, use the Run count and the seed widget">${esc(out.cli.join(" "))}: CLI only</span>` : ""}<span class="grow"></span>`
     + `${outs ? `<button class="btn ghost" data-act="outputs">${icon("image")}${outs} output${outs === 1 ? "" : "s"}</button>` : ""}`
     + `<button class="btn" data-act="test" title="Roll it in the Test tab: a few seeds, or a reel's clips">${icon("dice")}Test</button>`
@@ -42,7 +43,7 @@ function statsHTML(app) {
       ? `<button class="btn primary" data-act="stopsweep" title="Stop queueing the sweep; what is queued already still runs">${icon("x")}Stop<small class="sweep">${app.state.sweepQueue.done}/${app.state.sweepQueue.total} queued</small></button>`
       : plan
       ? `<label class="rep" title="How many seeds: each runs the whole sweep, the seed stepping between them as its control after generate says">×<input type="number" min="1" max="999" value="${repeats(app)}" data-rep aria-label="Seeds per sweep"></label>`
-        + `<button class="btn primary" data-act="generate" title="The LoRA sweep: every strength (solo LoRAs in turn), one seed per sweep; the outputs go to a galaxy folder of their own">${icon("play")}Generate ×${plan.runs * repeats(app)}<small class="sweep">sweep ${esc(plan.formula)}${repeats(app) > 1 ? ` · ${repeats(app)} seeds` : ""}</small></button>`
+        + `<button class="btn primary" data-act="generate" title="The sweep: every LoRA strength (solo LoRAs in turn) and every cell of the grid, one seed per sweep; the outputs go to a galaxy folder of their own">${icon("play")}Generate ×${plan.runs * repeats(app)}<small class="sweep">sweep ${esc(plan.formula)}${repeats(app) > 1 ? ` · ${repeats(app)} seeds` : ""}</small></button>`
       : `<label class="rep" title="How many runs Generate queues, one after another; seed and segment step between them as their control after generate says, so a reel plays that many clips">×<input type="number" min="1" max="999" value="${repeats(app)}" data-rep aria-label="Runs per Generate"></label>`
         + `<button class="btn primary" data-act="generate" title="Queue only what this node feeds, up to its Save nodes; their files go to the galaxy">${icon("play")}Generate</button>`);
 }
@@ -91,6 +92,7 @@ export function renderPrompt(app) {
   const paint = () => paintEditor(app);
   const afterEdit = (ta) => {
     fixReelSeed(app);
+    fixUniqueSeed(app);
     if (dialKey(app.text) !== app.state.dialKey) renderDials(app);
     refreshBar(app);
     if (ta) complete(app, ta);
@@ -133,7 +135,7 @@ export function renderPrompt(app) {
     if (act === "saveas") openSave(app, { text: applyDials(app.text, app.bridge.getParams()), from: app.preset, link: true });
     if (act === "test") { app.go("test"); runRolls(app); }
     if (act === "stopsweep") return app.bridge.stopGenerate();
-    if (act === "generate" && sweepPlan(app.text)) return generateSweep(app);
+    if (act === "generate" && planOf(app)) return generateSweep(app);
     if (act === "generate") {
       const runs = repeats(app);
       app.bridge.generate(runs).then((n) => {
@@ -158,12 +160,14 @@ export function renderPrompt(app) {
     if (e.target.dataset.rep === undefined) return;
     app.bridge.props.repeat = Number(e.target.value) || 1;
     e.target.value = repeats(app);
-    if (sweepPlan(app.text)) refreshFoot(app);  // the sweep button counts runs × seeds
+    if (planOf(app)) refreshFoot(app);  // the sweep button counts runs × seeds
   };
   if (app.state.pick) wirePicker(app);
   renderDials(app);
   wireDials(app);
   fixReelSeed(app);
+  fixUniqueSeed(app);
+  refreshGrid(app);
 }
 
 async function restart(app) {
@@ -172,7 +176,7 @@ async function restart(app) {
     const cancelled = await app.bridge.cancelRuns();
     app.run = null;
     app.bridge.setSegment(0);
-    if (sweepPlan(app.text)) return generateSweep(app, cancelled);
+    if (planOf(app)) return generateSweep(app, cancelled);
     const runs = repeats(app);
     if (!(await app.bridge.generate(runs))) return app.toast("Nothing to generate: connect this node's outputs toward a Save or Preview node.");
     app.toast(`Restarted at segment <b>0</b>${runs > 1 ? ` · ${runs} runs queued` : ""}${cancelled ? ` · cancelled ${cancelled} earlier run${cancelled === 1 ? "" : "s"} of this node` : ""}`);
@@ -184,7 +188,7 @@ const SWEEP_ASK = 50;  // above this many runs, Generate asks first
 
 // A LoRA sweep: every run, once per seed, its outputs in a galaxy folder named after the first swept LoRA.
 function generateSweep(app, cancelled = 0) {
-  const plan = sweepPlan(app.text), seeds = repeats(app), total = plan.runs * seeds;
+  const plan = planOf(app), seeds = repeats(app), total = plan.runs * seeds;
   const stamp = new Date(), pad = (n) => String(n).padStart(2, "0");
   const folder = `sweeps/${plan.first.split("/").pop().slice(0, 40)} ${stamp.getFullYear()}-${pad(stamp.getMonth() + 1)}-${pad(stamp.getDate())} ${pad(stamp.getHours())}.${pad(stamp.getMinutes())}`;
   const lock = (on) => {
@@ -252,8 +256,39 @@ function jumpToChunk(app) {
 }
 
 export function refreshFoot(app) {
+  refreshGrid(app);  // a dial or an edit can change the grid's count
   const foot = app.view.querySelector(".pfoot");
   if (foot) foot.innerHTML = statsHTML(app);
+}
+
+// `unique=` walks a shuffled order one step per seed: the seeds of a batch have to come in a row.
+function fixUniqueSeed(app) {
+  if (!/^\s*:.*\bunique=/m.test(stripComments(app.text)) || ["increment", ""].includes(app.bridge.getControl())) return;
+  app.bridge.setControl("increment");
+  app.toast("unique=: control after generate set to <b>increment</b>, so each run of a batch gets another value");
+}
+
+// A `: grid`'s cells are counted by the server (it knows the libraries); the count, or why the grid
+// cannot run, is kept for the template and dials it was counted for.
+const gridKey = (app) => `${app.text}\n${JSON.stringify(app.bridge.getParams())}`;
+const gridOf = (app) => (app.data.grid?.key === gridKey(app) ? app.data.grid : null);
+const planOf = (app) => { const g = gridOf(app); return sweepPlan(app.text, g && !g.error ? g : null); };
+
+function refreshGrid(app) {
+  if (!/^\s*:\s*grid\b/m.test(stripComments(app.text))) { app.data.grid = null; return; }
+  const key = gridKey(app);
+  if (app.data.grid?.key === key || app.state.gridKey === key) return;
+  app.state.gridKey = key;
+  clearTimeout(app.state.gridTimer);
+  app.state.gridTimer = setTimeout(async () => {
+    let got;
+    try { got = await app.api.grid({ template: app.text, target: app.bridge.getTarget(), params: app.bridge.getParams() }); }
+    catch (err) { got = { error: err.message }; }
+    if (gridKey(app) !== key) return;
+    app.state.gridKey = null;
+    app.data.grid = { ...got, key };
+    if (app.state.tab === "prompt") refreshFoot(app);
+  }, 250);
 }
 
 // A reel runs as one clip per queue; a seed that changes between clips would reroll its bindings.
@@ -277,7 +312,7 @@ function dialChoices(app, d) {
     return [];
   }
   const lib = app.data.libraries.find((l) => l.name === d.lib);
-  return (lib?.entries || []).filter((e) => !d.tag || e.tags.includes(d.tag)).map((e) => e.value);
+  return (lib?.entries || []).filter((e) => tagsMatch(d.tag, e.tags)).map((e) => e.value);
 }
 
 function renderDials(app) {

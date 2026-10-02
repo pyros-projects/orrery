@@ -26,17 +26,18 @@ Effort: **S** = an evening for an agent, verifiable by tests; **M** = a stage;
   can't learn. The syntax comes from z-explorer. · M · partly built
   (2026-09-24): `LORA:` lines, the `lora_stack` output, completion of your
   LoRA files, and `{<lora:a:1.00>|<lora:b:1.00>}` rolls and records the real
-  tags. Open: strength ranges and the short `@style(0.8)` form.
+  tags. Built (2026-10-02): strength ranges (`<lora:style:0.4-0.9>` rolls,
+  binned; lists and steps sweep) and the short `@style(0.8)` form.
 - **Numeric ranges.** `{0.4-0.9}` and `{2-6}` roll a number and bin it for
   learning (e.g. `0.4–0.5`). *Why:* strength, CFG and time of day are dials
-  too. · S
+  too. · S · built 2026-10-02 (ten bins at most)
 - **Structured library entries.** Entries with fields, e.g.
   `{value: snow, sfx: "footsteps crunch", light: "flat white"}`, read back as
   `$w = __weather__ … $w.sfx`. *Why:* correlated picks without new control
   flow. The H3 templates already needed this: rain in the picture has to match
   rain in the soundscape. · M
 - **Tag algebra.** `__creature[myth,!bird]__`, `__creature[water|deep_sea]__`.
-  *Why:* finer regions without new libraries. · S
+  *Why:* finer regions without new libraries. · S · built 2026-10-02
 - **Recursive entries.** Library values may contain DSL
   (`a __color__ scarf`), expanded with a depth limit. *Why:* libraries become
   grammars, not word lists. · S
@@ -45,10 +46,12 @@ Effort: **S** = an evening for an agent, verifiable by tests; **M** = a stage;
   S · preset store.
 - **Sweeps next to rolls.** `: grid __style__ × {dawn|noon}` yields the full
   factorial, deterministically. *Why:* a probe run is a structured sweep; this
-  is its smallest form (Prompt Galaxy sketch). · S
+  is its smallest form (Prompt Galaxy sketch). · S · built 2026-10-02 (`: grid`,
+  queued by Generate like a LoRA sweep)
 - **Batch coverage.** `: x8 unique=__creature__` gives eight different
   creatures in eight rolls (stratified, not independent). *Why:* a batch should
-  map a region, not resample it. · S
+  map a region, not resample it. · S · built 2026-10-02 (stateless: seed s takes
+  step s of a shuffled order)
 
 ## 2. The learning loop and exploration strategy
 

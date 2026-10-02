@@ -6,6 +6,7 @@ const REF = [
   ["Wildcards", [
     ["__creature__", "one entry from a library, weighted by what you rated", "a __creature__ at dusk"],
     ["__creature[myth]__", "only entries tagged myth", "a __creature[myth]__ asleep"],
+    ["__creature[myth,!bird]__", "every term holds (! for none of); [water|deep_sea] either tag", "a __creature[myth,!bird]__ asleep"],
     ["__film/genre__", "a library in a folder: library/film/genre.yaml or .txt (one entry per line); the language model creates folder and file when they don't exist", ""],
     ["__runway_shoes:20__", "with a language model set (the gear): an unknown library is created when the node runs, and :20 tops it up to at least 20 entries", ""],
     ["__film_scene__(30 words, set and cast)", "directions for the model that writes the library; they never reach the prompt. New entries wait in Libraries for Accept or Discard", ""],
@@ -16,6 +17,7 @@ const REF = [
     ["{2$$__material__}", "two different picks, joined with commas", "built from {2$$__material__}"],
     ["{1-3$$a|b|c}", "one to three of the options", "a bouquet of {1-3$$roses|thistles|ferns}"],
     ["{a {b|c}|d}", "choices nest; inner ones roll first", "a {lighthouse {keeper|cat}|night ferry}"],
+    ["{0.4-0.9}", "a number in between, at the decimals written ({2-6} for whole ones); recorded and learned like any pick", "at {0.4-0.9} strength"],
   ]],
   ["Bindings and extras", [
     ["$hero = __creature__", "roll once on its own line, reuse everywhere as $hero", "$hero = __creature__\n$hero meets another $hero"],
@@ -29,6 +31,10 @@ const REF = [
     ["# a note", "a comment: a note for you that never reaches the model", "# "],
     ["<lora:style:0.5,0.7,1.0>", "a LoRA sweep: Generate runs once per strength, one seed for all; 0-1;0.1 is a range with a step, several swept LoRAs combine, and outputs go to a galaxy folder sweeps/…", ""],
     ["<lora:a:0.5,1.0:solo>", "solo: the solo LoRAs take turns, the others off (2 + 2 runs, not 2 × 2); <lora:a:test> is 1.0,0.7,0.5:solo", ""],
+    ["<lora:style:0.4-0.9>", "a range without a step: the strength rolls per run and is recorded as a pick", ""],
+    ["@style(0.8)", "short for <lora:style:0.8>, with every strength form: @style(0.4-0.9), @style(0.5,0.7)", ""],
+    [": grid __style__ × {dawn|noon}", "every combination, one run each; the rest rolls the same in all. Axes: a library, a choice or a $binding. Generate queues them all (times a LoRA sweep)", ": grid "],
+    [": unique=$hero", "seeds in a row never repeat it (8 seeds, 8 heroes); the seed's control after generate goes to increment", ": unique="],
     [": w832 h1216", "size: the node's width and height outputs (wire them into your latent)", ": w832 h1216"],
     [": x8 seed=100", "CLI only (orrery expand); in ComfyUI use the Run count and the seed widget", ""],
     ["a __creature__", "a/an follows the picked word: “an axolotl”", ""],
