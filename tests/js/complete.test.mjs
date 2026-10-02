@@ -245,3 +245,10 @@ test("the refmods: line completes as a keyword, then its defaults", () => {
   assert.ok(names("@h3 ref2va\nref").includes("refmods: "));
   assert.deepEqual(names("@h3 ref2va\nrefmods: "), ["at 1 from 35%", "at 0.5", "from 0%"]);
 });
+
+test("SET: lists the CAST's RefMods and pictures as name(strength, start)", () => {
+  const head = `${CAST_HEAD}EMMA (refmod emma_canon, image 1): a woman\nTOM (image 3): a man\nCHUNK\nSHOT 5s: static\n`;
+  assert.deepEqual(names(`${head}SET: `), ["emma_canon(1, 35%)", "image_1(1, 0%)", "image_3(1, 0%)"]);
+  assert.deepEqual(names(`${head}SET: image_1(0.5, 35%), em`), ["emma_canon(1, 35%)"]);
+  assert.deepEqual(names(`${head}SET: image_1(0.`), []);
+});

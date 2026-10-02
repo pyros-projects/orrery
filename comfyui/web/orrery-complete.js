@@ -4,7 +4,7 @@
 // Accepting an item replaces text[replaceFrom:caret] with item.insert.
 
 const KEYWORDS = ["SHOT ", "SFX: ", "MUSIC: ", "style: ", "summary: ", "CAST", "voice: ", "keep: ",
-  "CHUNK", "HANDOFF: ", "SEND: ", "GOTO: ", "LORA: ", "context: ", "refmods: "];
+  "CHUNK", "HANDOFF: ", "SEND: ", "GOTO: ", "LORA: ", "context: ", "refmods: ", "SET: "];
 const NONE = { items: [], replaceFrom: 0 };
 
 const startsWith = (word, prefix) => word.toLowerCase().startsWith(prefix.toLowerCase());
@@ -246,6 +246,22 @@ function refmodItems(before, line, data) {
   return items.length ? { items, replaceFrom: before.length - word.length } : null;
 }
 
+// `SET: ` the CAST's RefMods and pictures as name(strength, start), one item after another.
+function setItems(before, line, text) {
+  const m = /^\s*SET:(.*)$/.exec(line);
+  if (!m) return null;
+  const token = /(?:^|,)\s*([^,()]*)$/.exec(m[1]);
+  if (!token) return null;  // inside the parentheses: the numbers are the user's
+  const cast = uncommented(text);
+  const refmods = [...new Set([...cast.matchAll(/\brefmod\s+([\w./-]+)/g)].map((r) => r[1]))];
+  const images = [...new Set([...cast.matchAll(/^\s*[A-Z][A-Z0-9 _-]*?\s*\(([^)]*)\)\s*:/gm)]
+    .flatMap((c) => [...c[1].matchAll(/\bimage\s+(\d+)/g)].map((i) => Number(i[1]))))].sort((a, b) => a - b);
+  const targets = [...refmods.map((r) => [`${r}(1, 35%)`, "a RefMod: (strength, start)"]),
+                   ...images.map((n) => [`image_${n}(1, 0%)`, "a picture: (strength, start)"])];
+  const items = targets.filter(([t]) => startsWith(t, token[1])).map(([insert, detail]) => ({ insert, detail, preview: "" }));
+  return items.length ? { items, replaceFrom: before.length - token[1].length } : null;
+}
+
 // The `refmods:` line: the defaults for RefMods without their own `at` or `from`.
 function refmodsLineItems(before, line) {
   const m = /^\s*refmods:\s*(.*)$/.exec(line);
@@ -317,7 +333,7 @@ export function suggest(text, caret, data) {
   const found = directive ?? (screenplay ? loraItems(before, line, data) : null)
     ?? libraryItems(before, data)
     ?? bindingItems(before, text)
-    ?? (screenplay ? refmodsLineItems(before, line) ?? refmodItems(before, line, data) ?? gotoItems(before, line, text)
+    ?? (screenplay ? refmodsLineItems(before, line) ?? setItems(before, line, text) ?? refmodItems(before, line, data) ?? gotoItems(before, line, text)
       ?? castItems(before, line, text) ?? shotItems(before, line, data) ?? keywordItems(before, line) : null)
     ?? NONE;
   const typed = before.slice(found.replaceFrom);
