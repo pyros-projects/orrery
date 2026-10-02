@@ -7,7 +7,7 @@ body:
     id: description
     attributes:
       label: Description
-      description: What should be built? A short, clear description of the result. A feature may take as long as it takes; split it into tasks (its sub-issues) of at most 8 hours of work for a person each.
+      description: What should be built? A short, clear description of the result. A feature may take as long as it takes; split it into tasks (its sub-issues).
       placeholder: Describe the feature and what it is good for.
     validations:
       required: true
