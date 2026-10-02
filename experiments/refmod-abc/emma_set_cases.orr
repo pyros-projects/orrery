@@ -1,0 +1,41 @@
+# EMMA leaves and comes back: the picture and RefMod dials, case by case. Render segment 2 at seed 7,
+# with one SET line in chunk 3 switched on at a time.
+@h3 ref2va 2:3 0.6MP
+style: live-action, TikTok reel
+context: 22
+refmods: at 1 from 35%
+
+CAST
+EMMA (refmod ela4_refMod_Video, image 1): a skinny and pretty alternative young woman around 20 years old.
+
+CHUNK 1
+SHOT 7s: static
+LORA:<lora:relim_v2_lora_500:0.50>
+SEND: frame 30 to image 1
+EMMA is showcasing her outfit. EMMA is wearing __80s/80s_women_clothing_combined__ and has __80s/80s_women_hair_combined__ in __80s/colors/80s_colors__ for a 80's party she is going. After 3s someone is ringing at the door and EMMA goes looking and is leaving the scene to the side and is completely out of frame after 5s. After 5s the camera is filming an empty room.
+HANDOFF: the camera is filming only the room.
+
+CHUNK 2
+SHOT 5s: static
+The camera is filming a room. nothing is happening.
+HANDOFF: the camera is filming only the room.
+
+CHUNK 3
+SHOT 7s: static
+# A: neither: a woman as the text describes her, not EMMA
+SET: image_1(0), ela4_refMod_Video(0)
+# B: the RefMod alone: EMMA's face, but not the outfit of frame 30
+#SET: image_1(0), ela4_refMod_Video(1)
+# C: the picture alone: EMMA in the 80s outfit of frame 30
+#SET: image_1(1), ela4_refMod_Video(0)
+# D: both, as without SET
+#SET: image_1(1), ela4_refMod_Video(1)
+# E: half the picture: between A and C? Its text encoder still sees it in full
+#SET: image_1(0.5), ela4_refMod_Video(0)
+# F: half the RefMod: between A and B?
+#SET: image_1(0), ela4_refMod_Video(0.5)
+# G: the picture from 35%: the framing free, the outfit still there?
+#SET: image_1(1, 35%), ela4_refMod_Video(0)
+# H: the RefMod from 0% (B waits until 35%): does it copy the framing it was built from?
+#SET: image_1(0), ela4_refMod_Video(1, 0%)
+EMMA is entering the scene from the side and standing in front of the camera. EMMA is showcasing her outfit.
