@@ -8,7 +8,16 @@ cd /path/to/ComfyUI/custom_nodes && git clone https://github.com/pyros-projects/
 ln -s /path/to/orrery/comfyui /path/to/ComfyUI/custom_nodes/orrery   # Windows: mklink /J …\custom_nodes\orrery …\orrery\comfyui
 ```
 
-Restart ComfyUI. Nodes under **orrery**:
+Restart ComfyUI. **Templates → orrery** (or `example_workflows/` in the
+repository) holds a workflow per mode, built from ComfyUI's own nodes plus
+orrery's: Krea 2 (`text`), MiniMax H3 t2va, i2va, fl2va, l2va, ref2va, and reels
+on t2va and on ref2va with Orrery Continue / Orrery Film. Their notes name the
+models and where they go; sampling follows ComfyUI's own templates (H3:
+`res_multistep`, 20 steps; Krea 2 Turbo: 8 steps). With the repository linked
+as its `comfyui` folder, the template browser does not list them; drag the
+files in instead.
+
+Nodes under **orrery**:
 
 - **Orrery Prompt**: seed and target (`text`, `h3-base`, `flat`), optional
   `segment` → `text`, `picks`, `seed`, `width`, `height`, `length`, `lora_stack`,

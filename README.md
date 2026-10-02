@@ -95,11 +95,16 @@ cd /path/to/ComfyUI/custom_nodes
 git clone https://github.com/pyros-projects/orrery.git
 ```
 
-Restart ComfyUI and add **orrery → Orrery Prompt**. Wire its `text` output into
-your prompt input (and `width`, `height`, `length` into the latent for H3),
-open a preset such as `@onebutton/clip` or `@loops/backrooms`, and press
-**Generate**. **New** starts a blank H3 scene, reel, reference or keyframe
-screenplay, or a Krea prompt, each with a quickstart in its comments.
+Restart ComfyUI and open a workflow from **Templates → orrery** (or drag one in
+from [`example_workflows/`](example_workflows)): Krea 2 text to image, and
+MiniMax H3 t2va, i2va, fl2va, l2va, ref2va and reels (t2va and ref2va), all
+built from ComfyUI's own nodes plus orrery's, each with notes on the models it
+needs and where they go. Or add **orrery → Orrery Prompt** to a graph of your
+own: wire its `text` output into your prompt input (and `width`, `height`,
+`length` into the latent for H3), open a preset such as `@onebutton/clip` or
+`@loops/backrooms`, and press **Generate**. **New** starts a blank H3 scene,
+reel, reference or keyframe screenplay, or a Krea prompt, each with a
+quickstart in its comments.
 
 ## Install
 

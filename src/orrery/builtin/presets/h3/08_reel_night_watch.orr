@@ -1,6 +1,6 @@
 ---
 title: "Reel: the night watch"
-note: "A three-clip reel for H3 Motion Context. Wire Load Latent's clip_index into segment and set the Chain's segments to 3; the keeper and the rolled storm stay the same in every clip, and each handoff links two clips."
+note: "A three-clip reel: Generate ×3 plays it, each clip continuing the last (Orrery Continue / Orrery Film, or H3 Motion Context); the keeper and the rolled storm stay the same in every clip, and each handoff links two clips."
 tags: [h3, reel, motion_context]
 ---
 @h3 t2va 16:9

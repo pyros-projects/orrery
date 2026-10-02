@@ -1,0 +1,1541 @@
+{
+  "id": "8f1d03a8-19cd-4701-b39e-fed1bd482035",
+  "revision": 0,
+  "last_node_id": 19,
+  "last_link_id": 28,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "OrreryPrompt",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        700,
+        960
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "clip",
+          "name": "clip",
+          "shape": 7,
+          "type": "CLIP",
+          "link": null
+        },
+        {
+          "localized_name": "latent_path",
+          "name": "latent_path",
+          "shape": 7,
+          "type": "STRING",
+          "link": null
+        },
+        {
+          "localized_name": "template",
+          "name": "template",
+          "type": "STRING",
+          "widget": {
+            "name": "template"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "target",
+          "name": "target",
+          "type": "COMBO",
+          "widget": {
+            "name": "target"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "preset",
+          "name": "preset",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "preset"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "home",
+          "name": "home",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "home"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "params",
+          "name": "params",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "params"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "segment",
+          "name": "segment",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "segment"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "sweep",
+          "name": "sweep",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "sweep"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "text",
+          "name": "text",
+          "type": "STRING",
+          "links": [
+            3
+          ]
+        },
+        {
+          "localized_name": "picks",
+          "name": "picks",
+          "type": "STRING",
+          "links": [
+            10
+          ]
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "type": "INT",
+          "links": [
+            7
+          ]
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "links": [
+            4
+          ]
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "links": [
+            5
+          ]
+        },
+        {
+          "localized_name": "length",
+          "name": "length",
+          "type": "INT",
+          "links": [
+            6
+          ]
+        },
+        {
+          "localized_name": "lora_stack",
+          "name": "lora_stack",
+          "type": "LORA_STACK",
+          "links": null
+        },
+        {
+          "localized_name": "load_index",
+          "name": "load_index",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "localized_name": "save_index",
+          "name": "save_index",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "localized_name": "previous",
+          "name": "previous",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "localized_name": "previous_audio",
+          "name": "previous_audio",
+          "type": "AUDIO",
+          "links": null
+        },
+        {
+          "localized_name": "megapixels",
+          "name": "megapixels",
+          "type": "FLOAT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "OrreryPrompt"
+      },
+      "widgets_values": [
+        "# H3 REEL · quickstart: one screenplay, one clip per run, each continuing the one before\n# Wiring: picks → Orrery Continue, with the H3 node's latent (length → that node: it counts the 22\n#   pinned frames) and conditioning; its latent → the sampler · sampled latent + decoded images and\n#   audio → Orrery Film, whose film is the reel so far (H3 Motion Context instead: load_index → Load\n#   Latent's clip_index, save_index → Save Latent's)\n# Run it: Generate ×N plays N clips · Restart goes back to segment 0 · keep the seed fixed\n# Before the first CHUNK is the world (header, style, CAST, $bindings, LORA:, MUSIC:, context:):\n#   it rolls once, so a $binding there stays the same in every clip\n# CHUNK [title] [repeat N|forever]   one clip; a $binding inside it rolls again for every clip\n# HANDOFF: …    how this clip ends and the next one opens (the next may paraphrase it)\n# $x~1          binding x as it was one clip ago · $x~1.open one of its properties\n# context: 22   frames each clip continues from (Orrery Continue: 22; Motion Context: 5, 22, 39, 56)\n# SEND: frame 0 to image 3      ref2va reels: this clip's frame 0 (after the pinned frames) is image 3 for\n#   every later clip; wire the picks into Orrery Refs, and the frame comes out there from the next clip\n#   on, after the images the prompt names · NAME (image 1, image 3) in the CAST names it in the prompt\n#   too · frames 2, 5, 34-46 sends several at once · it keeps a face or an outfit the same across clips\n#   frame -1 is the last · … for segment 4+ (or 4-8, or 4, 6, 7) gives it to those clips only\n# Tips: describe recurring people and places again in every clip, the model has no memory ·\n#       end each clip on a simple, framed state (a closed door, curtains, the foot of a stair) ·\n#       no per-clip music: lay one score over the whole film afterwards\n@h3 t2va 16:9\nstyle: live-action, cinematic, one continuous unbroken ten-second shot at eye level\ncontext: 22\nMUSIC: N/A\n$house = __tour/architecture__\n\nCHUNK the first room\n$room = __tour/rooms__\nSHOT 10s: push in, slow\nThe camera glides into $room, inside $house, and in the final second comes to rest facing a closed door.\nSFX: $room.sfx; $house.sfx\nHANDOFF: the camera rests squarely facing a closed door\n\nCHUNK the next room repeat forever\n$room = __tour/rooms__\nSHOT 10s: push in, slow\nThe door swings open and the camera glides into $room, inside $house, and in the final second comes to rest facing a closed door.\nSFX: $room.sfx; $house.sfx\nHANDOFF: the camera rests squarely facing a closed door\n",
+        1,
+        "fixed",
+        "h3-base",
+        "(none)",
+        "",
+        "",
+        0,
+        "increment",
+        ""
+      ],
+      "widgets_values_named": {
+        "template": "# H3 REEL · quickstart: one screenplay, one clip per run, each continuing the one before\n# Wiring: picks → Orrery Continue, with the H3 node's latent (length → that node: it counts the 22\n#   pinned frames) and conditioning; its latent → the sampler · sampled latent + decoded images and\n#   audio → Orrery Film, whose film is the reel so far (H3 Motion Context instead: load_index → Load\n#   Latent's clip_index, save_index → Save Latent's)\n# Run it: Generate ×N plays N clips · Restart goes back to segment 0 · keep the seed fixed\n# Before the first CHUNK is the world (header, style, CAST, $bindings, LORA:, MUSIC:, context:):\n#   it rolls once, so a $binding there stays the same in every clip\n# CHUNK [title] [repeat N|forever]   one clip; a $binding inside it rolls again for every clip\n# HANDOFF: …    how this clip ends and the next one opens (the next may paraphrase it)\n# $x~1          binding x as it was one clip ago · $x~1.open one of its properties\n# context: 22   frames each clip continues from (Orrery Continue: 22; Motion Context: 5, 22, 39, 56)\n# SEND: frame 0 to image 3      ref2va reels: this clip's frame 0 (after the pinned frames) is image 3 for\n#   every later clip; wire the picks into Orrery Refs, and the frame comes out there from the next clip\n#   on, after the images the prompt names · NAME (image 1, image 3) in the CAST names it in the prompt\n#   too · frames 2, 5, 34-46 sends several at once · it keeps a face or an outfit the same across clips\n#   frame -1 is the last · … for segment 4+ (or 4-8, or 4, 6, 7) gives it to those clips only\n# Tips: describe recurring people and places again in every clip, the model has no memory ·\n#       end each clip on a simple, framed state (a closed door, curtains, the foot of a stair) ·\n#       no per-clip music: lay one score over the whole film afterwards\n@h3 t2va 16:9\nstyle: live-action, cinematic, one continuous unbroken ten-second shot at eye level\ncontext: 22\nMUSIC: N/A\n$house = __tour/architecture__\n\nCHUNK the first room\n$room = __tour/rooms__\nSHOT 10s: push in, slow\nThe camera glides into $room, inside $house, and in the final second comes to rest facing a closed door.\nSFX: $room.sfx; $house.sfx\nHANDOFF: the camera rests squarely facing a closed door\n\nCHUNK the next room repeat forever\n$room = __tour/rooms__\nSHOT 10s: push in, slow\nThe door swings open and the camera glides into $room, inside $house, and in the final second comes to rest facing a closed door.\nSFX: $room.sfx; $house.sfx\nHANDOFF: the camera rests squarely facing a closed door\n",
+        "seed": 1,
+        "control_after_generate": "fixed",
+        "target": "h3-base",
+        "preset": "(none)",
+        "home": "",
+        "params": "",
+        "segment": 0,
+        "control_after_generate#1": "increment",
+        "sweep": ""
+      }
+    },
+    {
+      "id": 2,
+      "type": "MarkdownNote",
+      "pos": [
+        0,
+        1160
+      ],
+      "size": [
+        720,
+        520
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "orrery",
+      "properties": {},
+      "widgets_values": [
+        "## orrery · H3 reel (one screenplay, one clip per run)\n\n`CHUNK` lines split the screenplay into clips; the `segment` widget counts up by itself, so **Generate ×N** plays N clips and **Restart** goes back to segment 0. Keep the seed fixed (the node sets it).\n\n- **Orrery Continue** starts every clip after the first with the last 22 frames of the one before, picture and sound, under a noise mask (Masked AV, from [H3 Continuum](https://github.com/ukr8b3g-cmyk/ComfyUI-H3-Continuum), MIT). `length` already counts those frames.\n- **Orrery Film** trims them off again, keeps every segment's take under `output/h3_context/orrery_film/` and joins the reel so far into `film.mp4` there (its `film` output). Rendering a segment again replaces it and drops the ones after it.\n- The editor marks every CHUNK with its segments and the time left; the timeline beside it shows the clips.\n\nThe **Orrery Prompt** node is the whole of orrery: write in its **Prompt** tab (this workflow opens with a quickstart; **New** has the other modes), roll it in **Test** without queueing, and rate what comes out in **Galaxy**: the ratings steer the next rolls. **Generate** in the node queues this graph; what the Save node writes is logged to the galaxy with the picks that made it.\n\n- `seed` drives the rolls and the sampler (Random Noise).\n- `LORA:` lines come out on `lora_stack`, for a loader with a `lora_stack` input (LoraManager, Efficiency …), which is not part of this core-nodes workflow.\n\n[orrery on GitHub](https://github.com/pyros-projects/orrery) · [the prompt language](https://github.com/pyros-projects/orrery/blob/main/docs/dsl.md) · [H3 screenplays](https://github.com/pyros-projects/orrery/blob/main/docs/h3.md)"
+      ],
+      "widgets_values_named": {
+        "text": "## orrery · H3 reel (one screenplay, one clip per run)\n\n`CHUNK` lines split the screenplay into clips; the `segment` widget counts up by itself, so **Generate ×N** plays N clips and **Restart** goes back to segment 0. Keep the seed fixed (the node sets it).\n\n- **Orrery Continue** starts every clip after the first with the last 22 frames of the one before, picture and sound, under a noise mask (Masked AV, from [H3 Continuum](https://github.com/ukr8b3g-cmyk/ComfyUI-H3-Continuum), MIT). `length` already counts those frames.\n- **Orrery Film** trims them off again, keeps every segment's take under `output/h3_context/orrery_film/` and joins the reel so far into `film.mp4` there (its `film` output). Rendering a segment again replaces it and drops the ones after it.\n- The editor marks every CHUNK with its segments and the time left; the timeline beside it shows the clips.\n\nThe **Orrery Prompt** node is the whole of orrery: write in its **Prompt** tab (this workflow opens with a quickstart; **New** has the other modes), roll it in **Test** without queueing, and rate what comes out in **Galaxy**: the ratings steer the next rolls. **Generate** in the node queues this graph; what the Save node writes is logged to the galaxy with the picks that made it.\n\n- `seed` drives the rolls and the sampler (Random Noise).\n- `LORA:` lines come out on `lora_stack`, for a loader with a `lora_stack` input (LoraManager, Efficiency …), which is not part of this core-nodes workflow.\n\n[orrery on GitHub](https://github.com/pyros-projects/orrery) · [the prompt language](https://github.com/pyros-projects/orrery/blob/main/docs/dsl.md) · [H3 screenplays](https://github.com/pyros-projects/orrery/blob/main/docs/h3.md)"
+      },
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 3,
+      "type": "UNETLoader",
+      "pos": [
+        780,
+        0
+      ],
+      "size": [
+        380,
+        90
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "unet_name",
+          "name": "unet_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "unet_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "weight_dtype",
+          "name": "weight_dtype",
+          "type": "COMBO",
+          "widget": {
+            "name": "weight_dtype"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MODEL",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            8,
+            9
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+        "default"
+      ],
+      "widgets_values_named": {
+        "unet_name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+        "weight_dtype": "default"
+      }
+    },
+    {
+      "id": 4,
+      "type": "CLIPLoader",
+      "pos": [
+        780,
+        130
+      ],
+      "size": [
+        380,
+        110
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "clip_name",
+          "name": "clip_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "clip_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "type",
+          "name": "type",
+          "type": "COMBO",
+          "widget": {
+            "name": "type"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "device",
+          "name": "device",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "device"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "CLIP",
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+        "minimax",
+        "default"
+      ],
+      "widgets_values_named": {
+        "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+        "type": "minimax",
+        "device": "default"
+      }
+    },
+    {
+      "id": 5,
+      "type": "VAELoader",
+      "pos": [
+        780,
+        280
+      ],
+      "size": [
+        380,
+        60
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "vae_name",
+          "name": "vae_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "vae_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "VAE",
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            2,
+            20
+          ]
+        }
+      ],
+      "title": "video VAE",
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "minimax_h3_video_vae_int8_convrot.safetensors"
+      ],
+      "widgets_values_named": {
+        "vae_name": "minimax_h3_video_vae_int8_convrot.safetensors"
+      }
+    },
+    {
+      "id": 6,
+      "type": "VAELoader",
+      "pos": [
+        780,
+        380
+      ],
+      "size": [
+        380,
+        60
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "vae_name",
+          "name": "vae_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "vae_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "VAE",
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            22
+          ]
+        }
+      ],
+      "title": "audio VAE",
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "minimax_h3_audio_vae_fp32.safetensors"
+      ],
+      "widgets_values_named": {
+        "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
+      }
+    },
+    {
+      "id": 7,
+      "type": "MarkdownNote",
+      "pos": [
+        780,
+        1160
+      ],
+      "size": [
+        560,
+        420
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "models",
+      "properties": {},
+      "widgets_values": [
+        "## Models\n\nFrom [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3):\n\n- `models/diffusion_models/` [minimax_h3_fl2va_pruned_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors)\n- `models/text_encoders/` [qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors)\n- `models/vae/` [minimax_h3_video_vae_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_int8_convrot.safetensors) and [minimax_h3_audio_vae_fp32.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors)\n\nSampling as in ComfyUI's own H3 templates: `res_multistep`, `simple`, 20 steps, no CFG. For a turbo LoRA from the same repository, put a **LoraLoaderModelOnly** after the model loader and lower the steps (4 to 8, as the LoRA says)."
+      ],
+      "widgets_values_named": {
+        "text": "## Models\n\nFrom [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3):\n\n- `models/diffusion_models/` [minimax_h3_fl2va_pruned_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors)\n- `models/text_encoders/` [qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors)\n- `models/vae/` [minimax_h3_video_vae_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_int8_convrot.safetensors) and [minimax_h3_audio_vae_fp32.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors)\n\nSampling as in ComfyUI's own H3 templates: `res_multistep`, `simple`, 20 steps, no CFG. For a turbo LoRA from the same repository, put a **LoraLoaderModelOnly** after the model loader and lower the steps (4 to 8, as the LoRA says)."
+      },
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 8,
+      "type": "MiniMaxH3ImageToVideo",
+      "pos": [
+        1200,
+        0
+      ],
+      "size": [
+        380,
+        208
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "clip",
+          "name": "clip",
+          "type": "CLIP",
+          "link": 1
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 2
+        },
+        {
+          "localized_name": "first_frame",
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "last_frame",
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": 3
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": 4
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": 5
+        },
+        {
+          "localized_name": "length",
+          "name": "length",
+          "type": "INT",
+          "widget": {
+            "name": "length"
+          },
+          "link": 6
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "positive",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            12
+          ]
+        },
+        {
+          "localized_name": "LATENT",
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            11
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MiniMaxH3ImageToVideo"
+      },
+      "widgets_values": [
+        "",
+        1344,
+        768,
+        124
+      ],
+      "widgets_values_named": {
+        "prompt": "",
+        "width": 1344,
+        "height": 768,
+        "length": 124
+      }
+    },
+    {
+      "id": 9,
+      "type": "RandomNoise",
+      "pos": [
+        1620,
+        160
+      ],
+      "size": [
+        300,
+        294
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "noise_seed",
+          "name": "noise_seed",
+          "type": "INT",
+          "widget": {
+            "name": "noise_seed"
+          },
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "NOISE",
+          "name": "NOISE",
+          "type": "NOISE",
+          "links": [
+            15
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "RandomNoise"
+      },
+      "widgets_values": [
+        0,
+        "randomize"
+      ],
+      "widgets_values_named": {
+        "noise_seed": 0,
+        "control_after_generate": "randomize"
+      }
+    },
+    {
+      "id": 10,
+      "type": "KSamplerSelect",
+      "pos": [
+        1620,
+        280
+      ],
+      "size": [
+        300,
+        270
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "sampler_name",
+          "name": "sampler_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "sampler_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "SAMPLER",
+          "name": "SAMPLER",
+          "type": "SAMPLER",
+          "links": [
+            17
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSamplerSelect"
+      },
+      "widgets_values": [
+        "res_multistep"
+      ],
+      "widgets_values_named": {
+        "sampler_name": "res_multistep"
+      }
+    },
+    {
+      "id": 11,
+      "type": "BasicScheduler",
+      "pos": [
+        1620,
+        380
+      ],
+      "size": [
+        300,
+        318
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 8
+        },
+        {
+          "localized_name": "scheduler",
+          "name": "scheduler",
+          "type": "COMBO",
+          "widget": {
+            "name": "scheduler"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "steps",
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "denoise",
+          "name": "denoise",
+          "type": "FLOAT",
+          "widget": {
+            "name": "denoise"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "SIGMAS",
+          "name": "SIGMAS",
+          "type": "SIGMAS",
+          "links": [
+            18
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BasicScheduler"
+      },
+      "widgets_values": [
+        "simple",
+        20,
+        1
+      ],
+      "widgets_values_named": {
+        "scheduler": "simple",
+        "steps": 20,
+        "denoise": 1
+      }
+    },
+    {
+      "id": 12,
+      "type": "BasicGuider",
+      "pos": [
+        1620,
+        530
+      ],
+      "size": [
+        300,
+        50
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 9
+        },
+        {
+          "localized_name": "conditioning",
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 13
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "GUIDER",
+          "name": "GUIDER",
+          "type": "GUIDER",
+          "links": [
+            16
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BasicGuider"
+      }
+    },
+    {
+      "id": 13,
+      "type": "SamplerCustomAdvanced",
+      "pos": [
+        1960,
+        0
+      ],
+      "size": [
+        300,
+        330
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "noise",
+          "name": "noise",
+          "type": "NOISE",
+          "link": 15
+        },
+        {
+          "localized_name": "guider",
+          "name": "guider",
+          "type": "GUIDER",
+          "link": 16
+        },
+        {
+          "localized_name": "sampler",
+          "name": "sampler",
+          "type": "SAMPLER",
+          "link": 17
+        },
+        {
+          "localized_name": "sigmas",
+          "name": "sigmas",
+          "type": "SIGMAS",
+          "link": 18
+        },
+        {
+          "localized_name": "latent_image",
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 14
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "output",
+          "name": "output",
+          "type": "LATENT",
+          "links": [
+            19,
+            21,
+            23
+          ]
+        },
+        {
+          "localized_name": "denoised_output",
+          "name": "denoised_output",
+          "type": "LATENT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SamplerCustomAdvanced"
+      }
+    },
+    {
+      "id": 14,
+      "type": "OrreryContinue",
+      "pos": [
+        1620,
+        0
+      ],
+      "size": [
+        300,
+        110
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "picks",
+          "name": "picks",
+          "type": "STRING",
+          "link": 10
+        },
+        {
+          "localized_name": "latent",
+          "name": "latent",
+          "type": "LATENT",
+          "link": 11
+        },
+        {
+          "localized_name": "conditioning",
+          "name": "conditioning",
+          "shape": 7,
+          "type": "CONDITIONING",
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "conditioning",
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "links": [
+            13
+          ]
+        },
+        {
+          "localized_name": "latent",
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            14
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "OrreryContinue"
+      }
+    },
+    {
+      "id": 15,
+      "type": "VAEDecode",
+      "pos": [
+        2300,
+        0
+      ],
+      "size": [
+        220,
+        50
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "samples",
+          "name": "samples",
+          "type": "LATENT",
+          "link": 19
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 20
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "IMAGE",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            24
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      }
+    },
+    {
+      "id": 16,
+      "type": "VAEDecodeAudio",
+      "pos": [
+        2300,
+        100
+      ],
+      "size": [
+        220,
+        50
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "samples",
+          "name": "samples",
+          "type": "LATENT",
+          "link": 21
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 22
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "AUDIO",
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            25
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecodeAudio"
+      }
+    },
+    {
+      "id": 17,
+      "type": "CreateVideo",
+      "pos": [
+        2580,
+        0
+      ],
+      "size": [
+        260,
+        142
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 26
+        },
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 27
+        },
+        {
+          "localized_name": "fps",
+          "name": "fps",
+          "type": "FLOAT",
+          "widget": {
+            "name": "fps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "bit_depth",
+          "name": "bit_depth",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "bit_depth"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "color_space",
+          "name": "color_space",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "color_space"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "codec",
+          "name": "codec",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "codec"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "VIDEO",
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            28
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CreateVideo"
+      },
+      "widgets_values": [
+        24,
+        "auto",
+        "sRGB",
+        "none"
+      ],
+      "widgets_values_named": {
+        "fps": 24,
+        "bit_depth": "auto",
+        "color_space": "sRGB",
+        "codec": "none"
+      }
+    },
+    {
+      "id": 18,
+      "type": "SaveVideo",
+      "pos": [
+        2880,
+        0
+      ],
+      "size": [
+        520,
+        520
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "link": 28
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "format",
+          "name": "format",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "codec",
+          "name": "format.codec",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format.codec"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "codec",
+          "name": "codec",
+          "shape": 7,
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "codec"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "links": null
+        }
+      ],
+      "properties": {},
+      "widgets_values": [
+        "orrery/reel",
+        "auto",
+        "auto",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "orrery/reel",
+        "format": "auto",
+        "format.codec": "auto",
+        "codec": "auto"
+      }
+    },
+    {
+      "id": 19,
+      "type": "OrreryFilm",
+      "pos": [
+        2300,
+        200
+      ],
+      "size": [
+        240,
+        100
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "samples",
+          "name": "samples",
+          "type": "LATENT",
+          "link": 23
+        },
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 24
+        },
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 25
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            26
+          ]
+        },
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            27
+          ]
+        },
+        {
+          "localized_name": "film",
+          "name": "film",
+          "type": "VIDEO",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "OrreryFilm"
+      }
+    }
+  ],
+  "links": [
+    [
+      1,
+      4,
+      0,
+      8,
+      0,
+      "CLIP"
+    ],
+    [
+      2,
+      5,
+      0,
+      8,
+      1,
+      "VAE"
+    ],
+    [
+      3,
+      1,
+      0,
+      8,
+      4,
+      "STRING"
+    ],
+    [
+      4,
+      1,
+      3,
+      8,
+      5,
+      "INT"
+    ],
+    [
+      5,
+      1,
+      4,
+      8,
+      6,
+      "INT"
+    ],
+    [
+      6,
+      1,
+      5,
+      8,
+      7,
+      "INT"
+    ],
+    [
+      7,
+      1,
+      2,
+      9,
+      0,
+      "INT"
+    ],
+    [
+      8,
+      3,
+      0,
+      11,
+      0,
+      "MODEL"
+    ],
+    [
+      9,
+      3,
+      0,
+      12,
+      0,
+      "MODEL"
+    ],
+    [
+      10,
+      1,
+      1,
+      14,
+      0,
+      "STRING"
+    ],
+    [
+      11,
+      8,
+      1,
+      14,
+      1,
+      "LATENT"
+    ],
+    [
+      12,
+      8,
+      0,
+      14,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      13,
+      14,
+      0,
+      12,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      14,
+      14,
+      1,
+      13,
+      4,
+      "LATENT"
+    ],
+    [
+      15,
+      9,
+      0,
+      13,
+      0,
+      "NOISE"
+    ],
+    [
+      16,
+      12,
+      0,
+      13,
+      1,
+      "GUIDER"
+    ],
+    [
+      17,
+      10,
+      0,
+      13,
+      2,
+      "SAMPLER"
+    ],
+    [
+      18,
+      11,
+      0,
+      13,
+      3,
+      "SIGMAS"
+    ],
+    [
+      19,
+      13,
+      0,
+      15,
+      0,
+      "LATENT"
+    ],
+    [
+      20,
+      5,
+      0,
+      15,
+      1,
+      "VAE"
+    ],
+    [
+      21,
+      13,
+      0,
+      16,
+      0,
+      "LATENT"
+    ],
+    [
+      22,
+      6,
+      0,
+      16,
+      1,
+      "VAE"
+    ],
+    [
+      23,
+      13,
+      0,
+      19,
+      0,
+      "LATENT"
+    ],
+    [
+      24,
+      15,
+      0,
+      19,
+      1,
+      "IMAGE"
+    ],
+    [
+      25,
+      16,
+      0,
+      19,
+      2,
+      "AUDIO"
+    ],
+    [
+      26,
+      19,
+      0,
+      17,
+      0,
+      "IMAGE"
+    ],
+    [
+      27,
+      19,
+      1,
+      17,
+      1,
+      "AUDIO"
+    ],
+    [
+      28,
+      17,
+      0,
+      18,
+      0,
+      "VIDEO"
+    ]
+  ],
+  "groups": [
+    {
+      "id": "#335",
+      "title": "Models",
+      "bounding": [
+        768,
+        -46,
+        404,
+        498
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": "#353",
+      "title": "Sample",
+      "bounding": [
+        1188,
+        -46,
+        1084,
+        638
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": "#533",
+      "title": "Decode and save",
+      "bounding": [
+        2288,
+        -46,
+        1124,
+        578
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.5172413793103449,
+      "offset": [
+        77.33333333333333,
+        137.33333333333331
+      ]
+    }
+  },
+  "version": 0.4
+}

@@ -1,6 +1,6 @@
 ---
 title: "Set change"
-note: "Pyro's idea taken all the way: one continuous walk through places that have nothing to do with each other, and every clip changes the set in front of the camera by a visible action instead of a cut. Stagehands strike it, a giant hand swaps the diorama, the sky tears open, a train passes, the whole place is a painted flat that falls over (transitions/between, twenty of them, each with its own sound). Loop it on Motion Context with Run (Instant)."
+note: "Pyro's idea taken all the way: one continuous walk through places that have nothing to do with each other, and every clip changes the set in front of the camera by a visible action instead of a cut. Stagehands strike it, a giant hand swaps the diorama, the sky tears open, a train passes, the whole place is a painted flat that falls over (transitions/between, twenty of them, each with its own sound). Loop it with Run (Instant)."
 tags: [loops, h3, reel, motion_context]
 ---
 @h3 t2va 16:9
