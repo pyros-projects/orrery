@@ -41,10 +41,11 @@ node --test tests/js/*.mjs
    emoji that fits it (`🧠 RefMod memory for reels`), so features stand out in every list. It is
    split into **tasks**, attached as its sub-issues. Every task belongs to a feature: there are
    no tasks on their own.
-3. **What is learned goes into the feature's comments.** Only features get comments. Write one
-   whenever knowledge comes up that the feature does not hold yet: an experiment and its results,
-   a learning, a problem that came up and the issue it led to. A comment may link tasks, but it
-   carries the point itself, so nobody has to dig through tasks to find it:
+3. **What is learned goes into the feature's comments.** Tasks get no comments; features do, and
+   so do bugs and risks. Write one whenever knowledge comes up that the issue does not hold yet:
+   an experiment and its results, a learning, a problem that came up and the issue it led to. A
+   comment may link tasks, but it carries the point itself, so nobody has to dig through tasks to
+   find it:
    - good: "While implementing #12 we found that WebGPU does not work in this system's browser;
      in #13 we fixed it by starting the browser with `--enable-unsafe-webgpu`."
    - bad: "There was an issue in #12, we solved it in #13."
