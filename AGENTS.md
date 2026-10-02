@@ -37,9 +37,10 @@ node --test tests/js/*.mjs
 **Feature → tasks → one branch and one PR → feature closed.**
 
 1. **Every change starts as an issue**, from a template: Feature, Task, Bug or Risk.
-2. **A feature** describes a result and may take as long as it takes. It is split into **tasks**,
-   attached as its sub-issues. A task is at most 8 hours of work for a person: split anything
-   bigger. The limit holds for agents too; it keeps every step small enough to follow.
+2. **A feature** describes a result and may take as long as it takes. Its title starts with an
+   emoji that fits it (`🧠 RefMod memory for reels`), so features stand out in every list. It is
+   split into **tasks**, attached as its sub-issues. A task is at most 8 hours of work for a
+   person: split anything bigger. The limit holds for agents too; it keeps every step small enough to follow.
 3. **One branch per feature, from `main`**, named `<feature number>-<short-slug>`
    (`4-refmod-memory`). Tasks don't get branches of their own; each commit names the task it
    does (`Refs #9`).
