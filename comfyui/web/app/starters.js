@@ -67,12 +67,12 @@ HANDOFF: the camera rests squarely facing a closed door
 `;
 
 const REF = `# H3 REF2VA · quickstart: for the MiniMax H3 Reference to Video node
-# CAST, before the first SHOT, names every reference once; shots, lines and summary use the NAME
+# CAST, before the first SHOT, names every reference once; shots and lines use the NAME
 #   NAME (image 1): the head noun, then details      NAME (image 2, image 3): several views of it
 #   NAME (video 1): …      NAME (video 1 + audio): with its soundtrack wired too
 #   voice: audio 1         the timbre the member above speaks with
-#   keep: fully_preserved - what stays   (partially_preserved, attribute_transfer, weak_reference)
-# summary: The target video shows NAME … (the task prefix is added for you)
+#   keep: face, outfit     what of the member above stays: a retention block goes into the prompt
+#     (all · face, hair, body, outfit · style · place · loose, or fully_preserved - your own reason)
 # SHOT 4s: from image 3   the shot starts on <Picture 3> · to image 3: it ends on it
 # SHOT 4s: after video 1  continues <Video 1> from its last frame (wire the node's previous output)
 # --directions--           a slot the language model writes when the node runs
@@ -80,16 +80,15 @@ const REF = `# H3 REF2VA · quickstart: for the MiniMax H3 Reference to Video no
 # In a reel: SEND: frame 0 to image 3 inside a CHUNK makes that clip's frame 0 image 3 for the clips
 #   after it: Orrery Refs fetches it from the reel's clips (leave its image_3 unwired) and hands it on, with a
 #   CAST naming it or without
-# @h3 ref2va 16:9 lite     writes <Subject N> = … lines instead of the six full sections
-# Tip: the guide wants 350–500 words of shot description, so write rich prose (the lint counts)
+# @h3 ref2va 16:9 full     the six sections of MiniMax's guide instead of <Subject N> = … lines, with a
+#   summary: The target video shows NAME … (the task prefix is added for you) and 350–500 words of prose
 @h3 ref2va 16:9
 style: live-action, cinematic
-summary: The target video shows HERO walking through PLACE at dusk.
 
 CAST
 PLACE (image 1): the street, with wet cobblestones and warm shop windows
 HERO (image 2): the woman, with short black hair and a red raincoat
-keep: fully_preserved - her face, short black hair and red raincoat are retained.
+keep: face, hair, outfit
 
 SHOT 5s: tracking, slow
 HERO walks through PLACE, turns her head toward a shop window and smiles.

@@ -62,12 +62,13 @@ export const templateHash = (text) => sha256(new TextEncoder().encode(text)).sli
 // `# …` lines are comments (as in wildcard files): the node drops them before anything rolls.
 export const stripComments = (text) => text.split("\n").filter((l) => !/^\s*#/.test(l)).join("\n");
 
-// A run recorded before every pick had dice of its own (no rng in its row) replays with the old ones.
-// It goes under the @h3 line, which stays the first.
+// A run is replayed as it was made: one recorded before every pick had dice of its own (no rng in
+// its row) gets `@rng 1` (under the @h3 line, which stays the first), and a screenplay recorded before
+// lite was the default (no format in its row) gets `full` on its @h3 line.
 export function withDice(text, row) {
-  if (row?.rng || /^\s*@rng\b/m.test(text)) return text;
   const lines = text.split("\n"), head = lines.findIndex((l) => /^\s*@h3\b/.test(l));
-  lines.splice(head + 1, 0, "@rng 1");
+  if (head >= 0 && !row?.format && !/\b(lite|full)\b/.test(lines[head])) lines[head] = `${lines[head].trimEnd()} full`;
+  if (!row?.rng && !/^\s*@rng\b/m.test(text)) lines.splice(head + 1, 0, "@rng 1");
   return lines.join("\n");
 }
 

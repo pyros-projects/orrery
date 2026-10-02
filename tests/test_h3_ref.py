@@ -3,12 +3,14 @@ example in the official full-reference guide (VIDEO_PROMPT_WRITING_GUIDE_ref_en.
 
 import re
 
+import pytest
+
 from orrery.h3 import compile_scene
 from orrery.library import Entry, Library
 
 LIBS = {"animal": Library("animal", [Entry("fox")])}
 
-SITCOM = """@h3 ref2va 16:9
+SITCOM = """@h3 ref2va full 16:9
 style: realistic multi-camera sitcom style with warm indoor lighting
 summary: The target video shows MAYA eating a cookie in CAFE. LEO enters with DOG, which lunges toward the cookie. The three-shot exchange uses [audio 1] as the voice-timbre reference for MAYA and ends with a canned audience laugh.
 
@@ -108,7 +110,7 @@ def test_the_guide_example_compiles_without_errors():
 
 
 def test_audio_labels_count_video_soundtracks_first():
-    src = """@h3 ref2va
+    src = """@h3 ref2va full
 summary: A and B play.
 CAST
 A (video 1 + audio): the dancer, in red
@@ -125,7 +127,7 @@ SFX: drums pound
 
 
 def test_a_video_soundtrack_can_be_the_voice():
-    src = """@h3 ref2va
+    src = """@h3 ref2va full
 summary: A sings.
 CAST
 A (video 1 + audio): the singer, in silver
@@ -140,7 +142,7 @@ SFX: wind hums
 
 
 def test_frame_anchors_become_pictures_with_keyframe_completion():
-    src = """@h3 ref2va
+    src = """@h3 ref2va full
 summary: CAFE wakes up.
 CAST
 CAFE (image 1): the café, with a tall window
@@ -161,7 +163,7 @@ Steam rises in CAFE.
 
 
 def test_after_video_continues_the_previous_clip():
-    src = """@h3 ref2va
+    src = """@h3 ref2va full
 summary: WASHER finishes the window.
 CAST
 WASHER (image 1): the window washer, in a red overall
@@ -179,12 +181,12 @@ SFX: wind
 
 
 def test_after_video_outside_ref2va_is_flagged():
-    result = compile_scene("@h3 t2va\nSHOT 5s: after video 1\nA man waits.\nSFX: rain\n", 1, {})
+    result = compile_scene("@h3 t2va full\nSHOT 5s: after video 1\nA man waits.\nSFX: rain\n", 1, {})
     assert any("after video N" in i.message for i in result.lint)
 
 
 def test_bracketed_sources_in_prose_become_labels():
-    src = """@h3 ref2va
+    src = """@h3 ref2va full
 summary: A moves like [video 1].
 CAST
 A (image 1): the dancer, in red
@@ -198,7 +200,7 @@ SFX: shoes squeak
 
 
 def test_cast_names_expand_to_descriptions_in_base_modes():
-    src = """@h3 t2va
+    src = """@h3 t2va full
 CAST
 MAYA: a young blonde woman, in a light-pink shirt
 SHOT 5s
@@ -213,7 +215,7 @@ SFX: wind
 
 
 def test_later_mentions_use_the_head_noun_even_without_a_comma():
-    src = """@h3 t2va
+    src = """@h3 t2va full
 CAST
 HOST: an adult human facing the camera
 ENTITY: a compact humanoid alien with an elongated head and large dark eyes
@@ -227,7 +229,7 @@ SFX: breathing
 
 
 def test_flat_target_uses_cast_descriptions():
-    src = """@h3 ref2va
+    src = """@h3 ref2va full
 summary: DOG naps.
 CAST
 DOG (image 1): the fluffy white Samoyed, with a curved tail
@@ -240,7 +242,7 @@ SFX: fire crackles
 
 
 def test_ref2va_lint_advises_without_errors():
-    base = """@h3 ref2va
+    base = """@h3 ref2va full
 CAST
 {cast}
 SHOT 5s
@@ -256,7 +258,7 @@ SFX: wind
 
 
 def test_text_only_subjects_are_fine_in_ref2va():
-    src = """@h3 ref2va
+    src = """@h3 ref2va full
 summary: CAFE hums.
 CAST
 CAFE: the coffee-shop environment, featuring an exposed brick wall
@@ -270,7 +272,7 @@ SFX: cups clink
 
 
 def test_keep_is_forgiving():
-    src = """@h3 ref2va
+    src = """@h3 ref2va full
 summary: A B C D dance.
 CAST
 A (image 1): the dancer
@@ -293,7 +295,7 @@ SFX: music plays
 
 
 def test_refmods_are_described_but_not_loaded_yet():
-    src = """@h3 t2va
+    src = """@h3 t2va full
 CAST
 MAYA (refmod maya_canon): a young blonde woman, in a light-pink shirt
 SHOT 5s
@@ -306,7 +308,7 @@ SFX: wind
 
 
 def test_reference_sources_outside_ref2va_warn():
-    src = """@h3 t2va
+    src = """@h3 t2va full
 CAST
 MAYA (image 1): a woman, in pink
 SHOT 5s
@@ -317,7 +319,7 @@ SFX: wind
 
 
 def test_word_count_is_linted_for_generation():
-    src = """@h3 ref2va
+    src = """@h3 ref2va full
 summary: A waves.
 CAST
 A (image 1): the dancer, in red
@@ -329,18 +331,65 @@ SFX: wind
 
 
 def test_full_definitions_put_the_picture_after_the_head_noun():
-    src = "@h3 ref2va\nsummary: VICTIM waits.\nCAST\nVICTIM (image 1): an arrogant young man in an expensive suit\nSHOT 5s\nVICTIM waits.\nSFX: x\n"
+    src = "@h3 ref2va full\nsummary: VICTIM waits.\nCAST\nVICTIM (image 1): an arrogant young man in an expensive suit\nSHOT 5s\nVICTIM waits.\nSFX: x\n"
     assert "<Subject 1> is an arrogant young man in <Picture 1>, in an expensive suit." in h3(src).text
 
 
 def test_empty_sections_are_left_out():
     """H3 copes without them; an empty subject_definitions or a summary that is only its task prefix is noise."""
-    bare = h3("@h3 ref2va 2:3\nSHOT 5s: push in, slow\nA girl stretches in a living room.\nSFX: foley sound\n").text
+    bare = h3("@h3 ref2va full 2:3\nSHOT 5s: push in, slow\nA girl stretches in a living room.\nSFX: foley sound\n").text
     names, _ = sections(bare)
     assert names == ["detailed_description", "overall_soundscape", "non_diegetic_music"]
-    cast = h3("@h3 ref2va\nCAST\nA (image 1): a woman\nSHOT 5s\nA waits.\nSFX: wind\n").text
+    cast = h3("@h3 ref2va full\nCAST\nA (image 1): a woman\nSHOT 5s\nA waits.\nSFX: wind\n").text
     names, _ = sections(cast)
     assert names == ["subject_definitions", "retention_analysis", "detailed_description", "overall_soundscape",
                      "non_diegetic_music"]
-    summed = h3("@h3 ref2va\nsummary: A waits.\nCAST\nA (image 1): a woman\nSHOT 5s\nA waits.\nSFX: wind\n").text
+    summed = h3("@h3 ref2va full\nsummary: A waits.\nCAST\nA (image 1): a woman\nSHOT 5s\nA waits.\nSFX: wind\n").text
     assert sections(summed)[1]["summary"].startswith("[reference generation] ")
+
+
+# --- lite by default, full on demand, keep: macros (2026-10-02) ------------------------------
+
+KEEP_SRC = "@h3 {mode} 16:9{fmt}\nCAST\nKEEPER (image 1): an old lighthouse keeper, in a yellow coat\n{keep}SHOT 5s: static\nKEEPER waves.\nSFX: wind"
+
+
+def keep_text(mode="ref2va", fmt="", keep=""):
+    return compile_scene(KEEP_SRC.format(mode=mode, fmt=fmt, keep=keep), 1, {})
+
+
+def test_lite_is_the_default_and_full_writes_the_guides_format():
+    assert keep_text().text.startswith("<Subject 1> = an old lighthouse keeper of <Picture 1>")
+    assert keep_text(fmt=" lite").text == keep_text().text
+    assert keep_text(fmt=" full").text.startswith("subject_definitions:\n<Subject 1> is an old lighthouse keeper")
+
+
+@pytest.mark.parametrize("keep, marker, reason", [
+    ("all", "fully_preserved", "the old lighthouse keeper is retained as defined, in every detail."),
+    ("face, hair", "partially_preserved", "only the face and hair of the old lighthouse keeper are retained"),
+    ("face and outfit + body", "partially_preserved", "only the face, outfit, and build of the old lighthouse keeper"),
+    ("style", "attribute_transfer", "only the style of the old lighthouse keeper carries over"),
+    ("place", "fully_preserved", "is retained as a place"),
+    ("loose", "weak_reference", "only a loose reference"),
+    ("partial - only his face", "partially_preserved", "only his face"),  # the written form still works
+])
+def test_keep_macros_write_a_marker_and_a_reason(keep, marker, reason):
+    from orrery.cast import parse_keep
+
+    got_marker, got_reason = parse_keep(keep)
+    assert got_marker == marker and reason in got_reason.replace("{who}", "the old lighthouse keeper")
+
+
+def test_a_keep_line_always_brings_a_retention_block():
+    for mode, fmt in (("ref2va", ""), ("ref2va", " full"), ("i2va", ""), ("i2va", " full"), ("t2va", "")):
+        text = keep_text(mode, fmt, "keep: face\n").text
+        assert "retention_analysis:\n" in text and "partially_preserved - only the face of the old lighthouse keeper" in text, (mode, fmt)
+    assert "retention_analysis" not in keep_text().text  # without keep: lite writes none
+    i2va = keep_text("i2va", "", "keep: face\n").text  # after the alignment line, which follows the definitions
+    assert i2va.index("is fully referenced") < i2va.index("retention_analysis")
+    with pytest.raises(ValueError, match="stands alone"):
+        keep_text(keep="keep: all, face\n")
+
+
+def test_a_summary_asks_for_full():
+    lite = compile_scene("@h3 ref2va\nsummary: A waits.\nCAST\nA (image 1): a woman\nSHOT 5s\nA waits.\nSFX: wind\n", 1, {})
+    assert any("add full" in i.message for i in lite.lint) and "A waits." not in lite.text.split("integrated")[0]

@@ -96,9 +96,11 @@ async function onClick(app, e) {
   if (act === "copyp") copyText(app, r.text || "", "Prompt");
   if (act === "copys") copyText(app, String(r.seed), "Seed");
   if (act === "use" && !app.busy()) {
+    let kept = false;
     try {
       const text = (await app.api.template(r.template)).text;
       app.text = withDice(text, r);
+      kept = app.text !== text;
       app.preset = r.preset || null;
       app.base = r.preset ? text : null;
       app.bridge.setSeed(r.seed);
@@ -108,6 +110,6 @@ async function onClick(app, e) {
     } catch (err) { return app.fail(err); }
     app.go("prompt");
     app.toast(`Template and seed ${r.seed}${r.segment != null ? `, segment ${r.segment}` : ""} restored · control after generate set to <b>fixed</b>, so the next run reproduces it`
-      + (r.rng ? "" : " · <b>@rng 1</b> on top: it was made with the dice of before"));
+      + (kept ? " · replayed as it was made: <b>@rng 1</b> or <b>full</b> added (the dice and the format of back then)" : ""));
   }
 }

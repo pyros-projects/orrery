@@ -61,10 +61,11 @@ const REF = [
   ["Cast and Ref2VA", [
     ["CAST", "names your references once; mention them by name in shots and the summary", "CAST\nMAYA (image 1): the young blonde woman, in a light-pink shirt"],
     ["DOG (image 2, image 3): the white Samoyed, with a curved tail", "sources in parentheses (image N, video N, video N + audio, refmod NAME), then the description; later mentions use its head noun (“the white Samoyed”)", ""],
-    ["@h3 ref2va 16:9 lite", "lite changes only what orrery writes for H3: one <Subject N> = … line per cast member, then three fields where each is only its label (no retention, no summary); without it, the full reference format of MiniMax's guide. Works in every mode", "@h3 ref2va 16:9 lite"],
+    ["@h3 ref2va 16:9 full", "the prompt's format: lite by default (one <Subject N> = … line per cast member, then three fields where each is only its label); full writes the six sections of MiniMax's guide, with summary: and retention. Works in every mode", "@h3 ref2va 16:9 full"],
+    ["keep: face, outfit", "under a cast member: a retention block goes into the prompt (lite too). Macros: all · face, hair, body, outfit (combined) · style · place · loose; or partially_preserved - your own reason", "keep: "],
     ["voice: audio 1", "on the line after a member: the voice timbre it speaks with", ""],
     ["keep: partial - only the fur colour is kept", "optional retention marker and reason (full, partial, transfer, weak)", ""],
-    ["summary: MAYA feeds DOG in CAFE.", "full ref2va's summary; the task types are added for you (lite needs none)", "summary: "],
+    ["summary: MAYA feeds DOG in CAFE.", "the summary of full ref2va (a summary in lite warns); the task types are added for you", "summary: "],
     ["SHOT 5s: from image 5", "ref2va: the shot begins from a reference picture (to image N: ends on it)", ""],
     ["[audio 1]", "a reference slot in prose; orrery writes the label the node uses", ""],
   ]],

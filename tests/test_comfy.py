@@ -830,6 +830,9 @@ def test_a_run_records_its_dice_for_history_and_galaxy(home):
     assert json.loads(OrreryPrompt().run("a __animal__", 5, "text", home=str(home))[1])["rng"] == 2
     assert json.loads(OrreryPrompt().run("@rng 1\na __animal__", 5, "text", home=str(home))[1])["rng"] == 1
     assert [r["rng"] for r in history.read(Home(home))["runs"]] == [1, 2]  # newest first
+    h3 = json.loads(OrreryPrompt().run("@h3 t2va full\nSHOT 5s: static\nA fox.", 5, "h3-base", home=str(home))[1])
+    assert h3["format"] == "full" and history.read(Home(home))["runs"][0]["format"] == "full"
+    assert json.loads(OrreryPrompt().run("@h3 t2va\nSHOT 5s: static\nA fox.", 5, "h3-base", home=str(home))[1])["format"] == "lite"
 
 
 def test_size_comes_from_the_size_directive(home):

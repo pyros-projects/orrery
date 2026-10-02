@@ -3,7 +3,7 @@ title: "Sitcom café (Ref2VA)"
 note: "The official full-reference example as a screenplay. Wire MiniMax H3 Reference to Video with ref_image_1 (the café), ref_image_2–4 (the dog), ref_video_1 (the woman), ref_video_2 (the man) and ref_audio_1 (her voice). CAST names the references once; orrery numbers every label."
 tags: [h3, ref2va, dialogue]
 ---
-@h3 ref2va 16:9
+@h3 ref2va 16:9 full
 style: realistic multi-camera sitcom style with warm indoor lighting
 summary: The target video shows MAYA eating a cookie in CAFE. LEO enters with DOG, which lunges toward the cookie. The three-shot exchange uses [audio 1] as the voice-timbre reference for MAYA and ends with a canned audience laugh.
 

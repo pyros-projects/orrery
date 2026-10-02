@@ -488,9 +488,11 @@ async function onClick(app, e, open, rows) {
   if (act === "export") return openExport(app);
   if (!open) return;
   if (act === "use" && !app.busy()) {
+    let kept = false;
     try {
       const text = await templateOf(app, open);
       app.text = withDice(text, open);
+      kept = app.text !== text;
       app.preset = open.preset;
       app.base = open.preset ? text : null;
       app.bridge.setSeed(open.seed);
@@ -499,7 +501,7 @@ async function onClick(app, e, open, rows) {
     } catch (err) { return app.fail(err); }
     app.go("prompt");
     app.toast(`Template and seed ${open.seed} restored · control after generate set to <b>fixed</b>, so the next run reproduces it`
-      + (open.rng ? "" : " · <b>@rng 1</b> on top: it was made with the dice of before"));
+      + (kept ? " · replayed as it was made: <b>@rng 1</b> or <b>full</b> added (the dice and the format of back then)" : ""));
   }
   if (act === "save") {
     try { openSave(app, { text: applyDials(await templateOf(app, open), open.params), from: open.preset }); } catch (err) { app.fail(err); }

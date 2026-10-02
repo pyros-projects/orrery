@@ -85,7 +85,7 @@ Orrery Prompt ──── picks ──────────────┘  
    `ref_image` slot as you connect the last one.
 4. **Text**: Orrery Prompt `text` → Reference to Video `prompt`, directly or
    through text nodes (Text Concatenate and friends are fine).
-5. **Header**: the screenplay starts with `@h3 ref2va` (or `@h3 ref2va … lite`).
+5. **Header**: the screenplay starts with `@h3 ref2va` (the lite format by default; `@h3 ref2va … full` for the guide's full one).
 6. **Preview** (optional): `preview` → Preview Image shows every reference the
    clip gets. Keep previews off the `ref_N` themselves (section 7 says why).
 

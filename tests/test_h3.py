@@ -264,7 +264,7 @@ def test_an_enhance_line_belongs_to_its_shot_or_to_the_whole_scene():
 
 
 def test_packing_renumbers_the_images_a_scene_uses_to_one_two_three():
-    src = ("@h3 ref2va 16:9\nsummary: A meets B.\nCAST\nA (image 4): a woman\nB (image 7): a man\n"
+    src = ("@h3 ref2va 16:9 full\nsummary: A meets B.\nCAST\nA (image 4): a woman\nB (image 7): a man\n"
            "SHOT 5s: from image 6 (the door)\nA opens the door of [image 6] for B.\nSFX: a creak\n")
     result = compile_scene(src, 1, {}, packed=True)
     assert result.refs == [4, 6, 7]

@@ -416,7 +416,10 @@ test("directives: @size shapes the node, @seed and @batch are the CLI's, @rng 1 
   assert.deepEqual([shape("@h3 t2va 16:9\n@size 832x1216\nSHOT 5s\nA.").width, shape("@size 832x1216\na fox").height], [832, 1216]);
   assert.deepEqual(shape("a fox\n@seed 100\n@batch 8").cli, ["@seed 100", "@batch 8"]);
   assert.match(highlight("@batch 8", known), /t-cli/);
-  assert.equal(withDice("@h3 t2va\nSHOT 5s\nA.", {}), "@h3 t2va\n@rng 1\nSHOT 5s\nA.");
+  assert.equal(withDice("@h3 t2va\nSHOT 5s\nA.", {}), "@h3 t2va full\n@rng 1\nSHOT 5s\nA.");  // the format of back then too
+  assert.equal(withDice("@h3 t2va lite\nSHOT 5s\nA.", { rng: 2 }), "@h3 t2va lite\nSHOT 5s\nA.");
+  assert.equal(withDice("@h3 t2va\nSHOT 5s\nA.", { rng: 2, format: "lite" }), "@h3 t2va\nSHOT 5s\nA.");
+  assert.equal(withDice("@h3 t2va\nSHOT 5s\nA.", { rng: 2 }), "@h3 t2va full\nSHOT 5s\nA.");
 });
 
 test("a chance is on or off, not a list for the dials", () => {

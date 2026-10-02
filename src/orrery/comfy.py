@@ -370,6 +370,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         "edited": bool(linked) and template != load_preset(h, linked),
         "params": dials,
         "rng": parse(source).params.rng or RNG,  # the dice: a replay of an older run puts @rng 1 on top
+        # a screenplay's format (lite by default since 2026-10-02, `full` the guide's): a replay of an older run adds full
+        **({"format": "lite" if result.scene.lite else "full"} if target != "text" and getattr(result, "scene", None) else {}),
         "text": result.text,
         "picks": [{"label": p.label, "value": p.value, "keys": list(p.keys)} for p in result.picks] + sweep_picks,
         **({"sweep": sweep_data} if sweep_data else {}),
@@ -466,6 +468,7 @@ def log_outputs(home: Home, picks_json: str, media: list[str]) -> list[dict]:
         "text": data.get("text"),
         "picks": data.get("picks", []),
         **({"rng": data["rng"]} if data.get("rng") else {}),
+        **({"format": data["format"]} if data.get("format") else {}),
         **({"segment": data["segment"], "chunks": data["chunks"]} if data.get("chunks") else {}),
         **({"folder": folder} if (folder := _galaxy_folder(data.get("folder"))) else {}),
         "rating": None,

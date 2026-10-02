@@ -124,7 +124,7 @@ class Scene:
     silence: bool = False
     cast: list[Member] = field(default_factory=list)
     summary: str = ""
-    lite: bool = False  # `lite` in the header: <Subject N> = … definitions over the base fields
+    lite: bool = True  # <Subject N> = … definitions over the base fields; `full` in the header: MiniMax's full format
     loras: list[str] = field(default_factory=list)
     context: int | None = None  # frames Motion Context pins at the start of every reel segment after the first
     enhance: str = ""  # a `> instruction` before the first shot: for every shot without its own
@@ -175,8 +175,8 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
         elif m := _HEADER.match(line):
             scene.mode = m.group(1).lower()
             for token in m.group(2).split():
-                if token.lower() == "lite":
-                    scene.lite = True
+                if token.lower() in ("lite", "full"):
+                    scene.lite = token.lower() == "lite"
                 elif _RATIO.match(token):
                     scene.ratio = token
         elif m := _STYLE.match(line):
@@ -457,9 +457,26 @@ def _fields(scene: Scene, lint: list[Issue], shots: list[str]) -> str:
             f"overall_soundscape: {soundscape(scene, lint)}\n\nnon_diegetic_music: {music(scene, lint)}")
 
 
+def retention(scene: Scene, names, label) -> str:
+    """The retention_analysis block when a CAST member says `keep:`: every member, its shots, its marker
+    and reason (the default for those without). Empty without a `keep:` line."""
+    if not any(m.keep for m in scene.cast):
+        return ""
+    from orrery.h3_ref import DEFAULT_KEEP
+
+    lines = []
+    for m in scene.cast:
+        where = ", ".join(f"[Shot {i}]" for i in sorted(names.appears.get(m.name, []))) or "no shot"
+        marker, reason = m.keep or DEFAULT_KEEP
+        lines.append(f"{label(m)} (appears in {where}): {marker} - {(reason or DEFAULT_KEEP[1]).replace('{who}', m.short)}")
+    return "retention_analysis:\n" + "\n".join(lines)
+
+
 def write_h3_base(scene: Scene, lint: list[Issue]) -> str:
-    shots = render_shots(scene, lint, _Speakers(scene), Names(scene.cast), style=scene.style)
-    return "\n\n".join(p for p in (_alignment(scene), _fields(scene, lint, shots)) if p)
+    names = Names(scene.cast)
+    shots = render_shots(scene, lint, _Speakers(scene), names, style=scene.style)
+    keep = retention(scene, names, lambda m: m.short[0].upper() + m.short[1:])
+    return "\n\n".join(p for p in (_alignment(scene), keep, _fields(scene, lint, shots)) if p)
 
 
 def write_h3_lite(scene: Scene, lint: list[Issue]) -> str:
@@ -467,8 +484,8 @@ def write_h3_lite(scene: Scene, lint: list[Issue]) -> str:
     mention as its label."""
     prose = [it for shot in scene.shots for it in shot.items if isinstance(it, str)]
     labels = Labels(scene.cast, [s for text in prose for s in bracket_sources(text)])
-    shots = render_shots(scene, lint, _Speakers(scene, labels, sep=":"), Names(scene.cast, labels, describe=False),
-                         labels, style=scene.style)
+    names = Names(scene.cast, labels, describe=False)
+    shots = render_shots(scene, lint, _Speakers(scene, labels, sep=":"), names, labels, style=scene.style)
     definitions = []
     for m in scene.cast:
         subject, phrase = f"<Subject {labels.subjects[m.name]}>", labels.sources_phrase(m)
@@ -477,7 +494,10 @@ def write_h3_lite(scene: Scene, lint: list[Issue]) -> str:
         if m.voice:
             definitions.append(f"{labels.label(m.voice)} = the voice of {subject}")
     align = "" if scene.mode == "ref2va" else _alignment(scene)
-    return "\n\n".join(p for p in ("\n".join(definitions), align, _fields(scene, lint, shots)) if p)
+    keep = retention(scene, names, lambda m: f"<Subject {labels.subjects[m.name]}>")
+    if scene.summary.strip():
+        lint.append(Issue("warn", "summary: goes into the prompt only in the full format: add full to the @h3 line."))
+    return "\n\n".join(p for p in ("\n".join(definitions), align, keep, _fields(scene, lint, shots)) if p)
 
 
 def write_flat(scene: Scene) -> str:

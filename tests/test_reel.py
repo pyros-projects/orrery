@@ -242,7 +242,7 @@ def test_before_it_exists_a_sent_image_is_left_out_of_the_clip():
 
 
 def test_a_frame_anchor_on_a_sent_image_waits_for_it():
-    full = SEND_REEL.replace(" lite", "")
+    full = SEND_REEL.replace(" lite", " full")
     later = full.replace("SHOT 4s: static", "SHOT 4s: from image 3, static")
     assert "<Picture 2> is the first frame of [Shot 1]" in ref2va(later, segment=2).text
     early = full.replace("SHOT 5s: push in, slow", "SHOT 5s: from image 3, push in, slow")
