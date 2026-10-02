@@ -8,7 +8,10 @@ cd /path/to/ComfyUI/custom_nodes && git clone https://github.com/pyros-projects/
 ln -s /path/to/orrery/comfyui /path/to/ComfyUI/custom_nodes/orrery   # Windows: mklink /J …\custom_nodes\orrery …\orrery\comfyui
 ```
 
-Restart ComfyUI. **Templates → orrery** (or `example_workflows/` in the
+Restart ComfyUI. While it loads, orrery prints its banner in the console: a
+small orrery in brass, then its boot lines (the nodes it registered, its home,
+and anything that did not come up, marked with a red `!`); `NO_COLOR` prints
+it without colour. **Templates → orrery** (or `example_workflows/` in the
 repository) holds a workflow per mode, built from ComfyUI's own nodes plus
 orrery's: Krea 2 (`text`), MiniMax H3 t2va, i2va, fl2va, l2va, ref2va, and reels
 on t2va and on ref2va with Orrery Continue / Orrery Film. Their notes name the
