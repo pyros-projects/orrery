@@ -77,6 +77,8 @@ _HANDOFF = re.compile(r"^HANDOFF:\s*(.+)$")
 _SEND_LINE = re.compile(r"^SEND:")
 _LORA = re.compile(r"^LORA:\s*(.+)$")
 _CONTEXT = re.compile(r"^context:\s*(\d+)\s*f?$", re.IGNORECASE)
+_REFMODS = re.compile(r"^refmods:\s*(?:at\s+(\d*\.?\d+))?\s*(?:from\s+(\d+(?:\.\d+)?)\s*%)?\s*$", re.IGNORECASE)
+REFMOD_START = 0.35  # RefMods sit out the first 35 % of sampling, where the layout is set (docs/long-video.md)
 _DSL_ONLY = re.compile(r"^(:\s*(x\d|seed=|w\d|h\d|grid\b|unique=)|@(grid|unique|size|seed|batch|rng)\b)")  # params lines of plain templates
 _ENHANCE = re.compile(r"^>\s*(.+)$")
 H3_FPS = 24
@@ -127,6 +129,8 @@ class Scene:
     lite: bool = True  # <Subject N> = … definitions over the base fields; `full` in the header: MiniMax's full format
     loras: list[str] = field(default_factory=list)
     context: int | None = None  # frames Motion Context pins at the start of every reel segment after the first
+    refmod_strength: float = 1.0  # `refmods: at 0.8 from 35%`: what a RefMod without its own `at`/`from` gets
+    refmod_start: float = REFMOD_START
     enhance: str = ""  # a `> instruction` before the first shot: for every shot without its own
 
     @property
@@ -147,6 +151,7 @@ class Compiled:
     refs: list[int] = field(default_factory=list)  # packed: the original image slots, in their new order (sent ones the prompt does not name last)
     sends: dict[int, dict] = field(default_factory=dict)  # sent images that exist in this segment (Reel.ready)
     send_slots: list[int] = field(default_factory=list)  # every image a SEND: line of the reel fills
+    refmods: list[dict] = field(default_factory=list)  # the RefMods this clip gets (clip_refmods), for Orrery RefMods
 
 
 # --- front end ------------------------------------------------------------------------------
@@ -191,6 +196,11 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
             raise ValueError("SEND: belongs inside a CHUNK: it sends frames of that chunk's clip to the clips after it.")
         elif m := _CONTEXT.match(line):
             scene.context = int(m.group(1))
+        elif m := _REFMODS.match(line):
+            if m.group(1):
+                scene.refmod_strength = float(m.group(1))
+            if m.group(2):
+                scene.refmod_start = min(1.0, float(m.group(2)) / 100)
         elif (m := _MUSIC.match(line)) and cur is None and in_cast:
             scene.music = m.group(1).strip()
         elif line == "CAST" and cur is None:
@@ -549,10 +559,7 @@ def _cast_lint(scene: Scene, lint: list[Issue]) -> None:
     for m in scene.cast:
         lint.extend(Issue("warn", problem) for problem in m.problems)
         for src in m.sources:
-            if src.kind == "refmod":
-                lint.append(Issue("warn", f"{m.name} uses refmod {src.name}: orrery does not load RefMods yet, "
-                                          f"so apply it with the H3 RefMod nodes. The prompt already describes {m.name}."))
-            elif src.index > MAX_SLOTS[src.kind]:
+            if src.kind != "refmod" and src.index > MAX_SLOTS[src.kind]:
                 lint.append(Issue("warn", f"{m.name} uses {src.kind} {src.index}; the Reference to Video node "
                                           f"takes {src.kind} 1–{MAX_SLOTS[src.kind]}."))
         if not ref and (m.voice or any(s.kind != "refmod" for s in m.sources)):
@@ -566,6 +573,23 @@ def _cast_lint(scene: Scene, lint: list[Issue]) -> None:
     if ref and not scene.lite and not scene.summary:
         lint.append(Issue("warn", "ref2va reads best with a summary: line (one short paragraph about the "
                                   "target video, using CAST names)."))
+
+
+def clip_refmods(scene: Scene) -> list[dict]:
+    """The RefMods this clip gets: those of the cast members its prose, voices or summary name, and of
+    the `global` ones. A RefMod brings back what it shows, so a place the clip only leaves for, or
+    a person who is not in it, stays out. Each with its strength and its start (a share of sampling)."""
+    texts = [scene.summary, *(it if isinstance(it, str) else f"{it.name}: {it.text}"
+                              for shot in scene.shots for it in shot.items)]
+    named = lambda name: any(re.search(rf"(?<![\w]){re.escape(name)}(?![\w])", text) for text in texts)
+    out: dict[str, dict] = {}
+    for m in scene.cast:
+        for src in m.sources:
+            if src.kind == "refmod" and src.name not in out and (m.everywhere or named(m.name)):
+                out[src.name] = {"name": src.name, "member": m.name,
+                                 "strength": scene.refmod_strength if src.strength is None else src.strength,
+                                 "from": scene.refmod_start if src.start is None else src.start}
+    return list(out.values())
 
 
 _IMAGE_BRACKET = re.compile(r"\[image\s+(\d+)\]", re.IGNORECASE)
@@ -680,4 +704,4 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
         _scene_lint(src, scene, lint)
     return Compiled(text, picks, lint, scene, " ".join(scene.loras), len(reel.blocks) if reel else 0,
                     segment if reel else 0, reel.segments if reel else 0, refs,
-                    sends, reel.send_slots if reel else [])
+                    sends, reel.send_slots if reel else [], clip_refmods(scene))

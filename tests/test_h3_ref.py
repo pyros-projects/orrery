@@ -294,7 +294,7 @@ SFX: music plays
     assert "<Subject 4> (appears in [Shot 1]): fully_preserved - only the red bass" in ret
 
 
-def test_refmods_are_described_but_not_loaded_yet():
+def test_refmods_are_described_and_listed_for_orrery_refmods():
     src = """@h3 t2va full
 CAST
 MAYA (refmod maya_canon): a young blonde woman, in a light-pink shirt
@@ -304,7 +304,37 @@ SFX: wind
 """
     res = h3(src)
     assert "A young blonde woman, in a light-pink shirt, waves." in res.text
-    assert any("maya_canon" in i.message and i.severity == "warn" for i in res.lint)
+    assert res.refmods == [{"name": "maya_canon", "member": "MAYA", "strength": 1.0, "from": 0.35}]
+    assert not any("maya_canon" in i.message for i in res.lint)
+
+
+REFMOD_TOUR = """@h3 ref2va 16:9
+refmods: at 0.9 from 40%
+CAST
+SALON (refmod salon_canon at 0.5 from 20%): a grand salon, with a black piano
+HALL (refmod hall_canon): a long hallway
+GARDEN (refmod garden_canon, global): a walled garden
+SHOT 5s
+The camera crosses SALON toward the doors.
+"""
+
+
+def test_a_refmod_carries_its_strength_and_start_or_the_screenplay_defaults():
+    mods = {m["name"]: m for m in h3(REFMOD_TOUR.replace("crosses SALON", "crosses SALON into HALL")).refmods}
+    assert mods["salon_canon"] == {"name": "salon_canon", "member": "SALON", "strength": 0.5, "from": 0.2}
+    assert (mods["hall_canon"]["strength"], mods["hall_canon"]["from"]) == (0.9, 0.4)
+
+
+def test_a_clip_gets_the_refmods_of_the_members_it_names_and_the_global_ones():
+    assert [m["name"] for m in h3(REFMOD_TOUR).refmods] == ["salon_canon", "garden_canon"]
+    quiet = REFMOD_TOUR.replace("The camera crosses SALON toward the doors.", "The camera rests on the salon.")
+    assert [m["name"] for m in h3(quiet).refmods] == ["garden_canon"]  # lowercase prose names no member
+
+
+def test_refmod_syntax_problems_are_lint_not_failures():
+    src = REFMOD_TOUR.replace("refmod hall_canon", "refmod hall_canon from 150%").replace(", global", ", everywhere")
+    lint = [i.message for i in h3(src).lint]
+    assert any("from 150%" in m for m in lint) and any('"everywhere"' in m for m in lint)
 
 
 def test_reference_sources_outside_ref2va_warn():

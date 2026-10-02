@@ -243,7 +243,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                frames=None, packed: bool = False,
                wired: int | None = None, chain: str = DEFAULT_CHAIN,
                keep: bool = False, sweep: str = "",
-               continued: bool = False, sizes: tuple[Size, Size] = (None, None)) -> tuple[str, str, int, int, int, int, list, int, int]:
+               continued: bool = False, sizes: tuple[Size, Size] = (None, None),
+               refmodded: bool = True) -> tuple[str, str, int, int, int, int, list, int, int]:
     """`frames`: the previous clip's stills, which the model sees when it writes `--…--` slots.
     `packed`: Orrery Refs routes the images per clip; `wired`: the reference images Reference to
     Video has (both from the graph, see `wiring`). `chain`: the Motion Context chain SEND: reads;
@@ -251,7 +252,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     `sweep`: "run|galaxy folder", set by Generate for each run of a LoRA sweep (orrery.sweep) or a
     `: grid` (orrery.batch); the LoRA runs are the outer loop, the grid's cells the inner one.
     `continued`: an Orrery Continue reads the picks, which pins 22 frames whatever `context:` says.
-    `sizes`: (width, height) of the frames wired into first_frame and last_frame, or None."""
+    `sizes`: (width, height) of the frames wired into first_frame and last_frame, or None.
+    `refmodded`: an Orrery RefMods reads the picks, which applies the clip's RefMods."""
     h = resolve_home(home or None)
     if preset and preset != NO_PRESET:
         template, linked = load_preset(h, preset), preset
@@ -360,6 +362,12 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     if target != "text" and result.loras:
         stack, warnings = lora_stack(result.loras, lora_files())
         lint += [{"severity": "warn", "message": w} for w in warnings]
+    refmods = getattr(result, "refmods", []) if target != "text" else []
+    if refmods and not refmodded:
+        lint.append({"severity": "warn", "message": (
+            f"This clip uses RefMods ({', '.join(r['name'] for r in refmods)}), but no Orrery RefMods reads this "
+            "node's picks: put one between Reference to Video's conditioning and the sampler (or Orrery "
+            "Continue), with the picks wired in. The prompt already describes them.")})
     for issue in lint:
         print(f"[orrery] {issue['severity']}: {issue['message']}")
     data = {
@@ -382,6 +390,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                       "ready": {str(k): v for k, v in result.sends.items()}}}
            if target != "text" and result.send_slots else {}),
         **({"enhanced": enhanced} if enhanced else {}),
+        **({"refmods": refmods} if refmods else {}),
     }
     width, height, length = shape(source, sizes)
     lint += frame_lint(source, sizes, width, height)
@@ -572,7 +581,8 @@ class OrreryPrompt:
         try:
             outputs = run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
                                  params, segment, clip, stills, packed, wired, latent_path or DEFAULT_CHAIN, keep,
-                                 sweep, continued(prompt, unique_id), (_size(first_frame), _size(last_frame)))
+                                 sweep, continued(prompt, unique_id), (_size(first_frame), _size(last_frame)),
+                                 reads_picks(prompt, unique_id, "OrreryRefMods"))
             data = json.loads(outputs[1])
             h = resolve_home(home or None)
             history.record(h, data)
@@ -691,6 +701,14 @@ def to_image(array):
     import torch
 
     return torch.from_numpy(array)
+
+
+def reads_picks(prompt: dict | None, unique_id, class_type: str) -> bool:
+    """Whether a node of `class_type` reads this node's picks; True without a graph (the CLI, tests)."""
+    if not prompt or unique_id is None:
+        return True
+    return any(n.get("class_type") == class_type and n.get("inputs", {}).get("picks") == [str(unique_id), 1]
+               for n in prompt.values())
 
 
 def continued(prompt: dict | None, unique_id) -> bool:

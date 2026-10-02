@@ -872,3 +872,19 @@ def test_a_logged_sweep_output_lands_in_its_folder(home, tmp_path):
     [row] = log_outputs(Home(home), json.dumps(data), [str(tmp_path / "y.png")])
     assert "folder" not in row
 
+
+REFMOD_SCENE = """@h3 ref2va 16:9
+CAST
+SALON (refmod salon_canon at 0.5): a grand salon
+SHOT 5s
+The camera crosses SALON.
+"""
+
+
+def test_the_picks_carry_the_clips_refmods_and_lint_asks_for_orrery_refmods(home):
+    _, picks, *_ = run_prompt(REFMOD_SCENE, 1, "h3-base", str(home))
+    data = json.loads(picks)
+    assert data["refmods"] == [{"name": "salon_canon", "member": "SALON", "strength": 0.5, "from": 0.35}]
+    assert not any("Orrery RefMods" in i["message"] for i in data["lint"])
+    _, picks, *_ = run_prompt(REFMOD_SCENE, 1, "h3-base", str(home), refmodded=False)
+    assert any("Orrery RefMods" in i["message"] for i in json.loads(picks)["lint"])

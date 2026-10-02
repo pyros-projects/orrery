@@ -7,7 +7,9 @@
     keep: partial - only her face and hair are kept      (or a macro: keep: face, hair)
 
 A member is a memory: a description (head noun phrase, then details after the first comma)
-plus where it comes from (`image N`, `video N`, `video N + audio`, `refmod NAME`). In ref2va the
+plus where it comes from (`image N`, `video N`, `video N + audio`, `refmod NAME`). A RefMod can
+carry a strength and a start (`refmod salon_canon at 0.5 from 35%`), and `global` sends the member's
+RefMods with every clip, not only with the clips that name it. In ref2va the
 compiler turns members into <Subject N> labels and sources into the labels the MiniMax H3
 Reference to Video node gives its inputs; in the other modes names expand to descriptions,
 which is also how RefMods bind to a prompt.
@@ -28,7 +30,8 @@ KEEP = {  # any of these spellings (spaces, hyphens or underscores) name a reten
 }
 
 MEMBER = re.compile(r"^([A-Z][A-Z0-9 _-]*?)\s*(?:\(([^)]*)\))?\s*:\s*(.+)$")
-_SOURCE = re.compile(r"^(image|video|audio)\s+(\d+)(\s*\+\s*audio)?$|^refmod\s+([\w.-]+)$", re.IGNORECASE)
+_SOURCE = re.compile(r"^(image|video|audio)\s+(\d+)(\s*\+\s*audio)?$"
+                     r"|^refmod\s+([\w./-]+)(?:\s+at\s+(\d*\.?\d+))?(?:\s+from\s+(\d+(?:\.\d+)?)\s*%)?$", re.IGNORECASE)
 _VOICE = re.compile(r"^(?:(audio)\s+(\d+)|video\s+(\d+)\s+audio)\s*(?:,\s*(.*))?$", re.IGNORECASE)
 # keep: macros, written out as a marker and a reason ({who} is the member's head noun)
 KEEP_PARTS = {"face": "face", "identity": "face", "hair": "hair", "body": "build", "build": "build",
@@ -58,6 +61,8 @@ class Source:
     index: int = 0
     name: str = ""
     soundtrack: bool = False
+    strength: float | None = None  # refmod: `at 0.5`; None takes the screenplay's default
+    start: float | None = None  # refmod: `from 35%` as 0.35, the share of sampling it waits; None, the default
 
 
 @dataclass
@@ -69,6 +74,7 @@ class Member:
     voice: Source | None = None  # an audio slot, or a video's soundtrack (kind "video", soundtrack True)
     voice_note: str = ""
     keep: tuple[str, str | None] | None = None  # (marker, reason or None for the default)
+    everywhere: bool = False  # `global`: its RefMods go with every clip, named in it or not
     problems: list[str] = field(default_factory=list)  # advice for lint; parsing never fails
 
     def split_head(self) -> tuple[str, str]:
@@ -88,11 +94,19 @@ def parse_member(name: str, spec: str, text: str) -> Member:
     member = Member(name.strip(), head.strip(), f", {rest.strip()}" if rest.strip() else "")
     for raw in filter(None, (s.strip() for s in (spec or "").split(","))):
         m = _SOURCE.match(raw)
-        if not m:
+        if raw.lower() == "global":
+            member.everywhere = True
+        elif not m:
             member.problems.append(f"{member.name}: \"{raw}\" is not a reference orrery knows (image N, "
-                                   "video N, video N + audio, audio N, refmod NAME), so it is left out.")
+                                   "video N, video N + audio, audio N, refmod NAME, global), so it is left out.")
         elif m.group(4):
-            member.sources.append(Source("refmod", name=m.group(4)))
+            start = float(m.group(6)) / 100 if m.group(6) else None
+            if start is not None and start > 1:
+                member.problems.append(f"{member.name}: refmod {m.group(4)} from {m.group(6)}% waits past the end "
+                                       "of sampling; it starts at 100% instead.")
+                start = 1.0
+            member.sources.append(Source("refmod", name=m.group(4),
+                                         strength=float(m.group(5)) if m.group(5) else None, start=start))
         else:
             member.sources.append(Source(m.group(1).lower(), int(m.group(2)), soundtrack=bool(m.group(3))))
     return member
