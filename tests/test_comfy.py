@@ -26,6 +26,16 @@ REPO = Path(__file__).resolve().parents[1]
 SCENE = "@h3 t2va\nSHOT 5s: static\nA __animal__ sleeps.\nSFX: wind\n"
 
 
+@pytest.fixture(autouse=True)
+def _preview_only_real_images(monkeypatch):
+    """Orrery Refs draws a preview of what it hands on; many tests hand it placeholder strings."""
+    from orrery import comfy
+
+    real = comfy.stack_preview
+    monkeypatch.setattr(comfy, "stack_preview",
+                        lambda labelled: real(labelled) if all(hasattr(img, "shape") for _, img in labelled) else None)
+
+
 def test_prompt_node_expands_plain_templates(home):
     text, picks, seed, *_ = run_prompt("a __animal__", 4, "text", str(home))
     data = json.loads(picks)
@@ -861,3 +871,4 @@ def test_a_logged_sweep_output_lands_in_its_folder(home, tmp_path):
     data["folder"] = "../escape"
     [row] = log_outputs(Home(home), json.dumps(data), [str(tmp_path / "y.png")])
     assert "folder" not in row
+
