@@ -678,7 +678,7 @@ def test_the_history_lists_runs_newest_first_and_searches(home):
 
 def test_the_writer_texts_are_read_edited_and_reset(home):
     body = ok(home, webapi.writer_texts)
-    assert set(body) == {"skill", "continue", "story", "describe", "describe_shot"} and body["skill"]["edited"] is False
+    assert set(body) == {"continue", "story", "describe", "describe_shot"} and body["continue"]["edited"] is False
     edited = ok(home, webapi.writer_save, name="story", text="Write {seconds} seconds.")
     assert edited["edited"] is True and edited["text"].startswith("Write {seconds}")
     assert ok(home, webapi.writer_save, name="story", text=None)["edited"] is False

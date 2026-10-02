@@ -9,6 +9,7 @@ wrong with it.
 import json
 
 from orrery import writers
+from orrery.comfy_llm import llm_config
 from orrery.home import resolve_home
 
 FRAME_EDGE = 768  # the long edge of a frame the model sees: enough to read it, a few hundred tokens
@@ -78,7 +79,8 @@ class OrreryWrite:
             source = strip_comments(resolve_includes(h, override(template, dials)))
             prompt = writers.request(h, task, source, seed, h.libraries(), h.weights())
             images = _frames(task, first_frame, last_frame)
-            backend = comfy.llm_for(h, clip, seed=(seed + idea) % 2**32)
+            backend = comfy.llm_for(h, clip, seed=(seed + idea) % 2**32,
+                                    temperature=float(llm_config(h)["writer_temperature"]))  # ideas, not one answer
             if backend is None:
                 raise writers.WriterError("The writers need a language model: pick one in orrery's settings (the gear "
                                           "in the node), or wire a text encoder into the Orrery Prompt's clip.")

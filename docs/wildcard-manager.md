@@ -117,12 +117,14 @@ Each idea is a short run of its own: Orrery Write with only the frames and the
 text encoder wired into the node, so no video model loads and the run ends
 when the model has written (a run already in the queue goes first). The ideas
 wait in a sheet: ‹ › pages through them, **Another idea** asks again (the
-model samples at seed + n, the chunks it reads still roll at the node's
-seed), **Insert** puts one into the editor as an unsaved edit (Undo in the
+model samples at seed + n and at `writer_temperature`, 0.8 by default in
+`orrery.yaml`'s `llm:`, so each idea is a different one; the chunks it reads
+still roll at the node's seed), **Insert** puts one into the editor as an unsaved edit (Undo in the
 toast). An answer that writes wildcards, more than one chunk or a shot orrery
 cannot compile is shown with what is wrong; **Insert anyway** takes it as it
 is. Close the sheet while it writes, and a toast says when the idea is ready.
-The gear's **Writers** section holds what the model is sent: the skill (the
-language, with examples, ahead of every task) and each task, editable, with
-**Reset to default**; an edit lives in `writers/` in the orrery home, so an
+The gear's **Writers** section holds what the model is sent: each writer its
+own prompt (the image prompt and the i2va shot of Prompt from image are two),
+with only the rules and examples it needs, so a small model is not confused by
+the others'. Each is editable, with **Reset to default**; an edit lives in `writers/` in the orrery home, so an
 update of orrery leaves it alone.

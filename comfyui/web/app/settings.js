@@ -6,9 +6,9 @@ import { icon } from "./icons.js";
 
 const gb = (bytes) => (bytes ? `${(bytes / 1e9).toFixed(1)} GB` : "");
 
-// What the Write menu sends the model: the skill ahead of every task, then the task.
-const WRITER_TEXTS = { skill: "The skill: the screenplay language, ahead of every task", continue: "Continue the reel",
-  story: "Story between frames", describe: "Prompt from image: an image prompt", describe_shot: "Prompt from image: an @h3 i2va shot" };
+// What the Write menu sends the model: each writer a prompt of its own, with only its own rules.
+const WRITER_TEXTS = { continue: "Continue the reel", story: "Story between frames", describe: "Prompt from image: an image prompt",
+  describe_shot: "Prompt from image: an @h3 i2va shot" };
 
 const HOME_NOTE = {
   env: (h) => `ORRERY_HOME is set to <code>${esc(h)}</code> and wins over this setting; unset it to use the folder below.`,
@@ -39,8 +39,9 @@ export async function openSettings(app) {
     <div class="field"><label class="label" for="oa-llm-t">Max tokens</label>
       <div class="row"><input class="input narrow" id="oa-llm-t" type="number" min="500" max="131072" step="500" value="${s.max_tokens}"><span class="muted">the longest answer it may write in one run; long entries need room</span></div></div>
     <div class="row spread"><h5 class="label">Writers</h5></div>
-    <p class="muted flush">What the <b>Write</b> menu sends the language model. <code>{world}</code> <code>{chunks}</code> <code>{next}</code> <code>{handoff}</code> <code>{seconds}</code>
-      are filled in when it runs; Picture 1 and 2 are the frames it sees. An edit is kept in the home folder, so an update of orrery leaves it alone.</p>
+    <p class="muted flush">What the <b>Write</b> menu sends the language model: each writer its own prompt, with only the rules it needs.
+      <code>{world}</code> <code>{chunks}</code> <code>{next}</code> <code>{handoff}</code> <code>{seconds}</code> are filled in when it runs; Picture 1 and 2 are the frames it sees.
+      An edit is kept in the home folder, so an update of orrery leaves it alone.</p>
     <div class="field"><div class="row"><select class="input" id="oa-wr" aria-label="Writer text">${Object.entries(WRITER_TEXTS).map(([k, label]) =>
       `<option value="${k}">${esc(label)}${wr[k].edited ? " · edited" : ""}</option>`).join("")}</select>
       <button type="button" class="btn ghost" data-wreset title="Back to the text orrery ships">${icon("undo")}Reset to default</button></div>

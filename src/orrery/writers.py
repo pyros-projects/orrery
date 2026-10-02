@@ -1,12 +1,14 @@
-"""orrery's language model writes screenplays: a skill that teaches it the static language, and three
-writers on top.
+"""orrery's language model writes screenplays: three writers, each with a prompt of its own that
+teaches only what it writes (the static language, no wildcards), so a small model is not confused by
+the rules of the others.
 
     continue   the reel's chunks so far, resolved (picks filled)  →  the next CHUNK
     story      the first and the last frame                       →  the SHOT between them (fl2va)
     describe   a picture                                          →  an image prompt, or an i2va SHOT
 
-The texts ship in builtin/writers/ (Markdown, one per name) and can be edited in the settings; an
-edit lives in the orrery home's writers/ folder and shadows the default. The model writes once per
+The prompts ship in builtin/writers/ (Markdown, one per name; describe has two, an image prompt and
+an i2va shot) and can be edited in the settings; an edit lives in the orrery home's writers/ folder
+and shadows the default. The model writes once per
 ComfyUI run (a second generate in one run crashes the process), so an answer that does not fit is
 reported with what is wrong, not retried: the app shows it as an idea and asks for the next one.
 """
@@ -17,7 +19,7 @@ from pathlib import Path
 from orrery.home import Home, write_atomic
 
 BUILTIN = Path(__file__).parent / "builtin" / "writers"
-NAMES = ("skill", "continue", "story", "describe", "describe_shot")
+NAMES = ("continue", "story", "describe", "describe_shot")
 TASKS = ("continue", "story", "describe")
 DEFAULT_SECONDS = 5
 
@@ -103,7 +105,7 @@ def task_name(task: str, template: str) -> str:
 
 
 def request(home: Home, task: str, template: str, seed: int, libraries, weights) -> str:
-    """The skill, then the task filled in for this template. `template` is the source as the node
+    """The writer's prompt, filled in for this template. `template` is the source as the node
     compiles it: dials applied, includes resolved, comments out."""
     name = task_name(task, template)
     if name != "continue" and any(_CHUNK.match(ln) for ln in template.splitlines()):
@@ -135,11 +137,7 @@ def request(home: Home, task: str, template: str, seed: int, libraries, weights)
             else:
                 world.append(ex.expr(ln))
         values = {"seconds": shot_seconds(template), "world": _world(world)}
-    return default_join(text(home, "skill"), _fill(text(home, name), values))
-
-
-def default_join(skill: str, task: str) -> str:
-    return f"{skill.strip()}\n\n---\n\n{task.strip()}"
+    return _fill(text(home, name), values).strip()
 
 
 # --- what comes back --------------------------------------------------------------------------

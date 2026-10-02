@@ -1,6 +1,6 @@
-"""orrery's language model writes screenplays: the skill and the three writers (continue the reel,
-the story between two frames, a prompt from a picture), what they send, how an answer is checked and
-where it lands in the template."""
+"""orrery's language model writes screenplays: the three writers (continue the reel, the story
+between two frames, a prompt from a picture), each with a prompt of its own, what they send, how an
+answer is checked and where it lands in the template."""
 
 import pytest
 
@@ -34,13 +34,26 @@ HANDOFF: the boat turns toward the light
 
 
 def test_continue_reads_every_segment_resolved_and_asks_for_the_next(home):
-    prompt = writers.request(Home(home), "continue", REEL, 3, {}, {})
-    assert prompt.startswith(writers.default("skill").strip()[:40])
+    h = Home(home)
+    assert writers.request(h, "continue", REEL, 3, {}, {}).startswith(writers.default("continue").strip()[:40])
+    writers.save(h, "continue", "{world}\n\n{chunks}\n\nWrite clip {next}, from {handoff}.")
+    prompt = writers.request(h, "continue", REEL, 3, {}, {})
     storm = "a rising gale" if "a rising gale" in prompt else "a heavy sea fog"
-    assert f"KEEPER climbs the stairs while {storm} batters the tower." in prompt and "$storm" not in prompt.split("---")[-1]
-    assert prompt.split("---")[-1].count("CHUNK the lamp") == 2  # repeat 2: both clips, as they were made
-    assert "Write clip 4" in prompt and "the beam sweeps over the sea" in prompt
-    assert "style: live-action, cinematic" in prompt and "@h3" not in prompt.split("---")[-1]
+    assert f"KEEPER climbs the stairs while {storm} batters the tower." in prompt and "$storm" not in prompt
+    assert prompt.count("CHUNK the lamp") == 2  # repeat 2: both clips, as they were made
+    assert "Write clip 4, from the last clip ended as: the beam sweeps over the sea." in prompt
+    assert "style: live-action, cinematic" in prompt and "@h3" not in prompt
+
+
+@pytest.mark.parametrize("task, template, foreign", [
+    ("continue", REEL, ("Krea", "Picture 1")),
+    ("story", "@h3 fl2va\nSHOT 5s\nA.", ("Krea", "CHUNK", "HANDOFF")),
+    ("describe", "a photo", ("SHOT", "CHUNK", "H3")),
+    ("describe", "@h3 i2va\nSHOT 5s\nA.", ("Krea", "CHUNK", "HANDOFF")),
+])
+def test_each_writer_sends_only_its_own_rules(home, task, template, foreign):
+    prompt = writers.request(Home(home), task, template, 1, {}, {})
+    assert not [word for word in foreign if word in prompt] and "orrery" not in prompt.lower()
 
 
 def test_a_continued_chunk_is_cleaned_checked_and_appended():
@@ -77,7 +90,7 @@ def test_story_and_describe_write_a_shot_under_the_header(home):
 
 def test_describe_writes_an_image_prompt_for_a_still(home):
     krea = "# KREA 2 · quickstart\na photo of {a fox|a heron}\n: w832 h1216\n"
-    assert "image prompt for Krea 2" in writers.request(Home(home), "describe", krea, 1, {}, {})
+    assert "image prompts for Krea 2" in writers.request(Home(home), "describe", krea, 1, {}, {})
     text, problem = writers.check("describe", krea, 'Prompt: "A 35mm photograph of a grey cat on a white\nbed, soft window light."')
     assert problem is None and text == "A 35mm photograph of a grey cat on a white bed, soft window light."
     assert writers.apply("describe", krea, text) == f"# KREA 2 · quickstart\n{text}\n: w832 h1216\n"
@@ -119,14 +132,14 @@ def _write(monkeypatch, home, replies, **inputs):
 
     class Recording(FakeBackend):
         def complete(self, prompt, images=None):
-            asked.append((prompt, images, self.seed))
+            asked.append((prompt, images, self.seed, self.temperature))
             return super().complete(prompt, images)
 
-    def llm_for(h, clip=None, seed=0):
+    def llm_for(h, clip=None, seed=0, temperature=None):
         if replies is None:
             return None
         backend = Recording(replies)
-        backend.seed = seed
+        backend.seed, backend.temperature = seed, temperature
         return backend
 
     monkeypatch.setattr(comfy, "llm_for", llm_for)
@@ -138,6 +151,7 @@ def test_the_write_node_asks_once_and_hands_back_the_new_template(home, monkeypa
     result, asked = _write(monkeypatch, home, [CHUNK_ANSWER], task="continue", template="# my reel\n" + REEL, seed=3, idea=2)
     assert len(asked) == 1 and asked[0][1] is None and "Write clip 4" in asked[0][0]
     assert asked[0][2] == 5 and result["idea"] == 2  # the model samples at seed + idea
+    assert asked[0][3] == 0.8  # the writers' own temperature: each idea a different one
     assert result["problem"] is None and result["text"].startswith("CHUNK the ship")
     assert result["template"].startswith("# my reel\n@h3 t2va") and result["template"].rstrip().endswith("toward the light")
 

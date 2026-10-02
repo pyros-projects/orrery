@@ -195,11 +195,12 @@ def dial_values(params: str) -> dict[str, str]:
     return {str(k).lstrip("$"): str(v).strip() for k, v in values.items() if str(v).strip()} if isinstance(values, dict) else {}
 
 
-def llm_for(home: Home, clip=None, seed: int = 0) -> ComfyBackend | None:
+def llm_for(home: Home, clip=None, seed: int = 0, temperature: float | None = None) -> ComfyBackend | None:
     """The active language model: a text encoder on the node's clip input, else the one chosen in
-    orrery's settings, else none."""
+    orrery's settings, else none. `temperature` overrides the configured one (the writers' own)."""
     cfg = llm_config(home)
-    options = {"temperature": float(cfg["temperature"]), "max_length": int(cfg["max_tokens"]), "seed": seed}
+    options = {"temperature": float(cfg["temperature"] if temperature is None else temperature),
+               "max_length": int(cfg["max_tokens"]), "seed": seed}
     if clip is not None:
         return ComfyBackend(clip=clip, **options)
     if cfg["file"] and can_write(cfg["file"]):

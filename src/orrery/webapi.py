@@ -581,7 +581,7 @@ def history_runs(home: Home, args: dict) -> dict:
 
 
 def writer_texts(home: Home, args: dict) -> dict:
-    """The writers' skill and tasks: each {text, default, edited}."""
+    """The writers' prompts: each {text, default, edited}."""
     from orrery import writers
 
     return writers.texts(home)
