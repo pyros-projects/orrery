@@ -187,7 +187,9 @@ Test it by hand with the installed H3RefMods (Codie's A/B/C):
 | C | ✓ | ✓ | ✓ |
 
 Same seed and prompt; judge room identity, material drift, recurring objects,
-seam quality and composition leakage. Build the RefMods from stills (Create
-From Folder): the video path of the installed pack snaps to a 4k+1 frame grid
-instead of H3's 17k+5, and "Create From Inputs" with saving looks broken
-(both unverified).
+seam quality and composition leakage. Build the RefMods from stills: the
+installed pack trims a video reference to 4k+1 frames, while H3's own Reference
+to Video trims to 17k+5 (checked in both sources, 2026-10-02). Whether "Create
+From Inputs" saves correctly is still unchecked; the experiment builds its
+RefMods in the graph without saving them. The setup, the three workflows and
+the run sheet are in [experiments/refmod-abc/](../experiments/refmod-abc/run_sheet.md).
