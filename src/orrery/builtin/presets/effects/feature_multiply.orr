@@ -14,7 +14,7 @@ $ending = {all the eyes blink together once, perfectly in time for the first tim
 CAST
 HOST (image 1): $host
 
-SHOT 10s | push in, slow
+SHOT 10s: push in, slow
 HOST stands facing the camera in $room, framed from the chest up, calm and ordinary. A thin line appears on the skin $row and opens like an eyelid: a perfectly formed human eye looks out, glistening, and blinks. A moment later a second line opens beside it, then a third, each eye appearing in the same neat row at the same careful distance, until there are $count of them. They blink slightly out of time with one another, and each one looks in its own direction. HOST's own eyes stay wide and still, as if afraid that moving them would wake the others. In the final moment $ending.
 SFX: quiet room ambience; shallow breathing; a soft moist click each time an eye opens; overlapping blinks like tiny wet shutters
 MUSIC: N/A

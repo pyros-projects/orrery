@@ -80,12 +80,12 @@ def write_h3_ref(scene: Scene, lint: list[Issue]) -> str:
             lint.append(Issue("warn", f"{m.name} is in the CAST but appears in no shot."))
         where = ", ".join(f"[Shot {i}]" for i in sorted(shots_in)) or "no shot"
         marker, reason = m.keep or (DEFAULT_KEEP[0], None)
-        reason = reason or DEFAULT_KEEP[1].format(who=m.short)
+        reason = (reason or DEFAULT_KEEP[1]).replace("{who}", m.short)
         subjects.append(f"<Subject {labels.subjects[m.name]}> (appears in {where}): {marker} - {reason}")
     retention = subjects + retention
 
     prefix = " + ".join(t for t in TASK_ORDER if t in types) or "reference generation"
-    summary = f"[{prefix}] {names.plain(labels.brackets(scene.summary))}".rstrip()
+    summary = f"[{prefix}] {names.plain(labels.brackets(scene.summary))}".rstrip() if scene.summary.strip() else ""
     description = "\n".join(p for p in (_style_sentence(scene.style), *shots) if p)
     if issue := word_issue(description):
         lint.append(issue)
@@ -97,4 +97,4 @@ def write_h3_ref(scene: Scene, lint: list[Issue]) -> str:
         "overall_soundscape": soundscape(scene, lint),
         "non_diegetic_music": music(scene, lint),
     }
-    return "\n\n".join(f"{k}:\n{v}" for k, v in parts.items())
+    return "\n\n".join(f"{k}:\n{v}" for k, v in parts.items() if v)  # an empty section is left out; H3 copes

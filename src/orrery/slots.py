@@ -1,6 +1,6 @@
 """Slots: `--directions--` in a template is prose the language model writes for this run.
 
-    SHOT 5s | after video 1, tracking, slow
+    SHOT 5s: after video 1, tracking, slow
     --what WASHER does in the next 5 seconds--
 
 The slot stands where its text goes; the model sees the whole compiled prompt around it, so what it

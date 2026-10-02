@@ -1,0 +1,62 @@
+---
+title: "The relay"
+note: "A thing travels through a city from hand to hand, for ever. Every clip, the one who carries it ($holder~1) hands it to a stranger ($holder, from __characters/average_joes__) somewhere new. After four handoffs it either rests for a moment, or (one time in four) slips and is chased across the street until someone catches it; then the relay goes on. GOTO lines steer it; the things and places come with the preset (@lib). Run (Instant) plays it until you stop."
+tags: [loops, h3, reel, goto, motion_context]
+---
+@h3 t2va 16:9
+context: 22
+style: live-action, warm city documentary, handheld, one continuous take
+$thing = __relay_things__
+MUSIC: a light, rolling piano at a walking tempo
+
+@lib relay_things
+  a small brass key on a red ribbon
+  a glowing paper lantern
+  a sealed blue envelope
+  a potted lemon tree
+  a battered red umbrella
+@lib relay_places
+  a crowded tram stop
+  a flower market under striped awnings
+  a bridge over a slow green river
+  a narrow stairway between old houses
+  the doorway of a busy bakery
+  a rooftop garden above the traffic
+  a laundromat late at night
+
+CHUNK the start
+$holder = __characters/average_joes__
+$place = __relay_places__
+SHOT 6s: tracking, slow
+At $place, $holder finds $thing waiting on a bench, as if it had been left for them, picks it up and sets off at a brisk walk.
+SFX: the city murmuring; quick footsteps
+HANDOFF: the one carrying it hurries around a corner
+
+CHUNK the handoff repeat 4
+$holder = __characters/average_joes__
+$place = __relay_places__
+$slip = {25% slips}
+SHOT 6s: tracking
+At $place, $holder~1 arrives out of breath with $thing and presses it into the hands of $holder, who nods once and sets off the other way.
+SFX: footsteps meeting and parting; the city around them
+HANDOFF: the new carrier hurries off with it
+? $slip[slips]: GOTO: the scramble
+GOTO: the pause
+
+CHUNK the pause
+$holder = $holder~1
+$place = __relay_places__
+SHOT 6s: static
+At $place, $holder sits down for a moment with $thing on their lap, catches their breath and looks at it as if wondering where it is going; then they stand and walk on.
+SFX: a quiet moment in the city; a bird; a long breath out
+HANDOFF: the carrier walks on with it
+GOTO: the handoff
+
+CHUNK the scramble
+$holder = __characters/average_joes__
+$place = __relay_places__
+SHOT 6s: tracking, fast
+At $place, $thing slips out of the carrier's hands and tumbles away across the ground; passers-by dodge and lunge for it until $holder snatches it up just in time and walks on, grinning.
+SFX: a clatter; a gasp from the crowd; scattered laughter
+HANDOFF: the new carrier walks on, holding it tight
+GOTO: the handoff

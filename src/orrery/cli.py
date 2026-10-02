@@ -7,7 +7,15 @@ from pathlib import Path
 
 from orrery import manager
 from orrery.comfy import h3_length
-from orrery.dsl import MissingLibrary, bindings, expand_batch, override, parse
+from orrery.dsl import (
+    MissingLibrary,
+    bindings,
+    expand_batch,
+    override,
+    parse,
+    strip_comments,
+    with_inline,
+)
 from orrery.h3 import compile_scene
 from orrery.home import resolve_home
 from orrery.library import library_files
@@ -23,7 +31,7 @@ from orrery.presets import (
     save_preset,
     tag_preset,
 )
-from orrery.reel import split_reel
+from orrery.reel import reel_path, split_reel
 
 
 def _msg(err: Exception) -> str:
@@ -57,17 +65,20 @@ def _cmd_expand(args: argparse.Namespace) -> int:
         seed = args.seed if args.seed is not None else (params.seed or 0)
         count = args.n if args.n is not None else (params.count or 1)
         rows = expand_batch(template, seed, count, home.libraries(), home.weights())
-    except KeyError as err:
+    except (KeyError, ValueError) as err:  # a missing library, a grid or a range that does not hold
         print(f"orrery: {_msg(err)}", file=sys.stderr)
         return 2
+    for warning in dict.fromkeys(w for e in rows for w in e.warnings):
+        print(f"orrery: warning: {warning}", file=sys.stderr)
     if args.json:
         print(json.dumps([
-            {"seed": e.seed, "text": e.text, "picks": {p.label: p.value for p in e.picks}}
+            {"seed": e.seed, **({} if e.cell is None else {"cell": e.cell}), "text": e.text,
+             "picks": {p.label: p.value for p in e.picks}}
             for e in rows
         ], ensure_ascii=False, indent=2))
         return 0
     for e in rows:
-        print(f"[{e.seed}] {e.text}")
+        print(f"[{e.seed}{'' if e.cell is None else f' · grid {e.cell + 1}'}] {e.text}")
         if e.picks:
             print("     " + " · ".join(f"{p.label}: {p.value}" for p in e.picks))
     return 0
@@ -82,6 +93,10 @@ def _cmd_compile(args: argparse.Namespace) -> int:
         scene = resolve_includes(home, _dials(resolve_template(home, args.scene), args.set))
         reel = split_reel(scene)
         total = reel.segments if reel else 0
+        if reel and reel.jumps_on_rolls:  # the GOTO lines wait on what rolls: walk it at this seed
+            src, libraries = with_inline(strip_comments(scene), home.libraries())
+            path, ended = reel_path(split_reel(src), args.seed, libraries, home.weights())
+            total = len(path) if ended else None
         segments = ([args.segment or 0] if args.segment is not None or not reel
                     else range(total if total is not None else FOREVER_SHOWN))
         results = [compile_scene(scene, args.seed, home.libraries(), home.weights(), target=args.target,

@@ -1,9 +1,11 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { highlight } from "../../comfyui/web/app/highlight.js";
+import { fitThumbs } from "../../comfyui/web/app/timeline.js";
+import { writerBlock } from "../../comfyui/web/app/write.js";
 import {
   applyDials, dials, downstream, entryPage, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
-  rangeIds, shape, stats, templateHash,
+  chunkInfo, chunkLabel, splitCells, rangeIds, shape, stats, PLAN_HINT, templateHash, hasGoto, plays, longForm, matches, splitOptions, tagsMatch, withDice,
 } from "../../comfyui/web/app/model.js";
 
 const known = new Set(["creature", "place"]);
@@ -22,12 +24,19 @@ test("bindings, braces and multi-picks are coloured", () => {
 });
 
 test("screenplay lines get keyword colours and html is escaped", () => {
-  const html = highlight("@h3 t2va 16:9\nSHOT 5s | push in\nKEEPER (warm voice): Hi\nSFX: rain\nThe start of <Picture 1>.", known);
+  const html = highlight("@h3 t2va 16:9\nSHOT 5s: push in\nKEEPER (warm voice): Hi\nSFX: rain\nThe start of <Picture 1>.", known);
   assert.match(html, /<span class="t-head">@h3 t2va 16:9<\/span>/);
-  assert.match(html, /<span class="t-kw">SHOT 5s<\/span>/);
+  assert.match(html, /<span class="t-kw">SHOT 5s:<\/span>/);
+  assert.match(highlight("@h3 t2va\nSHOT 5s | push in", known), /<span class="t-kw">SHOT 5s<\/span>/);
   assert.match(html, /<span class="t-kw">KEEPER \(warm voice\):<\/span>/);
   assert.match(html, /<span class="t-kw">SFX:<\/span>/);
   assert.match(html, /&lt;Picture 1&gt;/);
+});
+
+test("keyword lines keep their colour without a space after the colon", () => {
+  const html = highlight("LORA:<lora:a:0.8>\nHANDOFF:she waves\nSEND:frame 0 to image 3\nGOTO:the walk", known);
+  for (const kw of ["LORA:", "HANDOFF:", "SEND:", "GOTO:"]) assert.match(html, new RegExp(`<span class="t-kw">${kw}</span>`));
+  assert.match(html, /<span class="t-lora">&lt;lora:a:0.8&gt;<\/span>/);
 });
 
 test("screenplay cast lines are keywords", () => {
@@ -67,7 +76,7 @@ test("template hash matches orrery's sha256 prefix", () => {
 test("stats count rolls, libraries, bindings and H3 timing", () => {
   const s = stats("$a = __creature__\n{x|y} in __place__ and __creature__");
   assert.deepEqual([s.rolls, s.libs, s.binds, s.h3], [4, 2, 1, null]);
-  const h = stats("@h3 t2va\nSHOT 3s | static\nA.\nNARRATOR (voiceover): Hi\nSHOT 2.5s | cut, arc\nB.\nSFX: wind");
+  const h = stats("@h3 t2va\nSHOT 3s: static\nA.\nNARRATOR (voiceover): Hi\nSHOT 2.5s: cut, arc\nB.\nSFX: wind");
   assert.deepEqual(h.h3, { shots: 2, secs: 5.5, voices: 1, reel: null });
   const r = stats("@h3 ref2va\nCAST\nMAYA (video 1): a woman\nDOG (image 1): a dog\nSHOT 5s\nMAYA waves.\nMAYA (warm): Hi.\nSFX: wind");
   assert.equal(r.h3.voices, 1);
@@ -159,7 +168,7 @@ test("applyDials mirrors orrery's override", () => {
 });
 
 test("reels: chunk timing, per-chunk lengths, keywords are not voices", () => {
-  const reel = "@h3 t2va 16:9\nLORA: <lora:a:1>\ncontext: 22\nCHUNK\nSHOT 5s\nA.\nHANDOFF: b\nCHUNK the hall\nSHOT 3s\nB.\nSHOT 1s\nC.";
+  const reel = "@h3 t2va 16:9\nLORA: <lora:a:1>\ncontext: 22\nCHUNK\nSHOT 5s\nA.\nHANDOFF: b\nSEND: frame 0 to image 3\nCHUNK the hall\nSHOT 3s\nB.\nSHOT 1s\nC.";
   const st = stats(reel);
   assert.deepEqual([st.h3.voices, st.h3.reel], [0, { chunks: 2, secs: [5, 4], repeats: [1, 1], clips: 2 }]);
   const out = shape(reel);
@@ -274,7 +283,7 @@ test("generate finds the output nodes downstream of the orrery node, and whether
 });
 
 test("# lines are comments: grey, and nothing in them rolls, counts or opens a screenplay", () => {
-  const src = "# Quickstart: __ideas__ and $x = __animal__\n@h3 t2va 16:9 0.6MP\n# SHOT 9s | pan left\nSHOT 5s | static\nA fox.";
+  const src = "# Quickstart: __ideas__ and $x = __animal__\n@h3 t2va 16:9 0.6MP\n# SHOT 9s: pan left\nSHOT 5s: static\nA fox.";
   assert.match(highlight(src, new Set()), /<span class="t-comment"># Quickstart: __ideas__ and \$x = __animal__<\/span>/);
   const st = stats(src);
   assert.deepEqual([st.rolls, st.libs, st.binds, st.h3.shots, st.h3.secs], [0, 0, 0, 1, 5]);
@@ -292,4 +301,160 @@ test("every New template opens with a quickstart and its dials come from code, n
     if (s.target === "h3-base") assert.ok(stats(s.text).h3, kind);
   }
   assert.equal(stats(STARTERS.reel.text).h3.reel.chunks, 2);
+});
+
+
+const REEL_TEXT = `@h3 t2va 16:9
+# CHUNK in a comment is no chunk
+CHUNK the opening
+SHOT 5s: push in
+A.
+CHUNK the walk repeat 4
+SHOT 4s: static
+B.
+SHOT 1s: cut
+C.
+CHUNK the end
+SHOT 10s: static
+D.`;
+
+test("every CHUNK line knows its segments, where it sits in the film and what is left", () => {
+  const info = chunkInfo(REEL_TEXT);
+  assert.deepEqual(info.map((c) => [c.line, c.first, c.last, c.secs, c.start, c.end, c.left]),
+    [[2, 0, 0, 5, 0, 5, 30], [5, 1, 4, 5, 5, 25, 10], [10, 5, 5, 10, 25, 35, 0]]);
+  assert.equal(chunkLabel(info[0]), "seg 0 · 0:00 → 0:05 · 0:30 left");
+  assert.equal(chunkLabel(info[1]), "seg 1–4 · 4 × 5 s · 0:05 → 0:25 · 0:10 left");
+  assert.equal(chunkLabel(info[2]), "seg 5 · 0:25 → 0:35 · the end");
+  assert.equal(chunkInfo("@h3 t2va\nSHOT 5s\nA."), null);
+  const sends = chunkInfo("CHUNK a\nSHOT 5s\nSEND: frame 0 to image 1\nSEND: frames -1 to image 3 for segment 4+\nSEND: frame 9 to image 1 for segment 9\nA.");
+  assert.deepEqual(sends[0].images, [1, 3]);
+});
+
+test("a chunk that repeats forever runs on, and the ones after it never play", () => {
+  const info = chunkInfo("CHUNK a\nSHOT 5s\nA.\nCHUNK b repeat forever\nSHOT 6s\nB.\nCHUNK c\nSHOT 5s\nC.");
+  assert.equal(chunkLabel(info[1]), "seg 1 → ∞ · 6 s each · from 0:05");
+  assert.equal(chunkLabel(info[2]), "never plays: a chunk before it repeats forever");
+  assert.equal(chunkLabel(info[0]), "seg 0 · 0:00 → 0:05");
+});
+
+test("CHUNK lines get a divider with their label, and the next segment's chunk is marked", () => {
+  const info = chunkInfo(REEL_TEXT);
+  const html = highlight(REEL_TEXT, new Set(), { chunks: info, segment: 2 });
+  assert.equal(html.split("\n").length, REEL_TEXT.split("\n").length);  // no extra lines: the caret stays put
+  assert.match(html, /<span class="chunkline"><span class="chunkinfo"><span>seg 0 · 0:00 → 0:05 · 0:30 left<\/span><\/span><span class="t-kw">CHUNK<\/span> the opening<\/span>/);
+  assert.match(html, /<span class="chunkline now"><span class="chunkinfo"><span>▶ next 2\/4 · seg 1–4 [^<]*<\/span><\/span><span class="t-kw">CHUNK<\/span> the walk repeat 4/);
+  assert.doesNotMatch(highlight(REEL_TEXT, new Set()), /chunkinfo/);
+});
+
+test("timeline thumbs keep the clips' aspect ratio, portrait as well as landscape, and always fit their chunk", () => {
+  assert.deepEqual(fitThumbs(1, 120, 74, 16 / 9), { cols: 1, w: 120, h: 67 });
+  assert.deepEqual(fitThumbs(1, 120, 74, 9 / 16), { cols: 1, w: 41, h: 74 });
+  assert.deepEqual(fitThumbs(4, 120, 53, 9 / 16), { cols: 4, w: 27, h: 49 });  // portrait repeats side by side
+  assert.deepEqual(fitThumbs(1, 120, 400, 9 / 16), { cols: 1, w: 101, h: 180 });  // a tall chunk stops at 180 px
+  for (const ratio of [16 / 9, 1, 9 / 16]) {
+    const { cols, w, h } = fitThumbs(20, 120, 53, ratio), rows = Math.ceil(20 / cols);
+    assert.ok(cols * w + (cols - 1) * 3 <= 120 && rows * h + (rows - 1) * 3 <= 53, `ratio ${ratio}`);
+  }
+});
+
+test("the cells view splits a reel at its CHUNK lines, and joining the cells gives the text back", () => {
+  const cells = splitCells(REEL_TEXT);
+  assert.deepEqual(cells.map((c) => [c.line, c.chunk, c.text.split("\n")[0]]),
+    [[0, -1, "@h3 t2va 16:9"], [2, 0, "CHUNK the opening"], [5, 1, "CHUNK the walk repeat 4"], [10, 2, "CHUNK the end"]]);
+  assert.equal(cells.map((c) => c.text).join("\n"), REEL_TEXT);
+  const bare = "CHUNK a\nSHOT 5s\n  CHUNK b\n";
+  assert.deepEqual(splitCells(bare).map((c) => [c.chunk, c.text]), [[0, "CHUNK a\nSHOT 5s"], [1, "  CHUNK b\n"]]);
+  assert.deepEqual(splitCells("no chunks\nhere"), [{ line: 0, chunk: -1, text: "no chunks\nhere" }]);
+});
+
+test("the Write menu offers a writer only where it can write", () => {
+  const app = (text, { llm = true, clip = false, frames = [] } = {}) => ({
+    text, llmActive: () => llm, bridge: { wired: (n) => n === "clip" && clip, frames: () => frames },
+  });
+  const reel = "@h3 t2va\nCHUNK a\nSHOT 5s\nA.\nCHUNK b\nSHOT 5s\nB.", fl2va = "@h3 fl2va 16:9\nSHOT 5s\nA.";
+  assert.match(writerBlock(app(reel, { llm: false }), "continue"), /language model/);
+  assert.equal(writerBlock(app(reel, { llm: false, clip: true }), "continue"), "");
+  assert.match(writerBlock(app("@h3 t2va\nCHUNK a repeat forever\nSHOT 5s\nA."), "continue"), /forever/);
+  assert.match(writerBlock(app(fl2va), "continue"), /Needs a reel/);
+  assert.match(writerBlock(app(reel, { frames: ["first_frame", "last_frame"] }), "story"), /not for a reel/);
+  assert.match(writerBlock(app(fl2va, { frames: ["first_frame"] }), "story"), /first and the last frame/);
+  assert.equal(writerBlock(app(fl2va, { frames: ["first_frame", "last_frame"] }), "story"), "");
+  assert.match(writerBlock(app("a photo of a fox", { frames: ["first_frame", "last_frame"] }), "story"), /@h3/);
+  assert.match(writerBlock(app("a photo of a fox"), "describe"), /first_frame/);
+  assert.equal(writerBlock(app("a photo of a fox", { frames: ["last_frame"] }), "describe"), "");
+});
+
+test("tag algebra, brace options and the LoRA short form mirror the expander", () => {
+  assert.ok(tagsMatch("myth,!bird", ["myth"]) && !tagsMatch("myth,!bird", ["myth", "bird"]));
+  assert.ok(tagsMatch("water|deep_sea", ["deep_sea"]) && !tagsMatch("water|deep_sea", ["myth"]) && tagsMatch(null, []));
+  assert.deepEqual(splitOptions("__a[x|y]__|b"), ["__a[x|y]__", "b"]);
+  assert.equal(longForm("@ink(0.8) @include x @h3(1)"), "<lora:ink:0.8> @include x @h3(1)");
+  const html = highlight("a __creature[myth,!bird]__ @ink(0.4-0.9)", known);
+  assert.match(html, /<span class="t-lib">__creature\[myth,!bird\]__<\/span>/);
+  assert.match(html, /<span class="t-lora">@ink\(0\.4-0\.9\)<\/span>/);
+  assert.deepEqual(dials("$s = {0.4-0.9}\n$t = {a|__b[x|y]__}").map((d) => d.options), [[], ["a", "__b[x|y]__"]]);
+});
+
+
+
+test("a backslash keeps a character from being syntax, in the editor too", () => {
+  const html = highlight("\\{a|b\\} \\__init__ __creature__ \\@x(1)", known);
+  assert.match(html, /<span class="t-esc"[^>]*>\\\{<\/span>/);
+  assert.doesNotMatch(html, /t-lib[^"]*">__init__/);
+  assert.equal(longForm("\\@x(1) @y(2)"), "\\@x(1) <lora:y:2>");
+});
+
+test("a run made before every pick had its own dice replays with @rng 1", () => {
+  assert.equal(withDice("a __creature__", {}), "@rng 1\na __creature__");
+  assert.equal(withDice("a __creature__", { rng: 2 }), "a __creature__");
+  assert.equal(withDice("@rng 1\na __creature__", {}), "@rng 1\na __creature__");
+});
+
+test("the predicate language mirrors the expander for the dials", () => {
+  const e = { tags: ["myth"], props: { habitat: "Sea", size: "small" } };
+  assert.ok(matches("myth, habitat=sea", e.tags, e.props) && matches("size=large|small", e.tags, e.props));
+  assert.ok(!matches("myth, !habitat=sea", e.tags, e.props) && !matches("size!=small", e.tags, e.props));
+  assert.ok(matches("habitat=$a.habitat", e.tags, e.props));  // a roll the browser cannot know holds
+  assert.match(highlight("a __creature[myth, habitat=$a.habitat]__", known), /class="t-lib">__creature\[myth, habitat=\$a\.habitat\]__/);
+});
+
+test("directives: @size shapes the node, @seed and @batch are the CLI's, @rng 1 goes under @h3", () => {
+  assert.deepEqual([shape("@h3 t2va 16:9\n@size 832x1216\nSHOT 5s\nA.").width, shape("@size 832x1216\na fox").height], [832, 1216]);
+  assert.deepEqual(shape("a fox\n@seed 100\n@batch 8").cli, ["@seed 100", "@batch 8"]);
+  assert.match(highlight("@batch 8", known), /t-cli/);
+  assert.equal(withDice("@h3 t2va\nSHOT 5s\nA.", {}), "@h3 t2va full\n@rng 1\nSHOT 5s\nA.");  // the format of back then too
+  assert.equal(withDice("@h3 t2va lite\nSHOT 5s\nA.", { rng: 2 }), "@h3 t2va lite\nSHOT 5s\nA.");
+  assert.equal(withDice("@h3 t2va\nSHOT 5s\nA.", { rng: 2, format: "lite" }), "@h3 t2va\nSHOT 5s\nA.");
+  assert.equal(withDice("@h3 t2va\nSHOT 5s\nA.", { rng: 2 }), "@h3 t2va full\nSHOT 5s\nA.");
+});
+
+test("a chance is on or off, not a list for the dials", () => {
+  assert.deepEqual(dials("$r = {30% in the rain}\n$c = {30% off|half price}").map((d) => d.options), [[], ["30% off", "half price"]]);
+});
+
+test("a glob is a known library when it matches one", () => {
+  const libs = new Set(["clothing/hats", "creature"]);
+  assert.match(highlight("__clothing/*__", libs), /class="t-lib">__clothing\/\*__/);
+  assert.match(highlight("__shoes/*__", libs), /t-miss/);
+});
+
+test("Generate asks the server for a plan only when there may be one", () => {
+  for (const t of ["<lora:a:0.5,1.0>", "<lora:a:0-1;0.1>", "<lora:a:1:solo>", "<lora:a:test>", "@x(0.5,1.0)", "a\n@grid __s__", "a\n: grid {x|y}"]) {
+    assert.ok(PLAN_HINT.test(t), t);
+  }
+  for (const t of ["a cat <lora:b:0.8>", "<lora:x:0.4-0.9>", "@x(0.8)", "a grid of tiles"]) assert.ok(!PLAN_HINT.test(t), t);
+});
+
+
+test("with GOTO lines the chunks follow the path the server walked", () => {
+  const text = "@h3 t2va\nCHUNK the gate\nSHOT 5s\nA.\nCHUNK the stairs\nSHOT 4s\nB.\nCHUNK the lamp\nSHOT 6s\nC.\nGOTO: the stairs ×2";
+  assert.ok(hasGoto(text) && !hasGoto("@h3 t2va\nCHUNK a\nSHOT 5s\nA."));
+  assert.match(chunkInfo(text)[1].label, /walking the reel/);  // the path is not there yet
+  const walked = chunkInfo(text, { path: [0, 1, 2, 1, 2, 1, 2], ended: true });
+  assert.deepEqual(walked.map((c) => c.segs), [[0], [1, 3, 5], [2, 4, 6]]);
+  assert.equal(walked[1].label, "seg 1, 3, 5 · 3 × 4 s · from 0:05 · 0:06 left");  // left after its last play
+  assert.ok(plays(walked[2], 4) && !plays(walked[2], 3) && plays(chunkInfo("CHUNK a\nSHOT 5s\nA.")[0], 0));
+  const endless = chunkInfo(text, { path: [0, 1, 2, 1, 2], ended: false });
+  assert.match(endless[2].label, /^seg 2, 4, … · 2\+ × 6 s/);
+  assert.match(highlight(text, known, { chunks: walked, segment: 3 }), /▶ next 2\/3/);
 });

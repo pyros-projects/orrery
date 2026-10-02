@@ -3,7 +3,7 @@
 // deleted into the home's trash.
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
-import { applyDials, FACTORS, filterRows, folderDropPath, folderTree, markPicks, rangeIds, templateHash } from "./model.js";
+import { applyDials, FACTORS, filterRows, folderDropPath, folderTree, markPicks, rangeIds, templateHash, withDice } from "./model.js";
 import { copyText, resizable } from "./parts.js";
 import { openSave } from "./save.js";
 
@@ -487,10 +487,12 @@ async function onClick(app, e, open, rows) {
   if (act === "delete") return confirmDelete(app);
   if (act === "export") return openExport(app);
   if (!open) return;
-  if (act === "use") {
+  if (act === "use" && !app.busy()) {
+    let kept = false;
     try {
       const text = await templateOf(app, open);
-      app.text = text;
+      app.text = withDice(text, open);
+      kept = app.text !== text;
       app.preset = open.preset;
       app.base = open.preset ? text : null;
       app.bridge.setSeed(open.seed);
@@ -498,7 +500,8 @@ async function onClick(app, e, open, rows) {
       app.bridge.setParams(open.params || {});
     } catch (err) { return app.fail(err); }
     app.go("prompt");
-    app.toast(`Template and seed ${open.seed} restored · control after generate set to <b>fixed</b>, so the next run reproduces it`);
+    app.toast(`Template and seed ${open.seed} restored · control after generate set to <b>fixed</b>, so the next run reproduces it`
+      + (kept ? " · replayed as it was made: <b>@rng 1</b> or <b>full</b> added (the dice and the format of back then)" : ""));
   }
   if (act === "save") {
     try { openSave(app, { text: applyDials(await templateOf(app, open), open.params), from: open.preset }); } catch (err) { app.fail(err); }

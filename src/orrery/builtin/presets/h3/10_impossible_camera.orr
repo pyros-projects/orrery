@@ -9,7 +9,7 @@ $start = __world/landscapes__
 $portal = __scale/portals__
 $end = {__world/landscapes__|__tour/rooms__}
 
-SHOT 10s | push in, large, slow
+SHOT 10s: push in, large, slow
 The camera begins wide over $start, then descends toward one tiny detail in it, $portal, pushing in without a single cut until the detail fills the frame. $portal.out, and the camera emerges into $end, at a completely different scale, still moving forward in the same smooth motion.
 SFX: $start.sfx; a hush as the camera closes in; $end.sfx
 MUSIC: N/A

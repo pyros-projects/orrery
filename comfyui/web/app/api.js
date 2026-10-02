@@ -44,6 +44,9 @@ export function client(home) {
     acceptLibrary: (name) => call("library/accept", { body: { name } }),
     discardLibrary: (name) => call("library/discard", { body: { name } }),
     galaxy: (query = {}) => call("galaxy", { query }),
+    history: (query = {}) => call("history", { query }),
+    writers: () => call("writers"),
+    saveWriter: (name, text) => call("writers", { body: { name, text } }),
     rate: (id, rating) => call("galaxy/rate", { body: { id, rating } }),
     moveOutputs: (ids, folder) => call("galaxy/move", { body: { ids, folder } }),
     deleteOutputs: (ids) => call("galaxy/delete", { body: { ids } }),
@@ -52,6 +55,8 @@ export function client(home) {
     renameFolder: (path, to) => call("galaxy/folder/rename", { body: { path, to } }),
     deleteFolder: (path) => call("galaxy/folder/delete", { body: { path } }),
     roll: (body) => call("roll", { body }),
+    plan: (body) => call("plan", { body }),
+    reel: (body) => call("reel", { body }),
     frequency: (body) => call("frequency", { body }),
     homeFolder: () => call("home"),
     saveHomeFolder: (path) => call("home", { body: { path } }),
@@ -62,5 +67,9 @@ export function client(home) {
     onExecuted: (fn) => { api.addEventListener("executed", fn); return () => api.removeEventListener("executed", fn); },
     captureOutputs: (body) => call("galaxy/capture", { body }),
     mediaURL: (id) => url("galaxy/media", { id }),
+    chain: (latent_path) => call("chain", { query: latent_path ? { latent_path } : {} }),
+    chainThumbURL: (segment, latent_path, v) => url("chain/thumb", { segment, ...(latent_path ? { latent_path } : {}), v: v ?? "" }),
+    chainVideoURL: (segment, latent_path, v) => url("chain/video", { segment, ...(latent_path ? { latent_path } : {}), v: v ?? "" }),
+    anchorURL: (image, v) => url("anchor", { image, v: v ?? "" }),
   };
 }

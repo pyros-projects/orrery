@@ -7,6 +7,6 @@ tags: [h3, music, performance]
 style: live-action, cinematic
 $instrument = {cello|upright piano|koto|accordion|trumpet|theremin}
 
-SHOT 7s | arc, slow
+SHOT 7s: arc, slow
 An elderly street musician plays a $instrument alone in __place__, {snow|rain|fog} drifting through the light of a single lamp. A few coins glint in an open case at their feet. Their eyes are closed.
 SFX: a slow, bare $instrument melody is played live, close to the microphone; a city hums in the distance

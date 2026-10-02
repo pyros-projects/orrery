@@ -23,7 +23,7 @@ from orrery.home import Home
 from orrery.presets import save_preset
 
 REPO = Path(__file__).resolve().parents[1]
-SCENE = "@h3 t2va\nSHOT 5s | static\nA __animal__ sleeps.\nSFX: wind\n"
+SCENE = "@h3 t2va\nSHOT 5s: static\nA __animal__ sleeps.\nSFX: wind\n"
 
 
 def test_prompt_node_expands_plain_templates(home):
@@ -87,12 +87,15 @@ def test_save_png_embeds_the_picks(tmp_path):
 
 
 def test_node_classes_declare_comfy_interfaces():
-    assert set(NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs"}
+    assert set(NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm", "OrreryWrite"}
     inputs = OrreryPrompt.INPUT_TYPES()["required"]
     assert inputs["target"][0] == ["text", "h3-base", "flat"]
     assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length", "lora_stack",
                                          "load_index", "save_index", "previous", "previous_audio", "megapixels")
     assert OrreryLog.OUTPUT_NODE is True
+    film, cont = NODE_CLASS_MAPPINGS["OrreryFilm"], NODE_CLASS_MAPPINGS["OrreryContinue"]
+    assert film.OUTPUT_NODE is True and film.RETURN_TYPES == ("IMAGE", "AUDIO", "VIDEO")
+    assert list(cont.INPUT_TYPES()["required"]) == ["picks", "latent"] and cont.RETURN_TYPES == ("CONDITIONING", "LATENT")
 
 
 def test_node_pack_imports_from_the_repo_folder(monkeypatch):
@@ -100,7 +103,7 @@ def test_node_pack_imports_from_the_repo_folder(monkeypatch):
     spec = importlib.util.spec_from_file_location("orrery_pack", REPO / "comfyui" / "__init__.py")
     pack = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(pack)
-    assert set(pack.NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs"}
+    assert set(pack.NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm", "OrreryWrite"}
 
 
 def test_prompt_node_uses_a_preset_and_remembers_the_template(home):
@@ -131,8 +134,62 @@ def test_size_defaults_and_h3_ratio(home):
     assert shape("@h3 t2va 16:9\n: w1280 h720\nSHOT 5s\nA fox.")[:2] == (1280, 720)
 
 
+CAT, WIDE = (1536, 2048), (2048, 1536)  # a portrait photo (3:4) and a landscape one (4:3)
+
+
+def test_a_wired_frame_shapes_the_clip_so_h3_does_not_stretch_it():
+    assert shape("@h3 fl2va 16:9 1.032MP\nSHOT 5s\nA.", (CAT, None))[:2] == (864, 1152)  # exactly 3:4, near 1.03 MP
+    assert shape("@h3 i2va 16:9\nSHOT 5s\nA.", (CAT, None))[:2] == (768, 1024)  # H3's canvas, in the frame's shape
+    assert shape("@h3 l2va\nSHOT 5s\nA.", (None, WIDE))[:2] == (1024, 768)
+    assert shape("@h3 fl2va 16:9\nSHOT 5s\nA.", (CAT, WIDE))[:2] == (768, 1024)  # the first frame leads
+    assert shape("@h3 i2va 16:9\n: w1280 h720\nSHOT 5s\nA.", (CAT, None))[:2] == (1280, 720)  # written sizes win
+    assert shape("@h3 i2va 16:9\nSHOT 5s\nA.")[:2] == (1344, 768)
+
+
+def test_the_canvas_keeps_a_frame_s_shape_on_the_32_grid():
+    from orrery.comfy import fit_canvas
+    w, h = fit_canvas(1536 / 2048, 1.032e6)
+    assert (w, h) == (864, 1152) and w % 32 == 0 and h % 32 == 0
+    w, h = fit_canvas(1290 / 2122, 0.6e6)  # an odd phone shape: as close as the grid gets, area near
+    assert abs((w / h) / (1290 / 2122) - 1) < 0.02 and 0.9 <= w * h / 0.6e6 <= 1.1
+
+
+def test_the_frame_size_is_explained_and_mismatches_are_flagged(home):
+    lint = lambda text, sizes: [i for i in json.loads(run_prompt(text, 1, "h3-base", str(home), sizes=sizes)[1])["lint"]
+                                if "frame" in i["message"]]
+    info = lint("@h3 i2va 16:9\nSHOT 5s\nThe scene begins exactly as in <Picture 1>.", (CAT, None))
+    assert [i["severity"] for i in info] == ["info"] and "1536×2048" in info[0]["message"] and "768×1024" in info[0]["message"]
+    crop = lint("@h3 fl2va\nSHOT 5s\nFrom <Picture 1> to <Picture 2>.", (CAT, WIDE))
+    assert any(i["severity"] == "warn" and "crops" in i["message"] for i in crop)
+    stretch = lint("@h3 i2va\n: w1280 h720\nSHOT 5s\nThe scene begins exactly as in <Picture 1>.", (CAT, None))
+    assert any(i["severity"] == "warn" and "stretches" in i["message"] for i in stretch)
+    assert not lint("@h3 i2va 3:4\nSHOT 5s\nThe scene begins exactly as in <Picture 1>.", (CAT, None))
+
+
+def test_the_node_takes_the_frames_and_reads_their_size(home):
+    import numpy as np
+    optional = OrreryPrompt.INPUT_TYPES()["optional"]
+    assert optional["first_frame"][0] == "IMAGE" and optional["last_frame"][0] == "IMAGE"
+    outputs = OrreryPrompt().run("@h3 i2va 16:9\nSHOT 5s\nThe scene begins exactly as in <Picture 1>.", 1, "h3-base",
+                                 home=str(home), first_frame=np.zeros((1, 2048, 1536, 3), dtype=np.float32))
+    assert outputs[3:5] == (768, 1024)
+
+
+def test_each_run_lands_in_the_history_and_in_the_log(home, capsys):
+    from orrery import history, uistate
+    OrreryPrompt().run("a {red|blue} fox", 7, "text", home=str(home))
+    runs = history.read(Home(home))["runs"]
+    assert runs[0]["seed"] == 7 and runs[0]["text"] in ("a red fox", "a blue fox")
+    out = capsys.readouterr().out
+    assert "[orrery] run · seed 7" in out and runs[0]["text"] in out
+    uistate.set_flag(Home(home), "log_prompts", False)
+    OrreryPrompt().run("a fox", 8, "text", home=str(home))
+    assert "seed 8" not in capsys.readouterr().out
+    assert history.read(Home(home))["total"] == 2  # the history keeps it all the same
+
+
 def test_h3_length_is_frames_on_the_17k_plus_5_grid(home):
-    assert shape("@h3 t2va\nSHOT 4s | cut\nA.\nSHOT 3s\nB.\nSHOT 4s\nC.")[2] == 277
+    assert shape("@h3 t2va\nSHOT 4s: cut\nA.\nSHOT 3s\nB.\nSHOT 4s\nC.")[2] == 277
     assert shape("@h3 t2va\nSHOT 4s\nA.")[2] == 107
 
 
@@ -251,6 +308,24 @@ def test_the_node_counts_segments_and_outputs_motion_context_indices(home):
     assert OrreryPrompt.RETURN_TYPES[6:9] == ("LORA_STACK", "INT", "INT")
     *_, load, save = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
     assert (load, save) == (1, 2)
+
+
+def test_a_reel_tells_orrery_continue_its_chain_and_context(home):
+    _, picks, *_ = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
+    assert (json.loads(picks)["chain"], json.loads(picks)["context"]) == ("h3_context", 22)
+
+
+def test_orrery_continue_pins_22_frames_and_another_context_is_a_warning(home):
+    graph = {"9": {"class_type": "OrreryPrompt", "inputs": {}},
+             "15": {"class_type": "OrreryContinue", "inputs": {"picks": ["9", 1], "latent": ["3", 1]}}}
+    longer = REEL.replace("CHUNK\nSHOT 5s", "context: 39\nCHUNK\nSHOT 5s", 1)
+    _, picks, *_ = OrreryPrompt().run(longer, 1, "h3-base", home=str(home), segment=1, prompt=graph, unique_id="9")
+    warned = [i for i in json.loads(picks)["lint"] if "Orrery Continue" in i["message"]]
+    assert [i["severity"] for i in warned] == ["warn"] and "17 frames (0.7 s) longer" in warned[0]["message"]
+    _, picks, *_ = OrreryPrompt().run(longer, 1, "h3-base", home=str(home), segment=1)  # Motion Context takes 39
+    assert not [i for i in json.loads(picks)["lint"] if "Orrery Continue" in i["message"]]
+    _, picks, *_ = OrreryPrompt().run(REEL, 1, "h3-base", home=str(home), segment=1, prompt=graph, unique_id="9")
+    assert not [i for i in json.loads(picks)["lint"] if "Orrery Continue" in i["message"]]
 
 
 def test_past_the_end_of_a_reel_blocks_the_rest_of_the_graph(home, monkeypatch):
@@ -432,7 +507,7 @@ def test_orrery_refs_hands_on_only_the_images_the_clip_uses():
     from orrery.comfy import OrreryRefs
     imgs = {f"image_{i}": f"img{i}" for i in range(1, 8)}
     out = OrreryRefs().route(json.dumps({"refs": [3, 6]}), **imgs)
-    assert out[:3] == ("img3", "img6", None) and len(out) == 9
+    assert out[:3] == ("img3", "img6", None) and len(out) == 10
     assert OrreryRefs().route(json.dumps({}), **imgs)[:2] == ("img1", "img2")  # nothing packed: as wired
     with pytest.raises(ValueError, match="image_6"):
         OrreryRefs().route(json.dumps({"refs": [3, 6]}), image_3="img3")
@@ -499,3 +574,290 @@ def test_comments_neither_roll_nor_ask_for_libraries(home):
     outputs = OrreryPrompt().run(src, 1, "h3-base", home=str(home))
     data = json.loads(outputs[1])
     assert "Quickstart" not in outputs[0] and (outputs[3], outputs[4]) == (1024, 576) and data["megapixels"] == 0.6
+
+
+# --- SEND: frames of a clip as reference images for later clips -------------------------------
+
+SEND_REEL = """@h3 ref2va 16:9 lite
+CAST
+GIRL (image 1, image 3): the young woman, in a pink tracksuit
+CHUNK the pose
+SHOT 5s: push in, slow
+GIRL stretches on a mat.
+SEND: frame 0 to image 3
+SEND: frames 2, 5, 34-36 to image 4
+CHUNK the walk
+SHOT 4s: static
+GIRL walks to the window.
+"""
+REFS_GRAPH = {"9": {"class_type": "OrreryPrompt", "inputs": {}},
+              "12": {"class_type": "OrreryRefs", "inputs": {"picks": ["9", 1], "image_1": ["5", 0]}},
+              "20": {"class_type": "MiniMaxH3ReferenceToVideo",
+                     "inputs": {"prompt": ["9", 0], "ref_images.ref_image_0": ["12", 0], "ref_images.ref_image_1": ["12", 1]}}}
+
+
+def test_the_picks_tell_orrery_refs_what_is_sent_and_from_which_chain(home):
+    _, picks, *_ = OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), segment=0,
+                                      latent_path="reels/one", prompt=REFS_GRAPH, unique_id="9")
+    data = json.loads(picks)
+    assert data["refs"] == [1] and data["sends"] == {"chain": "reels/one", "home": str(home), "slots": [3, 4], "ready": {}}
+    _, picks, *_ = OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), segment=1,
+                                      latent_path="reels/one", prompt=REFS_GRAPH, unique_id="9")
+    data = json.loads(picks)
+    assert data["refs"] == [1, 3, 4]
+    assert data["sends"]["ready"] == {"3": {"segment": 0, "frames": [[0, 0]]},
+                                      "4": {"segment": 0, "frames": [[2, 2], [5, 5], [34, 36]]}}
+
+
+def test_a_reel_that_sends_needs_orrery_refs(home):
+    graph = {"9": {"class_type": "OrreryPrompt", "inputs": {}}}
+    with pytest.raises(ValueError, match="Orrery Refs"):
+        OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), prompt=graph, unique_id="9")
+
+
+def send_chain(tmp_path, monkeypatch, clips=2, dropped=()):
+    """A Chain Video with `clips` clips under a fake ComfyUI output folder; frames() returns a marker."""
+    run = tmp_path / "h3_context" / "chain_video" / "run_1"
+    folders = [f"clip_{i:05d}" for i in range(1, clips + 1)]
+    run.mkdir(parents=True)
+    for folder in folders:
+        (run / folder).mkdir()
+        (run / folder / "video.mp4").write_bytes(b"")
+    (run.parent / "active.json").write_text(json.dumps({"run": "run_1"}))
+    (run / "clips.json").write_text(json.dumps({"clips": [{"folder": f} for f in folders]}))
+    monkeypatch.setitem(sys.modules, "folder_paths", types.SimpleNamespace(get_output_directory=lambda: str(tmp_path)))
+    from orrery import chain as ch
+
+    class Batch:
+        def __init__(self, path, wanted):
+            self.label, self.shape = f"{Path(path).parent.name}:{wanted}", (len(wanted), 8, 8, 3)
+
+    monkeypatch.setattr(ch, "frames", lambda path, wanted: (Batch(path, wanted), list(dropped)))
+    from orrery import anchors
+    saved = []
+    monkeypatch.setattr(anchors, "save", lambda home, n, frames: saved.append((str(home.root), n, frames.label)))
+    return saved
+
+
+def sends(ready, slots=(3, 4), refs=(1, 3), home="/nowhere"):
+    return json.dumps({"refs": list(refs), "sends": {"chain": "h3_context", "home": home, "slots": list(slots),
+                                                     "ready": ready}})
+
+
+def test_orrery_refs_fills_a_sent_image_with_its_frames(tmp_path, monkeypatch):
+    from orrery.comfy import OrreryRefs
+    send_chain(tmp_path, monkeypatch)
+    out = OrreryRefs().route(sends({"3": {"segment": 1, "frames": [[0, 0]]}}), image_1="img1")
+    assert out[0] == "img1" and out[1].label == "clip_00002:[[0, 0]]" and out[2] is None
+
+
+def test_orrery_refs_refuses_a_slot_both_wired_and_sent(tmp_path, monkeypatch):
+    from orrery.comfy import OrreryRefs
+    send_chain(tmp_path, monkeypatch)
+    with pytest.raises(ValueError, match="image 3"):
+        OrreryRefs().route(sends({}, refs=[1]), image_1="img1", image_3="img3")
+
+
+def test_orrery_refs_says_when_the_chain_lacks_the_sending_clip(tmp_path, monkeypatch):
+    from orrery.comfy import OrreryRefs
+    send_chain(tmp_path, monkeypatch, clips=1)
+    with pytest.raises(ValueError, match="no clip for segment 4"):
+        OrreryRefs().route(sends({"3": {"segment": 4, "frames": [[0, 0]]}}), image_1="img1")
+
+
+def test_orrery_refs_warns_about_dropped_frames_and_batches_for_reference_to_video(tmp_path, monkeypatch, capsys):
+    from orrery.comfy import OrreryRefs
+    send_chain(tmp_path, monkeypatch, dropped=[60])
+    graph = {"12": {"class_type": "OrreryRefs", "inputs": {}},
+             "20": {"class_type": "MiniMaxH3ReferenceToVideo", "inputs": {"ref_images.ref_image_1": ["12", 1]}}}
+    OrreryRefs().route(sends({"3": {"segment": 0, "frames": [[2, 2], [5, 5], [60, 60]]}}), prompt=graph, unique_id="12",
+                       image_1="img1")
+    said = capsys.readouterr().out
+    assert "60" in said and "not in segment 0's clip" in said
+    assert "reads only the first" in said
+
+
+def test_an_empty_ref_blocks_a_preview_but_stays_none_for_reference_to_video(monkeypatch):
+    """Segment 0 of a reel that sends has nothing on the sent refs yet: Reference to Video skips None,
+    but Preview Image would crash on it, so outputs only nodes other than it read are blocked instead."""
+    from orrery.comfy import OrreryRefs
+    blocker = types.ModuleType("comfy_execution.graph_utils")
+
+    class ExecutionBlocker:
+        def __init__(self, message):
+            self.message = message
+
+    blocker.ExecutionBlocker = ExecutionBlocker
+    monkeypatch.setitem(sys.modules, "comfy_execution", types.ModuleType("comfy_execution"))
+    monkeypatch.setitem(sys.modules, "comfy_execution.graph_utils", blocker)
+    graph = {"12": {"class_type": "OrreryRefs", "inputs": {}},
+             "20": {"class_type": "MiniMaxH3ReferenceToVideo", "inputs": {"ref_images.ref_image_0": ["12", 0],
+                                                                         "ref_images.ref_image_1": ["12", 1]}},
+             "30": {"class_type": "PreviewImage", "inputs": {"images": ["12", 1]}},
+             "31": {"class_type": "PreviewImage", "inputs": {"images": ["12", 2]}}}
+    out = OrreryRefs().route(sends({}, refs=[1]), prompt=graph, unique_id="12", image_1="img1")
+    assert out[0] == "img1"
+    assert out[1] is None  # Reference to Video reads it (and a preview too): None, which it skips
+    assert isinstance(out[2], ExecutionBlocker) and out[2].message is None  # only a preview: blocked
+    assert out[3] is None  # read by nothing
+
+
+def test_the_preview_output_shows_every_ref_of_the_clip_labelled(monkeypatch):
+    """ref_N go to Reference to Video, which needs None for an empty one; previews take `preview` instead."""
+    from orrery import comfy
+    from orrery.comfy import OrreryRefs
+    assert OrreryRefs.RETURN_NAMES[-1] == "preview" and len(OrreryRefs.RETURN_TYPES) == 10
+    blocker = types.ModuleType("comfy_execution.graph_utils")
+
+    class ExecutionBlocker:
+        def __init__(self, message):
+            self.message = message
+
+    blocker.ExecutionBlocker = ExecutionBlocker
+    monkeypatch.setitem(sys.modules, "comfy_execution", types.ModuleType("comfy_execution"))
+    monkeypatch.setitem(sys.modules, "comfy_execution.graph_utils", blocker)
+    monkeypatch.setattr(comfy, "stack_preview", lambda labelled: ("stacked", tuple(labelled)))
+    graph = {"12": {"class_type": "OrreryRefs", "inputs": {}},
+             "30": {"class_type": "PreviewImage", "inputs": {"images": ["12", 9]}}}
+    out = OrreryRefs().route(json.dumps({"refs": [3, 6]}), prompt=graph, unique_id="12", image_3="img3", image_6="img6")
+    assert out[9] == ("stacked", (("ref_1", "img3"), ("ref_2", "img6")))
+    empty = OrreryRefs().route(json.dumps({"refs": []}), prompt=graph, unique_id="12")
+    assert empty[9] == ("stacked", ())  # a grey "no refs" frame, so the preview never shows an older clip's refs
+
+
+def test_orrery_refs_always_runs_so_a_new_chain_is_never_hidden_by_the_cache():
+    from orrery.comfy import OrreryRefs
+    assert OrreryRefs.IS_CHANGED(picks="x") != OrreryRefs.IS_CHANGED(picks="x")  # NaN: ComfyUI never reuses it
+
+
+def test_a_fetched_sent_image_is_kept_as_the_anchor_of_its_image(tmp_path, monkeypatch):
+    from orrery.comfy import OrreryRefs
+    saved = send_chain(tmp_path, monkeypatch)
+    OrreryRefs().route(sends({"3": {"segment": 1, "frames": [[0, 0]]}}, home=str(tmp_path)), image_1="img1")
+    assert saved == [(str(tmp_path), 3, "clip_00002:[[0, 0]]")]
+
+
+def test_a_held_image_comes_from_its_anchor_not_the_chain(tmp_path, monkeypatch):
+    from orrery import anchors, comfy
+    from orrery.comfy import OrreryRefs
+    saved = send_chain(tmp_path, monkeypatch, clips=0)
+    monkeypatch.setattr(anchors, "load", lambda home, n: f"anchor{n}@{home.root.name}" if n == 3 else None)
+    monkeypatch.setattr(comfy, "to_image", lambda array: array)
+    out = OrreryRefs().route(sends({"3": {"held": True}}, home=str(tmp_path)), image_1="img1")
+    assert out[1] == f"anchor3@{tmp_path.name}" and saved == []  # held: no chain read, nothing overwritten
+    with pytest.raises(ValueError, match="image 4"):
+        OrreryRefs().route(sends({"4": {"held": True}}, refs=(1, 4), home=str(tmp_path)), image_1="img1")
+
+
+def test_keep_sent_on_orrery_refs_holds_the_stored_anchors_from_segment_0(home, monkeypatch):
+    from orrery import anchors
+    monkeypatch.setattr(anchors, "stored", lambda h: {3})
+    graph = {**REFS_GRAPH, "12": {"class_type": "OrreryRefs", "inputs": {"picks": ["9", 1], "image_1": ["5", 0],
+                                                                         "keep_sent": True}}}
+    _, picks, *_ = OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), segment=0, prompt=graph, unique_id="9")
+    data = json.loads(picks)
+    assert data["refs"] == [1, 3] and data["sends"]["ready"] == {"3": {"held": True}}
+    assert data["sends"]["home"] == str(home)
+    _, picks, *_ = OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), segment=0, prompt=REFS_GRAPH, unique_id="9")
+    assert json.loads(picks)["sends"]["ready"] == {}
+
+
+def test_the_preview_frames_carry_their_ref_in_white_with_a_black_edge():
+    from orrery.comfy import preview_frames
+    blue = np.zeros((1, 64, 64, 3), dtype=np.float32)
+    blue[..., 2] = 1.0
+    red = np.zeros((2, 96, 160, 3), dtype=np.float32)
+    red[..., 0] = 1.0
+    frames = preview_frames([("ref_1", blue), ("ref_2", red)])
+    assert frames.shape == (3, 512, 853, 3)
+    corner = frames[0, :70, :260]
+    assert (corner >= 0.99).all(axis=-1).any() and (corner <= 0.01).all(axis=-1).any()  # white text, black edge
+    empty = preview_frames([])
+    assert empty.shape[0] == 1 and abs(float(empty[0, -1, -1, 0]) - 0.5) < 0.01
+
+
+# --- LoRA sweeps -------------------------------------------------------------------------------
+
+SWEEP = "a cat on a roof <lora:a:0.5,1.0:solo><lora:b:0.7:solo>"
+
+
+def test_a_sweep_run_writes_its_tags_records_them_and_names_its_galaxy_folder(home):
+    text, picks, seed, *_ = OrreryPrompt().run(SWEEP, 5, "text", home=str(home), sweep="1|sweeps/a 2026-10-01 14.03")
+    data = json.loads(picks)
+    assert text == "a cat on a roof <lora:a:1>" and seed == 5
+    assert {"label": "<lora:a>", "value": "1", "keys": ["<lora:a>=1"]} in data["picks"]
+    assert {"label": "<lora:b>", "value": "off", "keys": ["<lora:b>=off"]} in data["picks"]
+    assert data["folder"] == "sweeps/a 2026-10-01 14.03" and data["sweep"] == {"run": 1, "runs": 3}
+
+
+def test_run_without_generate_takes_the_first_and_says_how_many_there_are(home):
+    text, picks, *_ = OrreryPrompt().run(SWEEP, 5, "text", home=str(home))
+    assert text == "a cat on a roof <lora:a:0.5>"
+    assert any("3 runs" in i["message"] and "Generate" in i["message"] for i in json.loads(picks)["lint"])
+    with pytest.raises(ValueError, match="run 7"):
+        OrreryPrompt().run(SWEEP, 5, "text", home=str(home), sweep="7|x")
+
+
+GRID = "a __animal__ in __style__\n: grid __style__"
+
+
+def test_a_grid_runs_one_cell_per_sweep_run_and_multiplies_with_a_lora_sweep(home):
+    texts = [OrreryPrompt().run(GRID, 5, "text", home=str(home), sweep=f"{i}|g")[0] for i in range(2)]
+    animal = texts[0].split()[1]
+    assert texts == [f"a {animal} in linocut", f"a {animal} in gouache"]
+    both = GRID.replace("__style__\n", "__style__ @x(0.5,1.0)\n")
+    runs = [OrreryPrompt().run(both, 5, "text", home=str(home), sweep=f"{i}|g") for i in range(4)]
+    assert [r[0].split(" in ")[1] for r in runs] == ["linocut <lora:x:0.5>", "gouache <lora:x:0.5>",
+                                                     "linocut <lora:x:1>", "gouache <lora:x:1>"]
+    assert json.loads(runs[3][1])["sweep"] == {"run": 3, "runs": 4}
+    lint = json.loads(OrreryPrompt().run(both, 5, "text", home=str(home))[1])["lint"]
+    assert any("LoRA sweep and grid: 4 runs (2 × 2)" in i["message"] for i in lint)
+    with pytest.raises(ValueError, match="run 4"):
+        OrreryPrompt().run(both, 5, "text", home=str(home), sweep="4|g")
+
+
+def test_a_sweep_in_a_library_entry_warns_in_the_node(home):
+    (home / "library" / "sets.yaml").write_text("- <lora:ink:0.5,1.0>\n")
+    text, picks, *_ = OrreryPrompt().run("a fox __sets__", 5, "text", home=str(home))
+    assert text == "a fox <lora:ink:0.5>"
+    assert any("is a sweep" in i["message"] and i["severity"] == "warn" for i in json.loads(picks)["lint"])
+
+
+def test_a_run_records_its_dice_for_history_and_galaxy(home):
+    from orrery import history
+    from orrery.home import Home
+
+    assert json.loads(OrreryPrompt().run("a __animal__", 5, "text", home=str(home))[1])["rng"] == 2
+    assert json.loads(OrreryPrompt().run("@rng 1\na __animal__", 5, "text", home=str(home))[1])["rng"] == 1
+    assert [r["rng"] for r in history.read(Home(home))["runs"]] == [1, 2]  # newest first
+    h3 = json.loads(OrreryPrompt().run("@h3 t2va full\nSHOT 5s: static\nA fox.", 5, "h3-base", home=str(home))[1])
+    assert h3["format"] == "full" and history.read(Home(home))["runs"][0]["format"] == "full"
+    assert json.loads(OrreryPrompt().run("@h3 t2va\nSHOT 5s: static\nA fox.", 5, "h3-base", home=str(home))[1])["format"] == "lite"
+
+
+def test_size_comes_from_the_size_directive(home):
+    from orrery.comfy import shape
+
+    assert shape("@h3 t2va 16:9\n@size 832x1216\nSHOT 5s\nA.")[:2] == (832, 1216)
+    assert shape("@h3 t2va 16:9\n: w832 h1216\nSHOT 5s\nA.")[:2] == (832, 1216)
+
+
+def test_the_node_runs_a_template_with_its_own_library_without_a_language_model(home):
+    text, picks, *_ = OrreryPrompt().run("@lib mood\n  calm\n  tense\nA __mood__ __animal__.", 3, "text", home=str(home))
+    assert text.split()[1] in ("calm", "tense") and not [i for i in json.loads(picks)["lint"] if i["severity"] != "info"]
+
+
+def test_every_sweep_run_is_a_new_run_for_comfyui():
+    a = OrreryPrompt.IS_CHANGED(SWEEP, 5, "text", sweep="0|x")
+    assert a != OrreryPrompt.IS_CHANGED(SWEEP, 5, "text", sweep="1|x")
+
+
+def test_a_logged_sweep_output_lands_in_its_folder(home, tmp_path):
+    from orrery.comfy import log_outputs
+    _, picks, *_ = OrreryPrompt().run(SWEEP, 5, "text", home=str(home), sweep="2|sweeps/a 2026-10-01 14.03")
+    [row] = log_outputs(Home(home), picks, [str(tmp_path / "x.png")])
+    assert row["folder"] == "sweeps/a 2026-10-01 14.03"
+    data = json.loads(picks)
+    data["folder"] = "../escape"
+    [row] = log_outputs(Home(home), json.dumps(data), [str(tmp_path / "y.png")])
+    assert "folder" not in row

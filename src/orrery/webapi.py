@@ -5,6 +5,7 @@ comfyui/__init__.py registers ROUTES with ComfyUI's server. `call` turns ApiErro
 UI can show. The contract lives in docs/plan-node-app.md.
 """
 
+import hashlib
 import re
 import traceback
 from collections import Counter
@@ -13,9 +14,10 @@ from pathlib import Path
 from orrery import galaxy as gx
 from orrery import manager, uistate
 from orrery import presets as ps
+from orrery.chain import DEFAULT_CHAIN
 from orrery.comfy_llm import can_write, llm_config, text_encoders
 from orrery.completion import completion_data
-from orrery.dsl import MissingLibrary, expand, override
+from orrery.dsl import MissingLibrary, expand, override, strip_comments
 from orrery.h3 import compile_scene
 from orrery.home import BUILTIN_DIR, Home, home_setting, home_source, resolve_home, set_home_setting
 from orrery.library import NAME, Entry, Library, load_library
@@ -159,7 +161,7 @@ def presets(home: Home, args: dict) -> dict:
         "presets": [_card(home, n, outputs) for n in names],
         "favorites": [n for n in ui["favorites"] if n in known],
         "recent": [n for n in ui["recent"] if n in known],
-        "quickstart": ui["quickstart"],
+        **{flag: ui[flag] for flag in uistate.FLAGS},
     }
 
 
@@ -218,10 +220,13 @@ def recent(home: Home, args: dict) -> dict:
 
 
 def ui_save(home: Home, args: dict) -> dict:
-    """App preferences kept in the home: `quickstart` (New templates open with their comments)."""
-    if "quickstart" in args:
-        uistate.set_quickstart(home, bool(args["quickstart"]))
-    return {"quickstart": uistate.load_ui(home)["quickstart"]}
+    """App switches kept in the home: `quickstart` (New templates open with their comments),
+    `dividers` (chunk dividers in the editor), `timeline` (the reel's clips beside it)."""
+    for flag in uistate.FLAGS:
+        if flag in args:
+            uistate.set_flag(home, flag, bool(args[flag]))
+    ui = uistate.load_ui(home)
+    return {flag: ui[flag] for flag in uistate.FLAGS}
 
 
 def _preset_by_hash(home: Home) -> dict[str, str]:
@@ -523,6 +528,78 @@ def galaxy_media(home: Home, args: dict) -> Path:
     return _file(gx.media_path, home, args)
 
 
+# --- the timeline: the chain's clips and the sent frames ------------------------------------
+
+def _latent_path(args: dict) -> str:
+    return str(args.get("latent_path") or DEFAULT_CHAIN)
+
+
+def chain(home: Home, args: dict) -> dict:
+    """The clips the reel's chain holds (Orrery Film's or Chain Video's), by segment."""
+    from orrery.chain import listing
+
+    return {"latent_path": _latent_path(args), **listing(_output_dir(), _latent_path(args))}
+
+
+def chain_video(home: Home, args: dict) -> Path:
+    from orrery.chain import clip_file
+
+    path = clip_file(_output_dir(), _latent_path(args), _int(args, "segment", -1))
+    if path is None:
+        raise ApiError(404, f"the chain has no clip for segment {args.get('segment')}.")
+    return path
+
+
+def chain_thumb(home: Home, args: dict) -> Path:
+    src = chain_video(home, args)
+    digest = hashlib.sha1(str(src).encode("utf-8")).hexdigest()[:16]
+    try:
+        return gx.thumb_file(src, home.root / "thumbs" / f"chain-{digest}.webp")
+    except KeyError as err:
+        raise ApiError(404, err.args[0]) from None
+
+
+def anchor(home: Home, args: dict) -> Path:
+    """The first frame stored for a sent image (Orrery Refs' anchors)."""
+    from orrery import anchors
+
+    image = str(args.get("image") or "")
+    if not image.isdigit():
+        raise ApiError(400, "'image' must be an image number.")
+    path = anchors.folder(home, int(image)) / "0000.png"
+    if not path.is_file():
+        raise ApiError(404, f"image {image} has no stored anchor yet.")
+    return path
+
+
+def history_runs(home: Home, args: dict) -> dict:
+    """The prompt history, newest first: `q` searches prompt, picks, preset and seed."""
+    from orrery import history
+
+    return history.read(home, limit=min(max(_int(args, "limit", 50), 1), 200), offset=max(_int(args, "offset", 0), 0),
+                        query=str(args.get("q") or ""))
+
+
+def writer_texts(home: Home, args: dict) -> dict:
+    """The writers' prompts: each {text, default, edited}."""
+    from orrery import writers
+
+    return writers.texts(home)
+
+
+def writer_save(home: Home, args: dict) -> dict:
+    """Keep an edited writer text; a null or empty text goes back to the default."""
+    from orrery import writers
+
+    text = args.get("text")
+    if text is not None and not isinstance(text, str):
+        raise ApiError(400, "'text' must be a string or null.")
+    try:
+        return writers.save(home, str(args.get("name") or ""), text)
+    except ValueError as err:
+        raise ApiError(400, str(err)) from None
+
+
 # --- roll -----------------------------------------------------------------------------------
 
 ROLL_CLIPS = 6  # Roll on a reel shows this many clips at most
@@ -548,7 +625,8 @@ def _run(home: Home, text: str, seed: int, target: str, segment: int):
     """One expansion or compile, and its lint (LoRA warnings included when ComfyUI knows the files)."""
     try:
         if target == "text":
-            return expand(text, seed, home.libraries(), home.weights()), []
+            result = expand(text, seed, home.libraries(), home.weights())
+            return result, [{"severity": "warn", "message": w} for w in result.warnings]
         result = compile_scene(text, seed, home.libraries(), home.weights(), target=target, segment=segment)
     except MissingLibrary as err:
         raise ApiError(400, str(err), library=err.name) from None
@@ -560,13 +638,55 @@ def _run(home: Home, text: str, seed: int, target: str, segment: int):
     return result, lint
 
 
+def generate_plan(home: Home, args: dict) -> dict:
+    """What Generate queues: a LoRA sweep's runs times a grid's cells (orrery.batch.plan)."""
+    from orrery import batch
+
+    text, _ = _template_for(home, args)
+    try:
+        return batch.plan(text, home.libraries())
+    except ValueError as err:
+        raise ApiError(400, str(err)) from None
+
+
+def _clips(home: Home, text: str, reel, seed: int, upto: int) -> int | None:
+    """How many clips a reel plays at `seed` (looking up to `upto`); None when it plays on past that."""
+    if not reel.jumps_on_rolls:
+        return reel.segments
+    from orrery.dsl import with_inline
+    from orrery.reel import reel_path
+
+    src, libraries = with_inline(strip_comments(text), home.libraries())
+    path, ended = reel_path(split_reel(src), seed, libraries, home.weights(), upto)
+    return len(path) if ended else None
+
+
+def reel_walk(home: Home, args: dict) -> dict:
+    """The chunk each clip of a reel plays at a seed: with GOTO lines the path can wait on what rolls."""
+    from orrery.dsl import with_inline
+    from orrery.loras import long_form
+    from orrery.reel import MAX_WALK, reel_path
+
+    text, _ = _template_for(home, args)
+    src, libraries = with_inline(long_form(strip_comments(text)), home.libraries())
+    reel = split_reel(src)
+    if reel is None:
+        return {"path": [], "ended": True}
+    try:
+        path, ended = reel_path(reel, _int(args, "seed", 0), libraries, home.weights(), MAX_WALK)
+    except ValueError as err:
+        raise ApiError(400, str(err)) from None
+    return {"path": [block for block, _ in path], "ended": ended}
+
+
 def roll(home: Home, args: dict) -> dict:
     text, target = _template_for(home, args)
     seed, n = _int(args, "seed", 0), min(max(_int(args, "n", 3), 1), MAX_ROLLS)
     reel = split_reel(text) if target != "text" else None
     # a reel shows its clips at one seed, from `start` (a few at a time); anything else shows n seeds
     start = max(_int(args, "start", 0), 0)
-    end = start + ROLL_CLIPS if reel and reel.segments is None else min(start + ROLL_CLIPS, reel.segments) if reel else 0
+    total = _clips(home, text, reel, seed, start + ROLL_CLIPS) if reel else 0
+    end = start + ROLL_CLIPS if reel and total is None else min(start + ROLL_CLIPS, total) if reel else 0
     runs = [(seed, k) for k in range(start, end)] if reel else [(s, None) for s in range(seed, seed + n)]
     rolls = []
     for s, segment in runs:
@@ -586,7 +706,7 @@ def frequency(home: Home, args: dict) -> dict:
     if across == "clips":
         if not reel:
             raise ApiError(400, "Counting across clips needs a reel (CHUNK lines) and a screenplay target.")
-        n = min(n, MAX_FREQUENCY_CLIPS, reel.segments or MAX_FREQUENCY_CLIPS)
+        n = min(n, MAX_FREQUENCY_CLIPS, _clips(home, text, reel, seed, n) or MAX_FREQUENCY_CLIPS)
         runs = [(seed, k) for k in range(n)]
     elif across == "seeds":
         segment = max(_int(args, "segment", 0), 0) if reel else 0
@@ -669,6 +789,13 @@ ROUTES = [
     ("POST", "/orrery/galaxy/rate", galaxy_rate),
     ("GET", "/orrery/galaxy/thumb", galaxy_thumb),
     ("GET", "/orrery/galaxy/media", galaxy_media),
+    ("GET", "/orrery/chain", chain),
+    ("GET", "/orrery/chain/thumb", chain_thumb),
+    ("GET", "/orrery/chain/video", chain_video),
+    ("GET", "/orrery/anchor", anchor),
+    ("GET", "/orrery/history", history_runs),
+    ("GET", "/orrery/writers", writer_texts),
+    ("POST", "/orrery/writers", writer_save),
     ("POST", "/orrery/galaxy/move", galaxy_move),
     ("POST", "/orrery/galaxy/delete", galaxy_delete),
     ("POST", "/orrery/galaxy/export", galaxy_export),
@@ -676,6 +803,8 @@ ROUTES = [
     ("POST", "/orrery/galaxy/folder/rename", galaxy_folder_rename),
     ("POST", "/orrery/galaxy/folder/delete", galaxy_folder_delete),
     ("POST", "/orrery/roll", roll),
+    ("POST", "/orrery/plan", generate_plan),
+    ("POST", "/orrery/reel", reel_walk),
     ("POST", "/orrery/frequency", frequency),
     ("GET", "/orrery/home", home_settings),
     ("POST", "/orrery/home", home_save),

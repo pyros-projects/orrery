@@ -1,0 +1,99 @@
+---
+title: "Infinite backrooms"
+note: "A found-footage horror film that writes itself. The camera walks the Backrooms three levels at a time; after every third, there is a 40% chance that something finds it. Which SCP it is decides how the camera gets away: it does not look at SCP-096, holds its breath while SCP-939 listens, runs from SCP-682 (and is sometimes caught: the tape tears, rewinds, and the walk starts again in the yellow rooms), dives through the flooded floor away from SCP-3000, and is hugged by SCP-999. Every way out noclips into a new level, and the walk goes on. GOTO lines steer it; another seed is another film. The entities come from the SCP Wiki (CC BY-SA 3.0, credited in __scp/entities__)."
+tags: [loops, h3, reel, goto, horror, motion_context]
+---
+@h3 t2va 16:9
+context: 22
+style: found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp "JUN 14 1996 3:12 AM" in the lower corner, handheld at chest height
+MUSIC: N/A
+
+@lib backrooms_approach
+  stands at the far end of the room, perfectly still, facing the camera
+  steps out from behind a pillar a few metres ahead
+  crawls out of a dark doorway on all fours
+  is already in the room when the lights flicker back on
+  rises slowly from behind a row of empty desks
+
+CHUNK the yellow rooms
+$level = __backrooms/levels#start:yes__
+$exit = __backrooms/exits__
+SHOT 10s: push in, slow
+The camera operator walks slowly forward through $level. The place is completely empty and goes on in every direction.
+SFX: $level.sfx; the camera operator's breathing and footsteps close to the microphone
+HANDOFF: $exit
+
+CHUNK the walk repeat 3
+$level = __backrooms/levels__
+$exit = __backrooms/exits__
+$contact = {40% contact}
+SHOT 10s: push in, slow
+$exit~1.open, into $level. The camera operator walks slowly on. The place is completely empty and goes on in every direction{30% , and far away a door closes softly by itself}.
+SFX: $level.sfx; the camera operator's breathing and footsteps close to the microphone
+HANDOFF: $exit
+? $contact[contact]: GOTO: contact
+GOTO: the walk
+
+CHUNK contact
+$scp = __scp/entities__
+$level = __backrooms/levels__
+SHOT 10s: static
+$exit~1.open, into $level. The camera operator stops dead: $scp __backrooms_approach__. The camera trembles in the operator's hands.
+SFX: $scp.sfx; the operator's breath catching; the fluorescent buzz rising
+HANDOFF: the thing stands between the camera and the way on
+? $scp[id=SCP-096]: GOTO: eyes shut
+? $scp[id=SCP-939]: GOTO: silence
+? $scp[id=SCP-682]: GOTO: the chase
+? $scp[id=SCP-3000]: GOTO: the deep floor
+GOTO: the hug
+
+CHUNK eyes shut
+$exit = __backrooms/exits__
+SHOT 10s: tilt down, fast
+The camera swings down to the floor before it can see the face of $scp~1. The operator squeezes their eyes shut; the picture shows only carpet and shaking hands while something huge walks past, close enough to brush the lens, and moves on. Then the operator stumbles forward, and $exit.
+SFX: $scp~1.sfx passing very close; the operator's ragged, held breath
+HANDOFF: $exit
+GOTO: the walk
+
+CHUNK silence
+$exit = __backrooms/exits__
+SHOT 10s: static, small
+The operator crouches behind an overturned desk and holds their breath. $scp~1 moves through the room, its head turning toward every small sound, stops right beside the desk, then drifts away into the dark. The operator slips out the other way, and $exit.
+SFX: total silence but for $scp~1.sfx; one drop of water falling
+HANDOFF: $exit
+GOTO: the walk
+
+CHUNK the chase
+$exit = __backrooms/exits__
+$fate = {70% gone|caught}
+SHOT 10s: tracking, fast
+The operator turns and runs, the camera jolting wildly, through room after identical room with $scp~1 crashing after them, doorframes splintering behind.
+? $fate[gone]: At the last moment $exit, and the crashing stops.
+? $fate[caught]: A huge shape fills the frame from the side, the camera is torn away and tumbles across the floor, still recording.
+SFX: running footsteps; $scp~1.sfx right behind; the camera's case cracking
+HANDOFF: the picture jolts and breaks up for a moment
+? $fate[caught]: GOTO: the tape
+GOTO: the walk
+
+CHUNK the deep floor
+$exit = __backrooms/exits[open=The camera rises dripping out of shallow water]__
+SHOT 10s: push in, slow
+The floor ahead is flooded with dark water. $scp~1 rises out of it, enormous, and glides past just under the surface; the operator holds the camera high and backs away until $exit, the picture going green and murky.
+SFX: water rushing into the microphone; $scp~1.sfx muffled through the water
+HANDOFF: $exit
+GOTO: the walk
+
+CHUNK the hug
+$exit = __backrooms/exits__
+SHOT 10s: static
+$scp~1 wobbles up to the camera, rises tall and wraps two soft pseudopods around the operator, who laughs in spite of everything. It lets go, wobbles away happily, and the operator, still smiling, walks on, and $exit.
+SFX: a happy bubbling hum; the operator's shaky laughter
+HANDOFF: $exit
+GOTO: the walk
+
+CHUNK the tape
+SHOT 10s: static
+The picture is all tracking noise and static. The tape counter spins backwards, the date stamp flickers, and the static slowly clears into the yellow rooms again, as if the tape had been rewound.
+SFX: tape hiss; the whir of a cassette rewinding; a click
+HANDOFF: the camera stands again at the start of the yellow rooms
+GOTO: the yellow rooms

@@ -62,9 +62,56 @@ export const templateHash = (text) => sha256(new TextEncoder().encode(text)).sli
 // `# …` lines are comments (as in wildcard files): the node drops them before anything rolls.
 export const stripComments = (text) => text.split("\n").filter((l) => !/^\s*#/.test(l)).join("\n");
 
+// A run is replayed as it was made: one recorded before every pick had dice of its own (no rng in
+// its row) gets `@rng 1` (under the @h3 line, which stays the first), and a screenplay recorded before
+// lite was the default (no format in its row) gets `full` on its @h3 line.
+export function withDice(text, row) {
+  const lines = text.split("\n"), head = lines.findIndex((l) => /^\s*@h3\b/.test(l));
+  if (head >= 0 && !row?.format && !/\b(lite|full)\b/.test(lines[head])) lines[head] = `${lines[head].trimEnd()} full`;
+  if (!row?.rng && !/^\s*@rng\b/m.test(text)) lines.splice(head + 1, 0, "@rng 1");
+  return lines.join("\n");
+}
+
+// `@style(0.8)` is `<lora:style:0.8>`, as orrery.loras.long_form writes it (not @include or @h3).
+export const longForm = (text) => text.replace(/(?<![\w@<\\])@([\w./\\-]+)\(([^()<>]*)\)/g,
+  (m, name, spec) => (/^(include|h3)$/i.test(name) ? m : `<lora:${name}:${spec.trim()}>`));
+
+// A brace's options: split at `|`, but not inside `[...]` (`{__a[x|y]__|b}` has two). Mirrors orrery.dsl.split_options.
+export function splitOptions(inner) {
+  const out = [];
+  let depth = 0, start = 0;
+  [...inner].forEach((ch, i) => {
+    if (ch === "[") depth++;
+    else if (ch === "]" && depth) depth--;
+    else if (ch === "|" && !depth) { out.push(inner.slice(start, i)); start = i + 1; }
+  });
+  return [...out, inner.slice(start)];
+}
+
+// `[myth]` · `[myth,!bird]` every term holds · `[water|deep_sea]` either does. Mirrors orrery.dsl.tags_match.
+// `myth, !bird, habitat=sea, size=small|tiny`: mirrors orrery.dsl.matches. A `$var` value is not known
+// here, so it holds.
+export function matches(spec, tags, props = {}) {
+  if (!spec || !spec.trim()) return true;
+  return spec.split(",").every((term) => {
+    let key = null;
+    const alts = term.split("|").map((a) => a.trim()).filter(Boolean);
+    return !alts.length || alts.some((alt) => {
+      let neg = alt.startsWith("!"), body = alt.replace(/^!+\s*/, ""), value = null;
+      if (body.includes("!=")) { [key, value] = body.split("!=").map((x) => x.trim()); neg = !neg; }
+      else if (body.includes("=")) [key, value] = body.split("=").map((x) => x.trim());
+      else if (key !== null) value = body;
+      const ok = value === null ? tags.includes(body)
+        : value.startsWith("$") || String(props?.[key] ?? "").trim().toLowerCase() === value.toLowerCase();
+      return ok !== neg;
+    });
+  });
+}
+export const tagsMatch = (spec, tags) => matches(spec, tags);
+
 export function stats(raw) {
-  const text = stripComments(raw).replace(/<lora:[^<>]*>/g, "<lora>");
-  const libs = [...text.matchAll(/__(\w+(?:\/\w+)*)(?:\[[\w-]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__/g)];
+  const text = longForm(stripComments(raw)).replace(/<lora:[^<>]*>/g, "<lora>");
+  const libs = [...text.matchAll(/__([\w*]+(?:\/[\w*]+)*)(?:\[[^\[\]\n]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__/g)];
   const rolls = (text.match(/\{/g) || []).length + libs.length;
   const binds = (text.match(/^\s*\$\w+\s*=/gm) || []).length;
   let h3 = null;
@@ -72,7 +119,7 @@ export function stats(raw) {
     const shots = [...text.matchAll(/^\s*SHOT\s+([\d.]+)\s*s/gm)];
     const firstShot = text.search(/^\s*SHOT\b/m);
     const voices = new Set([...text.slice(Math.max(firstShot, 0)).matchAll(/^\s*([A-Z][A-Z0-9 _-]*?)\s*(?:\([^)]*\))?\s*:\s/gm)]
-      .map((m) => m[1]).filter((n) => !["SFX", "MUSIC", "SHOT", "LORA", "HANDOFF"].includes(n)));
+      .map((m) => m[1]).filter((n) => !["SFX", "MUSIC", "SHOT", "LORA", "HANDOFF", "SEND"].includes(n)));
     h3 = { shots: shots.length, secs: shots.reduce((s, m) => s + Number(m[1]), 0), voices: voices.size, reel: reelSecs(text) };
   }
   return { rolls, libs: new Set(libs.map((m) => m[1])).size, binds, h3 };
@@ -199,6 +246,110 @@ function reelSecs(text) {
   return secs && { chunks: secs.length, secs, repeats, clips: repeats.reduce((a, b) => a + b, 0) };
 }
 
+// Each CHUNK line of a reel, for the editor's dividers and the timeline: the line it is on, its
+// title, the images its SEND: lines fill, the segments it plays (last Infinity when it repeats forever; first null when a chunk before
+// it does), the seconds of one clip (kept without the pinned frames), where it starts
+// and ends in the film, the seconds left after it (null when the film runs forever) and a label.
+// Null without CHUNK lines. Mirrors orrery.reel.
+export function chunkInfo(text, walked = null) {
+  const out = [];
+  text.split("\n").forEach((raw, line) => {
+    const l = raw.trim(), c = /^CHUNK\b\s*(.*)$/.exec(l);
+    if (c) {
+      const r = /^(.*?)\s*\brepeat\s+(\d+|forever)\s*$/i.exec(c[1]);
+      const repeat = !r ? 1 : r[2].toLowerCase() === "forever" ? Infinity : Math.max(1, Number(r[2]));
+      out.push({ line, title: (r ? r[1] : c[1]).trim(), repeat, secs: 0, images: [] });
+    }
+    const m = /^SHOT\s+(\d+(?:\.\d+)?)\s*s\b/i.exec(l), send = /^SEND:.*\bto\s+image\s+(\d+)/i.exec(l);
+    if (m && out.length) out[out.length - 1].secs += Number(m[1]);
+    if (send && out.length && !out[out.length - 1].images.includes(Number(send[1]))) out[out.length - 1].images.push(Number(send[1]));
+  });
+  if (!out.length) return null;
+  if (hasGoto(text)) return walkedInfo(out, walked);
+  let segment = 0, at = 0;
+  for (const c of out) {
+    if (segment === null) Object.assign(c, { first: null, last: null, start: null, end: null });
+    else {
+      Object.assign(c, { first: segment, last: segment + c.repeat - 1, start: at, end: at + c.secs * c.repeat });
+      segment = c.repeat === Infinity ? null : segment + c.repeat;
+      at = c.end;
+    }
+  }
+  for (const c of out) {
+    c.left = segment === null || c.end === null ? null : at - c.end;
+    c.label = chunkLabel(c);
+  }
+  return out;
+}
+
+// A reel with GOTO lines plays a chunk wherever the server's walk at the node's seed puts it
+// (`walked`: {path: chunk index per segment, ended}): each chunk its list of segments, `segs`.
+export const hasGoto = (text) => /^\s*(?:\?[^\n]*?:\s*)?GOTO:/im.test(stripComments(text));
+
+function walkedInfo(out, walked) {
+  if (!walked) {
+    for (const c of out) Object.assign(c, { segs: [], first: null, last: null, start: null, end: null, left: null, label: "GOTO: walking the reel at this seed…" });
+    return out;
+  }
+  const at = [0];
+  walked.path.forEach((chunk, t) => at.push(at[t] + (out[chunk]?.secs ?? 0)));
+  const total = walked.ended ? at[walked.path.length] : null;
+  out.forEach((c, i) => {
+    const segs = walked.path.flatMap((chunk, t) => (chunk === i ? [t] : []));
+    const first = segs.length ? segs[0] : null, last = segs.length ? segs[segs.length - 1] : null;
+    Object.assign(c, { segs, endless: !walked.ended, first, last, start: first === null ? null : at[first],
+      end: last === null ? null : at[last] + c.secs, left: last === null || total === null ? null : total - at[last] - c.secs });
+    c.label = chunkLabel(c);
+  });
+  return out;
+}
+
+// Does chunk c play segment s? On its range, or on its list when GOTO lines set the path.
+export const plays = (c, s) => s != null && (c.segs ? c.segs.includes(s) : c.first !== null && s >= c.first && s <= c.last);
+
+// 1, 3–4, 7: a chunk's segments in short.
+function runs(segs) {
+  const parts = [];
+  for (const s of segs) {
+    const last = parts[parts.length - 1];
+    if (last && s === last[1] + 1) last[1] = s;
+    else parts.push([s, s]);
+  }
+  return parts.map(([a, b]) => (a === b ? `${a}` : `${a}–${b}`)).join(", ");
+}
+
+// The cells view: the text cut before every CHUNK line, the world above the first one its own cell
+// (chunk -1). Joined with newlines, the cells are the text again.
+export function splitCells(text) {
+  const lines = text.split("\n");
+  const starts = lines.flatMap((l, i) => (/^CHUNK\b/.test(l.trim()) ? [i] : []));
+  if (!starts.length) return [{ line: 0, chunk: -1, text }];
+  const cells = starts[0] > 0 ? [{ line: 0, chunk: -1, text: lines.slice(0, starts[0]).join("\n") }] : [];
+  starts.forEach((s, k) => cells.push({ line: s, chunk: k, text: lines.slice(s, starts[k + 1] ?? lines.length).join("\n") }));
+  return cells;
+}
+
+const clock = (secs) => {
+  const s = Math.round(secs * 10) / 10, m = Math.floor(s / 60), r = Math.round((s - m * 60) * 10) / 10;
+  return `${m}:${Number.isInteger(r) ? String(r).padStart(2, "0") : r.toFixed(1).padStart(4, "0")}`;
+};
+const span = (secs) => `${Math.round(secs * 100) / 100} s`;
+
+// `seg 4 · 0:20 → 0:25 · 1:35 left`, `seg 1–4 · 4 × 5 s · …`, `seg 7 → ∞ · 6 s each · from 0:35`
+export function chunkLabel(c) {
+  if (c.segs) {
+    if (!c.segs.length) return c.endless ? "not on the path yet: the reel loops before it" : "never plays at this seed";
+    const shown = c.segs.slice(0, 12), more = c.segs.length > 12 || c.endless ? ", …" : "";
+    const left = c.left === null ? "" : c.left > 0 ? ` · ${clock(c.left)} left` : " · the end";
+    return `seg ${runs(shown)}${more} · ${c.segs.length > 1 ? `${c.segs.length}${c.endless ? "+" : ""} × ` : ""}${span(c.secs)} · from ${clock(c.start)}${left}`;
+  }
+  if (c.first === null) return "never plays: a chunk before it repeats forever";
+  if (c.repeat === Infinity) return `seg ${c.first} → ∞ · ${span(c.secs)} each · from ${clock(c.start)}`;
+  const segs = c.repeat > 1 ? `seg ${c.first}–${c.last} · ${c.repeat} × ${span(c.secs)}` : `seg ${c.first}`;
+  const left = c.left === null ? "" : c.left > 0 ? ` · ${clock(c.left)} left` : " · the end";
+  return `${segs} · ${clock(c.start)} → ${clock(c.end)}${left}`;
+}
+
 function h3Length(seconds) {
   const frames = Math.max(5, Math.ceil(seconds * 24 - 1e-4));
   return frames + ((((5 - frames) % 17) + 17) % 17);
@@ -219,7 +370,10 @@ function h3Canvas(ratio, megapixels) {
 export function shape(raw) {
   const text = stripComments(raw);
   const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
-  const params = lines.filter((l) => /^:\s*(x\d|seed=|w\d|h\d)/.test(l)).join(" ");
+  // `: x8 seed=100 w832 h1216`, and their directives: `@batch 8`, `@seed 100`, `@size 832x1216`
+  const params = lines.filter((l) => /^:\s*(x\d|seed=|w\d|h\d)/.test(l)).join(" ") + " "
+    + lines.map((l) => /^@size\s+(\d+)\s*[x×*\s]\s*(\d+)\s*$/.exec(l)).filter(Boolean).map((m) => `w${m[1]} h${m[2]}`).join(" ");
+  const cliDirectives = lines.filter((l) => /^@(seed|batch)\b/.test(l));
   const num = (re) => { const m = re.exec(params); return m ? Number(m[1]) : null; };
   const header = /^@h3\s+\w+(.*)$/i.exec(lines[0] || "");
   const tokens = header ? header[1].split(/\s+/) : [];
@@ -234,7 +388,7 @@ export function shape(raw) {
   const width = num(/\bw(\d+)/) ?? canvas[0], height = num(/\bh(\d+)/) ?? canvas[1];
   return {
     width, height, length, megapixels: megapixels ?? Math.round((width * height) / 1e3) / 1e3,
-    cli: params.split(/\s+/).filter((w) => /^(x\d+|seed=\d+)$/.test(w)),
+    cli: [...params.split(/\s+/).filter((w) => /^(x\d+|seed=\d+)$/.test(w)), ...cliDirectives],
     ...(lengths ? { lengths } : {}),
   };
 }
@@ -245,8 +399,10 @@ const BINDING_LINE = /^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$/;
 export function dials(text) {
   const seen = new Set();  // a binding set in several chunks is one dial; override() turns them all
   return text.split("\n").map((l) => BINDING_LINE.exec(l)).filter((m) => m && !seen.has(m[2]) && seen.add(m[2])).map((m) => {
-    const expr = m[4].trim(), lib = /^__(\w+(?:\/\w+)*)(?:\[([\w-]+)\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\([^()]*\))?$/.exec(expr), brace = /^\{([^{}]*)\}$/.exec(expr);
-    const options = brace && !brace[1].includes("$$") ? brace[1].split("|").map((o) => o.replace(/:\d+(\.\d+)?$/, "").replace(/^\s*\d+(\.\d+)?::/, "").trim()).filter(Boolean) : [];
+    const expr = m[4].trim(), lib = /^__([\w*]+(?:\/[\w*]+)*)(?:\[([^\[\]\n]+)\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\([^()]*\))?$/.exec(expr), brace = /^\{([^{}]*)\}$/.exec(expr);
+    const range = brace && (/^\s*-?\d+(\.\d+)?\s*-\s*-?\d+(\.\d+)?\s*$/.test(brace[1])  // {0.4-0.9} rolls a number: no list
+      || (/^\s*\d+(\.\d+)?%\s/.test(brace[1]) && splitOptions(brace[1]).length === 1));  // {30% …}: on or off
+    const options = brace && !range && !brace[1].includes("$$") ? splitOptions(brace[1]).map((o) => o.replace(/:\d+(\.\d+)?$/, "").replace(/^\s*\d+(\.\d+)?::/, "").trim()).filter(Boolean) : [];
     return { name: m[2], expr, lib: lib ? lib[1] : null, tag: lib ? lib[2] || null : null, options };
   });
 }
@@ -304,3 +460,9 @@ export function downstream(nodes, start) {
   outputs.sort((a, b) => a - b);
   return { outputs, log: outputs.some((id) => byId.get(id)?.type === "OrreryLog") };
 }
+
+// What Generate queues is planned by the server (orrery.batch.plan, /orrery/plan): a LoRA sweep's runs
+// times a grid's cells. It is asked only when the template may hold one: a LoRA tag with several
+// strengths, a solo or test tag, or a grid.
+export const PLAN_HINT = /<lora:[^<>]*[,;][^<>]*>|<lora:[^<>]*:(?:solo|test)\b|(?<![\w@<\\])@[\w./\\-]+\([^()<>]*[,;][^()<>]*\)|^\s*(?:@grid|:\s*grid)\b/m;
+

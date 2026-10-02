@@ -7,12 +7,12 @@ tags: [h3, voiceover, documentary]
 style: live-action, nature documentary footage
 $beast = __creature[deep_sea]__
 
-SHOT 5s | tracking, slow
+SHOT 5s: tracking, slow
 Deep underwater, darkness except for a faint blue glow. A $beast drifts into the beam of a submersible's searchlight, marine snow falling around it.
 NARRATOR (calm, low British male voice, voiceover): At this depth, sunlight is only a rumour.
 SFX: a sonar ping repeats; the submersible's motors hum low
 
-SHOT 4s | cut, push in, small, slow
+SHOT 4s: cut, push in, small, slow
 A close-up of the $beast as faint blue and violet light pulses slowly along its body.
 NARRATOR (voiceover): And yet, the $beast makes its own.
 SFX: a muffled, slow pulse throbs like a heartbeat

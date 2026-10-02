@@ -1,12 +1,15 @@
 // The orrery app: one element that lives in the node or, in the big view, over the canvas.
+import { inlineLibraries } from "../orrery-complete.js";
+import { chunkInfo } from "./model.js";
 import { client } from "./api.js";
 import { renderGalaxy } from "./galaxy.js";
 import { renderHelp } from "./help.js";
 import { esc } from "./highlight.js";
+import { refreshHistory, renderHistory } from "./history.js";
 import { icon, LOGO } from "./icons.js";
 import { renderLibraries } from "./libraries.js";
 import { renderPresets } from "./presets.js";
-import { refreshFoot, renderPrompt } from "./prompt.js";
+import { refreshReel, renderPrompt } from "./prompt.js";
 import { openSettings } from "./settings.js";
 import { renderTest } from "./test.js";
 
@@ -16,6 +19,7 @@ const TABS = [
   ["presets", "Presets", renderPresets],
   ["libraries", "Libraries", renderLibraries],
   ["galaxy", "Galaxy", renderGalaxy],
+  ["history", "History", renderHistory],
   ["help", "Help", renderHelp],
 ];
 
@@ -70,7 +74,14 @@ export class OrreryApp {
     else delete this.bridge.props.orrery_preset;
   }
   card(name) { return this.data.presets.find((p) => p.name === name); }
-  known() { return new Set((this.data.completion?.libraries || []).map((l) => l.name)); }
+  // A reel with GOTO lines: the path the server walked at the node's seed (null until it came).
+  reelKey() { return `${this.text}\n${this.bridge.getSeed()}\n${JSON.stringify(this.bridge.getParams())}`; }
+  reelPath() { return this.data.reelPath?.key === this.reelKey() && !this.data.reelPath.error ? this.data.reelPath : null; }
+  chunks() { return chunkInfo(this.text, this.reelPath()); }
+
+  known() {  // the home's libraries and the template's own (@lib)
+    return new Set([...(this.data.completion?.libraries || []).map((l) => l.name), ...inlineLibraries(this.text).map((l) => l.name)]);
+  }
   llmActive() { return !!this.data.llm?.file; }
   dirty() { return this.preset ? this.base !== null && this.text !== this.base : this.text.trim() !== ""; }
 
@@ -89,6 +100,8 @@ export class OrreryApp {
 
   // A run may have let the language model write libraries: refresh, and point at anything to review.
   async afterRun() {
+    refreshReel(this, { chain: true });  // the reel may hold a new clip, Orrery Refs new anchors
+    if (this.state.tab === "history") refreshHistory(this);
     const before = new Set((this.data.libraries || []).filter((l) => l.pending || (l.pending_entries || []).length).map((l) => l.name));
     let libs;
     try { libs = (await this.api.libraries()).libraries; } catch { return; }
@@ -112,11 +125,15 @@ export class OrreryApp {
     this.data.favorites = new Set(d.favorites);
     this.data.recent = d.recent;
     this.data.quickstart = d.quickstart !== false;
+    this.data.dividers = d.dividers !== false;
+    this.data.timeline = d.timeline !== false;
+    this.data.log_prompts = d.log_prompts !== false;
   }
   async refreshCompletion() { this.data.completion = await this.api.completions(); }
 
   render() {
-    const n = { presets: this.data.presets.length, libraries: this.data.completion?.libraries.length, galaxy: this.data.gTotal ?? this.data.rows?.length };
+    const n = { presets: this.data.presets.length, libraries: this.data.completion?.libraries.length, galaxy: this.data.gTotal ?? this.data.rows?.length,
+      history: this.data.hAll };
     this.$(".tabs").innerHTML = TABS.map(([k, label]) => `<button class="tab" role="tab" aria-selected="${this.state.tab === k}" data-tab="${k}">`
       + `${label}${n[k] ? `<span class="n">${n[k]}</span>` : ""}</button>`).join("");
     const big = this.$(".big-btn");
@@ -130,13 +147,22 @@ export class OrreryApp {
       this.data.libStale = true;
       this.refreshCompletion().catch(() => {});
     }
+    if (tab === "history") this.state.hFetched = false;  // the runs since it was last open
     this.state.tab = tab;
     this.state.pick = false;
     this.bridge.props.orrery_tab = tab;
     this.render();
   }
 
+  // While a LoRA sweep is being queued, every queue item reads the template: nothing may change it.
+  busy() {
+    if (!this.bridge.sweeping?.()) return false;
+    this.toast("A LoRA sweep is being queued; wait until it is in, or press Stop.");
+    return true;
+  }
+
   async loadPreset(name, { quiet = false, tab = true } = {}) {
+    if (this.busy()) return;
     const prev = { preset: this.preset, base: this.base, text: this.text, params: this.bridge.getParams() };
     const wasDirty = this.dirty();
     try {
@@ -248,7 +274,7 @@ export class OrreryApp {
     this.run = null;
     this.refreshRun();
   }
-  refreshRun() { if (this.state.tab === "prompt") refreshFoot(this); }
+  refreshRun() { refreshReel(this); }
 
   destroy() {
     this.stopListening?.();

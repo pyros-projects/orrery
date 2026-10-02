@@ -8,7 +8,7 @@ import pytest
 
 from orrery.h3 import compile_scene
 from orrery.library import Entry, Library
-from orrery.reel import split_reel
+from orrery.reel import ReelEnd, reel_path, split_reel
 
 FOX = {"animal": Library("animal", [Entry("fox")])}
 MANY = {"animal": Library("animal", [Entry(a) for a in ("fox", "heron", "owl", "lynx", "hare")])}
@@ -20,16 +20,16 @@ $hero = __animal__
 
 CHUNK the salon
 LORA: <lora:first:1>
-SHOT 5s | push in, slow
+SHOT 5s: push in, slow
 A $hero crosses a salon.
 SFX: footsteps
 HANDOFF: the $hero reaches the staircase
 
 CHUNK
-SHOT 4s | static
+SHOT 4s: static
 The $hero climbs the stairs.
 SFX: creaking wood
-SHOT 2s | cut
+SHOT 2s: cut
 A landing with a tall window.
 MUSIC: a slow cello line
 
@@ -188,3 +188,249 @@ def test_a_property_of_an_earlier_clip_is_read_with_its_history():
         before = compile_scene(src, 5, libs, segment=seg - 1).text
         ended = "velvet curtains" if "before velvet curtains" in before else "mirrored doors"
         assert ("the curtains part" if ended == "velvet curtains" else "the mirrored doors swing inward") in now
+
+
+# --- SEND: frames of a clip as reference images for later clips -------------------------------
+
+SEND_REEL = """@h3 ref2va 16:9 lite
+style: live-action, cinematic
+CAST
+GIRL (image 1, image 3): the young woman, in a pink tracksuit
+
+CHUNK the pose repeat 2
+SHOT 5s: push in, slow
+GIRL stretches on a mat.
+SEND: frame 0 to image 3
+SEND: frames 2, 5, 34-36 to image 4
+
+CHUNK the walk
+SHOT 4s: static
+GIRL walks to the window.
+"""
+
+
+def ref2va(src, segment=0):
+    return compile_scene(src, 1, {}, target="h3-base", segment=segment, packed=True)
+
+
+def test_send_lines_belong_to_their_chunk_and_list_frames_in_order():
+    from orrery.reel import Send
+    reel = split_reel(SEND_REEL)
+    assert reel.blocks[0].sends == [Send([[0, 0]], 3), Send([[2, 2], [5, 5], [34, 36]], 4)]
+    assert not any("SEND" in line for block in reel.blocks for line in block.lines)
+    assert reel.send_slots == [3, 4]
+
+
+def test_a_sent_image_exists_from_the_segment_after_its_chunk_first_plays():
+    reel = split_reel(SEND_REEL)
+    assert reel.ready(0) == {}
+    first = {3: {"segment": 0, "frames": [[0, 0]]}, 4: {"segment": 0, "frames": [[2, 2], [5, 5], [34, 36]]}}
+    assert reel.ready(1) == first  # the chunk's second repetition still sends its first clip
+    assert reel.ready(2) == first
+
+
+def test_before_it_exists_a_sent_image_is_left_out_of_the_clip():
+    before = ref2va(SEND_REEL, segment=0)
+    assert before.refs == [1]
+    assert "<Subject 1> = the young woman of <Picture 1>, in a pink tracksuit" in before.text
+    assert "<Picture 2>" not in before.text
+    after = ref2va(SEND_REEL, segment=2)
+    assert after.refs == [1, 3, 4]  # image 4 is sent but named by nothing: it follows the ones the prompt uses
+    assert "<Picture 1> and <Picture 2>" in after.text
+    assert after.sends == {3: {"segment": 0, "frames": [[0, 0]]}, 4: {"segment": 0, "frames": [[2, 2], [5, 5], [34, 36]]}}
+    assert after.send_slots == [3, 4]
+
+
+def test_a_frame_anchor_on_a_sent_image_waits_for_it():
+    full = SEND_REEL.replace(" lite", " full")
+    later = full.replace("SHOT 4s: static", "SHOT 4s: from image 3, static")
+    assert "<Picture 2> is the first frame of [Shot 1]" in ref2va(later, segment=2).text
+    early = full.replace("SHOT 5s: push in, slow", "SHOT 5s: from image 3, push in, slow")
+    assert "first frame" not in ref2va(early, segment=0).text
+
+
+def test_a_bracket_before_its_image_exists_is_flagged():
+    src = SEND_REEL.replace("GIRL stretches on a mat.", "GIRL stretches like in [image 3].")
+    lint = [i.message for i in ref2va(src, segment=0).lint]
+    assert any("[image 3]" in m and "SEND" in m for m in lint)
+
+
+@pytest.mark.parametrize("line, words", [
+    ("SEND: frames 5-2 to image 3", "5-2"),
+    ("SEND: frames a, 2 to image 3", "a"),
+    ("SEND: frame 0 to image 10", "1–9"),
+    ("SEND: frame 0 to picture 3", "image N"),
+    ("SEND: frame to image 3", "frame"),
+])
+def test_malformed_send_lines_are_clear_errors(line, words):
+    with pytest.raises(ValueError, match=re.escape(words)):
+        split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", line))
+
+
+def test_two_sends_to_one_image_warn_and_the_later_takes_over():
+    src = SEND_REEL.replace("GIRL walks to the window.", "GIRL walks to the window.\nSEND: frame 9 to image 3")
+    assert split_reel(src).ready(3)[3] == {"segment": 2, "frames": [[9, 9]]}
+    lint = [i.message for i in ref2va(src, segment=2).lint]
+    assert any("image 3" in m and "segment 3" in m and "(CHUNK 2) takes over" in m for m in lint)
+
+
+def test_send_outside_a_chunk_or_outside_ref2va_is_an_error():
+    head = SEND_REEL.replace("CAST\n", "SEND: frame 0 to image 5\nCAST\n")
+    with pytest.raises(ValueError, match="inside a CHUNK"):
+        ref2va(head)
+    plain = "@h3 ref2va 16:9\nSHOT 5s\nA fox.\nSEND: frame 0 to image 3\n"
+    with pytest.raises(ValueError, match="inside a CHUNK"):
+        ref2va(plain)
+    t2va = SEND_REEL.replace("@h3 ref2va 16:9 lite", "@h3 t2va 16:9")
+    with pytest.raises(ValueError, match="ref2va"):
+        ref2va(t2va)
+
+
+def test_without_a_cast_a_sent_image_still_reaches_the_refs():
+    """ref_1 of every clip after the first is the first clip's frame 0, named in the prompt or not."""
+    src = ("@h3 ref2va 2:3\nCHUNK a\nSHOT 5s\nA girl stretches.\nSEND: frame 0 to image 1\n"
+           "CHUNK b\nSHOT 5s\nShe walks.\nCHUNK c\nSHOT 5s\nShe turns.\n")
+    assert ref2va(src, segment=0).refs == []
+    assert ref2va(src, segment=1).refs == [1] and ref2va(src, segment=2).refs == [1]
+    assert "<Picture" not in ref2va(src, segment=1).text
+
+
+def test_negative_frames_count_from_the_end_and_ranges_may_mix_signs():
+    from orrery.reel import Send, parse_send
+    assert parse_send("frame -1 to image 5") == Send([[-1, -1]], 5)
+    assert parse_send("frames -24--1, 10--1, 3 to image 6") == Send([[-24, -1], [10, -1], [3, 3]], 6)
+    with pytest.raises(ValueError, match="-1--5"):
+        parse_send("frames -1--5 to image 6")
+
+
+def test_for_segment_takes_numbers_ranges_and_a_plus():
+    from orrery.reel import parse_send
+    assert parse_send("frame 0 to image 5 for segment 4+").segments == [[4, None]]
+    assert parse_send("frame 0 to image 5 for segments 4, 6, 7, 12").segments == [[4, 4], [6, 6], [7, 7], [12, 12]]
+    assert parse_send("frame 0 to image 5 for segments 2, 4-8, 12+").segments == [[2, 2], [4, 8], [12, None]]
+    assert parse_send("frame 0 to image 5").segments is None
+    for bad, words in (("for segment 8-4", "8-4"), ("for segment x", '"x"'), ("for segments", "segment")):
+        with pytest.raises(ValueError, match=re.escape(words)):
+            parse_send(f"frame 0 to image 5 {bad}")
+
+
+REANCHOR = """@h3 ref2va 16:9 lite
+CAST
+GIRL (image 1, image 3): the young dancer
+CHUNK the old look repeat 4
+SHOT 5s: static
+GIRL dances.
+SEND: frame 0 to image 3 for segments 1-4
+CHUNK the new look
+SHOT 5s: static
+GIRL changes her outfit.
+SEND: frame -1 to image 3 for segment 5+
+CHUNK the finale repeat forever
+SHOT 5s: static
+GIRL bows.
+"""
+
+
+def test_an_image_exists_only_in_the_segments_its_send_lists():
+    reel = split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", "SEND: frame 0 to image 3 for segment 2+"))
+    assert 3 not in reel.ready(1) and reel.ready(2)[3] == {"segment": 0, "frames": [[0, 0]]}
+    picked = split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", "SEND: frame 0 to image 3 for segments 1, 3"))
+    assert [3 in picked.ready(t) for t in range(5)] == [False, True, False, True, False]
+
+
+def test_several_sends_may_fill_one_image_in_different_segments():
+    reel = split_reel(REANCHOR)
+    assert reel.send_slots == [3]
+    assert [reel.ready(t).get(3, {}).get("segment") for t in range(8)] == [None, 0, 0, 0, 0, 4, 4, 4]
+    assert reel.ready(6)[3]["frames"] == [[-1, -1]]
+    assert ref2va(REANCHOR, segment=0).refs == [1] and ref2va(REANCHOR, segment=6).refs == [1, 3]
+
+
+def test_two_sends_claiming_one_segment_for_one_image_hand_over_to_the_later():
+    clash = REANCHOR.replace("for segments 1-4", "for segments 1-5")
+    assert [split_reel(clash).ready(t)[3]["segment"] for t in (4, 5, 6)] == [0, 4, 4]
+    lint = [i.message for i in ref2va(clash, segment=5).lint]
+    assert any("segment 5" in m and "(CHUNK 2) takes over" in m for m in lint)
+    assert not any("takes over" in i.message for i in ref2va(REANCHOR, segment=5).lint)
+
+
+def test_a_listed_segment_before_the_frame_exists_is_flagged():
+    src = SEND_REEL.replace("GIRL walks to the window.", "GIRL walks to the window.\nSEND: frame 0 to image 5 for segment 1+")
+    lint = [i.message for i in ref2va(src, segment=0).lint]
+    assert any("image 5" in m and "segment 1" in m for m in lint)
+
+
+def test_a_held_image_exists_from_segment_0_within_its_for_list():
+    reel = split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", "SEND: frame 0 to image 3 for segment 2+"))
+    assert reel.ready(0, held={3, 4}) == {4: {"held": True}}
+    assert reel.ready(2, held={3})[3] == {"held": True}
+    held = compile_scene(SEND_REEL, 1, {}, target="h3-base", segment=0, packed=True, held={3})
+    assert held.refs == [1, 3] and "<Picture 1> and <Picture 2>" in held.text and held.sends == {3: {"held": True}}
+
+
+def test_a_field_of_the_reels_head_is_the_same_in_every_clip():
+    from orrery.h3 import compile_scene
+    from orrery.library import Entry, Library
+
+    libs = {"pose": Library("pose", [Entry("bend", props=(("action", "a {deep|full|slow|wide} backbend"),))])}
+    reel = "@h3 t2va\n$p = __pose__\nCHUNK a repeat 4\nSHOT 5s: static\nShe holds $p.action."
+    shown = {compile_scene(reel, 9, libs, segment=k).scene.shots[0].items[0].split(" holds ")[1] for k in range(4)}
+    assert len(shown) == 1
+
+
+
+# --- GOTO (docs/plan-dsl-2.md, phase 8) ------------------------------------------------------
+
+GOTO_REEL = """@h3 t2va
+CHUNK the gate
+SHOT 5s: static
+The keeper opens the gate.
+CHUNK the stairs
+SHOT 5s: tracking
+The keeper climbs.
+HANDOFF: the keeper reaches the landing
+CHUNK the lamp
+SHOT 5s: push in
+The keeper lights the lamp.
+HANDOFF: the beam sweeps the sea
+GOTO: the stairs ×2
+"""
+
+
+def test_goto_loops_back_n_times_then_goes_on():
+    reel = split_reel(GOTO_REEL)
+    assert [b for b, _ in reel.walk()[0]] == [0, 1, 2, 1, 2, 1, 2] and reel.segments == 7
+    assert split_reel(GOTO_REEL.replace("GOTO: the stairs ×2", "GOTO: 2 x1")).segments == 5  # a number, an x
+    endless = split_reel(GOTO_REEL.replace(" ×2", ""))
+    assert endless.segments is None and [b for b, _ in endless.walk(upto=6)[0]] == [0, 1, 2, 1, 2, 1]
+    with pytest.raises(ValueError, match="no CHUNK is called 'the cellar'"):
+        split_reel(GOTO_REEL.replace("the stairs ×2", "the cellar"))
+
+
+def test_a_jump_opens_on_the_handoff_before_it_and_its_line_stays_out_of_the_prose():
+    clip = compile_scene(GOTO_REEL, 1, {}, target="h3-base", segment=3)  # the stairs again, after the lamp
+    assert "The keeper climbs" in clip.text and "beam sweeps the sea" in clip.text and "GOTO" not in clip.text
+    with pytest.raises(ReelEnd):
+        compile_scene(GOTO_REEL, 1, {}, segment=7)
+
+
+def test_a_goto_that_waits_on_a_roll_makes_each_seed_its_own_story():
+    story = GOTO_REEL.replace("CHUNK the lamp\n", "CHUNK the lamp\n$w = {rain|clear}\n").replace(
+        "GOTO: the stairs ×2", "? $w[rain]: GOTO: the stairs ×3")
+    reel = split_reel(story)
+    assert reel.jumps_on_rolls and reel.segments is None
+    lengths = {len(reel_path(reel, seed, {}, None)[0]) for seed in range(40)}
+    assert lengths <= {3, 5, 7, 9} and len(lengths) > 1  # every rain sends the keeper back, at most three times
+    seed = next(s for s in range(40) if len(reel_path(reel, s, {}, None)[0]) == 5)
+    assert compile_scene(story, seed, {}, segment=4).text and pytest.raises(ReelEnd, compile_scene, story, seed, {}, segment=5)
+
+
+def test_several_gotos_the_first_that_holds_and_has_jumps_left():
+    reel = split_reel(GOTO_REEL.replace("GOTO: the stairs ×2", "GOTO: the gate ×1\nGOTO: the stairs ×1"))
+    assert [b for b, _ in reel.walk()[0]] == [0, 1, 2, 0, 1, 2, 1, 2]
+
+
+def test_a_chunk_every_goto_jumps_past_is_flagged():
+    src = GOTO_REEL.replace("GOTO: the stairs ×2", "GOTO: the gate") + "CHUNK the cellar\nSHOT 5s: static\nDark.\n"
+    lint = [i.message for i in compile_scene(src, 1, {}, segment=0).lint]
+    assert any("CHUNK 4" in m and "never plays" in m for m in lint)

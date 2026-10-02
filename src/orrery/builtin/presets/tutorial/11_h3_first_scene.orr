@@ -7,7 +7,7 @@ tags: [tutorial, h3]
 style: __h3style__
 $hero = __creature__
 
-SHOT 6s | push in, small, slow
+SHOT 6s: push in, small, slow
 A $hero waits alone in __place__. Beyond the windows, __weather__.
 SFX: a clock ticks; wind presses against old glass
 

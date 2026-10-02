@@ -6,6 +6,8 @@ const REF = [
   ["Wildcards", [
     ["__creature__", "one entry from a library, weighted by what you rated", "a __creature__ at dusk"],
     ["__creature[myth]__", "only entries tagged myth", "a __creature[myth]__ asleep"],
+    ["__creature[myth, !bird, size=small|tiny]__", "a predicate: commas all of, | either, ! not, key=value a property (habitat=$a.habitat: what rolled before)", "a __creature[myth, !bird]__ asleep"],
+    ["__clothing/*__", "a library of the folder at random (** and below, features* a name's start), then its entry", "wearing __clothing/*__"],
     ["__film/genre__", "a library in a folder: library/film/genre.yaml or .txt (one entry per line); the language model creates folder and file when they don't exist", ""],
     ["__runway_shoes:20__", "with a language model set (the gear): an unknown library is created when the node runs, and :20 tops it up to at least 20 entries", ""],
     ["__film_scene__(30 words, set and cast)", "directions for the model that writes the library; they never reach the prompt. New entries wait in Libraries for Accept or Discard", ""],
@@ -13,28 +15,42 @@ const REF = [
     ["__world/habitats#habitat:$animal.habitat__", "a filter that reads an earlier roll: the place is one the animal lives in", "$animal = __subjects/animals__\na photograph of $animal in __world/habitats#habitat:$animal.habitat__"],
     ["{misty|frozen:3}", "inline choice; :3 makes frozen three times as likely", "a {misty|frozen:3} forest"],
     ["{|red }car", "an empty option makes a word optional", ""],
+    ["{30% in the rain}", "the words three times in ten, nothing otherwise (the space before goes too)", "a fox {30% in the rain}"],
     ["{2$$__material__}", "two different picks, joined with commas", "built from {2$$__material__}"],
     ["{1-3$$a|b|c}", "one to three of the options", "a bouquet of {1-3$$roses|thistles|ferns}"],
     ["{a {b|c}|d}", "choices nest; inner ones roll first", "a {lighthouse {keeper|cat}|night ferry}"],
+    ["{0.4-0.9}", "a number in between, at the decimals written ({2-6} for whole ones); recorded and learned like any pick", "at {0.4-0.9} strength"],
   ]],
   ["Bindings and extras", [
     ["$hero = __creature__", "roll once on its own line, reuse everywhere as $hero", "$hero = __creature__\n$hero meets another $hero"],
+    ["@lib crowd", "a library of this template's own: indented lines under it are its entries; use it as __crowd__", "@lib crowd\n  a few __creature__s\n  a lone __creature__\nA meadow with __crowd__"],
     ["$hero → dial", "every binding is a dial under the editor: pick an entry or type any expression, empty = its default roll; Save bakes dials in (CLI: --set hero=owl)", ""],
     ["> make it moody and cinematic", "with a language model set (the gear), it rewrites the rolled prompt as asked; in a screenplay a > before the first SHOT covers every shot's prose, one inside a SHOT only that shot, never dialogue", "> make it moody and cinematic"],
     ["--one detail, 5 to 8 words--", "a slot the language model writes where it stands, seeing the whole rolled prompt (and, in a reel, the clip before)", ""],
-    ["$w.sfx", "a property of whatever $w rolled: the sound follows the weather", "SFX: $w.sfx"],
+    ["$w.sfx", "a property of whatever $w rolled: the sound follows the weather. A property may hold {a|b}, __lib__ or LoRAs (LORA: $p.loras with $p.action); it rolls once when $w is bound", "SFX: $w.sfx"],
     ["? $w.kind=rain,snow: …", "a line kept only when the condition holds (!= for not); works for SFX lines too", "? $w.kind=rain: "],
     ["{? $w.kind=rain: wet|dry}", "a choice made by a condition instead of the dice", ""],
+    ["? $c[myth, size=small]: …", "a condition in the same brackets, against what $c rolled: tags, properties, its value", "? $c["],
     ["@include effects/living_clay", "embeds a preset where it stands; indented key = value lines under it turn its dials", "@include "],
     ["# a note", "a comment: a note for you that never reaches the model", "# "],
-    [": w832 h1216", "size: the node's width and height outputs (wire them into your latent)", ": w832 h1216"],
-    [": x8 seed=100", "CLI only (orrery expand); in ComfyUI use the Run count and the seed widget", ""],
+    ["\\{OPEN\\}  \\__init__", "a backslash writes the next character as it is: { } | $ _ @ # [ ] \\ < >", ""],
+    ["<lora:style:0.5,0.7,1.0>", "a LoRA sweep: Generate runs once per strength, one seed for all; 0-1;0.1 is a range with a step, several swept LoRAs combine, and outputs go to a galaxy folder sweeps/…", ""],
+    ["<lora:a:0.5,1.0:solo>", "solo: the solo LoRAs take turns, the others off (2 + 2 runs, not 2 × 2); <lora:a:test> is 1.0,0.7,0.5:solo", ""],
+    ["<lora:style:0.4-0.9>", "a range without a step: the strength rolls per run and is recorded as a pick", ""],
+    ["@style(0.8)", "short for <lora:style:0.8>, with every strength form: @style(0.4-0.9), @style(0.5,0.7)", ""],
+    ["LORA: __my_lora_sets__", "a library of LoRA sets: each entry one or more tags (or \"\" for none); the set that rolled is a pick, and @grid __my_lora_sets__ runs each once", "LORA: __"],
+    ["@grid __style__ × {dawn|noon}", "every combination, one run each; the rest rolls the same in all. Axes: a library, a choice or a $binding. Generate queues them all (times a LoRA sweep)", "@grid "],
+    ["@unique $hero", "seeds in a row never repeat it (8 seeds, 8 heroes); the seed's control after generate goes to increment", "@unique "],
+    ["@size 832x1216", "the node's width and height outputs (wire them into your latent)", "@size 832x1216"],
+    ["@batch 8  @seed 100", "CLI only (orrery expand); in ComfyUI use the Run count and the seed widget", ""],
+    ["@rng 1", "the dice of before 2026-10-02: one stream for every pick (History and Galaxy add it to runs from back then)", ""],
+    [": x8 seed=100 w832 h1216", "the older form of the directives above; still works", ""],
     ["a __creature__", "a/an follows the picked word: “an axolotl”", ""],
   ]],
   ["H3 screenplays", [
     ["@h3 t2va 16:9", "first line: mode (t2va, i2va, fl2va, l2va) and ratio", "@h3 t2va 16:9"],
     ["style: live-action, cinematic", "the look; opens Shot 1 as its own sentence", "style: __h3style__"],
-    ["SHOT 5s | dissolve, arc, slow", "duration · optional transition · camera · small/large · slow/fast", "SHOT 4s | cut, push in, small, slow"],
+    ["SHOT 5s: dissolve, arc, slow", "duration · optional transition · camera · small/large · slow/fast", "SHOT 4s: cut, push in, small, slow"],
     ["@h3 t2va 9:16", "the ratio sets width and height; all SHOT durations set length, in frames at 24 fps, for the MiniMax H3 latent", ""],
     ["@h3 t2va 16:9 0.6MP", "0.6MP sizes width and height by area in that ratio; the node's megapixels output carries it for resolution and scale nodes", ""],
     ["KEEPER (raspy voice, voiceover): [French] Bonjour.", "a line of speech; off-screen or voiceover after the voice", "KEEPER (warm, raspy old voice): The ships stopped coming."],
@@ -45,21 +61,27 @@ const REF = [
   ["Cast and Ref2VA", [
     ["CAST", "names your references once; mention them by name in shots and the summary", "CAST\nMAYA (image 1): the young blonde woman, in a light-pink shirt"],
     ["DOG (image 2, image 3): the white Samoyed, with a curved tail", "sources in parentheses (image N, video N, video N + audio, refmod NAME), then the description; later mentions use its head noun (“the white Samoyed”)", ""],
-    ["@h3 ref2va 16:9 lite", "lite: <Subject N> = … definitions over the three base fields, the hand-written style; works in every mode, text-only subjects too", "@h3 ref2va 16:9 lite"],
+    ["@h3 ref2va 16:9 full", "the prompt's format: lite by default (one <Subject N> = … line per cast member, then three fields where each is only its label); full writes the six sections of MiniMax's guide, with summary: and retention. Works in every mode", "@h3 ref2va 16:9 full"],
+    ["keep: face, outfit", "under a cast member: a retention block goes into the prompt (lite too). Macros: all · face, hair, body, outfit (combined) · style · place · loose; or partially_preserved - your own reason", "keep: "],
     ["voice: audio 1", "on the line after a member: the voice timbre it speaks with", ""],
     ["keep: partial - only the fur colour is kept", "optional retention marker and reason (full, partial, transfer, weak)", ""],
-    ["summary: MAYA feeds DOG in CAFE.", "full ref2va's summary; the task types are added for you (lite needs none)", "summary: "],
-    ["SHOT 5s | from image 5", "ref2va: the shot begins from a reference picture (to image N: ends on it)", ""],
+    ["summary: MAYA feeds DOG in CAFE.", "the summary of full ref2va (a summary in lite warns); the task types are added for you", "summary: "],
+    ["SHOT 5s: from image 5", "ref2va: the shot begins from a reference picture (to image N: ends on it)", ""],
     ["[audio 1]", "a reference slot in prose; orrery writes the label the node uses", ""],
   ]],
-  ["Reels (H3 Motion Context)", [
-    ["CHUNK the salon", "one Motion Context clip; everything before the first CHUNK (style, CAST, bindings) is the world and holds for every clip", "CHUNK\nSHOT 5s | push in, slow\n"],
+  ["Reels (Orrery Continue, or H3 Motion Context)", [
+    ["CHUNK the salon", "one clip, continuing the one before; everything before the first CHUNK (style, CAST, bindings) is the world and holds for every clip", "CHUNK\nSHOT 5s: push in, slow\n"],
     ["CHUNK the walk repeat 8", "plays this chunk 8 times (repeat forever: until you stop); bindings inside a chunk roll anew every clip", "CHUNK the walk repeat forever\n"],
     ["$look~1", "$look as it was one clip ago (~2: two clips); the model who walks back keeps her look", "$look~1"],
     ["HANDOFF: MAYA reaches the door", "closes this chunk and opens the next with the same words", "HANDOFF: "],
+    ["GOTO: the stairs ×2", "at a chunk's end: jump to that chunk (title or number) instead of going on; ×2 twice, then on; without ×N for good (an endless loop)", "GOTO: "],
+    ["? $w[a storm]: GOTO: the stairs", "a jump on what this clip rolled: each seed its own story; the dividers list the segments each chunk plays at the node's seed", "? $w[]: GOTO: "],
+    ["SEND: frames 2, 5, 34-46 to image 4", "ref2va: those frames of this chunk's clip (from 0, at 24 fps) become image 4 for every later clip; wire the picks into Orrery Refs and they come out there, after the images the prompt names; GIRL (image 1, image 4) in the CAST names them in the prompt too", "SEND: frame 0 to image "],
+    ["SEND: frame -1 to image 5 for segment 4+", "-1 is the clip's last frame (-24--1 its last second); for segment 4+ / 4-8 / 4, 6, 7 gives it to those clips only, so several lines can fill one image in turns", "SEND: frame -1 to image "],
     ["LORA: <lora:name:0.8>", "the lora_stack output, for any loader with a lora_stack input: lines before the first CHUNK always, a chunk's own only there; after LORA: the editor lists your LoRA files; <lora:name:model:clip> sets both strengths", "LORA: "],
-    ["context: 22", "the frames Motion Context pins (5, 22, 39, 56); from the second chunk on, Shot 1 and length include them", "context: 22"],
-    ["load_index · save_index", "wire them into Load and Save Latent's clip_index; segment counts up by itself, so Run count N (or Run Instant) plays the reel", ""],
+    ["context: 22", "the frames each clip continues from (Orrery Continue pins 22; Motion Context 5, 22, 39, 56); from the second chunk on, Shot 1 and length include them", "context: 22"],
+    ["Orrery Continue · Orrery Film", "picks and the H3 node's latent into Orrery Continue, its latent into the sampler; the sampled latent and the decoded clip into Orrery Film, which keeps the takes and joins the film; segment counts up by itself, so Generate ×N plays the reel", ""],
+    ["load_index · save_index", "with H3 Motion Context instead: wire them into its Load and Save Latent's clip_index", ""],
   ]],
 ];
 
@@ -84,7 +106,7 @@ export function renderHelp(app) {
     ${REF.map(([h, rows]) => `<section><h5 class="label">${h}</h5><div class="ref">${rows.map(([code, what, ex]) => `<div class="refrow"><pre class="codebox">${highlight(code, known)}</pre>`
       + `<span class="muted">${esc(what)}</span>${ex ? `<button class="btn ghost" data-insert="${esc(ex)}" title="Add to the end of your template">${icon("plus")}Insert</button>` : "<span></span>"}</div>`).join("")}</div></section>`).join("")}
     <section><h5 class="label">Writing for the models</h5><div class="tips">${TIPS.map(([k, t]) => `<p><b>${k}.</b> ${esc(t)}</p>`).join("")}</div></section>
-    <section><h5 class="label">Keys in the editor</h5><p class="muted flush"><code>__</code> libraries, by any part of the name (<code>__hai</code> finds <code>characters/gothic/hair</code>) · <code>__name[</code> tags · <code>__name#</code> properties and their values · <code>$</code> bindings · <code>SHOT 5s |</code> camera words · ↑↓ choose · ↵ or Tab insert · Esc close</p></section>
+    <section><h5 class="label">Keys in the editor</h5><p class="muted flush"><code>__</code> libraries, by any part of the name (<code>__hai</code> finds <code>characters/gothic/hair</code>) · <code>__name[</code> tags · <code>__name#</code> properties and their values · <code>$</code> bindings · <code>SHOT 5s:</code> camera words · ↑↓ choose · ↵ or Tab insert · Esc close</p></section>
   </div></div>`;
   app.view.onclick = (e) => {
     const lesson = e.target.closest("[data-load]");

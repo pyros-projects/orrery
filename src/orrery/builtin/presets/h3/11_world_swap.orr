@@ -9,7 +9,7 @@ $from = __world/landscapes__
 $to = {__world/landscapes__|__tour/rooms__}
 $shift = __transitions/between__
 
-SHOT 10s | tracking, slow
+SHOT 10s: tracking, slow
 The camera glides forward at eye level through $from. Midway, $shift. The camera glides on into $to without ever stopping, as if this were the most ordinary thing in the world.
 SFX: $from.sfx; $shift.sfx; $to.sfx
 MUSIC: N/A

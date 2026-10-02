@@ -14,7 +14,7 @@ $ending = {the aperture closes again, leaving only a small spiral scar|something
 CAST
 HOST (image 1): $host
 
-SHOT 10s | push in, slow
+SHOT 10s: push in, slow
 HOST stands facing the camera in $room, framed from the chest up, $where bare and clearly visible. A faint spiral crease appears in the skin of $where. The crease deepens into overlapping curved flaps of skin that rotate outward in one smooth motion, exactly like the blades of a camera iris, and a perfectly round opening widens to the size of a coin, then of a palm. There is no blood and no wound; the edges are clean, soft and alive. Inside is $inside. HOST stares at it, breath held, and the rim of the aperture slowly contracts and relaxes like a pupil adjusting to the light. In the final moment $ending.
 SFX: quiet room ambience; held breath; a soft sliding of skin over skin as the aperture turns open; a faint hollow air tone from inside
 MUSIC: N/A

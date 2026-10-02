@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { suggest, missingLibraries } from "../../comfyui/web/orrery-complete.js";
+import { suggest, missingLibraries, inlineLibraries, globMatches, castNames } from "../../comfyui/web/orrery-complete.js";
 
 const DATA = {
   libraries: [
@@ -48,19 +48,24 @@ test("$ lists bindings defined in the template", () => {
   assert.deepEqual(at(text).items.map((i) => i.insert), ["$hero"]);
 });
 
-test("camera vocabulary after SHOT |", () => {
-  const first = at("@h3 t2va\nSHOT 5s | pu").items.map((i) => i.insert);
+test("camera vocabulary after SHOT 5s:", () => {
+  const first = at("@h3 t2va\nSHOT 5s: pu").items.map((i) => i.insert);
   assert.ok(first.includes("push in") && first.includes("pull out"));
-  const mods = at("@h3 t2va\nSHOT 5s | push in, s").items.map((i) => i.insert);
+  const mods = at("@h3 t2va\nSHOT 5s: push in, s").items.map((i) => i.insert);
   assert.deepEqual(mods, ["small", "slow"]);
 });
 
+test("the colon opens the camera words at once, and the old | still works", () => {
+  assert.ok(at("@h3 t2va\nSHOT 5s:").items.some((i) => i.insert === "push in"));
+  assert.ok(at("@h3 t2va\nSHOT 5s | pu").items.some((i) => i.insert === "push in"));
+});
+
 test("a fully typed word is not offered again", () => {
-  assert.ok(!at("@h3 t2va\nSHOT 5s | push in").items.some((i) => i.insert === "push in"));
+  assert.ok(!at("@h3 t2va\nSHOT 5s: push in").items.some((i) => i.insert === "push in"));
 });
 
 test("transitions are offered first on later shots", () => {
-  const items = at("@h3 t2va\nSHOT 3s\nA.\nSHOT 3s | ").items.map((i) => i.insert);
+  const items = at("@h3 t2va\nSHOT 3s\nA.\nSHOT 3s: ").items.map((i) => i.insert);
   assert.ok(items.includes("dissolve") && items.includes("push in"));
 });
 
@@ -86,7 +91,7 @@ test("cast keywords at line start in screenplays", () => {
 
 test("reel keywords at line start in screenplays", () => {
   const items = at("@h3 t2va\nSHOT 5s\nA.\n").items.map((i) => i.insert);
-  assert.ok(["CHUNK", "HANDOFF: ", "LORA: ", "context: "].every((k) => at(`@h3 t2va\n${k[0]}`).items.some((i) => i.insert === k)), items.join());
+  assert.ok(["CHUNK", "HANDOFF: ", "SEND: ", "LORA: ", "context: "].every((k) => at(`@h3 t2va\n${k[0]}`).items.some((i) => i.insert === k)), items.join());
 });
 
 test("LORA: lists your loras in the syntax LoRA Text Loader reads", () => {
@@ -122,7 +127,7 @@ test("a minimum count does not hide a missing library", () => {
 test("__folder/ completes the libraries in that folder", () => {
   const data = { ...DATA, libraries: [...DATA.libraries, { name: "film/genre", count: 4, source: "user", tags: [], sample: ["noir"] }] };
   const inFolder = suggest("a __film/", 9, data).items.map((i) => i.insert);
-  assert.deepEqual(inFolder, ["__film/genre__"]);
+  assert.deepEqual(inFolder, ["__film/*__", "__film/genre__"]);  // a library of the folder at random, first
   assert.ok(suggest("a __fi", 6, data).items.some((i) => i.insert === "__film/genre__"));
   assert.deepEqual(missingLibraries("__film/genre__ and __film/new__", data), ["film/new"]);
 });
@@ -141,7 +146,7 @@ test("comments neither complete nor count as missing libraries", () => {
   assert.deepEqual(missingLibraries("# try __nothing__ here\n__creature__", DATA), []);
   const text = "# __cre";
   assert.equal(suggest(text, text.length, DATA).items.length, 0);
-  const h3 = "# a comment first\n@h3 t2va\nSHOT 5s | ";
+  const h3 = "# a comment first\n@h3 t2va\nSHOT 5s: ";
   assert.ok(suggest(h3, h3.length, DATA).items.some((i) => i.insert === "push in"));
 });
 
@@ -154,4 +159,63 @@ test("after __lib# the library's property keys, after #key: its values", () => {
   assert.deepEqual(values.items.map((i) => [i.insert, i.label, i.detail, i.preview]), [["#habitat:sea__", "sea", "9×", "a manta ray"]]);
   assert.equal(text.slice(0, values.replaceFrom), "a __creature[myth]#size:small");
   assert.deepEqual(suggest("__animal#", 9, DATA).items, []);  // a library without properties offers nothing
+});
+
+test("a tag after others completes in place: [myth,!de…", () => {
+  const s = at("a __creature[myth,!de");
+  assert.deepEqual(s.items.map((i) => i.insert), ["__creature[myth,!deep_sea]__"]);
+  assert.equal(s.replaceFrom, 2);
+  assert.deepEqual(at("__creature[deep_sea|m").items.map((i) => i.insert), ["__creature[deep_sea|myth]__"]);
+});
+
+
+test("inside the brackets: tags and keys, a key's values, another value of the key", () => {
+  const keys = at("__creature[myth, ha").items.map((i) => i.insert);
+  assert.deepEqual(keys, ["__creature[myth, habitat="]);
+  assert.deepEqual(at("__creature[habitat=s").items.map((i) => i.insert), ["__creature[habitat=sea]__"]);
+  assert.deepEqual(at("__creature[habitat=sea|f").items.map((i) => i.insert), ["__creature[habitat=sea|forest]__"]);
+  assert.deepEqual(at("__creature[!d").items.map((i) => i.insert), ["__creature[!deep_sea]__"]);
+});
+
+test("@ at the start of a line offers the directives", () => {
+  const s = at("a fox\n@g");
+  assert.deepEqual(s.items.map((i) => i.insert), ["@grid "]);
+  assert.equal(s.replaceFrom, 6);
+  assert.equal(at("a fox @g").items.length, 0);
+});
+
+test("the template's own libraries complete, highlight and are not missing", () => {
+  const text = "@lib crowd\n  a few __animal__s\n  - a lone __animal__\nA meadow with __cr";
+  assert.deepEqual(inlineLibraries(text), [{ name: "crowd", entries: ["a few __animal__s", "a lone __animal__"] }]);
+  assert.ok(suggest(text, text.length, DATA).items.some((i) => i.insert === "__crowd__"));
+  assert.deepEqual(missingLibraries("@lib crowd\n  x\n__crowd__ __nope__", DATA), ["nope"]);
+});
+
+test("globs: ** offered when it reaches further, known when they match, missing when they match nothing", () => {
+  const data = { ...DATA, libraries: [...DATA.libraries, { name: "clothing/hats", count: 2, source: "user", tags: [], sample: [] },
+    { name: "clothing/winter/coats", count: 1, source: "user", tags: [], sample: [] }] };
+  assert.deepEqual(suggest("__clothing/", 11, data).items.slice(0, 2).map((i) => i.insert), ["__clothing/*__", "__clothing/**__"]);
+  assert.deepEqual(missingLibraries("__clothing/*__ __clothing/**__ __shoes/*__", data), ["shoes/*"]);
+  assert.deepEqual(globMatches("clothing/**", data.libraries.map((l) => l.name)), ["clothing/hats", "clothing/winter/coats"]);
+});
+
+
+test("GOTO: completes the chunk titles, after a condition too", () => {
+  const text = "@h3 t2va\nCHUNK the gate\nSHOT 5s\nA.\nCHUNK the stairs repeat 2\nSHOT 5s\nB.\nGOTO: the s";
+  assert.deepEqual(suggest(text, text.length, DATA).items.map((i) => i.insert), ["the stairs"]);
+  const cond = text.replace("GOTO: the s", "? $w[rain]: GOTO: ");
+  assert.deepEqual(suggest(cond, cond.length, DATA).items.map((i) => i.insert), ["the gate", "the stairs"]);
+  assert.ok(suggest("@h3 t2va\nCHUNK a\nGO", 19, DATA).items.some((i) => i.insert === "GOTO: "));
+});
+
+test("two capitals complete a CAST name; at a line's start also as a line of speech", () => {
+  const head = "@h3 ref2va 16:9\nCAST\nKEEPER (image 1): an old lighthouse keeper\nMAYA: a young woman\n\nSHOT 5s: static\n";
+  const inProse = head + "The light finds KE";
+  assert.deepEqual(suggest(inProse, inProse.length, DATA).items.map((i) => i.insert), ["KEEPER"]);
+  const atStart = head + "MA";
+  assert.deepEqual(suggest(atStart, atStart.length, DATA).items.map((i) => i.insert), ["MAYA", "MAYA ("]);
+  assert.equal(suggest(head + "A K", head.length + 3, DATA).items.length, 0);  // one capital is a word
+  const chunkCast = "@h3 ref2va\nCHUNK a\nCAST\nGIRL (image 1): a girl\nSHOT 5s\nGI";
+  assert.deepEqual(suggest(chunkCast, chunkCast.length, DATA).items.map((i) => i.insert), ["GIRL", "GIRL ("]);
+  assert.deepEqual(castNames(head), ["KEEPER", "MAYA"]);
 });

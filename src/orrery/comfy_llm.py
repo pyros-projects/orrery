@@ -11,6 +11,8 @@ The choice lives in orrery.yaml, set from the node's settings:
       clip_type: minimax                  # how ComfyUI loads it; minimax suits Qwen3-VL builds
       entries: 12                         # a library the LLM creates starts with this many
       max_tokens: 16000                   # the longest answer it may write
+      temperature: 0.3                    # libraries and slots: reliable judgement
+      writer_temperature: 0.8             # the Write menu: each idea a different one
 
 A text encoder wired into the node's `clip` input wins over the setting. orrery never unloads a
 model itself: ComfyUI moves the encoder out when the video model needs the room, and unloading it
@@ -21,7 +23,8 @@ warnings). A loaded encoder is kept for the next run, one at a time, as Pixaroma
 import re
 from pathlib import Path
 
-DEFAULTS = {"file": None, "clip_type": "minimax", "entries": 12, "temperature": 0.3, "max_tokens": 16000}
+DEFAULTS = {"file": None, "clip_type": "minimax", "entries": 12, "temperature": 0.3, "writer_temperature": 0.8,
+            "max_tokens": 16000}
 TRUNCATED = re.compile(r"minimax[_-]?h3|_h3_int|h3_te", re.IGNORECASE)  # encoders that cannot generate
 _THINK_BLOCK = re.compile(r"<think>.*?</think>", re.DOTALL)
 VISION = "<|vision_start|><|image_pad|><|vision_end|>"  # the tokenizer fills each with the next frame

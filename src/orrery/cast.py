@@ -4,7 +4,7 @@
     DOG (image 2, image 3): the fluffy white Samoyed, with thick white fur and a curved tail
     MAYA (video 1 + audio): the young blonde woman, in a light-pink shirt
     voice: audio 1, containing a spoken English vocal layer
-    keep: partial - only her face and hair are kept
+    keep: partial - only her face and hair are kept      (or a macro: keep: face, hair)
 
 A member is a memory: a description (head noun phrase, then details after the first comma)
 plus where it comes from (`image N`, `video N`, `video N + audio`, `refmod NAME`). In ref2va the
@@ -30,6 +30,23 @@ KEEP = {  # any of these spellings (spaces, hyphens or underscores) name a reten
 MEMBER = re.compile(r"^([A-Z][A-Z0-9 _-]*?)\s*(?:\(([^)]*)\))?\s*:\s*(.+)$")
 _SOURCE = re.compile(r"^(image|video|audio)\s+(\d+)(\s*\+\s*audio)?$|^refmod\s+([\w.-]+)$", re.IGNORECASE)
 _VOICE = re.compile(r"^(?:(audio)\s+(\d+)|video\s+(\d+)\s+audio)\s*(?:,\s*(.*))?$", re.IGNORECASE)
+# keep: macros, written out as a marker and a reason ({who} is the member's head noun)
+KEEP_PARTS = {"face": "face", "identity": "face", "hair": "hair", "body": "build", "build": "build",
+              "outfit": "outfit", "clothes": "outfit", "clothing": "outfit"}
+KEEP_WHOLE = {
+    "all": ("fully_preserved", "{who} is retained as defined, in every detail."),
+    "everything": ("fully_preserved", "{who} is retained as defined, in every detail."),
+    "style": ("attribute_transfer", ("only the style of {who} carries over, its colours, materials and finish; what it "
+                                     "is follows the prompt.")),
+    "colors": ("attribute_transfer", "only the colours of {who} carry over."),
+    "colours": ("attribute_transfer", "only the colours of {who} carry over."),
+    "place": ("fully_preserved", "{who} is retained as a place: its layout, surfaces and light."),
+    "location": ("fully_preserved", "{who} is retained as a place: its layout, surfaces and light."),
+    "background": ("fully_preserved", "{who} is retained as a place: its layout, surfaces and light."),
+    "setting": ("fully_preserved", "{who} is retained as a place: its layout, surfaces and light."),
+    "loose": ("weak_reference", ("{who} is only a loose reference: its general look guides the shot, and its details "
+                                 "may change.")),
+}
 _KEEP = re.compile(r"^([A-Za-z_ -]+?)\s*(?:[-–—:,]\s*(.*))?$")
 _BRACKET = re.compile(r"\[(image|video|audio)\s+(\d+)(\s+audio)?\]", re.IGNORECASE)
 _DETAIL = re.compile(r"\s+(?:with|wearing|in|who|whose|that|holding|carrying|facing|dressed)\s", re.IGNORECASE)
@@ -95,8 +112,27 @@ def attach(member: Member, key: str, value: str) -> None:
         member.keep = parse_keep(value)
 
 
+def keep_macro(value: str) -> tuple[str, str] | None:
+    """`keep: face, hair` · `keep: all` · `keep: style` · `keep: place` · `keep: loose`: a marker and a
+    reason with {who} in it; None when the value is not made of these words."""
+    words = [w for w in re.split(r"\s*(?:,|\+|\band\b)\s*|\s+", value.strip().lower()) if w]
+    if not words or not all(w in KEEP_PARTS or w in KEEP_WHOLE for w in words):
+        return None
+    whole = [w for w in words if w in KEEP_WHOLE]
+    if whole:
+        if len(words) > 1:
+            raise ValueError(f"keep: {value}: {whole[0]} stands alone; the parts that combine are "
+                             f"{', '.join(sorted(set(KEEP_PARTS)))}.")
+        return KEEP_WHOLE[whole[0]]
+    parts = list(dict.fromkeys(KEEP_PARTS[w] for w in words))
+    return "partially_preserved", f"only the {oxford(parts)} of {{who}} are retained; everything else follows the prompt."
+
+
 def parse_keep(value: str) -> tuple[str, str | None]:
-    """`full`, `partially preserved - only her face`, `weak: a hint`, or just a reason."""
+    """A macro (`face, hair`, `all`, `style`, `place`, `loose`), `full`, `partially preserved - only her
+    face`, `weak: a hint`, or just a reason."""
+    if macro := keep_macro(value):
+        return macro
     text = value.strip()
     m = _KEEP.match(text)
     marker = m and KEEP.get(re.sub(r"[\s-]+", "_", m.group(1).strip().lower()))

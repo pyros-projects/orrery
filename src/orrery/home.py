@@ -53,6 +53,10 @@ class Home:
         return self.root / "export"
 
     @property
+    def anchors_dir(self) -> Path:
+        return self.root / "anchors"
+
+    @property
     def history_dir(self) -> Path:
         return self.root / "history"
 

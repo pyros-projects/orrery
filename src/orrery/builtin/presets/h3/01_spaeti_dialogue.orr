@@ -7,7 +7,7 @@ tags: [h3, dialogue, german]
 style: live-action, cinematic, handheld night footage
 $pet = __creature[mammal]__
 
-SHOT 8s | static
+SHOT 8s: static
 A tiny corner shop at 2 a.m., fluorescent tubes flickering over shelves of crisps and bottled drinks. A tired young man in a rain-soaked hoodie puts a carton of oat milk on the counter. Behind the counter an old cashier with reading glasses scans it without looking up, a $pet asleep next to the till.
 CUSTOMER (tired young male voice): [German] Ist das Ihr Tier?
 CASHIER (gravelly old female voice): [German] {Nein, das ist der Chef.|Der wohnt hier.|Welches Tier?}

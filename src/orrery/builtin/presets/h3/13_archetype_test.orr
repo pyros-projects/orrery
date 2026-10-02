@@ -10,6 +10,6 @@ $describe = {? $version=naive: $entity.naive|$entity}
 style: live-action, photorealistic, one continuous unbroken ten-second shot on 35mm film, everything real and physically present in the room
 MUSIC: N/A
 
-SHOT 10s | $entity.shot
+SHOT 10s: $entity.shot
 In $entity.cell, the camera finds $describe. $entity.act
 SFX: $entity.sfx

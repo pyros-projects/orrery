@@ -120,10 +120,14 @@ def _poster(src: Path):
 
 def thumbnail(home: Home, rid: str) -> Path:
     src = media_path(home, rid)
-    kind = media_kind(src)
-    if kind not in ("image", "video"):
+    if media_kind(src) not in ("image", "video"):
         raise KeyError(f"galaxy output {rid} has no picture to preview")
-    out = home.root / "thumbs" / f"{rid}.webp"
+    return thumb_file(src, home.root / "thumbs" / f"{rid}.webp")
+
+
+def thumb_file(src: Path, out: Path) -> Path:
+    """A small cached WEBP of a picture, or of a video's frame a third in."""
+    kind = media_kind(src)
     if out.exists() and out.stat().st_mtime >= src.stat().st_mtime:
         return out
     from PIL import Image  # ComfyUI ships Pillow; the CLI never needs it

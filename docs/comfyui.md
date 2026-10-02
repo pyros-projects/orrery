@@ -1,6 +1,6 @@
 # The ComfyUI nodes
 
-Everything the Orrery Prompt node puts out, the five tabs of its app, Generate and Restart, and Orrery Log.
+Everything the Orrery Prompt node puts out, the six tabs of its app, Generate and Restart, Orrery Log and Orrery Refs.
 
 ```bash
 cd /path/to/ComfyUI/custom_nodes && git clone https://github.com/pyros-projects/orrery.git
@@ -8,11 +8,29 @@ cd /path/to/ComfyUI/custom_nodes && git clone https://github.com/pyros-projects/
 ln -s /path/to/orrery/comfyui /path/to/ComfyUI/custom_nodes/orrery   # Windows: mklink /J …\custom_nodes\orrery …\orrery\comfyui
 ```
 
-Restart ComfyUI. Nodes under **orrery**:
+Restart ComfyUI. **Templates → orrery** (or `example_workflows/` in the
+repository) holds a workflow per mode, built from ComfyUI's own nodes plus
+orrery's: Krea 2 (`text`), MiniMax H3 t2va, i2va, fl2va, l2va, ref2va, and reels
+on t2va and on ref2va with Orrery Continue / Orrery Film. Their notes name the
+models and where they go; sampling follows ComfyUI's own templates (H3:
+`res_multistep`, 20 steps; Krea 2 Turbo: 8 steps). Each puts ComfyUI's Model
+Attention Backend on `comfy kitchen attention` after the model loader: INT8
+attention, much faster on Nvidia and AMD GPUs; elsewhere the node falls back to
+PyTorch attention by itself. With the repository linked
+as its `comfyui` folder, the template browser does not list them; drag the
+files in instead.
+
+Nodes under **orrery**:
 
 - **Orrery Prompt**: seed and target (`text`, `h3-base`, `flat`), optional
-  `segment` → `text`, `picks`, `seed`, `width`, `height`, `length`, `lora_stack`,
-  `load_index`, `save_index`, `previous`, `previous_audio`, `megapixels`.
+  `segment`, `first_frame` and `last_frame` → `text`, `picks`, `seed`, `width`,
+  `height`, `length`, `lora_stack`, `load_index`, `save_index`, `previous`,
+  `previous_audio`, `megapixels`. A picture wired into `first_frame` (else
+  `last_frame`), the same one the H3 node gets, gives `width`/`height` its shape
+  at the header's megapixels (else H3's canvas area), on the 32 grid as close to
+  its shape as the grid allows: H3 stretches a first frame and crops a last one
+  into any other shape. A written `: w… h…` still wins, and the lint says when
+  the header's ratio is set aside or two frames differ in shape.
   Wire `text` into your text encoder or the MiniMax H3 prompt input;
   `width`/`height` come from `: w… h…` or the `@h3` ratio (`@h3 ref2va 16:9 0.6MP`
   sizes the canvas by area, and `megapixels` puts that out for resolution and
@@ -20,23 +38,45 @@ Restart ComfyUI. Nodes under **orrery**:
   screenplay's duration in frames for the H3 latent, `lora_stack` carries the
   `LORA:` lines as a LORA_STACK for any loader with a `lora_stack` input
   (LoraManager, Efficiency, Easy-Use …); unknown or ambiguous names are
-  reported in the log and in the Test tab. For H3 Motion Context chains, a reel
-  (`CHUNK` blocks, `repeat N|forever`, `$x~N`; see [h3.md](h3.md) 1d) writes one
-  clip per run: `segment` counts up by itself, and `load_index`/`save_index`
-  go into Load and Save Latent's `clip_index`. The node is the whole of orrery, in five tabs (⤢ opens the
+  reported in the log and in the Test tab. A reel (`CHUNK` blocks,
+  `repeat N|forever`, `$x~N`; see [h3.md](h3.md) 1d) writes one clip per run:
+  `segment` counts up by itself, and Orrery Continue / Orrery Film (below)
+  chain the clips; with H3 Motion Context instead, `load_index`/`save_index`
+  go into its Load and Save Latent's `clip_index`. The node is the whole of orrery, in six tabs (⤢ opens the
   same app over the canvas, Esc brings it back):
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `__creature#` properties and their
-    values, `$` bindings, camera words after
-    `SHOT 5s |`, your LoRA files after `LORA:`). **New** starts a fresh
-    template linked to no preset: an H3 scene, an H3 reel for Motion Context,
+    values, `$` bindings, CAST names after two capitals (`KE` → `KEEPER`; at a
+    line's start also `KEEPER (…): ` for speech), camera words after
+    `SHOT 5s:`, your LoRA files after `LORA:`). **New** starts a fresh
+    template linked to no preset: an H3 scene, an H3 reel,
     H3 references (ref2va), H3 keyframes (i2va, fl2va, l2va) or a Krea prompt,
     each with a quickstart of the essentials as `#` comments on top (the gear
     turns the quickstart off). Open a preset from the bar above it; ● marks unsaved
     edits; Save, Save as…, Revert. Under the editor, every binding is a
     **dial**: pick a library entry or choice, or type any expression; empty
     means its default roll. Saving bakes the dials in, and a galaxy output
-    restores them. **Test** jumps to the Test tab and rolls.
+    restores them. **Test** jumps to the Test tab and rolls. **Write** has
+    the language model write the reel's next chunk, the shot between two
+    frames or a prompt from a picture, one idea per short run, browsed
+    before it goes in ([wildcard-manager.md](wildcard-manager.md)).
+    In a reel, every `CHUNK` line carries a divider that says which segments
+    it plays, when and how much film is left (`seg 1–4 · 4 × 5 s · 0:05 →
+    0:25 · 1:35 left`); the chunk that plays the node's `segment` next is
+    marked (`▶ next`), and **Jump** beside *Next segment* puts the caret
+    there. Beside the editor, the **timeline** lines up each chunk's clips
+    as Orrery Film (or H3 Motion Context's Chain Video) keeps them (hover plays one, a click
+    opens it; dashed boxes are segments not rendered yet) and, under a chunk
+    with `SEND:` lines, the frames Orrery Refs last sent to each image (its
+    anchors). It reads the chain from the string wired into `latent_path`,
+    else `h3_context`, and refreshes after every run. Drag the edge between
+    editor and timeline to widen it. **Clips beside / Clips below** in the
+    footer switches to the cells view: the editor cut into one cell per
+    CHUNK, each followed by a section with that chunk's clips and sent
+    frames; drag a section's lower edge to resize it (kept per chunk, like
+    the width, in the node). Arrow keys cross from cell to cell, Backspace at
+    a cell's start and Delete at its end join two, and a CHUNK line typed or
+    removed cuts the text anew. The gear turns dividers and timeline off.
   - **Test**: what the template makes, without queueing anything. **Rolls**
     shows three seeds (a reel: six clips at one seed, pageable through a
     forever loop). **Frequencies** rolls it 50, 200 or 500 times, across seeds
@@ -64,6 +104,15 @@ Restart ComfyUI. Nodes under **orrery**:
     `~/.orrery/trash/`. Learned weights stay. The big picture of an open
     output drags onto the canvas like the file itself: a new Load Image node,
     a Load Image node's new picture, or the workflow the picture carries.
+  - **History**: every run of the node as it resolved, newest first: the
+    seed, the segment, the dials, every pick and the prompt, kept even when
+    the output was not (the last 2000 runs, in `prompt_history.jsonl` in the
+    orrery home). Search by prompt, pick, preset or seed; **Use template +
+    seed** puts the run back in the Prompt tab (segment included, control
+    after generate fixed), so a lucky roll can be made again (a run from before
+    2026-10-02 comes back with `@rng 1` on top: the dice it was made with). Each run is
+    also printed to ComfyUI's console (seed, picks, prompt); the gear turns
+    that off.
   - **Help**: the DSL at a glance, the tutorial lessons, writing tips.
 
   Workflows that used the old `preset` dropdown open with that preset loaded
@@ -71,3 +120,42 @@ Restart ComfyUI. Nodes under **orrery**:
 - **Orrery Log**: `picks` (+ `images`) → saves PNGs with the picks embedded and
   appends one line per output to `~/.orrery/galaxy.jsonl`. For videos saved by
   another node, put the file path into `media_path`.
+- **Orrery Refs**: `picks` + `image_1` … `image_9` → `ref_1` … `ref_9` and `preview`, between
+  your reference images and MiniMax H3 Reference to Video. Every clip gets only
+  the images its screenplay uses, packed from `ref_1` and numbered as the prompt
+  numbers them, plus the frames of earlier clips a reel `SEND:`s; `preview` shows
+  them all in one Preview Image, each labelled with its ref. Sent frames are kept
+  as anchors in the orrery home; `keep_sent` on holds them from segment 0 for the
+  next run, so a character stays. The tutorial:
+  [orrery-refs.md](orrery-refs.md).
+- **Orrery Continue** and **Orrery Film**: orrery chains a reel's clips itself,
+  on the Masked AV continuation of
+  [H3 Continuum](https://github.com/ukr8b3g-cmyk/ComfyUI-H3-Continuum) (MIT).
+  From the second segment on, Orrery Continue starts the clip's latent with the
+  last 22 frames of the segment before, picture and sound, and a `noise_mask`
+  keeps the sampler off them; no model or layout patch is involved. Wire:
+
+  ```
+  Orrery Prompt picks ───────────────▶ Orrery Continue picks
+  H3 node (Reference to Video …) latent ▶ Orrery Continue latent ──▶ sampler latent_image
+                         conditioning ▶ Orrery Continue conditioning ▶ sampler positive (optional)
+  sampled latent ─────────────────────▶ Orrery Film samples
+  decoded images / audio ─────────────▶ Orrery Film images / audio
+  Orrery Film film (VIDEO) ───────────▶ Save Video, Orrery Log
+  ```
+
+  The H3 node's `length` comes from the Orrery Prompt (it counts the 22 frames).
+  Orrery Continue drops a first-frame image from the conditioning in segments
+  after the first (the clip starts with the one before); Orrery Film refuses a
+  clip whose pinned frames the sampler changed (a sampler that ignores
+  `noise_mask`). Orrery Film trims the 22 frames, puts out the clip
+  (`images`, `audio`) and `film`, the reel so far, and keeps the takes under
+  `output/<latent_path>/orrery_film/` (`h3_context` unless the Orrery Prompt's
+  `latent_path` says otherwise): each segment's clip, its sound and the tail the
+  next one continues from. Rendering a segment again replaces its take and drops
+  the segments after it (they continued the old one); segment 0 starts a new
+  run; older takes stay on disk. The previous clip, `SEND:` and the timeline read
+  this store or H3 Motion Context's Chain Video, whichever was written last.
+  Another `context:` than 22 is a warning: 22 frames are pinned all the same.
+- **Orrery Write** (`orrery/internal`): the Write menu queues it on its own;
+  you don't add it.

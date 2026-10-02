@@ -24,7 +24,7 @@ def test_library_pick_is_recorded_with_label_value_and_weight_key():
     e = expand("a __animal__", 5, LIBS)
     [pick] = e.picks
     assert pick.label == "__animal__"
-    assert e.text == "a " + pick.value
+    assert e.text in ("a " + pick.value, "an " + pick.value)  # a/an follows the pick
     assert pick.keys == ("__animal__=" + pick.value,)
 
 
@@ -342,6 +342,31 @@ def test_lines_and_choices_can_depend_on_a_property():
     assert expand("$w = __weather__\n? $w.kind!=snow: Umbrellas.", 2, WEATHER).text in ("", "Umbrellas.")
 
 
+POSES = {"pose": Library("pose", [
+    Entry("backbend", props=(("kind", "bend"), ("loras", "@backbend(0.4-0.9) <lora:flex:1>"),
+                             ("action", "$p arches into a {deep|full} backbend over __mat__"))),
+]), "mat": Library("mat", [Entry("a blue mat"), Entry("a red mat")])}
+
+
+def test_a_field_is_a_template_rolled_once_when_it_is_bound():
+    """LoRAs and the action they belong to, in one entry: $p.loras and $p.action."""
+    e = expand("$p = __pose__\n$p.action. Again: $p.action. $p.loras", 4, POSES)
+    action = e.text.split(". ")[0]
+    assert e.text.startswith(f"{action}. Again: {action}. <lora:backbend:0.")  # read twice, the same
+    assert action.startswith("backbend arches into a ") and action.endswith(("blue mat", "red mat"))
+    labels = [p.label for p in e.picks]
+    assert labels[0] == "$p ← __pose__" and "<lora:backbend>" in labels and "{deep|full}" in labels
+    t = "$p = __pose__\n? $p.kind=bend: Bent.\n__mat#kind:$p.kind__"  # conditions and filters read it as written
+    assert expand(t, 1, {**POSES, "mat": Library("mat", [Entry("a yoga mat", props=(("kind", "bend"),))])}).text \
+        == "Bent. a yoga mat"
+
+
+def test_a_sweep_in_a_field_takes_its_first_strength_and_says_to_grid_the_binding():
+    libs = {"pose": Library("pose", [Entry("split", props=(("loras", "<lora:split:0.5,1.0>"),))])}
+    e = expand("$p = __pose__\n$p.loras", 1, libs)
+    assert e.text == "<lora:split:0.5>" and "in $p.loras is a sweep" in e.warnings[0] and "@grid $p" in e.warnings[0]
+
+
 def test_a_filter_can_depend_on_what_was_rolled_before():
     """Codie's dependent choice: the place follows the animal's habitat."""
     libs = {"animal": Library("animal", [Entry("a whale", props=(("habitat", "ocean"),)),
@@ -358,3 +383,172 @@ def test_hash_lines_are_comments_and_filters_are_not():
     libs = {"animal": Library("animal", [Entry("fox", props=(("size", "small"),)), Entry("bear", props=(("size", "big"),))])}
     template = "# quickstart: __missing__ rolls a library, $x = __animal__ binds one\n  # indented too\n$a = __animal#size:big__\n#$a = __animal#size:small__\na $a in the snow"
     assert expand(template, 1, libs).text == "a bear in the snow"
+
+
+# --- how deep, and what comes back ------------------------------------------------------------
+
+def test_many_choices_all_roll_and_a_choice_that_keeps_coming_back_stops_with_a_message():
+    assert "{" not in expand(" ".join(["{x|y}"] * 500), 1, {}).text  # the old cap left braces 201+ as text
+    loop = {"a": Library("a", [Entry("x {1$$__a__}")])}
+    with pytest.raises(ValueError, match="still to roll"):
+        expand("{1$$__a__}", 1, loop)
+
+
+def test_a_field_reads_its_siblings_and_two_that_read_each_other_are_an_error():
+    libs = {"p": Library("p", [Entry("bend", props=(("a", "A sees [$p.b]"), ("b", "B {is|was} $p")))])}
+    e = expand("$p = __p__\n$p.a / $p.b", 3, libs)
+    a, b = e.text.split(" / ")
+    assert a == f"A sees [{b}]" and b in ("B is bend", "B was bend") and not e.warnings
+    both = {"p": Library("p", [Entry("bend", props=(("a", "[$p.b]"), ("b", "[$p.a]")))])}
+    with pytest.raises(ValueError, match=r"Fields read each other: \$p\.a → \$p\.b → \$p\.a"):
+        expand("$p = __p__\n$p.a", 1, both)
+
+
+def test_a_name_that_is_not_bound_stays_as_written_and_warns():
+    e = expand("$a = $b\n$b = owl\n[$a] [$b] [$nope] [$nope.field] $5 off", 1, {})
+    assert e.text == "[$b] [owl] [$nope] [] $5 off"
+    assert [w.split(" is not bound")[0] for w in e.warnings] == ["$b", "$nope"]
+    assert expand("$b = owl\n$a = $b\n[$a]", 1, {}).warnings == []
+
+
+# --- second pass: bugs (docs/plan-dsl-2.md, phase 1) -------------------------------------------
+
+def test_a_weighted_optional_keeps_its_space():
+    assert {expand("a fox{ in the rain:3|:7}", s, {}).text for s in range(40)} == {"a fox", "a fox in the rain"}
+
+
+def test_dynamic_prompts_joiner():
+    assert expand("{2$$ and $$a|b|c}", 1, {}).text.count(" and ") == 1
+    three = expand("{3$$ / $$__style__}", 1, LIBS)
+    assert sorted(three.text.split(" / ")) == ["cyanotype", "gouache", "linocut"] and three.picks[0].value == three.text
+
+
+def test_a_backslash_writes_the_character_as_it_is():
+    e = expand("json \\{a|b\\} and \\__init__ and \\$HOME, one \\\\ and \\<lora:x:1> and \\@x(1)", 1, LIBS)
+    assert e.text == "json {a|b} and __init__ and $HOME, one \\ and <lora:x:1> and @x(1)" and not e.picks and not e.warnings
+    assert wanted_libraries("a \\__init__ and __animal__") == {"animal": 0}
+    libs = {"sign": Library("sign", [Entry("a sign reading \\{OPEN\\}")])}
+    assert expand("$s = __sign__\n$s, again $s", 1, libs).text == "a sign reading {OPEN}, again a sign reading {OPEN}"
+
+
+# --- second pass: stable seeds (phase 2) -------------------------------------------------------
+
+def test_a_choice_added_elsewhere_leaves_the_other_picks_of_a_seed_alone():
+    libs = {**LIBS, "light": Library("light", [Entry(x) for x in ("dawn", "noon", "dusk", "night")])}
+    for seed in range(30):
+        before = expand("a __animal__ at __light__", seed, libs).picks
+        after = expand("a {small|big} __animal__ at __light__, {0.4-0.9}", seed, libs).picks
+        assert [(p.label, p.value) for p in before] == [(p.label, p.value) for p in after if p.label in ("__animal__", "__light__")]
+
+
+def test_the_dice_of_before_stay_with_rng_1():
+    """The single stream every run used until 2026-10-02 (outputs pinned from that code)."""
+    t = "@rng 1\n$hero = __animal__\n$hero in {misty|frozen} __style__"
+    assert [expand(t, s, LIBS).text for s in (1, 2, 3)] == ["owl in misty linocut", "ocelot in frozen cyanotype",
+                                                            "heron in misty gouache"]
+    assert "@rng" not in expand(t, 1, LIBS).text and expand(t, 1, LIBS).params.rng == 1
+
+
+# --- second pass: one predicate language (phase 3) ---------------------------------------------
+
+BEINGS = {"creature": Library("creature", [
+    Entry("dragon", ("myth",), props=(("habitat", "mountain"), ("size", "huge"))),
+    Entry("selkie", ("myth",), props=(("habitat", "sea"), ("size", "small"))),
+    Entry("phoenix", ("myth", "bird"), props=(("habitat", "sky"), ("size", "large"))),
+    Entry("otter", ("water",), props=(("habitat", "Sea"), ("size", "small"))),
+    Entry("wren", ("bird",), props=(("habitat", "forest"), ("size", "tiny"))),
+]), "place": Library("place", [Entry("a kelp forest", props=(("habitat", "sea"),)),
+                               Entry("a crag", props=(("habitat", "mountain"),))])}
+
+
+def seen(template):
+    return {expand(template, s, BEINGS).text for s in range(80)}
+
+
+def test_tags_and_properties_filter_in_one_bracket():
+    assert seen("__creature[myth, !bird, habitat=sea]__") == {"selkie"}
+    assert seen("__creature[size=small|tiny]__") == {"selkie", "otter", "wren"}  # a key's values
+    assert seen("__creature[size!=small, !myth]__") == {"wren"}
+    assert seen("$a = __creature[habitat=sea|mountain]__\n$a in __place[habitat=$a.habitat]__") == {
+        "dragon in a crag", "selkie in a kelp forest", "otter in a kelp forest"}
+    assert seen("__creature[myth]#size:small__") == {"selkie"}  # the old filter still adds up
+
+
+def test_a_condition_takes_the_same_brackets_and_reads_tags_props_and_the_value():
+    assert seen("$c = __creature__\n{? $c[myth, size=small|tiny]: small myth|other}") == {"small myth", "other"}
+    assert {t for t in seen("$c = __creature__\n? $c[wren]: It sings.\n$c") if "sings" in t} == {"It sings. wren"}
+    assert seen("$c = __creature[bird]__\n? $c[!myth]: no myth\n? $c[myth]: myth") == {"no myth", "myth"}
+
+
+# --- second pass: the template's own libraries, chance (phase 5) -------------------------------
+
+CROWD = "@lib crowd\n  a few __animal__s\n  - a lone __animal__\n\nA meadow with __crowd__."
+
+
+def test_a_template_brings_its_own_libraries():
+    texts = {expand(CROWD, s, LIBS).text for s in range(40)}
+    assert any(t.startswith("A meadow with a few ") for t in texts) and any("a lone " in t for t in texts)
+    assert wanted_libraries(CROWD) == {"animal": 0}  # never asked of the language model
+    shadow = "@lib animal\n  a unicorn\n__animal__"
+    assert expand(shadow, 1, LIBS).text == "a unicorn" and expand(shadow, 1, LIBS).picks[0].keys == ("__animal__=a unicorn",)
+    assert [expand(CROWD + "\n@grid __crowd__", 2, LIBS, cell=c).text.split(" with ")[1][:5] for c in range(2)] == ["a few", "a lon"]
+    with pytest.raises(ValueError, match="no entries"):
+        expand("@lib empty\na __empty__", 1, LIBS)
+
+
+def test_a_screenplay_and_a_reel_have_their_own_libraries_too():
+    from orrery.h3 import compile_scene
+
+    h3 = "@h3 t2va\n@lib mood\n  calm\n  tense\nSHOT 5s: static\nA __mood__ street.\nSFX: wind"
+    assert compile_scene(h3, 2, LIBS).scene.shots[0].items[0] in ("A calm street.", "A tense street.")
+    reel = "@h3 t2va\n@lib mood\n  calm\nCHUNK a repeat 2\nSHOT 5s: static\nA __mood__ street."
+    assert "calm" in compile_scene(reel, 2, LIBS, segment=1).text
+
+
+def test_a_chance_adds_its_words_that_often_and_takes_its_space_along():
+    hits = sum("in the rain" in expand("a fox {30% in the rain}.", s, {}).text for s in range(1000))
+    assert 250 < hits < 350
+    assert {expand("a fox {30% in the rain}.", s, {}).text for s in range(30)} == {"a fox.", "a fox in the rain."}
+    assert {expand("a fox {30% in the rain}.", s, {}, {"{30% in the rain}=": 0.0}).text for s in range(10)} == {
+        "a fox in the rain."}  # learned like a choice
+    assert expand("{30% off|half price}", 1, {}).text in ("30% off", "half price")  # a choice, not a chance
+    assert [expand("a fox {30% in the rain}\n@grid {30% in the rain}", 1, {}, cell=c).text for c in (0, 1)] == [
+        "a fox in the rain", "a fox"]
+
+
+def test_the_writers_keep_the_templates_own_libraries():
+    from orrery.writers import apply
+
+    assert apply("describe", "@lib mood\n  calm\na photo\n@size 832x1216\n", "A fox.") == \
+        "@lib mood\n  calm\nA fox.\n@size 832x1216\n"
+
+
+# --- second pass: globs and leftovers (phase 6) ------------------------------------------------
+
+CLOTHES = {"clothing/hats": Library("clothing/hats", [Entry("beret"), Entry("fedora", ("winter",))]),
+           "clothing/shoes": Library("clothing/shoes", [Entry(f"shoe {i}") for i in range(30)]),
+           "clothing/winter/coats": Library("clothing/winter/coats", [Entry("parka", ("winter",))]),
+           "scenes/features_a": Library("scenes/features_a", [Entry("tower")]), "scenes/other": Library("scenes/other", [Entry("x")])}
+
+
+def test_a_glob_rolls_a_library_then_its_entry_and_learns_on_the_library():
+    picked = [expand("__clothing/*__", s, CLOTHES).picks[0] for s in range(400)]
+    hats = sum(p.keys[0].startswith("__clothing/hats__=") for p in picked)
+    assert 150 < hats < 250  # each library as likely, however many entries it has
+    assert picked[0].label == "__clothing/*__" and picked[0].keys[0].split("=")[1] == picked[0].value
+    assert {expand("__clothing/**[winter]__", s, CLOTHES).text for s in range(40)} == {"fedora", "parka"}
+    assert {expand("__scenes/features*__", s, CLOTHES).text for s in range(5)} == {"tower"}
+    assert wanted_libraries("__clothing/*__ and __real__") == {"real": 0}
+    with pytest.raises(ValueError, match="matches no library"):
+        expand("__shoes/*__", 1, CLOTHES)
+
+
+def test_a_grid_and_unique_run_through_a_globs_entries():
+    texts = [expand("__clothing/**[winter]__\n@grid __clothing/**[winter]__", 1, CLOTHES, cell=c).text for c in range(2)]
+    assert texts == ["fedora", "parka"]
+
+
+def test_what_looks_like_syntax_but_rolled_nothing_warns():
+    warnings = expand("a __my-list__ and {broken", 1, {}).warnings
+    assert any("__my-list__ looks like a wildcard" in w for w in warnings) and any("{ or } is left over" in w for w in warnings)
+    assert expand("a \\__my-list__ and \\{fine\\}", 1, {}).warnings == []

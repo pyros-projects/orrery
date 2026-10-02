@@ -8,11 +8,11 @@ soundscape and `N/A` rules. Randomness only ever fills slots.
 
     @h3 t2va 16:9
     style: live-action, cinematic
-    SHOT 5s | push in, small, slow
+    SHOT 5s: push in, small, slow
     A misty forest at dawn.
     NARRATOR (calm voice, off-screen): The forest remembers.
     SFX: branches creak under frost; soft footfalls on snow
-    SHOT 3s | cut, static
+    SHOT 3s: cut, static
     A close-up of glowing eyes.
     MUSIC: sparse cello at a slow tempo, fading out
 
@@ -68,15 +68,16 @@ _STYLE = re.compile(r"^style:\s*(.+)$", re.IGNORECASE)
 _SUMMARY = re.compile(r"^summary:\s*(.+)$", re.IGNORECASE)
 _ATTRIBUTE = re.compile(r"^(voice|keep):\s*(.+)$")
 _ANCHOR = re.compile(r"\b(from|to)\s+image\s+(\d+)(?:\s*\(([^)]*)\))?|\b(after)\s+video\s+(\d+)", re.IGNORECASE)
-_SHOT = re.compile(r"^SHOT\s+(\d+(?:\.\d+)?)\s*s\b\s*(?:\|\s*(.*))?$", re.IGNORECASE)
+_SHOT = re.compile(r"^SHOT\s+(\d+(?:\.\d+)?)\s*s\b\s*(?:[:|]\s*(.*))?$", re.IGNORECASE)  # `|`: the older spelling
 _MUSIC = re.compile(r"^MUSIC:\s*(.+)$", re.IGNORECASE)
 _SFX = re.compile(r"^SFX:\s*(.+)$", re.IGNORECASE)
 _VOICE = re.compile(r"^([A-Z][A-Z0-9 _-]*?)\s*(?:\(([^)]*)\))?\s*:\s*(.+)$")
 _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
 _HANDOFF = re.compile(r"^HANDOFF:\s*(.+)$")
+_SEND_LINE = re.compile(r"^SEND:")
 _LORA = re.compile(r"^LORA:\s*(.+)$")
 _CONTEXT = re.compile(r"^context:\s*(\d+)\s*f?$", re.IGNORECASE)
-_DSL_ONLY = re.compile(r"^:\s*(x\d|seed=|w\d|h\d)")  # params lines of plain templates
+_DSL_ONLY = re.compile(r"^(:\s*(x\d|seed=|w\d|h\d|grid\b|unique=)|@(grid|unique|size|seed|batch|rng)\b)")  # params lines of plain templates
 _ENHANCE = re.compile(r"^>\s*(.+)$")
 H3_FPS = 24
 DEFAULT_CONTEXT = 22  # H3 Motion Context's default context_length, in frames
@@ -123,7 +124,7 @@ class Scene:
     silence: bool = False
     cast: list[Member] = field(default_factory=list)
     summary: str = ""
-    lite: bool = False  # `lite` in the header: <Subject N> = … definitions over the base fields
+    lite: bool = True  # <Subject N> = … definitions over the base fields; `full` in the header: MiniMax's full format
     loras: list[str] = field(default_factory=list)
     context: int | None = None  # frames Motion Context pins at the start of every reel segment after the first
     enhance: str = ""  # a `> instruction` before the first shot: for every shot without its own
@@ -143,7 +144,9 @@ class Compiled:
     chunks: int = 0  # a reel's number of CHUNKs; 0 for a plain screenplay
     segment: int = 0
     segments: int | None = 0  # a reel's clips, counting repeats; None when a CHUNK repeats forever
-    refs: list[int] = field(default_factory=list)  # packed: the original image slots, in their new order
+    refs: list[int] = field(default_factory=list)  # packed: the original image slots, in their new order (sent ones the prompt does not name last)
+    sends: dict[int, dict] = field(default_factory=dict)  # sent images that exist in this segment (Reel.ready)
+    send_slots: list[int] = field(default_factory=list)  # every image a SEND: line of the reel fills
 
 
 # --- front end ------------------------------------------------------------------------------
@@ -172,8 +175,8 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
         elif m := _HEADER.match(line):
             scene.mode = m.group(1).lower()
             for token in m.group(2).split():
-                if token.lower() == "lite":
-                    scene.lite = True
+                if token.lower() in ("lite", "full"):
+                    scene.lite = token.lower() == "lite"
                 elif _RATIO.match(token):
                     scene.ratio = token
         elif m := _STYLE.match(line):
@@ -184,6 +187,8 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
             scene.loras.append(m.group(1).strip())
         elif _HANDOFF.match(line):
             lint.append(Issue("warn", "HANDOFF only works inside a CHUNK; it is ignored."))
+        elif _SEND_LINE.match(line):
+            raise ValueError("SEND: belongs inside a CHUNK: it sends frames of that chunk's clip to the clips after it.")
         elif m := _CONTEXT.match(line):
             scene.context = int(m.group(1))
         elif (m := _MUSIC.match(line)) and cur is None and in_cast:
@@ -417,6 +422,9 @@ def render_shots(scene: Scene, lint: list[Issue], speakers: _Speakers, names: Na
     return shots
 
 
+DEFAULT_SOUNDSCAPE = "Natural foley and ambient sound that fit the scene."  # without SFX lines H3 still wants sound
+
+
 def soundscape(scene: Scene, lint: list[Issue]) -> str:
     sfx = [items for shot in scene.shots for items in shot.sfx]
     if sfx:
@@ -428,10 +436,11 @@ def soundscape(scene: Scene, lint: list[Issue]) -> str:
         if scene.silence:
             lint.append(Issue("warn", "SFX: silence next to other SFX lines is ignored."))
         return joined
-    if not scene.silence:
-        lint.append(Issue("warn", "No SFX lines, so overall_soundscape is N/A; the guide suggests 1–4 "
-                                  "sentences of ambience (SFX: silence says the silence is intended)."))
-    return "N/A"
+    if scene.silence:
+        return "N/A"
+    lint.append(Issue("info", "No SFX lines, so overall_soundscape asks for natural foley and ambience; SFX: lines "
+                              "choose the sounds, SFX: silence means none."))
+    return DEFAULT_SOUNDSCAPE
 
 
 def music(scene: Scene, lint: list[Issue]) -> str:
@@ -448,9 +457,26 @@ def _fields(scene: Scene, lint: list[Issue], shots: list[str]) -> str:
             f"overall_soundscape: {soundscape(scene, lint)}\n\nnon_diegetic_music: {music(scene, lint)}")
 
 
+def retention(scene: Scene, names, label) -> str:
+    """The retention_analysis block when a CAST member says `keep:`: every member, its shots, its marker
+    and reason (the default for those without). Empty without a `keep:` line."""
+    if not any(m.keep for m in scene.cast):
+        return ""
+    from orrery.h3_ref import DEFAULT_KEEP
+
+    lines = []
+    for m in scene.cast:
+        where = ", ".join(f"[Shot {i}]" for i in sorted(names.appears.get(m.name, []))) or "no shot"
+        marker, reason = m.keep or DEFAULT_KEEP
+        lines.append(f"{label(m)} (appears in {where}): {marker} - {(reason or DEFAULT_KEEP[1]).replace('{who}', m.short)}")
+    return "retention_analysis:\n" + "\n".join(lines)
+
+
 def write_h3_base(scene: Scene, lint: list[Issue]) -> str:
-    shots = render_shots(scene, lint, _Speakers(scene), Names(scene.cast), style=scene.style)
-    return "\n\n".join(p for p in (_alignment(scene), _fields(scene, lint, shots)) if p)
+    names = Names(scene.cast)
+    shots = render_shots(scene, lint, _Speakers(scene), names, style=scene.style)
+    keep = retention(scene, names, lambda m: m.short[0].upper() + m.short[1:])
+    return "\n\n".join(p for p in (_alignment(scene), keep, _fields(scene, lint, shots)) if p)
 
 
 def write_h3_lite(scene: Scene, lint: list[Issue]) -> str:
@@ -458,8 +484,8 @@ def write_h3_lite(scene: Scene, lint: list[Issue]) -> str:
     mention as its label."""
     prose = [it for shot in scene.shots for it in shot.items if isinstance(it, str)]
     labels = Labels(scene.cast, [s for text in prose for s in bracket_sources(text)])
-    shots = render_shots(scene, lint, _Speakers(scene, labels, sep=":"), Names(scene.cast, labels, describe=False),
-                         labels, style=scene.style)
+    names = Names(scene.cast, labels, describe=False)
+    shots = render_shots(scene, lint, _Speakers(scene, labels, sep=":"), names, labels, style=scene.style)
     definitions = []
     for m in scene.cast:
         subject, phrase = f"<Subject {labels.subjects[m.name]}>", labels.sources_phrase(m)
@@ -468,7 +494,10 @@ def write_h3_lite(scene: Scene, lint: list[Issue]) -> str:
         if m.voice:
             definitions.append(f"{labels.label(m.voice)} = the voice of {subject}")
     align = "" if scene.mode == "ref2va" else _alignment(scene)
-    return "\n\n".join(p for p in ("\n".join(definitions), align, _fields(scene, lint, shots)) if p)
+    keep = retention(scene, names, lambda m: f"<Subject {labels.subjects[m.name]}>")
+    if scene.summary.strip():
+        lint.append(Issue("warn", "summary: goes into the prompt only in the full format: add full to the @h3 line."))
+    return "\n\n".join(p for p in ("\n".join(definitions), align, keep, _fields(scene, lint, shots)) if p)
 
 
 def write_flat(scene: Scene) -> str:
@@ -567,6 +596,24 @@ def pack_images(scene: Scene) -> list[int]:
     return used
 
 
+def withhold_images(scene: Scene, missing: set[int], lint: list[Issue]) -> None:
+    """Leave out of this clip the images a SEND: line fills later: CAST sources and frame anchors go,
+    and a [image N] in prose is flagged, since it points at nothing yet."""
+    if not missing:
+        return
+    for m in scene.cast:
+        m.sources = [s for s in m.sources if not (s.kind == "image" and s.index in missing)]
+    for shot in scene.shots:
+        if shot.first_frame and shot.first_frame[0] in missing:
+            shot.first_frame = None
+        if shot.last_frame and shot.last_frame[0] in missing:
+            shot.last_frame = None
+    texts = [scene.summary, *(it for shot in scene.shots for it in shot.items if isinstance(it, str))]
+    for n in sorted({int(x) for text in texts for x in _IMAGE_BRACKET.findall(text)} & missing):
+        lint.append(Issue("warn", f"[image {n}] is mentioned before the SEND: line that fills it has played, "
+                                  "so in this clip it points at nothing."))
+
+
 def render_scene(scene: Scene, target: str, lint: list[Issue]) -> str:
     """The prompt for a parsed scene; again after its prose was rewritten (`> enhance`)."""
     if target == "flat":
@@ -583,21 +630,54 @@ def render_scene(scene: Scene, target: str, lint: list[Issue]) -> str:
 
 def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                   weights: Mapping[str, float] | None = None, target: str = "h3-base",
-                  segment: int = 0, packed: bool = False) -> Compiled:
+                  segment: int = 0, packed: bool = False, held: set[int] | frozenset = frozenset(),
+                  cell: int | None = None) -> Compiled:
     """`segment` picks a reel's clip (see orrery.reel); plain screenplays ignore it. `packed`: the
-    images are renumbered to the ones this clip uses (Orrery Refs hands on only those)."""
-    from orrery.reel import build_segment, split_reel
+    images are renumbered to the ones this clip uses (Orrery Refs hands on only those). `cell`: the
+    run of a `: grid` (orrery.batch); None rolls its axes."""
+    from orrery.batch import prepare
+    from orrery.dsl import parse, with_inline
+    from orrery.reel import build_segment, shared_sends, split_reel
+
     lint: list[Issue] = []
-    src = strip_comments(src)
+    src, libraries = with_inline(strip_comments(src), libraries)
     reel = split_reel(src)
+    params = parse(src).params
+    if reel and (params.grid is not None or params.unique):
+        raise ValueError("@grid and @unique vary a template across runs; a reel already gives every run a "
+                         "clip of its own. Use them in a single clip.")
+    src = prepare(src, seed, libraries, cell)
+    reel = split_reel(src) if reel else None
+    sends: dict[int, dict] = {}
     if reel:
-        scene, picks = build_segment(reel, seed, libraries, weights, segment, lint)
+        scene, picks, path = build_segment(reel, seed, libraries, weights, segment, lint)
+        if reel.send_slots:
+            if scene.mode != "ref2va":
+                raise ValueError("SEND: hands frames to Reference to Video as reference images, so it needs an "
+                                 "@h3 ref2va screenplay.")
+            sends = reel.ready(segment, set(held) & set(reel.send_slots), path)
+            withhold_images(scene, set(reel.send_slots) - set(sends), lint)
+            # every chunk's first segment: the reel's own path, or the one walked here when jumps wait on rolls
+            starts = reel.starts(path if reel.jumps_on_rolls else None)
+            lint += [Issue("warn", w) for w in shared_sends(reel, starts)]
+            for block, start in zip(reel.blocks, starts, strict=True):
+                for send in block.sends:
+                    early = [lo for lo, _ in send.segments or []
+                             if start is not None and lo <= start and send.image not in held]
+                    if early:
+                        lint.append(Issue("warn", f"SEND: to image {send.image} lists segment {min(early)}, but its "
+                                                  f"frames come from segment {start}: up to segment {start} the clips "
+                                                  "go without it."))
     else:
-        ex = Expander(seed, libraries, weights)
+        ex = Expander(seed, libraries, weights, params.rng)
         scene, picks = parse_scene(src, ex, lint), ex.picks
+        lint += [Issue("warn", w) for w in ex.warnings]
     refs = pack_images(scene) if packed else []
+    if packed:  # sent images reach Orrery Refs whether the prompt names them or not, after the ones it does
+        refs += [n for n in sorted(sends) if n not in refs]
     text = render_scene(scene, target, lint)
     if target == "h3-base":
         _scene_lint(src, scene, lint)
     return Compiled(text, picks, lint, scene, " ".join(scene.loras), len(reel.blocks) if reel else 0,
-                    segment if reel else 0, reel.segments if reel else 0, refs)
+                    segment if reel else 0, reel.segments if reel else 0, refs,
+                    sends, reel.send_slots if reel else [])
