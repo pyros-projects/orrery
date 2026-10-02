@@ -120,7 +120,7 @@
 .orrery-app .pchip .caret { margin-left: auto; color: var(--faint); display: inline-flex; }
 .orrery-app .pnote { margin: 0 12px 8px; color: var(--muted); font-size: 12.5px; line-height: 1.5; max-width: 80ch; }
 .orrery-app .pnote b { color: var(--ink); font-weight: 500; }
-.orrery-app .edrow { display: flex; gap: 8px; margin: 0 12px; flex: 1 1 auto; min-height: 210px; }
+.orrery-app .edrow { display: flex; gap: 2px; margin: 0 12px; flex: 1 1 auto; min-height: 210px; }
 .orrery-app .editor { position: relative; border: 1px solid var(--line); border-radius: 8px; background: var(--well); flex: 1 1 auto; min-width: 0; }
 .orrery-app .editor pre, .orrery-app .editor textarea { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 10px 12px; font: 12.5px/1.65 var(--mono); letter-spacing: 0;
   white-space: pre-wrap; overflow-wrap: anywhere; border: 0; border-radius: 8px; tab-size: 2; scrollbar-gutter: stable; }
@@ -138,8 +138,24 @@
 .orrery-app .chunkline.now .chunkinfo > span { color: var(--brass); background: color-mix(in srgb, var(--brass) 14%, var(--well)); }
 .orrery-app .editor.nodiv .chunkinfo { display: none; }
 /* the timeline: each chunk's clips and sent frames, level with its lines */
-.orrery-app .timeline { position: relative; width: 132px; flex: none; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: var(--well); }
-.orrery-app.big .timeline { width: 210px; }
+.orrery-app .timeline { position: relative; width: var(--tl-w, 132px); flex: none; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: var(--well); }
+.orrery-app.big .timeline { width: var(--tl-w, 210px); }
+.orrery-app .tl-grip { width: 8px; flex: none; cursor: col-resize; border-radius: 4px; touch-action: none; }
+.orrery-app .tl-grip:hover, .orrery-app .tl-grip:focus-visible { background: var(--line); outline: none; }
+/* the cells view: one cell per CHUNK, each with its clips in a section under it */
+.orrery-app .editor.cells { overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: var(--line) transparent; padding: 6px 0 24px; }
+.orrery-app .editor.cells .cell { position: relative; }
+.orrery-app .editor.cells .cell pre { position: relative; inset: auto; height: auto; overflow: visible; padding: 2px 12px; scrollbar-gutter: auto; min-height: 1.65em; }
+.orrery-app .editor.cells .cell textarea { position: absolute; inset: 0; height: 100%; overflow: hidden; padding: 2px 12px; scrollbar-gutter: auto; }
+.orrery-app .chunkmedia { position: relative; margin: 2px 0 6px; background: color-mix(in srgb, var(--surface) 70%, var(--well)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.orrery-app .chunkmedia .cm-body { height: 100%; overflow-y: auto; display: flex; flex-wrap: wrap; align-content: flex-start; align-items: flex-start; gap: 6px; padding: 6px 12px 10px;
+  scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+.orrery-app .chunkmedia .cm-grip { position: absolute; left: 0; right: 0; bottom: -4px; height: 8px; cursor: row-resize; touch-action: none; z-index: 2; }
+.orrery-app .chunkmedia .cm-grip:hover { background: color-mix(in srgb, var(--line) 80%, transparent); }
+.orrery-app .chunkmedia .tl-clip { flex: none; }
+.orrery-app .chunkmedia .tl-send { flex-direction: column; align-items: flex-start; gap: 3px; height: var(--clip-h); }
+.orrery-app .chunkmedia .tl-send img { max-height: calc(var(--clip-h) - 14px); max-width: none; }
+.orrery-app .chunkmedia .cm-none { font-size: 11.5px; padding: 4px 0; }
 .orrery-app .timeline[hidden] { display: none; }
 .orrery-app .tl-track { position: absolute; left: 0; right: 0; top: 0; }
 .orrery-app .tl-chunk { position: absolute; left: 0; right: 0; border-top: 1px dashed #3d3f56; padding: 4px 5px; display: flex; flex-direction: column; gap: 4px; overflow: hidden; }

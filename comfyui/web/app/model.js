@@ -234,6 +234,17 @@ export function chunkInfo(text) {
   return out;
 }
 
+// The cells view: the text cut before every CHUNK line, the world above the first one its own cell
+// (chunk -1). Joined with newlines, the cells are the text again.
+export function splitCells(text) {
+  const lines = text.split("\n");
+  const starts = lines.flatMap((l, i) => (/^CHUNK\b/.test(l.trim()) ? [i] : []));
+  if (!starts.length) return [{ line: 0, chunk: -1, text }];
+  const cells = starts[0] > 0 ? [{ line: 0, chunk: -1, text: lines.slice(0, starts[0]).join("\n") }] : [];
+  starts.forEach((s, k) => cells.push({ line: s, chunk: k, text: lines.slice(s, starts[k + 1] ?? lines.length).join("\n") }));
+  return cells;
+}
+
 const clock = (secs) => {
   const s = Math.round(secs * 10) / 10, m = Math.floor(s / 60), r = Math.round((s - m * 60) * 10) / 10;
   return `${m}:${Number.isInteger(r) ? String(r).padStart(2, "0") : r.toFixed(1).padStart(4, "0")}`;

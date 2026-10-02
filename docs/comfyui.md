@@ -56,8 +56,14 @@ Nodes under **orrery**:
     opens it; dashed boxes are segments not rendered yet) and, under a chunk
     with `SEND:` lines, the frames Orrery Refs last sent to each image (its
     anchors). It reads the chain from the string wired into `latent_path`,
-    else `h3_context`, and refreshes after every run. The gear turns
-    dividers and timeline off.
+    else `h3_context`, and refreshes after every run. Drag the edge between
+    editor and timeline to widen it. **Clips beside / Clips below** in the
+    footer switches to the cells view: the editor cut into one cell per
+    CHUNK, each followed by a section with that chunk's clips and sent
+    frames; drag a section's lower edge to resize it (kept per chunk, like
+    the width, in the node). Arrow keys cross from cell to cell, Backspace at
+    a cell's start and Delete at its end join two, and a CHUNK line typed or
+    removed cuts the text anew. The gear turns dividers and timeline off.
   - **Test**: what the template makes, without queueing anything. **Rolls**
     shows three seeds (a reel: six clips at one seed, pageable through a
     forever loop). **Frequencies** rolls it 50, 200 or 500 times, across seeds

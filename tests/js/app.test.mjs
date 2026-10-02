@@ -4,7 +4,7 @@ import { highlight } from "../../comfyui/web/app/highlight.js";
 import { fitThumbs } from "../../comfyui/web/app/timeline.js";
 import {
   applyDials, dials, downstream, entryPage, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
-  chunkInfo, chunkLabel, rangeIds, shape, stats, sweepPlan, templateHash,
+  chunkInfo, chunkLabel, splitCells, rangeIds, shape, stats, sweepPlan, templateHash,
 } from "../../comfyui/web/app/model.js";
 
 const known = new Set(["creature", "place"]);
@@ -361,4 +361,14 @@ test("timeline thumbs keep the clips' aspect ratio, portrait as well as landscap
     const { cols, w, h } = fitThumbs(20, 120, 53, ratio), rows = Math.ceil(20 / cols);
     assert.ok(cols * w + (cols - 1) * 3 <= 120 && rows * h + (rows - 1) * 3 <= 53, `ratio ${ratio}`);
   }
+});
+
+test("the cells view splits a reel at its CHUNK lines, and joining the cells gives the text back", () => {
+  const cells = splitCells(REEL_TEXT);
+  assert.deepEqual(cells.map((c) => [c.line, c.chunk, c.text.split("\n")[0]]),
+    [[0, -1, "@h3 t2va 16:9"], [2, 0, "CHUNK the opening"], [5, 1, "CHUNK the walk repeat 4"], [10, 2, "CHUNK the end"]]);
+  assert.equal(cells.map((c) => c.text).join("\n"), REEL_TEXT);
+  const bare = "CHUNK a\nSHOT 5s\n  CHUNK b\n";
+  assert.deepEqual(splitCells(bare).map((c) => [c.chunk, c.text]), [[0, "CHUNK a\nSHOT 5s"], [1, "  CHUNK b\n"]]);
+  assert.deepEqual(splitCells("no chunks\nhere"), [{ line: 0, chunk: -1, text: "no chunks\nhere" }]);
 });

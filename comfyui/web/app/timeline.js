@@ -1,7 +1,8 @@
 // The film beside the editor: each CHUNK's clips as Orrery Film (or H3 Motion Context's Chain Video) keeps them, and
-// the frames its SEND: lines handed on (Orrery Refs' anchors), level with the chunk's lines.
+// the frames its SEND: lines handed on (Orrery Refs' anchors), level with the chunk's lines. The cells view
+// (cells.js) shows the same under each chunk, in a section of its own.
 import { icon } from "./icons.js";
-import { shape } from "./model.js";
+import { chunkInfo, shape } from "./model.js";
 
 const GAP = 3, MAX_H = 180, SEND_ROW = 26;
 
@@ -45,6 +46,21 @@ export function fitThumbs(n, width, height, ratio) {
   return { cols, w: Math.floor(w), h: Math.floor(w / ratio) };
 }
 
+// The clips' width / height: a chain keeps one frame size; before it holds a clip, the size the template asks for.
+export function clipRatio(app) {
+  const { width, height } = app.data.chain?.width && app.data.chain?.height ? app.data.chain : shape(app.text);
+  return width / height;
+}
+
+// A chunk's clips and sent frames for its section in the cells view; the section sizes them (--clip-h).
+export function sectionHTML(app, c) {
+  if (c.first === null) return '<span class="muted cm-none">never plays: a chunk before it repeats forever</span>';
+  const clips = new Map((app.data.chain?.clips || []).map((x) => [x.segment, x]));
+  const segment = Number(app.bridge.getSegment());
+  return segmentsOf(c, clips).map((s) => clipHTML(app, s, clips.get(s), segment)).join("")
+    + c.images.map((n) => sendHTML(app, n)).join("");
+}
+
 // Blocks level with the CHUNK lines the highlight drew; the track follows the textarea's scroll.
 export function layoutTimeline(app, chunks) {
   const box = app.view.querySelector(".timeline");
@@ -56,15 +72,14 @@ export function layoutTimeline(app, chunks) {
   const end = pre.scrollHeight;
   const clips = new Map((app.data.chain?.clips || []).map((c) => [c.segment, c]));
   const segment = Number(app.bridge.getSegment());
-  // A chain keeps one frame size; before it holds a clip, the size the template asks for
-  const { width, height } = app.data.chain?.width && app.data.chain?.height ? app.data.chain : shape(app.text);
+  const ratio = clipRatio(app);
   const track = box.querySelector(".tl-track");
   track.style.height = `${end}px`;
   track.innerHTML = chunks.map((c, i) => {
     const top = heads[i] ?? 0, rowsH = (heads[i + 1] ?? end) - top;
     const segs = segmentsOf(c, clips);
     const now = c.first !== null && segment >= c.first && segment <= c.last;
-    const fit = fitThumbs(segs.length, box.clientWidth - 10, rowsH - 9 - c.images.length * SEND_ROW, width / height);
+    const fit = fitThumbs(segs.length, box.clientWidth - 10, rowsH - 9 - c.images.length * SEND_ROW, ratio);
     return `<div class="tl-chunk${now ? " now" : ""}" style="top:${top}px;height:${rowsH}px">`
       + `<div class="tl-clips" style="--cols:${fit.cols};--clip-w:${fit.w}px;--clip-h:${fit.h}px">${segs.map((s) => clipHTML(app, s, clips.get(s), segment)).join("")}</div>`
       + c.images.map((n) => sendHTML(app, n)).join("") + "</div>";
@@ -77,7 +92,7 @@ export function scrollTimeline(app) {
   if (track && ed) track.style.transform = `translateY(${-ed.scrollTop}px)`;
 }
 
-// Hover plays a clip in place; a click opens it large.
+// The column: the wheel scrolls the editor, and the grip before it sets its width (kept in the node).
 export function wireTimeline(app) {
   const box = app.view.querySelector(".timeline");
   if (!box) return;
@@ -86,6 +101,39 @@ export function wireTimeline(app) {
     ed.scrollTop += e.deltaY;
     e.preventDefault();
   }, { passive: false });
+  wireClips(app, box);
+  const row = app.view.querySelector(".edrow"), grip = row.querySelector(".tl-grip");
+  const set = (w) => {
+    const px = Math.round(Math.min(Math.max(w, 90), row.clientWidth * 0.6));
+    row.style.setProperty("--tl-w", `${px}px`);
+    app.bridge.props.orrery_tl_w = px;
+  };
+  drag(grip, (dx, start) => set(start - dx), () => box.offsetWidth, () => layoutTimeline(app, chunkInfo(app.text)));
+  grip.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault();
+    set(box.offsetWidth + (e.key === "ArrowLeft" ? 16 : -16));
+    layoutTimeline(app, chunkInfo(app.text));
+  });
+}
+
+// A pointer drag in the node's CSS pixels: the canvas zoom scales the screen pixels the pointer moves.
+export function drag(grip, move, start, done) {
+  grip.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    grip.setPointerCapture(e.pointerId);
+    const scale = grip.getBoundingClientRect().width / (grip.offsetWidth || 1) || 1;
+    const x0 = e.clientX, y0 = e.clientY, from = start();
+    const onMove = (m) => move((m.clientX - x0) / scale, from, (m.clientY - y0) / scale);
+    const up = () => { grip.removeEventListener("pointermove", onMove); grip.removeEventListener("pointerup", up); done(); };
+    grip.addEventListener("pointermove", onMove);
+    grip.addEventListener("pointerup", up);
+  });
+}
+
+// Hover plays a clip in place; a click opens it large.
+export function wireClips(app, box) {
   box.addEventListener("pointerover", (e) => {
     const clip = e.target.closest(".tl-clip:not(.empty)");
     if (!clip || clip.querySelector("video")) return;
