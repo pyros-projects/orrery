@@ -296,7 +296,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     try:
         if target == "text":
             result = expand(source, seed, h.libraries(), h.weights(), cell=cell)
-            lint = []
+            lint = [{"severity": "warn", "message": w} for w in result.warnings]
         else:
             result = compile_scene(source, seed, h.libraries(), h.weights(), target=target, segment=segment,
                                    packed=packed, held=anchors.stored(h) if keep else frozenset(), cell=cell)

@@ -136,7 +136,8 @@ def fmt(number: float) -> str:
     return f"{round(number, 4):g}"
 
 
-def _tag(swept: Swept, value: Value) -> str:
+def concrete(swept: Swept, value: Value) -> str:
+    """The tag at one of its strengths: <lora:name:0.5> (with :clip when it has one)."""
     model, clip = value
     return f"<lora:{swept.name}:{fmt(model)}{'' if clip is None else ':' + fmt(clip)}>"
 
@@ -158,7 +159,7 @@ def apply(source: str, run: dict[str, Value | None]) -> str:
         if value is None:
             source = re.sub(r"([ \t]?)" + re.escape(swept.text) + r"([ \t]?)", _gap, source)
         else:
-            source = source.replace(swept.text, _tag(swept, value))
+            source = source.replace(swept.text, concrete(swept, value))
     return _EMPTY_LORA_LINE.sub("", source)
 
 

@@ -60,6 +60,8 @@ def _cmd_expand(args: argparse.Namespace) -> int:
     except (KeyError, ValueError) as err:  # a missing library, a grid or a range that does not hold
         print(f"orrery: {_msg(err)}", file=sys.stderr)
         return 2
+    for warning in dict.fromkeys(w for e in rows for w in e.warnings):
+        print(f"orrery: warning: {warning}", file=sys.stderr)
     if args.json:
         print(json.dumps([
             {"seed": e.seed, **({} if e.cell is None else {"cell": e.cell}), "text": e.text,

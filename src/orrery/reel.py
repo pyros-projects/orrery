@@ -254,6 +254,7 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
     def expander(t: int) -> tuple[Expander, Block]:
         block = reel.blocks[reel.locate(t)[0]]
         ex = Expander(derive(seed, t), libraries, weights)
+        ex.warnings = world.warnings  # one list for the whole reel
         ex.vars = dict(world.vars)
         ex.var_props = dict(world.var_props)
 
@@ -318,6 +319,7 @@ def build_segment(reel: Reel, seed: int, libraries: Mapping[str, Library],
     world, head, expand = _unroll(reel, seed, libraries, weights, segment)
     lines, handoff, picks, _ = expand(segment)
     before, before_picks = (expand(segment - 1)[1::2] if segment else (None, []))
+    lint += [Issue("warn", w) for w in world.warnings]
     scene = parse_scene("\n".join(head + lines), Expander(0, {}), lint, expanded=True)
     if scene.shots and before:
         scene.shots[0].items.insert(0, f"The shot opens as {_clause(before)}")

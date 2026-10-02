@@ -35,7 +35,12 @@ Libraries live in the home folder (`~/.orrery` unless set otherwise, see
 they are (one entry per line, `#` comments), so Dynamic Prompts collections can
 be dropped in; the first edit in the node turns one into YAML. An entry is a
 template itself: `__80s/Women/80s_sports__` or `{a|b}` inside it expand too,
-as in Dynamic Prompts (a library that comes back to itself is an error).
+as in Dynamic Prompts (a library that comes back to itself is an error). Entries
+may hold LoRAs, so a library can be a set of LoRA combinations
+(`- <lora:ink:0.8> <lora:grain:0.4>`, `- @clay(0.4-0.9)`, `- ""` for none) used
+as `LORA: __my_lora_sets__` or in a text prompt; which set rolled is a pick that
+learns like any other. A sweep in an entry (`0.5,1.0`) runs at its first
+strength and warns: `: grid __my_lora_sets__` runs every entry instead.
 Library names are word characters and `/`: a file with `-` or spaces in its
 path is not found. When a name exists
 as both, the YAML wins. `orrery lib import FOLDER [--into dp] [--merge NAME]`

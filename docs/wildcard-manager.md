@@ -88,7 +88,11 @@ template) and **Stop** ends the queueing. Every output records the swept
 strengths as picks (`<lora:a>` = 0.5, or off) and lands in a galaxy folder
 `sweeps/<first swept LoRA> <date> <time>`. ComfyUI's own Run takes the first
 run. `@style(0.5,0.7)` is short for the tag and sweeps the same; a range without
-a step, `<lora:style:0.4-0.9>`, rolls a strength per run instead.
+a step, `<lora:style:0.4-0.9>`, rolls a strength per run instead. A library
+of LoRA sets (`LORA: __my_lora_sets__`, entries such as `<lora:ink:0.8>
+<lora:grain:0.4>`) rolls a set per run; `: grid __my_lora_sets__` runs each set
+once (see below). Sweeps sweep only where the template writes them: one in an
+entry takes its first strength and warns.
 
 **Grids.** `: grid __style__ × {dawn|noon}` sweeps picks the way a LoRA sweep
 sweeps strengths: one run per combination, everything else rolled the same, so

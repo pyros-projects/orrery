@@ -151,3 +151,31 @@ def test_unique_says_what_is_wrong():
         expand("a __style__\n: unique=__creature__", 1, LIBS)
     with pytest.raises(ValueError, match="grid axis"):
         expand("a __style__\n: grid __style__\n: unique=__style__", 1, LIBS, cell=0)
+
+
+# --- LoRAs in library entries ---------------------------------------------------------------
+
+def one(value):
+    return {"sets": Library("sets", [Entry(value)])}
+
+
+def test_an_entry_writes_its_loras_as_the_template_does():
+    rolled_ = expand("a fox __sets__", 3, one("<lora:ink:0.4-0.9> @grain(0.6)"))
+    strength = rolled_.picks[1].value
+    assert rolled_.text == f"a fox <lora:ink:{strength}> <lora:grain:0.6>" and 0.4 <= float(strength) <= 0.9
+    assert [p.label for p in rolled_.picks] == ["__sets__", "<lora:ink>"] and not rolled_.warnings
+    c = compile_scene("@h3 t2va\nLORA: __sets__\nSHOT 5s: static\nA fox.", 1, one("@ink(0.8) @grain(0.4)"))
+    assert c.loras == "<lora:ink:0.8> <lora:grain:0.4>"
+
+
+def test_a_sweep_in_an_entry_takes_its_first_strength_and_says_to_grid_instead():
+    e = expand("a fox __sets__", 1, one("<lora:ink:0.5,1.0>"))
+    assert e.text == "a fox <lora:ink:0.5>"
+    [warning] = e.warnings
+    assert "<lora:ink:0.5,1.0> in an entry of __sets__ is a sweep" in warning and ": grid __sets__" in warning
+    assert expand("a fox __sets__", 1, one("<lora:ink:0-1;0.5>")).text.strip() == "a fox"  # its first strength is off
+    assert expand("a fox <lora:ink:0.5,1.0>", 1, LIBS).warnings == []  # in the template it is a sweep, as ever
+    h3 = compile_scene("@h3 t2va\nLORA: __sets__\nSHOT 5s: static\nA fox.", 1, one("<lora:ink:0.5,1.0>"))
+    reel = compile_scene("@h3 t2va\nLORA: __sets__\nCHUNK a\nSHOT 5s\nA fox.", 1, one("<lora:ink:0.5,1.0>"))
+    for compiled in (h3, reel):
+        assert any("is a sweep" in i.message for i in compiled.lint) and compiled.loras == "<lora:ink:0.5>"

@@ -816,6 +816,13 @@ def test_a_grid_runs_one_cell_per_sweep_run_and_multiplies_with_a_lora_sweep(hom
         OrreryPrompt().run(both, 5, "text", home=str(home), sweep="4|g")
 
 
+def test_a_sweep_in_a_library_entry_warns_in_the_node(home):
+    (home / "library" / "sets.yaml").write_text("- <lora:ink:0.5,1.0>\n")
+    text, picks, *_ = OrreryPrompt().run("a fox __sets__", 5, "text", home=str(home))
+    assert text == "a fox <lora:ink:0.5>"
+    assert any("is a sweep" in i["message"] and i["severity"] == "warn" for i in json.loads(picks)["lint"])
+
+
 def test_every_sweep_run_is_a_new_run_for_comfyui():
     a = OrreryPrompt.IS_CHANGED(SWEEP, 5, "text", sweep="0|x")
     assert a != OrreryPrompt.IS_CHANGED(SWEEP, 5, "text", sweep="1|x")

@@ -647,6 +647,7 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
     else:
         ex = Expander(seed, libraries, weights)
         scene, picks = parse_scene(src, ex, lint), ex.picks
+        lint += [Issue("warn", w) for w in ex.warnings]
     refs = pack_images(scene) if packed else []
     if packed:  # sent images reach Orrery Refs whether the prompt names them or not, after the ones it does
         refs += [n for n in sorted(sends) if n not in refs]

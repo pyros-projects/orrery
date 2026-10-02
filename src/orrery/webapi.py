@@ -625,7 +625,8 @@ def _run(home: Home, text: str, seed: int, target: str, segment: int):
     """One expansion or compile, and its lint (LoRA warnings included when ComfyUI knows the files)."""
     try:
         if target == "text":
-            return expand(text, seed, home.libraries(), home.weights()), []
+            result = expand(text, seed, home.libraries(), home.weights())
+            return result, [{"severity": "warn", "message": w} for w in result.warnings]
         result = compile_scene(text, seed, home.libraries(), home.weights(), target=target, segment=segment)
     except MissingLibrary as err:
         raise ApiError(400, str(err), library=err.name) from None

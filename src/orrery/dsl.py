@@ -15,7 +15,10 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 
 from orrery.library import Library
+from orrery.loras import long_form
 from orrery.rng import Rng, weighted_pick
+from orrery.sweep import concrete as sweep_tag
+from orrery.sweep import tags as sweep_tags
 
 _BRACE = re.compile(r"\{([^{}]*)\}")
 FIX = "\x1f"  # FIX n FIX inside a library or a brace: the draw lands on option n (grids, unique=; see orrery.batch)
@@ -87,6 +90,7 @@ class Expansion:
     params: Params = field(default_factory=Params)
     enhance: str | None = None
     cell: int | None = None  # the run of a `: grid`
+    warnings: list[str] = field(default_factory=list)  # what rolled, but not as written (a sweep in an entry)
 
 
 @dataclass
@@ -236,6 +240,11 @@ class Expander:
         self.history_props: Callable[[str, int], dict[str, str]] | None = None
         self._props_seen: dict[str, str] = {}
         self._within: list[str] = []  # the libraries whose entry is being expanded, outermost first
+        self.warnings: list[str] = []  # a reel's expanders share their world's list
+
+    def warn(self, message: str) -> None:
+        if message not in self.warnings:
+            self.warnings.append(message)
 
     def learned(self, key: str) -> float:
         return float(self.weights.get(key, 1.0))
@@ -335,8 +344,11 @@ class Expander:
         return text
 
     def _nested(self, name: str, value: str, label_prefix: str) -> str:
-        """An entry is a template itself, as in Dynamic Prompts: its libraries, braces and $vars expand."""
-        if "__" not in value and "{" not in value and "$" not in value:
+        """An entry is a template itself, as in Dynamic Prompts: its libraries, braces and $vars expand,
+        its LoRA tags as in the template (`@style(0.8)`, a strength range)."""
+        if "@" in value:
+            value = long_form(value)
+        if "__" not in value and "{" not in value and "$" not in value and "<lora:" not in value:
             return value
         if name in self._within:
             raise ValueError("A library comes back to itself: " + " → ".join([*self._within, name]))
@@ -420,6 +432,13 @@ class Expander:
     def _lora(self, tag: str) -> str:
         """`<lora:style:0.4-0.9>` (and `:0.2-0.5` for CLIP): a strength rolled per run and recorded as a
         pick of `<lora:style>`; any other tag as it is."""
+        if self._within and (swept := sweep_tags(tag)):  # a sweep runs only where the template writes it
+            first = swept[0].variants()[0]
+            library = self._within[-1]
+            shown = sweep_tag(swept[0], first) if first[0] or first[1] else ""
+            self.warn(f"{tag} in an entry of __{library}__ is a sweep, and a sweep runs only where the template "
+                      f"writes it: the entry takes {shown or 'it off'}. To run every entry, write : grid __{library}__.")
+            return shown
         m = _LORA_PARTS.fullmatch(tag)
         if not m or not any(part and _RANGE.fullmatch(part) for part in (m.group(2), m.group(3))):
             return tag
@@ -450,7 +469,7 @@ def expand(template: str, seed: int, libraries: Mapping[str, Library],
     text = ex.expr(" ".join(line for raw in parsed.body if (line := ex.guarded(raw)) is not None))
     if parsed.enhance:
         ex.picks.append(Pick("> enhance", parsed.enhance))
-    return Expansion(seed, text, ex.picks, parsed.params, parsed.enhance, cell)
+    return Expansion(seed, text, ex.picks, parsed.params, parsed.enhance, cell, ex.warnings)
 
 
 def expand_batch(template: str, seed: int, count: int, libraries: Mapping[str, Library],

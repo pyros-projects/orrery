@@ -33,6 +33,7 @@ const REF = [
     ["<lora:a:0.5,1.0:solo>", "solo: the solo LoRAs take turns, the others off (2 + 2 runs, not 2 × 2); <lora:a:test> is 1.0,0.7,0.5:solo", ""],
     ["<lora:style:0.4-0.9>", "a range without a step: the strength rolls per run and is recorded as a pick", ""],
     ["@style(0.8)", "short for <lora:style:0.8>, with every strength form: @style(0.4-0.9), @style(0.5,0.7)", ""],
+    ["LORA: __my_lora_sets__", "a library of LoRA sets: each entry one or more tags (or \"\" for none); the set that rolled is a pick, and : grid __my_lora_sets__ runs each once", "LORA: __"],
     [": grid __style__ × {dawn|noon}", "every combination, one run each; the rest rolls the same in all. Axes: a library, a choice or a $binding. Generate queues them all (times a LoRA sweep)", ": grid "],
     [": unique=$hero", "seeds in a row never repeat it (8 seeds, 8 heroes); the seed's control after generate goes to increment", ": unique="],
     [": w832 h1216", "size: the node's width and height outputs (wire them into your latent)", ": w832 h1216"],
