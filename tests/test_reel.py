@@ -490,6 +490,20 @@ def test_set_lines_turn_the_dials_in_the_head_and_per_chunk():
     assert "SET" not in back.text  # never prose
 
 
+def test_a_picture_at_0_leaves_the_clip_so_not_even_the_text_encoder_sees_it():
+    # Reference to Video shows its pictures to the text encoder too: at 0 Orrery Refs must not hand it on
+    sent = LEAVES.replace("EMMA (refmod emma_canon)", "EMMA (refmod emma_canon, image 3)").replace(
+        "HANDOFF: only the room is left\nCHUNK", "HANDOFF: only the room is left\nSEND: frame 0 to image 3\nCHUNK", 1)
+    assert ref2va(sent, segment=2).refs == [3]
+    back = ref2va(sent.replace("EMMA slides back", "SET: image_3(0)\nEMMA slides back"), segment=2)
+    assert back.refs == [] and back.sends == {} and back.images == [] and "<Picture" not in back.text
+    assert [m["name"] for m in back.refmods] == ["emma_canon"]  # the RefMod stays
+    assert ref2va(sent.replace("image 3)", "image 3 at 0)"), segment=2).refs == []  # the CAST's own dial
+    wired = ref2va(LEAVES.replace("EMMA (refmod emma_canon)", "EMMA (image 1)").replace(
+        "EMMA slides back", "SET: image_1(0)\nEMMA slides back"), segment=2)
+    assert wired.refs == [] and "<Picture" not in wired.text
+
+
 def test_a_set_line_written_wrong_or_naming_nothing_is_lint():
     lint = lambda line: [i.message for i in ref2va(LEAVES.replace("EMMA slides back", f"{line}\nEMMA slides back"), segment=2).lint]
     assert any("is not name(strength, start)" in m for m in lint("SET: image_1 at 0.5"))

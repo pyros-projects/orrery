@@ -720,9 +720,19 @@ def pack_images(scene: Scene) -> list[int]:
     return used
 
 
-def withhold_images(scene: Scene, missing: set[int], lint: list[Issue]) -> None:
-    """Leave out of this clip the images a SEND: line fills later: CAST sources and frame anchors go,
-    and a [image N] in prose is flagged, since it points at nothing yet."""
+def zero_images(scene: Scene) -> set[int]:
+    """The pictures this clip has at 0 (`SET: image_1(0)`, or `image 1 at 0` in its CAST)."""
+    zero = {n for (kind, n), dial in scene.dials.items() if kind == "image" and dial.get("strength", 1.0) <= 0}
+    for m in scene.cast:
+        for s in m.sources:
+            if s.kind == "image" and s.strength is not None and s.strength <= 0 and "strength" not in scene.dials.get(("image", s.index), {}):
+                zero.add(s.index)
+    return zero
+
+
+def withhold_images(scene: Scene, missing: set[int], lint: list[Issue], at_zero: bool = False) -> None:
+    """Leave out of this clip the images a SEND: line fills later, or that are at 0: CAST sources and
+    frame anchors go, and a [image N] in prose is flagged, since it points at nothing (or keeps it in)."""
     if not missing:
         return
     for m in scene.cast:
@@ -734,8 +744,9 @@ def withhold_images(scene: Scene, missing: set[int], lint: list[Issue]) -> None:
             shot.last_frame = None
     texts = [scene.summary, *(it for shot in scene.shots for it in shot.items if isinstance(it, str))]
     for n in sorted({int(x) for text in texts for x in _IMAGE_BRACKET.findall(text)} & missing):
-        lint.append(Issue("warn", f"[image {n}] is mentioned before the SEND: line that fills it has played, "
-                                  "so in this clip it points at nothing."))
+        lint.append(Issue("warn", f"image {n} is at 0, but [image {n}] in the prose still hands it to H3 in this clip."
+                          if at_zero else f"[image {n}] is mentioned before the SEND: line that fills it has played, "
+                                          "so in this clip it points at nothing."))
 
 
 def render_scene(scene: Scene, target: str, lint: list[Issue]) -> str:
@@ -805,6 +816,11 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
         lint += [Issue("warn", problem) for m in absent for problem in m.problems]
         lint += [Issue("warn", f"{m.name} is in the CAST, but no shot, voice or summary names it, so it is left out "
                                "of the prompt (global keeps a member in).") for m in absent]
+    # A picture at 0 leaves the clip: Reference to Video shows its pictures to the text encoder too, so
+    # only one it never gets is gone. Not named, and not handed on as a sent image either.
+    if zero := zero_images(scene):
+        withhold_images(scene, zero, lint, at_zero=True)
+        sends = {n: send for n, send in sends.items() if n not in zero}
     refs = pack_images(scene) if packed else []
     if packed:  # sent images reach Orrery Refs whether the prompt names them or not, after the ones it does
         refs += [n for n in sorted(sends) if n not in refs]
