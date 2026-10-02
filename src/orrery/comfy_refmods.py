@@ -10,6 +10,7 @@ RefMods that have started by then. ComfyUI only.
 
 import json
 import sys
+from pathlib import Path
 
 from orrery.refbias import KEY
 
@@ -23,6 +24,15 @@ def _pack():
             return module
     raise ValueError(f"Orrery RefMods loads RefMods with the {PACK} pack (github.com/FranckyB/{PACK}): install "
                      "it in custom_nodes and restart ComfyUI.")
+
+
+def pack_installed() -> bool:
+    """Whether ComfyUI's custom_nodes hold the RefMod pack (it may load after orrery, so look on disk)."""
+    try:
+        import folder_paths  # ComfyUI
+    except ImportError:
+        return False
+    return any(any(Path(base).glob("*/nodes/refmod_loader.py")) for base in folder_paths.get_folder_paths("custom_nodes"))
 
 
 def resolve(name: str, available: list[str]) -> str:
