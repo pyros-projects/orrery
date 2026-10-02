@@ -153,7 +153,9 @@ names the salon's RefMod in the CAST (`SALON (refmod orrery_abc_salon)`), and
 Continue. The prompts are word for word those of rounds 1 and 2; the RefMod goes with the clips
 that name SALON (the first and the last), from 35 % of sampling on, at strength 1 unless the CAST
 says otherwise. `orrery_abc_salon` is made once from A's first clip (frames 0, 60, 120, 180) with
-Create H3 RefMod From Inputs (identity_encode, saved).
+Create H3 RefMod From Folder on `input/orrery_abc` (identity_encode, saved: 2,304 tokens). Create H3 RefMod
+From Inputs cannot save: it calls `_resolve_output_dir("", subfolder)`, which takes one argument
+(`nodes/refmod_create.py`, line 1646 against line 343), so `save` always fails.
 
 ## Deciding
 
