@@ -27,6 +27,15 @@ Every construct of orrery's template language, where libraries live, how Dynamic
 | `: grid __style__ × {dawn\|noon}` | every combination, one run each (3 styles × 2 = 6); everything else rolls the same in all of them. Axes: a library (with its `[tags]`), a choice, or a binding (`$hero`). Generate in the node queues them all, times a LoRA sweep; the CLI prints every cell per seed; Test rolls the axes like any pick |
 | `: unique=__creature__`, `unique=$hero` | seeds in a row never repeat it: each seed takes the next step of one shuffled order, so 8 seeds give 8 different creatures and the next batch goes on from there. Learned weights don't steer it. The node sets the seed's control after generate to increment |
 
+**How deep, and what comes back.** Entries and fields resolve as deep as they
+go: a library in an entry in a library, a field that reads a sibling field
+(`$p.a` with `$p.b` in it) or its own binding (`$p`). Bindings roll from the top
+down, so a `$name` used above its binding (or never bound) stays as written,
+with a warning. What would go round in circles stops with the path: a library
+that comes back to itself (`a → b → a`), presets that include each other,
+fields that read each other (`$p.a → $p.b → $p.a`), and a `{N$$__a__}` whose
+entries bring it back (after 2000 choices in one place).
+
 Several `:` lines add up; `grid` takes the rest of its line. A grid or `unique=` varies one clip
 across runs, so a reel (which gives every run a clip of its own) refuses them.
 

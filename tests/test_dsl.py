@@ -383,3 +383,29 @@ def test_hash_lines_are_comments_and_filters_are_not():
     libs = {"animal": Library("animal", [Entry("fox", props=(("size", "small"),)), Entry("bear", props=(("size", "big"),))])}
     template = "# quickstart: __missing__ rolls a library, $x = __animal__ binds one\n  # indented too\n$a = __animal#size:big__\n#$a = __animal#size:small__\na $a in the snow"
     assert expand(template, 1, libs).text == "a bear in the snow"
+
+
+# --- how deep, and what comes back ------------------------------------------------------------
+
+def test_many_choices_all_roll_and_a_choice_that_keeps_coming_back_stops_with_a_message():
+    assert "{" not in expand(" ".join(["{x|y}"] * 500), 1, {}).text  # the old cap left braces 201+ as text
+    loop = {"a": Library("a", [Entry("x {1$$__a__}")])}
+    with pytest.raises(ValueError, match="still to roll"):
+        expand("{1$$__a__}", 1, loop)
+
+
+def test_a_field_reads_its_siblings_and_two_that_read_each_other_are_an_error():
+    libs = {"p": Library("p", [Entry("bend", props=(("a", "A sees [$p.b]"), ("b", "B {is|was} $p")))])}
+    e = expand("$p = __p__\n$p.a / $p.b", 3, libs)
+    a, b = e.text.split(" / ")
+    assert a == f"A sees [{b}]" and b in ("B is bend", "B was bend") and not e.warnings
+    both = {"p": Library("p", [Entry("bend", props=(("a", "[$p.b]"), ("b", "[$p.a]")))])}
+    with pytest.raises(ValueError, match=r"Fields read each other: \$p\.a → \$p\.b → \$p\.a"):
+        expand("$p = __p__\n$p.a", 1, both)
+
+
+def test_a_name_that_is_not_bound_stays_as_written_and_warns():
+    e = expand("$a = $b\n$b = owl\n[$a] [$b] [$nope] [$nope.field] $5 off", 1, {})
+    assert e.text == "[$b] [owl] [$nope] [] $5 off"
+    assert [w.split(" is not bound")[0] for w in e.warnings] == ["$b", "$nope"]
+    assert expand("$b = owl\n$a = $b\n[$a]", 1, {}).warnings == []

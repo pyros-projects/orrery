@@ -41,6 +41,7 @@ _NUMBER = r"-?\d+(?:\.\d+)?"
 _RANGE = re.compile(rf"\s*({_NUMBER})\s*-\s*({_NUMBER})\s*")  # {0.4-0.9}, {2-6}: a number rolled in between
 _LORA_PARTS = re.compile(r"<lora:([^:<>]+):([^:<>]+)(?::([^:<>]+))?>")
 BINS = 10  # a range finer than this learns per tenth of it (0.40–0.44), not per value
+MAX_CHOICES = 2000  # {…} rolled in one expression: past it the braces keep coming back ({1$$__a__} in __a__)
 _PROP = re.compile(r"#([\w-]+):(\$?[\w.-]+)")  # a value may be $var or $var.field
 _ARTICLE = re.compile(r"(?:A|An|The) ")
 _LORA_TAG = re.compile(r"<lora:[^<>]*>")  # opaque: LoRA file names may contain __
@@ -242,6 +243,7 @@ class Expander:
         self._props_seen: dict[str, str] = {}
         self._within: list[str] = []  # the libraries whose entry is being expanded, outermost first
         self._where: list[tuple[str, str]] = []  # (what is being expanded, the grid that would run all of it)
+        self._fields_open: list[str] = []  # the fields being rolled, so two that read each other are caught
         self.warnings: list[str] = []  # a reel's expanders share their world's list
 
     def warn(self, message: str) -> None:
@@ -256,8 +258,28 @@ class Expander:
         self.vars[name] = self.expr(expr, label_prefix=f"${name} ← ")
         self.var_props[name] = props = self._props_seen
         self._props_seen = {}  # a field's own picks are not the binding's
-        self.var_fields[name] = {k: self._field(name, k, v) for k, v in props.items()}
+        self.var_fields[name] = {}
+        for key in props:
+            self._field_of(name, key)
         return self.vars[name]
+
+    def _field_of(self, name: str, field: str) -> str:
+        """$name.field, rolled the first time it is needed (when bound, or by a field before it that
+        reads it) and kept."""
+        fields = self.var_fields.setdefault(name, {})
+        if field not in fields:
+            raw = self.var_props.get(name, {}).get(field)
+            if raw is None:
+                return ""
+            here = f"${name}.{field}"
+            if here in self._fields_open:
+                raise ValueError("Fields read each other: " + " → ".join([*self._fields_open, here]))
+            self._fields_open.append(here)
+            try:
+                fields[field] = self._field(name, field, raw)
+            finally:
+                self._fields_open.pop()
+        return fields[field]
 
     def _field(self, name: str, field: str, raw: str) -> str:
         """A property as $name.field shows it: a template like an entry, rolled once when it is bound, so
@@ -299,11 +321,15 @@ class Expander:
         return show(text)
 
     def _expand(self, text: str, label_prefix: str) -> str:
-        for _ in range(200):
+        for _ in range(MAX_CHOICES):
             m = _BRACE.search(text)
             if not m:
                 break
             text = text[: m.start()] + self._brace(m.group(1)) + text[m.end():]
+        else:
+            if m := _BRACE.search(text):
+                raise ValueError(f"More than {MAX_CHOICES} {{…}} choices in one place, and {m.group(0)[:60]} is still "
+                                 "to roll: a {N$$__lib__} whose entries bring it back?")
         text = _LIB.sub(lambda m: _mid_line(self._library(m.group(1), m.group(2), label_prefix, m.group(3),
                                                           None if m.group(5) is None else int(m.group(5))), m), text)
         text = _VAR.sub(lambda m: _mid_line(self._var(m), m), text)
@@ -314,11 +340,20 @@ class Expander:
         if field:  # a property of the pick behind the binding (N clips back with ~N); empty when it has none
             if back is not None:
                 return (self.history_props(name, int(back)) if self.history_props else self.var_fields.get(name, {})).get(field, "")
-            return self.var_fields.get(name, {}).get(field, "")
+            if name not in self.vars:
+                self._unbound(name)
+            return self._field_of(name, field)
         value = self.history(name, int(back)) if back is not None and self.history else None
         if value is None:
             value = self.vars.get(name)
-        return m.group(0) if value is None else value
+        if value is None:
+            self._unbound(name)
+            return m.group(0)
+        return value
+
+    def _unbound(self, name: str) -> None:
+        self.warn(f"${name} is not bound where it is used (bindings roll from the top down), so it stays as "
+                  f"written: bind it on a line above, ${name} = ….")
 
     def _articles(self, text: str) -> str:
         """Make a/an agree with picked values ('a axolotl' → 'an axolotl')."""
