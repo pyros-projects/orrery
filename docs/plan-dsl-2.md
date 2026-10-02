@@ -1,7 +1,7 @@
 # Plan: the DSL, second pass
 
-Status: approved 2026-10-02 (Pyro: "alles implementieren inkl. grid und bedingtes goto"), built in
-phases, one commit each.
+Status: approved and built 2026-10-02 (Pyro: "alles implementieren inkl. grid und bedingtes goto"),
+one commit per phase (f89a884 … e38a982). The showcase: `@fashion/infinite_cakewalk`.
 
 ## Why
 

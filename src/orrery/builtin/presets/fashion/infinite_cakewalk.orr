@@ -1,0 +1,89 @@
+---
+title: "Infinite cakewalk"
+note: "A runway show that never ends, steered by GOTO. Every clip rolls who walks next ($who), and its last line jumps to the womenswear or the menswear chunk, which dresses that model in clothes of their own. The season is rolled once per show (dial $season): spring and summer walk outside, autumn and winter inside, each with its own weather. The libraries come with the preset (@lib). Run (Instant) plays clip after clip; another seed is another show."
+tags: [fashion, h3, reel, goto, motion_context]
+---
+@h3 t2va 9:16
+style: live-action, cinematic fashion film, one continuous take
+context: 22
+$house = __couture_house__
+$season = {spring|summer|autumn|winter}
+$venue = {? $season[spring|summer]: __cakewalk_outdoor__|__cakewalk_indoor__}
+
+MUSIC: a swaggering brass cakewalk over a slow, heavy techno kick
+
+@lib cakewalk_outdoor
+  a long runway of white planks laid across a flowering meadow
+  a rooftop runway above the city under an open sky
+  a runway along a sunlit harbour pier
+  a runway cut through a lavender field
+  a runway on a beach of pale sand beside the surf
+@lib cakewalk_indoor
+  the ballroom of a crumbling palace, lit by chandeliers
+  a brutalist concrete hall with one hard spotlight
+  an empty museum gallery with polished marble floors
+  a disused railway hall strung with warm bulbs
+  a glasshouse fogged from inside, its iron frame glowing
+@lib cakewalk_women
+  a towering model with a severe black bob and razor cheekbones
+  a freckled model with a slicked-back copper ponytail
+  a model with close-cropped platinum hair and dark brows
+  an older model with a sharp silver pixie cut
+  a model with waist-long braids gathered into a crown
+@lib cakewalk_men
+  a lean model with a shaved head and a long jaw
+  a broad-shouldered model with a trimmed black beard
+  a silver-haired older model with a weathered face
+  a model with bleached curls and a single gold earring
+  a tall model with a slicked-back undercut
+@lib cakewalk_womenswear
+  a sculptural ivory gown with a collar like a folded fan
+  a crimson latex column dress with opera gloves
+  a floor-length coat of liquid silver sequins
+  a sheer organza dress over a boxy grey tailored jacket
+  a corset gown pieced together from vintage denim
+@lib cakewalk_menswear
+  a razor-sharp double-breasted suit with wide peaked lapels
+  an oversized trench coat cinched with a leather harness
+  a cropped tuxedo jacket over wide pleated trousers
+  a boiler suit in raw white canvas with exaggerated shoulders
+  a long cape of black feathers over a bare chest and tailored trousers
+
+CHUNK the curtain
+$who = {woman|man}
+SHOT 6s: tracking, slow
+The $house $season show opens at $venue: the guests settle along both sides of the runway with their phones raised as the lights come up.
+? $season[spring]: Blossom drifts across the runway in the breeze.
+? $season[summer]: The low sun glares off every lens in the front row.
+? $season[autumn]: Rain streaks the tall windows behind the crowd.
+? $season[winter]: Snow drifts past the tall windows behind the crowd.
+SFX: a murmuring crowd; the first notes of a brass band
+HANDOFF: the runway lies empty under the lights, waiting
+? $who[woman]: GOTO: womenswear
+GOTO: menswear
+
+CHUNK womenswear
+$model = __cakewalk_women__
+$look = __cakewalk_womenswear__
+$who = {woman|man}
+SHOT 6s: tracking, slow
+$model struts down the runway toward the camera in $look, high-stepping in time with the brass like an old cakewalk.
+? $season[spring|summer]: The open air tugs at the hem as she passes.
+? $season[autumn|winter]: Her steps echo off the walls as she passes.
+SFX: heel strikes in time with the brass; a ripple of camera shutters
+HANDOFF: the model reaches the end of the runway, poses and turns back
+? $who[woman]: GOTO: womenswear
+GOTO: menswear
+
+CHUNK menswear
+$model = __cakewalk_men__
+$look = __cakewalk_menswear__
+$who = {woman|man}
+SHOT 6s: tracking, slow
+$model struts down the runway toward the camera in $look, high-stepping in time with the brass like an old cakewalk.
+? $season[spring|summer]: The open air tugs at the coat as he passes.
+? $season[autumn|winter]: His steps echo off the walls as he passes.
+SFX: hard soles strike in time with the brass; a ripple of camera shutters
+HANDOFF: the model reaches the end of the runway, poses and turns back
+? $who[woman]: GOTO: womenswear
+GOTO: menswear

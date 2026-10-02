@@ -61,7 +61,7 @@ const REF = [
   ["Cast and Ref2VA", [
     ["CAST", "names your references once; mention them by name in shots and the summary", "CAST\nMAYA (image 1): the young blonde woman, in a light-pink shirt"],
     ["DOG (image 2, image 3): the white Samoyed, with a curved tail", "sources in parentheses (image N, video N, video N + audio, refmod NAME), then the description; later mentions use its head noun (“the white Samoyed”)", ""],
-    ["@h3 ref2va 16:9 lite", "lite: <Subject N> = … definitions over the three base fields, the hand-written style; works in every mode, text-only subjects too", "@h3 ref2va 16:9 lite"],
+    ["@h3 ref2va 16:9 lite", "lite changes only what orrery writes for H3: one <Subject N> = … line per cast member, then three fields where each is only its label (no retention, no summary); without it, the full reference format of MiniMax's guide. Works in every mode", "@h3 ref2va 16:9 lite"],
     ["voice: audio 1", "on the line after a member: the voice timbre it speaks with", ""],
     ["keep: partial - only the fur colour is kept", "optional retention marker and reason (full, partial, transfer, weak)", ""],
     ["summary: MAYA feeds DOG in CAFE.", "full ref2va's summary; the task types are added for you (lite needs none)", "summary: "],
@@ -73,6 +73,8 @@ const REF = [
     ["CHUNK the walk repeat 8", "plays this chunk 8 times (repeat forever: until you stop); bindings inside a chunk roll anew every clip", "CHUNK the walk repeat forever\n"],
     ["$look~1", "$look as it was one clip ago (~2: two clips); the model who walks back keeps her look", "$look~1"],
     ["HANDOFF: MAYA reaches the door", "closes this chunk and opens the next with the same words", "HANDOFF: "],
+    ["GOTO: the stairs ×2", "at a chunk's end: jump to that chunk (title or number) instead of going on; ×2 twice, then on; without ×N for good (an endless loop)", "GOTO: "],
+    ["? $w[a storm]: GOTO: the stairs", "a jump on what this clip rolled: each seed its own story; the dividers list the segments each chunk plays at the node's seed", "? $w[]: GOTO: "],
     ["SEND: frames 2, 5, 34-46 to image 4", "ref2va: those frames of this chunk's clip (from 0, at 24 fps) become image 4 for every later clip; wire the picks into Orrery Refs and they come out there, after the images the prompt names; GIRL (image 1, image 4) in the CAST names them in the prompt too", "SEND: frame 0 to image "],
     ["SEND: frame -1 to image 5 for segment 4+", "-1 is the clip's last frame (-24--1 its last second); for segment 4+ / 4-8 / 4, 6, 7 gives it to those clips only, so several lines can fill one image in turns", "SEND: frame -1 to image "],
     ["LORA: <lora:name:0.8>", "the lora_stack output, for any loader with a lora_stack input: lines before the first CHUNK always, a chunk's own only there; after LORA: the editor lists your LoRA files; <lora:name:model:clip> sets both strengths", "LORA: "],

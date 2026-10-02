@@ -43,7 +43,9 @@ dent that stays). `characters/` holds seven sets of ten detailed people
 each with `gender` and `age` properties and hair and clothes rolled from nested
 libraries: `__characters/noir#gender:female__`. The two Katamori curators live
 in `__characters/horror#role:curator__`. `fashion/` strings snobby adjectives and impossible shapes
-into runway looks for Krea and H3 (`couture_*` libraries). `loops/` holds H3 Motion Context reels
+into runway looks for Krea and H3 (`couture_*` libraries); `infinite_cakewalk` is an endless show
+steered by GOTO: every clip rolls who walks next and jumps to the chunk that dresses them, and the
+season (a dial) puts the runway outside in spring and summer, inside in autumn and winter. `loops/` holds H3 Motion Context reels
 that never end (`repeat forever`, Run (Instant)): an endless tour through one
 building (Codie's Garamonde method: the building described again in every
 clip, each clip ending on a framed threshold the next one opens), a set change
