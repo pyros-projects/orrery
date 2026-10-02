@@ -13,7 +13,9 @@ _SRC = Path(__file__).resolve().parent.parent / "src"
 if str(_SRC) not in sys.path:
     sys.path.insert(0, str(_SRC))
 
+from orrery import __version__, banner
 from orrery.comfy import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
+from orrery.home import home_source
 from orrery.webapi import register
 
 WEB_DIRECTORY = "./web"
@@ -26,5 +28,10 @@ except ImportError:  # imported outside ComfyUI
 
 if PromptServer is not None:
     register(PromptServer.instance.routes, web)
+    banner.note("nodes", " · ".join(name.removeprefix("Orrery ") for name in NODE_DISPLAY_NAME_MAPPINGS.values()))
+    home, source = home_source()
+    where = {"env": "ORRERY_HOME", "setting": "the setting"}.get(source, source)
+    banner.note("home", f"{home} ({where})")
+    banner.show(__version__)
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
