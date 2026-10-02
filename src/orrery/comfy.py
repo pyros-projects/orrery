@@ -87,17 +87,89 @@ def h3_canvas(ratio: str, megapixels: float | None = None) -> tuple[int, int] | 
     return max(32, round(w / 32) * 32), max(32, round(h / 32) * 32)
 
 
-def shape(template: str) -> tuple[int, int, int]:
-    """width, height and H3 length for the node's outputs: `: w… h…` wins, then an @h3 ratio."""
+def fit_canvas(ratio: float, area: float, step: int = 32) -> tuple[int, int]:
+    """Width and height in multiples of `step`, in `ratio`'s shape as closely as the grid allows, with an
+    area within 10 % of `area`: a picture scaled to it is not stretched (H3 stretches a first frame)."""
+    ideal, best = math.sqrt(area * ratio), None
+    for k in range(max(1, int(ideal * 0.8 // step)), int(ideal * 1.25 // step) + 2):
+        w = k * step
+        h = max(step, round(w / ratio / step) * step)
+        if 0.9 <= w * h / area <= 1.1:
+            key = (round(abs(math.log(w / h / ratio)), 9), abs(math.log(w * h / area)))
+            best = min(best, (key, (w, h))) if best else (key, (w, h))
+    if best:
+        return best[1]
+    return max(step, round(ideal / step) * step), max(step, round(math.sqrt(area / ratio) / step) * step)
+
+
+def _frame_area(template: str, ratio: float) -> float:
+    """The canvas area for a frame-shaped clip: the header's megapixels, else H3's canvas in that shape
+    (768 short edge, 768×1344 cap), else 1024²."""
+    if megapixels := header_megapixels(template):
+        return megapixels * 1e6
+    first = next((line.strip() for line in template.splitlines() if line.strip()), "")
+    if not re.match(r"@h3\b", first, re.IGNORECASE):
+        return 1024 * 1024
+    w, h = (768 * ratio, 768) if ratio >= 1 else (768, 768 / ratio)
+    return min(w * h, 768 * 1344)
+
+
+Size = tuple[int, int] | None  # (width, height) of a wired frame
+
+
+def shape(template: str, frames: tuple[Size, Size] = (None, None)) -> tuple[int, int, int]:
+    """width, height and H3 length for the node's outputs: `: w… h…` wins, then the shape of a wired frame
+    (first, else last), then an @h3 ratio."""
     params = parse(template).params
     lines = [line.strip() for line in template.splitlines() if line.strip()]
     header = re.match(r"@h3\s+\w+(.*)$", lines[0], re.IGNORECASE) if lines else None
     ratio = next((t for t in header.group(1).split() if h3_canvas(t)), "") if header else ""
     canvas = h3_canvas(ratio, header_megapixels(template)) or (1024, 1024)
+    frame = frames[0] or frames[1]
+    if frame and not (params.width or params.height):
+        canvas = fit_canvas(frame[0] / frame[1], _frame_area(template, frame[0] / frame[1]))
     seconds = sum(float(m.group(1)) for line in lines
                   if (m := re.match(r"SHOT\s+(\d+(?:\.\d+)?)\s*s\b", line, re.IGNORECASE)))
     return (params.width or canvas[0], params.height or canvas[1],
             h3_length(seconds) if seconds else H3_DEFAULT_LENGTH)
+
+
+def _same_shape(a: tuple[int, int], b: tuple[int, int], tolerance: float = 0.02) -> bool:
+    return abs(math.log((a[0] / a[1]) / (b[0] / b[1]))) <= tolerance
+
+
+def frame_lint(template: str, sizes: tuple[Size, Size], width: int, height: int) -> list[dict]:
+    """What the wired frames did to the size, and the mismatches H3 would stretch or crop."""
+    first, last = sizes
+    frame, which = (first, "first") if first else (last, "last")
+    if not frame:
+        return []
+    out = []
+    params = parse(template).params
+    if params.width or params.height:
+        if not _same_shape(frame, (width, height)):
+            out.append({"severity": "warn", "message": (
+                f"`: w… h…` makes the clip {width}×{height}, but the {which} frame is {frame[0]}×{frame[1]}: H3 "
+                f"{'stretches' if which == 'first' else 'crops'} it. Leave the size out and orrery takes it from the frame.")})
+    else:
+        lines = [line.strip() for line in template.splitlines() if line.strip()]
+        header = re.match(r"@h3\s+\w+(.*)$", lines[0], re.IGNORECASE) if lines else None
+        ratio = next((t for t in header.group(1).split() if h3_canvas(t)), "") if header else ""
+        written = h3_canvas(ratio) if ratio else None
+        if written and not _same_shape(written, frame):
+            out.append({"severity": "info", "message": (
+                f"The {which} frame is {frame[0]}×{frame[1]}, so the clip is {width}×{height} in its shape; the "
+                f"header's {ratio} is set aside (H3 would stretch the frame into it).")})
+    if first and last and not _same_shape(first, last):
+        out.append({"severity": "warn", "message": (
+            f"The last frame is {last[0]}×{last[1]}, the first {first[0]}×{first[1]}: H3 crops the last frame to the "
+            "first's shape. Use two pictures of one shape.")})
+    return out
+
+
+def _size(image) -> Size:
+    """(width, height) of an IMAGE batch [frames, height, width, channels], or None."""
+    return None if image is None else (int(image.shape[2]), int(image.shape[1]))
 
 
 def linked_preset(extra_pnginfo, unique_id) -> str | None:
@@ -166,13 +238,14 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                frames=None, packed: bool = False,
                wired: int | None = None, chain: str = DEFAULT_CHAIN,
                keep: bool = False, sweep: str = "",
-               continued: bool = False) -> tuple[str, str, int, int, int, int, list, int, int]:
+               continued: bool = False, sizes: tuple[Size, Size] = (None, None)) -> tuple[str, str, int, int, int, int, list, int, int]:
     """`frames`: the previous clip's stills, which the model sees when it writes `--…--` slots.
     `packed`: Orrery Refs routes the images per clip; `wired`: the reference images Reference to
     Video has (both from the graph, see `wiring`). `chain`: the Motion Context chain SEND: reads;
     `keep`: Orrery Refs' keep_sent, so sent images with a stored anchor are held from segment 0.
     `sweep`: "run|galaxy folder", set by Generate for each run of a LoRA sweep (see orrery.sweep).
-    `continued`: an Orrery Continue reads the picks, which pins 22 frames whatever `context:` says."""
+    `continued`: an Orrery Continue reads the picks, which pins 22 frames whatever `context:` says.
+    `sizes`: (width, height) of the frames wired into first_frame and last_frame, or None."""
     h = resolve_home(home or None)
     if preset and preset != NO_PRESET:
         template, linked = load_preset(h, preset), preset
@@ -293,7 +366,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
            if target != "text" and result.send_slots else {}),
         **({"enhanced": enhanced} if enhanced else {}),
     }
-    width, height, length = shape(source)
+    width, height, length = shape(source, sizes)
+    lint += frame_lint(source, sizes, width, height)
     data["megapixels"] = header_megapixels(source) or round(width * height / 1e6, 3)
     if target != "text":
         if result.scene.shots:
@@ -441,6 +515,12 @@ class OrreryPrompt:
                                                "run plays the next clip, which Orrery Continue (or H3 Motion "
                                                "Context, through load_index and save_index) chains to the one "
                                                "before. Plain screenplays ignore it."}),
+                "first_frame": ("IMAGE", {"tooltip": (
+                    "Optional: the picture the clip starts on (wire it into the H3 node's first_frame too). Width and "
+                    "height then take its shape at the header's megapixels, so H3 does not stretch it.")}),
+                "last_frame": ("IMAGE", {"tooltip": (
+                    "Optional: the picture the clip ends on (and the H3 node's last_frame). Without a first frame, width "
+                    "and height take its shape, so H3 does not crop it.")}),
                 "latent_path": ("STRING", {"forceInput": True, "tooltip": (
                     "Where the reel's clips live, under ComfyUI's output (default h3_context; H3 Motion "
                     "Context's latent_path): Orrery Film keeps them in its orrery_film folder, Chain Video in "
@@ -460,13 +540,14 @@ class OrreryPrompt:
         return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{segment}:{latent_path}:{sweep}:{state_token(h)}"
 
     def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, clip=None,
-            latent_path=DEFAULT_CHAIN, sweep="", unique_id=None, extra_pnginfo=None, prompt=None):
+            latent_path=DEFAULT_CHAIN, sweep="", unique_id=None, extra_pnginfo=None, prompt=None,
+            first_frame=None, last_frame=None):
         stills, tail, audio = _previous(latent_path, segment)
         packed, wired, keep = wiring(prompt, unique_id)
         try:
             outputs = run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
                                  params, segment, clip, stills, packed, wired, latent_path or DEFAULT_CHAIN, keep,
-                                 sweep, continued(prompt, unique_id))
+                                 sweep, continued(prompt, unique_id), (_size(first_frame), _size(last_frame)))
             data = json.loads(outputs[1])
             if "sends" in data and not packed:
                 raise ValueError("This reel SENDs frames as reference images, which Orrery Refs fetches: wire this "

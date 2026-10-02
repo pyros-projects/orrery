@@ -134,6 +134,47 @@ def test_size_defaults_and_h3_ratio(home):
     assert shape("@h3 t2va 16:9\n: w1280 h720\nSHOT 5s\nA fox.")[:2] == (1280, 720)
 
 
+CAT, WIDE = (1536, 2048), (2048, 1536)  # a portrait photo (3:4) and a landscape one (4:3)
+
+
+def test_a_wired_frame_shapes_the_clip_so_h3_does_not_stretch_it():
+    assert shape("@h3 fl2va 16:9 1.032MP\nSHOT 5s\nA.", (CAT, None))[:2] == (864, 1152)  # exactly 3:4, near 1.03 MP
+    assert shape("@h3 i2va 16:9\nSHOT 5s\nA.", (CAT, None))[:2] == (768, 1024)  # H3's canvas, in the frame's shape
+    assert shape("@h3 l2va\nSHOT 5s\nA.", (None, WIDE))[:2] == (1024, 768)
+    assert shape("@h3 fl2va 16:9\nSHOT 5s\nA.", (CAT, WIDE))[:2] == (768, 1024)  # the first frame leads
+    assert shape("@h3 i2va 16:9\n: w1280 h720\nSHOT 5s\nA.", (CAT, None))[:2] == (1280, 720)  # written sizes win
+    assert shape("@h3 i2va 16:9\nSHOT 5s\nA.")[:2] == (1344, 768)
+
+
+def test_the_canvas_keeps_a_frame_s_shape_on_the_32_grid():
+    from orrery.comfy import fit_canvas
+    w, h = fit_canvas(1536 / 2048, 1.032e6)
+    assert (w, h) == (864, 1152) and w % 32 == 0 and h % 32 == 0
+    w, h = fit_canvas(1290 / 2122, 0.6e6)  # an odd phone shape: as close as the grid gets, area near
+    assert abs((w / h) / (1290 / 2122) - 1) < 0.02 and 0.9 <= w * h / 0.6e6 <= 1.1
+
+
+def test_the_frame_size_is_explained_and_mismatches_are_flagged(home):
+    lint = lambda text, sizes: [i for i in json.loads(run_prompt(text, 1, "h3-base", str(home), sizes=sizes)[1])["lint"]
+                                if "frame" in i["message"]]
+    info = lint("@h3 i2va 16:9\nSHOT 5s\nThe scene begins exactly as in <Picture 1>.", (CAT, None))
+    assert [i["severity"] for i in info] == ["info"] and "1536×2048" in info[0]["message"] and "768×1024" in info[0]["message"]
+    crop = lint("@h3 fl2va\nSHOT 5s\nFrom <Picture 1> to <Picture 2>.", (CAT, WIDE))
+    assert any(i["severity"] == "warn" and "crops" in i["message"] for i in crop)
+    stretch = lint("@h3 i2va\n: w1280 h720\nSHOT 5s\nThe scene begins exactly as in <Picture 1>.", (CAT, None))
+    assert any(i["severity"] == "warn" and "stretches" in i["message"] for i in stretch)
+    assert not lint("@h3 i2va 3:4\nSHOT 5s\nThe scene begins exactly as in <Picture 1>.", (CAT, None))
+
+
+def test_the_node_takes_the_frames_and_reads_their_size(home):
+    import numpy as np
+    optional = OrreryPrompt.INPUT_TYPES()["optional"]
+    assert optional["first_frame"][0] == "IMAGE" and optional["last_frame"][0] == "IMAGE"
+    outputs = OrreryPrompt().run("@h3 i2va 16:9\nSHOT 5s\nThe scene begins exactly as in <Picture 1>.", 1, "h3-base",
+                                 home=str(home), first_frame=np.zeros((1, 2048, 1536, 3), dtype=np.float32))
+    assert outputs[3:5] == (768, 1024)
+
+
 def test_h3_length_is_frames_on_the_17k_plus_5_grid(home):
     assert shape("@h3 t2va\nSHOT 4s: cut\nA.\nSHOT 3s\nB.\nSHOT 4s\nC.")[2] == 277
     assert shape("@h3 t2va\nSHOT 4s\nA.")[2] == 107

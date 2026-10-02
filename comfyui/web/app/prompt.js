@@ -12,6 +12,7 @@ import { layoutTimeline, loadChain, scrollTimeline, wireTimeline } from "./timel
 
 function statsHTML(app) {
   const st = stats(app.text), out = shape(app.text), reel = st.h3?.reel, plan = sweepPlan(app.text);
+  const wired = /^\s*:\s*.*\b[wh]\d/m.test(app.text) ? [] : app.bridge.frames?.() || [];  // `: w… h…` wins
   const outs = (app.data.rows || []).filter((r) => r.template === templateHash(app.text)).length;
   const forever = reel && reel.clips === Infinity;
   const how = !reel ? "" : "Wire the picks into Orrery Continue (and the clip into Orrery Film), or with H3 Motion Context load_index into Load Latent's clip_index and save_index into Save Latent's. The segment widget counts up by itself (increment): "
@@ -23,7 +24,9 @@ function statsHTML(app) {
   return timing
     + `<span class="stat"><b>${st.rolls}</b> rolls · <b>${st.libs}</b> libraries · <b>${st.binds}</b> bindings${setDials(app) ? ` · <b>${setDials(app)}</b> dialed` : ""}</span>`
     + `${app.llmActive() ? `<span class="stat" title="Unknown __libraries__ and __name:N__ are made by this model when the node runs">LLM <b>${esc(app.data.llm.file.replace(/\.[a-z]+$/, ""))}</b></span>` : ""}`
-    + `<span class="stat" title="The node's width, height, length and megapixels outputs${reel ? "; from the second chunk on, length includes the 22 frames the clip continues from" : ""}">→ <b>${out.width}×${out.height}</b> · ${out.megapixels} MP${frames}</span>`
+    + (wired.length
+      ? `<span class="stat" title="Width and height take the shape of the ${wired[0].replace("_", " ")} wired into the node, at the header's megapixels or H3's canvas area, so H3 does not stretch or crop it; the size is known when the node runs">→ size from the <b>${wired[0].replace("_", " ")}</b>${headerMP(app.text) ? ` · ${out.megapixels} MP` : ""}${frames}</span>`
+      : `<span class="stat" title="The node's width, height, length and megapixels outputs${reel ? "; from the second chunk on, length includes the 22 frames the clip continues from" : ""}">→ <b>${out.width}×${out.height}</b> · ${out.megapixels} MP${frames}</span>`)
     + `${out.cli.length ? `<span class="stat cli" title="In ComfyUI, use the Run count and the seed widget">${esc(out.cli.join(" "))}: CLI only</span>` : ""}<span class="grow"></span>`
     + `${outs ? `<button class="btn ghost" data-act="outputs">${icon("image")}${outs} output${outs === 1 ? "" : "s"}</button>` : ""}`
     + `<button class="btn" data-act="test" title="Roll it in the Test tab: a few seeds, or a reel's clips">${icon("dice")}Test</button>`
@@ -45,6 +48,9 @@ function statsHTML(app) {
 
 // The cells view: each chunk its own cell with its clips under it (a reel, the timeline on, chosen in the footer).
 const cellsView = (app) => app.data.timeline !== false && app.bridge.props.orrery_tl_view === "below" && !!chunkInfo(app.text);
+
+// `0.6MP` in the @h3 line: the area a frame-shaped clip gets.
+const headerMP = (text) => /^\s*@h3\b[^\n]*\s\d+(?:\.\d+)?mp\b/im.test(stripComments(text));
 
 // Runs per Generate, kept in the node's properties so the workflow remembers it.
 const repeats = (app) => Math.min(999, Math.max(1, Math.floor(Number(app.bridge.props.repeat) || 1)));

@@ -148,6 +148,8 @@ function mount(node) {
       const text = source?.widgets?.find((w) => typeof w.value === "string" && w.value.trim());
       return text ? text.value.trim() : "";
     },
+    // The frames wired into the node: they shape width and height (the server reads their size when it runs).
+    frames: () => ["first_frame", "last_frame"].filter((name) => node.inputs?.find((i) => i.name === name)?.link != null),
     getSegment: () => find("segment")?.value ?? 0,
     setSegment: (value) => set("segment", value),
     // Restart: dequeue this node's pending runs and interrupt its running one; other jobs stay queued.

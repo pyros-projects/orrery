@@ -1,8 +1,8 @@
 {
-  "id": "7bf6bbe7-b2be-4268-b70a-65acb1a04bdc",
+  "id": "0932ad56-d5d5-4f9b-a0f8-3903f2cc648c",
   "revision": 0,
   "last_node_id": 20,
-  "last_link_id": 25,
+  "last_link_id": 27,
   "nodes": [
     {
       "id": 1,
@@ -16,7 +16,7 @@
         960
       ],
       "flags": {},
-      "order": 0,
+      "order": 12,
       "mode": 0,
       "inputs": [
         {
@@ -25,6 +25,20 @@
           "shape": 7,
           "type": "CLIP",
           "link": null
+        },
+        {
+          "localized_name": "first_frame",
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 5
+        },
+        {
+          "localized_name": "last_frame",
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 7
         },
         {
           "localized_name": "latent_path",
@@ -117,7 +131,7 @@
           "name": "text",
           "type": "STRING",
           "links": [
-            6
+            8
           ]
         },
         {
@@ -131,7 +145,7 @@
           "name": "seed",
           "type": "INT",
           "links": [
-            10
+            12
           ]
         },
         {
@@ -139,7 +153,7 @@
           "name": "width",
           "type": "INT",
           "links": [
-            7
+            9
           ]
         },
         {
@@ -147,7 +161,7 @@
           "name": "height",
           "type": "INT",
           "links": [
-            8
+            10
           ]
         },
         {
@@ -155,7 +169,7 @@
           "name": "length",
           "type": "INT",
           "links": [
-            9
+            11
           ]
         },
         {
@@ -235,17 +249,17 @@
         520
       ],
       "flags": {},
-      "order": 1,
+      "order": 0,
       "mode": 0,
       "inputs": [],
       "outputs": [],
       "title": "orrery",
       "properties": {},
       "widgets_values": [
-        "## orrery · H3 fl2va (first and last frame)\n\nTwo Load Image nodes: `first_frame` opens the clip (`<Picture 1>`), `last_frame` closes it (`<Picture 2>`); one shot in between (`@h3 fl2va`).\n\nThe **Orrery Prompt** node is the whole of orrery: write in its **Prompt** tab (this workflow opens with a quickstart; **New** has the other modes), roll it in **Test** without queueing, and rate what comes out in **Galaxy**: the ratings steer the next rolls. **Generate** in the node queues this graph; what the Save node writes is logged to the galaxy with the picks that made it.\n\n- `seed` drives the rolls and the sampler (Random Noise).\n- `LORA:` lines come out on `lora_stack`, for a loader with a `lora_stack` input (LoraManager, Efficiency …), which is not part of this core-nodes workflow.\n\n[orrery on GitHub](https://github.com/pyros-projects/orrery) · [the prompt language](https://github.com/pyros-projects/orrery/blob/main/docs/dsl.md) · [H3 screenplays](https://github.com/pyros-projects/orrery/blob/main/docs/h3.md)"
+        "## orrery · H3 fl2va (first and last frame)\n\nTwo Load Image nodes, each into the H3 node *and* the Orrery Prompt: `first_frame` opens the clip (`<Picture 1>`), `last_frame` closes it (`<Picture 2>`); one shot in between (`@h3 fl2va`). The clip takes the first picture's shape, so H3 does not stretch it; use two pictures of one shape (H3 crops a last frame to fit, and the lint says so).\n\nThe **Orrery Prompt** node is the whole of orrery: write in its **Prompt** tab (this workflow opens with a quickstart; **New** has the other modes), roll it in **Test** without queueing, and rate what comes out in **Galaxy**: the ratings steer the next rolls. **Generate** in the node queues this graph; what the Save node writes is logged to the galaxy with the picks that made it.\n\n- `seed` drives the rolls and the sampler (Random Noise).\n- `LORA:` lines come out on `lora_stack`, for a loader with a `lora_stack` input (LoraManager, Efficiency …), which is not part of this core-nodes workflow.\n\n[orrery on GitHub](https://github.com/pyros-projects/orrery) · [the prompt language](https://github.com/pyros-projects/orrery/blob/main/docs/dsl.md) · [H3 screenplays](https://github.com/pyros-projects/orrery/blob/main/docs/h3.md)"
       ],
       "widgets_values_named": {
-        "text": "## orrery · H3 fl2va (first and last frame)\n\nTwo Load Image nodes: `first_frame` opens the clip (`<Picture 1>`), `last_frame` closes it (`<Picture 2>`); one shot in between (`@h3 fl2va`).\n\nThe **Orrery Prompt** node is the whole of orrery: write in its **Prompt** tab (this workflow opens with a quickstart; **New** has the other modes), roll it in **Test** without queueing, and rate what comes out in **Galaxy**: the ratings steer the next rolls. **Generate** in the node queues this graph; what the Save node writes is logged to the galaxy with the picks that made it.\n\n- `seed` drives the rolls and the sampler (Random Noise).\n- `LORA:` lines come out on `lora_stack`, for a loader with a `lora_stack` input (LoraManager, Efficiency …), which is not part of this core-nodes workflow.\n\n[orrery on GitHub](https://github.com/pyros-projects/orrery) · [the prompt language](https://github.com/pyros-projects/orrery/blob/main/docs/dsl.md) · [H3 screenplays](https://github.com/pyros-projects/orrery/blob/main/docs/h3.md)"
+        "text": "## orrery · H3 fl2va (first and last frame)\n\nTwo Load Image nodes, each into the H3 node *and* the Orrery Prompt: `first_frame` opens the clip (`<Picture 1>`), `last_frame` closes it (`<Picture 2>`); one shot in between (`@h3 fl2va`). The clip takes the first picture's shape, so H3 does not stretch it; use two pictures of one shape (H3 crops a last frame to fit, and the lint says so).\n\nThe **Orrery Prompt** node is the whole of orrery: write in its **Prompt** tab (this workflow opens with a quickstart; **New** has the other modes), roll it in **Test** without queueing, and rate what comes out in **Galaxy**: the ratings steer the next rolls. **Generate** in the node queues this graph; what the Save node writes is logged to the galaxy with the picks that made it.\n\n- `seed` drives the rolls and the sampler (Random Noise).\n- `LORA:` lines come out on `lora_stack`, for a loader with a `lora_stack` input (LoraManager, Efficiency …), which is not part of this core-nodes workflow.\n\n[orrery on GitHub](https://github.com/pyros-projects/orrery) · [the prompt language](https://github.com/pyros-projects/orrery/blob/main/docs/dsl.md) · [H3 screenplays](https://github.com/pyros-projects/orrery/blob/main/docs/h3.md)"
       },
       "color": "#432",
       "bgcolor": "#653"
@@ -262,7 +276,7 @@
         90
       ],
       "flags": {},
-      "order": 2,
+      "order": 1,
       "mode": 0,
       "inputs": [
         {
@@ -318,7 +332,7 @@
         70
       ],
       "flags": {},
-      "order": 13,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
@@ -343,8 +357,8 @@
           "name": "model",
           "type": "MODEL",
           "links": [
-            11,
-            12
+            13,
+            14
           ]
         }
       ],
@@ -370,7 +384,7 @@
         110
       ],
       "flags": {},
-      "order": 3,
+      "order": 2,
       "mode": 0,
       "inputs": [
         {
@@ -438,7 +452,7 @@
         60
       ],
       "flags": {},
-      "order": 4,
+      "order": 3,
       "mode": 0,
       "inputs": [
         {
@@ -458,7 +472,7 @@
           "type": "VAE",
           "links": [
             3,
-            20
+            22
           ]
         }
       ],
@@ -485,7 +499,7 @@
         60
       ],
       "flags": {},
-      "order": 5,
+      "order": 4,
       "mode": 0,
       "inputs": [
         {
@@ -504,7 +518,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            22
+            24
           ]
         }
       ],
@@ -531,7 +545,7 @@
         420
       ],
       "flags": {},
-      "order": 6,
+      "order": 5,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -558,7 +572,7 @@
         208
       ],
       "flags": {},
-      "order": 14,
+      "order": 15,
       "mode": 0,
       "inputs": [
         {
@@ -585,7 +599,7 @@
           "name": "last_frame",
           "shape": 7,
           "type": "IMAGE",
-          "link": 5
+          "link": 6
         },
         {
           "localized_name": "prompt",
@@ -594,7 +608,7 @@
           "widget": {
             "name": "prompt"
           },
-          "link": 6
+          "link": 8
         },
         {
           "localized_name": "width",
@@ -603,7 +617,7 @@
           "widget": {
             "name": "width"
           },
-          "link": 7
+          "link": 9
         },
         {
           "localized_name": "height",
@@ -612,7 +626,7 @@
           "widget": {
             "name": "height"
           },
-          "link": 8
+          "link": 10
         },
         {
           "localized_name": "length",
@@ -621,7 +635,7 @@
           "widget": {
             "name": "length"
           },
-          "link": 9
+          "link": 11
         }
       ],
       "outputs": [
@@ -630,7 +644,7 @@
           "name": "positive",
           "type": "CONDITIONING",
           "links": [
-            13
+            15
           ]
         },
         {
@@ -638,7 +652,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            14
+            16
           ]
         }
       ],
@@ -670,7 +684,7 @@
         314
       ],
       "flags": {},
-      "order": 7,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -698,7 +712,8 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            4
+            4,
+            5
           ]
         },
         {
@@ -733,7 +748,7 @@
         314
       ],
       "flags": {},
-      "order": 8,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
@@ -761,7 +776,8 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            5
+            6,
+            7
           ]
         },
         {
@@ -796,7 +812,7 @@
         82
       ],
       "flags": {},
-      "order": 12,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
@@ -806,7 +822,7 @@
           "widget": {
             "name": "noise_seed"
           },
-          "link": 10
+          "link": 12
         }
       ],
       "outputs": [
@@ -815,7 +831,7 @@
           "name": "NOISE",
           "type": "NOISE",
           "links": [
-            15
+            17
           ]
         }
       ],
@@ -843,7 +859,7 @@
         60
       ],
       "flags": {},
-      "order": 9,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -862,7 +878,7 @@
           "name": "SAMPLER",
           "type": "SAMPLER",
           "links": [
-            17
+            19
           ]
         }
       ],
@@ -888,14 +904,14 @@
         110
       ],
       "flags": {},
-      "order": 15,
+      "order": 13,
       "mode": 0,
       "inputs": [
         {
           "localized_name": "model",
           "name": "model",
           "type": "MODEL",
-          "link": 11
+          "link": 13
         },
         {
           "localized_name": "scheduler",
@@ -931,7 +947,7 @@
           "name": "SIGMAS",
           "type": "SIGMAS",
           "links": [
-            18
+            20
           ]
         }
       ],
@@ -968,13 +984,13 @@
           "localized_name": "model",
           "name": "model",
           "type": "MODEL",
-          "link": 12
+          "link": 14
         },
         {
           "localized_name": "conditioning",
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 13
+          "link": 15
         }
       ],
       "outputs": [
@@ -983,7 +999,7 @@
           "name": "GUIDER",
           "type": "GUIDER",
           "links": [
-            16
+            18
           ]
         }
       ],
@@ -1010,31 +1026,31 @@
           "localized_name": "noise",
           "name": "noise",
           "type": "NOISE",
-          "link": 15
+          "link": 17
         },
         {
           "localized_name": "guider",
           "name": "guider",
           "type": "GUIDER",
-          "link": 16
+          "link": 18
         },
         {
           "localized_name": "sampler",
           "name": "sampler",
           "type": "SAMPLER",
-          "link": 17
+          "link": 19
         },
         {
           "localized_name": "sigmas",
           "name": "sigmas",
           "type": "SIGMAS",
-          "link": 18
+          "link": 20
         },
         {
           "localized_name": "latent_image",
           "name": "latent_image",
           "type": "LATENT",
-          "link": 14
+          "link": 16
         }
       ],
       "outputs": [
@@ -1043,8 +1059,8 @@
           "name": "output",
           "type": "LATENT",
           "links": [
-            19,
-            21
+            21,
+            23
           ]
         },
         {
@@ -1077,13 +1093,13 @@
           "localized_name": "samples",
           "name": "samples",
           "type": "LATENT",
-          "link": 19
+          "link": 21
         },
         {
           "localized_name": "vae",
           "name": "vae",
           "type": "VAE",
-          "link": 20
+          "link": 22
         }
       ],
       "outputs": [
@@ -1092,7 +1108,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            23
+            25
           ]
         }
       ],
@@ -1119,13 +1135,13 @@
           "localized_name": "samples",
           "name": "samples",
           "type": "LATENT",
-          "link": 21
+          "link": 23
         },
         {
           "localized_name": "vae",
           "name": "vae",
           "type": "VAE",
-          "link": 22
+          "link": 24
         }
       ],
       "outputs": [
@@ -1134,7 +1150,7 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            24
+            26
           ]
         }
       ],
@@ -1154,21 +1170,21 @@
         142
       ],
       "flags": {},
-      "order": 10,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "localized_name": "images",
           "name": "images",
           "type": "IMAGE",
-          "link": 23
+          "link": 25
         },
         {
           "localized_name": "audio",
           "name": "audio",
           "shape": 7,
           "type": "AUDIO",
-          "link": 24
+          "link": 26
         },
         {
           "localized_name": "fps",
@@ -1216,7 +1232,7 @@
           "name": "VIDEO",
           "type": "VIDEO",
           "links": [
-            25
+            27
           ]
         }
       ],
@@ -1248,14 +1264,14 @@
         520
       ],
       "flags": {},
-      "order": 11,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
           "localized_name": "video",
           "name": "video",
           "type": "VIDEO",
-          "link": 25
+          "link": 27
         },
         {
           "localized_name": "filename_prefix",
@@ -1353,6 +1369,14 @@
     ],
     [
       5,
+      10,
+      0,
+      1,
+      1,
+      "IMAGE"
+    ],
+    [
+      6,
       11,
       0,
       9,
@@ -1360,7 +1384,15 @@
       "IMAGE"
     ],
     [
-      6,
+      7,
+      11,
+      0,
+      1,
+      2,
+      "IMAGE"
+    ],
+    [
+      8,
       1,
       0,
       9,
@@ -1368,7 +1400,7 @@
       "STRING"
     ],
     [
-      7,
+      9,
       1,
       3,
       9,
@@ -1376,7 +1408,7 @@
       "INT"
     ],
     [
-      8,
+      10,
       1,
       4,
       9,
@@ -1384,7 +1416,7 @@
       "INT"
     ],
     [
-      9,
+      11,
       1,
       5,
       9,
@@ -1392,7 +1424,7 @@
       "INT"
     ],
     [
-      10,
+      12,
       1,
       2,
       12,
@@ -1400,7 +1432,7 @@
       "INT"
     ],
     [
-      11,
+      13,
       4,
       0,
       14,
@@ -1408,7 +1440,7 @@
       "MODEL"
     ],
     [
-      12,
+      14,
       4,
       0,
       15,
@@ -1416,7 +1448,7 @@
       "MODEL"
     ],
     [
-      13,
+      15,
       9,
       0,
       15,
@@ -1424,7 +1456,7 @@
       "CONDITIONING"
     ],
     [
-      14,
+      16,
       9,
       1,
       16,
@@ -1432,7 +1464,7 @@
       "LATENT"
     ],
     [
-      15,
+      17,
       12,
       0,
       16,
@@ -1440,7 +1472,7 @@
       "NOISE"
     ],
     [
-      16,
+      18,
       15,
       0,
       16,
@@ -1448,7 +1480,7 @@
       "GUIDER"
     ],
     [
-      17,
+      19,
       13,
       0,
       16,
@@ -1456,7 +1488,7 @@
       "SAMPLER"
     ],
     [
-      18,
+      20,
       14,
       0,
       16,
@@ -1464,7 +1496,7 @@
       "SIGMAS"
     ],
     [
-      19,
+      21,
       16,
       0,
       17,
@@ -1472,7 +1504,7 @@
       "LATENT"
     ],
     [
-      20,
+      22,
       6,
       0,
       17,
@@ -1480,7 +1512,7 @@
       "VAE"
     ],
     [
-      21,
+      23,
       16,
       0,
       18,
@@ -1488,7 +1520,7 @@
       "LATENT"
     ],
     [
-      22,
+      24,
       7,
       0,
       18,
@@ -1496,7 +1528,7 @@
       "VAE"
     ],
     [
-      23,
+      25,
       17,
       0,
       19,
@@ -1504,7 +1536,7 @@
       "IMAGE"
     ],
     [
-      24,
+      26,
       18,
       0,
       19,
@@ -1512,7 +1544,7 @@
       "AUDIO"
     ],
     [
-      25,
+      27,
       19,
       0,
       20,

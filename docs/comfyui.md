@@ -23,8 +23,14 @@ files in instead.
 Nodes under **orrery**:
 
 - **Orrery Prompt**: seed and target (`text`, `h3-base`, `flat`), optional
-  `segment` → `text`, `picks`, `seed`, `width`, `height`, `length`, `lora_stack`,
-  `load_index`, `save_index`, `previous`, `previous_audio`, `megapixels`.
+  `segment`, `first_frame` and `last_frame` → `text`, `picks`, `seed`, `width`,
+  `height`, `length`, `lora_stack`, `load_index`, `save_index`, `previous`,
+  `previous_audio`, `megapixels`. A picture wired into `first_frame` (else
+  `last_frame`), the same one the H3 node gets, gives `width`/`height` its shape
+  at the header's megapixels (else H3's canvas area), on the 32 grid as close to
+  its shape as the grid allows: H3 stretches a first frame and crops a last one
+  into any other shape. A written `: w… h…` still wins, and the lint says when
+  the header's ratio is set aside or two frames differ in shape.
   Wire `text` into your text encoder or the MiniMax H3 prompt input;
   `width`/`height` come from `: w… h…` or the `@h3` ratio (`@h3 ref2va 16:9 0.6MP`
   sizes the canvas by area, and `megapixels` puts that out for resolution and
