@@ -151,4 +151,5 @@ def install() -> bool:
     h3.optimized_attention = _attention(h3.optimized_attention, AttentionTensorContainer)
     model._forward = _forward(model._forward)
     h3._orrery_refbias = True
+    print("[orrery] RefMod strengths are on: orrery wraps H3's attention in memory (ComfyUI's files stay as they are).")
     return True
