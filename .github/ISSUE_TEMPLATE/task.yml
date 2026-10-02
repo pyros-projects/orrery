@@ -7,7 +7,7 @@ body:
     id: task_description
     attributes:
       label: Task
-      description: What should be done? One slice is at most 8 hours of work for a person; split anything bigger.
+      description: What should be done? A task is at most 8 hours of work for a person; split anything bigger. Attach it to its feature as a sub-issue.
       placeholder: A short description of the task.
     validations:
       required: true

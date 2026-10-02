@@ -34,15 +34,21 @@ node --test tests/js/*.mjs
 
 ## Development process
 
-**Issue → branch → PR → issue closed.**
+**Feature → tasks → one branch and one PR → feature closed.**
 
 1. **Every change starts as an issue**, from a template: Feature, Task, Bug or Risk.
-2. **One slice is at most 8 hours of work for a person.** Split anything bigger into several
-   issues. The rule holds for agents too: it keeps every slice small enough to follow.
-3. **One branch per issue, from `main`**, named `<issue number>-<short-slug>` (`12-refmod-node`).
-4. **One PR per issue**, with `Closes #12` in its body. It carries its tests and its doc updates.
-   It merges only with the three checks green.
-5. **Pyro merges.** Nothing is pushed to `main` directly.
+2. **A feature** describes a result and may take as long as it takes. It is split into **tasks**,
+   attached as its sub-issues. A task is at most 8 hours of work for a person: split anything
+   bigger. The limit holds for agents too; it keeps every step small enough to follow.
+3. **One branch per feature, from `main`**, named `<feature number>-<short-slug>`
+   (`4-refmod-memory`). Tasks don't get branches of their own; each commit names the task it
+   does (`Refs #9`).
+4. **One PR per feature.** Its body says `Closes #4` for the feature and for each task done in it,
+   so the merge closes them together. It carries its tests and its doc updates, and merges only
+   with the three checks green.
+5. **A bug** stands on its own: its own branch and PR. **A risk** names the feature it threatens
+   and stays open while it matters.
+6. **Pyro merges.** Nothing is pushed to `main` directly.
 
 Scope: build what the issue asks. Anything else you notice (a missing feature, a refactor, a test,
 a fix next door) becomes a new issue or a question, not part of the PR.
