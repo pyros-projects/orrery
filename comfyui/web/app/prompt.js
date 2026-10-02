@@ -2,7 +2,7 @@
 import { inlineLibraries, suggest } from "../orrery-complete.js";
 import { esc, highlight } from "./highlight.js";
 import { icon } from "./icons.js";
-import { applyDials, chunkInfo, dials, folderColor, pickerGroups, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
+import { applyDials, chunkInfo, dials, hasGoto, plays, folderColor, pickerGroups, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
 import { thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
 import { STARTERS } from "./starters.js";
@@ -12,14 +12,18 @@ import { layoutTimeline, loadChain, scrollTimeline, wireTimeline } from "./timel
 import { openWrite, writeMenuHTML } from "./write.js";
 
 function statsHTML(app) {
-  const st = stats(app.text), out = shape(app.text), reel = st.h3?.reel, plan = planOf(app), planned = planData(app);
+  const st = stats(app.text), out = shape(app.text), plan = planOf(app), planned = planData(app);
+  // with GOTO lines the clips are the walked path's (all of it when it ends, else on and on)
+  const walked = st.h3?.reel && hasGoto(app.text) ? app.reelPath() : null;
+  const reel = !st.h3?.reel ? null : !hasGoto(app.text) ? st.h3.reel
+    : { ...st.h3.reel, clips: walked ? (walked.ended ? walked.path.length : Infinity) : NaN, goto: true };
   const wired = /^\s*(:\s*.*\b[wh]\d|@size\b)/m.test(app.text) ? [] : app.bridge.frames?.() || [];  // `@size` wins
   const outs = (app.data.rows || []).filter((r) => r.template === templateHash(app.text)).length;
-  const forever = reel && reel.clips === Infinity;
+  const forever = reel && reel.clips === Infinity, clips = !reel ? "" : forever ? "∞" : Number.isNaN(reel.clips) ? "?" : reel.clips;
   const how = !reel ? "" : "Wire the picks into Orrery Continue (and the clip into Orrery Film), or with H3 Motion Context load_index into Load Latent's clip_index and save_index into Save Latent's. The segment widget counts up by itself (increment): "
-    + (forever ? "Run (Instant) plays clip after clip until you stop it." : `a Run count of ${reel.clips} plays the whole reel; after the last clip nothing downstream runs.`);
+    + (forever ? "Run (Instant) plays clip after clip until you stop it." : `a Run count of ${clips} plays the whole reel${reel.goto ? " at this seed (its GOTO lines may jump on what rolls)" : ""}; after the last clip nothing downstream runs.`);
   const timing = reel
-    ? `<span class="stat" title="${esc(how)}"><b>Reel</b> · ${reel.secs.map((s, i) => `<b>${s.toFixed(1)} s</b>${reel.repeats[i] === 1 ? "" : ` ×${reel.repeats[i] === Infinity ? "∞" : reel.repeats[i]}`}`).join(" + ")} · <b>${forever ? "∞" : reel.clips}</b> clip${reel.clips === 1 ? "" : "s"}</span>`
+    ? `<span class="stat" title="${esc(how)}"><b>Reel</b> · ${reel.secs.map((s, i) => `<b>${s.toFixed(1)} s</b>${reel.repeats[i] === 1 ? "" : ` ×${reel.repeats[i] === Infinity ? "∞" : reel.repeats[i]}`}`).join(" + ")}${reel.goto ? " · GOTO" : ""} · <b>${clips}</b> clip${reel.clips === 1 ? "" : "s"}</span>`
     : st.h3 ? `<span class="stat"><b>H3</b> · ${st.h3.shots} shot${st.h3.shots === 1 ? "" : "s"} · <b>${st.h3.secs.toFixed(1)} s</b> · ${st.h3.voices} voice${st.h3.voices === 1 ? "" : "s"}</span>` : "";
   const frames = reel ? ` · <b>${out.lengths.join(" / ")}</b> frames per chunk` : st.h3 ? ` · <b>${out.length}</b> frames = ${(out.length / 24).toFixed(2)} s` : "";
   return timing
@@ -49,7 +53,7 @@ function statsHTML(app) {
 }
 
 // The cells view: each chunk its own cell with its clips under it (a reel, the timeline on, chosen in the footer).
-const cellsView = (app) => app.data.timeline !== false && app.bridge.props.orrery_tl_view === "below" && !!chunkInfo(app.text);
+const cellsView = (app) => app.data.timeline !== false && app.bridge.props.orrery_tl_view === "below" && !!app.chunks();
 
 // `0.6MP` in the @h3 line: the area a frame-shaped clip gets.
 const headerMP = (text) => /^\s*@h3\b[^\n]*\s\d+(?:\.\d+)?mp\b/im.test(stripComments(text));
@@ -116,14 +120,14 @@ export function renderPrompt(app) {
       afterEdit(ed);
     });
     ed.addEventListener("scroll", () => { pre.scrollTop = ed.scrollTop; scrollTimeline(app); });
-    app.edResize = new ResizeObserver(() => layoutTimeline(app, chunkInfo(app.text)));  // wrapped lines move the chunks
+    app.edResize = new ResizeObserver(() => layoutTimeline(app, app.chunks()));  // wrapped lines move the chunks
     app.edResize.observe(ed);
     wireTimeline(app);
     ed.addEventListener("keydown", (e) => completionKey(app, e));
     ed.addEventListener("blur", () => blur(ed));
     ed.addEventListener("focus", focus);
   }
-  if (app.data.timeline !== false && chunkInfo(app.text)) loadChain(app).then(paint);
+  if (app.data.timeline !== false && app.chunks()) loadChain(app).then(paint);
 
   app.view.onclick = (e) => {
     const act = e.target.closest("[data-act]")?.dataset.act;
@@ -229,7 +233,7 @@ function paintEditor(app) {
   if (app.view.querySelector(".editor.cells")) return paintCells(app);
   const pre = app.view.querySelector(".editor pre.hl");
   if (!pre) return;
-  const chunks = chunkInfo(app.text);
+  const chunks = app.chunks();
   pre.innerHTML = `${highlight(app.text, app.known(), { llm: app.llmActive(), chunks, segment: chunks && Number(app.bridge.getSegment()) })}\n`;
   layoutTimeline(app, chunks);
   if (chunks && app.data.timeline !== false && app.data.chain === undefined) {  // a reel typed or pasted in
@@ -242,14 +246,14 @@ function paintEditor(app) {
 export function refreshReel(app, { chain = false } = {}) {
   if (app.state.tab !== "prompt") return;
   refreshFoot(app);
-  if (chain && app.data.timeline !== false && chunkInfo(app.text)) loadChain(app).then(() => paintEditor(app));
+  if (chain && app.data.timeline !== false && app.chunks()) loadChain(app).then(() => paintEditor(app));
   else paintEditor(app);
 }
 
 // Jump: the caret and the view to the CHUNK line of the segment Generate plays next.
 function jumpToChunk(app) {
-  const segment = Number(app.bridge.getSegment()), chunks = chunkInfo(app.text) || [];
-  const i = chunks.findIndex((c) => c.first !== null && segment >= c.first && segment <= c.last);
+  const segment = Number(app.bridge.getSegment()), chunks = app.chunks() || [];
+  const i = chunks.findIndex((c) => plays(c, segment));
   if (i < 0) return app.toast(`No chunk plays segment <b>${segment}</b>: the reel ends before it. Restart plays it from the beginning.`);
   if (jumpCell(app, i)) return;
   const ed = app.view.querySelector(".editor textarea"), head = app.view.querySelectorAll(".editor .chunkinfo")[i];
@@ -261,6 +265,7 @@ function jumpToChunk(app) {
 
 export function refreshFoot(app) {
   refreshPlan(app);  // a dial or an edit can change what Generate queues
+  refreshReelPath(app);
   const foot = app.view.querySelector(".pfoot");
   if (foot) foot.innerHTML = statsHTML(app);
 }
@@ -296,6 +301,25 @@ function refreshPlan(app) {
     await fetchPlan(app);
     if (app.state.planKey === key) app.state.planKey = null;
     if (app.state.tab === "prompt") refreshFoot(app);
+  }, 250);
+}
+
+// A reel with GOTO lines: its path at the node's seed comes from the server (a jump may wait on a roll);
+// the dividers, the timeline and the cells follow it once it is there.
+function refreshReelPath(app) {
+  if (!hasGoto(app.text)) { app.data.reelPath = null; return; }
+  const key = app.reelKey();
+  if (app.data.reelPath?.key === key || app.state.reelKey === key) return;
+  app.state.reelKey = key;
+  clearTimeout(app.state.reelTimer);
+  app.state.reelTimer = setTimeout(async () => {
+    let got;
+    try { got = await app.api.reel({ template: app.text, target: app.bridge.getTarget(), params: app.bridge.getParams(), seed: app.bridge.getSeed() }); }
+    catch (err) { got = { error: err.message }; }
+    if (app.state.reelKey === key) app.state.reelKey = null;
+    if (app.reelKey() !== key) return;
+    app.data.reelPath = { ...got, key };
+    if (app.state.tab === "prompt") { paintEditor(app); refreshFoot(app); }
   }, 250);
 }
 

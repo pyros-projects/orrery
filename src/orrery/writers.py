@@ -115,14 +115,16 @@ def request(home: Home, task: str, template: str, seed: int, libraries, weights)
         raise WriterError("This writer writes one shot, and this template is a reel: its shot would take the "
                           "place of every chunk. Use Continue the reel, or a template without CHUNK lines.")
     if name == "continue":
-        from orrery.reel import resolved, split_reel
+        from orrery.reel import reel_path, resolved, split_reel
 
         reel = split_reel(template)
         if reel is None:
             raise WriterError("Continue the reel needs a reel: a screenplay with CHUNK lines.")
-        if reel.segments is None:
-            raise WriterError("This reel repeats a chunk forever, so there is no next chunk to write.")
-        head, segments = resolved(reel, seed, libraries, weights, reel.segments)
+        path, ended = reel_path(reel, seed, libraries, weights)
+        if not ended:
+            raise WriterError("This reel plays on and on (a chunk that repeats forever, or a GOTO without ×N), "
+                              "so there is no next chunk to write.")
+        head, segments = resolved(reel, seed, libraries, weights, len(path))
         chunks = "\n\n".join(
             f"CHUNK {s['title'] or f'clip {i + 1}'}\n" + "\n".join(s["lines"])
             + (f"\nHANDOFF: {s['handoff']}" if s["handoff"] else "") for i, s in enumerate(segments))

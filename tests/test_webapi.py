@@ -60,6 +60,7 @@ def test_routes_cover_the_contract():
         ("GET", "/orrery/writers"),
         ("POST", "/orrery/writers"),
         ("POST", "/orrery/plan"),
+        ("POST", "/orrery/reel"),
     }
 
 
@@ -685,6 +686,14 @@ def test_generate_plans_a_lora_sweep_times_a_grid(home):
     assert ok(home, webapi.generate_plan, template="a __animal__")["runs"] == 0
     status, body = api(home, webapi.generate_plan, template="a __animal__\n@grid __style__")
     assert status == 400 and "doesn't use it" in body["error"]
+
+
+def test_the_app_gets_the_path_a_reel_takes_at_its_seed(home):
+    loop = "@h3 t2va\nCHUNK a\nSHOT 5s\nA.\nCHUNK b\nSHOT 5s\nB.\nGOTO: a ×1"
+    assert ok(home, webapi.reel_walk, template=loop, seed=3) == {"path": [0, 1, 0, 1], "ended": True}
+    endless = ok(home, webapi.reel_walk, template=loop.replace(" ×1", ""), seed=3)
+    assert endless["ended"] is False and endless["path"][:5] == [0, 1, 0, 1, 0]
+    assert ok(home, webapi.reel_walk, template="a fox", seed=1) == {"path": [], "ended": True}
 
 
 def test_the_writer_texts_are_read_edited_and_reset(home):

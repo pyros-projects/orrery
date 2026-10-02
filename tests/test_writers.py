@@ -166,3 +166,13 @@ def test_the_write_node_says_what_is_missing(home, monkeypatch):
     assert "language model" in result["error"]
     result, asked = _write(monkeypatch, home, ["SHOT 5s: static\nA."], task="story", template="@h3 fl2va\nSHOT 5s\nA.", seed=1)
     assert "first and the last frame" in result["error"] and not asked
+
+
+def test_continue_follows_a_loop_and_refuses_one_without_end(home):
+    loop = "@h3 t2va\nCHUNK a\nSHOT 5s\nA.\nCHUNK b\nSHOT 5s\nB.\nGOTO: a ×1"
+    writers.save(Home(home), "continue", "{chunks}\nWrite clip {next}.")
+    prompt = writers.request(Home(home), "continue", loop, 1, {}, {})
+    assert prompt.count("CHUNK a") == 2 and "Write clip 5." in prompt
+    with pytest.raises(writers.WriterError, match="on and on"):
+        writers.request(Home(home), "continue", loop.replace(" ×1", ""), 1, {}, {})
+

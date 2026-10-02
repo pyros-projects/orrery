@@ -17,7 +17,7 @@ from orrery import presets as ps
 from orrery.chain import DEFAULT_CHAIN
 from orrery.comfy_llm import can_write, llm_config, text_encoders
 from orrery.completion import completion_data
-from orrery.dsl import MissingLibrary, expand, override
+from orrery.dsl import MissingLibrary, expand, override, strip_comments
 from orrery.h3 import compile_scene
 from orrery.home import BUILTIN_DIR, Home, home_setting, home_source, resolve_home, set_home_setting
 from orrery.library import NAME, Entry, Library, load_library
@@ -649,13 +649,44 @@ def generate_plan(home: Home, args: dict) -> dict:
         raise ApiError(400, str(err)) from None
 
 
+def _clips(home: Home, text: str, reel, seed: int, upto: int) -> int | None:
+    """How many clips a reel plays at `seed` (looking up to `upto`); None when it plays on past that."""
+    if not reel.jumps_on_rolls:
+        return reel.segments
+    from orrery.dsl import with_inline
+    from orrery.reel import reel_path
+
+    src, libraries = with_inline(strip_comments(text), home.libraries())
+    path, ended = reel_path(split_reel(src), seed, libraries, home.weights(), upto)
+    return len(path) if ended else None
+
+
+def reel_walk(home: Home, args: dict) -> dict:
+    """The chunk each clip of a reel plays at a seed: with GOTO lines the path can wait on what rolls."""
+    from orrery.dsl import with_inline
+    from orrery.loras import long_form
+    from orrery.reel import MAX_WALK, reel_path
+
+    text, _ = _template_for(home, args)
+    src, libraries = with_inline(long_form(strip_comments(text)), home.libraries())
+    reel = split_reel(src)
+    if reel is None:
+        return {"path": [], "ended": True}
+    try:
+        path, ended = reel_path(reel, _int(args, "seed", 0), libraries, home.weights(), MAX_WALK)
+    except ValueError as err:
+        raise ApiError(400, str(err)) from None
+    return {"path": [block for block, _ in path], "ended": ended}
+
+
 def roll(home: Home, args: dict) -> dict:
     text, target = _template_for(home, args)
     seed, n = _int(args, "seed", 0), min(max(_int(args, "n", 3), 1), MAX_ROLLS)
     reel = split_reel(text) if target != "text" else None
     # a reel shows its clips at one seed, from `start` (a few at a time); anything else shows n seeds
     start = max(_int(args, "start", 0), 0)
-    end = start + ROLL_CLIPS if reel and reel.segments is None else min(start + ROLL_CLIPS, reel.segments) if reel else 0
+    total = _clips(home, text, reel, seed, start + ROLL_CLIPS) if reel else 0
+    end = start + ROLL_CLIPS if reel and total is None else min(start + ROLL_CLIPS, total) if reel else 0
     runs = [(seed, k) for k in range(start, end)] if reel else [(s, None) for s in range(seed, seed + n)]
     rolls = []
     for s, segment in runs:
@@ -675,7 +706,7 @@ def frequency(home: Home, args: dict) -> dict:
     if across == "clips":
         if not reel:
             raise ApiError(400, "Counting across clips needs a reel (CHUNK lines) and a screenplay target.")
-        n = min(n, MAX_FREQUENCY_CLIPS, reel.segments or MAX_FREQUENCY_CLIPS)
+        n = min(n, MAX_FREQUENCY_CLIPS, _clips(home, text, reel, seed, n) or MAX_FREQUENCY_CLIPS)
         runs = [(seed, k) for k in range(n)]
     elif across == "seeds":
         segment = max(_int(args, "segment", 0), 0) if reel else 0
@@ -773,6 +804,7 @@ ROUTES = [
     ("POST", "/orrery/galaxy/folder/delete", galaxy_folder_delete),
     ("POST", "/orrery/roll", roll),
     ("POST", "/orrery/plan", generate_plan),
+    ("POST", "/orrery/reel", reel_walk),
     ("POST", "/orrery/frequency", frequency),
     ("GET", "/orrery/home", home_settings),
     ("POST", "/orrery/home", home_save),

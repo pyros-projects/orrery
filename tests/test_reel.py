@@ -8,7 +8,7 @@ import pytest
 
 from orrery.h3 import compile_scene
 from orrery.library import Entry, Library
-from orrery.reel import split_reel
+from orrery.reel import ReelEnd, reel_path, split_reel
 
 FOX = {"animal": Library("animal", [Entry("fox")])}
 MANY = {"animal": Library("animal", [Entry(a) for a in ("fox", "heron", "owl", "lynx", "hare")])}
@@ -374,3 +374,60 @@ def test_a_field_of_the_reels_head_is_the_same_in_every_clip():
     shown = {compile_scene(reel, 9, libs, segment=k).scene.shots[0].items[0].split(" holds ")[1] for k in range(4)}
     assert len(shown) == 1
 
+
+
+# --- GOTO (docs/plan-dsl-2.md, phase 8) ------------------------------------------------------
+
+GOTO_REEL = """@h3 t2va
+CHUNK the gate
+SHOT 5s: static
+The keeper opens the gate.
+CHUNK the stairs
+SHOT 5s: tracking
+The keeper climbs.
+HANDOFF: the keeper reaches the landing
+CHUNK the lamp
+SHOT 5s: push in
+The keeper lights the lamp.
+HANDOFF: the beam sweeps the sea
+GOTO: the stairs ×2
+"""
+
+
+def test_goto_loops_back_n_times_then_goes_on():
+    reel = split_reel(GOTO_REEL)
+    assert [b for b, _ in reel.walk()[0]] == [0, 1, 2, 1, 2, 1, 2] and reel.segments == 7
+    assert split_reel(GOTO_REEL.replace("GOTO: the stairs ×2", "GOTO: 2 x1")).segments == 5  # a number, an x
+    endless = split_reel(GOTO_REEL.replace(" ×2", ""))
+    assert endless.segments is None and [b for b, _ in endless.walk(upto=6)[0]] == [0, 1, 2, 1, 2, 1]
+    with pytest.raises(ValueError, match="no CHUNK is called 'the cellar'"):
+        split_reel(GOTO_REEL.replace("the stairs ×2", "the cellar"))
+
+
+def test_a_jump_opens_on_the_handoff_before_it_and_its_line_stays_out_of_the_prose():
+    clip = compile_scene(GOTO_REEL, 1, {}, target="h3-base", segment=3)  # the stairs again, after the lamp
+    assert "The keeper climbs" in clip.text and "beam sweeps the sea" in clip.text and "GOTO" not in clip.text
+    with pytest.raises(ReelEnd):
+        compile_scene(GOTO_REEL, 1, {}, segment=7)
+
+
+def test_a_goto_that_waits_on_a_roll_makes_each_seed_its_own_story():
+    story = GOTO_REEL.replace("CHUNK the lamp\n", "CHUNK the lamp\n$w = {rain|clear}\n").replace(
+        "GOTO: the stairs ×2", "? $w[rain]: GOTO: the stairs ×3")
+    reel = split_reel(story)
+    assert reel.jumps_on_rolls and reel.segments is None
+    lengths = {len(reel_path(reel, seed, {}, None)[0]) for seed in range(40)}
+    assert lengths <= {3, 5, 7, 9} and len(lengths) > 1  # every rain sends the keeper back, at most three times
+    seed = next(s for s in range(40) if len(reel_path(reel, s, {}, None)[0]) == 5)
+    assert compile_scene(story, seed, {}, segment=4).text and pytest.raises(ReelEnd, compile_scene, story, seed, {}, segment=5)
+
+
+def test_several_gotos_the_first_that_holds_and_has_jumps_left():
+    reel = split_reel(GOTO_REEL.replace("GOTO: the stairs ×2", "GOTO: the gate ×1\nGOTO: the stairs ×1"))
+    assert [b for b, _ in reel.walk()[0]] == [0, 1, 2, 0, 1, 2, 1, 2]
+
+
+def test_a_chunk_every_goto_jumps_past_is_flagged():
+    src = GOTO_REEL.replace("GOTO: the stairs ×2", "GOTO: the gate") + "CHUNK the cellar\nSHOT 5s: static\nDark.\n"
+    lint = [i.message for i in compile_scene(src, 1, {}, segment=0).lint]
+    assert any("CHUNK 4" in m and "never plays" in m for m in lint)

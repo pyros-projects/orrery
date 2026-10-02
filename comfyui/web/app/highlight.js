@@ -50,8 +50,9 @@ function line(text, known, llm) {
 // The divider on a CHUNK line: absolutely placed, so the text keeps its place under the textarea's caret;
 // first in the line, so its static top is the line's top.
 function chunkLine(html, c, segment) {
-  const now = segment !== null && c.first !== null && segment >= c.first && segment <= c.last;
-  const turn = now && c.repeat > 1 ? ` ${segment - c.first + 1}/${c.repeat === Infinity ? "∞" : c.repeat}` : "";
+  const now = segment !== null && (c.segs ? c.segs.includes(segment) : c.first !== null && segment >= c.first && segment <= c.last);
+  const turn = !now ? "" : c.segs ? (c.segs.length > 1 ? ` ${c.segs.indexOf(segment) + 1}/${c.segs.length}${c.endless ? "+" : ""}` : "")
+    : c.repeat > 1 ? ` ${segment - c.first + 1}/${c.repeat === Infinity ? "∞" : c.repeat}` : "";
   const label = `${now ? `▶ next${turn} · ` : ""}${c.label}`;
   return `<span class="chunkline${now ? " now" : ""}"><span class="chunkinfo"><span>${esc(label)}</span></span>${html}</span>`;
 }

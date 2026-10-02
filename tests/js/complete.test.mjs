@@ -199,3 +199,11 @@ test("globs: ** offered when it reaches further, known when they match, missing 
   assert.deepEqual(globMatches("clothing/**", data.libraries.map((l) => l.name)), ["clothing/hats", "clothing/winter/coats"]);
 });
 
+
+test("GOTO: completes the chunk titles, after a condition too", () => {
+  const text = "@h3 t2va\nCHUNK the gate\nSHOT 5s\nA.\nCHUNK the stairs repeat 2\nSHOT 5s\nB.\nGOTO: the s";
+  assert.deepEqual(suggest(text, text.length, DATA).items.map((i) => i.insert), ["the stairs"]);
+  const cond = text.replace("GOTO: the s", "? $w[rain]: GOTO: ");
+  assert.deepEqual(suggest(cond, cond.length, DATA).items.map((i) => i.insert), ["the gate", "the stairs"]);
+  assert.ok(suggest("@h3 t2va\nCHUNK a\nGO", 19, DATA).items.some((i) => i.insert === "GOTO: "));
+});

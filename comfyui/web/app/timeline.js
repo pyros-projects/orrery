@@ -2,7 +2,7 @@
 // the frames its SEND: lines handed on (Orrery Refs' anchors), level with the chunk's lines. The cells view
 // (cells.js) shows the same under each chunk, in a section of its own.
 import { icon } from "./icons.js";
-import { chunkInfo, shape } from "./model.js";
+import { plays, shape } from "./model.js";
 
 const GAP = 3, MAX_H = 180, SEND_ROW = 26;
 
@@ -15,6 +15,11 @@ export async function loadChain(app) {
 // The segments a chunk shows: all it plays, or for one that repeats forever, the clips made so far
 // and the next one.
 function segmentsOf(c, clips) {
+  if (c.segs) {  // GOTO: the segments on the walked path; an endless one, those made and the next
+    if (!c.endless) return c.segs;
+    const next = c.segs.find((s) => !clips.has(s));
+    return [...c.segs.filter((s) => clips.has(s)), ...(next === undefined ? [] : [next])];
+  }
   if (c.first === null) return [];
   if (c.repeat !== Infinity) return Array.from({ length: c.repeat }, (_, i) => c.first + i);
   const made = [...clips.keys()].filter((s) => s >= c.first);
@@ -78,7 +83,7 @@ export function layoutTimeline(app, chunks) {
   track.innerHTML = chunks.map((c, i) => {
     const top = heads[i] ?? 0, rowsH = (heads[i + 1] ?? end) - top;
     const segs = segmentsOf(c, clips);
-    const now = c.first !== null && segment >= c.first && segment <= c.last;
+    const now = plays(c, segment);
     const fit = fitThumbs(segs.length, box.clientWidth - 10, rowsH - 9 - c.images.length * SEND_ROW, ratio);
     return `<div class="tl-chunk${now ? " now" : ""}" style="top:${top}px;height:${rowsH}px">`
       + `<div class="tl-clips" style="--cols:${fit.cols};--clip-w:${fit.w}px;--clip-h:${fit.h}px">${segs.map((s) => clipHTML(app, s, clips.get(s), segment)).join("")}</div>`
@@ -108,12 +113,12 @@ export function wireTimeline(app) {
     row.style.setProperty("--tl-w", `${px}px`);
     app.bridge.props.orrery_tl_w = px;
   };
-  drag(grip, (dx, start) => set(start - dx), () => box.offsetWidth, () => layoutTimeline(app, chunkInfo(app.text)));
+  drag(grip, (dx, start) => set(start - dx), () => box.offsetWidth, () => layoutTimeline(app, app.chunks()));
   grip.addEventListener("keydown", (e) => {
     if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
     e.preventDefault();
     set(box.offsetWidth + (e.key === "ArrowLeft" ? 16 : -16));
-    layoutTimeline(app, chunkInfo(app.text));
+    layoutTimeline(app, app.chunks());
   });
 }
 

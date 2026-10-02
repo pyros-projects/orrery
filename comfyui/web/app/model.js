@@ -250,7 +250,7 @@ function reelSecs(text) {
 // it does), the seconds of one clip (kept without the pinned frames), where it starts
 // and ends in the film, the seconds left after it (null when the film runs forever) and a label.
 // Null without CHUNK lines. Mirrors orrery.reel.
-export function chunkInfo(text) {
+export function chunkInfo(text, walked = null) {
   const out = [];
   text.split("\n").forEach((raw, line) => {
     const l = raw.trim(), c = /^CHUNK\b\s*(.*)$/.exec(l);
@@ -264,6 +264,7 @@ export function chunkInfo(text) {
     if (send && out.length && !out[out.length - 1].images.includes(Number(send[1]))) out[out.length - 1].images.push(Number(send[1]));
   });
   if (!out.length) return null;
+  if (hasGoto(text)) return walkedInfo(out, walked);
   let segment = 0, at = 0;
   for (const c of out) {
     if (segment === null) Object.assign(c, { first: null, last: null, start: null, end: null });
@@ -278,6 +279,42 @@ export function chunkInfo(text) {
     c.label = chunkLabel(c);
   }
   return out;
+}
+
+// A reel with GOTO lines plays a chunk wherever the server's walk at the node's seed puts it
+// (`walked`: {path: chunk index per segment, ended}): each chunk its list of segments, `segs`.
+export const hasGoto = (text) => /^\s*(?:\?[^\n]*?:\s*)?GOTO:/im.test(stripComments(text));
+
+function walkedInfo(out, walked) {
+  if (!walked) {
+    for (const c of out) Object.assign(c, { segs: [], first: null, last: null, start: null, end: null, left: null, label: "GOTO: walking the reel at this seed…" });
+    return out;
+  }
+  const at = [0];
+  walked.path.forEach((chunk, t) => at.push(at[t] + (out[chunk]?.secs ?? 0)));
+  const total = walked.ended ? at[walked.path.length] : null;
+  out.forEach((c, i) => {
+    const segs = walked.path.flatMap((chunk, t) => (chunk === i ? [t] : []));
+    const first = segs.length ? segs[0] : null, last = segs.length ? segs[segs.length - 1] : null;
+    Object.assign(c, { segs, endless: !walked.ended, first, last, start: first === null ? null : at[first],
+      end: last === null ? null : at[last] + c.secs, left: last === null || total === null ? null : total - at[last] - c.secs });
+    c.label = chunkLabel(c);
+  });
+  return out;
+}
+
+// Does chunk c play segment s? On its range, or on its list when GOTO lines set the path.
+export const plays = (c, s) => s != null && (c.segs ? c.segs.includes(s) : c.first !== null && s >= c.first && s <= c.last);
+
+// 1, 3–4, 7: a chunk's segments in short.
+function runs(segs) {
+  const parts = [];
+  for (const s of segs) {
+    const last = parts[parts.length - 1];
+    if (last && s === last[1] + 1) last[1] = s;
+    else parts.push([s, s]);
+  }
+  return parts.map(([a, b]) => (a === b ? `${a}` : `${a}–${b}`)).join(", ");
 }
 
 // The cells view: the text cut before every CHUNK line, the world above the first one its own cell
@@ -299,6 +336,12 @@ const span = (secs) => `${Math.round(secs * 100) / 100} s`;
 
 // `seg 4 · 0:20 → 0:25 · 1:35 left`, `seg 1–4 · 4 × 5 s · …`, `seg 7 → ∞ · 6 s each · from 0:35`
 export function chunkLabel(c) {
+  if (c.segs) {
+    if (!c.segs.length) return c.endless ? "not on the path yet: the reel loops before it" : "never plays at this seed";
+    const shown = c.segs.slice(0, 12), more = c.segs.length > 12 || c.endless ? ", …" : "";
+    const left = c.left === null ? "" : c.left > 0 ? ` · ${clock(c.left)} left` : " · the end";
+    return `seg ${runs(shown)}${more} · ${c.segs.length > 1 ? `${c.segs.length}${c.endless ? "+" : ""} × ` : ""}${span(c.secs)} · from ${clock(c.start)}${left}`;
+  }
   if (c.first === null) return "never plays: a chunk before it repeats forever";
   if (c.repeat === Infinity) return `seg ${c.first} → ∞ · ${span(c.secs)} each · from ${clock(c.start)}`;
   const segs = c.repeat > 1 ? `seg ${c.first}–${c.last} · ${c.repeat} × ${span(c.secs)}` : `seg ${c.first}`;

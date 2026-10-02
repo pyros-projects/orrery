@@ -4,7 +4,7 @@
 // Backspace at a cell's start and Delete at its end join two, and a CHUNK line typed or removed cuts the
 // text again, the caret where it was. Each section's height is dragged at its foot and kept per chunk.
 import { highlight } from "./highlight.js";
-import { chunkInfo, splitCells } from "./model.js";
+import { splitCells } from "./model.js";
 import { clipRatio, drag, sectionHTML, wireClips } from "./timeline.js";
 
 const SECTION_H = 110, SECTION_MIN = 44, SECTION_MAX = 640;
@@ -46,7 +46,7 @@ export function renderCells(app, at = null) {
 export function paintCells(app) {
   const host = box(app);
   if (!host) return;
-  const cells = splitCells(app.text), chunks = chunkInfo(app.text) || [], segment = Number(app.bridge.getSegment());
+  const cells = splitCells(app.text), chunks = app.chunks() || [], segment = Number(app.bridge.getSegment());
   host.querySelectorAll(".cell").forEach((cell, i) => {
     const c = cells[i];
     if (!c) return;
@@ -54,7 +54,7 @@ export function paintCells(app) {
     cell.querySelector("pre").innerHTML = `${highlight(c.text, app.known(), { llm: app.llmActive(), chunks: local, segment })}​`;
   });
   const ratio = clipRatio(app);
-  const sig = JSON.stringify([chunks.map((c) => [c.first, c.last, c.images]), (app.data.chain?.clips || []).map((c) => c.version),
+  const sig = JSON.stringify([chunks.map((c) => [c.first, c.last, c.segs, c.images]), (app.data.chain?.clips || []).map((c) => c.version),
     app.data.anchorV, segment, ratio]);
   if (sig === app.cellsSig) return;
   app.cellsSig = sig;

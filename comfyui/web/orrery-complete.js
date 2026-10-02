@@ -4,7 +4,7 @@
 // Accepting an item replaces text[replaceFrom:caret] with item.insert.
 
 const KEYWORDS = ["SHOT ", "SFX: ", "MUSIC: ", "style: ", "summary: ", "CAST", "voice: ", "keep: ",
-  "CHUNK", "HANDOFF: ", "SEND: ", "LORA: ", "context: "];
+  "CHUNK", "HANDOFF: ", "SEND: ", "GOTO: ", "LORA: ", "context: "];
 const NONE = { items: [], replaceFrom: 0 };
 
 const startsWith = (word, prefix) => word.toLowerCase().startsWith(prefix.toLowerCase());
@@ -131,6 +131,18 @@ function shotItems(before, line, data) {
   };
 }
 
+// GOTO: (alone, or after `? cond:`): the chunks to jump to, by title.
+function gotoItems(before, line, text) {
+  const m = /^\s*(?:\?[^\n]*?:\s*)?GOTO:\s*([^×]*)$/i.exec(line);
+  if (!m) return null;
+  const titles = text.split("\n").map((l) => /^\s*CHUNK\b\s*(.*?)(?:\s+repeat\s+(?:\d+|forever))?\s*$/i.exec(l)).filter(Boolean)
+    .map((c, i) => c[1] || String(i + 1));
+  return {
+    items: titles.filter((t) => startsWith(t, m[1])).map((t) => ({ insert: t, detail: "jump to this chunk; ×N after it: N times", preview: "" })),
+    replaceFrom: before.length - m[1].length,
+  };
+}
+
 function keywordItems(before, line) {
   const m = line.match(/^([A-Za-z]+)$/);
   if (!m) return null;
@@ -225,7 +237,7 @@ export function suggest(text, caret, data) {
   const found = directive ?? (screenplay ? loraItems(before, line, data) : null)
     ?? libraryItems(before, data)
     ?? bindingItems(before, text)
-    ?? (screenplay ? shotItems(before, line, data) ?? keywordItems(before, line) : null)
+    ?? (screenplay ? gotoItems(before, line, text) ?? shotItems(before, line, data) ?? keywordItems(before, line) : null)
     ?? NONE;
   const typed = before.slice(found.replaceFrom);
   return { ...found, items: found.items.filter((i) => i.insert !== typed) };

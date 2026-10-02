@@ -7,7 +7,15 @@ from pathlib import Path
 
 from orrery import manager
 from orrery.comfy import h3_length
-from orrery.dsl import MissingLibrary, bindings, expand_batch, override, parse
+from orrery.dsl import (
+    MissingLibrary,
+    bindings,
+    expand_batch,
+    override,
+    parse,
+    strip_comments,
+    with_inline,
+)
 from orrery.h3 import compile_scene
 from orrery.home import resolve_home
 from orrery.library import library_files
@@ -23,7 +31,7 @@ from orrery.presets import (
     save_preset,
     tag_preset,
 )
-from orrery.reel import split_reel
+from orrery.reel import reel_path, split_reel
 
 
 def _msg(err: Exception) -> str:
@@ -85,6 +93,10 @@ def _cmd_compile(args: argparse.Namespace) -> int:
         scene = resolve_includes(home, _dials(resolve_template(home, args.scene), args.set))
         reel = split_reel(scene)
         total = reel.segments if reel else 0
+        if reel and reel.jumps_on_rolls:  # the GOTO lines wait on what rolls: walk it at this seed
+            src, libraries = with_inline(strip_comments(scene), home.libraries())
+            path, ended = reel_path(split_reel(src), args.seed, libraries, home.weights())
+            total = len(path) if ended else None
         segments = ([args.segment or 0] if args.segment is not None or not reel
                     else range(total if total is not None else FOREVER_SHOWN))
         results = [compile_scene(scene, args.seed, home.libraries(), home.weights(), target=args.target,

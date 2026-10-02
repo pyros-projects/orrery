@@ -5,7 +5,7 @@ import { fitThumbs } from "../../comfyui/web/app/timeline.js";
 import { writerBlock } from "../../comfyui/web/app/write.js";
 import {
   applyDials, dials, downstream, entryPage, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
-  chunkInfo, chunkLabel, splitCells, rangeIds, shape, stats, PLAN_HINT, templateHash, longForm, matches, splitOptions, tagsMatch, withDice,
+  chunkInfo, chunkLabel, splitCells, rangeIds, shape, stats, PLAN_HINT, templateHash, hasGoto, plays, longForm, matches, splitOptions, tagsMatch, withDice,
 } from "../../comfyui/web/app/model.js";
 
 const known = new Set(["creature", "place"]);
@@ -436,3 +436,16 @@ test("Generate asks the server for a plan only when there may be one", () => {
   for (const t of ["a cat <lora:b:0.8>", "<lora:x:0.4-0.9>", "@x(0.8)", "a grid of tiles"]) assert.ok(!PLAN_HINT.test(t), t);
 });
 
+
+test("with GOTO lines the chunks follow the path the server walked", () => {
+  const text = "@h3 t2va\nCHUNK the gate\nSHOT 5s\nA.\nCHUNK the stairs\nSHOT 4s\nB.\nCHUNK the lamp\nSHOT 6s\nC.\nGOTO: the stairs ×2";
+  assert.ok(hasGoto(text) && !hasGoto("@h3 t2va\nCHUNK a\nSHOT 5s\nA."));
+  assert.match(chunkInfo(text)[1].label, /walking the reel/);  // the path is not there yet
+  const walked = chunkInfo(text, { path: [0, 1, 2, 1, 2, 1, 2], ended: true });
+  assert.deepEqual(walked.map((c) => c.segs), [[0], [1, 3, 5], [2, 4, 6]]);
+  assert.equal(walked[1].label, "seg 1, 3, 5 · 3 × 4 s · from 0:05 · 0:06 left");  // left after its last play
+  assert.ok(plays(walked[2], 4) && !plays(walked[2], 3) && plays(chunkInfo("CHUNK a\nSHOT 5s\nA.")[0], 0));
+  const endless = chunkInfo(text, { path: [0, 1, 2, 1, 2], ended: false });
+  assert.match(endless[2].label, /^seg 2, 4, … · 2\+ × 6 s/);
+  assert.match(highlight(text, known, { chunks: walked, segment: 3 }), /▶ next 2\/3/);
+});

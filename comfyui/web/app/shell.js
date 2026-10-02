@@ -1,5 +1,6 @@
 // The orrery app: one element that lives in the node or, in the big view, over the canvas.
 import { inlineLibraries } from "../orrery-complete.js";
+import { chunkInfo } from "./model.js";
 import { client } from "./api.js";
 import { renderGalaxy } from "./galaxy.js";
 import { renderHelp } from "./help.js";
@@ -73,6 +74,11 @@ export class OrreryApp {
     else delete this.bridge.props.orrery_preset;
   }
   card(name) { return this.data.presets.find((p) => p.name === name); }
+  // A reel with GOTO lines: the path the server walked at the node's seed (null until it came).
+  reelKey() { return `${this.text}\n${this.bridge.getSeed()}\n${JSON.stringify(this.bridge.getParams())}`; }
+  reelPath() { return this.data.reelPath?.key === this.reelKey() && !this.data.reelPath.error ? this.data.reelPath : null; }
+  chunks() { return chunkInfo(this.text, this.reelPath()); }
+
   known() {  // the home's libraries and the template's own (@lib)
     return new Set([...(this.data.completion?.libraries || []).map((l) => l.name), ...inlineLibraries(this.text).map((l) => l.name)]);
   }

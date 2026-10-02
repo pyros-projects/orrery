@@ -630,14 +630,15 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
     reel = split_reel(src) if reel else None
     sends: dict[int, dict] = {}
     if reel:
-        scene, picks = build_segment(reel, seed, libraries, weights, segment, lint)
+        scene, picks, path = build_segment(reel, seed, libraries, weights, segment, lint)
         if reel.send_slots:
             if scene.mode != "ref2va":
                 raise ValueError("SEND: hands frames to Reference to Video as reference images, so it needs an "
                                  "@h3 ref2va screenplay.")
-            sends = reel.ready(segment, set(held) & set(reel.send_slots))
+            sends = reel.ready(segment, set(held) & set(reel.send_slots), path)
             withhold_images(scene, set(reel.send_slots) - set(sends), lint)
-            for block, start in zip(reel.blocks, reel.starts(), strict=True):
+            # every chunk's first segment: the reel's own path, or the one walked here when jumps wait on rolls
+            for block, start in zip(reel.blocks, reel.starts(path if reel.jumps_on_rolls else None), strict=True):
                 for send in block.sends:
                     early = [lo for lo, _ in send.segments or []
                              if start is not None and lo <= start and send.image not in held]
