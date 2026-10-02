@@ -477,3 +477,21 @@ def test_a_chunks_own_cast_replaces_the_member_for_that_clip():
     assert back.scene.cast[0].name == "EMMA"  # in her place: still <Subject 1>
     assert back.images == [{"ref": 1, "image": 1, "member": "EMMA", "strength": 0.5, "from": 0.0}]
     assert not any("twice" in i.message for i in back.lint)
+
+
+
+def test_set_lines_turn_the_dials_in_the_head_and_per_chunk():
+    src = LEAVES.replace("CAST\nEMMA (refmod emma_canon)", "SET: emma_canon(0.8)\nCAST\nEMMA (refmod emma_canon_Video, image 1)").replace(
+        "EMMA slides back", "SET: image_1(0.5,0.35)\nSET: emma_canon_Video(0.4, 20%)\nEMMA slides back")
+    first, _, back = (ref2va(src, segment=s) for s in range(3))
+    assert [(m["strength"], m["from"]) for m in first.refmods] == [(0.8, 0.35)] and first.images == []
+    assert [(m["strength"], m["from"]) for m in back.refmods] == [(0.4, 0.2)]
+    assert back.images == [{"ref": 1, "image": 1, "member": "EMMA", "strength": 0.5, "from": 0.35}]
+    assert "SET" not in back.text  # never prose
+
+
+def test_a_set_line_written_wrong_or_naming_nothing_is_lint():
+    lint = lambda line: [i.message for i in ref2va(LEAVES.replace("EMMA slides back", f"{line}\nEMMA slides back"), segment=2).lint]
+    assert any("is not name(strength, start)" in m for m in lint("SET: image_1 at 0.5"))
+    assert any("SET: image_4 is not a picture or a RefMod of the CAST" in m for m in lint("SET: image_4(0.5)"))
+    assert any("takes numbers" in m for m in lint("SET: emma_canon(half)"))
