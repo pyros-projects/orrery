@@ -447,3 +447,34 @@ def test_the_dice_of_before_stay_with_rng_1():
     assert [expand(t, s, LIBS).text for s in (1, 2, 3)] == ["owl in misty linocut", "ocelot in frozen cyanotype",
                                                             "heron in misty gouache"]
     assert "@rng" not in expand(t, 1, LIBS).text and expand(t, 1, LIBS).params.rng == 1
+
+
+# --- second pass: one predicate language (phase 3) ---------------------------------------------
+
+BEINGS = {"creature": Library("creature", [
+    Entry("dragon", ("myth",), props=(("habitat", "mountain"), ("size", "huge"))),
+    Entry("selkie", ("myth",), props=(("habitat", "sea"), ("size", "small"))),
+    Entry("phoenix", ("myth", "bird"), props=(("habitat", "sky"), ("size", "large"))),
+    Entry("otter", ("water",), props=(("habitat", "Sea"), ("size", "small"))),
+    Entry("wren", ("bird",), props=(("habitat", "forest"), ("size", "tiny"))),
+]), "place": Library("place", [Entry("a kelp forest", props=(("habitat", "sea"),)),
+                               Entry("a crag", props=(("habitat", "mountain"),))])}
+
+
+def seen(template):
+    return {expand(template, s, BEINGS).text for s in range(80)}
+
+
+def test_tags_and_properties_filter_in_one_bracket():
+    assert seen("__creature[myth, !bird, habitat=sea]__") == {"selkie"}
+    assert seen("__creature[size=small|tiny]__") == {"selkie", "otter", "wren"}  # a key's values
+    assert seen("__creature[size!=small, !myth]__") == {"wren"}
+    assert seen("$a = __creature[habitat=sea|mountain]__\n$a in __place[habitat=$a.habitat]__") == {
+        "dragon in a crag", "selkie in a kelp forest", "otter in a kelp forest"}
+    assert seen("__creature[myth]#size:small__") == {"selkie"}  # the old filter still adds up
+
+
+def test_a_condition_takes_the_same_brackets_and_reads_tags_props_and_the_value():
+    assert seen("$c = __creature__\n{? $c[myth, size=small|tiny]: small myth|other}") == {"small myth", "other"}
+    assert {t for t in seen("$c = __creature__\n? $c[wren]: It sings.\n$c") if "sings" in t} == {"It sings. wren"}
+    assert seen("$c = __creature[bird]__\n? $c[!myth]: no myth\n? $c[myth]: myth") == {"no myth", "myth"}

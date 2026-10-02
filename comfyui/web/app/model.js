@@ -82,14 +82,29 @@ export function splitOptions(inner) {
 }
 
 // `[myth]` · `[myth,!bird]` every term holds · `[water|deep_sea]` either does. Mirrors orrery.dsl.tags_match.
-export const tagsMatch = (spec, tags) => !spec || spec.split(",").every((term) => {
-  const alts = term.split("|").filter(Boolean);
-  return !alts.length || alts.some((a) => (a.startsWith("!") ? !tags.includes(a.slice(1)) : tags.includes(a)));
-});
+// `myth, !bird, habitat=sea, size=small|tiny`: mirrors orrery.dsl.matches. A `$var` value is not known
+// here, so it holds.
+export function matches(spec, tags, props = {}) {
+  if (!spec || !spec.trim()) return true;
+  return spec.split(",").every((term) => {
+    let key = null;
+    const alts = term.split("|").map((a) => a.trim()).filter(Boolean);
+    return !alts.length || alts.some((alt) => {
+      let neg = alt.startsWith("!"), body = alt.replace(/^!+\s*/, ""), value = null;
+      if (body.includes("!=")) { [key, value] = body.split("!=").map((x) => x.trim()); neg = !neg; }
+      else if (body.includes("=")) [key, value] = body.split("=").map((x) => x.trim());
+      else if (key !== null) value = body;
+      const ok = value === null ? tags.includes(body)
+        : value.startsWith("$") || String(props?.[key] ?? "").trim().toLowerCase() === value.toLowerCase();
+      return ok !== neg;
+    });
+  });
+}
+export const tagsMatch = (spec, tags) => matches(spec, tags);
 
 export function stats(raw) {
   const text = longForm(stripComments(raw)).replace(/<lora:[^<>]*>/g, "<lora>");
-  const libs = [...text.matchAll(/__(\w+(?:\/\w+)*)(?:\[[\w,|!-]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__/g)];
+  const libs = [...text.matchAll(/__(\w+(?:\/\w+)*)(?:\[[^\[\]\n]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__/g)];
   const rolls = (text.match(/\{/g) || []).length + libs.length;
   const binds = (text.match(/^\s*\$\w+\s*=/gm) || []).length;
   let h3 = null;
@@ -331,7 +346,7 @@ const BINDING_LINE = /^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$/;
 export function dials(text) {
   const seen = new Set();  // a binding set in several chunks is one dial; override() turns them all
   return text.split("\n").map((l) => BINDING_LINE.exec(l)).filter((m) => m && !seen.has(m[2]) && seen.add(m[2])).map((m) => {
-    const expr = m[4].trim(), lib = /^__(\w+(?:\/\w+)*)(?:\[([\w,|!-]+)\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\([^()]*\))?$/.exec(expr), brace = /^\{([^{}]*)\}$/.exec(expr);
+    const expr = m[4].trim(), lib = /^__(\w+(?:\/\w+)*)(?:\[([^\[\]\n]+)\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\([^()]*\))?$/.exec(expr), brace = /^\{([^{}]*)\}$/.exec(expr);
     const range = brace && /^\s*-?\d+(\.\d+)?\s*-\s*-?\d+(\.\d+)?\s*$/.test(brace[1]);  // {0.4-0.9} rolls a number: no list
     const options = brace && !range && !brace[1].includes("$$") ? splitOptions(brace[1]).map((o) => o.replace(/:\d+(\.\d+)?$/, "").replace(/^\s*\d+(\.\d+)?::/, "").trim()).filter(Boolean) : [];
     return { name: m[2], expr, lib: lib ? lib[1] : null, tag: lib ? lib[2] || null : null, options };

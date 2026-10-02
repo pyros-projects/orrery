@@ -29,9 +29,9 @@ from orrery.dsl import (
     _RANGE,
     _WEIGHTED,
     FIX,
+    matches,
     parse,
     split_options,
-    tags_match,
     without_directions,
 )
 from orrery.library import Library
@@ -54,13 +54,13 @@ def _choices(expr: str, libraries: Mapping[str, Library], what: str) -> list[str
     """The options of one library reference or one brace, in their order."""
     expr = without_directions(expr.strip())
     if m := _LIB_ONLY.match(expr):
-        if "$" in (m.group(3) or ""):
+        if "$" in (m.group(3) or "") + (m.group(2) or ""):
             raise ValueError(f"{what}: {expr} filters by a roll, so its entries are not known before the run.")
         name, tag = m.group(1), m.group(2)
         if name not in libraries:
             raise ValueError(f"{what}: there is no library __{name}__.")
         wanted = [(k, v.casefold()) for k, v in _PROPS.findall(m.group(3) or "")]
-        entries = [e.value for e in libraries[name].entries if tags_match(tag, e.tags)
+        entries = [e.value for e in libraries[name].entries if matches(tag, e.tags, dict(e.props))
                    and all((e.prop(k) or "").casefold() == v for k, v in wanted)]
         if not entries:
             raise ValueError(f"{what}: {expr} matches no entry.")

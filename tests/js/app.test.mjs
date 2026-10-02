@@ -5,7 +5,7 @@ import { fitThumbs } from "../../comfyui/web/app/timeline.js";
 import { writerBlock } from "../../comfyui/web/app/write.js";
 import {
   applyDials, dials, downstream, entryPage, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
-  chunkInfo, chunkLabel, splitCells, rangeIds, shape, stats, sweepPlan, templateHash, longForm, splitOptions, tagsMatch, withDice,
+  chunkInfo, chunkLabel, splitCells, rangeIds, shape, stats, sweepPlan, templateHash, longForm, matches, splitOptions, tagsMatch, withDice,
 } from "../../comfyui/web/app/model.js";
 
 const known = new Set(["creature", "place"]);
@@ -422,4 +422,12 @@ test("a run made before every pick had its own dice replays with @rng 1", () => 
   assert.equal(withDice("a __creature__", {}), "@rng 1\na __creature__");
   assert.equal(withDice("a __creature__", { rng: 2 }), "a __creature__");
   assert.equal(withDice("@rng 1\na __creature__", {}), "@rng 1\na __creature__");
+});
+
+test("the predicate language mirrors the expander for the dials", () => {
+  const e = { tags: ["myth"], props: { habitat: "Sea", size: "small" } };
+  assert.ok(matches("myth, habitat=sea", e.tags, e.props) && matches("size=large|small", e.tags, e.props));
+  assert.ok(!matches("myth, !habitat=sea", e.tags, e.props) && !matches("size!=small", e.tags, e.props));
+  assert.ok(matches("habitat=$a.habitat", e.tags, e.props));  // a roll the browser cannot know holds
+  assert.match(highlight("a __creature[myth, habitat=$a.habitat]__", known), /class="t-lib">__creature\[myth, habitat=\$a\.habitat\]__/);
 });

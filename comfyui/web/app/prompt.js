@@ -2,7 +2,7 @@
 import { suggest } from "../orrery-complete.js";
 import { esc, highlight } from "./highlight.js";
 import { icon } from "./icons.js";
-import { applyDials, chunkInfo, dials, folderColor, pickerGroups, shape, stats, stripComments, sweepPlan, tagsMatch, templateHash } from "./model.js";
+import { applyDials, chunkInfo, dials, folderColor, pickerGroups, shape, stats, stripComments, sweepPlan, matches, templateHash } from "./model.js";
 import { thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
 import { STARTERS } from "./starters.js";
@@ -312,7 +312,7 @@ function dialChoices(app, d) {
     return [];
   }
   const lib = app.data.libraries.find((l) => l.name === d.lib);
-  return (lib?.entries || []).filter((e) => tagsMatch(d.tag, e.tags)).map((e) => e.value);
+  return (lib?.entries || []).filter((e) => matches(d.tag, e.tags, e.props)).map((e) => e.value);
 }
 
 function renderDials(app) {

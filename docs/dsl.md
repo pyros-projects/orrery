@@ -6,7 +6,7 @@ Every construct of orrery's template language, where libraries live, how Dynamic
 |---|---|
 | `__animal__` | one entry from `library/animal.yaml` (or `animal.txt`, one entry per line), weighted by learned weights |
 | `__film/genre__` | a library in a folder: `library/film/genre.yaml` or `.txt`, as in z-explorer |
-| `__animal[feline]__` | only entries tagged `feline`; `[myth,!bird]` all of the terms (`!` none of), `[water\|deep_sea]` either |
+| `__animal[feline]__` | only entries tagged `feline`. The brackets take a predicate: `[myth, !bird]` all of the terms (`!` not), `[water\|deep_sea]` either, `[habitat=sea]` a property (`!=` not that value), `[size=small\|tiny]` either value of a key, `[habitat=$a.habitat]` what rolled before |
 | `__characters/cyberpunk#gender:female__` | only entries with that property (`props: {gender: female}` in the YAML, or `gender:female` typed into an entry's tag field); several `#key:value` must all match, in any case |
 | `{a\|b\|c:3}` | inline choice; `:3` is a static weight (Dynamic Prompts' `{3::c\|a\|b}` works too) |
 | `{\|red }car` | an empty option makes a word optional; the other options keep their spaces |
@@ -20,6 +20,7 @@ Every construct of orrery's template language, where libraries live, how Dynamic
 | `__world/habitats#habitat:$animal.habitat__` | a filter that depends on what was rolled before (`#key:$var` or `#key:$var.field`): the manta ray lands in the sea, never on a beach |
 | `? $w.kind=rain,snow: …` | a line kept only when the condition holds (`!=` for not); works for SFX lines too |
 | `{? $w.kind=rain: wet\|dry}` | a choice made by a condition instead of the dice |
+| `? $c[myth, size=small\|tiny]: …`, `{? $w[kind=rain]: wet\|dry}` | a condition in the brackets' language, against what `$c` rolled: its tags, its properties and its value (`? $c[wren]: It sings.`) |
 | `> make it moody and cinematic` | with a language model set in the node, it rewrites the rolled prompt as asked; in a screenplay a `>` before the first `SHOT` rewrites every shot's prose and one inside a `SHOT` only that shot's, never dialogue. The CLI records it with the picks |
 | `--one detail, 5 to 8 words--` | a slot: the language model writes it where it stands, after everything else has rolled (see [wildcard-manager.md](wildcard-manager.md)) |
 | `\{` `\}` `\|` `\$` `\__` `\@` `\#` `\\` | the character as written, not syntax: `a sign reading \{OPEN\}`, `\__init__` |

@@ -260,6 +260,7 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
         ex.warnings = world.warnings  # one list for the whole reel
         ex.vars = dict(world.vars)
         ex.var_props = dict(world.var_props)
+        ex.var_tags = dict(world.var_tags)
         ex.var_fields = dict(world.var_fields)  # the head's fields rolled once, for every clip
 
         def back(name: str, n: int) -> str | None:

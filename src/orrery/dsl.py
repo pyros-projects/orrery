@@ -25,13 +25,17 @@ _BRACE = re.compile(r"\{([^{}]*)\}")
 FIX = "\x1f"  # FIX n FIX inside a library or a brace: the draw lands on option n (grids, unique=; see orrery.batch)
 # __name[tags]:N__(directions): N = at least N entries; (directions) guide the model that writes the
 # library and never reach the prompt. [tags]: `myth` · `myth,!bird` (all, none of) · `water|deep_sea` (either).
-_LIB = re.compile(r"(?<!\\)__(\w+(?:/\w+)*)(?:\[([\w,|!-]+)\])?((?:#[\w-]+:\$?[\w.-]+)*)(?::(\d+))?(?:\x1f(\d+)\x1f)?__"
+_LIB = re.compile(r"(?<!\\)__(\w+(?:/\w+)*)(?:\[([^\[\]\n]+)\])?((?:#[\w-]+:\$?[\w.-]+)*)(?::(\d+))?(?:\x1f(\d+)\x1f)?__"
                   r"(?:\(([^()]*)\))?")
 _VAR = re.compile(r"\$([A-Za-z_]\w*)(?:~(\d+))?(?:\.([A-Za-z_][\w-]*))?")  # $x, $x~N (N clips ago), $x.field
 # `$w.kind=rain,snow`, `$w!=x`: a condition on a binding's text or on a property of its pick
 _COND = r"\$([A-Za-z_]\w*)(?:\.([A-Za-z_][\w-]*))?\s*(!=|=)\s*([\w-]+(?:\s*,\s*[\w-]+)*)"
 _GUARD = re.compile(rf"^\?\s*{_COND}\s*:\s*(.*)$", re.DOTALL)  # ? cond: a line kept only when it holds
 _IF = re.compile(rf"^\?\s*{_COND}\s*:(.*)$", re.DOTALL)  # {? cond: then|else}
+# the same with brackets: `? $w[kind=rain|snow]: …`, `{? $c[myth, !bird]: then|else}`
+_PRED = r"\$([A-Za-z_]\w*)\[([^\[\]]*)\]"
+_GUARD_PRED = re.compile(rf"^\?\s*{_PRED}\s*:\s*(.*)$", re.DOTALL)
+_IF_PRED = re.compile(rf"^\?\s*{_PRED}\s*:(.*)$", re.DOTALL)
 _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
 _BINDING_LINE = re.compile(r"^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$")
 _MULTI = re.compile(r"^(\d+)(?:-(\d+))?\$\$(?:(.*?)\$\$)?(.+)$")  # {2$$ and $$a|b|c}: Dynamic Prompts' joiner
@@ -39,7 +43,7 @@ _ESCAPE = re.compile(r"\\([{}|$_@#\[\]\\<>])")  # \{ \__ \$ …: the character a
 _ESCAPED = re.compile("\ue000(\\d+)\ue001")
 _WEIGHTED = re.compile(r"^(.*?):(\d+(?:\.\d+)?)$")
 _DP_WEIGHT = re.compile(r"^\s*(\d+(?:\.\d+)?)::(.*)$", re.DOTALL)  # Dynamic Prompts: {3::red|1::blue}
-_LIB_ONLY = re.compile(r"^__(\w+(?:/\w+)*)(?:\[([\w,|!-]+)\])?((?:#[\w-]+:\$?[\w.-]+)*)(?::\d+)?__(?:\([^()]*\))?$")
+_LIB_ONLY = re.compile(r"^__(\w+(?:/\w+)*)(?:\[([^\[\]\n]+)\])?((?:#[\w-]+:\$?[\w.-]+)*)(?::\d+)?__(?:\([^()]*\))?$")
 _NUMBER = r"-?\d+(?:\.\d+)?"
 _RANGE = re.compile(rf"\s*({_NUMBER})\s*-\s*({_NUMBER})\s*")  # {0.4-0.9}, {2-6}: a number rolled in between
 _LORA_PARTS = re.compile(r"<lora:([^:<>]+):([^:<>]+)(?::([^:<>]+))?>")
@@ -198,16 +202,43 @@ def split_options(inner: str, most: int = -1) -> list[str]:
     return [*out, inner[start:]]
 
 
-def tags_match(spec: str | None, tags) -> bool:
-    """`[myth]` · `[myth,!bird]`: every comma-separated term holds · `[water|deep_sea]`: either does."""
-    if not spec:
+def matches(spec: str | None, tags, props: Mapping[str, str] | None = None,
+            resolve: Callable[[str], str] = lambda v: v) -> bool:
+    """One predicate language for library filters and conditions:
+
+        myth                      the tag            !bird            not the tag
+        habitat=sea               a property         size!=large      not that value
+        myth, !bird               all of them        water|deep_sea   either
+        size=small|tiny           a key's values     habitat=$a.habitat   what rolled before
+
+    Properties compare in any case; tags as written."""
+    if not spec or not spec.strip():
         return True
-    have = set(tags)
+    props = props or {}
     for term in spec.split(","):
-        alts = [a for a in term.split("|") if a]
-        if alts and not any((a[1:] not in have) if a.startswith("!") else (a in have) for a in alts):
+        key, hit, alts = None, False, [a.strip() for a in term.split("|") if a.strip()]
+        for alt in alts:
+            neg, body = alt.startswith("!"), alt.lstrip("!").strip()
+            if "!=" in body:
+                key, _, value = body.partition("!=")
+                neg, key = not neg, key.strip()
+            elif "=" in body:
+                key, _, value = body.partition("=")
+                key = key.strip()
+            else:
+                value = body if key is not None else None  # size=small|tiny: tiny is a size too
+            ok = body in tags if value is None else \
+                (props.get(key) or "").strip().casefold() == resolve(value.strip()).strip().casefold()
+            if ok != neg:
+                hit = True
+                break
+        if alts and not hit:
             return False
     return True
+
+
+def tags_match(spec: str | None, tags) -> bool:
+    return matches(spec, tags)
 
 
 def _places(number: str) -> int:
@@ -248,6 +279,8 @@ class Expander:
         self.history: Callable[[str, int], str | None] | None = None
         self.var_props: dict[str, dict[str, str]] = {}  # a binding → the properties of the picks it rolled
         self.var_fields: dict[str, dict[str, str]] = {}  # the same, each rolled once as a template ($x.field reads it)
+        self.var_tags: dict[str, set[str]] = {}  # a binding → the tags of the picks it rolled (`? $c[myth]: …`)
+        self._tags_seen: set[str] = set()
         # (name, clips back) → that clip's fields of the binding, as it showed them; set by reels, for $x~N.field
         self.history_props: Callable[[str, int], dict[str, str]] | None = None
         self._props_seen: dict[str, str] = {}
@@ -275,8 +308,9 @@ class Expander:
         return float(self.weights.get(key, 1.0))
 
     def bind(self, name: str, expr: str) -> str:
-        self._props_seen = {}
+        self._props_seen, self._tags_seen = {}, set()
         self.vars[name] = self.expr(expr, label_prefix=f"${name} ← ")
+        self.var_tags[name] = self._tags_seen
         self.var_props[name] = props = self._props_seen
         self._props_seen = {}  # a field's own picks are not the binding's
         self.var_fields[name] = {}
@@ -321,8 +355,18 @@ class Expander:
         hit = actual.strip().casefold() in {v.strip().casefold() for v in values.split(",")}
         return hit if op == "=" else not hit
 
+    def holds_pred(self, name: str, spec: str) -> bool:
+        """`$c[myth, size=small]`: the predicate against what $c rolled: its tags, its properties, and
+        its value as a tag of its own (`? $c[backbend]: …`)."""
+        if name not in self.vars:
+            self._unbound(name)
+        value = (self.vars.get(name) or "").strip()
+        return matches(spec, self.var_tags.get(name, set()) | {value}, self.var_props.get(name, {}), self._resolve)
+
     def guarded(self, line: str) -> str | None:
         """A `? cond: rest` line: its rest when the condition holds, else None. Other lines as they are."""
+        if m := _GUARD_PRED.match(line.strip()):
+            return m.group(3) if self.holds_pred(m.group(1), m.group(2)) else None
         if not (m := _GUARD.match(line.strip())):
             return line
         return m.group(5) if self.holds(*m.group(1, 2, 3, 4)) else None
@@ -401,11 +445,11 @@ class Expander:
             raise MissingLibrary(name)
         family = f"__{name}__"
         wanted = [(k, self._resolve(v).casefold()) for k, v in _PROP.findall(props or "")]
-        entries = [e for e in self.libraries[name].entries if tags_match(tag, e.tags)
+        entries = [e for e in self.libraries[name].entries if matches(tag, e.tags, dict(e.props), self._resolve)
                    and all((e.prop(k) or "").casefold() == v for k, v in wanted)]
         if not entries:
             raise ValueError(f"{_label(name, tag, props)} matches no entry")
-        return family, [(e.value, e.weight * self.learned(f"{family}={e.value}"), e.props) for e in entries]
+        return family, [(e.value, e.weight * self.learned(f"{family}={e.value}"), e.props, e.tags) for e in entries]
 
     def _resolve(self, value: str) -> str:
         """A filter value: as written, or `$var` / `$var.field` from what was rolled before."""
@@ -417,15 +461,16 @@ class Expander:
     def _library(self, name: str, tag: str | None, label_prefix: str, props: str = "", fixed: int | None = None) -> str:
         family, pool = self._pool(name, tag, props)
         label = label_prefix + _label(name, tag, props)
-        i = weighted_pick([w for _, w, _ in pool], self._stream(label))  # a fixed draw rolls too (`@rng 1`)
+        i = weighted_pick([w for _, w, _, _ in pool], self._stream(label))  # a fixed draw rolls too (`@rng 1`)
         if fixed is not None:
             if fixed >= len(pool):
                 raise ValueError(f"{_label(name, tag, props)} has {len(pool)} entries now, fewer than the grid counted")
             i = fixed
-        value, _, entry_props = pool[i]
+        value, _, entry_props, entry_tags = pool[i]
         self.picks.append(Pick(label, value, (f"{family}={value}",)))
         text = self._nested(name, value, label_prefix)
         self._props_seen.update(entry_props)  # after the nested picks: the outer library's fields win
+        self._tags_seen.update(entry_tags)
         return text
 
     def _nested(self, name: str, value: str, label_prefix: str) -> str:
@@ -452,6 +497,9 @@ class Expander:
         if inner.startswith(FIX):
             n, _, inner = inner[1:].partition(FIX)
             fixed = int(n)
+        if m := _IF_PRED.match(inner.strip()):
+            then, otherwise = (split_options(m.group(3), 1) + [""])[:2]
+            return (then if self.holds_pred(m.group(1), m.group(2)) else otherwise).strip()
         if m := _IF.match(inner.strip()):
             then, otherwise = (split_options(m.group(5), 1) + [""])[:2]
             return (then if self.holds(*m.group(1, 2, 3, 4)) else otherwise).strip()
@@ -484,7 +532,7 @@ class Expander:
     def _multi(self, lo: int, hi: int, source: str, joiner: str = ", ") -> str:
         if lm := _LIB_ONLY.match(source):
             family, pool3 = self._pool(lm.group(1), lm.group(2), lm.group(3))
-            pool = [(v, w) for v, w, _ in pool3]
+            pool = [(v, w) for v, w, _, _ in pool3]
         else:
             options = [(dp.group(2).strip(), float(dp.group(1))) if (dp := _DP_WEIGHT.match(v)) else (v.strip(), 1.0)
                        for v in split_options(source)]

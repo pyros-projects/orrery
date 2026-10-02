@@ -6,7 +6,7 @@ const REF = [
   ["Wildcards", [
     ["__creature__", "one entry from a library, weighted by what you rated", "a __creature__ at dusk"],
     ["__creature[myth]__", "only entries tagged myth", "a __creature[myth]__ asleep"],
-    ["__creature[myth,!bird]__", "every term holds (! for none of); [water|deep_sea] either tag", "a __creature[myth,!bird]__ asleep"],
+    ["__creature[myth, !bird, size=small|tiny]__", "a predicate: commas all of, | either, ! not, key=value a property (habitat=$a.habitat: what rolled before)", "a __creature[myth, !bird]__ asleep"],
     ["__film/genre__", "a library in a folder: library/film/genre.yaml or .txt (one entry per line); the language model creates folder and file when they don't exist", ""],
     ["__runway_shoes:20__", "with a language model set (the gear): an unknown library is created when the node runs, and :20 tops it up to at least 20 entries", ""],
     ["__film_scene__(30 words, set and cast)", "directions for the model that writes the library; they never reach the prompt. New entries wait in Libraries for Accept or Discard", ""],
@@ -27,6 +27,7 @@ const REF = [
     ["$w.sfx", "a property of whatever $w rolled: the sound follows the weather. A property may hold {a|b}, __lib__ or LoRAs (LORA: $p.loras with $p.action); it rolls once when $w is bound", "SFX: $w.sfx"],
     ["? $w.kind=rain,snow: …", "a line kept only when the condition holds (!= for not); works for SFX lines too", "? $w.kind=rain: "],
     ["{? $w.kind=rain: wet|dry}", "a choice made by a condition instead of the dice", ""],
+    ["? $c[myth, size=small]: …", "a condition in the same brackets, against what $c rolled: tags, properties, its value", "? $c["],
     ["@include effects/living_clay", "embeds a preset where it stands; indented key = value lines under it turn its dials", "@include "],
     ["# a note", "a comment: a note for you that never reaches the model", "# "],
     ["\\{OPEN\\}  \\__init__", "a backslash writes the next character as it is: { } | $ _ @ # [ ] \\ < >", ""],

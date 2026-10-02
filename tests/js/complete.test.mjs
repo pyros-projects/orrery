@@ -168,3 +168,11 @@ test("a tag after others completes in place: [myth,!de…", () => {
   assert.deepEqual(at("__creature[deep_sea|m").items.map((i) => i.insert), ["__creature[deep_sea|myth]__"]);
 });
 
+
+test("inside the brackets: tags and keys, a key's values, another value of the key", () => {
+  const keys = at("__creature[myth, ha").items.map((i) => i.insert);
+  assert.deepEqual(keys, ["__creature[myth, habitat="]);
+  assert.deepEqual(at("__creature[habitat=s").items.map((i) => i.insert), ["__creature[habitat=sea]__"]);
+  assert.deepEqual(at("__creature[habitat=sea|f").items.map((i) => i.insert), ["__creature[habitat=sea|forest]__"]);
+  assert.deepEqual(at("__creature[!d").items.map((i) => i.insert), ["__creature[!deep_sea]__"]);
+});
