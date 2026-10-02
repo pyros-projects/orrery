@@ -1,0 +1,40 @@
+# RefMods through the language (#9, #10, #30): the A/B/C tour, with the salon's RefMod named in the CAST.
+# orrery_abc_salon is made from four stills of A's first clip (run_sheet.md). Orrery RefMods puts it on the
+# conditioning of the clips that name SALON (the first and the last); the hallway and the library go without.
+# Turn the dials and Generate again:
+#   SALON (refmod orrery_abc_salon at 0.5)        strength: about half its share of attention (1 as it is)
+#   SALON (refmod orrery_abc_salon from 0%)       from the first step (round 1's C: the salon's framings come back)
+#   SALON (refmod orrery_abc_salon, global)       with every clip, the library's too
+#   refmods: at 0.8 from 35%                      the defaults for every RefMod without its own
+@h3 ref2va 16:9 0.6MP
+style: live-action, architectural documentary, warm evening light, photorealistic, one continuous unbroken ten-second shot at eye level
+context: 22
+refmods: at 1 from 35%
+
+CAST
+SALON (refmod orrery_abc_salon): a double-height salon with a black-and-white checkered marble floor, a curved white staircase, a black grand piano, a green velvet sofa, a tall gilt mirror and a crystal chandelier
+HALLWAY: a long hallway with dark wood panelling, a red runner rug and gold-framed portraits
+LIBRARY: a two-storey library with floor-to-ceiling shelves, a rolling brass ladder and a reading desk with a green glass lamp
+
+CHUNK the salon
+SHOT 10s: arc, slow
+The camera circles slowly through SALON: past the black grand piano, along the green velvet sofa and the tall gilt mirror, under the crystal chandelier, and up the sweep of the curved white staircase. Late sun falls across the checkered marble floor. At the end the camera settles on the open double doors to the hallway.
+SFX: a quiet, large room; a clock ticking; distant birdsong through the windows
+HANDOFF: the open double doors to the hallway fill the centre of the frame
+
+CHUNK the hallway
+SHOT 10s: push in, slow
+The camera glides through the doors and along HALLWAY, over the red runner rug, past the gold-framed portraits on the dark wood panelling, toward a tall door at the far end that stands ajar.
+SFX: soft footsteps on a rug; the creak of old floorboards
+HANDOFF: the tall door at the end of the hallway swings open
+
+CHUNK the library
+SHOT 10s: push in, slow
+The camera moves into LIBRARY, past the floor-to-ceiling shelves and the rolling brass ladder, around the reading desk with its green glass lamp, toward a second pair of doors on the far side, which open back onto the salon.
+SFX: the hush of a library; a page turning somewhere; the lamp's faint hum
+HANDOFF: the far doors of the library open onto the salon beyond
+
+CHUNK back in the salon
+SHOT 10s: push in, slow
+The camera passes through the doors and comes back into SALON from the other side: the curved white staircase now rises on the left, the black grand piano stands in the foreground, the green velvet sofa and the tall gilt mirror face the camera across the checkered marble floor, under the crystal chandelier. The camera drifts slowly toward the piano.
+SFX: the quiet, large room again; the clock ticking; birdsong

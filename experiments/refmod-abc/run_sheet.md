@@ -145,6 +145,16 @@ What the sheets show:
 (4 against 2) with leakage at 4, so it earns its place. The recent RefMod rides along in these
 variants and needs a test of its own before it earns one.
 
+### Round 3: RefMods through the language (#9, #10, #30)
+
+The same tour, with no SEND: lines and no RefMod nodes but one: [`abc_refmods.orr`](abc_refmods.orr)
+names the salon's RefMod in the CAST (`SALON (refmod orrery_abc_salon)`), and
+[`abc_refmods.json`](abc_refmods.json) puts Orrery RefMods between Reference to Video and Orrery
+Continue. The prompts are word for word those of rounds 1 and 2; the RefMod goes with the clips
+that name SALON (the first and the last), from 35 % of sampling on, at strength 1 unless the CAST
+says otherwise. `orrery_abc_salon` is made once from A's first clip (frames 0, 60, 120, 180) with
+Create H3 RefMod From Inputs (identity_encode, saved).
+
 ## Deciding
 
 - **The place RefMod earns its place** when C beats A on room identity in segment 3 by at least
