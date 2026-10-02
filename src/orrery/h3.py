@@ -152,6 +152,7 @@ class Compiled:
     sends: dict[int, dict] = field(default_factory=dict)  # sent images that exist in this segment (Reel.ready)
     send_slots: list[int] = field(default_factory=list)  # every image a SEND: line of the reel fills
     refmods: list[dict] = field(default_factory=list)  # the RefMods this clip gets (clip_refmods), for Orrery RefMods
+    images: list[dict] = field(default_factory=list)  # the clip's pictures with an at or a from (clip_images)
 
 
 # --- front end ------------------------------------------------------------------------------
@@ -164,6 +165,7 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
             if m := _BINDING.match(line):
                 ex.bind(m.group(1), m.group(2))
     scene, cur, in_cast = Scene(), None, False
+    block, last = 0, None  # the CAST block being read, and its last member (for voice: and keep:)
     loose: list[str] = []  # prose before any SHOT: the implicit shot, or ignored
     loose_sfx: list[list[str]] = []
     for raw in lines:
@@ -204,9 +206,9 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
         elif (m := _MUSIC.match(line)) and cur is None and in_cast:
             scene.music = m.group(1).strip()
         elif line == "CAST" and cur is None:
-            in_cast = True
+            in_cast, block = True, block + 1
         elif in_cast and cur is None and not _SHOT.match(line):
-            _cast_line(scene, line, lint)
+            last = _cast_line(scene, line, lint, block, last)
         elif m := _SHOT.match(line):
             spec, anchors = _anchors(m.group(2) or "")
             transition, head = "cut", spec.split(",")[0].strip().lower()
@@ -245,16 +247,27 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
     return scene
 
 
-def _cast_line(scene: Scene, line: str, lint: list[Issue]) -> None:
-    if (m := _ATTRIBUTE.match(line)) and scene.cast:
-        attach(scene.cast[-1], m.group(1), m.group(2))
-    elif m := MEMBER.match(line):
-        if any(c.name == m.group(1).strip() for c in scene.cast):
-            lint.append(Issue("warn", f"{m.group(1).strip()} is in the CAST twice; the first one counts."))
-            return
-        scene.cast.append(parse_member(m.group(1), m.group(2), m.group(3).rstrip(".")))
-    else:
-        lint.append(Issue("warn", f"Ignored CAST line (write NAME (sources): description): {line[:48]}"))
+def _cast_line(scene: Scene, line: str, lint: list[Issue], block: int = 0, last: Member | None = None) -> Member | None:
+    """One line of a CAST block; returns the member a following voice: or keep: line belongs to. A
+    member a later block declares again (a chunk's own CAST) replaces the earlier one in its place,
+    so its <Subject N> keeps its number."""
+    if (m := _ATTRIBUTE.match(line)) and last is not None:
+        attach(last, m.group(1), m.group(2))
+        return last
+    if m := MEMBER.match(line):
+        member = parse_member(m.group(1), m.group(2), m.group(3).rstrip("."))
+        member.block = block
+        at = next((i for i, c in enumerate(scene.cast) if c.name == member.name), None)
+        if at is None:
+            scene.cast.append(member)
+        elif scene.cast[at].block == block:
+            lint.append(Issue("warn", f"{member.name} is in the CAST twice; the first one counts."))
+            return last
+        else:
+            scene.cast[at] = member
+        return member
+    lint.append(Issue("warn", f"Ignored CAST line (write NAME (sources): description): {line[:48]}"))
+    return last
 
 
 def _clause(text: str) -> str:
@@ -610,6 +623,20 @@ def clip_refmods(scene: Scene) -> list[dict]:
     return list(out.values())
 
 
+def clip_images(scene: Scene, refs: list[int]) -> list[dict]:
+    """The clip's pictures with an `at` or a `from` (`image 1 at 0.5 from 35%`), for Orrery RefMods:
+    `ref` is the picture's place among those Reference to Video gets (packed by Orrery Refs when
+    `refs` lists the original slots), `image` its slot in the CAST."""
+    out: dict[int, dict] = {}
+    for m in scene.cast:
+        for src in m.sources:
+            if src.kind == "image" and (src.strength is not None or src.start is not None) and src.index not in out:
+                out[src.index] = {"ref": src.index, "image": refs[src.index - 1] if refs else src.index,
+                                  "member": m.name, "strength": 1.0 if src.strength is None else src.strength,
+                                  "from": 0.0 if src.start is None else src.start}
+    return list(out.values())
+
+
 _IMAGE_BRACKET = re.compile(r"\[image\s+(\d+)\]", re.IGNORECASE)
 
 
@@ -731,4 +758,4 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
         _scene_lint(src, scene, lint)
     return Compiled(text, picks, lint, scene, " ".join(scene.loras), len(reel.blocks) if reel else 0,
                     segment if reel else 0, reel.segments if reel else 0, refs,
-                    sends, reel.send_slots if reel else [], clip_refmods(scene))
+                    sends, reel.send_slots if reel else [], clip_refmods(scene), clip_images(scene, refs))

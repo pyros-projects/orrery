@@ -61,7 +61,7 @@ const REF = [
   ["Cast and Ref2VA", [
     ["CAST", "names your references once; mention them by name in shots and the summary", "CAST\nMAYA (image 1): the young blonde woman, in a light-pink shirt"],
     ["DOG (image 2, image 3): the white Samoyed, with a curved tail", "sources in parentheses (image N, video N, video N + audio, refmod NAME), then the description; later mentions use its head noun (“the white Samoyed”)", ""],
-    ["EMMA (refmod emma_canon): a young woman in a red coat", "a RefMod from models/refmods. A clip that does not name EMMA leaves her out; at 0.5 holds looser, from 35% (the default) waits until the picture is laid out, , global keeps her in every clip", "NAME (refmod name): "],
+    ["EMMA (refmod emma_canon): a young woman in a red coat", "a RefMod from models/refmods. A clip that does not name EMMA leaves her out; at 0.5 holds looser, from 35% (the default) waits until the picture is laid out, , global keeps her in every clip. image 1 at 0.5 from 35% sets the same dials for a picture; a chunk's own CAST replaces her for that clip", "NAME (refmod name): "],
     ["refmods: at 0.8 from 35%", "the defaults for RefMods without their own at or from", "refmods: from 35%"],
     ["@h3 ref2va 16:9 full", "the prompt's format: lite by default (one <Subject N> = … line per cast member, then three fields where each is only its label); full writes the six sections of MiniMax's guide, with summary: and retention. Works in every mode", "@h3 ref2va 16:9 full"],
     ["keep: face, outfit", "under a cast member: a retention block goes into the prompt (lite too). Macros: all · face, hair, body, outfit (combined) · style · place · loose; or partially_preserved - your own reason", "keep: "],

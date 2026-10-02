@@ -466,3 +466,14 @@ def test_a_sent_image_of_a_member_not_in_the_chunk_stays_out():
         "HANDOFF: only the room is left\nCHUNK\nSHOT 5s: static\nNothing", "HANDOFF: only the room is left\nSEND: frame 0 to image 3\nCHUNK\nSHOT 5s: static\nNothing", 1)
     clips = [ref2va(src, segment=s) for s in range(3)]
     assert [sorted(c.sends) for c in clips] == [[], [], [3]] and [c.refs for c in clips] == [[], [], [3]]
+
+
+def test_a_chunks_own_cast_replaces_the_member_for_that_clip():
+    src = LEAVES.replace("CHUNK\nSHOT 5s: static\nEMMA slides back", (
+        "CHUNK\nCAST\nEMMA (refmod emma_canon at 0.3, image 1 at 0.5): a young woman in a red coat\n"
+        "SHOT 5s: static\nEMMA slides back"))
+    first, _, back = (ref2va(src, segment=s) for s in range(3))
+    assert [m["strength"] for m in first.refmods] == [1.0] and [m["strength"] for m in back.refmods] == [0.3]
+    assert back.scene.cast[0].name == "EMMA"  # in her place: still <Subject 1>
+    assert back.images == [{"ref": 1, "image": 1, "member": "EMMA", "strength": 0.5, "from": 0.0}]
+    assert not any("twice" in i.message for i in back.lint)

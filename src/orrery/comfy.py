@@ -364,11 +364,13 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         stack, warnings = lora_stack(result.loras, lora_files())
         lint += [{"severity": "warn", "message": w} for w in warnings]
     refmods = getattr(result, "refmods", []) if target != "text" else []
-    if refmods and not refmodded:
+    images = getattr(result, "images", []) if target != "text" else []
+    if (refmods or images) and not refmodded:
+        what = ", ".join([r["name"] for r in refmods] + [f"image {i['image']} at {i['strength']:g}" for i in images])
         lint.append({"severity": "warn", "message": (
-            f"This clip uses RefMods ({', '.join(r['name'] for r in refmods)}), but no Orrery RefMods reads this "
-            "node's picks: put one between Reference to Video's conditioning and the sampler (or Orrery "
-            "Continue), with the picks wired in. The prompt already describes them.")})
+            f"This clip uses RefMods or picture strengths ({what}), but no Orrery RefMods reads this node's picks: "
+            "put one between Reference to Video's conditioning and the sampler (or Orrery Continue), with the "
+            "picks wired in. The prompt already describes them.")})
     for issue in lint:
         print(f"[orrery] {issue['severity']}: {issue['message']}")
     data = {
@@ -392,6 +394,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
            if target != "text" and result.send_slots else {}),
         **({"enhanced": enhanced} if enhanced else {}),
         **({"refmods": refmods} if refmods else {}),
+        **({"images": images} if images else {}),
     }
     width, height, length = shape(source, sizes)
     lint += frame_lint(source, sizes, width, height)
