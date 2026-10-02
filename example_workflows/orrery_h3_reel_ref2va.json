@@ -1,8 +1,8 @@
 {
-  "id": "3a9daf56-41a1-47c7-b1b3-c58e9cd1b3bb",
+  "id": "685aa7ff-1a5c-4b69-a9c7-39d0e63a6834",
   "revision": 0,
-  "last_node_id": 21,
-  "last_link_id": 35,
+  "last_node_id": 22,
+  "last_link_id": 36,
   "nodes": [
     {
       "id": 1,
@@ -117,7 +117,7 @@
           "name": "text",
           "type": "STRING",
           "links": [
-            10
+            11
           ]
         },
         {
@@ -125,8 +125,8 @@
           "name": "picks",
           "type": "STRING",
           "links": [
-            4,
-            17
+            5,
+            18
           ]
         },
         {
@@ -134,7 +134,7 @@
           "name": "seed",
           "type": "INT",
           "links": [
-            14
+            15
           ]
         },
         {
@@ -142,7 +142,7 @@
           "name": "width",
           "type": "INT",
           "links": [
-            11
+            12
           ]
         },
         {
@@ -150,7 +150,7 @@
           "name": "height",
           "type": "INT",
           "links": [
-            12
+            13
           ]
         },
         {
@@ -158,7 +158,7 @@
           "name": "length",
           "type": "INT",
           "links": [
-            13
+            14
           ]
         },
         {
@@ -231,7 +231,7 @@
       "type": "MarkdownNote",
       "pos": [
         0,
-        1160
+        1220
       ],
       "size": [
         720,
@@ -293,8 +293,7 @@
           "name": "MODEL",
           "type": "MODEL",
           "links": [
-            15,
-            16
+            1
           ]
         }
       ],
@@ -312,10 +311,62 @@
     },
     {
       "id": 4,
+      "type": "ModelAttentionBackend",
+      "pos": [
+        780,
+        120
+      ],
+      "size": [
+        380,
+        70
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        },
+        {
+          "localized_name": "backend",
+          "name": "attention",
+          "type": "COMBO",
+          "widget": {
+            "name": "attention"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "links": [
+            16,
+            17
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ModelAttentionBackend"
+      },
+      "widgets_values": [
+        "comfy kitchen attention"
+      ],
+      "widgets_values_named": {
+        "attention": "comfy kitchen attention"
+      }
+    },
+    {
+      "id": 5,
       "type": "CLIPLoader",
       "pos": [
         780,
-        130
+        230
       ],
       "size": [
         380,
@@ -360,7 +411,7 @@
           "name": "CLIP",
           "type": "CLIP",
           "links": [
-            1
+            2
           ]
         }
       ],
@@ -379,11 +430,11 @@
       }
     },
     {
-      "id": 5,
+      "id": 6,
       "type": "VAELoader",
       "pos": [
         780,
-        280
+        380
       ],
       "size": [
         380,
@@ -409,8 +460,8 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            2,
-            27
+            3,
+            28
           ]
         }
       ],
@@ -426,11 +477,11 @@
       }
     },
     {
-      "id": 6,
+      "id": 7,
       "type": "VAELoader",
       "pos": [
         780,
-        380
+        480
       ],
       "size": [
         380,
@@ -456,8 +507,8 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            3,
-            29
+            4,
+            30
           ]
         }
       ],
@@ -473,11 +524,11 @@
       }
     },
     {
-      "id": 7,
+      "id": 8,
       "type": "MarkdownNote",
       "pos": [
         780,
-        1160
+        1220
       ],
       "size": [
         560,
@@ -491,16 +542,16 @@
       "title": "models",
       "properties": {},
       "widgets_values": [
-        "## Models\n\nFrom [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3):\n\n- `models/diffusion_models/` [minimax_h3_ref2va_pruned_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors)\n- `models/text_encoders/` [qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors)\n- `models/vae/` [minimax_h3_video_vae_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_int8_convrot.safetensors) and [minimax_h3_audio_vae_fp32.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors)\n\nSampling as in ComfyUI's own H3 templates: `res_multistep`, `simple`, 20 steps, no CFG. For a turbo LoRA from the same repository, put a **LoraLoaderModelOnly** after the model loader and lower the steps (4 to 8, as the LoRA says)."
+        "## Models\n\nFrom [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3):\n\n- `models/diffusion_models/` [minimax_h3_ref2va_pruned_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors)\n- `models/text_encoders/` [qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors)\n- `models/vae/` [minimax_h3_video_vae_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_int8_convrot.safetensors) and [minimax_h3_audio_vae_fp32.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors)\n\nSampling as in ComfyUI's own H3 templates: `res_multistep`, `simple`, 20 steps, no CFG. For a turbo LoRA from the same repository, put a **LoraLoaderModelOnly** after the model loader and lower the steps (4 to 8, as the LoRA says).\n\n**Model Attention Backend** is set to `comfy kitchen attention`: ComfyUI's own quantized INT8 attention, much faster on Nvidia and AMD GPUs. Where it is not available, the node falls back to PyTorch attention by itself (and says so in the log)."
       ],
       "widgets_values_named": {
-        "text": "## Models\n\nFrom [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3):\n\n- `models/diffusion_models/` [minimax_h3_ref2va_pruned_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors)\n- `models/text_encoders/` [qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors)\n- `models/vae/` [minimax_h3_video_vae_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_int8_convrot.safetensors) and [minimax_h3_audio_vae_fp32.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors)\n\nSampling as in ComfyUI's own H3 templates: `res_multistep`, `simple`, 20 steps, no CFG. For a turbo LoRA from the same repository, put a **LoraLoaderModelOnly** after the model loader and lower the steps (4 to 8, as the LoRA says)."
+        "text": "## Models\n\nFrom [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3):\n\n- `models/diffusion_models/` [minimax_h3_ref2va_pruned_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors)\n- `models/text_encoders/` [qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors)\n- `models/vae/` [minimax_h3_video_vae_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_int8_convrot.safetensors) and [minimax_h3_audio_vae_fp32.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors)\n\nSampling as in ComfyUI's own H3 templates: `res_multistep`, `simple`, 20 steps, no CFG. For a turbo LoRA from the same repository, put a **LoraLoaderModelOnly** after the model loader and lower the steps (4 to 8, as the LoRA says).\n\n**Model Attention Backend** is set to `comfy kitchen attention`: ComfyUI's own quantized INT8 attention, much faster on Nvidia and AMD GPUs. Where it is not available, the node falls back to PyTorch attention by itself (and says so in the log)."
       },
       "color": "#432",
       "bgcolor": "#653"
     },
     {
-      "id": 8,
+      "id": 9,
       "type": "MiniMaxH3ReferenceToVideo",
       "pos": [
         1200,
@@ -518,49 +569,49 @@
           "localized_name": "clip",
           "name": "clip",
           "type": "CLIP",
-          "link": 1
+          "link": 2
         },
         {
           "localized_name": "vae",
           "name": "vae",
           "shape": 7,
           "type": "VAE",
-          "link": 2
+          "link": 3
         },
         {
           "localized_name": "audio_vae",
           "name": "audio_vae",
           "shape": 7,
           "type": "VAE",
-          "link": 3
+          "link": 4
         },
         {
           "localized_name": "ref_image_0",
           "name": "ref_images.ref_image_0",
           "shape": 7,
           "type": "IMAGE",
-          "link": 5
+          "link": 6
         },
         {
           "localized_name": "ref_image_1",
           "name": "ref_images.ref_image_1",
           "shape": 7,
           "type": "IMAGE",
-          "link": 6
+          "link": 7
         },
         {
           "localized_name": "ref_image_2",
           "name": "ref_images.ref_image_2",
           "shape": 7,
           "type": "IMAGE",
-          "link": 7
+          "link": 8
         },
         {
           "localized_name": "ref_image_3",
           "name": "ref_images.ref_image_3",
           "shape": 7,
           "type": "IMAGE",
-          "link": 8
+          "link": 9
         },
         {
           "localized_name": "ref_image_4",
@@ -597,7 +648,7 @@
           "widget": {
             "name": "prompt"
           },
-          "link": 10
+          "link": 11
         },
         {
           "localized_name": "width",
@@ -606,7 +657,7 @@
           "widget": {
             "name": "width"
           },
-          "link": 11
+          "link": 12
         },
         {
           "localized_name": "height",
@@ -615,7 +666,7 @@
           "widget": {
             "name": "height"
           },
-          "link": 12
+          "link": 13
         },
         {
           "localized_name": "length",
@@ -624,7 +675,7 @@
           "widget": {
             "name": "length"
           },
-          "link": 13
+          "link": 14
         },
         {
           "localized_name": "ref_image_size",
@@ -642,7 +693,7 @@
           "name": "positive",
           "type": "CONDITIONING",
           "links": [
-            19
+            20
           ]
         },
         {
@@ -650,7 +701,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            18
+            19
           ]
         }
       ],
@@ -673,7 +724,7 @@
       }
     },
     {
-      "id": 9,
+      "id": 10,
       "type": "OrreryRefs",
       "pos": [
         1200,
@@ -681,7 +732,7 @@
       ],
       "size": [
         380,
-        330
+        450
       ],
       "flags": {},
       "order": 11,
@@ -691,7 +742,7 @@
           "localized_name": "picks",
           "name": "picks",
           "type": "STRING",
-          "link": 4
+          "link": 5
         },
         {
           "localized_name": "image_1",
@@ -773,7 +824,7 @@
           "name": "ref_1",
           "type": "IMAGE",
           "links": [
-            5
+            6
           ]
         },
         {
@@ -781,7 +832,7 @@
           "name": "ref_2",
           "type": "IMAGE",
           "links": [
-            6
+            7
           ]
         },
         {
@@ -789,7 +840,7 @@
           "name": "ref_3",
           "type": "IMAGE",
           "links": [
-            7
+            8
           ]
         },
         {
@@ -797,7 +848,7 @@
           "name": "ref_4",
           "type": "IMAGE",
           "links": [
-            8
+            9
           ]
         },
         {
@@ -835,7 +886,7 @@
           "name": "preview",
           "type": "IMAGE",
           "links": [
-            9
+            10
           ]
         }
       ],
@@ -850,7 +901,7 @@
       }
     },
     {
-      "id": 10,
+      "id": 11,
       "type": "PreviewImage",
       "pos": [
         1200,
@@ -868,7 +919,7 @@
           "localized_name": "images",
           "name": "images",
           "type": "IMAGE",
-          "link": 9
+          "link": 10
         }
       ],
       "outputs": [
@@ -882,10 +933,12 @@
       "title": "references this clip gets",
       "properties": {
         "Node name for S&R": "PreviewImage"
-      }
+      },
+      "widgets_values": [],
+      "widgets_values_named": {}
     },
     {
-      "id": 11,
+      "id": 12,
       "type": "RandomNoise",
       "pos": [
         1620,
@@ -906,7 +959,7 @@
           "widget": {
             "name": "noise_seed"
           },
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [
@@ -915,7 +968,7 @@
           "name": "NOISE",
           "type": "NOISE",
           "links": [
-            22
+            23
           ]
         }
       ],
@@ -932,7 +985,7 @@
       }
     },
     {
-      "id": 12,
+      "id": 13,
       "type": "KSamplerSelect",
       "pos": [
         1620,
@@ -962,7 +1015,7 @@
           "name": "SAMPLER",
           "type": "SAMPLER",
           "links": [
-            24
+            25
           ]
         }
       ],
@@ -977,7 +1030,7 @@
       }
     },
     {
-      "id": 13,
+      "id": 14,
       "type": "BasicScheduler",
       "pos": [
         1620,
@@ -988,14 +1041,14 @@
         110
       ],
       "flags": {},
-      "order": 13,
+      "order": 16,
       "mode": 0,
       "inputs": [
         {
           "localized_name": "model",
           "name": "model",
           "type": "MODEL",
-          "link": 15
+          "link": 16
         },
         {
           "localized_name": "scheduler",
@@ -1031,7 +1084,7 @@
           "name": "SIGMAS",
           "type": "SIGMAS",
           "links": [
-            25
+            26
           ]
         }
       ],
@@ -1050,7 +1103,7 @@
       }
     },
     {
-      "id": 14,
+      "id": 15,
       "type": "BasicGuider",
       "pos": [
         1620,
@@ -1061,20 +1114,20 @@
         50
       ],
       "flags": {},
-      "order": 17,
+      "order": 18,
       "mode": 0,
       "inputs": [
         {
           "localized_name": "model",
           "name": "model",
           "type": "MODEL",
-          "link": 16
+          "link": 17
         },
         {
           "localized_name": "conditioning",
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 20
+          "link": 21
         }
       ],
       "outputs": [
@@ -1083,7 +1136,7 @@
           "name": "GUIDER",
           "type": "GUIDER",
           "links": [
-            23
+            24
           ]
         }
       ],
@@ -1092,7 +1145,7 @@
       }
     },
     {
-      "id": 15,
+      "id": 16,
       "type": "SamplerCustomAdvanced",
       "pos": [
         1960,
@@ -1103,38 +1156,38 @@
         330
       ],
       "flags": {},
-      "order": 18,
+      "order": 19,
       "mode": 0,
       "inputs": [
         {
           "localized_name": "noise",
           "name": "noise",
           "type": "NOISE",
-          "link": 22
+          "link": 23
         },
         {
           "localized_name": "guider",
           "name": "guider",
           "type": "GUIDER",
-          "link": 23
+          "link": 24
         },
         {
           "localized_name": "sampler",
           "name": "sampler",
           "type": "SAMPLER",
-          "link": 24
+          "link": 25
         },
         {
           "localized_name": "sigmas",
           "name": "sigmas",
           "type": "SIGMAS",
-          "link": 25
+          "link": 26
         },
         {
           "localized_name": "latent_image",
           "name": "latent_image",
           "type": "LATENT",
-          "link": 21
+          "link": 22
         }
       ],
       "outputs": [
@@ -1143,9 +1196,9 @@
           "name": "output",
           "type": "LATENT",
           "links": [
-            26,
-            28,
-            30
+            27,
+            29,
+            31
           ]
         },
         {
@@ -1160,7 +1213,7 @@
       }
     },
     {
-      "id": 16,
+      "id": 17,
       "type": "OrreryContinue",
       "pos": [
         1620,
@@ -1171,27 +1224,27 @@
         110
       ],
       "flags": {},
-      "order": 16,
+      "order": 17,
       "mode": 0,
       "inputs": [
         {
           "localized_name": "picks",
           "name": "picks",
           "type": "STRING",
-          "link": 17
+          "link": 18
         },
         {
           "localized_name": "latent",
           "name": "latent",
           "type": "LATENT",
-          "link": 18
+          "link": 19
         },
         {
           "localized_name": "conditioning",
           "name": "conditioning",
           "shape": 7,
           "type": "CONDITIONING",
-          "link": 19
+          "link": 20
         }
       ],
       "outputs": [
@@ -1200,7 +1253,7 @@
           "name": "conditioning",
           "type": "CONDITIONING",
           "links": [
-            20
+            21
           ]
         },
         {
@@ -1208,7 +1261,7 @@
           "name": "latent",
           "type": "LATENT",
           "links": [
-            21
+            22
           ]
         }
       ],
@@ -1217,53 +1270,11 @@
       }
     },
     {
-      "id": 17,
+      "id": 18,
       "type": "VAEDecode",
       "pos": [
         2300,
         0
-      ],
-      "size": [
-        220,
-        50
-      ],
-      "flags": {},
-      "order": 19,
-      "mode": 0,
-      "inputs": [
-        {
-          "localized_name": "samples",
-          "name": "samples",
-          "type": "LATENT",
-          "link": 26
-        },
-        {
-          "localized_name": "vae",
-          "name": "vae",
-          "type": "VAE",
-          "link": 27
-        }
-      ],
-      "outputs": [
-        {
-          "localized_name": "IMAGE",
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            31
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAEDecode"
-      }
-    },
-    {
-      "id": 18,
-      "type": "VAEDecodeAudio",
-      "pos": [
-        2300,
-        100
       ],
       "size": [
         220,
@@ -1277,13 +1288,55 @@
           "localized_name": "samples",
           "name": "samples",
           "type": "LATENT",
-          "link": 28
+          "link": 27
         },
         {
           "localized_name": "vae",
           "name": "vae",
           "type": "VAE",
+          "link": 28
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "IMAGE",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            32
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      }
+    },
+    {
+      "id": 19,
+      "type": "VAEDecodeAudio",
+      "pos": [
+        2300,
+        100
+      ],
+      "size": [
+        220,
+        50
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "samples",
+          "name": "samples",
+          "type": "LATENT",
           "link": 29
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 30
         }
       ],
       "outputs": [
@@ -1292,7 +1345,7 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            32
+            33
           ]
         }
       ],
@@ -1301,7 +1354,7 @@
       }
     },
     {
-      "id": 19,
+      "id": 20,
       "type": "CreateVideo",
       "pos": [
         2580,
@@ -1319,14 +1372,14 @@
           "localized_name": "images",
           "name": "images",
           "type": "IMAGE",
-          "link": 33
+          "link": 34
         },
         {
           "localized_name": "audio",
           "name": "audio",
           "shape": 7,
           "type": "AUDIO",
-          "link": 34
+          "link": 35
         },
         {
           "localized_name": "fps",
@@ -1374,7 +1427,7 @@
           "name": "VIDEO",
           "type": "VIDEO",
           "links": [
-            35
+            36
           ]
         }
       ],
@@ -1395,7 +1448,7 @@
       }
     },
     {
-      "id": 20,
+      "id": 21,
       "type": "SaveVideo",
       "pos": [
         2880,
@@ -1413,7 +1466,7 @@
           "localized_name": "video",
           "name": "video",
           "type": "VIDEO",
-          "link": 35
+          "link": 36
         },
         {
           "localized_name": "filename_prefix",
@@ -1476,7 +1529,7 @@
       }
     },
     {
-      "id": 21,
+      "id": 22,
       "type": "OrreryFilm",
       "pos": [
         2300,
@@ -1494,19 +1547,19 @@
           "localized_name": "samples",
           "name": "samples",
           "type": "LATENT",
-          "link": 30
+          "link": 31
         },
         {
           "localized_name": "images",
           "name": "images",
           "type": "IMAGE",
-          "link": 31
+          "link": 32
         },
         {
           "localized_name": "audio",
           "name": "audio",
           "type": "AUDIO",
-          "link": 32
+          "link": 33
         }
       ],
       "outputs": [
@@ -1515,7 +1568,7 @@
           "name": "images",
           "type": "IMAGE",
           "links": [
-            33
+            34
           ]
         },
         {
@@ -1523,7 +1576,7 @@
           "name": "audio",
           "type": "AUDIO",
           "links": [
-            34
+            35
           ]
         },
         {
@@ -1540,128 +1593,128 @@
   ],
   "links": [
     [
+      1,
+      3,
+      0,
       4,
-      1,
-      1,
-      9,
-      0,
-      "STRING"
-    ],
-    [
-      1,
-      4,
-      0,
-      8,
-      0,
-      "CLIP"
-    ],
-    [
-      2,
-      5,
-      0,
-      8,
-      1,
-      "VAE"
-    ],
-    [
-      3,
-      6,
-      0,
-      8,
-      2,
-      "VAE"
-    ],
-    [
-      5,
-      9,
-      0,
-      8,
-      3,
-      "IMAGE"
-    ],
-    [
-      6,
-      9,
-      1,
-      8,
-      4,
-      "IMAGE"
-    ],
-    [
-      7,
-      9,
-      2,
-      8,
-      5,
-      "IMAGE"
-    ],
-    [
-      8,
-      9,
-      3,
-      8,
-      6,
-      "IMAGE"
-    ],
-    [
-      9,
-      9,
-      9,
-      10,
-      0,
-      "IMAGE"
-    ],
-    [
-      10,
-      1,
-      0,
-      8,
-      11,
-      "STRING"
-    ],
-    [
-      11,
-      1,
-      3,
-      8,
-      12,
-      "INT"
-    ],
-    [
-      12,
-      1,
-      4,
-      8,
-      13,
-      "INT"
-    ],
-    [
-      13,
-      1,
-      5,
-      8,
-      14,
-      "INT"
-    ],
-    [
-      14,
-      1,
-      2,
-      11,
-      0,
-      "INT"
-    ],
-    [
-      15,
-      3,
-      0,
-      13,
       0,
       "MODEL"
     ],
     [
-      16,
+      5,
+      1,
+      1,
+      10,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      5,
+      0,
+      9,
+      0,
+      "CLIP"
+    ],
+    [
       3,
+      6,
+      0,
+      9,
+      1,
+      "VAE"
+    ],
+    [
+      4,
+      7,
+      0,
+      9,
+      2,
+      "VAE"
+    ],
+    [
+      6,
+      10,
+      0,
+      9,
+      3,
+      "IMAGE"
+    ],
+    [
+      7,
+      10,
+      1,
+      9,
+      4,
+      "IMAGE"
+    ],
+    [
+      8,
+      10,
+      2,
+      9,
+      5,
+      "IMAGE"
+    ],
+    [
+      9,
+      10,
+      3,
+      9,
+      6,
+      "IMAGE"
+    ],
+    [
+      10,
+      10,
+      9,
+      11,
+      0,
+      "IMAGE"
+    ],
+    [
+      11,
+      1,
+      0,
+      9,
+      11,
+      "STRING"
+    ],
+    [
+      12,
+      1,
+      3,
+      9,
+      12,
+      "INT"
+    ],
+    [
+      13,
+      1,
+      4,
+      9,
+      13,
+      "INT"
+    ],
+    [
+      14,
+      1,
+      5,
+      9,
+      14,
+      "INT"
+    ],
+    [
+      15,
+      1,
+      2,
+      12,
+      0,
+      "INT"
+    ],
+    [
+      16,
+      4,
       0,
       14,
       0,
@@ -1669,102 +1722,94 @@
     ],
     [
       17,
+      4,
+      0,
+      15,
+      0,
+      "MODEL"
+    ],
+    [
+      18,
       1,
       1,
-      16,
+      17,
       0,
       "STRING"
     ],
     [
-      18,
-      8,
+      19,
+      9,
       1,
-      16,
+      17,
       1,
       "LATENT"
     ],
     [
-      19,
-      8,
-      0,
-      16,
-      2,
-      "CONDITIONING"
-    ],
-    [
       20,
-      16,
+      9,
       0,
-      14,
-      1,
+      17,
+      2,
       "CONDITIONING"
     ],
     [
       21,
-      16,
-      1,
+      17,
+      0,
       15,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      22,
+      17,
+      1,
+      16,
       4,
       "LATENT"
     ],
     [
-      22,
-      11,
+      23,
+      12,
       0,
-      15,
+      16,
       0,
       "NOISE"
     ],
     [
-      23,
-      14,
-      0,
+      24,
       15,
+      0,
+      16,
       1,
       "GUIDER"
-    ],
-    [
-      24,
-      12,
-      0,
-      15,
-      2,
-      "SAMPLER"
     ],
     [
       25,
       13,
       0,
-      15,
+      16,
+      2,
+      "SAMPLER"
+    ],
+    [
+      26,
+      14,
+      0,
+      16,
       3,
       "SIGMAS"
     ],
     [
-      26,
-      15,
-      0,
-      17,
-      0,
-      "LATENT"
-    ],
-    [
       27,
-      5,
-      0,
-      17,
-      1,
-      "VAE"
-    ],
-    [
-      28,
-      15,
+      16,
       0,
       18,
       0,
       "LATENT"
     ],
     [
-      29,
+      28,
       6,
       0,
       18,
@@ -1772,50 +1817,66 @@
       "VAE"
     ],
     [
-      30,
-      15,
+      29,
+      16,
       0,
-      21,
+      19,
       0,
       "LATENT"
     ],
     [
-      31,
-      17,
+      30,
+      7,
       0,
-      21,
+      19,
       1,
-      "IMAGE"
+      "VAE"
+    ],
+    [
+      31,
+      16,
+      0,
+      22,
+      0,
+      "LATENT"
     ],
     [
       32,
       18,
       0,
-      21,
+      22,
+      1,
+      "IMAGE"
+    ],
+    [
+      33,
+      19,
+      0,
+      22,
       2,
       "AUDIO"
     ],
     [
-      33,
-      21,
+      34,
+      22,
       0,
-      19,
+      20,
       0,
       "IMAGE"
     ],
     [
-      34,
-      21,
+      35,
+      22,
       1,
-      19,
+      20,
       1,
       "AUDIO"
     ],
     [
-      35,
-      19,
-      0,
+      36,
       20,
+      0,
+      21,
       0,
       "VIDEO"
     ]
@@ -1828,7 +1889,7 @@
         768,
         -46,
         404,
-        498
+        598
       ],
       "color": "#3f789e",
       "flags": {}

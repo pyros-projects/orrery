@@ -13,7 +13,10 @@ repository) holds a workflow per mode, built from ComfyUI's own nodes plus
 orrery's: Krea 2 (`text`), MiniMax H3 t2va, i2va, fl2va, l2va, ref2va, and reels
 on t2va and on ref2va with Orrery Continue / Orrery Film. Their notes name the
 models and where they go; sampling follows ComfyUI's own templates (H3:
-`res_multistep`, 20 steps; Krea 2 Turbo: 8 steps). With the repository linked
+`res_multistep`, 20 steps; Krea 2 Turbo: 8 steps). Each puts ComfyUI's Model
+Attention Backend on `comfy kitchen attention` after the model loader: INT8
+attention, much faster on Nvidia and AMD GPUs; elsewhere the node falls back to
+PyTorch attention by itself. With the repository linked
 as its `comfyui` folder, the template browser does not list them; drag the
 files in instead.
 
