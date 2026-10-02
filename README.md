@@ -66,6 +66,9 @@ run to be different, and a little better than the last, orrery is for you.
 - **Writes the lists you don't have.** Name a wildcard list that doesn't exist
   and a local language model creates it; edit lists in plain language and
   approve every change first.
+- **Writes with you.** The same model continues a reel by one chunk, writes
+  the shot between a first and a last frame, or a prompt from a picture;
+  browse its ideas and insert the one you like.
 - **Tests your LoRAs.** `<lora:style:0.5,0.7,1.0>` or `0-1;0.1` and one click
   runs every strength on the same seed, several LoRAs combined or in turns,
   the whole sweep in a galaxy folder of its own to compare and rate.
@@ -137,7 +140,7 @@ uv sync --extra local    # + torch and transformers for a local language model
 | Python | 3.13+ |
 | ComfyUI | tested with frontend 1.53 |
 | MiniMax H3 nodes | only for video: Reference to Video (reels chain with orrery's own Orrery Continue / Orrery Film, or with H3 Motion Context) |
-| A language model | optional: a text encoder that is a whole LLM, such as Krea 2's `qwen3vl_4b`, lets the node write libraries and `--slots--` |
+| A language model | optional: a text encoder that is a whole LLM, such as Krea 2's `qwen3vl_4b`, lets the node write libraries, `--slots--` and the Write menu's ideas |
 
 MiniMax H3's open weights are licensed outside the EU, the UK, South Korea and
 the US; check the model's license for where you are. orrery itself ships no
@@ -219,7 +222,7 @@ every one continuing the last 22 frames, picture and sound, of the one before.
 | [Orrery Refs](docs/orrery-refs.md) | a tutorial: reference images per clip, numbers that match, frames of earlier clips with `SEND:` |
 | [Presets and the content pack](docs/presets.md) | template references, saving presets, what ships built in |
 | [The ComfyUI nodes](docs/comfyui.md) | outputs, the app's six tabs, Generate and Restart |
-| [The wildcard manager](docs/wildcard-manager.md) | editing libraries in plain language, the language model in ComfyUI |
+| [The wildcard manager](docs/wildcard-manager.md) | editing libraries in plain language, the language model in ComfyUI, the Write menu |
 | [Configuration](docs/configuration.md) | the orrery home folder and model settings |
 
 ## How It Works
