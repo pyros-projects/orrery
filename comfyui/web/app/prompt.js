@@ -13,7 +13,7 @@ function statsHTML(app) {
   const st = stats(app.text), out = shape(app.text), reel = st.h3?.reel, plan = sweepPlan(app.text);
   const outs = (app.data.rows || []).filter((r) => r.template === templateHash(app.text)).length;
   const forever = reel && reel.clips === Infinity;
-  const how = !reel ? "" : "Wire load_index into Load Latent's clip_index and save_index into Save Latent's. The segment widget counts up by itself (increment): "
+  const how = !reel ? "" : "Wire the picks into Orrery Continue (and the clip into Orrery Film), or with H3 Motion Context load_index into Load Latent's clip_index and save_index into Save Latent's. The segment widget counts up by itself (increment): "
     + (forever ? "Run (Instant) plays clip after clip until you stop it." : `a Run count of ${reel.clips} plays the whole reel; after the last clip nothing downstream runs.`);
   const timing = reel
     ? `<span class="stat" title="${esc(how)}"><b>Reel</b> · ${reel.secs.map((s, i) => `<b>${s.toFixed(1)} s</b>${reel.repeats[i] === 1 ? "" : ` ×${reel.repeats[i] === Infinity ? "∞" : reel.repeats[i]}`}`).join(" + ")} · <b>${forever ? "∞" : reel.clips}</b> clip${reel.clips === 1 ? "" : "s"}</span>`
@@ -22,7 +22,7 @@ function statsHTML(app) {
   return timing
     + `<span class="stat"><b>${st.rolls}</b> rolls · <b>${st.libs}</b> libraries · <b>${st.binds}</b> bindings${setDials(app) ? ` · <b>${setDials(app)}</b> dialed` : ""}</span>`
     + `${app.llmActive() ? `<span class="stat" title="Unknown __libraries__ and __name:N__ are made by this model when the node runs">LLM <b>${esc(app.data.llm.file.replace(/\.[a-z]+$/, ""))}</b></span>` : ""}`
-    + `<span class="stat" title="The node's width, height, length and megapixels outputs${reel ? "; from the second chunk on, length includes the frames Motion Context pins" : ""}">→ <b>${out.width}×${out.height}</b> · ${out.megapixels} MP${frames}</span>`
+    + `<span class="stat" title="The node's width, height, length and megapixels outputs${reel ? "; from the second chunk on, length includes the 22 frames the clip continues from" : ""}">→ <b>${out.width}×${out.height}</b> · ${out.megapixels} MP${frames}</span>`
     + `${out.cli.length ? `<span class="stat cli" title="In ComfyUI, use the Run count and the seed widget">${esc(out.cli.join(" "))}: CLI only</span>` : ""}<span class="grow"></span>`
     + `${outs ? `<button class="btn ghost" data-act="outputs">${icon("image")}${outs} output${outs === 1 ? "" : "s"}</button>` : ""}`
     + `<button class="btn" data-act="test" title="Roll it in the Test tab: a few seeds, or a reel's clips">${icon("dice")}Test</button>`

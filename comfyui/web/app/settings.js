@@ -39,7 +39,7 @@ export async function openSettings(app) {
     <label class="check"><input type="checkbox" id="oa-div" ${app.data.dividers !== false ? "checked" : ""}>
       <span><b>Chunk dividers</b>: a reel's CHUNK lines say which segments they play, when, and how much film is left; the chunk of the next segment is marked</span></label>
     <label class="check"><input type="checkbox" id="oa-tl" ${app.data.timeline !== false ? "checked" : ""}>
-      <span><b>Timeline</b>: beside a reel, each chunk's clips as Chain Video keeps them, and the frames its <code>SEND:</code> lines handed on</span></label>
+      <span><b>Timeline</b>: beside a reel, each chunk's clips as the reel keeps them (Orrery Film or Chain Video), and the frames its <code>SEND:</code> lines handed on</span></label>
     <div class="acts"><button type="button" class="btn ghost" data-cancel>Cancel</button><button class="btn primary">${icon("save")}Save</button></div>
   </form>`);
   sheet.querySelector("[data-cancel]").onclick = () => app.closeSheet();

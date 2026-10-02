@@ -20,16 +20,17 @@ Restart ComfyUI. Nodes under **orrery**:
   screenplay's duration in frames for the H3 latent, `lora_stack` carries the
   `LORA:` lines as a LORA_STACK for any loader with a `lora_stack` input
   (LoraManager, Efficiency, Easy-Use …); unknown or ambiguous names are
-  reported in the log and in the Test tab. For H3 Motion Context chains, a reel
-  (`CHUNK` blocks, `repeat N|forever`, `$x~N`; see [h3.md](h3.md) 1d) writes one
-  clip per run: `segment` counts up by itself, and `load_index`/`save_index`
-  go into Load and Save Latent's `clip_index`. The node is the whole of orrery, in five tabs (⤢ opens the
+  reported in the log and in the Test tab. A reel (`CHUNK` blocks,
+  `repeat N|forever`, `$x~N`; see [h3.md](h3.md) 1d) writes one clip per run:
+  `segment` counts up by itself, and Orrery Continue / Orrery Film (below)
+  chain the clips; with H3 Motion Context instead, `load_index`/`save_index`
+  go into its Load and Save Latent's `clip_index`. The node is the whole of orrery, in five tabs (⤢ opens the
   same app over the canvas, Esc brings it back):
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `__creature#` properties and their
     values, `$` bindings, camera words after
     `SHOT 5s:`, your LoRA files after `LORA:`). **New** starts a fresh
-    template linked to no preset: an H3 scene, an H3 reel for Motion Context,
+    template linked to no preset: an H3 scene, an H3 reel,
     H3 references (ref2va), H3 keyframes (i2va, fl2va, l2va) or a Krea prompt,
     each with a quickstart of the essentials as `#` comments on top (the gear
     turns the quickstart off). Open a preset from the bar above it; ● marks unsaved
@@ -42,7 +43,7 @@ Restart ComfyUI. Nodes under **orrery**:
     0:25 · 1:35 left`); the chunk that plays the node's `segment` next is
     marked (`▶ next`), and **Jump** beside *Next segment* puts the caret
     there. Beside the editor, the **timeline** lines up each chunk's clips
-    as H3 Motion Context's Chain Video keeps them (hover plays one, a click
+    as Orrery Film (or H3 Motion Context's Chain Video) keeps them (hover plays one, a click
     opens it; dashed boxes are segments not rendered yet) and, under a chunk
     with `SEND:` lines, the frames Orrery Refs last sent to each image (its
     anchors). It reads the chain from the string wired into `latent_path`,
@@ -90,3 +91,32 @@ Restart ComfyUI. Nodes under **orrery**:
   as anchors in the orrery home; `keep_sent` on holds them from segment 0 for the
   next run, so a character stays. The tutorial:
   [orrery-refs.md](orrery-refs.md).
+- **Orrery Continue** and **Orrery Film**: orrery chains a reel's clips itself,
+  on the Masked AV continuation of
+  [H3 Continuum](https://github.com/ukr8b3g-cmyk/ComfyUI-H3-Continuum) (MIT).
+  From the second segment on, Orrery Continue starts the clip's latent with the
+  last 22 frames of the segment before, picture and sound, and a `noise_mask`
+  keeps the sampler off them; no model or layout patch is involved. Wire:
+
+  ```
+  Orrery Prompt picks ───────────────▶ Orrery Continue picks
+  H3 node (Reference to Video …) latent ▶ Orrery Continue latent ──▶ sampler latent_image
+                         conditioning ▶ Orrery Continue conditioning ▶ sampler positive (optional)
+  sampled latent ─────────────────────▶ Orrery Film samples
+  decoded images / audio ─────────────▶ Orrery Film images / audio
+  Orrery Film film (VIDEO) ───────────▶ Save Video, Orrery Log
+  ```
+
+  The H3 node's `length` comes from the Orrery Prompt (it counts the 22 frames).
+  Orrery Continue drops a first-frame image from the conditioning in segments
+  after the first (the clip starts with the one before); Orrery Film refuses a
+  clip whose pinned frames the sampler changed (a sampler that ignores
+  `noise_mask`). Orrery Film trims the 22 frames, puts out the clip
+  (`images`, `audio`) and `film`, the reel so far, and keeps the takes under
+  `output/<latent_path>/orrery_film/` (`h3_context` unless the Orrery Prompt's
+  `latent_path` says otherwise): each segment's clip, its sound and the tail the
+  next one continues from. Rendering a segment again replaces its take and drops
+  the segments after it (they continued the old one); segment 0 starts a new
+  run; older takes stay on disk. The previous clip, `SEND:` and the timeline read
+  this store or H3 Motion Context's Chain Video, whichever was written last.
+  Another `context:` than 22 is a warning: 22 frames are pinned all the same.

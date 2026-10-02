@@ -25,16 +25,18 @@ $who sits alone in a laundromat at night and looks up as the lights flicker.
 SFX: dryers tumbling; a fluorescent tube buzzing
 `;
 
-const REEL = `# H3 REEL · quickstart: one screenplay, one clip per run, chained by H3 Motion Context
-# Wiring: load_index → Load Latent's clip_index · save_index → Save Latent's clip_index ·
-#         length → the latent (it counts the frames Motion Context pins)
+const REEL = `# H3 REEL · quickstart: one screenplay, one clip per run, each continuing the one before
+# Wiring: picks → Orrery Continue, with the H3 node's latent (length → that node: it counts the 22
+#   pinned frames) and conditioning; its latent → the sampler · sampled latent + decoded images and
+#   audio → Orrery Film, whose film is the reel so far (H3 Motion Context instead: load_index → Load
+#   Latent's clip_index, save_index → Save Latent's)
 # Run it: Generate ×N plays N clips · Restart goes back to segment 0 · keep the seed fixed
 # Before the first CHUNK is the world (header, style, CAST, $bindings, LORA:, MUSIC:, context:):
 #   it rolls once, so a $binding there stays the same in every clip
 # CHUNK [title] [repeat N|forever]   one clip; a $binding inside it rolls again for every clip
 # HANDOFF: …    how this clip ends and the next one opens (the next may paraphrase it)
 # $x~1          binding x as it was one clip ago · $x~1.open one of its properties
-# context: 22   frames Motion Context pins: 5, 22, 39 or 56
+# context: 22   frames each clip continues from (Orrery Continue: 22; Motion Context: 5, 22, 39, 56)
 # SEND: frame 0 to image 3      ref2va reels: this clip's frame 0 (after the pinned frames) is image 3 for
 #   every later clip; wire the picks into Orrery Refs, and the frame comes out there from the next clip
 #   on, after the images the prompt names · NAME (image 1, image 3) in the CAST names it in the prompt
@@ -76,7 +78,7 @@ const REF = `# H3 REF2VA · quickstart: for the MiniMax H3 Reference to Video no
 # --directions--           a slot the language model writes when the node runs
 # Orrery Refs between your images and the node hands each clip only the references its CAST uses
 # In a reel: SEND: frame 0 to image 3 inside a CHUNK makes that clip's frame 0 image 3 for the clips
-#   after it: Orrery Refs fetches it from Chain Video (leave its image_3 unwired) and hands it on, with a
+#   after it: Orrery Refs fetches it from the reel's clips (leave its image_3 unwired) and hands it on, with a
 #   CAST naming it or without
 # @h3 ref2va 16:9 lite     writes <Subject N> = … lines instead of the six full sections
 # Tip: the guide wants 350–500 words of shot description, so write rich prose (the lint counts)
@@ -120,7 +122,7 @@ a 35mm photograph of {a quiet street|an empty diner|a greenhouse} at {dawn|dusk}
 
 export const STARTERS = {
   h3: { label: "H3 scene", hint: "t2va: shots, camera, voices, sound", target: "h3-base", text: SCENE },
-  reel: { label: "H3 reel", hint: "several clips on Motion Context: CHUNK, HANDOFF, SEND", target: "h3-base", text: REEL },
+  reel: { label: "H3 reel", hint: "several clips, each continuing the last: CHUNK, HANDOFF, SEND", target: "h3-base", text: REEL },
   ref: { label: "H3 references", hint: "ref2va: a CAST from images, videos, voices", target: "h3-base", text: REF },
   keyframes: { label: "H3 keyframes", hint: "i2va, fl2va, l2va: start or end on a still", target: "h3-base", text: KEYFRAMES },
   krea: { label: "Krea prompt", hint: "a still: medium first, size", target: "text", text: KREA },

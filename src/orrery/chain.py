@@ -1,11 +1,13 @@
-"""The clip before this one, from H3 Motion Context's Chain Video: for the language model to watch
-and for ref2va to continue.
+"""The clip before this one, from the reel's chain: for the language model to watch and for ref2va
+to continue.
 
-Chain Video keeps every trimmed clip under `output/<latent_path>/chain_video`: `active.json` names
-the current run, whose `clips.json` lists the clip folders in order (clip_index from 1), each with a
-`video.mp4`. orrery's segments count from 0, so segment N continues clip N. The model sees one
-frame a second plus the last one, scaled down (~250 tokens a frame instead of ~1000); ref2va gets
-the last three seconds at full size, which is what video continuation wants. `SEND:` reads a
+Two stores keep a reel's trimmed clips under `output/<latent_path>`: Orrery Film's `orrery_film`
+(see orrery.film) and H3 Motion Context's `chain_video`. In both, `active.json` names the current
+run, whose `clips.json` lists the clip folders in order, each with a `video.mp4`; the store written
+last is the one read, so a workflow can switch engines. orrery's segments count from 0: segment N
+is the N+1th clip (Chain Video's clip_index N+1). The model sees one frame a second plus the last
+one, scaled down (~250 tokens a frame instead of ~1000); ref2va gets the last three seconds at full
+size, which is what video continuation wants. `SEND:` reads a
 segment's own clip (`clip_file`) and only the frames it names (`frames`).
 """
 
@@ -13,6 +15,7 @@ import json
 from pathlib import Path
 
 DEFAULT_CHAIN = "h3_context"  # Chain Video's and Load Latent's default latent_path
+STORES = ("orrery_film", "chain_video")  # Orrery Film's takes, H3 Motion Context's Chain Video
 STILL_WIDTH = 672
 TAIL_SECONDS = 3.0
 
@@ -22,25 +25,38 @@ def previous_clip(output: Path | str, latent_path: str, segment: int) -> Path | 
     return clip_file(output, latent_path, segment - 1) if segment >= 1 else None
 
 
-def _active(output: Path | str, latent_path: str) -> tuple[Path, list[dict], list] | None:
-    """The chain's active run folder, its clips and its settings (width, height, fps, audio), or None
-    (no chain, or a path outside the output)."""
+def chain_folder(output: Path | str, latent_path: str) -> Path | None:
+    """The folder a reel's chain lives in, or None for a path outside ComfyUI's output."""
     output = Path(output).resolve()
     folder = (output / latent_path).resolve()
     if not folder.is_relative_to(output):
         return None
     if folder.is_file() or (not folder.is_dir() and folder.suffix == ".safetensors"):  # as Motion Context reads it
         folder = folder.parent
-    root = folder / "chain_video"
+    return folder
+
+
+def _run(root: Path) -> tuple[Path, list[dict], list, float] | None:
+    """A store's active run folder, its clips, its settings (width, height, fps, audio) and when its
+    clips.json was written; None when the store holds none."""
     try:
         run = (root / json.loads((root / "active.json").read_text(encoding="utf-8"))["run"]).resolve()
-        state = json.loads((run / "clips.json").read_text(encoding="utf-8"))
-        clips, settings = state["clips"], state.get("settings")
+        listed = run / "clips.json"
+        state = json.loads(listed.read_text(encoding="utf-8"))
+        clips, settings, written = state["clips"], state.get("settings"), listed.stat().st_mtime
     except (OSError, ValueError, KeyError, TypeError, AttributeError):
         return None
     if not (run.is_relative_to(root) and isinstance(clips, list)):
         return None
-    return run, clips, settings if isinstance(settings, list) else []
+    return run, clips, settings if isinstance(settings, list) else [], written
+
+
+def _active(output: Path | str, latent_path: str) -> tuple[Path, list[dict], list] | None:
+    """The active run, clips and settings of the store written last, or None (no chain, or a path
+    outside the output)."""
+    folder = chain_folder(output, latent_path)
+    runs = [r for r in (_run(folder / store) for store in STORES) if r] if folder else []
+    return max(runs, key=lambda r: r[3])[:3] if runs else None
 
 
 def _video(run: Path, clip) -> Path | None:
@@ -52,7 +68,7 @@ def _video(run: Path, clip) -> Path | None:
 
 
 def clip_file(output: Path | str, latent_path: str, index: int) -> Path | None:
-    """The video file of segment `index`'s own clip (Chain Video's clip index + 1), or None."""
+    """The video file of segment `index`'s own clip, or None."""
     active = _active(output, latent_path) if index >= 0 else None
     if active is None or len(active[1]) <= index:
         return None

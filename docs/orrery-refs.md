@@ -130,7 +130,7 @@ What counts as "used":
 
 ## 5. Lesson 2: a reel where every clip has its own references
 
-In a reel (`CHUNK` lines, H3 Motion Context), everything before the first
+In a reel (`CHUNK` lines, chained by Orrery Continue or H3 Motion Context), everything before the first
 `CHUNK` is the world and holds for every clip, and that includes a CAST there.
 A chunk can have a CAST of its own, which holds for that clip only. This is
 where Orrery Refs pays off.
@@ -173,7 +173,7 @@ to their chunks' CASTs.
 
 ## 6. Lesson 3: anchors across a reel with SEND
 
-A Motion Context reel drifts. Each clip sees only the clip before it, so by the
+A reel drifts. Each clip sees only the clip before it, so by the
 seventh clip the face is a copy of a copy of a copy. `SEND:` gives every later
 clip a fixed anchor: a real frame of an earlier clip, as a reference image.
 
@@ -218,9 +218,9 @@ SEND: frames -24--1 to image 6 for segments 4, 6, 7, 12
 ```
 
 - **Where**: inside a `CHUNK`, any number of lines, in `@h3 ref2va` screenplays.
-- **Frames** count from 0, at 24 fps, in the clip as H3 Motion Context's Chain
-  Video keeps it: from the second clip on, the frames Motion Context pins are
-  trimmed off, so frame 0 is always the first new frame. Single frames and
+- **Frames** count from 0, at 24 fps, in the clip as the reel keeps it (Orrery
+  Film, or H3 Motion Context's Chain Video): from the second clip on, the pinned
+  frames are trimmed off, so frame 0 is always the first new frame. Single frames and
   ranges mix; `frame` and `frames` are the same word.
 - **Negative frames** count from the clip's end: `-1` is the last, `-2` the one
   before. Ranges may mix signs: `-24--1` is the last second, `10--1` runs from
@@ -270,11 +270,12 @@ line if you want the prompt to point at it after all.
 
 ### Where the frames come from
 
-Orrery Refs reads the clip from Chain Video, in the chain the Orrery Prompt's
-`latent_path` names (`h3_context` unless you wire another one). Chain Video
-replaces a clip when its `clip_index` renders again and drops the ones after
-it, so a reel rendered from the top with **Restart** always sends frames of
-this reel, never of an older one. Start in the middle of a reel whose sending
+Orrery Refs reads the clip from the reel's chain, in the folder the Orrery
+Prompt's `latent_path` names (`h3_context` unless you wire another one): Orrery
+Film's takes, or H3 Motion Context's Chain Video, whichever was written last.
+Both replace a clip when its segment renders again and drop the ones after it,
+so a reel rendered from the top with **Restart** always sends frames of this
+reel, never of an older one. Start in the middle of a reel whose sending
 clip was never rendered and Orrery Refs stops with a message instead of taking
 the wrong frames.
 
@@ -394,10 +395,10 @@ subscriptable`), that ref goes into Reference to Video as well, so it stays
 
 - Nine reference images per clip (`image_1` to `image_9`, `ref_1` to `ref_9`).
 - Images only; videos and audio go straight into Reference to Video (section 8).
-- `SEND:` needs `@h3 ref2va`, a reel, Chain Video and an Orrery Refs reading
-  the prompt's `picks`.
+- `SEND:` needs `@h3 ref2va`, a reel, its clips kept (Orrery Film or Chain
+  Video) and an Orrery Refs reading the prompt's `picks`.
 - Reference to Video reads the first image of a batch only.
 
 Related: [H3 screenplays](h3.md) (the CAST, frame anchors and reels in full),
-[long videos](long-video.md) (Motion Context, RefMods and the plan behind
+[long videos](long-video.md) (the continuation, RefMods and the plan behind
 reels), [the ComfyUI nodes](comfyui.md).

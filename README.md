@@ -131,7 +131,7 @@ uv sync --extra local    # + torch and transformers for a local language model
 |---|---|
 | Python | 3.13+ |
 | ComfyUI | tested with frontend 1.53 |
-| MiniMax H3 nodes | only for video: Reference to Video, and Motion Context for reels |
+| MiniMax H3 nodes | only for video: Reference to Video (reels chain with orrery's own Orrery Continue / Orrery Film, or with H3 Motion Context) |
 | A language model | optional: a text encoder that is a whole LLM, such as Krea 2's `qwen3vl_4b`, lets the node write libraries and `--slots--` |
 
 MiniMax H3's open weights are licensed outside the EU, the UK, South Korea and
@@ -201,9 +201,9 @@ The door swings open and the camera glides into $room, and comes to rest facing 
 HANDOFF: the camera rests squarely facing a closed door
 ```
 
-Each run writes one clip. Wire `load_index` and `save_index` into Motion
-Context's Load and Save Latent, set Generate to ×10, and the reel plays clip
-after clip, every one opening on the frame the last one closed on.
+Each run writes one clip. Wire the picks into Orrery Continue (and the clip
+into Orrery Film), set Generate to ×10, and the reel plays clip after clip,
+every one continuing the last 22 frames, picture and sound, of the one before.
 
 ## Documentation
 

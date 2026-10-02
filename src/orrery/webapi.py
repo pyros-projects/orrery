@@ -535,7 +535,7 @@ def _latent_path(args: dict) -> str:
 
 
 def chain(home: Home, args: dict) -> dict:
-    """The clips H3 Motion Context's Chain Video holds for this reel, by segment."""
+    """The clips the reel's chain holds (Orrery Film's or Chain Video's), by segment."""
     from orrery.chain import listing
 
     return {"latent_path": _latent_path(args), **listing(_output_dir(), _latent_path(args))}

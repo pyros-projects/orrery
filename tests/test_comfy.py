@@ -87,12 +87,15 @@ def test_save_png_embeds_the_picks(tmp_path):
 
 
 def test_node_classes_declare_comfy_interfaces():
-    assert set(NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs"}
+    assert set(NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm"}
     inputs = OrreryPrompt.INPUT_TYPES()["required"]
     assert inputs["target"][0] == ["text", "h3-base", "flat"]
     assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length", "lora_stack",
                                          "load_index", "save_index", "previous", "previous_audio", "megapixels")
     assert OrreryLog.OUTPUT_NODE is True
+    film, cont = NODE_CLASS_MAPPINGS["OrreryFilm"], NODE_CLASS_MAPPINGS["OrreryContinue"]
+    assert film.OUTPUT_NODE is True and film.RETURN_TYPES == ("IMAGE", "AUDIO", "VIDEO")
+    assert list(cont.INPUT_TYPES()["required"]) == ["picks", "latent"] and cont.RETURN_TYPES == ("CONDITIONING", "LATENT")
 
 
 def test_node_pack_imports_from_the_repo_folder(monkeypatch):
@@ -100,7 +103,7 @@ def test_node_pack_imports_from_the_repo_folder(monkeypatch):
     spec = importlib.util.spec_from_file_location("orrery_pack", REPO / "comfyui" / "__init__.py")
     pack = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(pack)
-    assert set(pack.NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs"}
+    assert set(pack.NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm"}
 
 
 def test_prompt_node_uses_a_preset_and_remembers_the_template(home):
@@ -251,6 +254,24 @@ def test_the_node_counts_segments_and_outputs_motion_context_indices(home):
     assert OrreryPrompt.RETURN_TYPES[6:9] == ("LORA_STACK", "INT", "INT")
     *_, load, save = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
     assert (load, save) == (1, 2)
+
+
+def test_a_reel_tells_orrery_continue_its_chain_and_context(home):
+    _, picks, *_ = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
+    assert (json.loads(picks)["chain"], json.loads(picks)["context"]) == ("h3_context", 22)
+
+
+def test_orrery_continue_pins_22_frames_and_another_context_is_a_warning(home):
+    graph = {"9": {"class_type": "OrreryPrompt", "inputs": {}},
+             "15": {"class_type": "OrreryContinue", "inputs": {"picks": ["9", 1], "latent": ["3", 1]}}}
+    longer = REEL.replace("CHUNK\nSHOT 5s", "context: 39\nCHUNK\nSHOT 5s", 1)
+    _, picks, *_ = OrreryPrompt().run(longer, 1, "h3-base", home=str(home), segment=1, prompt=graph, unique_id="9")
+    warned = [i for i in json.loads(picks)["lint"] if "Orrery Continue" in i["message"]]
+    assert [i["severity"] for i in warned] == ["warn"] and "17 frames (0.7 s) longer" in warned[0]["message"]
+    _, picks, *_ = OrreryPrompt().run(longer, 1, "h3-base", home=str(home), segment=1)  # Motion Context takes 39
+    assert not [i for i in json.loads(picks)["lint"] if "Orrery Continue" in i["message"]]
+    _, picks, *_ = OrreryPrompt().run(REEL, 1, "h3-base", home=str(home), segment=1, prompt=graph, unique_id="9")
+    assert not [i for i in json.loads(picks)["lint"] if "Orrery Continue" in i["message"]]
 
 
 def test_past_the_end_of_a_reel_blocks_the_rest_of_the_graph(home, monkeypatch):

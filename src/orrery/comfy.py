@@ -17,7 +17,9 @@ from orrery import anchors, runs
 from orrery import sweep as sweeps
 from orrery.autolib import needs
 from orrery.chain import DEFAULT_CHAIN, load, previous_clip
+from orrery.comfy_film import OrreryContinue, OrreryFilm
 from orrery.comfy_llm import ComfyBackend, can_write, llm_config
+from orrery.continuum.grid import CONTEXT
 from orrery.dsl import (
     MissingLibrary,
     bindings,
@@ -27,7 +29,7 @@ from orrery.dsl import (
     strip_comments,
     wanted_libraries,
 )
-from orrery.h3 import compile_scene, image_slots, render_scene
+from orrery.h3 import DEFAULT_CONTEXT, compile_scene, image_slots, render_scene
 from orrery.h3_ref import word_issue
 from orrery.home import Home, resolve_home
 from orrery.library import library_files
@@ -163,12 +165,14 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                params: str = "", segment: int = 0, clip=None,
                frames=None, packed: bool = False,
                wired: int | None = None, chain: str = DEFAULT_CHAIN,
-               keep: bool = False, sweep: str = "") -> tuple[str, str, int, int, int, int, list, int, int]:
+               keep: bool = False, sweep: str = "",
+               continued: bool = False) -> tuple[str, str, int, int, int, int, list, int, int]:
     """`frames`: the previous clip's stills, which the model sees when it writes `--…--` slots.
     `packed`: Orrery Refs routes the images per clip; `wired`: the reference images Reference to
     Video has (both from the graph, see `wiring`). `chain`: the Motion Context chain SEND: reads;
     `keep`: Orrery Refs' keep_sent, so sent images with a stored anchor are held from segment 0.
-    `sweep`: "run|galaxy folder", set by Generate for each run of a LoRA sweep (see orrery.sweep)."""
+    `sweep`: "run|galaxy folder", set by Generate for each run of a LoRA sweep (see orrery.sweep).
+    `continued`: an Orrery Continue reads the picks, which pins 22 frames whatever `context:` says."""
     h = resolve_home(home or None)
     if preset and preset != NO_PRESET:
         template, linked = load_preset(h, preset), preset
@@ -296,6 +300,16 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
             length = h3_length(result.scene.duration)
         if result.chunks:
             data["segment"], data["chunks"], data["segments"] = result.segment, result.chunks, result.segments
+            context = DEFAULT_CONTEXT if result.scene.context is None else result.scene.context
+            data["chain"], data["context"] = chain, context
+            if continued and context != CONTEXT:
+                off = abs(context - CONTEXT)
+                data["lint"].append({"severity": "warn", "message": (
+                    f"context: {context}, but Orrery Continue pins {CONTEXT} frames all the same, so from the second "
+                    f"segment on each clip runs {off} frames ({off / 24:.1f} s) "
+                    f"{'longer' if context > CONTEXT else 'shorter'} than its shots. Write context: {CONTEXT}, or "
+                    "leave the line out; H3 Motion Context takes other lengths.")})
+                print(f"[orrery] warn: {data['lint'][-1]['message']}")
     return (result.text, json.dumps(data, ensure_ascii=False), seed, width, height, length, stack,
             segment, segment + 1)
 
@@ -393,10 +407,12 @@ class OrreryPrompt:
                         "chunk on), snapped up to H3's 17k+5 grid (124 without SHOTs)."),
                        ("The LORA: lines (global, plus the chunk's in a reel) as a LORA_STACK for any "
                         "loader with a lora_stack input (LoraManager, Efficiency, Easy-Use …)."),
-                       "The segment: wire it into H3 Motion Context Load Latent's clip_index.",
-                       "The segment + 1: wire it into H3 Motion Context Save Latent's clip_index.",
-                       ("The last 3 s of the clip before this segment (H3 Motion Context's Chain Video), for the "
-                        "Reference to Video node's ref_video; None in the first segment, which ref2va skips."),
+                       ("The segment, for H3 Motion Context only: wire it into its Load Latent's clip_index "
+                        "(Orrery Continue reads the segment from the picks)."),
+                       "The segment + 1, for H3 Motion Context only: wire it into its Save Latent's clip_index.",
+                       ("The last 3 s of the clip before this segment (from Orrery Film or H3 Motion Context's "
+                        "Chain Video), for the Reference to Video node's ref_video; None in the first segment, "
+                        "which ref2va skips."),
                        "The soundtrack of `previous`, for the Reference to Video node's ref_video_audio.",
                        ("The canvas area: `0.6MP` from the @h3 line, else width × height, for resolution and "
                         "scale nodes that take megapixels."))
@@ -422,11 +438,14 @@ class OrreryPrompt:
                                              "as the language model, in place of the one in orrery's settings."}),
                 "segment": ("INT", {"default": 0, "min": 0, "max": 99999, "control_after_generate": True,
                                     "tooltip": "The reel's clip to write, from 0. With increment, every queued "
-                                               "run plays the next clip; load_index and save_index drive H3 "
-                                               "Motion Context. Plain screenplays ignore it."}),
+                                               "run plays the next clip, which Orrery Continue (or H3 Motion "
+                                               "Context, through load_index and save_index) chains to the one "
+                                               "before. Plain screenplays ignore it."}),
                 "latent_path": ("STRING", {"forceInput": True, "tooltip": (
-                    "H3 Motion Context's latent_path (default h3_context): where the chain of clips lives. From "
-                    "the second segment on the model watches the previous clip when it writes --…-- slots.")}),
+                    "Where the reel's clips live, under ComfyUI's output (default h3_context; H3 Motion "
+                    "Context's latent_path): Orrery Film keeps them in its orrery_film folder, Chain Video in "
+                    "chain_video. From the second segment on the model watches the previous clip when it writes "
+                    "--…-- slots.")}),
                 "sweep": ("STRING", {"default": "", "tooltip": (
                     "Set by Generate for each run of a LoRA sweep (run|galaxy folder); empty runs the first.")}),
             },
@@ -447,7 +466,7 @@ class OrreryPrompt:
         try:
             outputs = run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
                                  params, segment, clip, stills, packed, wired, latent_path or DEFAULT_CHAIN, keep,
-                                 sweep)
+                                 sweep, continued(prompt, unique_id))
             data = json.loads(outputs[1])
             if "sends" in data and not packed:
                 raise ValueError("This reel SENDs frames as reference images, which Orrery Refs fetches: wire this "
@@ -562,6 +581,14 @@ def to_image(array):
     import torch
 
     return torch.from_numpy(array)
+
+
+def continued(prompt: dict | None, unique_id) -> bool:
+    """Whether an Orrery Continue reads this node's picks (then orrery continues the reel itself)."""
+    if not prompt or unique_id is None:
+        return False
+    return any(n.get("class_type") == "OrreryContinue" and n.get("inputs", {}).get("picks") == [str(unique_id), 1]
+               for n in prompt.values())
 
 
 def wiring(prompt: dict | None, unique_id) -> tuple[bool, int | None, bool]:
@@ -711,5 +738,7 @@ class OrreryRefs:
                       "image of a reference; send several stills to several images for ref2va.")
 
 
-NODE_CLASS_MAPPINGS = {"OrreryPrompt": OrreryPrompt, "OrreryLog": OrreryLog, "OrreryRefs": OrreryRefs}
-NODE_DISPLAY_NAME_MAPPINGS = {"OrreryPrompt": "Orrery Prompt", "OrreryLog": "Orrery Log", "OrreryRefs": "Orrery Refs"}
+NODE_CLASS_MAPPINGS = {"OrreryPrompt": OrreryPrompt, "OrreryLog": OrreryLog, "OrreryRefs": OrreryRefs,
+                       "OrreryContinue": OrreryContinue, "OrreryFilm": OrreryFilm}
+NODE_DISPLAY_NAME_MAPPINGS = {"OrreryPrompt": "Orrery Prompt", "OrreryLog": "Orrery Log", "OrreryRefs": "Orrery Refs",
+                              "OrreryContinue": "Orrery Continue", "OrreryFilm": "Orrery Film"}

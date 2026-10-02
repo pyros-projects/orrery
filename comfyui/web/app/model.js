@@ -201,7 +201,7 @@ function reelSecs(text) {
 
 // Each CHUNK line of a reel, for the editor's dividers and the timeline: the line it is on, its
 // title, the images its SEND: lines fill, the segments it plays (last Infinity when it repeats forever; first null when a chunk before
-// it does), the seconds of one clip (Chain Video keeps them without the pinned context), where it starts
+// it does), the seconds of one clip (kept without the pinned frames), where it starts
 // and ends in the film, the seconds left after it (null when the film runs forever) and a label.
 // Null without CHUNK lines. Mirrors orrery.reel.
 export function chunkInfo(text) {

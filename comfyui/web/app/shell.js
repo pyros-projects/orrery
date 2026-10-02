@@ -89,7 +89,7 @@ export class OrreryApp {
 
   // A run may have let the language model write libraries: refresh, and point at anything to review.
   async afterRun() {
-    refreshReel(this, { chain: true });  // Chain Video may hold a new clip, Orrery Refs new anchors
+    refreshReel(this, { chain: true });  // the reel may hold a new clip, Orrery Refs new anchors
     const before = new Set((this.data.libraries || []).filter((l) => l.pending || (l.pending_entries || []).length).map((l) => l.name));
     let libs;
     try { libs = (await this.api.libraries()).libraries; } catch { return; }

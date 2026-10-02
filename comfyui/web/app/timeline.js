@@ -1,4 +1,4 @@
-// The film beside the editor: each CHUNK's clips as H3 Motion Context's Chain Video keeps them, and
+// The film beside the editor: each CHUNK's clips as Orrery Film (or H3 Motion Context's Chain Video) keeps them, and
 // the frames its SEND: lines handed on (Orrery Refs' anchors), level with the chunk's lines.
 import { icon } from "./icons.js";
 import { shape } from "./model.js";
@@ -56,7 +56,7 @@ export function layoutTimeline(app, chunks) {
   const end = pre.scrollHeight;
   const clips = new Map((app.data.chain?.clips || []).map((c) => [c.segment, c]));
   const segment = Number(app.bridge.getSegment());
-  // Chain Video keeps one frame size per chain; before it holds any, the size the template asks for
+  // A chain keeps one frame size; before it holds a clip, the size the template asks for
   const { width, height } = app.data.chain?.width && app.data.chain?.height ? app.data.chain : shape(app.text);
   const track = box.querySelector(".tl-track");
   track.style.height = `${end}px`;
@@ -105,7 +105,7 @@ export function wireTimeline(app) {
     const sheet = app.openSheet(`<div class="panel"><div class="row spread"><h4>Segment ${s}</h4>`
       + `<button class="icon-btn" data-close title="Close">${icon("x")}</button></div>`
       + `<video class="tl-video" controls autoplay loop src="${app.api.chainVideoURL(s, app.bridge.latentPath(), made?.version)}"></video>`
-      + `<p class="muted flush">${made?.frames ?? "?"} frames, as Chain Video keeps them (without the pinned context)</p></div>`);
+      + `<p class="muted flush">${made?.frames ?? "?"} frames, as the reel keeps them (without the pinned frames)</p></div>`);
     sheet.querySelector("[data-close]").onclick = () => app.closeSheet();
   });
 }
