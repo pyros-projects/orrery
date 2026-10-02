@@ -1,9 +1,10 @@
-"""What the ComfyUI editor needs to complete a template: libraries, H3 words and LoRAs."""
+"""What the ComfyUI editor needs to complete a template: libraries, H3 words, LoRAs and RefMods."""
 
 import re
 from collections import Counter
 from pathlib import PurePosixPath
 
+from orrery.comfy_refmods import refmod_names
 from orrery.h3 import CAMERA, TRANSITIONS
 from orrery.home import BUILTIN_DIR, Home
 from orrery.library import load_libraries
@@ -43,7 +44,7 @@ def _props(lib) -> dict[str, list[dict]]:
             for key, counts in sorted(seen.items())}
 
 
-def completion_data(home: Home, loras: list[str] | None = None) -> dict:
+def completion_data(home: Home, loras: list[str] | None = None, refmods: list[str] | None = None) -> dict:
     builtin = set(load_libraries(BUILTIN_DIR)) - set(load_libraries(home.library_dir))
     libraries = [{
         "name": name,
@@ -57,4 +58,5 @@ def completion_data(home: Home, loras: list[str] | None = None) -> dict:
         "libraries": libraries,
         "h3": {"camera": list(CAMERA), "modifiers": MODIFIERS, "transitions": list(TRANSITIONS)},
         "loras": sorted((_lora(f) for f in (lora_files() if loras is None else loras)), key=lambda x: x["name"].lower()),
+        "refmods": refmod_names() if refmods is None else refmods,
     }

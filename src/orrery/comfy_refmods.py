@@ -25,6 +25,22 @@ def _pack():
                      "it in custom_nodes and restart ComfyUI.")
 
 
+def refmod_names() -> list[str]:
+    """The RefMods in models/refmods as a CAST names them (`NAME` for `NAME_Video`), for the editor's
+    completion; empty outside ComfyUI or before the pack has registered its folder."""
+    try:
+        import folder_paths  # ComfyUI
+        files = folder_paths.get_filename_list("refmods")
+    except Exception:  # noqa: BLE001 - not inside ComfyUI, or no refmods folder
+        return []
+    names = set()
+    for f in files:
+        stem = f.replace("\\", "/")
+        if stem.endswith(".safetensors") and not stem.endswith("_Audio.safetensors"):
+            names.add(stem.removesuffix(".safetensors").removesuffix("_Video"))
+    return sorted(names, key=str.lower)
+
+
 def resolve(name: str, available: list[str]) -> str:
     """The pack's name for a CAST's `refmod NAME`: the name itself, or its `_Video` half."""
     for candidate in (name, f"{name}_Video"):

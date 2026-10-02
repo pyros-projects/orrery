@@ -67,6 +67,16 @@ def test_lora_files_come_from_comfyui_and_are_empty_outside_it(home, monkeypatch
     assert completion_data(Home(home))["loras"] == [{"name": "b", "folder": "a"}]
 
 
+def test_refmods_are_named_as_the_cast_names_them_and_empty_outside_comfyui(home, monkeypatch):
+    assert completion_data(Home(home))["refmods"] == []
+    fake = types.ModuleType("folder_paths")
+    files = ["salon_canon_Video.safetensors", "salon_canon_Audio.safetensors", "salon_canon.png",
+             "people\\maya_Video.safetensors", "plain.safetensors", "voice_only_Audio.safetensors"]
+    fake.get_filename_list = lambda kind: files if kind == "refmods" else []
+    monkeypatch.setitem(sys.modules, "folder_paths", fake)
+    assert completion_data(Home(home))["refmods"] == ["people/maya", "plain", "salon_canon"]
+
+
 def test_libraries_carry_the_property_values_a_filter_can_name(home):
     libs = {lib["name"]: lib for lib in completion_data(Home(home))["libraries"]}
     cat = next(v for v in libs["scp/archetype_test"]["props"]["id"] if v["value"] == "SCP-529")
