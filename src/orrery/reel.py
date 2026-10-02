@@ -237,16 +237,11 @@ def derive(seed: int, segment: int) -> int:
     return int.from_bytes(hashlib.sha256(f"orrery-reel:{seed}:{segment}".encode()).digest()[:4], "big")
 
 
-def build_segment(reel: Reel, seed: int, libraries: Mapping[str, Library],
-                  weights: Mapping[str, float] | None, segment: int,
-                  lint: list[Issue]) -> tuple[Scene, list[Pick]]:
-    """Segment `segment` of the reel as a scene, with the picks that went into it."""
-    reel.locate(segment)
-    forever = next((i for i, b in enumerate(reel.blocks) if b.repeat is None), None)
-    if forever is not None and forever < len(reel.blocks) - 1:
-        lint.append(Issue("warn", f"CHUNK {forever + 1} repeats forever, so the "
-                                  f"{len(reel.blocks) - forever - 1} CHUNK(s) after it never play."))
-
+def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Mapping[str, float] | None,
+            last: int):
+    """The world (its expander and its expanded lines) and `expand(t)` for segments up to `last`: the
+    chunk's screenplay lines as segment t rolls them (its own seed, the world's bindings, `$x~N`
+    recomputed), its handoff and the picks."""
     world = Expander(seed, libraries, weights)
     for line in reel.head:
         if m := BINDING.match(line.strip()):
@@ -274,7 +269,7 @@ def build_segment(reel: Reel, seed: int, libraries: Mapping[str, Library],
                 ex.bind(m.group(1), m.group(2))
         return ex, block
 
-    for t in range(segment + 1):
+    for t in range(last + 1):
         ex_t = expander(t)[0]
         history.append(dict(ex_t.vars))
         history_props.append(dict(ex_t.var_props))
@@ -294,6 +289,33 @@ def build_segment(reel: Reel, seed: int, libraries: Mapping[str, Library],
                 lines.append(ex.expr(line))
         return lines, handoff, ex.picks, handoff_picks
 
+    return world, head, expand
+
+
+def resolved(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Mapping[str, float] | None,
+             segments: int) -> tuple[list[str], list[dict]]:
+    """The world's lines and the first `segments` segments as static screenplay lines, picks filled in:
+    each {"title", "lines", "handoff"}, as the reel rendered them at `seed`. What a language model reads
+    to continue the reel."""
+    _, head, expand = _unroll(reel, seed, libraries, weights, segments - 1)
+    out = []
+    for t in range(segments):
+        lines, handoff, _, _ = expand(t)
+        out.append({"title": reel.blocks[reel.locate(t)[0]].title, "lines": lines, "handoff": handoff})
+    return head, out
+
+
+def build_segment(reel: Reel, seed: int, libraries: Mapping[str, Library],
+                  weights: Mapping[str, float] | None, segment: int,
+                  lint: list[Issue]) -> tuple[Scene, list[Pick]]:
+    """Segment `segment` of the reel as a scene, with the picks that went into it."""
+    reel.locate(segment)
+    forever = next((i for i, b in enumerate(reel.blocks) if b.repeat is None), None)
+    if forever is not None and forever < len(reel.blocks) - 1:
+        lint.append(Issue("warn", f"CHUNK {forever + 1} repeats forever, so the "
+                                  f"{len(reel.blocks) - forever - 1} CHUNK(s) after it never play."))
+
+    world, head, expand = _unroll(reel, seed, libraries, weights, segment)
     lines, handoff, picks, _ = expand(segment)
     before, before_picks = (expand(segment - 1)[1::2] if segment else (None, []))
     scene = parse_scene("\n".join(head + lines), Expander(0, {}), lint, expanded=True)

@@ -57,6 +57,8 @@ def test_routes_cover_the_contract():
         ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("GET", "/orrery/chain/video"),
         ("GET", "/orrery/anchor"),
         ("GET", "/orrery/history"),
+        ("GET", "/orrery/writers"),
+        ("POST", "/orrery/writers"),
     }
 
 
@@ -672,3 +674,12 @@ def test_the_history_lists_runs_newest_first_and_searches(home):
     assert body["total"] == 3 and [r["seed"] for r in body["runs"]] == [3, 2, 1]
     assert [r["seed"] for r in ok(home, webapi.history_runs, q="heron", limit="1")["runs"]] == [3]
     assert ok(home, webapi.history_runs, q="heron", offset="1")["runs"][0]["seed"] == 1
+
+
+def test_the_writer_texts_are_read_edited_and_reset(home):
+    body = ok(home, webapi.writer_texts)
+    assert set(body) == {"skill", "continue", "story", "describe", "describe_shot"} and body["skill"]["edited"] is False
+    edited = ok(home, webapi.writer_save, name="story", text="Write {seconds} seconds.")
+    assert edited["edited"] is True and edited["text"].startswith("Write {seconds}")
+    assert ok(home, webapi.writer_save, name="story", text=None)["edited"] is False
+    assert api(home, webapi.writer_save, name="nope", text="x")[0] == 400

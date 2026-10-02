@@ -580,6 +580,26 @@ def history_runs(home: Home, args: dict) -> dict:
                         query=str(args.get("q") or ""))
 
 
+def writer_texts(home: Home, args: dict) -> dict:
+    """The writers' skill and tasks: each {text, default, edited}."""
+    from orrery import writers
+
+    return writers.texts(home)
+
+
+def writer_save(home: Home, args: dict) -> dict:
+    """Keep an edited writer text; a null or empty text goes back to the default."""
+    from orrery import writers
+
+    text = args.get("text")
+    if text is not None and not isinstance(text, str):
+        raise ApiError(400, "'text' must be a string or null.")
+    try:
+        return writers.save(home, str(args.get("name") or ""), text)
+    except ValueError as err:
+        raise ApiError(400, str(err)) from None
+
+
 # --- roll -----------------------------------------------------------------------------------
 
 ROLL_CLIPS = 6  # Roll on a reel shows this many clips at most
@@ -731,6 +751,8 @@ ROUTES = [
     ("GET", "/orrery/chain/video", chain_video),
     ("GET", "/orrery/anchor", anchor),
     ("GET", "/orrery/history", history_runs),
+    ("GET", "/orrery/writers", writer_texts),
+    ("POST", "/orrery/writers", writer_save),
     ("POST", "/orrery/galaxy/move", galaxy_move),
     ("POST", "/orrery/galaxy/delete", galaxy_delete),
     ("POST", "/orrery/galaxy/export", galaxy_export),

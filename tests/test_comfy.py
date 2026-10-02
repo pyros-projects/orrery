@@ -87,7 +87,7 @@ def test_save_png_embeds_the_picks(tmp_path):
 
 
 def test_node_classes_declare_comfy_interfaces():
-    assert set(NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm"}
+    assert set(NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm", "OrreryWrite"}
     inputs = OrreryPrompt.INPUT_TYPES()["required"]
     assert inputs["target"][0] == ["text", "h3-base", "flat"]
     assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length", "lora_stack",
@@ -103,7 +103,7 @@ def test_node_pack_imports_from_the_repo_folder(monkeypatch):
     spec = importlib.util.spec_from_file_location("orrery_pack", REPO / "comfyui" / "__init__.py")
     pack = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(pack)
-    assert set(pack.NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm"}
+    assert set(pack.NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm", "OrreryWrite"}
 
 
 def test_prompt_node_uses_a_preset_and_remembers_the_template(home):

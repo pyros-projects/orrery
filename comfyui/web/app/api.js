@@ -45,6 +45,8 @@ export function client(home) {
     discardLibrary: (name) => call("library/discard", { body: { name } }),
     galaxy: (query = {}) => call("galaxy", { query }),
     history: (query = {}) => call("history", { query }),
+    writers: () => call("writers"),
+    saveWriter: (name, text) => call("writers", { body: { name, text } }),
     rate: (id, rating) => call("galaxy/rate", { body: { id, rating } }),
     moveOutputs: (ids, folder) => call("galaxy/move", { body: { ids, folder } }),
     deleteOutputs: (ids) => call("galaxy/delete", { body: { ids } }),

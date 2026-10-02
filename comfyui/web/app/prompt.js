@@ -9,6 +9,7 @@ import { STARTERS } from "./starters.js";
 import { runRolls } from "./test.js";
 import { caretPoint, cellStart, inCell, jumpCell, paintCells, renderCells, wireCells } from "./cells.js";
 import { layoutTimeline, loadChain, scrollTimeline, wireTimeline } from "./timeline.js";
+import { openWrite, writeMenuHTML } from "./write.js";
 
 function statsHTML(app) {
   const st = stats(app.text), out = shape(app.text), reel = st.h3?.reel, plan = sweepPlan(app.text);
@@ -74,7 +75,9 @@ export function renderPrompt(app) {
       <button class="btn" data-act="save" ${card && (d || setDials(app)) ? "" : "disabled"}>${icon("save")}${card?.builtin ? "Save a copy" : "Save"}</button>
       <button class="btn primary" data-act="saveas">Save as…</button>
       <button class="btn" data-act="new" aria-haspopup="menu" aria-expanded="${!!app.state.newMenu}">${icon("plus")}New</button>
+      <button class="btn" data-act="write" aria-haspopup="menu" aria-expanded="${!!app.state.writeMenu}" title="The language model writes: the reel's next chunk, the shot between two frames, a prompt from a picture">${icon("spark")}Write</button>
       ${app.state.newMenu ? `<div class="pop newpop" role="menu">${Object.entries(STARTERS).map(([k, s]) => `<button role="menuitem" data-new="${k}"><b>${esc(s.label)}</b><span class="muted">${esc(s.hint)}</span></button>`).join("")}</div>` : ""}
+      ${app.state.writeMenu ? writeMenuHTML(app) : ""}
     </div>
     ${card?.note ? `<p class="pnote"><b>${esc(card.title)}.</b> ${esc(card.note)}</p>` : '<p class="pnote">Type a template, or open a preset. <b>__</b> lists your libraries, <b>$</b> your bindings.</p>'}
     <div class="edrow"${app.bridge.props.orrery_tl_w ? ` style="--tl-w:${Number(app.bridge.props.orrery_tl_w)}px"` : ""}>${cellsView(app)
@@ -142,7 +145,10 @@ export function renderPrompt(app) {
     if (act === "restart") restart(app);
     if (act === "jump") jumpToChunk(app);
     if (act === "tlview") { app.bridge.props.orrery_tl_view = cellsView(app) ? "beside" : "below"; return renderPrompt(app); }
-    if (act === "new") { app.state.newMenu = !app.state.newMenu; return renderPrompt(app); }
+    if (act === "new") { app.state.newMenu = !app.state.newMenu; app.state.writeMenu = false; return renderPrompt(app); }
+    if (act === "write") { app.state.writeMenu = !app.state.writeMenu; app.state.newMenu = false; return renderPrompt(app); }
+    const writer = e.target.closest("[data-write]")?.dataset.write;
+    if (writer) { app.state.writeMenu = false; renderPrompt(app); return openWrite(app, writer); }
     const starter = e.target.closest("[data-new]")?.dataset.new;
     if (starter) startNew(app, starter);
     if (act === "outputs") { app.state.gScope = "prompt"; app.go("galaxy"); }

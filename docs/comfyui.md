@@ -55,7 +55,10 @@ Nodes under **orrery**:
     edits; Save, Save as…, Revert. Under the editor, every binding is a
     **dial**: pick a library entry or choice, or type any expression; empty
     means its default roll. Saving bakes the dials in, and a galaxy output
-    restores them. **Test** jumps to the Test tab and rolls.
+    restores them. **Test** jumps to the Test tab and rolls. **Write** has
+    the language model write the reel's next chunk, the shot between two
+    frames or a prompt from a picture, one idea per short run, browsed
+    before it goes in ([wildcard-manager.md](wildcard-manager.md)).
     In a reel, every `CHUNK` line carries a divider that says which segments
     it plays, when and how much film is left (`seg 1–4 · 4 × 5 s · 0:05 →
     0:25 · 1:35 left`); the chunk that plays the node's `segment` next is
@@ -152,3 +155,5 @@ Nodes under **orrery**:
   run; older takes stay on disk. The previous clip, `SEND:` and the timeline read
   this store or H3 Motion Context's Chain Video, whichever was written last.
   Another `context:` than 22 is a warning: 22 frames are pinned all the same.
+- **Orrery Write** (`orrery/internal`): the Write menu queues it on its own;
+  you don't add it.

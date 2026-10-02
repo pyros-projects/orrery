@@ -6,6 +6,10 @@ import { icon } from "./icons.js";
 
 const gb = (bytes) => (bytes ? `${(bytes / 1e9).toFixed(1)} GB` : "");
 
+// What the Write menu sends the model: the skill ahead of every task, then the task.
+const WRITER_TEXTS = { skill: "The skill: the screenplay language, ahead of every task", continue: "Continue the reel",
+  story: "Story between frames", describe: "Prompt from image: an image prompt", describe_shot: "Prompt from image: an @h3 i2va shot" };
+
 const HOME_NOTE = {
   env: (h) => `ORRERY_HOME is set to <code>${esc(h)}</code> and wins over this setting; unset it to use the folder below.`,
   setting: () => "Libraries, presets, the galaxy and these settings live here. Existing files are not moved when you change it.",
@@ -13,8 +17,9 @@ const HOME_NOTE = {
 };
 
 export async function openSettings(app) {
-  let s, h;
-  try { [s, h] = await Promise.all([app.api.llm(), app.api.homeFolder()]); } catch (e) { return app.fail(e); }
+  let s, h, wr;
+  try { [s, h, wr] = await Promise.all([app.api.llm(), app.api.homeFolder(), app.api.writers()]); } catch (e) { return app.fail(e); }
+  const drafts = Object.fromEntries(Object.keys(WRITER_TEXTS).map((k) => [k, wr[k].text]));
   const options = [`<option value="">None: unknown libraries stay an error</option>`]
     .concat(s.files.map((f) => `<option value="${esc(f.name)}" ${f.name === s.file ? "selected" : ""} ${f.can_write ? "" : "disabled"}>`
       + `${esc(f.name)}${f.size ? ` · ${gb(f.size)}` : ""}${f.can_write ? "" : " · can't write"}</option>`)).join("");
@@ -33,6 +38,13 @@ export async function openSettings(app) {
       <div class="row"><input class="input narrow" id="oa-llm-n" type="number" min="1" max="200" value="${s.entries}"><span class="muted">entries · <code>__name:30__</code> asks for at least 30</span></div></div>
     <div class="field"><label class="label" for="oa-llm-t">Max tokens</label>
       <div class="row"><input class="input narrow" id="oa-llm-t" type="number" min="500" max="131072" step="500" value="${s.max_tokens}"><span class="muted">the longest answer it may write in one run; long entries need room</span></div></div>
+    <div class="row spread"><h5 class="label">Writers</h5></div>
+    <p class="muted flush">What the <b>Write</b> menu sends the language model. <code>{world}</code> <code>{chunks}</code> <code>{next}</code> <code>{handoff}</code> <code>{seconds}</code>
+      are filled in when it runs; Picture 1 and 2 are the frames it sees. An edit is kept in the home folder, so an update of orrery leaves it alone.</p>
+    <div class="field"><div class="row"><select class="input" id="oa-wr" aria-label="Writer text">${Object.entries(WRITER_TEXTS).map(([k, label]) =>
+      `<option value="${k}">${esc(label)}${wr[k].edited ? " · edited" : ""}</option>`).join("")}</select>
+      <button type="button" class="btn ghost" data-wreset title="Back to the text orrery ships">${icon("undo")}Reset to default</button></div>
+      <textarea class="input mono wtext" id="oa-wt" spellcheck="false" aria-label="The writer text"></textarea></div>
     <div class="row spread"><h5 class="label">Editor</h5></div>
     <label class="check"><input type="checkbox" id="oa-qs" ${app.data.quickstart !== false ? "checked" : ""}>
       <span><b>New</b> templates open with a quickstart: the essentials as <code># …</code> comments above the template</span></label>
@@ -45,6 +57,11 @@ export async function openSettings(app) {
     <div class="acts"><button type="button" class="btn ghost" data-cancel>Cancel</button><button class="btn primary">${icon("save")}Save</button></div>
   </form>`);
   sheet.querySelector("[data-cancel]").onclick = () => app.closeSheet();
+  const wsel = sheet.querySelector("#oa-wr"), wtext = sheet.querySelector("#oa-wt");
+  let wcur = wsel.value;
+  wtext.value = drafts[wcur];
+  wsel.onchange = () => { drafts[wcur] = wtext.value; wcur = wsel.value; wtext.value = drafts[wcur]; };
+  sheet.querySelector("[data-wreset]").onclick = () => { wtext.value = wr[wcur].default; };
   sheet.querySelector("form").addEventListener("submit", async (e) => {
     e.preventDefault();
     try {
@@ -58,6 +75,9 @@ export async function openSettings(app) {
       const flags = { quickstart: sheet.querySelector("#oa-qs").checked, dividers: sheet.querySelector("#oa-div").checked,
         timeline: sheet.querySelector("#oa-tl").checked, log_prompts: sheet.querySelector("#oa-log").checked };
       if (Object.entries(flags).some(([k, on]) => on !== (app.data[k] !== false))) Object.assign(app.data, await app.api.saveUi(flags));
+      drafts[wcur] = wtext.value;
+      const edits = Object.keys(drafts).filter((k) => drafts[k] !== wr[k].text);
+      for (const k of edits) await app.api.saveWriter(k, drafts[k]);
       app.data.llm = await app.api.saveLlm({ file: sheet.querySelector("#oa-llm").value, entries: Number(sheet.querySelector("#oa-llm-n").value) || 12,
         max_tokens: Number(sheet.querySelector("#oa-llm-t").value) || 16000 });
       app.closeSheet();

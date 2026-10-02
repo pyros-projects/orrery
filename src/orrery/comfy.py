@@ -19,6 +19,7 @@ from orrery.autolib import needs
 from orrery.chain import DEFAULT_CHAIN, load, previous_clip
 from orrery.comfy_film import OrreryContinue, OrreryFilm
 from orrery.comfy_llm import ComfyBackend, can_write, llm_config
+from orrery.comfy_write import OrreryWrite
 from orrery.continuum.grid import CONTEXT
 from orrery.dsl import (
     MissingLibrary,
@@ -824,6 +825,7 @@ class OrreryRefs:
 
 
 NODE_CLASS_MAPPINGS = {"OrreryPrompt": OrreryPrompt, "OrreryLog": OrreryLog, "OrreryRefs": OrreryRefs,
-                       "OrreryContinue": OrreryContinue, "OrreryFilm": OrreryFilm}
+                       "OrreryContinue": OrreryContinue, "OrreryFilm": OrreryFilm, "OrreryWrite": OrreryWrite}
 NODE_DISPLAY_NAME_MAPPINGS = {"OrreryPrompt": "Orrery Prompt", "OrreryLog": "Orrery Log", "OrreryRefs": "Orrery Refs",
-                              "OrreryContinue": "Orrery Continue", "OrreryFilm": "Orrery Film"}
+                              "OrreryContinue": "Orrery Continue", "OrreryFilm": "Orrery Film",
+                              "OrreryWrite": "Orrery Write"}

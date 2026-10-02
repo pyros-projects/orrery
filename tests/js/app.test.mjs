@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { highlight } from "../../comfyui/web/app/highlight.js";
 import { fitThumbs } from "../../comfyui/web/app/timeline.js";
+import { writerBlock } from "../../comfyui/web/app/write.js";
 import {
   applyDials, dials, downstream, entryPage, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
   chunkInfo, chunkLabel, splitCells, rangeIds, shape, stats, sweepPlan, templateHash,
@@ -371,4 +372,21 @@ test("the cells view splits a reel at its CHUNK lines, and joining the cells giv
   const bare = "CHUNK a\nSHOT 5s\n  CHUNK b\n";
   assert.deepEqual(splitCells(bare).map((c) => [c.chunk, c.text]), [[0, "CHUNK a\nSHOT 5s"], [1, "  CHUNK b\n"]]);
   assert.deepEqual(splitCells("no chunks\nhere"), [{ line: 0, chunk: -1, text: "no chunks\nhere" }]);
+});
+
+test("the Write menu offers a writer only where it can write", () => {
+  const app = (text, { llm = true, clip = false, frames = [] } = {}) => ({
+    text, llmActive: () => llm, bridge: { wired: (n) => n === "clip" && clip, frames: () => frames },
+  });
+  const reel = "@h3 t2va\nCHUNK a\nSHOT 5s\nA.\nCHUNK b\nSHOT 5s\nB.", fl2va = "@h3 fl2va 16:9\nSHOT 5s\nA.";
+  assert.match(writerBlock(app(reel, { llm: false }), "continue"), /language model/);
+  assert.equal(writerBlock(app(reel, { llm: false, clip: true }), "continue"), "");
+  assert.match(writerBlock(app("@h3 t2va\nCHUNK a repeat forever\nSHOT 5s\nA."), "continue"), /forever/);
+  assert.match(writerBlock(app(fl2va), "continue"), /Needs a reel/);
+  assert.match(writerBlock(app(reel, { frames: ["first_frame", "last_frame"] }), "story"), /not for a reel/);
+  assert.match(writerBlock(app(fl2va, { frames: ["first_frame"] }), "story"), /first and the last frame/);
+  assert.equal(writerBlock(app(fl2va, { frames: ["first_frame", "last_frame"] }), "story"), "");
+  assert.match(writerBlock(app("a photo of a fox", { frames: ["first_frame", "last_frame"] }), "story"), /@h3/);
+  assert.match(writerBlock(app("a photo of a fox"), "describe"), /first_frame/);
+  assert.equal(writerBlock(app("a photo of a fox", { frames: ["last_frame"] }), "describe"), "");
 });

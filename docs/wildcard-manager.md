@@ -97,3 +97,32 @@ keeps it, **Discard** drops it (a discarded library is written again on the
 next run, so change the directions first). After every run the node refreshes
 its libraries and points at anything new to review. Writes can also be undone
 with `orrery lib undo`.
+
+**The Write menu.** In the Prompt tab, **Write** has the language model write
+for the editor, in the static screenplay language (no wildcards, bindings or
+slots, which keeps it within a 4B or 8B model's reach):
+
+- **Continue the reel**: it reads every chunk as it rolls at the node's seed
+  (picks filled in, with the reel's style and CAST) and writes the next
+  `CHUNK`, with a `HANDOFF:` that picks up the last one's. It is appended to
+  the reel.
+- **Story between frames**: it sees the pictures wired into `first_frame` and
+  `last_frame` and writes the shot that gets from one to the other (fl2va). It
+  takes the place of the shots below the header.
+- **Prompt from image**: it sees the picture in `first_frame` and writes an
+  image prompt (Krea 2), or an i2va shot when the template is `@h3`. Comments
+  and `: w… h…` lines stay.
+
+Each idea is a short run of its own: Orrery Write with only the frames and the
+text encoder wired into the node, so no video model loads and the run ends
+when the model has written (a run already in the queue goes first). The ideas
+wait in a sheet: ‹ › pages through them, **Another idea** asks again (the
+model samples at seed + n, the chunks it reads still roll at the node's
+seed), **Insert** puts one into the editor as an unsaved edit (Undo in the
+toast). An answer that writes wildcards, more than one chunk or a shot orrery
+cannot compile is shown with what is wrong; **Insert anyway** takes it as it
+is. Close the sheet while it writes, and a toast says when the idea is ready.
+The gear's **Writers** section holds what the model is sent: the skill (the
+language, with examples, ahead of every task) and each task, editable, with
+**Reset to default**; an edit lives in `writers/` in the orrery home, so an
+update of orrery leaves it alone.

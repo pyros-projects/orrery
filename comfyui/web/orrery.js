@@ -140,6 +140,51 @@ function mount(node) {
       return batch.done;
     },
     stopGenerate: async () => { batch.id++; await batch.done?.catch(() => {}); },
+    // The Write menu: a run of its own with Orrery Write and only what the language model needs (the frames
+    // and a text encoder wired into this node), so it ends when the model has written and no video model
+    // loads. Resolves with the idea, as Orrery Write hands it back; idea n samples the model at seed + n.
+    write: async (task, idea, template) => {
+      const { output } = await app.graphToPrompt();
+      const key = Object.keys(output).find((k) => output[k]?.class_type === "OrreryPrompt" && (k === String(node.id) || k.endsWith(`:${node.id}`)));
+      const me = key && output[key];
+      if (!me) throw new Error("This node is not part of what ComfyUI would queue (is it bypassed?).");
+      const keep = {};
+      const visit = (id) => {
+        if (keep[id] || !output[id]) return;
+        keep[id] = output[id];
+        Object.values(output[id].inputs || {}).forEach((v) => { if (Array.isArray(v)) visit(String(v[0])); });
+      };
+      // as this node has them, a value or a link (a seed or a home may come from another node)
+      const passed = ["seed", "home", "params", "clip", "first_frame", "last_frame"].filter((k) => me.inputs[k] !== undefined);
+      passed.forEach((k) => { if (Array.isArray(me.inputs[k])) visit(String(me.inputs[k][0])); });
+      const prompt = { ...keep, orrery_write: { class_type: "OrreryWrite", inputs: {
+        task, template, idea, ...Object.fromEntries(passed.map((k) => [k, me.inputs[k]])) } } };
+      // listening before it is queued: a quick run (or one that fails at once) can end before the POST answers
+      const seen = [];
+      let settle = () => {};
+      const on = Object.fromEntries(["executed", "execution_error", "execution_interrupted"].map((kind) =>
+        [kind, ({ detail }) => { seen.push([kind, detail]); settle(); }]));
+      Object.entries(on).forEach(([kind, f]) => api.addEventListener(kind, f));
+      try {
+        const res = await api.fetchApi("/prompt", { method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt, client_id: api.clientId ?? api.initialClientId }) });
+        const queued = await res.json();
+        if (!res.ok || !queued.prompt_id) throw new Error(queued.error?.message || "ComfyUI did not take the write run.");
+        return await new Promise((resolve, reject) => {
+          settle = () => {
+            for (const [kind, d] of seen.splice(0)) {
+              if (d?.prompt_id !== queued.prompt_id) continue;
+              if (kind === "executed" && d.node === "orrery_write") return resolve(JSON.parse(d.output?.orrery_write?.[0] || "{}"));
+              if (kind === "execution_error") return reject(new Error(`${d.node_type ? `${d.node_type}: ` : ""}${d.exception_message || "the write run failed"}`));
+              if (kind === "execution_interrupted") return reject(new Error("The write run was stopped."));
+            }
+          };
+          settle();
+        });
+      } finally {
+        Object.entries(on).forEach(([kind, f]) => api.removeEventListener(kind, f));
+      }
+    },
     // The chain the reel's clips live in: the string wired into latent_path, else the default h3_context.
     latentPath: () => {
       const input = node.inputs?.find((i) => i.name === "latent_path"), g = node.graph || app.graph;
@@ -150,6 +195,7 @@ function mount(node) {
     },
     // The frames wired into the node: they shape width and height (the server reads their size when it runs).
     frames: () => ["first_frame", "last_frame"].filter((name) => node.inputs?.find((i) => i.name === name)?.link != null),
+    wired: (name) => node.inputs?.find((i) => i.name === name)?.link != null,
     getSegment: () => find("segment")?.value ?? 0,
     setSegment: (value) => set("segment", value),
     // Restart: dequeue this node's pending runs and interrupt its running one; other jobs stay queued.
