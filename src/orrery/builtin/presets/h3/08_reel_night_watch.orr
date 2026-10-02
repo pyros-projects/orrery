@@ -1,9 +1,9 @@
 ---
 title: "Reel: the night watch"
-note: "A three-clip ref2va reel that keeps a face: the first clip opens on the keeper's face, and SEND makes that frame image 1 for every later clip, so the lamp room and the ship still know him after the stairs end on his back. Generate ×3 plays it (Orrery Continue / Orrery Film, or H3 Motion Context); wire the picks into Orrery Refs and its ref_N into Reference to Video. No input image: image 1 comes from the reel itself."
+note: "A three-clip ref2va reel that keeps a face: the first clip opens on the keeper's face, and SEND makes that frame image 1 for every later clip, so the last clip can come back to his face in close-up after two clips that never show it. Generate ×3 plays it (Orrery Continue / Orrery Film, or H3 Motion Context); wire the picks into Orrery Refs and its ref_N into Reference to Video. No input image: image 1 comes from the reel itself, and image 2 (the lamp clip's first frame) goes along as a reference for the view from the top."
 tags: [h3, reel, ref2va, send, motion_context]
 ---
-@h3 ref2va 16:9 lite
+@h3 ref2va 16:9 lite 0.6MP
 style: live-action, cinematic
 context: 22
 $storm = {a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}
@@ -17,16 +17,17 @@ CHUNK the stairs
 SHOT 8s: tracking, slow
 KEEPER's weathered face is lit by his lantern as he looks up the iron spiral stairs of the lighthouse; then he turns and climbs them while $storm batters the tower.
 SFX: boots ring on iron steps; wind howls against the walls
-HANDOFF: KEEPER reaches the small door of the lamp room at the top of the stairs
+HANDOFF: KEEPER reaches the top of the lighthouse and looks out over the sea for boats
 SEND: frame 0 to image 1
 
 CHUNK the lamp
 SHOT 7s: push in, small, slow
-KEEPER opens the door and lights the great lamp; the lens begins to turn and throws a sweeping beam out into $storm.
-SFX: a match strikes; gears grind as the lens starts to turn
-HANDOFF: the sweeping beam passes over the dark sea
+At the top, KEEPER sees a small fishing boat far below, fighting the waves, and the boat turns toward the light.
+SFX: waves crash against the rocks; a distant ship's horn answers
+HANDOFF: the small boat is fighting the waves
+SEND: frame 0 to image 2
 
 CHUNK the ship
-SHOT 8s: pull out, slow
-Far below, the beam finds a small fishing boat fighting the waves, and the boat turns toward the light.
+SHOT 8s: arc
+After four seconds the camera moves in to a close-up of KEEPER's face, with a sorrowful expression.
 SFX: waves crash against the rocks; a distant ship's horn answers

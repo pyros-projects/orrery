@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { suggest, missingLibraries, inlineLibraries, globMatches } from "../../comfyui/web/orrery-complete.js";
+import { suggest, missingLibraries, inlineLibraries, globMatches, castNames } from "../../comfyui/web/orrery-complete.js";
 
 const DATA = {
   libraries: [
@@ -206,4 +206,16 @@ test("GOTO: completes the chunk titles, after a condition too", () => {
   const cond = text.replace("GOTO: the s", "? $w[rain]: GOTO: ");
   assert.deepEqual(suggest(cond, cond.length, DATA).items.map((i) => i.insert), ["the gate", "the stairs"]);
   assert.ok(suggest("@h3 t2va\nCHUNK a\nGO", 19, DATA).items.some((i) => i.insert === "GOTO: "));
+});
+
+test("two capitals complete a CAST name; at a line's start also as a line of speech", () => {
+  const head = "@h3 ref2va 16:9\nCAST\nKEEPER (image 1): an old lighthouse keeper\nMAYA: a young woman\n\nSHOT 5s: static\n";
+  const inProse = head + "The light finds KE";
+  assert.deepEqual(suggest(inProse, inProse.length, DATA).items.map((i) => i.insert), ["KEEPER"]);
+  const atStart = head + "MA";
+  assert.deepEqual(suggest(atStart, atStart.length, DATA).items.map((i) => i.insert), ["MAYA", "MAYA ("]);
+  assert.equal(suggest(head + "A K", head.length + 3, DATA).items.length, 0);  // one capital is a word
+  const chunkCast = "@h3 ref2va\nCHUNK a\nCAST\nGIRL (image 1): a girl\nSHOT 5s\nGI";
+  assert.deepEqual(suggest(chunkCast, chunkCast.length, DATA).items.map((i) => i.insert), ["GIRL", "GIRL ("]);
+  assert.deepEqual(castNames(head), ["KEEPER", "MAYA"]);
 });

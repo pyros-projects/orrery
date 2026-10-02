@@ -143,6 +143,36 @@ function gotoItems(before, line, text) {
   };
 }
 
+// The CAST's names (every CAST block, a chunk's own too): `KEEPER (image 1): …`, `MAYA: …`.
+export function castNames(text) {
+  const names = [];
+  let inCast = false;
+  for (const raw of uncommented(text).split("\n")) {
+    const l = raw.trim();
+    if (/^CAST\s*$/.test(l)) { inCast = true; continue; }
+    if (/^(SHOT\b|CHUNK\b|@)/.test(l) || (inCast && !l)) { inCast = false; continue; }
+    const m = inCast && /^([A-Z][A-Z0-9 _-]*?)\s*(?:\([^)]*\))?\s*:\s*\S/.exec(l);
+    if (m && !names.includes(m[1])) names.push(m[1]);
+  }
+  return names;
+}
+
+// Two capitals at a word's start (`KE`) complete a CAST name; at a line's start also as a line of
+// speech (`KEEPER (…): `), next to the screenplay keywords that match.
+function castItems(before, line, text) {
+  const m = /(?:^|[^\w$])([A-Z][A-Z0-9_]+)$/.exec(before);
+  if (!m) return null;
+  const names = castNames(text).filter((n) => n.startsWith(m[1]) && n !== m[1]);
+  const lineStart = new RegExp(`^\\s*${m[1]}$`).test(line);
+  if (!names.length) return null;
+  const items = names.flatMap((n) => [
+    { insert: n, detail: "cast", preview: "" },
+    ...(lineStart ? [{ insert: `${n} (`, label: `${n} (…): `, detail: "a line of speech: how it sounds, then the words", preview: "" }] : []),
+  ]);
+  const keywords = lineStart ? KEYWORDS.filter((k) => startsWith(k, m[1])).map((k) => ({ insert: k, detail: "screenplay", preview: "" })) : [];
+  return { items: [...items, ...keywords], replaceFrom: before.length - m[1].length };
+}
+
 function keywordItems(before, line) {
   const m = line.match(/^([A-Za-z]+)$/);
   if (!m) return null;
@@ -237,7 +267,7 @@ export function suggest(text, caret, data) {
   const found = directive ?? (screenplay ? loraItems(before, line, data) : null)
     ?? libraryItems(before, data)
     ?? bindingItems(before, text)
-    ?? (screenplay ? gotoItems(before, line, text) ?? shotItems(before, line, data) ?? keywordItems(before, line) : null)
+    ?? (screenplay ? gotoItems(before, line, text) ?? castItems(before, line, text) ?? shotItems(before, line, data) ?? keywordItems(before, line) : null)
     ?? NONE;
   const typed = before.slice(found.replaceFrom);
   return { ...found, items: found.items.filter((i) => i.insert !== typed) };

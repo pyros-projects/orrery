@@ -1,0 +1,82 @@
+---
+title: "Endless kitchen"
+note: "A dinner service that never ends. Every clip, the next ticket ($station) sends the camera to the grill, the pastry bench or the wok, where a dish from that station is cooked; one time in ten a pan catches fire, the kitchen puts it out, and the service rolls on. The head chef ($chef, from __characters/average_joes__) runs the pass all night. GOTO lines steer it; the dishes come with the preset (@lib). Run (Instant) plays it until you stop."
+tags: [loops, h3, reel, goto, motion_context]
+---
+@h3 t2va 16:9
+context: 22
+style: live-action, restaurant kitchen documentary, warm tungsten light, handheld, one continuous take
+$chef = __characters/average_joes__
+MUSIC: a fast brushed jazz drum at a low volume
+
+@lib kitchen_grill
+  a thick steak seared on a roaring grill
+  skewers of vegetables charring over the coals
+  a whole fish crisping skin-side down
+@lib kitchen_dessert
+  a tower of choux buns glazed with caramel
+  a lemon tart torched until its top blisters
+  a chocolate fondant turned out onto a white plate
+@lib kitchen_wok
+  noodles tossed through a burst of flame in a wok
+  prawns flung into a smoking wok with chilli and garlic
+  fried rice thrown high and caught again in the wok
+
+CHUNK the pass
+$station = {grill|pastry|wok}
+SHOT 6s: tracking
+Evening service begins. $chef tears the first ticket from the printer at the pass and calls it out to the kitchen.
+SFX: a ticket printer chattering; pans clanging; the chef's shout
+HANDOFF: a cook spins toward the $station station
+? $station[grill]: GOTO: the grill
+? $station[pastry]: GOTO: the pastry bench
+GOTO: the wok
+
+CHUNK the grill
+$dish = __kitchen_grill__
+$station = {grill|pastry|wok}
+$fire = {10% fire}
+SHOT 6s: push in
+At the grill, a cook works on $dish, sweat on their brow, then plates it in one swift motion.
+SFX: fat sizzling; tongs clacking; the extractor roaring
+HANDOFF: the plate slides onto the pass as the next ticket prints
+? $fire[fire]: GOTO: the fire
+? $station[grill]: GOTO: the grill
+? $station[pastry]: GOTO: the pastry bench
+GOTO: the wok
+
+CHUNK the pastry bench
+$dish = __kitchen_dessert__
+$station = {grill|pastry|wok}
+$fire = {10% fire}
+SHOT 6s: push in, slow
+At the cool marble pastry bench, a cook finishes $dish with steady hands and a pair of tweezers.
+SFX: a whisk on steel; a blowtorch's soft roar; quiet concentration
+HANDOFF: the plate slides onto the pass as the next ticket prints
+? $fire[fire]: GOTO: the fire
+? $station[grill]: GOTO: the grill
+? $station[pastry]: GOTO: the pastry bench
+GOTO: the wok
+
+CHUNK the wok
+$dish = __kitchen_wok__
+$station = {grill|pastry|wok}
+$fire = {10% fire}
+SHOT 6s: push in
+At the wok station, a cook makes $dish, the flame leaping up with every toss.
+SFX: a jet burner roaring; the wok scraping on its ring; sizzling
+HANDOFF: the plate slides onto the pass as the next ticket prints
+? $fire[fire]: GOTO: the fire
+? $station[grill]: GOTO: the grill
+? $station[pastry]: GOTO: the pastry bench
+GOTO: the wok
+
+CHUNK the fire
+$station = {grill|pastry|wok}
+SHOT 6s: shake slightly
+A pan bursts into tall flames. A cook slams a lid onto it, the fire dies with a hiss, the whole kitchen cheers, and $chef calls the next order without missing a beat.
+SFX: a whoosh of fire; a lid clanging down; cheering and laughter
+HANDOFF: a cook spins toward the $station station
+? $station[grill]: GOTO: the grill
+? $station[pastry]: GOTO: the pastry bench
+GOTO: the wok

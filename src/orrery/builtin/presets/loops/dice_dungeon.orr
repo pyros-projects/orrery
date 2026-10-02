@@ -1,0 +1,72 @@
+---
+title: "Dice dungeon"
+note: "An adventure the dice tell. A hero from __characters/fantasy__ walks a dungeon room by room; every room may bring a foe (30%), and a fight is won four times in five. A lost fight fades out and the hero stands at the gate again; a relic (8% a room) ends the reel. So every seed is an adventure of its own length. GOTO lines steer it; the rooms, foes and relics come with the preset (@lib). Play it with Run (Instant) and let it end on its own."
+tags: [loops, h3, reel, goto, fantasy, motion_context]
+---
+@h3 t2va 16:9
+context: 22
+style: live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot
+$hero = __characters/fantasy__
+MUSIC: a low, pulsing drum at a slow tempo under a quiet, sustained horn
+
+@lib dungeon_rooms
+  a long vaulted corridor lined with guttering torches
+  a flooded crypt where the black water reaches the knees
+  a hall of collapsed pillars choked with pale roots
+  a narrow stone bridge over a bottomless chasm
+  a chamber of empty iron cages swaying on chains
+  a library of rotting books with a ladder that ends in the dark
+@lib dungeon_foes
+  a skeleton knight in rusted plate, dragging a notched sword
+  a giant pale spider dropping from the ceiling on a thread
+  a hulking troll swinging a club made from a tree trunk
+  a swarm of shrieking bats pouring out of a crack in the wall
+  a hooded cultist hurling green fire from both hands
+@lib dungeon_relics
+  a golden crown that hums with light
+  a crystal skull with a flame burning inside it
+  a sword set in a block of stone, glowing blue
+
+CHUNK the gate
+$room = __dungeon_rooms__
+SHOT 8s: push in, slow
+$hero pushes open a massive iron gate and steps into $room, torch held high.
+SFX: the gate grinding on its hinges; water dripping somewhere far off
+HANDOFF: the adventurer walks deeper into the dark
+
+CHUNK the rooms
+$room = __dungeon_rooms__
+$threat = {30% a foe}
+$find = {8% the relic}
+SHOT 8s: tracking, slow
+$hero moves carefully through $room, torch raised, every shadow shifting at the edge of the light.
+SFX: footsteps on wet stone; the torch crackling
+HANDOFF: the adventurer stops at the threshold of the next chamber
+? $find[the relic]: GOTO: the relic
+? $threat[a foe]: GOTO: the fight
+GOTO: the rooms
+
+CHUNK the fight
+$foe = __dungeon_foes__
+$outcome = {80% victory|defeat}
+SHOT 8s: arc, fast
+Out of the dark comes $foe. $hero draws a blade and they clash in the flickering torchlight.
+? $outcome[victory]: With a last blow the adventurer drives it back into the dark and stands, breathing hard.
+? $outcome[defeat]: The adventurer is thrown to the stone floor, and the torch rolls away, guttering.
+SFX: steel on steel; a roar echoing off the vaults; the torch hissing
+HANDOFF: the torchlight steadies on the floor
+? $outcome[defeat]: GOTO: the fall
+GOTO: the rooms
+
+CHUNK the fall
+SHOT 8s: pull out, slow
+The torch dies on the floor beside $hero, the darkness closes in, and far above a bell begins to toll. Then the light swells again, and the adventurer stands once more before the iron gate, as if waking from a dream.
+SFX: the torch hissing out; a slow, distant bell; a sharp breath
+HANDOFF: the adventurer stands before the iron gate again
+GOTO: the gate
+
+CHUNK the relic
+$relic = __dungeon_relics__
+SHOT 10s: push in, slow
+In the last chamber, on a stone altar, lies $relic. $hero lifts it, and its light floods the chamber, driving every shadow back into the walls.
+SFX: a rising choir of voices; stone cracking as the roots pull back

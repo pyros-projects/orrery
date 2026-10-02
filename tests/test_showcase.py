@@ -1,10 +1,10 @@
 import pytest
 
-from orrery.dsl import expand
+from orrery.dsl import expand, strip_comments, with_inline
 from orrery.h3 import compile_scene
 from orrery.home import Home
 from orrery.presets import BUILTIN_PRESETS, load_preset, preset_meta
-from orrery.reel import split_reel
+from orrery.reel import reel_path, split_reel
 
 MINIMUM = {"krea": 5, "h3": 5, "effects": 17, "fashion": 5, "loops": 5, "onebutton": 2}
 FOLDERS = tuple(MINIMUM)
@@ -36,7 +36,11 @@ def test_every_showcase_preset_runs_clean_across_seeds(home, name):
         outs = []
         if screenplay:
             reel = split_reel(text)
-            for segment in range(1 if not reel else (reel.segments or 6)):
+            clips = 1
+            if reel:  # the clips it plays at this seed (GOTO lines may end it early), six at most
+                source, merged = with_inline(strip_comments(text), libs)
+                clips = len(reel_path(split_reel(source), seed, merged, weights, upto=6)[0])
+            for segment in range(clips):
                 result = compile_scene(text, seed, libs, weights, segment=segment)
                 assert result.lint == [], (seed, segment, result.lint)
                 outs.append(result.text)

@@ -58,7 +58,7 @@ run to be different, and a little better than the last, orrery is for you.
   one click, watch which one is rendering, restart from the top. `SEND:` hands
   frames of an early clip to the later ones as references, so a face or an
   outfit holds for the whole reel.
-- **Ships a content pack worth pressing Generate for.** 70 presets and 878
+- **Ships a content pack worth pressing Generate for.** 75 presets and 878
   hand-written entries: drone odysseys, set changes, the Backrooms, a time
   machine, one-click random stills and clips, a creature test for H3.
 - **Keeps random coherent.** The sound matches the place, the animal lands in
