@@ -249,7 +249,7 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
     head = [world.expr(line.strip()) for line in reel.head if line.strip() and not BINDING.match(line.strip())]
 
     history: list[dict[str, str]] = []  # every earlier segment's bindings, recomputed
-    history_props: list[dict[str, dict[str, str]]] = []  # and the properties of what they rolled
+    history_props: list[dict[str, dict[str, str]]] = []  # and the fields of what they rolled, as their clips showed them
 
     def expander(t: int) -> tuple[Expander, Block]:
         block = reel.blocks[reel.locate(t)[0]]
@@ -257,13 +257,14 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
         ex.warnings = world.warnings  # one list for the whole reel
         ex.vars = dict(world.vars)
         ex.var_props = dict(world.var_props)
+        ex.var_fields = dict(world.var_fields)  # the head's fields rolled once, for every clip
 
         def back(name: str, n: int) -> str | None:
             target = max(t - n, 0)
             return ex.vars.get(name) if target >= t else history[target].get(name)
 
         ex.history = back
-        ex.history_props = lambda name, n: (ex.var_props if max(t - n, 0) >= t
+        ex.history_props = lambda name, n: (ex.var_fields if max(t - n, 0) >= t
                                             else history_props[max(t - n, 0)]).get(name, {})
         for line in block.lines:
             if m := BINDING.match(line.strip()):
@@ -273,7 +274,7 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
     for t in range(last + 1):
         ex_t = expander(t)[0]
         history.append(dict(ex_t.vars))
-        history_props.append(dict(ex_t.var_props))
+        history_props.append(dict(ex_t.var_fields))
 
     def expand(t: int) -> tuple[list[str], str | None, list[Pick], list[Pick]]:
         ex, block = expander(t)

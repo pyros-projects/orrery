@@ -16,7 +16,7 @@ Every construct of orrery's template language, where libraries live, how Dynamic
 | `@style(0.8)` | short for `<lora:style:0.8>`, with every strength form: `@style(0.4-0.9)`, `@style(0.5,0.7)`, `@style(1.0:0.5)` |
 | `$hero = __animal__` | bind once, reuse everywhere |
 | `@include effects/living_clay` + indented `room = the salon` | embed a preset where it stands; indented `key = value` lines turn its dials, so a preset is an operator with parameters (its `@h3` line gives way to yours) |
-| `$w.sfx` | a property of the entry `$w` rolled (empty if it has none): the sound follows the weather |
+| `$w.sfx` | a property of the entry `$w` rolled (empty if it has none): the sound follows the weather. A property is a template like an entry (`{a\|b}`, `__lib__`, `$w`, LoRA tags), rolled once when `$w` is bound, so every `$w.sfx` reads the same; filters and `?` conditions compare it as written |
 | `__world/habitats#habitat:$animal.habitat__` | a filter that depends on what was rolled before (`#key:$var` or `#key:$var.field`): the manta ray lands in the sea, never on a beach |
 | `? $w.kind=rain,snow: …` | a line kept only when the condition holds (`!=` for not); works for SFX lines too |
 | `{? $w.kind=rain: wet\|dry}` | a choice made by a condition instead of the dice |
@@ -39,7 +39,8 @@ as in Dynamic Prompts (a library that comes back to itself is an error). Entries
 may hold LoRAs, so a library can be a set of LoRA combinations
 (`- <lora:ink:0.8> <lora:grain:0.4>`, `- @clay(0.4-0.9)`, `- ""` for none) used
 as `LORA: __my_lora_sets__` or in a text prompt; which set rolled is a pick that
-learns like any other. A sweep in an entry (`0.5,1.0`) runs at its first
+learns like any other. To keep LoRAs with the words they belong to, give one entry
+both as fields and bind it: `$p = __poses__`, then `LORA: $p.loras` and `$p.action`. A sweep in an entry (`0.5,1.0`) runs at its first
 strength and warns: `: grid __my_lora_sets__` runs every entry instead.
 Library names are word characters and `/`: a file with `-` or spaces in its
 path is not found. When a name exists

@@ -24,7 +24,7 @@ const REF = [
     ["$hero → dial", "every binding is a dial under the editor: pick an entry or type any expression, empty = its default roll; Save bakes dials in (CLI: --set hero=owl)", ""],
     ["> make it moody and cinematic", "with a language model set (the gear), it rewrites the rolled prompt as asked; in a screenplay a > before the first SHOT covers every shot's prose, one inside a SHOT only that shot, never dialogue", "> make it moody and cinematic"],
     ["--one detail, 5 to 8 words--", "a slot the language model writes where it stands, seeing the whole rolled prompt (and, in a reel, the clip before)", ""],
-    ["$w.sfx", "a property of whatever $w rolled: the sound follows the weather", "SFX: $w.sfx"],
+    ["$w.sfx", "a property of whatever $w rolled: the sound follows the weather. A property may hold {a|b}, __lib__ or LoRAs (LORA: $p.loras with $p.action); it rolls once when $w is bound", "SFX: $w.sfx"],
     ["? $w.kind=rain,snow: …", "a line kept only when the condition holds (!= for not); works for SFX lines too", "? $w.kind=rain: "],
     ["{? $w.kind=rain: wet|dry}", "a choice made by a condition instead of the dice", ""],
     ["@include effects/living_clay", "embeds a preset where it stands; indented key = value lines under it turn its dials", "@include "],

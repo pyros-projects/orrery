@@ -342,6 +342,31 @@ def test_lines_and_choices_can_depend_on_a_property():
     assert expand("$w = __weather__\n? $w.kind!=snow: Umbrellas.", 2, WEATHER).text in ("", "Umbrellas.")
 
 
+POSES = {"pose": Library("pose", [
+    Entry("backbend", props=(("kind", "bend"), ("loras", "@backbend(0.4-0.9) <lora:flex:1>"),
+                             ("action", "$p arches into a {deep|full} backbend over __mat__"))),
+]), "mat": Library("mat", [Entry("a blue mat"), Entry("a red mat")])}
+
+
+def test_a_field_is_a_template_rolled_once_when_it_is_bound():
+    """LoRAs and the action they belong to, in one entry: $p.loras and $p.action."""
+    e = expand("$p = __pose__\n$p.action. Again: $p.action. $p.loras", 4, POSES)
+    action = e.text.split(". ")[0]
+    assert e.text.startswith(f"{action}. Again: {action}. <lora:backbend:0.")  # read twice, the same
+    assert action.startswith("backbend arches into a ") and action.endswith(("blue mat", "red mat"))
+    labels = [p.label for p in e.picks]
+    assert labels[0] == "$p ← __pose__" and "<lora:backbend>" in labels and "{deep|full}" in labels
+    t = "$p = __pose__\n? $p.kind=bend: Bent.\n__mat#kind:$p.kind__"  # conditions and filters read it as written
+    assert expand(t, 1, {**POSES, "mat": Library("mat", [Entry("a yoga mat", props=(("kind", "bend"),))])}).text \
+        == "Bent. a yoga mat"
+
+
+def test_a_sweep_in_a_field_takes_its_first_strength_and_says_to_grid_the_binding():
+    libs = {"pose": Library("pose", [Entry("split", props=(("loras", "<lora:split:0.5,1.0>"),))])}
+    e = expand("$p = __pose__\n$p.loras", 1, libs)
+    assert e.text == "<lora:split:0.5>" and "in $p.loras is a sweep" in e.warnings[0] and ": grid $p" in e.warnings[0]
+
+
 def test_a_filter_can_depend_on_what_was_rolled_before():
     """Codie's dependent choice: the place follows the animal's habitat."""
     libs = {"animal": Library("animal", [Entry("a whale", props=(("habitat", "ocean"),)),

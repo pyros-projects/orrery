@@ -236,10 +236,12 @@ class Expander:
         # (name, clips back) → that clip's value; set by reels. Without it, $x~N is $x.
         self.history: Callable[[str, int], str | None] | None = None
         self.var_props: dict[str, dict[str, str]] = {}  # a binding → the properties of the picks it rolled
-        # (name, clips back) → that clip's properties of the binding; set by reels, for $x~N.field
+        self.var_fields: dict[str, dict[str, str]] = {}  # the same, each rolled once as a template ($x.field reads it)
+        # (name, clips back) → that clip's fields of the binding, as it showed them; set by reels, for $x~N.field
         self.history_props: Callable[[str, int], dict[str, str]] | None = None
         self._props_seen: dict[str, str] = {}
         self._within: list[str] = []  # the libraries whose entry is being expanded, outermost first
+        self._where: list[tuple[str, str]] = []  # (what is being expanded, the grid that would run all of it)
         self.warnings: list[str] = []  # a reel's expanders share their world's list
 
     def warn(self, message: str) -> None:
@@ -252,8 +254,24 @@ class Expander:
     def bind(self, name: str, expr: str) -> str:
         self._props_seen = {}
         self.vars[name] = self.expr(expr, label_prefix=f"${name} ← ")
-        self.var_props[name] = self._props_seen
+        self.var_props[name] = props = self._props_seen
+        self._props_seen = {}  # a field's own picks are not the binding's
+        self.var_fields[name] = {k: self._field(name, k, v) for k, v in props.items()}
         return self.vars[name]
+
+    def _field(self, name: str, field: str, raw: str) -> str:
+        """A property as $name.field shows it: a template like an entry, rolled once when it is bound, so
+        every read shows the same. Filters and conditions read the property as written."""
+        value = long_form(raw) if "@" in raw else raw
+        if "__" not in value and "{" not in value and "$" not in value and "<lora:" not in value:
+            return value
+        self._where.append((f"${name}.{field}", f"${name}"))
+        try:
+            return " ".join(self.expr(value, label_prefix=f"${name}.{field} ← ").split())
+        except MissingLibrary as err:
+            raise ValueError(f"Library __{err.name}__ is missing; ${name}.{field} uses it.") from err
+        finally:
+            self._where.pop()
 
     def holds(self, name: str, field: str | None, op: str, values: str) -> bool:
         actual = (self.var_props.get(name, {}).get(field) if field else self.vars.get(name)) or ""
@@ -295,8 +313,8 @@ class Expander:
         name, back, field = m.group(1), m.group(2), m.group(3)
         if field:  # a property of the pick behind the binding (N clips back with ~N); empty when it has none
             if back is not None:
-                return (self.history_props(name, int(back)) if self.history_props else self.var_props.get(name, {})).get(field, "")
-            return self.var_props.get(name, {}).get(field, "")
+                return (self.history_props(name, int(back)) if self.history_props else self.var_fields.get(name, {})).get(field, "")
+            return self.var_fields.get(name, {}).get(field, "")
         value = self.history(name, int(back)) if back is not None and self.history else None
         if value is None:
             value = self.vars.get(name)
@@ -353,12 +371,14 @@ class Expander:
         if name in self._within:
             raise ValueError("A library comes back to itself: " + " → ".join([*self._within, name]))
         self._within.append(name)
+        self._where.append((f"an entry of __{name}__", f"__{name}__"))
         try:
             return " ".join(self.expr(value, label_prefix).split())  # `{|red} perm` leaves no stray space
         except MissingLibrary as err:
             raise ValueError(f"Library __{err.name}__ is missing; an entry of __{name}__ uses it.") from err
         finally:
             self._within.pop()
+            self._where.pop()
 
     def _brace(self, inner: str) -> str:
         fixed = None
@@ -432,12 +452,12 @@ class Expander:
     def _lora(self, tag: str) -> str:
         """`<lora:style:0.4-0.9>` (and `:0.2-0.5` for CLIP): a strength rolled per run and recorded as a
         pick of `<lora:style>`; any other tag as it is."""
-        if self._within and (swept := sweep_tags(tag)):  # a sweep runs only where the template writes it
+        if self._where and (swept := sweep_tags(tag)):  # a sweep runs only where the template writes it
             first = swept[0].variants()[0]
-            library = self._within[-1]
+            where, grid = self._where[-1]
             shown = sweep_tag(swept[0], first) if first[0] or first[1] else ""
-            self.warn(f"{tag} in an entry of __{library}__ is a sweep, and a sweep runs only where the template "
-                      f"writes it: the entry takes {shown or 'it off'}. To run every entry, write : grid __{library}__.")
+            self.warn(f"{tag} in {where} is a sweep, and a sweep runs only where the template writes it: it takes "
+                      f"{shown or 'it off'} there. To run every entry, write : grid {grid}.")
             return shown
         m = _LORA_PARTS.fullmatch(tag)
         if not m or not any(part and _RANGE.fullmatch(part) for part in (m.group(2), m.group(3))):

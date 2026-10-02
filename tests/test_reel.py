@@ -363,3 +363,14 @@ def test_a_held_image_exists_from_segment_0_within_its_for_list():
     assert reel.ready(2, held={3})[3] == {"held": True}
     held = compile_scene(SEND_REEL, 1, {}, target="h3-base", segment=0, packed=True, held={3})
     assert held.refs == [1, 3] and "<Picture 1> and <Picture 2>" in held.text and held.sends == {3: {"held": True}}
+
+
+def test_a_field_of_the_reels_head_is_the_same_in_every_clip():
+    from orrery.h3 import compile_scene
+    from orrery.library import Entry, Library
+
+    libs = {"pose": Library("pose", [Entry("bend", props=(("action", "a {deep|full|slow|wide} backbend"),))])}
+    reel = "@h3 t2va\n$p = __pose__\nCHUNK a repeat 4\nSHOT 5s: static\nShe holds $p.action."
+    shown = {compile_scene(reel, 9, libs, segment=k).scene.shots[0].items[0].split(" holds ")[1] for k in range(4)}
+    assert len(shown) == 1
+
