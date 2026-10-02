@@ -97,7 +97,8 @@ def test_save_png_embeds_the_picks(tmp_path):
 
 
 def test_node_classes_declare_comfy_interfaces():
-    assert set(NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm", "OrreryWrite"}
+    assert set(NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm",
+                                        "OrreryWrite", "OrreryRefMods"}
     inputs = OrreryPrompt.INPUT_TYPES()["required"]
     assert inputs["target"][0] == ["text", "h3-base", "flat"]
     assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length", "lora_stack",
@@ -106,6 +107,8 @@ def test_node_classes_declare_comfy_interfaces():
     film, cont = NODE_CLASS_MAPPINGS["OrreryFilm"], NODE_CLASS_MAPPINGS["OrreryContinue"]
     assert film.OUTPUT_NODE is True and film.RETURN_TYPES == ("IMAGE", "AUDIO", "VIDEO")
     assert list(cont.INPUT_TYPES()["required"]) == ["picks", "latent"] and cont.RETURN_TYPES == ("CONDITIONING", "LATENT")
+    refmods = NODE_CLASS_MAPPINGS["OrreryRefMods"]
+    assert list(refmods.INPUT_TYPES()["required"]) == ["conditioning", "picks"] and refmods.RETURN_TYPES == ("CONDITIONING",)
 
 
 def test_node_pack_imports_from_the_repo_folder(monkeypatch):
@@ -113,7 +116,8 @@ def test_node_pack_imports_from_the_repo_folder(monkeypatch):
     spec = importlib.util.spec_from_file_location("orrery_pack", REPO / "comfyui" / "__init__.py")
     pack = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(pack)
-    assert set(pack.NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm", "OrreryWrite"}
+    assert set(pack.NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm",
+                                             "OrreryWrite", "OrreryRefMods"}
 
 
 def test_prompt_node_uses_a_preset_and_remembers_the_template(home):
