@@ -107,9 +107,13 @@ Motion Context's six nodes and the `load_index`/`save_index` wiring, and needs
 no model or layout patch. Motion Context still works; the previous clip, `SEND:`
 and the timeline read whichever store was written last.
 
-Still planned: the **memory list** per chunk (global, the places and people it
-mentions, optionally the previous chunk as "recent"); the retrieval query for
-this RefMod-RAG is the screenplay itself.
+Built (2026-10-02): the **memory list** per chunk. A clip gets the RefMods of the
+CAST members it names and of the `global` ones, so the retrieval query for this
+RefMod-RAG is the screenplay itself. **Orrery RefMods** puts them on the
+conditioning, each with a strength (`at 0.5`, an attention bias orrery wraps
+around H3) and a start (`from 35%`, a timestep range), see
+[h3.md](h3.md#1e-refmods-refmod-name-at-05-from-35). Still open: the "recent"
+memory (a RefMod of the chunk before), and making canon from the galaxy.
 
 Wiring: Orrery `picks` → Orrery Continue, with the H3 node's latent (and
 conditioning) on their way to the sampler, and the sampled latent with the

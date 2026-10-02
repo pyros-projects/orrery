@@ -157,5 +157,21 @@ Nodes under **orrery**:
   run; older takes stay on disk. The previous clip, `SEND:` and the timeline read
   this store or H3 Motion Context's Chain Video, whichever was written last.
   Another `context:` than 22 is a warning: 22 frames are pinned all the same.
+- **Orrery RefMods**: `conditioning` + `picks` → `conditioning`. It puts the
+  clip's RefMods on the conditioning, the ones its CAST names
+  (`refmod NAME at 0.5 from 35%`, see [h3.md](h3.md#1e-refmods-refmod-name-at-05-from-35)),
+  each with its strength and its start. It loads them from `models/refmods`
+  with the [ComfyUI-H3RefMods](https://github.com/FranckyB/ComfyUI-H3RefMods)
+  pack, which needs to be installed; the pack's Load and Apply nodes are not
+  needed. Wire:
+
+  ```
+  Reference to Video conditioning ▶ Orrery RefMods conditioning ▶ Orrery Continue conditioning (or the guider)
+  Orrery Prompt picks ────────────▶ Orrery RefMods picks
+  ```
+
+  A RefMod that starts later goes into a timestep range of its own, as
+  ConditioningSetTimestepRange would put it. The strength comes from orrery's
+  wrap of H3's attention, which orrery installs in memory when its nodes load.
 - **Orrery Write** (`orrery/internal`): the Write menu queues it on its own;
   you don't add it.
