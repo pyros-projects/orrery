@@ -152,6 +152,7 @@ class Compiled:
     sends: dict[int, dict] = field(default_factory=dict)  # sent images that exist in this segment (Reel.ready)
     send_slots: list[int] = field(default_factory=list)  # every image a SEND: line of the reel fills
     refmods: list[dict] = field(default_factory=list)  # the RefMods this clip gets (clip_refmods), for Orrery RefMods
+    images: list[dict] = field(default_factory=list)  # the clip's pictures with an at or a from (clip_images)
 
 
 # --- front end ------------------------------------------------------------------------------
@@ -164,6 +165,7 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
             if m := _BINDING.match(line):
                 ex.bind(m.group(1), m.group(2))
     scene, cur, in_cast = Scene(), None, False
+    block, last = 0, None  # the CAST block being read, and its last member (for voice: and keep:)
     loose: list[str] = []  # prose before any SHOT: the implicit shot, or ignored
     loose_sfx: list[list[str]] = []
     for raw in lines:
@@ -204,9 +206,9 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
         elif (m := _MUSIC.match(line)) and cur is None and in_cast:
             scene.music = m.group(1).strip()
         elif line == "CAST" and cur is None:
-            in_cast = True
+            in_cast, block = True, block + 1
         elif in_cast and cur is None and not _SHOT.match(line):
-            _cast_line(scene, line, lint)
+            last = _cast_line(scene, line, lint, block, last)
         elif m := _SHOT.match(line):
             spec, anchors = _anchors(m.group(2) or "")
             transition, head = "cut", spec.split(",")[0].strip().lower()
@@ -245,16 +247,27 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
     return scene
 
 
-def _cast_line(scene: Scene, line: str, lint: list[Issue]) -> None:
-    if (m := _ATTRIBUTE.match(line)) and scene.cast:
-        attach(scene.cast[-1], m.group(1), m.group(2))
-    elif m := MEMBER.match(line):
-        if any(c.name == m.group(1).strip() for c in scene.cast):
-            lint.append(Issue("warn", f"{m.group(1).strip()} is in the CAST twice; the first one counts."))
-            return
-        scene.cast.append(parse_member(m.group(1), m.group(2), m.group(3).rstrip(".")))
-    else:
-        lint.append(Issue("warn", f"Ignored CAST line (write NAME (sources): description): {line[:48]}"))
+def _cast_line(scene: Scene, line: str, lint: list[Issue], block: int = 0, last: Member | None = None) -> Member | None:
+    """One line of a CAST block; returns the member a following voice: or keep: line belongs to. A
+    member a later block declares again (a chunk's own CAST) replaces the earlier one in its place,
+    so its <Subject N> keeps its number."""
+    if (m := _ATTRIBUTE.match(line)) and last is not None:
+        attach(last, m.group(1), m.group(2))
+        return last
+    if m := MEMBER.match(line):
+        member = parse_member(m.group(1), m.group(2), m.group(3).rstrip("."))
+        member.block = block
+        at = next((i for i, c in enumerate(scene.cast) if c.name == member.name), None)
+        if at is None:
+            scene.cast.append(member)
+        elif scene.cast[at].block == block:
+            lint.append(Issue("warn", f"{member.name} is in the CAST twice; the first one counts."))
+            return last
+        else:
+            scene.cast[at] = member
+        return member
+    lint.append(Issue("warn", f"Ignored CAST line (write NAME (sources): description): {line[:48]}"))
+    return last
 
 
 def _clause(text: str) -> str:
@@ -575,20 +588,52 @@ def _cast_lint(scene: Scene, lint: list[Issue]) -> None:
                                   "target video, using CAST names)."))
 
 
+def named_members(scene: Scene) -> set[str]:
+    """The CAST names this clip's screenplay uses: in its prose, its voices, its sound, its frame
+    anchors or its summary."""
+    texts = [scene.summary]
+    for shot in scene.shots:
+        texts += [it if isinstance(it, str) else f"{it.name}: {it.text}" for it in shot.items]
+        texts += [part for group in shot.sfx for part in group]
+        texts += [anchor[1] for anchor in (shot.first_frame, shot.last_frame) if anchor and anchor[1]]
+    return {m.name for m in scene.cast if any(re.search(rf"(?<![\w]){re.escape(m.name)}(?![\w])", t) for t in texts)}
+
+
+def drop_absent(scene: Scene) -> list[Member]:
+    """Leave the cast members this clip does not name (and that are not `global`) out of it: their
+    definitions, their references and their RefMods. A defined subject that the screenplay never
+    calls for still shows up in H3's clip. Returns the members left out."""
+    named = named_members(scene)
+    absent = [m for m in scene.cast if not (m.everywhere or m.name in named)]
+    scene.cast = [m for m in scene.cast if m.everywhere or m.name in named]
+    return absent
+
+
 def clip_refmods(scene: Scene) -> list[dict]:
-    """The RefMods this clip gets: those of the cast members its prose, voices or summary name, and of
-    the `global` ones. A RefMod brings back what it shows, so a place the clip only leaves for, or
-    a person who is not in it, stays out. Each with its strength and its start (a share of sampling)."""
-    texts = [scene.summary, *(it if isinstance(it, str) else f"{it.name}: {it.text}"
-                              for shot in scene.shots for it in shot.items)]
-    named = lambda name: any(re.search(rf"(?<![\w]){re.escape(name)}(?![\w])", text) for text in texts)
+    """The RefMods this clip gets: those of its cast (after drop_absent, the members it names and the
+    `global` ones), each with its strength and its start (a share of sampling). A RefMod brings
+    back what it shows, so a place the clip only leaves for, or a person who is not in it, stays out."""
     out: dict[str, dict] = {}
     for m in scene.cast:
         for src in m.sources:
-            if src.kind == "refmod" and src.name not in out and (m.everywhere or named(m.name)):
+            if src.kind == "refmod" and src.name not in out:
                 out[src.name] = {"name": src.name, "member": m.name,
                                  "strength": scene.refmod_strength if src.strength is None else src.strength,
                                  "from": scene.refmod_start if src.start is None else src.start}
+    return list(out.values())
+
+
+def clip_images(scene: Scene, refs: list[int]) -> list[dict]:
+    """The clip's pictures with an `at` or a `from` (`image 1 at 0.5 from 35%`), for Orrery RefMods:
+    `ref` is the picture's place among those Reference to Video gets (packed by Orrery Refs when
+    `refs` lists the original slots), `image` its slot in the CAST."""
+    out: dict[int, dict] = {}
+    for m in scene.cast:
+        for src in m.sources:
+            if src.kind == "image" and (src.strength is not None or src.start is not None) and src.index not in out:
+                out[src.index] = {"ref": src.index, "image": refs[src.index - 1] if refs else src.index,
+                                  "member": m.name, "strength": 1.0 if src.strength is None else src.strength,
+                                  "from": 0.0 if src.start is None else src.start}
     return list(out.values())
 
 
@@ -675,11 +720,16 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
     sends: dict[int, dict] = {}
     if reel:
         scene, picks, path = build_segment(reel, seed, libraries, weights, segment, lint)
+        absent = drop_absent(scene)  # a chunk without a member leaves its definition and its RefMods out
+        lint += [Issue("warn", problem) for m in absent for problem in m.problems]
         if reel.send_slots:
             if scene.mode != "ref2va":
                 raise ValueError("SEND: hands frames to Reference to Video as reference images, so it needs an "
                                  "@h3 ref2va screenplay.")
             sends = reel.ready(segment, set(held) & set(reel.send_slots), path)
+            theirs = {s.index for m in absent for s in m.sources if s.kind == "image"}
+            ours = {s.index for m in scene.cast for s in m.sources if s.kind == "image"}
+            sends = {n: send for n, send in sends.items() if n not in theirs - ours}  # a sent image of a member not here
             withhold_images(scene, set(reel.send_slots) - set(sends), lint)
             # every chunk's first segment: the reel's own path, or the one walked here when jumps wait on rolls
             starts = reel.starts(path if reel.jumps_on_rolls else None)
@@ -696,6 +746,10 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
         ex = Expander(seed, libraries, weights, params.rng)
         scene, picks = parse_scene(src, ex, lint), ex.picks
         lint += [Issue("warn", w) for w in ex.warnings]
+        absent = drop_absent(scene)
+        lint += [Issue("warn", problem) for m in absent for problem in m.problems]
+        lint += [Issue("warn", f"{m.name} is in the CAST, but no shot, voice or summary names it, so it is left out "
+                               "of the prompt (global keeps a member in).") for m in absent]
     refs = pack_images(scene) if packed else []
     if packed:  # sent images reach Orrery Refs whether the prompt names them or not, after the ones it does
         refs += [n for n in sorted(sends) if n not in refs]
@@ -704,4 +758,4 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
         _scene_lint(src, scene, lint)
     return Compiled(text, picks, lint, scene, " ".join(scene.loras), len(reel.blocks) if reel else 0,
                     segment if reel else 0, reel.segments if reel else 0, refs,
-                    sends, reel.send_slots if reel else [], clip_refmods(scene))
+                    sends, reel.send_slots if reel else [], clip_refmods(scene), clip_images(scene, refs))

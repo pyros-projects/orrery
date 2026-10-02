@@ -69,6 +69,19 @@ def test_a_range_the_conditioning_already_has_is_kept(pack):
     assert [(m["start_percent"], m["end_percent"], len(m["minimax_refs"])) for _, m in out] == [(0.5, 1.0, 1)]
 
 
+def test_a_picture_with_at_and_from_is_marked_and_waits_without_the_pack(monkeypatch):
+    for name in [n for n in sys.modules if n.endswith(".nodes.refmod_loader")]:
+        monkeypatch.delitem(sys.modules, name)
+    cond = [["text", {"minimax_refs": [{"kind": "image", "latent": "one"}, {"kind": "image", "latent": "two"},
+                                       {"kind": "video", "latent": "clip"}]}]]
+    picks = {"images": [{"ref": 2, "image": 5, "member": "TOM", "strength": 0.5, "from": 0.35}]}
+    (out,) = OrreryRefMods().apply(cond, json.dumps(picks))
+    (early, late) = out
+    assert [b["latent"] for b in early[1]["minimax_refs"]] == ["one", "clip"]  # image 2 waits
+    assert [(b["latent"], b.get(refbias.KEY)) for b in late[1]["minimax_refs"]] == [("one", None), ("two", 0.5),
+                                                                                   ("clip", None)]
+
+
 def test_without_the_pack_the_node_says_where_to_get_it(monkeypatch):
     for name in [n for n in sys.modules if n.endswith(".nodes.refmod_loader")]:
         monkeypatch.delitem(sys.modules, name)

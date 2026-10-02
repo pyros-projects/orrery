@@ -423,3 +423,44 @@ def test_a_keep_line_always_brings_a_retention_block():
 def test_a_summary_asks_for_full():
     lite = compile_scene("@h3 ref2va\nsummary: A waits.\nCAST\nA (image 1): a woman\nSHOT 5s\nA waits.\nSFX: wind\n", 1, {})
     assert any("add full" in i.message for i in lite.lint) and "A waits." not in lite.text.split("integrated")[0]
+
+
+def test_a_member_no_shot_names_is_left_out_and_lint_says_so():
+    src = """@h3 ref2va 16:9
+CAST
+MAYA (image 1): a young blonde woman, in a light-pink shirt
+DOG (image 2): the fluffy white Samoyed
+SHOT 5s
+MAYA waves.
+"""
+    res = h3(src)
+    assert "Samoyed" not in res.text and "pink shirt" in res.text
+    assert any("DOG is in the CAST, but no shot" in i.message for i in res.lint)
+
+
+def test_an_image_takes_at_and_from_and_the_picks_name_its_packed_place():
+    src = """@h3 ref2va 2:3
+CAST
+EMMA (image 3 at 0.5 from 35%): a young woman in a red coat
+TOM (image 5): a tall man
+SHOT 5s: static
+EMMA waves to TOM.
+"""
+    assert compile_scene(src, 1, LIBS, packed=True).images == [
+        {"ref": 1, "image": 3, "member": "EMMA", "strength": 0.5, "from": 0.35}]
+    assert h3(src).images[0]["ref"] == 3  # without Orrery Refs: the slot as wired
+    bad = h3(src.replace("TOM (image 5)", "TOM (video 1 at 0.4)"))
+    assert any("video 1 takes no at or from" in i.message for i in bad.lint)
+
+
+def test_a_member_twice_in_one_cast_block_warns_and_the_first_counts():
+    src = """@h3 ref2va 2:3
+CAST
+EMMA (image 1): a young woman in a red coat
+EMMA (image 2): a young woman in a blue coat
+SHOT 5s: static
+EMMA waves.
+"""
+    res = h3(src)
+    assert "red coat" in res.text and "blue coat" not in res.text
+    assert any("EMMA is in the CAST twice" in i.message for i in res.lint)

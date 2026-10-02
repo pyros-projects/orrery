@@ -892,3 +892,11 @@ def test_the_picks_carry_the_clips_refmods_and_lint_asks_for_orrery_refmods(home
     assert not any("Orrery RefMods" in i["message"] for i in data["lint"])
     _, picks, *_ = run_prompt(REFMOD_SCENE, 1, "h3-base", str(home), refmodded=False)
     assert any("Orrery RefMods" in i["message"] for i in json.loads(picks)["lint"])
+
+
+def test_the_picks_carry_picture_strengths(home):
+    src = REFMOD_SCENE.replace("SALON (refmod salon_canon at 0.5)", "SALON (image 1 at 0.5)")
+    _, picks, *_ = run_prompt(src, 1, "h3-base", str(home), refmodded=False)
+    data = json.loads(picks)
+    assert data["images"] == [{"ref": 1, "image": 1, "member": "SALON", "strength": 0.5, "from": 0.0}]
+    assert any("picture strengths (image 1 at 0.5)" in i["message"] for i in data["lint"])

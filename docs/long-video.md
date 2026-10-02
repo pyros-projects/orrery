@@ -107,9 +107,9 @@ Motion Context's six nodes and the `load_index`/`save_index` wiring, and needs
 no model or layout patch. Motion Context still works; the previous clip, `SEND:`
 and the timeline read whichever store was written last.
 
-Built (2026-10-02): the **memory list** per chunk. A clip gets the RefMods of the
-CAST members it names and of the `global` ones, so the retrieval query for this
-RefMod-RAG is the screenplay itself. **Orrery RefMods** puts them on the
+Built (2026-10-02): the **memory list** per chunk. A clip keeps the CAST members
+it names and the `global` ones, with their RefMods, and leaves the others out, so
+the retrieval query for this RefMod-RAG is the screenplay itself. **Orrery RefMods** puts them on the
 conditioning, each with a strength (`at 0.5`, an attention bias orrery wraps
 around H3) and a start (`from 35%`, a timestep range), see
 [h3.md](h3.md#1e-refmods-refmod-name-at-05-from-35). Still open: the "recent"

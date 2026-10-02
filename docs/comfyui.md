@@ -171,8 +171,10 @@ Nodes under **orrery**:
   Orrery Prompt picks ────────────▶ Orrery RefMods picks
   ```
 
-  A RefMod that starts later goes into a timestep range of its own, as
-  ConditioningSetTimestepRange would put it. The strength comes from orrery's
+  It also applies a picture's dials (`image 1 at 0.5 from 35%`) to the pictures
+  Reference to Video put on the conditioning: with Orrery Refs, the k-th picture
+  is the k-th packed ref. A RefMod or a picture that starts later goes into a
+  timestep range of its own, as ConditioningSetTimestepRange would put it. The strength comes from orrery's
   wrap of H3's attention, which orrery installs in memory when its nodes load.
 - **Orrery Write** (`orrery/internal`): the Write menu queues it on its own;
   you don't add it.
