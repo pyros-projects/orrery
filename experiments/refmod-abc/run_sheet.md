@@ -16,6 +16,7 @@ differ:
 | A | `abc_a.json` | ✓ | | |
 | B | `abc_b.json` | ✓ | ✓ the chunk before (3 stills) | |
 | C | `abc_c.json` | ✓ | ✓ the chunk before (3 stills) | ✓ the salon (4 stills from chunk 1) |
+| C late | `abc_c_late.json` | ✓ | as C, from 35 % of sampling on | as C, from 35 % of sampling on |
 
 The RefMods are built in the graph from the reel's own frames. The `SEND:` lines of the template
 hand the stills to Orrery Refs: images 3 to 6 are the salon from chunk 1 (frames 0, 60, 120, 180),
@@ -99,6 +100,50 @@ Two things make B and C look worse than RefMods would on their own:
 - **The pack's `strength` does not weaken a RefMod's hold on the layout.** It mixes the reference
   toward a blurred copy of itself, so only detail fades, while the layout, which is what leaks,
   stays. H3 itself has no strength for references.
+
+### Round 2: levers on C (#27, 2026-10-02)
+
+Same tour, seed and local settings as round 1. Each lever is applied to variant C (place and recent
+RefMods), and each variant continues from A's segment 0. Contact sheets:
+[results/round2/](results/round2/).
+
+- **Noise 0.9 / 0.7:** the model's own condition noise (`visual_cond_noise_aug`, through Codie's
+  MiniMax H3 Cond Noise Aug node, a local node that is not public). It noises every condition row
+  and tells the model so through the row's timestep.
+- **Late 35 % / 60 %:** the RefMods only from 35 % or 60 % of sampling on.
+  ConditioningSetTimestepRange keeps the conditioning without RefMods for the start and the one
+  with RefMods for the rest, and ConditioningCombine joins both. Core nodes only:
+  [`abc_c_late.json`](abc_c_late.json) (35 %).
+
+| Segment | Variant | Identity | Drift | Objects | Seam | Leakage | Time | Peak VRAM |
+|---|---|---|---|---|---|---|---|---|
+| 2 library | noise 0.9 | 2 | 3 | 2 | 3 | 1 | 116 s | 22.8 GB |
+| 2 library | noise 0.7 | 2 | 3 | 2 | 3 | 2 | 106 s | 20.4 GB |
+| 2 library | late 35 % | 3 | 4 | 3 | 4 | 4 | 101 s | 20.0 GB |
+| 2 library | late 60 % | 3 | 4 | 3 | 4 | 4 | 100 s | 20.0 GB |
+| 3 salon again | noise 0.9 | 5 | 4 | 5 | 3 | 2 | 114 s | 20.0 GB |
+| 3 salon again | noise 0.7 | 4 | 3 | 4 | 3 | 2 | 109 s | 22.8 GB |
+| 3 salon again | late 35 % | 4 | 4 | 4 | 4 | 4 | 104 s | 22.8 GB |
+| 3 salon again | late 60 % | 4 | 3 | 3 | 4 | 4 | 102 s | 20.2 GB |
+
+What the sheets show:
+
+- **Late is the lever.** With the RefMods kept out of the first 35 % of sampling, the return to
+  the salon shows the room of chunk 1 (the green velvet sofa, the gilt mirror, the piano, the
+  chandelier and the checkered floor), seen from the new viewpoint at the door, not from chunk 1's
+  gallery. In the library, the layout follows A, and the salon appears only at the end, through
+  the doors, as the handoff asks.
+- **Late 60 % holds the salon a little less.** The piano shrinks, and the library's shelves and
+  ladder creep into the salon.
+- **Noise barely helps.** At 0.9 and 0.7 the camera still looks down from chunk 1's gallery, in the
+  library as in the salon. At 0.9 it only cycles through more of chunk 1's stills than C does.
+- **Late costs nothing.** It is as fast as A, since the first steps carry no RefMod tokens.
+- With 4 turbo steps, 35 % means the first step or two. At 20 steps the threshold may need
+  another look.
+
+**Against the decision rule:** the place RefMod with late 35 % beats A on identity in segment 3
+(4 against 2) with leakage at 4, so it earns its place. The recent RefMod rides along in these
+variants and needs a test of its own before it earns one.
 
 ## Deciding
 
