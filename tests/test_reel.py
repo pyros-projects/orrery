@@ -434,3 +434,35 @@ def test_a_chunk_every_goto_jumps_past_is_flagged():
     src = GOTO_REEL.replace("GOTO: the stairs ×2", "GOTO: the gate") + "CHUNK the cellar\nSHOT 5s: static\nDark.\n"
     lint = [i.message for i in compile_scene(src, 1, {}, segment=0).lint]
     assert any("CHUNK 4" in m and "never plays" in m for m in lint)
+
+
+LEAVES = """@h3 ref2va 2:3
+CAST
+EMMA (refmod emma_canon): a young woman in a red coat
+GARDEN (global): a small walled garden
+CHUNK
+SHOT 5s: static
+EMMA waves and walks out of the frame.
+HANDOFF: only the room is left
+CHUNK
+SHOT 5s: static
+Nothing happens in the empty room.
+HANDOFF: only the room is left
+CHUNK
+SHOT 5s: static
+EMMA slides back into the frame, laughing.
+"""
+
+
+def test_a_chunk_without_a_member_leaves_its_definition_and_its_refmod_out():
+    clips = [ref2va(LEAVES, segment=s) for s in range(3)]
+    assert ["a young woman in a red coat" in c.text for c in clips] == [True, False, True]
+    assert [[m["name"] for m in c.refmods] for c in clips] == [["emma_canon"], [], ["emma_canon"]]
+    assert all("a small walled garden" in c.text for c in clips)  # global: in every clip
+
+
+def test_a_sent_image_of_a_member_not_in_the_chunk_stays_out():
+    src = LEAVES.replace("EMMA (refmod emma_canon)", "EMMA (image 3)").replace(
+        "HANDOFF: only the room is left\nCHUNK\nSHOT 5s: static\nNothing", "HANDOFF: only the room is left\nSEND: frame 0 to image 3\nCHUNK\nSHOT 5s: static\nNothing", 1)
+    clips = [ref2va(src, segment=s) for s in range(3)]
+    assert [sorted(c.sends) for c in clips] == [[], [], [3]] and [c.refs for c in clips] == [[], [], [3]]

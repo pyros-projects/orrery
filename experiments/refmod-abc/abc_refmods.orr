@@ -1,11 +1,5 @@
-# RefMods through the language (#9, #10, #30): the A/B/C tour, with the salon's RefMod named in the CAST.
-# orrery_abc_salon is made from four stills of A's first clip (run_sheet.md). Orrery RefMods puts it on the
-# conditioning of the clips that name SALON (the first and the last); the hallway and the library go without.
-# Turn the dials and Generate again:
-#   SALON (refmod orrery_abc_salon at 0.5)        strength: about half its share of attention (1 as it is)
-#   SALON (refmod orrery_abc_salon from 0%)       from the first step (round 1's C: the salon's framings come back)
-#   SALON (refmod orrery_abc_salon, global)       with every clip, the library's too
-#   refmods: at 0.8 from 35%                      the defaults for every RefMod without its own
+# The A/B/C tour steered by the CAST: the salon's RefMod goes with the clips that name SALON (the first and the last).
+# Try: (refmod orrery_abc_salon at 0.5) · (refmod orrery_abc_salon from 0%) · (refmod orrery_abc_salon, global)
 @h3 ref2va 16:9 0.6MP
 style: live-action, architectural documentary, warm evening light, photorealistic, one continuous unbroken ten-second shot at eye level
 context: 22

@@ -423,3 +423,16 @@ def test_a_keep_line_always_brings_a_retention_block():
 def test_a_summary_asks_for_full():
     lite = compile_scene("@h3 ref2va\nsummary: A waits.\nCAST\nA (image 1): a woman\nSHOT 5s\nA waits.\nSFX: wind\n", 1, {})
     assert any("add full" in i.message for i in lite.lint) and "A waits." not in lite.text.split("integrated")[0]
+
+
+def test_a_member_no_shot_names_is_left_out_and_lint_says_so():
+    src = """@h3 ref2va 16:9
+CAST
+MAYA (image 1): a young blonde woman, in a light-pink shirt
+DOG (image 2): the fluffy white Samoyed
+SHOT 5s
+MAYA waves.
+"""
+    res = h3(src)
+    assert "Samoyed" not in res.text and "pink shirt" in res.text
+    assert any("DOG is in the CAST, but no shot" in i.message for i in res.lint)

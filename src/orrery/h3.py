@@ -575,17 +575,35 @@ def _cast_lint(scene: Scene, lint: list[Issue]) -> None:
                                   "target video, using CAST names)."))
 
 
+def named_members(scene: Scene) -> set[str]:
+    """The CAST names this clip's screenplay uses: in its prose, its voices, its sound, its frame
+    anchors or its summary."""
+    texts = [scene.summary]
+    for shot in scene.shots:
+        texts += [it if isinstance(it, str) else f"{it.name}: {it.text}" for it in shot.items]
+        texts += [part for group in shot.sfx for part in group]
+        texts += [anchor[1] for anchor in (shot.first_frame, shot.last_frame) if anchor and anchor[1]]
+    return {m.name for m in scene.cast if any(re.search(rf"(?<![\w]){re.escape(m.name)}(?![\w])", t) for t in texts)}
+
+
+def drop_absent(scene: Scene) -> list[Member]:
+    """Leave the cast members this clip does not name (and that are not `global`) out of it: their
+    definitions, their references and their RefMods. A defined subject that the screenplay never
+    calls for still shows up in H3's clip. Returns the members left out."""
+    named = named_members(scene)
+    absent = [m for m in scene.cast if not (m.everywhere or m.name in named)]
+    scene.cast = [m for m in scene.cast if m.everywhere or m.name in named]
+    return absent
+
+
 def clip_refmods(scene: Scene) -> list[dict]:
-    """The RefMods this clip gets: those of the cast members its prose, voices or summary name, and of
-    the `global` ones. A RefMod brings back what it shows, so a place the clip only leaves for, or
-    a person who is not in it, stays out. Each with its strength and its start (a share of sampling)."""
-    texts = [scene.summary, *(it if isinstance(it, str) else f"{it.name}: {it.text}"
-                              for shot in scene.shots for it in shot.items)]
-    named = lambda name: any(re.search(rf"(?<![\w]){re.escape(name)}(?![\w])", text) for text in texts)
+    """The RefMods this clip gets: those of its cast (after drop_absent, the members it names and the
+    `global` ones), each with its strength and its start (a share of sampling). A RefMod brings
+    back what it shows, so a place the clip only leaves for, or a person who is not in it, stays out."""
     out: dict[str, dict] = {}
     for m in scene.cast:
         for src in m.sources:
-            if src.kind == "refmod" and src.name not in out and (m.everywhere or named(m.name)):
+            if src.kind == "refmod" and src.name not in out:
                 out[src.name] = {"name": src.name, "member": m.name,
                                  "strength": scene.refmod_strength if src.strength is None else src.strength,
                                  "from": scene.refmod_start if src.start is None else src.start}
@@ -675,11 +693,16 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
     sends: dict[int, dict] = {}
     if reel:
         scene, picks, path = build_segment(reel, seed, libraries, weights, segment, lint)
+        absent = drop_absent(scene)  # a chunk without a member leaves its definition and its RefMods out
+        lint += [Issue("warn", problem) for m in absent for problem in m.problems]
         if reel.send_slots:
             if scene.mode != "ref2va":
                 raise ValueError("SEND: hands frames to Reference to Video as reference images, so it needs an "
                                  "@h3 ref2va screenplay.")
             sends = reel.ready(segment, set(held) & set(reel.send_slots), path)
+            theirs = {s.index for m in absent for s in m.sources if s.kind == "image"}
+            ours = {s.index for m in scene.cast for s in m.sources if s.kind == "image"}
+            sends = {n: send for n, send in sends.items() if n not in theirs - ours}  # a sent image of a member not here
             withhold_images(scene, set(reel.send_slots) - set(sends), lint)
             # every chunk's first segment: the reel's own path, or the one walked here when jumps wait on rolls
             starts = reel.starts(path if reel.jumps_on_rolls else None)
@@ -696,6 +719,10 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
         ex = Expander(seed, libraries, weights, params.rng)
         scene, picks = parse_scene(src, ex, lint), ex.picks
         lint += [Issue("warn", w) for w in ex.warnings]
+        absent = drop_absent(scene)
+        lint += [Issue("warn", problem) for m in absent for problem in m.problems]
+        lint += [Issue("warn", f"{m.name} is in the CAST, but no shot, voice or summary names it, so it is left out "
+                               "of the prompt (global keeps a member in).") for m in absent]
     refs = pack_images(scene) if packed else []
     if packed:  # sent images reach Orrery Refs whether the prompt names them or not, after the ones it does
         refs += [n for n in sorted(sends) if n not in refs]
