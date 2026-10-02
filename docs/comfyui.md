@@ -1,6 +1,6 @@
 # The ComfyUI nodes
 
-Everything the Orrery Prompt node puts out, the five tabs of its app, Generate and Restart, Orrery Log and Orrery Refs.
+Everything the Orrery Prompt node puts out, the six tabs of its app, Generate and Restart, Orrery Log and Orrery Refs.
 
 ```bash
 cd /path/to/ComfyUI/custom_nodes && git clone https://github.com/pyros-projects/orrery.git
@@ -42,7 +42,7 @@ Nodes under **orrery**:
   `repeat N|forever`, `$x~N`; see [h3.md](h3.md) 1d) writes one clip per run:
   `segment` counts up by itself, and Orrery Continue / Orrery Film (below)
   chain the clips; with H3 Motion Context instead, `load_index`/`save_index`
-  go into its Load and Save Latent's `clip_index`. The node is the whole of orrery, in five tabs (⤢ opens the
+  go into its Load and Save Latent's `clip_index`. The node is the whole of orrery, in six tabs (⤢ opens the
   same app over the canvas, Esc brings it back):
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `__creature#` properties and their
@@ -100,6 +100,14 @@ Nodes under **orrery**:
     `~/.orrery/trash/`. Learned weights stay. The big picture of an open
     output drags onto the canvas like the file itself: a new Load Image node,
     a Load Image node's new picture, or the workflow the picture carries.
+  - **History**: every run of the node as it resolved, newest first: the
+    seed, the segment, the dials, every pick and the prompt, kept even when
+    the output was not (the last 2000 runs, in `prompt_history.jsonl` in the
+    orrery home). Search by prompt, pick, preset or seed; **Use template +
+    seed** puts the run back in the Prompt tab (segment included, control
+    after generate fixed), so a lucky roll can be made again. Each run is
+    also printed to ComfyUI's console (seed, picks, prompt); the gear turns
+    that off.
   - **Help**: the DSL at a glance, the tutorial lessons, writing tips.
 
   Workflows that used the old `preset` dropdown open with that preset loaded

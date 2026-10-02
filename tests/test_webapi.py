@@ -56,6 +56,7 @@ def test_routes_cover_the_contract():
         ("GET", "/orrery/home"), ("POST", "/orrery/home"),
         ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("GET", "/orrery/chain/video"),
         ("GET", "/orrery/anchor"),
+        ("GET", "/orrery/history"),
     }
 
 
@@ -122,7 +123,7 @@ def test_register_attaches_every_route_through_one_adapter(home, tmp_path):
     kind, status, body = hit("GET", "/orrery/presets", query=q)
     assert (kind, status) == ("json", 200) and body["favorites"] == [] and body["quickstart"] is True
     assert hit("POST", "/orrery/ui", query=q, body={"quickstart": False}) == \
-        ("json", 200, {"quickstart": False, "dividers": True, "timeline": True})
+        ("json", 200, {"quickstart": False, "dividers": True, "timeline": True, "log_prompts": True})
     assert hit("GET", "/orrery/presets", query=q)[2]["quickstart"] is False
     assert hit("GET", "/orrery/preset", query={**q, "name": "nope"})[1] == 404
     assert hit("POST", "/orrery/recent", query=q, broken=True)[1] == 400
@@ -658,5 +659,16 @@ def test_an_anchor_is_served_by_image_number(home):
 
 def test_the_editor_switches_travel_with_the_presets_and_are_saved(home):
     assert ok(home, webapi.presets)["dividers"] is True and ok(home, webapi.presets)["timeline"] is True
-    assert ok(home, webapi.ui_save, timeline=False) == {"quickstart": True, "dividers": True, "timeline": False}
+    assert ok(home, webapi.ui_save, timeline=False) == {"quickstart": True, "dividers": True, "timeline": False, "log_prompts": True}
     assert ok(home, webapi.presets)["timeline"] is False
+
+
+def test_the_history_lists_runs_newest_first_and_searches(home):
+    from orrery import history
+    for seed, text in ((1, "a heron at dawn"), (2, "a fox in the snow"), (3, "a heron at dusk")):
+        history.record(Home(home), {"seed": seed, "target": "text", "template": "0123456789abcdef", "text": text,
+                                    "picks": [], "params": {}})
+    body = ok(home, webapi.history_runs)
+    assert body["total"] == 3 and [r["seed"] for r in body["runs"]] == [3, 2, 1]
+    assert [r["seed"] for r in ok(home, webapi.history_runs, q="heron", limit="1")["runs"]] == [3]
+    assert ok(home, webapi.history_runs, q="heron", offset="1")["runs"][0]["seed"] == 1

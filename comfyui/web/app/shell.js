@@ -3,6 +3,7 @@ import { client } from "./api.js";
 import { renderGalaxy } from "./galaxy.js";
 import { renderHelp } from "./help.js";
 import { esc } from "./highlight.js";
+import { refreshHistory, renderHistory } from "./history.js";
 import { icon, LOGO } from "./icons.js";
 import { renderLibraries } from "./libraries.js";
 import { renderPresets } from "./presets.js";
@@ -16,6 +17,7 @@ const TABS = [
   ["presets", "Presets", renderPresets],
   ["libraries", "Libraries", renderLibraries],
   ["galaxy", "Galaxy", renderGalaxy],
+  ["history", "History", renderHistory],
   ["help", "Help", renderHelp],
 ];
 
@@ -90,6 +92,7 @@ export class OrreryApp {
   // A run may have let the language model write libraries: refresh, and point at anything to review.
   async afterRun() {
     refreshReel(this, { chain: true });  // the reel may hold a new clip, Orrery Refs new anchors
+    if (this.state.tab === "history") refreshHistory(this);
     const before = new Set((this.data.libraries || []).filter((l) => l.pending || (l.pending_entries || []).length).map((l) => l.name));
     let libs;
     try { libs = (await this.api.libraries()).libraries; } catch { return; }
@@ -115,11 +118,13 @@ export class OrreryApp {
     this.data.quickstart = d.quickstart !== false;
     this.data.dividers = d.dividers !== false;
     this.data.timeline = d.timeline !== false;
+    this.data.log_prompts = d.log_prompts !== false;
   }
   async refreshCompletion() { this.data.completion = await this.api.completions(); }
 
   render() {
-    const n = { presets: this.data.presets.length, libraries: this.data.completion?.libraries.length, galaxy: this.data.gTotal ?? this.data.rows?.length };
+    const n = { presets: this.data.presets.length, libraries: this.data.completion?.libraries.length, galaxy: this.data.gTotal ?? this.data.rows?.length,
+      history: this.data.hAll };
     this.$(".tabs").innerHTML = TABS.map(([k, label]) => `<button class="tab" role="tab" aria-selected="${this.state.tab === k}" data-tab="${k}">`
       + `${label}${n[k] ? `<span class="n">${n[k]}</span>` : ""}</button>`).join("");
     const big = this.$(".big-btn");
@@ -133,6 +138,7 @@ export class OrreryApp {
       this.data.libStale = true;
       this.refreshCompletion().catch(() => {});
     }
+    if (tab === "history") this.state.hFetched = false;  // the runs since it was last open
     this.state.tab = tab;
     this.state.pick = false;
     this.bridge.props.orrery_tab = tab;

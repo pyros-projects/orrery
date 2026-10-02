@@ -218,7 +218,7 @@ every one continuing the last 22 frames, picture and sound, of the one before.
 | [H3 screenplays](docs/h3.md) | modes, casts, reels, the compiler's output and lint |
 | [Orrery Refs](docs/orrery-refs.md) | a tutorial: reference images per clip, numbers that match, frames of earlier clips with `SEND:` |
 | [Presets and the content pack](docs/presets.md) | template references, saving presets, what ships built in |
-| [The ComfyUI nodes](docs/comfyui.md) | outputs, the app's five tabs, Generate and Restart |
+| [The ComfyUI nodes](docs/comfyui.md) | outputs, the app's six tabs, Generate and Restart |
 | [The wildcard manager](docs/wildcard-manager.md) | editing libraries in plain language, the language model in ComfyUI |
 | [Configuration](docs/configuration.md) | the orrery home folder and model settings |
 

@@ -40,6 +40,8 @@ export async function openSettings(app) {
       <span><b>Chunk dividers</b>: a reel's CHUNK lines say which segments they play, when, and how much film is left; the chunk of the next segment is marked</span></label>
     <label class="check"><input type="checkbox" id="oa-tl" ${app.data.timeline !== false ? "checked" : ""}>
       <span><b>Timeline</b>: a reel's clips as the reel keeps them (Orrery Film or Chain Video), beside the editor or under each chunk (Clips beside / below in the footer), and the frames its <code>SEND:</code> lines handed on</span></label>
+    <label class="check"><input type="checkbox" id="oa-log" ${app.data.log_prompts !== false ? "checked" : ""}>
+      <span><b>Log each run</b> to ComfyUI's console: its seed, every pick and the resolved prompt (the <b>History</b> tab keeps them either way)</span></label>
     <div class="acts"><button type="button" class="btn ghost" data-cancel>Cancel</button><button class="btn primary">${icon("save")}Save</button></div>
   </form>`);
   sheet.querySelector("[data-cancel]").onclick = () => app.closeSheet();
@@ -53,7 +55,8 @@ export async function openSettings(app) {
         await Promise.all([app.refreshPresets(), app.refreshCompletion()]);
         app.toast(`Home folder: <b>${esc(moved.home)}</b>`);
       }
-      const flags = { quickstart: sheet.querySelector("#oa-qs").checked, dividers: sheet.querySelector("#oa-div").checked, timeline: sheet.querySelector("#oa-tl").checked };
+      const flags = { quickstart: sheet.querySelector("#oa-qs").checked, dividers: sheet.querySelector("#oa-div").checked,
+        timeline: sheet.querySelector("#oa-tl").checked, log_prompts: sheet.querySelector("#oa-log").checked };
       if (Object.entries(flags).some(([k, on]) => on !== (app.data[k] !== false))) Object.assign(app.data, await app.api.saveUi(flags));
       app.data.llm = await app.api.saveLlm({ file: sheet.querySelector("#oa-llm").value, entries: Number(sheet.querySelector("#oa-llm-n").value) || 12,
         max_tokens: Number(sheet.querySelector("#oa-llm-t").value) || 16000 });

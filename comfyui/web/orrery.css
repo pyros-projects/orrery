@@ -316,6 +316,21 @@
 /* galaxy tab */
 .orrery-app .rule { font-size: 11.5px; color: var(--faint); padding: 10px 12px 0; margin: 0; }
 .orrery-app .rule b { font-weight: 500; }
+/* history: every run as it resolved */
+.orrery-app .hist { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+.orrery-app .hist .bar .input { flex: 1; min-width: 180px; }
+.orrery-app .hrow { margin: 6px 12px 0; border: 1px solid var(--line); border-radius: 8px; background: var(--card); }
+.orrery-app .hrow.open { border-color: #4a4c63; }
+.orrery-app .hhead { display: flex; align-items: center; gap: 6px; width: 100%; padding: 7px 10px; text-align: left; min-width: 0; }
+.orrery-app .hhead:hover { background: var(--hover); border-radius: 8px; }
+.orrery-app .hwhen { font-size: 11.5px; color: var(--faint); flex: none; }
+.orrery-app .htext { flex: 1; min-width: 0; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12.5px; }
+.orrery-app .hbody { padding: 0 10px 10px; display: grid; gap: 8px; }
+.orrery-app .hpicks { display: flex; flex-wrap: wrap; gap: 4px; }
+.orrery-app .hpicks b { color: var(--teal); font-weight: 500; }
+.orrery-app .hbody .codebox { max-height: 320px; overflow-y: auto; margin: 0; }
+.orrery-app .hbody .acts { display: flex; gap: 6px; flex-wrap: wrap; }
+.orrery-app .hmore { margin: 10px auto 16px; display: flex; }
 .orrery-app .rule .love { color: var(--love); } .orrery-app .rule .like { color: var(--like); }
 .orrery-app .rule .nope { color: var(--nope); } .orrery-app .rule .hate { color: var(--hate); }
 .orrery-app .gcard { position: relative; border-radius: 9px; overflow: hidden; background: #14151b; border: 1px solid var(--line); }

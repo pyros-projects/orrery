@@ -13,7 +13,7 @@ import re
 from datetime import UTC, datetime
 from pathlib import Path
 
-from orrery import anchors, runs
+from orrery import anchors, history, runs, uistate
 from orrery import sweep as sweeps
 from orrery.autolib import needs
 from orrery.chain import DEFAULT_CHAIN, load, previous_clip
@@ -549,6 +549,10 @@ class OrreryPrompt:
                                  params, segment, clip, stills, packed, wired, latent_path or DEFAULT_CHAIN, keep,
                                  sweep, continued(prompt, unique_id), (_size(first_frame), _size(last_frame)))
             data = json.loads(outputs[1])
+            h = resolve_home(home or None)
+            history.record(h, data)
+            if uistate.load_ui(h)["log_prompts"]:
+                print("\n".join(history.log_lines(data)))
             if "sends" in data and not packed:
                 raise ValueError("This reel SENDs frames as reference images, which Orrery Refs fetches: wire this "
                                  "node's picks into an Orrery Refs, and its ref outputs into Reference to Video.")

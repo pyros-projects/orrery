@@ -572,6 +572,14 @@ def anchor(home: Home, args: dict) -> Path:
     return path
 
 
+def history_runs(home: Home, args: dict) -> dict:
+    """The prompt history, newest first: `q` searches prompt, picks, preset and seed."""
+    from orrery import history
+
+    return history.read(home, limit=min(max(_int(args, "limit", 50), 1), 200), offset=max(_int(args, "offset", 0), 0),
+                        query=str(args.get("q") or ""))
+
+
 # --- roll -----------------------------------------------------------------------------------
 
 ROLL_CLIPS = 6  # Roll on a reel shows this many clips at most
@@ -722,6 +730,7 @@ ROUTES = [
     ("GET", "/orrery/chain/thumb", chain_thumb),
     ("GET", "/orrery/chain/video", chain_video),
     ("GET", "/orrery/anchor", anchor),
+    ("GET", "/orrery/history", history_runs),
     ("POST", "/orrery/galaxy/move", galaxy_move),
     ("POST", "/orrery/galaxy/delete", galaxy_delete),
     ("POST", "/orrery/galaxy/export", galaxy_export),

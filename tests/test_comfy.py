@@ -175,6 +175,19 @@ def test_the_node_takes_the_frames_and_reads_their_size(home):
     assert outputs[3:5] == (768, 1024)
 
 
+def test_each_run_lands_in_the_history_and_in_the_log(home, capsys):
+    from orrery import history, uistate
+    OrreryPrompt().run("a {red|blue} fox", 7, "text", home=str(home))
+    runs = history.read(Home(home))["runs"]
+    assert runs[0]["seed"] == 7 and runs[0]["text"] in ("a red fox", "a blue fox")
+    out = capsys.readouterr().out
+    assert "[orrery] run · seed 7" in out and runs[0]["text"] in out
+    uistate.set_flag(Home(home), "log_prompts", False)
+    OrreryPrompt().run("a fox", 8, "text", home=str(home))
+    assert "seed 8" not in capsys.readouterr().out
+    assert history.read(Home(home))["total"] == 2  # the history keeps it all the same
+
+
 def test_h3_length_is_frames_on_the_17k_plus_5_grid(home):
     assert shape("@h3 t2va\nSHOT 4s: cut\nA.\nSHOT 3s\nB.\nSHOT 4s\nC.")[2] == 277
     assert shape("@h3 t2va\nSHOT 4s\nA.")[2] == 107

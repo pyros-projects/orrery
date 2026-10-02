@@ -1,6 +1,7 @@
 """What the node app remembers between sessions: favorite and recently opened presets, and its
 switches: New templates open with their quickstart comments, the editor draws chunk dividers and
-shows the reel's clips beside it. Every switch is on until turned off."""
+shows the reel's clips beside it, each run prints its prompt and picks to ComfyUI's log. Every switch
+is on until turned off."""
 
 import json
 
@@ -8,7 +9,7 @@ from orrery.home import Home, write_atomic
 
 RECENT_MAX = 12
 LISTS = ("favorites", "recent")  # preset names, followed by renames and deletes
-FLAGS = ("quickstart", "dividers", "timeline")
+FLAGS = ("quickstart", "dividers", "timeline", "log_prompts")
 
 
 def _path(home: Home):
