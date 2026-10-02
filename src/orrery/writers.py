@@ -83,7 +83,7 @@ def shot_seconds(template: str) -> int:
 
 def _world(head: list[str]) -> str:
     """The lines a writer may lean on (style, CAST, MUSIC …): no header, comments, params or bindings."""
-    keep = [ln for ln in head if ln.strip() and not re.match(r"\s*(@h3\b|#|:|\$\w+\s*=|context:)", ln)]
+    keep = [ln for ln in head if ln.strip() and not re.match(r"\s*(@h3\b|@(grid|unique|size|seed|batch|rng)\b|#|:|\$\w+\s*=|context:)", ln)]
     return "\n".join(keep)
 
 
@@ -214,5 +214,5 @@ def apply(task: str, template: str, text_: str) -> str:
         head = "\n".join(lines[:first]).rstrip()
         return f"{head}\n\n{text_.strip()}\n" if head else f"{text_.strip()}\n"
     comments = [ln for ln in lines if ln.strip().startswith("#")]
-    params = [ln for ln in lines if re.match(r"\s*:\s*\S", ln)]
+    params = [ln for ln in lines if re.match(r"\s*(:\s*\S|@(grid|unique|size|seed|batch|rng)\b)", ln)]
     return "\n".join([*comments, text_.strip(), *params]) + "\n"

@@ -150,7 +150,7 @@ def _fix(source: str, axis: Axis, index) -> str:
         return f"{text[:close]}{FIX}{n}{FIX}{text[close:]}"
 
     def fix_line(raw: str) -> str:
-        if re.match(r"\s*[:#]", raw):  # the `: grid` / `unique=` line itself, comments
+        if re.match(r"\s*([:#]|@(grid|unique|size|seed|batch|rng)\b)", raw):  # the @grid / @unique line itself, comments
             return raw
         if axis.expr.startswith("{"):
             return _BRACE.sub(lambda m: mark(m, m.group(1)), raw)

@@ -77,7 +77,7 @@ _HANDOFF = re.compile(r"^HANDOFF:\s*(.+)$")
 _SEND_LINE = re.compile(r"^SEND:")
 _LORA = re.compile(r"^LORA:\s*(.+)$")
 _CONTEXT = re.compile(r"^context:\s*(\d+)\s*f?$", re.IGNORECASE)
-_DSL_ONLY = re.compile(r"^(:\s*(x\d|seed=|w\d|h\d|grid\b|unique=)|@rng\b)")  # params lines of plain templates
+_DSL_ONLY = re.compile(r"^(:\s*(x\d|seed=|w\d|h\d|grid\b|unique=)|@(grid|unique|size|seed|batch|rng)\b)")  # params lines of plain templates
 _ENHANCE = re.compile(r"^>\s*(.+)$")
 H3_FPS = 24
 DEFAULT_CONTEXT = 22  # H3 Motion Context's default context_length, in frames
@@ -623,7 +623,7 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
     reel = split_reel(src)
     params = parse(src).params
     if reel and (params.grid is not None or params.unique):
-        raise ValueError("`: grid` and `unique=` vary a template across runs; a reel already gives every run a "
+        raise ValueError("@grid and @unique vary a template across runs; a reel already gives every run a "
                          "clip of its own. Use them in a single clip.")
     src = prepare(src, seed, libraries, cell)
     reel = split_reel(src) if reel else None

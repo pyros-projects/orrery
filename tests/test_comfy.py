@@ -832,6 +832,13 @@ def test_a_run_records_its_dice_for_history_and_galaxy(home):
     assert [r["rng"] for r in history.read(Home(home))["runs"]] == [1, 2]  # newest first
 
 
+def test_size_comes_from_the_size_directive(home):
+    from orrery.comfy import shape
+
+    assert shape("@h3 t2va 16:9\n@size 832x1216\nSHOT 5s\nA.")[:2] == (832, 1216)
+    assert shape("@h3 t2va 16:9\n: w832 h1216\nSHOT 5s\nA.")[:2] == (832, 1216)
+
+
 def test_every_sweep_run_is_a_new_run_for_comfyui():
     a = OrreryPrompt.IS_CHANGED(SWEEP, 5, "text", sweep="0|x")
     assert a != OrreryPrompt.IS_CHANGED(SWEEP, 5, "text", sweep="1|x")

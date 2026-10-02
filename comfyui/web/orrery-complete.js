@@ -157,13 +157,33 @@ function loraItems(before, line, data) {
 
 const uncommented = (text) => text.split("\n").filter((l) => !/^\s*#/.test(l)).join("\n");  // `# …` lines
 
+// `@` at the start of a line: the directives, each on a line of its own.
+const DIRECTIVES = [
+  ["@grid ", "every combination, one run each: @grid __style__ × {dawn|noon}"],
+  ["@unique ", "seeds in a row never repeat it: @unique $hero"],
+  ["@size ", "the node's width and height: @size 832x1216"],
+  ["@include ", "embed a preset where it stands"],
+  ["@rng 1", "the dice of before 2026-10-02 (one stream for every pick)"],
+  ["@seed ", "CLI only: the first seed"],
+  ["@batch ", "CLI only: how many seeds"],
+];
+
+function directiveItems(line) {
+  const m = /^\s*(@\w*)$/.exec(line);
+  if (!m) return null;
+  const items = DIRECTIVES.filter(([d]) => d.startsWith(m[1])).map(([insert, detail]) => ({ insert, label: insert.trim(), detail, preview: "" }));
+  return items.length ? { items, replaceFrom: -m[1].length } : null;
+}
+
 export function suggest(text, caret, data) {
   if (!data) return NONE;
   const before = text.slice(0, caret);
   const line = before.slice(before.lastIndexOf("\n") + 1);
   if (/^\s*#/.test(line)) return NONE;
   const screenplay = uncommented(text).trimStart().startsWith("@h3");
-  const found = (screenplay ? loraItems(before, line, data) : null)
+  const directive = directiveItems(line);
+  if (directive) directive.replaceFrom += before.length;
+  const found = directive ?? (screenplay ? loraItems(before, line, data) : null)
     ?? libraryItems(before, data)
     ?? bindingItems(before, text)
     ?? (screenplay ? shotItems(before, line, data) ?? keywordItems(before, line) : null)

@@ -49,7 +49,9 @@ _RANGE = re.compile(rf"\s*({_NUMBER})\s*-\s*({_NUMBER})\s*")  # {0.4-0.9}, {2-6}
 _LORA_PARTS = re.compile(r"<lora:([^:<>]+):([^:<>]+)(?::([^:<>]+))?>")
 BINS = 10  # a range finer than this learns per tenth of it (0.40–0.44), not per value
 RNG = 2  # the dice: 2 gives every pick a stream of its own, 1 is the single stream of old (`@rng 1`)
-_RNG_LINE = re.compile(r"^@rng\s+([12])\s*$")
+# one per line: @grid A × B · @unique $hero · @size 832x1216 · @seed 100 · @batch 8 · @rng 1 (the `:` line's aliases)
+_DIRECTIVE = re.compile(r"^@(grid|unique|size|seed|batch|rng)\b\s*(.*)$")
+DIRECTIVES = ("grid", "unique", "size", "seed", "batch", "rng")
 MAX_CHOICES = 2000  # {…} rolled in one expression: past it the braces keep coming back ({1$$__a__} in __a__)
 _PROP = re.compile(r"#([\w-]+):(\$?[\w.-]+)")  # a value may be $var or $var.field
 _ARTICLE = re.compile(r"(?:A|An|The) ")
@@ -133,8 +135,8 @@ def parse(template: str) -> _Parsed:
             parsed.enhance = line[1:].strip()
         elif line.startswith(":"):
             parsed.params = _parse_params(line[1:], parsed.params)  # several `:` lines add up
-        elif m := _RNG_LINE.match(line):
-            parsed.params.rng = int(m.group(1))
+        elif m := _DIRECTIVE.match(line):
+            parsed.params = _directive(m.group(1), m.group(2).strip(), parsed.params)
         else:
             parsed.body.append(line)
     return parsed
@@ -189,6 +191,35 @@ def _parse_params(text: str, before: Params | None = None) -> Params:
     return Params(count=grab(r"\bx(\d+)", before.count), seed=grab(r"\bseed=(\d+)", before.seed),
                   width=grab(r"\bw(\d+)", before.width), height=grab(r"\bh(\d+)", before.height),
                   grid=grid or before.grid, rng=before.rng, unique=before.unique + re.findall(r"\bunique=(\S+)", text))
+
+
+def _directive(name: str, value: str, params: Params) -> Params:
+    """An `@name value` line into the params, as its `:` alias would put it."""
+    number = re.fullmatch(r"\d+", value)
+    if name == "grid":
+        params.grid = value
+    elif name == "unique":
+        params.unique = params.unique + value.split()
+    elif name == "size":
+        m = re.fullmatch(r"(\d+)\s*[x×*\s]\s*(\d+)", value) or re.fullmatch(r"w(\d+)\s+h(\d+)", value)
+        if not m:
+            raise ValueError(f"@size {value}: write the width and the height, as in @size 832x1216.")
+        params.width, params.height = int(m.group(1)), int(m.group(2))
+    elif name == "rng":
+        if value not in ("1", "2"):
+            raise ValueError(f"@rng {value}: the dice are 1 (one stream, as before 2026-10-02) or 2.")
+        params.rng = int(value)
+    elif not number:
+        raise ValueError(f"@{name} {value}: it takes a number, as in @{name} 8.")
+    elif name == "seed":
+        params.seed = int(value)
+    else:
+        params.count = int(value)
+    return params
+
+
+def is_directive(line: str) -> bool:
+    return bool(_DIRECTIVE.match(line.strip()))
 
 
 def split_options(inner: str, most: int = -1) -> list[str]:

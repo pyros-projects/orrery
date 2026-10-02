@@ -13,7 +13,7 @@ import { openWrite, writeMenuHTML } from "./write.js";
 
 function statsHTML(app) {
   const st = stats(app.text), out = shape(app.text), reel = st.h3?.reel, plan = planOf(app), grid = gridOf(app);
-  const wired = /^\s*:\s*.*\b[wh]\d/m.test(app.text) ? [] : app.bridge.frames?.() || [];  // `: w… h…` wins
+  const wired = /^\s*(:\s*.*\b[wh]\d|@size\b)/m.test(app.text) ? [] : app.bridge.frames?.() || [];  // `@size` wins
   const outs = (app.data.rows || []).filter((r) => r.template === templateHash(app.text)).length;
   const forever = reel && reel.clips === Infinity;
   const how = !reel ? "" : "Wire the picks into Orrery Continue (and the clip into Orrery Film), or with H3 Motion Context load_index into Load Latent's clip_index and save_index into Save Latent's. The segment widget counts up by itself (increment): "
@@ -263,9 +263,9 @@ export function refreshFoot(app) {
 
 // `unique=` walks a shuffled order one step per seed: the seeds of a batch have to come in a row.
 function fixUniqueSeed(app) {
-  if (!/^\s*:.*\bunique=/m.test(stripComments(app.text)) || ["increment", ""].includes(app.bridge.getControl())) return;
+  if (!/^\s*(:.*\bunique=|@unique\b)/m.test(stripComments(app.text)) || ["increment", ""].includes(app.bridge.getControl())) return;
   app.bridge.setControl("increment");
-  app.toast("unique=: control after generate set to <b>increment</b>, so each run of a batch gets another value");
+  app.toast("@unique: control after generate set to <b>increment</b>, so each run of a batch gets another value");
 }
 
 // A `: grid`'s cells are counted by the server (it knows the libraries); the count, or why the grid
@@ -275,7 +275,7 @@ const gridOf = (app) => (app.data.grid?.key === gridKey(app) ? app.data.grid : n
 const planOf = (app) => { const g = gridOf(app); return sweepPlan(app.text, g && !g.error ? g : null); };
 
 function refreshGrid(app) {
-  if (!/^\s*:\s*grid\b/m.test(stripComments(app.text))) { app.data.grid = null; return; }
+  if (!/^\s*(:\s*grid|@grid)\b/m.test(stripComments(app.text))) { app.data.grid = null; return; }
   const key = gridKey(app);
   if (app.data.grid?.key === key || app.state.gridKey === key) return;
   app.state.gridKey = key;

@@ -63,7 +63,13 @@ export const templateHash = (text) => sha256(new TextEncoder().encode(text)).sli
 export const stripComments = (text) => text.split("\n").filter((l) => !/^\s*#/.test(l)).join("\n");
 
 // A run recorded before every pick had dice of its own (no rng in its row) replays with the old ones.
-export const withDice = (text, row) => (row?.rng || /^\s*@rng\b/m.test(text) ? text : `@rng 1\n${text}`);
+// It goes under the @h3 line, which stays the first.
+export function withDice(text, row) {
+  if (row?.rng || /^\s*@rng\b/m.test(text)) return text;
+  const lines = text.split("\n"), head = lines.findIndex((l) => /^\s*@h3\b/.test(l));
+  lines.splice(head + 1, 0, "@rng 1");
+  return lines.join("\n");
+}
 
 // `@style(0.8)` is `<lora:style:0.8>`, as orrery.loras.long_form writes it (not @include or @h3).
 export const longForm = (text) => text.replace(/(?<![\w@<\\])@([\w./\\-]+)\(([^()<>]*)\)/g,
@@ -320,7 +326,10 @@ function h3Canvas(ratio, megapixels) {
 export function shape(raw) {
   const text = stripComments(raw);
   const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
-  const params = lines.filter((l) => /^:\s*(x\d|seed=|w\d|h\d)/.test(l)).join(" ");
+  // `: x8 seed=100 w832 h1216`, and their directives: `@batch 8`, `@seed 100`, `@size 832x1216`
+  const params = lines.filter((l) => /^:\s*(x\d|seed=|w\d|h\d)/.test(l)).join(" ") + " "
+    + lines.map((l) => /^@size\s+(\d+)\s*[x×*\s]\s*(\d+)\s*$/.exec(l)).filter(Boolean).map((m) => `w${m[1]} h${m[2]}`).join(" ");
+  const cliDirectives = lines.filter((l) => /^@(seed|batch)\b/.test(l));
   const num = (re) => { const m = re.exec(params); return m ? Number(m[1]) : null; };
   const header = /^@h3\s+\w+(.*)$/i.exec(lines[0] || "");
   const tokens = header ? header[1].split(/\s+/) : [];
@@ -335,7 +344,7 @@ export function shape(raw) {
   const width = num(/\bw(\d+)/) ?? canvas[0], height = num(/\bh(\d+)/) ?? canvas[1];
   return {
     width, height, length, megapixels: megapixels ?? Math.round((width * height) / 1e3) / 1e3,
-    cli: params.split(/\s+/).filter((w) => /^(x\d+|seed=\d+)$/.test(w)),
+    cli: [...params.split(/\s+/).filter((w) => /^(x\d+|seed=\d+)$/.test(w)), ...cliDirectives],
     ...(lengths ? { lengths } : {}),
   };
 }

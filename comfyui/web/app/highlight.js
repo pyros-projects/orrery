@@ -12,7 +12,8 @@ function line(text, known, llm) {
   if (/^\s*#/.test(text)) return `<span class="t-comment">${esc(text)}</span>`;
   if (/^\s*@h3\b/.test(text)) return `<span class="t-head">${esc(text)}</span>`;
   if (/^\s*>/.test(text)) return `<span class="t-enh">${esc(text)}</span>`;
-  if (/^\s*(:\s*(x\d|seed=|w\d|h\d|grid\b|unique=)|@rng\b)/.test(text)) {
+  if (/^\s*@(seed|batch)\b/.test(text)) return `<span class="t-cli" title="${CLI_ONLY}">${esc(text)}</span>`;
+  if (/^\s*(:\s*(x\d|seed=|w\d|h\d|grid\b|unique=)|@(grid|unique|size|seed|batch|rng)\b)/.test(text)) {
     return text.replace(/(\S+)|(\s+)/g, (m, word) => {
       if (!word) return m;
       if (/^(x\d+|seed=\d+)$/.test(word)) return `<span class="t-cli" title="${CLI_ONLY}">${esc(word)}</span>`;

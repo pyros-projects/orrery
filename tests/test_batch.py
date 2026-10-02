@@ -179,3 +179,29 @@ def test_a_sweep_in_an_entry_takes_its_first_strength_and_says_to_grid_instead()
     reel = compile_scene("@h3 t2va\nLORA: __sets__\nCHUNK a\nSHOT 5s\nA fox.", 1, one("<lora:ink:0.5,1.0>"))
     for compiled in (h3, reel):
         assert any("is a sweep" in i.message for i in compiled.lint) and compiled.loras == "<lora:ink:0.5>"
+
+
+# --- @ directives (docs/plan-dsl-2.md, phase 4) ----------------------------------------------
+
+def test_directives_say_what_the_colon_line_says():
+    at = parse("a fox\n@grid __style__ × {dawn|noon}\n@unique $hero __creature__\n@size 832x1216\n@seed 100\n@batch 8").params
+    colon = parse("a fox\n: grid __style__ × {dawn|noon}\n: unique=$hero unique=__creature__ w832 h1216 seed=100 x8").params
+    assert at == colon
+    g = "a __creature__ in __style__\n@grid __style__"
+    assert [expand(g, 3, LIBS, cell=c).text.split(" in ")[1] for c in range(3)] == ["ink", "clay", "oil"]
+    assert "@" not in expand("@size 832x1216\na fox\n@batch 2", 1, LIBS).text
+
+
+@pytest.mark.parametrize("line, words", [("@size big", "width and the height"), ("@rng 3", "dice are 1"),
+                                         ("@batch many", "takes a number")])
+def test_a_directive_says_what_it_needs(line, words):
+    with pytest.raises(ValueError, match=words):
+        parse(f"a fox\n{line}")
+
+
+def test_a_screenplay_and_the_writers_keep_directives_out_of_the_prose():
+    from orrery.writers import apply
+
+    h3 = compile_scene("@h3 t2va\n@size 832x1216\n@rng 1\nSHOT 5s: static\nA fox.", 1, LIBS)
+    assert "@size" not in h3.text and "@rng" not in h3.text
+    assert apply("describe", "# note\na photo\n@size 832x1216\n", "A fox in snow.") == "# note\nA fox in snow.\n@size 832x1216\n"

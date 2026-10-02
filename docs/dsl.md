@@ -25,9 +25,10 @@ Every construct of orrery's template language, where libraries live, how Dynamic
 | `--one detail, 5 to 8 words--` | a slot: the language model writes it where it stands, after everything else has rolled (see [wildcard-manager.md](wildcard-manager.md)) |
 | `\{` `\}` `\|` `\$` `\__` `\@` `\#` `\\` | the character as written, not syntax: `a sign reading \{OPEN\}`, `\__init__` |
 | `# a note` | a comment: a line starting with `#` never reaches the model (filters like `__lib#key:value__` are not comments) |
-| `: x8 seed=100 w1216 h832` | batch parameters (`x8` and `seed=` are for the CLI; in ComfyUI the Run count and the seed widget) |
-| `: grid __style__ × {dawn\|noon}` | every combination, one run each (3 styles × 2 = 6); everything else rolls the same in all of them. Axes: a library (with its `[tags]`), a choice, or a binding (`$hero`). Generate in the node queues them all, times a LoRA sweep; the CLI prints every cell per seed; Test rolls the axes like any pick |
-| `: unique=__creature__`, `unique=$hero` | seeds in a row never repeat it: each seed takes the next step of one shuffled order, so 8 seeds give 8 different creatures and the next batch goes on from there. Learned weights don't steer it. The node sets the seed's control after generate to increment |
+| `@size 832x1216` | the node's width and height outputs |
+| `@batch 8`, `@seed 100` | how many seeds and the first (the CLI's; in ComfyUI the Run count and the seed widget) |
+| `@grid __style__ × {dawn\|noon}` | every combination, one run each (3 styles × 2 = 6); everything else rolls the same in all of them. Axes: a library (with its `[tags]`), a choice, or a binding (`$hero`). Generate in the node queues them all, times a LoRA sweep; the CLI prints every cell per seed; Test rolls the axes like any pick |
+| `@unique __creature__`, `@unique $hero` | seeds in a row never repeat it: each seed takes the next step of one shuffled order, so 8 seeds give 8 different creatures and the next batch goes on from there. Learned weights don't steer it. The node sets the seed's control after generate to increment |
 
 **Seeds stay put.** Every pick has dice of its own, drawn from the seed, its label and how
 often that label was drawn before. Add a `{small|big}` in front, and seed 7 still gives the same
@@ -44,7 +45,10 @@ that comes back to itself (`a → b → a`), presets that include each other,
 fields that read each other (`$p.a → $p.b → $p.a`), and a `{N$$__a__}` whose
 entries bring it back (after 2000 choices in one place).
 
-Several `:` lines add up; `grid` takes the rest of its line. A grid or `unique=` varies one clip
+Directives stand on a line of their own (under the `@h3` line in a screenplay, which stays first);
+completion offers them after `@` at the start of a line. The `:` line says the same and still works:
+`: x8 seed=100 w1216 h832 unique=$hero` and `: grid …` (which takes the rest of its line); several of
+them add up. A grid or `@unique` varies one clip
 across runs, so a reel (which gives every run a clip of its own) refuses them.
 
 Libraries live in the home folder (`~/.orrery` unless set otherwise, see
@@ -58,7 +62,7 @@ may hold LoRAs, so a library can be a set of LoRA combinations
 as `LORA: __my_lora_sets__` or in a text prompt; which set rolled is a pick that
 learns like any other. To keep LoRAs with the words they belong to, give one entry
 both as fields and bind it: `$p = __poses__`, then `LORA: $p.loras` and `$p.action`. A sweep in an entry (`0.5,1.0`) runs at its first
-strength and warns: `: grid __my_lora_sets__` runs every entry instead.
+strength and warns: `@grid __my_lora_sets__` runs every entry instead.
 Library names are word characters and `/`: a file with `-` or spaces in its
 path is not found. When a name exists
 as both, the YAML wins. `orrery lib import FOLDER [--into dp] [--merge NAME]`

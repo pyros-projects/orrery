@@ -176,3 +176,10 @@ test("inside the brackets: tags and keys, a key's values, another value of the k
   assert.deepEqual(at("__creature[habitat=sea|f").items.map((i) => i.insert), ["__creature[habitat=sea|forest]__"]);
   assert.deepEqual(at("__creature[!d").items.map((i) => i.insert), ["__creature[!deep_sea]__"]);
 });
+
+test("@ at the start of a line offers the directives", () => {
+  const s = at("a fox\n@g");
+  assert.deepEqual(s.items.map((i) => i.insert), ["@grid "]);
+  assert.equal(s.replaceFrom, 6);
+  assert.equal(at("a fox @g").items.length, 0);
+});
