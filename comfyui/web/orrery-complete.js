@@ -76,8 +76,15 @@ function libraryItems(before, data) {
   }
   m = before.match(/(?:^|[^\w])(__([\w/]*))$/);
   if (!m) return null;
+  // a folder typed (`__clothing/`): `*` a library of this folder, `**` of it or below, then its entry
+  const names = data.libraries.map((l) => l.name);
+  const globs = !m[2].endsWith("/") ? [] : [["*", "this folder"], ["**", "this folder and below"]]
+    .map(([g, where]) => ({ g: `${m[2]}${g}`, where, hits: globMatches(`${m[2]}${g}`, names) }))
+    .filter((x, i, all) => x.hits.length && (i === 0 || x.hits.length > all[0].hits.length))
+    .map(({ g, where, hits }) => ({ insert: `__${g}__`, detail: `${hits.length} libraries in ${where}, one at random`,
+      preview: hits.slice(0, 4).join(", ") + (hits.length > 4 ? ", …" : "") }));
   return {
-    items: data.libraries
+    items: [...globs, ...data.libraries
       .map((l) => ({ l, rank: nameRank(l.name, m[2]) }))
       .filter((x) => x.rank >= 0)
       .sort((a, b) => a.rank - b.rank || a.l.name.localeCompare(b.l.name))
@@ -85,7 +92,7 @@ function libraryItems(before, data) {
         insert: `__${l.name}__`,
         detail: `${l.count} · ${l.source}`,
         preview: l.sample.join(", ") + (l.count > l.sample.length ? ", …" : ""),
-      })),
+      }))],
     replaceFrom: before.length - m[1].length,
   };
 }
@@ -175,6 +182,13 @@ function directiveItems(line) {
   return items.length ? { items, replaceFrom: -m[1].length } : null;
 }
 
+// `clothing/*` (a part of the path), `clothing/**` (across folders): mirrors orrery.dsl.glob_names.
+export function globMatches(pattern, names) {
+  const part = (p) => (p === "**" ? ".+" : p.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, "[^/]*"));
+  const rx = new RegExp(`^${pattern.split("/").map(part).join("/")}$`);
+  return names.filter((n) => rx.test(n));
+}
+
 // The template's own libraries: `@lib name` and its indented entry lines (mirrors orrery.dsl.inline_libraries).
 export function inlineLibraries(text) {
   const out = [];
@@ -219,6 +233,6 @@ export function suggest(text, caret, data) {
 
 export function missingLibraries(text, data) {
   const known = new Set([...data.libraries.map((l) => l.name), ...inlineLibraries(text).map((l) => l.name)]);
-  const names = [...uncommented(text).replace(/<lora:[^<>]*>/g, "").matchAll(/__(\w+(?:\/\w+)*)(?:\[[^\[\]\n]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__/g)].map((m) => m[1]);
-  return [...new Set(names)].filter((n) => !known.has(n));
+  const names = [...uncommented(text).replace(/<lora:[^<>]*>/g, "").matchAll(/__([\w*]+(?:\/[\w*]+)*)(?:\[[^\[\]\n]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__/g)].map((m) => m[1]);
+  return [...new Set(names)].filter((n) => (n.includes("*") ? !globMatches(n, [...known]).length : !known.has(n)));
 }

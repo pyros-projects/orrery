@@ -7,6 +7,7 @@ const REF = [
     ["__creature__", "one entry from a library, weighted by what you rated", "a __creature__ at dusk"],
     ["__creature[myth]__", "only entries tagged myth", "a __creature[myth]__ asleep"],
     ["__creature[myth, !bird, size=small|tiny]__", "a predicate: commas all of, | either, ! not, key=value a property (habitat=$a.habitat: what rolled before)", "a __creature[myth, !bird]__ asleep"],
+    ["__clothing/*__", "a library of the folder at random (** and below, features* a name's start), then its entry", "wearing __clothing/*__"],
     ["__film/genre__", "a library in a folder: library/film/genre.yaml or .txt (one entry per line); the language model creates folder and file when they don't exist", ""],
     ["__runway_shoes:20__", "with a language model set (the gear): an unknown library is created when the node runs, and :20 tops it up to at least 20 entries", ""],
     ["__film_scene__(30 words, set and cast)", "directions for the model that writes the library; they never reach the prompt. New entries wait in Libraries for Accept or Discard", ""],

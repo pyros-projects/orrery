@@ -25,7 +25,7 @@ _BRACE = re.compile(r"\{([^{}]*)\}")
 FIX = "\x1f"  # FIX n FIX inside a library or a brace: the draw lands on option n (grids, unique=; see orrery.batch)
 # __name[tags]:N__(directions): N = at least N entries; (directions) guide the model that writes the
 # library and never reach the prompt. [tags]: `myth` · `myth,!bird` (all, none of) · `water|deep_sea` (either).
-_LIB = re.compile(r"(?<!\\)__(\w+(?:/\w+)*)(?:\[([^\[\]\n]+)\])?((?:#[\w-]+:\$?[\w.-]+)*)(?::(\d+))?(?:\x1f(\d+)\x1f)?__"
+_LIB = re.compile(r"(?<!\\)__([\w*]+(?:/[\w*]+)*)(?:\[([^\[\]\n]+)\])?((?:#[\w-]+:\$?[\w.-]+)*)(?::(\d+))?(?:\x1f(\d+)\x1f)?__"
                   r"(?:\(([^()]*)\))?")
 _VAR = re.compile(r"\$([A-Za-z_]\w*)(?:~(\d+))?(?:\.([A-Za-z_][\w-]*))?")  # $x, $x~N (N clips ago), $x.field
 # `$w.kind=rain,snow`, `$w!=x`: a condition on a binding's text or on a property of its pick
@@ -43,7 +43,7 @@ _ESCAPE = re.compile(r"\\([{}|$_@#\[\]\\<>])")  # \{ \__ \$ …: the character a
 _ESCAPED = re.compile("\ue000(\\d+)\ue001")
 _WEIGHTED = re.compile(r"^(.*?):(\d+(?:\.\d+)?)$")
 _DP_WEIGHT = re.compile(r"^\s*(\d+(?:\.\d+)?)::(.*)$", re.DOTALL)  # Dynamic Prompts: {3::red|1::blue}
-_LIB_ONLY = re.compile(r"^__(\w+(?:/\w+)*)(?:\[([^\[\]\n]+)\])?((?:#[\w-]+:\$?[\w.-]+)*)(?::\d+)?__(?:\([^()]*\))?$")
+_LIB_ONLY = re.compile(r"^__([\w*]+(?:/[\w*]+)*)(?:\[([^\[\]\n]+)\])?((?:#[\w-]+:\$?[\w.-]+)*)(?::\d+)?__(?:\([^()]*\))?$")
 _NUMBER = r"-?\d+(?:\.\d+)?"
 _RANGE = re.compile(rf"\s*({_NUMBER})\s*-\s*({_NUMBER})\s*")  # {0.4-0.9}, {2-6}: a number rolled in between
 _LORA_PARTS = re.compile(r"<lora:([^:<>]+):([^:<>]+)(?::([^:<>]+))?>")
@@ -52,6 +52,7 @@ RNG = 2  # the dice: 2 gives every pick a stream of its own, 1 is the single str
 # one per line: @grid A × B · @unique $hero · @size 832x1216 · @seed 100 · @batch 8 · @rng 1 (the `:` line's aliases)
 _DIRECTIVE = re.compile(r"^@(grid|unique|size|seed|batch|rng)\b\s*(.*)$")
 DIRECTIVES = ("grid", "unique", "size", "seed", "batch", "rng")
+_LOOKS_LIB = re.compile(r"__[^\s_\x00\ue000][^\s]*?__")  # what is left over looking like a wildcard
 _LIB_BLOCK = re.compile(r"^@lib\s+(\w+(?:/\w+)*)\s*$")
 _CHANCE = re.compile(r"\s*(\d+(?:\.\d+)?)%\s+(.*\S)\s*", re.DOTALL)  # {30% in the rain}
 MAX_CHOICES = 2000  # {…} rolled in one expression: past it the braces keep coming back ({1$$__a__} in __a__)
@@ -185,7 +186,8 @@ def wanted_libraries(template: str) -> dict[str, int]:
     `@lib` libraries are not wanted from anywhere else."""
     wanted: dict[str, int] = {}
     for m in _LIB.finditer(_LORA_TAG.sub("", template)):
-        wanted[m.group(1)] = max(wanted.get(m.group(1), 0), int(m.group(4) or 0))
+        if "*" not in m.group(1):  # a glob names libraries that are there
+            wanted[m.group(1)] = max(wanted.get(m.group(1), 0), int(m.group(4) or 0))
     if "@lib" in template:
         for name in inline_libraries(template)[1]:
             wanted.pop(name, None)
@@ -262,6 +264,14 @@ def _directive(name: str, value: str, params: Params) -> Params:
 
 def is_directive(line: str) -> bool:
     return bool(_DIRECTIVE.match(line.strip()))
+
+
+def glob_names(pattern: str, names) -> list[str]:
+    """The library names a glob matches, sorted: `*` within a part of the path (`clothing/*`,
+    `scenes/features*`), `**` across folders (`clothing/**`)."""
+    rx = re.compile("/".join(".+" if part == "**" else re.escape(part).replace(r"\*", "[^/]*")
+                             for part in pattern.split("/")) + "$")
+    return sorted(n for n in names if rx.match(n))
 
 
 def split_options(inner: str, most: int = -1) -> list[str]:
@@ -456,6 +466,8 @@ class Expander:
             tags: list[str] = []
             text = _LORA_TAG.sub(lambda m: tags.append(self._lora(m.group(0))) or f"\x00{len(tags) - 1}\x00", text)
             text = self._expand(text, label_prefix)
+            if outermost:
+                self._leftovers(text)
         finally:
             self._depth -= 1
         shows = []
@@ -504,6 +516,14 @@ class Expander:
             return m.group(0)
         return value
 
+    def _leftovers(self, text: str) -> None:
+        """What looks like syntax but rolled nothing: a misspelt wildcard, half a choice."""
+        for m in _LOOKS_LIB.finditer(text):
+            self.warn(f"{m.group(0)} looks like a wildcard but rolled nothing: a library name is letters, digits, _ "
+                      f"and / (no - or spaces); \\__ writes the underscores as they are.")
+        if "{" in text or "}" in text:
+            self.warn("A { or } is left over: a choice is missing its other half; \\{ writes the brace as it is.")
+
     def _unbound(self, name: str) -> None:
         self.warn(f"${name} is not bound where it is used (bindings roll from the top down), so it stays as "
                   f"written: bind it on a line above, ${name} = ….")
@@ -535,10 +555,33 @@ class Expander:
         name, _, field = value[1:].partition(".")
         return (self.var_props.get(name, {}).get(field) if field else self.vars.get(name)) or ""
 
+    def _glob(self, pattern: str, tag: str | None, props: str, rng: Rng, fixed: int | None) -> tuple[str, int | None]:
+        """`__clothing/*__`: one of the libraries it matches that has such entries, each as likely
+        (a fixed draw counts through their entries, in order), and the index within it."""
+        names = glob_names(pattern, self.libraries)
+        pools = []
+        for name in names:
+            try:
+                pools.append((name, len(self._pool(name, tag, props)[1])))
+            except ValueError:
+                continue  # none of its entries match the brackets
+        if not pools:
+            raise ValueError(f"{_label(pattern, tag, props)} matches no library{' with such entries' if names else ''}")
+        if fixed is None:
+            return pools[int(rng.random() * len(pools))][0], None
+        for name, count in pools:
+            if fixed < count:
+                return name, fixed
+            fixed -= count
+        raise ValueError(f"{_label(pattern, tag, props)} has fewer entries now than the grid counted")
+
     def _library(self, name: str, tag: str | None, label_prefix: str, props: str = "", fixed: int | None = None) -> str:
-        family, pool = self._pool(name, tag, props)
         label = label_prefix + _label(name, tag, props)
-        i = weighted_pick([w for _, w, _, _ in pool], self._stream(label))  # a fixed draw rolls too (`@rng 1`)
+        rng = self._stream(label)
+        if "*" in name:
+            name, fixed = self._glob(name, tag, props, rng, fixed)
+        family, pool = self._pool(name, tag, props)
+        i = weighted_pick([w for _, w, _, _ in pool], rng)  # a fixed draw rolls too (`@rng 1`)
         if fixed is not None:
             if fixed >= len(pool):
                 raise ValueError(f"{_label(name, tag, props)} has {len(pool)} entries now, fewer than the grid counted")

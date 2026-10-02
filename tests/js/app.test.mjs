@@ -442,3 +442,10 @@ test("directives: @size shapes the node, @seed and @batch are the CLI's, @rng 1 
 test("a chance is on or off, not a list for the dials", () => {
   assert.deepEqual(dials("$r = {30% in the rain}\n$c = {30% off|half price}").map((d) => d.options), [[], ["30% off", "half price"]]);
 });
+
+test("a glob is a known library when it matches one", () => {
+  const libs = new Set(["clothing/hats", "creature"]);
+  assert.match(highlight("__clothing/*__", libs), /class="t-lib">__clothing\/\*__/);
+  assert.match(highlight("__shoes/*__", libs), /t-miss/);
+});
+

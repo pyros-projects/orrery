@@ -110,7 +110,7 @@ export const tagsMatch = (spec, tags) => matches(spec, tags);
 
 export function stats(raw) {
   const text = longForm(stripComments(raw)).replace(/<lora:[^<>]*>/g, "<lora>");
-  const libs = [...text.matchAll(/__(\w+(?:\/\w+)*)(?:\[[^\[\]\n]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__/g)];
+  const libs = [...text.matchAll(/__([\w*]+(?:\/[\w*]+)*)(?:\[[^\[\]\n]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__/g)];
   const rolls = (text.match(/\{/g) || []).length + libs.length;
   const binds = (text.match(/^\s*\$\w+\s*=/gm) || []).length;
   let h3 = null;
@@ -355,7 +355,7 @@ const BINDING_LINE = /^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$/;
 export function dials(text) {
   const seen = new Set();  // a binding set in several chunks is one dial; override() turns them all
   return text.split("\n").map((l) => BINDING_LINE.exec(l)).filter((m) => m && !seen.has(m[2]) && seen.add(m[2])).map((m) => {
-    const expr = m[4].trim(), lib = /^__(\w+(?:\/\w+)*)(?:\[([^\[\]\n]+)\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\([^()]*\))?$/.exec(expr), brace = /^\{([^{}]*)\}$/.exec(expr);
+    const expr = m[4].trim(), lib = /^__([\w*]+(?:\/[\w*]+)*)(?:\[([^\[\]\n]+)\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\([^()]*\))?$/.exec(expr), brace = /^\{([^{}]*)\}$/.exec(expr);
     const range = brace && (/^\s*-?\d+(\.\d+)?\s*-\s*-?\d+(\.\d+)?\s*$/.test(brace[1])  // {0.4-0.9} rolls a number: no list
       || (/^\s*\d+(\.\d+)?%\s/.test(brace[1]) && splitOptions(brace[1]).length === 1));  // {30% …}: on or off
     const options = brace && !range && !brace[1].includes("$$") ? splitOptions(brace[1]).map((o) => o.replace(/:\d+(\.\d+)?$/, "").replace(/^\s*\d+(\.\d+)?::/, "").trim()).filter(Boolean) : [];

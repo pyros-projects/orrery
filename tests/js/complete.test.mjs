@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { suggest, missingLibraries, inlineLibraries } from "../../comfyui/web/orrery-complete.js";
+import { suggest, missingLibraries, inlineLibraries, globMatches } from "../../comfyui/web/orrery-complete.js";
 
 const DATA = {
   libraries: [
@@ -127,7 +127,7 @@ test("a minimum count does not hide a missing library", () => {
 test("__folder/ completes the libraries in that folder", () => {
   const data = { ...DATA, libraries: [...DATA.libraries, { name: "film/genre", count: 4, source: "user", tags: [], sample: ["noir"] }] };
   const inFolder = suggest("a __film/", 9, data).items.map((i) => i.insert);
-  assert.deepEqual(inFolder, ["__film/genre__"]);
+  assert.deepEqual(inFolder, ["__film/*__", "__film/genre__"]);  // a library of the folder at random, first
   assert.ok(suggest("a __fi", 6, data).items.some((i) => i.insert === "__film/genre__"));
   assert.deepEqual(missingLibraries("__film/genre__ and __film/new__", data), ["film/new"]);
 });
@@ -190,3 +190,12 @@ test("the template's own libraries complete, highlight and are not missing", () 
   assert.ok(suggest(text, text.length, DATA).items.some((i) => i.insert === "__crowd__"));
   assert.deepEqual(missingLibraries("@lib crowd\n  x\n__crowd__ __nope__", DATA), ["nope"]);
 });
+
+test("globs: ** offered when it reaches further, known when they match, missing when they match nothing", () => {
+  const data = { ...DATA, libraries: [...DATA.libraries, { name: "clothing/hats", count: 2, source: "user", tags: [], sample: [] },
+    { name: "clothing/winter/coats", count: 1, source: "user", tags: [], sample: [] }] };
+  assert.deepEqual(suggest("__clothing/", 11, data).items.slice(0, 2).map((i) => i.insert), ["__clothing/*__", "__clothing/**__"]);
+  assert.deepEqual(missingLibraries("__clothing/*__ __clothing/**__ __shoes/*__", data), ["shoes/*"]);
+  assert.deepEqual(globMatches("clothing/**", data.libraries.map((l) => l.name)), ["clothing/hats", "clothing/winter/coats"]);
+});
+

@@ -521,3 +521,34 @@ def test_the_writers_keep_the_templates_own_libraries():
 
     assert apply("describe", "@lib mood\n  calm\na photo\n@size 832x1216\n", "A fox.") == \
         "@lib mood\n  calm\nA fox.\n@size 832x1216\n"
+
+
+# --- second pass: globs and leftovers (phase 6) ------------------------------------------------
+
+CLOTHES = {"clothing/hats": Library("clothing/hats", [Entry("beret"), Entry("fedora", ("winter",))]),
+           "clothing/shoes": Library("clothing/shoes", [Entry(f"shoe {i}") for i in range(30)]),
+           "clothing/winter/coats": Library("clothing/winter/coats", [Entry("parka", ("winter",))]),
+           "scenes/features_a": Library("scenes/features_a", [Entry("tower")]), "scenes/other": Library("scenes/other", [Entry("x")])}
+
+
+def test_a_glob_rolls_a_library_then_its_entry_and_learns_on_the_library():
+    picked = [expand("__clothing/*__", s, CLOTHES).picks[0] for s in range(400)]
+    hats = sum(p.keys[0].startswith("__clothing/hats__=") for p in picked)
+    assert 150 < hats < 250  # each library as likely, however many entries it has
+    assert picked[0].label == "__clothing/*__" and picked[0].keys[0].split("=")[1] == picked[0].value
+    assert {expand("__clothing/**[winter]__", s, CLOTHES).text for s in range(40)} == {"fedora", "parka"}
+    assert {expand("__scenes/features*__", s, CLOTHES).text for s in range(5)} == {"tower"}
+    assert wanted_libraries("__clothing/*__ and __real__") == {"real": 0}
+    with pytest.raises(ValueError, match="matches no library"):
+        expand("__shoes/*__", 1, CLOTHES)
+
+
+def test_a_grid_and_unique_run_through_a_globs_entries():
+    texts = [expand("__clothing/**[winter]__\n@grid __clothing/**[winter]__", 1, CLOTHES, cell=c).text for c in range(2)]
+    assert texts == ["fedora", "parka"]
+
+
+def test_what_looks_like_syntax_but_rolled_nothing_warns():
+    warnings = expand("a __my-list__ and {broken", 1, {}).warnings
+    assert any("__my-list__ looks like a wildcard" in w for w in warnings) and any("{ or } is left over" in w for w in warnings)
+    assert expand("a \\__my-list__ and \\{fine\\}", 1, {}).warnings == []

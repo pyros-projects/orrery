@@ -30,6 +30,7 @@ from orrery.dsl import (
     _RANGE,
     _WEIGHTED,
     FIX,
+    glob_names,
     matches,
     parse,
     split_options,
@@ -58,10 +59,11 @@ def _choices(expr: str, libraries: Mapping[str, Library], what: str) -> list[str
         if "$" in (m.group(3) or "") + (m.group(2) or ""):
             raise ValueError(f"{what}: {expr} filters by a roll, so its entries are not known before the run.")
         name, tag = m.group(1), m.group(2)
-        if name not in libraries:
+        names = glob_names(name, libraries) if "*" in name else [name]  # a glob: every entry of each, in order
+        if not names or names[0] not in libraries:
             raise ValueError(f"{what}: there is no library __{name}__.")
         wanted = [(k, v.casefold()) for k, v in _PROPS.findall(m.group(3) or "")]
-        entries = [e.value for e in libraries[name].entries if matches(tag, e.tags, dict(e.props))
+        entries = [e.value for n in names for e in libraries[n].entries if matches(tag, e.tags, dict(e.props))
                    and all((e.prop(k) or "").casefold() == v for k, v in wanted)]
         if not entries:
             raise ValueError(f"{what}: {expr} matches no entry.")

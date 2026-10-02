@@ -6,6 +6,7 @@ Every construct of orrery's template language, where libraries live, how Dynamic
 |---|---|
 | `__animal__` | one entry from `library/animal.yaml` (or `animal.txt`, one entry per line), weighted by learned weights |
 | `__film/genre__` | a library in a folder: `library/film/genre.yaml` or `.txt`, as in z-explorer |
+| `__clothing/*__`, `__clothing/**__`, `__scenes/features*__` | a glob: one of the libraries it matches (this folder; it and below; a name's start), each as likely however many entries it has, then its entry. The pick learns on the library that rolled, and brackets filter as ever (`__clothing/**[winter]__`) |
 | `__animal[feline]__` | only entries tagged `feline`. The brackets take a predicate: `[myth, !bird]` all of the terms (`!` not), `[water\|deep_sea]` either, `[habitat=sea]` a property (`!=` not that value), `[size=small\|tiny]` either value of a key, `[habitat=$a.habitat]` what rolled before |
 | `__characters/cyberpunk#gender:female__` | only entries with that property (`props: {gender: female}` in the YAML, or `gender:female` typed into an entry's tag field); several `#key:value` must all match, in any case |
 | `{a\|b\|c:3}` | inline choice; `:3` is a static weight (Dynamic Prompts' `{3::c\|a\|b}` works too) |
@@ -37,6 +38,10 @@ often that label was drawn before. Add a `{small|big}` in front, and seed 7 stil
 animal and the same light: an edit changes what it touches. Templates made before 2026-10-02 rolled
 everything from one stream; `@rng 1` on a line of its own brings those dice back, and History and
 Galaxy put it on top when they restore a run from back then.
+
+**What looks like syntax.** A `__name__` that rolled nothing (a `-` or a space in it) and a `{` or `}`
+without its other half reach the prompt as written, with a warning; a backslash writes them on
+purpose.
 
 **How deep, and what comes back.** Entries and fields resolve as deep as they
 go: a library in an entry in a library, a field that reads a sibling field
