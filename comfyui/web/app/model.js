@@ -62,6 +62,9 @@ export const templateHash = (text) => sha256(new TextEncoder().encode(text)).sli
 // `# …` lines are comments (as in wildcard files): the node drops them before anything rolls.
 export const stripComments = (text) => text.split("\n").filter((l) => !/^\s*#/.test(l)).join("\n");
 
+// A run recorded before every pick had dice of its own (no rng in its row) replays with the old ones.
+export const withDice = (text, row) => (row?.rng || /^\s*@rng\b/m.test(text) ? text : `@rng 1\n${text}`);
+
 // `@style(0.8)` is `<lora:style:0.8>`, as orrery.loras.long_form writes it (not @include or @h3).
 export const longForm = (text) => text.replace(/(?<![\w@<\\])@([\w./\\-]+)\(([^()<>]*)\)/g,
   (m, name, spec) => (/^(include|h3)$/i.test(name) ? m : `<lora:${name}:${spec.trim()}>`));

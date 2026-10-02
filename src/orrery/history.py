@@ -11,7 +11,7 @@ from orrery.home import Home, write_atomic
 
 FILE = "prompt_history.jsonl"
 KEEP = 2000  # runs kept; the file is trimmed back to this when it grows a quarter past it
-FIELDS = ("seed", "target", "template", "preset", "edited", "params", "text", "picks", "segment", "sweep")
+FIELDS = ("seed", "target", "template", "preset", "edited", "params", "rng", "text", "picks", "segment", "sweep")
 
 
 def _path(home: Home):

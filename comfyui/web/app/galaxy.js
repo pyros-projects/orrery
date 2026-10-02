@@ -3,7 +3,7 @@
 // deleted into the home's trash.
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
-import { applyDials, FACTORS, filterRows, folderDropPath, folderTree, markPicks, rangeIds, templateHash } from "./model.js";
+import { applyDials, FACTORS, filterRows, folderDropPath, folderTree, markPicks, rangeIds, templateHash, withDice } from "./model.js";
 import { copyText, resizable } from "./parts.js";
 import { openSave } from "./save.js";
 
@@ -490,7 +490,7 @@ async function onClick(app, e, open, rows) {
   if (act === "use" && !app.busy()) {
     try {
       const text = await templateOf(app, open);
-      app.text = text;
+      app.text = withDice(text, open);
       app.preset = open.preset;
       app.base = open.preset ? text : null;
       app.bridge.setSeed(open.seed);
@@ -498,7 +498,8 @@ async function onClick(app, e, open, rows) {
       app.bridge.setParams(open.params || {});
     } catch (err) { return app.fail(err); }
     app.go("prompt");
-    app.toast(`Template and seed ${open.seed} restored · control after generate set to <b>fixed</b>, so the next run reproduces it`);
+    app.toast(`Template and seed ${open.seed} restored · control after generate set to <b>fixed</b>, so the next run reproduces it`
+      + (open.rng ? "" : " · <b>@rng 1</b> on top: it was made with the dice of before"));
   }
   if (act === "save") {
     try { openSave(app, { text: applyDials(await templateOf(app, open), open.params), from: open.preset }); } catch (err) { app.fail(err); }

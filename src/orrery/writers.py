@@ -127,9 +127,9 @@ def request(home: Home, task: str, template: str, seed: int, libraries, weights)
         values = {"world": _world(head), "chunks": chunks, "next": len(segments) + 1,
                   "handoff": f"the last clip ended as: {last}" if last else "where the last clip ended"}
     else:
-        from orrery.dsl import Expander
+        from orrery.dsl import Expander, parse
 
-        ex = Expander(seed, libraries, weights)
+        ex = Expander(seed, libraries, weights, parse(template).params.rng)
         world = []
         for ln in _head(template):
             if m := re.match(r"\s*\$(\w+)\s*=\s*(.+)$", ln):

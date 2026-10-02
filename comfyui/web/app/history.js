@@ -2,6 +2,7 @@
 // first, so a lucky roll can be found and run again even when its output was not kept.
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
+import { withDice } from "./model.js";
 import { copyText } from "./parts.js";
 
 const PAGE = 50;
@@ -97,7 +98,7 @@ async function onClick(app, e) {
   if (act === "use" && !app.busy()) {
     try {
       const text = (await app.api.template(r.template)).text;
-      app.text = text;
+      app.text = withDice(text, r);
       app.preset = r.preset || null;
       app.base = r.preset ? text : null;
       app.bridge.setSeed(r.seed);
@@ -106,6 +107,7 @@ async function onClick(app, e) {
       if (r.segment != null) app.bridge.setSegment(r.segment);
     } catch (err) { return app.fail(err); }
     app.go("prompt");
-    app.toast(`Template and seed ${r.seed}${r.segment != null ? `, segment ${r.segment}` : ""} restored · control after generate set to <b>fixed</b>, so the next run reproduces it`);
+    app.toast(`Template and seed ${r.seed}${r.segment != null ? `, segment ${r.segment}` : ""} restored · control after generate set to <b>fixed</b>, so the next run reproduces it`
+      + (r.rng ? "" : " · <b>@rng 1</b> on top: it was made with the dice of before"));
   }
 }

@@ -130,6 +130,7 @@ class Block:
 class Reel:
     head: list[str]
     blocks: list[Block]
+    rng: int | None = None  # `@rng 1`: the dice its template was made with
 
     @property
     def segments(self) -> int | None:
@@ -209,7 +210,9 @@ def split_reel(src: str) -> Reel | None:
             blocks[-1].sends.append(parse_send(send.group(1)))
         else:
             (blocks[-1].lines if blocks else head).append(raw)
-    reel = Reel(head, blocks)
+    from orrery.dsl import parse
+
+    reel = Reel(head, blocks, parse(src).params.rng)
     claims: dict[int, list[tuple[int, list]]] = {}  # image → (chunk, segment spans) of each SEND: line
     for i, (block, start) in enumerate(zip(blocks, reel.starts(), strict=True)):
         for send in block.sends:
@@ -242,7 +245,7 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
     """The world (its expander and its expanded lines) and `expand(t)` for segments up to `last`: the
     chunk's screenplay lines as segment t rolls them (its own seed, the world's bindings, `$x~N`
     recomputed), its handoff and the picks."""
-    world = Expander(seed, libraries, weights)
+    world = Expander(seed, libraries, weights, reel.rng)
     for line in reel.head:
         if m := BINDING.match(line.strip()):
             world.bind(m.group(1), m.group(2))
@@ -253,7 +256,7 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
 
     def expander(t: int) -> tuple[Expander, Block]:
         block = reel.blocks[reel.locate(t)[0]]
-        ex = Expander(derive(seed, t), libraries, weights)
+        ex = Expander(derive(seed, t), libraries, weights, reel.rng)
         ex.warnings = world.warnings  # one list for the whole reel
         ex.vars = dict(world.vars)
         ex.var_props = dict(world.var_props)

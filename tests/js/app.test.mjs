@@ -5,7 +5,7 @@ import { fitThumbs } from "../../comfyui/web/app/timeline.js";
 import { writerBlock } from "../../comfyui/web/app/write.js";
 import {
   applyDials, dials, downstream, entryPage, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
-  chunkInfo, chunkLabel, splitCells, rangeIds, shape, stats, sweepPlan, templateHash, longForm, splitOptions, tagsMatch,
+  chunkInfo, chunkLabel, splitCells, rangeIds, shape, stats, sweepPlan, templateHash, longForm, splitOptions, tagsMatch, withDice,
 } from "../../comfyui/web/app/model.js";
 
 const known = new Set(["creature", "place"]);
@@ -416,4 +416,10 @@ test("a backslash keeps a character from being syntax, in the editor too", () =>
   assert.match(html, /<span class="t-esc"[^>]*>\\\{<\/span>/);
   assert.doesNotMatch(html, /t-lib[^"]*">__init__/);
   assert.equal(longForm("\\@x(1) @y(2)"), "\\@x(1) <lora:y:2>");
+});
+
+test("a run made before every pick had its own dice replays with @rng 1", () => {
+  assert.equal(withDice("a __creature__", {}), "@rng 1\na __creature__");
+  assert.equal(withDice("a __creature__", { rng: 2 }), "a __creature__");
+  assert.equal(withDice("@rng 1\na __creature__", {}), "@rng 1\na __creature__");
 });

@@ -823,6 +823,15 @@ def test_a_sweep_in_a_library_entry_warns_in_the_node(home):
     assert any("is a sweep" in i["message"] and i["severity"] == "warn" for i in json.loads(picks)["lint"])
 
 
+def test_a_run_records_its_dice_for_history_and_galaxy(home):
+    from orrery import history
+    from orrery.home import Home
+
+    assert json.loads(OrreryPrompt().run("a __animal__", 5, "text", home=str(home))[1])["rng"] == 2
+    assert json.loads(OrreryPrompt().run("@rng 1\na __animal__", 5, "text", home=str(home))[1])["rng"] == 1
+    assert [r["rng"] for r in history.read(Home(home))["runs"]] == [1, 2]  # newest first
+
+
 def test_every_sweep_run_is_a_new_run_for_comfyui():
     a = OrreryPrompt.IS_CHANGED(SWEEP, 5, "text", sweep="0|x")
     assert a != OrreryPrompt.IS_CHANGED(SWEEP, 5, "text", sweep="1|x")

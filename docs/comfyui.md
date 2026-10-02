@@ -108,7 +108,8 @@ Nodes under **orrery**:
     the output was not (the last 2000 runs, in `prompt_history.jsonl` in the
     orrery home). Search by prompt, pick, preset or seed; **Use template +
     seed** puts the run back in the Prompt tab (segment included, control
-    after generate fixed), so a lucky roll can be made again. Each run is
+    after generate fixed), so a lucky roll can be made again (a run from before
+    2026-10-02 comes back with `@rng 1` on top: the dice it was made with). Each run is
     also printed to ComfyUI's console (seed, picks, prompt); the gear turns
     that off.
   - **Help**: the DSL at a glance, the tutorial lessons, writing tips.

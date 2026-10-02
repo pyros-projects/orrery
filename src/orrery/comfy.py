@@ -23,6 +23,7 @@ from orrery.comfy_llm import ComfyBackend, can_write, llm_config
 from orrery.comfy_write import OrreryWrite
 from orrery.continuum.grid import CONTEXT
 from orrery.dsl import (
+    RNG,
     MissingLibrary,
     bindings,
     expand,
@@ -367,6 +368,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         "preset": linked,
         "edited": bool(linked) and template != load_preset(h, linked),
         "params": dials,
+        "rng": parse(source).params.rng or RNG,  # the dice: a replay of an older run puts @rng 1 on top
         "text": result.text,
         "picks": [{"label": p.label, "value": p.value, "keys": list(p.keys)} for p in result.picks] + sweep_picks,
         **({"sweep": sweep_data} if sweep_data else {}),
@@ -462,6 +464,7 @@ def log_outputs(home: Home, picks_json: str, media: list[str]) -> list[dict]:
         "params": data.get("params") or {},
         "text": data.get("text"),
         "picks": data.get("picks", []),
+        **({"rng": data["rng"]} if data.get("rng") else {}),
         **({"segment": data["segment"], "chunks": data["chunks"]} if data.get("chunks") else {}),
         **({"folder": folder} if (folder := _galaxy_folder(data.get("folder"))) else {}),
         "rating": None,

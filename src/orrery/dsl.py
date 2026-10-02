@@ -11,6 +11,7 @@ Every expansion returns the text *and* the picks that produced it. Pick keys
 """
 
 import re
+import zlib
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 
@@ -43,6 +44,8 @@ _NUMBER = r"-?\d+(?:\.\d+)?"
 _RANGE = re.compile(rf"\s*({_NUMBER})\s*-\s*({_NUMBER})\s*")  # {0.4-0.9}, {2-6}: a number rolled in between
 _LORA_PARTS = re.compile(r"<lora:([^:<>]+):([^:<>]+)(?::([^:<>]+))?>")
 BINS = 10  # a range finer than this learns per tenth of it (0.40–0.44), not per value
+RNG = 2  # the dice: 2 gives every pick a stream of its own, 1 is the single stream of old (`@rng 1`)
+_RNG_LINE = re.compile(r"^@rng\s+([12])\s*$")
 MAX_CHOICES = 2000  # {…} rolled in one expression: past it the braces keep coming back ({1$$__a__} in __a__)
 _PROP = re.compile(r"#([\w-]+):(\$?[\w.-]+)")  # a value may be $var or $var.field
 _ARTICLE = re.compile(r"(?:A|An|The) ")
@@ -82,6 +85,7 @@ class Params:
     width: int | None = None
     height: int | None = None
     grid: str | None = None  # `: grid __style__ × {dawn|noon}`, the axes as written (orrery.batch)
+    rng: int | None = None  # `@rng 1`: the dice a template was made with (None: RNG)
     unique: list[str] = field(default_factory=list)  # `unique=__creature__`, `unique=$hero`
 
 
@@ -125,6 +129,8 @@ def parse(template: str) -> _Parsed:
             parsed.enhance = line[1:].strip()
         elif line.startswith(":"):
             parsed.params = _parse_params(line[1:], parsed.params)  # several `:` lines add up
+        elif m := _RNG_LINE.match(line):
+            parsed.params.rng = int(m.group(1))
         else:
             parsed.body.append(line)
     return parsed
@@ -176,9 +182,9 @@ def _parse_params(text: str, before: Params | None = None) -> Params:
         m = re.search(pattern, text)
         return int(m.group(1)) if m else old
 
-    return Params(grab(r"\bx(\d+)", before.count), grab(r"\bseed=(\d+)", before.seed), grab(r"\bw(\d+)", before.width),
-                  grab(r"\bh(\d+)", before.height), grid or before.grid,
-                  before.unique + re.findall(r"\bunique=(\S+)", text))
+    return Params(count=grab(r"\bx(\d+)", before.count), seed=grab(r"\bseed=(\d+)", before.seed),
+                  width=grab(r"\bw(\d+)", before.width), height=grab(r"\bh(\d+)", before.height),
+                  grid=grid or before.grid, rng=before.rng, unique=before.unique + re.findall(r"\bunique=(\S+)", text))
 
 
 def split_options(inner: str, most: int = -1) -> list[str]:
@@ -230,8 +236,10 @@ class Expander:
     """Expands DSL expressions against libraries, one seeded draw sequence per instance."""
 
     def __init__(self, seed: int, libraries: Mapping[str, Library],
-                 weights: Mapping[str, float] | None = None) -> None:
-        self.rng = Rng(seed)
+                 weights: Mapping[str, float] | None = None, rng: int | None = None) -> None:
+        self.seed, self.dice = seed, rng or RNG
+        self.rng = Rng(seed)  # the single stream of `@rng 1`
+        self._drawn: dict[str, int] = {}  # a label → how often it was drawn: each draw its own stream
         self.libraries = libraries
         self.weights = weights or {}
         self.picks: list[Pick] = []
@@ -249,6 +257,15 @@ class Expander:
         self._depth = 0  # expressions within expressions (an entry, a field): escapes come back at 0
         self._escaped: list[str] = []
         self.warnings: list[str] = []  # a reel's expanders share their world's list
+
+    def _stream(self, label: str) -> Rng:
+        """The dice for one pick. With RNG 2 a pick's stream comes from the seed, its label and how often
+        that label was drawn before, so a choice added elsewhere leaves this pick as it was."""
+        if self.dice == 1:
+            return self.rng
+        n = self._drawn.get(label, 0)
+        self._drawn[label] = n + 1
+        return Rng(zlib.crc32(f"{self.seed}\x1e{label}\x1e{n}".encode()))
 
     def warn(self, message: str) -> None:
         if message not in self.warnings:
@@ -399,13 +416,13 @@ class Expander:
 
     def _library(self, name: str, tag: str | None, label_prefix: str, props: str = "", fixed: int | None = None) -> str:
         family, pool = self._pool(name, tag, props)
-        i = weighted_pick([w for _, w, _ in pool], self.rng)  # a fixed draw rolls too: the picks after it stay put
+        label = label_prefix + _label(name, tag, props)
+        i = weighted_pick([w for _, w, _ in pool], self._stream(label))  # a fixed draw rolls too (`@rng 1`)
         if fixed is not None:
             if fixed >= len(pool):
                 raise ValueError(f"{_label(name, tag, props)} has {len(pool)} entries now, fewer than the grid counted")
             i = fixed
         value, _, entry_props = pool[i]
-        label = label_prefix + _label(name, tag, props)
         self.picks.append(Pick(label, value, (f"{family}={value}",)))
         text = self._nested(name, value, label_prefix)
         self._props_seen.update(entry_props)  # after the nested picks: the outer library's fields win
@@ -458,14 +475,13 @@ class Expander:
         # Labels and learned keys leave `(directions)` out: editing them must not rename the choice.
         family = without_directions("{" + "|".join(v for v, _ in options) + "}")
         weights = [w * self.learned(f"{family}={without_directions(v)}") for v, w in options]
-        i = weighted_pick(weights, self.rng)  # a fixed draw rolls too: the picks after it stay put
+        i = weighted_pick(weights, self._stream(family))  # a fixed draw rolls too (`@rng 1`)
         value = options[i if fixed is None else fixed][0]
         shown = without_directions(value)
         self.picks.append(Pick(family, shown, (f"{family}={shown}",)))
         return value
 
     def _multi(self, lo: int, hi: int, source: str, joiner: str = ", ") -> str:
-        n = lo + int(self.rng.random() * (hi - lo + 1))
         if lm := _LIB_ONLY.match(source):
             family, pool3 = self._pool(lm.group(1), lm.group(2), lm.group(3))
             pool = [(v, w) for v, w, _ in pool3]
@@ -474,11 +490,13 @@ class Expander:
                        for v in split_options(source)]
             family = without_directions("{" + "|".join(v for v, _ in options) + "}")
             pool = [(v, w * self.learned(f"{family}={without_directions(v)}")) for v, w in options]
+        span = str(lo) if lo == hi else f"{lo}–{hi}"
+        rng = self._stream(f"{family} ×{span}")
+        n = lo + int(rng.random() * (hi - lo + 1))  # the count first, then the picks: as `@rng 1` always drew
         chosen: list[str] = []
         while pool and len(chosen) < n:
-            i = weighted_pick([w for _, w in pool], self.rng)
+            i = weighted_pick([w for _, w in pool], rng)
             chosen.append(pool.pop(i)[0])
-        span = str(lo) if lo == hi else f"{lo}–{hi}"
         self.picks.append(Pick(f"{family} ×{span}", without_directions(joiner.join(chosen)),
                                tuple(f"{family}={without_directions(v)}" for v in chosen)))
         return joiner.join(chosen)
@@ -498,8 +516,9 @@ class Expander:
         show = lambda v: f"{v / scale:.{places}f}"
         labels = [show(edges[k]) if edges[k + 1] - edges[k] == 1 else f"{show(edges[k])}–{show(edges[k + 1] - 1)}"
                   for k in range(bins)]
-        k = weighted_pick([self.learned(f"{family}={label}") for label in labels], self.rng)
-        return show(edges[k] + int(self.rng.random() * (edges[k + 1] - edges[k]))), labels[k]
+        rng = self._stream(family)
+        k = weighted_pick([self.learned(f"{family}={label}") for label in labels], rng)
+        return show(edges[k] + int(rng.random() * (edges[k + 1] - edges[k]))), labels[k]
 
     def _lora(self, tag: str) -> str:
         """`<lora:style:0.4-0.9>` (and `:0.2-0.5` for CLIP): a strength rolled per run and recorded as a
@@ -535,7 +554,7 @@ def expand(template: str, seed: int, libraries: Mapping[str, Library],
 
     template = prepare(template, seed, libraries, cell)
     parsed = parse(template)
-    ex = Expander(seed, libraries, weights)
+    ex = Expander(seed, libraries, weights, parsed.params.rng)
     for name, expr in parsed.bindings:
         ex.bind(name, expr)
     text = ex.expr(" ".join(line for raw in parsed.body if (line := ex.guarded(raw)) is not None))

@@ -24,7 +24,7 @@ def test_library_pick_is_recorded_with_label_value_and_weight_key():
     e = expand("a __animal__", 5, LIBS)
     [pick] = e.picks
     assert pick.label == "__animal__"
-    assert e.text == "a " + pick.value
+    assert e.text in ("a " + pick.value, "an " + pick.value)  # a/an follows the pick
     assert pick.keys == ("__animal__=" + pick.value,)
 
 
@@ -429,3 +429,21 @@ def test_a_backslash_writes_the_character_as_it_is():
     assert wanted_libraries("a \\__init__ and __animal__") == {"animal": 0}
     libs = {"sign": Library("sign", [Entry("a sign reading \\{OPEN\\}")])}
     assert expand("$s = __sign__\n$s, again $s", 1, libs).text == "a sign reading {OPEN}, again a sign reading {OPEN}"
+
+
+# --- second pass: stable seeds (phase 2) -------------------------------------------------------
+
+def test_a_choice_added_elsewhere_leaves_the_other_picks_of_a_seed_alone():
+    libs = {**LIBS, "light": Library("light", [Entry(x) for x in ("dawn", "noon", "dusk", "night")])}
+    for seed in range(30):
+        before = expand("a __animal__ at __light__", seed, libs).picks
+        after = expand("a {small|big} __animal__ at __light__, {0.4-0.9}", seed, libs).picks
+        assert [(p.label, p.value) for p in before] == [(p.label, p.value) for p in after if p.label in ("__animal__", "__light__")]
+
+
+def test_the_dice_of_before_stay_with_rng_1():
+    """The single stream every run used until 2026-10-02 (outputs pinned from that code)."""
+    t = "@rng 1\n$hero = __animal__\n$hero in {misty|frozen} __style__"
+    assert [expand(t, s, LIBS).text for s in (1, 2, 3)] == ["owl in misty linocut", "ocelot in frozen cyanotype",
+                                                            "heron in misty gouache"]
+    assert "@rng" not in expand(t, 1, LIBS).text and expand(t, 1, LIBS).params.rng == 1
