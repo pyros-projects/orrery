@@ -236,8 +236,9 @@ SEND: frames -24--1 to image 6 for segments 4, 6, 7, 12
   one after), `4-8`, or a list such as `2, 4-8, 12+`; `segment` and `segments`
   are the same word. A listed segment before the frame exists goes without it,
   and lint says so.
-- **One image, several lines**: fine, as long as no segment gets two. That
-  re-anchors an image mid-reel, for a new outfit, say:
+- **One image, several lines**: fine. Where two fill it in the same segment,
+  the one sent last takes over and lint names the segment; a `for segment …`
+  lets them take turns. That re-anchors an image mid-reel, for a new outfit, say:
 
   ```
   CHUNK the old look repeat 4
@@ -381,7 +382,7 @@ ComfyUI console.
 | `image 3 is held (keep_sent), but it has no stored anchor: …` | `keep_sent` is on for an image that was never fetched | run once with `keep_sent` off, then switch it on |
 | `SEND: hands frames to Reference to Video as reference images, so it needs an @h3 ref2va screenplay.` | `SEND:` in another mode | switch the header to `@h3 ref2va` |
 | `SEND: belongs inside a CHUNK: …` | `SEND:` before the first `CHUNK` or in a screenplay without chunks | move it into the chunk whose clip it sends |
-| `image 3 is sent for segment 5 by two SEND: lines (CHUNK 1 and CHUNK 3); …` | two lines fill one image in the same segment | give each a `for segment …` that leaves the other out, or send to two images |
+| `image 3 is filled by two SEND: lines in segment 5 (CHUNK 1 and CHUNK 3): …` (lint) | two lines fill one image in the same segment | fine if intended: the one sent last takes over; a `for segment …` lets them take turns |
 | `SEND: to image 5 lists segment 2, but its frames come from segment 3: …` (lint) | a `for` names segments before the frame exists | fine if intended; those clips go without it |
 | `[image 3] is mentioned before the SEND: line that fills it has played, …` (lint) | the prose names a sent image in a clip before it exists | fine if intended; it points at nothing in that clip |
 | `[orrery] SEND to image 5: frame 60 is not in segment 1's clip, so it is left out.` (console) | the clip is shorter than the frame number (or a negative one reaches before its start) | pick another frame; with none left, the last frame stands in |

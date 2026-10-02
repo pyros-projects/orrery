@@ -227,14 +227,19 @@ class Reel:
     def ready(self, segment: int, held: set[int] | frozenset = frozenset(),
               path: list[tuple[int, int]] | None = None) -> dict[int, dict]:
         """The sent images that exist in `segment`, each with the segment its frames come from: sent by a
-        chunk that first played before it, for a segment its `for` lists (any later one without). A `held`
-        image (Orrery Refs' keep_sent, with a stored anchor) exists from segment 0 within its `for` list,
-        and comes from that anchor instead."""
+        chunk that first played before it, for a segment its `for` lists (any later one without). When
+        several SEND: lines fill one image there, the one sent last wins (a later line within a chunk).
+        A `held` image (Orrery Refs' keep_sent, with a stored anchor) exists from segment 0 within its
+        `for` list, and comes from that anchor instead."""
         out: dict[int, dict] = {}
+        latest: dict[int, int] = {}  # image → the segment its winning send so far comes from
         for block, start in zip(self.blocks, self.starts(path), strict=True):
             for send in block.sends:
                 spans = (send.segments or [[0, None]]) if send.image in held else fills(send, start)
-                if any(lo <= segment and (hi is None or segment <= hi) for lo, hi in spans):
+                when = -1 if start is None else start
+                if (any(lo <= segment and (hi is None or segment <= hi) for lo, hi in spans)
+                        and when >= latest.get(send.image, -1)):
+                    latest[send.image] = when
                     out[send.image] = ({"held": True} if send.image in held
                                        else {"segment": start, "frames": [list(f) for f in send.frames]})
         return out
@@ -273,21 +278,27 @@ def split_reel(src: str) -> Reel | None:
         blocks[i].gotos.append(_goto(line, blocks))
     from orrery.dsl import parse
 
-    reel = Reel(head, blocks, parse(src).params.rng)
-    claims: dict[int, list[tuple[int, list]]] = {}  # image → (chunk, segment spans) of each SEND: line
-    if reel.jumps_on_rolls:  # which segment a chunk starts in waits on the seed
-        return reel
-    for i, (block, start) in enumerate(zip(blocks, reel.starts(), strict=True)):
+    return Reel(head, blocks, parse(src).params.rng)
+
+
+def shared_sends(reel: Reel, starts: list[int | None]) -> list[str]:
+    """A warning for each two SEND: lines that fill one image in the same segment: there the one sent
+    last takes over (Reel.ready)."""
+    out: list[str] = []
+    claims: dict[int, list[tuple[int, int | None, list]]] = {}  # image → (chunk, start, spans) per line
+    for i, (block, start) in enumerate(zip(reel.blocks, starts, strict=True)):
         for send in block.sends:
             spans = fills(send, start)
-            for j, other in claims.get(send.image, []):
-                for (lo, hi), (olo, ohi) in ((a, b) for a in spans for b in other):
-                    first, ends = max(lo, olo), [x for x in (hi, ohi) if x is not None]
-                    if first <= min(ends, default=first):
-                        raise ValueError(f"image {send.image} is sent for segment {first} by two SEND: lines (CHUNK "
-                                         f"{j + 1} and CHUNK {i + 1}); give each segment one, with for segment ….")
-            claims.setdefault(send.image, []).append((i, spans))
-    return reel
+            for j, other_start, other in claims.get(send.image, []):
+                shared = [max(lo, olo) for lo, hi in spans for olo, ohi in other
+                          if max(lo, olo) <= min([x for x in (hi, ohi) if x is not None], default=max(lo, olo))]
+                if shared:
+                    later = i if start >= other_start else j
+                    out.append(f"image {send.image} is filled by two SEND: lines in segment {min(shared)} (CHUNK "
+                               f"{j + 1} and CHUNK {i + 1}): where they meet, the one sent last (CHUNK {later + 1}) "
+                               "takes over.")
+            claims.setdefault(send.image, []).append((i, start, spans))
+    return out
 
 
 def _goto(line: str, blocks: list[Block]) -> Goto:

@@ -267,10 +267,11 @@ def test_malformed_send_lines_are_clear_errors(line, words):
         split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", line))
 
 
-def test_two_sends_to_one_image_are_an_error():
+def test_two_sends_to_one_image_warn_and_the_later_takes_over():
     src = SEND_REEL.replace("GIRL walks to the window.", "GIRL walks to the window.\nSEND: frame 9 to image 3")
-    with pytest.raises(ValueError, match="image 3"):
-        split_reel(src)
+    assert split_reel(src).ready(3)[3] == {"segment": 2, "frames": [[9, 9]]}
+    lint = [i.message for i in ref2va(src, segment=2).lint]
+    assert any("image 3" in m and "segment 3" in m and "(CHUNK 2) takes over" in m for m in lint)
 
 
 def test_send_outside_a_chunk_or_outside_ref2va_is_an_error():
@@ -345,10 +346,12 @@ def test_several_sends_may_fill_one_image_in_different_segments():
     assert ref2va(REANCHOR, segment=0).refs == [1] and ref2va(REANCHOR, segment=6).refs == [1, 3]
 
 
-def test_two_sends_claiming_one_segment_for_one_image_are_an_error():
+def test_two_sends_claiming_one_segment_for_one_image_hand_over_to_the_later():
     clash = REANCHOR.replace("for segments 1-4", "for segments 1-5")
-    with pytest.raises(ValueError, match="segment 5"):
-        split_reel(clash)
+    assert [split_reel(clash).ready(t)[3]["segment"] for t in (4, 5, 6)] == [0, 4, 4]
+    lint = [i.message for i in ref2va(clash, segment=5).lint]
+    assert any("segment 5" in m and "(CHUNK 2) takes over" in m for m in lint)
+    assert not any("takes over" in i.message for i in ref2va(REANCHOR, segment=5).lint)
 
 
 def test_a_listed_segment_before_the_frame_exists_is_flagged():

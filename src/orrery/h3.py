@@ -637,7 +637,7 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
     run of a `: grid` (orrery.batch); None rolls its axes."""
     from orrery.batch import prepare
     from orrery.dsl import parse, with_inline
-    from orrery.reel import build_segment, split_reel
+    from orrery.reel import build_segment, shared_sends, split_reel
 
     lint: list[Issue] = []
     src, libraries = with_inline(strip_comments(src), libraries)
@@ -658,7 +658,9 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
             sends = reel.ready(segment, set(held) & set(reel.send_slots), path)
             withhold_images(scene, set(reel.send_slots) - set(sends), lint)
             # every chunk's first segment: the reel's own path, or the one walked here when jumps wait on rolls
-            for block, start in zip(reel.blocks, reel.starts(path if reel.jumps_on_rolls else None), strict=True):
+            starts = reel.starts(path if reel.jumps_on_rolls else None)
+            lint += [Issue("warn", w) for w in shared_sends(reel, starts)]
+            for block, start in zip(reel.blocks, starts, strict=True):
                 for send in block.sends:
                     early = [lo for lo, _ in send.segments or []
                              if start is not None and lo <= start and send.image not in held]

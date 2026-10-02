@@ -33,6 +33,12 @@ test("screenplay lines get keyword colours and html is escaped", () => {
   assert.match(html, /&lt;Picture 1&gt;/);
 });
 
+test("keyword lines keep their colour without a space after the colon", () => {
+  const html = highlight("LORA:<lora:a:0.8>\nHANDOFF:she waves\nSEND:frame 0 to image 3\nGOTO:the walk", known);
+  for (const kw of ["LORA:", "HANDOFF:", "SEND:", "GOTO:"]) assert.match(html, new RegExp(`<span class="t-kw">${kw}</span>`));
+  assert.match(html, /<span class="t-lora">&lt;lora:a:0.8&gt;<\/span>/);
+});
+
 test("screenplay cast lines are keywords", () => {
   const html = highlight("CAST\nsummary: MAYA meets DOG.\nvoice: audio 1", known);
   assert.match(html, /<span class="t-kw">CAST<\/span>/);
