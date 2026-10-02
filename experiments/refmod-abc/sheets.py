@@ -4,8 +4,9 @@
         A=abc_a C=abc_c late=abc_c_late35 ...
 
 Each LABEL=LATENT_PATH row reads the active run of output/<latent_path>/orrery_film (Orrery Film's
-store), and the sheet shows frames 0, 60, 120, 180 and the last of that segment's take. Needs av
-and Pillow (the dev dependencies).
+store); a LABEL=FILE.mp4 row reads that clip instead (a Save Video file, the segment is then
+ignored). The sheet shows frames 0, 60, 120, 180 and the last. Needs av and Pillow (the dev
+dependencies).
 """
 
 import json
@@ -21,10 +22,14 @@ W, H, LEFT, TOP = 320, 180, 110, 44
 
 
 def frames(output: Path, latent_path: str, segment: int) -> list:
-    store = output / latent_path / "orrery_film"
-    run = store / json.loads((store / "active.json").read_text())["run"]
-    clips = json.loads((run / "clips.json").read_text())["clips"]
-    with av.open(str(run / clips[segment]["folder"] / "video.mp4")) as video:
+    if latent_path.endswith(".mp4"):
+        clip = Path(latent_path) if Path(latent_path).is_absolute() else output / latent_path
+    else:
+        store = output / latent_path / "orrery_film"
+        run = store / json.loads((store / "active.json").read_text())["run"]
+        clips = json.loads((run / "clips.json").read_text())["clips"]
+        clip = run / clips[segment]["folder"] / "video.mp4"
+    with av.open(str(clip)) as video:
         decoded = [frame.to_image() for frame in video.decode(video=0)]
     return [decoded[i] for i in PICK]
 

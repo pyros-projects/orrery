@@ -4,7 +4,7 @@
 // Accepting an item replaces text[replaceFrom:caret] with item.insert.
 
 const KEYWORDS = ["SHOT ", "SFX: ", "MUSIC: ", "style: ", "summary: ", "CAST", "voice: ", "keep: ",
-  "CHUNK", "HANDOFF: ", "SEND: ", "GOTO: ", "LORA: ", "context: "];
+  "CHUNK", "HANDOFF: ", "SEND: ", "GOTO: ", "LORA: ", "context: ", "refmods: "];
 const NONE = { items: [], replaceFrom: 0 };
 
 const startsWith = (word, prefix) => word.toLowerCase().startsWith(prefix.toLowerCase());
@@ -206,6 +206,56 @@ function loraItems(before, line, data) {
 
 const uncommented = (text) => text.split("\n").filter((l) => !/^\s*#/.test(l)).join("\n");  // `# …` lines
 
+// Whether the caret's line is a member line of a CAST block (castNames' reading of the lines above).
+function inCast(before) {
+  let open = false;
+  for (const raw of uncommented(before).split("\n").slice(0, -1)) {
+    const l = raw.trim();
+    if (/^CAST\s*$/.test(l)) open = true;
+    else if (/^(SHOT\b|CHUNK\b|@)/.test(l) || (open && !l)) open = false;
+  }
+  return open;
+}
+
+// Inside a CAST member's parentheses: `refmod ` and `global`; after `refmod ` the RefMods in
+// models/refmods (any part of the name matches, prefix matches first); after the name its strength
+// and its start.
+const REFMOD_CAP = 80;
+
+function refmodItems(before, line, data) {
+  const m = /^\s*[A-Z][A-Z0-9 _-]*?\s*\(([^)]*)$/.exec(line);
+  if (!m || !inCast(before)) return null;
+  const token = m[1].split(",").pop().replace(/^\s+/, "");
+  const named = /^refmod\s+(\S*)$/i.exec(token);
+  if (named) {
+    const query = named[1].toLowerCase();
+    const hits = (data.refmods || []).filter((n) => n.toLowerCase().includes(query));
+    const ranked = [...hits.filter((n) => n.toLowerCase().startsWith(query)), ...hits.filter((n) => !n.toLowerCase().startsWith(query))];
+    return { kind: "refmod", items: ranked.slice(0, REFMOD_CAP).map((n) => ({ insert: n, detail: "refmod", preview: "" })),
+             replaceFrom: before.length - named[1].length };
+  }
+  const after = /^refmod\s+\S+((?:\s+\S+)*)\s+(\w*)$/i.exec(token);
+  const word = after ? after[2] : (/^([a-z]*)$/i.exec(token) || [])[1];
+  if (word === undefined || (!after && !word)) return null;
+  const options = after ? [
+    ...(/\bat\b/i.test(after[1]) ? [] : [["at 1", "its strength: 1 as it is, 0.5 about half its share of attention"]]),
+    ...(/\bfrom\b/i.test(after[1]) ? [] : [["from 35%", "the share of sampling it sits out, where the picture is laid out"]]),
+  ] : [["refmod ", "a RefMod from models/refmods: refmod NAME at 1 from 35%"],
+       ["global", "its RefMods go with every clip, not only with the clips that name it"]];
+  const items = options.filter(([o]) => startsWith(o, word)).map(([insert, detail]) => ({ insert, detail, preview: "" }));
+  return items.length ? { items, replaceFrom: before.length - word.length } : null;
+}
+
+// The `refmods:` line: the defaults for RefMods without their own `at` or `from`.
+function refmodsLineItems(before, line) {
+  const m = /^\s*refmods:\s*(.*)$/.exec(line);
+  if (!m) return null;
+  const items = [["at 1 from 35%", "strength 1, from 35% of sampling on: orrery's defaults"],
+                 ["at 0.5", "every RefMod at half its share of attention"], ["from 0%", "every RefMod from the first step"]]
+    .filter(([o]) => startsWith(o, m[1]) && o !== m[1]).map(([insert, detail]) => ({ insert, detail, preview: "" }));
+  return items.length ? { items, replaceFrom: before.length - m[1].length } : null;
+}
+
 // `@` at the start of a line: the directives, each on a line of its own.
 const DIRECTIVES = [
   ["@grid ", "every combination, one run each: @grid __style__ × {dawn|noon}"],
@@ -267,7 +317,8 @@ export function suggest(text, caret, data) {
   const found = directive ?? (screenplay ? loraItems(before, line, data) : null)
     ?? libraryItems(before, data)
     ?? bindingItems(before, text)
-    ?? (screenplay ? gotoItems(before, line, text) ?? castItems(before, line, text) ?? shotItems(before, line, data) ?? keywordItems(before, line) : null)
+    ?? (screenplay ? refmodsLineItems(before, line) ?? refmodItems(before, line, data) ?? gotoItems(before, line, text)
+      ?? castItems(before, line, text) ?? shotItems(before, line, data) ?? keywordItems(before, line) : null)
     ?? NONE;
   const typed = before.slice(found.replaceFrom);
   return { ...found, items: found.items.filter((i) => i.insert !== typed) };

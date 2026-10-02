@@ -48,7 +48,8 @@ Nodes under **orrery**:
     (`__` libraries, `__creature[` tags, `__creature#` properties and their
     values, `$` bindings, CAST names after two capitals (`KE` → `KEEPER`; at a
     line's start also `KEEPER (…): ` for speech), camera words after
-    `SHOT 5s:`, your LoRA files after `LORA:`). **New** starts a fresh
+    `SHOT 5s:`, your LoRA files after `LORA:`, your RefMods after `refmod ` in
+    a CAST member's parentheses, then `at 1` and `from 35%`). **New** starts a fresh
     template linked to no preset: an H3 scene, an H3 reel,
     H3 references (ref2va), H3 keyframes (i2va, fl2va, l2va) or a Krea prompt,
     each with a quickstart of the essentials as `#` comments on top (the gear
