@@ -14,6 +14,7 @@ const REF = [
     ["__world/habitats#habitat:$animal.habitat__", "a filter that reads an earlier roll: the place is one the animal lives in", "$animal = __subjects/animals__\na photograph of $animal in __world/habitats#habitat:$animal.habitat__"],
     ["{misty|frozen:3}", "inline choice; :3 makes frozen three times as likely", "a {misty|frozen:3} forest"],
     ["{|red }car", "an empty option makes a word optional", ""],
+    ["{30% in the rain}", "the words three times in ten, nothing otherwise (the space before goes too)", "a fox {30% in the rain}"],
     ["{2$$__material__}", "two different picks, joined with commas", "built from {2$$__material__}"],
     ["{1-3$$a|b|c}", "one to three of the options", "a bouquet of {1-3$$roses|thistles|ferns}"],
     ["{a {b|c}|d}", "choices nest; inner ones roll first", "a {lighthouse {keeper|cat}|night ferry}"],
@@ -21,6 +22,7 @@ const REF = [
   ]],
   ["Bindings and extras", [
     ["$hero = __creature__", "roll once on its own line, reuse everywhere as $hero", "$hero = __creature__\n$hero meets another $hero"],
+    ["@lib crowd", "a library of this template's own: indented lines under it are its entries; use it as __crowd__", "@lib crowd\n  a few __creature__s\n  a lone __creature__\nA meadow with __crowd__"],
     ["$hero → dial", "every binding is a dial under the editor: pick an entry or type any expression, empty = its default roll; Save bakes dials in (CLI: --set hero=owl)", ""],
     ["> make it moody and cinematic", "with a language model set (the gear), it rewrites the rolled prompt as asked; in a screenplay a > before the first SHOT covers every shot's prose, one inside a SHOT only that shot, never dialogue", "> make it moody and cinematic"],
     ["--one detail, 5 to 8 words--", "a slot the language model writes where it stands, seeing the whole rolled prompt (and, in a reel, the clip before)", ""],

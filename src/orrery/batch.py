@@ -21,6 +21,7 @@ from dataclasses import dataclass
 
 from orrery.dsl import (
     _BRACE,
+    _CHANCE,
     _DP_WEIGHT,
     _IF,
     _LIB,
@@ -65,6 +66,8 @@ def _choices(expr: str, libraries: Mapping[str, Library], what: str) -> list[str
         if not entries:
             raise ValueError(f"{what}: {expr} matches no entry.")
         return entries
+    if (m := _BRACE.fullmatch(expr)) and (c := _CHANCE.fullmatch(m.group(1))) and len(split_options(m.group(1))) == 1:
+        return [c.group(2), ""]  # {30% in the rain}: with the words, without
     if (m := _BRACE.fullmatch(expr)) and not _IF.match(m.group(1).strip()) and not _MULTI.match(m.group(1)) \
             and not _RANGE.fullmatch(m.group(1)):
         out = []

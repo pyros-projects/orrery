@@ -107,6 +107,9 @@ def task_name(task: str, template: str) -> str:
 def request(home: Home, task: str, template: str, seed: int, libraries, weights) -> str:
     """The writer's prompt, filled in for this template. `template` is the source as the node
     compiles it: dials applied, includes resolved, comments out."""
+    from orrery.dsl import with_inline
+
+    template, libraries = with_inline(template, libraries)
     name = task_name(task, template)
     if name != "continue" and any(_CHUNK.match(ln) for ln in template.splitlines()):
         raise WriterError("This writer writes one shot, and this template is a reel: its shot would take the "
@@ -215,4 +218,9 @@ def apply(task: str, template: str, text_: str) -> str:
         return f"{head}\n\n{text_.strip()}\n" if head else f"{text_.strip()}\n"
     comments = [ln for ln in lines if ln.strip().startswith("#")]
     params = [ln for ln in lines if re.match(r"\s*(:\s*\S|@(grid|unique|size|seed|batch|rng)\b)", ln)]
-    return "\n".join([*comments, text_.strip(), *params]) + "\n"
+    blocks, inside = [], False  # the template's own libraries stay, @lib line and entries
+    for ln in lines:
+        inside = bool(re.match(r"\s*@lib\s", ln)) or (inside and (ln[:1] in (" ", "\t") or not ln.strip()))
+        if inside and ln.strip():
+            blocks.append(ln)
+    return "\n".join([*comments, *blocks, text_.strip(), *params]) + "\n"

@@ -10,11 +10,13 @@ Every construct of orrery's template language, where libraries live, how Dynamic
 | `__characters/cyberpunk#gender:female__` | only entries with that property (`props: {gender: female}` in the YAML, or `gender:female` typed into an entry's tag field); several `#key:value` must all match, in any case |
 | `{a\|b\|c:3}` | inline choice; `:3` is a static weight (Dynamic Prompts' `{3::c\|a\|b}` works too) |
 | `{\|red }car` | an empty option makes a word optional; the other options keep their spaces |
+| `{30% in the rain}` | the words three times in ten, nothing otherwise, learned like a choice; when nothing rolls, the space before it goes too (`a fox {30% in the rain}.` → `a fox.`) |
 | `{1-2$$__style__}` | pick 1–2 distinct values, joined with `, `; `{2$$ and $$a\|b\|c}` joins them with ` and ` (Dynamic Prompts' form) |
 | `{0.4-0.9}`, `{2-6}` | a number in between (both included), at the decimals written; recorded as a pick that learns per value, or per tenth of a finer range (`0.40–0.44`) |
 | `<lora:style:0.4-0.9>` | a LoRA strength rolled per run, recorded as the pick `<lora:style>` (`:0.2-0.5` after it for CLIP); with a step (`0-1;0.1`) or a list it is a sweep instead ([wildcard-manager.md](wildcard-manager.md)) |
 | `@style(0.8)` | short for `<lora:style:0.8>`, with every strength form: `@style(0.4-0.9)`, `@style(0.5,0.7)`, `@style(1.0:0.5)` |
 | `$hero = __animal__` | bind once, reuse everywhere |
+| `@lib crowd` + indented lines | a library of this template's own, `__crowd__`: each indented line an entry (a template itself; `- ` before it allowed). It shadows a library of the same name, travels with the preset, and the language model never writes it |
 | `@include effects/living_clay` + indented `room = the salon` | embed a preset where it stands; indented `key = value` lines turn its dials, so a preset is an operator with parameters (its `@h3` line gives way to yours) |
 | `$w.sfx` | a property of the entry `$w` rolled (empty if it has none): the sound follows the weather. A property is a template like an entry (`{a\|b}`, `__lib__`, `$w`, LoRA tags), rolled once when `$w` is bound, so every `$w.sfx` reads the same; filters and `?` conditions compare it as written |
 | `__world/habitats#habitat:$animal.habitat__` | a filter that depends on what was rolled before (`#key:$var` or `#key:$var.field`): the manta ray lands in the sea, never on a beach |

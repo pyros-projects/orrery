@@ -839,6 +839,11 @@ def test_size_comes_from_the_size_directive(home):
     assert shape("@h3 t2va 16:9\n: w832 h1216\nSHOT 5s\nA.")[:2] == (832, 1216)
 
 
+def test_the_node_runs_a_template_with_its_own_library_without_a_language_model(home):
+    text, picks, *_ = OrreryPrompt().run("@lib mood\n  calm\n  tense\nA __mood__ __animal__.", 3, "text", home=str(home))
+    assert text.split()[1] in ("calm", "tense") and not [i for i in json.loads(picks)["lint"] if i["severity"] != "info"]
+
+
 def test_every_sweep_run_is_a_new_run_for_comfyui():
     a = OrreryPrompt.IS_CHANGED(SWEEP, 5, "text", sweep="0|x")
     assert a != OrreryPrompt.IS_CHANGED(SWEEP, 5, "text", sweep="1|x")

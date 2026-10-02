@@ -31,6 +31,7 @@ from orrery.dsl import (
     parse,
     strip_comments,
     wanted_libraries,
+    with_inline,
 )
 from orrery.h3 import DEFAULT_CONTEXT, compile_scene, image_slots, render_scene
 from orrery.h3_ref import word_issue
@@ -260,7 +261,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     dials = {k: v for k, v in dial_values(params).items() if k in known}
     source = long_form(strip_comments(resolve_includes(h, override(template, dials))))  # the hash keeps the comments
     plan, sweep_picks, sweep_data, folder, cell = sweeps.runs(source), [], None, "", None
-    grid = batches.axes(source, h.libraries()) if parse(source).params.grid is not None else []
+    grid = batches.axes(*with_inline(source, h.libraries())) if parse(source).params.grid is not None else []
     cells = batches.cells(grid) if grid else 1
     planned = sweep_formula(source, grid)
     if plan or grid:  # a LoRA sweep or a grid: this queue item is one of its runs (the first, from ComfyUI's own Run)

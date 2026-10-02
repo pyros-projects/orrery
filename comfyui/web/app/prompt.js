@@ -1,5 +1,5 @@
 // Prompt tab: preset bar, the highlighted editor with completion, dials, and a way into Test.
-import { suggest } from "../orrery-complete.js";
+import { inlineLibraries, suggest } from "../orrery-complete.js";
 import { esc, highlight } from "./highlight.js";
 import { icon } from "./icons.js";
 import { applyDials, chunkInfo, dials, folderColor, pickerGroups, shape, stats, stripComments, sweepPlan, matches, templateHash } from "./model.js";
@@ -306,6 +306,8 @@ const setDials = (app) => Object.keys(app.bridge.getParams()).length;
 function dialChoices(app, d) {
   if (d.options.length) return d.options;
   if (!d.lib) return [];
+  const own = inlineLibraries(app.text).find((l) => l.name === d.lib);  // the template's @lib wins
+  if (own) return own.entries;
   if (!app.data.libraries) {
     app.libsLoading ??= app.api.libraries().then((r) => { app.data.libraries = r.libraries; renderDials(app); })
       .catch(() => { app.data.libraries = []; });

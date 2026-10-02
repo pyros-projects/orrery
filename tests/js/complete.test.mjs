@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { suggest, missingLibraries } from "../../comfyui/web/orrery-complete.js";
+import { suggest, missingLibraries, inlineLibraries } from "../../comfyui/web/orrery-complete.js";
 
 const DATA = {
   libraries: [
@@ -182,4 +182,11 @@ test("@ at the start of a line offers the directives", () => {
   assert.deepEqual(s.items.map((i) => i.insert), ["@grid "]);
   assert.equal(s.replaceFrom, 6);
   assert.equal(at("a fox @g").items.length, 0);
+});
+
+test("the template's own libraries complete, highlight and are not missing", () => {
+  const text = "@lib crowd\n  a few __animal__s\n  - a lone __animal__\nA meadow with __cr";
+  assert.deepEqual(inlineLibraries(text), [{ name: "crowd", entries: ["a few __animal__s", "a lone __animal__"] }]);
+  assert.ok(suggest(text, text.length, DATA).items.some((i) => i.insert === "__crowd__"));
+  assert.deepEqual(missingLibraries("@lib crowd\n  x\n__crowd__ __nope__", DATA), ["nope"]);
 });

@@ -438,3 +438,7 @@ test("directives: @size shapes the node, @seed and @batch are the CLI's, @rng 1 
   assert.match(highlight("@batch 8", known), /t-cli/);
   assert.equal(withDice("@h3 t2va\nSHOT 5s\nA.", {}), "@h3 t2va\n@rng 1\nSHOT 5s\nA.");
 });
+
+test("a chance is on or off, not a list for the dials", () => {
+  assert.deepEqual(dials("$r = {30% in the rain}\n$c = {30% off|half price}").map((d) => d.options), [[], ["30% off", "half price"]]);
+});

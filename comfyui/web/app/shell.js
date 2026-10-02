@@ -1,4 +1,5 @@
 // The orrery app: one element that lives in the node or, in the big view, over the canvas.
+import { inlineLibraries } from "../orrery-complete.js";
 import { client } from "./api.js";
 import { renderGalaxy } from "./galaxy.js";
 import { renderHelp } from "./help.js";
@@ -72,7 +73,9 @@ export class OrreryApp {
     else delete this.bridge.props.orrery_preset;
   }
   card(name) { return this.data.presets.find((p) => p.name === name); }
-  known() { return new Set((this.data.completion?.libraries || []).map((l) => l.name)); }
+  known() {  // the home's libraries and the template's own (@lib)
+    return new Set([...(this.data.completion?.libraries || []).map((l) => l.name), ...inlineLibraries(this.text).map((l) => l.name)]);
+  }
   llmActive() { return !!this.data.llm?.file; }
   dirty() { return this.preset ? this.base !== null && this.text !== this.base : this.text.trim() !== ""; }
 

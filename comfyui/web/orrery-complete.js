@@ -175,8 +175,33 @@ function directiveItems(line) {
   return items.length ? { items, replaceFrom: -m[1].length } : null;
 }
 
+// The template's own libraries: `@lib name` and its indented entry lines (mirrors orrery.dsl.inline_libraries).
+export function inlineLibraries(text) {
+  const out = [];
+  let current = null;
+  for (const raw of text.split("\n")) {
+    const m = /^\s*@lib\s+(\w+(?:\/\w+)*)\s*$/.exec(raw);
+    if (m) { current = { name: m[1], entries: [] }; out.push(current); continue; }
+    if (current && (/^[ \t]/.test(raw) || !raw.trim())) {
+      const entry = raw.trim().replace(/^- /, "");
+      if (entry && !entry.startsWith("#")) current.entries.push(entry);
+      continue;
+    }
+    current = null;
+  }
+  return out;
+}
+
+const withInline = (text, data) => {
+  const inline = inlineLibraries(text);
+  if (!inline.length) return data;
+  const own = inline.map((l) => ({ name: l.name, count: l.entries.length, source: "template", tags: [], sample: l.entries.slice(0, 3), props: {} }));
+  return { ...data, libraries: [...own, ...data.libraries.filter((l) => !inline.some((i) => i.name === l.name))] };
+};
+
 export function suggest(text, caret, data) {
   if (!data) return NONE;
+  data = withInline(text, data);
   const before = text.slice(0, caret);
   const line = before.slice(before.lastIndexOf("\n") + 1);
   if (/^\s*#/.test(line)) return NONE;
@@ -193,7 +218,7 @@ export function suggest(text, caret, data) {
 }
 
 export function missingLibraries(text, data) {
-  const known = new Set(data.libraries.map((l) => l.name));
+  const known = new Set([...data.libraries.map((l) => l.name), ...inlineLibraries(text).map((l) => l.name)]);
   const names = [...uncommented(text).replace(/<lora:[^<>]*>/g, "").matchAll(/__(\w+(?:\/\w+)*)(?:\[[^\[\]\n]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__/g)].map((m) => m[1]);
   return [...new Set(names)].filter((n) => !known.has(n));
 }

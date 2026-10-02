@@ -616,10 +616,11 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
     images are renumbered to the ones this clip uses (Orrery Refs hands on only those). `cell`: the
     run of a `: grid` (orrery.batch); None rolls its axes."""
     from orrery.batch import prepare
-    from orrery.dsl import parse
+    from orrery.dsl import parse, with_inline
     from orrery.reel import build_segment, split_reel
+
     lint: list[Issue] = []
-    src = strip_comments(src)
+    src, libraries = with_inline(strip_comments(src), libraries)
     reel = split_reel(src)
     params = parse(src).params
     if reel and (params.grid is not None or params.unique):

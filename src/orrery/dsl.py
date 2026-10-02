@@ -15,7 +15,7 @@ import zlib
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 
-from orrery.library import Library
+from orrery.library import Entry, Library
 from orrery.loras import long_form
 from orrery.rng import Rng, weighted_pick
 from orrery.sweep import concrete as sweep_tag
@@ -52,6 +52,8 @@ RNG = 2  # the dice: 2 gives every pick a stream of its own, 1 is the single str
 # one per line: @grid A × B · @unique $hero · @size 832x1216 · @seed 100 · @batch 8 · @rng 1 (the `:` line's aliases)
 _DIRECTIVE = re.compile(r"^@(grid|unique|size|seed|batch|rng)\b\s*(.*)$")
 DIRECTIVES = ("grid", "unique", "size", "seed", "batch", "rng")
+_LIB_BLOCK = re.compile(r"^@lib\s+(\w+(?:/\w+)*)\s*$")
+_CHANCE = re.compile(r"\s*(\d+(?:\.\d+)?)%\s+(.*\S)\s*", re.DOTALL)  # {30% in the rain}
 MAX_CHOICES = 2000  # {…} rolled in one expression: past it the braces keep coming back ({1$$__a__} in __a__)
 _PROP = re.compile(r"#([\w-]+):(\$?[\w.-]+)")  # a value may be $var or $var.field
 _ARTICLE = re.compile(r"(?:A|An|The) ")
@@ -142,11 +144,51 @@ def parse(template: str) -> _Parsed:
     return parsed
 
 
+def inline_libraries(template: str) -> tuple[str, dict[str, Library]]:
+    """The template without its `@lib name` blocks, and those libraries: each indented line under the
+    `@lib` line an entry (a template itself, `- ` before it allowed), until a line that is not indented.
+
+        @lib crowd
+          a few __animal__s
+          a lone __animal__
+    """
+    out, found, current = [], {}, None
+    for raw in template.split("\n"):
+        if m := _LIB_BLOCK.match(raw.strip()):
+            current = m.group(1)
+            found[current] = []
+            continue
+        if current is not None and (raw[:1] in (" ", "\t") or not raw.strip()):
+            entry = raw.strip()
+            entry = entry[2:].strip() if entry.startswith("- ") else entry
+            if entry and not entry.startswith("#"):
+                found[current].append(entry)
+            continue
+        current = None
+        out.append(raw)
+    for name, values in found.items():
+        if not values:
+            raise ValueError(f"@lib {name} has no entries: write them on indented lines under it.")
+    return "\n".join(out), {name: Library(name, [Entry(v) for v in values]) for name, values in found.items()}
+
+
+def with_inline(template: str, libraries: Mapping[str, Library]) -> tuple[str, Mapping[str, Library]]:
+    """The template's own libraries over the home's (a name in both: the template's)."""
+    if "@lib" not in template:
+        return template, libraries
+    text, inline = inline_libraries(template)
+    return text, {**libraries, **inline}
+
+
 def wanted_libraries(template: str) -> dict[str, int]:
-    """Every library a template uses, with the entries it asks for (`__name:N__`, else 0)."""
+    """Every library a template uses, with the entries it asks for (`__name:N__`, else 0); its own
+    `@lib` libraries are not wanted from anywhere else."""
     wanted: dict[str, int] = {}
     for m in _LIB.finditer(_LORA_TAG.sub("", template)):
         wanted[m.group(1)] = max(wanted.get(m.group(1), 0), int(m.group(4) or 0))
+    if "@lib" in template:
+        for name in inline_libraries(template)[1]:
+            wanted.pop(name, None)
     return wanted
 
 
@@ -432,7 +474,11 @@ class Expander:
             m = _BRACE.search(text)
             if not m:
                 break
-            text = text[: m.start()] + self._brace(m.group(1)) + text[m.end():]
+            rolled, start = self._brace(m.group(1)), m.start()
+            if not rolled and start and text[start - 1] == " " and text[m.end():m.end() + 1] in ("", " ", ",", ".", ";",
+                                                                                                ":", "!", "?", ")"):
+                start -= 1  # nothing rolled: the space before it goes too ("a fox {30% in the rain}.")
+            text = text[:start] + rolled + text[m.end():]
         else:
             if m := _BRACE.search(text):
                 raise ValueError(f"More than {MAX_CHOICES} {{…}} choices in one place, and {m.group(0)[:60]} is still "
@@ -537,6 +583,8 @@ class Expander:
         if m := _MULTI.match(inner):
             return self._multi(int(m.group(1)), int(m.group(2) or m.group(1)), m.group(4).strip(),
                                ", " if m.group(3) is None else m.group(3))
+        if (m := _CHANCE.fullmatch(inner)) and len(split_options(inner)) == 1:
+            return self._chance(float(m.group(1)), m.group(2), "{" + inner.strip() + "}", fixed)
         if m := _RANGE.fullmatch(inner):
             family = "{" + inner.strip() + "}"
             value, bin_ = self._number(m.group(1), m.group(2), family)
@@ -558,6 +606,15 @@ class Expander:
         value = options[i if fixed is None else fixed][0]
         shown = without_directions(value)
         self.picks.append(Pick(family, shown, (f"{family}={shown}",)))
+        return value
+
+    def _chance(self, percent: float, words: str, family: str, fixed: int | None = None) -> str:
+        """`{30% in the rain}`: the words three times in ten, nothing otherwise; learned like a choice."""
+        p = min(max(percent / 100, 0.0), 1.0)
+        weights = [p * self.learned(f"{family}={words}"), (1 - p) * self.learned(f"{family}=")]
+        i = weighted_pick(weights, self._stream(family)) if any(weights) else 1
+        value = words if (i if fixed is None else fixed) == 0 else ""
+        self.picks.append(Pick(family, value, (f"{family}={value}",)))
         return value
 
     def _multi(self, lo: int, hi: int, source: str, joiner: str = ", ") -> str:
@@ -631,6 +688,7 @@ def expand(template: str, seed: int, libraries: Mapping[str, Library],
     """`cell`: the run of the template's `: grid` (orrery.batch); None rolls its axes like any pick."""
     from orrery.batch import prepare
 
+    template, libraries = with_inline(template, libraries)
     template = prepare(template, seed, libraries, cell)
     parsed = parse(template)
     ex = Expander(seed, libraries, weights, parsed.params.rng)
@@ -648,7 +706,7 @@ def expand_batch(template: str, seed: int, count: int, libraries: Mapping[str, L
     from orrery.batch import axes, cells
     from orrery.loras import long_form
 
-    source = long_form(template)
+    source, libraries = with_inline(long_form(template), libraries)
     found = axes(source, libraries) if parse(source).params.grid is not None else []
     grid = range(cells(found)) if found else [None]
     return [expand(template, seed + i, libraries, weights, cell=c) for i in range(count) for c in grid]

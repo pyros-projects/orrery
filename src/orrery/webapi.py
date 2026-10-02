@@ -648,7 +648,9 @@ def grid_plan(home: Home, args: dict) -> dict:
     if parse(source).params.grid is None:
         return {"cells": 0, "formula": "", "axes": []}
     try:
-        found = batch.axes(source, home.libraries())
+        from orrery.dsl import with_inline
+
+        found = batch.axes(*with_inline(source, home.libraries()))
         return {"cells": batch.cells(found), "formula": batch.formula(found),
                 "axes": [{"text": a.text, "count": len(a.options)} for a in found]}
     except ValueError as err:

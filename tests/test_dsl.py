@@ -478,3 +478,46 @@ def test_a_condition_takes_the_same_brackets_and_reads_tags_props_and_the_value(
     assert seen("$c = __creature__\n{? $c[myth, size=small|tiny]: small myth|other}") == {"small myth", "other"}
     assert {t for t in seen("$c = __creature__\n? $c[wren]: It sings.\n$c") if "sings" in t} == {"It sings. wren"}
     assert seen("$c = __creature[bird]__\n? $c[!myth]: no myth\n? $c[myth]: myth") == {"no myth", "myth"}
+
+
+# --- second pass: the template's own libraries, chance (phase 5) -------------------------------
+
+CROWD = "@lib crowd\n  a few __animal__s\n  - a lone __animal__\n\nA meadow with __crowd__."
+
+
+def test_a_template_brings_its_own_libraries():
+    texts = {expand(CROWD, s, LIBS).text for s in range(40)}
+    assert any(t.startswith("A meadow with a few ") for t in texts) and any("a lone " in t for t in texts)
+    assert wanted_libraries(CROWD) == {"animal": 0}  # never asked of the language model
+    shadow = "@lib animal\n  a unicorn\n__animal__"
+    assert expand(shadow, 1, LIBS).text == "a unicorn" and expand(shadow, 1, LIBS).picks[0].keys == ("__animal__=a unicorn",)
+    assert [expand(CROWD + "\n@grid __crowd__", 2, LIBS, cell=c).text.split(" with ")[1][:5] for c in range(2)] == ["a few", "a lon"]
+    with pytest.raises(ValueError, match="no entries"):
+        expand("@lib empty\na __empty__", 1, LIBS)
+
+
+def test_a_screenplay_and_a_reel_have_their_own_libraries_too():
+    from orrery.h3 import compile_scene
+
+    h3 = "@h3 t2va\n@lib mood\n  calm\n  tense\nSHOT 5s: static\nA __mood__ street.\nSFX: wind"
+    assert compile_scene(h3, 2, LIBS).scene.shots[0].items[0] in ("A calm street.", "A tense street.")
+    reel = "@h3 t2va\n@lib mood\n  calm\nCHUNK a repeat 2\nSHOT 5s: static\nA __mood__ street."
+    assert "calm" in compile_scene(reel, 2, LIBS, segment=1).text
+
+
+def test_a_chance_adds_its_words_that_often_and_takes_its_space_along():
+    hits = sum("in the rain" in expand("a fox {30% in the rain}.", s, {}).text for s in range(1000))
+    assert 250 < hits < 350
+    assert {expand("a fox {30% in the rain}.", s, {}).text for s in range(30)} == {"a fox.", "a fox in the rain."}
+    assert {expand("a fox {30% in the rain}.", s, {}, {"{30% in the rain}=": 0.0}).text for s in range(10)} == {
+        "a fox in the rain."}  # learned like a choice
+    assert expand("{30% off|half price}", 1, {}).text in ("30% off", "half price")  # a choice, not a chance
+    assert [expand("a fox {30% in the rain}\n@grid {30% in the rain}", 1, {}, cell=c).text for c in (0, 1)] == [
+        "a fox in the rain", "a fox"]
+
+
+def test_the_writers_keep_the_templates_own_libraries():
+    from orrery.writers import apply
+
+    assert apply("describe", "@lib mood\n  calm\na photo\n@size 832x1216\n", "A fox.") == \
+        "@lib mood\n  calm\nA fox.\n@size 832x1216\n"

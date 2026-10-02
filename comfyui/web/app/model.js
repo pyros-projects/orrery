@@ -356,7 +356,8 @@ export function dials(text) {
   const seen = new Set();  // a binding set in several chunks is one dial; override() turns them all
   return text.split("\n").map((l) => BINDING_LINE.exec(l)).filter((m) => m && !seen.has(m[2]) && seen.add(m[2])).map((m) => {
     const expr = m[4].trim(), lib = /^__(\w+(?:\/\w+)*)(?:\[([^\[\]\n]+)\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\([^()]*\))?$/.exec(expr), brace = /^\{([^{}]*)\}$/.exec(expr);
-    const range = brace && /^\s*-?\d+(\.\d+)?\s*-\s*-?\d+(\.\d+)?\s*$/.test(brace[1]);  // {0.4-0.9} rolls a number: no list
+    const range = brace && (/^\s*-?\d+(\.\d+)?\s*-\s*-?\d+(\.\d+)?\s*$/.test(brace[1])  // {0.4-0.9} rolls a number: no list
+      || (/^\s*\d+(\.\d+)?%\s/.test(brace[1]) && splitOptions(brace[1]).length === 1));  // {30% …}: on or off
     const options = brace && !range && !brace[1].includes("$$") ? splitOptions(brace[1]).map((o) => o.replace(/:\d+(\.\d+)?$/, "").replace(/^\s*\d+(\.\d+)?::/, "").trim()).filter(Boolean) : [];
     return { name: m[2], expr, lib: lib ? lib[1] : null, tag: lib ? lib[2] || null : null, options };
   });
