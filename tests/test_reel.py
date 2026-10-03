@@ -484,7 +484,7 @@ def test_set_lines_turn_the_dials_in_the_head_and_per_chunk():
     src = LEAVES.replace("CAST\nEMMA (refmod emma_canon)", "SET: emma_canon(0.8)\nCAST\nEMMA (refmod emma_canon_Video, image 1)").replace(
         "EMMA slides back", "SET: image_1(0.5,0.35)\nSET: emma_canon_Video(0.4, 20%)\nEMMA slides back")
     first, _, back = (ref2va(src, segment=s) for s in range(3))
-    assert [(m["strength"], m["from"]) for m in first.refmods] == [(0.8, 0.35)] and first.images == []
+    assert [(m["strength"], m["from"]) for m in first.refmods] == [(0.8, 0.0)] and first.images == []
     assert [(m["strength"], m["from"]) for m in back.refmods] == [(0.4, 0.2)]
     assert back.images == [{"ref": 1, "image": 1, "member": "EMMA", "strength": 0.5, "from": 0.35}]
     assert "SET" not in back.text  # never prose

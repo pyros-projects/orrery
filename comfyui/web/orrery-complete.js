@@ -239,8 +239,8 @@ function refmodItems(before, line, data) {
   if (word === undefined || (!after && !word)) return null;
   const options = after ? [
     ...(/\bat\b/i.test(after[1]) ? [] : [["at 1", "its strength: 1 as it is, 0.5 about half its share of attention"]]),
-    ...(/\bfrom\b/i.test(after[1]) ? [] : [["from 35%", "the share of sampling it sits out, where the picture is laid out"]]),
-  ] : [["refmod ", "a RefMod from models/refmods: refmod NAME at 1 from 35%"],
+    ...(/\bfrom\b/i.test(after[1]) ? [] : [["from 35%", "it waits while the picture is laid out: a place drags less of its framing along"]]),
+  ] : [["refmod ", "a RefMod from models/refmods: refmod NAME at 1"],
        ["global", "its RefMods go with every clip, not only with the clips that name it"]];
   const items = options.filter(([o]) => startsWith(o, word)).map(([insert, detail]) => ({ insert, detail, preview: "" }));
   return items.length ? { items, replaceFrom: before.length - word.length } : null;
@@ -256,7 +256,7 @@ function setItems(before, line, text) {
   const refmods = [...new Set([...cast.matchAll(/\brefmod\s+([\w./-]+)/g)].map((r) => r[1]))];
   const images = [...new Set([...cast.matchAll(/^\s*[A-Z][A-Z0-9 _-]*?\s*\(([^)]*)\)\s*:/gm)]
     .flatMap((c) => [...c[1].matchAll(/\bimage\s+(\d+)/g)].map((i) => Number(i[1]))))].sort((a, b) => a - b);
-  const targets = [...refmods.map((r) => [`${r}(1, 35%)`, "a RefMod: (strength, start)"]),
+  const targets = [...refmods.map((r) => [`${r}(1, 0%)`, "a RefMod: (strength, start)"]),
                    ...images.map((n) => [`image_${n}(1, 0%)`, "a picture: (strength, start)"])];
   const items = targets.filter(([t]) => startsWith(t, token[1])).map(([insert, detail]) => ({ insert, detail, preview: "" }));
   return items.length ? { items, replaceFrom: before.length - token[1].length } : null;
@@ -266,8 +266,9 @@ function setItems(before, line, text) {
 function refmodsLineItems(before, line) {
   const m = /^\s*refmods:\s*(.*)$/.exec(line);
   if (!m) return null;
-  const items = [["at 1 from 35%", "strength 1, from 35% of sampling on: orrery's defaults"],
-                 ["at 0.5", "every RefMod at half its share of attention"], ["from 0%", "every RefMod from the first step"]]
+  const items = [["at 1 from 0%", "strength 1, from the first step: orrery's defaults"],
+                 ["at 0.5", "every RefMod at half its share of attention"],
+                 ["from 35%", "every RefMod waits while the picture is laid out: for places"]]
     .filter(([o]) => startsWith(o, m[1]) && o !== m[1]).map(([insert, detail]) => ({ insert, detail, preview: "" }));
   return items.length ? { items, replaceFrom: before.length - m[1].length } : null;
 }
