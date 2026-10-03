@@ -1,0 +1,57 @@
+# The leave-and-return cases as branches (#76): every case continues scene 2, so one Generate ×8 from
+# clip 1 renders the whole table at seed 7. Written in DSL 2.0 (SCENE, END ON:, AFTER:).
+@h3 references 2:3 0.6MP
+style: live-action, TikTok reel
+context: 22
+
+CAST
+JINX (refmod minimaxh3_jinx_v1_refmod, image 1): a skinny and pretty alternative young woman around 20 years old.
+
+SCENE 1
+SHOT 7s: static
+SEND: frame 30 to image 1
+JINX is showcasing her outfit. JINX is wearing __80s/80s_women_clothing_combined__ and has __80s/80s_women_hair_combined__ and her hair is of __80s/colors/80s_colors__ color for a 80's party she is going. After 3s someone is ringing at the door and JINX goes looking and is leaving the scene to the side and is completely out of frame after 5s. After 5s the camera is filming an empty room.
+END ON: the camera is filming only the room.
+
+SCENE 2
+SHOT 5s: static
+The camera is filming a room. nothing is happening.
+END ON: the camera is filming only the room.
+
+SCENE case A
+AFTER: 2
+SET: image_1(0), minimaxh3_jinx_v1_refmod(0)
+SHOT 7s: static
+JINX is entering the scene from the side and standing in front of the camera. JINX is showcasing her outfit.
+
+SCENE case C
+AFTER: 2
+SET: image_1(1), minimaxh3_jinx_v1_refmod(0)
+SHOT 7s: static
+JINX is entering the scene from the side and standing in front of the camera. JINX is showcasing her outfit.
+
+SCENE case L
+AFTER: 2
+SET: image_1(0.01), minimaxh3_jinx_v1_refmod(0)
+SHOT 7s: static
+JINX is entering the scene from the side and standing in front of the camera. JINX is showcasing her outfit.
+
+SCENE case M
+AFTER: 2
+SET: image_1(1, 35%), minimaxh3_jinx_v1_refmod(0)
+SHOT 7s: static
+JINX is entering the scene from the side and standing in front of the camera. JINX is showcasing her outfit.
+
+SCENE case N
+AFTER: 2
+SET: image_1(1, 0%, 10%), minimaxh3_jinx_v1_refmod(0)
+SHOT 7s: static
+JINX is entering the scene from the side and standing in front of the camera. JINX is showcasing her outfit.
+
+# AFTER: nothing: a fresh start, no pinned frames and no opening sentence. What was sent does not
+# reach it either (see #39), so here only the RefMod brings Jinx.
+SCENE fresh
+AFTER: nothing
+SET: minimaxh3_jinx_v1_refmod(1)
+SHOT 7s: static
+JINX is standing in front of the camera in a room. JINX is showcasing her outfit.
