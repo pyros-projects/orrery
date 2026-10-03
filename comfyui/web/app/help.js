@@ -39,7 +39,7 @@ const REF = [
     ["<lora:style:0.4-0.9>", "a range without a step: the strength rolls per run and is recorded as a pick", ""],
     ["@style(0.8)", "short for <lora:style:0.8>, with every strength form: @style(0.4-0.9), @style(0.5,0.7)", ""],
     ["LORA: __my_lora_sets__", "a library of LoRA sets: each entry one or more tags (or \"\" for none); the set that rolled is a pick, and @grid __my_lora_sets__ runs each once", "LORA: __"],
-    ["@grid __style__ × {dawn|noon}", "every combination, one run each; the rest rolls the same in all. Axes: a library, a choice or a $binding. Roll queues them all (times a LoRA sweep)", "@grid "],
+    ["@grid __style__ × {dawn|noon}", "every combination, one run each; the rest rolls the same in all. Axes: a library, a choice or a $binding (dialed to one value: a grid of one). Roll queues them all (times a LoRA sweep)", "@grid "],
     ["@unique $hero", "seeds in a row never repeat it (8 seeds, 8 heroes); the seed's control after generate goes to increment", "@unique "],
     ["@size 832x1216", "the node's width and height outputs (wire them into your latent)", "@size 832x1216"],
     ["@batch 8  @seed 100", "CLI only (orrery expand); in ComfyUI use the Run count and the seed widget", ""],

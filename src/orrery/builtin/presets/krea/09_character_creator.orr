@@ -1,0 +1,32 @@
+---
+title: "Character creator"
+note: "An original character for Krea 2, built the way character designers build one: a silhouette (build and clothes), one signature colour carried through the outfit and its accents, one detail you remember, a face, hair that fits the age, a genre. Every $binding is a dial: pin the genre, the colour, the age, an accessory, the look, and the rest still rolls. One seed is one character, and the grid shows it from four sides: a portrait, a three-quarter view, a full figure and a profile, ready as references for H3 or a RefMod. Set $view to one of them to try characters faster."
+tags: [krea, characters, references]
+---
+$genre = {everyday:3|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}
+$colour = __characters/creator/colour__
+$gender = {woman:4|man:4|nonbinary person}
+$fit = {IF $gender is woman: women|{IF $gender is man: men|all}}
+$age = {young:3|prime:3|middle-aged:2|old:2}
+$years = {IF $age is young: {19-26}|{IF $age is prime: {27-39}|{IF $age is middle-aged: {40-58}|{59-79}}}}
+$origin = __characters/creator/origin__
+$build = __characters/creator/build__
+$face = __characters/creator/face__
+$eyes = __characters/creator/eyes__
+$haircolour = {IF $age is old: {silver|white|snow-white|iron-grey|salt-and-pepper}|{IF $age is young: {__characters/creator/haircolour__:4|$colour-dyed}|{IF $age is middle-aged: {__characters/creator/haircolour__:3|greying|salt-and-pepper}|__characters/creator/haircolour__}}}
+$hair = __characters/creator/hair[fit=$fit|all]__
+$mark = __characters/creator/mark__
+$outfit = __characters/creator/outfit[genre=$genre, fit=$fit|all]__
+$accessorize = {no:3|yes:2}
+$accessory = __characters/creator/accessory[fit=$fit|all]__
+$presence = __characters/creator/presence__
+$backdrop = a seamless mid-grey studio backdrop
+# The grid runs every view: one character from four sides. Set $view to one of them to try characters faster.
+$look = {photo:6|animated:2|anime:2|painted}
+$view = {portrait|three-quarter|full-length|profile}
+$opening = {IF $look is photo: A studio photograph|{IF $look is animated: A 3D character render, in the style of a modern animated feature film,|{IF $look is anime: An anime character design|A gouache character study}}}
+$frame = {IF $view is portrait: A head-and-shoulders portrait, facing the camera|{IF $view is three-quarter: A head-and-shoulders view turned three-quarters to the left|{IF $view is full-length: A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera|A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible}}}
+$finish = {IF $look is photo: Shot on an 85mm lens at eye level, true colours.|{IF $look is animated: Stylised proportions, soft subsurface skin.|{IF $look is anime: Clean line art and flat cel shading.|Visible brush strokes on warm paper.}}}
+$opening of a $years-year-old $gender of $origin: $build, $face, $eyes, $hair and $mark. Dressed in $outfit{IF $accessorize is yes: , wearing $accessory|}, with $presence. $frame, against $backdrop, in soft, even light. $finish
+@size 832x1216
+@grid $view

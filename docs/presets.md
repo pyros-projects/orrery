@@ -24,7 +24,12 @@ Built-in presets are read-only (`preset save NAME @NAME` makes a copy yours):
 to a three-shot H3 scene, an endless reel and the language model's lists,
 slots and `>` rewrites, `krea/` holds Krea 2 stills (natural language, the medium named, text
 to render in quotes; the cabinet of curiosities deals a different specimen to every seed with
-`@unique` and shoots each in three lights with `@grid`), and `h3/` holds MiniMax H3 scenes (dialogue in German
+`@unique` and shoots each in three lights with `@grid`; the character creator rolls an original
+character from parts the way designers build one (a silhouette, a signature colour carried through
+clothes and accents, one detail you remember, a face, hair that fits the age, a genre), every part a
+dial, and shows it from four sides: portrait, three-quarter, full figure and profile, on a grey
+studio backdrop, ready as references for H3 or a RefMod; set `$view` to one of them to try
+characters faster), and `h3/` holds MiniMax H3 scenes (dialogue in German
 and Cantonese, a voiceover, fast cuts, an animated fable, on-screen music, and
 an I2VA starter for your own stills, a three-clip reel for H3 Motion
 Context, a drone flight, an impossible camera move that dives into a dewdrop

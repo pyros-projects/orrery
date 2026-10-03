@@ -1,0 +1,1257 @@
+{
+ "preset": "krea/09_character_creator",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A studio photograph of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes. Dressed in a crimson reflective rain poncho over a black tracksuit, wearing a crimson beret tilted to one side, with a steady, amused half-smile. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "cyberpunk"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged"
+      ],
+      [
+       "{19-26}",
+       "25"
+      ],
+      [
+       "{27-39}",
+       "28"
+      ],
+      [
+       "{40-58}",
+       "58"
+      ],
+      [
+       "{59-79}",
+       "61"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Indian descent, with {warm brown|light brown|deep brown} skin"
+      ],
+      [
+       "{warm brown|light brown|deep brown}",
+       "light brown"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a sprinter's strong legs"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes"
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "salt-and-pepper"
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "$colour-dyed"
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "salt-and-pepper"
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "loose $haircolour curls on top over a tight fade"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a $colour reflective rain poncho over a black tracksuit"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "a $colour beret tilted to one side"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a steady, amused half-smile"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "portrait"
+      ]
+     ]
+    },
+    {
+     "cell": 1,
+     "text": "A studio photograph of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes. Dressed in a crimson reflective rain poncho over a black tracksuit, wearing a crimson beret tilted to one side, with a steady, amused half-smile. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "cyberpunk"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged"
+      ],
+      [
+       "{19-26}",
+       "25"
+      ],
+      [
+       "{27-39}",
+       "28"
+      ],
+      [
+       "{40-58}",
+       "58"
+      ],
+      [
+       "{59-79}",
+       "61"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Indian descent, with {warm brown|light brown|deep brown} skin"
+      ],
+      [
+       "{warm brown|light brown|deep brown}",
+       "light brown"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a sprinter's strong legs"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes"
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "salt-and-pepper"
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "$colour-dyed"
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "salt-and-pepper"
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "loose $haircolour curls on top over a tight fade"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a $colour reflective rain poncho over a black tracksuit"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "a $colour beret tilted to one side"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a steady, amused half-smile"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "three-quarter"
+      ]
+     ]
+    },
+    {
+     "cell": 2,
+     "text": "A studio photograph of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes. Dressed in a crimson reflective rain poncho over a black tracksuit, wearing a crimson beret tilted to one side, with a steady, amused half-smile. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "cyberpunk"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged"
+      ],
+      [
+       "{19-26}",
+       "25"
+      ],
+      [
+       "{27-39}",
+       "28"
+      ],
+      [
+       "{40-58}",
+       "58"
+      ],
+      [
+       "{59-79}",
+       "61"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Indian descent, with {warm brown|light brown|deep brown} skin"
+      ],
+      [
+       "{warm brown|light brown|deep brown}",
+       "light brown"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a sprinter's strong legs"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes"
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "salt-and-pepper"
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "$colour-dyed"
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "salt-and-pepper"
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "loose $haircolour curls on top over a tight fade"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a $colour reflective rain poncho over a black tracksuit"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "a $colour beret tilted to one side"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a steady, amused half-smile"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "full-length"
+      ]
+     ]
+    },
+    {
+     "cell": 3,
+     "text": "A studio photograph of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes. Dressed in a crimson reflective rain poncho over a black tracksuit, wearing a crimson beret tilted to one side, with a steady, amused half-smile. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "cyberpunk"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged"
+      ],
+      [
+       "{19-26}",
+       "25"
+      ],
+      [
+       "{27-39}",
+       "28"
+      ],
+      [
+       "{40-58}",
+       "58"
+      ],
+      [
+       "{59-79}",
+       "61"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Indian descent, with {warm brown|light brown|deep brown} skin"
+      ],
+      [
+       "{warm brown|light brown|deep brown}",
+       "light brown"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a sprinter's strong legs"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes"
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "salt-and-pepper"
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "$colour-dyed"
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "salt-and-pepper"
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "loose $haircolour curls on top over a tight fade"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a $colour reflective rain poncho over a black tracksuit"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "a $colour beret tilted to one side"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a steady, amused half-smile"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "profile"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A studio photograph of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe. Dressed in a mustard-yellow pleated skirt with chrome buckles and a short mesh top, wearing chunky mustard-yellow headphones around the neck, with a brooding, lowered brow. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "cyberpunk"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young"
+      ],
+      [
+       "{19-26}",
+       "24"
+      ],
+      [
+       "{27-39}",
+       "33"
+      ],
+      [
+       "{40-58}",
+       "56"
+      ],
+      [
+       "{59-79}",
+       "61"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tibetan descent, with {weathered tan|light brown} skin"
+      ],
+      [
+       "{weathered tan|light brown}",
+       "weathered tan"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "short and broad, with a wrestler's build"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes"
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver"
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__"
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "__characters/creator/haircolour__"
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown"
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a $colour pleated skirt with chrome buckles and a short mesh top"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "chunky $colour headphones around the neck"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a brooding, lowered brow"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "portrait"
+      ]
+     ]
+    },
+    {
+     "cell": 1,
+     "text": "A studio photograph of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe. Dressed in a mustard-yellow pleated skirt with chrome buckles and a short mesh top, wearing chunky mustard-yellow headphones around the neck, with a brooding, lowered brow. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "cyberpunk"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young"
+      ],
+      [
+       "{19-26}",
+       "24"
+      ],
+      [
+       "{27-39}",
+       "33"
+      ],
+      [
+       "{40-58}",
+       "56"
+      ],
+      [
+       "{59-79}",
+       "61"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tibetan descent, with {weathered tan|light brown} skin"
+      ],
+      [
+       "{weathered tan|light brown}",
+       "weathered tan"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "short and broad, with a wrestler's build"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes"
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver"
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__"
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "__characters/creator/haircolour__"
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown"
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a $colour pleated skirt with chrome buckles and a short mesh top"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "chunky $colour headphones around the neck"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a brooding, lowered brow"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "three-quarter"
+      ]
+     ]
+    },
+    {
+     "cell": 2,
+     "text": "A studio photograph of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe. Dressed in a mustard-yellow pleated skirt with chrome buckles and a short mesh top, wearing chunky mustard-yellow headphones around the neck, with a brooding, lowered brow. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "cyberpunk"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young"
+      ],
+      [
+       "{19-26}",
+       "24"
+      ],
+      [
+       "{27-39}",
+       "33"
+      ],
+      [
+       "{40-58}",
+       "56"
+      ],
+      [
+       "{59-79}",
+       "61"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tibetan descent, with {weathered tan|light brown} skin"
+      ],
+      [
+       "{weathered tan|light brown}",
+       "weathered tan"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "short and broad, with a wrestler's build"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes"
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver"
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__"
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "__characters/creator/haircolour__"
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown"
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a $colour pleated skirt with chrome buckles and a short mesh top"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "chunky $colour headphones around the neck"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a brooding, lowered brow"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "full-length"
+      ]
+     ]
+    },
+    {
+     "cell": 3,
+     "text": "A studio photograph of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe. Dressed in a mustard-yellow pleated skirt with chrome buckles and a short mesh top, wearing chunky mustard-yellow headphones around the neck, with a brooding, lowered brow. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "cyberpunk"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young"
+      ],
+      [
+       "{19-26}",
+       "24"
+      ],
+      [
+       "{27-39}",
+       "33"
+      ],
+      [
+       "{40-58}",
+       "56"
+      ],
+      [
+       "{59-79}",
+       "61"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tibetan descent, with {weathered tan|light brown} skin"
+      ],
+      [
+       "{weathered tan|light brown}",
+       "weathered tan"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "short and broad, with a wrestler's build"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes"
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver"
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__"
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "__characters/creator/haircolour__"
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown"
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a $colour pleated skirt with chrome buckles and a short mesh top"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "chunky $colour headphones around the neck"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a brooding, lowered brow"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "profile"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A studio photograph of a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points. Dressed in a black military jacket with silver frogging and camel fringed epaulettes, with a sheepish, apologetic look. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "gothic"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged"
+      ],
+      [
+       "{19-26}",
+       "19"
+      ],
+      [
+       "{27-39}",
+       "28"
+      ],
+      [
+       "{40-58}",
+       "50"
+      ],
+      [
+       "{59-79}",
+       "69"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+      ],
+      [
+       "{light brown|copper-brown|dark brown}",
+       "copper-brown"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "trim and neatly proportioned"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes"
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver"
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__"
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "greying"
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "chin-length $haircolour two-strand twists"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a black military jacket with silver frogging and $colour fringed epaulettes"
+      ],
+      [
+       "{no|yes}",
+       "no"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "a battered cowboy hat"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a sheepish, apologetic look"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "portrait"
+      ]
+     ]
+    },
+    {
+     "cell": 1,
+     "text": "A studio photograph of a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points. Dressed in a black military jacket with silver frogging and camel fringed epaulettes, with a sheepish, apologetic look. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "gothic"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged"
+      ],
+      [
+       "{19-26}",
+       "19"
+      ],
+      [
+       "{27-39}",
+       "28"
+      ],
+      [
+       "{40-58}",
+       "50"
+      ],
+      [
+       "{59-79}",
+       "69"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+      ],
+      [
+       "{light brown|copper-brown|dark brown}",
+       "copper-brown"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "trim and neatly proportioned"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes"
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver"
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__"
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "greying"
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "chin-length $haircolour two-strand twists"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a black military jacket with silver frogging and $colour fringed epaulettes"
+      ],
+      [
+       "{no|yes}",
+       "no"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "a battered cowboy hat"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a sheepish, apologetic look"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "three-quarter"
+      ]
+     ]
+    },
+    {
+     "cell": 2,
+     "text": "A studio photograph of a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points. Dressed in a black military jacket with silver frogging and camel fringed epaulettes, with a sheepish, apologetic look. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "gothic"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged"
+      ],
+      [
+       "{19-26}",
+       "19"
+      ],
+      [
+       "{27-39}",
+       "28"
+      ],
+      [
+       "{40-58}",
+       "50"
+      ],
+      [
+       "{59-79}",
+       "69"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+      ],
+      [
+       "{light brown|copper-brown|dark brown}",
+       "copper-brown"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "trim and neatly proportioned"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes"
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver"
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__"
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "greying"
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "chin-length $haircolour two-strand twists"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a black military jacket with silver frogging and $colour fringed epaulettes"
+      ],
+      [
+       "{no|yes}",
+       "no"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "a battered cowboy hat"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a sheepish, apologetic look"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "full-length"
+      ]
+     ]
+    },
+    {
+     "cell": 3,
+     "text": "A studio photograph of a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points. Dressed in a black military jacket with silver frogging and camel fringed epaulettes, with a sheepish, apologetic look. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "gothic"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged"
+      ],
+      [
+       "{19-26}",
+       "19"
+      ],
+      [
+       "{27-39}",
+       "28"
+      ],
+      [
+       "{40-58}",
+       "50"
+      ],
+      [
+       "{59-79}",
+       "69"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+      ],
+      [
+       "{light brown|copper-brown|dark brown}",
+       "copper-brown"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "trim and neatly proportioned"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes"
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver"
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__"
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "greying"
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "chin-length $haircolour two-strand twists"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a black military jacket with silver frogging and $colour fringed epaulettes"
+      ],
+      [
+       "{no|yes}",
+       "no"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "a battered cowboy hat"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a sheepish, apologetic look"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "profile"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

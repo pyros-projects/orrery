@@ -4,7 +4,7 @@ and the batch parameters `: grid` and `unique=` (orrery.batch)."""
 import pytest
 
 from orrery import batch
-from orrery.dsl import expand, expand_batch, parse
+from orrery.dsl import expand, expand_batch, override, parse
 from orrery.h3 import compile_scene
 from orrery.library import Entry, Library
 from orrery.loras import long_form
@@ -102,6 +102,15 @@ def test_a_grid_runs_every_combination_and_nothing_else_moves():
 def test_a_grid_axis_may_be_a_binding_or_a_filtered_library():
     t = "$hero = __creature[myth|water]__\n$hero at {dawn|noon}\n: grid $hero"
     assert [expand(t, 1, LIBS, cell=c).text.split()[0] for c in range(4)] == ["dragon", "phoenix", "heron", "otter"]
+
+
+def test_a_grid_axis_dialed_to_one_value_is_a_grid_of_one():
+    t = "$view = {front|side|back}\n__creature__, seen from the $view\n: grid $view"
+    assert [expand(t, 4, LIBS, cell=c).text for c in range(3)] == [
+        expand(override(t, {"view": v}), 4, LIBS, cell=0).text for v in ("front", "side", "back")]
+    assert batch.axes(override(t, {"view": "side"}), LIBS)[0].options == ["side"]
+    lib = "$s = __style__\n$s, __style__ again\n: grid $s"  # a library dialed to its entry keeps it
+    assert [expand(override(lib, {"s": "clay"}), 4, LIBS, cell=0).text.split(",")[0]] == ["clay"]
 
 
 def test_expand_batch_gives_every_cell_at_each_seed():

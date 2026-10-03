@@ -9,6 +9,10 @@ checks) are left out.
 
 ### Added
 
+- A character creator for Krea 2 (`krea/09_character_creator`): an original character from about 800 parts
+  (a silhouette, a signature colour carried through clothes and accents, one detail you remember, a face,
+  hair that fits the age, seven genres, women in women's clothes and men in men's), every part a dial,
+  shown from four sides as references. A grid axis dialed to one value is a grid of one (#121).
 - The clips view is where a reel is worked: the default view, its clips big (a clip size in the
   settings sets their shorter side), the frames each `REMEMBER:` line takes cut from its clip as you
   type, where they go at the line's end, and a frame picked by eye written into the line (#97).
