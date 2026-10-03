@@ -1,7 +1,9 @@
 // The Write menu: the language model writes for the editor (the reel's next chunk, the shot between two
 // frames, a prompt from a picture). Each idea is a short run of its own (Orrery Write), browsed in a
 // sheet: ‹ › through the ideas so far, Another idea, Insert. A run writes once, so an idea that does not
-// fit is shown with what is wrong with it, and the next one is a click away.
+// fit is shown with what is wrong with it, and the next one is a click away. With an API endpoint the
+// server asks it directly, beside ComfyUI's queue (#167); and Write now writes a template's open libraries (#168).
+import { inlineLibraries } from "../orrery-complete.js";
 import { esc, highlight } from "./highlight.js";
 import { icon } from "./icons.js";
 import { stats } from "./model.js";
@@ -13,6 +15,47 @@ export const WRITERS = {
 };
 
 const WRITING = "The language model is writing. It loads first (a while the first time), and a run already in ComfyUI's queue goes before it.";
+const WRITING_API = "The language model is writing, over the API, beside ComfyUI's queue.";
+
+// The libraries a template still needs written: unknown ones, and `__name:N__` above what a library holds,
+// as orrery.autolib finds them (the server applies the dials and @include when it writes them). `own`: @lib.
+export function openLibraries(text, libraries, own = new Set()) {
+  const counts = new Map(libraries.map((l) => [l.name, l.count]));
+  const wanted = new Map();
+  const src = text.split("\n").filter((l) => !/^\s*#/.test(l)).join("\n").replace(/<lora:[^<>]*>/g, "");
+  for (const m of src.matchAll(/(?<!\\)__(\w+(?:\/\w+)*)(?:\[[^[\]\n]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::(\d+))?__/g)) {
+    wanted.set(m[1], Math.max(wanted.get(m[1]) || 0, Number(m[2] || 0)));
+  }
+  return [...wanted].filter(([name, n]) => !own.has(name) && (!counts.has(name) || counts.get(name) < n)).map(([name]) => name);
+}
+
+export async function writeNow(app) {
+  const open = openLibraries(app.text, app.data.completion?.libraries || [], new Set(inlineLibraries(app.text).map((l) => l.name)));
+  if (app.state.writingNow || !open.length) return;
+  app.state.writingNow = open.length;
+  if (app.state.tab === "prompt") app.render();
+  try {
+    const got = await app.api.writeLibraries({ template: app.text, params: app.bridge.getParams() });
+    await app.refreshCompletion();
+    app.toast(got.notes.length ? got.notes.map(esc).join("<br>") : "Nothing left to write: the libraries are there.",
+      got.asked.length ? { label: "Review", run: () => app.go("libraries") } : undefined);
+  } catch (err) { app.fail(err); } finally {
+    app.state.writingNow = 0;
+    if (app.state.tab === "prompt") app.render();
+  }
+}
+
+// One idea: over the API directly when the frames it needs are files ComfyUI holds (Load Image), else in a
+// run of its own (Orrery Write), which computes the frames.
+async function writeOne(app, task, idea, template) {
+  if (app.llmApi()) {
+    const files = task === "continue" ? { names: {} } : await app.bridge.frameFiles?.();
+    if (files && !files.other) {
+      return app.api.writeIdea({ task, idea, template, seed: Number(app.bridge.getSeed()) || 0, params: app.bridge.getParams(), frames: files.names });
+    }
+  }
+  return app.bridge.write(task, idea, template);
+}
 
 // Why a writer cannot run on this node now, or "" when it can.
 export function writerBlock(app, task) {
@@ -45,7 +88,7 @@ async function ask(app) {
   const idea = w.next++;
   showIdeas(app);
   let got;
-  try { got = await app.bridge.write(w.task, idea, w.sent); } catch (err) { got = { error: err?.message || String(err) }; }
+  try { got = await writeOne(app, w.task, idea, w.sent); } catch (err) { got = { error: err?.message || String(err) }; }
   w.pending = false;
   if (app.state.ideas !== w) return;  // another writer or another template since
   w.list.push({ ...got, idea });
@@ -64,8 +107,8 @@ function showIdeas(app) {
   const html = `<div class="panel ideas"><div class="row spread"><h4>${esc(WRITERS[w.task].label)}</h4>
       ${n ? `<span class="row"><button class="icon-btn" data-wact="prev" aria-label="Previous idea" ${w.i > 0 ? "" : "disabled"}>‹</button>`
         + `<span class="muted">idea ${w.i + 1} of ${n}</span><button class="icon-btn" data-wact="next" aria-label="Next idea" ${w.i < n - 1 ? "" : "disabled"}>›</button></span>` : ""}</div>
-    ${cur ? ideaHTML(app, cur) : `<div class="empty">${WRITING}</div>`}
-    <p class="muted flush">${cur && w.pending ? `${WRITING} ` : ""}${esc(WRITERS[w.task].goes)} Insert makes it an unsaved edit.</p>
+    ${cur ? ideaHTML(app, cur) : `<div class="empty">${app.llmApi() ? WRITING_API : WRITING}</div>`}
+    <p class="muted flush">${cur && w.pending ? `${app.llmApi() ? WRITING_API : WRITING} ` : ""}${esc(WRITERS[w.task].goes)} Insert makes it an unsaved edit.</p>
     <div class="acts"><button class="btn ghost" data-wact="close">Close</button>
       <button class="btn" data-wact="again" ${w.pending ? "disabled" : ""}>${icon("spark")}${w.pending ? "Writing…" : "Another idea"}</button>
       <button class="btn primary" data-wact="insert" ${cur?.template && !app.busy() ? "" : "disabled"}>${cur?.problem ? "Insert anyway" : "Insert"}</button></div></div>`;

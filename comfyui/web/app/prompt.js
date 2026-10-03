@@ -11,7 +11,7 @@ import { STARTERS } from "./starters.js";
 import { runRolls } from "./test.js";
 import { caretPoint, cellStart, inCell, jumpCell, paintCells, renderCells, wireCells } from "./cells.js";
 import { layoutTimeline, loadChain, scrollTimeline, wireTimeline } from "./timeline.js";
-import { openWrite, writeMenuHTML } from "./write.js";
+import { openLibraries, openWrite, writeMenuHTML, writeNow } from "./write.js";
 
 function statsHTML(app) {
   const st = stats(app.text), out = shape(app.text), plan = planOf(app), planned = planData(app);
@@ -30,7 +30,9 @@ function statsHTML(app) {
   const frames = reel ? ` · <b>${out.lengths.join(" / ")}</b> frames per scene` : st.h3 ? ` · <b>${out.length}</b> frames = ${(out.length / 24).toFixed(2)} s` : "";
   return timing
     + `<span class="stat"><b>${st.rolls}</b> rolls · <b>${st.libs}</b> libraries · <b>${st.binds}</b> bindings${setDials(app) ? ` · <b>${setDials(app)}</b> dialed` : ""}</span>`
-    + `${app.llmActive() ? `<span class="stat" title="Unknown __libraries__ and __name:N__ are made by this model when the node runs">LLM <b>${esc(app.data.llm.file.replace(/\.[a-z]+$/, ""))}</b></span>` : ""}`
+    + `${app.llmActive() ? `<span class="stat" title="Unknown __libraries__ and __name:N__ are made by this model when the node runs${app.llmApi()
+      ? "; an API endpoint, beside ComfyUI: no VRAM, no queue" : ""}">LLM <b>${esc(app.data.llm.active.name)}</b>${app.llmApi() ? " · API" : ""}</span>` : ""}`
+    + writeNowHTML(app)
     + (wired.length
       ? `<span class="stat" title="Width and height take the shape of the ${wired[0].replace("_", " ")} wired into the node, at the header's megapixels or H3's canvas area, so H3 does not stretch or crop it; the size is known when the node runs">→ size from the <b>${wired[0].replace("_", " ")}</b>${headerMP(app.text) ? ` · ${out.megapixels} MP` : ""}${frames}</span>`
       : `<span class="stat" title="The node's width, height, length and megapixels outputs${reel ? "; from the second clip on, length includes the 22 frames the clip continues from" : ""}">→ <b>${out.width}×${out.height}</b> · ${out.megapixels} MP${frames}</span>`)
@@ -52,6 +54,15 @@ function statsHTML(app) {
         + `<label class="rep" title="How many seeds: each runs the whole sweep, the seed stepping between them and after the last as its control after generate says">next<input type="number" min="1" max="999" value="${repeats(app)}" data-rep aria-label="Seeds per sweep">${plural(repeats(app), "seed")}</label>`
       : `<button class="btn primary" data-act="generate" title="Queue only what this node feeds, up to its Save nodes; their files go to the gallery">${icon("play")}Roll</button>`
         + `<label class="rep" title="How many runs Roll queues, one after another; seed and segment step between them as their control after generate says, so a reel plays that many clips">next<input type="number" min="1" max="999" value="${repeats(app)}" data-rep aria-label="Runs per Roll">${plural(repeats(app), reel ? "clip" : st.h3 ? "video" : "image")}</label>`);
+}
+
+// Write now (#168): with an API endpoint, the libraries the template still needs, written at once beside ComfyUI.
+function writeNowHTML(app) {
+  if (!app.llmApi()) return "";
+  if (app.state.writingNow) return `<span class="stat live">Writing <b>${app.state.writingNow}</b> librar${app.state.writingNow === 1 ? "y" : "ies"}…</span>`;
+  const open = openLibraries(app.text, app.data.completion?.libraries || [], new Set(inlineLibraries(app.text).map((l) => l.name)));
+  return open.length ? `<button class="btn ghost" data-act="writenow" title="Write ${esc(open.map((n) => `__${n}__`).join(", "))} now: each in a request of its own, all at once, beside ComfyUI. The next run finds them done; they wait for review in Libraries.">`
+    + `${icon("spark")}Write ${open.length} now</button>` : "";
 }
 
 // What Roll's number counts: "next 1 clip", "next 3 clips".
@@ -156,6 +167,7 @@ export function renderPrompt(app) {
     const starter = e.target.closest("[data-new]")?.dataset.new;
     if (starter) startNew(app, starter);
     if (act === "outputs") { app.state.gScope = "prompt"; app.go("galaxy"); }
+    if (act === "writenow") return writeNow(app);
     if (act === "browse") app.go("presets");
   };
   app.view.onchange = (e) => {

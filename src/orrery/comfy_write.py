@@ -3,7 +3,8 @@
 The app queues it on its own, with only what the model needs (the frames and a text encoder wired
 into the Orrery Prompt), so the run ends when the model has written and no video model is loaded.
 The idea comes back as the node's UI output: the text, the template with it in place, or what is
-wrong with it.
+wrong with it. With an API endpoint the app asks the server instead (`write_idea`, #167), and only
+frames it cannot name as files still take this run.
 """
 
 import json
@@ -15,8 +16,8 @@ from orrery.home import resolve_home
 FRAME_EDGE = 768  # the long edge of a frame the model sees: enough to read it, a few hundred tokens
 
 
-def _frames(task: str, first, last):
-    """The frames a writer shows the model, as one IMAGE batch of one size, or None."""
+def pick_frames(task: str, first, last) -> list | None:
+    """The frames a writer shows the model (pictures of any kind), or None."""
     if task == "story":
         if first is None or last is None:
             raise writers.WriterError("The story between two frames needs the first and the last frame: wire them "
@@ -28,6 +29,14 @@ def _frames(task: str, first, last):
                                       "first_frame.")
         frames = [first if first is not None else last]
     else:
+        return None
+    return frames
+
+
+def _frames(task: str, first, last):
+    """The frames a writer shows the model, as one IMAGE batch of one size, or None."""
+    frames = pick_frames(task, first, last)
+    if frames is None:
         return None
     import comfy.utils  # ComfyUI
     import torch
@@ -69,28 +78,42 @@ class OrreryWrite:
         from orrery import (
             comfy,  # the node pack's helpers; imported here, as comfy imports this module
         )
-        from orrery.dsl import bindings, override, strip_comments
-        from orrery.presets import resolve_includes
 
-        h, answer = resolve_home(home or None), None
-        try:
-            known = {name for name, _ in bindings(template)}
-            dials = {k: v for k, v in comfy.dial_values(params).items() if k in known}
-            source = strip_comments(resolve_includes(h, override(template, dials)))
-            prompt = writers.request(h, task, source, seed, h.libraries(), h.weights())
-            images = _frames(task, first_frame, last_frame)
-            backend = comfy.llm_for(h, clip, seed=(seed + idea) % 2**32,
-                                    temperature=float(llm_config(h)["writer_temperature"]))  # ideas, not one answer
-            if backend is None:
-                raise writers.WriterError("The writers need a language model: pick one in orrery's settings (the gear "
-                                          "in the node), or wire a text encoder into the Orrery Prompt's clip.")
-            answer = backend.complete(prompt, images=images)
-            text, problem = writers.check(task, template, answer)
-            result = {"task": task, "seed": seed, "idea": idea, "text": text, "problem": problem,
-                      "template": writers.apply(task, template, text) if text else None}  # the app asks before it inserts one with a problem
-        except (writers.WriterError, ValueError, RuntimeError) as err:
-            result = {"task": task, "seed": seed, "idea": idea, "error": str(err), "raw": answer}
-        print(f"[orrery] write · {task} · seed {seed} · idea {idea}: {result.get('error') or result.get('problem') or 'an idea'}")
-        if result.get("text"):
-            print(result["text"])
+        h = resolve_home(home or None)
+
+        def backend():
+            return comfy.llm_for(h, clip, seed=(seed + idea) % 2**32, temperature=float(llm_config(h)["writer_temperature"]))
+
+        result = write_idea(h, task, template, seed, idea, params, backend, lambda: _frames(task, first_frame, last_frame))
         return {"ui": {"orrery_write": [json.dumps(result, ensure_ascii=False)]}}
+
+
+def write_idea(h, task: str, template: str, seed: int, idea: int, params, backend, frames) -> dict:
+    """One idea: the text, the template with it in place, what is wrong with it, or the error. `backend` and
+    `frames` are called when needed, so an error before them never loads a model or a picture."""
+    from orrery import comfy
+    from orrery.dsl import bindings, override, strip_comments
+    from orrery.presets import resolve_includes
+
+    answer = None
+    try:
+        known = {name for name, _ in bindings(template)}
+        dials = comfy.dial_values(params if isinstance(params, str) else json.dumps(params or {}))
+        dials = {k: v for k, v in dials.items() if k in known}
+        source = strip_comments(resolve_includes(h, override(template, dials)))
+        prompt = writers.request(h, task, source, seed, h.libraries(), h.weights())
+        images = frames()
+        model = backend()
+        if model is None:
+            raise writers.WriterError("The writers need a language model: pick one in orrery's settings (the gear "
+                                      "in the node), or wire a text encoder into the Orrery Prompt's clip.")
+        answer = model.complete(prompt, images=images)
+        text, problem = writers.check(task, template, answer)
+        result = {"task": task, "seed": seed, "idea": idea, "text": text, "problem": problem,
+                  "template": writers.apply(task, template, text) if text else None}  # the app asks before it inserts one with a problem
+    except (writers.WriterError, ValueError, RuntimeError) as err:
+        result = {"task": task, "seed": seed, "idea": idea, "error": str(err), "raw": answer}
+    print(f"[orrery] write · {task} · seed {seed} · idea {idea}: {result.get('error') or result.get('problem') or 'an idea'}")
+    if result.get("text"):
+        print(result["text"])
+    return result
