@@ -86,6 +86,7 @@ def test_a_picture_with_at_and_from_is_marked_and_waits_without_the_pack(monkeyp
     assert [b["latent"] for b in early[1]["minimax_refs"]] == ["one", "clip"]  # image 2 waits
     assert [(b["latent"], b.get(refbias.KEY)) for b in late[1]["minimax_refs"]] == [("one", None), ("two", 0.5),
                                                                                    ("clip", None)]
+    assert [b.get(refbias.PICTURE) for b in late[1]["minimax_refs"]] == [None, 2, None]  # <Picture 2>
     picks["images"][0].update({"from": 0.0, "to": 0.5})  # image 2 only for the first half
     (out,) = OrreryRefMods().apply(cond, json.dumps(picks))
     assert [[b["latent"] for b in c[1]["minimax_refs"]] for c in out] == [["one", "two", "clip"], ["one", "clip"]]
@@ -128,6 +129,31 @@ def test_rows_bias_the_targets_queries_and_the_refmods_keys():
     queries, keys = refbias.rows(segments, [(1.0, 1), (0.5, 2)])
     assert queries == [(40, 50), (50, 90)]
     assert keys == [(20, 26, math.log(0.5)), (26, 40, math.log(0.5))]
+
+
+def test_a_pictures_vision_block_is_the_nth_run_of_vision_tokens_in_the_text():
+    tags = [1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1]  # <Picture 1>, <Picture 2>, then a video's block
+    refs = [{"kind": "image"}, {"kind": "image", refbias.KEY: 0.25, refbias.PICTURE: 2}, {"kind": "video"}]
+    assert refbias.vision(refs, tags) == [(6, 8, 0.25)]
+    assert refbias.vision([{"kind": "image", refbias.KEY: 0.5, refbias.PICTURE: 1}], tags) == [(2, 5, 0.5)]
+    assert refbias.vision(refs[:1], tags) is None  # every picture at 1
+    assert refbias.vision(refs, None) is None  # no tags: only the latents
+
+
+def test_rows_bias_a_pictures_vision_block_in_the_text_too():
+    segments = [(0, 10, "text"), (10, 20, "ref_img"), (20, 60, "video")]
+    queries, keys = refbias.rows(segments, [(0.5, 1)], [(2, 5, 0.5)])
+    assert queries == [(20, 60)]
+    assert keys == [(10, 20, math.log(0.5)), (2, 5, math.log(0.5))]
+
+
+def test_the_forward_notes_the_strengths_and_vision_blocks_of_the_payload():
+    forward = refbias._forward(lambda self, x, t, c, options, *args, **kwargs: dict(options))
+    refs = [{"kind": "image", refbias.KEY: 0.5, refbias.PICTURE: 1}]
+    options = {"other": 1}
+    seen = forward(None, None, None, None, options, minimax_payload={"refs": refs, "text_token_tags": [1, 0, 0, 1]})
+    assert seen == {"other": 1, refbias.OPTION: [(0.5, 1)], refbias.VISION: [(1, 3, 0.5)]}
+    assert forward(None, None, None, None, options, minimax_payload={"refs": [{"kind": "image"}]}) == {"other": 1}
 
 
 def test_the_extra_column_adds_exactly_log_s_and_keeps_the_rest_of_the_logits():

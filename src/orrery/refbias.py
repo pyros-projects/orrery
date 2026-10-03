@@ -1,4 +1,5 @@
-"""A strength per RefMod: orrery biases H3's attention to a RefMod's tokens (issue #30).
+"""A strength per RefMod: orrery biases H3's attention to a RefMod's tokens (issue #30), and to a
+picture's: its reference latents and the vision tokens its text encoder left in the text (#61).
 
 H3 packs text, references and the video into one sequence, and every DiT block attends over all of
 it, so a reference has no weight of its own to turn down (the RefMod pack's `strength` only blurs
@@ -18,12 +19,18 @@ wider copies stay small.
 orrery wraps two names of `comfy.ldm.minimax.model` when its nodes load and leaves ComfyUI's files
 alone: `MiniMaxH3Model._forward` notes the strengths of the payload's refs, and the module's
 `optimized_attention` applies them. Without a strength other than 1, H3 runs untouched.
+
+Reference to Video also shows a picture to Qwen, and its vision block (tag 0 in the payload's
+`text_token_tags`) stays in the text every block attends to: those rows get the picture's `log s` too.
+The prompt Qwen read after the picture keeps what it saw.
 """
 
 import math
 
 KEY = "orrery_strength"  # on a block of the conditioning's minimax_refs (orrery.comfy_refmods)
+PICTURE = "orrery_picture"  # on a picture's block with a strength: its N in <Picture N> (comfy_refmods)
 OPTION = "orrery_ref_strengths"  # in transformer_options while H3 runs: plan() of the payload's refs
+VISION = "orrery_vision_strengths"  # and vision() of its pictures
 PAD = 8
 HEADS_AT_ONCE = 8
 FLOOR = 1e-4  # the smallest strength: log(1e-4) ≈ -9.2 hides a RefMod all but completely
@@ -41,15 +48,42 @@ def plan(refs) -> list[tuple[float, int]] | None:
     return out if any(s != 1.0 for s, _ in out) else None
 
 
-def rows(segments, refs_plan) -> tuple[list[tuple[int, int]], list[tuple[int, int, float]]]:
+def vision(refs, tags) -> list[tuple[int, int, float]] | None:
+    """(start, stop, strength) in the text for the vision block of each picture with a strength other
+    than 1: the Nth run of tag 0 in `tags` for <Picture N>, as Reference to Video shows the pictures
+    first, in order, then the videos. None when there is none."""
+    wanted = {int(b[PICTURE]): float(b.get(KEY, 1.0)) for b in refs or ()
+              if b.get(PICTURE) and float(b.get(KEY, 1.0)) != 1.0}
+    if not wanted or tags is None:
+        return None
+    runs = _runs(tags.reshape(-1).tolist() if hasattr(tags, "reshape") else list(tags))
+    return [(*runs[n - 1], s) for n, s in sorted(wanted.items()) if n <= len(runs)] or None
+
+
+def _runs(tags: list) -> list[tuple[int, int]]:
+    """(start, stop) of each run of tag 0, in order."""
+    out, start = [], None
+    for i, tag in enumerate([*tags, 1]):
+        if int(tag) == 0 and start is None:
+            start = i
+        elif int(tag) != 0 and start is not None:
+            out.append((start, i))
+            start = None
+    return out
+
+
+def rows(segments, refs_plan, pictures=None) -> tuple[list[tuple[int, int]], list[tuple[int, int, float]]]:
     """From the layout's (start, stop, kind) table: the query rows to bias (the target audio and video)
-    and the key rows of each RefMod with a strength other than 1, with `log s`."""
+    and the key rows of each RefMod with a strength other than 1, with `log s`; `pictures` (vision())
+    adds the rows of their vision blocks in the text."""
     packed = [(a, b) for a, b, kind in segments if kind in ("ref_img", "ref_audio")]
     keys, i = [], 0
     for strength, n in refs_plan:
         if strength != 1.0:
             keys += [(a, b, math.log(max(strength, FLOOR))) for a, b in packed[i:i + n]]
         i += n
+    text = next((a for a, _, kind in segments if kind == "text"), 0)
+    keys += [(text + a, text + b, math.log(max(s, FLOOR))) for a, b, s in pictures or ()]
     return [(a, b) for a, b, kind in segments if kind in ("audio", "video")], keys
 
 
@@ -89,17 +123,17 @@ def _attention(original, container):
 
     def attention(q, k, v, heads, *args, transformer_options=None, **kwargs):
         options = transformer_options or {}
-        refs_plan, layout = options.get(OPTION), options.get("minimax_h3_layout")
+        refs_plan, pictures, layout = options.get(OPTION), options.get(VISION), options.get("minimax_h3_layout")
         shape = q.peek().shape if isinstance(q, container) else None
         segments = getattr(layout, "segments", None)
         if not refs_plan or shape is None or len(shape) != 4 or not segments or shape[2] != segments[-1][1]:
             return original(q, k, v, heads, *args, transformer_options=transformer_options, **kwargs)
         qt, kt, vt = q.take(), k.take(), v.take()  # [1, heads, seq, dim]
         _, n_heads, seq, dim = qt.shape
-        key = (id(layout), tuple(refs_plan), seq, dim, qt.device, qt.dtype)
+        key = (id(layout), tuple(refs_plan), tuple(pictures or ()), seq, dim, qt.device, qt.dtype)
         if key not in cache:
             cache.clear()
-            queries, keys = rows(segments, refs_plan)
+            queries, keys = rows(segments, refs_plan, pictures)
             c, values, scale = columns([b for _, _, b in keys], dim)
             cache[key] = (_extra(seq, queries, lambda _: c, qt.device, qt.dtype).view(1, 1, seq, 1),
                           _extra(seq, keys, lambda span: values[span[2]], qt.device, qt.dtype).view(1, 1, seq, 1),
@@ -123,11 +157,14 @@ def _attention(original, container):
 def _forward(original):
     def forward(self, x, timestep, context, transformer_options=None, *args, minimax_payload=None, **kwargs):
         options = {} if transformer_options is None else transformer_options
-        refs_plan = plan((minimax_payload or {}).get("refs"))
-        if refs_plan:
-            options[OPTION] = refs_plan
-        else:
-            options.pop(OPTION, None)
+        payload = minimax_payload or {}
+        refs_plan = plan(payload.get("refs"))
+        pictures = vision(payload.get("refs"), payload.get("text_token_tags")) if refs_plan else None
+        for name, value in ((OPTION, refs_plan), (VISION, pictures)):
+            if value:
+                options[name] = value
+            else:
+                options.pop(name, None)
         return original(self, x, timestep, context, options, *args, minimax_payload=minimax_payload, **kwargs)
 
     return forward

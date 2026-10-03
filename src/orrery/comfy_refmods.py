@@ -15,7 +15,7 @@ import sys
 from itertools import pairwise
 from pathlib import Path
 
-from orrery.refbias import KEY
+from orrery.refbias import KEY, PICTURE
 
 PACK = "ComfyUI-H3RefMods"
 EXAMPLES = Path(__file__).resolve().parents[2] / "examples" / "refmods"  # RefMods that ship with orrery
@@ -175,7 +175,7 @@ def _ranged(conditioning, blocks: list[dict], lo: float, hi: float, images: dict
                 if wait > lo or until < hi or strength <= 0.0:
                     continue
                 if strength != 1.0:
-                    block = {**block, KEY: strength}
+                    block = {**block, KEY: strength, PICTURE: k}
             refs.append(block)
         if refs or blocks or "minimax_refs" in meta:
             meta["minimax_refs"] = [*refs, *blocks]
