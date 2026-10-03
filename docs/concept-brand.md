@@ -1,6 +1,9 @@
 # orrery: the brand
 
-Status: concept, 2026-10-03. For Pyro to decide (#88, under #23).
+Status: decided 2026-10-03 (#88, under #23). Pyro picked the first screen of
+the mock ("ich will basically genau das"): the name stays, the headline is *One
+script. Endless films.*, and real videos replace the wall of text (#91). The
+hype video is #90. Open: *Roll* on the button, and which of the six ideas next.
 The options side by side, with a working seed crank:
 https://claude.ai/artifact/67S9KyLtjVT9AUhR9bdBzQ (source:
 `docs/mock/orrery-brand.html`).
