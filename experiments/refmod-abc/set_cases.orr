@@ -47,4 +47,7 @@ SHOT 7s: static
 # left of Jinx then came through the prompt Qwen read after the picture. Render A, C and L with SLA off:
 # a strength other than 1 runs dense anyway, a case at 1 would lose reference blocks to sparsity.
 SET: image_1(0.01), minimaxh3_jinx_v1_refmod(0)
+# With #63, when does Jinx become Jinx? At 0.1 half of her (braid and face, a floral top), at 0.2 nearly all
+#SET: image_1(0.1), minimaxh3_jinx_v1_refmod(0)
+#SET: image_1(0.2), minimaxh3_jinx_v1_refmod(0)
 JINX is entering the scene from the side and standing in front of the camera. JINX is showcasing her outfit.
