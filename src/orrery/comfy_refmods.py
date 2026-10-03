@@ -138,8 +138,8 @@ def sent_block(name: str, sent: dict, latent_path: str, vae) -> dict:
     segment, step = sent["segment"], int(sent.get("step", 1))
     path = chain.clip_file(Path(folder_paths.get_output_directory()), latent_path, segment)
     if path is None:
-        raise ValueError(f"refmod {name} is sent from segment {segment}, but the chain {latent_path!r} has no clip for "
-                         f"segment {segment}: render the reel from that chunk on, or check the Orrery Prompt's "
+        raise ValueError(f"refmod {name} is sent from clip {segment + 1}, but the chain {latent_path!r} has no clip "
+                         f"{segment + 1}: render the reel from that scene on, or check the Orrery Prompt's "
                          "latent_path.")
     key = (str(path), Path(path).stat().st_mtime_ns, json.dumps(sent["frames"]), step)
     if key not in _BUILT:
@@ -148,10 +148,10 @@ def sent_block(name: str, sent: dict, latent_path: str, vae) -> dict:
                              "the H3 video VAE (the one Reference to Video takes) into its vae input.")
         frames, dropped = chain.frames(path, sent["frames"], step)
         if dropped:
-            print(f"[orrery] SEND to refmod {name}: frames {', '.join(map(str, dropped))} are not in segment "
-                  f"{segment}'s clip, so they are left out.")
+            print(f"[orrery] SEND to refmod {name}: frames {', '.join(map(str, dropped))} are not in clip "
+                  f"{segment + 1}, so they are left out.")
         _BUILT[key] = encode(frames, vae)
-        print(f"[orrery] Orrery RefMods: built refmod {name} from {frames.shape[0]} frames of segment {segment}")
+        print(f"[orrery] Orrery RefMods: built refmod {name} from {frames.shape[0]} frames of clip {segment + 1}")
     return _BUILT[key]
 
 

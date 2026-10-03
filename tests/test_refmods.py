@@ -272,5 +272,5 @@ def test_a_sent_refmod_is_built_once_from_the_chain_without_the_pack(canvas, mon
     with pytest.raises(ValueError, match="needs the VAE"):
         cr.OrreryRefMods().apply(cond, picks)
     later = json.dumps({"refmods": [{**sent, "sent": {**sent["sent"], "segment": 3}}], "chain": "h3_context"})
-    with pytest.raises(ValueError, match="no clip for segment 3"):
+    with pytest.raises(ValueError, match="has no clip 4"):
         cr.OrreryRefMods().apply(cond, later, vae=vae)

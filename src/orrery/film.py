@@ -52,8 +52,8 @@ def _active(root: Path) -> tuple[Path | None, dict]:
 
 def _before(latent_path: str, segment: int, run: Path | None, clips: list) -> None:
     if run is None or len(clips) < segment:
-        raise FilmError(f"segment {segment} continues segment {segment - 1}, which the reel {latent_path!r} "
-                        f"does not hold yet: render segment {len(clips)} first, or Restart the reel.")
+        raise FilmError(f"clip {segment + 1} continues clip {segment}, which the reel {latent_path!r} does not hold "
+                        f"yet: render clip {len(clips) + 1} first (segment {len(clips)}), or Restart the reel.")
 
 
 def previous_tail(output: Path | str, latent_path: str, segment: int) -> Tail:
@@ -93,10 +93,10 @@ def save_take(output: Path | str, latent_path: str, segment: int, frames: Sequen
         _before(latent_path, segment, run, clips)
         was = state.get("settings") or settings
         if was[:2] != settings[:2]:
-            raise FilmError(f"segment {segment} is {width}×{height}, the reel's segments before it "
+            raise FilmError(f"clip {segment + 1} is {width}×{height}, the reel's clips before it "
                             f"{was[0]}×{was[1]}: a reel keeps one size (Restart it to change).")
         if was[3:] != settings[3:]:
-            raise FilmError(f"segment {segment}'s sound is {sample_rate} Hz × {sound.shape[0]}, the reel's "
+            raise FilmError(f"clip {segment + 1}'s sound is {sample_rate} Hz × {sound.shape[0]}, the reel's "
                             f"{was[3]} Hz × {was[4]}.")
     name = f"seg_{segment:04d}_{uuid.uuid4().hex[:8]}"
     tmp = run / f".{name}.tmp"

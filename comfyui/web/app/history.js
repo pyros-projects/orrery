@@ -32,7 +32,7 @@ function rowHTML(r, open) {
   return `<div class="hrow${open ? " open" : ""}" data-hid="${esc(r.id)}">
     <button class="hhead" data-hopen="${esc(r.id)}" aria-expanded="${open}">
       <span class="hwhen mono">${esc(when(r.ts))}</span>
-      <span class="tagchip">seed ${esc(String(r.seed))}</span>${r.segment != null ? `<span class="tagchip">seg ${r.segment}</span>` : ""}
+      <span class="tagchip">seed ${esc(String(r.seed))}</span>${r.segment != null ? `<span class="tagchip">clip ${r.segment + 1}</span>` : ""}
       ${r.preset ? `<span class="tagchip">@${esc(r.preset)}${r.edited ? " · edited" : ""}</span>` : ""}
       ${r.issues ? `<span class="warn" title="Lint warnings when it ran">${r.issues} ⚠</span>` : ""}
       <span class="htext">${esc(first)}</span></button>
@@ -109,7 +109,7 @@ async function onClick(app, e) {
       if (r.segment != null) app.bridge.setSegment(r.segment);
     } catch (err) { return app.fail(err); }
     app.go("prompt");
-    app.toast(`Template and seed ${r.seed}${r.segment != null ? `, segment ${r.segment}` : ""} restored · control after generate set to <b>fixed</b>, so the next run reproduces it`
+    app.toast(`Template and seed ${r.seed}${r.segment != null ? `, clip ${r.segment + 1}` : ""} restored · control after generate set to <b>fixed</b>, so the next run reproduces it`
       + (kept ? " · replayed as it was made: <b>@rng 1</b> or <b>full</b> added (the dice and the format of back then)" : ""));
   }
 }

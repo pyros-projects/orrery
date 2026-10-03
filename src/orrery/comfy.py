@@ -512,9 +512,9 @@ class OrreryPrompt:
     OUTPUT_TOOLTIPS = ("", "", "", "From `: w…` in the template, else the @h3 ratio, else 1024.",
                        "From `: h…` in the template, else the @h3 ratio, else 1024.",
                        ("Frames at 24 fps for the MiniMax H3 nodes' length input: the sum of the SHOT "
-                        "durations (in a reel: the chunk's, plus the pinned context from the second "
-                        "chunk on), snapped up to H3's 17k+5 grid (124 without SHOTs)."),
-                       ("The LORA: lines (global, plus the chunk's in a reel) as a LORA_STACK for any "
+                        "durations (in a reel: the scene's, plus the pinned context from the second "
+                        "clip on), snapped up to H3's 17k+5 grid (124 without SHOTs)."),
+                       ("The LORA: lines (the head's, plus the scene's in a reel) as a LORA_STACK for any "
                         "loader with a lora_stack input (LoraManager, Efficiency, Easy-Use …)."),
                        ("The canvas area: `0.6MP` from the @h3 line, else width × height, for resolution and "
                         "scale nodes that take megapixels."))
@@ -539,9 +539,9 @@ class OrreryPrompt:
                 "clip": ("CLIP", {"tooltip": "Optional: a text encoder that can write (Krea 2's Qwen3-VL) "
                                              "as the language model, in place of the one in orrery's settings."}),
                 "segment": ("INT", {"default": 0, "min": 0, "max": 99999, "control_after_generate": True,
-                                    "tooltip": "The reel's clip to write, from 0. With increment, every queued "
-                                               "run plays the next clip, which Orrery Continue chains to the one "
-                                               "before. Plain screenplays ignore it."}),
+                                    "tooltip": "The reel's clip to write, counted from 0 here (0 is clip 1). With "
+                                               "increment, every queued run plays the next clip, which Orrery "
+                                               "Continue chains to the one before. Plain screenplays ignore it."}),
                 "first_frame": ("IMAGE", {"tooltip": (
                     "Optional: the picture the clip starts on (wire it into the H3 node's first_frame too). Width and "
                     "height then take its shape at the header's megapixels, so H3 does not stretch it.")}),
@@ -837,14 +837,14 @@ class OrreryRefs:
         segment = send["segment"]
         path = chain.clip_file(Path(folder_paths.get_output_directory()), latent_path, segment)
         if path is None:
-            raise ValueError(f"image {n} is sent from segment {segment}, but the chain {latent_path!r} has no clip for "
-                             f"segment {segment}: render the reel from that chunk on, or check the Orrery Prompt's "
+            raise ValueError(f"image {n} is sent from clip {segment + 1}, but the chain {latent_path!r} has no clip "
+                             f"{segment + 1}: render the reel from that scene on, or check the Orrery Prompt's "
                              "latent_path.")
         batch, dropped = chain.frames(path, send["frames"], send.get("step", 1))
         if dropped:
             many = len(dropped) > 1
             print(f"[orrery] SEND to image {n}: frame{'s' if many else ''} {', '.join(map(str, dropped))} "
-                  f"{'are' if many else 'is'} not in segment {segment}'s clip, so "
+                  f"{'are' if many else 'is'} not in clip {segment + 1}, so "
                   f"{'they are' if many else 'it is'} left out.")
         return batch
 

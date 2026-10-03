@@ -668,7 +668,7 @@ def test_orrery_refs_refuses_a_slot_both_wired_and_sent(tmp_path, monkeypatch):
 def test_orrery_refs_says_when_the_chain_lacks_the_sending_clip(tmp_path, monkeypatch):
     from orrery.comfy import OrreryRefs
     send_chain(tmp_path, monkeypatch, clips=1)
-    with pytest.raises(ValueError, match="no clip for segment 4"):
+    with pytest.raises(ValueError, match="has no clip 5"):
         OrreryRefs().route(sends({"3": {"segment": 4, "frames": [[0, 0]]}}), image_1="img1")
 
 
@@ -680,7 +680,7 @@ def test_orrery_refs_warns_about_dropped_frames_and_batches_for_reference_to_vid
     OrreryRefs().route(sends({"3": {"segment": 0, "frames": [[2, 2], [5, 5], [60, 60]]}}), prompt=graph, unique_id="12",
                        image_1="img1")
     said = capsys.readouterr().out
-    assert "60" in said and "not in segment 0's clip" in said
+    assert "60" in said and "not in clip 1" in said
     assert "reads only the first" in said
 
 

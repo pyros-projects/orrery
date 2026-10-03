@@ -92,7 +92,7 @@ def test_picks_belong_to_the_chunk_they_came_from():
 
 
 def test_a_segment_past_the_end_is_a_clear_error():
-    with pytest.raises(ValueError, match="3 segments"):
+    with pytest.raises(ValueError, match="3 clips"):
         h3(REEL, segment=3)
 
 
@@ -141,7 +141,7 @@ def test_repeats_count_as_segments():
     assert split_reel(LOOP).segments == 5
     assert ["Intro" in h3(LOOP, segment=0).text, *("Walk at" in h3(LOOP, segment=k).text for k in (1, 2, 3)),
             "Outro" in h3(LOOP, segment=4).text] == [True] * 5
-    with pytest.raises(ValueError, match="5 segments"):
+    with pytest.raises(ValueError, match="5 clips"):
         h3(LOOP, segment=5)
 
 
@@ -273,7 +273,7 @@ def test_two_sends_to_one_image_warn_and_the_later_takes_over():
     src = SEND_REEL.replace("GIRL walks to the window.", "GIRL walks to the window.\nSEND: frame 9 to image 3")
     assert split_reel(src).ready(3)[3] == {"segment": 2, "frames": [[9, 9]]}
     lint = [i.message for i in ref2va(src, segment=2).lint]
-    assert any("image 3" in m and "segment 3" in m and "(SCENE 2) takes over" in m for m in lint)
+    assert any("image 3" in m and "clip 4" in m and "(SCENE 2) takes over" in m for m in lint)
 
 
 MOD_REEL = """@h3 t2va 16:9
@@ -388,7 +388,7 @@ def test_two_sends_claiming_one_segment_for_one_image_hand_over_to_the_later():
     clash = REANCHOR.replace("for segments 1-4", "for segments 1-5")
     assert [split_reel(clash).ready(t)[3]["segment"] for t in (4, 5, 6)] == [0, 4, 4]
     lint = [i.message for i in ref2va(clash, segment=5).lint]
-    assert any("segment 5" in m and "(SCENE 2) takes over" in m for m in lint)
+    assert any("clip 6" in m and "(SCENE 2) takes over" in m for m in lint)
     assert not any("takes over" in i.message for i in ref2va(REANCHOR, segment=5).lint)
 
 

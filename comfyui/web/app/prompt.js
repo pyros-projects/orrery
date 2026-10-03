@@ -25,23 +25,23 @@ function statsHTML(app) {
   const timing = reel
     ? `<span class="stat" title="${esc(how)}"><b>Reel</b> · ${reel.secs.map((s, i) => `<b>${s.toFixed(1)} s</b>${reel.repeats[i] === 1 ? "" : ` ×${reel.repeats[i] === Infinity ? "∞" : reel.repeats[i]}`}`).join(" + ")}${reel.goto ? " · GOTO" : ""} · <b>${clips}</b> clip${reel.clips === 1 ? "" : "s"}</span>`
     : st.h3 ? `<span class="stat"><b>H3</b> · ${st.h3.shots} shot${st.h3.shots === 1 ? "" : "s"} · <b>${st.h3.secs.toFixed(1)} s</b> · ${st.h3.voices} voice${st.h3.voices === 1 ? "" : "s"}</span>` : "";
-  const frames = reel ? ` · <b>${out.lengths.join(" / ")}</b> frames per chunk` : st.h3 ? ` · <b>${out.length}</b> frames = ${(out.length / 24).toFixed(2)} s` : "";
+  const frames = reel ? ` · <b>${out.lengths.join(" / ")}</b> frames per scene` : st.h3 ? ` · <b>${out.length}</b> frames = ${(out.length / 24).toFixed(2)} s` : "";
   return timing
     + `<span class="stat"><b>${st.rolls}</b> rolls · <b>${st.libs}</b> libraries · <b>${st.binds}</b> bindings${setDials(app) ? ` · <b>${setDials(app)}</b> dialed` : ""}</span>`
     + `${app.llmActive() ? `<span class="stat" title="Unknown __libraries__ and __name:N__ are made by this model when the node runs">LLM <b>${esc(app.data.llm.file.replace(/\.[a-z]+$/, ""))}</b></span>` : ""}`
     + (wired.length
       ? `<span class="stat" title="Width and height take the shape of the ${wired[0].replace("_", " ")} wired into the node, at the header's megapixels or H3's canvas area, so H3 does not stretch or crop it; the size is known when the node runs">→ size from the <b>${wired[0].replace("_", " ")}</b>${headerMP(app.text) ? ` · ${out.megapixels} MP` : ""}${frames}</span>`
-      : `<span class="stat" title="The node's width, height, length and megapixels outputs${reel ? "; from the second chunk on, length includes the 22 frames the clip continues from" : ""}">→ <b>${out.width}×${out.height}</b> · ${out.megapixels} MP${frames}</span>`)
+      : `<span class="stat" title="The node's width, height, length and megapixels outputs${reel ? "; from the second clip on, length includes the 22 frames the clip continues from" : ""}">→ <b>${out.width}×${out.height}</b> · ${out.megapixels} MP${frames}</span>`)
     + (planned?.error ? `<span class="stat warn" title="${esc(planned.error)}">${esc(planned.error)}</span>` : "")
     + `${out.cli.length ? `<span class="stat cli" title="In ComfyUI, use the Run count and the seed widget">${esc(out.cli.join(" "))}: CLI only</span>` : ""}<span class="grow"></span>`
     + `${outs ? `<button class="btn ghost" data-act="outputs">${icon("image")}${outs} output${outs === 1 ? "" : "s"}</button>` : ""}`
     + `<button class="btn" data-act="test" title="Roll it in the Test tab: a few seeds, or a reel's clips">${icon("dice")}Test</button>`
     + (reel ? (app.run
-      ? `<span class="stat live" title="The reel segment this node is generating now">Generating segment <b>${app.run.segment}</b></span>`
-      : `<span class="stat" title="The segment Generate plays next: the node's segment widget">Next segment <b>${esc(String(app.bridge.getSegment()))}</b></span>`)
-      + `<button class="btn ghost" data-act="jump" title="Scroll the editor to the chunk that plays the next segment">${icon("jump")}Jump</button>`
+      ? `<span class="stat live" title="The clip of the reel this node is generating now (its segment widget counts from 0)">Generating clip <b>${Number(app.run.segment) + 1}</b></span>`
+      : `<span class="stat" title="The clip Generate plays next: the node's segment widget, which counts from 0">Next clip <b>${Number(app.bridge.getSegment()) + 1}</b></span>`)
+      + `<button class="btn ghost" data-act="jump" title="Scroll the editor to the scene that plays the next clip">${icon("jump")}Jump</button>`
       + (app.data.timeline === false ? "" : `<button class="btn ghost" data-act="tlview" aria-pressed="${cellsView(app)}" title="${cellsView(app)
-        ? "Clips under each chunk: show them in a column beside the editor instead" : "Clips in a column beside the editor: show them under each chunk instead"}">${icon("film")}${cellsView(app) ? "Clips below" : "Clips beside"}</button>`)
+        ? "Clips under each scene: show them in a column beside the editor instead" : "Clips in a column beside the editor: show them under each scene instead"}">${icon("film")}${cellsView(app) ? "Clips below" : "Clips beside"}</button>`)
       + `<button class="btn" data-act="restart" title="Cancel this node's queued and running clips, set segment to 0 and generate from the start">${icon("undo")}Restart</button>` : "")
     + (app.state.sweepQueue
       ? `<button class="btn primary" data-act="stopsweep" title="Stop queueing the sweep; what is queued already still runs">${icon("x")}Stop<small class="sweep">${app.state.sweepQueue.done}/${app.state.sweepQueue.total} queued</small></button>`
@@ -80,7 +80,7 @@ export function renderPrompt(app) {
       <button class="btn" data-act="save" ${card && (d || setDials(app)) ? "" : "disabled"}>${icon("save")}${card?.builtin ? "Save a copy" : "Save"}</button>
       <button class="btn primary" data-act="saveas">Save as…</button>
       <button class="btn" data-act="new" aria-haspopup="menu" aria-expanded="${!!app.state.newMenu}">${icon("plus")}New</button>
-      <button class="btn" data-act="write" aria-haspopup="menu" aria-expanded="${!!app.state.writeMenu}" title="The language model writes: the reel's next chunk, the shot between two frames, a prompt from a picture">${icon("spark")}Write</button>
+      <button class="btn" data-act="write" aria-haspopup="menu" aria-expanded="${!!app.state.writeMenu}" title="The language model writes: the reel's next scene, the shot between two frames, a prompt from a picture">${icon("spark")}Write</button>
       ${app.state.newMenu ? `<div class="pop newpop" role="menu">${Object.entries(STARTERS).map(([k, s]) => `<button role="menuitem" data-new="${k}"><b>${esc(s.label)}</b><span class="muted">${esc(s.hint)}</span></button>`).join("")}</div>` : ""}
       ${app.state.writeMenu ? writeMenuHTML(app) : ""}
     </div>
@@ -187,7 +187,7 @@ async function restart(app) {
     if (planOf(app)) return generateSweep(app, cancelled);
     const runs = repeats(app);
     if (!(await app.bridge.generate(runs))) return app.toast("Nothing to generate: connect this node's outputs toward a Save or Preview node.");
-    app.toast(`Restarted at segment <b>0</b>${runs > 1 ? ` · ${runs} runs queued` : ""}${cancelled ? ` · cancelled ${cancelled} earlier run${cancelled === 1 ? "" : "s"} of this node` : ""}`);
+    app.toast(`Restarted at clip <b>1</b>${runs > 1 ? ` · ${runs} runs queued` : ""}${cancelled ? ` · cancelled ${cancelled} earlier run${cancelled === 1 ? "" : "s"} of this node` : ""}`);
     refreshFoot(app);
   } catch (err) { app.fail(err); }
 }
@@ -254,7 +254,7 @@ export function refreshReel(app, { chain = false } = {}) {
 function jumpToChunk(app) {
   const segment = Number(app.bridge.getSegment()), chunks = app.chunks() || [];
   const i = chunks.findIndex((c) => plays(c, segment));
-  if (i < 0) return app.toast(`No chunk plays segment <b>${segment}</b>: the reel ends before it. Restart plays it from the beginning.`);
+  if (i < 0) return app.toast(`No scene plays clip <b>${segment + 1}</b>: the reel ends before it. Restart plays it from the beginning.`);
   if (jumpCell(app, i)) return;
   const ed = app.view.querySelector(".editor textarea"), head = app.view.querySelectorAll(".editor .chunkinfo")[i];
   const at = app.text.split("\n").slice(0, chunks[i].line).reduce((n, l) => n + l.length + 1, 0);
@@ -332,7 +332,7 @@ async function ensurePlan(app) {
 function fixReelSeed(app) {
   if (!stats(app.text).h3?.reel || ["fixed", ""].includes(app.bridge.getControl())) return;
   app.bridge.setControl("fixed");
-  app.toast("Reel: control after generate set to <b>fixed</b>, so every chunk rolls the same bindings");
+  app.toast("Reel: control after generate set to <b>fixed</b>, so every scene rolls the same bindings");
 }
 
 /* dials: every binding can be turned without editing the template; empty = its default roll */

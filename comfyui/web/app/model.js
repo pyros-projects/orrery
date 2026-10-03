@@ -313,7 +313,7 @@ function walkedInfo(out, walked) {
 // Does chunk c play segment s? On its range, or on its list when GOTO lines set the path.
 export const plays = (c, s) => s != null && (c.segs ? c.segs.includes(s) : c.first !== null && s >= c.first && s <= c.last);
 
-// 1, 3–4, 7: a chunk's segments in short.
+// 1, 3–4, 7: a scene's clips in short, counted from 1 (segments from 0).
 function runs(segs) {
   const parts = [];
   for (const s of segs) {
@@ -321,7 +321,7 @@ function runs(segs) {
     if (last && s === last[1] + 1) last[1] = s;
     else parts.push([s, s]);
   }
-  return parts.map(([a, b]) => (a === b ? `${a}` : `${a}–${b}`)).join(", ");
+  return parts.map(([a, b]) => (a === b ? `${a + 1}` : `${a + 1}–${b + 1}`)).join(", ");
 }
 
 // The cells view: the text cut before every SCENE line, the world above the first one its own cell
@@ -341,17 +341,18 @@ const clock = (secs) => {
 };
 const span = (secs) => `${Math.round(secs * 100) / 100} s`;
 
-// `seg 4 · 0:20 → 0:25 · 1:35 left`, `seg 1–4 · 4 × 5 s · …`, `seg 7 → ∞ · 6 s each · from 0:35`
+// `clip 5 · 0:20 → 0:25 · 1:35 left`, `clips 2–5 · 4 × 5 s · …`, `clip 8 → ∞ · 6 s each · from 0:35`:
+// clips count from 1, the segments behind them from 0.
 export function chunkLabel(c) {
   if (c.segs) {
     if (!c.segs.length) return c.endless ? "not on the path yet: the reel loops before it" : "never plays at this seed";
     const shown = c.segs.slice(0, 12), more = c.segs.length > 12 || c.endless ? ", …" : "";
     const left = c.left === null ? "" : c.left > 0 ? ` · ${clock(c.left)} left` : " · the end";
-    return `seg ${runs(shown)}${more} · ${c.segs.length > 1 ? `${c.segs.length}${c.endless ? "+" : ""} × ` : ""}${span(c.secs)} · from ${clock(c.start)}${left}`;
+    return `clip${c.segs.length > 1 ? "s" : ""} ${runs(shown)}${more} · ${c.segs.length > 1 ? `${c.segs.length}${c.endless ? "+" : ""} × ` : ""}${span(c.secs)} · from ${clock(c.start)}${left}`;
   }
-  if (c.first === null) return "never plays: a chunk before it repeats forever";
-  if (c.repeat === Infinity) return `seg ${c.first} → ∞ · ${span(c.secs)} each · from ${clock(c.start)}`;
-  const segs = c.repeat > 1 ? `seg ${c.first}–${c.last} · ${c.repeat} × ${span(c.secs)}` : `seg ${c.first}`;
+  if (c.first === null) return "never plays: a scene before it repeats forever";
+  if (c.repeat === Infinity) return `clip ${c.first + 1} → ∞ · ${span(c.secs)} each · from ${clock(c.start)}`;
+  const segs = c.repeat > 1 ? `clips ${c.first + 1}–${c.last + 1} · ${c.repeat} × ${span(c.secs)}` : `clip ${c.first + 1}`;
   const left = c.left === null ? "" : c.left > 0 ? ` · ${clock(c.left)} left` : " · the end";
   return `${segs} · ${clock(c.start)} → ${clock(c.end)}${left}`;
 }

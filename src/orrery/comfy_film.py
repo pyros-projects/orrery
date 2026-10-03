@@ -173,7 +173,7 @@ class OrreryFilm:
         tail = masked.Tail(last.video.float().cpu().numpy(), last.audio.float().cpu().numpy(), last.grid_offset)
         take = film.save_take(_output(), chain, segment, _Frames(kept), wave[0].float().cpu().numpy(), rate, tail,
                               info.get("meta") or {})
-        print(f"[orrery] Orrery Film: segment {segment} kept, {kept.shape[0]} frames "
+        print(f"[orrery] Orrery Film: clip {segment + 1} kept, {kept.shape[0]} frames "
               f"({kept.shape[0] / 24:.2f} s); the film is {film.film_file(take)}")
         sound = {**audio, "waveform": wave.contiguous(), "sample_rate": rate}
         return kept, sound, InputImpl.VideoFromFile(str(film.film_file(take)))

@@ -226,8 +226,8 @@ class Reel:
         if path is None:
             path, _ = self.walk(upto=segment + 1)
         if segment >= len(path):
-            raise ReelEnd(f"The reel has {len(path)} segments; segment {segment} is past its end "
-                          "(segments count from 0, like Load Latent's clip_index).")
+            raise ReelEnd(f"The reel has {len(path)} clips; segment {segment} (clip {segment + 1}) is past its end "
+                          "(the segment counts from 0, like Load Latent's clip_index).")
         return path[segment]
 
     @property
@@ -333,7 +333,7 @@ def shared_sends(reel: Reel, starts: list[int | None]) -> list[str]:
                           if max(lo, olo) <= min([x for x in (hi, ohi) if x is not None], default=max(lo, olo))]
                 if shared:
                     later = i if start >= other_start else j
-                    out.append(f"{send.what} is filled by two SEND: lines in segment {min(shared)} (SCENE "
+                    out.append(f"{send.what} is filled by two SEND: lines in clip {min(shared) + 1} (SCENE "
                                f"{j + 1} and SCENE {i + 1}): where they meet, the one sent last (SCENE {later + 1}) "
                                "takes over.")
             claims.setdefault((send.refmod is None, send.target), []).append((i, start, spans))
@@ -416,8 +416,8 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
 
     path, ended = reel.walk(holds, upto=max(last + 1, upto or 0), on_segment=record)
     if last >= len(path):
-        raise ReelEnd(f"The reel has {len(path)} segments at this seed; segment {last} is past its end "
-                      "(segments count from 0, like Load Latent's clip_index).")
+        raise ReelEnd(f"The reel has {len(path)} clips at this seed; segment {last} (clip {last + 1}) is past its end "
+                      "(the segment counts from 0, like Load Latent's clip_index).")
 
     def expand(t: int) -> tuple[list[str], str | None, list[Pick], list[Pick]]:
         ex, block = expander(t)

@@ -64,7 +64,7 @@ def log_lines(data: dict) -> list[str]:
     """The run for ComfyUI's log: what made it, every pick, and the prompt."""
     head = [f"seed {data.get('seed')}"]
     if data.get("segment") is not None:
-        head.append(f"segment {data['segment']}")
+        head.append(f"clip {data['segment'] + 1}")
     if data.get("preset"):
         head.append(f"@{data['preset']}{' (edited)' if data.get('edited') else ''}")
     if data.get("params"):
