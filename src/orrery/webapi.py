@@ -162,6 +162,7 @@ def presets(home: Home, args: dict) -> dict:
         "favorites": [n for n in ui["favorites"] if n in known],
         "recent": [n for n in ui["recent"] if n in known],
         **{flag: ui[flag] for flag in uistate.FLAGS},
+        **{name: ui[name] for name in uistate.SIZES},
     }
 
 
@@ -221,12 +222,16 @@ def recent(home: Home, args: dict) -> dict:
 
 def ui_save(home: Home, args: dict) -> dict:
     """App switches kept in the home: `quickstart` (New templates open with their comments),
-    `dividers` (chunk dividers in the editor), `timeline` (the reel's clips beside it)."""
+    `dividers` (chunk dividers in the editor), `timeline` (the reel's clips beside it), and its sizes
+    (`clip_min`: a clip's shorter side in the clips view)."""
     for flag in uistate.FLAGS:
         if flag in args:
             uistate.set_flag(home, flag, bool(args[flag]))
+    for name in uistate.SIZES:
+        if name in args:
+            uistate.set_size(home, name, args[name])
     ui = uistate.load_ui(home)
-    return {flag: ui[flag] for flag in uistate.FLAGS}
+    return {**{flag: ui[flag] for flag in uistate.FLAGS}, **{name: ui[name] for name in uistate.SIZES}}
 
 
 def _preset_by_hash(home: Home) -> dict[str, str]:

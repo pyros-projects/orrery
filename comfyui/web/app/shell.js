@@ -78,6 +78,7 @@ export class OrreryApp {
   reelKey() { return `${this.text}\n${this.bridge.getSeed()}\n${JSON.stringify(this.bridge.getParams())}`; }
   reelPath() { return this.data.reelPath?.key === this.reelKey() && !this.data.reelPath.error ? this.data.reelPath : null; }
   chunks() { return chunkInfo(this.text, this.reelPath()); }
+  remembered() { return this.data.remembered?.key === this.reelKey() && !this.data.remembered.error ? this.data.remembered : null; }
 
   known() {  // the home's libraries and the template's own (@lib)
     return new Set([...(this.data.completion?.libraries || []).map((l) => l.name), ...inlineLibraries(this.text).map((l) => l.name)]);
@@ -128,6 +129,7 @@ export class OrreryApp {
     this.data.dividers = d.dividers !== false;
     this.data.timeline = d.timeline !== false;
     this.data.log_prompts = d.log_prompts !== false;
+    this.data.clip_min = d.clip_min ?? 360;
   }
   async refreshCompletion() { this.data.completion = await this.api.completions(); }
 

@@ -52,7 +52,9 @@ export async function openSettings(app) {
     <label class="check"><input type="checkbox" id="oa-div" ${app.data.dividers !== false ? "checked" : ""}>
       <span><b>Scene dividers</b>: a reel's SCENE lines say which clips they play, when, and how much film is left; the scene of the next clip is marked</span></label>
     <label class="check"><input type="checkbox" id="oa-tl" ${app.data.timeline !== false ? "checked" : ""}>
-      <span><b>Timeline</b>: a reel's clips as the reel keeps them (Orrery Film or Chain Video), beside the editor or under each scene (Clips beside / below in the footer), and the frames its <code>SEND:</code> lines handed on</span></label>
+      <span><b>Timeline</b>: a reel's clips as the reel keeps them (Orrery Film or Chain Video), under each scene or beside the editor (Clips below / beside in the footer), and the frames its <code>REMEMBER:</code> lines take</span></label>
+    <div class="field"><label class="label" for="oa-clipmin">Clip size</label>
+      <div class="row"><input class="input narrow" id="oa-clipmin" type="number" min="96" max="1600" step="8" value="${app.data.clip_min ?? 360}"><span class="muted">px: a clip's shorter side under its scene, as far as the editor is wide</span></div></div>
     <label class="check"><input type="checkbox" id="oa-log" ${app.data.log_prompts !== false ? "checked" : ""}>
       <span><b>Log each run</b> to ComfyUI's console: its seed, every pick and the resolved prompt (the <b>History</b> tab keeps them either way)</span></label>
     <div class="acts"><button type="button" class="btn ghost" data-cancel>Cancel</button><button class="btn primary">${icon("save")}Save</button></div>
@@ -76,6 +78,8 @@ export async function openSettings(app) {
       const flags = { quickstart: sheet.querySelector("#oa-qs").checked, dividers: sheet.querySelector("#oa-div").checked,
         timeline: sheet.querySelector("#oa-tl").checked, log_prompts: sheet.querySelector("#oa-log").checked };
       if (Object.entries(flags).some(([k, on]) => on !== (app.data[k] !== false))) Object.assign(app.data, await app.api.saveUi(flags));
+      const clipMin = Number(sheet.querySelector("#oa-clipmin").value) || 360;
+      if (clipMin !== (app.data.clip_min ?? 360)) { Object.assign(app.data, await app.api.saveUi({ clip_min: clipMin })); app.cellsSig = null; }
       drafts[wcur] = wtext.value;
       const edits = Object.keys(drafts).filter((k) => drafts[k] !== wr[k].text);
       for (const k of edits) await app.api.saveWriter(k, drafts[k]);

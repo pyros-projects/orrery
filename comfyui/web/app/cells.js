@@ -1,14 +1,14 @@
 // The cells view of a reel: the editor cut into one cell per CHUNK (the world above them a cell of its own),
-// and under every chunk a section with the clips it made and the frames it sent. A cell is a textarea over
-// its highlight, as tall as its text; the cells together scroll. Arrow keys cross from cell to cell,
-// Backspace at a cell's start and Delete at its end join two, and a CHUNK line typed or removed cuts the
-// text again, the caret where it was. Each section's height is dragged at its foot and kept per chunk.
+// and under every chunk a section with the clips it made and the frames its REMEMBER: lines take (the
+// world's, from the input video, under the world). A cell is a textarea over its highlight, as tall as its
+// text; the cells together scroll. Arrow keys cross from cell to cell, Backspace at a cell's start and Delete
+// at its end join two, and a CHUNK line typed or removed cuts the text again, the caret where it was. A
+// clip's shorter side is the settings' clip size, as far as the section is wide.
 import { castNames } from "../orrery-complete.js";
 import { highlight } from "./highlight.js";
 import { splitCells } from "./model.js";
-import { clipRatio, drag, sectionHTML, wireClips } from "./timeline.js";
-
-const SECTION_H = 110, SECTION_MIN = 44, SECTION_MAX = 640;
+import { fillStrip, hintsFor, openPicker, rememberLines, stripHTML } from "./remember.js";
+import { clipRatio, sectionHTML, sourceClip, wireClips } from "./timeline.js";
 
 const box = (app) => app.view.querySelector(".editor.cells");
 const areas = (app) => [...(box(app)?.querySelectorAll("textarea") || [])];
@@ -24,8 +24,12 @@ export function cellStart(app, ta) {
   return n;
 }
 
-const heights = (app) => (app.bridge.props.orrery_tl_h ||= {});
-const sectionH = (app, chunk) => heights(app)[chunk] || SECTION_H;
+// A clip's size: its shorter side `least` pixels, no wider than `width`, in the clips' aspect ratio.
+export function clipSize(least, width, ratio) {
+  let w = ratio >= 1 ? least * ratio : least;
+  if (w > width) w = width;
+  return { w: Math.max(16, Math.floor(w)), h: Math.max(16, Math.floor(w / ratio)) };
+}
 
 // The cells, the caret put back at `at` (an offset into the whole text) when given.
 export function renderCells(app, at = null) {
@@ -34,12 +38,13 @@ export function renderCells(app, at = null) {
   const cells = splitCells(app.text);
   host.innerHTML = cells.map((c, i) => `<div class="cell" data-cell="${i}" data-chunk="${c.chunk}">`
     + `<pre class="hl" aria-hidden="true"></pre><textarea spellcheck="false" aria-label="${c.chunk < 0 ? "Before the first SCENE" : `SCENE ${c.chunk + 1}`}"></textarea></div>`
-    + (c.chunk >= 0 ? `<div class="chunkmedia" data-chunk="${c.chunk}"><div class="cm-body"></div>`
-      + '<div class="cm-grip" title="Drag to resize this section"></div></div>' : "")).join("");
+    + `<div class="chunkmedia${c.chunk < 0 ? " head" : ""}" data-chunk="${c.chunk}"><div class="cm-body"></div></div>`).join("");
   areas(app).forEach((ta, i) => { ta.value = cells[i].text; ta.readOnly = !!app.state.sweepQueue; });
   app.cellsSig = null;
   paintCells(app);
-  host.querySelectorAll(".chunkmedia").forEach((m) => wireSection(app, m));
+  app.cellsResize?.disconnect();
+  app.cellsResize = new ResizeObserver(() => sizeSections(app));  // a wider node, bigger clips
+  app.cellsResize.observe(host);
   if (at !== null) placeCaret(app, at);
 }
 
@@ -48,40 +53,42 @@ export function paintCells(app) {
   const host = box(app);
   if (!host) return;
   const cells = splitCells(app.text), chunks = app.chunks() || [], segment = Number(app.bridge.getSegment());
+  const remembered = app.remembered();
+  let before = 0;  // the REMEMBER: lines in the cells above: the hints count them through the whole text
   host.querySelectorAll(".cell").forEach((cell, i) => {
     const c = cells[i];
     if (!c) return;
     const local = c.chunk >= 0 && chunks[c.chunk] ? [{ ...chunks[c.chunk], line: 0 }] : null;
-    cell.querySelector("pre").innerHTML = `${highlight(c.text, app.known(), { llm: app.llmActive(), chunks: local, segment, cast: castNames(app.text) })}​`;
+    const hints = hintsFor(c.text, remembered, before);
+    before += rememberLines(c.text).length;
+    cell.querySelector("pre").innerHTML = `${highlight(c.text, app.known(), { llm: app.llmActive(), chunks: local, segment, cast: castNames(app.text), hints })}​`;
   });
-  const ratio = clipRatio(app);
-  const sig = JSON.stringify([chunks.map((c) => [c.first, c.last, c.segs, c.images]), (app.data.chain?.clips || []).map((c) => c.version),
-    app.data.anchorV, segment, ratio]);
+  const sig = JSON.stringify([chunks.map((c) => [c.first, c.last, c.segs]), (app.data.chain?.clips || []).map((c) => c.version),
+    segment, clipRatio(app), app.data.clip_min, remembered?.key, remembered?.lines]);
   if (sig === app.cellsSig) return;
   app.cellsSig = sig;
   host.querySelectorAll(".chunkmedia").forEach((m) => {
-    const c = chunks[Number(m.dataset.chunk)];
-    if (!c) return;
-    size(m, sectionH(app, m.dataset.chunk), ratio);
-    m.querySelector(".cm-body").innerHTML = sectionHTML(app, c);
+    const scene = Number(m.dataset.chunk), c = chunks[scene];
+    if (scene >= 0 && !c) return;
+    const line = remembered?.lines.find((l) => l.scene === scene);
+    const source = line ? sourceClip(app, line.source) : null;
+    const body = m.querySelector(".cm-body");
+    body.innerHTML = (scene >= 0 ? sectionHTML(app, c) : "") + stripHTML(app, scene, source?.url);
+    fillStrip(body, source?.frames);
   });
+  sizeSections(app);
 }
 
-// Thumbs as tall as the section allows, in the clips' aspect ratio.
-function size(m, h, ratio) {
-  const clip = Math.max(16, h - 22);
-  m.style.height = `${h}px`;
-  m.style.setProperty("--clip-h", `${clip}px`);
-  m.style.setProperty("--clip-w", `${Math.round(clip * ratio)}px`);
-}
-
-function wireSection(app, m) {
-  const set = (h) => {
-    const px = Math.round(Math.min(Math.max(h, SECTION_MIN), SECTION_MAX));
-    size(m, px, clipRatio(app));
-    heights(app)[m.dataset.chunk] = px;
-  };
-  drag(m.querySelector(".cm-grip"), (_dx, start, dy) => set(start + dy), () => m.offsetHeight, () => {});
+// Every section's clips at the settings' clip size, as far as the section is wide.
+function sizeSections(app) {
+  const host = box(app);
+  if (!host) return;
+  const ratio = clipRatio(app), least = Number(app.data.clip_min) || 360;
+  host.querySelectorAll(".chunkmedia").forEach((m) => {
+    const { w, h } = clipSize(least, Math.max(64, m.clientWidth - 26), ratio);
+    m.style.setProperty("--clip-w", `${w}px`);
+    m.style.setProperty("--clip-h", `${h}px`);
+  });
 }
 
 function placeCaret(app, at) {
@@ -169,6 +176,13 @@ export function wireCells(app, { onEdit, onKey, onFocus, onBlur }) {
     }
   });
   wireClips(app, host);
+  host.addEventListener("click", (e) => {  // a remembered frame clicked: pick another by eye
+    const img = e.target.closest(".rm-item img.pick");
+    if (!img) return;
+    const item = img.closest(".rm-item"), line = Number(img.closest(".rm-line").dataset.line);
+    openPicker(app, { line, item: Number(item.dataset.item), url: item.dataset.url, frame: Number(img.dataset.frame) },
+      () => { renderCells(app); onEdit(null); });
+  });
 }
 
 // Jump: the cells scrolled to a chunk's cell, the caret at its start.

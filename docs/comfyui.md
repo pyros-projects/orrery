@@ -75,19 +75,28 @@ Nodes under **orrery**:
     it plays (counted from 1), when and how much film is left (`clips 2–5 · 4 × 5 s · 0:05 →
     0:25 · 1:35 left`); the scene that plays the next clip is
     marked (`▶ next`), and **Jump** beside *Next clip* puts the caret
-    there. Beside the editor, the **timeline** lines up each scene's clips
-    as Orrery Film (or H3 Motion Context's Chain Video) keeps them (hover plays one, a click
-    opens it; dashed boxes are clips not rendered yet) and, under a scene
-    with `REMEMBER:` lines, the frames Orrery Refs last fetched for each image (its
-    anchors). It reads the chain from the string wired into `latent_path`,
-    else `h3_context`, and refreshes after every run. Drag the edge between
-    editor and timeline to widen it. **Clips beside / Clips below** in the
-    footer switches to the cells view: the editor cut into one cell per
-    SCENE, each followed by a section with that scene's clips and remembered
-    frames; drag a section's lower edge to resize it (kept per scene, like
-    the width, in the node). Arrow keys cross from cell to cell, Backspace at
-    a cell's start and Delete at its end join two, and a SCENE line typed or
-    removed cuts the text anew. The gear turns dividers and timeline off.
+    there. A reel opens in the **clips view**: the editor cut into one cell
+    per SCENE, each followed by that scene's clips as Orrery Film (or H3
+    Motion Context's Chain Video) keeps them, big: a clip's shorter side is
+    the **Clip size** in the gear (360 px unless set otherwise), as far as the
+    editor is wide. Hover plays one, a click opens it; small dashed boxes are
+    clips not rendered yet. Under a scene's clips come the frames its
+    `REMEMBER:` lines take, cut from that clip in the browser as you type
+    (`frame 50` → `frame 20` shows frame 20 at once, a range as a strip with
+    its count, frames past the end in red), and each says where they go;
+    the head's come from the input video. Each `REMEMBER:` line also says it
+    at its end, in the editor (`→ image 1 · @WOMAN · clips 2+`, and `replaced
+    from clip 2 by "frame 50 as @WOMAN"` when a later line fills the same
+    picture), from the same resolution the compile uses. A click on a single
+    frame opens its clip with a slider: **Use frame N** writes that frame into
+    the line. Arrow keys cross from cell to cell, Backspace at a cell's start
+    and Delete at its end join two, and a SCENE line typed or removed cuts
+    the text anew. **Clips beside** in the footer puts the clips in a
+    **timeline** beside the editor instead, level with their scenes, with the
+    frames Orrery Refs last fetched (drag the edge between editor and
+    timeline to widen it). It reads the chain from the string wired into
+    `latent_path`, else `h3_context`, and refreshes after every run. The gear
+    turns dividers and the clips off.
   - **Test**: what the template makes, without queueing anything. **Rolls**
     shows three seeds (a reel: six clips at one seed, pageable through a
     forever loop). **Frequencies** rolls it 50, 200 or 500 times, across seeds

@@ -6,12 +6,13 @@ from orrery.uistate import (
     rename_everywhere,
     set_favorite,
     set_flag,
+    set_size,
     touch_recent,
 )
 
 
 def test_a_fresh_home_has_no_favorites_or_recents(home):
-    assert load_ui(Home(home)) == {"favorites": [], "recent": [], "quickstart": True, "dividers": True, "timeline": True, "log_prompts": True}
+    assert load_ui(Home(home)) == {"favorites": [], "recent": [], "quickstart": True, "dividers": True, "timeline": True, "log_prompts": True, "clip_min": 360}
 
 
 def test_favorites_toggle_on_and_off(home):
@@ -36,9 +37,9 @@ def test_rename_and_forget_update_both_lists(home):
     set_favorite(h, "old", True)
     touch_recent(h, "old")
     rename_everywhere(h, "old", "new")
-    assert load_ui(h) == {"favorites": ["new"], "recent": ["new"], "quickstart": True, "dividers": True, "timeline": True, "log_prompts": True}
+    assert load_ui(h) == {"favorites": ["new"], "recent": ["new"], "quickstart": True, "dividers": True, "timeline": True, "log_prompts": True, "clip_min": 360}
     forget(h, "new")
-    assert load_ui(h) == {"favorites": [], "recent": [], "quickstart": True, "dividers": True, "timeline": True, "log_prompts": True}
+    assert load_ui(h) == {"favorites": [], "recent": [], "quickstart": True, "dividers": True, "timeline": True, "log_prompts": True, "clip_min": 360}
 
 
 def test_writes_leave_no_temp_files(home):
@@ -62,3 +63,11 @@ def test_the_editor_switches_are_on_until_turned_off(home):
     assert set_flag(h, "timeline", False) is False
     assert load_ui(h)["timeline"] is False and load_ui(h)["dividers"] is True
     assert set_flag(h, "timeline", True) is True
+
+
+def test_a_clip_keeps_its_minimum_size_within_bounds(home):
+    h = Home(home)
+    assert load_ui(h)["clip_min"] == 360
+    assert set_size(h, "clip_min", 512) == 512 and load_ui(h)["clip_min"] == 512
+    assert set_size(h, "clip_min", 5) == 96 and set_size(h, "clip_min", "lots") == 360
+    assert load_ui(h)["timeline"] is True  # the switches stay as they are
