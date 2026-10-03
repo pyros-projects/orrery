@@ -62,6 +62,8 @@ checks) are left out.
 
 ### Fixed
 
+- The gear saves again when `max_tokens` in `orrery.yaml` is not a multiple of 500 (the browser refused the
+  form); the API endpoint's text no longer looks like a label, and its model list waits for a pick (#179).
 - A dial's list of choices opens every time: a menu of its own shows every choice while the dial holds
   one of them, filters what you type, and a library's choices come back after a run (#155).
 - The Libraries tab opens at once with a home of a hundred thousand entries (it loaded all of them,

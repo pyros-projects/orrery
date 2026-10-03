@@ -494,6 +494,9 @@
 @keyframes orrery-up { from { transform: translateY(24px); opacity: 0; } }
 .orrery-app .panel h4 { margin: 0; font: italic 400 21px/1.1 var(--serif); }
 .orrery-app .field { display: grid; gap: 5px; }
+.orrery-app .llm-src { display: grid; gap: 11px; }  /* the gear's language-model choice: its fields, spaced as the panel's */
+.orrery-app .llm-src[hidden] { display: none; }
+.orrery-app .llm-pick { display: grid; gap: 6px; }
 .orrery-app .namebox { display: flex; align-items: center; background: #1a1b23; border: 1px solid var(--line); border-radius: 7px; }
 .orrery-app .namebox:focus-within { border-color: var(--brass); }
 .orrery-app .namebox span { padding-left: 9px; font: 12.5px var(--mono); color: var(--faint); }

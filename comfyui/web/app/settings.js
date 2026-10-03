@@ -12,7 +12,7 @@ const WRITER_TEXTS = { continue: "Continue the reel", story: "Story between fram
 
 // The model field: a list once the endpoint has named its models, else a text field.
 const modelField = (models, current) => (models.length
-  ? `<select class="input mono" id="oa-api-model">${[...new Set([current, ...models].filter(Boolean))].map((m) =>
+  ? `<select class="input mono" id="oa-api-model">${current ? "" : '<option value="" selected disabled>Pick a model</option>'}${[...new Set([current, ...models].filter(Boolean))].map((m) =>
     `<option ${m === current ? "selected" : ""}>${esc(m)}</option>`).join("")}</select>`
   : `<input class="input mono" id="oa-api-model" value="${esc(current)}" placeholder="gpt-6-luna" spellcheck="false">`);
 
@@ -39,16 +39,16 @@ export async function openSettings(app) {
       <input class="input mono" id="oa-home" value="${esc(h.setting || h.home)}" placeholder="/path/to/orrery" ${h.source === "env" ? "disabled" : ""} spellcheck="false">
       <span class="muted">${HOME_NOTE[h.source](h.home)}</span></div>
     <div class="row spread"><h5 class="label">Language model</h5></div>
-    <div class="row" role="radiogroup" aria-label="The language model">
+    <div class="llm-pick" role="radiogroup" aria-label="The language model">
       <label class="check"><input type="radio" name="oa-src" value="comfy" ${s.source !== "api" ? "checked" : ""}><span>A text encoder in ComfyUI</span></label>
       <label class="check"><input type="radio" name="oa-src" value="api" ${s.source === "api" ? "checked" : ""}><span>An API endpoint: OpenAI, or a server that speaks its protocol</span></label></div>
-    <div class="src-comfy">
+    <div class="llm-src src-comfy">
     <p class="muted flush">A text encoder that is a whole language model can write: Krea 2's <code>qwen3vl_4b</code> or a Qwen3-VL 8B build.
       MiniMax H3's encoder is cut short and cannot. The model loads when the node runs and writes once; ComfyUI moves it out when the video model needs the room.
       A text encoder wired into the node's <b>clip</b> input wins over this choice.</p>
     <div class="field"><label class="label" for="oa-llm">Model</label><select class="input" id="oa-llm">${options}</select>
       ${s.files.length ? "" : '<span class="warn">No text encoders found (is this running inside ComfyUI?).</span>'}</div></div>
-    <div class="src-api">
+    <div class="llm-src src-api">
     <p class="muted flush">Every language-model task goes to the endpoint: the libraries, <code>--slots--</code> and <code>&gt; enhance</code> of a run, the <b>Write</b> menu, <code>orrery lib</code>.
       It runs beside ComfyUI: no VRAM, no text encoder pushing the video model out, no waiting behind a render. It wins over a text encoder wired into <b>clip</b>.
       Saving checks it first: the key, and one short answer from the model.</p>
@@ -64,7 +64,7 @@ export async function openSettings(app) {
     <div class="field"><label class="label" for="oa-llm-n">A library it creates starts with</label>
       <div class="row"><input class="input narrow" id="oa-llm-n" type="number" min="1" max="200" value="${s.entries}"><span class="muted">entries · <code>__name:30__</code> asks for at least 30</span></div></div>
     <div class="field"><label class="label" for="oa-llm-t">Max tokens</label>
-      <div class="row"><input class="input narrow" id="oa-llm-t" type="number" min="500" max="131072" step="500" value="${s.max_tokens}"><span class="muted">the longest answer it may write in one run; long entries need room</span></div></div>
+      <div class="row"><input class="input narrow" id="oa-llm-t" type="number" min="64" max="131072" step="any" value="${s.max_tokens}"><span class="muted">the longest answer it may write in one run; long entries need room</span></div></div>
     <div class="row spread"><h5 class="label">Writers</h5></div>
     <p class="muted flush">What the <b>Write</b> menu sends the language model: each writer its own prompt, with only the rules it needs.
       <code>{world}</code> <code>{chunks}</code> <code>{next}</code> <code>{handoff}</code> <code>{seconds}</code> are filled in when it runs; Picture 1 and 2 are the frames it sees.
