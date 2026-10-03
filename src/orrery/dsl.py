@@ -44,6 +44,10 @@ _IS = re.compile(r"^IF\s+\$([A-Za-z_]\w*)(?:\.([A-Za-z_][\w-]*))?\s+is\s+(not\s+
                  re.IGNORECASE)
 _IF_WORD = re.compile(r"^IF\s+(?=\$)", re.IGNORECASE)
 _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
+# EXPORT: what the run keeps beside its prompt: `EXPORT: mood = __moods__`, `EXPORT: $who, $job`, or
+# `EXPORT:` and indented `name = expression` / `$name` lines under it
+_EXPORT = re.compile(r"^EXPORT:\s*(.*)$")
+_EXPORT_ONE = re.compile(r"^(?:\$([A-Za-z_]\w*)|([A-Za-z_]\w*)\s*=\s*(.+))$")
 _BINDING_LINE = re.compile(r"^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$")
 _MULTI = re.compile(r"^(\d+)(?:-(\d+))?\$\$(?:(.*?)\$\$)?(.+)$")  # {2$$ and $$a|b|c}: Dynamic Prompts' joiner
 _ESCAPE = re.compile(r"\\([{}|$_@#\[\]\\<>])")  # \{ \__ \$ …: the character as written
@@ -131,6 +135,7 @@ class Expansion:
     enhance: str | None = None
     cell: int | None = None  # the run of a `: grid`
     warnings: list[str] = field(default_factory=list)  # what rolled, but not as written (a sweep in an entry)
+    exports: dict[str, object] = field(default_factory=dict)  # what EXPORT: rolled: text, {value, fields} or a list
 
 
 @dataclass
@@ -139,6 +144,7 @@ class _Parsed:
     body: list[str]
     enhance: str | None
     params: Params
+    exports: list[tuple[str, str]] = field(default_factory=list)  # (name, expression); `$who` exports a binding
 
 
 _COMMENT = re.compile(r"^[ \t]*#.*(?:\r?\n|$)", re.MULTILINE)
@@ -150,11 +156,45 @@ def strip_comments(template: str) -> str:
     return _COMMENT.sub("", template)
 
 
+def _exports(spec: str) -> list[tuple[str, str]]:
+    """`mood = __moods__` or `$who, $job` as (name, expression) pairs; a binding is ("who", "$who")."""
+    if (m := _EXPORT_ONE.match(spec.strip())) and m.group(2):
+        return [(m.group(2), m.group(3).strip())]
+    if all(re.fullmatch(r"\$[A-Za-z_]\w*", part.strip()) for part in spec.split(",")):
+        return [(part.strip()[1:], part.strip()) for part in spec.split(",")]
+    raise ValueError(f"EXPORT: {spec.strip()}: write `name = what it rolls` or `$binding`.")
+
+
+def strip_exports(template: str) -> str:
+    """The template without its EXPORT: lines and blocks (a screenplay reads exports from the gallery)."""
+    out, block = [], False
+    for raw in template.splitlines():
+        if block and raw.strip() and raw[:1] in (" ", "\t"):
+            continue
+        block = False
+        if m := _EXPORT.match(raw.strip()):
+            block = not m.group(1).strip()
+            continue
+        out.append(raw)
+    return "\n".join(out)
+
+
 def parse(template: str) -> _Parsed:
     parsed = _Parsed([], [], None, Params())
+    block = False  # in an `EXPORT:` block: its indented lines are exports
     for raw in strip_comments(template).splitlines():
         line = raw.strip()
         if not line:
+            continue
+        if block and raw[:1] in (" ", "\t"):
+            parsed.exports += _exports(line)
+            continue
+        block = False
+        if m := _EXPORT.match(line):
+            if m.group(1).strip():
+                parsed.exports += _exports(m.group(1))
+            else:
+                block = True
             continue
         if m := _BINDING.match(line):
             parsed.bindings.append((m.group(1), m.group(2)))
@@ -445,6 +485,24 @@ class Expander:
         for key in props:
             self._field_of(name, key)
         return self.vars[name]
+
+    def export(self, name: str, expr: str):
+        """What `EXPORT: name = expr` keeps: its text, never in the prompt; `{value, field …}` when it rolled
+        an entry with properties (or exports a binding that did), a list when it is a `{N$$…}` pick."""
+        bound = re.fullmatch(r"\$([A-Za-z_]\w*)", expr.strip())
+        if bound and bound.group(1) in self.vars:
+            key = bound.group(1)
+        else:
+            key = f"\x1eexport {name}"  # beside the bindings, never one of them
+            self._props_seen, self._tags_seen = {}, set()
+            self.vars[key] = self.expr(expr, label_prefix=f"EXPORT {name} ← ")
+            self.var_props[key], self._props_seen = self._props_seen, {}
+            self.var_fields[key] = {}
+        value = self.vars[key]
+        if (b := _BRACE.fullmatch(expr.strip())) and (multi := _MULTI.match(b.group(1))):
+            value = [v.strip() for v in value.split(", " if multi.group(3) is None else multi.group(3)) if v.strip()]
+        fields = {f: self._field_of(key, f) for f in self.var_props.get(key, {})}
+        return {"value": value, **fields} if fields else value
 
     def _field_of(self, name: str, field: str) -> str:
         """$name.field, rolled the first time it is needed (when bound, or by a field before it that
@@ -805,7 +863,8 @@ def expand(template: str, seed: int, libraries: Mapping[str, Library],
     text = ex.expr(" ".join(line for raw in parsed.body if (line := ex.guarded(raw)) is not None))
     if parsed.enhance:
         ex.picks.append(Pick("> enhance", parsed.enhance))
-    return Expansion(seed, text, ex.picks, parsed.params, parsed.enhance, cell, ex.warnings)
+    exports = {name: ex.export(name, expr) for name, expr in parsed.exports}
+    return Expansion(seed, text, ex.picks, parsed.params, parsed.enhance, cell, ex.warnings, exports)
 
 
 def expand_batch(template: str, seed: int, count: int, libraries: Mapping[str, Library],

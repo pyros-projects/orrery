@@ -44,6 +44,36 @@ def fill(text: str, texts: dict[str, str]) -> str:
     return _FILLED.sub(put, text)
 
 
+def export_slots(exports) -> list[str]:
+    """The slots in what EXPORT: rolled (texts, fields, lists), each once, in order."""
+    found: list[str] = []
+    for text in _strings(exports):
+        found += [d for d in slots(text) if d not in found]
+    return found
+
+
+def fill_exports(exports, texts: dict[str, str]):
+    """The exports with their slots written, as fill does for the prompt (no full stop added)."""
+    if isinstance(exports, str):
+        return SLOT.sub(lambda m: texts.get(m.group(1)) or m.group(1), exports)
+    if isinstance(exports, list):
+        return [fill_exports(v, texts) for v in exports]
+    if isinstance(exports, dict):
+        return {k: fill_exports(v, texts) for k, v in exports.items()}
+    return exports
+
+
+def _strings(value):
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, list | tuple):
+        for v in value:
+            yield from _strings(v)
+    elif isinstance(value, dict):
+        for v in value.values():
+            yield from _strings(v)
+
+
 def request(wanted: list[Need], directions: list[str], context: str, frames: int = 0,
             rewrites: list[tuple[str, str]] = (), made: dict[str, str] | None = None) -> str:
     """The one request of a run: libraries to write, slots to fill, passages to rewrite (`> …`,

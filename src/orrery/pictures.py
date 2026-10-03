@@ -10,7 +10,9 @@ Pictures a template without a preset made are under `unsaved/<template hash>`.
 
 A character also carries what its template rolled for it, as properties named after the bindings
 (`gender`, `origin`, `genre`, `colour` …, its dials included), so a second character can be told to
-differ from the first: `__pictures/krea/09_character_creator[origin!=$hero.origin]__`.
+differ from the first: `__pictures/krea/09_character_creator[origin!=$hero.origin]__`. What its
+template EXPORTed comes along too, and wins: `$hero.who`, `$hero.mood`, an exported entry's
+properties as `$hero.job_tool`, a list as its items joined with commas.
 """
 
 from __future__ import annotations
@@ -82,6 +84,13 @@ def _traits(home, row: dict, labels: dict) -> dict[str, str]:
     for name, value in (row.get("params") or {}).items():
         if name not in _OWN and (value := _plain(value)):
             out[name] = value
+    for name, value in (row.get("exports") or {}).items():  # EXPORT: (#157): what the picture carries on purpose
+        fields = value if isinstance(value, dict) else {"value": value}
+        for field, text in fields.items():
+            key = name if field == "value" else f"{name}_{field}"
+            text = ", ".join(map(str, text)) if isinstance(text, list) else " ".join(str(text).split())
+            if key not in _OWN and re.fullmatch(r"\w+", key) and text:
+                out[key] = text
     return out
 
 
