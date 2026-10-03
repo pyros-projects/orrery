@@ -216,6 +216,10 @@ test("CUT TO: completes the scene titles, as GOTO: does", () => {
   assert.deepEqual(suggest(cond, cond.length, DATA).items.map((i) => i.insert), ["the gate", "the stairs"]);
 });
 
+test("a CAST member written with @ is a name like any other, and the block goes on after it", () => {
+  assert.deepEqual(castNames("@h3 references\nCAST\n@KEEPER (image 1): a keeper\nMAYA: a woman\n@lib x\nGHOST: no member"), ["KEEPER", "MAYA"]);
+});
+
 test("two capitals complete a CAST name; at a line's start also as a line of speech", () => {
   const head = "@h3 ref2va 16:9\nCAST\nKEEPER (image 1): an old lighthouse keeper\nMAYA: a young woman\n\nSHOT 5s: static\n";
   const inProse = head + "The light finds KE";

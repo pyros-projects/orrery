@@ -14,6 +14,10 @@ it. In `@h3 references` (ref2va) the
 compiler turns members into <Subject N> labels and sources into the labels the MiniMax H3
 Reference to Video node gives its inputs; in the other modes names expand to descriptions,
 which is also how RefMods bind to a prompt.
+
+A member may be written `@JINX` anywhere (in the CAST, the prose, a voice, SET:), as Fountain forces
+a character with `@`; `bare` writes it `JINX` before the screenplay is read. `@name(0.8)` stays the
+LoRA shortcut for every name that is not a member's (orrery.loras.long_form asks `names`).
 """
 
 import re
@@ -55,6 +59,30 @@ KEEP_WHOLE = {
 _KEEP = re.compile(r"^([A-Za-z_ -]+?)\s*(?:[-–—:,]\s*(.*))?$")
 _BRACKET = re.compile(r"\[(image|video|audio)\s+(\d+)(\s+audio)?\]", re.IGNORECASE)
 _DETAIL = re.compile(r"\s+(?:with|wearing|in|who|whose|that|holding|carrying|facing|dressed)\s", re.IGNORECASE)
+_ENDS_CAST = re.compile(r"^(?:SHOT|SCENE|CHUNK)\b")
+
+
+def names(text: str) -> list[str]:
+    """The names the CAST blocks of a template give their members, written with `@` or without."""
+    out, in_cast = [], False
+    for raw in text.splitlines():
+        line = raw.strip()
+        if line == "CAST":
+            in_cast = True
+        elif _ENDS_CAST.match(line):
+            in_cast = False
+        elif in_cast and (m := MEMBER.match(line.removeprefix("@"))) and m.group(1).strip() not in out:
+            out.append(m.group(1).strip())
+    return out
+
+
+def bare(text: str) -> str:
+    """The template with every `@NAME` of a CAST member written `NAME`."""
+    found = names(text) if "@" in text else []
+    if not found:
+        return text
+    member = "|".join(re.escape(n) for n in sorted(found, key=len, reverse=True))
+    return re.sub(rf"(?<![\w@<\\])@({member})(?![\w-])", r"\1", text)
 
 
 @dataclass(frozen=True)

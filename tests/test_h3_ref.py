@@ -331,6 +331,33 @@ def test_a_clip_gets_the_refmods_of_the_members_it_names_and_the_global_ones():
     assert [m["name"] for m in h3(quiet).refmods] == ["garden_canon"]  # lowercase prose names no member
 
 
+AT_CAST = """@h3 references 16:9
+CAST
+@KEEPER (image 1, refmod keeper_canon): an old lighthouse keeper, in a yellow raincoat
+@OLD MAN: a fisherman with a white beard
+SHOT 5s: static
+@KEEPER climbs the stairs while @OLD MAN watches. A note to @keeper@example.org.
+@KEEPER (whispering): The light is out.
+SFX: rain on the glass
+LORA: @style(0.8)
+"""
+
+
+def test_a_member_written_with_at_is_the_member_without_it():
+    plain = AT_CAST.replace("@KEEPER", "KEEPER").replace("@OLD MAN", "OLD MAN")
+    then, now = h3(plain), h3(AT_CAST)
+    assert (now.text, now.refmods, [i.message for i in now.lint]) == (then.text, then.refmods, [i.message for i in then.lint])
+    assert "@keeper@example.org" in now.text and "<lora:style:0.8>" in now.loras  # not members: as written
+
+
+def test_a_members_name_is_no_lora_shortcut():
+    from orrery.loras import long_form
+
+    text = AT_CAST + "SET: @KEEPER(0.6)\n"
+    assert "SET: @KEEPER(0.6)" in long_form(text) and "<lora:style:0.8>" in long_form(text)
+    assert long_form("a cat @KEEPER(0.6)") == "a cat <lora:KEEPER:0.6>"  # no CAST: a LoRA, as before
+
+
 def test_always_keeps_a_member_in_as_global_did():
     assert h3(REFMOD_TOUR.replace(", global", ", always")).refmods == h3(REFMOD_TOUR).refmods
 

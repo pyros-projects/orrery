@@ -19,9 +19,13 @@ Stack = list[tuple[str, float, float]]
 
 
 def long_form(text: str) -> str:
-    """Every `@name(strength)` as the `<lora:name:strength>` that LoRA loaders and orrery's sweeps read."""
-    return SHORT.sub(lambda m: m.group(0) if m.group(1).lower() in NOT_LORAS else f"<lora:{m.group(1)}:{m.group(2).strip()}>",
-                     text or "")
+    """Every `@name(strength)` as the `<lora:name:strength>` that LoRA loaders and orrery's sweeps read; a
+    CAST member's name is no LoRA (`SET: @JINX(0.6)` turns her references)."""
+    from orrery.cast import names
+
+    members = set(names(text)) if "@" in (text or "") else set()
+    return SHORT.sub(lambda m: m.group(0) if m.group(1).lower() in NOT_LORAS or m.group(1) in members
+                     else f"<lora:{m.group(1)}:{m.group(2).strip()}>", text or "")
 
 
 def lora_files() -> list[str]:

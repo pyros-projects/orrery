@@ -151,8 +151,8 @@ export function castNames(text) {
   for (const raw of uncommented(text).split("\n")) {
     const l = raw.trim();
     if (/^CAST\s*$/.test(l)) { inCast = true; continue; }
-    if (/^(SHOT\b|SCENE\b|CHUNK\b|@)/.test(l) || (inCast && !l)) { inCast = false; continue; }
-    const m = inCast && /^([A-Z][A-Z0-9 _-]*?)\s*(?:\([^)]*\))?\s*:\s*\S/.exec(l);
+    if (/^(SHOT\b|SCENE\b|CHUNK\b|@(?![A-Z]))/.test(l) || (inCast && !l)) { inCast = false; continue; }
+    const m = inCast && /^@?([A-Z][A-Z0-9 _-]*?)\s*(?:\([^)]*\))?\s*:\s*\S/.exec(l);
     if (m && !names.includes(m[1])) names.push(m[1]);
   }
   return names;
@@ -213,7 +213,7 @@ function inCast(before) {
   for (const raw of uncommented(before).split("\n").slice(0, -1)) {
     const l = raw.trim();
     if (/^CAST\s*$/.test(l)) open = true;
-    else if (/^(SHOT\b|SCENE\b|CHUNK\b|@)/.test(l) || (open && !l)) open = false;
+    else if (/^(SHOT\b|SCENE\b|CHUNK\b|@(?![A-Z]))/.test(l) || (open && !l)) open = false;
   }
   return open;
 }

@@ -32,6 +32,7 @@ from orrery.cast import (
     Names,
     article,
     attach,
+    bare,
     bracket_sources,
     oxford,
     parse_member,
@@ -808,6 +809,7 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
 
     lint: list[Issue] = []
     src, libraries = with_inline(strip_comments(src), libraries)
+    src = bare(src)  # `@JINX` is JINX
     reel = split_reel(src)
     params = parse(src).params
     if reel and params.unique:
