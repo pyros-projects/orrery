@@ -80,6 +80,7 @@ const REF = [
     ["END ON: @MAYA reaches the door", "closes this scene and opens the next with the same words", "END ON: "],
     ["START WITH: the door bursts open", "this scene's own opening, in place of the END ON: before it", "START WITH: "],
     ["AFTER: 2", "continue scene 2's last clip (title or number) instead of the clip before: many scenes can branch off one clip, each with its own SET:", "AFTER: "],
+    ["AFTER: the input video", "continue the video wired into the Orrery Prompt's video input (Orrery Continue needs the vae and audio_vae); an END ON: in the head says how the video ends, a REMEMBER: there keeps its frames for every clip", "AFTER: the input video\n"],
     ["CUT TO: the stairs ×2 (30%)", "at a scene's end: jump to that scene (title or number) instead of going on; ×2 twice, then on, without ×N for good; (30%) that often", "CUT TO: "],
     ["IF $w is a storm: CUT TO: the stairs", "a jump on what this clip rolled: each seed its own story; the dividers list the clips each scene plays at the node's seed", "IF $w is "],
     ["$look[-1]", "$look as it was one clip ago ([-2]: two clips); $look[\"the salon\"]: when that scene last played", "$look[-1]"],

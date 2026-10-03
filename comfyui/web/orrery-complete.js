@@ -137,17 +137,19 @@ const sceneTitles = (text) => text.split("\n")
   .map((l) => /^\s*(?:SCENE|CHUNK)\b\s*(.*?)(?:\s+repeat\s+(?:\d+|forever)|\s+[×x]\s*\d+|\s+forever)?\s*$/i.exec(l)).filter(Boolean)
   .map((c, i) => c[1].replace(/(?<!\S)\(test\)(?!\S)/i, " ").split(/\s+/).filter(Boolean).join(" ") || String(i + 1));
 
-// CUT TO: (GOTO:, the earlier word; alone, or after `? cond:` / `IF …:`) and AFTER:: the scenes, by title.
+// CUT TO: (GOTO:, the earlier word; alone, or after `? cond:` / `IF …:`) and AFTER:: the scenes, by title;
+// AFTER: also the input video.
 function gotoItems(before, line, text) {
   const cut = /^\s*(?:(?:\?|IF\s+(?=\$))[^\n]*?:\s*)?(?:CUT\s+TO|GOTO):\s*([^×(]*)$/i.exec(line);
   const after = /^\s*AFTER:\s*(.*)$/.exec(line);
   const m = cut || after;
   if (!m) return null;
   const detail = cut ? "jump to this scene; ×N after it: N times, (30%) that often" : "continue this scene's last clip";
-  return {
-    items: sceneTitles(text).filter((t) => startsWith(t, m[1])).map((t) => ({ insert: t, detail, preview: "" })),
-    replaceFrom: before.length - m[1].length,
-  };
+  const items = sceneTitles(text).filter((t) => startsWith(t, m[1])).map((t) => ({ insert: t, detail, preview: "" }));
+  if (after && startsWith("the input video", m[1])) {
+    items.push({ insert: "the input video", detail: "continue the video wired into the Orrery Prompt", preview: "" });
+  }
+  return { items, replaceFrom: before.length - m[1].length };
 }
 
 // REMEMBER: what to keep (first frame, frame at 1s, every 10th frame), then as whom or what, then for

@@ -15,8 +15,9 @@ did not come up, marked with a red `!`); `NO_COLOR` prints
 it without colour. **Templates → orrery** (or `example_workflows/` in the
 repository) holds a workflow per mode, built from ComfyUI's own nodes plus
 orrery's: Krea 2 (`text`), MiniMax H3 t2va, i2va, fl2va, l2va, ref2va, reels
-on t2va and on ref2va with Orrery Continue / Orrery Film, and a reel with
-RefMods (Orrery RefMods, with the Jinx RefMod that ships with orrery). Their notes name the
+on t2va and on ref2va with Orrery Continue / Orrery Film, a reel with
+RefMods (Orrery RefMods, with the Jinx RefMod that ships with orrery) and a reel
+that goes on from a video of your own. Their notes name the
 models and where they go; sampling follows ComfyUI's own templates (H3:
 `res_multistep`, 20 steps; Krea 2 Turbo: 8 steps). Each puts ComfyUI's Model
 Attention Backend on `comfy kitchen attention` after the model loader: INT8
@@ -28,7 +29,7 @@ files in instead.
 Nodes under **orrery**:
 
 - **Orrery Prompt**: seed and target (`text`, `h3-base`, `flat`), optional
-  `segment`, `first_frame` and `last_frame` → `text`, `picks`, `seed`, `width`,
+  `segment`, `first_frame`, `last_frame` and `video` → `text`, `picks`, `seed`, `width`,
   `height`, `length`, `lora_stack` and
   `megapixels`. A picture wired into `first_frame` (else
   `last_frame`), the same one the H3 node gets, gives `width`/`height` its shape
@@ -46,7 +47,10 @@ Nodes under **orrery**:
   reported in the log and in the Test tab. A reel (`SCENE` blocks, `×N` and
   `forever`, `$x[-1]`, `AFTER:`, `(test)`; see [h3.md](h3.md) 1d) writes one clip per run:
   `segment` counts up by itself, and Orrery Continue / Orrery Film (below)
-  chain the clips. The node is the whole of orrery, in six tabs (⤢ opens the
+  chain the clips. A video wired into `video` (Load Video) is the scene before
+  the reel's first: the node keeps it at 24 fps beside the clips, a head
+  `REMEMBER:` keeps its frames, and a scene with `AFTER: the input video`
+  continues it ([h3.md](h3.md) 1d, *The input video*). The node is the whole of orrery, in six tabs (⤢ opens the
   same app over the canvas, Esc brings it back):
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `__creature#` properties and their
@@ -141,7 +145,10 @@ Nodes under **orrery**:
   [H3 Continuum](https://github.com/ukr8b3g-cmyk/ComfyUI-H3-Continuum) (MIT).
   In every clip that continues one, Orrery Continue starts the clip's latent with the
   last 22 frames of that clip (the one before, or the one `AFTER:` names), picture and sound, and a `noise_mask`
-  keeps the sampler off them; no model or layout patch is involved. Wire:
+  keeps the sampler off them; no model or layout patch is involved. After the
+  input video it takes the video's last 22 frames and sound instead, fitted to
+  the clip's canvas and encoded with the H3 video VAE in its `vae` and the audio
+  VAE in its `audio_vae` (only that clip needs them). Wire:
 
   ```
   Orrery Prompt picks ───────────────▶ Orrery Continue picks
