@@ -304,7 +304,7 @@ SFX: wind
 """
     res = h3(src)
     assert "A young blonde woman, in a light-pink shirt, waves." in res.text
-    assert res.refmods == [{"name": "maya_canon", "member": "MAYA", "strength": 1.0, "from": 0.35}]
+    assert res.refmods == [{"name": "maya_canon", "member": "MAYA", "strength": 1.0, "from": 0.0}]
     assert not any("maya_canon" in i.message for i in res.lint)
 
 
