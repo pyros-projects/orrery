@@ -42,7 +42,7 @@ def _character(row: dict) -> str:
     return f"{_owner(row)}/{row.get('seed')}{tail}"
 
 
-_OWN = ("pictures", "prompt")  # the properties every character has; a binding of that name gives way
+_OWN = ("ids", "pictures", "prompt")  # the properties every character has; a binding of that name gives way
 _PICKED = re.compile(r"^\$(\w+) ← ")  # `$origin ← __characters/creator/origin__`: a library binding's pick
 
 
@@ -111,7 +111,8 @@ def libraries(home) -> dict[str, Library]:
                            | ({"exported"} if any(r.get("exports") for r in rows) else set()))  # it carries EXPORT: data
             each = [_traits(home, r, labels) for r in rows]
             traits = {k: v for k, v in each[0].items() if all(t.get(k) == v for t in each)}  # not the view, say
-            props = {**traits, "pictures": "\n".join(str(r["media"]) for r in rows), "prompt": str(rows[0].get("text") or "")}
+            props = {**traits, "pictures": "\n".join(str(r["media"]) for r in rows), "prompt": str(rows[0].get("text") or ""),
+                     "ids": "\n".join(str(r["id"]) for r in rows)}  # the gallery's ids: thumbnails in the editor
             entries.append(Entry(name, tuple(rated), round(sum(factors) / len(factors), 3), tuple(sorted(props.items()))))
         out[PREFIX + owner] = Library(PREFIX + owner, entries, {"source": f"the gallery's pictures of {owner}",
                                                                 "gallery": True})
@@ -132,6 +133,17 @@ def find(name: str, libraries: Mapping[str, Library]) -> list[Path] | None:
         if one := [f for f in files if f.stem == last or f.name == last]:
             return one[:1]
     return None
+
+
+def ids(name: str, libraries: Mapping[str, Library]) -> dict[str, str]:
+    """The gallery id of each picture `name` stands for, by its file (for a thumbnail)."""
+    owner = name.strip().rpartition("/")[0]
+    lib = libraries.get(PREFIX + owner)
+    out = {}
+    for entry in lib.entries if lib else []:
+        files, rows = (entry.prop("pictures") or "").splitlines(), (entry.prop("ids") or "").splitlines()
+        out.update(zip(files, rows, strict=False))
+    return out
 
 
 def prompt(name: str, libraries: Mapping[str, Library]) -> str:

@@ -543,3 +543,60 @@ test("a picture's sheet lists what it exported: texts, lists and an entry's fiel
   ]);
   assert.deepEqual(exportRows(undefined), []);
 });
+
+test("a dial ticks several choices into one that rolls among them (#156)", async () => {
+  const { chosen, joinChoices, menuItems } = await import("../../comfyui/web/app/dialmenu.js");
+  const genres = ["everyday", "noir", "gothic", "spacefarer"];
+  assert.deepEqual(chosen(genres, "{noir|gothic}"), ["noir", "gothic"]);
+  assert.deepEqual(chosen(genres, "Noir"), ["noir"]);
+  assert.deepEqual(chosen(genres, "{noir|western}"), []);  // not all of them are choices: it is an expression
+  assert.deepEqual(menuItems(genres, "{noir|gothic}"), genres);  // every choice stays listed to tick more
+  const origins = ["Tamil descent, with {deep brown|dark brown} skin", "Greek descent"];
+  assert.deepEqual(chosen(origins, `{${origins[0]}|${origins[1]}}`), origins);  // a choice with its own braces
+  assert.equal(joinChoices([]), "");
+  assert.equal(joinChoices(["noir"]), "noir");
+  assert.equal(joinChoices(["noir", "gothic"]), "{noir|gothic}");
+});
+
+test("annotations sit at the ends of the lines they belong to (#163)", async () => {
+  const { annotationLines, mergeHints } = await import("../../comfyui/web/app/annotate.js");
+  const text = ["$colour = __colours__", "$backdrop = a grey wall", "EXPORT:", "  mood = __moods__", "  $who", "EXPORT: $a, $b",
+    "@grid $view", "@h3 references", "CAST", "@HERO (image $hero): $hero.who", "SHOT 5s: static", "HERO waits."].join("\n");
+  const ann = { bindings: { colour: "violet", backdrop: "a grey wall" }, exports: { mood: "restless", who: "a heron", a: "1", b: "2" },
+    grid: "4 runs: portrait · profile", cast: { HERO: "images 6–9 · krea/x/7" } };
+  const got = Object.fromEntries([...annotationLines(text, ann)].map(([i, h]) => [i, h.text]));
+  assert.deepEqual(got, { 0: "= violet", 3: "→ restless", 4: "→ a heron", 5: "→ 1  → 2", 6: "→ 4 runs: portrait · profile",
+    9: "→ images 6–9 · krea/x/7" });  // the plain backdrop says itself; HERO waits. is no CAST line
+  const merged = mergeHints(new Map([[0, { text: "frames → image 3" }]]), annotationLines(text, ann));
+  assert.equal(merged.get(0).text, "frames → image 3");  // REMEMBER's hint wins
+});
+
+test("hover knows each keyword's forms and a picture's dials (#136, #147)", async () => {
+  const { keywordHelp, directiveHelp, dialText } = await import("../../comfyui/web/app/hover.js");
+  assert.equal(keywordHelp("REMEMBER:").word, "REMEMBER:");
+  assert.ok(keywordHelp("REMEMBER:").forms.some(([f]) => f === "REMEMBER: frames 0, 50 as @NAME"));
+  assert.equal(keywordHelp("SHOT 5s:").word, "SHOT");
+  assert.equal(keywordHelp("IF").word, "IF");
+  assert.equal(keywordHelp("EXPORT:").word, "EXPORT:");
+  assert.equal(keywordHelp("style:").word, "style:");
+  assert.equal(keywordHelp("@HERO (image 1):"), null);  // a CAST member's head is no keyword
+  assert.equal(directiveHelp("@grid").word, "@grid");
+  assert.equal(dialText({ strength: 0.6, from: 0.35, to: 1 }), "at 0.6 from 35%");
+  assert.equal(dialText({ strength: 1 }), "");
+});
+
+test("a CAST line with gallery pictures shows them after it (#137)", async () => {
+  const { annotationLines } = await import("../../comfyui/web/app/annotate.js");
+  const ann = { cast: { HERO: "images 8–9 · krea/x/7" }, members: { HERO: { pictures: [{ image: 8, id: "a1" }, { image: 9, id: "a2" }] } } };
+  const hint = annotationLines("CAST\n@HERO (image krea/x/7): a heron\nSHOT 5s", ann, (id) => `/t/${id}`).get(1);
+  assert.deepEqual(hint.thumbs, ["/t/a1", "/t/a2"]);
+});
+
+test("a CAST line's note says nothing the line says itself", async () => {
+  const { annotationLines, slotsText } = await import("../../comfyui/web/app/annotate.js");
+  assert.equal(slotsText([9, 6, 7, 8]), "images 6–9");
+  assert.equal(slotsText([2, 5]), "images 2, 5");
+  const ann = { cast: { PLACE: "image 1", HERO: "image 9 · krea/x/7" } };
+  const notes = annotationLines("CAST\n@PLACE (image 1): a street\n@HERO (image krea/x/7): a heron", ann);
+  assert.deepEqual([...notes.keys()], [2]);
+});

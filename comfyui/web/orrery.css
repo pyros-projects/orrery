@@ -175,6 +175,21 @@
 .orrery-app .editor .hint { display: inline-block; width: 0; white-space: nowrap; vertical-align: top; }
 .orrery-app .editor .hint > span { margin-left: 1.5ch; color: var(--teal); opacity: .75; font-style: italic; }
 .orrery-app .editor .hint.replaced > span { color: var(--faint); text-decoration: line-through; }
+.orrery-app .editor .hint.note > span { color: var(--muted); opacity: .55; }
+.orrery-app .editor .hint .hint-pic { height: 1.45em; width: auto; border-radius: 3px; margin-right: 3px; vertical-align: top; opacity: 1; }
+.orrery-app .editor .hint.note > span:has(.hint-pic) { opacity: .8; }
+.orrery-app .hv { position: absolute; z-index: 25; pointer-events: none; width: max-content; max-width: min(440px, calc(100% - 8px)); background: #1f2029; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.5); padding: 8px 10px; font-size: 12px; line-height: 1.45; display: grid; gap: 4px; }
+.orrery-app .hv b { color: var(--ink); }
+.orrery-app .hv .hv-t { color: var(--muted); }
+.orrery-app .hv .hv-who { font-family: var(--mono); color: var(--ink); overflow-wrap: anywhere; }
+.orrery-app .hv ul { margin: 0; padding-left: 14px; display: grid; gap: 2px; }
+.orrery-app .hv code { font-family: var(--mono); color: var(--brass); }
+.orrery-app .hv .hv-f { color: var(--faint); font-size: 11px; }
+.orrery-app .hv .hv-pics { display: flex; flex-wrap: wrap; gap: 6px; }
+.orrery-app .hv figure { margin: 0; display: grid; gap: 2px; justify-items: center; }
+.orrery-app .hv figure img { width: 64px; height: 80px; object-fit: cover; border-radius: 5px; background: #14151b; }
+.orrery-app .hv figcaption { font: 10.5px var(--mono); color: var(--muted); }
+.orrery-app .hv .hv-none { width: 64px; height: 80px; display: grid; place-items: center; border: 1px dashed var(--line); border-radius: 5px; color: var(--faint); font-size: 10.5px; }
   scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
 .orrery-app .chunkmedia .tl-clip { flex: none; }
 .orrery-app .chunkmedia .cm-none { font-size: 11.5px; padding: 4px 0; }
@@ -197,16 +212,20 @@
 .orrery-app .tl-send .missing { width: 34px; height: 22px; aspect-ratio: auto; border-radius: 3px; flex: none; cursor: default; }
 .orrery-app .tl-send .missing .i { width: 12px; height: 12px; }
 .orrery-app .tl-video { width: 100%; max-height: 60vh; border-radius: 8px; background: #000; }
-.orrery-app .ac { position: absolute; z-index: 20; min-width: 240px; max-width: 340px; background: #1f2029; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.5); overflow: hidden; font-size: 12px; }
-.orrery-app .ac ul { list-style: none; margin: 0; padding: 3px 0; max-height: 200px; overflow-y: auto; }
-.orrery-app .ac li { display: flex; justify-content: space-between; gap: 14px; padding: 4px 10px; cursor: pointer; font-family: var(--mono); }
-.orrery-app .ac li span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.orrery-app .ac li span:last-child { color: var(--faint); font-family: var(--ui); white-space: nowrap; }
-.orrery-app .ac.wide { max-width: min(480px, calc(100% - 8px)); }
-.orrery-app .ac.wide ul { max-height: 260px; }
-.orrery-app .ac.wide .pv { white-space: normal; overflow-wrap: anywhere; font-family: var(--mono); }
+.orrery-app .ac { position: absolute; z-index: 20; width: max-content; min-width: 260px; max-width: min(560px, calc(100% - 8px)); background: #1f2029; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.5); overflow: hidden; font-size: 12px; }
+.orrery-app .ac ul { list-style: none; margin: 0; padding: 3px 0; max-height: 264px; overflow-y: auto; }
+.orrery-app .ac li { display: flex; flex-direction: column; gap: 1px; padding: 5px 10px; cursor: pointer; }
+.orrery-app .ac li.thumbed { display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 8px; align-items: center; }
+.orrery-app .ac li.thumbed .acl, .orrery-app .ac li.thumbed .acd { grid-column: 2; }
+.orrery-app .ac li .act { grid-row: span 2; width: 40px; height: 40px; object-fit: cover; border-radius: 4px; background: #14151b; }
+.orrery-app .ac .acl { font-family: var(--mono); white-space: normal; overflow-wrap: anywhere; color: var(--ink); }
+.orrery-app .ac .acd { font-family: var(--ui); font-size: 11px; color: var(--faint); white-space: normal; overflow-wrap: anywhere; }
 .orrery-app .ac li.on { background: var(--hover); }
-.orrery-app .ac .pv { padding: 5px 10px; border-top: 1px solid var(--line); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.orrery-app .ac li.on .acd { color: var(--muted); }
+.orrery-app .ac .pv { padding: 6px 10px; border-top: 1px solid var(--line); color: var(--muted); white-space: normal; overflow-wrap: anywhere; font-family: var(--mono); max-height: 150px; overflow-y: auto; }
+.orrery-app .ac .pv:has(img) { display: flex; gap: 8px; align-items: flex-start; }
+.orrery-app .ac .pv img { height: 88px; border-radius: 5px; flex: none; }
+.orrery-app .ac .pv span { flex: 1; min-width: 0; }
 .orrery-app .dials { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px 0; flex: none; max-height: 96px; overflow-y: auto; }
 .orrery-app .dials:empty { display: none; }
 .orrery-app .dial { display: inline-flex; align-items: center; background: var(--well); border: 1px solid var(--line); border-radius: 7px; font: 12px var(--mono); max-width: 100%; }
@@ -218,10 +237,17 @@
 .orrery-app .dial .mini { display: none; margin-right: 4px; }
 .orrery-app .dial.on .mini { display: inline-flex; }
 .orrery-app .dm { position: absolute; z-index: 30; max-width: min(460px, calc(100% - 8px)); max-height: 260px; overflow-y: auto; background: #1f2029; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.5); padding: 3px 0; font: 12px/1.4 var(--mono); }
-.orrery-app .dm-item { padding: 4px 10px; cursor: pointer; white-space: normal; overflow-wrap: anywhere; }
+.orrery-app .dm-item { padding: 4px 10px 4px 6px; cursor: pointer; white-space: normal; overflow-wrap: anywhere; display: flex; gap: 7px; align-items: flex-start; }
+.orrery-app .dm-box { flex: none; width: 15px; height: 15px; margin-top: 1px; border: 1px solid var(--line); border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; color: var(--rose); }
+.orrery-app .dm-box:hover { border-color: var(--rose); }
+.orrery-app .dm-item.cur .dm-box { border-color: var(--rose); background: rgba(240,122,160,.12); }
 .orrery-app .dm-item:hover, .orrery-app .dm-item.on { background: var(--hover); }
 .orrery-app .dm-item.cur { color: var(--rose); }
 .orrery-app .dm-note { padding: 6px 10px; color: var(--faint); font-family: var(--ui); }
+.orrery-app .dm-pic { width: 34px; height: 42px; object-fit: cover; border-radius: 4px; flex: none; background: #14151b; }
+.orrery-app .dm-text { display: grid; gap: 1px; min-width: 0; }
+.orrery-app .dm-text > span { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.orrery-app .dm-text small { color: var(--faint); font-size: 10.5px; }
 .orrery-app .pfoot { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px; flex: none; }
 .orrery-app .stat.live b { color: var(--brass); }
 .orrery-app .stat.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--brass); display: inline-block; margin-right: 6px; animation: oa-pulse 1.2s ease-in-out infinite; }
@@ -339,7 +365,10 @@
 .orrery-app .addrow { display: flex; gap: 6px; padding: 10px 12px; border-top: 1px solid var(--line); flex: none; }
 .orrery-app .ask { margin: 0 12px 12px; display: flex; gap: 8px; align-items: center; border: 1px dashed #3d3f58; border-radius: 8px; padding: 7px 10px; color: var(--faint); font-size: 12px; flex: none; }
 .orrery-app .ask .i { color: var(--violet); }
-.orrery-app .tagadd { width: 64px; background: transparent; border: 1px dashed var(--line); border-radius: 5px; font: 11px var(--mono); padding: 2px 5px; color: var(--muted); }
+.orrery-app .libpics { display: inline-flex; gap: 4px; margin-right: 4px; }
+.orrery-app .libpics img { width: 44px; height: 56px; object-fit: cover; border-radius: 4px; background: #14151b; }
+.orrery-app .tagadd:focus { width: 18ch; }
+.orrery-app .tagadd { width: 7ch; background: transparent; border: 1px dashed var(--line); border-radius: 5px; font: 11px var(--mono); padding: 2px 5px; color: var(--muted); }
 
 /* galaxy tab */
 .orrery-app .rule { font-size: 11.5px; color: var(--faint); padding: 10px 12px 0; margin: 0; }

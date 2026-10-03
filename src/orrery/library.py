@@ -58,8 +58,24 @@ def _text_entries(text: str) -> list[str]:
     return [line.strip() for line in text.splitlines() if line.strip() and not line.strip().startswith("#")]
 
 
+_LOADED: dict[tuple[str, str | None], tuple[tuple[int, int], Library]] = {}  # path, name → (mtime, size), library
+
+
 def load_library(path: Path, name: str | None = None) -> Library:
+    """A library file, parsed once and again only when the file changes (a home of a hundred thousand
+    entries took 0.3 s to read for every request)."""
     path = Path(path)
+    stat = path.stat()
+    key, mark = (str(path), name), (stat.st_mtime_ns, stat.st_size)
+    if (hit := _LOADED.get(key)) and hit[0] == mark:
+        lib = hit[1]
+    else:
+        lib = _read_library(path, name)
+        _LOADED[key] = (mark, lib)
+    return Library(lib.name, list(lib.entries), dict(lib.meta))  # a copy: no caller changes the cache
+
+
+def _read_library(path: Path, name: str | None = None) -> Library:
     if path.suffix == ".txt":
         return Library(name or path.stem, [Entry(v) for v in _text_entries(path.read_text(encoding="utf-8"))], {})
     data = yaml.safe_load(path.read_text(encoding="utf-8"))

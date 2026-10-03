@@ -9,6 +9,13 @@ checks) are left out.
 
 ### Added
 
+- The editor remembers the language for you: a completion popup you can read (it wraps, previews in full,
+  opens upward near the bottom, Ctrl+Space), every form of a keyword as you type its start, fields after
+  `$hero.`, the gallery's characters with thumbnails after `image `, each line's result at its end (a
+  binding's roll, an export, a grid's cells, where a member's pictures go), and hover help on keywords,
+  CAST members, libraries and bindings (#132).
+- A dial takes several choices: tick them in its menu, and it rolls among them (`{noir|gothic}`); on a
+  library the chosen entries keep their properties (#156).
 - `EXPORT:` keeps what a template rolled beside its prompt, never in it: the gallery, History and
   `orrery expand --json` hold it for other systems, the Gallery shows it as a sheet, and a picture
   carries it into the screenplays that cast it (`$hero.mood`). The Character creator exports who it

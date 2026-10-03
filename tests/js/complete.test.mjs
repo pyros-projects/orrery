@@ -290,3 +290,58 @@ test("AFTER: completes the scene titles, and REMEMBER: what to keep, as whom, fo
   assert.deepEqual(names(`${reel}REMEMBER: first frame as @KEEPER `), ["in clips 2-5", "until "]);
   assert.deepEqual(names(`${reel}REMEMBER: first frame as @KEEPER until the g`), ["the gate"]);
 });
+
+test("a keyword's start offers the keyword and every form of it (#135)", () => {
+  const items = at("@h3 references\nSHOT 5s\nA.\nREME").items.map((i) => i.insert);
+  assert.equal(items[0], "REMEMBER: ");
+  assert.ok(items.includes("REMEMBER: frames 0, 50 as @NAME") && items.includes("REMEMBER: every 10th frame as refmod NAME"));
+  const set = at("@h3 references\nSHOT 5s\nA.\nSET").items;
+  assert.ok(set.some((i) => i.insert === "SET: @NAME(1, 35%, 80%)" && i.detail === "strength, start and end"));
+  assert.equal(at("@h3 references\nSHOT 5s\nA.\nR").items.filter((i) => i.insert.startsWith("REMEMBER: ") && i.insert.length > 10).length, 0,
+    "one letter offers the keywords only, not every form");
+});
+
+test("text templates get their own keywords: EXPORT:, IF $ (#135)", () => {
+  const items = at("$who = a heron\nEXP").items.map((i) => i.insert);
+  assert.ok(items.includes("EXPORT: ") && items.includes("EXPORT:\n  who = $who\n  mood = __characters/creator/mood__"));
+  assert.ok(at("a fox\nIF").items.some((i) => i.insert === "IF $x is a, b: the line"));
+  assert.ok(!at("@h3 t2va\nSHOT 5s\nA.\nEXP").items.some((i) => i.insert.startsWith("EXPORT")));  // a screenplay leaves it out
+});
+
+test("after $name. the fields of what the binding rolls, and @h3 and @lib among the directives (#135)", () => {
+  const data = { ...DATA, libraries: [...DATA.libraries, { name: "pictures/krea/x", count: 2, source: "builtin", tags: [], sample: [],
+    props: {}, fields: ["mood", "pictures", "prompt", "who"] }] };
+  const atEnd = (t) => suggest(t, t.length, data).items.map((i) => i.insert);
+  const fields = atEnd("$hero = __pictures/krea/x[exported]__\n$hero.");
+  assert.deepEqual(fields, ["who", "mood", "prompt"]);  // what a character carries first; ids and pictures are the app's
+  const now = suggest("$hero = __pictures/krea/x__\n$hero.", 34, { ...data, fieldValues: { hero: { who: "a tall heron" } } }).items[0];
+  assert.deepEqual([now.insert, now.detail], ["who", "now: a tall heron"]);
+  assert.deepEqual(atEnd("$hero = __pictures/krea/x__\n$hero.wh"), ["who"]);
+  const directives = at("@").items.map((i) => i.insert);
+  assert.ok(directives.includes("@h3 ") && directives.includes("@lib "));
+});
+
+test("after image in a CAST: the gallery's presets to roll from and its characters, with their pictures (#137)", () => {
+  const data = { ...DATA, pictures: [{ preset: "krea/09_character_creator", count: 2, characters: [
+    { name: "krea/09_character_creator/7", ids: ["a1", "a2"], views: 2, tags: ["exported"], who: "a tall heron in a red coat" },
+    { name: "krea/09_character_creator/9", ids: ["b1"], views: 1, tags: [], who: "an old fox" }] }] };
+  const text = "@h3 references\nCAST\n@HERO (image ";
+  const items = suggest(text, text.length, data).items;
+  assert.equal(items[0].insert, "__pictures/krea/09_character_creator__");
+  assert.deepEqual(items[0].thumbIds, ["a1", "b1"]);
+  assert.deepEqual(items.slice(1).map((i) => [i.insert, i.thumbId]), [["krea/09_character_creator/7", "a1"], ["krea/09_character_creator/9", "b1"]]);
+  const fox = suggest(`${text}fox`, text.length + 3, data).items.map((i) => i.insert);
+  assert.deepEqual(fox, ["krea/09_character_creator/9"]);  // who matches too
+  const typed = "@h3 references\nCAST\n@HERO (i";
+  assert.ok(suggest(typed, typed.length, data).items.some((i) => i.insert === "image "));
+});
+
+test("after as image and from image: the slots, each saying what has it already", () => {
+  const text = "@h3 references\nCAST\n@HERO (image 1, image 3): a heron\nSHOT 5s: static\nREMEMBER: frame 0 as image 4\nREMEMBER: first frame as image ";
+  const items = suggest(text, text.length, DATA).items;
+  assert.deepEqual(items.slice(0, 5).map((i) => [i.label, i.detail]), [["image 1", "HERO's picture"], ["image 2", "free"],
+    ["image 3", "HERO's picture"], ["image 4", "a REMEMBER: line's frames"], ["image 5", "free"]]);
+  assert.equal(items.length, 9);
+  const shot = "@h3 references\nCAST\n@HERO (image 2): a heron\nSHOT 5s: from image ";
+  assert.equal(suggest(shot, shot.length, DATA).items[1].detail, "HERO's picture");
+});

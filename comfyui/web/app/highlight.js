@@ -7,7 +7,7 @@ export const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "
 const CLI_ONLY = "CLI only: in ComfyUI, use the Run count and the seed widget";
 // a line's head: the screenplay words (the earlier CHUNK, HANDOFF:, GOTO:, SEND: too), IF before a
 // condition, and a name with a colon (a CAST member, a speaker), `@` before it or not
-const HEAD = /^(\s*)(SHOT\s+[\d.]+\s*s\b:?|SFX:|MUSIC:|LORA:|END ON:|START WITH:|REMEMBER:|CUT TO:|AFTER:|HANDOFF:|SEND:|GOTO:|SET:|style:|summary:|voice:|keep:|context:|refmods:|(?:SCENE|CHUNK)(?=\s|$)|IF(?=\s+\$)|CAST(?=\s*$)|@?[A-Z][A-Z0-9 _-]*?(?:\s*\([^)]*\))?\s*:(?=\s))/;
+const HEAD = /^(\s*)(SHOT\s+[\d.]+\s*s\b:?|EXPORT:|SFX:|MUSIC:|LORA:|END ON:|START WITH:|REMEMBER:|CUT TO:|AFTER:|HANDOFF:|SEND:|GOTO:|SET:|style:|summary:|voice:|keep:|context:|refmods:|(?:SCENE|CHUNK)(?=\s|$)|IF(?=\s+\$)|CAST(?=\s*$)|@?[A-Z][A-Z0-9 _-]*?(?:\s*\([^)]*\))?\s*:(?=\s))/;
 const TOKEN = /(\\[{}|$_@#[\]\\<>])|((?<!\\)__([\w*]+(?:\/[\w*]+)*)(?:\[[^\[\]\n]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\([^()]*\))?)|(\$[A-Za-z_]\w*(?:~\d+)?(?:\.[A-Za-z_][\w-]*)?)|(\d+(?:-\d+)?\$\$)|([{}|])|([^_${}|]+|[_$])/g;
 
 // A glob (`clothing/*`, `clothing/**`) is known when it matches a library.
@@ -79,7 +79,8 @@ function chunkLine(html, c, segment) {
 export function highlight(src, known, { llm = false, chunks = null, segment = null, cast = null, hints = null } = {}) {
   const at = new Map((chunks || []).map((c) => [c.line, c]));
   const members = memberPattern(cast ?? castNames(src));
-  const hint = (i) => (hints?.has(i) ? `<span class="hint${hints.get(i).replaced ? " replaced" : ""}"><span>${esc(hints.get(i).text)}</span></span>` : "");
+  const hint = (i) => (hints?.has(i) ? `<span class="hint${hints.get(i).replaced ? " replaced" : ""}${hints.get(i).kind ? ` ${hints.get(i).kind}` : ""}"><span>`
+    + `${(hints.get(i).thumbs || []).map((u) => `<img class="hint-pic" src="${esc(u)}" alt="">`).join("")}${esc(hints.get(i).text)}</span></span>` : "");
   return src.split("\n").map((l, i) => (at.has(i) ? chunkLine(line(l, known, llm, members), at.get(i), segment)
     : line(l, known, llm, members)) + hint(i)).join("\n");
 }

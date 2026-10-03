@@ -53,6 +53,7 @@ def completion_data(home: Home, loras: list[str] | None = None, refmods: list[st
         "tags": sorted({t for e in lib.entries for t in e.tags}),
         "sample": lib.values()[:SAMPLE],
         "props": _props(lib),
+        "fields": sorted({k for e in lib.entries for k, _ in e.props}),  # every key `$x.field` reads, sentences too
     } for name, lib in sorted(home.libraries().items())]
     return {
         "libraries": libraries,

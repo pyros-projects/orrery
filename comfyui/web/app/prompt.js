@@ -1,7 +1,9 @@
 // Prompt tab: preset bar, the highlighted editor with completion, dials, and a way into Test.
-import { inlineLibraries, suggest } from "../orrery-complete.js";
-import { closeMenu, drawMenu } from "./dialmenu.js";
+import { KEYWORDS, inlineLibraries, suggest } from "../orrery-complete.js";
+import { chosen, closeMenu, drawMenu, joinChoices } from "./dialmenu.js";
 import { esc, highlight } from "./highlight.js";
+import { annotationLines, mergeHints } from "./annotate.js";
+import { wireHover } from "./hover.js";
 import { hintsFor } from "./remember.js";
 import { icon } from "./icons.js";
 import { applyDials, chunkInfo, dials, hasGoto, plays, folderColor, pickerGroups, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
@@ -133,6 +135,7 @@ export function renderPrompt(app) {
     ed.addEventListener("blur", () => blur(ed));
     ed.addEventListener("focus", focus);
   }
+  wireHover(app, app.view.querySelector(".editor"));
   if (app.data.timeline !== false && app.chunks()) loadChain(app).then(paint);
 
   app.view.onclick = (e) => {
@@ -171,6 +174,7 @@ export function renderPrompt(app) {
   fixUniqueSeed(app);
   refreshPlan(app);
   refreshRemembered(app);  // the hints and the remembered frames of a reel just opened
+  refreshAnnotations(app);
 }
 
 async function generate(app) {
@@ -242,7 +246,7 @@ function paintEditor(app) {
   if (!pre) return;
   const chunks = app.chunks();
   pre.innerHTML = `${highlight(app.text, app.known(), { llm: app.llmActive(), chunks, segment: chunks && Number(app.bridge.getSegment()),
-    hints: hintsFor(app.text, app.remembered()) })}\n`;
+    hints: mergeHints(hintsFor(app.text, app.remembered()), annotationLines(app.text, app.annotations(), app.api.thumbURL)) })}\n`;
   layoutTimeline(app, chunks);
   if (chunks && app.data.timeline !== false && app.data.chain === undefined) {  // a reel typed or pasted in
     app.data.chain = null;
@@ -275,6 +279,7 @@ export function refreshFoot(app) {
   refreshPlan(app);  // a dial or an edit can change what Generate queues
   refreshReelPath(app);
   refreshRemembered(app);
+  refreshAnnotations(app);
   const foot = app.view.querySelector(".pfoot");
   if (foot) foot.innerHTML = statsHTML(app);
 }
@@ -334,6 +339,25 @@ function refreshReelPath(app) {
 
 // Where a reel's REMEMBER: lines put their frames, at the node's seed: from the server, which resolves them as
 // the compile does; the hints at their ends and the frames under each scene follow once it is there.
+// Annotations at line ends (#163): what each line gives at the node's seed (and clip), from the server; they
+// wait a moment after typing stops, and a newer template's answer wins.
+function refreshAnnotations(app) {
+  const key = `${app.reelKey()}\n${app.bridge.getSegment?.() ?? 0}`;
+  if (app.data.annotations?.key === key || app.state.annotateKey === key) return;
+  app.state.annotateKey = key;
+  clearTimeout(app.state.annotateTimer);
+  app.state.annotateTimer = setTimeout(async () => {
+    let got;
+    try {
+      got = await app.api.annotate({ template: app.text, target: app.bridge.getTarget(), params: app.bridge.getParams(),
+        seed: app.bridge.getSeed(), segment: app.bridge.getSegment?.() ?? 0 });
+    } catch { got = {}; }
+    if (app.state.annotateKey === key) app.state.annotateKey = null;
+    app.data.annotations = { ...got, key };
+    if (app.state.tab === "prompt" && `${app.reelKey()}\n${app.bridge.getSegment?.() ?? 0}` === key) paintEditor(app);
+  }, 450);
+}
+
 function refreshRemembered(app) {
   if (!app.chunks() || !/^\s*(REMEMBER|SEND):/im.test(stripComments(app.text))) { app.data.remembered = null; return; }
   const key = app.reelKey();
@@ -398,7 +422,6 @@ function renderDials(app) {
   box.innerHTML = list.length ? `<span class="label" title="Turn a binding without editing the template. Empty means its default roll; saving bakes the dials in.">Dials</span>`
     + list.map((d) => {
       const v = kept[d.name] || "", id = `oa-${app.uid}-dl-${d.name}`;
-      dialChoices(app, d);  // a library's entries start on their way now, not when its menu opens
       return `<label class="dial${v ? " on" : ""}" title="$${esc(d.name)} = ${esc(d.expr)}"><span class="dn">$${esc(d.name)}</span>`
         + `<input class="dv" id="${id}" data-dial="${esc(d.name)}" value="${esc(v)}" placeholder="${esc(d.expr)}" spellcheck="false" autocomplete="off" role="combobox" aria-expanded="false">`
         + `<button type="button" class="mini" data-dreset="${esc(d.name)}" aria-label="Back to the default roll">${icon("x")}</button></label>`;
@@ -433,6 +456,9 @@ function wireDials(app) {
     } else if (e.key === "Enter" && app.dm && app.dm.at >= 0 && app.dm.items[app.dm.at] !== undefined) {
       e.preventDefault();
       pickChoice(app, input, app.dm.items[app.dm.at]);
+    } else if (e.key === " " && app.dm && app.dm.at >= 0 && app.dm.items[app.dm.at] !== undefined) {
+      e.preventDefault();
+      toggleChoice(app, input, app.dm.items[app.dm.at]);
     } else if (e.key === "Escape" && app.dm) {
       e.preventDefault();
       shutMenu(app);
@@ -454,13 +480,21 @@ const menuHost = (app) => app.view.closest(".orrery-app") || app.view;
 function openMenu(app, input, at) {
   const d = dials(app.text).find((x) => x.name === input.dataset.dial);
   if (!d) return;
-  const state = drawMenu(menuHost(app), input, dialChoices(app, d), at);
+  const lib = d.lib && (app.data.libFull?.[d.lib] || app.dialLibs?.[d.lib]);
+  const gallery = lib && d.lib.startsWith("pictures/") ? new Map(lib.entries.map((e) => [e.value, e.props || {}])) : null;
+  const describe = gallery && ((c) => {
+    const p = gallery.get(c);
+    const id = p?.ids?.split("\n")[0];
+    return p && { sub: p.who || (p.prompt || "").slice(0, 110), thumb: id && app.api.thumbURL(id) };
+  });
+  const state = drawMenu(menuHost(app), input, dialChoices(app, d), at, describe);
   app.dm = { ...state, input };
   input.setAttribute("aria-expanded", "true");
   state.box.addEventListener("mousedown", (e) => {
-    const item = e.target.closest("[data-n]");
+    const item = e.target.closest("[data-n]"), box = e.target.closest("[data-toggle]");
     e.preventDefault();  // the box keeps the focus
-    if (item) pickChoice(app, input, app.dm.items[Number(item.dataset.n)]);
+    if (box) toggleChoice(app, input, app.dm.items[Number(box.dataset.toggle)]);
+    else if (item) pickChoice(app, input, app.dm.items[Number(item.dataset.n)]);
   });
 }
 
@@ -472,6 +506,14 @@ function shutMenu(app) {
   closeMenu(menuHost(app));
   app.dm?.input.setAttribute("aria-expanded", "false");
   app.dm = null;
+}
+
+// A tick adds a choice to the ones the dial rolls among, or takes it out; the menu stays open.
+function toggleChoice(app, input, value) {
+  const d = dials(app.text).find((x) => x.name === input.dataset.dial), all = (d && dialChoices(app, d)) || [];
+  const now = chosen(all, input.value), next = now.includes(value) ? now.filter((c) => c !== value) : [...now, value];
+  app.pickChoice(input, joinChoices(all.filter((c) => next.includes(c))));  // in the list's order
+  openMenu(app, input, app.dm ? app.dm.at : -1);
 }
 
 function pickChoice(app, input, value) {
@@ -584,22 +626,38 @@ function wirePicker(app) {
 // In the cells view a cell sees the whole text (the world's bindings), at its offset in it.
 function complete(app, ta) {
   const offset = inCell(ta) ? cellStart(app, ta) : 0;
-  const found = suggest(inCell(ta) ? app.text : ta.value, offset + ta.selectionEnd, app.data.completion);
+  const ann = app.annotations() || app.data.annotations;  // while typing, the last ones still know slots and fields
+  const data = app.data.completion && { ...app.data.completion, fieldValues: ann?.fields || {},
+    taken: Object.fromEntries(Object.entries(ann?.members || {}).flatMap(([name, m]) => m.pictures
+      .filter((p) => p.name).map((p) => [p.image, `${name}'s gallery picture (${p.name})`]))) };
+  const found = suggest(inCell(ta) ? app.text : ta.value, offset + ta.selectionEnd, data);
   if (!found.items.length) return closeCompletion(app);
-  app.ac = { ...found, i: 0, ta, offset };
+  for (const it of found.items) {  // gallery pictures: their thumbnails, by id
+    if (it.thumbId) it.thumb = app.api.thumbURL(it.thumbId);
+    if (it.thumbIds) it.thumbs = it.thumbIds.map((id) => app.api.thumbURL(id));
+  }
+  // a whole keyword typed (`CAST`, `SET`): nothing is chosen, so Enter is a new line; ↓ chooses
+  const typed = (inCell(ta) ? app.text : ta.value).slice(found.replaceFrom, offset + ta.selectionEnd).trim().replace(/:$/, "");
+  const whole = KEYWORDS.some((k) => k.word.trim().replace(/\s*\$$/, "").replace(/:$/, "") === typed);
+  app.ac = { ...found, i: whole ? -1 : 0, ta, offset };
   drawCompletion(app);
 }
 
+// The popup: wide enough to read (labels and details wrap, nothing is cut), a preview of the highlighted
+// item (its text in full, its pictures), under the caret or above it when the app has no room below.
 function drawCompletion(app) {
   app.view.querySelector(".ac")?.remove();
-  const { items, i, ta, kind } = app.ac, { x, y } = caretPoint(ta), item = items[i], wide = kind === "lora";
-  const cell = ta.closest(".cell"), dx = cell ? cell.offsetLeft : 0, dy = cell ? cell.offsetTop : 0;
+  const { items, i, ta } = app.ac, { x, y } = caretPoint(ta), item = items[i] || {};
+  const editor = ta.closest(".editor"), cell = ta.closest(".cell");
+  const dx = cell ? cell.offsetLeft : 0, dy = cell ? cell.offsetTop - editor.scrollTop : 0;
   const box = document.createElement("div");
-  box.className = wide ? "ac wide" : "ac";
-  box.style.left = `${Math.max(4, Math.min(x + 8, ta.clientWidth - (wide ? 480 : 250)) + dx)}px`;
-  box.style.top = `${y + 12 + dy}px`;
-  box.innerHTML = `<ul>${items.map((it, n) => `<li class="${n === i ? "on" : ""}" data-i="${n}"><span>${esc((it.label ?? it.insert).trim())}</span><span>${esc(it.detail)}</span></li>`).join("")}</ul>`
-    + `${item.preview ? `<div class="pv">${esc(item.preview)}</div>` : ""}`;
+  box.className = "ac";
+  const shown = item.thumbs?.length || item.preview;
+  box.innerHTML = `<ul role="listbox">${items.map((it, n) => `<li class="${n === i ? "on" : ""}${it.thumb ? " thumbed" : ""}" data-i="${n}" role="option">`
+    + (it.thumb ? `<img class="act" src="${esc(it.thumb)}" alt="" loading="lazy">` : "")
+    + `<span class="acl">${esc((it.label ?? it.insert).trim())}</span>${it.detail ? `<span class="acd">${esc(it.detail)}</span>` : ""}</li>`).join("")}</ul>`
+    + (shown ? `<div class="pv">${(item.thumbs || []).map((u) => `<img src="${esc(u)}" alt="">`).join("")}`
+      + `${item.preview ? `<span>${esc(item.preview)}</span>` : ""}</div>` : "");
   box.addEventListener("mousedown", (e) => {
     const li = e.target.closest("[data-i]");
     if (!li) return;
@@ -607,7 +665,13 @@ function drawCompletion(app) {
     app.ac.i = Number(li.dataset.i);
     acceptCompletion(app);
   });
-  app.view.querySelector(".editor").appendChild(box);
+  editor.appendChild(box);
+  const root = editor.closest(".orrery-app") || editor, er = editor.getBoundingClientRect(), rr = root.getBoundingClientRect();
+  const k = er.width / editor.offsetWidth || 1, line = parseFloat(getComputedStyle(ta).lineHeight) || 20;
+  box.style.left = `${Math.max(4, Math.min(x + 8 + dx, editor.clientWidth - box.offsetWidth - 4))}px`;
+  const below = y + 4 + dy, above = y - line - box.offsetHeight - 4 + dy;
+  const roomBelow = (rr.bottom - er.top) / k - below, roomAbove = (er.top - rr.top) / k + above;
+  box.style.top = `${box.offsetHeight <= roomBelow || roomAbove < 0 ? below : above}px`;
   box.querySelector(".on")?.scrollIntoView({ block: "nearest" });
 }
 
@@ -616,11 +680,22 @@ function closeCompletion(app) {
   app.ac = null;
 }
 
-// True when the completion took the key.
+// True when the completion took the key. Ctrl+Space opens it where the caret is.
 function completionKey(app, e) {
+  if (e.ctrlKey && (e.code === "Space" || e.key === " ") && e.target.tagName === "TEXTAREA") {
+    e.preventDefault();
+    complete(app, e.target);
+    return true;
+  }
   if (!app.ac) return false;
   const n = app.ac.items.length;
-  if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); app.ac.i = (app.ac.i + (e.key === "ArrowDown" ? 1 : -1) + n) % n; drawCompletion(app); }
+  if ((e.key === "Enter" || e.key === "Tab") && app.ac.i < 0) { closeCompletion(app); return false; }  // nothing chosen: the key is the editor's
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+    e.preventDefault();
+    const down = e.key === "ArrowDown";
+    app.ac.i = app.ac.i < 0 ? (down ? 0 : n - 1) : (app.ac.i + (down ? 1 : -1) + n) % n;
+    drawCompletion(app);
+  }
   else if (e.key === "Enter" || e.key === "Tab") { e.preventDefault(); acceptCompletion(app); }
   else if (e.key === "Escape") { e.preventDefault(); closeCompletion(app); }
   else return false;

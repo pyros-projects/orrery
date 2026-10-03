@@ -136,6 +136,7 @@ class Expansion:
     cell: int | None = None  # the run of a `: grid`
     warnings: list[str] = field(default_factory=list)  # what rolled, but not as written (a sweep in an entry)
     exports: dict[str, object] = field(default_factory=dict)  # what EXPORT: rolled: text, {value, fields} or a list
+    bound: dict[str, str] = field(default_factory=dict)  # each binding as it rolled (the editor's annotations)
 
 
 @dataclass
@@ -297,6 +298,23 @@ def _pinned(expr: str, value: str) -> str:
         return value
     close = (m.start(6) - 1 if m.group(6) is not None else len(expr)) - 2
     return f"{expr[:close]}{FIX}p{value.encode().hex()}{FIX}{expr[close:]}"
+
+
+def _dialed_entries(dialed: str, pool: list) -> list[int]:
+    """`{a|b}` dialed on a library whose entries a and b are: their places in the pool (a dial with several
+    choices narrows the roll and keeps what the entries carry); [] for anything else."""
+    text = dialed.strip()
+    if not (text.startswith("{") and text.endswith("}")):
+        return []
+    options, depth, start, inner = [], 0, 0, text[1:-1]
+    for i, ch in enumerate(inner):  # split at the top level only: an entry may hold its own {…|…}
+        depth += (ch in "{[") - (ch in "}]" and depth > 0)
+        if ch == "|" and depth == 0:
+            options.append(inner[start:i])
+            start = i + 1
+    options = [re.sub(r":\d+(\.\d+)?$", "", o.strip()) for o in [*options, inner[start:]]]
+    places = {entry[0].strip(): j for j, entry in enumerate(pool)}
+    return [places[o] for o in dict.fromkeys(options)] if options and all(o in places for o in options) else []
 
 
 def _fixed(group: str | None) -> int | str | None:
@@ -692,6 +710,8 @@ class Expander:
         i = weighted_pick([w for _, w, _, _ in pool], rng)  # a fixed draw rolls too (`@rng 1`)
         if isinstance(fixed, str):  # a dial: its entry, with what the entry carries, or its text as written
             dialed, fixed = fixed, next((j for j, entry in enumerate(pool) if entry[0].strip() == fixed.strip()), None)
+            if fixed is None and (among := _dialed_entries(dialed, pool)):  # `{a|b}`: rolls among those entries
+                fixed = among[weighted_pick([pool[j][1] for j in among], rng)]
             if fixed is None:
                 return " ".join(self.expr(dialed, label_prefix).split())
         if fixed is not None:
@@ -864,7 +884,8 @@ def expand(template: str, seed: int, libraries: Mapping[str, Library],
     if parsed.enhance:
         ex.picks.append(Pick("> enhance", parsed.enhance))
     exports = {name: ex.export(name, expr) for name, expr in parsed.exports}
-    return Expansion(seed, text, ex.picks, parsed.params, parsed.enhance, cell, ex.warnings, exports)
+    bound = {k: v for k, v in ex.vars.items() if not k.startswith("\x1e")}
+    return Expansion(seed, text, ex.picks, parsed.params, parsed.enhance, cell, ex.warnings, exports, bound)
 
 
 def expand_batch(template: str, seed: int, count: int, libraries: Mapping[str, Library],

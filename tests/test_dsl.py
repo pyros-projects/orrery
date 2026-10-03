@@ -587,3 +587,13 @@ def test_what_looks_like_syntax_but_rolled_nothing_warns():
     warnings = expand("a __my-list__ and {broken", 1, {}).warnings
     assert any("__my-list__ looks like a wildcard" in w for w in warnings) and any("{ or } is left over" in w for w in warnings)
     assert expand("a \\__my-list__ and \\{fine\\}", 1, {}).warnings == []
+
+
+def test_a_dial_with_several_entries_rolls_among_them_with_what_they_carry():
+    """#156: ticking two entries narrows the roll and keeps their properties."""
+    t = "$w = __weather__\nA street in $w; $w.sfx."
+    seen = {expand(override(t, {"w": "{heavy snow|summer rain}"}), s, WEATHER).text for s in range(12)}
+    assert seen == {"A street in heavy snow; footsteps crunch in fresh snow.",
+                    "A street in summer rain; rain drums on a tin roof."}
+    one = expand(override(t, {"w": "{summer rain|fog}"}), 1, WEATHER).text  # fog is no entry: an expression
+    assert one in ("A street in summer rain; .", "A street in fog; .")
