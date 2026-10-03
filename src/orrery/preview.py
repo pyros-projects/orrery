@@ -71,27 +71,83 @@ def forward_core_previews() -> None:
 
 # --- the whole clip, from a wrapper around the sampler ------------------------------------
 
-_TINY: dict[str, object] = {}  # path → ComfyUI's VAE around the tiny decoder; one at a time
+_TINY: dict[str, object] = {}  # path → the tiny decoder (or None: it did not load); one at a time
+
+
+def flat_decoder(sd):
+    """A TAESD-style decoder, built from its checkpoint: the 2D taeh3 (a picture per latent frame), which
+    ComfyUI's VAE cannot build. Its keys are module positions: `N.weight` a 3×3 conv, `N.conv.*` a block,
+    and a position without weights the clamp (first), the ReLU after the first conv, or an upsample."""
+    import torch
+    from torch import nn
+
+    class Clamp(nn.Module):
+        def forward(self, x):
+            return torch.tanh(x / 3) * 3
+
+    class Block(nn.Module):
+        def __init__(self, n_in, n_out):
+            super().__init__()
+            self.conv = nn.Sequential(nn.Conv2d(n_in, n_out, 3, padding=1), nn.ReLU(), nn.Conv2d(n_out, n_out, 3, padding=1),
+                                      nn.ReLU(), nn.Conv2d(n_out, n_out, 3, padding=1))
+            self.skip = nn.Conv2d(n_in, n_out, 1, bias=False) if n_in != n_out else nn.Identity()
+
+        def forward(self, x):
+            return torch.relu(self.conv(x) + self.skip(x))
+
+    at: dict[int, dict] = {}
+    for key, value in sd.items():
+        position, _, name = key.partition(".")
+        at.setdefault(int(position), {})[name] = value
+    layers = []
+    for i in range(max(at) + 1):
+        weights = at.get(i)
+        if weights is None:
+            layers.append(Clamp() if i == 0 else nn.ReLU() if i == 2 else nn.Upsample(scale_factor=2))
+        elif "conv.0.weight" in weights:
+            n_out, n_in = weights["conv.0.weight"].shape[:2]
+            layers.append(Block(n_in, n_out))
+        else:
+            n_out, n_in = weights["weight"].shape[:2]
+            layers.append(nn.Conv2d(n_in, n_out, 3, padding=1, bias="bias" in weights))
+    decoder = nn.Sequential(*layers)
+    decoder.load_state_dict(sd)
+    return decoder.eval().requires_grad_(False)
+
+
+def _tiny(sd):
+    """("tae", ComfyUI's VAE) for a temporal tiny VAE, ("tae2d", the decoder) for a flat one, else None."""
+    if all(key.partition(".")[0].isdigit() for key in sd):
+        return "tae2d", flat_decoder(sd)
+    from comfy.sd import VAE
+
+    vae = VAE(sd)
+    if vae.first_stage_model is None:  # not a VAE ComfyUI knows
+        return None
+    vae.first_stage_model.show_progress_bar = False
+    return "tae", vae
 
 
 def _decoder(model_patcher):
-    """("tae", the tiny VAE) for the model's latents, else ("rgb", its latent format), else None."""
+    """The tiny VAE for the model's latents ("tae" or "tae2d"), else ("rgb", its latent format), else None."""
     latent_format = model_patcher.model.latent_format
     name = getattr(latent_format, "taesd_decoder_name", None)
     if name:
         import comfy.utils
         import folder_paths
-        from comfy.sd import VAE
 
         file = next((f for f in folder_paths.get_filename_list("vae_approx") if f.startswith(name)), None)
         path = file and folder_paths.get_full_path("vae_approx", file)
         if path:
             if path not in _TINY:
-                vae = VAE(comfy.utils.load_torch_file(path))
-                vae.first_stage_model.show_progress_bar = False
                 _TINY.clear()
-                _TINY[path] = vae
-            return "tae", _TINY[path]
+                try:
+                    _TINY[path] = _tiny(comfy.utils.load_torch_file(path))
+                except Exception as err:  # noqa: BLE001 - Latent2RGB then
+                    log.warning(f"[orrery] {file} did not load for the live preview: {err}")
+                    _TINY[path] = None
+            if _TINY[path] is not None:
+                return _TINY[path]
     if getattr(latent_format, "latent_rgb_factors", None) is not None:
         return "rgb", latent_format
     return None
@@ -111,11 +167,14 @@ def frames(decoder, video):
         x = x[:, :, torch.linspace(0, x.shape[2] - 1, MAX_LATENT_FRAMES).round().long().to(x.device)]
     kind, it = decoder
     with torch.no_grad():
-        if kind == "tae":
+        if kind in ("tae", "tae2d"):
             scale = min(1.0, MAX_EDGE / (SPATIAL * max(x.shape[-2:])))
             if scale < 1:  # a smaller latent decodes faster and is all a preview needs
                 x = torch.nn.functional.interpolate(x, scale_factor=(1, scale, scale), mode="trilinear")
-            out = it.decode(x)[0]  # ComfyUI's VAE moves and casts it: [frames, h, w, rgb] in 0..1
+            if kind == "tae":
+                out = it.decode(x)[0]  # ComfyUI's VAE moves and casts it: [frames, h, w, rgb] in 0..1
+            else:  # a picture per latent frame
+                out = it.to(x.device)(x[0].movedim(1, 0)).movedim(1, -1)
         else:
             factors = torch.tensor(it.latent_rgb_factors, device=x.device, dtype=x.dtype)
             rgb = torch.nn.functional.linear(x[0].movedim(0, -1), factors.transpose(0, 1))  # [time, h, w, rgb] in -1..1

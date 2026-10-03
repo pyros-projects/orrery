@@ -36,6 +36,22 @@ def test_the_tiny_vae_decodes_a_smaller_latent():
     assert len(pictures) == preview.MAX_LATENT_FRAMES * 4 and max(pictures[0].size) <= preview.MAX_EDGE
 
 
+def test_a_flat_tiny_decoder_is_built_from_its_checkpoint():
+    def block(at, n_in, n_out):
+        sd = {f"{at}.conv.{i}.weight": torch.randn(n_out, n_in if i == 0 else n_out, 3, 3) for i in (0, 2, 4)}
+        sd |= {f"{at}.conv.{i}.bias": torch.randn(n_out) for i in (0, 2, 4)}
+        return sd | ({f"{at}.skip.weight": torch.randn(n_out, n_in, 1, 1)} if n_in != n_out else {})
+
+    # as the 2D taeh3, smaller: clamp, conv, ReLU, block, upsample, conv, block, upsample, conv
+    sd = {"1.weight": torch.randn(8, 4, 3, 3), "1.bias": torch.randn(8), **block(3, 8, 8),
+          "5.weight": torch.randn(8, 8, 3, 3), **block(6, 8, 6), "8.weight": torch.randn(3, 6, 3, 3), "8.bias": torch.randn(3)}
+    decoder = preview.flat_decoder(sd)  # loads strictly: every weight found its module
+    assert [type(m).__name__ for m in decoder] == ["Clamp", "Conv2d", "ReLU", "Block", "Upsample", "Conv2d", "Block",
+                                                    "Upsample", "Conv2d"]
+    pictures = preview.frames(("tae2d", decoder), torch.zeros(1, 4, 30, 8, 12))
+    assert len(pictures) == preview.MAX_LATENT_FRAMES and pictures[0].size == (48, 32)  # a picture per latent frame
+
+
 def test_the_wrapper_keeps_the_samplers_callback_and_sends_the_clip(monkeypatch):
     sent, called = [], []
     monkeypatch.setattr(preview, "_send", sent.append)
