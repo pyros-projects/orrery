@@ -9,6 +9,9 @@ checks) are left out.
 
 ### Added
 
+- The clips view is where a reel is worked: the default view, its clips big (a clip size in the
+  settings sets their shorter side), the frames each `REMEMBER:` line takes cut from its clip as you
+  type, where they go at the line's end, and a frame picked by eye written into the line (#97).
 - Five presets for what no preset showed yet: The specimen (a Backrooms film that casts its monster
   in a test scene), Three endings (one setup, three genres with `AFTER:`), Cabinet of curiosities
   (`@unique` and `@grid` on Krea), And then… (your own video, going on forever) and Between two
@@ -28,6 +31,8 @@ checks) are left out.
 
 ### Changed
 
+- `REMEMBER: frames 0, 50 as @NAME` gives her one picture per frame (it was one batch, of which
+  Reference to Video read only the first); the lint names the two lines that fill one picture (#97).
 - The galaxy is the gallery now, and Generate is Roll, with how many runs it queues after it:
   **Roll** next 3 clips, next 8 images (#23). Ratings and folders on disk stay as they are.
 

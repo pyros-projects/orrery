@@ -64,7 +64,7 @@ input video` continues it (its last 22 frames, picture and sound, and that END O
 import hashlib
 import re
 from collections.abc import Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from orrery.cast import MEMBER
 from orrery.dsl import Expander, Pick, question
@@ -118,6 +118,9 @@ class Send:
     step: int = 1  # `every 10 frames`: every 10th frame of the spans
     until: int | None = None  # `until the return`: the scene before whose first clip it stops (an index)
     member: str | None = None  # `as @KEEPER`: the member whose picture it is (image is then filled in)
+    nth: int = 0  # which of the member's pictures: `frames 0, 50 as @KEEPER` gives him one per frame
+    line: int = field(default=0, compare=False)  # which REMEMBER: (SEND:) line of the template, from 0
+    said: str = field(default="", compare=False, repr=False)  # the line as written after its word, for messages
 
     @property
     def target(self) -> int | str:
@@ -474,6 +477,7 @@ def split_reel(src: str) -> Reel | None:
     gotos: list[tuple[int, str]] = []  # (chunk, line): resolved once every title is known
     afters: list[tuple[int, str]] = []  # (chunk, what its AFTER: names), the same
     untils: list[tuple[Send, str]] = []  # (a REMEMBER:, the scene its `until` names), the same
+    ordinal = 0  # the REMEMBER: (SEND:) lines, counted: the app finds a line's hints by it
     for raw in lines:
         if m := CHUNK.match(raw.strip()):
             heading, repeat = m.group(1).strip(), 1
@@ -483,12 +487,19 @@ def split_reel(src: str) -> Reel | None:
                 repeat = None if times.lower() == "forever" else max(1, int(times))
             blocks.append(Block(title, repeat, test=bool(TEST.search(heading))))
         elif send := SEND.match(raw.strip()):  # in the head: frames of the input video
-            (blocks[-1].sends if blocks else head_sends).append(parse_send(send.group(1)))
+            kept = replace(parse_send(send.group(1)), line=ordinal, said=" ".join(send.group(1).split()))
+            (blocks[-1].sends if blocks else head_sends).append(kept)
+            ordinal += 1
         elif remember := REMEMBER.match(raw.strip()):
             kept, until = parse_remember(remember.group(1))
-            (blocks[-1].sends if blocks else head_sends).append(kept)
-            if until:
-                untils.append((kept, until))
+            said = " ".join(remember.group(1).split())
+            if kept.member:  # the compile reads members bare (cast.bare): give the message its @ back
+                said = re.sub(rf"\bas\s+@?{re.escape(kept.member)}\b", f"as @{kept.member}", said)
+            for part in per_picture(replace(kept, line=ordinal, said=said)):
+                (blocks[-1].sends if blocks else head_sends).append(part)
+                if until:
+                    untils.append((part, until))
+            ordinal += 1
         elif (end := HANDOFF.match(raw.strip())) and not blocks:  # how the input video ends
             input_end = end.group(1).strip()
         elif GOTO_LINE.match(raw.strip()) and blocks:
@@ -531,9 +542,18 @@ def _cast_lines(lines: list[str]) -> list[int]:
     return out
 
 
+def per_picture(send: Send) -> list[Send]:
+    """`REMEMBER: frames 0, 50 as @KEEPER`: one send per listed frame, each a picture of his (a range
+    stays one, a batch); every other line stays one send."""
+    if not send.member or send.step != 1 or len(send.frames) < 2:
+        return [send]
+    return [replace(send, frames=[span], nth=k) for k, span in enumerate(send.frames)]
+
+
 def _remembered(head: list[str], blocks: list[Block], head_sends: list[Send] = ()) -> None:
     """`REMEMBER: … as @KEEPER`: the frames become KEEPER's picture, the first image his CAST lines give
-    him, or a free slot they are given (`KEEPER: …` reads `KEEPER (image 3): …` from then on)."""
+    him, or a free slot they are given (`KEEPER: …` reads `KEEPER (image 3): …` from then on); the nth
+    frame of a list his nth picture, a free slot again once his CAST has no more."""
     wanted = [send for send in [*head_sends, *(s for block in blocks for s in block.sends)] if send.member]
     if not wanted:
         return
@@ -547,8 +567,8 @@ def _remembered(head: list[str], blocks: list[Block], head_sends: list[Send] = (
             raise ValueError(f"REMEMBER: … as {send.member}: {send.member} is not in a CAST; give the member a line "
                              f"there ({send.member}: who it is), or remember the frames as an image N.")
         images = [s.index for g, i in lines for s in _member_of(g[i]).sources if s.kind == "image"]
-        if images:
-            send.image = images[0]
+        if len(images) > send.nth:
+            send.image = images[send.nth]
             continue
         free = [n for n in range(1, SEND_SLOTS + 1) if n not in taken]
         if not free:
@@ -574,21 +594,56 @@ def shared_sends(reel: Reel, starts: list[int | None]) -> list[str]:
     """A warning for each two SEND: lines that fill one image in the same segment: there the one sent
     last takes over (Reel.ready)."""
     out: list[str] = []
-    claims: dict = {}  # image or RefMod → (scene, start, spans) per line
+    claims: dict = {}  # image or RefMod → (scene, start, spans, send) per line
     where = lambda k: "the head" if k < 0 else f"SCENE {k + 1}"
+    said = lambda send, k: f'"{send.said}" in {where(k)}' if send.said else where(k)
     for i, start, send in reel.sources(starts):
         if start is None:
             continue
         spans = fills(send, start, starts)
-        for j, other_start, other in claims.get((send.refmod is None, send.target), []):
+        for j, other_start, other, earlier in claims.get((send.refmod is None, send.target), []):
             shared = [max(lo, olo) for lo, hi in spans for olo, ohi in other
                       if max(lo, olo) <= min([x for x in (hi, ohi) if x is not None], default=max(lo, olo))]
             if shared:
-                later = i if start >= other_start else j
-                out.append(f"{send.what} is filled by two REMEMBER: lines in clip {min(shared) + 1} ({where(j)} "
-                           f"and {where(i)}): where they meet, the one remembered last ({where(later)}) takes over.")
-        claims.setdefault((send.refmod is None, send.target), []).append((i, start, spans))
+                later = (send, i) if start >= other_start else (earlier, j)
+                out.append(f"{send.what} is filled by two REMEMBER: lines from clip {min(shared) + 1} on "
+                           f"({said(earlier, j)} and {said(send, i)}): there the one remembered last "
+                           f"({said(*later)}) takes over.")
+        claims.setdefault((send.refmod is None, send.target), []).append((i, start, spans, send))
     return out
+
+
+def remembered(reel: Reel, starts: list[int | None]) -> list[dict]:
+    """What each REMEMBER: (SEND:) line of the template does, in the template's order, for the app's hints
+    and its frames: the clip its frames come from (`source`: a segment, -1 the input video, None when the
+    reel never reaches its scene) and, for each picture or RefMod it fills, what that is, the frames and
+    every how many it takes, the clips it fills, and from which clip on a later line takes over
+    (`replaced`). The same resolution the compile uses: Reel.ready, shared_sends."""
+    lines: dict[int, dict] = {}
+    claims: dict = {}  # image or RefMod → [(start, spans, its fill)]
+    for scene, start, send in reel.sources(starts):
+        spans = fills(send, start, starts)
+        line = lines.setdefault(send.line, {"line": send.line, "scene": scene, "source": start, "said": send.said,
+                                            "fills": []})
+        mine = {"what": send.what, "member": send.member, "frames": send.frames, "step": send.step,
+                "clips": spans, "replaced": None}
+        line["fills"].append(mine)
+        if start is None:
+            continue
+        for other_start, other_spans, other in claims.get((send.refmod is None, send.target), []):
+            shared = [max(lo, olo) for lo, hi in spans for olo, ohi in other_spans
+                      if max(lo, olo) <= min([x for x in (hi, ohi) if x is not None], default=max(lo, olo))]
+            if not shared:
+                continue
+            earlier, by = (other, send.line) if start >= other_start else (mine, other["line"])
+            if earlier["replaced"] is None or min(shared) < earlier["replaced"]["from"]:
+                earlier["replaced"] = {"from": min(shared), "by": by}
+        mine["line"] = send.line
+        claims.setdefault((send.refmod is None, send.target), []).append((start, spans, mine))
+    for line in lines.values():
+        for fill in line["fills"]:
+            fill.pop("line", None)
+    return [lines[k] for k in sorted(lines)]
 
 
 def _scene(name: str, blocks: list[Block]) -> int | None:

@@ -273,7 +273,8 @@ def test_two_sends_to_one_image_warn_and_the_later_takes_over():
     src = SEND_REEL.replace("GIRL walks to the window.", "GIRL walks to the window.\nSEND: frame 9 to image 3")
     assert split_reel(src).ready(3)[3] == {"segment": 2, "frames": [[9, 9]]}
     lint = [i.message for i in ref2va(src, segment=2).lint]
-    assert any("image 3" in m and "clip 4" in m and "(SCENE 2) takes over" in m for m in lint)
+    assert any("image 3" in m and "from clip 4 on" in m and '("frame 9 to image 3" in SCENE 2) takes over' in m
+               for m in lint)
 
 
 MOD_REEL = """@h3 t2va 16:9
@@ -309,7 +310,7 @@ def test_two_sends_to_one_refmod_warn_and_the_later_takes_over():
     src = MOD_REEL.replace("The empty room.", "The empty room.\nSEND: frame -1 to refmod jinx_look")
     assert split_reel(src).refmods_ready(2)["jinx_look"] == {"segment": 1, "frames": [[-1, -1]]}
     lint = [i.message for i in compile_scene(src, 1, {}, segment=2).lint]
-    assert any("refmod jinx_look is filled by two REMEMBER: lines" in m and "(SCENE 2) takes over" in m for m in lint)
+    assert any("refmod jinx_look is filled by two REMEMBER: lines" in m and '" in SCENE 2) takes over' in m for m in lint)
 
 
 def test_send_outside_a_reel_or_outside_ref2va_is_an_error():
@@ -414,6 +415,44 @@ def test_remember_as_a_member_without_a_picture_gives_the_member_a_free_one():
         split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", "REMEMBER: first frame as the moon"))
 
 
+def test_frames_listed_as_a_member_give_her_one_picture_each():
+    mine = lambda src: [s for s in split_reel(src).blocks[0].sends if s.member]
+    src = SEND_REEL.replace("SEND: frame 0 to image 3", "REMEMBER: frames 0, 50 as @GIRL")
+    assert [(s.frames, s.image, s.nth) for s in mine(src)] == [([[0, 0]], 1, 0), ([[50, 50]], 3, 1)]  # her CAST's two
+    walk = ref2va(src, segment=2)
+    assert {1, 3} <= set(walk.sends)
+    dog = SEND_REEL.replace("in a pink tracksuit\n", "in a pink tracksuit\nDOG: a grey dog\n").replace(
+        "SEND: frame 0 to image 3", "REMEMBER: frames 0, 50 as @DOG").replace("walks to the window.", "walks to the window. DOG follows.")
+    assert [s.image for s in mine(dog)] == [2, 5]  # none in his CAST: free ones (1 and 3 are hers, 4 the SEND's)
+    assert any(line.strip() == "DOG (image 2, image 5): a grey dog" for line in split_reel(dog).head)
+    assert {2, 5} <= set(ref2va(dog, segment=2).sends)
+    kept = mine(SEND_REEL.replace("SEND: frame 0 to image 3", "REMEMBER: frames 0-5, 50 as @GIRL"))
+    assert [s.frames for s in kept] == [[[0, 5]], [[50, 50]]]  # a range stays one picture, a batch
+    for line, n in (("REMEMBER: frames 0, 50 as image 3", 2), ("REMEMBER: every 10th frame as @GIRL", 2)):
+        assert len(split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", line)).blocks[0].sends) == n  # and the SEND
+
+
+def test_two_lines_as_one_member_share_her_picture_and_the_lint_names_them():
+    src = SEND_REEL.replace("SEND: frame 0 to image 3", "REMEMBER: frame 0 as @GIRL\nREMEMBER: frame 50 as @GIRL")
+    assert [s.image for s in split_reel(src).blocks[0].sends if s.member] == [1, 1]
+    lint = [i.message for i in ref2va(src, segment=1).lint]
+    assert any('("frame 0 as @GIRL" in SCENE 1 and "frame 50 as @GIRL" in SCENE 1)' in m
+               and '("frame 50 as @GIRL" in SCENE 1) takes over' in m for m in lint)
+
+
+def test_each_remember_line_knows_its_place_and_what_replaces_it():
+    from orrery.reel import remembered
+
+    src = SEND_REEL.replace("SEND: frame 0 to image 3", "REMEMBER: frame 0 as @GIRL\nREMEMBER: frames 10, 50 as @GIRL")
+    reel = split_reel(src)
+    lines = remembered(reel, reel.starts())
+    assert [line["line"] for line in lines] == list(range(len(lines)))
+    first, second = lines[0], lines[1]
+    assert first["source"] == 0 and first["said"] == "frame 0 as @GIRL"
+    assert first["fills"][0]["replaced"] == {"from": 1, "by": 1}
+    assert [f["what"] for f in second["fills"]] == ["image 1", "image 3"] and second["fills"][1]["replaced"] is None
+
+
 def test_a_wired_picture_stands_in_until_the_frames_kept_for_it_exist():
     then, now = (compile_scene(SEND_REEL, 1, {}, target="h3-base", segment=0, packed=True, standing=s) for s in ((), {3}))
     assert then.refs == [1] and now.refs == [1, 3]  # wired: the picture is there before the frames are
@@ -441,7 +480,7 @@ def test_two_sends_claiming_one_segment_for_one_image_hand_over_to_the_later():
     clash = REANCHOR.replace("for segments 1-4", "for segments 1-5")
     assert [split_reel(clash).ready(t)[3]["segment"] for t in (4, 5, 6)] == [0, 4, 4]
     lint = [i.message for i in ref2va(clash, segment=5).lint]
-    assert any("clip 6" in m and "(SCENE 2) takes over" in m for m in lint)
+    assert any("from clip 6 on" in m and '" in SCENE 2) takes over' in m for m in lint)
     assert not any("takes over" in i.message for i in ref2va(REANCHOR, segment=5).lint)
 
 

@@ -162,6 +162,7 @@ def presets(home: Home, args: dict) -> dict:
         "favorites": [n for n in ui["favorites"] if n in known],
         "recent": [n for n in ui["recent"] if n in known],
         **{flag: ui[flag] for flag in uistate.FLAGS},
+        **{name: ui[name] for name in uistate.SIZES},
     }
 
 
@@ -221,12 +222,16 @@ def recent(home: Home, args: dict) -> dict:
 
 def ui_save(home: Home, args: dict) -> dict:
     """App switches kept in the home: `quickstart` (New templates open with their comments),
-    `dividers` (chunk dividers in the editor), `timeline` (the reel's clips beside it)."""
+    `dividers` (chunk dividers in the editor), `timeline` (the reel's clips beside it), and its sizes
+    (`clip_min`: a clip's shorter side in the clips view)."""
     for flag in uistate.FLAGS:
         if flag in args:
             uistate.set_flag(home, flag, bool(args[flag]))
+    for name in uistate.SIZES:
+        if name in args:
+            uistate.set_size(home, name, args[name])
     ui = uistate.load_ui(home)
-    return {flag: ui[flag] for flag in uistate.FLAGS}
+    return {**{flag: ui[flag] for flag in uistate.FLAGS}, **{name: ui[name] for name in uistate.SIZES}}
 
 
 def _preset_by_hash(home: Home) -> dict[str, str]:
@@ -681,6 +686,26 @@ def reel_walk(home: Home, args: dict) -> dict:
     return {"path": [block for block, _ in path], "ended": ended}
 
 
+def reel_remembered(home: Home, args: dict) -> dict:
+    """What each REMEMBER: line of a reel does at a seed (orrery.reel.remembered): the app shows where its
+    frames go and cuts them from the clip they come from."""
+    from orrery.dsl import with_inline
+    from orrery.loras import long_form
+    from orrery.reel import MAX_WALK, reel_path, remembered
+
+    text, _ = _template_for(home, args)
+    src, libraries = with_inline(long_form(strip_comments(text)), home.libraries())
+    try:
+        reel = split_reel(src)
+        if reel is None:
+            return {"lines": []}
+        path, _ = (reel_path(reel, _int(args, "seed", 0), libraries, home.weights(), MAX_WALK)
+                   if reel.jumps_on_rolls else reel.walk())
+        return {"lines": remembered(reel, reel.starts(path))}
+    except ValueError as err:
+        raise ApiError(400, str(err)) from None
+
+
 def roll(home: Home, args: dict) -> dict:
     text, target = _template_for(home, args)
     seed, n = _int(args, "seed", 0), min(max(_int(args, "n", 3), 1), MAX_ROLLS)
@@ -808,6 +833,7 @@ ROUTES = [
     ("POST", "/orrery/roll", roll),
     ("POST", "/orrery/plan", generate_plan),
     ("POST", "/orrery/reel", reel_walk),
+    ("POST", "/orrery/remembered", reel_remembered),
     ("POST", "/orrery/frequency", frequency),
     ("GET", "/orrery/home", home_settings),
     ("POST", "/orrery/home", home_save),

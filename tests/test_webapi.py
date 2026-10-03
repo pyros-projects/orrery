@@ -61,6 +61,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/writers"),
         ("POST", "/orrery/plan"),
         ("POST", "/orrery/reel"),
+        ("POST", "/orrery/remembered"),
     }
 
 
@@ -127,7 +128,7 @@ def test_register_attaches_every_route_through_one_adapter(home, tmp_path):
     kind, status, body = hit("GET", "/orrery/presets", query=q)
     assert (kind, status) == ("json", 200) and body["favorites"] == [] and body["quickstart"] is True
     assert hit("POST", "/orrery/ui", query=q, body={"quickstart": False}) == \
-        ("json", 200, {"quickstart": False, "dividers": True, "timeline": True, "log_prompts": True})
+        ("json", 200, {"quickstart": False, "dividers": True, "timeline": True, "log_prompts": True, "clip_min": 360})
     assert hit("GET", "/orrery/presets", query=q)[2]["quickstart"] is False
     assert hit("GET", "/orrery/preset", query={**q, "name": "nope"})[1] == 404
     assert hit("POST", "/orrery/recent", query=q, broken=True)[1] == 400
@@ -675,7 +676,9 @@ def test_an_anchor_is_served_by_image_number(home):
 
 def test_the_editor_switches_travel_with_the_presets_and_are_saved(home):
     assert ok(home, webapi.presets)["dividers"] is True and ok(home, webapi.presets)["timeline"] is True
-    assert ok(home, webapi.ui_save, timeline=False) == {"quickstart": True, "dividers": True, "timeline": False, "log_prompts": True}
+    assert ok(home, webapi.ui_save, timeline=False) == {"quickstart": True, "dividers": True, "timeline": False, "log_prompts": True,
+                                                         "clip_min": 360}
+    assert ok(home, webapi.ui_save, clip_min=480)["clip_min"] == 480 and ok(home, webapi.presets)["clip_min"] == 480
     assert ok(home, webapi.presets)["timeline"] is False
 
 
@@ -706,6 +709,18 @@ def test_the_app_gets_the_path_a_reel_takes_at_its_seed(home):
     endless = ok(home, webapi.reel_walk, template=loop.replace(" ×1", ""), seed=3)
     assert endless["ended"] is False and endless["path"][:5] == [0, 1, 0, 1, 0]
     assert ok(home, webapi.reel_walk, template="a fox", seed=1) == {"path": [], "ended": True}
+
+
+def test_the_app_learns_where_each_remember_line_goes(home):
+    reel = ("@h3 references\nCAST\n@WOMAN: a woman\nSCENE a\nSHOT 5s\nREMEMBER: frame 0 as @WOMAN\n"
+            "REMEMBER: frame 50 as @WOMAN\n@WOMAN waves.\nSCENE b\nSHOT 5s\n@WOMAN sits.")
+    lines = ok(home, webapi.reel_remembered, template=reel, seed=0)["lines"]
+    assert [(line["line"], line["source"], [f["what"] for f in line["fills"]]) for line in lines] == \
+        [(0, 0, ["image 1"]), (1, 0, ["image 1"])]
+    assert lines[0]["fills"][0]["replaced"] == {"from": 1, "by": 1} and lines[1]["fills"][0]["replaced"] is None
+    assert ok(home, webapi.reel_remembered, template="a fox", seed=0) == {"lines": []}
+    status, body = api(home, webapi.reel_remembered, template=reel.replace("as @WOMAN", "as @CAT", 1))
+    assert status == 400 and "CAT is not in a CAST" in body["error"]
 
 
 def test_the_writer_texts_are_read_edited_and_reset(home):

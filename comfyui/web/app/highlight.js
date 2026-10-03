@@ -74,9 +74,12 @@ function chunkLine(html, c, segment) {
 // options.llm: a language model is set, so unknown libraries are to be made, not missing.
 // options.chunks (model.chunkInfo): SCENE lines get dividers; the one playing options.segment is marked.
 // options.cast: the CAST's names, in brass (a cell passes the whole template's); else read from src.
-export function highlight(src, known, { llm = false, chunks = null, segment = null, cast = null } = {}) {
+// `hints`: line index → { text, replaced } drawn after the line (REMEMBER: lines say where their frames go);
+// a hint takes no room, so the text wraps exactly as the textarea's.
+export function highlight(src, known, { llm = false, chunks = null, segment = null, cast = null, hints = null } = {}) {
   const at = new Map((chunks || []).map((c) => [c.line, c]));
   const members = memberPattern(cast ?? castNames(src));
+  const hint = (i) => (hints?.has(i) ? `<span class="hint${hints.get(i).replaced ? " replaced" : ""}"><span>${esc(hints.get(i).text)}</span></span>` : "");
   return src.split("\n").map((l, i) => (at.has(i) ? chunkLine(line(l, known, llm, members), at.get(i), segment)
-    : line(l, known, llm, members))).join("\n");
+    : line(l, known, llm, members)) + hint(i)).join("\n");
 }

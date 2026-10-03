@@ -1,6 +1,7 @@
 // Prompt tab: preset bar, the highlighted editor with completion, dials, and a way into Test.
 import { inlineLibraries, suggest } from "../orrery-complete.js";
 import { esc, highlight } from "./highlight.js";
+import { hintsFor } from "./remember.js";
 import { icon } from "./icons.js";
 import { applyDials, chunkInfo, dials, hasGoto, plays, folderColor, pickerGroups, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
 import { thumbHTML } from "./parts.js";
@@ -56,7 +57,8 @@ function statsHTML(app) {
 const plural = (n, noun) => (n === 1 ? noun : `${noun}s`);
 
 // The cells view: each chunk its own cell with its clips under it (a reel, the timeline on, chosen in the footer).
-const cellsView = (app) => app.data.timeline !== false && app.bridge.props.orrery_tl_view === "below" && !!app.chunks();
+// The clips under each scene unless the node was set to beside them (Pyro, 3 October: the default).
+const cellsView = (app) => app.data.timeline !== false && app.bridge.props.orrery_tl_view !== "beside" && !!app.chunks();
 
 // `0.6MP` in the @h3 line: the area a frame-shaped clip gets.
 const headerMP = (text) => /^\s*@h3\b[^\n]*\s\d+(?:\.\d+)?mp\b/im.test(stripComments(text));
@@ -167,6 +169,7 @@ export function renderPrompt(app) {
   fixReelSeed(app);
   fixUniqueSeed(app);
   refreshPlan(app);
+  refreshRemembered(app);  // the hints and the remembered frames of a reel just opened
 }
 
 async function generate(app) {
@@ -237,7 +240,8 @@ function paintEditor(app) {
   const pre = app.view.querySelector(".editor pre.hl");
   if (!pre) return;
   const chunks = app.chunks();
-  pre.innerHTML = `${highlight(app.text, app.known(), { llm: app.llmActive(), chunks, segment: chunks && Number(app.bridge.getSegment()) })}\n`;
+  pre.innerHTML = `${highlight(app.text, app.known(), { llm: app.llmActive(), chunks, segment: chunks && Number(app.bridge.getSegment()),
+    hints: hintsFor(app.text, app.remembered()) })}\n`;
   layoutTimeline(app, chunks);
   if (chunks && app.data.timeline !== false && app.data.chain === undefined) {  // a reel typed or pasted in
     app.data.chain = null;
@@ -269,6 +273,7 @@ function jumpToChunk(app) {
 export function refreshFoot(app) {
   refreshPlan(app);  // a dial or an edit can change what Generate queues
   refreshReelPath(app);
+  refreshRemembered(app);
   const foot = app.view.querySelector(".pfoot");
   if (foot) foot.innerHTML = statsHTML(app);
 }
@@ -324,6 +329,25 @@ function refreshReelPath(app) {
     app.data.reelPath = { ...got, key };
     if (app.state.tab === "prompt") { paintEditor(app); refreshFoot(app); }
   }, 250);
+}
+
+// Where a reel's REMEMBER: lines put their frames, at the node's seed: from the server, which resolves them as
+// the compile does; the hints at their ends and the frames under each scene follow once it is there.
+function refreshRemembered(app) {
+  if (!app.chunks() || !/^\s*(REMEMBER|SEND):/im.test(stripComments(app.text))) { app.data.remembered = null; return; }
+  const key = app.reelKey();
+  if (app.data.remembered?.key === key || app.state.rememberedKey === key) return;
+  app.state.rememberedKey = key;
+  clearTimeout(app.state.rememberedTimer);
+  app.state.rememberedTimer = setTimeout(async () => {
+    let got;
+    try { got = await app.api.remembered({ template: app.text, target: app.bridge.getTarget(), params: app.bridge.getParams(), seed: app.bridge.getSeed() }); }
+    catch (err) { got = { error: err.message, lines: [] }; }
+    if (app.state.rememberedKey === key) app.state.rememberedKey = null;
+    if (app.reelKey() !== key) return;
+    app.data.remembered = { ...got, key };
+    if (app.state.tab === "prompt") paintEditor(app);
+  }, 300);
 }
 
 // Generate can come before the plan: it waits for it.
