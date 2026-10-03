@@ -602,16 +602,21 @@ function complete(app, ta) {
   drawCompletion(app);
 }
 
+// The popup: wide enough to read (labels and details wrap, nothing is cut), a preview of the highlighted
+// item (its text in full, its pictures), under the caret or above it when the app has no room below.
 function drawCompletion(app) {
   app.view.querySelector(".ac")?.remove();
-  const { items, i, ta, kind } = app.ac, { x, y } = caretPoint(ta), item = items[i], wide = kind === "lora";
-  const cell = ta.closest(".cell"), dx = cell ? cell.offsetLeft : 0, dy = cell ? cell.offsetTop : 0;
+  const { items, i, ta } = app.ac, { x, y } = caretPoint(ta), item = items[i];
+  const editor = ta.closest(".editor"), cell = ta.closest(".cell");
+  const dx = cell ? cell.offsetLeft : 0, dy = cell ? cell.offsetTop - editor.scrollTop : 0;
   const box = document.createElement("div");
-  box.className = wide ? "ac wide" : "ac";
-  box.style.left = `${Math.max(4, Math.min(x + 8, ta.clientWidth - (wide ? 480 : 250)) + dx)}px`;
-  box.style.top = `${y + 12 + dy}px`;
-  box.innerHTML = `<ul>${items.map((it, n) => `<li class="${n === i ? "on" : ""}" data-i="${n}"><span>${esc((it.label ?? it.insert).trim())}</span><span>${esc(it.detail)}</span></li>`).join("")}</ul>`
-    + `${item.preview ? `<div class="pv">${esc(item.preview)}</div>` : ""}`;
+  box.className = "ac";
+  const shown = item.thumbs?.length || item.preview;
+  box.innerHTML = `<ul role="listbox">${items.map((it, n) => `<li class="${n === i ? "on" : ""}${it.thumb ? " thumbed" : ""}" data-i="${n}" role="option">`
+    + (it.thumb ? `<img class="act" src="${esc(it.thumb)}" alt="" loading="lazy">` : "")
+    + `<span class="acl">${esc((it.label ?? it.insert).trim())}</span>${it.detail ? `<span class="acd">${esc(it.detail)}</span>` : ""}</li>`).join("")}</ul>`
+    + (shown ? `<div class="pv">${(item.thumbs || []).map((u) => `<img src="${esc(u)}" alt="">`).join("")}`
+      + `${item.preview ? `<span>${esc(item.preview)}</span>` : ""}</div>` : "");
   box.addEventListener("mousedown", (e) => {
     const li = e.target.closest("[data-i]");
     if (!li) return;
@@ -619,7 +624,13 @@ function drawCompletion(app) {
     app.ac.i = Number(li.dataset.i);
     acceptCompletion(app);
   });
-  app.view.querySelector(".editor").appendChild(box);
+  editor.appendChild(box);
+  const root = editor.closest(".orrery-app") || editor, er = editor.getBoundingClientRect(), rr = root.getBoundingClientRect();
+  const k = er.width / editor.offsetWidth || 1, line = parseFloat(getComputedStyle(ta).lineHeight) || 20;
+  box.style.left = `${Math.max(4, Math.min(x + 8 + dx, editor.clientWidth - box.offsetWidth - 4))}px`;
+  const below = y + 4 + dy, above = y - line - box.offsetHeight - 4 + dy;
+  const roomBelow = (rr.bottom - er.top) / k - below, roomAbove = (er.top - rr.top) / k + above;
+  box.style.top = `${box.offsetHeight <= roomBelow || roomAbove < 0 ? below : above}px`;
   box.querySelector(".on")?.scrollIntoView({ block: "nearest" });
 }
 
@@ -628,8 +639,13 @@ function closeCompletion(app) {
   app.ac = null;
 }
 
-// True when the completion took the key.
+// True when the completion took the key. Ctrl+Space opens it where the caret is.
 function completionKey(app, e) {
+  if (e.ctrlKey && (e.code === "Space" || e.key === " ") && e.target.tagName === "TEXTAREA") {
+    e.preventDefault();
+    complete(app, e.target);
+    return true;
+  }
   if (!app.ac) return false;
   const n = app.ac.items.length;
   if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); app.ac.i = (app.ac.i + (e.key === "ArrowDown" ? 1 : -1) + n) % n; drawCompletion(app); }
