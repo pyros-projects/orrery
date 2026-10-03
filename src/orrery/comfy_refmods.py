@@ -10,6 +10,7 @@ RefMods that have started by then. ComfyUI only.
 
 import json
 import sys
+from itertools import pairwise
 
 from orrery.refbias import KEY
 
@@ -54,18 +55,23 @@ def resolve(name: str, available: list[str]) -> str:
 
 def schedule(refmods: list[dict], images: list[dict] = ()) -> list[tuple[float, float, list[dict]]]:
     """(start, end, RefMods active) for each share of sampling, from 0 to 1. A range starts where a
-    RefMod or a picture starts; one that waits until 100% never runs."""
+    RefMod or a picture starts or stops; one that waits until 100% never runs."""
     waits = [*refmods, *images]
-    starts = sorted({0.0} | {min(1.0, max(0.0, float(r["from"]))) for r in waits} - {1.0})
-    ends = [*starts[1:], 1.0]
-    return [(lo, hi, [r for r in refmods if float(r["from"]) <= lo]) for lo, hi in zip(starts, ends, strict=True)]
+    edges = sorted({0.0, 1.0} | {_share(r["from"]) for r in waits} | {_share(r.get("to", 1.0)) for r in waits})
+    return [(lo, hi, [r for r in refmods if _share(r["from"]) <= lo and _share(r.get("to", 1.0)) >= hi])
+            for lo, hi in pairwise(edges)]
+
+
+def _share(value) -> float:
+    return min(1.0, max(0.0, float(value)))
 
 
 def _ranged(conditioning, blocks: list[dict], lo: float, hi: float, images: dict | None = None) -> list:
     """The conditioning with `blocks` added to its refs, for sampling from `lo` to `hi` (within any range
     an entry already has); entries that leave nothing of the range are dropped. `images`: {k: (strength,
-    from)} for the k-th picture Reference to Video put on the conditioning; a picture that waits past
-    `lo`, or is at 0, is left out of this range, any other strength marks it for orrery.refbias."""
+    from, to)} for the k-th picture Reference to Video put on the conditioning; a picture that waits past
+    `lo`, stops before `hi` or is at 0 is left out of this range, any other strength marks it for
+    orrery.refbias."""
     out = []
     for tensor, meta in conditioning:
         meta = dict(meta)
@@ -76,8 +82,8 @@ def _ranged(conditioning, blocks: list[dict], lo: float, hi: float, images: dict
         for block in meta.get("minimax_refs", []):
             if images and block.get("kind") == "image":
                 k += 1
-                strength, wait = images.get(k, (1.0, 0.0))
-                if wait > lo or strength <= 0.0:
+                strength, wait, until = images.get(k, (1.0, 0.0, 1.0))
+                if wait > lo or until < hi or strength <= 0.0:
                     continue
                 if strength != 1.0:
                     block = {**block, KEY: strength}
@@ -88,6 +94,12 @@ def _ranged(conditioning, blocks: list[dict], lo: float, hi: float, images: dict
             meta["start_percent"], meta["end_percent"] = start, end
         out.append([tensor, meta])
     return out
+
+
+def _span(dial: dict) -> str:
+    """` from 10% to 50%` for the console; `to` only when it stops before the end."""
+    end = float(dial.get("to", 1.0))
+    return f" from {float(dial['from']) * 100:g}%" + (f" to {end * 100:g}%" if end < 1.0 else "")
 
 
 def tokens(block: dict) -> int:
@@ -127,12 +139,12 @@ class OrreryRefMods:
                 block = pack._load_mod(resolve(r["name"], available)).ref_block(1.0, curve=None)
                 if block is not None:
                     blocks[r["name"]] = {**block, KEY: float(r["strength"])}
-        pictures = {int(i["ref"]): (float(i["strength"]), float(i["from"])) for i in images}
+        pictures = {int(i["ref"]): (float(i["strength"]), float(i["from"]), float(i.get("to", 1.0))) for i in images}
         out = []
         for lo, hi, active in schedule([r for r in refmods if r["name"] in blocks], images):
             out += _ranged(conditioning, [blocks[r["name"]] for r in active], lo, hi, pictures)
-        said = [f"{r['name']} at {float(r['strength']):g} from {float(r['from']) * 100:g}% ({tokens(blocks[r['name']])} tokens)"
+        said = [f"{r['name']} at {float(r['strength']):g}{_span(r)} ({tokens(blocks[r['name']])} tokens)"
                 if r["name"] in blocks else f"{r['name']} at 0, left out" for r in refmods]
-        said += [f"image {i['image']} at {float(i['strength']):g} from {float(i['from']) * 100:g}%" for i in images]
+        said += [f"image {i['image']} at {float(i['strength']):g}{_span(i)}" for i in images]
         print("[orrery] Orrery RefMods: " + "; ".join(said))
         return (out or conditioning,)

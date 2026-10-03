@@ -233,7 +233,7 @@ test("refmod in a CAST member's parentheses lists the RefMods, prefix matches fi
 test("the parentheses offer refmod and global, then a RefMod's strength and start", () => {
   assert.deepEqual(names(`${CAST_HEAD}SALON (re`), ["refmod "]);
   assert.deepEqual(names(`${CAST_HEAD}SALON (image 1, gl`), ["global"]);
-  assert.deepEqual(names(`${CAST_HEAD}SALON (refmod orrery_abc_salon `), ["at 1", "from 35%"]);
+  assert.deepEqual(names(`${CAST_HEAD}SALON (refmod orrery_abc_salon `), ["at 1", "from 35%", "to 50%"]);
   assert.deepEqual(names(`${CAST_HEAD}SALON (refmod orrery_abc_salon at 0.5 f`), ["from 35%"]);
 });
 
@@ -243,7 +243,7 @@ test("a line of speech in a shot gets no RefMod words", () => {
 
 test("the refmods: line completes as a keyword, then its defaults", () => {
   assert.ok(names("@h3 ref2va\nref").includes("refmods: "));
-  assert.deepEqual(names("@h3 ref2va\nrefmods: "), ["at 1 from 0%", "at 0.5", "from 35%"]);
+  assert.deepEqual(names("@h3 ref2va\nrefmods: "), ["at 1 from 0%", "at 0.5", "from 35%", "to 50%"]);
 });
 
 test("SET: lists the CAST's RefMods and pictures as name(strength, start)", () => {

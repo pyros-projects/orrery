@@ -77,7 +77,8 @@ _HANDOFF = re.compile(r"^HANDOFF:\s*(.+)$")
 _SEND_LINE = re.compile(r"^SEND:")
 _LORA = re.compile(r"^LORA:\s*(.+)$")
 _CONTEXT = re.compile(r"^context:\s*(\d+)\s*f?$", re.IGNORECASE)
-_REFMODS = re.compile(r"^refmods:\s*(?:at\s+(\d*\.?\d+))?\s*(?:from\s+(\d+(?:\.\d+)?)\s*%)?\s*$", re.IGNORECASE)
+_REFMODS = re.compile(r"^refmods:\s*(?:at\s+(\d*\.?\d+))?\s*(?:from\s+(\d+(?:\.\d+)?)\s*%)?\s*(?:to\s+(\d+(?:\.\d+)?)\s*%)?\s*$",
+                      re.IGNORECASE)
 REFMOD_START = 0.0  # RefMods start with the first step: a character's identity is laid out early, too
 _SET = re.compile(r"^SET:\s*(.*)$")
 _SET_ITEM = re.compile(r"([^,()]+?)\s*\(([^()]*)\)")  # name(strength, start)
@@ -134,6 +135,7 @@ class Scene:
     context: int | None = None  # frames Motion Context pins at the start of every reel segment after the first
     refmod_strength: float = 1.0  # `refmods: at 0.8 from 35%`: what a RefMod without its own `at`/`from` gets
     refmod_start: float = REFMOD_START
+    refmod_end: float = 1.0  # `refmods: … to 80%`: where a RefMod without its own `to` stops
     dials: dict = field(default_factory=dict)  # `SET: image_1(0.5, 35%)`: ("image", 1) or ("refmod", name) → {"strength", "from"}
     enhance: str = ""  # a `> instruction` before the first shot: for every shot without its own
 
@@ -209,6 +211,8 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
                 scene.refmod_strength = float(m.group(1))
             if m.group(2):
                 scene.refmod_start = min(1.0, float(m.group(2)) / 100)
+            if m.group(3):
+                scene.refmod_end = min(1.0, float(m.group(3)) / 100)
         elif (m := _MUSIC.match(line)) and cur is None and in_cast:
             scene.music = m.group(1).strip()
         elif line == "CAST" and cur is None:
@@ -286,8 +290,10 @@ def _set_line(scene: Scene, text: str, lint: list[Issue]) -> None:
         try:
             strength = float(values[0]) if values[0] else None
             start = _share(values[1]) if len(values) > 1 else None
+            end = _share(values[2]) if len(values) > 2 else None
         except ValueError:
-            lint.append(Issue("warn", f"SET: {target.strip()}({args}) takes numbers: (strength) or (strength, start)."))
+            lint.append(Issue("warn", f"SET: {target.strip()}({args}) takes numbers: (strength), (strength, start) or "
+                                      "(strength, start, end)."))
             continue
         image = _SET_IMAGE.match(target.strip())
         key = ("image", int(image.group(1))) if image else ("refmod", _refmod_key(target.strip()))
@@ -296,6 +302,8 @@ def _set_line(scene: Scene, text: str, lint: list[Issue]) -> None:
             dial["strength"] = strength
         if start is not None:
             dial["from"] = start
+        if end is not None:
+            dial["to"] = end
 
 
 def _cast_line(scene: Scene, line: str, lint: list[Issue], block: int = 0, last: Member | None = None) -> Member | None:
@@ -671,8 +679,9 @@ def clip_refmods(scene: Scene) -> list[dict]:
                 dial = scene.dials.get(("refmod", _refmod_key(src.name)), {})
                 strength = scene.refmod_strength if src.strength is None else src.strength
                 start = scene.refmod_start if src.start is None else src.start
+                end = scene.refmod_end if src.end is None else src.end
                 out[src.name] = {"name": src.name, "member": m.name, "strength": dial.get("strength", strength),
-                                 "from": dial.get("from", start)}
+                                 "from": dial.get("from", start), "to": dial.get("to", end)}
     return list(out.values())
 
 
@@ -685,10 +694,12 @@ def clip_images(scene: Scene, refs: list[int]) -> list[dict]:
         for src in m.sources:
             image = refs[src.index - 1] if refs else src.index
             dial = scene.dials.get(("image", image), {})
-            if src.kind == "image" and (src.strength is not None or src.start is not None or dial) and src.index not in out:
+            dialed = src.strength is not None or src.start is not None or src.end is not None or dial
+            if src.kind == "image" and dialed and src.index not in out:
                 out[src.index] = {"ref": src.index, "image": image, "member": m.name,
                                   "strength": dial.get("strength", 1.0 if src.strength is None else src.strength),
-                                  "from": dial.get("from", 0.0 if src.start is None else src.start)}
+                                  "from": dial.get("from", 0.0 if src.start is None else src.start),
+                                  "to": dial.get("to", 1.0 if src.end is None else src.end)}
     return list(out.values())
 
 
