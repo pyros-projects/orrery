@@ -1,18 +1,17 @@
 # A character leaves and comes back: the picture and RefMod dials, case by case. Render segment 2 at
-# seed 7, with one SET line in chunk 3 switched on at a time. The CAST only says "a young woman", so
-# whatever looks like Jinx (blue braids, tattoos, the Arcane look) comes from a reference.
+# seed 7, with one SET line in chunk 3 switched on at a time. The CAST does not describe Jinx, so
+# whatever looks like her (blue braids, tattoos, the Arcane look) comes from a reference.
 @h3 ref2va 2:3 0.6MP
 style: live-action, TikTok reel
 context: 22
 
 CAST
-JINX (refmod minimaxh3_jinx_v1_refmod, image 1): a young woman.
+JINX (refmod minimaxh3_jinx_v1_refmod, image 1): a skinny and pretty alternative young woman around 20 years old.
 
 CHUNK 1
 SHOT 7s: static
-LORA:<lora:relim_v2_lora_500:0.50>
 SEND: frame 30 to image 1
-JINX is showcasing her outfit. JINX is wearing __80s/80s_women_clothing_combined__ and has __80s/80s_women_hair_combined__ in __80s/colors/80s_colors__ for a 80's party she is going. After 3s someone is ringing at the door and JINX goes looking and is leaving the scene to the side and is completely out of frame after 5s. After 5s the camera is filming an empty room.
+JINX is showcasing her outfit. JINX is wearing __80s/80s_women_clothing_combined__ and has __80s/80s_women_hair_combined__ and her hair is of __80s/colors/80s_colors__ color for a 80's party she is going. After 3s someone is ringing at the door and JINX goes looking and is leaving the scene to the side and is completely out of frame after 5s. After 5s the camera is filming an empty room.
 HANDOFF: the camera is filming only the room.
 
 CHUNK 2
@@ -23,7 +22,7 @@ HANDOFF: the camera is filming only the room.
 CHUNK 3
 SHOT 7s: static
 # A: neither: a young woman as the text describes her, nothing of Jinx
-SET: image_1(0), minimaxh3_jinx_v1_refmod(0)
+#SET: image_1(0), minimaxh3_jinx_v1_refmod(0)
 # B: the RefMod alone: Jinx, but not the outfit of frame 30
 #SET: image_1(0), minimaxh3_jinx_v1_refmod(1)
 # C: the picture alone: as in frame 30, in its 80s outfit
@@ -38,4 +37,8 @@ SET: image_1(0), minimaxh3_jinx_v1_refmod(0)
 #SET: image_1(1, 35%), minimaxh3_jinx_v1_refmod(0)
 # H: the RefMod from 35%, the old default: in chunk 1 no Jinx came through at all
 #SET: image_1(0), minimaxh3_jinx_v1_refmod(1, 35%)
+# I: Jinx only in the first 10% of sampling, then the prompt takes over
+SET: image_1(0), minimaxh3_jinx_v1_refmod(1, 0%, 10%)
+# J: Jinx in the first 30%
+#SET: image_1(0), minimaxh3_jinx_v1_refmod(1, 0%, 30%)
 JINX is entering the scene from the side and standing in front of the camera. JINX is showcasing her outfit.
