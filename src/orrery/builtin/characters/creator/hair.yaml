@@ -1,0 +1,22 @@
+meta: {source: "orrery character creator: hairstyles; each reads the creator's $haircolour (natural, greying with age, or dyed in the signature colour)", needs: [haircolour], builtin: true}
+entries:
+  - short $haircolour hair in a messy crop
+  - a chin-length $haircolour bob
+  - long $haircolour hair tied in a low ponytail
+  - shoulder-length $haircolour waves
+  - a close-cropped $haircolour buzz cut
+  - thick $haircolour curls pinned up loosely
+  - $haircolour hair in a neat side part
+  - a long $haircolour braid over one shoulder
+  - tousled $haircolour hair that never quite behaves
+  - a $haircolour pixie cut
+  - $haircolour hair slicked straight back
+  - a high $haircolour bun
+  - long straight $haircolour hair with a blunt fringe
+  - a full $haircolour afro
+  - $haircolour box braids gathered at the nape
+  - {value: a shaved head, weight: 0.5}
+  - a $haircolour mullet
+  - a loose $haircolour top knot
+  - an undercut with long $haircolour hair swept to one side
+  - two $haircolour space buns

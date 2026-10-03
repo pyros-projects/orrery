@@ -1,0 +1,14 @@
+meta: {source: "orrery character creator: something worn on the head or face; several read the creator's $colour", needs: [colour], builtin: true}
+entries:
+  - round wire-rimmed glasses
+  - thick black-framed glasses
+  - a black eyepatch over the left eye
+  - a wide-brimmed $colour hat
+  - a $colour beanie pulled low
+  - a $colour bandana tied over the hair
+  - small round tinted sunglasses
+  - welding goggles pushed up on the forehead
+  - chunky $colour headphones around the neck
+  - a $colour hood pulled up
+  - a veil of fine $colour netting over the eyes
+  - a $colour headscarf

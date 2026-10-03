@@ -1,0 +1,12 @@
+meta: {source: "orrery character creator: eyes", builtin: true}
+entries:
+  - dark brown eyes
+  - pale grey eyes
+  - green eyes flecked with gold
+  - hazel eyes
+  - ice-blue eyes
+  - near-black eyes
+  - amber eyes
+  - warm brown hooded eyes
+  - deep-set grey-green eyes
+  - {value: one blue and one brown eye, weight: 0.3}

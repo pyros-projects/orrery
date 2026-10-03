@@ -1,0 +1,1225 @@
+{
+ "preset": "krea/09_character_creator",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A studio photograph of a 58-year-old man of Kenyan descent, with dark brown skin: gaunt and angular, a heart-shaped face with wide-set eyes, deep-set grey-green eyes, long honey-blonde hair tied in a low ponytail and vitiligo patches around the eyes and mouth. Dressed in a battered crimson bomber jacket patched with corporate logos, wearing a crimson hood pulled up, with a guarded, watchful look. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "cyberpunk"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged"
+      ],
+      [
+       "{19-26}",
+       "25"
+      ],
+      [
+       "{27-39}",
+       "28"
+      ],
+      [
+       "{40-58}",
+       "58"
+      ],
+      [
+       "{59-79}",
+       "61"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Kenyan descent, with {dark brown|deep brown} skin"
+      ],
+      [
+       "{dark brown|deep brown}",
+       "dark brown"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "gaunt and angular"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a heart-shaped face with wide-set eyes"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "deep-set grey-green eyes"
+      ],
+      [
+       "{silver|white|iron-grey|salt-and-pepper}",
+       "iron-grey"
+      ],
+      [
+       "{__characters/looks/hair_color__|$colour-dyed}",
+       "$colour-dyed"
+      ],
+      [
+       "$haircolour ← __characters/looks/hair_color__",
+       "honey-blonde"
+      ],
+      [
+       "$hair ← __characters/creator/hair__",
+       "long $haircolour hair tied in a low ponytail"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "vitiligo patches around the eyes and mouth"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit#genre:$genre__",
+       "a battered $colour bomber jacket patched with corporate logos"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory__",
+       "a $colour hood pulled up"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a guarded, watchful look"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "portrait"
+      ]
+     ]
+    },
+    {
+     "cell": 1,
+     "text": "A studio photograph of a 58-year-old man of Kenyan descent, with dark brown skin: gaunt and angular, a heart-shaped face with wide-set eyes, deep-set grey-green eyes, long honey-blonde hair tied in a low ponytail and vitiligo patches around the eyes and mouth. Dressed in a battered crimson bomber jacket patched with corporate logos, wearing a crimson hood pulled up, with a guarded, watchful look. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "cyberpunk"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged"
+      ],
+      [
+       "{19-26}",
+       "25"
+      ],
+      [
+       "{27-39}",
+       "28"
+      ],
+      [
+       "{40-58}",
+       "58"
+      ],
+      [
+       "{59-79}",
+       "61"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Kenyan descent, with {dark brown|deep brown} skin"
+      ],
+      [
+       "{dark brown|deep brown}",
+       "dark brown"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "gaunt and angular"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a heart-shaped face with wide-set eyes"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "deep-set grey-green eyes"
+      ],
+      [
+       "{silver|white|iron-grey|salt-and-pepper}",
+       "iron-grey"
+      ],
+      [
+       "{__characters/looks/hair_color__|$colour-dyed}",
+       "$colour-dyed"
+      ],
+      [
+       "$haircolour ← __characters/looks/hair_color__",
+       "honey-blonde"
+      ],
+      [
+       "$hair ← __characters/creator/hair__",
+       "long $haircolour hair tied in a low ponytail"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "vitiligo patches around the eyes and mouth"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit#genre:$genre__",
+       "a battered $colour bomber jacket patched with corporate logos"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory__",
+       "a $colour hood pulled up"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a guarded, watchful look"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "three-quarter"
+      ]
+     ]
+    },
+    {
+     "cell": 2,
+     "text": "A studio photograph of a 58-year-old man of Kenyan descent, with dark brown skin: gaunt and angular, a heart-shaped face with wide-set eyes, deep-set grey-green eyes, long honey-blonde hair tied in a low ponytail and vitiligo patches around the eyes and mouth. Dressed in a battered crimson bomber jacket patched with corporate logos, wearing a crimson hood pulled up, with a guarded, watchful look. A full-length view from head to toe, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "cyberpunk"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged"
+      ],
+      [
+       "{19-26}",
+       "25"
+      ],
+      [
+       "{27-39}",
+       "28"
+      ],
+      [
+       "{40-58}",
+       "58"
+      ],
+      [
+       "{59-79}",
+       "61"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Kenyan descent, with {dark brown|deep brown} skin"
+      ],
+      [
+       "{dark brown|deep brown}",
+       "dark brown"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "gaunt and angular"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a heart-shaped face with wide-set eyes"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "deep-set grey-green eyes"
+      ],
+      [
+       "{silver|white|iron-grey|salt-and-pepper}",
+       "iron-grey"
+      ],
+      [
+       "{__characters/looks/hair_color__|$colour-dyed}",
+       "$colour-dyed"
+      ],
+      [
+       "$haircolour ← __characters/looks/hair_color__",
+       "honey-blonde"
+      ],
+      [
+       "$hair ← __characters/creator/hair__",
+       "long $haircolour hair tied in a low ponytail"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "vitiligo patches around the eyes and mouth"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit#genre:$genre__",
+       "a battered $colour bomber jacket patched with corporate logos"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory__",
+       "a $colour hood pulled up"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a guarded, watchful look"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "full-length"
+      ]
+     ]
+    },
+    {
+     "cell": 3,
+     "text": "A studio photograph of a 58-year-old man of Kenyan descent, with dark brown skin: gaunt and angular, a heart-shaped face with wide-set eyes, deep-set grey-green eyes, long honey-blonde hair tied in a low ponytail and vitiligo patches around the eyes and mouth. Dressed in a battered crimson bomber jacket patched with corporate logos, wearing a crimson hood pulled up, with a guarded, watchful look. A head-and-shoulders profile, facing left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "cyberpunk"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged"
+      ],
+      [
+       "{19-26}",
+       "25"
+      ],
+      [
+       "{27-39}",
+       "28"
+      ],
+      [
+       "{40-58}",
+       "58"
+      ],
+      [
+       "{59-79}",
+       "61"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Kenyan descent, with {dark brown|deep brown} skin"
+      ],
+      [
+       "{dark brown|deep brown}",
+       "dark brown"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "gaunt and angular"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a heart-shaped face with wide-set eyes"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "deep-set grey-green eyes"
+      ],
+      [
+       "{silver|white|iron-grey|salt-and-pepper}",
+       "iron-grey"
+      ],
+      [
+       "{__characters/looks/hair_color__|$colour-dyed}",
+       "$colour-dyed"
+      ],
+      [
+       "$haircolour ← __characters/looks/hair_color__",
+       "honey-blonde"
+      ],
+      [
+       "$hair ← __characters/creator/hair__",
+       "long $haircolour hair tied in a low ponytail"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "vitiligo patches around the eyes and mouth"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit#genre:$genre__",
+       "a battered $colour bomber jacket patched with corporate logos"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory__",
+       "a $colour hood pulled up"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a guarded, watchful look"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "profile"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A studio photograph of a 24-year-old woman of Mongolian descent, with light tan skin: athletic, with a swimmer's shoulders, a broad face with a flat nose and a wide, easy mouth, green eyes flecked with gold, a cobalt-blue-dyed pixie cut and ears pierced all the way up with small hoops. Dressed in a quilted cobalt-blue kimono jacket with a holographic obi, wearing a cobalt-blue bandana tied over the hair, with a grin only just held back. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "cyberpunk"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "cobalt-blue"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young"
+      ],
+      [
+       "{19-26}",
+       "24"
+      ],
+      [
+       "{27-39}",
+       "33"
+      ],
+      [
+       "{40-58}",
+       "56"
+      ],
+      [
+       "{59-79}",
+       "61"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Mongolian descent, with {weathered tan|light tan} skin"
+      ],
+      [
+       "{weathered tan|light tan}",
+       "light tan"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a swimmer's shoulders"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a broad face with a flat nose and a wide, easy mouth"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "green eyes flecked with gold"
+      ],
+      [
+       "{silver|white|iron-grey|salt-and-pepper}",
+       "salt-and-pepper"
+      ],
+      [
+       "{__characters/looks/hair_color__|$colour-dyed}",
+       "$colour-dyed"
+      ],
+      [
+       "$hair ← __characters/creator/hair__",
+       "a $haircolour pixie cut"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "ears pierced all the way up with small hoops"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit#genre:$genre__",
+       "a quilted $colour kimono jacket with a holographic obi"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory__",
+       "a $colour bandana tied over the hair"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a grin only just held back"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "portrait"
+      ]
+     ]
+    },
+    {
+     "cell": 1,
+     "text": "A studio photograph of a 24-year-old woman of Mongolian descent, with light tan skin: athletic, with a swimmer's shoulders, a broad face with a flat nose and a wide, easy mouth, green eyes flecked with gold, a cobalt-blue-dyed pixie cut and ears pierced all the way up with small hoops. Dressed in a quilted cobalt-blue kimono jacket with a holographic obi, wearing a cobalt-blue bandana tied over the hair, with a grin only just held back. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "cyberpunk"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "cobalt-blue"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young"
+      ],
+      [
+       "{19-26}",
+       "24"
+      ],
+      [
+       "{27-39}",
+       "33"
+      ],
+      [
+       "{40-58}",
+       "56"
+      ],
+      [
+       "{59-79}",
+       "61"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Mongolian descent, with {weathered tan|light tan} skin"
+      ],
+      [
+       "{weathered tan|light tan}",
+       "light tan"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a swimmer's shoulders"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a broad face with a flat nose and a wide, easy mouth"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "green eyes flecked with gold"
+      ],
+      [
+       "{silver|white|iron-grey|salt-and-pepper}",
+       "salt-and-pepper"
+      ],
+      [
+       "{__characters/looks/hair_color__|$colour-dyed}",
+       "$colour-dyed"
+      ],
+      [
+       "$hair ← __characters/creator/hair__",
+       "a $haircolour pixie cut"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "ears pierced all the way up with small hoops"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit#genre:$genre__",
+       "a quilted $colour kimono jacket with a holographic obi"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory__",
+       "a $colour bandana tied over the hair"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a grin only just held back"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "three-quarter"
+      ]
+     ]
+    },
+    {
+     "cell": 2,
+     "text": "A studio photograph of a 24-year-old woman of Mongolian descent, with light tan skin: athletic, with a swimmer's shoulders, a broad face with a flat nose and a wide, easy mouth, green eyes flecked with gold, a cobalt-blue-dyed pixie cut and ears pierced all the way up with small hoops. Dressed in a quilted cobalt-blue kimono jacket with a holographic obi, wearing a cobalt-blue bandana tied over the hair, with a grin only just held back. A full-length view from head to toe, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "cyberpunk"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "cobalt-blue"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young"
+      ],
+      [
+       "{19-26}",
+       "24"
+      ],
+      [
+       "{27-39}",
+       "33"
+      ],
+      [
+       "{40-58}",
+       "56"
+      ],
+      [
+       "{59-79}",
+       "61"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Mongolian descent, with {weathered tan|light tan} skin"
+      ],
+      [
+       "{weathered tan|light tan}",
+       "light tan"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a swimmer's shoulders"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a broad face with a flat nose and a wide, easy mouth"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "green eyes flecked with gold"
+      ],
+      [
+       "{silver|white|iron-grey|salt-and-pepper}",
+       "salt-and-pepper"
+      ],
+      [
+       "{__characters/looks/hair_color__|$colour-dyed}",
+       "$colour-dyed"
+      ],
+      [
+       "$hair ← __characters/creator/hair__",
+       "a $haircolour pixie cut"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "ears pierced all the way up with small hoops"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit#genre:$genre__",
+       "a quilted $colour kimono jacket with a holographic obi"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory__",
+       "a $colour bandana tied over the hair"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a grin only just held back"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "full-length"
+      ]
+     ]
+    },
+    {
+     "cell": 3,
+     "text": "A studio photograph of a 24-year-old woman of Mongolian descent, with light tan skin: athletic, with a swimmer's shoulders, a broad face with a flat nose and a wide, easy mouth, green eyes flecked with gold, a cobalt-blue-dyed pixie cut and ears pierced all the way up with small hoops. Dressed in a quilted cobalt-blue kimono jacket with a holographic obi, wearing a cobalt-blue bandana tied over the hair, with a grin only just held back. A head-and-shoulders profile, facing left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "cyberpunk"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "cobalt-blue"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young"
+      ],
+      [
+       "{19-26}",
+       "24"
+      ],
+      [
+       "{27-39}",
+       "33"
+      ],
+      [
+       "{40-58}",
+       "56"
+      ],
+      [
+       "{59-79}",
+       "61"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Mongolian descent, with {weathered tan|light tan} skin"
+      ],
+      [
+       "{weathered tan|light tan}",
+       "light tan"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a swimmer's shoulders"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a broad face with a flat nose and a wide, easy mouth"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "green eyes flecked with gold"
+      ],
+      [
+       "{silver|white|iron-grey|salt-and-pepper}",
+       "salt-and-pepper"
+      ],
+      [
+       "{__characters/looks/hair_color__|$colour-dyed}",
+       "$colour-dyed"
+      ],
+      [
+       "$hair ← __characters/creator/hair__",
+       "a $haircolour pixie cut"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "ears pierced all the way up with small hoops"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit#genre:$genre__",
+       "a quilted $colour kimono jacket with a holographic obi"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory__",
+       "a $colour bandana tied over the hair"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a grin only just held back"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "profile"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a soft jaw and a dimpled chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a leather greatcoat with a sky-blue scarf wound twice around the neck, with a proudly lifted chin. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "gothic"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "sky-blue"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged"
+      ],
+      [
+       "{19-26}",
+       "19"
+      ],
+      [
+       "{27-39}",
+       "28"
+      ],
+      [
+       "{40-58}",
+       "50"
+      ],
+      [
+       "{59-79}",
+       "69"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Filipino descent, with {golden tan|warm brown} skin"
+      ],
+      [
+       "{golden tan|warm brown}",
+       "golden tan"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "curvy and strong"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a soft jaw and a dimpled chin"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "pale grey eyes"
+      ],
+      [
+       "{silver|white|iron-grey|salt-and-pepper}",
+       "silver"
+      ],
+      [
+       "{__characters/looks/hair_color__|$colour-dyed}",
+       "__characters/looks/hair_color__"
+      ],
+      [
+       "$haircolour ← __characters/looks/hair_color__",
+       "chestnut"
+      ],
+      [
+       "$hair ← __characters/creator/hair__",
+       "a close-cropped $haircolour buzz cut"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a notch missing from the top of one ear"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit#genre:$genre__",
+       "a leather greatcoat with a $colour scarf wound twice around the neck"
+      ],
+      [
+       "{no|yes}",
+       "no"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory__",
+       "chunky $colour headphones around the neck"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a proudly lifted chin"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "portrait"
+      ]
+     ]
+    },
+    {
+     "cell": 1,
+     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a soft jaw and a dimpled chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a leather greatcoat with a sky-blue scarf wound twice around the neck, with a proudly lifted chin. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "gothic"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "sky-blue"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged"
+      ],
+      [
+       "{19-26}",
+       "19"
+      ],
+      [
+       "{27-39}",
+       "28"
+      ],
+      [
+       "{40-58}",
+       "50"
+      ],
+      [
+       "{59-79}",
+       "69"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Filipino descent, with {golden tan|warm brown} skin"
+      ],
+      [
+       "{golden tan|warm brown}",
+       "golden tan"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "curvy and strong"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a soft jaw and a dimpled chin"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "pale grey eyes"
+      ],
+      [
+       "{silver|white|iron-grey|salt-and-pepper}",
+       "silver"
+      ],
+      [
+       "{__characters/looks/hair_color__|$colour-dyed}",
+       "__characters/looks/hair_color__"
+      ],
+      [
+       "$haircolour ← __characters/looks/hair_color__",
+       "chestnut"
+      ],
+      [
+       "$hair ← __characters/creator/hair__",
+       "a close-cropped $haircolour buzz cut"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a notch missing from the top of one ear"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit#genre:$genre__",
+       "a leather greatcoat with a $colour scarf wound twice around the neck"
+      ],
+      [
+       "{no|yes}",
+       "no"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory__",
+       "chunky $colour headphones around the neck"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a proudly lifted chin"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "three-quarter"
+      ]
+     ]
+    },
+    {
+     "cell": 2,
+     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a soft jaw and a dimpled chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a leather greatcoat with a sky-blue scarf wound twice around the neck, with a proudly lifted chin. A full-length view from head to toe, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "gothic"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "sky-blue"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged"
+      ],
+      [
+       "{19-26}",
+       "19"
+      ],
+      [
+       "{27-39}",
+       "28"
+      ],
+      [
+       "{40-58}",
+       "50"
+      ],
+      [
+       "{59-79}",
+       "69"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Filipino descent, with {golden tan|warm brown} skin"
+      ],
+      [
+       "{golden tan|warm brown}",
+       "golden tan"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "curvy and strong"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a soft jaw and a dimpled chin"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "pale grey eyes"
+      ],
+      [
+       "{silver|white|iron-grey|salt-and-pepper}",
+       "silver"
+      ],
+      [
+       "{__characters/looks/hair_color__|$colour-dyed}",
+       "__characters/looks/hair_color__"
+      ],
+      [
+       "$haircolour ← __characters/looks/hair_color__",
+       "chestnut"
+      ],
+      [
+       "$hair ← __characters/creator/hair__",
+       "a close-cropped $haircolour buzz cut"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a notch missing from the top of one ear"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit#genre:$genre__",
+       "a leather greatcoat with a $colour scarf wound twice around the neck"
+      ],
+      [
+       "{no|yes}",
+       "no"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory__",
+       "chunky $colour headphones around the neck"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a proudly lifted chin"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "full-length"
+      ]
+     ]
+    },
+    {
+     "cell": 3,
+     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a soft jaw and a dimpled chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a leather greatcoat with a sky-blue scarf wound twice around the neck, with a proudly lifted chin. A head-and-shoulders profile, facing left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "picks": [
+      [
+       "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
+       "gothic"
+      ],
+      [
+       "$colour ← __characters/creator/colour__",
+       "sky-blue"
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man"
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged"
+      ],
+      [
+       "{19-26}",
+       "19"
+      ],
+      [
+       "{27-39}",
+       "28"
+      ],
+      [
+       "{40-58}",
+       "50"
+      ],
+      [
+       "{59-79}",
+       "69"
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Filipino descent, with {golden tan|warm brown} skin"
+      ],
+      [
+       "{golden tan|warm brown}",
+       "golden tan"
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "curvy and strong"
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a soft jaw and a dimpled chin"
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "pale grey eyes"
+      ],
+      [
+       "{silver|white|iron-grey|salt-and-pepper}",
+       "silver"
+      ],
+      [
+       "{__characters/looks/hair_color__|$colour-dyed}",
+       "__characters/looks/hair_color__"
+      ],
+      [
+       "$haircolour ← __characters/looks/hair_color__",
+       "chestnut"
+      ],
+      [
+       "$hair ← __characters/creator/hair__",
+       "a close-cropped $haircolour buzz cut"
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a notch missing from the top of one ear"
+      ],
+      [
+       "$outfit ← __characters/creator/outfit#genre:$genre__",
+       "a leather greatcoat with a $colour scarf wound twice around the neck"
+      ],
+      [
+       "{no|yes}",
+       "no"
+      ],
+      [
+       "$accessory ← __characters/creator/accessory__",
+       "chunky $colour headphones around the neck"
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a proudly lifted chin"
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo"
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "profile"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,52 @@
+meta: {source: "orrery character creator: clothes per genre (the `genre` property); each reads the creator's $colour, so the signature colour is in the silhouette", needs: [colour], builtin: true}
+entries:
+  - {value: "a $colour hoodie under a faded denim jacket", props: {genre: everyday}}
+  - {value: "a $colour cable-knit cardigan over a plain white T-shirt", props: {genre: everyday}}
+  - {value: "a $colour rain jacket zipped to the chin", props: {genre: everyday}}
+  - {value: "a $colour flannel shirt with the sleeves rolled up", props: {genre: everyday}}
+  - {value: "a $colour wool overcoat over a black turtleneck", props: {genre: everyday}}
+  - {value: "paint-flecked overalls over a $colour T-shirt", props: {genre: everyday}}
+  - {value: "a $colour puffer vest over a grey sweatshirt", props: {genre: everyday}}
+  - {value: "an untucked $colour linen shirt and a canvas tote bag on one shoulder", props: {genre: everyday}}
+  - {value: "a weathered $colour field jacket with bulging pockets", props: {genre: adventure}}
+  - {value: "a $colour climbing shell over a fleece, a coil of rope over one shoulder", props: {genre: adventure}}
+  - {value: "a $colour waxed-cotton coat and a canvas satchel", props: {genre: adventure}}
+  - {value: "a sun-faded $colour expedition shirt and a battered compass on a cord", props: {genre: adventure}}
+  - {value: "a $colour down parka with a fur-trimmed hood thrown back", props: {genre: adventure}}
+  - {value: "a $colour sailing jacket with salt stains on the sleeves", props: {genre: adventure}}
+  - {value: "a $colour poncho over a leather jerkin, binoculars on a strap", props: {genre: adventure}}
+  - {value: "a hooded cloak of $colour wool over a travel-stained tunic", props: {genre: fantasy}}
+  - {value: "dented plate armour under a $colour tabard", props: {genre: fantasy}}
+  - {value: "robes of $colour velvet embroidered with silver constellations", props: {genre: fantasy}}
+  - {value: "a boiled-leather jerkin over a $colour linen shirt", props: {genre: fantasy}}
+  - {value: "a $colour scholar's coat with pockets full of scrolls", props: {genre: fantasy}}
+  - {value: "chain mail under a $colour fur-trimmed mantle", props: {genre: fantasy}}
+  - {value: "a feathered cloak dyed $colour, clasped with a bone pin", props: {genre: fantasy}}
+  - {value: "a translucent $colour vinyl coat over a black bodysuit", props: {genre: cyberpunk}}
+  - {value: "a high-collared techwear coat with glowing $colour seams", props: {genre: cyberpunk}}
+  - {value: "a cropped $colour hoodie and cargo pants with too many buckles", props: {genre: cyberpunk}}
+  - {value: "a padded $colour courier vest over a mesh shirt", props: {genre: cyberpunk}}
+  - {value: "a quilted $colour kimono jacket with a holographic obi", props: {genre: cyberpunk}}
+  - {value: "a battered $colour bomber jacket patched with corporate logos", props: {genre: cyberpunk}}
+  - {value: "a long duster with $colour cable ports along the sleeves", props: {genre: cyberpunk}}
+  - {value: "a belted trench coat with a $colour silk scarf at the throat", props: {genre: noir}}
+  - {value: "a double-breasted chalk-stripe suit and a loosened $colour tie", props: {genre: noir}}
+  - {value: "a bias-cut $colour satin evening gown under a fox stole", props: {genre: noir}}
+  - {value: "a tailored $colour skirt suit with padded shoulders", props: {genre: noir}}
+  - {value: "a heavy wool overcoat and a fedora with a $colour band", props: {genre: noir}}
+  - {value: "a rumpled white shirt with braces and a $colour waistcoat", props: {genre: noir}}
+  - {value: "a sequinned $colour cocktail dress and long satin gloves", props: {genre: noir}}
+  - {value: "a high-necked $colour velvet coat with jet buttons", props: {genre: gothic}}
+  - {value: "a black lace dress laced into a $colour corset", props: {genre: gothic}}
+  - {value: "a long black frock coat lined with $colour silk", props: {genre: gothic}}
+  - {value: "a ruffled shirt under a $colour brocade waistcoat", props: {genre: gothic}}
+  - {value: "a $colour taffeta gown under a black mourning veil", props: {genre: gothic}}
+  - {value: "a leather greatcoat with a $colour scarf wound twice around the neck", props: {genre: gothic}}
+  - {value: "a black tailcoat and a $colour silk cravat", props: {genre: gothic}}
+  - {value: "a $colour flight suit with mission patches on the shoulders", props: {genre: spacefarer}}
+  - {value: "a padded $colour pressure suit, the helmet under one arm", props: {genre: spacefarer}}
+  - {value: "a sleek $colour uniform with a high collar and rank pips", props: {genre: spacefarer}}
+  - {value: "a grease-smeared $colour mechanic's jumpsuit with tools on the belt", props: {genre: spacefarer}}
+  - {value: "a scuffed $colour armoured vest over a thermal undersuit", props: {genre: spacefarer}}
+  - {value: "a long $colour coat with a magnetic clasp and a utility harness", props: {genre: spacefarer}}
+  - {value: "a $colour medic's tunic with a glowing scanner clipped to the chest", props: {genre: spacefarer}}
