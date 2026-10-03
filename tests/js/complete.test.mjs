@@ -333,3 +333,13 @@ test("after image in a CAST: the gallery's presets to roll from and its characte
   const typed = "@h3 references\nCAST\n@HERO (i";
   assert.ok(suggest(typed, typed.length, data).items.some((i) => i.insert === "image "));
 });
+
+test("after as image and from image: the slots, each saying what has it already", () => {
+  const text = "@h3 references\nCAST\n@HERO (image 1, image 3): a heron\nSHOT 5s: static\nREMEMBER: frame 0 as image 4\nREMEMBER: first frame as image ";
+  const items = suggest(text, text.length, DATA).items;
+  assert.deepEqual(items.slice(0, 5).map((i) => [i.label, i.detail]), [["image 1", "HERO's picture"], ["image 2", "free"],
+    ["image 3", "HERO's picture"], ["image 4", "a REMEMBER: line's frames"], ["image 5", "free"]]);
+  assert.equal(items.length, 9);
+  const shot = "@h3 references\nCAST\n@HERO (image 2): a heron\nSHOT 5s: from image ";
+  assert.equal(suggest(shot, shot.length, DATA).items[1].detail, "HERO's picture");
+});

@@ -165,9 +165,11 @@ function bindingItems(before, text) {
   };
 }
 
-function shotItems(before, line, data) {
+function shotItems(before, line, data, text = "") {
   const m = line.match(/^\s*SHOT\s+[\d.]+s?\s*[:|](.*)$/i);  // `|`: the older spelling
   if (!m) return null;
+  const anchor = /\b(?:from|to)\s+image\s+(\d*)$/i.exec(m[1]);
+  if (anchor) return slotItems(anchor[1], text, before.length - anchor[1].length);
   const segments = m[1].split(",");
   const fragment = segments.pop().trimStart();
   const used = segments.map((s) => s.trim().toLowerCase());
@@ -208,12 +210,37 @@ function gotoItems(before, line, text) {
   return { items, replaceFrom: before.length - m[1].length };
 }
 
+// `image ` where a number goes (REMEMBER: … as image, SHOT …: from/to image): 1–9, each saying what has it
+// already: a CAST member's picture, a REMEMBER: line's frames, or free.
+export function imageSlots(text) {
+  const taken = new Map();
+  let cast = false;
+  for (const raw of uncommented(text).split("\n")) {
+    const line = raw.trim();
+    if (line === "CAST") { cast = true; continue; }
+    if (/^(SHOT|SCENE|CHUNK)\b/.test(line)) cast = false;
+    const member = cast && /^@?([A-Z][A-Z0-9 _-]*?)\s*\(([^)]*)\)/.exec(line);
+    if (member) for (const n of member[2].matchAll(/\bimage\s+(\d+)/gi)) if (!taken.has(+n[1])) taken.set(+n[1], `${member[1].trim()}'s picture`);
+    const kept = /^(?:REMEMBER|SEND):.*\bas\s+image\s+(\d+)/i.exec(line);
+    if (kept && !taken.has(+kept[1])) taken.set(+kept[1], "a REMEMBER: line's frames");
+  }
+  return Array.from({ length: 9 }, (_, i) => [String(i + 1), taken.get(i + 1) || "free"]);
+}
+
+function slotItems(typed, text, replaceFrom) {
+  const items = imageSlots(text).filter(([n]) => n.startsWith(typed) && n !== typed)
+    .map(([n, what]) => ({ insert: `${n} `, label: `image ${n}`, detail: what, preview: "" }));
+  return items.length ? { items, replaceFrom } : null;
+}
+
 // REMEMBER: what to keep (first frame, frame at 1s, every 10th frame), then as whom or what, then for
 // which clips (in clips 2-5, until a scene).
 function rememberItems(before, line, text) {
   const m = /^\s*REMEMBER:\s*(.*)$/.exec(line);
   if (!m) return null;
   const said = m[1];
+  const slot = /\bas\s+image\s+(\d*)$/i.exec(said);
+  if (slot) return slotItems(slot[1], text, before.length - slot[1].length);
   const until = /\buntil\s+(.*)$/i.exec(said);
   let options, typed;
   if (until) {
@@ -508,7 +535,7 @@ export function suggest(text, caret, data) {
     ?? bindingItems(before, text)
     ?? (screenplay ? refmodsLineItems(before, line) ?? setItems(before, line, text) ?? refmodItems(before, line, data) ?? gotoItems(before, line, text)
       ?? rememberItems(before, line, text)
-      ?? castItems(before, line, text) ?? shotItems(before, line, data) ?? keywordItems(before, line) : keywordItems(before, line, false))
+      ?? castItems(before, line, text) ?? shotItems(before, line, data, text) ?? keywordItems(before, line) : keywordItems(before, line, false))
     ?? NONE;
   const typed = before.slice(found.replaceFrom);
   return { ...found, items: found.items.filter((i) => i.insert !== typed) };
