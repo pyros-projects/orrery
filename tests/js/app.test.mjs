@@ -543,3 +543,17 @@ test("a picture's sheet lists what it exported: texts, lists and an entry's fiel
   ]);
   assert.deepEqual(exportRows(undefined), []);
 });
+
+test("a dial ticks several choices into one that rolls among them (#156)", async () => {
+  const { chosen, joinChoices, menuItems } = await import("../../comfyui/web/app/dialmenu.js");
+  const genres = ["everyday", "noir", "gothic", "spacefarer"];
+  assert.deepEqual(chosen(genres, "{noir|gothic}"), ["noir", "gothic"]);
+  assert.deepEqual(chosen(genres, "Noir"), ["noir"]);
+  assert.deepEqual(chosen(genres, "{noir|western}"), []);  // not all of them are choices: it is an expression
+  assert.deepEqual(menuItems(genres, "{noir|gothic}"), genres);  // every choice stays listed to tick more
+  const origins = ["Tamil descent, with {deep brown|dark brown} skin", "Greek descent"];
+  assert.deepEqual(chosen(origins, `{${origins[0]}|${origins[1]}}`), origins);  // a choice with its own braces
+  assert.equal(joinChoices([]), "");
+  assert.equal(joinChoices(["noir"]), "noir");
+  assert.equal(joinChoices(["noir", "gothic"]), "{noir|gothic}");
+});

@@ -1,6 +1,6 @@
 // Prompt tab: preset bar, the highlighted editor with completion, dials, and a way into Test.
 import { inlineLibraries, suggest } from "../orrery-complete.js";
-import { closeMenu, drawMenu } from "./dialmenu.js";
+import { chosen, closeMenu, drawMenu, joinChoices } from "./dialmenu.js";
 import { esc, highlight } from "./highlight.js";
 import { hintsFor } from "./remember.js";
 import { icon } from "./icons.js";
@@ -433,6 +433,9 @@ function wireDials(app) {
     } else if (e.key === "Enter" && app.dm && app.dm.at >= 0 && app.dm.items[app.dm.at] !== undefined) {
       e.preventDefault();
       pickChoice(app, input, app.dm.items[app.dm.at]);
+    } else if (e.key === " " && app.dm && app.dm.at >= 0 && app.dm.items[app.dm.at] !== undefined) {
+      e.preventDefault();
+      toggleChoice(app, input, app.dm.items[app.dm.at]);
     } else if (e.key === "Escape" && app.dm) {
       e.preventDefault();
       shutMenu(app);
@@ -458,9 +461,10 @@ function openMenu(app, input, at) {
   app.dm = { ...state, input };
   input.setAttribute("aria-expanded", "true");
   state.box.addEventListener("mousedown", (e) => {
-    const item = e.target.closest("[data-n]");
+    const item = e.target.closest("[data-n]"), box = e.target.closest("[data-toggle]");
     e.preventDefault();  // the box keeps the focus
-    if (item) pickChoice(app, input, app.dm.items[Number(item.dataset.n)]);
+    if (box) toggleChoice(app, input, app.dm.items[Number(box.dataset.toggle)]);
+    else if (item) pickChoice(app, input, app.dm.items[Number(item.dataset.n)]);
   });
 }
 
@@ -472,6 +476,14 @@ function shutMenu(app) {
   closeMenu(menuHost(app));
   app.dm?.input.setAttribute("aria-expanded", "false");
   app.dm = null;
+}
+
+// A tick adds a choice to the ones the dial rolls among, or takes it out; the menu stays open.
+function toggleChoice(app, input, value) {
+  const d = dials(app.text).find((x) => x.name === input.dataset.dial), all = (d && dialChoices(app, d)) || [];
+  const now = chosen(all, input.value), next = now.includes(value) ? now.filter((c) => c !== value) : [...now, value];
+  app.pickChoice(input, joinChoices(all.filter((c) => next.includes(c))));  // in the list's order
+  openMenu(app, input, app.dm ? app.dm.at : -1);
 }
 
 function pickChoice(app, input, value) {

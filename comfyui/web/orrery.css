@@ -218,7 +218,10 @@
 .orrery-app .dial .mini { display: none; margin-right: 4px; }
 .orrery-app .dial.on .mini { display: inline-flex; }
 .orrery-app .dm { position: absolute; z-index: 30; max-width: min(460px, calc(100% - 8px)); max-height: 260px; overflow-y: auto; background: #1f2029; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.5); padding: 3px 0; font: 12px/1.4 var(--mono); }
-.orrery-app .dm-item { padding: 4px 10px; cursor: pointer; white-space: normal; overflow-wrap: anywhere; }
+.orrery-app .dm-item { padding: 4px 10px 4px 6px; cursor: pointer; white-space: normal; overflow-wrap: anywhere; display: flex; gap: 7px; align-items: flex-start; }
+.orrery-app .dm-box { flex: none; width: 15px; height: 15px; margin-top: 1px; border: 1px solid var(--line); border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; color: var(--rose); }
+.orrery-app .dm-box:hover { border-color: var(--rose); }
+.orrery-app .dm-item.cur .dm-box { border-color: var(--rose); background: rgba(240,122,160,.12); }
 .orrery-app .dm-item:hover, .orrery-app .dm-item.on { background: var(--hover); }
 .orrery-app .dm-item.cur { color: var(--rose); }
 .orrery-app .dm-note { padding: 6px 10px; color: var(--faint); font-family: var(--ui); }

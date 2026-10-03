@@ -9,6 +9,8 @@ checks) are left out.
 
 ### Added
 
+- A dial takes several choices: tick them in its menu, and it rolls among them (`{noir|gothic}`); on a
+  library the chosen entries keep their properties (#156).
 - `EXPORT:` keeps what a template rolled beside its prompt, never in it: the gallery, History and
   `orrery expand --json` hold it for other systems, the Gallery shows it as a sheet, and a picture
   carries it into the screenplays that cast it (`$hero.mood`). The Character creator exports who it

@@ -123,8 +123,9 @@ $hero in a {misty|frozen} forest' --seed 5 -n 3        # --json for machines
 A template's bindings are its **dials**: turn one from outside without editing
 the template, with a value or any DSL expression. A dial on a binding to one
 library (`$look = __looks/still__`) set to one of its entries picks that entry
-with its tags and properties, so `$look.family` still reads; other text rolls as
-written. A preset stays a preset; the gallery records the dials next to its picks.
+with its tags and properties, so `$look.family` still reads; set to several of
+them (`{a|b}`, ticked in the dial's menu) it rolls among those, with what they
+carry; other text rolls as written. A preset stays a preset; the gallery records the dials next to its picks.
 
 ```bash
 uv run orrery compile @effects/subsurface_travel --set start="upper back" --set 'entity=__bh_entity__'

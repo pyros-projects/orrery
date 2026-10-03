@@ -299,6 +299,23 @@ def _pinned(expr: str, value: str) -> str:
     return f"{expr[:close]}{FIX}p{value.encode().hex()}{FIX}{expr[close:]}"
 
 
+def _dialed_entries(dialed: str, pool: list) -> list[int]:
+    """`{a|b}` dialed on a library whose entries a and b are: their places in the pool (a dial with several
+    choices narrows the roll and keeps what the entries carry); [] for anything else."""
+    text = dialed.strip()
+    if not (text.startswith("{") and text.endswith("}")):
+        return []
+    options, depth, start, inner = [], 0, 0, text[1:-1]
+    for i, ch in enumerate(inner):  # split at the top level only: an entry may hold its own {…|…}
+        depth += (ch in "{[") - (ch in "}]" and depth > 0)
+        if ch == "|" and depth == 0:
+            options.append(inner[start:i])
+            start = i + 1
+    options = [re.sub(r":\d+(\.\d+)?$", "", o.strip()) for o in [*options, inner[start:]]]
+    places = {entry[0].strip(): j for j, entry in enumerate(pool)}
+    return [places[o] for o in dict.fromkeys(options)] if options and all(o in places for o in options) else []
+
+
 def _fixed(group: str | None) -> int | str | None:
     """A library's FIX group: a grid's option number, or a dial's text."""
     if group is None:
@@ -692,6 +709,8 @@ class Expander:
         i = weighted_pick([w for _, w, _, _ in pool], rng)  # a fixed draw rolls too (`@rng 1`)
         if isinstance(fixed, str):  # a dial: its entry, with what the entry carries, or its text as written
             dialed, fixed = fixed, next((j for j, entry in enumerate(pool) if entry[0].strip() == fixed.strip()), None)
+            if fixed is None and (among := _dialed_entries(dialed, pool)):  # `{a|b}`: rolls among those entries
+                fixed = among[weighted_pick([pool[j][1] for j in among], rng)]
             if fixed is None:
                 return " ".join(self.expr(dialed, label_prefix).split())
         if fixed is not None:
