@@ -1,0 +1,28 @@
+# The three checks of AGENTS.md, in full, on every PR and on main.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+        with:
+          python-version: "3.13"
+          enable-cache: true
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Install
+        run: uv sync --frozen
+      - name: ruff
+        run: uv run ruff check src tests
+      - name: pytest
+        run: uv run pytest -n auto
+      - name: node --test
+        run: node --test tests/js/*.mjs
