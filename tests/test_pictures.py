@@ -143,8 +143,8 @@ def test_the_slot_writer_learns_what_the_pictures_show(home):
     assert _made(c, packed=True) == {"<Picture 2>": "a character of seed 7", "<Picture 3>": "a character of seed 7"}
     text = c.text.replace("a stranger", "--who they are--")
     asked = request([], slots(text), text, made=_made(c, True))
-    assert "<Subject 1> is the one made from this prompt; describe them from it, and from nothing else: " \
-           "«a character of seed 7»" in asked
+    assert "<Subject 1> is the one made from this prompt: start from what it says about them" in asked
+    assert "«a character of seed 7»" in asked
     assert "Reference pictures and the prompts" not in asked  # every picture is beside its slot
     loose = request([], ["what happens"], "A --what happens--.", made={"<Picture 4>": "a red fox"})
     assert "- <Picture 4>: a red fox" in loose
@@ -203,3 +203,4 @@ def test_two_members_with_the_same_slot_get_a_text_each_that_reads_as_their_defi
     done = fill(c.text, {asked[0]: "an old man in a green coat.", asked[1]: "a young woman with pink hair"})
     assert "<Subject 1> = an old man in a green coat of <Picture 1>" in done
     assert "<Subject 2> = a young woman with pink hair of <Picture 2>" in done
+

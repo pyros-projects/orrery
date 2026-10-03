@@ -82,7 +82,8 @@ def request(wanted: list[Need], directions: list[str], context: str, frames: int
                    "names who or what it is, no full stop)")
             prompts = list(dict.fromkeys(made[label] for label in pics if label in made))
             if prompts:
-                out += (f"\n  {subject} is the one made from this prompt; describe them from it, and from nothing else: "
+                out += (f"\n  {subject} is the one made from this prompt: start from what it says about them (not from "
+                        "another subject's), and make of it what the directions ask: "
                         + " / ".join(f"«{p}»" for p in prompts))
             return out
         parts.append(f"Parts to write, each as prose that fits where it stands and follows its directions exactly.{labels}\n"
