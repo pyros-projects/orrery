@@ -237,8 +237,10 @@ loved pick stays loved whether it became a Krea still or an H3 video.
 ## Development
 
 ```bash
-uv run pytest                                              # Python tests
-node --test tests/js/app.test.mjs tests/js/complete.test.mjs   # the node app
+scripts/check                  # all three checks in seconds, while you work
+
+uv run pytest                  # the same in full, as CI runs them on every pull request
+node --test tests/js/*.mjs     # the node app
 uv run ruff check src tests
 ```
 

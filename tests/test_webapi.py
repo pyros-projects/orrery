@@ -457,6 +457,18 @@ def test_frequency_across_the_clips_of_a_reel(home):
     assert sum(table["{1|2|3}"].values()) == 39
 
 
+def test_a_count_loads_the_libraries_once_however_many_rolls(home, monkeypatch):
+    from orrery.home import Home
+    loads, real = [], Home.libraries
+    monkeypatch.setattr(Home, "libraries", lambda self: loads.append(1) or real(self))
+    counts = []
+    for fn, n in ((webapi.frequency, 5), (webapi.frequency, 50), (webapi.roll, 1), (webapi.roll, 6)):
+        loads.clear()
+        ok(home, fn, template="a __animal__", seed=1, n=n)
+        counts.append(len(loads))
+    assert counts == [1, 1, 1, 1]
+
+
 def test_frequency_counts_lint_and_caps_the_runs(home):
     body = ok(home, webapi.frequency, template="@h3 t2va\nSHOT 2s\nA.\nSFX: x\n", seed=1, n=5000, target="h3-base")
     assert body["runs"] == webapi.MAX_FREQUENCY

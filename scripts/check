@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# The three checks of AGENTS.md, fast, for while you work: ruff, the app's tests, then pytest in
+# parallel over every core (the tests that failed last time first, stopping at the first failure).
+# CI runs them in full on every PR and on main (.github/workflows/ci.yml).
+set -uo pipefail
+cd "$(dirname "$0")/.."
+
+failed=()
+run() {
+    local name=$1; shift
+    printf '\n== %s\n' "$name"
+    "$@" || failed+=("$name")
+}
+
+run ruff uv run ruff check src tests
+run "node --test" node --test --test-reporter=dot tests/js/*.mjs
+run pytest uv run pytest -n auto -x --ff -q
+
+if ((${#failed[@]})); then
+    printf '\nFailed: %s\n' "${failed[*]}"
+    exit 1
+fi
+printf '\nAll three checks pass.\n'
