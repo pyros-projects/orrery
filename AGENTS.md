@@ -82,5 +82,7 @@ output:
   `comfyui/web/app/help.js`, and the example workflows when their templates or nodes change).
 - Determinism is a promise: the same template and seed give the same picks. A change that moves
   existing picks needs a reason in the PR and a way back (as `@rng 1` keeps the old dice).
-- Test ComfyUI changes on an isolated ComfyUI instance, never on the one Pyro works in.
+- Test ComfyUI changes in the ComfyUI that is already running, and only after asking. Never start
+  a second instance, or any other process that loads models on the GPU next to it: two at once
+  freeze the machine.
 - `~/.orrery` holds Pyro's own libraries and presets: don't change them unless asked.
