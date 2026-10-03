@@ -79,7 +79,7 @@ export async function openSettings(app) {
     <label class="check"><input type="checkbox" id="oa-div" ${app.data.dividers !== false ? "checked" : ""}>
       <span><b>Scene dividers</b>: a reel's SCENE lines say which clips they play, when, and how much film is left; the scene of the next clip is marked</span></label>
     <label class="check"><input type="checkbox" id="oa-tl" ${app.data.timeline !== false ? "checked" : ""}>
-      <span><b>Timeline</b>: a reel's clips as the reel keeps them (Orrery Film or Chain Video), under each scene or beside the editor (Clips below / beside in the footer), and the frames its <code>REMEMBER:</code> lines take</span></label>
+      <span><b>Timeline</b>: a reel's clips as the reel keeps them (Orrery Film or Chain Video), under each scene, and the frames its <code>REMEMBER:</code> lines take</span></label>
     <div class="field"><label class="label" for="oa-clipmin">Clip size</label>
       <div class="row"><input class="input narrow" id="oa-clipmin" type="number" min="96" max="1600" step="8" value="${app.data.clip_min ?? 360}"><span class="muted">px: a clip's shorter side under its scene, as far as the editor is wide</span></div></div>
     <label class="check"><input type="checkbox" id="oa-log" ${app.data.log_prompts !== false ? "checked" : ""}>

@@ -275,7 +275,7 @@ export class OrreryApp {
 
   showRun(d) {
     this.run = d.end ? null : { segment: d.segment, prompt: d.prompt_id };
-    if (d.end) this.toast(`Segment <b>${d.segment}</b> is past the end of the reel, so nothing ran. Restart plays it from the beginning.`);
+    if (d.end) this.toast(`Clip <b>${d.segment + 1}</b> is past the end of the reel, so nothing ran. Restart plays it from the beginning.`);
     this.refreshRun();
   }
   runDone(prompt) {

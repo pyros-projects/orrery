@@ -422,8 +422,18 @@ def test_a_slot_and_a_missing_library_share_the_one_request(home, monkeypatch):
 def test_the_model_sees_the_clip_it_continues(home, monkeypatch):
     backend = fake_llm(monkeypatch, {"slot 1": "he lets go"})
     frames = [object()] * 6
-    run_prompt("--what happens next--", 1, "text", str(home), frames=frames)
+    reel = "@h3 t2va\nSCENE start\nSHOT 5s: static\nA man holds a rope.\nSFX: wind\nSCENE next\nSHOT 5s: static\n--what happens next--\nSFX: wind"
+    run_prompt(reel, 1, "h3-base", str(home), segment=1, frames=frames)
     assert backend.images[0] is frames and "6 images" in backend.prompts[0]
+
+
+def test_without_scenes_the_node_never_continues_an_old_clip(home, monkeypatch):
+    """A segment left at 4 by earlier reels: a template without SCENE lines is one clip on its own (#190)."""
+    backend = fake_llm(monkeypatch, {"slot 1": "she waves"})
+    _, picks, *_ = run_prompt("@h3 t2va\nSHOT 5s: static\n--what happens--\nSFX: wind", 1, "h3-base", str(home),
+                              segment=4, frames=[object()] * 6)
+    assert backend.images == [None] and "frames of the previous clip" not in backend.prompts[0]
+    assert "segment" not in json.loads(picks)
 
 
 def test_frames_alone_ask_the_model_nothing(home, monkeypatch):
