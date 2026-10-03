@@ -249,7 +249,12 @@ function mount(node) {
   if (node.size[0] < NEW.width || node.size[1] < 900) node.setSize([Math.max(node.size[0], NEW.width), Math.max(node.size[1], NEW.height)]);
 
   // configure() (a loaded workflow's values and properties) runs after nodeCreated.
-  setTimeout(() => orrery.start(), 0);
+  setTimeout(() => {
+    // a workflow saved before #199 brings the latent_path input back with it: the node has none now, the app names the folder
+    const stale = node.inputs?.findIndex((i) => i.name === "latent_path") ?? -1;
+    if (stale >= 0) node.removeInput(stale);
+    orrery.start();
+  }, 0);
 
   // Which reel segment runs: the node announces it; a finished, failed or stopped prompt ends it.
   const mine = (id) => id != null && (String(id) === String(node.id) || String(id).endsWith(`:${node.id}`));
