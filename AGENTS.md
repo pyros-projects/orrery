@@ -62,6 +62,14 @@ node --test tests/js/*.mjs
 Scope: build what the issue asks. Anything else you notice (a missing feature, a refactor, a test,
 a fix next door) becomes a new issue or a question, not part of the PR.
 
+Pause for the human. Stop and wait in two cases, so nothing they have to act on gets lost in the
+output:
+
+- **A new task while two or more are queued:** recommend an order and wait until it is
+  confirmed. Work the human waits on (something to test, a decision, a merge) comes first.
+- **A PR ready for review or merge:** say so, with its link, and stop. Don't go on with other
+  work in the same turn.
+
 ## Conventions
 
 - Code, docs, issues, commits and PRs are in English.
