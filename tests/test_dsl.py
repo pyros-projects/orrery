@@ -126,17 +126,29 @@ def test_bindings_list_names_and_defaults_in_order():
 
 
 def test_override_replaces_a_binding_and_keeps_everything_else():
-    t = "$hero = __animal__\n  $place = {forest|city}\n$hero in the $place"
-    out = override(t, {"hero": "owl"})
-    assert out == "$hero = owl\n  $place = {forest|city}\n$hero in the $place"
-    assert expand(out, 1, LIBS).text.startswith("owl in the ")
+    t = "$hero = {owl|fox}\n  $place = {forest|city}\n$hero in the $place"
+    out = override(t, {"hero": "a raven"})
+    assert out == "$hero = a raven\n  $place = {forest|city}\n$hero in the $place"
+    assert expand(out, 1, LIBS).text.startswith("a raven in the ")
 
 
 def test_override_skips_empty_values_accepts_a_dollar_and_dsl():
-    t = "$hero = __animal__\n$hero"
+    t = "$hero = {owl|fox}\n$hero"
     assert override(t, {"hero": "  "}) == t
     assert override(t, {"$hero": "__animal[feline]__"}) == "$hero = __animal[feline]__\n$hero"
-    assert expand(override(t, {"hero": "__animal[feline]__"}), 3, LIBS).text in ("lynx", "ocelot")
+    assert expand(override("$hero = __animal__\n$hero", {"hero": "__animal[feline]__"}), 3, LIBS).text in ("lynx", "ocelot")
+
+
+def test_a_dial_set_to_an_entry_keeps_what_the_entry_carries():
+    """#122: picking an entry in a dial's list keeps its properties and tags, and records the pick."""
+    t = "$w = __weather__\nA street in $w; $w.sfx.\nIF $w[kind=rain]: Umbrellas."
+    for s in range(5):
+        x = expand(override(t, {"w": "summer rain"}), s, WEATHER)
+        assert x.text == "A street in summer rain; rain drums on a tin roof. Umbrellas."
+        assert [(p.label, p.value) for p in x.picks] == [("$w ← __weather__", "summer rain")]
+    other = expand(override(t, {"w": "fog over the {river|harbour}"}), 1, WEATHER).text  # no entry: rolls as written
+    assert other.startswith("A street in fog over the ") and other.endswith("; .")
+    assert override("$w = __weather__(cold ones)", {"w": "summer rain"}).endswith("__(cold ones)")  # directions stay
 
 
 # --- lora tags are opaque: LoRA file names may contain __ -------------------------------------
