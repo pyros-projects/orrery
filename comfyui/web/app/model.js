@@ -480,6 +480,31 @@ export function downstream(nodes, start) {
   return { outputs, log: outputs.some((id) => byId.get(id)?.type === "OrreryLog") };
 }
 
+// The seed for the next run, as the seed's control after generate would step it.
+export function nextSeed(seed, mode) {
+  seed = Number(seed) || 0;
+  if (mode === "increment") return seed + 1;
+  if (mode === "decrement") return Math.max(0, seed - 1);
+  if (mode === "randomize") return Math.floor(Math.random() * 2 ** 32);
+  return seed;
+}
+
+// A sweep's queue loop: every run once per seed, the seed held within a seed's runs and stepped as its
+// control says between seeds and once after the last run, as control after generate does after every
+// queue, so the next Roll starts on a new seed. `live()` turns false when a newer Roll or Stop ends it.
+export async function queueSweep({ count, seeds, mode, getSeed, setSeed, queue, live = () => true, progress = () => {} }) {
+  let queued = 0;
+  for (let s = 0; s < seeds && live(); s++) {
+    if (s > 0) setSeed(nextSeed(getSeed(), mode));
+    for (let i = 0; i < count && live(); i++) {
+      await queue(i);
+      progress(++queued);
+    }
+  }
+  if (queued) setSeed(nextSeed(getSeed(), mode));
+  return queued;
+}
+
 // What Generate queues is planned by the server (orrery.batch.plan, /orrery/plan): a LoRA sweep's runs
 // times a grid's cells. It is asked only when the template may hold one: a LoRA tag with several
 // strengths, a solo or test tag, or a grid.

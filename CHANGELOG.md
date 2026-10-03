@@ -38,6 +38,12 @@ checks) are left out.
 
 ### Fixed
 
+- A dial set to a library entry keeps the entry's properties and tags, so what reads them (a
+  photo look's lens in One button) still works (#122).
+- After a grid or a LoRA sweep the seed steps as its control after generate says, so the next Roll
+  starts on a seed of its own instead of repeating the last one (#125).
+- The docs name DSL 2.0 as the language's version, apart from the package's, and `docs/h3.md`
+  describes the Ref2VA writer as built (#123).
 - Frequencies and Rolls load the libraries once per request instead of once per roll (#47).
 
 ## [0.1.0] - 2026-10-02

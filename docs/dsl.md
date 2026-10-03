@@ -92,8 +92,10 @@ $hero in a {misty|frozen} forest' --seed 5 -n 3        # --json for machines
 ```
 
 A template's bindings are its **dials**: turn one from outside without editing
-the template, with a value or any DSL expression. A preset stays a preset; the
-gallery records the dials next to its picks.
+the template, with a value or any DSL expression. A dial on a binding to one
+library (`$look = __looks/still__`) set to one of its entries picks that entry
+with its tags and properties, so `$look.family` still reads; other text rolls as
+written. A preset stays a preset; the gallery records the dials next to its picks.
 
 ```bash
 uv run orrery compile @effects/subsurface_travel --set start="upper back" --set 'entity=__bh_entity__'
@@ -101,13 +103,17 @@ uv run orrery compile @effects/subsurface_travel --set start="upper back" --set 
 
 ## What the language guarantees
 
+The language is DSL 2.0 (2026-10-03, #81), the words these docs teach; its version is its own, apart
+from the package's. The earlier words (`CHUNK`, `HANDOFF:`, `SEND:`, `GOTO:`, `?`) still work.
 What a change to orrery must keep, and the tests that hold it. The golden corpus
 (`tests/test_golden.py`) is the executable half: it pins what every built-in preset rolls.
 
 **The order a template rolls in.**
-- A template's dials (`--set`, the node's params) replace its bindings' values first; then its
+- A template's dials (`--set`, the node's params) replace its bindings' values first; a dial set to
+  an entry of the binding's one library is that entry, with what it carries. Then its
   `@include`s are embedded, each with its own indented dials. Includes nest and never loop
   (`test_dsl.py::test_override_replaces_a_binding_and_keeps_everything_else`,
+  `::test_a_dial_set_to_an_entry_keeps_what_the_entry_carries`,
   `test_presets.py::test_include_embeds_a_preset_and_its_params_turn_its_dials`, `::test_includes_nest_but_never_loop`).
 - `@lib` libraries come next and shadow a library of the same name
   (`test_dsl.py::test_a_template_brings_its_own_libraries`).

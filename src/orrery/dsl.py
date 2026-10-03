@@ -23,9 +23,11 @@ from orrery.sweep import tags as sweep_tags
 
 _BRACE = re.compile(r"\{([^{}]*)\}")
 FIX = "\x1f"  # FIX n FIX inside a library or a brace: the draw lands on option n (grids, unique=; see orrery.batch)
+# FIX p<hex> FIX inside a library: a dial set to this text (hex, so nothing in it rolls first); the entry with
+# that value is picked with its tags and properties, and text that is no entry rolls as written (see override)
 # __name[tags]:N__(directions): N = at least N entries; (directions) guide the model that writes the
 # library and never reach the prompt. [tags]: `myth` · `myth,!bird` (all, none of) · `water|deep_sea` (either).
-_LIB = re.compile(r"(?<!\\)__([\w*]+(?:/[\w*]+)*)(?:\[([^\[\]\n]+)\])?((?:#[\w-]+:\$?[\w.-]+)*)(?::(\d+))?(?:\x1f(\d+)\x1f)?__"
+_LIB = re.compile(r"(?<!\\)__([\w*]+(?:/[\w*]+)*)(?:\[([^\[\]\n]+)\])?((?:#[\w-]+:\$?[\w.-]+)*)(?::(\d+))?(?:\x1f(\d+|p[0-9a-f]*)\x1f)?__"
                   r"(?:\(([^()]*)\))?")
 # $x, $x[-N] (N clips ago, or the earlier $x~N), $x["the stairs"] (the last time that scene played), $x.field
 _VAR = re.compile(r'\$([A-Za-z_]\w*)(?:~(\d+)|\[-(\d+)\]|\["([^"\]\n]+)"\])?(?:\.([A-Za-z_][\w-]*))?')
@@ -233,14 +235,35 @@ def bindings(template: str) -> list[tuple[str, str]]:
 
 def override(template: str, values: Mapping[str, str]) -> str:
     """Turn dials: each named binding (`hero` or `$hero`) gets a new expression, which may itself
-    use the DSL. Empty values keep the default; unknown names are ignored."""
+    use the DSL. Empty values keep the default; unknown names are ignored. A binding to one library
+    keeps it: the dial's text picks the entry with that value, with its tags and properties (so
+    `$look.family` still reads), and text that is no entry rolls as written."""
     wanted = {k.strip().lstrip("$"): v.strip() for k, v in values.items() if v and v.strip()}
 
     def swap(line: str) -> str:
         m = _BINDING_LINE.match(line)
-        return f"{m.group(1)}${m.group(2)}{m.group(3)}{wanted[m.group(2)]}" if m and m.group(2) in wanted else line
+        if not (m and m.group(2) in wanted):
+            return line
+        return f"{m.group(1)}${m.group(2)}{m.group(3)}{_pinned(m.group(4).strip(), wanted[m.group(2)])}"
 
     return "\n".join(swap(line) for line in template.split("\n"))
+
+
+def _pinned(expr: str, value: str) -> str:
+    """`__look__` dialed to `value`: the library with the value in it (FIX p<hex> FIX), or `value` itself
+    when `expr` is not one library of its own (a choice, a glob, one already fixed)."""
+    m = _LIB.fullmatch(expr)
+    if not m or "*" in m.group(1) or m.group(5) is not None:
+        return value
+    close = (m.start(6) - 1 if m.group(6) is not None else len(expr)) - 2
+    return f"{expr[:close]}{FIX}p{value.encode().hex()}{FIX}{expr[close:]}"
+
+
+def _fixed(group: str | None) -> int | str | None:
+    """A library's FIX group: a grid's option number, or a dial's text."""
+    if group is None:
+        return None
+    return bytes.fromhex(group[1:]).decode() if group.startswith("p") else int(group)
 
 
 def _parse_params(text: str, before: Params | None = None) -> Params:
@@ -520,7 +543,7 @@ class Expander:
                 raise ValueError(f"More than {MAX_CHOICES} {{…}} choices in one place, and {m.group(0)[:60]} is still "
                                  "to roll: a {N$$__lib__} whose entries bring it back?")
         text = _LIB.sub(lambda m: _mid_line(self._library(m.group(1), m.group(2), label_prefix, m.group(3),
-                                                          None if m.group(5) is None else int(m.group(5))), m), text)
+                                                          _fixed(m.group(5))), m), text)
         text = _VAR.sub(lambda m: _mid_line(self._var(m), m), text)
         return self._articles(text)
 
@@ -601,13 +624,18 @@ class Expander:
             fixed -= count
         raise ValueError(f"{_label(pattern, tag, props)} has fewer entries now than the grid counted")
 
-    def _library(self, name: str, tag: str | None, label_prefix: str, props: str = "", fixed: int | None = None) -> str:
+    def _library(self, name: str, tag: str | None, label_prefix: str, props: str = "",
+                 fixed: int | str | None = None) -> str:
         label = label_prefix + _label(name, tag, props)
         rng = self._stream(label)
         if "*" in name:
             name, fixed = self._glob(name, tag, props, rng, fixed)
         family, pool = self._pool(name, tag, props)
         i = weighted_pick([w for _, w, _, _ in pool], rng)  # a fixed draw rolls too (`@rng 1`)
+        if isinstance(fixed, str):  # a dial: its entry, with what the entry carries, or its text as written
+            dialed, fixed = fixed, next((j for j, entry in enumerate(pool) if entry[0].strip() == fixed.strip()), None)
+            if fixed is None:
+                return " ".join(self.expr(dialed, label_prefix).split())
         if fixed is not None:
             if fixed >= len(pool):
                 raise ValueError(f"{_label(name, tag, props)} has {len(pool)} entries now, fewer than the grid counted")
