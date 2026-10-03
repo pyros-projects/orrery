@@ -840,7 +840,7 @@ class OrreryRefs:
             raise ValueError(f"image {n} is sent from segment {segment}, but the chain {latent_path!r} has no clip for "
                              f"segment {segment}: render the reel from that chunk on, or check the Orrery Prompt's "
                              "latent_path.")
-        batch, dropped = chain.frames(path, send["frames"])
+        batch, dropped = chain.frames(path, send["frames"], send.get("step", 1))
         if dropped:
             many = len(dropped) > 1
             print(f"[orrery] SEND to image {n}: frame{'s' if many else ''} {', '.join(map(str, dropped))} "

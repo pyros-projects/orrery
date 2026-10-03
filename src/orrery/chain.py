@@ -104,10 +104,11 @@ def frame_picks(count: int, spans: list[list[int]]) -> tuple[list[int], list]:
     return (kept or ([count - 1] if count else [])), dropped
 
 
-def frames(path: Path, spans: list[list[int]]):
+def frames(path: Path, spans: list[list[int]], step: int = 1):
     """(the frames a SEND: names as one IMAGE batch, those outside the clip). Reads the clip's length from
     the container (counting packets when it has none), then decodes only up to the last frame named and
-    keeps only those, not the whole clip. ComfyUI only (torch)."""
+    keeps only those, not the whole clip. `step`: every step-th of them (`every 10 frames`). ComfyUI only
+    (torch)."""
     import av
     import numpy as np
     import torch
@@ -116,6 +117,7 @@ def frames(path: Path, spans: list[list[int]]):
         stream = container.streams.video[0]
         count = stream.frames or sum(1 for packet in container.demux(stream) if packet.size)
     picks, dropped = frame_picks(count, spans)
+    picks = picks[::max(1, step)]
     if not picks:
         raise ValueError(f"{path} has no video frames.")
     want, got, last = set(picks), {}, None
