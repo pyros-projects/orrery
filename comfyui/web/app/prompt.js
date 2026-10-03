@@ -2,6 +2,7 @@
 import { inlineLibraries, suggest } from "../orrery-complete.js";
 import { chosen, closeMenu, drawMenu, joinChoices } from "./dialmenu.js";
 import { esc, highlight } from "./highlight.js";
+import { annotationLines, mergeHints } from "./annotate.js";
 import { hintsFor } from "./remember.js";
 import { icon } from "./icons.js";
 import { applyDials, chunkInfo, dials, hasGoto, plays, folderColor, pickerGroups, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
@@ -171,6 +172,7 @@ export function renderPrompt(app) {
   fixUniqueSeed(app);
   refreshPlan(app);
   refreshRemembered(app);  // the hints and the remembered frames of a reel just opened
+  refreshAnnotations(app);
 }
 
 async function generate(app) {
@@ -242,7 +244,7 @@ function paintEditor(app) {
   if (!pre) return;
   const chunks = app.chunks();
   pre.innerHTML = `${highlight(app.text, app.known(), { llm: app.llmActive(), chunks, segment: chunks && Number(app.bridge.getSegment()),
-    hints: hintsFor(app.text, app.remembered()) })}\n`;
+    hints: mergeHints(hintsFor(app.text, app.remembered()), annotationLines(app.text, app.annotations())) })}\n`;
   layoutTimeline(app, chunks);
   if (chunks && app.data.timeline !== false && app.data.chain === undefined) {  // a reel typed or pasted in
     app.data.chain = null;
@@ -275,6 +277,7 @@ export function refreshFoot(app) {
   refreshPlan(app);  // a dial or an edit can change what Generate queues
   refreshReelPath(app);
   refreshRemembered(app);
+  refreshAnnotations(app);
   const foot = app.view.querySelector(".pfoot");
   if (foot) foot.innerHTML = statsHTML(app);
 }
@@ -334,6 +337,25 @@ function refreshReelPath(app) {
 
 // Where a reel's REMEMBER: lines put their frames, at the node's seed: from the server, which resolves them as
 // the compile does; the hints at their ends and the frames under each scene follow once it is there.
+// Annotations at line ends (#163): what each line gives at the node's seed (and clip), from the server; they
+// wait a moment after typing stops, and a newer template's answer wins.
+function refreshAnnotations(app) {
+  const key = `${app.reelKey()}\n${app.bridge.getSegment?.() ?? 0}`;
+  if (app.data.annotations?.key === key || app.state.annotateKey === key) return;
+  app.state.annotateKey = key;
+  clearTimeout(app.state.annotateTimer);
+  app.state.annotateTimer = setTimeout(async () => {
+    let got;
+    try {
+      got = await app.api.annotate({ template: app.text, target: app.bridge.getTarget(), params: app.bridge.getParams(),
+        seed: app.bridge.getSeed(), segment: app.bridge.getSegment?.() ?? 0 });
+    } catch { got = {}; }
+    if (app.state.annotateKey === key) app.state.annotateKey = null;
+    app.data.annotations = { ...got, key };
+    if (app.state.tab === "prompt" && `${app.reelKey()}\n${app.bridge.getSegment?.() ?? 0}` === key) paintEditor(app);
+  }, 450);
+}
+
 function refreshRemembered(app) {
   if (!app.chunks() || !/^\s*(REMEMBER|SEND):/im.test(stripComments(app.text))) { app.data.remembered = null; return; }
   const key = app.reelKey();

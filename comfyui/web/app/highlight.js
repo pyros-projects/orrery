@@ -79,7 +79,7 @@ function chunkLine(html, c, segment) {
 export function highlight(src, known, { llm = false, chunks = null, segment = null, cast = null, hints = null } = {}) {
   const at = new Map((chunks || []).map((c) => [c.line, c]));
   const members = memberPattern(cast ?? castNames(src));
-  const hint = (i) => (hints?.has(i) ? `<span class="hint${hints.get(i).replaced ? " replaced" : ""}"><span>${esc(hints.get(i).text)}</span></span>` : "");
+  const hint = (i) => (hints?.has(i) ? `<span class="hint${hints.get(i).replaced ? " replaced" : ""}${hints.get(i).kind ? ` ${hints.get(i).kind}` : ""}"><span>${esc(hints.get(i).text)}</span></span>` : "");
   return src.split("\n").map((l, i) => (at.has(i) ? chunkLine(line(l, known, llm, members), at.get(i), segment)
     : line(l, known, llm, members)) + hint(i)).join("\n");
 }

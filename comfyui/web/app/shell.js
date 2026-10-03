@@ -79,6 +79,7 @@ export class OrreryApp {
   reelPath() { return this.data.reelPath?.key === this.reelKey() && !this.data.reelPath.error ? this.data.reelPath : null; }
   chunks() { return chunkInfo(this.text, this.reelPath()); }
   remembered() { return this.data.remembered?.key === this.reelKey() && !this.data.remembered.error ? this.data.remembered : null; }
+  annotations() { return this.data.annotations?.key === `${this.reelKey()}\n${this.bridge.getSegment?.() ?? 0}` ? this.data.annotations : null; }
 
   known() {  // the home's libraries and the template's own (@lib)
     return new Set([...(this.data.completion?.libraries || []).map((l) => l.name), ...inlineLibraries(this.text).map((l) => l.name)]);

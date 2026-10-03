@@ -136,6 +136,7 @@ class Expansion:
     cell: int | None = None  # the run of a `: grid`
     warnings: list[str] = field(default_factory=list)  # what rolled, but not as written (a sweep in an entry)
     exports: dict[str, object] = field(default_factory=dict)  # what EXPORT: rolled: text, {value, fields} or a list
+    bound: dict[str, str] = field(default_factory=dict)  # each binding as it rolled (the editor's annotations)
 
 
 @dataclass
@@ -883,7 +884,8 @@ def expand(template: str, seed: int, libraries: Mapping[str, Library],
     if parsed.enhance:
         ex.picks.append(Pick("> enhance", parsed.enhance))
     exports = {name: ex.export(name, expr) for name, expr in parsed.exports}
-    return Expansion(seed, text, ex.picks, parsed.params, parsed.enhance, cell, ex.warnings, exports)
+    bound = {k: v for k, v in ex.vars.items() if not k.startswith("\x1e")}
+    return Expansion(seed, text, ex.picks, parsed.params, parsed.enhance, cell, ex.warnings, exports, bound)
 
 
 def expand_batch(template: str, seed: int, count: int, libraries: Mapping[str, Library],

@@ -61,7 +61,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/writers"),
         ("POST", "/orrery/plan"),
         ("POST", "/orrery/reel"),
-        ("POST", "/orrery/remembered"),
+        ("POST", "/orrery/remembered"), ("POST", "/orrery/annotate"),
     }
 
 
@@ -746,3 +746,15 @@ def test_the_writer_texts_are_read_edited_and_reset(home):
     assert edited["edited"] is True and edited["text"].startswith("Write {seconds}")
     assert ok(home, webapi.writer_save, name="story", text=None)["edited"] is False
     assert api(home, webapi.writer_save, name="nope", text="x")[0] == 400
+
+
+def test_annotate_says_what_each_line_gives_at_a_seed(home):
+    """#163: bindings as they rolled, exports, a grid's cells, where a CAST member's pictures go."""
+    text = "$a = __animal__\n$plain = a grey wall\nEXPORT: mood = {calm|grim}\n@grid {dawn|noon}\nA $a at {dawn|noon}."
+    out = ok(home, webapi.annotate, template=text, seed=3, target="text")
+    assert out["bindings"]["a"] in ("fox", "heron", "owl") and out["bindings"]["plain"] == "a grey wall"
+    assert out["exports"]["mood"] in ("calm", "grim") and out["grid"] == "2 runs: dawn · noon"
+    screenplay = "@h3 references\nCAST\n@HERO (image 2): a tall man\n@DOG: a dog\nSHOT 5s: static\n@HERO walks @DOG."
+    assert ok(home, webapi.annotate, template=screenplay, seed=1, target="h3-base")["cast"] == \
+           {"HERO": "image 2", "DOG": "no picture in this clip"}
+    assert ok(home, webapi.annotate, template="A __missing_lib__.", seed=1, target="text")["bindings"] == {}  # never fails
