@@ -290,3 +290,31 @@ test("AFTER: completes the scene titles, and REMEMBER: what to keep, as whom, fo
   assert.deepEqual(names(`${reel}REMEMBER: first frame as @KEEPER `), ["in clips 2-5", "until "]);
   assert.deepEqual(names(`${reel}REMEMBER: first frame as @KEEPER until the g`), ["the gate"]);
 });
+
+test("a keyword's start offers the keyword and every form of it (#135)", () => {
+  const items = at("@h3 references\nSHOT 5s\nA.\nREME").items.map((i) => i.insert);
+  assert.equal(items[0], "REMEMBER: ");
+  assert.ok(items.includes("REMEMBER: frames 0, 50 as @NAME") && items.includes("REMEMBER: every 10th frame as refmod NAME"));
+  const set = at("@h3 references\nSHOT 5s\nA.\nSET").items;
+  assert.ok(set.some((i) => i.insert === "SET: @NAME(1, 35%, 80%)" && i.detail === "strength, start and end"));
+  assert.equal(at("@h3 references\nSHOT 5s\nA.\nR").items.filter((i) => i.insert.startsWith("REMEMBER: ") && i.insert.length > 10).length, 0,
+    "one letter offers the keywords only, not every form");
+});
+
+test("text templates get their own keywords: EXPORT:, IF $ (#135)", () => {
+  const items = at("$who = a heron\nEXP").items.map((i) => i.insert);
+  assert.ok(items.includes("EXPORT: ") && items.includes("EXPORT:\n  who = $who\n  mood = __moods__"));
+  assert.ok(at("a fox\nIF").items.some((i) => i.insert === "IF $x is a, b: the line"));
+  assert.ok(!at("@h3 t2va\nSHOT 5s\nA.\nEXP").items.some((i) => i.insert.startsWith("EXPORT")));  // a screenplay leaves it out
+});
+
+test("after $name. the fields of what the binding rolls, and @h3 and @lib among the directives (#135)", () => {
+  const data = { ...DATA, libraries: [...DATA.libraries, { name: "pictures/krea/x", count: 2, source: "builtin", tags: [], sample: [],
+    props: {}, fields: ["mood", "pictures", "prompt", "who"] }] };
+  const atEnd = (t) => suggest(t, t.length, data).items.map((i) => i.insert);
+  const fields = atEnd("$hero = __pictures/krea/x[exported]__\n$hero.");
+  assert.deepEqual(fields, ["mood", "pictures", "prompt", "who"]);
+  assert.deepEqual(atEnd("$hero = __pictures/krea/x__\n$hero.wh"), ["who"]);
+  const directives = at("@").items.map((i) => i.insert);
+  assert.ok(directives.includes("@h3 ") && directives.includes("@lib "));
+});

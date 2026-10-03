@@ -3,9 +3,53 @@
 // suggest(text, caret, data) -> { items: [{ insert, detail, preview }], replaceFrom }
 // Accepting an item replaces text[replaceFrom:caret] with item.insert.
 
-// The words the editor teaches; the earlier CHUNK, HANDOFF:, GOTO: and SEND: still work, unoffered.
-const KEYWORDS = ["SHOT ", "SFX: ", "MUSIC: ", "style: ", "summary: ", "CAST", "voice: ", "keep: ",
-  "SCENE ", "END ON: ", "CUT TO: ", "AFTER: ", "START WITH: ", "REMEMBER: ", "IF $", "LORA: ", "context: ", "refmods: ", "SET: "];
+// The words the editor teaches, each with what it does and its forms: typing a keyword's start offers
+// the keyword and every form of it (`REME` → all of REMEMBER:'s). The earlier CHUNK, HANDOFF:, GOTO:
+// and SEND: still work, unoffered. `where`: screenplays, text templates or both.
+export const KEYWORDS = [
+  { word: "SHOT ", where: "h3", says: "a shot: its length, then the camera", forms: [
+    ["SHOT 5s: static", "a held shot"], ["SHOT 4s: push in, small, slow", "a camera move, its amplitude and speed"],
+    ["SHOT 5s: from image 1", "opens on a picture (a frame anchor)"], ["SHOT 5s: to image 2", "ends on a picture"],
+    ["SHOT 5s: after video 1", "continues a video from its last frame"]] },
+  { word: "SFX: ", where: "h3", says: "the shot's sounds", forms: [["SFX: rain on the glass, a spoon against a mug", "sounds, comma by comma"], ["SFX: silence", "no sound at all"]] },
+  { word: "MUSIC: ", where: "h3", says: "music under the clip", forms: [["MUSIC: a slow piano, far away", "what plays and how"]] },
+  { word: "style: ", where: "h3", says: "the look of the whole clip", forms: [["style: live-action, warm evening light, handheld", "medium, light, camera"]] },
+  { word: "summary: ", where: "h3", says: "the references' summary (full format)", forms: [["summary: The target video shows @NAME in @PLACE.", "who and where, by CAST name"]] },
+  { word: "CAST", where: "h3", says: "who and what the clip has: a member per line", forms: [
+    ["CAST\n@NAME (image 1): who they are", "a member with a picture"], ["CAST\n@NAME (image __pictures/krea/09_character_creator__): $hero.who", "a member from the gallery"],
+    ["CAST\n@NAME (refmod NAME): who they are", "a member made of a RefMod"]] },
+  { word: "voice: ", where: "h3", says: "after a member: the voice it speaks with", forms: [["voice: audio 1, a calm low voice", "a recorded voice and a note"], ["voice: video 1 audio", "the voice of a video's soundtrack"]] },
+  { word: "keep: ", where: "h3", says: "what a reference keeps", forms: [
+    ["keep: face, outfit", "only these"], ["keep: all", "everything"], ["keep: style", "only its style"], ["keep: place", "a place: layout, surfaces, light"],
+    ["keep: loose", "a loose reference"], ["keep: fully_preserved - the reason", "a marker and its reason"]] },
+  { word: "SCENE ", where: "h3", says: "starts a clip of a reel", forms: [
+    ["SCENE the title", "a clip, named for CUT TO: and AFTER:"], ["SCENE the title ×3", "played three times"], ["SCENE the title forever", "until you stop"],
+    ["SCENE the title (test)", "a test scene, left out of the film"]] },
+  { word: "END ON: ", where: "h3", says: "how a scene ends, and the next one opens", forms: [["END ON: @NAME turns toward the door", "its closing sentence"]] },
+  { word: "START WITH: ", where: "h3", says: "this scene's own opening", forms: [["START WITH: @NAME already at the window", "in place of the END ON: before it"]] },
+  { word: "AFTER: ", where: "h3", says: "which clip this one continues", forms: [["AFTER: 2", "scene 2's last clip (by title or number)"], ["AFTER: the input video", "the video wired into the Orrery Prompt"]] },
+  { word: "CUT TO: ", where: "h3", says: "at a scene's end: jump there instead", forms: [
+    ["CUT TO: the title", "a jump, for good"], ["CUT TO: the title ×2", "twice"], ["CUT TO: the title (30%)", "that often"],
+    ["IF $w is storm: CUT TO: the title", "on what this clip rolled"]] },
+  { word: "REMEMBER: ", where: "h3", says: "frames of this clip, kept for the clips after it", forms: [
+    ["REMEMBER: first frame as @NAME", "the first frame becomes the member's picture"], ["REMEMBER: last frame as @NAME", "its last frame"],
+    ["REMEMBER: frames 0, 50 as @NAME", "a picture of the member per frame"], ["REMEMBER: frame at 1s as image 3", "a numbered picture of the CAST"],
+    ["REMEMBER: every 10th frame as refmod NAME", "a RefMod made of the frames"], ["REMEMBER: last frame as image 5 in clips 5+", "only for those clips"],
+    ["REMEMBER: frame 0 as image 7 until the title", "until a scene first plays"]] },
+  { word: "SET: ", where: "h3", says: "turns a member's or a picture's strength", forms: [
+    ["SET: @NAME(0.6)", "all its pictures and RefMods"], ["SET: @NAME(0.6, 35%)", "a strength and when it starts"],
+    ["SET: @NAME(1, 35%, 80%)", "strength, start and end"], ["SET: @NAME(0.5, refmods)", "only its RefMods"],
+    ["SET: image_1(0.5, 35%)", "one picture by its name"], ["SET: refmods(1, 35%)", "the RefMods without their own"]] },
+  { word: "IF $", where: "both", says: "a line kept only when its condition holds", forms: [
+    ["IF $x is a, b: the line", "x rolled either"], ["IF $x is not a: the line", "x rolled something else"],
+    ["IF $x[myth]: the line", "a tag or a property of what x rolled"], ["IF $w.kind is rain: the line", "a property's value"]] },
+  { word: "EXPORT: ", where: "text", says: "kept with the picture, never in the prompt", forms: [
+    ["EXPORT: mood = __moods__", "one value"], ["EXPORT: $who", "a binding, with its entry's fields"],
+    ["EXPORT:\n  who = $who\n  mood = __moods__", "a block: one per line"], ["EXPORT: backstory = --two sentences of backstory for $who--", "written by the language model"]] },
+  { word: "LORA: ", where: "h3", says: "LoRAs for this clip", forms: [["LORA: <lora:NAME:0.8>", "a LoRA and its strength"], ["LORA: __my_lora_sets__", "a library of LoRA sets"]] },
+  { word: "context: ", where: "h3", says: "how many frames a continuation pins", forms: [["context: 22", "the last 22 frames"]] },
+  { word: "refmods: ", where: "h3", says: "the RefMods' defaults", forms: [["refmods: at 1 from 35%", "strength and start"]] },
+];
 const NONE = { items: [], replaceFrom: 0 };
 
 const startsWith = (word, prefix) => word.toLowerCase().startsWith(prefix.toLowerCase());
@@ -96,6 +140,18 @@ function libraryItems(before, data) {
       }))],
     replaceFrom: before.length - m[1].length,
   };
+}
+
+// `$hero.` the fields of what the binding rolls: its library's properties (the gallery's pictures: who,
+// mood …; weather: kind, sfx).
+function fieldItems(before, text, data) {
+  const m = before.match(/\$([A-Za-z_]\w*)\.([\w-]*)$/);
+  if (!m) return null;
+  const bound = new RegExp(`^\\s*\\$${m[1]}\\s*=\\s*__([\\w*/]+?)(?=__|\\[|#|:\\d)`, "m").exec(text);
+  const lib = bound && data.libraries.find((l) => l.name === bound[1]);
+  const fields = lib ? (lib.fields || Object.keys(lib.props || {})) : [];
+  const items = fields.filter((f) => startsWith(f, m[2]) && f !== m[2]).map((f) => ({ insert: f, detail: `a field of __${lib.name}__`, preview: "" }));
+  return items.length ? { items, replaceFrom: before.length - m[2].length } : null;
 }
 
 function bindingItems(before, text) {
@@ -221,18 +277,23 @@ function castItems(before, line, text) {
     { insert: n, detail: "cast", preview: "" },
     ...(lineStart ? [{ insert: `${n} (`, label: `${n} (…): `, detail: "a line of speech: how it sounds, then the words", preview: "" }] : []),
   ]);
-  const keywords = lineStart ? KEYWORDS.filter((k) => startsWith(k, m[1])).map((k) => ({ insert: k, detail: "screenplay", preview: "" })) : [];
+  const keywords = lineStart ? keywordForms(m[1], true) : [];
   return { items: [...items, ...keywords], replaceFrom: before.length - m[1].length };
 }
 
-function keywordItems(before, line) {
+// A keyword typed at a line's start: the keyword, then each of its forms (whole lines).
+function keywordForms(typed, screenplay) {
+  return KEYWORDS.filter((k) => k.where === "both" || k.where === (screenplay ? "h3" : "text"))
+    .filter((k) => startsWith(k.word, typed))
+    .flatMap((k) => [{ insert: k.word, detail: k.says, preview: "" },
+      ...(typed.length >= 2 ? k.forms.map(([insert, detail]) => ({ insert, label: insert.replace(/\n/g, " ⏎ "), detail, preview: "" })) : [])]);
+}
+
+function keywordItems(before, line, screenplay = true) {
   const m = line.match(/^([A-Za-z]+)$/);
   if (!m) return null;
-  return {
-    items: KEYWORDS.filter((k) => startsWith(k, m[1]))
-      .map((k) => ({ insert: k, detail: "screenplay", preview: "" })),
-    replaceFrom: before.length - m[1].length,
-  };
+  const items = keywordForms(m[1], screenplay);
+  return items.length ? { items, replaceFrom: before.length - m[1].length } : null;
 }
 
 // LORA: lines: your LoRA files as <lora:name:1.00>, the syntax LoraManager's LoRA Text Loader
@@ -361,6 +422,8 @@ const DIRECTIVES = [
   ["@unique ", "seeds in a row never repeat it: @unique $hero"],
   ["@size ", "the node's width and height: @size 832x1216"],
   ["@include ", "embed a preset where it stands"],
+  ["@h3 ", "a MiniMax H3 screenplay: @h3 text 16:9 (the first line)"],
+  ["@lib ", "a library of the template's own: its entries on indented lines under it"],
   ["@rng 1", "the dice of before 2026-10-02 (one stream for every pick)"],
   ["@seed ", "CLI only: the first seed"],
   ["@batch ", "CLI only: how many seeds"],
@@ -418,10 +481,11 @@ export function suggest(text, caret, data) {
   if (directive && cast) directive.items = [...cast.items, ...directive.items];  // `@` at a line's start: both
   const found = mode ?? directive ?? cast ?? (screenplay ? loraItems(before, line, data) : null)
     ?? libraryItems(before, data)
+    ?? fieldItems(before, text, data)
     ?? bindingItems(before, text)
     ?? (screenplay ? refmodsLineItems(before, line) ?? setItems(before, line, text) ?? refmodItems(before, line, data) ?? gotoItems(before, line, text)
       ?? rememberItems(before, line, text)
-      ?? castItems(before, line, text) ?? shotItems(before, line, data) ?? keywordItems(before, line) : null)
+      ?? castItems(before, line, text) ?? shotItems(before, line, data) ?? keywordItems(before, line) : keywordItems(before, line, false))
     ?? NONE;
   const typed = before.slice(found.replaceFrom);
   return { ...found, items: found.items.filter((i) => i.insert !== typed) };
