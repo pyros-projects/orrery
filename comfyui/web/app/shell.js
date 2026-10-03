@@ -278,11 +278,12 @@ export class OrreryApp {
   // The clip rendering now, as the sampler previews it (#205): only while this node's reel clip runs.
   preview(p) {
     if (!this.run || (p.prompt && this.run.prompt && p.prompt !== this.run.prompt)) return;
-    const live = (this.live ??= { segment: this.run.segment });
-    if (p.kj) live.kj = true;
-    if (p.src || (p.blob && !live.kj)) {  // KJ's whole clip wins over the core's single frame
+    const live = (this.live ??= { segment: this.run.segment, rank: 0 });
+    // the best source wins: a whole clip (orrery's through the model, or KJNodes') over a still (orrery's copy of
+    // ComfyUI's preview) over ComfyUI's own, which reaches only the tab that queued the run
+    if ((p.src || p.blob) && (p.rank || 0) >= live.rank) {
       if (live.url?.startsWith("blob:")) URL.revokeObjectURL(live.url);
-      Object.assign(live, { url: p.src || URL.createObjectURL(p.blob), video: !!p.video });
+      Object.assign(live, { url: p.src || URL.createObjectURL(p.blob), video: !!p.video, rank: p.rank || 0 });
     }
     if (p.total) Object.assign(live, { step: p.step, total: p.total });
     paintLive(this);

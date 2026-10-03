@@ -75,11 +75,11 @@ export function client(home) {
     // The sampler's previews while a clip renders (#205): KJNodes' Model Preview Override (a picture, or the whole
     // clip as an animated WebP or an MP4), else ComfyUI's own preview (b_preview); and the step progress.
     onPreview: (fn) => {
-      const kj = ({ detail: d }) => d?.image && fn({ src: `data:${d.mime || "image/jpeg"};base64,${d.image}`, video: d.mime === "video/mp4", kj: true,
+      const kj = ({ detail: d }) => d?.image && fn({ src: `data:${d.mime || "image/jpeg"};base64,${d.image}`, video: d.mime === "video/mp4", rank: 3,
         step: d.step, total: d.total });
       let tagged = false;  // newer frontends send each picture twice, with its prompt and without: the first is enough
-      const meta = ({ detail: d }) => { if (d?.blob instanceof Blob) { tagged = true; fn({ blob: d.blob, prompt: d.jobId }); } };
-      const own = ({ detail }) => { const blob = detail?.blob || detail; if (!tagged && blob instanceof Blob) fn({ blob }); };
+      const meta = ({ detail: d }) => { if (d?.blob instanceof Blob) { tagged = true; fn({ blob: d.blob, prompt: d.jobId, rank: 1 }); } };
+      const own = ({ detail }) => { const blob = detail?.blob || detail; if (!tagged && blob instanceof Blob) fn({ blob, rank: 1 }); };
       const step = ({ detail: d }) => d && fn({ step: d.value, total: d.max, prompt: d.prompt_id });
       const on = [["kj_preview_override", kj], ["b_preview_with_metadata", meta], ["b_preview", own], ["progress", step]];
       on.forEach(([kind, f]) => api.addEventListener(kind, f));

@@ -13,7 +13,7 @@ import re
 from datetime import UTC, datetime
 from pathlib import Path
 
-from orrery import anchors, endpoint, history, runs, uistate
+from orrery import anchors, endpoint, history, preview, runs, uistate
 from orrery import batch as batches
 from orrery import sweep as sweeps
 from orrery.autolib import needs, write_apart
@@ -558,8 +558,8 @@ def save_png(image, path: Path | str, picks_json: str) -> None:
 class OrreryPrompt:
     CATEGORY = "orrery"
     FUNCTION = "run"
-    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "LORA_STACK", "FLOAT")
-    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "lora_stack", "megapixels")
+    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "LORA_STACK", "FLOAT", "MODEL")
+    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "lora_stack", "megapixels", "model")
     OUTPUT_TOOLTIPS = ("", "", "", "From `: w…` in the template, else the @h3 ratio, else 1024.",
                        "From `: h…` in the template, else the @h3 ratio, else 1024.",
                        ("Frames at 24 fps for the MiniMax H3 nodes' length input: the sum of the SHOT "
@@ -599,6 +599,10 @@ class OrreryPrompt:
                 "last_frame": ("IMAGE", {"tooltip": (
                     "Optional: the picture the clip ends on (and the H3 node's last_frame). Without a first frame, width "
                     "and height take its shape, so H3 does not crop it.")}),
+                "model": ("MODEL", {"tooltip": (
+                    "Optional: the model, through orrery to the sampler (#209). The clip being sampled then shows in "
+                    "orrery's clip box as it forms, every frame, decoded with the tiny VAE (taeh3 in models/vae_approx). "
+                    "The model output is this model with that preview; nothing loads again.")}),
                 "video": ("VIDEO", {"tooltip": (
                     "Optional: a video of your own that the reel starts from (a Load Video). The template's head is "
                     "its scene: REMEMBER: there keeps its frames, END ON: there says how it ends, and a scene with "
@@ -625,7 +629,8 @@ class OrreryPrompt:
 
     def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, clip=None,
             sweep="", chain="", take=0, unique_id=None, extra_pnginfo=None, prompt=None,
-            first_frame=None, last_frame=None, video=None):
+            first_frame=None, last_frame=None, video=None, model=None):
+        preview.forward_core_previews()  # ComfyUI's own preview reaches every tab, not just the one that queued
         chain = chain or DEFAULT_CHAIN  # the app names it after the reel; old workflows and the CLI keep h3_context
         stills = _previous(chain, segment)
         packed, wired, keep, standing = wiring(prompt, unique_id)
@@ -654,7 +659,7 @@ class OrreryPrompt:
                 runs.remember(prompt_id, unique_id, outputs[1])  # for Generate: Save nodes log to the galaxy
             if "segments" in data:  # a reel
                 _announce(unique_id, data["segment"])
-            return (*outputs, data["megapixels"])
+            return (*outputs, data["megapixels"], preview.patched(model, unique_id) if model is not None else None)
         except ReelEnd as end:
             try:
                 from comfy_execution.graph_utils import ExecutionBlocker  # ComfyUI

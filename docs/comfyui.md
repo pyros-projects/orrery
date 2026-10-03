@@ -29,9 +29,14 @@ files in instead.
 Nodes under **orrery**:
 
 - **Orrery Prompt**: seed and target (`text`, `h3-base`, `flat`), optional
-  `segment`, `first_frame`, `last_frame` and `video` → `text`, `picks`, `seed`, `width`,
-  `height`, `length`, `lora_stack` and
-  `megapixels`. A picture wired into `first_frame` (else
+  `model`, `first_frame`, `last_frame` and `video` → `text`, `picks`, `seed`, `width`,
+  `height`, `length`, `lora_stack`,
+  `megapixels` and `model`. Wire the model through it (loader → Orrery Prompt
+  → guider or sampler) and the clip being sampled shows in its box as it
+  forms, every frame, decoded with the tiny VAE for the model's latents
+  (`taeh3` in `models/vae_approx` for MiniMax H3, else Latent2RGB); the model
+  output is the same model with that preview, nothing loads again. Without it
+  the box shows ComfyUI's own preview, which orrery passes to every open tab. A picture wired into `first_frame` (else
   `last_frame`), the same one the H3 node gets, gives `width`/`height` its shape
   at the header's megapixels (else H3's canvas area), on the 32 grid as close to
   its shape as the grid allows: H3 stretches a first frame and crops a last one
@@ -103,7 +108,8 @@ Nodes under **orrery**:
     clips not rendered yet. A scene's divider has three buttons: ▷
     **Generate** its clip (↻ **Regenerate** once it has one, a new take) and
     stay on the scene, ⏭ go to the **next scene** (Next clip becomes its first
-    clip), and ⏩ go there **and generate** it. **Sample surfing**: ×1 beside
+    clip), and ⏩ go there **and generate** it (the box of the clip rendering
+    shows it as it forms: see Orrery Prompt's `model` below). **Sample surfing**: ×1 beside
     ▷ turns to ×2, ×4, ×8, and Generate renders that many **takes** of the
     clip. They line up under it; hover plays one, a click puts it in the film
     (the next clip and `REMEMBER:` then use it too). 📌 in a scene keeps its

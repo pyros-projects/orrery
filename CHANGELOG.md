@@ -63,6 +63,9 @@ checks) are left out.
 - Sample surfing: a scene's Generate makes ×2, ×4 or ×8 takes of its clip, you pick the best under it, and the
   film, `REMEMBER:` and the next clip use that one; 📌 keeps the scene's rolled prompt so only the noise changes, and
   the gear numbers the takes' seeds and can delete the takes not picked (#197).
+- The Orrery Prompt takes the model through it: the clip being sampled then shows in orrery's clip box as it
+  forms, every frame (the tiny VAE taeh3, else Latent2RGB). Without it, ComfyUI's own preview reaches the clip box
+  in every open tab (#197).
 - The dials are a list in a sidebar beside the editor, one a row with what it rolls at this seed, to widen,
   fold or clear; a dial's menu filters by a regex over text, properties and tags, with All and None; a reel's
   clips show only under its scenes, and the column beside the editor is gone; the node's segment widget is

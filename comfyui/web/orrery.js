@@ -262,6 +262,12 @@ function mount(node) {
   const onDone = ({ detail }) => orrery.runDone(detail?.prompt_id);
   const ENDS = ["execution_success", "execution_error", "execution_interrupted"];
   api.addEventListener("orrery.segment", onSegment);
+  // orrery's previews (#209): this node's whole clip (its model through the node), or ComfyUI's still for any run
+  const onPreview = ({ detail: d }) => {
+    if (!d?.image || (d.node != null && !mine(d.node))) return;
+    orrery.preview({ src: `data:${d.mime};base64,${d.image}`, rank: d.animated ? 3 : 2, step: d.step, total: d.total, prompt: d.prompt_id });
+  };
+  api.addEventListener("orrery.preview", onPreview);
   ENDS.forEach((e) => api.addEventListener(e, onDone));
   // the segment, the seed and the target change what the editor shows (its annotations, the scene marked next)
   for (const name of ["segment", "seed", "target"]) {
@@ -272,6 +278,7 @@ function mount(node) {
   const onRemoved = node.onRemoved;
   node.onRemoved = function (...args) {
     api.removeEventListener("orrery.segment", onSegment);
+    api.removeEventListener("orrery.preview", onPreview);
     ENDS.forEach((e) => api.removeEventListener(e, onDone));
     orrery.destroy();
     return onRemoved?.apply(this, args);
