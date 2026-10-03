@@ -17,6 +17,7 @@ const DATA = {
     { name: "indie90s_style_h3_ep35", folder: "style" },
     { name: "Motion_Repair", folder: "" },
   ],
+  refmods: ["allie_refMod", "orrery_abc_salon", "salon_old/abc", "Zelda_refMod"],
 };
 
 const at = (text) => suggest(text, text.length, DATA);
@@ -218,4 +219,36 @@ test("two capitals complete a CAST name; at a line's start also as a line of spe
   const chunkCast = "@h3 ref2va\nCHUNK a\nCAST\nGIRL (image 1): a girl\nSHOT 5s\nGI";
   assert.deepEqual(suggest(chunkCast, chunkCast.length, DATA).items.map((i) => i.insert), ["GIRL", "GIRL ("]);
   assert.deepEqual(castNames(head), ["KEEPER", "MAYA"]);
+});
+
+const CAST_HEAD = "@h3 ref2va\nCAST\n";
+const names = (text) => at(text).items.map((i) => i.insert);
+
+test("refmod in a CAST member's parentheses lists the RefMods, prefix matches first", () => {
+  assert.deepEqual(names(`${CAST_HEAD}SALON (refmod `), ["allie_refMod", "orrery_abc_salon", "salon_old/abc", "Zelda_refMod"]);
+  assert.deepEqual(names(`${CAST_HEAD}SALON (refmod sal`), ["salon_old/abc", "orrery_abc_salon"]);
+  assert.equal(at(`${CAST_HEAD}SALON (refmod sal`).replaceFrom, `${CAST_HEAD}SALON (refmod `.length);
+});
+
+test("the parentheses offer refmod and global, then a RefMod's strength and start", () => {
+  assert.deepEqual(names(`${CAST_HEAD}SALON (re`), ["refmod "]);
+  assert.deepEqual(names(`${CAST_HEAD}SALON (image 1, gl`), ["global"]);
+  assert.deepEqual(names(`${CAST_HEAD}SALON (refmod orrery_abc_salon `), ["at 1", "from 35%", "to 50%"]);
+  assert.deepEqual(names(`${CAST_HEAD}SALON (refmod orrery_abc_salon at 0.5 f`), ["from 35%"]);
+});
+
+test("a line of speech in a shot gets no RefMod words", () => {
+  assert.deepEqual(names("@h3 ref2va\nSHOT 5s\nMAYA (g"), []);
+});
+
+test("the refmods: line completes as a keyword, then its defaults", () => {
+  assert.ok(names("@h3 ref2va\nref").includes("refmods: "));
+  assert.deepEqual(names("@h3 ref2va\nrefmods: "), ["at 1 from 0%", "at 0.5", "from 35%", "to 50%"]);
+});
+
+test("SET: lists the CAST's RefMods and pictures as name(strength, start)", () => {
+  const head = `${CAST_HEAD}EMMA (refmod emma_canon, image 1): a woman\nTOM (image 3): a man\nCHUNK\nSHOT 5s: static\n`;
+  assert.deepEqual(names(`${head}SET: `), ["emma_canon(1, 0%)", "image_1(1, 0%)", "image_3(1, 0%)"]);
+  assert.deepEqual(names(`${head}SET: image_1(0.5, 35%), em`), ["emma_canon(1, 0%)"]);
+  assert.deepEqual(names(`${head}SET: image_1(0.`), []);
 });

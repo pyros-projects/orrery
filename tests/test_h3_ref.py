@@ -294,7 +294,7 @@ SFX: music plays
     assert "<Subject 4> (appears in [Shot 1]): fully_preserved - only the red bass" in ret
 
 
-def test_refmods_are_described_but_not_loaded_yet():
+def test_refmods_are_described_and_listed_for_orrery_refmods():
     src = """@h3 t2va full
 CAST
 MAYA (refmod maya_canon): a young blonde woman, in a light-pink shirt
@@ -304,7 +304,37 @@ SFX: wind
 """
     res = h3(src)
     assert "A young blonde woman, in a light-pink shirt, waves." in res.text
-    assert any("maya_canon" in i.message and i.severity == "warn" for i in res.lint)
+    assert res.refmods == [{"name": "maya_canon", "member": "MAYA", "strength": 1.0, "from": 0.0, "to": 1.0}]
+    assert not any("maya_canon" in i.message for i in res.lint)
+
+
+REFMOD_TOUR = """@h3 ref2va 16:9
+refmods: at 0.9 from 40%
+CAST
+SALON (refmod salon_canon at 0.5 from 20%): a grand salon, with a black piano
+HALL (refmod hall_canon): a long hallway
+GARDEN (refmod garden_canon, global): a walled garden
+SHOT 5s
+The camera crosses SALON toward the doors.
+"""
+
+
+def test_a_refmod_carries_its_strength_and_start_or_the_screenplay_defaults():
+    mods = {m["name"]: m for m in h3(REFMOD_TOUR.replace("crosses SALON", "crosses SALON into HALL")).refmods}
+    assert mods["salon_canon"] == {"name": "salon_canon", "member": "SALON", "strength": 0.5, "from": 0.2, "to": 1.0}
+    assert (mods["hall_canon"]["strength"], mods["hall_canon"]["from"]) == (0.9, 0.4)
+
+
+def test_a_clip_gets_the_refmods_of_the_members_it_names_and_the_global_ones():
+    assert [m["name"] for m in h3(REFMOD_TOUR).refmods] == ["salon_canon", "garden_canon"]
+    quiet = REFMOD_TOUR.replace("The camera crosses SALON toward the doors.", "The camera rests on the salon.")
+    assert [m["name"] for m in h3(quiet).refmods] == ["garden_canon"]  # lowercase prose names no member
+
+
+def test_refmod_syntax_problems_are_lint_not_failures():
+    src = REFMOD_TOUR.replace("refmod hall_canon", "refmod hall_canon from 150%").replace(", global", ", everywhere")
+    lint = [i.message for i in h3(src).lint]
+    assert any("from 150%" in m for m in lint) and any('"everywhere"' in m for m in lint)
 
 
 def test_reference_sources_outside_ref2va_warn():
@@ -393,3 +423,44 @@ def test_a_keep_line_always_brings_a_retention_block():
 def test_a_summary_asks_for_full():
     lite = compile_scene("@h3 ref2va\nsummary: A waits.\nCAST\nA (image 1): a woman\nSHOT 5s\nA waits.\nSFX: wind\n", 1, {})
     assert any("add full" in i.message for i in lite.lint) and "A waits." not in lite.text.split("integrated")[0]
+
+
+def test_a_member_no_shot_names_is_left_out_and_lint_says_so():
+    src = """@h3 ref2va 16:9
+CAST
+MAYA (image 1): a young blonde woman, in a light-pink shirt
+DOG (image 2): the fluffy white Samoyed
+SHOT 5s
+MAYA waves.
+"""
+    res = h3(src)
+    assert "Samoyed" not in res.text and "pink shirt" in res.text
+    assert any("DOG is in the CAST, but no shot" in i.message for i in res.lint)
+
+
+def test_an_image_takes_at_and_from_and_the_picks_name_its_packed_place():
+    src = """@h3 ref2va 2:3
+CAST
+EMMA (image 3 at 0.5 from 35%): a young woman in a red coat
+TOM (image 5): a tall man
+SHOT 5s: static
+EMMA waves to TOM.
+"""
+    assert compile_scene(src, 1, LIBS, packed=True).images == [
+        {"ref": 1, "image": 3, "member": "EMMA", "strength": 0.5, "from": 0.35, "to": 1.0}]
+    assert h3(src).images[0]["ref"] == 3  # without Orrery Refs: the slot as wired
+    bad = h3(src.replace("TOM (image 5)", "TOM (video 1 at 0.4)"))
+    assert any("video 1 takes no at, from or to" in i.message for i in bad.lint)
+
+
+def test_a_member_twice_in_one_cast_block_warns_and_the_first_counts():
+    src = """@h3 ref2va 2:3
+CAST
+EMMA (image 1): a young woman in a red coat
+EMMA (image 2): a young woman in a blue coat
+SHOT 5s: static
+EMMA waves.
+"""
+    res = h3(src)
+    assert "red coat" in res.text and "blue coat" not in res.text
+    assert any("EMMA is in the CAST twice" in i.message for i in res.lint)

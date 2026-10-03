@@ -19,7 +19,7 @@ can give you.
 - [5. Lesson 2: a reel where every clip has its own references](#5-lesson-2-a-reel-where-every-clip-has-its-own-references)
 - [6. Lesson 3: anchors across a reel with SEND](#6-lesson-3-anchors-across-a-reel-with-send)
 - [7. What reaches the outputs, precisely](#7-what-reaches-the-outputs-precisely)
-- [8. Videos, audio, RefMods and `previous`](#8-videos-audio-refmods-and-previous)
+- [8. Videos, audio and RefMods](#8-videos-audio-and-refmods)
 - [9. Messages and what to do about them](#9-messages-and-what-to-do-about-them)
 - [10. Limits](#10-limits)
 
@@ -329,8 +329,10 @@ For every clip, Orrery Refs fills `ref_1`, `ref_2`, … in this order:
    and the chunk's), frame anchors and `[image N]`. These are `<Picture 1>`,
    `<Picture 2>`, … in the prompt. A sent image that the clip uses is fetched
    from the chain; any other must be wired, or the run stops.
-2. **Every other sent image that exists**, named or not, in `image N` order.
-   The prompt does not label these.
+2. **Every other sent image that exists** and that no CAST gives a member, in
+   `image N` order. The prompt does not label these. A sent image that a CAST gives
+   a member goes only where a member of the clip has it, so a chunk whose own CAST
+   redefines that member without it goes without it.
 3. **The rest is empty.** An empty ref that Reference to Video reads is `None`,
    which it skips. An empty ref that only other nodes read is blocked, so those
    nodes wait for a clip that has an image instead of failing the run.
@@ -350,7 +352,7 @@ When nothing tells the Orrery Prompt that an Orrery Refs reads its `picks` (the
 `picks` pass through another node first, or the target is `text`), nothing is
 packed: `ref_N` is simply `image_N`, and the prompt keeps your numbers.
 
-## 8. Videos, audio, RefMods and `previous`
+## 8. Videos, audio and RefMods
 
 Orrery Refs routes images only. The other reference types go straight into
 Reference to Video and keep their own numbering:
@@ -360,12 +362,9 @@ Reference to Video and keep their own numbering:
 | video | `NAME (video 1)` | `ref_video_0` | `<Video 1>` |
 | video with its sound | `NAME (video 1 + audio)` | `ref_video_0` + `ref_video_audio_0` | `<Video 1>`, its sound `<Audio 1>` |
 | audio | `voice: audio 1` | `ref_audio_0` | `<Audio …>` after the video soundtracks |
-| RefMod | `NAME (refmod NAME)` | the H3 RefMod nodes on the model (orrery does not load RefMods) | none: a text-only `<Subject N>`, described in words |
-| the previous clip | `SHOT …: after video 1` | Orrery Prompt `previous` → `ref_video_0`, `previous_audio` → `ref_video_audio_0` | `<Video 1>` |
+| RefMod | `NAME (refmod NAME)` | nothing to wire: Orrery RefMods loads it from `models/refmods` onto the conditioning | none: a text-only `<Subject N>`, described in words |
+| a clip to continue | `SHOT …: after video 1` | `ref_video_0` (a Load Video, for instance), its sound `ref_video_audio_0` | `<Video 1>` |
 
-`previous` and `SEND:` work together: `previous` hands the last three seconds
-of the clip before (continuation), `SEND:` hands chosen frames of any earlier
-clip (identity).
 
 ## 9. Messages and what to do about them
 

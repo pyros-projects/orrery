@@ -13,8 +13,9 @@ small orrery in brass, then its boot lines (the nodes it registered, its home,
 and anything that did not come up, marked with a red `!`); `NO_COLOR` prints
 it without colour. **Templates → orrery** (or `example_workflows/` in the
 repository) holds a workflow per mode, built from ComfyUI's own nodes plus
-orrery's: Krea 2 (`text`), MiniMax H3 t2va, i2va, fl2va, l2va, ref2va, and reels
-on t2va and on ref2va with Orrery Continue / Orrery Film. Their notes name the
+orrery's: Krea 2 (`text`), MiniMax H3 t2va, i2va, fl2va, l2va, ref2va, reels
+on t2va and on ref2va with Orrery Continue / Orrery Film, and a reel with
+RefMods (Orrery RefMods, with the Jinx RefMod that ships with orrery). Their notes name the
 models and where they go; sampling follows ComfyUI's own templates (H3:
 `res_multistep`, 20 steps; Krea 2 Turbo: 8 steps). Each puts ComfyUI's Model
 Attention Backend on `comfy kitchen attention` after the model loader: INT8
@@ -27,8 +28,8 @@ Nodes under **orrery**:
 
 - **Orrery Prompt**: seed and target (`text`, `h3-base`, `flat`), optional
   `segment`, `first_frame` and `last_frame` → `text`, `picks`, `seed`, `width`,
-  `height`, `length`, `lora_stack`, `load_index`, `save_index`, `previous`,
-  `previous_audio`, `megapixels`. A picture wired into `first_frame` (else
+  `height`, `length`, `lora_stack` and
+  `megapixels`. A picture wired into `first_frame` (else
   `last_frame`), the same one the H3 node gets, gives `width`/`height` its shape
   at the header's megapixels (else H3's canvas area), on the 32 grid as close to
   its shape as the grid allows: H3 stretches a first frame and crops a last one
@@ -44,14 +45,14 @@ Nodes under **orrery**:
   reported in the log and in the Test tab. A reel (`CHUNK` blocks,
   `repeat N|forever`, `$x~N`; see [h3.md](h3.md) 1d) writes one clip per run:
   `segment` counts up by itself, and Orrery Continue / Orrery Film (below)
-  chain the clips; with H3 Motion Context instead, `load_index`/`save_index`
-  go into its Load and Save Latent's `clip_index`. The node is the whole of orrery, in six tabs (⤢ opens the
+  chain the clips. The node is the whole of orrery, in six tabs (⤢ opens the
   same app over the canvas, Esc brings it back):
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `__creature#` properties and their
     values, `$` bindings, CAST names after two capitals (`KE` → `KEEPER`; at a
     line's start also `KEEPER (…): ` for speech), camera words after
-    `SHOT 5s:`, your LoRA files after `LORA:`). **New** starts a fresh
+    `SHOT 5s:`, your LoRA files after `LORA:`, your RefMods after `refmod ` in
+    a CAST member's parentheses, then `at 1` and `from 35%`). **New** starts a fresh
     template linked to no preset: an H3 scene, an H3 reel,
     H3 references (ref2va), H3 keyframes (i2va, fl2va, l2va) or a Krea prompt,
     each with a quickstart of the essentials as `#` comments on top (the gear
@@ -160,5 +161,33 @@ Nodes under **orrery**:
   run; older takes stay on disk. The previous clip, `SEND:` and the timeline read
   this store or H3 Motion Context's Chain Video, whichever was written last.
   Another `context:` than 22 is a warning: 22 frames are pinned all the same.
+- **Orrery RefMods**: `conditioning` + `picks` → `conditioning`. It puts the
+  clip's RefMods on the conditioning, the ones its CAST names
+  (`refmod NAME at 0.5 from 35%`, see [h3.md](h3.md#1e-refmods-refmod-name-at-05-from-35)),
+  each with its strength and its start. It loads them from `models/refmods`
+  with the [ComfyUI-H3RefMods](https://github.com/FranckyB/ComfyUI-H3RefMods)
+  pack, which needs to be installed; the pack's Load and Apply nodes are not
+  needed. One RefMod ships with orrery, in `examples/refmods` (Jinx, Apache 2.0):
+  the node finds it there without copying, and the completion offers it. Wire:
+
+  ```
+  Reference to Video conditioning ▶ Orrery RefMods conditioning ▶ Orrery Continue conditioning (or the guider)
+  Orrery Prompt picks ────────────▶ Orrery RefMods picks
+  H3 video VAE ───────────────────▶ Orrery RefMods vae (for RefMods made from the reel)
+  ```
+
+  A RefMod that a `SEND:` line makes from the reel's own frames (`SEND: every 10
+  frames to refmod NAME`) needs no pack: the node takes those frames of the
+  sending segment's clip from the chain and encodes them with the `vae` as
+  Reference to Video encodes a video reference, on its 768 canvas and on the
+  VAE's frame grid (the last frame held to fill it up, at most 73 frames spread
+  out evenly). It encodes them once and keeps the result for the run; a new take
+  of that segment encodes them again.
+
+  It also applies a picture's dials (`image 1 at 0.5 from 35%`) to the pictures
+  Reference to Video put on the conditioning: with Orrery Refs, the k-th picture
+  is the k-th packed ref. A RefMod or a picture that starts later goes into a
+  timestep range of its own, as ConditioningSetTimestepRange would put it. The strength comes from orrery's
+  wrap of H3's attention, which orrery installs in memory when its nodes load.
 - **Orrery Write** (`orrery/internal`): the Write menu queues it on its own;
   you don't add it.

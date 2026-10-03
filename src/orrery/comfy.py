@@ -20,6 +20,7 @@ from orrery.autolib import needs
 from orrery.chain import DEFAULT_CHAIN, load, previous_clip
 from orrery.comfy_film import OrreryContinue, OrreryFilm
 from orrery.comfy_llm import ComfyBackend, can_write, llm_config
+from orrery.comfy_refmods import OrreryRefMods
 from orrery.comfy_write import OrreryWrite
 from orrery.continuum.grid import CONTEXT
 from orrery.dsl import (
@@ -243,7 +244,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                frames=None, packed: bool = False,
                wired: int | None = None, chain: str = DEFAULT_CHAIN,
                keep: bool = False, sweep: str = "",
-               continued: bool = False, sizes: tuple[Size, Size] = (None, None)) -> tuple[str, str, int, int, int, int, list, int, int]:
+               continued: bool = False, sizes: tuple[Size, Size] = (None, None),
+               refmodded: bool = True) -> tuple[str, str, int, int, int, int, list, int, int]:
     """`frames`: the previous clip's stills, which the model sees when it writes `--…--` slots.
     `packed`: Orrery Refs routes the images per clip; `wired`: the reference images Reference to
     Video has (both from the graph, see `wiring`). `chain`: the Motion Context chain SEND: reads;
@@ -251,7 +253,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     `sweep`: "run|galaxy folder", set by Generate for each run of a LoRA sweep (orrery.sweep) or a
     `: grid` (orrery.batch); the LoRA runs are the outer loop, the grid's cells the inner one.
     `continued`: an Orrery Continue reads the picks, which pins 22 frames whatever `context:` says.
-    `sizes`: (width, height) of the frames wired into first_frame and last_frame, or None."""
+    `sizes`: (width, height) of the frames wired into first_frame and last_frame, or None.
+    `refmodded`: an Orrery RefMods reads the picks, which applies the clip's RefMods."""
     h = resolve_home(home or None)
     if preset and preset != NO_PRESET:
         template, linked = load_preset(h, preset), preset
@@ -360,6 +363,14 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     if target != "text" and result.loras:
         stack, warnings = lora_stack(result.loras, lora_files())
         lint += [{"severity": "warn", "message": w} for w in warnings]
+    refmods = getattr(result, "refmods", []) if target != "text" else []
+    images = getattr(result, "images", []) if target != "text" else []
+    if (refmods or images) and not refmodded:
+        what = ", ".join([r["name"] for r in refmods] + [f"image {i['image']} at {i['strength']:g}" for i in images])
+        lint.append({"severity": "warn", "message": (
+            f"This clip uses RefMods or picture strengths ({what}), but no Orrery RefMods reads this node's picks: "
+            "put one between Reference to Video's conditioning and the sampler (or Orrery Continue), with the "
+            "picks wired in. The prompt already describes them.")})
     for issue in lint:
         print(f"[orrery] {issue['severity']}: {issue['message']}")
     data = {
@@ -382,6 +393,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                       "ready": {str(k): v for k, v in result.sends.items()}}}
            if target != "text" and result.send_slots else {}),
         **({"enhanced": enhanced} if enhanced else {}),
+        **({"refmods": refmods} if refmods else {}),
+        **({"images": images} if images else {}),
     }
     width, height, length = shape(source, sizes)
     lint += frame_lint(source, sizes, width, height)
@@ -401,18 +414,17 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                     f"{'longer' if context > CONTEXT else 'shorter'} than its shots. Write context: {CONTEXT}, or "
                     "leave the line out; H3 Motion Context takes other lengths.")})
                 print(f"[orrery] warn: {data['lint'][-1]['message']}")
-    return (result.text, json.dumps(data, ensure_ascii=False), seed, width, height, length, stack,
-            segment, segment + 1)
+    return result.text, json.dumps(data, ensure_ascii=False), seed, width, height, length, stack
 
 
 def _previous(latent_path: str, segment: int):
-    """(stills, tail, audio) of the clip before this segment in the Motion Context chain, else Nones."""
+    """The stills of the clip before this segment in the chain, for the model's `--…--` slots, else None."""
     try:
         import folder_paths  # ComfyUI
     except ImportError:
-        return None, None, None
+        return None
     path = previous_clip(Path(folder_paths.get_output_directory()), latent_path or DEFAULT_CHAIN, segment)
-    return load(path) if path else (None, None, None)
+    return load(path) if path else None
 
 
 def _announce(unique_id, segment: int, end: bool = False) -> None:
@@ -495,10 +507,8 @@ def save_png(image, path: Path | str, picks_json: str) -> None:
 class OrreryPrompt:
     CATEGORY = "orrery"
     FUNCTION = "run"
-    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "LORA_STACK", "INT", "INT", "IMAGE", "AUDIO",
-                    "FLOAT")
-    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "lora_stack", "load_index", "save_index",
-                    "previous", "previous_audio", "megapixels")
+    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "LORA_STACK", "FLOAT")
+    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "lora_stack", "megapixels")
     OUTPUT_TOOLTIPS = ("", "", "", "From `: w…` in the template, else the @h3 ratio, else 1024.",
                        "From `: h…` in the template, else the @h3 ratio, else 1024.",
                        ("Frames at 24 fps for the MiniMax H3 nodes' length input: the sum of the SHOT "
@@ -506,13 +516,6 @@ class OrreryPrompt:
                         "chunk on), snapped up to H3's 17k+5 grid (124 without SHOTs)."),
                        ("The LORA: lines (global, plus the chunk's in a reel) as a LORA_STACK for any "
                         "loader with a lora_stack input (LoraManager, Efficiency, Easy-Use …)."),
-                       ("The segment, for H3 Motion Context only: wire it into its Load Latent's clip_index "
-                        "(Orrery Continue reads the segment from the picks)."),
-                       "The segment + 1, for H3 Motion Context only: wire it into its Save Latent's clip_index.",
-                       ("The last 3 s of the clip before this segment (from Orrery Film or H3 Motion Context's "
-                        "Chain Video), for the Reference to Video node's ref_video; None in the first segment, "
-                        "which ref2va skips."),
-                       "The soundtrack of `previous`, for the Reference to Video node's ref_video_audio.",
                        ("The canvas area: `0.6MP` from the @h3 line, else width × height, for resolution and "
                         "scale nodes that take megapixels."))
     DESCRIPTION = ("Expands an orrery template (text) or compiles a screenplay (h3-base, flat) "
@@ -537,8 +540,7 @@ class OrreryPrompt:
                                              "as the language model, in place of the one in orrery's settings."}),
                 "segment": ("INT", {"default": 0, "min": 0, "max": 99999, "control_after_generate": True,
                                     "tooltip": "The reel's clip to write, from 0. With increment, every queued "
-                                               "run plays the next clip, which Orrery Continue (or H3 Motion "
-                                               "Context, through load_index and save_index) chains to the one "
+                                               "run plays the next clip, which Orrery Continue chains to the one "
                                                "before. Plain screenplays ignore it."}),
                 "first_frame": ("IMAGE", {"tooltip": (
                     "Optional: the picture the clip starts on (wire it into the H3 node's first_frame too). Width and "
@@ -567,12 +569,13 @@ class OrreryPrompt:
     def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, clip=None,
             latent_path=DEFAULT_CHAIN, sweep="", unique_id=None, extra_pnginfo=None, prompt=None,
             first_frame=None, last_frame=None):
-        stills, tail, audio = _previous(latent_path, segment)
+        stills = _previous(latent_path, segment)
         packed, wired, keep = wiring(prompt, unique_id)
         try:
             outputs = run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
                                  params, segment, clip, stills, packed, wired, latent_path or DEFAULT_CHAIN, keep,
-                                 sweep, continued(prompt, unique_id), (_size(first_frame), _size(last_frame)))
+                                 sweep, continued(prompt, unique_id), (_size(first_frame), _size(last_frame)),
+                                 reads_picks(prompt, unique_id, "OrreryRefMods"))
             data = json.loads(outputs[1])
             h = resolve_home(home or None)
             history.record(h, data)
@@ -585,7 +588,7 @@ class OrreryPrompt:
                 runs.remember(prompt_id, unique_id, outputs[1])  # for Generate: Save nodes log to the galaxy
             if "segments" in data:  # a reel
                 _announce(unique_id, data["segment"])
-            return (*outputs, tail, audio, data["megapixels"])
+            return (*outputs, data["megapixels"])
         except ReelEnd as end:
             try:
                 from comfy_execution.graph_utils import ExecutionBlocker  # ComfyUI
@@ -691,6 +694,14 @@ def to_image(array):
     import torch
 
     return torch.from_numpy(array)
+
+
+def reads_picks(prompt: dict | None, unique_id, class_type: str) -> bool:
+    """Whether a node of `class_type` reads this node's picks; True without a graph (the CLI, tests)."""
+    if not prompt or unique_id is None:
+        return True
+    return any(n.get("class_type") == class_type and n.get("inputs", {}).get("picks") == [str(unique_id), 1]
+               for n in prompt.values())
 
 
 def continued(prompt: dict | None, unique_id) -> bool:
@@ -829,7 +840,7 @@ class OrreryRefs:
             raise ValueError(f"image {n} is sent from segment {segment}, but the chain {latent_path!r} has no clip for "
                              f"segment {segment}: render the reel from that chunk on, or check the Orrery Prompt's "
                              "latent_path.")
-        batch, dropped = chain.frames(path, send["frames"])
+        batch, dropped = chain.frames(path, send["frames"], send.get("step", 1))
         if dropped:
             many = len(dropped) > 1
             print(f"[orrery] SEND to image {n}: frame{'s' if many else ''} {', '.join(map(str, dropped))} "
@@ -849,7 +860,8 @@ class OrreryRefs:
 
 
 NODE_CLASS_MAPPINGS = {"OrreryPrompt": OrreryPrompt, "OrreryLog": OrreryLog, "OrreryRefs": OrreryRefs,
-                       "OrreryContinue": OrreryContinue, "OrreryFilm": OrreryFilm, "OrreryWrite": OrreryWrite}
+                       "OrreryContinue": OrreryContinue, "OrreryFilm": OrreryFilm, "OrreryWrite": OrreryWrite,
+                       "OrreryRefMods": OrreryRefMods}
 NODE_DISPLAY_NAME_MAPPINGS = {"OrreryPrompt": "Orrery Prompt", "OrreryLog": "Orrery Log", "OrreryRefs": "Orrery Refs",
                               "OrreryContinue": "Orrery Continue", "OrreryFilm": "Orrery Film",
-                              "OrreryWrite": "Orrery Write"}
+                              "OrreryWrite": "Orrery Write", "OrreryRefMods": "Orrery RefMods"}

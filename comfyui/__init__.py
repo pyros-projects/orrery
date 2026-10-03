@@ -13,10 +13,14 @@ _SRC = Path(__file__).resolve().parent.parent / "src"
 if str(_SRC) not in sys.path:
     sys.path.insert(0, str(_SRC))
 
-from orrery import __version__, banner
+from orrery import __version__, banner, refbias
 from orrery.comfy import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
+from orrery.comfy_refmods import pack_installed, register_examples
 from orrery.home import home_source
 from orrery.webapi import register
+
+strengths = refbias.install()  # a strength per RefMod: wraps H3's attention in memory, ComfyUI's files stay as they are
+register_examples()  # the RefMods that ship with orrery (Jinx), for the completion
 
 WEB_DIRECTORY = "./web"
 
@@ -32,6 +36,12 @@ if PromptServer is not None:
     home, source = home_source()
     where = {"env": "ORRERY_HOME", "setting": "the setting"}.get(source, source)
     banner.note("home", f"{home} ({where})")
+    if not pack_installed():
+        banner.note("refmods", "ComfyUI-H3RefMods is not installed, so Orrery RefMods cannot load RefMods", "warn")
+    elif strengths != "on":
+        banner.note("refmods", f"strengths are off ({strengths}): every RefMod runs at 1", "warn")
+    else:
+        banner.note("refmods", "strengths on: orrery wraps H3's attention in memory, ComfyUI's files stay as they are")
     banner.show(__version__)
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]

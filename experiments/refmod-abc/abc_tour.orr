@@ -1,0 +1,49 @@
+# The RefMod A/B/C experiment (#7, #8): a camera tour that leaves the salon and comes back to it.
+# A, B and C render this same template at the same seed; only the RefMods differ (see run_sheet.md).
+# The SEND: lines hand stills to Orrery Refs, which B and C turn into RefMods; they never reach the prompt.
+#   images 3-6: the place, four stills of the salon from the first chunk (C)
+#   images 7-9: the recent memory, three stills of the chunk before (B and C)
+@h3 ref2va 16:9 0.6MP
+style: live-action, architectural documentary, warm evening light, photorealistic, one continuous unbroken ten-second shot at eye level
+context: 22
+
+CAST
+SALON: a double-height salon with a black-and-white checkered marble floor, a curved white staircase, a black grand piano, a green velvet sofa, a tall gilt mirror and a crystal chandelier
+HALLWAY: a long hallway with dark wood panelling, a red runner rug and gold-framed portraits
+LIBRARY: a two-storey library with floor-to-ceiling shelves, a rolling brass ladder and a reading desk with a green glass lamp
+
+CHUNK the salon
+SHOT 10s: arc, slow
+The camera circles slowly through SALON: past the black grand piano, along the green velvet sofa and the tall gilt mirror, under the crystal chandelier, and up the sweep of the curved white staircase. Late sun falls across the checkered marble floor. At the end the camera settles on the open double doors to the hallway.
+SFX: a quiet, large room; a clock ticking; distant birdsong through the windows
+HANDOFF: the open double doors to the hallway fill the centre of the frame
+SEND: frame 0 to image 3
+SEND: frame 60 to image 4
+SEND: frame 120 to image 5
+SEND: frame 180 to image 6
+SEND: frame 0 to image 7 for segment 1
+SEND: frame 100 to image 8 for segment 1
+SEND: frame 200 to image 9 for segment 1
+
+CHUNK the hallway
+SHOT 10s: push in, slow
+The camera glides through the doors and along HALLWAY, over the red runner rug, past the gold-framed portraits on the dark wood panelling, toward a tall door at the far end that stands ajar.
+SFX: soft footsteps on a rug; the creak of old floorboards
+HANDOFF: the tall door at the end of the hallway swings open
+SEND: frame 0 to image 7 for segment 2
+SEND: frame 100 to image 8 for segment 2
+SEND: frame 200 to image 9 for segment 2
+
+CHUNK the library
+SHOT 10s: push in, slow
+The camera moves into LIBRARY, past the floor-to-ceiling shelves and the rolling brass ladder, around the reading desk with its green glass lamp, toward a second pair of doors on the far side, which open back onto the salon.
+SFX: the hush of a library; a page turning somewhere; the lamp's faint hum
+HANDOFF: the far doors of the library open onto the salon beyond
+SEND: frame 0 to image 7 for segment 3
+SEND: frame 100 to image 8 for segment 3
+SEND: frame 200 to image 9 for segment 3
+
+CHUNK back in the salon
+SHOT 10s: push in, slow
+The camera passes through the doors and comes back into SALON from the other side: the curved white staircase now rises on the left, the black grand piano stands in the foreground, the green velvet sofa and the tall gilt mirror face the camera across the checkered marble floor, under the crystal chandelier. The camera drifts slowly toward the piano.
+SFX: the quiet, large room again; the clock ticking; birdsong

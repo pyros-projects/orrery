@@ -163,30 +163,6 @@
           "links": null
         },
         {
-          "localized_name": "load_index",
-          "name": "load_index",
-          "type": "INT",
-          "links": null
-        },
-        {
-          "localized_name": "save_index",
-          "name": "save_index",
-          "type": "INT",
-          "links": null
-        },
-        {
-          "localized_name": "previous",
-          "name": "previous",
-          "type": "IMAGE",
-          "links": null
-        },
-        {
-          "localized_name": "previous_audio",
-          "name": "previous_audio",
-          "type": "AUDIO",
-          "links": null
-        },
-        {
           "localized_name": "megapixels",
           "name": "megapixels",
           "type": "FLOAT",
