@@ -62,6 +62,7 @@ checks) are left out.
 
 ### Fixed
 
+- A new Orrery Prompt starts 1300 px wide, so the footer of a prompt or an H3 scene fits on one line (#181).
 - The gear saves again when `max_tokens` in `orrery.yaml` is not a multiple of 500 (the browser refused the
   form); the API endpoint's text no longer looks like a label, and its model list waits for a pick (#179).
 - A dial's list of choices opens every time: a menu of its own shows every choice while the dial holds

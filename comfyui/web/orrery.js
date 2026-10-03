@@ -6,6 +6,7 @@ import { OrreryApp } from "./app/shell.js";
 
 const NO_PRESET = "(none)";
 const MIN = { width: 620, height: 560 };
+const NEW = { width: 1300, height: 960 };
 
 function loadStyles() {
   if (document.getElementById("orrery-css")) return;
@@ -233,7 +234,8 @@ function mount(node) {
   });
   widget.serialize = false;
   widget.computeLayoutSize = () => ({ minHeight: MIN.height, minWidth: MIN.width, maxHeight: 1e6, maxWidth: 1e6 });
-  if (node.size[0] < 700 || node.size[1] < 900) node.setSize([Math.max(node.size[0], 700), Math.max(node.size[1], 960)]);
+  // a new node: wide enough for the footer of a prompt or an H3 scene on one line (a loaded one keeps its size)
+  if (node.size[0] < NEW.width || node.size[1] < 900) node.setSize([Math.max(node.size[0], NEW.width), Math.max(node.size[1], NEW.height)]);
 
   // configure() (a loaded workflow's values and properties) runs after nodeCreated.
   setTimeout(() => orrery.start(), 0);
