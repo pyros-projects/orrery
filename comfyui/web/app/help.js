@@ -61,9 +61,9 @@ const REF = [
   ["Cast and Ref2VA", [
     ["CAST", "names your references once; mention them by name in shots and the summary", "CAST\nMAYA (image 1): the young blonde woman, in a light-pink shirt"],
     ["DOG (image 2, image 3): the white Samoyed, with a curved tail", "sources in parentheses (image N, video N, video N + audio, refmod NAME), then the description; later mentions use its head noun (“the white Samoyed”)", ""],
-    ["EMMA (refmod emma_canon): a young woman in a red coat", "a RefMod from models/refmods. A clip that does not name EMMA leaves her out; at 0.5 holds looser, from 35% waits until the picture is laid out (for a place: a character needs the first steps, so 0% is the default), global keeps her in every clip. image 1 at 0.5 from 35% sets the same dials for a picture; a chunk's own CAST replaces her for that clip", "NAME (refmod name): "],
+    ["JINX (refmod minimaxh3_jinx_v1_refmod): a young woman", "a RefMod from models/refmods (Jinx's ships with orrery). A clip that does not name JINX leaves her out; at 0.5 holds looser, from 35% waits until the picture is laid out (for a place: a character needs the first steps, so 0% is the default), global keeps her in every clip. image 1 at 0.5 from 35% sets the same dials for a picture; a chunk's own CAST replaces her for that clip", "NAME (refmod name): "],
     ["refmods: at 0.8 from 35%", "the defaults for RefMods without their own at or from", "refmods: from 35%"],
-    ["SET: image_1(0.5, 35%), emma_canon(0.3)", "a picture's or a RefMod's dials as (strength, start) or (strength, start, end): in the head for every clip, in a chunk for that clip; the later line wins, and SET wins over the CAST's at and from. A picture at 0 leaves the clip", "SET: "],
+    ["SET: image_1(0.5, 35%), minimaxh3_jinx_v1_refmod(0.3)", "a picture's or a RefMod's dials as (strength, start) or (strength, start, end): in the head for every clip, in a chunk for that clip; the later line wins, and SET wins over the CAST's at and from. A picture at 0 leaves the clip", "SET: "],
     ["@h3 ref2va 16:9 full", "the prompt's format: lite by default (one <Subject N> = … line per cast member, then three fields where each is only its label); full writes the six sections of MiniMax's guide, with summary: and retention. Works in every mode", "@h3 ref2va 16:9 full"],
     ["keep: face, outfit", "under a cast member: a retention block goes into the prompt (lite too). Macros: all · face, hair, body, outfit (combined) · style · place · loose; or partially_preserved - your own reason", "keep: "],
     ["voice: audio 1", "on the line after a member: the voice timbre it speaks with", ""],
@@ -72,19 +72,20 @@ const REF = [
     ["SHOT 5s: from image 5", "ref2va: the shot begins from a reference picture (to image N: ends on it)", ""],
     ["[audio 1]", "a reference slot in prose; orrery writes the label the node uses", ""],
   ]],
-  ["Reels (Orrery Continue, or H3 Motion Context)", [
+  ["Reels (Orrery Continue)", [
     ["CHUNK the salon", "one clip, continuing the one before; everything before the first CHUNK (style, CAST, bindings) is the world and holds for every clip", "CHUNK\nSHOT 5s: push in, slow\n"],
+    ["style: … (in a CHUNK)", "that clip's own style, in place of the head's", "style: "],
     ["CHUNK the walk repeat 8", "plays this chunk 8 times (repeat forever: until you stop); bindings inside a chunk roll anew every clip", "CHUNK the walk repeat forever\n"],
     ["$look~1", "$look as it was one clip ago (~2: two clips); the model who walks back keeps her look", "$look~1"],
     ["HANDOFF: MAYA reaches the door", "closes this chunk and opens the next with the same words", "HANDOFF: "],
     ["GOTO: the stairs ×2", "at a chunk's end: jump to that chunk (title or number) instead of going on; ×2 twice, then on; without ×N for good (an endless loop)", "GOTO: "],
     ["? $w[a storm]: GOTO: the stairs", "a jump on what this clip rolled: each seed its own story; the dividers list the segments each chunk plays at the node's seed", "? $w[]: GOTO: "],
     ["SEND: frames 2, 5, 34-46 to image 4", "ref2va: those frames of this chunk's clip (from 0, at 24 fps) become image 4 for every later clip; wire the picks into Orrery Refs and they come out there, after the images the prompt names; GIRL (image 1, image 4) in the CAST names them in the prompt too", "SEND: frame 0 to image "],
+    ["SEND: every 10 frames to refmod outfit", "every 10th frame of this chunk's clip becomes the RefMod outfit for the clips after it, where the CAST names refmod outfit; Orrery RefMods builds it from the chain (it needs the VAE)", "SEND: every 10 frames to refmod "],
     ["SEND: frame -1 to image 5 for segment 4+", "-1 is the clip's last frame (-24--1 its last second); for segment 4+ / 4-8 / 4, 6, 7 gives it to those clips only, so several lines can fill one image in turns", "SEND: frame -1 to image "],
     ["LORA: <lora:name:0.8>", "the lora_stack output, for any loader with a lora_stack input: lines before the first CHUNK always, a chunk's own only there; after LORA: the editor lists your LoRA files; <lora:name:model:clip> sets both strengths", "LORA: "],
     ["context: 22", "the frames each clip continues from (Orrery Continue pins 22; Motion Context 5, 22, 39, 56); from the second chunk on, Shot 1 and length include them", "context: 22"],
     ["Orrery Continue · Orrery Film", "picks and the H3 node's latent into Orrery Continue, its latent into the sampler; the sampled latent and the decoded clip into Orrery Film, which keeps the takes and joins the film; segment counts up by itself, so Generate ×N plays the reel", ""],
-    ["load_index · save_index", "with H3 Motion Context instead: wire them into its Load and Save Latent's clip_index", ""],
   ]],
 ];
 

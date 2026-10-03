@@ -100,7 +100,8 @@ git clone https://github.com/pyros-projects/orrery.git
 
 Restart ComfyUI and open a workflow from **Templates → orrery** (or drag one in
 from [`example_workflows/`](example_workflows)): Krea 2 text to image, and
-MiniMax H3 t2va, i2va, fl2va, l2va, ref2va and reels (t2va and ref2va), all
+MiniMax H3 t2va, i2va, fl2va, l2va, ref2va and reels (t2va, ref2va, and one
+with RefMods), all
 built from ComfyUI's own nodes plus orrery's, each with notes on the models it
 needs and where they go. Or add **orrery → Orrery Prompt** to a graph of your
 own: wire its `text` output into your prompt input (and `width`, `height`,
@@ -139,7 +140,7 @@ uv sync --extra local    # + torch and transformers for a local language model
 |---|---|
 | Python | 3.13+ |
 | ComfyUI | tested with frontend 1.53 |
-| MiniMax H3 nodes | only for video: Reference to Video (reels chain with orrery's own Orrery Continue / Orrery Film, or with H3 Motion Context) |
+| MiniMax H3 nodes | only for video: Reference to Video (reels chain with orrery's own Orrery Continue / Orrery Film) |
 | A language model | optional: a text encoder that is a whole LLM, such as Krea 2's `qwen3vl_4b`, lets the node write libraries, `--slots--` and the Write menu's ideas |
 
 MiniMax H3's open weights are licensed outside the EU, the UK, South Korea and
@@ -237,8 +238,10 @@ loved pick stays loved whether it became a Krea still or an H3 video.
 ## Development
 
 ```bash
-uv run pytest                                              # Python tests
-node --test tests/js/app.test.mjs tests/js/complete.test.mjs   # the node app
+scripts/check                  # all three checks in seconds, while you work
+
+uv run pytest                  # the same in full, as CI runs them on every pull request
+node --test tests/js/*.mjs     # the node app
 uv run ruff check src tests
 ```
 

@@ -1,8 +1,8 @@
 {
-  "id": "fe83d3f4-21d6-4536-b345-8656ac4a781a",
+  "id": "626de04b-4092-46ce-a625-1239331f76d6",
   "revision": 0,
-  "last_node_id": 18,
-  "last_link_id": 23,
+  "last_node_id": 23,
+  "last_link_id": 39,
   "nodes": [
     {
       "id": 1,
@@ -117,21 +117,25 @@
           "name": "text",
           "type": "STRING",
           "links": [
-            4
+            11
           ]
         },
         {
           "localized_name": "picks",
           "name": "picks",
           "type": "STRING",
-          "links": null
+          "links": [
+            5,
+            18,
+            38
+          ]
         },
         {
           "localized_name": "seed",
           "name": "seed",
           "type": "INT",
           "links": [
-            8
+            15
           ]
         },
         {
@@ -139,7 +143,7 @@
           "name": "width",
           "type": "INT",
           "links": [
-            5
+            12
           ]
         },
         {
@@ -147,7 +151,7 @@
           "name": "height",
           "type": "INT",
           "links": [
-            6
+            13
           ]
         },
         {
@@ -155,7 +159,7 @@
           "name": "length",
           "type": "INT",
           "links": [
-            7
+            14
           ]
         },
         {
@@ -175,9 +179,9 @@
         "Node name for S&R": "OrreryPrompt"
       },
       "widgets_values": [
-        "# H3 SCENE · quickstart (# lines are comments: they never reach the model)\n# @h3 <mode> [ratio] [0.6MP]    t2va i2va fl2va l2va ref2va · 0.6MP sizes width × height by area\n# style: …                      medium first: live-action, 2D-animated, claymation, vintage film …\n# SHOT 5s: push in, small, slow\n#     camera: push in, pull out, zoom in/out, pan/truck left/right, tilt/pedestal up/down, arc,\n#     tracking, static, shake slightly/strongly, roll · then small/large and slow/fast\n# SHOT 3s: cut, static         a later shot: cut (default), dissolve, fade or wipe\n# Prose: what the camera sees and what happens in it, a visible action, never a frozen pose\n# NAME (warm low voice): Line.  speech, about 2.5 words a second · [German] Text for other languages\n# SFX: rain on a tin roof; a door slams     sound next to its cause · SFX: silence for none ·\n#                                            no SFX: natural foley and ambience that fit the scene\n# MUSIC: solo cello at a slow tempo         the score; leave it out and there is none\n# __lib__ rolls a library · {a|b:2} a weighted choice · $x = __lib__ binds once · $x.sfx a property\n# Tips: name the look by medium, era and defects, not by artist · say what is there, no negatives ·\n#       \"one continuous unbroken ten-second shot\" in the style keeps a single take\n@h3 t2va 16:9\nstyle: live-action, cinematic\n$who = __characters/average_joes__\n\nSHOT 5s: push in, small, slow\n$who sits alone in a laundromat at night and looks up as the lights flicker.\nSFX: dryers tumbling; a fluorescent tube buzzing\n",
+        "# H3 REFMOD REEL · quickstart: JINX leaves, the room stays empty, she comes back\n# Wiring: Reference to Video's positive → Orrery RefMods → Orrery Continue · picks → Orrery Refs,\n#   Orrery RefMods and Orrery Continue · the H3 video VAE → Orrery RefMods' vae\n# Her RefMod ships with orrery (examples/refmods); yours go into models/refmods. Orrery RefMods puts it on\n#   the clips that name her: chunk 2 never does, so it goes without her. RefMod files need ComfyUI-H3RefMods\n# SET: minimaxh3_jinx_v1_refmod(1, 0%, 10%)   strength, start, end: here her look only in the first 10%\n# SEND: every 10 frames to refmod jinx_today   makes a RefMod from this chunk's clip for the clips after it\n@h3 ref2va 2:3 0.6MP\nstyle: live-action, cinematic\ncontext: 22\n\nCAST\nJINX (refmod minimaxh3_jinx_v1_refmod): a young woman\n\nCHUNK 1\nSHOT 6s: static\nJINX waves at the camera and walks out of the frame to the left.\nHANDOFF: the room is empty and still\n\nCHUNK 2\nSHOT 5s: static\nThe bedroom stays empty the whole time. Nobody comes in.\nHANDOFF: the room is empty and still\n\nCHUNK 3\nSHOT 6s: static\nJINX slides back into the frame from the left, laughing.\n",
         1,
-        "randomize",
+        "fixed",
         "h3-base",
         "(none)",
         "",
@@ -187,9 +191,9 @@
         ""
       ],
       "widgets_values_named": {
-        "template": "# H3 SCENE · quickstart (# lines are comments: they never reach the model)\n# @h3 <mode> [ratio] [0.6MP]    t2va i2va fl2va l2va ref2va · 0.6MP sizes width × height by area\n# style: …                      medium first: live-action, 2D-animated, claymation, vintage film …\n# SHOT 5s: push in, small, slow\n#     camera: push in, pull out, zoom in/out, pan/truck left/right, tilt/pedestal up/down, arc,\n#     tracking, static, shake slightly/strongly, roll · then small/large and slow/fast\n# SHOT 3s: cut, static         a later shot: cut (default), dissolve, fade or wipe\n# Prose: what the camera sees and what happens in it, a visible action, never a frozen pose\n# NAME (warm low voice): Line.  speech, about 2.5 words a second · [German] Text for other languages\n# SFX: rain on a tin roof; a door slams     sound next to its cause · SFX: silence for none ·\n#                                            no SFX: natural foley and ambience that fit the scene\n# MUSIC: solo cello at a slow tempo         the score; leave it out and there is none\n# __lib__ rolls a library · {a|b:2} a weighted choice · $x = __lib__ binds once · $x.sfx a property\n# Tips: name the look by medium, era and defects, not by artist · say what is there, no negatives ·\n#       \"one continuous unbroken ten-second shot\" in the style keeps a single take\n@h3 t2va 16:9\nstyle: live-action, cinematic\n$who = __characters/average_joes__\n\nSHOT 5s: push in, small, slow\n$who sits alone in a laundromat at night and looks up as the lights flicker.\nSFX: dryers tumbling; a fluorescent tube buzzing\n",
+        "template": "# H3 REF2VA REEL · quickstart: the night watch, a reel that keeps a face (the \"Reel: the night watch\" preset)\n# Wiring: picks → Orrery Refs and Orrery Continue; Orrery Refs' ref_N → Reference to Video's ref_image_N-1;\n#   the sampled latent and the decoded clip → Orrery Film · no input image: image 1 comes from the reel\n# SEND: frame 0 to image 1   the first clip's frame 0 (his face) becomes image 1 for every later clip, so\n#   they still know him when a clip ends on his back · KEEPER (image 1) names it in the prompt from then on ·\n#   frame -1 is the last · … for segment 4+ (or 4-8, or 4, 6, 7) gives it to those clips only\n# Your own pictures: NAME (image 2): … in the CAST, and a Load Image into Orrery Refs' image_2\n# Run it: Generate ×3 plays the reel · Restart goes back to segment 0 · keep the seed fixed\n@h3 ref2va 16:9 lite\nstyle: live-action, cinematic\ncontext: 22\n$storm = {a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}\n\nMUSIC: a low, sustained cello drone at a slow tempo\n\nCAST\nKEEPER (image 1): an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nCHUNK the stairs\nSHOT 8s: tracking, slow\nKEEPER's weathered face is lit by his lantern as he looks up the iron spiral stairs of the lighthouse; then he turns and climbs them while $storm batters the tower.\nSFX: boots ring on iron steps; wind howls against the walls\nHANDOFF: KEEPER reaches the small door of the lamp room at the top of the stairs\nSEND: frame 0 to image 1\n\nCHUNK the lamp\nSHOT 7s: push in, small, slow\nKEEPER opens the door and lights the great lamp; the lens begins to turn and throws a sweeping beam out into $storm.\nSFX: a match strikes; gears grind as the lens starts to turn\nHANDOFF: the sweeping beam passes over the dark sea\n\nCHUNK the ship\nSHOT 8s: pull out, slow\nFar below, the beam finds a small fishing boat fighting the waves, and the boat turns toward the light.\nSFX: waves crash against the rocks; a distant ship's horn answers\n",
         "seed": 1,
-        "control_after_generate": "randomize",
+        "control_after_generate": "fixed",
         "target": "h3-base",
         "preset": "(none)",
         "home": "",
@@ -218,10 +222,10 @@
       "title": "orrery",
       "properties": {},
       "widgets_values": [
-        "## orrery · H3 t2va (text to video with sound)\n\nThe screenplay (`@h3 t2va`, SHOTs, voices, SFX) compiles to H3's prompt: `text` → the H3 node's prompt; `width`/`height` come from the header's ratio, `length` from the SHOT durations (frames on H3's 17k+5 grid).\n\nThe **Orrery Prompt** node is the whole of orrery: write in its **Prompt** tab (this workflow opens with a quickstart; **New** has the other modes), roll it in **Test** without queueing, and rate what comes out in **Galaxy**: the ratings steer the next rolls. **Generate** in the node queues this graph; what the Save node writes is logged to the galaxy with the picks that made it.\n\n- `seed` drives the rolls and the sampler (Random Noise).\n- `LORA:` lines come out on `lora_stack`, for a loader with a `lora_stack` input (LoraManager, Efficiency …), which is not part of this core-nodes workflow.\n\n[orrery on GitHub](https://github.com/pyros-projects/orrery) · [the prompt language](https://github.com/pyros-projects/orrery/blob/main/docs/dsl.md) · [H3 screenplays](https://github.com/pyros-projects/orrery/blob/main/docs/h3.md)"
+        "## orrery · H3 RefMod reel (a character who comes back)\n\nJINX leaves the frame, the room stays empty for a clip, and she slides back in. The clip in between never names her, so it goes without her RefMod; the clips that name her get it. Her RefMod (`minimaxh3_jinx_v1_refmod`, Apache 2.0, from [malcolmrey/minimaxh3](https://huggingface.co/malcolmrey/minimaxh3)) ships with orrery in `examples/refmods`; RefMods of your own go into `models/refmods`.\n\n**Orrery RefMods** puts each clip's RefMods on Reference to Video's conditioning, each with a strength, a start and an end (`SET: name(1, 0%, 10%)`), and builds the ones a `SEND: every 10 frames to refmod NAME` line makes from the reel's own frames with the VAE wired into it. Loading RefMod files needs the [ComfyUI-H3RefMods](https://github.com/FranckyB/ComfyUI-H3RefMods) pack. Clips are chained by **Orrery Continue** / **Orrery Film** as in the reel workflow; Orrery Refs stays in for pictures of your own (`NAME (image 3)`).\n\nThe **Orrery Prompt** node is the whole of orrery: write in its **Prompt** tab (this workflow opens with a quickstart; **New** has the other modes), roll it in **Test** without queueing, and rate what comes out in **Galaxy**: the ratings steer the next rolls. **Generate** in the node queues this graph; what the Save node writes is logged to the galaxy with the picks that made it.\n\n- `seed` drives the rolls and the sampler (Random Noise).\n- `LORA:` lines come out on `lora_stack`, for a loader with a `lora_stack` input (LoraManager, Efficiency …), which is not part of this core-nodes workflow.\n\n[orrery on GitHub](https://github.com/pyros-projects/orrery) · [the prompt language](https://github.com/pyros-projects/orrery/blob/main/docs/dsl.md) · [H3 screenplays](https://github.com/pyros-projects/orrery/blob/main/docs/h3.md)"
       ],
       "widgets_values_named": {
-        "text": "## orrery · H3 t2va (text to video with sound)\n\nThe screenplay (`@h3 t2va`, SHOTs, voices, SFX) compiles to H3's prompt: `text` → the H3 node's prompt; `width`/`height` come from the header's ratio, `length` from the SHOT durations (frames on H3's 17k+5 grid).\n\nThe **Orrery Prompt** node is the whole of orrery: write in its **Prompt** tab (this workflow opens with a quickstart; **New** has the other modes), roll it in **Test** without queueing, and rate what comes out in **Galaxy**: the ratings steer the next rolls. **Generate** in the node queues this graph; what the Save node writes is logged to the galaxy with the picks that made it.\n\n- `seed` drives the rolls and the sampler (Random Noise).\n- `LORA:` lines come out on `lora_stack`, for a loader with a `lora_stack` input (LoraManager, Efficiency …), which is not part of this core-nodes workflow.\n\n[orrery on GitHub](https://github.com/pyros-projects/orrery) · [the prompt language](https://github.com/pyros-projects/orrery/blob/main/docs/dsl.md) · [H3 screenplays](https://github.com/pyros-projects/orrery/blob/main/docs/h3.md)"
+        "text": "## orrery · H3 ref2va reel (a reel that keeps a face)\n\nThe night watch: the first clip opens on the keeper's face, and `SEND: frame 0 to image 1` makes that frame image 1 for every later clip, so the next clips still know him after the stairs end on his back. **No input image is needed**: Orrery Refs fetches the frame from the reel's clips and hands it to Reference to Video, and from the second clip on the prompt names it (`KEEPER (image 1)`). Clips are chained by **Orrery Continue** / **Orrery Film** as in the reel workflow.\n\nFor pictures of your own, name them in the CAST (`NAME (image 2): …`) and wire a Load Image into Orrery Refs' `image_2`.\n\nThe **Orrery Prompt** node is the whole of orrery: write in its **Prompt** tab (this workflow opens with a quickstart; **New** has the other modes), roll it in **Test** without queueing, and rate what comes out in **Galaxy**: the ratings steer the next rolls. **Generate** in the node queues this graph; what the Save node writes is logged to the galaxy with the picks that made it.\n\n- `seed` drives the rolls and the sampler (Random Noise).\n- `LORA:` lines come out on `lora_stack`, for a loader with a `lora_stack` input (LoraManager, Efficiency …), which is not part of this core-nodes workflow.\n\n[orrery on GitHub](https://github.com/pyros-projects/orrery) · [the prompt language](https://github.com/pyros-projects/orrery/blob/main/docs/dsl.md) · [H3 screenplays](https://github.com/pyros-projects/orrery/blob/main/docs/h3.md)"
       },
       "color": "#432",
       "bgcolor": "#653"
@@ -274,11 +278,11 @@
         "Node name for S&R": "UNETLoader"
       },
       "widgets_values": [
-        "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+        "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
         "default"
       ],
       "widgets_values_named": {
-        "unet_name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+        "unet_name": "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
         "weight_dtype": "default"
       }
     },
@@ -294,7 +298,7 @@
         70
       ],
       "flags": {},
-      "order": 11,
+      "order": 13,
       "mode": 0,
       "inputs": [
         {
@@ -319,8 +323,8 @@
           "name": "model",
           "type": "MODEL",
           "links": [
-            9,
-            10
+            16,
+            17
           ]
         }
       ],
@@ -434,7 +438,8 @@
           "type": "VAE",
           "links": [
             3,
-            18
+            28,
+            39
           ]
         }
       ],
@@ -480,7 +485,8 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            20
+            4,
+            30
           ]
         }
       ],
@@ -514,27 +520,27 @@
       "title": "models",
       "properties": {},
       "widgets_values": [
-        "## Models\n\nFrom [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3):\n\n- `models/diffusion_models/` [minimax_h3_fl2va_pruned_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors)\n- `models/text_encoders/` [qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors)\n- `models/vae/` [minimax_h3_video_vae_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_int8_convrot.safetensors) and [minimax_h3_audio_vae_fp32.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors)\n\nSampling as in ComfyUI's own H3 templates: `res_multistep`, `simple`, 20 steps, no CFG. For a turbo LoRA from the same repository, put a **LoraLoaderModelOnly** after the model loader and lower the steps (4 to 8, as the LoRA says).\n\n**Model Attention Backend** is set to `comfy kitchen attention`: ComfyUI's own quantized INT8 attention, much faster on Nvidia and AMD GPUs. Where it is not available, the node falls back to PyTorch attention by itself (and says so in the log)."
+        "## Models\n\nFrom [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3):\n\n- `models/diffusion_models/` [minimax_h3_ref2va_pruned_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors)\n- `models/text_encoders/` [qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors)\n- `models/vae/` [minimax_h3_video_vae_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_int8_convrot.safetensors) and [minimax_h3_audio_vae_fp32.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors)\n\nSampling as in ComfyUI's own H3 templates: `res_multistep`, `simple`, 20 steps, no CFG. For a turbo LoRA from the same repository, put a **LoraLoaderModelOnly** after the model loader and lower the steps (4 to 8, as the LoRA says).\n\n**Model Attention Backend** is set to `comfy kitchen attention`: ComfyUI's own quantized INT8 attention, much faster on Nvidia and AMD GPUs. Where it is not available, the node falls back to PyTorch attention by itself (and says so in the log).\n\n**RefMods:** the [ComfyUI-H3RefMods](https://github.com/FranckyB/ComfyUI-H3RefMods) custom nodes, for loading RefMod files (their Load and Apply nodes are not needed)."
       ],
       "widgets_values_named": {
-        "text": "## Models\n\nFrom [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3):\n\n- `models/diffusion_models/` [minimax_h3_fl2va_pruned_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors)\n- `models/text_encoders/` [qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors)\n- `models/vae/` [minimax_h3_video_vae_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_int8_convrot.safetensors) and [minimax_h3_audio_vae_fp32.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors)\n\nSampling as in ComfyUI's own H3 templates: `res_multistep`, `simple`, 20 steps, no CFG. For a turbo LoRA from the same repository, put a **LoraLoaderModelOnly** after the model loader and lower the steps (4 to 8, as the LoRA says).\n\n**Model Attention Backend** is set to `comfy kitchen attention`: ComfyUI's own quantized INT8 attention, much faster on Nvidia and AMD GPUs. Where it is not available, the node falls back to PyTorch attention by itself (and says so in the log)."
+        "text": "## Models\n\nFrom [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3):\n\n- `models/diffusion_models/` [minimax_h3_ref2va_pruned_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors)\n- `models/text_encoders/` [qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors)\n- `models/vae/` [minimax_h3_video_vae_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_int8_convrot.safetensors) and [minimax_h3_audio_vae_fp32.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors)\n\nSampling as in ComfyUI's own H3 templates: `res_multistep`, `simple`, 20 steps, no CFG. For a turbo LoRA from the same repository, put a **LoraLoaderModelOnly** after the model loader and lower the steps (4 to 8, as the LoRA says).\n\n**Model Attention Backend** is set to `comfy kitchen attention`: ComfyUI's own quantized INT8 attention, much faster on Nvidia and AMD GPUs. Where it is not available, the node falls back to PyTorch attention by itself (and says so in the log)."
       },
       "color": "#432",
       "bgcolor": "#653"
     },
     {
       "id": 9,
-      "type": "MiniMaxH3ImageToVideo",
+      "type": "MiniMaxH3ReferenceToVideo",
       "pos": [
         1200,
         0
       ],
       "size": [
         380,
-        208
+        384
       ],
       "flags": {},
-      "order": 12,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
@@ -546,21 +552,71 @@
         {
           "localized_name": "vae",
           "name": "vae",
+          "shape": 7,
           "type": "VAE",
           "link": 3
         },
         {
-          "localized_name": "first_frame",
-          "name": "first_frame",
+          "localized_name": "audio_vae",
+          "name": "audio_vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 4
+        },
+        {
+          "localized_name": "ref_image_0",
+          "name": "ref_images.ref_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 6
+        },
+        {
+          "localized_name": "ref_image_1",
+          "name": "ref_images.ref_image_1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 7
+        },
+        {
+          "localized_name": "ref_image_2",
+          "name": "ref_images.ref_image_2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 8
+        },
+        {
+          "localized_name": "ref_image_3",
+          "name": "ref_images.ref_image_3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 9
+        },
+        {
+          "localized_name": "ref_image_4",
+          "name": "ref_images.ref_image_4",
           "shape": 7,
           "type": "IMAGE",
           "link": null
         },
         {
-          "localized_name": "last_frame",
-          "name": "last_frame",
+          "localized_name": "ref_video_0",
+          "name": "ref_videos.ref_video_0",
           "shape": 7,
           "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "ref_video_audio_0",
+          "name": "ref_video_audios.ref_video_audio_0",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "localized_name": "ref_audio_0",
+          "name": "ref_audios.ref_audio_0",
+          "shape": 7,
+          "type": "AUDIO",
           "link": null
         },
         {
@@ -570,7 +626,7 @@
           "widget": {
             "name": "prompt"
           },
-          "link": 4
+          "link": 11
         },
         {
           "localized_name": "width",
@@ -579,7 +635,7 @@
           "widget": {
             "name": "width"
           },
-          "link": 5
+          "link": 12
         },
         {
           "localized_name": "height",
@@ -588,7 +644,7 @@
           "widget": {
             "name": "height"
           },
-          "link": 6
+          "link": 13
         },
         {
           "localized_name": "length",
@@ -597,7 +653,16 @@
           "widget": {
             "name": "length"
           },
-          "link": 7
+          "link": 14
+        },
+        {
+          "localized_name": "ref_image_size",
+          "name": "ref_image_size",
+          "type": "COMBO",
+          "widget": {
+            "name": "ref_image_size"
+          },
+          "link": null
         }
       ],
       "outputs": [
@@ -606,7 +671,7 @@
           "name": "positive",
           "type": "CONDITIONING",
           "links": [
-            11
+            20
           ]
         },
         {
@@ -614,28 +679,244 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            12
+            19
           ]
         }
       ],
       "properties": {
-        "Node name for S&R": "MiniMaxH3ImageToVideo"
+        "Node name for S&R": "MiniMaxH3ReferenceToVideo"
       },
       "widgets_values": [
         "",
         1344,
         768,
-        124
+        124,
+        "match"
       ],
       "widgets_values_named": {
         "prompt": "",
         "width": 1344,
         "height": 768,
-        "length": 124
+        "length": 124,
+        "ref_image_size": "match"
       }
     },
     {
       "id": 10,
+      "type": "OrreryRefs",
+      "pos": [
+        1200,
+        330
+      ],
+      "size": [
+        380,
+        450
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "picks",
+          "name": "picks",
+          "type": "STRING",
+          "link": 5
+        },
+        {
+          "localized_name": "image_1",
+          "name": "image_1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_2",
+          "name": "image_2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_3",
+          "name": "image_3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_4",
+          "name": "image_4",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_5",
+          "name": "image_5",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_6",
+          "name": "image_6",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_7",
+          "name": "image_7",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_8",
+          "name": "image_8",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_9",
+          "name": "image_9",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "keep_sent",
+          "name": "keep_sent",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "keep_sent"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "ref_1",
+          "name": "ref_1",
+          "type": "IMAGE",
+          "links": [
+            6
+          ]
+        },
+        {
+          "localized_name": "ref_2",
+          "name": "ref_2",
+          "type": "IMAGE",
+          "links": [
+            7
+          ]
+        },
+        {
+          "localized_name": "ref_3",
+          "name": "ref_3",
+          "type": "IMAGE",
+          "links": [
+            8
+          ]
+        },
+        {
+          "localized_name": "ref_4",
+          "name": "ref_4",
+          "type": "IMAGE",
+          "links": [
+            9
+          ]
+        },
+        {
+          "localized_name": "ref_5",
+          "name": "ref_5",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "localized_name": "ref_6",
+          "name": "ref_6",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "localized_name": "ref_7",
+          "name": "ref_7",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "localized_name": "ref_8",
+          "name": "ref_8",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "localized_name": "ref_9",
+          "name": "ref_9",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "localized_name": "preview",
+          "name": "preview",
+          "type": "IMAGE",
+          "links": [
+            10
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "OrreryRefs"
+      },
+      "widgets_values": [
+        false
+      ],
+      "widgets_values_named": {
+        "keep_sent": false
+      }
+    },
+    {
+      "id": 11,
+      "type": "PreviewImage",
+      "pos": [
+        1200,
+        700
+      ],
+      "size": [
+        380,
+        300
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "title": "references this clip gets",
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": [],
+      "widgets_values_named": {}
+    },
+    {
+      "id": 12,
       "type": "RandomNoise",
       "pos": [
         1620,
@@ -646,7 +927,7 @@
         82
       ],
       "flags": {},
-      "order": 10,
+      "order": 12,
       "mode": 0,
       "inputs": [
         {
@@ -656,7 +937,7 @@
           "widget": {
             "name": "noise_seed"
           },
-          "link": 8
+          "link": 15
         }
       ],
       "outputs": [
@@ -665,7 +946,7 @@
           "name": "NOISE",
           "type": "NOISE",
           "links": [
-            13
+            23
           ]
         }
       ],
@@ -682,7 +963,7 @@
       }
     },
     {
-      "id": 11,
+      "id": 13,
       "type": "KSamplerSelect",
       "pos": [
         1620,
@@ -712,7 +993,7 @@
           "name": "SAMPLER",
           "type": "SAMPLER",
           "links": [
-            15
+            25
           ]
         }
       ],
@@ -727,7 +1008,7 @@
       }
     },
     {
-      "id": 12,
+      "id": 14,
       "type": "BasicScheduler",
       "pos": [
         1620,
@@ -738,14 +1019,14 @@
         110
       ],
       "flags": {},
-      "order": 13,
+      "order": 16,
       "mode": 0,
       "inputs": [
         {
           "localized_name": "model",
           "name": "model",
           "type": "MODEL",
-          "link": 9
+          "link": 16
         },
         {
           "localized_name": "scheduler",
@@ -781,7 +1062,7 @@
           "name": "SIGMAS",
           "type": "SIGMAS",
           "links": [
-            16
+            26
           ]
         }
       ],
@@ -800,7 +1081,7 @@
       }
     },
     {
-      "id": 13,
+      "id": 15,
       "type": "BasicGuider",
       "pos": [
         1620,
@@ -811,20 +1092,20 @@
         50
       ],
       "flags": {},
-      "order": 14,
+      "order": 18,
       "mode": 0,
       "inputs": [
         {
           "localized_name": "model",
           "name": "model",
           "type": "MODEL",
-          "link": 10
+          "link": 17
         },
         {
           "localized_name": "conditioning",
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 11
+          "link": 21
         }
       ],
       "outputs": [
@@ -833,7 +1114,7 @@
           "name": "GUIDER",
           "type": "GUIDER",
           "links": [
-            14
+            24
           ]
         }
       ],
@@ -842,7 +1123,7 @@
       }
     },
     {
-      "id": 14,
+      "id": 16,
       "type": "SamplerCustomAdvanced",
       "pos": [
         1960,
@@ -853,38 +1134,38 @@
         330
       ],
       "flags": {},
-      "order": 15,
+      "order": 19,
       "mode": 0,
       "inputs": [
         {
           "localized_name": "noise",
           "name": "noise",
           "type": "NOISE",
-          "link": 13
+          "link": 23
         },
         {
           "localized_name": "guider",
           "name": "guider",
           "type": "GUIDER",
-          "link": 14
+          "link": 24
         },
         {
           "localized_name": "sampler",
           "name": "sampler",
           "type": "SAMPLER",
-          "link": 15
+          "link": 25
         },
         {
           "localized_name": "sigmas",
           "name": "sigmas",
           "type": "SIGMAS",
-          "link": 16
+          "link": 26
         },
         {
           "localized_name": "latent_image",
           "name": "latent_image",
           "type": "LATENT",
-          "link": 12
+          "link": 22
         }
       ],
       "outputs": [
@@ -893,8 +1174,9 @@
           "name": "output",
           "type": "LATENT",
           "links": [
-            17,
-            19
+            27,
+            29,
+            31
           ]
         },
         {
@@ -909,7 +1191,64 @@
       }
     },
     {
-      "id": 15,
+      "id": 17,
+      "type": "OrreryContinue",
+      "pos": [
+        1620,
+        0
+      ],
+      "size": [
+        300,
+        110
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "picks",
+          "name": "picks",
+          "type": "STRING",
+          "link": 18
+        },
+        {
+          "localized_name": "latent",
+          "name": "latent",
+          "type": "LATENT",
+          "link": 19
+        },
+        {
+          "localized_name": "conditioning",
+          "name": "conditioning",
+          "shape": 7,
+          "type": "CONDITIONING",
+          "link": 37
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "conditioning",
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "links": [
+            21
+          ]
+        },
+        {
+          "localized_name": "latent",
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            22
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "OrreryContinue"
+      }
+    },
+    {
+      "id": 18,
       "type": "VAEDecode",
       "pos": [
         2300,
@@ -920,20 +1259,20 @@
         50
       ],
       "flags": {},
-      "order": 16,
+      "order": 20,
       "mode": 0,
       "inputs": [
         {
           "localized_name": "samples",
           "name": "samples",
           "type": "LATENT",
-          "link": 17
+          "link": 27
         },
         {
           "localized_name": "vae",
           "name": "vae",
           "type": "VAE",
-          "link": 18
+          "link": 28
         }
       ],
       "outputs": [
@@ -942,7 +1281,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            21
+            32
           ]
         }
       ],
@@ -951,7 +1290,7 @@
       }
     },
     {
-      "id": 16,
+      "id": 19,
       "type": "VAEDecodeAudio",
       "pos": [
         2300,
@@ -962,20 +1301,20 @@
         50
       ],
       "flags": {},
-      "order": 17,
+      "order": 21,
       "mode": 0,
       "inputs": [
         {
           "localized_name": "samples",
           "name": "samples",
           "type": "LATENT",
-          "link": 19
+          "link": 29
         },
         {
           "localized_name": "vae",
           "name": "vae",
           "type": "VAE",
-          "link": 20
+          "link": 30
         }
       ],
       "outputs": [
@@ -984,7 +1323,7 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            22
+            33
           ]
         }
       ],
@@ -993,7 +1332,7 @@
       }
     },
     {
-      "id": 17,
+      "id": 20,
       "type": "CreateVideo",
       "pos": [
         2580,
@@ -1011,14 +1350,14 @@
           "localized_name": "images",
           "name": "images",
           "type": "IMAGE",
-          "link": 21
+          "link": 34
         },
         {
           "localized_name": "audio",
           "name": "audio",
           "shape": 7,
           "type": "AUDIO",
-          "link": 22
+          "link": 35
         },
         {
           "localized_name": "fps",
@@ -1066,7 +1405,7 @@
           "name": "VIDEO",
           "type": "VIDEO",
           "links": [
-            23
+            36
           ]
         }
       ],
@@ -1087,7 +1426,7 @@
       }
     },
     {
-      "id": 18,
+      "id": 21,
       "type": "SaveVideo",
       "pos": [
         2880,
@@ -1105,7 +1444,7 @@
           "localized_name": "video",
           "name": "video",
           "type": "VIDEO",
-          "link": 23
+          "link": 36
         },
         {
           "localized_name": "filename_prefix",
@@ -1155,17 +1494,129 @@
       ],
       "properties": {},
       "widgets_values": [
-        "orrery/h3",
+        "orrery/reel",
         "auto",
         "auto",
         "auto"
       ],
       "widgets_values_named": {
-        "filename_prefix": "orrery/h3",
+        "filename_prefix": "orrery/reel",
         "format": "auto",
         "format.codec": "auto",
         "codec": "auto"
       }
+    },
+    {
+      "id": 22,
+      "type": "OrreryFilm",
+      "pos": [
+        2300,
+        200
+      ],
+      "size": [
+        240,
+        100
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "samples",
+          "name": "samples",
+          "type": "LATENT",
+          "link": 31
+        },
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 32
+        },
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 33
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            34
+          ]
+        },
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            35
+          ]
+        },
+        {
+          "localized_name": "film",
+          "name": "film",
+          "type": "VIDEO",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "OrreryFilm"
+      }
+    },
+    {
+      "id": 23,
+      "type": "OrreryRefMods",
+      "pos": [
+        1620,
+        -260
+      ],
+      "size": [
+        320,
+        100
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "conditioning",
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 20
+        },
+        {
+          "localized_name": "picks",
+          "name": "picks",
+          "type": "STRING",
+          "link": 38
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 39
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "conditioning",
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "links": [
+            37
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "OrreryRefMods"
+      },
+      "widgets_values": []
     }
   ],
   "links": [
@@ -1195,163 +1646,291 @@
     ],
     [
       4,
-      1,
+      7,
       0,
       9,
-      4,
+      2,
+      "VAE"
+    ],
+    [
+      5,
+      1,
+      1,
+      10,
+      0,
       "STRING"
     ],
     [
-      5,
-      1,
+      6,
+      10,
+      0,
+      9,
       3,
-      9,
-      5,
-      "INT"
+      "IMAGE"
     ],
     [
-      6,
+      7,
+      10,
       1,
+      9,
       4,
-      9,
-      6,
-      "INT"
-    ],
-    [
-      7,
-      1,
-      5,
-      9,
-      7,
-      "INT"
+      "IMAGE"
     ],
     [
       8,
-      1,
+      10,
       2,
-      10,
-      0,
-      "INT"
+      9,
+      5,
+      "IMAGE"
     ],
     [
       9,
-      4,
-      0,
-      12,
-      0,
-      "MODEL"
-    ],
-    [
       10,
-      4,
-      0,
-      13,
-      0,
-      "MODEL"
-    ],
-    [
-      11,
-      9,
-      0,
-      13,
-      1,
-      "CONDITIONING"
-    ],
-    [
-      12,
-      9,
-      1,
-      14,
-      4,
-      "LATENT"
-    ],
-    [
-      13,
-      10,
-      0,
-      14,
-      0,
-      "NOISE"
-    ],
-    [
-      14,
-      13,
-      0,
-      14,
-      1,
-      "GUIDER"
-    ],
-    [
-      15,
-      11,
-      0,
-      14,
-      2,
-      "SAMPLER"
-    ],
-    [
-      16,
-      12,
-      0,
-      14,
       3,
-      "SIGMAS"
-    ],
-    [
-      17,
-      14,
-      0,
-      15,
-      0,
-      "LATENT"
-    ],
-    [
-      18,
+      9,
       6,
-      0,
-      15,
-      1,
-      "VAE"
+      "IMAGE"
     ],
     [
-      19,
-      14,
-      0,
-      16,
-      0,
-      "LATENT"
-    ],
-    [
-      20,
-      7,
-      0,
-      16,
-      1,
-      "VAE"
-    ],
-    [
-      21,
-      15,
-      0,
-      17,
+      10,
+      10,
+      9,
+      11,
       0,
       "IMAGE"
     ],
     [
+      11,
+      1,
+      0,
+      9,
+      11,
+      "STRING"
+    ],
+    [
+      12,
+      1,
+      3,
+      9,
+      12,
+      "INT"
+    ],
+    [
+      13,
+      1,
+      4,
+      9,
+      13,
+      "INT"
+    ],
+    [
+      14,
+      1,
+      5,
+      9,
+      14,
+      "INT"
+    ],
+    [
+      15,
+      1,
+      2,
+      12,
+      0,
+      "INT"
+    ],
+    [
+      16,
+      4,
+      0,
+      14,
+      0,
+      "MODEL"
+    ],
+    [
+      17,
+      4,
+      0,
+      15,
+      0,
+      "MODEL"
+    ],
+    [
+      18,
+      1,
+      1,
+      17,
+      0,
+      "STRING"
+    ],
+    [
+      19,
+      9,
+      1,
+      17,
+      1,
+      "LATENT"
+    ],
+    [
+      20,
+      9,
+      0,
+      23,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      21,
+      17,
+      0,
+      15,
+      1,
+      "CONDITIONING"
+    ],
+    [
       22,
+      17,
+      1,
+      16,
+      4,
+      "LATENT"
+    ],
+    [
+      23,
+      12,
+      0,
       16,
       0,
-      17,
+      "NOISE"
+    ],
+    [
+      24,
+      15,
+      0,
+      16,
+      1,
+      "GUIDER"
+    ],
+    [
+      25,
+      13,
+      0,
+      16,
+      2,
+      "SAMPLER"
+    ],
+    [
+      26,
+      14,
+      0,
+      16,
+      3,
+      "SIGMAS"
+    ],
+    [
+      27,
+      16,
+      0,
+      18,
+      0,
+      "LATENT"
+    ],
+    [
+      28,
+      6,
+      0,
+      18,
+      1,
+      "VAE"
+    ],
+    [
+      29,
+      16,
+      0,
+      19,
+      0,
+      "LATENT"
+    ],
+    [
+      30,
+      7,
+      0,
+      19,
+      1,
+      "VAE"
+    ],
+    [
+      31,
+      16,
+      0,
+      22,
+      0,
+      "LATENT"
+    ],
+    [
+      32,
+      18,
+      0,
+      22,
+      1,
+      "IMAGE"
+    ],
+    [
+      33,
+      19,
+      0,
+      22,
+      2,
+      "AUDIO"
+    ],
+    [
+      34,
+      22,
+      0,
+      20,
+      0,
+      "IMAGE"
+    ],
+    [
+      35,
+      22,
+      1,
+      20,
       1,
       "AUDIO"
     ],
     [
-      23,
-      17,
+      36,
+      20,
       0,
-      18,
+      21,
       0,
       "VIDEO"
+    ],
+    [
+      37,
+      23,
+      0,
+      17,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      38,
+      1,
+      1,
+      23,
+      1,
+      "STRING"
+    ],
+    [
+      39,
+      6,
+      0,
+      23,
+      2,
+      "VAE"
     ]
   ],
   "groups": [
@@ -1374,7 +1953,7 @@
         1188,
         -46,
         1084,
-        638
+        718
       ],
       "color": "#3f789e",
       "flags": {}

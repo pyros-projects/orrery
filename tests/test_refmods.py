@@ -92,6 +92,21 @@ def test_a_picture_with_at_and_from_is_marked_and_waits_without_the_pack(monkeyp
     assert [(c[1].get("start_percent"), c[1].get("end_percent")) for c in out] == [(0.0, 0.5), (0.5, 1.0)]
 
 
+def test_a_refmod_that_ships_with_orrery_is_loaded_from_its_own_folder(pack, monkeypatch, tmp_path):
+    from orrery import comfy_refmods as cr
+    assert "minimaxh3_jinx_v1_refmod" in cr.shipped()  # the example RefMod is in the repository
+    (tmp_path / "jinx.safetensors").write_bytes(b"")
+    monkeypatch.setattr(cr, "EXAMPLES", tmp_path)
+    loader = next(m for n, m in sys.modules.items() if n.endswith(".nodes.refmod_loader"))
+    paths = []
+    monkeypatch.setattr(loader, "H3RefMod", types.SimpleNamespace(
+        load=lambda path, device="cpu": paths.append(path) or loader._load_mod("jinx")), raising=False)
+    jinx = {"name": "jinx", "member": "JINX", "strength": 1.0, "from": 0.0, "to": 1.0}
+    (out,) = OrreryRefMods().apply([["text", {}]], json.dumps({"refmods": [jinx]}))
+    assert paths == [str(tmp_path / "jinx")]  # not in models/refmods: from orrery's folder, with the pack's class
+    assert [b["latent"] for b in out[0][1]["minimax_refs"]] == ["latent of jinx"]
+
+
 def test_without_the_pack_the_node_says_where_to_get_it(monkeypatch):
     for name in [n for n in sys.modules if n.endswith(".nodes.refmod_loader")]:
         monkeypatch.delitem(sys.modules, name)
@@ -159,3 +174,77 @@ def test_biased_attention_matches_softmax_with_the_bias():
     plain = attention(Container(q.clone()), Container(k.clone()), Container(v.clone()), heads,
                       transformer_options={"minimax_h3_layout": Layout()})
     assert torch.equal(plain, sdpa(Container(q), Container(k), Container(v), heads))
+
+
+# --- RefMods a SEND: line makes from the reel's frames (#13) ------------------------------------
+
+def test_a_sent_refmod_keeps_every_frame_on_the_vaes_grid():
+    from orrery.comfy_refmods import MAX_FRAMES, video_frames
+    assert [video_frames(n) for n in (2, 5, 6, 18, 22, 23, 72)] == [5, 5, 22, 22, 22, 39, 73]
+    assert video_frames(MAX_FRAMES + 40) == MAX_FRAMES == 73
+
+
+@pytest.fixture
+def canvas(monkeypatch):
+    """ComfyUI's Reference to Video helpers as orrery borrows them, with a 32×48 canvas."""
+    torch = pytest.importorskip("torch")
+    h3 = types.ModuleType("comfy_extras.nodes_minimax_h3")
+    h3.adapt_canvas = lambda w, h: (32, 48)
+    h3._resize = lambda image, w, h, crop: torch.zeros(image.shape[0], h, w, 3)
+    monkeypatch.setitem(sys.modules, "comfy_extras", types.ModuleType("comfy_extras"))
+    monkeypatch.setitem(sys.modules, "comfy_extras.nodes_minimax_h3", h3)
+    return torch
+
+
+class FakeVAE:
+    """H3's video VAE in shape only: 17k+5 frames to 5k+2 latents, 16 times smaller."""
+
+    def __init__(self):
+        self.calls = []
+
+    def encode(self, pixels):
+        import torch
+        n, h, w = pixels.shape[0], pixels.shape[1], pixels.shape[2]
+        self.calls.append(n)
+        return torch.zeros(1, 24, 1 if n == 1 else (n - 5) // 17 * 5 + 2, h // 16, w // 16)
+
+
+def test_a_sent_refmod_is_encoded_like_a_video_reference(canvas):
+    from orrery.comfy_refmods import encode
+    torch, vae = canvas, FakeVAE()
+    video = encode(torch.rand(18, 96, 64, 3), vae)  # every 10th frame of a 7 s clip
+    assert vae.calls == [22]  # filled up to the VAE's grid with the last frame: none dropped
+    assert (video["kind"], video["latent_t"], video["latent_h"], video["latent_w"]) == ("video", 7, 3, 2)
+    still = encode(torch.rand(1, 96, 64, 3), vae)
+    assert (still["kind"], still["latent_h"], still["latent_w"]) == ("image", 3, 2)
+    encode(torch.rand(200, 96, 64, 3), vae)
+    assert vae.calls[-1] == 73  # more than MAX_FRAMES: spread out to that many
+
+
+def test_a_sent_refmod_is_built_once_from_the_chain_without_the_pack(canvas, monkeypatch, tmp_path):
+    from orrery import chain
+    from orrery import comfy_refmods as cr
+    torch, vae = canvas, FakeVAE()
+    clip = tmp_path / "video.mp4"
+    clip.write_bytes(b"")
+    monkeypatch.setitem(sys.modules, "folder_paths", types.SimpleNamespace(get_output_directory=lambda: str(tmp_path)))
+    monkeypatch.setattr(chain, "clip_file", lambda output, latent_path, segment: clip if segment == 0 else None)
+    monkeypatch.setattr(chain, "frames", lambda path, spans, step=1: (torch.rand(18, 96, 64, 3), []))
+    monkeypatch.setattr(cr, "_BUILT", {})
+    for name in [n for n in sys.modules if n.endswith(".nodes.refmod_loader")]:
+        monkeypatch.delitem(sys.modules, name)  # no pack installed
+    sent = {"name": "jinx_look", "member": "JINX", "strength": 0.5, "from": 0.0, "to": 1.0,
+            "sent": {"segment": 0, "frames": [[0, -1]], "step": 10}}
+    picks = json.dumps({"refmods": [sent], "chain": "h3_context"})
+    cond = [["text", {"minimax_refs": []}]]
+    (out,) = cr.OrreryRefMods().apply(cond, picks, vae=vae)
+    (block,) = out[0][1]["minimax_refs"]
+    assert (block["kind"], block["latent_t"], block[refbias.KEY]) == ("video", 7, 0.5)
+    cr.OrreryRefMods().apply(cond, picks, vae=vae)
+    assert vae.calls == [22]  # kept for the run: encoded once
+    monkeypatch.setattr(cr, "_BUILT", {})
+    with pytest.raises(ValueError, match="needs the VAE"):
+        cr.OrreryRefMods().apply(cond, picks)
+    later = json.dumps({"refmods": [{**sent, "sent": {**sent["sent"], "segment": 3}}], "chain": "h3_context"})
+    with pytest.raises(ValueError, match="no clip for segment 3"):
+        cr.OrreryRefMods().apply(cond, later, vae=vae)

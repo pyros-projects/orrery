@@ -261,6 +261,8 @@ def test_a_bracket_before_its_image_exists_is_flagged():
     ("SEND: frame 0 to image 10", "1–9"),
     ("SEND: frame 0 to picture 3", "image N"),
     ("SEND: frame to image 3", "frame"),
+    ("SEND: frame 0 to refmod", "refmod NAME"),
+    ("SEND: every 0 frames to refmod jinx_look", "every 0 frames"),
 ])
 def test_malformed_send_lines_are_clear_errors(line, words):
     with pytest.raises(ValueError, match=re.escape(words)):
@@ -272,6 +274,42 @@ def test_two_sends_to_one_image_warn_and_the_later_takes_over():
     assert split_reel(src).ready(3)[3] == {"segment": 2, "frames": [[9, 9]]}
     lint = [i.message for i in ref2va(src, segment=2).lint]
     assert any("image 3" in m and "segment 3" in m and "(CHUNK 2) takes over" in m for m in lint)
+
+
+MOD_REEL = """@h3 t2va 16:9
+CAST
+JINX (refmod jinx_look): a young woman
+CHUNK the outfit
+SHOT 5s: static
+JINX shows her outfit and walks out.
+SEND: every 10 frames to refmod jinx_look
+CHUNK the room
+SHOT 5s: static
+The empty room.
+CHUNK the return
+SHOT 5s: static
+JINX slides back in.
+"""
+
+
+def test_frames_sent_to_a_refmod_become_it_from_the_clip_after():
+    from orrery.reel import Send
+    reel = split_reel(MOD_REEL)
+    assert reel.blocks[0].sends == [Send([[0, -1]], None, refmod="jinx_look", step=10)]
+    assert (reel.send_slots, reel.send_refmods) == ([], ["jinx_look"])
+    first, _, back = (compile_scene(MOD_REEL, 1, {}, segment=s) for s in range(3))
+    assert first.refmods == []  # its chunk has not played yet: nothing to bring back (and no ref2va needed)
+    assert back.refmods == [{"name": "jinx_look", "member": "JINX", "strength": 1.0, "from": 0.0, "to": 1.0,
+                             "sent": {"segment": 0, "frames": [[0, -1]], "step": 10}}]
+    picked = split_reel(MOD_REEL.replace("every 10 frames", "frames 0, 24-48")).blocks[0].sends[0]
+    assert (picked.frames, picked.step) == ([[0, 0], [24, 48]], 1)
+
+
+def test_two_sends_to_one_refmod_warn_and_the_later_takes_over():
+    src = MOD_REEL.replace("The empty room.", "The empty room.\nSEND: frame -1 to refmod jinx_look")
+    assert split_reel(src).refmods_ready(2)["jinx_look"] == {"segment": 1, "frames": [[-1, -1]]}
+    lint = [i.message for i in compile_scene(src, 1, {}, segment=2).lint]
+    assert any("refmod jinx_look is filled by two SEND: lines" in m and "(CHUNK 2) takes over" in m for m in lint)
 
 
 def test_send_outside_a_chunk_or_outside_ref2va_is_an_error():

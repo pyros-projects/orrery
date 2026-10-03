@@ -50,9 +50,10 @@ SEND = re.compile(r"^SEND:\s*(.*)$")
 GOTO_LINE = re.compile(r"^(?:\?[^\n]*?:\s*)?GOTO:", re.IGNORECASE)  # a GOTO line, with its `? cond:` or without
 _GOTO = re.compile(r"GOTO:\s*(.+?)\s*(?:[×x]\s*(\d+))?\s*$", re.IGNORECASE)
 MAX_WALK = 500  # clips a walk through a reel follows before it calls the reel endless
-_SEND = re.compile(r"^frames?\b\s*(?P<frames>.*?)\s*\bto\s+(?P<target>.+?)\s*$", re.IGNORECASE)
+_SEND = re.compile(r"^(?:frames?\b\s*(?P<frames>.*?)|every\s+(?P<every>\d+)(?:st|nd|rd|th)?\s+frames?)"
+                   r"\s*\bto\s+(?P<target>.+?)\s*$", re.IGNORECASE)
 _FOR = re.compile(r"\s+for\s+", re.IGNORECASE)
-_TARGET = re.compile(r"^image\s+(\d+)$", re.IGNORECASE)
+_TARGET = re.compile(r"^(?:image\s+(?P<image>\d+)|refmod\s+(?P<refmod>[\w./-]+))$", re.IGNORECASE)
 _FRAMES = re.compile(r"(-?\d+)(?:\s*-\s*(-?\d+))?")
 _SEGMENTS = re.compile(r"^segments?\b\s*(.*)$", re.IGNORECASE)
 _SEGMENT = re.compile(r"(\d+)(?:\s*(\+)|\s*-\s*(\d+))?")
@@ -68,8 +69,19 @@ class ReelEnd(ValueError):
 @dataclass
 class Send:
     frames: list[list[int]]  # [first, last] spans in the order written; negative counts from the clip's end
-    image: int  # the reference image they become: the CAST's `image N`
+    image: int | None  # the reference image they become: the CAST's `image N`; None for a RefMod
     segments: list[list[int | None]] | None = None  # `for segment …`: [lo, hi] spans, hi None for `N+`
+    refmod: str | None = None  # `to refmod NAME`: the frames become a RefMod of that name
+    step: int = 1  # `every 10 frames`: every 10th frame of the spans
+
+    @property
+    def target(self) -> int | str:
+        """What it fills: an image's number, or a RefMod's name."""
+        return self.image if self.refmod is None else self.refmod
+
+    @property
+    def what(self) -> str:
+        return f"image {self.image}" if self.refmod is None else f"refmod {self.refmod}"
 
 
 def parse_frames(spec: str) -> list[list[int]]:
@@ -116,16 +128,23 @@ def parse_send(text: str) -> Send:
     body, *rest = _FOR.split(text.strip(), maxsplit=1)
     segments = parse_segments(rest[0]) if rest else None
     m = _SEND.match(body)
-    if not m or not m.group("frames"):
-        raise ValueError(f'"SEND: {text.strip()}": write it as "SEND: frame 0 to image 3" '
-                         'or "SEND: frames 2, 5, 34-46 to image 4".')
+    if not m or not (m.group("frames") or m.group("every")):
+        raise ValueError(f'"SEND: {text.strip()}": write it as "SEND: frame 0 to image 3", '
+                         '"SEND: frames 2, 5, 34-46 to image 4" or "SEND: every 10 frames to refmod NAME".')
     target = _TARGET.match(m.group("target"))
     if not target:
-        raise ValueError(f'SEND: sends to "image N" (the numbering of the CAST), not to "{m.group("target")}".')
-    image = int(target.group(1))
+        raise ValueError(f'SEND: sends to "image N" (the numbering of the CAST) or to "refmod NAME", not to '
+                         f'"{m.group("target")}".')
+    step = int(m.group("every") or 1)
+    if step < 1:
+        raise ValueError("SEND: every 0 frames sends nothing; write every 1 frame or more.")
+    frames = [[0, -1]] if m.group("every") else parse_frames(m.group("frames"))
+    if target.group("refmod"):
+        return Send(frames, None, segments, refmod=target.group("refmod"), step=step)
+    image = int(target.group("image"))
     if not 1 <= image <= SEND_SLOTS:
         raise ValueError(f"SEND: image {image} does not exist; Reference to Video takes image 1–{SEND_SLOTS}.")
-    return Send(parse_frames(m.group("frames")), image, segments)
+    return Send(frames, image, segments, step=step)
 
 
 @dataclass
@@ -211,7 +230,12 @@ class Reel:
     @property
     def send_slots(self) -> list[int]:
         """Every image a SEND: line fills."""
-        return sorted({send.image for block in self.blocks for send in block.sends})
+        return sorted({send.image for block in self.blocks for send in block.sends if send.refmod is None})
+
+    @property
+    def send_refmods(self) -> list[str]:
+        """Every RefMod a SEND: line makes."""
+        return sorted({send.refmod for block in self.blocks for send in block.sends if send.refmod is not None})
 
     def starts(self, path: list[tuple[int, int]] | None = None) -> list[int | None]:
         """The segment each chunk first plays in, on `path` or the reel's own; None for a chunk it
@@ -231,17 +255,29 @@ class Reel:
         several SEND: lines fill one image there, the one sent last wins (a later line within a chunk).
         A `held` image (Orrery Refs' keep_sent, with a stored anchor) exists from segment 0 within its
         `for` list, and comes from that anchor instead."""
-        out: dict[int, dict] = {}
-        latest: dict[int, int] = {}  # image → the segment its winning send so far comes from
+        return self._ready(segment, held, path, refmods=False)
+
+    def refmods_ready(self, segment: int, path: list[tuple[int, int]] | None = None) -> dict[str, dict]:
+        """The sent RefMods that exist in `segment`, by the rules of `ready`: from the clip after the
+        sending one (or in the segments its `for` lists), the one sent last winning."""
+        return self._ready(segment, frozenset(), path, refmods=True)
+
+    def _ready(self, segment: int, held, path, refmods: bool) -> dict:
+        out: dict = {}
+        latest: dict = {}  # target → the segment its winning send so far comes from
         for block, start in zip(self.blocks, self.starts(path), strict=True):
             for send in block.sends:
-                spans = (send.segments or [[0, None]]) if send.image in held else fills(send, start)
+                if (send.refmod is not None) != refmods:
+                    continue
+                key = send.target
+                spans = (send.segments or [[0, None]]) if key in held else fills(send, start)
                 when = -1 if start is None else start
                 if (any(lo <= segment and (hi is None or segment <= hi) for lo, hi in spans)
-                        and when >= latest.get(send.image, -1)):
-                    latest[send.image] = when
-                    out[send.image] = ({"held": True} if send.image in held
-                                       else {"segment": start, "frames": [list(f) for f in send.frames]})
+                        and when >= latest.get(key, -1)):
+                    latest[key] = when
+                    out[key] = ({"held": True} if key in held
+                                else {"segment": start, "frames": [list(f) for f in send.frames],
+                                      **({"step": send.step} if send.step > 1 else {})})
         return out
 
     def label(self, segment: int, path: list[tuple[int, int]] | None = None) -> str:
@@ -285,19 +321,19 @@ def shared_sends(reel: Reel, starts: list[int | None]) -> list[str]:
     """A warning for each two SEND: lines that fill one image in the same segment: there the one sent
     last takes over (Reel.ready)."""
     out: list[str] = []
-    claims: dict[int, list[tuple[int, int | None, list]]] = {}  # image → (chunk, start, spans) per line
+    claims: dict = {}  # image or RefMod → (chunk, start, spans) per line
     for i, (block, start) in enumerate(zip(reel.blocks, starts, strict=True)):
         for send in block.sends:
             spans = fills(send, start)
-            for j, other_start, other in claims.get(send.image, []):
+            for j, other_start, other in claims.get((send.refmod is None, send.target), []):
                 shared = [max(lo, olo) for lo, hi in spans for olo, ohi in other
                           if max(lo, olo) <= min([x for x in (hi, ohi) if x is not None], default=max(lo, olo))]
                 if shared:
                     later = i if start >= other_start else j
-                    out.append(f"image {send.image} is filled by two SEND: lines in segment {min(shared)} (CHUNK "
+                    out.append(f"{send.what} is filled by two SEND: lines in segment {min(shared)} (CHUNK "
                                f"{j + 1} and CHUNK {i + 1}): where they meet, the one sent last (CHUNK {later + 1}) "
                                "takes over.")
-            claims.setdefault(send.image, []).append((i, start, spans))
+            claims.setdefault((send.refmod is None, send.target), []).append((i, start, spans))
     return out
 
 

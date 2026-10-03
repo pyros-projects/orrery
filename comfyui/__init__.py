@@ -15,11 +15,12 @@ if str(_SRC) not in sys.path:
 
 from orrery import __version__, banner, refbias
 from orrery.comfy import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
-from orrery.comfy_refmods import pack_installed
+from orrery.comfy_refmods import pack_installed, register_examples
 from orrery.home import home_source
 from orrery.webapi import register
 
 strengths = refbias.install()  # a strength per RefMod: wraps H3's attention in memory, ComfyUI's files stay as they are
+register_examples()  # the RefMods that ship with orrery (Jinx), for the completion
 
 WEB_DIRECTORY = "./web"
 

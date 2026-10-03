@@ -639,7 +639,7 @@ def send_chain(tmp_path, monkeypatch, clips=2, dropped=()):
         def __init__(self, path, wanted):
             self.label, self.shape = f"{Path(path).parent.name}:{wanted}", (len(wanted), 8, 8, 3)
 
-    monkeypatch.setattr(ch, "frames", lambda path, wanted: (Batch(path, wanted), list(dropped)))
+    monkeypatch.setattr(ch, "frames", lambda path, wanted, step=1: (Batch(path, wanted), list(dropped)))
     from orrery import anchors
     saved = []
     monkeypatch.setattr(anchors, "save", lambda home, n, frames: saved.append((str(home.root), n, frames.label)))

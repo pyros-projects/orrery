@@ -795,6 +795,7 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
     src = prepare(src, seed, libraries, cell)
     reel = split_reel(src) if reel else None
     sends: dict[int, dict] = {}
+    sent_mods: dict[str, dict] = {}  # RefMods made from the reel's own frames, which Orrery RefMods builds
     if reel:
         scene, picks, path = build_segment(reel, seed, libraries, weights, segment, lint)
         absent = drop_absent(scene)  # a chunk without a member leaves its definition and its RefMods out
@@ -808,15 +809,21 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
             ours = {s.index for m in scene.cast for s in m.sources if s.kind == "image"}
             sends = {n: send for n, send in sends.items() if n not in theirs - ours}  # a sent image of a member not here
             withhold_images(scene, set(reel.send_slots) - set(sends), lint)
+        if reel.send_refmods:
+            sent_mods = reel.refmods_ready(segment, path)
+            late = set(reel.send_refmods) - set(sent_mods)  # its chunk has not played yet: nothing to bring back
+            for m in scene.cast:
+                m.sources = [s for s in m.sources if not (s.kind == "refmod" and s.name in late)]
+        if reel.send_slots or reel.send_refmods:
             # every chunk's first segment: the reel's own path, or the one walked here when jumps wait on rolls
             starts = reel.starts(path if reel.jumps_on_rolls else None)
             lint += [Issue("warn", w) for w in shared_sends(reel, starts)]
             for block, start in zip(reel.blocks, starts, strict=True):
                 for send in block.sends:
                     early = [lo for lo, _ in send.segments or []
-                             if start is not None and lo <= start and send.image not in held]
+                             if start is not None and lo <= start and send.target not in held]
                     if early:
-                        lint.append(Issue("warn", f"SEND: to image {send.image} lists segment {min(early)}, but its "
+                        lint.append(Issue("warn", f"SEND: to {send.what} lists segment {min(early)}, but its "
                                                   f"frames come from segment {start}: up to segment {start} the clips "
                                                   "go without it."))
     else:
@@ -840,4 +847,6 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
         _scene_lint(src, scene, lint)
     return Compiled(text, picks, lint, scene, " ".join(scene.loras), len(reel.blocks) if reel else 0,
                     segment if reel else 0, reel.segments if reel else 0, refs,
-                    sends, reel.send_slots if reel else [], clip_refmods(scene), clip_images(scene, refs))
+                    sends, reel.send_slots if reel else [],
+                    [{**r, "sent": sent_mods[r["name"]]} if r["name"] in sent_mods else r for r in clip_refmods(scene)],
+                    clip_images(scene, refs))

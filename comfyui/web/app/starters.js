@@ -28,8 +28,7 @@ SFX: dryers tumbling; a fluorescent tube buzzing
 const REEL = `# H3 REEL · quickstart: one screenplay, one clip per run, each continuing the one before
 # Wiring: picks → Orrery Continue, with the H3 node's latent (length → that node: it counts the 22
 #   pinned frames) and conditioning; its latent → the sampler · sampled latent + decoded images and
-#   audio → Orrery Film, whose film is the reel so far (H3 Motion Context instead: load_index → Load
-#   Latent's clip_index, save_index → Save Latent's)
+#   audio → Orrery Film, whose film is the reel so far
 # Run it: Generate ×N plays N clips · Restart goes back to segment 0 · keep the seed fixed
 # Before the first CHUNK is the world (header, style, CAST, $bindings, LORA:, MUSIC:, context:):
 #   it rolls once, so a $binding there stays the same in every clip
@@ -74,7 +73,7 @@ const REF = `# H3 REF2VA · quickstart: for the MiniMax H3 Reference to Video no
 #   keep: face, outfit     what of the member above stays: a retention block goes into the prompt
 #     (all · face, hair, body, outfit · style · place · loose, or fully_preserved - your own reason)
 # SHOT 4s: from image 3   the shot starts on <Picture 3> · to image 3: it ends on it
-# SHOT 4s: after video 1  continues <Video 1> from its last frame (wire the node's previous output)
+# SHOT 4s: after video 1  continues <Video 1> from its last frame (wire that video into ref_video)
 # --directions--           a slot the language model writes when the node runs
 # Orrery Refs between your images and the node hands each clip only the references its CAST uses
 # In a reel: SEND: frame 0 to image 3 inside a CHUNK makes that clip's frame 0 image 3 for the clips

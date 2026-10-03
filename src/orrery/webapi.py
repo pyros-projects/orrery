@@ -621,13 +621,15 @@ def _template_for(home: Home, args: dict) -> tuple[str, str]:
         raise ApiError(400, str(err)) from None
 
 
-def _run(home: Home, text: str, seed: int, target: str, segment: int):
-    """One expansion or compile, and its lint (LoRA warnings included when ComfyUI knows the files)."""
+def _run(loaded: tuple, text: str, seed: int, target: str, segment: int):
+    """One expansion or compile, and its lint (LoRA warnings included when ComfyUI knows the files).
+    `loaded`: the home's libraries and weights, loaded once for all the rolls of a request."""
+    libraries, weights = loaded
     try:
         if target == "text":
-            result = expand(text, seed, home.libraries(), home.weights())
+            result = expand(text, seed, libraries, weights)
             return result, [{"severity": "warn", "message": w} for w in result.warnings]
-        result = compile_scene(text, seed, home.libraries(), home.weights(), target=target, segment=segment)
+        result = compile_scene(text, seed, libraries, weights, target=target, segment=segment)
     except MissingLibrary as err:
         raise ApiError(400, str(err), library=err.name) from None
     except ValueError as err:
@@ -688,9 +690,9 @@ def roll(home: Home, args: dict) -> dict:
     total = _clips(home, text, reel, seed, start + ROLL_CLIPS) if reel else 0
     end = start + ROLL_CLIPS if reel and total is None else min(start + ROLL_CLIPS, total) if reel else 0
     runs = [(seed, k) for k in range(start, end)] if reel else [(s, None) for s in range(seed, seed + n)]
-    rolls = []
+    rolls, loaded = [], (home.libraries(), home.weights())
     for s, segment in runs:
-        result, lint = _run(home, text, s, target, segment or 0)
+        result, lint = _run(loaded, text, s, target, segment or 0)
         rolls.append({"seed": s, "text": result.text, "lint": lint,
                       "picks": [{"label": p.label, "value": p.value, "keys": list(p.keys)}
                                 for p in result.picks],
@@ -715,8 +717,9 @@ def frequency(home: Home, args: dict) -> dict:
         raise ApiError(400, "'across' must be seeds or clips.")
     counts: dict[str, Counter] = {}
     lint: Counter = Counter()
+    loaded = home.libraries(), home.weights()
     for s, segment in runs:
-        result, issues = _run(home, text, s, target, segment)
+        result, issues = _run(loaded, text, s, target, segment)
         for p in result.picks:
             for key in p.keys:
                 counts.setdefault(p.label, Counter())[key.split("=", 1)[1]] += 1

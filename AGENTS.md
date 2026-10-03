@@ -24,7 +24,11 @@ History), plus Orrery Refs, Orrery Continue, Orrery Film and Orrery Log.
 
 ## Checks
 
-All three pass before a PR:
+While you work, `scripts/check` runs all three in seconds: pytest in parallel over every core, the
+tests that failed last time first, stopping at the first failure.
+
+All three pass in full before a PR. CI (`.github/workflows/ci.yml`) runs them on every PR and on
+`main`:
 
 ```
 uv run pytest
@@ -39,21 +43,36 @@ node --test tests/js/*.mjs
 1. **Every change starts as an issue**, from a template: Feature, Task, Bug or Risk.
 2. **A feature** describes a result and may take as long as it takes. Its title starts with an
    emoji that fits it (`🧠 RefMod memory for reels`), so features stand out in every list. It is
-   split into **tasks**, attached as its sub-issues. A task is at most 8 hours of work for a
-   person: split anything bigger. The limit holds for agents too; it keeps every step small
-   enough to follow.
-3. **One branch per feature, from `main`**, named `<feature number>-<short-slug>`
+   split into **tasks**, attached as its sub-issues. Every task belongs to a feature: there are
+   no tasks on their own.
+3. **What is learned goes into the feature's comments.** Tasks get no comments; features do, and
+   so do bugs and risks. Write one whenever knowledge comes up that the issue does not hold yet:
+   an experiment and its results, a learning, a problem that came up and the issue it led to. A
+   comment may link tasks, but it carries the point itself, so nobody has to dig through tasks to
+   find it:
+   - good: "While implementing #12 we found that WebGPU does not work in this system's browser;
+     in #13 we fixed it by starting the browser with `--enable-unsafe-webgpu`."
+   - bad: "There was an issue in #12, we solved it in #13."
+4. **One branch per feature, from `main`**, named `<feature number>-<short-slug>`
    (`4-refmod-memory`). Tasks don't get branches of their own; each commit names the task it
    does (`Refs #9`).
-4. **One PR per feature.** Its body says `Closes #4` for the feature and for each task done in it,
+5. **One PR per feature.** Its body says `Closes #4` for the feature and for each task done in it,
    so the merge closes them together. It carries its tests and its doc updates, and merges only
    with the three checks green.
-5. **A bug** stands on its own: its own branch and PR. **A risk** names the feature it threatens
+6. **A bug** stands on its own: its own branch and PR. **A risk** names the feature it threatens
    and stays open while it matters.
-6. **Pyro merges.** Nothing is pushed to `main` directly.
+7. **Pyro merges.** Nothing is pushed to `main` directly.
 
 Scope: build what the issue asks. Anything else you notice (a missing feature, a refactor, a test,
 a fix next door) becomes a new issue or a question, not part of the PR.
+
+Pause for the human. Stop and wait in two cases, so nothing they have to act on gets lost in the
+output:
+
+- **A new task while two or more are queued:** recommend an order and wait until it is
+  confirmed. Work the human waits on (something to test, a decision, a merge) comes first.
+- **A PR ready for review or merge:** say so, with its link, and stop. Don't go on with other
+  work in the same turn.
 
 ## Conventions
 
