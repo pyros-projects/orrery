@@ -328,6 +328,7 @@ test("every CHUNK line knows its segments, where it sits in the film and what is
   assert.equal(chunkInfo("@h3 t2va\nSHOT 5s\nA."), null);
   const sends = chunkInfo("CHUNK a\nSHOT 5s\nSEND: frame 0 to image 1\nSEND: frames -1 to image 3 for segment 4+\nSEND: frame 9 to image 1 for segment 9\nA.");
   assert.deepEqual(sends[0].images, [1, 3]);
+  assert.deepEqual(chunkInfo("SCENE a\nSHOT 5s\nREMEMBER: first frame as image 2\nA.")[0].images, [2]);
 });
 
 test("SCENE, ×N and forever give what CHUNK and repeat gave, and CUT TO: walks the reel as GOTO: did", () => {

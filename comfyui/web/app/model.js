@@ -278,7 +278,7 @@ export function chunkInfo(text, walked = null) {
   text.split("\n").forEach((raw, line) => {
     const l = raw.trim(), c = SCENE.exec(l);
     if (c) out.push({ line, ...heading(c[1]), secs: 0, images: [] });
-    const m = /^SHOT\s+(\d+(?:\.\d+)?)\s*s\b/i.exec(l), send = /^SEND:.*\bto\s+image\s+(\d+)/i.exec(l);
+    const m = /^SHOT\s+(\d+(?:\.\d+)?)\s*s\b/i.exec(l), send = /^(?:SEND:.*\bto|REMEMBER:.*\bas)\s+image\s+(\d+)/i.exec(l);
     if (m && out.length) out[out.length - 1].secs += Number(m[1]);
     if (send && out.length && !out[out.length - 1].images.includes(Number(send[1]))) out[out.length - 1].images.push(Number(send[1]));
   });

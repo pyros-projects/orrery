@@ -369,6 +369,54 @@ GIRL bows.
 """
 
 
+@pytest.mark.parametrize("then, now", [
+    ("SEND: frame 0 to image 3", "REMEMBER: first frame as image 3"),
+    ("SEND: frame 0 to image 3", "REMEMBER: frame 0 as image 3"),
+    ("SEND: frame -1 to image 3", "REMEMBER: last frame as image 3"),
+    ("SEND: frame 24 to image 3", "REMEMBER: frame at 1s as image 3"),
+    ("SEND: frames 24-48 to image 3", "REMEMBER: frames 1s-2s as image 3"),
+    ("SEND: frame 0 to image 3 for segments 1-4", "REMEMBER: first frame as image 3 in clips 2-5"),
+    ("SEND: frame 0 to image 3 for segment 2+", "REMEMBER: first frame as image 3 in clips 3+"),
+    ("SEND: frame 0 to image 1", "REMEMBER: first frame as @GIRL"),  # the first picture her CAST line gives her
+])
+def test_remember_keeps_what_send_sent(then, now):
+    a, b = split_reel(SEND_REEL), split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", now))
+    if then != "SEND: frame 0 to image 3":
+        a = split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", then))
+    for t in range(6):
+        assert b.ready(t) == a.ready(t), (t, now)
+    if now.endswith("@GIRL"):
+        assert b.blocks[0].sends[0].image == 1
+
+
+def test_remember_every_nth_frame_of_a_range_as_a_refmod():
+    reel = split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", "REMEMBER: every 5th frame of 1s-2s as refmod girl_walk"))
+    kept = reel.blocks[0].sends[0]
+    assert (kept.frames, kept.step, kept.refmod) == ([[24, 48]], 5, "girl_walk") and reel.send_refmods == ["girl_walk"]
+    assert reel.refmods_ready(2)["girl_walk"] == {"segment": 0, "frames": [[24, 48]], "step": 5}
+
+
+def test_remember_until_a_scene_stops_before_its_first_clip():
+    reel = split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", "REMEMBER: first frame as image 3 until the walk"))
+    assert [3 in reel.ready(t) for t in range(4)] == [False, True, False, False]  # the walk is clip 3
+    with pytest.raises(ValueError, match="no SCENE is called 'the hall'"):
+        split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", "REMEMBER: first frame as image 3 until the hall"))
+
+
+def test_remember_as_a_member_without_a_picture_gives_the_member_a_free_one():
+    src = SEND_REEL.replace("in a pink tracksuit\n", "in a pink tracksuit\nDOG: a grey dog\n").replace(
+        "SEND: frame 0 to image 3", "REMEMBER: last frame as @DOG").replace("GIRL walks to the window.", "GIRL walks to the window. DOG follows.")
+    reel = split_reel(src)
+    assert reel.blocks[0].sends[0].image == 2  # images 1, 3 and 4 are taken
+    assert any(line.strip() == "DOG (image 2): a grey dog" for line in reel.head)
+    walk = ref2va(src, segment=2)
+    assert 2 in walk.sends and "<Picture" in walk.text
+    with pytest.raises(ValueError, match="CAT is not in a CAST"):
+        split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", "REMEMBER: first frame as @CAT"))
+    with pytest.raises(ValueError, match="not as \"the moon\""):
+        split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", "REMEMBER: first frame as the moon"))
+
+
 def test_an_image_exists_only_in_the_segments_its_send_lists():
     reel = split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", "SEND: frame 0 to image 3 for segment 2+"))
     assert 3 not in reel.ready(1) and reel.ready(2)[3] == {"segment": 0, "frames": [[0, 0]]}

@@ -24,6 +24,16 @@ clip is reproducible and a repeated scene still varies; `$x~N` recomputes the ea
 bindings instead of remembering them. The previous segment's END ON: opens this one, its own
 closes it, and from the second segment on Shot 1 also covers the frames Motion Context pins.
 
+`REMEMBER:` (`SEND:`, the earlier word, writes `to` for `as` and `for segments` from 0 for `in
+clips`) keeps frames of a scene's clip for the clips after it:
+
+    REMEMBER: first frame as @KEEPER        his picture: the CAST's image of his, or a free slot it gets
+    REMEMBER: frame at 1s as image 2        a frame by word, by second or by number (frames 34-46, -1)
+    REMEMBER: every 10th frame as refmod jinx_today      a RefMod made of them (every Nth: a step)
+    REMEMBER: every 5th frame of 1s-4s as refmod jinx_walk   … of a range
+    REMEMBER: last frame as image 3 in clips 2-5      only those clips (from 1); `until the return`:
+                                                       until that scene first plays
+
 `SEND:` hands frames of a scene's clip (counted from 0 in the clip Chain Video keeps, the pinned
 frames trimmed off; -1 is the last) to later clips as a reference image, the CAST's `image N`;
 several frames make one image batch. A scene that repeats sends from the first time it plays.
@@ -52,6 +62,7 @@ import re
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 
+from orrery.cast import MEMBER
 from orrery.dsl import Expander, Pick, question
 from orrery.h3 import DEFAULT_CONTEXT, H3_FPS, Issue, Scene, _clause, parse_scene
 from orrery.library import Library
@@ -60,6 +71,7 @@ CHUNK = re.compile(r"^(?:SCENE|CHUNK)\b\s*(.*)$")  # a scene's heading; CHUNK is
 REPEAT = re.compile(r"^(.*?)\s*(?:\brepeat\s+(\d+|forever)|(?<!\S)[×x]\s*(\d+)|(?<!\S)(forever))\s*$", re.IGNORECASE)
 HANDOFF = re.compile(r"^(?:END ON|HANDOFF):\s*(.+)$")
 SEND = re.compile(r"^SEND:\s*(.*)$")
+REMEMBER = re.compile(r"^REMEMBER:\s*(.*)$")
 AFTER = re.compile(r"^AFTER:\s*(.*)$")
 TEST = re.compile(r"(?<!\S)\(test\)(?!\S)", re.IGNORECASE)  # `SCENE the forest (test)`
 GOTO_LINE = re.compile(r"^(?:(?:\?|IF\s+(?=\$))[^\n]*?:\s*)?(?:CUT\s+TO|GOTO):", re.IGNORECASE)  # a cut, `? cond:` / `IF …:` or not
@@ -73,6 +85,14 @@ _TARGET = re.compile(r"^(?:image\s+(?P<image>\d+)|refmod\s+(?P<refmod>[\w./-]+))
 _FRAMES = re.compile(r"(-?\d+)(?:\s*-\s*(-?\d+))?")
 _SEGMENTS = re.compile(r"^segments?\b\s*(.*)$", re.IGNORECASE)
 _SEGMENT = re.compile(r"(\d+)(?:\s*(\+)|\s*-\s*(\d+))?")
+_IN_CLIPS = re.compile(r"\s+in\s+clips?\b\s*(.*)$", re.IGNORECASE)
+_UNTIL = re.compile(r"\s+until\s+(.+)$", re.IGNORECASE)
+_AS = re.compile(r"^(?P<what>.+?)\s+as\s+(?P<target>.+?)\s*$", re.IGNORECASE)
+_EVERY = re.compile(r"^every\s+(\d+)(?:st|nd|rd|th)?\s+frames?(?:\s+of\s+(?:frames?\s+)?(.+))?$", re.IGNORECASE)
+_FRAME_WORDS = {"first frame": [[0, 0]], "last frame": [[-1, -1]]}
+_FRAME_LIST = re.compile(r"^frames?\s+(?:at\s+)?(.+)$", re.IGNORECASE)
+_SECONDS = re.compile(r"(?<![\d.])(\d+(?:\.\d+)?)\s*s\b")  # 1.5s → its frame at 24 fps
+_MEMBER_TARGET = re.compile(r"^@?([A-Z][A-Z0-9 _-]*?)\s*$")
 SEND_SLOTS = 9  # Reference to Video takes nine reference images, ref_image_0 to ref_image_8
 MAX_SEND_FRAMES = 3600  # the longest clip Reference to Video makes
 BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
@@ -89,6 +109,8 @@ class Send:
     segments: list[list[int | None]] | None = None  # `for segment …`: [lo, hi] spans, hi None for `N+`
     refmod: str | None = None  # `to refmod NAME`: the frames become a RefMod of that name
     step: int = 1  # `every 10 frames`: every 10th frame of the spans
+    until: int | None = None  # `until the return`: the scene before whose first clip it stops (an index)
+    member: str | None = None  # `as @KEEPER`: the member whose picture it is (image is then filled in)
 
     @property
     def target(self) -> int | str:
@@ -100,7 +122,7 @@ class Send:
         return f"image {self.image}" if self.refmod is None else f"refmod {self.refmod}"
 
 
-def parse_frames(spec: str) -> list[list[int]]:
+def parse_frames(spec: str, word: str = "SEND") -> list[list[int]]:
     """`2, 5, 34-46, -24--1` → [[2, 2], [5, 5], [34, 46], [-24, -1]]: resolved against the clip's length
     when Orrery Refs reads it, so -1 is the last frame and 10--1 runs from frame 10 to the end."""
     spans: list[list[int]] = []
@@ -108,16 +130,16 @@ def parse_frames(spec: str) -> list[list[int]]:
     for part in (p.strip() for p in spec.split(",")):
         m = _FRAMES.fullmatch(part)
         if not m:
-            raise ValueError(f'SEND: "{part}" is not a frame; frames are numbers from 0 (-1 the last), '
+            raise ValueError(f'{word}: "{part}" is not a frame; frames are numbers from 0 (-1 the last), '
                              "or ranges like 34-46 and -24--1.")
         first = int(m.group(1))
         last = int(m.group(2)) if m.group(2) is not None else first
         if (first < 0) == (last < 0):
             if last < first:
-                raise ValueError(f"SEND: the range {part} runs backwards; write it as {last}-{first}.")
+                raise ValueError(f"{word}: the range {part} runs backwards; write it as {last}-{first}.")
             total += last - first + 1
             if total > MAX_SEND_FRAMES:
-                raise ValueError(f"SEND: {spec} names more than {MAX_SEND_FRAMES} frames, longer than any clip.")
+                raise ValueError(f"{word}: {spec} names more than {MAX_SEND_FRAMES} frames, longer than any clip.")
         spans.append([first, last])
     return spans
 
@@ -161,6 +183,66 @@ def parse_send(text: str) -> Send:
     if not 1 <= image <= SEND_SLOTS:
         raise ValueError(f"SEND: image {image} does not exist; Reference to Video takes image 1–{SEND_SLOTS}.")
     return Send(frames, image, segments, step=step)
+
+
+def parse_remember(text: str) -> tuple[Send, str | None]:
+    """A REMEMBER: line (see the module's doc), and the title its `until` names. split_reel, which knows
+    the scenes and the CAST, turns that title into the scene and gives `as @MEMBER` its image (_remembered)."""
+    body, until = text.strip(), None
+    if m := _UNTIL.search(body):
+        body, until = body[:m.start()], m.group(1).strip()
+    clips = None
+    if m := _IN_CLIPS.search(body):
+        body, clips = body[:m.start()], _clips(m.group(1))
+    m = _AS.match(body.strip())
+    if not m:
+        raise ValueError(f'"REMEMBER: {text.strip()}": write it as "REMEMBER: first frame as @KEEPER", '
+                         '"REMEMBER: frame at 1s as image 2" or "REMEMBER: every 10th frame as refmod NAME".')
+    what = " ".join(m.group("what").split())
+    step = 1
+    if spans := _FRAME_WORDS.get(what.lower()):
+        frames = [list(s) for s in spans]
+    elif every := _EVERY.match(what):
+        step = int(every.group(1))
+        if step < 1:
+            raise ValueError("REMEMBER: every 0th frame keeps nothing; write every 1st frame or more.")
+        frames = parse_frames(_SECONDS.sub(_frame_at, every.group(2)), "REMEMBER") if every.group(2) else [[0, -1]]
+    elif listed := _FRAME_LIST.match(what):
+        frames = parse_frames(_SECONDS.sub(_frame_at, listed.group(1)), "REMEMBER")
+    else:
+        raise ValueError(f'REMEMBER: "{what}" is no frame: first frame, last frame, frame 30, frames 34-46, '
+                         'frame at 1s or every 10th frame.')
+    target = " ".join(m.group("target").split())
+    if t := _TARGET.match(target):
+        image = int(t.group("image")) if t.group("image") else None
+        if image is not None and not 1 <= image <= SEND_SLOTS:
+            raise ValueError(f"REMEMBER: image {image} does not exist; Reference to Video takes image 1–{SEND_SLOTS}.")
+        send = Send(frames, image, clips, refmod=t.group("refmod"), step=step)
+    elif member := _MEMBER_TARGET.match(target):
+        send = Send(frames, None, clips, step=step, member=member.group(1).strip())
+    else:
+        raise ValueError(f'REMEMBER: keeps frames as a member\'s picture (as @KEEPER), as "image N" or as "refmod '
+                         f'NAME", not as "{target}".')
+    return send, until
+
+
+def _frame_at(m: re.Match) -> str:
+    return str(round(float(m.group(1)) * H3_FPS))
+
+
+def _clips(text: str) -> list[list[int | None]]:
+    """`in clips 2-5` → [[1, 4]]: clips count from 1, the segments behind them from 0."""
+    spans: list[list[int | None]] = []
+    for part in (p.strip() for p in text.split(",")):
+        s = _SEGMENT.fullmatch(part)
+        if not s or int(s.group(1)) < 1:
+            raise ValueError(f'REMEMBER: "in clips {text.strip()}": clips count from 1: in clip 4, in clips 4+ (and '
+                             "on), in clips 2-5, in clips 2, 4.")
+        lo, hi = int(s.group(1)), None if s.group(2) else int(s.group(3) or s.group(1))
+        if hi is not None and hi < lo:
+            raise ValueError(f"REMEMBER: the clips {part} run backwards; write them as {hi}-{lo}.")
+        spans.append([lo - 1, None if hi is None else hi - 1])
+    return spans
 
 
 @dataclass
@@ -328,12 +410,13 @@ class Reel:
             path, _ = self.walk(upto=segment + 1)
         # what this clip continues; past the reel's end, every clip before it
         behind = set(self.chain(segment, path)) if segment < len(path) else set(range(segment))
-        for block, start in zip(self.blocks, self.starts(path), strict=True):
+        starts = self.starts(path)
+        for block, start in zip(self.blocks, starts, strict=True):
             for send in block.sends:
                 if (send.refmod is not None) != refmods:
                     continue
                 key = send.target
-                spans = (send.segments or [[0, None]]) if key in held else fills(send, start)
+                spans = (send.segments or [[0, None]]) if key in held else fills(send, start, starts)
                 when = -1 if start is None else start
                 if (any(lo <= segment and (hi is None or segment <= hi) for lo, hi in spans)
                         and (key in held or start in behind) and when >= latest.get(key, -1)):
@@ -361,6 +444,7 @@ def split_reel(src: str) -> Reel | None:
     blocks: list[Block] = []
     gotos: list[tuple[int, str]] = []  # (chunk, line): resolved once every title is known
     afters: list[tuple[int, str]] = []  # (chunk, what its AFTER: names), the same
+    untils: list[tuple[Send, str]] = []  # (a REMEMBER:, the scene its `until` names), the same
     for raw in lines:
         if m := CHUNK.match(raw.strip()):
             heading, repeat = m.group(1).strip(), 1
@@ -371,6 +455,11 @@ def split_reel(src: str) -> Reel | None:
             blocks.append(Block(title, repeat, test=bool(TEST.search(heading))))
         elif (send := SEND.match(raw.strip())) and blocks:
             blocks[-1].sends.append(parse_send(send.group(1)))
+        elif (remember := REMEMBER.match(raw.strip())) and blocks:
+            kept, until = parse_remember(remember.group(1))
+            blocks[-1].sends.append(kept)
+            if until:
+                untils.append((kept, until))
         elif GOTO_LINE.match(raw.strip()) and blocks:
             gotos.append((len(blocks) - 1, raw.strip()))
         elif (after := AFTER.match(raw.strip())) and blocks:
@@ -386,9 +475,68 @@ def split_reel(src: str) -> Reel | None:
             titles = ", ".join(b.title or f"scene {k + 1}" for k, b in enumerate(blocks))
             raise ValueError(f"AFTER: {name}: {problem} (there are {titles}; a number counts them from 1).")
         blocks[i].after = index
+    for kept, name in untils:
+        kept.until = _scene(name, blocks)
+        if kept.until is None:
+            titles = ", ".join(b.title or f"scene {k + 1}" for k, b in enumerate(blocks))
+            raise ValueError(f"REMEMBER: … until {name}: no SCENE is called {name!r} (there are {titles}).")
+    _remembered(head, blocks)
     from orrery.dsl import parse
 
     return Reel(head, blocks, parse(src).params.rng)
+
+
+def _cast_lines(lines: list[str]) -> list[int]:
+    """Where the member lines of the CAST blocks among these lines are (a CAST runs until a SHOT)."""
+    out, open_ = [], False
+    for i, raw in enumerate(lines):
+        line = raw.strip()
+        if line == "CAST":
+            open_ = True
+        elif re.match(r"^SHOT\b", line, re.IGNORECASE):
+            open_ = False
+        elif open_ and MEMBER.match(line.removeprefix("@")):
+            out.append(i)
+    return out
+
+
+def _remembered(head: list[str], blocks: list[Block]) -> None:
+    """`REMEMBER: … as @KEEPER`: the frames become KEEPER's picture, the first image his CAST lines give
+    him, or a free slot they are given (`KEEPER: …` reads `KEEPER (image 3): …` from then on)."""
+    wanted = [send for block in blocks for send in block.sends if send.member]
+    if not wanted:
+        return
+    groups = [head, *(block.lines for block in blocks)]
+    taken = {int(n) for n in re.findall(r"\bimage[\s_]*(\d+)", "\n".join(line for g in groups for line in g), re.IGNORECASE)}
+    taken |= {send.image for block in blocks for send in block.sends if send.image}
+    for send in wanted:
+        lines = [(g, i) for g in groups for i in _cast_lines(g)
+                 if MEMBER.match(g[i].strip().removeprefix("@")).group(1).strip() == send.member]
+        if not lines:
+            raise ValueError(f"REMEMBER: … as {send.member}: {send.member} is not in a CAST; give the member a line "
+                             f"there ({send.member}: who it is), or remember the frames as an image N.")
+        images = [s.index for g, i in lines for s in _member_of(g[i]).sources if s.kind == "image"]
+        if images:
+            send.image = images[0]
+            continue
+        free = [n for n in range(1, SEND_SLOTS + 1) if n not in taken]
+        if not free:
+            raise ValueError(f"REMEMBER: … as {send.member}: every image 1–{SEND_SLOTS} is taken, so there is none "
+                             "left for the frames.")
+        send.image = free[0]
+        taken.add(free[0])
+        for g, i in lines:  # the member's CAST lines name the picture from now on
+            m = MEMBER.match(g[i].strip().removeprefix("@"))
+            indent = g[i][:len(g[i]) - len(g[i].lstrip())]
+            spec = f"{m.group(2)}, image {free[0]}" if m.group(2) else f"image {free[0]}"
+            g[i] = f"{indent}{m.group(1).strip()} ({spec}): {m.group(3)}"
+
+
+def _member_of(line: str):
+    from orrery.cast import parse_member
+
+    m = MEMBER.match(line.strip().removeprefix("@"))
+    return parse_member(m.group(1), m.group(2), m.group(3))
 
 
 def shared_sends(reel: Reel, starts: list[int | None]) -> list[str]:
@@ -398,7 +546,7 @@ def shared_sends(reel: Reel, starts: list[int | None]) -> list[str]:
     claims: dict = {}  # image or RefMod → (chunk, start, spans) per line
     for i, (block, start) in enumerate(zip(reel.blocks, starts, strict=True)):
         for send in block.sends:
-            spans = fills(send, start)
+            spans = fills(send, start, starts)
             for j, other_start, other in claims.get((send.refmod is None, send.target), []):
                 shared = [max(lo, olo) for lo, hi in spans for olo, ohi in other
                           if max(lo, olo) <= min([x for x in (hi, ohi) if x is not None], default=max(lo, olo))]
@@ -430,12 +578,16 @@ def _goto(line: str, blocks: list[Block]) -> Goto:
                 min(float(chance.group(1)) / 100, 1.0) if chance else None)
 
 
-def fills(send: Send, start: int | None) -> list[list[int | None]]:
-    """The segments a SEND: line fills: those its `for` lists (all, without) after the one it is sent from."""
+def fills(send: Send, start: int | None, starts: list[int | None] | None = None) -> list[list[int | None]]:
+    """The segments a SEND: line fills: those its `for` lists (all, without) after the one it is sent from,
+    and with `until` (`starts`: each scene's first clip) only those before that scene's first clip."""
     if start is None:
         return []
     first = start + 1
-    return [[max(lo, first), hi] for lo, hi in (send.segments or [[first, None]]) if hi is None or hi >= max(lo, first)]
+    end = starts[send.until] if send.until is not None and starts and starts[send.until] is not None else None
+    spans = [[max(lo, first), hi if end is None else end - 1 if hi is None else min(hi, end - 1)]
+             for lo, hi in (send.segments or [[first, None]])]
+    return [[lo, hi] for lo, hi in spans if hi is None or hi >= lo]
 
 
 def derive(seed: int, segment: int) -> int:
