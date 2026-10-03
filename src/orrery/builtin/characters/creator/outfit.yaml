@@ -8,6 +8,38 @@ entries:
   - {value: "paint-flecked overalls over a $colour T-shirt", props: {genre: everyday, fit: all}}
   - {value: "a $colour puffer vest over a grey sweatshirt", props: {genre: everyday, fit: all}}
   - {value: "an untucked $colour linen shirt and a canvas tote bag on one shoulder", props: {genre: everyday, fit: all}}
+  - {value: "a $colour corduroy jacket over a striped Breton top", props: {genre: everyday, fit: all}}
+  - {value: "a chunky $colour fisherman's sweater with frayed cuffs", props: {genre: everyday, fit: all}}
+  - {value: "a $colour quarter-zip fleece over a collared shirt", props: {genre: everyday, fit: all}}
+  - {value: "a $colour bomber jacket over a plain grey henley", props: {genre: everyday, fit: all}}
+  - {value: "a $colour varsity jacket with cream leather sleeves", props: {genre: everyday, fit: all}}
+  - {value: "a padded olive parka with a $colour fleece-lined hood", props: {genre: everyday, fit: all}}
+  - {value: "a $colour canvas chore coat with patched elbows", props: {genre: everyday, fit: all}}
+  - {value: "a $colour short-sleeved bowling shirt with contrast piping", props: {genre: everyday, fit: all}}
+  - {value: "a $colour zip-up track jacket with white side stripes", props: {genre: everyday, fit: all}}
+  - {value: "a $colour quilted gilet over a chambray work shirt", props: {genre: everyday, fit: all}}
+  - {value: "a $colour anorak with a kangaroo pocket and drawstring hem", props: {genre: everyday, fit: all}}
+  - {value: "a $colour western shirt with pearl snap buttons", props: {genre: everyday, fit: all}}
+  - {value: "a $colour wrap dress with a thin tan leather belt", props: {genre: everyday, fit: women}}
+  - {value: "a $colour pleated midi skirt and a tucked-in cream blouse", props: {genre: everyday, fit: women}}
+  - {value: "a floral sundress under a cropped $colour cardigan", props: {genre: everyday, fit: women}}
+  - {value: "a $colour trench coat belted over a knee-length shirt dress", props: {genre: everyday, fit: women}}
+  - {value: "a $colour jumper dress with black tights and ankle boots", props: {genre: everyday, fit: women}}
+  - {value: "a tie-neck $colour silk blouse and tailored wide-leg trousers", props: {genre: everyday, fit: women}}
+  - {value: "a $colour linen jumpsuit with a tie waist", props: {genre: everyday, fit: women}}
+  - {value: "a tiered cotton maxi skirt and a $colour smocked peasant top", props: {genre: everyday, fit: women}}
+  - {value: "a $colour puff-sleeved top and high-waisted flared jeans", props: {genre: everyday, fit: women}}
+  - {value: "a $colour swing coat with oversized buttons and low-heeled pumps", props: {genre: everyday, fit: women}}
+  - {value: "a grey two-piece suit, an oxford shirt and a $colour knitted tie", props: {genre: everyday, fit: men}}
+  - {value: "a navy blazer over a $colour polo shirt and pressed chinos", props: {genre: everyday, fit: men}}
+  - {value: "a $colour tweed waistcoat over a white shirt with rolled sleeves", props: {genre: everyday, fit: men}}
+  - {value: "a $colour rugby shirt with a white collar and worn jeans", props: {genre: everyday, fit: men}}
+  - {value: "a $colour cotton blouson jacket over a gingham button-down shirt", props: {genre: everyday, fit: men}}
+  - {value: "a double-breasted charcoal suit with a $colour pocket square", props: {genre: everyday, fit: men}}
+  - {value: "a $colour short-sleeved work shirt with a pen in the breast pocket", props: {genre: everyday, fit: men}}
+  - {value: "a $colour argyle knit pullover over a checked shirt and tie", props: {genre: everyday, fit: men}}
+  - {value: "a $colour peacoat over a grey roll-neck and dark chinos", props: {genre: everyday, fit: men}}
+  - {value: "a $colour workwear jacket over a collarless grandad shirt and braces", props: {genre: everyday, fit: men}}
   - {value: "a weathered $colour field jacket with bulging pockets", props: {genre: adventure, fit: all}}
   - {value: "a $colour climbing shell over a fleece, a coil of rope over one shoulder", props: {genre: adventure, fit: all}}
   - {value: "a $colour waxed-cotton coat and a canvas satchel", props: {genre: adventure, fit: all}}
@@ -15,13 +47,79 @@ entries:
   - {value: "a $colour down parka with a fur-trimmed hood thrown back", props: {genre: adventure, fit: all}}
   - {value: "a $colour sailing jacket with salt stains on the sleeves", props: {genre: adventure, fit: all}}
   - {value: "a $colour poncho over a leather jerkin, binoculars on a strap", props: {genre: adventure, fit: all}}
+  - {value: "a $colour safari shirt with epaulettes and khaki cargo shorts", props: {genre: adventure, fit: all}}
+  - {value: "a $colour fishing vest over a long-sleeved sun hoodie", props: {genre: adventure, fit: all}}
+  - {value: "a $colour hard-wearing work jacket with reflective strips across the chest", props: {genre: adventure, fit: all}}
+  - {value: "a $colour neoprene wetsuit with sun-bleached knee pads", props: {genre: adventure, fit: all}}
+  - {value: "a $colour softshell jacket with a water bottle clipped to the hip", props: {genre: adventure, fit: all}}
+  - {value: "a $colour canvas field smock with suede elbow patches", props: {genre: adventure, fit: all}}
+  - {value: "a heavy $colour fisherman's jumper under oilskin bib trousers", props: {genre: adventure, fit: all}}
+  - {value: "a $colour quilted mountaineering suit with a harness at the waist", props: {genre: adventure, fit: all}}
+  - {value: "a $colour hooded anorak with a map pocket on the chest", props: {genre: adventure, fit: all}}
+  - {value: "a $colour bush jacket with rolled sleeves and a sweat-stained collar", props: {genre: adventure, fit: all}}
+  - {value: "a $colour storm cagoule streaked with mud over a thermal top", props: {genre: adventure, fit: all}}
+  - {value: "a $colour sheepskin flying jacket with a turned-up collar", props: {genre: adventure, fit: all}}
+  - {value: "a $colour park ranger shirt with a cloth badge on the sleeve", props: {genre: adventure, fit: all}}
+  - {value: "a $colour linen safari dress with a cinched webbing belt", props: {genre: adventure, fit: women}}
+  - {value: "a long twill walking skirt and a $colour travelling jacket with brass buttons", props: {genre: adventure, fit: women}}
+  - {value: "a $colour high-necked blouse under a tweed hunting jacket", props: {genre: adventure, fit: women}}
+  - {value: "a $colour riding habit jacket with jodhpurs and tall boots", props: {genre: adventure, fit: women}}
+  - {value: "a $colour hiking dress over thermal leggings and laced trail boots", props: {genre: adventure, fit: women}}
+  - {value: "a $colour embroidered blouse under a full-length linen dust coat", props: {genre: adventure, fit: women}}
+  - {value: "a $colour fitted mountaineering coat flared below the waist", props: {genre: adventure, fit: women}}
+  - {value: "a $colour striped sailor top and white wide-leg deck trousers", props: {genre: adventure, fit: women}}
+  - {value: "a Victorian walking suit with a $colour short jacket and bustled skirt", props: {genre: adventure, fit: women}}
+  - {value: "a $colour laced corset vest over a white cotton shirt and moleskin breeches", props: {genre: adventure, fit: women}}
+  - {value: "a $colour tweed Norfolk jacket with plus-fours and a knitted tie", props: {genre: adventure, fit: men}}
+  - {value: "a $colour plaid mackinaw jacket over heavy work trousers held up by braces", props: {genre: adventure, fit: men}}
+  - {value: "a $colour hunting tartan kilt and a thick oiled-wool jumper", props: {genre: adventure, fit: men}}
+  - {value: "a $colour mechanic's boiler suit with a spanner in the thigh pocket", props: {genre: adventure, fit: men}}
+  - {value: "a $colour herringbone waistcoat over a collarless shirt and moleskin trousers", props: {genre: adventure, fit: men}}
+  - {value: "a rawhide prospector's waistcoat over a $colour chambray shirt, a gold pan at the hip", props: {genre: adventure, fit: men}}
+  - {value: "a $colour hunting coat with a game pocket and corduroy cuffs", props: {genre: adventure, fit: men}}
+  - {value: "a pale khaki drill suit with a $colour tie loosened at the neck", props: {genre: adventure, fit: men}}
+  - {value: "a thick leather farrier's apron over a $colour work smock", props: {genre: adventure, fit: men}}
+  - {value: "a $colour wool greatcoat over a buttoned three-piece suit", props: {genre: adventure, fit: men}}
   - {value: "a hooded cloak of $colour wool over a travel-stained tunic", props: {genre: fantasy, fit: all}}
   - {value: "dented plate armour under a $colour tabard", props: {genre: fantasy, fit: all}}
   - {value: "robes of $colour velvet embroidered with silver constellations", props: {genre: fantasy, fit: all}}
   - {value: "a boiled-leather jerkin over a $colour linen shirt", props: {genre: fantasy, fit: all}}
-  - {value: "a $colour scholar's coat with pockets full of scrolls", props: {genre: fantasy, fit: all}}
   - {value: "chain mail under a $colour fur-trimmed mantle", props: {genre: fantasy, fit: all}}
   - {value: "a feathered cloak dyed $colour, clasped with a bone pin", props: {genre: fantasy, fit: all}}
+  - {value: "a $colour scholar's coat with ink-stained cuffs and deep pockets", props: {genre: fantasy, fit: all}}
+  - {value: "a $colour quilted gambeson with a sheathed sword at the hip", props: {genre: fantasy, fit: all}}
+  - {value: "a $colour hide hunting vest with a quiver slung behind one shoulder", props: {genre: fantasy, fit: all}}
+  - {value: "a $colour brigandine studded with rows of brass rivets", props: {genre: fantasy, fit: all}}
+  - {value: "a $colour monk's habit with a corded belt", props: {genre: fantasy, fit: all}}
+  - {value: "a $colour shepherd's smock over patched leggings", props: {genre: fantasy, fit: all}}
+  - {value: "a set of ranger's leathers with $colour tooling on the shoulder guards", props: {genre: fantasy, fit: all}}
+  - {value: "a coat of scale armour with $colour enamelled edges", props: {genre: fantasy, fit: all}}
+  - {value: "a $colour surcoat over a hauberk with a coin purse at the waist", props: {genre: fantasy, fit: all}}
+  - {value: "a $colour alchemist's apron, scorched at the hem, over a plain smock", props: {genre: fantasy, fit: all}}
+  - {value: "a jester's motley with $colour diamond patches and bells at the cuffs", props: {genre: fantasy, fit: all}}
+  - {value: "a lamellar cuirass laced with $colour silk cord", props: {genre: fantasy, fit: all}}
+  - {value: "a $colour felted wool cape edged with fox fur, a drinking horn slung at the side", props: {genre: fantasy, fit: all}}
+  - {value: "a $colour healer's robe with bundles of dried herbs tied to the girdle", props: {genre: fantasy, fit: all}}
+  - {value: "a $colour velvet gown with long trailing sleeves", props: {genre: fantasy, fit: women}}
+  - {value: "a laced bodice over a $colour linen chemise", props: {genre: fantasy, fit: women}}
+  - {value: "a $colour kirtle under a sleeveless open-sided overdress", props: {genre: fantasy, fit: women}}
+  - {value: "a $colour brocade corset over a full undyed skirt", props: {genre: fantasy, fit: women}}
+  - {value: "a fitted breastplate over a $colour ankle-length padded dress", props: {genre: fantasy, fit: women}}
+  - {value: "a $colour silk gown with a jewelled girdle", props: {genre: fantasy, fit: women}}
+  - {value: "a $colour homespun dress, a bunch of iron keys at the waist", props: {genre: fantasy, fit: women}}
+  - {value: "a $colour cotehardie buttoned from neckline to hip", props: {genre: fantasy, fit: women}}
+  - {value: "a $colour long-skirted war tunic with steel vambraces", props: {genre: fantasy, fit: women}}
+  - {value: "a $colour embroidered apron over a full-sleeved peasant blouse and skirt", props: {genre: fantasy, fit: women}}
+  - {value: "a $colour belted plaid draped over one shoulder with thick knitted hose", props: {genre: fantasy, fit: men}}
+  - {value: "a $colour doublet with slashed sleeves and dark breeches", props: {genre: fantasy, fit: men}}
+  - {value: "a $colour waistcoat over a loose shirt with a ruffled collar", props: {genre: fantasy, fit: men}}
+  - {value: "a suit of full plate with a $colour sash across the chest", props: {genre: fantasy, fit: men}}
+  - {value: "a $colour wrap-front kaftan with woven trim and cross-gartered legs", props: {genre: fantasy, fit: men}}
+  - {value: "a $colour high-collared houppelande with dagged hems", props: {genre: fantasy, fit: men}}
+  - {value: "a $colour arming doublet with gauntlets tucked into the belt", props: {genre: fantasy, fit: men}}
+  - {value: "a bard's long brocade coat with a $colour sash, a lute on the back", props: {genre: fantasy, fit: men}}
+  - {value: "a $colour quilted pourpoint with brass buttons and tall riding boots", props: {genre: fantasy, fit: men}}
+  - {value: "a $colour forester's jerkin patched at the shoulders", props: {genre: fantasy, fit: men}}
   - {value: "a translucent $colour vinyl coat over a black bodysuit", props: {genre: cyberpunk, fit: all}}
   - {value: "a high-collared techwear coat with glowing $colour seams", props: {genre: cyberpunk, fit: all}}
   - {value: "a cropped $colour hoodie and cargo pants with too many buckles", props: {genre: cyberpunk, fit: all}}
@@ -29,20 +127,119 @@ entries:
   - {value: "a quilted $colour kimono jacket with a holographic obi", props: {genre: cyberpunk, fit: all}}
   - {value: "a battered $colour bomber jacket patched with corporate logos", props: {genre: cyberpunk, fit: all}}
   - {value: "a long duster with $colour cable ports along the sleeves", props: {genre: cyberpunk, fit: all}}
+  - {value: "a $colour reflective rain poncho over a black tracksuit", props: {genre: cyberpunk, fit: all}}
+  - {value: "a $colour armoured riding jacket with scuffed shoulder plates", props: {genre: cyberpunk, fit: all}}
+  - {value: "a $colour windbreaker with LED strips down the sleeves", props: {genre: cyberpunk, fit: all}}
+  - {value: "a $colour hazard smock with a respirator hanging at the chest", props: {genre: cyberpunk, fit: all}}
+  - {value: "a $colour oversized raglan sweatshirt printed with a barcode", props: {genre: cyberpunk, fit: all}}
+  - {value: "a $colour iridescent shell jacket over a hooded base layer", props: {genre: cyberpunk, fit: all}}
+  - {value: "a $colour utility jacket with a battery pack clipped to the belt", props: {genre: cyberpunk, fit: all}}
+  - {value: "a $colour coverall with a soldering iron in the breast pocket", props: {genre: cyberpunk, fit: all}}
+  - {value: "a $colour rubberised anorak with heat-sealed seams", props: {genre: cyberpunk, fit: all}}
+  - {value: "a boxy $colour jacket with mirrored panels down the front", props: {genre: cyberpunk, fit: all}}
+  - {value: "a $colour long tunic printed with glitchy text, a datapad under one arm", props: {genre: cyberpunk, fit: all}}
+  - {value: "a $colour patchwork jacket stitched from recycled tarpaulin", props: {genre: cyberpunk, fit: all}}
+  - {value: "a $colour chunky knit sweater threaded with fibre-optic strands", props: {genre: cyberpunk, fit: all}}
+  - {value: "a $colour pleated skirt with chrome buckles and a short mesh top", props: {genre: cyberpunk, fit: women}}
+  - {value: "a $colour mandarin-collared dress with circuit-trace embroidery", props: {genre: cyberpunk, fit: women}}
+  - {value: "a $colour asymmetric wrap skirt over leggings and chunky platform boots", props: {genre: cyberpunk, fit: women}}
+  - {value: "a $colour armoured corset over a long-sleeved black bodysuit", props: {genre: cyberpunk, fit: women}}
+  - {value: "a $colour sculpted-shoulder blazer over a short tennis dress", props: {genre: cyberpunk, fit: women}}
+  - {value: "a $colour puffed-sleeve blouse with a wired collar and wide culottes", props: {genre: cyberpunk, fit: women}}
+  - {value: "a $colour belted jumpsuit with clear plastic panels at the hips", props: {genre: cyberpunk, fit: women}}
+  - {value: "a $colour cropped bolero jacket with neon piping over a fitted top", props: {genre: cyberpunk, fit: women}}
+  - {value: "a $colour structured peplum top and slim cargo trousers", props: {genre: cyberpunk, fit: women}}
+  - {value: "a glossy short puffer jacket, a $colour turtleneck and heeled ankle boots", props: {genre: cyberpunk, fit: women}}
+  - {value: "a sharp black suit with a $colour fibre-optic tie", props: {genre: cyberpunk, fit: men}}
+  - {value: "a $colour ballistic-weave waistcoat over a dress shirt with metal sleeve garters", props: {genre: cyberpunk, fit: men}}
+  - {value: "a $colour double-breasted jacket with chrome buttons, worn open", props: {genre: cyberpunk, fit: men}}
+  - {value: "a rumpled grey office suit with a $colour ID lanyard", props: {genre: cyberpunk, fit: men}}
+  - {value: "a pair of $colour hakama trousers under a padded techwear haori", props: {genre: cyberpunk, fit: men}}
+  - {value: "a $colour ripstop combat shirt with a holstered multitool on the thigh", props: {genre: cyberpunk, fit: men}}
+  - {value: "a $colour utility kilt with clip-on pockets over black leggings", props: {genre: cyberpunk, fit: men}}
+  - {value: "a $colour souvenir jacket embroidered with a tiger over a white undershirt", props: {genre: cyberpunk, fit: men}}
+  - {value: "a scuffed $colour dock-worker's jacket over a grey henley", props: {genre: cyberpunk, fit: men}}
+  - {value: "a frayed tuxedo jacket with $colour satin lapels over a black roll-neck", props: {genre: cyberpunk, fit: men}}
   - {value: "a belted trench coat with a $colour silk scarf at the throat", props: {genre: noir, fit: all}}
+  - {value: "a rain-darkened gabardine mackintosh, collar up, showing a $colour plaid lining", props: {genre: noir, fit: all}}
+  - {value: "a scuffed leather flight jacket with a sheepskin collar over a $colour roll-neck sweater", props: {genre: noir, fit: all}}
+  - {value: "a camel-hair polo coat over a cable-knit cardigan in $colour wool", props: {genre: noir, fit: all}}
+  - {value: "a navy wool peacoat with horn buttons and a knitted $colour watch cap", props: {genre: noir, fit: all}}
+  - {value: "a pair of oil-stained denim coveralls with $colour patches on the knees", props: {genre: noir, fit: all}}
+  - {value: "a worn army-surplus field jacket over a brushed $colour flannel shirt", props: {genre: noir, fit: all}}
+  - {value: "a bellhop's short brass-buttoned jacket and trousers with $colour piping", props: {genre: noir, fit: all}}
+  - {value: "a houndstooth blazer and high-waisted slacks over a loose $colour silk shirt", props: {genre: noir, fit: all}}
+  - {value: "a starched white lab coat over an argyle sweater vest knitted in $colour", props: {genre: noir, fit: all}}
+  - {value: "a cab driver's zip-front windbreaker and a checked $colour newsboy cap", props: {genre: noir, fit: all}}
+  - {value: "a black leather motorcycle jacket zipped over a striped $colour jersey", props: {genre: noir, fit: all}}
+  - {value: "a shawl-collared corduroy jacket over a faded $colour gingham shirt", props: {genre: noir, fit: all}}
+  - {value: "a hooded duffle coat with toggle fastenings over a thick $colour turtleneck", props: {genre: noir, fit: all}}
   - {value: "a double-breasted chalk-stripe suit and a loosened $colour tie", props: {genre: noir, fit: men}}
-  - {value: "a bias-cut $colour satin evening gown under a fox stole", props: {genre: noir, fit: women}}
-  - {value: "a tailored $colour skirt suit with padded shoulders", props: {genre: noir, fit: women}}
   - {value: "a heavy wool overcoat and a fedora with a $colour band", props: {genre: noir, fit: men}}
   - {value: "a rumpled white shirt with braces and a $colour waistcoat", props: {genre: noir, fit: men}}
+  - {value: "a three-piece grey flannel suit, a pocket-watch chain and a knitted $colour tie", props: {genre: noir, fit: men}}
+  - {value: "a white dinner jacket with a $colour carnation in the buttonhole", props: {genre: noir, fit: men}}
+  - {value: "a black tuxedo with satin lapels and a pleated $colour cummerbund", props: {genre: noir, fit: men}}
+  - {value: "a long-draped zoot suit over a wide-collared $colour shirt", props: {genre: noir, fit: men}}
+  - {value: "a creased cream linen jacket, a straw boater and a $colour bow tie", props: {genre: noir, fit: men}}
+  - {value: "a shabby tweed jacket with a $colour pocket square and a press card in the hatband", props: {genre: noir, fit: men}}
+  - {value: "a short-sleeved $colour gabardine shirt with an empty leather shoulder holster", props: {genre: noir, fit: men}}
+  - {value: "a chauffeur's grey double-breasted tunic with leather gauntlets and $colour collar tabs", props: {genre: noir, fit: men}}
+  - {value: "a croupier's black waistcoat over shirtsleeves held by $colour sleeve garters", props: {genre: noir, fit: men}}
+  - {value: "a glen-check sport coat with a $colour silk ascot tucked into the open collar", props: {genre: noir, fit: men}}
+  - {value: "a bias-cut $colour satin evening gown under a fox stole", props: {genre: noir, fit: women}}
+  - {value: "a tailored $colour skirt suit with padded shoulders", props: {genre: noir, fit: women}}
   - {value: "a sequinned $colour cocktail dress and long satin gloves", props: {genre: noir, fit: women}}
+  - {value: "a polka-dot $colour day dress with a white collar and cuffs", props: {genre: noir, fit: women}}
+  - {value: "a peplum jacket and pencil skirt with a small $colour pillbox hat", props: {genre: noir, fit: women}}
+  - {value: "a halter-necked $colour lamé gown with a draped silver chiffon wrap", props: {genre: noir, fit: women}}
+  - {value: "a nightclub singer's black velvet sheath with a $colour gardenia in the hair", props: {genre: noir, fit: women}}
+  - {value: "a crisp white blouse with a floppy neck bow and a pleated $colour skirt", props: {genre: noir, fit: women}}
+  - {value: "a full-backed swing coat with a fur collar and a tilted $colour felt hat", props: {genre: noir, fit: women}}
+  - {value: "a cream silk blouse with a jabot under a cropped $colour bolero jacket", props: {genre: noir, fit: women}}
+  - {value: "a nurse's starched white uniform with a short $colour wool cape", props: {genre: noir, fit: women}}
+  - {value: "a two-piece cream slack suit with a knotted $colour turban", props: {genre: noir, fit: women}}
+  - {value: "a fine-knit twin-set and tweed skirt with a stiff $colour leather handbag on one arm", props: {genre: noir, fit: women}}
   - {value: "a high-necked $colour velvet coat with jet buttons", props: {genre: gothic, fit: all}}
-  - {value: "a black lace dress laced into a $colour corset", props: {genre: gothic, fit: women}}
   - {value: "a long black frock coat lined with $colour silk", props: {genre: gothic, fit: all}}
-  - {value: "a ruffled shirt under a $colour brocade waistcoat", props: {genre: gothic, fit: men}}
-  - {value: "a $colour taffeta gown under a black mourning veil", props: {genre: gothic, fit: women}}
   - {value: "a leather greatcoat with a $colour scarf wound twice around the neck", props: {genre: gothic, fit: all}}
+  - {value: "a hooded black wool cloak fastened with a round $colour enamel clasp", props: {genre: gothic, fit: all}}
+  - {value: "a black mesh-sleeved top under a cropped $colour tartan jacket", props: {genre: gothic, fit: all}}
+  - {value: "a floor-length black velvet cape with a hood lined in $colour satin", props: {genre: gothic, fit: all}}
+  - {value: "a black vinyl coat to the ankles with buckled cuffs and a stiff $colour collar", props: {genre: gothic, fit: all}}
+  - {value: "a black military jacket with silver frogging and $colour fringed epaulettes", props: {genre: gothic, fit: all}}
+  - {value: "a moth-eaten black cardigan over a long-sleeved shirt striped in $colour", props: {genre: gothic, fit: all}}
+  - {value: "a robe of layered black gauze with ragged hems and a $colour rope belt", props: {genre: gothic, fit: all}}
+  - {value: "a studded black leather biker jacket over a faded $colour T-shirt", props: {genre: gothic, fit: all}}
+  - {value: "a black poet's shirt with billowing sleeves under a wide $colour sash", props: {genre: gothic, fit: all}}
+  - {value: "a black zip-up hoodie with lace-up sides and $colour thumbhole cuffs", props: {genre: gothic, fit: all}}
+  - {value: "a weathered black duster coat with $colour stitching and a crow feather in the buttonhole", props: {genre: gothic, fit: all}}
+  - {value: "a black lace dress laced into a $colour corset", props: {genre: gothic, fit: women}}
+  - {value: "a $colour taffeta gown under a black mourning veil", props: {genre: gothic, fit: women}}
+  - {value: "a bustled black silk gown with a deep $colour bertha collar", props: {genre: gothic, fit: women}}
+  - {value: "a high-necked white blouse with a cameo brooch and a $colour wool walking skirt", props: {genre: gothic, fit: women}}
+  - {value: "a black satin corset over a $colour chiffon blouse with bell sleeves", props: {genre: gothic, fit: women}}
+  - {value: "a tiered black taffeta skirt and a $colour shawl with long fringe", props: {genre: gothic, fit: women}}
+  - {value: "a black bombazine mourning bodice and skirt with a $colour beaded collar", props: {genre: gothic, fit: women}}
+  - {value: "a black tulle petticoat skirt and a cropped $colour brocade jacket with puffed shoulders", props: {genre: gothic, fit: women}}
+  - {value: "a black pinafore with ruffled hems and $colour ribbon bows at the shoulders", props: {genre: gothic, fit: women}}
+  - {value: "a black wool riding habit with a $colour silk stock and a leather crop", props: {genre: gothic, fit: women}}
+  - {value: "a black velvet kirtle with trailing sleeves and a $colour braided girdle", props: {genre: gothic, fit: women}}
+  - {value: "a black lace capelet over a high-waisted $colour empire-line dress", props: {genre: gothic, fit: women}}
+  - {value: "a ragged black jersey tunic over striped leggings and $colour lace-up boots", props: {genre: gothic, fit: women}}
+  - {value: "a ruffled shirt under a $colour brocade waistcoat", props: {genre: gothic, fit: men}}
   - {value: "a black tailcoat and a $colour silk cravat", props: {genre: gothic, fit: men}}
+  - {value: "a caped Inverness coat over a $colour checked waistcoat", props: {genre: gothic, fit: men}}
+  - {value: "a Victorian undertaker's black suit and a top hat wound with $colour crape", props: {genre: gothic, fit: men}}
+  - {value: "a black smoking jacket with $colour satin lapels and frogged buttons", props: {genre: gothic, fit: men}}
+  - {value: "a charcoal morning coat and grey trousers with a $colour wing-collared shirt", props: {genre: gothic, fit: men}}
+  - {value: "a black pleated utility kilt with cargo pockets and a ripped $colour long-sleeved top", props: {genre: gothic, fit: men}}
+  - {value: "a black cassock-style coat buttoned to the throat with a $colour standing collar", props: {genre: gothic, fit: men}}
+  - {value: "a black silk-damask dressing gown with a $colour cord belt", props: {genre: gothic, fit: men}}
+  - {value: "a padded black doublet with slashed sleeves showing $colour silk beneath", props: {genre: gothic, fit: men}}
+  - {value: "a black boiled-wool cutaway jacket with $colour piped seams", props: {genre: gothic, fit: men}}
+  - {value: "a gravedigger's patched black work coat with a $colour neckerchief, an iron lantern in hand", props: {genre: gothic, fit: men}}
+  - {value: "a black Edwardian lounge suit with a $colour four-in-hand tie and spats", props: {genre: gothic, fit: men}}
   - {value: "a $colour flight suit with mission patches on the shoulders", props: {genre: spacefarer, fit: all}}
   - {value: "a padded $colour pressure suit, the helmet under one arm", props: {genre: spacefarer, fit: all}}
   - {value: "a sleek $colour uniform with a high collar and rank pips", props: {genre: spacefarer, fit: all}}
@@ -50,3 +247,36 @@ entries:
   - {value: "a scuffed $colour armoured vest over a thermal undersuit", props: {genre: spacefarer, fit: all}}
   - {value: "a long $colour coat with a magnetic clasp and a utility harness", props: {genre: spacefarer, fit: all}}
   - {value: "a $colour medic's tunic with a glowing scanner clipped to the chest", props: {genre: spacefarer, fit: all}}
+  - {value: "a patched canvas deck jacket with a $colour hazard-striped collar", props: {genre: spacefarer, fit: all}}
+  - {value: "a threadbare quilted thermal liner with $colour tape mending the elbows", props: {genre: spacefarer, fit: all}}
+  - {value: "a sun-bleached cargo hauler's coverall with a $colour hood bunched at the neck", props: {genre: spacefarer, fit: all}}
+  - {value: "a heavy rubberised vacuum-work suit with a $colour reflective strip on each sleeve", props: {genre: spacefarer, fit: all}}
+  - {value: "a fleece-lined bomber jacket with a blinking $colour beacon on the shoulder", props: {genre: spacefarer, fit: all}}
+  - {value: "a hydroponics tech's waterproof apron over a thin $colour mesh undershirt", props: {genre: spacefarer, fit: all}}
+  - {value: "a cropped insulated jacket and cargo trousers with $colour knee pads", props: {genre: spacefarer, fit: all}}
+  - {value: "a hooded desert smock of sand-coloured cloth with a $colour respirator hanging at the chest", props: {genre: spacefarer, fit: all}}
+  - {value: "an asteroid miner's dust-caked anorak with a $colour headlamp clipped to the collar", props: {genre: spacefarer, fit: all}}
+  - {value: "a scavenger's poncho stitched from old parachute cloth, edged in $colour", props: {genre: spacefarer, fit: all}}
+  - {value: "a station porter's padded work coat with a $colour access badge on a lanyard", props: {genre: spacefarer, fit: all}}
+  - {value: "a navigator's soft-shell jacket with $colour cuffs and a datapad strapped to the forearm", props: {genre: spacefarer, fit: all}}
+  - {value: "a ribbed environment undersuit with $colour seals at the wrists and collar", props: {genre: spacefarer, fit: all}}
+  - {value: "a short leather pilot's jacket over a high-necked $colour shift dress", props: {genre: spacefarer, fit: women}}
+  - {value: "a fitted $colour bodice with buckled straps over a long divided skirt and leggings", props: {genre: spacefarer, fit: women}}
+  - {value: "a diplomat's floor-length gown with metal collar plates and a $colour sash", props: {genre: spacefarer, fit: women}}
+  - {value: "a laced leather corset vest over a loose $colour linen blouse", props: {genre: spacefarer, fit: women}}
+  - {value: "a patched knee-length coat dress with $colour toggles and a frayed hem", props: {genre: spacefarer, fit: women}}
+  - {value: "a quilted $colour bolero over a long ribbed jersey dress", props: {genre: spacefarer, fit: women}}
+  - {value: "a crisp crew blouse tucked into high-waisted trousers, with $colour shoulder boards", props: {genre: spacefarer, fit: women}}
+  - {value: "a many-pocketed utility dress with a $colour webbing belt and rolled sleeves", props: {genre: spacefarer, fit: women}}
+  - {value: "a long wrap skirt of heavy canvas under a cropped $colour flight jacket", props: {genre: spacefarer, fit: women}}
+  - {value: "a tailored grey officer's skirt suit with a $colour collar stripe and a comm earpiece", props: {genre: spacefarer, fit: women}}
+  - {value: "a captain's double-breasted greatcoat with tarnished buttons and a $colour collar", props: {genre: spacefarer, fit: men}}
+  - {value: "a stoker's sweat-stained undershirt and dog tags on a braided $colour cord", props: {genre: spacefarer, fit: men}}
+  - {value: "a corporate envoy's narrow grey suit with a slim $colour tie and silver tie clip", props: {genre: spacefarer, fit: men}}
+  - {value: "a high-collared merchant's frock coat with $colour brocade cuffs", props: {genre: spacefarer, fit: men}}
+  - {value: "a formal dress tunic with a row of medals and $colour shoulder cords", props: {genre: spacefarer, fit: men}}
+  - {value: "a smuggler's open-collared shirt under a worn $colour suede vest", props: {genre: spacefarer, fit: men}}
+  - {value: "a spaceport gambler's embroidered waistcoat and shirtsleeves with a $colour silk cravat", props: {genre: spacefarer, fit: men}}
+  - {value: "a sleeveless oilskin jerkin over a washed $colour henley shirt", props: {genre: spacefarer, fit: men}}
+  - {value: "an old prospector's sheepskin poncho and a checked $colour flannel shirt, goggles on the brow", props: {genre: spacefarer, fit: men}}
+  - {value: "a hull welder's heavy work trousers and braces over a waffle-knit $colour shirt", props: {genre: spacefarer, fit: men}}

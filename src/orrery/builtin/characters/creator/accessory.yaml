@@ -1,4 +1,4 @@
-meta: {source: "orrery character creator: something worn on the head or face, for whom (`fit`: women or all); several read the creator's $colour", needs: [colour], builtin: true}
+meta: {source: "orrery character creator: something worn on the head or face, for whom (`fit`: women, men or all); several read the creator's $colour", needs: [colour], builtin: true}
 entries:
   - {value: "round wire-rimmed glasses", props: {fit: all}}
   - {value: "thick black-framed glasses", props: {fit: all}}
@@ -12,3 +12,51 @@ entries:
   - {value: "a $colour hood pulled up", props: {fit: all}}
   - {value: "a veil of fine $colour netting over the eyes", props: {fit: women}}
   - {value: "a $colour headscarf", props: {fit: women}}
+  - {value: "half-moon reading glasses low on the nose", props: {fit: all}}
+  - {value: "cat-eye glasses with $colour frames", props: {fit: women}}
+  - {value: "aviator sunglasses with gold frames", props: {fit: all}}
+  - {value: "wraparound sports sunglasses", props: {fit: all}}
+  - {value: "a monocle on a fine chain", props: {fit: all}}
+  - {value: "thin rimless glasses", props: {fit: all}}
+  - {value: "oversized square glasses with $colour frames", props: {fit: all}}
+  - {value: "mirrored sunglasses pushed up on the head", props: {fit: all}}
+  - {value: "heavy tortoiseshell glasses", props: {fit: all}}
+  - {value: "a $colour flat cap", props: {fit: men}}
+  - {value: "a black bowler hat", props: {fit: men}}
+  - {value: "a $colour baseball cap worn backwards", props: {fit: all}}
+  - {value: "a flat straw boater", props: {fit: all}}
+  - {value: "a $colour beret tilted to one side", props: {fit: all}}
+  - {value: "a grey felt fedora", props: {fit: all}}
+  - {value: "a fur trapper hat with the flaps down", props: {fit: all}}
+  - {value: "a faded canvas bucket hat", props: {fit: all}}
+  - {value: "a felt cloche hat pulled down to the eyebrows", props: {fit: women}}
+  - {value: "a battered cowboy hat", props: {fit: all}}
+  - {value: "a tall black top hat", props: {fit: all}}
+  - {value: "a tall, sculpted $colour head wrap", props: {fit: women}}
+  - {value: "an oilskin sou'wester", props: {fit: all}}
+  - {value: "a peaked officer's cap", props: {fit: all}}
+  - {value: "a scuffed white hard hat", props: {fit: all}}
+  - {value: "a leather aviator cap with the straps hanging loose", props: {fit: all}}
+  - {value: "a headset with a thin microphone arm", props: {fit: all}}
+  - {value: "a virtual-reality headset pushed up on the forehead", props: {fit: all}}
+  - {value: "long $colour drop earrings", props: {fit: women}}
+  - {value: "large gold hoop earrings", props: {fit: women}}
+  - {value: "pearl stud earrings", props: {fit: women}}
+  - {value: "a single dangling feather earring", props: {fit: all}}
+  - {value: "an ear cuff climbing the edge of one ear", props: {fit: all}}
+  - {value: "an ornate $colour hair comb", props: {fit: women}}
+  - {value: "a thin silver tiara", props: {fit: women}}
+  - {value: "a black velvet headband", props: {fit: women}}
+  - {value: "a crown of small white flowers", props: {fit: women}}
+  - {value: "a fine gold chain headpiece across the forehead", props: {fit: women}}
+  - {value: "a white terry-cloth sweatband across the forehead", props: {fit: all}}
+  - {value: "a paper face mask pulled down under the chin", props: {fit: all}}
+  - {value: "a $colour masquerade mask pushed up into the hair", props: {fit: all}}
+  - {value: "a pencil tucked behind one ear", props: {fit: all}}
+  - {value: "a jeweller's loupe headband with the lenses flipped up", props: {fit: all}}
+  - {value: "a miner's headlamp strapped to the forehead", props: {fit: all}}
+  - {value: "a black lace mantilla draped over the head", props: {fit: women}}
+  - {value: "a $colour bonnet tied under the chin", props: {fit: women}}
+  - {value: "a $colour fascinator pinned at an angle", props: {fit: women}}
+  - {value: "a $colour silk durag", props: {fit: all}}
+  - {value: "a pair of $colour earmuffs", props: {fit: all}}

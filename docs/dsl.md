@@ -32,7 +32,7 @@ Every construct of orrery's template language, where libraries live, how Dynamic
 | `# a note` | a comment: a line starting with `#` never reaches the model (filters like `__lib#key:value__` are not comments) |
 | `@size 832x1216` | the node's width and height outputs |
 | `@batch 8`, `@seed 100` | how many seeds and the first (the CLI's; in ComfyUI the Run count and the seed widget) |
-| `@grid __style__ × {dawn\|noon}` | every combination, one run each (3 styles × 2 = 6); everything else rolls the same in all of them. Axes: a library (with its `[tags]`), a choice, or a binding (`$hero`). Roll in the node queues them all, times a LoRA sweep; the CLI prints every cell per seed; Test rolls the axes like any pick |
+| `@grid __style__ × {dawn\|noon}` | every combination, one run each (3 styles × 2 = 6); everything else rolls the same in all of them. Axes: a library (with its `[tags]`), a choice, or a binding (`$hero`); a binding dialed to one value is a grid of one. Roll in the node queues them all, times a LoRA sweep; the CLI prints every cell per seed; Test rolls the axes like any pick |
 | `@unique __creature__`, `@unique $hero` | seeds in a row never repeat it: each seed takes the next step of one shuffled order, so 8 seeds give 8 different creatures and the next batch goes on from there. Learned weights don't steer it. The node sets the seed's control after generate to increment |
 
 **Seeds stay put.** Every pick has dice of its own, drawn from the seed, its label and how
