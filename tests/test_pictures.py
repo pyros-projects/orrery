@@ -147,7 +147,7 @@ def test_a_slot_in_a_cast_line_keeps_its_commas():
     from orrery.cast import parse_member
 
     m = parse_member("HERO", "image 2", "--who they are, in one sentence--, in a red coat")
-    assert (m.head, m.tail) == ("--who they are, in one sentence--", ", in a red coat")
+    assert (m.head, m.tail) == ("--who they are, in one sentence (for HERO)--", ", in a red coat")
     assert m.split_head() == (m.head, "")
 
 
@@ -181,3 +181,18 @@ def test_a_character_carries_what_its_template_rolled_so_another_can_differ(home
     for s in range(12):
         hero, other = (p.value for p in compile_scene(pair, s, libs).picks)
         assert (hero.split("/")[-1][0] == "9") != (other.split("/")[-1][0] == "9")  # one is Greek, one is not
+
+
+def test_two_members_with_the_same_slot_get_a_text_each_that_reads_as_their_definition():
+    """Pyro's gallery cast: both members' `--who they are--` got the first one's text, a sentence with its
+    full stop before "of <Picture 5>"."""
+    from orrery.slots import fill, request, slots
+
+    c = compile_scene("@h3 references\nCAST\n@HERO (image 1): --who they are--\n@PAL (image 2): --who they are--\n"
+                      "SHOT 3s: static\n@HERO waits for @PAL.", 1, {})
+    asked = slots(c.text)
+    assert asked == ["who they are (for HERO)", "who they are (for PAL)"]
+    assert "this is <Subject 2>'s definition" in request([], asked, c.text)
+    done = fill(c.text, {asked[0]: "an old man in a green coat.", asked[1]: "a young woman with pink hair"})
+    assert "<Subject 1> = an old man in a green coat of <Picture 1>" in done
+    assert "<Subject 2> = a young woman with pink hair of <Picture 2>" in done

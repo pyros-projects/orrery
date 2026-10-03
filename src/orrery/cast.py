@@ -132,6 +132,10 @@ def parse_member(name: str, spec: str, text: str) -> Member:
     hidden = _SLOT_SPAN.sub(lambda m: "-" * len(m.group(0)), text)  # where the head ends: the first comma outside a slot
     cut = hidden.find(",")
     head, rest = (text, "") if cut < 0 else (text[:cut], text[cut + 1:])
+    # a slot that writes who the member is says whose it is: two members with the same directions get a
+    # text each (orrery.slots writes each directions once), and the model knows which subject it describes
+    head = _SLOT_SPAN.sub(lambda m: m.group(0) if f"(for {name.strip()})" in m.group(0)
+                          else f"{m.group(0)[:-2]} (for {name.strip()})--", head)
     member = Member(name.strip(), head.strip(), f", {rest.strip()}" if rest.strip() else "")
     for raw in filter(None, (s.strip() for s in (spec or "").split(","))):
         m, named = _SOURCE.match(raw), _NAMED.match(raw)

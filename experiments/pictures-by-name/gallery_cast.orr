@@ -7,8 +7,8 @@ style: live-action, warm evening light in a roadside diner, photorealistic, hand
 $hero = __pictures/krea/09_character_creator__
 
 CAST
-@HERO (image $hero): --who they are, in one sentence--
-@STRANGER (image __pictures/krea/09_character_creator[origin!=$hero.origin, colour!=$hero.colour]__): --who they are, in one sentence--
+@HERO (image $hero): --who they are, briefly--
+@STRANGER (image __pictures/krea/09_character_creator[origin!=$hero.origin, colour!=$hero.colour]__): --who they are, briefly--
 keep: face, outfit
 
 SHOT 3s: static, medium

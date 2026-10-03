@@ -34,9 +34,12 @@ def slots(text: str) -> list[str]:
 
 
 def fill(text: str, texts: dict[str, str]) -> str:
-    """The text with each slot replaced by what was written for it, else by its directions."""
+    """The text with each slot replaced by what was written for it, else by its directions. A written
+    full stop goes where the text goes on in lower case (`<Subject 1> = a woman … of <Picture 5>`)."""
     def put(m: re.Match) -> str:
         written = texts.get(m.group(1)) or m.group(1)
+        if re.match(r"[ \t]+[a-z]|,", text[m.end():]) and written.endswith(".") and not m.group(2):
+            return written[:-1]
         return written if written.endswith((".", "!", "?")) else written + m.group(2)
     return _FILLED.sub(put, text)
 
@@ -62,11 +65,14 @@ def request(wanted: list[Need], directions: list[str], context: str, frames: int
         parts.append(f"The prompt, with each part you write marked [slot N]:\n\n{shown.strip()}")
         if made:
             parts.append("The reference pictures were made from these prompts, so a part that describes who or what "
-                         "they show says what the prompt says, in a sentence:\n" + "\n".join(f"- {m}" for m in made))
+                         "they show draws on what the prompt says about them:\n" + "\n".join(f"- {m}" for m in made))
         labels = " Name people and things by their labels (<Subject N>, <Video N> …) as the prompt does." \
             if re.search(r"<(?:Subject|Picture|Video|Audio) \d+>", context) else ""
+        defines = {m.group(2): m.group(1) for m in re.finditer(r"(<Subject \d+>) = --([^\n]*?[^\s-])--", context)}
+        hint = lambda d: (f" (this is {defines[d]}'s definition, as \"{defines[d]} = …\" reads it: a noun phrase in lower "
+                          "case that names who or what it is, no full stop)") if d in defines else ""
         parts.append(f"Parts to write, each as prose that fits where it stands and follows its directions exactly.{labels}\n"
-                     + "\n".join(f'- "{keys[d]}": {d}' for d in directions))
+                     + "\n".join(f'- "{keys[d]}": {d}{hint(d)}' for d in directions))
         replies.append('each part ("slot 1", …) to its text')
     if rewrites:
         parts.append("Passages to rewrite, each following its instruction. Keep every UPPERCASE name, every <label> "
