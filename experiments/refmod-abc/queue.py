@@ -11,6 +11,7 @@ the instance Pyro works in, after asking: a second ComfyUI freezes the machine.
 import json
 import sys
 import urllib.request
+from pathlib import Path
 
 import av
 
@@ -27,7 +28,7 @@ def main() -> None:
     if len(sys.argv) != 4:
         sys.exit(__doc__)
     prompt, workflow = graph(sys.argv[1])
-    template, segment = open(sys.argv[2]).read(), int(sys.argv[3])
+    template, segment = Path(sys.argv[2]).read_text(), int(sys.argv[3])
     nodes = prompt.values()
     orrery = next(n for n in nodes if n["class_type"] == "OrreryPrompt")
     orrery["inputs"].update(template=template, segment=segment)
