@@ -75,7 +75,7 @@ def test_a_range_the_conditioning_already_has_is_kept(pack):
     assert [(m["start_percent"], m["end_percent"], len(m["minimax_refs"])) for _, m in out] == [(0.5, 1.0, 1)]
 
 
-def test_a_picture_with_at_and_from_is_marked_and_waits_without_the_pack(monkeypatch):
+def test_a_picture_with_at_and_from_is_marked_and_waits_at_zero_without_the_pack(monkeypatch):
     for name in [n for n in sys.modules if n.endswith(".nodes.refmod_loader")]:
         monkeypatch.delitem(sys.modules, name)
     cond = [["text", {"minimax_refs": [{"kind": "image", "latent": "one"}, {"kind": "image", "latent": "two"},
@@ -83,12 +83,13 @@ def test_a_picture_with_at_and_from_is_marked_and_waits_without_the_pack(monkeyp
     picks = {"images": [{"ref": 2, "image": 5, "member": "TOM", "strength": 0.5, "from": 0.35}]}
     (out,) = OrreryRefMods().apply(cond, json.dumps(picks))
     (early, late) = out
-    assert [b["latent"] for b in early[1]["minimax_refs"]] == ["one", "clip"]  # image 2 waits
-    assert [(b["latent"], b.get(refbias.KEY)) for b in late[1]["minimax_refs"]] == [("one", None), ("two", 0.5),
-                                                                                   ("clip", None)]
+    marks = lambda c: [(b["latent"], b.get(refbias.KEY), b.get(refbias.PICTURE)) for b in c[1]["minimax_refs"]]
+    # image 2 waits at 0, so refbias hides its vision block in the text too, which leaving would not
+    assert marks(early) == [("one", None, None), ("two", 0.0, 2), ("clip", None, None)]
+    assert marks(late) == [("one", None, None), ("two", 0.5, 2), ("clip", None, None)]
     picks["images"][0].update({"from": 0.0, "to": 0.5})  # image 2 only for the first half
     (out,) = OrreryRefMods().apply(cond, json.dumps(picks))
-    assert [[b["latent"] for b in c[1]["minimax_refs"]] for c in out] == [["one", "two", "clip"], ["one", "clip"]]
+    assert [[b.get(refbias.KEY) for b in c[1]["minimax_refs"]] for c in out] == [[None, 0.5, None], [None, 0.0, None]]
     assert [(c[1].get("start_percent"), c[1].get("end_percent")) for c in out] == [(0.0, 0.5), (0.5, 1.0)]
 
 
@@ -128,6 +129,31 @@ def test_rows_bias_the_targets_queries_and_the_refmods_keys():
     queries, keys = refbias.rows(segments, [(1.0, 1), (0.5, 2)])
     assert queries == [(40, 50), (50, 90)]
     assert keys == [(20, 26, math.log(0.5)), (26, 40, math.log(0.5))]
+
+
+def test_a_pictures_vision_block_is_the_nth_run_of_vision_tokens_in_the_text():
+    tags = [1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1]  # <Picture 1>, <Picture 2>, then a video's block
+    refs = [{"kind": "image"}, {"kind": "image", refbias.KEY: 0.25, refbias.PICTURE: 2}, {"kind": "video"}]
+    assert refbias.vision(refs, tags) == [(6, 8, 0.25)]
+    assert refbias.vision([{"kind": "image", refbias.KEY: 0.5, refbias.PICTURE: 1}], tags) == [(2, 5, 0.5)]
+    assert refbias.vision(refs[:1], tags) is None  # every picture at 1
+    assert refbias.vision(refs, None) is None  # no tags: only the latents
+
+
+def test_rows_bias_a_pictures_vision_block_in_the_text_too():
+    segments = [(0, 10, "text"), (10, 20, "ref_img"), (20, 60, "video")]
+    queries, keys = refbias.rows(segments, [(0.5, 1)], [(2, 5, 0.5)])
+    assert queries == [(20, 60)]
+    assert keys == [(10, 20, math.log(0.5)), (2, 5, math.log(0.5))]
+
+
+def test_the_forward_notes_the_strengths_and_vision_blocks_of_the_payload():
+    forward = refbias._forward(lambda self, x, t, c, options, *args, **kwargs: dict(options))
+    refs = [{"kind": "image", refbias.KEY: 0.5, refbias.PICTURE: 1}]
+    options = {"other": 1}
+    seen = forward(None, None, None, None, options, minimax_payload={"refs": refs, "text_token_tags": [1, 0, 0, 1]})
+    assert seen == {"other": 1, refbias.OPTION: [(0.5, 1)], refbias.VISION: [(1, 3, 0.5)]}
+    assert forward(None, None, None, None, options, minimax_payload={"refs": [{"kind": "image"}]}) == {"other": 1}
 
 
 def test_the_extra_column_adds_exactly_log_s_and_keeps_the_rest_of_the_logits():
