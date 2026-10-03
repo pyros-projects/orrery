@@ -329,8 +329,10 @@ For every clip, Orrery Refs fills `ref_1`, `ref_2`, … in this order:
    and the chunk's), frame anchors and `[image N]`. These are `<Picture 1>`,
    `<Picture 2>`, … in the prompt. A sent image that the clip uses is fetched
    from the chain; any other must be wired, or the run stops.
-2. **Every other sent image that exists**, named or not, in `image N` order.
-   The prompt does not label these.
+2. **Every other sent image that exists** and that no CAST gives a member, in
+   `image N` order. The prompt does not label these. A sent image that a CAST gives
+   a member goes only where a member of the clip has it, so a chunk whose own CAST
+   redefines that member without it goes without it.
 3. **The rest is empty.** An empty ref that Reference to Video reads is `None`,
    which it skips. An empty ref that only other nodes read is blocked, so those
    nodes wait for a clip that has an image instead of failing the run.
