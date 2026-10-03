@@ -805,9 +805,9 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
     src, libraries = with_inline(strip_comments(src), libraries)
     reel = split_reel(src)
     params = parse(src).params
-    if reel and (params.grid is not None or params.unique):
-        raise ValueError("@grid and @unique vary a template across runs; a reel already gives every run a "
-                         "clip of its own. Use them in a single clip.")
+    if reel and params.unique:
+        raise ValueError("@unique varies a template across runs; a reel already gives every run a clip of its "
+                         "own. Use it in a single clip.")
     src = prepare(src, seed, libraries, cell)
     reel = split_reel(src) if reel else None
     sends: dict[int, dict] = {}

@@ -823,6 +823,14 @@ def test_a_grid_runs_one_cell_per_sweep_run_and_multiplies_with_a_lora_sweep(hom
         OrreryPrompt().run(both, 5, "text", home=str(home), sweep="4|g")
 
 
+def test_a_grid_in_a_reel_runs_its_cells_on_one_clip(home):
+    reel = "@h3 text\nSCENE a\nSHOT 5s\nA fox.\nSCENE b\nSHOT 5s\nA heron in __style__.\n: grid __style__"
+    texts = [OrreryPrompt().run(reel, 5, "h3-base", home=str(home), segment=1, sweep=f"{i}|g")[0] for i in range(2)]
+    assert "in linocut" in texts[0] and "in gouache" in texts[1]
+    lint = json.loads(OrreryPrompt().run(reel, 5, "h3-base", home=str(home), segment=1)[1])["lint"]
+    assert any("Grid: 2 runs" in i["message"] and "on this clip" in i["message"] for i in lint)
+
+
 def test_a_sweep_in_a_library_entry_warns_in_the_node(home):
     (home / "library" / "sets.yaml").write_text("- <lora:ink:0.5,1.0>\n")
     text, picks, *_ = OrreryPrompt().run("a fox __sets__", 5, "text", home=str(home))

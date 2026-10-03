@@ -357,8 +357,9 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     lint = [{"severity": "info", "message": n} for n in notes] + lint
     if (plan or grid) and not sweep:
         what = "LoRA sweep" if not grid else "Grid" if not plan else "LoRA sweep and grid"
+        on = " on this clip (the segment holds still)" if getattr(result, "chunks", 0) else ""
         lint.append({"severity": "info", "message": f"{what}: {max(len(plan), 1) * cells} runs ({planned}); "
-                                                     "Generate runs them all, Run takes the first."})
+                                                     f"Generate runs them all{on}, Run takes the first."})
     stack: list = []
     if target != "text" and result.loras:
         stack, warnings = lora_stack(result.loras, lora_files())
