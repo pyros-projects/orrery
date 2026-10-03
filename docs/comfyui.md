@@ -143,7 +143,7 @@ Nodes under **orrery**:
 - **Orrery Log**: `picks` (+ `images`) → saves PNGs with the picks embedded and
   appends one line per output to `~/.orrery/galaxy.jsonl`. For videos saved by
   another node, put the file path into `media_path`.
-- **Orrery Refs**: `picks` + `image_1` … `image_9` → `ref_1` … `ref_9` and `preview`, between
+- **Orrery Refs**: `picks` + `image_1` … `image_9` → `ref_1` … `ref_9` and `preview` (it also loads the gallery pictures a CAST names, `image NAME`), between
   your reference images and MiniMax H3 Reference to Video. Every clip gets only
   the images its screenplay uses, packed from `ref_1` and numbered as the prompt
   numbers them, plus the frames of earlier clips a reel `REMEMBER:`s (a picture

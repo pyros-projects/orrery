@@ -12,7 +12,7 @@ from collections import Counter
 from pathlib import Path
 
 from orrery import galaxy as gx
-from orrery import manager, uistate
+from orrery import manager, pictures, uistate
 from orrery import presets as ps
 from orrery.chain import DEFAULT_CHAIN
 from orrery.comfy_llm import can_write, llm_config, text_encoders
@@ -100,6 +100,8 @@ def _library_name(raw) -> str:
     name = str(raw or "").strip() if NAME.match(str(raw or "").strip()) else list_name(raw)
     if not name:
         raise ApiError(400, f"'{raw}' is not a usable library name. Use letters, digits and _.")
+    if name.startswith(pictures.PREFIX):
+        raise ApiError(403, f"__{name}__ holds the gallery's pictures: it follows the gallery and cannot be edited.")
     return name
 
 
@@ -258,6 +260,8 @@ def template(home: Home, args: dict) -> dict:
 # --- libraries ------------------------------------------------------------------------------
 
 def _source(home: Home, name: str, lib: Library) -> str:
+    if lib.meta.get("gallery"):
+        return "gallery"
     if lib.meta.get("generated_by"):
         return "llm"
     return "user" if home.library_file(name) else "builtin"

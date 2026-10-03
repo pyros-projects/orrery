@@ -329,7 +329,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     if (todo or (passages and backend is not None)) and not wanted:
         marked = [keep_marks(passage) for _, passage, _ in passages] if backend is not None else []
         prompt = request([], todo, result.text, _count(frames),
-                         [(instruction, text) for (instruction, _, _), (text, _) in zip(passages, marked, strict=False)])
+                         [(instruction, text) for (instruction, _, _), (text, _) in zip(passages, marked, strict=False)],
+                         made=_made(result, packed) if target != "text" else [])
         try:
             reply = backend.complete(prompt, images=frames)
             texts, _ = write(h, [], todo, reply, backend)
@@ -391,6 +392,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         **({"folder": folder.strip()} if sweep_data and folder.strip() else {}),
         "lint": lint,
         **({"refs": result.refs} if target != "text" and packed else {}),
+        **({"pictures": {str(n): p["file"] for n, p in result.pictures.items() if not packed or n in result.refs}}
+           if target != "text" and getattr(result, "pictures", None) else {}),
         **({"sends": {"chain": chain, "home": str(h.root), "slots": result.send_slots,
                       "ready": {str(k): v for k, v in result.sends.items()}}}
            if target != "text" and result.send_slots else {}),
@@ -615,6 +618,9 @@ class OrreryPrompt:
             if "sends" in data and not packed:
                 raise ValueError("This reel REMEMBERs frames as reference images, which Orrery Refs fetches: wire this "
                                  "node's picks into an Orrery Refs, and its ref outputs into Reference to Video.")
+            if data.get("pictures") and not packed:
+                raise ValueError("The CAST names pictures of the gallery (image NAME), which Orrery Refs loads: wire this "
+                                 "node's picks into an Orrery Refs, and its ref outputs into Reference to Video.")
             if (prompt_id := runs.current_prompt()) and unique_id is not None:
                 runs.remember(prompt_id, unique_id, outputs[1])  # for Generate: Save nodes log to the galaxy
             if "segments" in data:  # a reel
@@ -720,6 +726,22 @@ def stack_preview(labelled: list[tuple[str, object]]):
     return torch.from_numpy(preview_frames(labelled))
 
 
+def _made(result, packed: bool) -> dict[str, str]:
+    """For the slots: the prompt that made each gallery picture of the clip, by its label in the compiled
+    prompt (packed: in Orrery Refs' order)."""
+    return {f"<Picture {result.refs.index(n) + 1 if packed else n}>": picture["prompt"]
+            for n, picture in sorted(getattr(result, "pictures", {}).items())
+            if picture.get("prompt") and (not packed or n in result.refs)}
+
+
+def load_picture(path: str):
+    """A picture file as an IMAGE batch of one. ComfyUI only (torch)."""
+    import numpy as np
+    from PIL import Image
+
+    return to_image(np.asarray(Image.open(path).convert("RGB"), dtype=np.float32)[None] / 255.0)
+
+
 def to_image(array):
     """A float array (frames, height, width, 3) as an IMAGE batch. ComfyUI only (torch)."""
     import torch
@@ -804,7 +826,14 @@ class OrreryRefs:
 
     def route(self, picks, prompt=None, unique_id=None, keep_sent=False, **images):
         data = json.loads(picks or "{}")
-        refs, sends = data.get("refs"), data.get("sends") or {}
+        refs, sends, named = data.get("refs"), data.get("sends") or {}, data.get("pictures") or {}
+        for n in sorted(int(k) for k in named if images.get(f"image_{k}") is not None):
+            print(f"[orrery] warn: image {n} is wired into Orrery Refs and named in the CAST too: the gallery picture "
+                  f"{Path(named[str(n)]).name} replaces the wired one.")
+        for k, path in named.items():
+            if not Path(path).is_file():
+                raise ValueError(f"The CAST names the gallery picture {path}, but the file is gone.")
+            images[f"image_{k}"] = load_picture(path)
         for n in sorted(n for n in sends.get("slots", []) if images.get(f"image_{n}") is not None):
             sent = sends.get("ready", {}).get(str(n), {})
             print(f"[orrery] warn: image {n} is wired into Orrery Refs and kept by a REMEMBER: (SEND:) line too: "

@@ -1,5 +1,6 @@
 // Prompt tab: preset bar, the highlighted editor with completion, dials, and a way into Test.
 import { inlineLibraries, suggest } from "../orrery-complete.js";
+import { closeMenu, drawMenu } from "./dialmenu.js";
 import { esc, highlight } from "./highlight.js";
 import { hintsFor } from "./remember.js";
 import { icon } from "./icons.js";
@@ -369,6 +370,7 @@ const setDials = (app) => Object.keys(app.bridge.getParams()).length;
 
 const DIAL_CHOICES = 500;  // a dial lists this many of its library's entries; any other can be typed
 
+// A dial's choices: its braces' options, or its library's entries (null while they are on their way).
 function dialChoices(app, d) {
   if (d.options.length) return d.options;
   if (!d.lib) return [];
@@ -377,9 +379,10 @@ function dialChoices(app, d) {
   const lib = app.data.libFull?.[d.lib] || app.dialLibs?.[d.lib];  // only this library, once (#152: the home was 30 MB)
   if (!lib) {
     (app.libsLoading ??= {})[d.lib] ??= app.api.library(d.lib)
-      .then((got) => { (app.dialLibs ??= {})[d.lib] = got; renderDials(app); })
-      .catch(() => { (app.dialLibs ??= {})[d.lib] = { entries: [] }; });
-    return [];
+      .then((got) => { (app.dialLibs ??= {})[d.lib] = got; })
+      .catch(() => { (app.dialLibs ??= {})[d.lib] = { entries: [] }; })
+      .finally(() => { delete app.libsLoading[d.lib]; refreshMenu(app); });  // asked again after a run empties the cache
+    return null;
   }
   return lib.entries.filter((e) => matches(d.tag, e.tags, e.props)).slice(0, DIAL_CHOICES).map((e) => e.value);
 }
@@ -387,6 +390,7 @@ function dialChoices(app, d) {
 function renderDials(app) {
   const box = app.view.querySelector(".dials");
   if (!box) return;
+  if (app.dm) shutMenu(app);
   const list = dials(app.text), values = app.bridge.getParams();
   const kept = Object.fromEntries(Object.entries(values).filter(([k]) => list.some((d) => d.name === k)));
   if (Object.keys(kept).length !== Object.keys(values).length) app.bridge.setParams(kept);
@@ -394,10 +398,10 @@ function renderDials(app) {
   box.innerHTML = list.length ? `<span class="label" title="Turn a binding without editing the template. Empty means its default roll; saving bakes the dials in.">Dials</span>`
     + list.map((d) => {
       const v = kept[d.name] || "", id = `oa-${app.uid}-dl-${d.name}`;
+      dialChoices(app, d);  // a library's entries start on their way now, not when its menu opens
       return `<label class="dial${v ? " on" : ""}" title="$${esc(d.name)} = ${esc(d.expr)}"><span class="dn">$${esc(d.name)}</span>`
-        + `<input class="dv" data-dial="${esc(d.name)}" list="${id}" value="${esc(v)}" placeholder="${esc(d.expr)}" spellcheck="false" autocomplete="off">`
-        + `<button type="button" class="mini" data-dreset="${esc(d.name)}" aria-label="Back to the default roll">${icon("x")}</button>`
-        + `<datalist id="${id}">${dialChoices(app, d).map((c) => `<option value="${esc(c)}"></option>`).join("")}</datalist></label>`;
+        + `<input class="dv" id="${id}" data-dial="${esc(d.name)}" value="${esc(v)}" placeholder="${esc(d.expr)}" spellcheck="false" autocomplete="off" role="combobox" aria-expanded="false">`
+        + `<button type="button" class="mini" data-dreset="${esc(d.name)}" aria-label="Back to the default roll">${icon("x")}</button></label>`;
     }).join("") : "";
 }
 
@@ -410,7 +414,31 @@ function wireDials(app) {
     box.querySelector(`[data-dial="${CSS.escape(name)}"]`)?.closest(".dial").classList.toggle("on", !!value.trim());
     refreshBar(app);
   };
-  box.addEventListener("input", (e) => { if (e.target.dataset.dial) put(e.target.dataset.dial, e.target.value); });
+  box.addEventListener("input", (e) => {
+    if (!e.target.dataset.dial) return;
+    put(e.target.dataset.dial, e.target.value);
+    openMenu(app, e.target, -1);
+  });
+  box.addEventListener("focusin", (e) => { if (e.target.dataset.dial) openMenu(app, e.target, -1); });
+  box.addEventListener("mousedown", (e) => { if (e.target.dataset.dial && !app.dm) openMenu(app, e.target, -1); });
+  box.addEventListener("focusout", (e) => { if (e.target.dataset.dial) setTimeout(() => { if (app.dm?.input === e.target) shutMenu(app); }, 0); });
+  box.addEventListener("keydown", (e) => {
+    const input = e.target;
+    if (!input.dataset.dial) return;
+    const n = app.dm?.items.length || 0;
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      const down = e.key === "ArrowDown", was = app.dm ? app.dm.at : -1;
+      openMenu(app, input, !n ? -1 : was < 0 ? (down ? 0 : n - 1) : (was + (down ? 1 : n - 1)) % n);
+    } else if (e.key === "Enter" && app.dm && app.dm.at >= 0 && app.dm.items[app.dm.at] !== undefined) {
+      e.preventDefault();
+      pickChoice(app, input, app.dm.items[app.dm.at]);
+    } else if (e.key === "Escape" && app.dm) {
+      e.preventDefault();
+      shutMenu(app);
+    }
+  });
+  app.pickChoice = (input, value) => { input.value = value; put(input.dataset.dial, value); };
   box.addEventListener("click", (e) => {
     const r = e.target.closest("[data-dreset]");
     if (!r) return;
@@ -418,6 +446,37 @@ function wireDials(app) {
     box.querySelector(`[data-dial="${CSS.escape(r.dataset.dreset)}"]`).value = "";
     put(r.dataset.dreset, "");
   });
+}
+
+// The dial's menu: drawn in the app (the dials row scrolls and would cut it off), kept in app.dm.
+const menuHost = (app) => app.view.closest(".orrery-app") || app.view;
+
+function openMenu(app, input, at) {
+  const d = dials(app.text).find((x) => x.name === input.dataset.dial);
+  if (!d) return;
+  const state = drawMenu(menuHost(app), input, dialChoices(app, d), at);
+  app.dm = { ...state, input };
+  input.setAttribute("aria-expanded", "true");
+  state.box.addEventListener("mousedown", (e) => {
+    const item = e.target.closest("[data-n]");
+    e.preventDefault();  // the box keeps the focus
+    if (item) pickChoice(app, input, app.dm.items[Number(item.dataset.n)]);
+  });
+}
+
+function refreshMenu(app) {
+  if (app.dm && app.dm.input.isConnected) openMenu(app, app.dm.input, app.dm.at);
+}
+
+function shutMenu(app) {
+  closeMenu(menuHost(app));
+  app.dm?.input.setAttribute("aria-expanded", "false");
+  app.dm = null;
+}
+
+function pickChoice(app, input, value) {
+  app.pickChoice(input, value);
+  shutMenu(app);
 }
 
 // Fresh templates: no preset linked, so nothing can be overwritten by accident.

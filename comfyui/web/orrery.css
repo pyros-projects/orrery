@@ -217,6 +217,11 @@
 .orrery-app .dial.on { border-color: rgba(240,122,160,.55); background: rgba(240,122,160,.08); }
 .orrery-app .dial .mini { display: none; margin-right: 4px; }
 .orrery-app .dial.on .mini { display: inline-flex; }
+.orrery-app .dm { position: absolute; z-index: 30; max-width: min(460px, calc(100% - 8px)); max-height: 260px; overflow-y: auto; background: #1f2029; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.5); padding: 3px 0; font: 12px/1.4 var(--mono); }
+.orrery-app .dm-item { padding: 4px 10px; cursor: pointer; white-space: normal; overflow-wrap: anywhere; }
+.orrery-app .dm-item:hover, .orrery-app .dm-item.on { background: var(--hover); }
+.orrery-app .dm-item.cur { color: var(--rose); }
+.orrery-app .dm-note { padding: 6px 10px; color: var(--faint); font-family: var(--ui); }
 .orrery-app .pfoot { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px; flex: none; }
 .orrery-app .stat.live b { color: var(--brass); }
 .orrery-app .stat.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--brass); display: inline-block; margin-right: 6px; animation: oa-pulse 1.2s ease-in-out infinite; }
@@ -480,6 +485,7 @@
 .orrery-app .liblist .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; background: var(--line); }
 .orrery-app .liblist .dot.user { background: var(--teal); }
 .orrery-app .liblist .dot.llm { background: var(--violet); }
+.orrery-app .liblist .dot.gallery { background: var(--brass); }
 .orrery-app .pend-chip { font: 600 10px var(--mono); color: var(--violet); background: rgba(180,148,245,.14); border-radius: 4px; padding: 1px 5px; flex: none; }
 .orrery-app .banner.review { border-color: rgba(180,148,245,.45); background: rgba(180,148,245,.08); color: var(--ink); display: flex; align-items: center; gap: 8px; }
 .orrery-app .banner.review > .i { color: var(--violet); flex: none; }

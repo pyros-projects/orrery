@@ -93,8 +93,11 @@ class Home:
         return path
 
     def libraries(self) -> dict[str, Library]:
-        """Built-in libraries (H3 camera, styles, instruments), overridden by the user's files."""
-        return {**load_libraries(BUILTIN_DIR), **load_libraries(self.library_dir)}
+        """Built-in libraries (H3 camera, styles, instruments), overridden by the user's files, and the
+        gallery's pictures (`__pictures/<preset>__`, orrery.pictures)."""
+        from orrery import pictures
+
+        return {**load_libraries(BUILTIN_DIR), **load_libraries(self.library_dir), **pictures.libraries(self)}
 
     def weights(self) -> dict[str, float]:
         if not self.weights_path.exists():
