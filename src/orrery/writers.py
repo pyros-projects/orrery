@@ -2,7 +2,7 @@
 teaches only what it writes (the static language, no wildcards), so a small model is not confused by
 the rules of the others.
 
-    continue   the reel's chunks so far, resolved (picks filled)  →  the next CHUNK
+    continue   the reel's scenes so far, resolved (picks filled)  →  the next SCENE
     story      the first and the last frame                       →  the SHOT between them (fl2va)
     describe   a picture                                          →  an image prompt, or an i2va SHOT
 
@@ -126,8 +126,8 @@ def request(home: Home, task: str, template: str, seed: int, libraries, weights)
                               "so there is no next scene to write.")
         head, segments = resolved(reel, seed, libraries, weights, len(path))
         chunks = "\n\n".join(
-            f"CHUNK {s['title'] or f'clip {i + 1}'}\n" + "\n".join(s["lines"])
-            + (f"\nHANDOFF: {s['handoff']}" if s["handoff"] else "") for i, s in enumerate(segments))
+            f"SCENE {s['title'] or f'clip {i + 1}'}\n" + "\n".join(s["lines"])
+            + (f"\nEND ON: {s['handoff']}" if s["handoff"] else "") for i, s in enumerate(segments))
         last = segments[-1]["handoff"] if segments else None
         values = {"world": _world(head), "chunks": chunks, "next": len(segments) + 1,
                   "handoff": f"the last clip ended as: {last}" if last else "where the last clip ended"}
@@ -178,14 +178,14 @@ def check(task: str, template: str, answer: str) -> tuple[str, str | None]:
     shots, chunks = sum(1 for ln in lines if _SHOT.match(ln)), sum(1 for ln in lines if _CHUNK.match(ln))
     if name == "continue":
         if not _CHUNK.match(lines[0]):
-            return out, "The answer does not start with a CHUNK line."
+            return out, "The answer does not start with a SCENE line."
         if chunks > 1:
-            return out, f"The answer writes {chunks} chunks; one was asked for."
+            return out, f"The answer writes {chunks} scenes; one was asked for."
         if not shots:
-            return out, "The chunk has no SHOT line."
+            return out, "The scene has no SHOT line."
     elif name in ("story", "describe_shot"):
         if chunks:
-            return out, "The answer writes a CHUNK; one shot was asked for."
+            return out, "The answer writes a SCENE; one shot was asked for."
         if not shots:
             return out, "The answer has no SHOT line."
     elif shots or chunks:
@@ -207,7 +207,7 @@ def _compile(lines: list[str]) -> None:
 
 
 def apply(task: str, template: str, text_: str) -> str:
-    """The template with the writer's text in its place: a new chunk at the end; a shot instead of the
+    """The template with the writer's text in its place: a new scene at the end; a shot instead of the
     template's shots (header, style and CAST kept); an image prompt instead of the prompt lines
     (comments and `: w… h…` kept)."""
     name = task_name(task, template)
