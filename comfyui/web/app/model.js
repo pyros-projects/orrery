@@ -438,8 +438,14 @@ export function applyDials(text, values) {
 // the rest. A folder is a real one (film/genre → film: genre) or, for flat names such as the
 // built-ins, a shared prefix (couture_form, couture_house → couture: form, house). Each item carries
 // its name without the folder.
+// A library's line in the list, from the library with its entries (what the server sends after an edit).
+export function libraryHead(lib) {
+  return { name: lib.name, source: lib.source, count: lib.entries.length, tags: lib.tags || [], pending: !!lib.pending,
+    pending_count: (lib.pending_entries || []).length, directions: lib.directions || "" };
+}
+
 export function libraryGroups(libs) {
-  const review = libs.filter((l) => l.pending || (l.pending_entries || []).length);
+  const review = libs.filter((l) => l.pending || l.pending_count || (l.pending_entries || []).length);
   const rest = libs.filter((l) => !review.includes(l));
   const dir = (name) => (name.includes("/") ? name.slice(0, name.lastIndexOf("/")) : null);
   const prefix = (name) => name.split("_")[0];

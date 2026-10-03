@@ -104,12 +104,15 @@ Nodes under **orrery**:
     how often each lint warning fires.
   - **Presets**: every preset with your newest output as its preview; search,
     folders, favorites, recents, a sample roll and the template per preset.
-  - **Libraries**: edit wildcard lists by hand: entries, tags, weights, and
-    the weight each entry learned from your ratings. Libraries that share a
-    name prefix sit in a folder (`couture_form`, `couture_house` → couture);
-    what the language model wrote waits on top for review. Built-ins become
-    yours with **Make it mine**. Drag the list's edge to widen it; a long
-    property opens when you click it.
+  - **Libraries**: edit wildcard lists by hand: entries, their tags and
+    properties (on a line under each entry), weights, and the weight each
+    entry learned from your ratings. Libraries that share a name prefix sit in
+    a folder (`couture_form`, `couture_house` → couture); what the language
+    model wrote waits on top for review. Built-ins become yours with **Make it
+    mine**. A library's entries load when you open it, so a home of a hundred
+    thousand entries opens at once; the search finds libraries by name and by
+    entry. Drag the list's edge to widen it; a long property opens when you
+    click it.
   - **Gallery**: every logged output. love / like / nope / hate multiply the
     learned weight of each pick by 1.5 / 1.2 / 0.8 / 0.5 (re-rating replaces
     the factor). **Use template + seed** restores an output and sets the seed

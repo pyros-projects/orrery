@@ -4,7 +4,7 @@ import { highlight } from "../../comfyui/web/app/highlight.js";
 import { fitThumbs } from "../../comfyui/web/app/timeline.js";
 import { writerBlock } from "../../comfyui/web/app/write.js";
 import {
-  applyDials, dials, downstream, nextSeed, queueSweep, entryPage, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
+  applyDials, dials, downstream, nextSeed, queueSweep, entryPage, libraryHead, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
   chunkInfo, chunkLabel, splitCells, rangeIds, shape, stats, PLAN_HINT, templateHash, hasGoto, plays, longForm, matches, splitOptions, tagsMatch, withDice,
 } from "../../comfyui/web/app/model.js";
 
@@ -280,6 +280,14 @@ test("generate finds the output nodes downstream of the orrery node, and whether
   assert.deepEqual(downstream(nodes, 9), { outputs: [31], log: false });
   nodes[0].targets.push(41); nodes.push({ id: 41, type: "OrreryLog", output: true, targets: [] });
   assert.deepEqual(downstream(nodes, 9), { outputs: [31, 41], log: true });
+});
+
+test("a library's line in the list counts its entries and what waits for review, without carrying them", () => {
+  const lib = { name: "film/genre", source: "user", entries: [{ value: "noir" }, { value: "western" }], tags: ["dark"],
+    pending: false, pending_entries: ["western"], directions: "" };
+  const head = libraryHead(lib);
+  assert.deepEqual(head, { name: "film/genre", source: "user", count: 2, tags: ["dark"], pending: false, pending_count: 1, directions: "" });
+  assert.equal(libraryGroups([head, libraryHead({ ...lib, name: "style", pending_entries: [] })])[0].key, "review");  // the count is enough
 });
 
 test("a sweep holds the seed for its runs, steps it between seeds and once after the last run", async () => {

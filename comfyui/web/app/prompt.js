@@ -367,18 +367,21 @@ function fixReelSeed(app) {
 const dialKey = (text) => dials(text).map((d) => `${d.name}=${d.expr}`).join("\n");
 const setDials = (app) => Object.keys(app.bridge.getParams()).length;
 
+const DIAL_CHOICES = 500;  // a dial lists this many of its library's entries; any other can be typed
+
 function dialChoices(app, d) {
   if (d.options.length) return d.options;
   if (!d.lib) return [];
   const own = inlineLibraries(app.text).find((l) => l.name === d.lib);  // the template's @lib wins
   if (own) return own.entries;
-  if (!app.data.libraries) {
-    app.libsLoading ??= app.api.libraries().then((r) => { app.data.libraries = r.libraries; renderDials(app); })
-      .catch(() => { app.data.libraries = []; });
+  const lib = app.data.libFull?.[d.lib] || app.dialLibs?.[d.lib];  // only this library, once (#152: the home was 30 MB)
+  if (!lib) {
+    (app.libsLoading ??= {})[d.lib] ??= app.api.library(d.lib)
+      .then((got) => { (app.dialLibs ??= {})[d.lib] = got; renderDials(app); })
+      .catch(() => { (app.dialLibs ??= {})[d.lib] = { entries: [] }; });
     return [];
   }
-  const lib = app.data.libraries.find((l) => l.name === d.lib);
-  return (lib?.entries || []).filter((e) => matches(d.tag, e.tags, e.props)).map((e) => e.value);
+  return lib.entries.filter((e) => matches(d.tag, e.tags, e.props)).slice(0, DIAL_CHOICES).map((e) => e.value);
 }
 
 function renderDials(app) {

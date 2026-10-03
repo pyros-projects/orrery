@@ -313,7 +313,8 @@
 .orrery-app .banner { margin: 10px 12px 0; padding: 8px 10px; border-radius: 8px; background: #23242f; border: 1px solid var(--line); color: var(--muted); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 12.5px; flex: none; }
 .orrery-app .banner b { color: var(--ink); font-weight: 500; }
 .orrery-app .entries { width: 100%; border-collapse: collapse; table-layout: fixed; }
-.orrery-app .entries col.cv { width: 52%; }
+.orrery-app .entries td.v .chips { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; padding: 1px 6px 4px; }
+.orrery-app .entries th .sub { font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--faint); }
 .orrery-app .entries col.cw { width: 74px; }
 .orrery-app .entries col.cl { width: 92px; }
 .orrery-app .entries col.cx { width: 34px; }

@@ -312,9 +312,27 @@ def _entries(raw) -> list[Entry]:
 
 
 def libraries(home: Home, args: dict) -> dict:
-    weights = home.weights()
-    return {"libraries": [_library_json(home, n, lib, weights)
-                          for n, lib in sorted(home.libraries().items())]}
+    """The list of the Libraries tab: names, counts and sources, without entries (a home can hold a
+    hundred thousand). `q`: only the libraries whose name or an entry holds it."""
+    q = str(args.get("q") or "").strip().casefold()
+    return {"libraries": [_library_head(home, n, lib) for n, lib in sorted(home.libraries().items())
+                          if not q or q in n.casefold() or any(q in e.value.casefold() for e in lib.entries)]}
+
+
+def _library_head(home: Home, name: str, lib: Library) -> dict:
+    return {"name": name, "source": _source(home, name, lib), "count": len(lib.entries),
+            "tags": sorted({t for e in lib.entries for t in e.tags}), "pending": bool(lib.meta.get("pending")),
+            "pending_count": len(lib.meta.get("pending_entries") or []),
+            "directions": str(lib.meta.get("directions") or "")}
+
+
+def library(home: Home, args: dict) -> dict:
+    """One library with its entries, when the tab opens it or a dial lists it."""
+    name = str(args.get("name") or "")
+    lib = home.libraries().get(name)
+    if lib is None:
+        raise ApiError(404, f"There is no library __{name}__.")
+    return _library_json(home, name, lib, home.weights())
 
 
 def library_save(home: Home, args: dict) -> dict:
@@ -808,6 +826,7 @@ ROUTES = [
     ("POST", "/orrery/ui", ui_save),
     ("GET", "/orrery/template", template),
     ("GET", "/orrery/libraries", libraries),
+    ("GET", "/orrery/library", library),
     ("POST", "/orrery/library/save", library_save),
     ("POST", "/orrery/library/own", library_own),
     ("POST", "/orrery/library/delete", library_delete),
