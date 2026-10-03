@@ -38,6 +38,8 @@ checks) are left out.
 
 ### Fixed
 
+- After a grid or a LoRA sweep the seed steps as its control after generate says, so the next Roll
+  starts on a seed of its own instead of repeating the last one (#125).
 - Frequencies and Rolls load the libraries once per request instead of once per roll (#47).
 
 ## [0.1.0] - 2026-10-02
