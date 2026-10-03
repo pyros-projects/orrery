@@ -15,6 +15,7 @@ model is needed.
 
 import difflib
 import json
+import re
 import sys
 import tempfile
 from pathlib import Path
@@ -139,6 +140,17 @@ def test_the_preset_rolls_what_it_rolled(bare_home, name):
     said = differences(name, want, got)
     assert not said, "\n".join(said) + "\n\nIntended? Say why in the PR and run: " \
                                        "uv run python tests/test_golden.py --write"
+
+
+MARKERS = re.compile("[\x1e\x1f\ue000-\uf8ff]")  # what the phases pass to each other inside the text (#22)
+
+
+def test_no_marker_reaches_a_prompt():
+    leaks = [f"{p.relative_to(GOLDEN)}, seed {seed}" for p in sorted(GOLDEN.rglob("*.json"))
+             for seed, rolled in json.loads(p.read_text(encoding="utf-8"))["seeds"].items()
+             for take in rolled["takes"]
+             if MARKERS.search(take["text"]) or any(MARKERS.search(v) for _, v in take["picks"])]
+    assert not leaks, f"a marker character reached the prompt: {leaks[:5]}"
 
 
 def test_every_snapshot_has_its_preset():

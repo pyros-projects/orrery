@@ -57,8 +57,9 @@ entries bring it back (after 2000 choices in one place).
 Directives stand on a line of their own (under the `@h3` line in a screenplay, which stays first);
 completion offers them after `@` at the start of a line. The `:` line says the same and still works:
 `: x8 seed=100 w1216 h832 unique=$hero` and `: grid …` (which takes the rest of its line); several of
-them add up. A grid or `@unique` varies one clip
-across runs, so a reel (which gives every run a clip of its own) refuses them.
+them add up. `@unique` varies one clip
+across runs, so a reel (which gives every run a clip of its own) refuses it; a grid in a reel renders
+every cell on the same clip ([h3.md](h3.md) 1d).
 
 Libraries live in the home folder (`~/.orrery` unless set otherwise, see
 [configuration.md](configuration.md)) under `library/`, in any subfolders. Plain `.txt` wildcard files work as
@@ -97,3 +98,78 @@ galaxy records the dials next to its picks.
 ```bash
 uv run orrery compile @effects/subsurface_travel --set start="upper back" --set 'entity=__bh_entity__'
 ```
+
+## What the language guarantees
+
+What a change to orrery must keep, and the tests that hold it. The golden corpus
+(`tests/test_golden.py`) is the executable half: it pins what every built-in preset rolls.
+
+**The order a template rolls in.**
+- A template's dials (`--set`, the node's params) replace its bindings' values first; then its
+  `@include`s are embedded, each with its own indented dials. Includes nest and never loop
+  (`test_dsl.py::test_override_replaces_a_binding_and_keeps_everything_else`,
+  `test_presets.py::test_include_embeds_a_preset_and_its_params_turn_its_dials`, `::test_includes_nest_but_never_loop`).
+- `@lib` libraries come next and shadow a library of the same name
+  (`test_dsl.py::test_a_template_brings_its_own_libraries`).
+- Then the grid fixes its axes for the run and `@unique` takes this seed's step; everything else
+  rolls the same in every cell (`test_batch.py::test_a_grid_runs_every_combination_and_nothing_else_moves`,
+  `::test_unique_never_repeats_within_a_batch_of_seeds_in_a_row`).
+- Bindings roll from the top down, each once, and a field rolls once when its binding does; a
+  `$name` above its binding stays as written, with a warning
+  (`test_dsl.py::test_binding_is_expanded_once_and_reused`, `::test_a_field_is_a_template_rolled_once_when_it_is_bound`,
+  `::test_a_name_that_is_not_bound_stays_as_written_and_warns`).
+- Then the lines: an `IF` line is kept only when its condition holds on what rolled, and the text
+  rolls inside out, an entry being a template itself
+  (`test_dsl.py::test_a_condition_takes_the_same_brackets_and_reads_tags_props_and_the_value`,
+  `::test_nested_braces_resolve_inside_out`, `::test_an_entry_is_a_template_itself_as_in_dynamic_prompts`).
+
+**Scopes.**
+- In a reel, the head (everything before the first `SCENE`) rolls once per seed and holds for
+  every clip; each clip rolls its scene anew, from the seed and its own number
+  (`test_reel.py::test_bindings_roll_once_for_the_whole_reel`,
+  `::test_the_world_holds_and_every_segment_rolls_its_chunk_anew`, `::test_a_field_of_the_reels_head_is_the_same_in_every_clip`).
+- `$x[-N]` is the value N clips back and `$x["title"]` the value when that scene last played,
+  recomputed, so there is no limit; before it exists it is this clip's own value, with a warning
+  (`test_reel.py::test_history_looks_back_n_clips_and_clamps_at_the_first`,
+  `::test_history_in_brackets_is_the_value_clips_back_or_when_a_scene_last_played`,
+  `::test_history_of_a_scene_that_has_not_played_is_this_clips_value_with_a_warning`).
+- A `SET:` in the head holds for every clip, one in a scene for that clip, and the later line wins
+  (`test_reel.py::test_set_lines_turn_the_dials_in_the_head_and_per_chunk`).
+- A reel's path is walked clip by clip from the seed: the same seed plays the same scenes
+  (`test_reel.py::test_a_goto_that_waits_on_a_roll_makes_each_seed_its_own_story`,
+  `::test_a_cut_with_a_chance_holds_that_often_and_each_seed_its_own_way`).
+
+**Determinism.**
+- The same template, libraries, learned weights and seed give the same text and the same picks
+  (`test_dsl.py::test_same_seed_gives_same_text_and_picks`, the golden corpus).
+- A pick's dice come from the seed, its label and how often that label was drawn before, so adding
+  or removing a choice elsewhere leaves a seed's other picks alone
+  (`test_dsl.py::test_a_choice_added_elsewhere_leaves_the_other_picks_of_a_seed_alone`).
+- What moves a pick: the seed, its own expression (its label), how often that label was drawn
+  before it, the entries of the library it draws from, and learned weights, which are meant to steer it
+  (`test_dsl.py::test_learned_weights_shift_distribution`).
+- `@rng 1` brings back the single stream of templates made before 2026-10-02
+  (`test_dsl.py::test_the_dice_of_before_stay_with_rng_1`).
+- Language-model slots and `>` lines are not rolled: the model writes them after the roll, where
+  they stand (`test_slots.py::test_fill_puts_the_written_text_where_each_slot_stands`,
+  `test_dsl.py::test_enhance_line_is_recorded_not_inlined`).
+
+**What fails, what warns, what passes through.**
+- An error stops the run and names the fix: a missing library (and where it is used), a filter
+  that matches nothing, something that goes round in circles (a library, includes, fields that read
+  each other, a `{N$$…}` that keeps coming back), a grid or `@unique` that cannot work, an empty
+  screenplay (`test_dsl.py::test_missing_library_names_the_library`,
+  `::test_a_missing_library_inside_an_entry_names_where_it_is_used`, `::test_a_filter_nothing_matches_says_so`,
+  `::test_a_library_that_comes_back_to_itself_is_an_error`,
+  `::test_a_field_reads_its_siblings_and_two_that_read_each_other_are_an_error`,
+  `::test_many_choices_all_roll_and_a_choice_that_keeps_coming_back_stops_with_a_message`,
+  `test_batch.py::test_a_grid_says_what_is_wrong`, `::test_unique_says_what_is_wrong`,
+  `test_h3.py::test_only_an_empty_screenplay_is_an_error`).
+- A warning lets the run go on: syntax that rolled nothing (a `__my-list__`, a lone `{`), an
+  unbound `$name` and a camera word H3 does not know stay as written, history that does not exist
+  yet is this clip's value (`test_dsl.py::test_what_looks_like_syntax_but_rolled_nothing_warns`,
+  `test_h3.py::test_unknown_camera_motion_is_kept_in_words_and_warned`).
+- A backslash writes a character as it is, a `#` line is a comment that never reaches the model,
+  and no character orrery uses inside reaches a prompt
+  (`test_dsl.py::test_a_backslash_writes_the_character_as_it_is`,
+  `::test_hash_lines_are_comments_and_filters_are_not`, `test_golden.py::test_no_marker_reaches_a_prompt`).
