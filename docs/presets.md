@@ -23,13 +23,16 @@ Built-in presets are read-only (`preset save NAME @NAME` makes a copy yours):
 `tutorial/` walks through the DSL in eighteen lessons, from a first wildcard
 to a three-shot H3 scene, an endless reel and the language model's lists,
 slots and `>` rewrites, `krea/` holds Krea 2 stills (natural language, the medium named, text
-to render in quotes), and `h3/` holds MiniMax H3 scenes (dialogue in German
+to render in quotes; the cabinet of curiosities deals a different specimen to every seed with
+`@unique` and shoots each in three lights with `@grid`), and `h3/` holds MiniMax H3 scenes (dialogue in German
 and Cantonese, a voiceover, fast cuts, an animated fable, on-screen music, and
 an I2VA starter for your own stills, a three-clip reel for H3 Motion
 Context, a drone flight, an impossible camera move that dives into a dewdrop
 and comes out elsewhere, and a world swap inside one take, an entity test that shows how H3
-renders five non-human SCP entities, with a dial for naming them, and an
-archetype test that checks where H3 pulls an unfamiliar design). `effects/` holds Ito-style body-horror operators in the lite format,
+renders five non-human SCP entities, with a dial for naming them, an
+archetype test that checks where H3 pulls an unfamiliar design, three endings (one setup, and a
+sitcom, a horror film and a romance that each continue the same clip with `AFTER:`) and between two
+frames, where any first and last picture are joined in one take by a visible action). `effects/` holds Ito-style body-horror operators in the lite format,
 from Codie's H3 tests: subsurface travel, body suit, mirror replacement, living
 paper, glass body, living clay, elastic body, hollow vessel, filament, human
 drawer and zipper spine, plus his operators surface press, feature migration,
@@ -46,8 +49,9 @@ in `__characters/horror#role:curator__`. `fashion/` strings snobby adjectives an
 into runway looks for Krea and H3 (`couture_*` libraries); `infinite_cakewalk` is an endless show
 steered by CUT TO:: every clip rolls who walks next and cuts to the scene that dresses them, and the
 season (a dial) puts the runway outside in spring and summer, inside in autumn and winter. `loops/` holds H3 Motion Context reels
-that never end (`forever` or `CUT TO:`, Run (Instant)). Five are steered by `CUT TO:` and play out differently
-with every seed: `infinite_backrooms` (a found-footage horror film: after every third level a chance that
+that never end (`forever` or `CUT TO:`, Run (Instant)). Six are steered by `CUT TO:` and play out differently
+with every seed: `the_specimen` (a test scene films the SCP the seed rolled and REMEMBER keeps it, so the
+walk through the Backrooms meets that very thing, at a 35% chance, twice at most), `infinite_backrooms` (a found-footage horror film: after every third level a chance that
 an SCP finds the camera, and which one decides how it gets away), `dice_dungeon` (rooms, foes and a relic
 that ends it, so every seed is an adventure of its own length), `the_relay` (a thing passed from hand to
 hand through a city), `evolution` (a creature that changes one trait per generation, and sometimes all of
@@ -57,9 +61,10 @@ clip, each clip ending on a framed threshold the next one opens), a set change
 where stagehands strike one place and reveal the next (Pyro's tested idea and
 nineteen more mechanisms in `__transitions/between__`), a drone odyssey, a
 rabbit hole that dives into ever smaller details and comes out at a new scale,
-a time machine over one street corner from 1850 to 3000, and the Backrooms: a
+a time machine over one street corner from 1850 to 3000, the Backrooms (a
 found-footage walk on a 1990s camcorder that noclips from one empty level to
-the next. `onebutton/` is
+the next), and `and_then`, which takes a video of your own (the Orrery Prompt's `video` input) and
+lets it go on forever, a little stranger every clip. `onebutton/` is
 OneButtonPrompt's promise without its slop: `still` (Krea) and `clip` (H3)
 roll a person, animal, object, idea or landscape, a moment that happens to it,
 a place it belongs in, a look and a composition, and `$wild` dials from tame

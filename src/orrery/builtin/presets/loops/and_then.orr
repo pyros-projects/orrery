@@ -1,0 +1,39 @@
+---
+title: "And then…"
+note: "Your own clip, going on forever, a little stranger every time. Wire a video into the Orrery Prompt's video input: the head speaks for it (its END ON: says how it ends, in words that fit any clip), and the first scene continues it, picture and sound (AFTER: the input video). Then every clip rolls what happens next, and everyone in it carries on as if nothing were odd, still marked by what happened the clip before ($event[-1]). Run (Instant) plays it until you stop. Orrery Continue needs the H3 video and audio VAEs in its vae and audio_vae."
+tags: [loops, h3, reel, input_video, motion_context]
+---
+@h3 text 16:9
+style: live-action, the same look, light and camera as the footage before it, one continuous shot
+context: 22
+MUSIC: N/A
+END ON: the footage reaches its last moment, everything exactly where it was
+
+@lib and_then
+  a single red balloon drifts slowly through the frame
+  it starts to snow, softly, indoors as much as out
+  every loose object lifts a few centimetres off the ground and hangs there
+  a brass band marches straight through the middle of the scene and out the other side
+  the light turns to a deep golden sunset in a matter of seconds
+  the walls fold away like stage flats, and behind them is a beach at noon
+  a whale glides past in the sky, close enough to touch
+  everything begins to move in slow motion except one small dog
+  the colours drain out of the world one by one until only red is left
+  a second, identical version of the scene slides in from the left and overlaps the first
+  gravity tips sideways, and everyone leans into it calmly
+  the camera's own reflection appears in the air, waving
+
+SCENE and then
+AFTER: the input video
+$event = __and_then__
+SHOT 6s: static
+Everything carries on exactly where the footage left off, and then $event. Nobody seems to find it strange.
+SFX: the footage's own sound carrying on; then the sound of what happens, close and clear
+END ON: everyone settles back into what they were doing, as if nothing had happened
+
+SCENE and then some forever
+$event = __and_then__
+SHOT 6s: static
+The scene carries on, still marked by the moment $event[-1], and then $event. Everyone takes it in their stride.
+SFX: the scene's sound carrying on; then the sound of what happens, close and clear
+END ON: everyone settles back into what they were doing, as if nothing had happened

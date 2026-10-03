@@ -1,0 +1,11 @@
+---
+title: "Cabinet of curiosities"
+note: "A naturalist's specimen in a glass cabinet, photographed for a museum catalogue, and a different one on every seed: @unique deals the creatures from one shuffled deck, so eight seeds give eight different animals before any comes back. Each is shot in three lights, one run each (@grid). Its legs, wings, catalogue number and year are numbers rolled in a range, the framing comes from any library in the frame/ folder (a glob), and every specimen has something wrong with it. @size makes it a catalogue page."
+tags: [krea, photo, grid]
+---
+@size 832x1216
+$beast = __creature__
+$light = {raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}
+@unique $beast
+@grid $light
+a museum catalogue photograph of a naturalist's specimen: a {|tiny |giant }$beast {IF $beast[bird]: with {2-4} wings|with {2-8} legs}, __subjects/twists__, pinned to black velvet inside a glass-fronted cabinet, a yellowed handwritten label beneath it reading "specimen no. {100-999}, collected {1850-1925}", {30% a brass magnifying glass leaning against the glass,} lit by $light, __frame/*__, dust and old fingerprints on the glass catching the light
