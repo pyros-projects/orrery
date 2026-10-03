@@ -1,0 +1,92 @@
+{
+ "preset": "krea/02_found_photo",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "a grainy VHS camcorder still of a school gym dance, a real snow leopard standing among the guests as if it had been invited, people in 1990s clothes, harsh on-camera flash, red-eye, motion blur at the edges, an orange date stamp in the lower right corner reading \"12 31 '99\"",
+     "picks": [
+      [
+       "{a disposable camera snapshot|an overexposed early 2000s digital camera photo|a cheap 35mm point-and-shoot photo|a grainy VHS camcorder still}",
+       "a grainy VHS camcorder still"
+      ],
+      [
+       "{birthday party in a living room|school gym dance|family road trip rest stop|backyard barbecue}",
+       "school gym dance"
+      ],
+      [
+       "{1990s|early 2000s}",
+       "1990s"
+      ],
+      [
+       "{06 21 '98|12 31 '99|08 14 '03}",
+       "12 31 '99"
+      ],
+      [
+       "__creature[mammal]__",
+       "snow leopard"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "a disposable camera snapshot of a backyard barbecue, a real caracal standing among the guests as if it had been invited, people in early 2000s clothes, harsh on-camera flash, red-eye, motion blur at the edges, an orange date stamp in the lower right corner reading \"06 21 '98\"",
+     "picks": [
+      [
+       "{a disposable camera snapshot|an overexposed early 2000s digital camera photo|a cheap 35mm point-and-shoot photo|a grainy VHS camcorder still}",
+       "a disposable camera snapshot"
+      ],
+      [
+       "{birthday party in a living room|school gym dance|family road trip rest stop|backyard barbecue}",
+       "backyard barbecue"
+      ],
+      [
+       "{1990s|early 2000s}",
+       "early 2000s"
+      ],
+      [
+       "{06 21 '98|12 31 '99|08 14 '03}",
+       "06 21 '98"
+      ],
+      [
+       "__creature[mammal]__",
+       "caracal"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "an overexposed early 2000s digital camera photo of a school gym dance, a real black panther standing among the guests as if it had been invited, people in 1990s clothes, harsh on-camera flash, red-eye, motion blur at the edges, an orange date stamp in the lower right corner reading \"12 31 '99\"",
+     "picks": [
+      [
+       "{a disposable camera snapshot|an overexposed early 2000s digital camera photo|a cheap 35mm point-and-shoot photo|a grainy VHS camcorder still}",
+       "an overexposed early 2000s digital camera photo"
+      ],
+      [
+       "{birthday party in a living room|school gym dance|family road trip rest stop|backyard barbecue}",
+       "school gym dance"
+      ],
+      [
+       "{1990s|early 2000s}",
+       "1990s"
+      ],
+      [
+       "{06 21 '98|12 31 '99|08 14 '03}",
+       "12 31 '99"
+      ],
+      [
+       "__creature[mammal]__",
+       "black panther"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

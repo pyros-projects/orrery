@@ -1,0 +1,224 @@
+{
+ "preset": "tutorial/16_h3_first_reel",
+ "seeds": {
+  "0": {
+   "path": [
+    "the first room",
+    "the next room 1/∞",
+    "the next room 2/∞",
+    "the next room 3/∞",
+    "the next room 4/∞",
+    "the next room 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. <Subject 1> walks slowly through a gallery of empty picture frames, one of them showing a moving landscape, holding up a lantern, and stops in front of a closed door. The camera pushes in at slow speed. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: A hush and faint wind coming from inside one frame and slow footsteps.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "a gallery of empty picture frames, one of them showing a moving landscape"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. The shot opens as <Subject 1> stands at a closed door, the lantern raised. The camera pushes in at slow speed. <Subject 1> opens the door and leaves a gallery of empty picture frames, one of them showing a moving landscape behind, walks slowly through a private cinema of red velvet seats, a film flickering on the screen with the lantern raised, and stops in front of the next closed door. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: A projector rattling and muffled film dialogue and a door creaking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "a private cinema of red velvet seats, a film flickering on the screen"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. The shot opens as <Subject 1> stands at a closed door, the lantern raised. The camera pushes in at slow speed. <Subject 1> opens the door and leaves a private cinema of red velvet seats, a film flickering on the screen behind, walks slowly through a vaulted wine cellar lit by candles between oak barrels with the lantern raised, and stops in front of the next closed door. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: Dripping and a cork pulled somewhere in the dark and a door creaking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "a vaulted wine cellar lit by candles between oak barrels"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. The shot opens as <Subject 1> stands at a closed door, the lantern raised. The camera pushes in at slow speed. <Subject 1> opens the door and leaves a vaulted wine cellar lit by candles between oak barrels behind, walks slowly through a music room where a grand piano plays itself with the lantern raised, and stops in front of the next closed door. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: A slow melancholy piano piece and a door creaking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "a music room where a grand piano plays itself"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. The shot opens as <Subject 1> stands at a closed door, the lantern raised. The camera pushes in at slow speed. <Subject 1> opens the door and leaves a music room where a grand piano plays itself behind, walks slowly through a kitchen of copper pots and steam where cooks move in a quick choreography with the lantern raised, and stops in front of the next closed door. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: Sizzling pans, clattering and a shouted order and a door creaking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "a kitchen of copper pots and steam where cooks move in a quick choreography"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. The shot opens as <Subject 1> stands at a closed door, the lantern raised. The camera pushes in at slow speed. <Subject 1> opens the door and leaves a kitchen of copper pots and steam where cooks move in a quick choreography behind, walks slowly through a winter garden of palms and orchids around a stone fountain with the lantern raised, and stops in front of the next closed door. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: A splashing fountain and tropical birds and a door creaking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "a winter garden of palms and orchids around a stone fountain"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "path": [
+    "the first room",
+    "the next room 1/∞",
+    "the next room 2/∞",
+    "the next room 3/∞",
+    "the next room 4/∞",
+    "the next room 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. <Subject 1> walks slowly through a private cinema of red velvet seats, a film flickering on the screen, holding up a lantern, and stops in front of a closed door. The camera pushes in at slow speed. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: A projector rattling and muffled film dialogue and slow footsteps.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "a private cinema of red velvet seats, a film flickering on the screen"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. The shot opens as <Subject 1> stands at a closed door, the lantern raised. The camera pushes in at slow speed. <Subject 1> opens the door and leaves a private cinema of red velvet seats, a film flickering on the screen behind, walks slowly through a flooded ground floor where furniture floats in knee-deep water with the lantern raised, and stops in front of the next closed door. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: Water sloshing and furniture bumping gently and a door creaking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "a flooded ground floor where furniture floats in knee-deep water"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. The shot opens as <Subject 1> stands at a closed door, the lantern raised. The camera pushes in at slow speed. <Subject 1> opens the door and leaves a flooded ground floor where furniture floats in knee-deep water behind, walks slowly through a flooded ground floor where furniture floats in knee-deep water with the lantern raised, and stops in front of the next closed door. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: Water sloshing and furniture bumping gently and a door creaking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "a flooded ground floor where furniture floats in knee-deep water"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. The shot opens as <Subject 1> stands at a closed door, the lantern raised. The camera pushes in at slow speed. <Subject 1> opens the door and leaves a flooded ground floor where furniture floats in knee-deep water behind, walks slowly through a ballroom with a sprung wooden floor and couples turning slowly with the lantern raised, and stops in front of the next closed door. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: A slow waltz and shoes brushing wood and a door creaking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "a ballroom with a sprung wooden floor and couples turning slowly"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. The shot opens as <Subject 1> stands at a closed door, the lantern raised. The camera pushes in at slow speed. <Subject 1> opens the door and leaves a ballroom with a sprung wooden floor and couples turning slowly behind, walks slowly through an observatory dome opening onto a night full of stars with the lantern raised, and stops in front of the next closed door. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: Gears grinding as the dome turns and a door creaking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "an observatory dome opening onto a night full of stars"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. The shot opens as <Subject 1> stands at a closed door, the lantern raised. The camera pushes in at slow speed. <Subject 1> opens the door and leaves an observatory dome opening onto a night full of stars behind, walks slowly through a bar of backlit bottles where a bartender pours in slow ritual with the lantern raised, and stops in front of the next closed door. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: Ice clinking, a cocktail shaker and low talk and a door creaking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "a bar of backlit bottles where a bartender pours in slow ritual"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "path": [
+    "the first room",
+    "the next room 1/∞",
+    "the next room 2/∞",
+    "the next room 3/∞",
+    "the next room 4/∞",
+    "the next room 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. <Subject 1> walks slowly through a music room where a grand piano plays itself, holding up a lantern, and stops in front of a closed door. The camera pushes in at slow speed. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: A slow melancholy piano piece and slow footsteps.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "a music room where a grand piano plays itself"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. The shot opens as <Subject 1> stands at a closed door, the lantern raised. The camera pushes in at slow speed. <Subject 1> opens the door and leaves a music room where a grand piano plays itself behind, walks slowly through a spiral stairwell winding up a tall tower around an empty core with the lantern raised, and stops in front of the next closed door. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: Footsteps ringing up and down the spiral and a door creaking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "a spiral stairwell winding up a tall tower around an empty core"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. The shot opens as <Subject 1> stands at a closed door, the lantern raised. The camera pushes in at slow speed. <Subject 1> opens the door and leaves a spiral stairwell winding up a tall tower around an empty core behind, walks slowly through a vaulted wine cellar lit by candles between oak barrels with the lantern raised, and stops in front of the next closed door. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: Dripping and a cork pulled somewhere in the dark and a door creaking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "a vaulted wine cellar lit by candles between oak barrels"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. The shot opens as <Subject 1> stands at a closed door, the lantern raised. The camera pushes in at slow speed. <Subject 1> opens the door and leaves a vaulted wine cellar lit by candles between oak barrels behind, walks slowly through a long hall of mirrors where every candle multiplies into infinity with the lantern raised, and stops in front of the next closed door. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: Light footsteps and a soft diffuse echo and a door creaking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "a long hall of mirrors where every candle multiplies into infinity"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. The shot opens as <Subject 1> stands at a closed door, the lantern raised. The camera pushes in at slow speed. <Subject 1> opens the door and leaves a long hall of mirrors where every candle multiplies into infinity behind, walks slowly through a spiral stairwell winding up a tall tower around an empty core with the lantern raised, and stops in front of the next closed door. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: Footsteps ringing up and down the spiral and a door creaking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "a spiral stairwell winding up a tall tower around an empty core"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous unbroken ten-second shot, lantern light. The shot opens as <Subject 1> stands at a closed door, the lantern raised. The camera pushes in at slow speed. <Subject 1> opens the door and leaves a spiral stairwell winding up a tall tower around an empty core behind, walks slowly through a kitchen of copper pots and steam where cooks move in a quick choreography with the lantern raised, and stops in front of the next closed door. The shot ends as <Subject 1> stands at a closed door, the lantern raised.\n\noverall_soundscape: Sizzling pans, clattering and a shouted order and a door creaking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$room ← __tour/rooms__",
+       "a kitchen of copper pots and steam where cooks move in a quick choreography"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

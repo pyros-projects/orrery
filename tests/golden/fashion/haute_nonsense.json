@@ -1,0 +1,116 @@
+{
+ "preset": "fashion/haute_nonsense",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "a high-fashion runway photograph from the Atelier Sans Titre spring-summer show at the ballroom of a crumbling palace, a model walking toward the camera in a post-luxury, pre-apocalyptic, aggressively understated look: sleeves that forget where the arm ends in moss velvet, with a dress built from forty overlapping umbrellas, harsh runway flash, the front row blurred in the dark, shot on a long lens",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{autumn-winter|spring-summer|resort}",
+       "spring-summer"
+      ],
+      [
+       "__couture_adjective__ ×2–3",
+       "post-luxury, pre-apocalyptic, aggressively understated"
+      ],
+      [
+       "__couture_form__ ×1–2",
+       "a dress built from forty overlapping umbrellas"
+      ],
+      [
+       "__couture_venue__",
+       "the ballroom of a crumbling palace"
+      ],
+      [
+       "__couture_form__",
+       "sleeves that forget where the arm ends"
+      ],
+      [
+       "__couture_material__",
+       "moss velvet"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "a high-fashion runway photograph from the Studio Kessler-Mourne autumn-winter show at a runway of wet black sand, a model walking toward the camera in a subversively bourgeois, post-ironic look: lapels that fold back into themselves in boiled wool, with a single sleeve that continues into the floor, a cape cut from the idea of a staircase, harsh runway flash, the front row blurred in the dark, shot on a long lens",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Studio Kessler-Mourne"
+      ],
+      [
+       "{autumn-winter|spring-summer|resort}",
+       "autumn-winter"
+      ],
+      [
+       "__couture_adjective__ ×2–3",
+       "subversively bourgeois, post-ironic"
+      ],
+      [
+       "__couture_form__ ×1–2",
+       "a single sleeve that continues into the floor, a cape cut from the idea of a staircase"
+      ],
+      [
+       "__couture_venue__",
+       "a runway of wet black sand"
+      ],
+      [
+       "__couture_form__",
+       "lapels that fold back into themselves"
+      ],
+      [
+       "__couture_material__",
+       "boiled wool"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "a high-fashion runway photograph from the Maison Absente spring-summer show at a greenhouse full of dead orchids, a model walking toward the camera in a quietly unwearable, radically tailored, neo-ecclesiastical look: pockets placed exactly where regret lives in crushed silver lamé, with a skirt that is mostly an argument, harsh runway flash, the front row blurred in the dark, shot on a long lens",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Absente"
+      ],
+      [
+       "{autumn-winter|spring-summer|resort}",
+       "spring-summer"
+      ],
+      [
+       "__couture_adjective__ ×2–3",
+       "quietly unwearable, radically tailored, neo-ecclesiastical"
+      ],
+      [
+       "__couture_form__ ×1–2",
+       "a skirt that is mostly an argument"
+      ],
+      [
+       "__couture_venue__",
+       "a greenhouse full of dead orchids"
+      ],
+      [
+       "__couture_form__",
+       "pockets placed exactly where regret lives"
+      ],
+      [
+       "__couture_material__",
+       "crushed silver lamé"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

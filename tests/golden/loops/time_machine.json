@@ -1,0 +1,296 @@
+{
+ "preset": "loops/time_machine",
+ "seeds": {
+  "0": {
+   "path": [
+    "1850",
+    "1920",
+    "1955",
+    "1978",
+    "1995",
+    "2025"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. A small harbour front with a stone quay in 1850: gas lamps, mud and cobbles, horse-drawn carts, men in top hats and women in long skirts, a blacksmith's forge smoking. The camera holds a static shot. People go about the day in front of the fixed camera. In the last seconds a time-lapse begins: days and nights flicker past faster and faster. The shot ends as days and nights flicker past faster and faster over a small harbour front with a stone quay.\n\noverall_soundscape: Hooves on cobbles, a hammer on an anvil and street criers.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a small harbour front with a stone quay"
+      ],
+      [
+       "$era ← __time/eras#era:1850__",
+       "gas lamps, mud and cobbles, horse-drawn carts, men in top hats and women in long skirts, a blacksmith's forge smoking"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. The shot opens as days and nights flicker past faster and faster over a small harbour front with a stone quay. The camera holds a static shot. The flickering slows and settles on a small harbour front with a stone quay in the 1920s: the first electric street lamps, a tram rattling past, flat caps and cloche hats, the first cars sharing the street with carts. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again. The shot ends as days and nights flicker past faster and faster over a small harbour front with a stone quay.\n\noverall_soundscape: A tram bell, a car horn and a gramophone through an open window.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a small harbour front with a stone quay"
+      ],
+      [
+       "$era ← __time/eras#era:1920__",
+       "the first electric street lamps, a tram rattling past, flat caps and cloche hats, the first cars sharing the street with carts"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. The shot opens as days and nights flicker past faster and faster over a small harbour front with a stone quay. The camera holds a static shot. The flickering slows and settles on a small harbour front with a stone quay in the 1950s: chrome cars with fins, a milk bar with a neon sign, children on bicycles and washing lines between the houses. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again. The shot ends as days and nights flicker past faster and faster over a small harbour front with a stone quay.\n\noverall_soundscape: A rock and roll jukebox and bicycle bells.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a small harbour front with a stone quay"
+      ],
+      [
+       "$era ← __time/eras#era:1955__",
+       "chrome cars with fins, a milk bar with a neon sign, children on bicycles and washing lines between the houses"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. The shot opens as days and nights flicker past faster and faster over a small harbour front with a stone quay. The camera holds a static shot. The flickering slows and settles on a small harbour front with a stone quay in the late 1970s: concrete and orange paint, a phone box, flared jeans, a boombox on a stoop and graffiti starting on the walls. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again. The shot ends as days and nights flicker past faster and faster over a small harbour front with a stone quay.\n\noverall_soundscape: A disco beat from a boombox and a passing motorbike.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a small harbour front with a stone quay"
+      ],
+      [
+       "$era ← __time/eras#era:1978__",
+       "concrete and orange paint, a phone box, flared jeans, a boombox on a stoop and graffiti starting on the walls"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. The shot opens as days and nights flicker past faster and faster over a small harbour front with a stone quay. The camera holds a static shot. The flickering slows and settles on a small harbour front with a stone quay in the mid 1990s: satellite dishes, a video rental shop, neon tubes and people with mobile phones the size of bricks. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again. The shot ends as days and nights flicker past faster and faster over a small harbour front with a stone quay.\n\noverall_soundscape: A dial-up screech from a window and traffic.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a small harbour front with a stone quay"
+      ],
+      [
+       "$era ← __time/eras#era:1995__",
+       "satellite dishes, a video rental shop, neon tubes and people with mobile phones the size of bricks"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. The shot opens as days and nights flicker past faster and faster over a small harbour front with a stone quay. The camera holds a static shot. The flickering slows and settles on a small harbour front with a stone quay today: glass shopfronts, e-scooters, people looking down at their phones and a food delivery rider weaving through. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again. The shot ends as days and nights flicker past faster and faster over a small harbour front with a stone quay.\n\noverall_soundscape: Scooter whine, phone notifications and distant construction.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a small harbour front with a stone quay"
+      ],
+      [
+       "$era ← __time/eras#era:2025__",
+       "glass shopfronts, e-scooters, people looking down at their phones and a food delivery rider weaving through"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "path": [
+    "1850",
+    "1920",
+    "1955",
+    "1978",
+    "1995",
+    "2025"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. A street corner by an old railway bridge in 1850: gas lamps, mud and cobbles, horse-drawn carts, men in top hats and women in long skirts, a blacksmith's forge smoking. The camera holds a static shot. People go about the day in front of the fixed camera. In the last seconds a time-lapse begins: days and nights flicker past faster and faster. The shot ends as days and nights flicker past faster and faster over a street corner by an old railway bridge.\n\noverall_soundscape: Hooves on cobbles, a hammer on an anvil and street criers.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a street corner by an old railway bridge"
+      ],
+      [
+       "$era ← __time/eras#era:1850__",
+       "gas lamps, mud and cobbles, horse-drawn carts, men in top hats and women in long skirts, a blacksmith's forge smoking"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. The shot opens as days and nights flicker past faster and faster over a street corner by an old railway bridge. The camera holds a static shot. The flickering slows and settles on a street corner by an old railway bridge in the 1920s: the first electric street lamps, a tram rattling past, flat caps and cloche hats, the first cars sharing the street with carts. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again. The shot ends as days and nights flicker past faster and faster over a street corner by an old railway bridge.\n\noverall_soundscape: A tram bell, a car horn and a gramophone through an open window.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a street corner by an old railway bridge"
+      ],
+      [
+       "$era ← __time/eras#era:1920__",
+       "the first electric street lamps, a tram rattling past, flat caps and cloche hats, the first cars sharing the street with carts"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. The shot opens as days and nights flicker past faster and faster over a street corner by an old railway bridge. The camera holds a static shot. The flickering slows and settles on a street corner by an old railway bridge in the 1950s: chrome cars with fins, a milk bar with a neon sign, children on bicycles and washing lines between the houses. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again. The shot ends as days and nights flicker past faster and faster over a street corner by an old railway bridge.\n\noverall_soundscape: A rock and roll jukebox and bicycle bells.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a street corner by an old railway bridge"
+      ],
+      [
+       "$era ← __time/eras#era:1955__",
+       "chrome cars with fins, a milk bar with a neon sign, children on bicycles and washing lines between the houses"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. The shot opens as days and nights flicker past faster and faster over a street corner by an old railway bridge. The camera holds a static shot. The flickering slows and settles on a street corner by an old railway bridge in the late 1970s: concrete and orange paint, a phone box, flared jeans, a boombox on a stoop and graffiti starting on the walls. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again. The shot ends as days and nights flicker past faster and faster over a street corner by an old railway bridge.\n\noverall_soundscape: A disco beat from a boombox and a passing motorbike.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a street corner by an old railway bridge"
+      ],
+      [
+       "$era ← __time/eras#era:1978__",
+       "concrete and orange paint, a phone box, flared jeans, a boombox on a stoop and graffiti starting on the walls"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. The shot opens as days and nights flicker past faster and faster over a street corner by an old railway bridge. The camera holds a static shot. The flickering slows and settles on a street corner by an old railway bridge in the mid 1990s: satellite dishes, a video rental shop, neon tubes and people with mobile phones the size of bricks. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again. The shot ends as days and nights flicker past faster and faster over a street corner by an old railway bridge.\n\noverall_soundscape: A dial-up screech from a window and traffic.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a street corner by an old railway bridge"
+      ],
+      [
+       "$era ← __time/eras#era:1995__",
+       "satellite dishes, a video rental shop, neon tubes and people with mobile phones the size of bricks"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. The shot opens as days and nights flicker past faster and faster over a street corner by an old railway bridge. The camera holds a static shot. The flickering slows and settles on a street corner by an old railway bridge today: glass shopfronts, e-scooters, people looking down at their phones and a food delivery rider weaving through. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again. The shot ends as days and nights flicker past faster and faster over a street corner by an old railway bridge.\n\noverall_soundscape: Scooter whine, phone notifications and distant construction.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a street corner by an old railway bridge"
+      ],
+      [
+       "$era ← __time/eras#era:2025__",
+       "glass shopfronts, e-scooters, people looking down at their phones and a food delivery rider weaving through"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "path": [
+    "1850",
+    "1920",
+    "1955",
+    "1978",
+    "1995",
+    "2025"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. A street corner by an old railway bridge in 1850: gas lamps, mud and cobbles, horse-drawn carts, men in top hats and women in long skirts, a blacksmith's forge smoking. The camera holds a static shot. People go about the day in front of the fixed camera. In the last seconds a time-lapse begins: days and nights flicker past faster and faster. The shot ends as days and nights flicker past faster and faster over a street corner by an old railway bridge.\n\noverall_soundscape: Hooves on cobbles, a hammer on an anvil and street criers.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a street corner by an old railway bridge"
+      ],
+      [
+       "$era ← __time/eras#era:1850__",
+       "gas lamps, mud and cobbles, horse-drawn carts, men in top hats and women in long skirts, a blacksmith's forge smoking"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. The shot opens as days and nights flicker past faster and faster over a street corner by an old railway bridge. The camera holds a static shot. The flickering slows and settles on a street corner by an old railway bridge in the 1920s: the first electric street lamps, a tram rattling past, flat caps and cloche hats, the first cars sharing the street with carts. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again. The shot ends as days and nights flicker past faster and faster over a street corner by an old railway bridge.\n\noverall_soundscape: A tram bell, a car horn and a gramophone through an open window.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a street corner by an old railway bridge"
+      ],
+      [
+       "$era ← __time/eras#era:1920__",
+       "the first electric street lamps, a tram rattling past, flat caps and cloche hats, the first cars sharing the street with carts"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. The shot opens as days and nights flicker past faster and faster over a street corner by an old railway bridge. The camera holds a static shot. The flickering slows and settles on a street corner by an old railway bridge in the 1950s: chrome cars with fins, a milk bar with a neon sign, children on bicycles and washing lines between the houses. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again. The shot ends as days and nights flicker past faster and faster over a street corner by an old railway bridge.\n\noverall_soundscape: A rock and roll jukebox and bicycle bells.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a street corner by an old railway bridge"
+      ],
+      [
+       "$era ← __time/eras#era:1955__",
+       "chrome cars with fins, a milk bar with a neon sign, children on bicycles and washing lines between the houses"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. The shot opens as days and nights flicker past faster and faster over a street corner by an old railway bridge. The camera holds a static shot. The flickering slows and settles on a street corner by an old railway bridge in the late 1970s: concrete and orange paint, a phone box, flared jeans, a boombox on a stoop and graffiti starting on the walls. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again. The shot ends as days and nights flicker past faster and faster over a street corner by an old railway bridge.\n\noverall_soundscape: A disco beat from a boombox and a passing motorbike.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a street corner by an old railway bridge"
+      ],
+      [
+       "$era ← __time/eras#era:1978__",
+       "concrete and orange paint, a phone box, flared jeans, a boombox on a stoop and graffiti starting on the walls"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. The shot opens as days and nights flicker past faster and faster over a street corner by an old railway bridge. The camera holds a static shot. The flickering slows and settles on a street corner by an old railway bridge in the mid 1990s: satellite dishes, a video rental shop, neon tubes and people with mobile phones the size of bricks. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again. The shot ends as days and nights flicker past faster and faster over a street corner by an old railway bridge.\n\noverall_soundscape: A dial-up screech from a window and traffic.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a street corner by an old railway bridge"
+      ],
+      [
+       "$era ← __time/eras#era:1995__",
+       "satellite dishes, a video rental shop, neon tubes and people with mobile phones the size of bricks"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot from a camera locked on a tripod at head height. The shot opens as days and nights flicker past faster and faster over a street corner by an old railway bridge. The camera holds a static shot. The flickering slows and settles on a street corner by an old railway bridge today: glass shopfronts, e-scooters, people looking down at their phones and a food delivery rider weaving through. People pass close to the camera, going about their day. In the last seconds the time-lapse starts again. The shot ends as days and nights flicker past faster and faster over a street corner by an old railway bridge.\n\noverall_soundscape: Scooter whine, phone notifications and distant construction.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
+       "a street corner by an old railway bridge"
+      ],
+      [
+       "$era ← __time/eras#era:2025__",
+       "glass shopfronts, e-scooters, people looking down at their phones and a food delivery rider weaving through"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

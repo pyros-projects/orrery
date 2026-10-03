@@ -1,0 +1,80 @@
+{
+ "preset": "effects/human_drawer",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a quiet bedroom at night, framed from the waist up. The camera pushes in at slow speed. A thin horizontal seam forms across the upper chest, and two short vertical seams descend from its ends into a precise rectangle; a small dark handle-like ridge rises at its centre. <Subject 1> grips the ridge and slides the rectangular section of the chest outward as one intact volume, like precision cabinetry that keeps its human surface. It keeps coming, far deeper than the body could hold, until the chest drawer extends nearly an arm's length; inside is a dark smooth cavity. <Subject 1> reaches in, and the arm disappears past the body's visible depth, the forearm, then part of the upper arm. <Subject 1> searches with quiet curiosity and draws out a folded handwritten letter, looks at it briefly, returns it and pushes the drawer back until the seams are almost invisible. <Subject 1> places a palm on the closed chest and looks at the camera. In the final moment a faint knock sounds from inside the closed chest.\n\noverall_soundscape: Quiet room ambience, restrained breathing, a smooth wooden sliding sound, a hollow resonance from the deep interior, and a soft click as the chest closes.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "{a dim study|a wood-panelled library|a quiet bedroom at night}",
+       "a quiet bedroom at night"
+      ],
+      [
+       "{a small faded photograph|a child's red hair ribbon|an old brass house key|a folded handwritten letter}",
+       "a folded handwritten letter"
+      ],
+      [
+       "{a second, smaller rectangular seam begins forming lower on the abdomen|a tiny keyhole appears just below the collarbone|a faint knock sounds from inside the closed chest}",
+       "a faint knock sounds from inside the closed chest"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the young man of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a quiet bedroom at night, framed from the waist up. The camera pushes in at slow speed. A thin horizontal seam forms across the upper chest, and two short vertical seams descend from its ends into a precise rectangle; a small dark handle-like ridge rises at its centre. <Subject 1> grips the ridge and slides the rectangular section of the chest outward as one intact volume, like precision cabinetry that keeps its human surface. It keeps coming, far deeper than the body could hold, until the chest drawer extends nearly an arm's length; inside is a dark smooth cavity. <Subject 1> reaches in, and the arm disappears past the body's visible depth, the forearm, then part of the upper arm. <Subject 1> searches with quiet curiosity and draws out a folded handwritten letter, looks at it briefly, returns it and pushes the drawer back until the seams are almost invisible. <Subject 1> places a palm on the closed chest and looks at the camera. In the final moment a tiny keyhole appears just below the collarbone.\n\noverall_soundscape: Quiet room ambience, restrained breathing, a smooth wooden sliding sound, a hollow resonance from the deep interior, and a soft click as the chest closes.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the young man"
+      ],
+      [
+       "{a dim study|a wood-panelled library|a quiet bedroom at night}",
+       "a quiet bedroom at night"
+      ],
+      [
+       "{a small faded photograph|a child's red hair ribbon|an old brass house key|a folded handwritten letter}",
+       "a folded handwritten letter"
+      ],
+      [
+       "{a second, smaller rectangular seam begins forming lower on the abdomen|a tiny keyhole appears just below the collarbone|a faint knock sounds from inside the closed chest}",
+       "a tiny keyhole appears just below the collarbone"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a wood-panelled library, framed from the waist up. The camera pushes in at slow speed. A thin horizontal seam forms across the upper chest, and two short vertical seams descend from its ends into a precise rectangle; a small dark handle-like ridge rises at its centre. <Subject 1> grips the ridge and slides the rectangular section of the chest outward as one intact volume, like precision cabinetry that keeps its human surface. It keeps coming, far deeper than the body could hold, until the chest drawer extends nearly an arm's length; inside is a dark smooth cavity. <Subject 1> reaches in, and the arm disappears past the body's visible depth, the forearm, then part of the upper arm. <Subject 1> searches with quiet curiosity and draws out a small faded photograph, looks at it briefly, returns it and pushes the drawer back until the seams are almost invisible. <Subject 1> places a palm on the closed chest and looks at the camera. In the final moment a faint knock sounds from inside the closed chest.\n\noverall_soundscape: Quiet room ambience, restrained breathing, a smooth wooden sliding sound, a hollow resonance from the deep interior, and a soft click as the chest closes.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "{a dim study|a wood-panelled library|a quiet bedroom at night}",
+       "a wood-panelled library"
+      ],
+      [
+       "{a small faded photograph|a child's red hair ribbon|an old brass house key|a folded handwritten letter}",
+       "a small faded photograph"
+      ],
+      [
+       "{a second, smaller rectangular seam begins forming lower on the abdomen|a tiny keyhole appears just below the collarbone|a faint knock sounds from inside the closed chest}",
+       "a faint knock sounds from inside the closed chest"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

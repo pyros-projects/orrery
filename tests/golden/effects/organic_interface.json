@@ -1,0 +1,68 @@
+{
+ "preset": "effects/organic_interface",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> rests one hand on the iron rail of a staircase, framed from the waist up in a quiet dim room. The camera pushes in at slow speed. When <Subject 1> tries to lift the hand, the fingers do not come away: at the point of contact the skin has already become cold black iron, flowing seamlessly into the object with no line where one ends and the other begins. <Subject 1> pulls gently, then harder; the joined surface stretches slightly and holds. The change spreads a few centimetres up the wrist in a clean even edge, the skin turning into cold black iron as it passes. <Subject 1> stares at the hand, now visibly part of the iron rail of a staircase, and presses the free hand against the boundary. In the final moment <Subject 1> lets go with the other hand, and the fingers of the fused hand move under the surface of the object.\n\noverall_soundscape: Quiet room ambience, strained breathing, a low ringing of iron, and a slow tension as the hand pulls.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$thing ← __bh_interface__",
+       "the iron rail of a staircase"
+      ],
+      [
+       "{HOST pulls hard, and the object comes along with the hand as a single piece|the change climbs past the elbow, the arm now the same material to the shoulder|HOST lets go with the other hand, and the fingers of the fused hand move under the surface of the object}",
+       "HOST lets go with the other hand, and the fingers of the fused hand move under the surface of the object"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the young man of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> rests one hand on the iron rail of a staircase, framed from the waist up in a quiet dim room. The camera pushes in at slow speed. When <Subject 1> tries to lift the hand, the fingers do not come away: at the point of contact the skin has already become cold black iron, flowing seamlessly into the object with no line where one ends and the other begins. <Subject 1> pulls gently, then harder; the joined surface stretches slightly and holds. The change spreads a few centimetres up the wrist in a clean even edge, the skin turning into cold black iron as it passes. <Subject 1> stares at the hand, now visibly part of the iron rail of a staircase, and presses the free hand against the boundary. In the final moment the change climbs past the elbow, the arm now the same material to the shoulder.\n\noverall_soundscape: Quiet room ambience, strained breathing, a low ringing of iron, and a slow tension as the hand pulls.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the young man"
+      ],
+      [
+       "$thing ← __bh_interface__",
+       "the iron rail of a staircase"
+      ],
+      [
+       "{HOST pulls hard, and the object comes along with the hand as a single piece|the change climbs past the elbow, the arm now the same material to the shoulder|HOST lets go with the other hand, and the fingers of the fused hand move under the surface of the object}",
+       "the change climbs past the elbow, the arm now the same material to the shoulder"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> rests one hand on the edge of a marble tabletop, framed from the waist up in a quiet dim room. The camera pushes in at slow speed. When <Subject 1> tries to lift the hand, the fingers do not come away: at the point of contact the skin has already become veined white marble, flowing seamlessly into the object with no line where one ends and the other begins. <Subject 1> pulls gently, then harder; the joined surface stretches slightly and holds. The change spreads a few centimetres up the wrist in a clean even edge, the skin turning into veined white marble as it passes. <Subject 1> stares at the hand, now visibly part of the edge of a marble tabletop, and presses the free hand against the boundary. In the final moment <Subject 1> lets go with the other hand, and the fingers of the fused hand move under the surface of the object.\n\noverall_soundscape: Quiet room ambience, strained breathing, a dry grinding of stone, and a slow tension as the hand pulls.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$thing ← __bh_interface__",
+       "the edge of a marble tabletop"
+      ],
+      [
+       "{HOST pulls hard, and the object comes along with the hand as a single piece|the change climbs past the elbow, the arm now the same material to the shoulder|HOST lets go with the other hand, and the fingers of the fused hand move under the surface of the object}",
+       "HOST lets go with the other hand, and the fingers of the fused hand move under the surface of the object"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

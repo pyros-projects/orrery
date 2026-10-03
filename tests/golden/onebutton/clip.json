@@ -1,0 +1,200 @@
+{
+ "preset": "onebutton/clip",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = a retired watchmaker in his seventies, small and exact, with wind-blown warm caramel hair down to the collar, magnifying loupe marks around one eye and ink-stained fingertips, wearing a corduroy blazer with elbow patches\n\nintegrated_multimodal_description: [Shot 1] Vintage film, 1960s Kodachrome home movie: saturated reds and deep blues, crisp grain, bright daylight, and the gentle gate weave and flicker of a small-gauge reel. In terraced rice paddies filled with water, each terrace holding a strip of sky, <Subject 1> runs, stumbles, catches themselves and keeps running. The camera pans left with small amplitude at slow speed.\n\noverall_soundscape: Frogs, trickling water between terraces, a distant rooster. Fast footsteps and heavy breathing.\n\nnon_diegetic_music: A light ukulele strum at a moderate tempo with brushed percussion.",
+     "picks": [
+      [
+       "{tame|curious|unhinged}",
+       "tame"
+      ],
+      [
+       "{person|animal|thing|place}",
+       "person"
+      ],
+      [
+       "{average_joes|models|gothic|cyberpunk|horror|noir|fantasy}",
+       "average_joes"
+      ],
+      [
+       "$who ← __characters/average_joes__",
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$who ← __characters/looks/hair__",
+       "wind-blown __characters/looks/hair_color__ hair down to the collar"
+      ],
+      [
+       "$who ← __characters/looks/hair_color__",
+       "warm caramel"
+      ],
+      [
+       "$who ← __characters/average_joes/outfit__",
+       "a corduroy blazer with elbow patches"
+      ],
+      [
+       "$act ← __moments/person__",
+       "runs, stumbles, catches themselves and keeps running"
+      ],
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$place ← __world/landscapes__",
+       "terraced rice paddies filled with water, each terrace holding a strip of sky"
+      ],
+      [
+       "$land ← __world/landscapes__",
+       "an iceberg-strewn bay where humpback whales surface between the ice"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "a thunderstorm rolling in, lightning flickering inside black cloud"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "dives from high above in a fast FPV plunge and pulls out just above the ground"
+      ],
+      [
+       "$look ← __looks/video__",
+       "Vintage film, 1960s Kodachrome home movie: saturated reds and deep blues, crisp grain, bright daylight, and the gentle gate weave and flicker of a small-gauge reel"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = a back-alley street medic in her forties, Vietnamese, calm hands and exhausted eyes, with a shaved head with a glowing ultraviolet circuit tattoo, one eye replaced by a many-lensed camera, wearing a quilted kimono jacket with a holographic obi\n\nintegrated_multimodal_description: [Shot 1] Sand animation on a light table: pictures drawn in dark sand against a warm glowing backlight, a hand sweeping one picture into the next, grains trickling at the edges. In a savanna with one acacia tree and a herd of elephants crossing it, <Subject 1> runs, stumbles, catches themselves and keeps running. The camera holds a static shot.\n\noverall_soundscape: Elephants rumbling, dry grass rustling and distant birds. Fast footsteps and heavy breathing.\n\nnon_diegetic_music: A solo cello at a slow tempo.",
+     "picks": [
+      [
+       "{tame|curious|unhinged}",
+       "curious"
+      ],
+      [
+       "{person|animal|thing|place}",
+       "person"
+      ],
+      [
+       "{average_joes|models|gothic|cyberpunk|horror|noir|fantasy}",
+       "cyberpunk"
+      ],
+      [
+       "$who ← __characters/cyberpunk__",
+       "a back-alley street medic in her forties, Vietnamese, calm hands and exhausted eyes, with __characters/cyberpunk/hair__, __characters/cyberpunk/augment__, wearing __characters/cyberpunk/outfit__"
+      ],
+      [
+       "$who ← __characters/cyberpunk/hair__",
+       "a shaved head with a glowing __characters/cyberpunk/dye__ circuit tattoo"
+      ],
+      [
+       "$who ← __characters/cyberpunk/dye__",
+       "ultraviolet"
+      ],
+      [
+       "$who ← __characters/cyberpunk/augment__",
+       "one eye replaced by a many-lensed camera"
+      ],
+      [
+       "$who ← __characters/cyberpunk/outfit__",
+       "a quilted kimono jacket with a holographic obi"
+      ],
+      [
+       "$act ← __moments/person__",
+       "runs, stumbles, catches themselves and keeps running"
+      ],
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$place ← __world/landscapes__",
+       "a savanna with one acacia tree and a herd of elephants crossing it"
+      ],
+      [
+       "$land ← __world/landscapes__",
+       "a savanna with one acacia tree and a herd of elephants crossing it"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "a thunderstorm rolling in, lightning flickering inside black cloud"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "skims a few metres above the surface toward the horizon, then climbs steeply to reveal the whole expanse at once"
+      ],
+      [
+       "$look ← __looks/video__",
+       "Sand animation on a light table: pictures drawn in dark sand against a warm glowing backlight, a hand sweeping one picture into the next, grains trickling at the edges"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = an aristocratic recluse in his seventies, tall and bloodless, with silver-white hair pinned in Victorian coils, a signet ring worn thin and a silver-topped cane he does not need, wearing a high-necked black lace blouse under a velvet frock coat\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, shot on bleach-bypass film: colour drained almost to silver, dense inky shadows, hard metallic sheen on wet skin and steel, and fine grain crawling across the frame. In a flooded forest where the trunks stand in still black water, <Subject 1> turns slowly and looks straight into the camera as the wind lifts their hair. The camera tracks the moving subject at fast speed.\n\noverall_soundscape: Drips, a paddle dipping and distant howler monkeys. Wind and a single breath.\n\nnon_diegetic_music: Low sustained strings over a slow, heavy drum pulse that builds and cuts off abruptly.",
+     "picks": [
+      [
+       "{tame|curious|unhinged}",
+       "tame"
+      ],
+      [
+       "{person|animal|thing|place}",
+       "person"
+      ],
+      [
+       "{average_joes|models|gothic|cyberpunk|horror|noir|fantasy}",
+       "gothic"
+      ],
+      [
+       "$who ← __characters/gothic__",
+       "an aristocratic recluse in his seventies, tall and bloodless, with __characters/gothic/hair__, a signet ring worn thin and a silver-topped cane he does not need, wearing __characters/gothic/attire__"
+      ],
+      [
+       "$who ← __characters/gothic/hair__",
+       "silver-white hair pinned in Victorian coils"
+      ],
+      [
+       "$who ← __characters/gothic/attire__",
+       "a high-necked black lace blouse under a velvet frock coat"
+      ],
+      [
+       "$act ← __moments/person__",
+       "turns slowly and looks straight into the camera as the wind lifts their hair"
+      ],
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$place ← __world/landscapes__",
+       "a flooded forest where the trunks stand in still black water"
+      ],
+      [
+       "$land ← __world/landscapes__",
+       "a lighthouse on a lone rock in a storm-whipped sea"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "high noon under a fierce white sun and heat shimmer"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "threads low through a narrow gap between rocks or trees and bursts out into open space"
+      ],
+      [
+       "$look ← __looks/video__",
+       "Live-action, cinematic, shot on bleach-bypass film: colour drained almost to silver, dense inky shadows, hard metallic sheen on wet skin and steel, and fine grain crawling across the frame"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

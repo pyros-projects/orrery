@@ -1,0 +1,431 @@
+{
+ "preset": "krea/08_cabinet_of_curiosities",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "a museum catalogue photograph of a naturalist's specimen: a red panda with 8 legs, made entirely of folded paper, pinned to black velvet inside a glass-fronted cabinet, a yellowed handwritten label beneath it reading \"specimen no. 478, collected 1899\", lit by raking daylight from a tall window, a split composition, half in shadow and half in light, dust and old fingerprints on the glass catching the light",
+     "picks": [
+      [
+       "$beast ← __creature__",
+       "red panda"
+      ],
+      [
+       "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
+       "raking daylight from a tall window"
+      ],
+      [
+       "{|tiny |giant }",
+       ""
+      ],
+      [
+       "{2-4}",
+       "2"
+      ],
+      [
+       "{2-8}",
+       "8"
+      ],
+      [
+       "{100-999}",
+       "478"
+      ],
+      [
+       "{1850-1925}",
+       "1899"
+      ],
+      [
+       "{30% a brass magnifying glass leaning against the glass,}",
+       ""
+      ],
+      [
+       "__subjects/twists__",
+       "made entirely of folded paper"
+      ],
+      [
+       "__frame/*__",
+       "a split composition, half in shadow and half in light"
+      ]
+     ]
+    },
+    {
+     "cell": 1,
+     "text": "a museum catalogue photograph of a naturalist's specimen: a red panda with 8 legs, made entirely of folded paper, pinned to black velvet inside a glass-fronted cabinet, a yellowed handwritten label beneath it reading \"specimen no. 478, collected 1899\", lit by the warm glow of a single candle, a split composition, half in shadow and half in light, dust and old fingerprints on the glass catching the light",
+     "picks": [
+      [
+       "$beast ← __creature__",
+       "red panda"
+      ],
+      [
+       "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
+       "the warm glow of a single candle"
+      ],
+      [
+       "{|tiny |giant }",
+       ""
+      ],
+      [
+       "{2-4}",
+       "2"
+      ],
+      [
+       "{2-8}",
+       "8"
+      ],
+      [
+       "{100-999}",
+       "478"
+      ],
+      [
+       "{1850-1925}",
+       "1899"
+      ],
+      [
+       "{30% a brass magnifying glass leaning against the glass,}",
+       ""
+      ],
+      [
+       "__subjects/twists__",
+       "made entirely of folded paper"
+      ],
+      [
+       "__frame/*__",
+       "a split composition, half in shadow and half in light"
+      ]
+     ]
+    },
+    {
+     "cell": 2,
+     "text": "a museum catalogue photograph of a naturalist's specimen: a red panda with 8 legs, made entirely of folded paper, pinned to black velvet inside a glass-fronted cabinet, a yellowed handwritten label beneath it reading \"specimen no. 478, collected 1899\", lit by the hard white burst of a flashbulb, a split composition, half in shadow and half in light, dust and old fingerprints on the glass catching the light",
+     "picks": [
+      [
+       "$beast ← __creature__",
+       "red panda"
+      ],
+      [
+       "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
+       "the hard white burst of a flashbulb"
+      ],
+      [
+       "{|tiny |giant }",
+       ""
+      ],
+      [
+       "{2-4}",
+       "2"
+      ],
+      [
+       "{2-8}",
+       "8"
+      ],
+      [
+       "{100-999}",
+       "478"
+      ],
+      [
+       "{1850-1925}",
+       "1899"
+      ],
+      [
+       "{30% a brass magnifying glass leaning against the glass,}",
+       ""
+      ],
+      [
+       "__subjects/twists__",
+       "made entirely of folded paper"
+      ],
+      [
+       "__frame/*__",
+       "a split composition, half in shadow and half in light"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "a museum catalogue photograph of a naturalist's specimen: a tiny vampire squid with 5 legs, tangled in a web of red thread, pinned to black velvet inside a glass-fronted cabinet, a yellowed handwritten label beneath it reading \"specimen no. 907, collected 1893\", lit by raking daylight from a tall window, a tilt-shift blur at the top and bottom of the frame, so the whole scene looks like a miniature model, dust and old fingerprints on the glass catching the light",
+     "picks": [
+      [
+       "$beast ← __creature__",
+       "vampire squid"
+      ],
+      [
+       "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
+       "raking daylight from a tall window"
+      ],
+      [
+       "{|tiny |giant }",
+       "tiny "
+      ],
+      [
+       "{2-4}",
+       "2"
+      ],
+      [
+       "{2-8}",
+       "5"
+      ],
+      [
+       "{100-999}",
+       "907"
+      ],
+      [
+       "{1850-1925}",
+       "1893"
+      ],
+      [
+       "{30% a brass magnifying glass leaning against the glass,}",
+       ""
+      ],
+      [
+       "__subjects/twists__",
+       "tangled in a web of red thread"
+      ],
+      [
+       "__frame/*__",
+       "a tilt-shift blur at the top and bottom of the frame, so the whole scene looks like a miniature model"
+      ]
+     ]
+    },
+    {
+     "cell": 1,
+     "text": "a museum catalogue photograph of a naturalist's specimen: a tiny vampire squid with 5 legs, tangled in a web of red thread, pinned to black velvet inside a glass-fronted cabinet, a yellowed handwritten label beneath it reading \"specimen no. 907, collected 1893\", lit by the warm glow of a single candle, a tilt-shift blur at the top and bottom of the frame, so the whole scene looks like a miniature model, dust and old fingerprints on the glass catching the light",
+     "picks": [
+      [
+       "$beast ← __creature__",
+       "vampire squid"
+      ],
+      [
+       "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
+       "the warm glow of a single candle"
+      ],
+      [
+       "{|tiny |giant }",
+       "tiny "
+      ],
+      [
+       "{2-4}",
+       "2"
+      ],
+      [
+       "{2-8}",
+       "5"
+      ],
+      [
+       "{100-999}",
+       "907"
+      ],
+      [
+       "{1850-1925}",
+       "1893"
+      ],
+      [
+       "{30% a brass magnifying glass leaning against the glass,}",
+       ""
+      ],
+      [
+       "__subjects/twists__",
+       "tangled in a web of red thread"
+      ],
+      [
+       "__frame/*__",
+       "a tilt-shift blur at the top and bottom of the frame, so the whole scene looks like a miniature model"
+      ]
+     ]
+    },
+    {
+     "cell": 2,
+     "text": "a museum catalogue photograph of a naturalist's specimen: a tiny vampire squid with 5 legs, tangled in a web of red thread, pinned to black velvet inside a glass-fronted cabinet, a yellowed handwritten label beneath it reading \"specimen no. 907, collected 1893\", lit by the hard white burst of a flashbulb, a tilt-shift blur at the top and bottom of the frame, so the whole scene looks like a miniature model, dust and old fingerprints on the glass catching the light",
+     "picks": [
+      [
+       "$beast ← __creature__",
+       "vampire squid"
+      ],
+      [
+       "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
+       "the hard white burst of a flashbulb"
+      ],
+      [
+       "{|tiny |giant }",
+       "tiny "
+      ],
+      [
+       "{2-4}",
+       "2"
+      ],
+      [
+       "{2-8}",
+       "5"
+      ],
+      [
+       "{100-999}",
+       "907"
+      ],
+      [
+       "{1850-1925}",
+       "1893"
+      ],
+      [
+       "{30% a brass magnifying glass leaning against the glass,}",
+       ""
+      ],
+      [
+       "__subjects/twists__",
+       "tangled in a web of red thread"
+      ],
+      [
+       "__frame/*__",
+       "a tilt-shift blur at the top and bottom of the frame, so the whole scene looks like a miniature model"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "a museum catalogue photograph of a naturalist's specimen: a giant raven with 3 wings, cast in liquid chrome that ripples as it moves, pinned to black velvet inside a glass-fronted cabinet, a yellowed handwritten label beneath it reading \"specimen no. 753, collected 1890\", lit by raking daylight from a tall window, a symmetrical composition with the subject dead centre, dust and old fingerprints on the glass catching the light",
+     "picks": [
+      [
+       "$beast ← __creature__",
+       "raven"
+      ],
+      [
+       "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
+       "raking daylight from a tall window"
+      ],
+      [
+       "{|tiny |giant }",
+       "giant "
+      ],
+      [
+       "{2-4}",
+       "3"
+      ],
+      [
+       "{2-8}",
+       "3"
+      ],
+      [
+       "{100-999}",
+       "753"
+      ],
+      [
+       "{1850-1925}",
+       "1890"
+      ],
+      [
+       "{30% a brass magnifying glass leaning against the glass,}",
+       ""
+      ],
+      [
+       "__subjects/twists__",
+       "cast in liquid chrome that ripples as it moves"
+      ],
+      [
+       "__frame/*__",
+       "a symmetrical composition with the subject dead centre"
+      ]
+     ]
+    },
+    {
+     "cell": 1,
+     "text": "a museum catalogue photograph of a naturalist's specimen: a giant raven with 3 wings, cast in liquid chrome that ripples as it moves, pinned to black velvet inside a glass-fronted cabinet, a yellowed handwritten label beneath it reading \"specimen no. 753, collected 1890\", lit by the warm glow of a single candle, a symmetrical composition with the subject dead centre, dust and old fingerprints on the glass catching the light",
+     "picks": [
+      [
+       "$beast ← __creature__",
+       "raven"
+      ],
+      [
+       "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
+       "the warm glow of a single candle"
+      ],
+      [
+       "{|tiny |giant }",
+       "giant "
+      ],
+      [
+       "{2-4}",
+       "3"
+      ],
+      [
+       "{2-8}",
+       "3"
+      ],
+      [
+       "{100-999}",
+       "753"
+      ],
+      [
+       "{1850-1925}",
+       "1890"
+      ],
+      [
+       "{30% a brass magnifying glass leaning against the glass,}",
+       ""
+      ],
+      [
+       "__subjects/twists__",
+       "cast in liquid chrome that ripples as it moves"
+      ],
+      [
+       "__frame/*__",
+       "a symmetrical composition with the subject dead centre"
+      ]
+     ]
+    },
+    {
+     "cell": 2,
+     "text": "a museum catalogue photograph of a naturalist's specimen: a giant raven with 3 wings, cast in liquid chrome that ripples as it moves, pinned to black velvet inside a glass-fronted cabinet, a yellowed handwritten label beneath it reading \"specimen no. 753, collected 1890\", lit by the hard white burst of a flashbulb, a symmetrical composition with the subject dead centre, dust and old fingerprints on the glass catching the light",
+     "picks": [
+      [
+       "$beast ← __creature__",
+       "raven"
+      ],
+      [
+       "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
+       "the hard white burst of a flashbulb"
+      ],
+      [
+       "{|tiny |giant }",
+       "giant "
+      ],
+      [
+       "{2-4}",
+       "3"
+      ],
+      [
+       "{2-8}",
+       "3"
+      ],
+      [
+       "{100-999}",
+       "753"
+      ],
+      [
+       "{1850-1925}",
+       "1890"
+      ],
+      [
+       "{30% a brass magnifying glass leaning against the glass,}",
+       ""
+      ],
+      [
+       "__subjects/twists__",
+       "cast in liquid chrome that ripples as it moves"
+      ],
+      [
+       "__frame/*__",
+       "a symmetrical composition with the subject dead centre"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,80 @@
+{
+ "preset": "effects/living_paper",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a tiled changing room at a public swimming pool, framed from the knees up, fully human and naturally proportioned. The camera pushes in at slow speed. A perfectly straight crease forms diagonally from one shoulder to the opposite hip, and the body bends inward along it like thick living paper: the two sides rotate toward each other in one smooth, controlled movement, and the chest becomes flatter while keeping its human surface. A second crease forms across the abdomen, and the waist becomes a clean geometric hinge while <Subject 1> stays balanced and upright. One forearm flattens from wrist to elbow into a broad thin plane; the hand follows, fingers arranging themselves along the same flat surface. <Subject 1> raises the arm and studies it, and a new fold forms naturally at the elbow. The head stays fully three-dimensional above the folded architecture. In the final moment <Subject 1> turns sideways, and in profile the folded body is only a few centimetres thick.\n\noverall_soundscape: Quiet room ambience, restrained breathing, soft dry folding sounds, and crisp paper tension each time a plane settles.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a tiled changing room at a public swimming pool"
+      ],
+      [
+       "{down the centre of the torso from the sternum to the navel|diagonally from one shoulder to the opposite hip|across the chest from one armpit to the other}",
+       "diagonally from one shoulder to the opposite hip"
+      ],
+      [
+       "{HOST presses one imperfect crease in the chest with the flattened hand until it becomes perfectly straight, and studies the corrected body with calm satisfaction|HOST folds the flattened forearm neatly against itself like a closed card and holds it up to the light|HOST turns sideways, and in profile the folded body is only a few centimetres thick}",
+       "HOST turns sideways, and in profile the folded body is only a few centimetres thick"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the young man of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a dim apartment sitting room, framed from the knees up, fully human and naturally proportioned. The camera pushes in at slow speed. A perfectly straight crease forms down the centre of the torso from the sternum to the navel, and the body bends inward along it like thick living paper: the two sides rotate toward each other in one smooth, controlled movement, and the chest becomes flatter while keeping its human surface. A second crease forms across the abdomen, and the waist becomes a clean geometric hinge while <Subject 1> stays balanced and upright. One forearm flattens from wrist to elbow into a broad thin plane; the hand follows, fingers arranging themselves along the same flat surface. <Subject 1> raises the arm and studies it, and a new fold forms naturally at the elbow. The head stays fully three-dimensional above the folded architecture. In the final moment <Subject 1> turns sideways, and in profile the folded body is only a few centimetres thick.\n\noverall_soundscape: Quiet room ambience, restrained breathing, soft dry folding sounds, and crisp paper tension each time a plane settles.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the young man"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a dim apartment sitting room"
+      ],
+      [
+       "{down the centre of the torso from the sternum to the navel|diagonally from one shoulder to the opposite hip|across the chest from one armpit to the other}",
+       "down the centre of the torso from the sternum to the navel"
+      ],
+      [
+       "{HOST presses one imperfect crease in the chest with the flattened hand until it becomes perfectly straight, and studies the corrected body with calm satisfaction|HOST folds the flattened forearm neatly against itself like a closed card and holds it up to the light|HOST turns sideways, and in profile the folded body is only a few centimetres thick}",
+       "HOST turns sideways, and in profile the folded body is only a few centimetres thick"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a narrow hotel corridor, framed from the knees up, fully human and naturally proportioned. The camera pushes in at slow speed. A perfectly straight crease forms across the chest from one armpit to the other, and the body bends inward along it like thick living paper: the two sides rotate toward each other in one smooth, controlled movement, and the chest becomes flatter while keeping its human surface. A second crease forms across the abdomen, and the waist becomes a clean geometric hinge while <Subject 1> stays balanced and upright. One forearm flattens from wrist to elbow into a broad thin plane; the hand follows, fingers arranging themselves along the same flat surface. <Subject 1> raises the arm and studies it, and a new fold forms naturally at the elbow. The head stays fully three-dimensional above the folded architecture. In the final moment <Subject 1> presses one imperfect crease in the chest with the flattened hand until it becomes perfectly straight, and studies the corrected body with calm satisfaction.\n\noverall_soundscape: Quiet room ambience, restrained breathing, soft dry folding sounds, and crisp paper tension each time a plane settles.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a narrow hotel corridor"
+      ],
+      [
+       "{down the centre of the torso from the sternum to the navel|diagonally from one shoulder to the opposite hip|across the chest from one armpit to the other}",
+       "across the chest from one armpit to the other"
+      ],
+      [
+       "{HOST presses one imperfect crease in the chest with the flattened hand until it becomes perfectly straight, and studies the corrected body with calm satisfaction|HOST folds the flattened forearm neatly against itself like a closed card and holds it up to the light|HOST turns sideways, and in profile the folded body is only a few centimetres thick}",
+       "HOST presses one imperfect crease in the chest with the flattened hand until it becomes perfectly straight, and studies the corrected body with calm satisfaction"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,1485 @@
+{
+ "preset": "fashion/infinite_cakewalk",
+ "seeds": {
+  "0": {
+   "path": [
+    "the curtain",
+    "womenswear",
+    "womenswear",
+    "menswear",
+    "menswear",
+    "womenswear"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The Atelier Sans Titre summer show opens at a runway on a beach of pale sand beside the surf: the guests settle along both sides of the runway with their phones raised as the lights come up. The camera tracks the moving subject at slow speed. The low sun glares off every lens in the front row. The shot ends as the runway lies empty under the lights, waiting.\n\noverall_soundscape: A murmuring crowd and the first notes of a brass band.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "summer"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a runway on a beach of pale sand beside the surf"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the runway lies empty under the lights, waiting. The camera tracks the moving subject at slow speed. A model with waist-long braids gathered into a crown struts down the runway toward the camera in a sheer organza dress over a boxy grey tailored jacket, high-stepping in time with the brass like an old cakewalk. The open air tugs at the hem as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "summer"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a runway on a beach of pale sand beside the surf"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a model with waist-long braids gathered into a crown"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a sheer organza dress over a boxy grey tailored jacket"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A towering model with a severe black bob and razor cheekbones struts down the runway toward the camera in a sheer organza dress over a boxy grey tailored jacket, high-stepping in time with the brass like an old cakewalk. The open air tugs at the hem as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "summer"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a runway on a beach of pale sand beside the surf"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a towering model with a severe black bob and razor cheekbones"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a sheer organza dress over a boxy grey tailored jacket"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A tall model with a slicked-back undercut struts down the runway toward the camera in an oversized trench coat cinched with a leather harness, high-stepping in time with the brass like an old cakewalk. The open air tugs at the coat as he passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Hard soles strike in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "summer"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a runway on a beach of pale sand beside the surf"
+      ],
+      [
+       "$model ← __cakewalk_men__",
+       "a tall model with a slicked-back undercut"
+      ],
+      [
+       "$look ← __cakewalk_menswear__",
+       "an oversized trench coat cinched with a leather harness"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A lean model with a shaved head and a long jaw struts down the runway toward the camera in an oversized trench coat cinched with a leather harness, high-stepping in time with the brass like an old cakewalk. The open air tugs at the coat as he passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Hard soles strike in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "summer"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a runway on a beach of pale sand beside the surf"
+      ],
+      [
+       "$model ← __cakewalk_men__",
+       "a lean model with a shaved head and a long jaw"
+      ],
+      [
+       "$look ← __cakewalk_menswear__",
+       "an oversized trench coat cinched with a leather harness"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A freckled model with a slicked-back copper ponytail struts down the runway toward the camera in a sheer organza dress over a boxy grey tailored jacket, high-stepping in time with the brass like an old cakewalk. The open air tugs at the hem as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "summer"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a runway on a beach of pale sand beside the surf"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a freckled model with a slicked-back copper ponytail"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a sheer organza dress over a boxy grey tailored jacket"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "path": [
+    "the curtain",
+    "menswear",
+    "womenswear",
+    "womenswear",
+    "womenswear",
+    "womenswear"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The Studio Kessler-Mourne winter show opens at a brutalist concrete hall with one hard spotlight: the guests settle along both sides of the runway with their phones raised as the lights come up. The camera tracks the moving subject at slow speed. Snow drifts past the tall windows behind the crowd. The shot ends as the runway lies empty under the lights, waiting.\n\noverall_soundscape: A murmuring crowd and the first notes of a brass band.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Studio Kessler-Mourne"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "winter"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a brutalist concrete hall with one hard spotlight"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the runway lies empty under the lights, waiting. The camera tracks the moving subject at slow speed. A lean model with a shaved head and a long jaw struts down the runway toward the camera in a razor-sharp double-breasted suit with wide peaked lapels, high-stepping in time with the brass like an old cakewalk. His steps echo off the walls as he passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Hard soles strike in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Studio Kessler-Mourne"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "winter"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a brutalist concrete hall with one hard spotlight"
+      ],
+      [
+       "$model ← __cakewalk_men__",
+       "a lean model with a shaved head and a long jaw"
+      ],
+      [
+       "$look ← __cakewalk_menswear__",
+       "a razor-sharp double-breasted suit with wide peaked lapels"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A towering model with a severe black bob and razor cheekbones struts down the runway toward the camera in a floor-length coat of liquid silver sequins, high-stepping in time with the brass like an old cakewalk. Her steps echo off the walls as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Studio Kessler-Mourne"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "winter"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a brutalist concrete hall with one hard spotlight"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a towering model with a severe black bob and razor cheekbones"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a floor-length coat of liquid silver sequins"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A towering model with a severe black bob and razor cheekbones struts down the runway toward the camera in a corset gown pieced together from vintage denim, high-stepping in time with the brass like an old cakewalk. Her steps echo off the walls as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Studio Kessler-Mourne"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "winter"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a brutalist concrete hall with one hard spotlight"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a towering model with a severe black bob and razor cheekbones"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a corset gown pieced together from vintage denim"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A towering model with a severe black bob and razor cheekbones struts down the runway toward the camera in a sheer organza dress over a boxy grey tailored jacket, high-stepping in time with the brass like an old cakewalk. Her steps echo off the walls as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Studio Kessler-Mourne"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "winter"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a brutalist concrete hall with one hard spotlight"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a towering model with a severe black bob and razor cheekbones"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a sheer organza dress over a boxy grey tailored jacket"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A model with waist-long braids gathered into a crown struts down the runway toward the camera in a crimson latex column dress with opera gloves, high-stepping in time with the brass like an old cakewalk. Her steps echo off the walls as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Studio Kessler-Mourne"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "winter"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a brutalist concrete hall with one hard spotlight"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a model with waist-long braids gathered into a crown"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a crimson latex column dress with opera gloves"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    }
+   ]
+  },
+  "2": {
+   "path": [
+    "the curtain",
+    "womenswear",
+    "womenswear",
+    "womenswear",
+    "womenswear",
+    "menswear"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The Atelier Sans Titre spring show opens at a rooftop runway above the city under an open sky: the guests settle along both sides of the runway with their phones raised as the lights come up. The camera tracks the moving subject at slow speed. Blossom drifts across the runway in the breeze. The shot ends as the runway lies empty under the lights, waiting.\n\noverall_soundscape: A murmuring crowd and the first notes of a brass band.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "spring"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a rooftop runway above the city under an open sky"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the runway lies empty under the lights, waiting. The camera tracks the moving subject at slow speed. A freckled model with a slicked-back copper ponytail struts down the runway toward the camera in a sculptural ivory gown with a collar like a folded fan, high-stepping in time with the brass like an old cakewalk. The open air tugs at the hem as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "spring"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a rooftop runway above the city under an open sky"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a freckled model with a slicked-back copper ponytail"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a sculptural ivory gown with a collar like a folded fan"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. An older model with a sharp silver pixie cut struts down the runway toward the camera in a crimson latex column dress with opera gloves, high-stepping in time with the brass like an old cakewalk. The open air tugs at the hem as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "spring"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a rooftop runway above the city under an open sky"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "an older model with a sharp silver pixie cut"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a crimson latex column dress with opera gloves"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A model with close-cropped platinum hair and dark brows struts down the runway toward the camera in a corset gown pieced together from vintage denim, high-stepping in time with the brass like an old cakewalk. The open air tugs at the hem as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "spring"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a rooftop runway above the city under an open sky"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a model with close-cropped platinum hair and dark brows"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a corset gown pieced together from vintage denim"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A model with waist-long braids gathered into a crown struts down the runway toward the camera in a floor-length coat of liquid silver sequins, high-stepping in time with the brass like an old cakewalk. The open air tugs at the hem as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "spring"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a rooftop runway above the city under an open sky"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a model with waist-long braids gathered into a crown"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a floor-length coat of liquid silver sequins"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A silver-haired older model with a weathered face struts down the runway toward the camera in a razor-sharp double-breasted suit with wide peaked lapels, high-stepping in time with the brass like an old cakewalk. The open air tugs at the coat as he passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Hard soles strike in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "spring"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a rooftop runway above the city under an open sky"
+      ],
+      [
+       "$model ← __cakewalk_men__",
+       "a silver-haired older model with a weathered face"
+      ],
+      [
+       "$look ← __cakewalk_menswear__",
+       "a razor-sharp double-breasted suit with wide peaked lapels"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    }
+   ]
+  },
+  "3": {
+   "path": [
+    "the curtain",
+    "menswear",
+    "womenswear",
+    "womenswear",
+    "womenswear",
+    "menswear"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The Maison Vérité autumn show opens at a disused railway hall strung with warm bulbs: the guests settle along both sides of the runway with their phones raised as the lights come up. The camera tracks the moving subject at slow speed. Rain streaks the tall windows behind the crowd. The shot ends as the runway lies empty under the lights, waiting.\n\noverall_soundscape: A murmuring crowd and the first notes of a brass band.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Vérité"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a disused railway hall strung with warm bulbs"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the runway lies empty under the lights, waiting. The camera tracks the moving subject at slow speed. A model with bleached curls and a single gold earring struts down the runway toward the camera in a cropped tuxedo jacket over wide pleated trousers, high-stepping in time with the brass like an old cakewalk. His steps echo off the walls as he passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Hard soles strike in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Vérité"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a disused railway hall strung with warm bulbs"
+      ],
+      [
+       "$model ← __cakewalk_men__",
+       "a model with bleached curls and a single gold earring"
+      ],
+      [
+       "$look ← __cakewalk_menswear__",
+       "a cropped tuxedo jacket over wide pleated trousers"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A model with waist-long braids gathered into a crown struts down the runway toward the camera in a floor-length coat of liquid silver sequins, high-stepping in time with the brass like an old cakewalk. Her steps echo off the walls as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Vérité"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a disused railway hall strung with warm bulbs"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a model with waist-long braids gathered into a crown"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a floor-length coat of liquid silver sequins"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A towering model with a severe black bob and razor cheekbones struts down the runway toward the camera in a crimson latex column dress with opera gloves, high-stepping in time with the brass like an old cakewalk. Her steps echo off the walls as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Vérité"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a disused railway hall strung with warm bulbs"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a towering model with a severe black bob and razor cheekbones"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a crimson latex column dress with opera gloves"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A freckled model with a slicked-back copper ponytail struts down the runway toward the camera in a sheer organza dress over a boxy grey tailored jacket, high-stepping in time with the brass like an old cakewalk. Her steps echo off the walls as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Vérité"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a disused railway hall strung with warm bulbs"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a freckled model with a slicked-back copper ponytail"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a sheer organza dress over a boxy grey tailored jacket"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A tall model with a slicked-back undercut struts down the runway toward the camera in a razor-sharp double-breasted suit with wide peaked lapels, high-stepping in time with the brass like an old cakewalk. His steps echo off the walls as he passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Hard soles strike in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Vérité"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a disused railway hall strung with warm bulbs"
+      ],
+      [
+       "$model ← __cakewalk_men__",
+       "a tall model with a slicked-back undercut"
+      ],
+      [
+       "$look ← __cakewalk_menswear__",
+       "a razor-sharp double-breasted suit with wide peaked lapels"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    }
+   ]
+  },
+  "4": {
+   "path": [
+    "the curtain",
+    "menswear",
+    "womenswear",
+    "menswear",
+    "womenswear",
+    "womenswear"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The Haus Grauzone summer show opens at a long runway of white planks laid across a flowering meadow: the guests settle along both sides of the runway with their phones raised as the lights come up. The camera tracks the moving subject at slow speed. The low sun glares off every lens in the front row. The shot ends as the runway lies empty under the lights, waiting.\n\noverall_soundscape: A murmuring crowd and the first notes of a brass band.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Haus Grauzone"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "summer"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a long runway of white planks laid across a flowering meadow"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the runway lies empty under the lights, waiting. The camera tracks the moving subject at slow speed. A lean model with a shaved head and a long jaw struts down the runway toward the camera in a boiler suit in raw white canvas with exaggerated shoulders, high-stepping in time with the brass like an old cakewalk. The open air tugs at the coat as he passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Hard soles strike in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Haus Grauzone"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "summer"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a long runway of white planks laid across a flowering meadow"
+      ],
+      [
+       "$model ← __cakewalk_men__",
+       "a lean model with a shaved head and a long jaw"
+      ],
+      [
+       "$look ← __cakewalk_menswear__",
+       "a boiler suit in raw white canvas with exaggerated shoulders"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A model with waist-long braids gathered into a crown struts down the runway toward the camera in a corset gown pieced together from vintage denim, high-stepping in time with the brass like an old cakewalk. The open air tugs at the hem as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Haus Grauzone"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "summer"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a long runway of white planks laid across a flowering meadow"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a model with waist-long braids gathered into a crown"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a corset gown pieced together from vintage denim"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A lean model with a shaved head and a long jaw struts down the runway toward the camera in a long cape of black feathers over a bare chest and tailored trousers, high-stepping in time with the brass like an old cakewalk. The open air tugs at the coat as he passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Hard soles strike in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Haus Grauzone"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "summer"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a long runway of white planks laid across a flowering meadow"
+      ],
+      [
+       "$model ← __cakewalk_men__",
+       "a lean model with a shaved head and a long jaw"
+      ],
+      [
+       "$look ← __cakewalk_menswear__",
+       "a long cape of black feathers over a bare chest and tailored trousers"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A towering model with a severe black bob and razor cheekbones struts down the runway toward the camera in a crimson latex column dress with opera gloves, high-stepping in time with the brass like an old cakewalk. The open air tugs at the hem as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Haus Grauzone"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "summer"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a long runway of white planks laid across a flowering meadow"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a towering model with a severe black bob and razor cheekbones"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a crimson latex column dress with opera gloves"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A model with close-cropped platinum hair and dark brows struts down the runway toward the camera in a sculptural ivory gown with a collar like a folded fan, high-stepping in time with the brass like an old cakewalk. The open air tugs at the hem as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Haus Grauzone"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "summer"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a long runway of white planks laid across a flowering meadow"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a model with close-cropped platinum hair and dark brows"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a sculptural ivory gown with a collar like a folded fan"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    }
+   ]
+  },
+  "5": {
+   "path": [
+    "the curtain",
+    "womenswear",
+    "menswear",
+    "womenswear",
+    "menswear",
+    "menswear"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The Maison Absente autumn show opens at a glasshouse fogged from inside, its iron frame glowing: the guests settle along both sides of the runway with their phones raised as the lights come up. The camera tracks the moving subject at slow speed. Rain streaks the tall windows behind the crowd. The shot ends as the runway lies empty under the lights, waiting.\n\noverall_soundscape: A murmuring crowd and the first notes of a brass band.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Absente"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a glasshouse fogged from inside, its iron frame glowing"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the runway lies empty under the lights, waiting. The camera tracks the moving subject at slow speed. A freckled model with a slicked-back copper ponytail struts down the runway toward the camera in a corset gown pieced together from vintage denim, high-stepping in time with the brass like an old cakewalk. Her steps echo off the walls as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Absente"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a glasshouse fogged from inside, its iron frame glowing"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a freckled model with a slicked-back copper ponytail"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a corset gown pieced together from vintage denim"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A tall model with a slicked-back undercut struts down the runway toward the camera in a boiler suit in raw white canvas with exaggerated shoulders, high-stepping in time with the brass like an old cakewalk. His steps echo off the walls as he passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Hard soles strike in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Absente"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a glasshouse fogged from inside, its iron frame glowing"
+      ],
+      [
+       "$model ← __cakewalk_men__",
+       "a tall model with a slicked-back undercut"
+      ],
+      [
+       "$look ← __cakewalk_menswear__",
+       "a boiler suit in raw white canvas with exaggerated shoulders"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A towering model with a severe black bob and razor cheekbones struts down the runway toward the camera in a sculptural ivory gown with a collar like a folded fan, high-stepping in time with the brass like an old cakewalk. Her steps echo off the walls as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Absente"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a glasshouse fogged from inside, its iron frame glowing"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a towering model with a severe black bob and razor cheekbones"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a sculptural ivory gown with a collar like a folded fan"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A lean model with a shaved head and a long jaw struts down the runway toward the camera in a boiler suit in raw white canvas with exaggerated shoulders, high-stepping in time with the brass like an old cakewalk. His steps echo off the walls as he passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Hard soles strike in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Absente"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a glasshouse fogged from inside, its iron frame glowing"
+      ],
+      [
+       "$model ← __cakewalk_men__",
+       "a lean model with a shaved head and a long jaw"
+      ],
+      [
+       "$look ← __cakewalk_menswear__",
+       "a boiler suit in raw white canvas with exaggerated shoulders"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A tall model with a slicked-back undercut struts down the runway toward the camera in a razor-sharp double-breasted suit with wide peaked lapels, high-stepping in time with the brass like an old cakewalk. His steps echo off the walls as he passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Hard soles strike in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Absente"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a glasshouse fogged from inside, its iron frame glowing"
+      ],
+      [
+       "$model ← __cakewalk_men__",
+       "a tall model with a slicked-back undercut"
+      ],
+      [
+       "$look ← __cakewalk_menswear__",
+       "a razor-sharp double-breasted suit with wide peaked lapels"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    }
+   ]
+  },
+  "6": {
+   "path": [
+    "the curtain",
+    "menswear",
+    "womenswear",
+    "womenswear",
+    "womenswear",
+    "womenswear"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The Atelier Sans Titre autumn show opens at a brutalist concrete hall with one hard spotlight: the guests settle along both sides of the runway with their phones raised as the lights come up. The camera tracks the moving subject at slow speed. Rain streaks the tall windows behind the crowd. The shot ends as the runway lies empty under the lights, waiting.\n\noverall_soundscape: A murmuring crowd and the first notes of a brass band.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a brutalist concrete hall with one hard spotlight"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the runway lies empty under the lights, waiting. The camera tracks the moving subject at slow speed. A silver-haired older model with a weathered face struts down the runway toward the camera in a boiler suit in raw white canvas with exaggerated shoulders, high-stepping in time with the brass like an old cakewalk. His steps echo off the walls as he passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Hard soles strike in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a brutalist concrete hall with one hard spotlight"
+      ],
+      [
+       "$model ← __cakewalk_men__",
+       "a silver-haired older model with a weathered face"
+      ],
+      [
+       "$look ← __cakewalk_menswear__",
+       "a boiler suit in raw white canvas with exaggerated shoulders"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. An older model with a sharp silver pixie cut struts down the runway toward the camera in a corset gown pieced together from vintage denim, high-stepping in time with the brass like an old cakewalk. Her steps echo off the walls as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a brutalist concrete hall with one hard spotlight"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "an older model with a sharp silver pixie cut"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a corset gown pieced together from vintage denim"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A model with waist-long braids gathered into a crown struts down the runway toward the camera in a corset gown pieced together from vintage denim, high-stepping in time with the brass like an old cakewalk. Her steps echo off the walls as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a brutalist concrete hall with one hard spotlight"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a model with waist-long braids gathered into a crown"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a corset gown pieced together from vintage denim"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. An older model with a sharp silver pixie cut struts down the runway toward the camera in a sheer organza dress over a boxy grey tailored jacket, high-stepping in time with the brass like an old cakewalk. Her steps echo off the walls as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a brutalist concrete hall with one hard spotlight"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "an older model with a sharp silver pixie cut"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a sheer organza dress over a boxy grey tailored jacket"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A towering model with a severe black bob and razor cheekbones struts down the runway toward the camera in a corset gown pieced together from vintage denim, high-stepping in time with the brass like an old cakewalk. Her steps echo off the walls as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "autumn"
+      ],
+      [
+       "$venue ← __cakewalk_indoor__",
+       "a brutalist concrete hall with one hard spotlight"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a towering model with a severe black bob and razor cheekbones"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a corset gown pieced together from vintage denim"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "path": [
+    "the curtain",
+    "womenswear",
+    "menswear",
+    "menswear",
+    "menswear",
+    "menswear"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The Maison Absente spring show opens at a long runway of white planks laid across a flowering meadow: the guests settle along both sides of the runway with their phones raised as the lights come up. The camera tracks the moving subject at slow speed. Blossom drifts across the runway in the breeze. The shot ends as the runway lies empty under the lights, waiting.\n\noverall_soundscape: A murmuring crowd and the first notes of a brass band.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Absente"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "spring"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a long runway of white planks laid across a flowering meadow"
+      ],
+      [
+       "{woman|man}",
+       "woman"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the runway lies empty under the lights, waiting. The camera tracks the moving subject at slow speed. A freckled model with a slicked-back copper ponytail struts down the runway toward the camera in a sculptural ivory gown with a collar like a folded fan, high-stepping in time with the brass like an old cakewalk. The open air tugs at the hem as she passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Heel strikes in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Absente"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "spring"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a long runway of white planks laid across a flowering meadow"
+      ],
+      [
+       "$model ← __cakewalk_women__",
+       "a freckled model with a slicked-back copper ponytail"
+      ],
+      [
+       "$look ← __cakewalk_womenswear__",
+       "a sculptural ivory gown with a collar like a folded fan"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A model with bleached curls and a single gold earring struts down the runway toward the camera in a long cape of black feathers over a bare chest and tailored trousers, high-stepping in time with the brass like an old cakewalk. The open air tugs at the coat as he passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Hard soles strike in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Absente"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "spring"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a long runway of white planks laid across a flowering meadow"
+      ],
+      [
+       "$model ← __cakewalk_men__",
+       "a model with bleached curls and a single gold earring"
+      ],
+      [
+       "$look ← __cakewalk_menswear__",
+       "a long cape of black feathers over a bare chest and tailored trousers"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A model with bleached curls and a single gold earring struts down the runway toward the camera in a long cape of black feathers over a bare chest and tailored trousers, high-stepping in time with the brass like an old cakewalk. The open air tugs at the coat as he passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Hard soles strike in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Absente"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "spring"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a long runway of white planks laid across a flowering meadow"
+      ],
+      [
+       "$model ← __cakewalk_men__",
+       "a model with bleached curls and a single gold earring"
+      ],
+      [
+       "$look ← __cakewalk_menswear__",
+       "a long cape of black feathers over a bare chest and tailored trousers"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A silver-haired older model with a weathered face struts down the runway toward the camera in a boiler suit in raw white canvas with exaggerated shoulders, high-stepping in time with the brass like an old cakewalk. The open air tugs at the coat as he passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Hard soles strike in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Absente"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "spring"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a long runway of white planks laid across a flowering meadow"
+      ],
+      [
+       "$model ← __cakewalk_men__",
+       "a silver-haired older model with a weathered face"
+      ],
+      [
+       "$look ← __cakewalk_menswear__",
+       "a boiler suit in raw white canvas with exaggerated shoulders"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film, one continuous take. The shot opens as the model reaches the end of the runway, poses and turns back. The camera tracks the moving subject at slow speed. A silver-haired older model with a weathered face struts down the runway toward the camera in an oversized trench coat cinched with a leather harness, high-stepping in time with the brass like an old cakewalk. The open air tugs at the coat as he passes. The shot ends as the model reaches the end of the runway, poses and turns back.\n\noverall_soundscape: Hard soles strike in time with the brass and a ripple of camera shutters.\n\nnon_diegetic_music: A swaggering brass cakewalk over a slow, heavy techno kick.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Absente"
+      ],
+      [
+       "{spring|summer|autumn|winter}",
+       "spring"
+      ],
+      [
+       "$venue ← __cakewalk_outdoor__",
+       "a long runway of white planks laid across a flowering meadow"
+      ],
+      [
+       "$model ← __cakewalk_men__",
+       "a silver-haired older model with a weathered face"
+      ],
+      [
+       "$look ← __cakewalk_menswear__",
+       "an oversized trench coat cinched with a leather harness"
+      ],
+      [
+       "{woman|man}",
+       "man"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

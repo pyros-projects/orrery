@@ -1,0 +1,140 @@
+{
+ "preset": "krea/06_film_still",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "a still from a 1990s Hong Kong film, a subway driver sitting alone in a laundromat at 3 a.m, a glittering sun shower outside, anamorphic lens with blue flares, aurora light, soft halation around the highlights, a yellow burned-in subtitle at the bottom of the frame reading \"I told you it would come back.\"",
+     "picks": [
+      [
+       "{a lighthouse keeper|a night-shift nurse|an old clockmaker|a teenage beekeeper|a subway driver}",
+       "a subway driver"
+      ],
+      [
+       "{1970s Italian|1980s Japanese|1990s Hong Kong|2000s Scandinavian}",
+       "1990s Hong Kong"
+      ],
+      [
+       "{sitting alone in|walking through|talking on a payphone in}",
+       "sitting alone in"
+      ],
+      [
+       "{35mm film grain|soft halation around the highlights|faded Technicolor}",
+       "soft halation around the highlights"
+      ],
+      [
+       "{I told you it would come back.|Nobody lives here anymore.|Did you hear that?|We are late again.}",
+       "I told you it would come back."
+      ],
+      [
+       "__place__",
+       "a laundromat at 3 a.m."
+      ],
+      [
+       "__weather__",
+       "a glittering sun shower"
+      ],
+      [
+       "__lens__",
+       "anamorphic lens with blue flares"
+      ],
+      [
+       "__light__",
+       "aurora light"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "a still from a 1990s Hong Kong film, a subway driver talking on a payphone in a snowed-in train station, a gathering thunderstorm outside, fisheye lens, neon reflections on wet asphalt, soft halation around the highlights, a yellow burned-in subtitle at the bottom of the frame reading \"We are late again.\"",
+     "picks": [
+      [
+       "{a lighthouse keeper|a night-shift nurse|an old clockmaker|a teenage beekeeper|a subway driver}",
+       "a subway driver"
+      ],
+      [
+       "{1970s Italian|1980s Japanese|1990s Hong Kong|2000s Scandinavian}",
+       "1990s Hong Kong"
+      ],
+      [
+       "{sitting alone in|walking through|talking on a payphone in}",
+       "talking on a payphone in"
+      ],
+      [
+       "{35mm film grain|soft halation around the highlights|faded Technicolor}",
+       "soft halation around the highlights"
+      ],
+      [
+       "{I told you it would come back.|Nobody lives here anymore.|Did you hear that?|We are late again.}",
+       "We are late again."
+      ],
+      [
+       "__place__",
+       "a snowed-in train station"
+      ],
+      [
+       "__weather__",
+       "a gathering thunderstorm"
+      ],
+      [
+       "__lens__",
+       "fisheye lens"
+      ],
+      [
+       "__light__",
+       "neon reflections on wet asphalt"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "a still from a 1990s Hong Kong film, a teenage beekeeper talking on a payphone in a greenhouse on the moon, a gathering thunderstorm outside, 400mm telephoto compression, soft overcast north light, 35mm film grain, a yellow burned-in subtitle at the bottom of the frame reading \"Did you hear that?\"",
+     "picks": [
+      [
+       "{a lighthouse keeper|a night-shift nurse|an old clockmaker|a teenage beekeeper|a subway driver}",
+       "a teenage beekeeper"
+      ],
+      [
+       "{1970s Italian|1980s Japanese|1990s Hong Kong|2000s Scandinavian}",
+       "1990s Hong Kong"
+      ],
+      [
+       "{sitting alone in|walking through|talking on a payphone in}",
+       "talking on a payphone in"
+      ],
+      [
+       "{35mm film grain|soft halation around the highlights|faded Technicolor}",
+       "35mm film grain"
+      ],
+      [
+       "{I told you it would come back.|Nobody lives here anymore.|Did you hear that?|We are late again.}",
+       "Did you hear that?"
+      ],
+      [
+       "__place__",
+       "a greenhouse on the moon"
+      ],
+      [
+       "__weather__",
+       "a gathering thunderstorm"
+      ],
+      [
+       "__lens__",
+       "400mm telephoto compression"
+      ],
+      [
+       "__light__",
+       "soft overcast north light"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,80 @@
+{
+ "preset": "effects/living_clay",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a tiled changing room at a public swimming pool, framed from the waist up, firm and naturally proportioned. The camera pushes in at slow speed. One side of the chest slowly sinks several centimetres, the surrounding body following like dense soft clay giving way to gravity. <Subject 1> reaches across and presses the softened area; each fingertip leaves a deep rounded dent that stays exactly where it was made. <Subject 1> places both hands on the sides of the torso and pushes the body back into shape; the waist narrows under the palms, and broad hand-shaped depressions remain. <Subject 1> releases it, and the torso holds its new sculpted form. The softness reaches the face: one cheek sags, <Subject 1> pushes it up with a palm, and the jawline changes with it and stays. Curious now, <Subject 1> slides the fingertips up toward the temple, nudges the nose slightly to one side and compresses the chin upward; every change remains, while the eyes stay alive inside the altered face. In the final moment <Subject 1> presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains.\n\noverall_soundscape: Quiet room ambience, restrained breathing, dense soft pressure sounds, and muted material shifting under each touch.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a tiled changing room at a public swimming pool"
+      ],
+      [
+       "{one shoulder|the upper arm|one side of the chest}",
+       "one side of the chest"
+      ],
+      [
+       "{HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains|HOST compresses the face between both palms and lets go, leaving a narrower, newly sculpted face that still blinks|HOST pinches the chin and draws it slowly downward into a long soft point, then looks calmly into the camera}",
+       "HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the young man of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a dim apartment sitting room, framed from the waist up, firm and naturally proportioned. The camera pushes in at slow speed. The upper arm slowly sinks several centimetres, the surrounding body following like dense soft clay giving way to gravity. <Subject 1> reaches across and presses the softened area; each fingertip leaves a deep rounded dent that stays exactly where it was made. <Subject 1> places both hands on the sides of the torso and pushes the body back into shape; the waist narrows under the palms, and broad hand-shaped depressions remain. <Subject 1> releases it, and the torso holds its new sculpted form. The softness reaches the face: one cheek sags, <Subject 1> pushes it up with a palm, and the jawline changes with it and stays. Curious now, <Subject 1> slides the fingertips up toward the temple, nudges the nose slightly to one side and compresses the chin upward; every change remains, while the eyes stay alive inside the altered face. In the final moment <Subject 1> presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains.\n\noverall_soundscape: Quiet room ambience, restrained breathing, dense soft pressure sounds, and muted material shifting under each touch.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the young man"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a dim apartment sitting room"
+      ],
+      [
+       "{one shoulder|the upper arm|one side of the chest}",
+       "the upper arm"
+      ],
+      [
+       "{HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains|HOST compresses the face between both palms and lets go, leaving a narrower, newly sculpted face that still blinks|HOST pinches the chin and draws it slowly downward into a long soft point, then looks calmly into the camera}",
+       "HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a narrow hotel corridor, framed from the waist up, firm and naturally proportioned. The camera pushes in at slow speed. One shoulder slowly sinks several centimetres, the surrounding body following like dense soft clay giving way to gravity. <Subject 1> reaches across and presses the softened area; each fingertip leaves a deep rounded dent that stays exactly where it was made. <Subject 1> places both hands on the sides of the torso and pushes the body back into shape; the waist narrows under the palms, and broad hand-shaped depressions remain. <Subject 1> releases it, and the torso holds its new sculpted form. The softness reaches the face: one cheek sags, <Subject 1> pushes it up with a palm, and the jawline changes with it and stays. Curious now, <Subject 1> slides the fingertips up toward the temple, nudges the nose slightly to one side and compresses the chin upward; every change remains, while the eyes stay alive inside the altered face. In the final moment <Subject 1> pinches the chin and draws it slowly downward into a long soft point, then looks calmly into the camera.\n\noverall_soundscape: Quiet room ambience, restrained breathing, dense soft pressure sounds, and muted material shifting under each touch.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a narrow hotel corridor"
+      ],
+      [
+       "{one shoulder|the upper arm|one side of the chest}",
+       "one shoulder"
+      ],
+      [
+       "{HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains|HOST compresses the face between both palms and lets go, leaving a narrower, newly sculpted face that still blinks|HOST pinches the chin and draws it slowly downward into a long soft point, then looks calmly into the camera}",
+       "HOST pinches the chin and draws it slowly downward into a long soft point, then looks calmly into the camera"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

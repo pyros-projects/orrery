@@ -1,0 +1,92 @@
+{
+ "preset": "effects/organic_aperture",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a tiled changing room at a public swimming pool, framed from the chest up, the middle of the forehead bare and clearly visible. The camera pushes in at slow speed. A faint spiral crease appears in the skin of the middle of the forehead. The crease deepens into overlapping curved flaps of skin that rotate outward in one smooth motion, exactly like the blades of a camera iris, and a perfectly round opening widens to the size of a coin, then of a palm. There is no blood and no wound; the edges are clean, soft and alive. Inside is a smooth dark cavity far deeper than the body could hold. <Subject 1> stares at it, breath held, and the rim of the aperture slowly contracts and relaxes like a pupil adjusting to the light. In the final moment the aperture closes again, leaving only a small spiral scar.\n\noverall_soundscape: Quiet room ambience, held breath, a soft sliding of skin over skin as the aperture turns open, and a faint hollow air tone from inside.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a tiled changing room at a public swimming pool"
+      ],
+      [
+       "{the centre of the palm|the middle of the forehead|the sternum}",
+       "the middle of the forehead"
+      ],
+      [
+       "{a smooth dark cavity far deeper than the body could hold|soft concentric pale layers folding inward like the inside of a flower|a small darkness scattered with faint points of light}",
+       "a smooth dark cavity far deeper than the body could hold"
+      ],
+      [
+       "{the aperture closes again, leaving only a small spiral scar|something inside the opening blinks|HOST raises it to the camera and looks through it as through a spyglass}",
+       "the aperture closes again, leaving only a small spiral scar"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the young man of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a dim apartment sitting room, framed from the chest up, the centre of the palm bare and clearly visible. The camera pushes in at slow speed. A faint spiral crease appears in the skin of the centre of the palm. The crease deepens into overlapping curved flaps of skin that rotate outward in one smooth motion, exactly like the blades of a camera iris, and a perfectly round opening widens to the size of a coin, then of a palm. There is no blood and no wound; the edges are clean, soft and alive. Inside is a smooth dark cavity far deeper than the body could hold. <Subject 1> stares at it, breath held, and the rim of the aperture slowly contracts and relaxes like a pupil adjusting to the light. In the final moment the aperture closes again, leaving only a small spiral scar.\n\noverall_soundscape: Quiet room ambience, held breath, a soft sliding of skin over skin as the aperture turns open, and a faint hollow air tone from inside.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the young man"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a dim apartment sitting room"
+      ],
+      [
+       "{the centre of the palm|the middle of the forehead|the sternum}",
+       "the centre of the palm"
+      ],
+      [
+       "{a smooth dark cavity far deeper than the body could hold|soft concentric pale layers folding inward like the inside of a flower|a small darkness scattered with faint points of light}",
+       "a smooth dark cavity far deeper than the body could hold"
+      ],
+      [
+       "{the aperture closes again, leaving only a small spiral scar|something inside the opening blinks|HOST raises it to the camera and looks through it as through a spyglass}",
+       "the aperture closes again, leaving only a small spiral scar"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a narrow hotel corridor, framed from the chest up, the sternum bare and clearly visible. The camera pushes in at slow speed. A faint spiral crease appears in the skin of the sternum. The crease deepens into overlapping curved flaps of skin that rotate outward in one smooth motion, exactly like the blades of a camera iris, and a perfectly round opening widens to the size of a coin, then of a palm. There is no blood and no wound; the edges are clean, soft and alive. Inside is a small darkness scattered with faint points of light. <Subject 1> stares at it, breath held, and the rim of the aperture slowly contracts and relaxes like a pupil adjusting to the light. In the final moment <Subject 1> raises it to the camera and looks through it as through a spyglass.\n\noverall_soundscape: Quiet room ambience, held breath, a soft sliding of skin over skin as the aperture turns open, and a faint hollow air tone from inside.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a narrow hotel corridor"
+      ],
+      [
+       "{the centre of the palm|the middle of the forehead|the sternum}",
+       "the sternum"
+      ],
+      [
+       "{a smooth dark cavity far deeper than the body could hold|soft concentric pale layers folding inward like the inside of a flower|a small darkness scattered with faint points of light}",
+       "a small darkness scattered with faint points of light"
+      ],
+      [
+       "{the aperture closes again, leaving only a small spiral scar|something inside the opening blinks|HOST raises it to the camera and looks through it as through a spyglass}",
+       "HOST raises it to the camera and looks through it as through a spyglass"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

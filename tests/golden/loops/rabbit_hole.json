@@ -1,0 +1,356 @@
+{
+ "preset": "loops/rabbit_hole",
+ "seeds": {
+  "0": {
+   "path": [
+    "the first world",
+    "the next world 1/∞",
+    "the next world 2/∞",
+    "the next world 3/∞",
+    "the next world 4/∞",
+    "the next world 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The camera drifts through a fjord between sheer granite walls, a thread of waterfall falling into dark water, then slowly lowers toward a tiny detail in it: a sunlit pinhole in a green leaf. The camera pushes in with large amplitude at slow speed. It pushes closer and closer until the detail fills the frame completely and the camera passes into it. The shot ends as the camera dives into a sunlit pinhole in a green leaf.\n\noverall_soundscape: Distant falling water echoing off the cliffs and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$world ← __world/landscapes__",
+       "a fjord between sheer granite walls, a thread of waterfall falling into dark water"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a sunlit pinhole in a green leaf"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The shot opens as the camera dives into a sunlit pinhole in a green leaf. The camera pushes in with large amplitude at slow speed. The camera passes through the pinhole into a new light, and the camera is somewhere entirely different: a waterfall plunging off the edge of a flat-topped table mountain into cloud, seen at a completely new scale. It drifts through it, then finds a tiny detail, a sunlit pinhole in a green leaf, and pushes in until the detail fills the frame and the camera passes into it. The shot ends as the camera dives into a sunlit pinhole in a green leaf.\n\noverall_soundscape: A thundering fall muffled by mist and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$world ← __world/landscapes__",
+       "a waterfall plunging off the edge of a flat-topped table mountain into cloud"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a sunlit pinhole in a green leaf"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The shot opens as the camera dives into a sunlit pinhole in a green leaf. The camera pushes in with large amplitude at slow speed. The camera passes through the pinhole into a new light, and the camera is somewhere entirely different: a crater lake of impossible blue inside a ring of scree, seen at a completely new scale. It drifts through it, then finds a tiny detail, a snowflake settling on dark wool, and pushes in until the detail fills the frame and the camera passes into it. The shot ends as the camera dives into a snowflake settling on dark wool.\n\noverall_soundscape: Wind across the crater rim and small stones clattering and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$world ← __world/landscapes__",
+       "a crater lake of impossible blue inside a ring of scree"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a snowflake settling on dark wool"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The shot opens as the camera dives into a snowflake settling on dark wool. The camera pushes in with large amplitude at slow speed. The ice crystal's arms grow into glittering bridges around the camera, and the camera is somewhere entirely different: a double-height library with rolling brass ladders and reading lamps, seen at a completely new scale. It drifts through it, then finds a tiny detail, a raindrop running down a window pane, and pushes in until the detail fills the frame and the camera passes into it. The shot ends as the camera dives into a raindrop running down a window pane.\n\noverall_soundscape: Pages turning and a chair creaking and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__tour/rooms__"
+      ],
+      [
+       "$world ← __tour/rooms__",
+       "a double-height library with rolling brass ladders and reading lamps"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a raindrop running down a window pane"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The shot opens as the camera dives into a raindrop running down a window pane. The camera pushes in with large amplitude at slow speed. The camera tumbles out of the raindrop into open air, and the camera is somewhere entirely different: a savanna with one acacia tree and a herd of elephants crossing it, seen at a completely new scale. It drifts through it, then finds a tiny detail, a single dewdrop hanging from a blade of grass, and pushes in until the detail fills the frame and the camera passes into it. The shot ends as the camera dives into a single dewdrop hanging from a blade of grass.\n\noverall_soundscape: Elephants rumbling, dry grass rustling and distant birds and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$world ← __world/landscapes__",
+       "a savanna with one acacia tree and a herd of elephants crossing it"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a single dewdrop hanging from a blade of grass"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The shot opens as the camera dives into a single dewdrop hanging from a blade of grass. The camera pushes in with large amplitude at slow speed. The camera bursts out through the dewdrop's shimmering skin, and the camera is somewhere entirely different: a ghost town half swallowed by sand dunes, doors open to the desert, seen at a completely new scale. It drifts through it, then finds a tiny detail, a soap bubble drifting past, its skin swirling with colour, and pushes in until the detail fills the frame and the camera passes into it. The shot ends as the camera dives into a soap bubble drifting past, its skin swirling with colour.\n\noverall_soundscape: Sand whispering through empty rooms and a loose shutter banging and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$world ← __world/landscapes__",
+       "a ghost town half swallowed by sand dunes, doors open to the desert"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a soap bubble drifting past, its skin swirling with colour"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "path": [
+    "the first world",
+    "the next world 1/∞",
+    "the next world 2/∞",
+    "the next world 3/∞",
+    "the next world 4/∞",
+    "the next world 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The camera drifts through a giant sinkhole with a whole rainforest growing at its bottom, then slowly lowers toward a tiny detail in it: an old photograph lying face up on the ground. The camera pushes in with large amplitude at slow speed. It pushes closer and closer until the detail fills the frame completely and the camera passes into it. The shot ends as the camera dives into an old photograph lying face up on the ground.\n\noverall_soundscape: Birdsong echoing inside the rock walls and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$world ← __world/landscapes__",
+       "a giant sinkhole with a whole rainforest growing at its bottom"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "an old photograph lying face up on the ground"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The shot opens as the camera dives into an old photograph lying face up on the ground. The camera pushes in with large amplitude at slow speed. The grain of the photograph swells into real texture and colour floods into it, and the camera is somewhere entirely different: a slot canyon of striped red sandstone, light falling in a single shaft, seen at a completely new scale. It drifts through it, then finds a tiny detail, a hairline crack in an old stone wall, and pushes in until the detail fills the frame and the camera passes into it. The shot ends as the camera dives into a hairline crack in an old stone wall.\n\noverall_soundscape: Wind moaning through the narrow rock and trickling sand and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$world ← __world/landscapes__",
+       "a slot canyon of striped red sandstone, light falling in a single shaft"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a hairline crack in an old stone wall"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The shot opens as the camera dives into a hairline crack in an old stone wall. The camera pushes in with large amplitude at slow speed. The crack widens into a canyon and the camera flies out of it, and the camera is somewhere entirely different: a coral atoll ringed by turquoise shallows and a line of white surf, seen at a completely new scale. It drifts through it, then finds a tiny detail, a single dewdrop hanging from a blade of grass, and pushes in until the detail fills the frame and the camera passes into it. The shot ends as the camera dives into a single dewdrop hanging from a blade of grass.\n\noverall_soundscape: Surf on the reef and wind in palm fronds and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$world ← __world/landscapes__",
+       "a coral atoll ringed by turquoise shallows and a line of white surf"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a single dewdrop hanging from a blade of grass"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The shot opens as the camera dives into a single dewdrop hanging from a blade of grass. The camera pushes in with large amplitude at slow speed. The camera bursts out through the dewdrop's shimmering skin, and the camera is somewhere entirely different: an indoor swimming pool under a glass roof, light rippling on the tiles, seen at a completely new scale. It drifts through it, then finds a tiny detail, a keyhole glowing with light from the other side, and pushes in until the detail fills the frame and the camera passes into it. The shot ends as the camera dives into a keyhole glowing with light from the other side.\n\noverall_soundscape: Water lapping and a splash echoing under glass and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__tour/rooms__"
+      ],
+      [
+       "$world ← __tour/rooms__",
+       "an indoor swimming pool under a glass roof, light rippling on the tiles"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a keyhole glowing with light from the other side"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The shot opens as the camera dives into a keyhole glowing with light from the other side. The camera pushes in with large amplitude at slow speed. The camera squeezes through the keyhole into brightness, and the camera is somewhere entirely different: a ghost town half swallowed by sand dunes, doors open to the desert, seen at a completely new scale. It drifts through it, then finds a tiny detail, the lens of an old brass telescope, and pushes in until the detail fills the frame and the camera passes into it. The shot ends as the camera dives into the lens of an old brass telescope.\n\noverall_soundscape: Sand whispering through empty rooms and a loose shutter banging and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$world ← __world/landscapes__",
+       "a ghost town half swallowed by sand dunes, doors open to the desert"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "the lens of an old brass telescope"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The shot opens as the camera dives into the lens of an old brass telescope. The camera pushes in with large amplitude at slow speed. The view inside the lens becomes the world around the camera, and the camera is somewhere entirely different: an observatory dome opening onto a night full of stars, seen at a completely new scale. It drifts through it, then finds a tiny detail, an old photograph lying face up on the ground, and pushes in until the detail fills the frame and the camera passes into it. The shot ends as the camera dives into an old photograph lying face up on the ground.\n\noverall_soundscape: Gears grinding as the dome turns and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__tour/rooms__"
+      ],
+      [
+       "$world ← __tour/rooms__",
+       "an observatory dome opening onto a night full of stars"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "an old photograph lying face up on the ground"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "path": [
+    "the first world",
+    "the next world 1/∞",
+    "the next world 2/∞",
+    "the next world 3/∞",
+    "the next world 4/∞",
+    "the next world 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The camera drifts through a black-sand beach on a volcanic island, sea stacks standing in the surf, then slowly lowers toward a tiny detail in it: a keyhole glowing with light from the other side. The camera pushes in with large amplitude at slow speed. It pushes closer and closer until the detail fills the frame completely and the camera passes into it. The shot ends as the camera dives into a keyhole glowing with light from the other side.\n\noverall_soundscape: Heavy Atlantic waves booming against basalt and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$world ← __world/landscapes__",
+       "a black-sand beach on a volcanic island, sea stacks standing in the surf"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a keyhole glowing with light from the other side"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The shot opens as the camera dives into a keyhole glowing with light from the other side. The camera pushes in with large amplitude at slow speed. The camera squeezes through the keyhole into brightness, and the camera is somewhere entirely different: a cabinet of curiosities crowded with specimens, globes and brass instruments, seen at a completely new scale. It drifts through it, then finds a tiny detail, a soap bubble drifting past, its skin swirling with colour, and pushes in until the detail fills the frame and the camera passes into it. The shot ends as the camera dives into a soap bubble drifting past, its skin swirling with colour.\n\noverall_soundscape: A clock ticking and a music box winding down and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__tour/rooms__"
+      ],
+      [
+       "$world ← __tour/rooms__",
+       "a cabinet of curiosities crowded with specimens, globes and brass instruments"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a soap bubble drifting past, its skin swirling with colour"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The shot opens as the camera dives into a soap bubble drifting past, its skin swirling with colour. The camera pushes in with large amplitude at slow speed. The bubble pops around the camera in a spray of light, and the camera is somewhere entirely different: an alpine valley meadow blazing with wildflowers under glaciers, seen at a completely new scale. It drifts through it, then finds a tiny detail, a glowing ember at the heart of a campfire, and pushes in until the detail fills the frame and the camera passes into it. The shot ends as the camera dives into a glowing ember at the heart of a campfire.\n\noverall_soundscape: A meltwater stream, marmot whistles and insects and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$world ← __world/landscapes__",
+       "an alpine valley meadow blazing with wildflowers under glaciers"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a glowing ember at the heart of a campfire"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The shot opens as the camera dives into a glowing ember at the heart of a campfire. The camera pushes in with large amplitude at slow speed. The ember's glow blooms outward into a whole sky, and the camera is somewhere entirely different: a coast of hexagonal basalt columns stepping down into the sea, seen at a completely new scale. It drifts through it, then finds a tiny detail, a hairline crack in an old stone wall, and pushes in until the detail fills the frame and the camera passes into it. The shot ends as the camera dives into a hairline crack in an old stone wall.\n\noverall_soundscape: Waves sucking and spilling between the columns and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$world ← __world/landscapes__",
+       "a coast of hexagonal basalt columns stepping down into the sea"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a hairline crack in an old stone wall"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The shot opens as the camera dives into a hairline crack in an old stone wall. The camera pushes in with large amplitude at slow speed. The crack widens into a canyon and the camera flies out of it, and the camera is somewhere entirely different: a cherry orchard in full bloom, petals drifting over a mossy temple roof, seen at a completely new scale. It drifts through it, then finds a tiny detail, a snowflake settling on dark wool, and pushes in until the detail fills the frame and the camera passes into it. The shot ends as the camera dives into a snowflake settling on dark wool.\n\noverall_soundscape: A temple bell, soft wind and falling petals and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$world ← __world/landscapes__",
+       "a cherry orchard in full bloom, petals drifting over a mossy temple roof"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a snowflake settling on dark wool"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic macro and wide cinematography, photorealistic, one continuous unbroken ten-second shot. The shot opens as the camera dives into a snowflake settling on dark wool. The camera pushes in with large amplitude at slow speed. The ice crystal's arms grow into glittering bridges around the camera, and the camera is somewhere entirely different: a savanna with one acacia tree and a herd of elephants crossing it, seen at a completely new scale. It drifts through it, then finds a tiny detail, a hairline crack in an old stone wall, and pushes in until the detail fills the frame and the camera passes into it. The shot ends as the camera dives into a hairline crack in an old stone wall.\n\noverall_soundscape: Elephants rumbling, dry grass rustling and distant birds and the sound narrowing to a hush as the camera closes in.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$world ← __world/landscapes__",
+       "a savanna with one acacia tree and a herd of elephants crossing it"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a hairline crack in an old stone wall"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

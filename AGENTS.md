@@ -82,6 +82,11 @@ output:
   `comfyui/web/app/help.js`, and the example workflows when their templates or nodes change).
 - Determinism is a promise: the same template and seed give the same picks. A change that moves
   existing picks needs a reason in the PR and a way back (as `@rng 1` keeps the old dice).
+- The golden corpus (`tests/test_golden.py`, snapshots in `tests/golden/`) pins what every built-in
+  preset rolls: its text, its picks and a reel's path. When it fails, either the change is a mistake,
+  or it is meant: then the PR says what moved and why, and `uv run python tests/test_golden.py --write`
+  rewrites the snapshots. A new built-in preset gets its snapshot the same way. The corpus is the
+  presets, so a language feature no preset uses yet gets a preset worth shipping, not a dry test case.
 - Test ComfyUI changes in the ComfyUI that is already running, and only after asking. Never start
   a second instance, or any other process that loads models on the GPU next to it: two at once
   freeze the machine.

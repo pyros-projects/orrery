@@ -1,0 +1,68 @@
+{
+ "preset": "h3/09_drone_flight",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. Over an iceberg-strewn bay where humpback whales surface between the ice, in a thunderstorm rolling in, lightning flickering inside black cloud, the drone dives from high above in a fast FPV plunge and pulls out just above the ground. The camera pushes in with large amplitude at fast speed. The scale reads from small things in the frame: a road, a boat, a single tree, a figure standing still. The light moves across the land as the drone flies.\n\noverall_soundscape: Whale blows, the slap of flukes and grinding ice and rolling thunder and the first heavy drops.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "an iceberg-strewn bay where humpback whales surface between the ice"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "a thunderstorm rolling in, lightning flickering inside black cloud"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "dives from high above in a fast FPV plunge and pulls out just above the ground"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. Over a savanna with one acacia tree and a herd of elephants crossing it, in a thunderstorm rolling in, lightning flickering inside black cloud, the drone skims a few metres above the surface toward the horizon, then climbs steeply to reveal the whole expanse at once. The camera pushes in with large amplitude at slow speed. The scale reads from small things in the frame: a road, a boat, a single tree, a figure standing still. The light moves across the land as the drone flies.\n\noverall_soundscape: Elephants rumbling, dry grass rustling and distant birds and rolling thunder and the first heavy drops.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a savanna with one acacia tree and a herd of elephants crossing it"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "a thunderstorm rolling in, lightning flickering inside black cloud"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "skims a few metres above the surface toward the horizon, then climbs steeply to reveal the whole expanse at once"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. Over a lighthouse on a lone rock in a storm-whipped sea, in high noon under a fierce white sun and heat shimmer, the drone threads low through a narrow gap between rocks or trees and bursts out into open space. The camera tracks the moving subject at fast speed. The scale reads from small things in the frame: a road, a boat, a single tree, a figure standing still. The light moves across the land as the drone flies.\n\noverall_soundscape: Storm wind, waves exploding on rock and a foghorn and cicadas screaming in the heat.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a lighthouse on a lone rock in a storm-whipped sea"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "high noon under a fierce white sun and heat shimmer"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "threads low through a narrow gap between rocks or trees and bursts out into open space"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

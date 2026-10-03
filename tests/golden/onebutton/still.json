@@ -1,0 +1,188 @@
+{
+ "preset": "onebutton/still",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "a paper boat stranded on a rain-wet windowsill, lit by moonlight through fog, seen through a rain-streaked window. The picture is a 1950s pulp magazine cover painted in lurid colour with dramatic lighting and a worn, creased paper texture.",
+     "picks": [
+      [
+       "{tame|curious|unhinged}",
+       "tame"
+      ],
+      [
+       "{person|animal|thing|idea|place}",
+       "thing"
+      ],
+      [
+       "{average_joes|models|gothic|cyberpunk|horror|noir|fantasy}",
+       "average_joes"
+      ],
+      [
+       "$who ← __characters/average_joes__",
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$who ← __characters/looks/hair__",
+       "wind-blown __characters/looks/hair_color__ hair down to the collar"
+      ],
+      [
+       "$who ← __characters/looks/hair_color__",
+       "warm caramel"
+      ],
+      [
+       "$who ← __characters/average_joes/outfit__",
+       "a corduroy blazer with elbow patches"
+      ],
+      [
+       "$subject ← __subjects/still_life__",
+       "a paper boat stranded on a rain-wet windowsill"
+      ],
+      [
+       "$look ← __looks/still__",
+       "a 1950s pulp magazine cover painted in lurid colour with dramatic lighting and a worn, creased paper texture"
+      ],
+      [
+       "{|, __subjects/twists__}",
+       ""
+      ],
+      [
+       "$frame ← __frame/compositions__",
+       "seen through a rain-streaked window"
+      ],
+      [
+       "$light ← __light__",
+       "moonlight through fog"
+      ],
+      [
+       "{$subject$twist, $frame, lit by $light$beyond. The picture is $look$lens.|The picture is $look$lens: $subject$twist, $frame, lit by $light$beyond.|$subject$twist, lit by $light, $frame$beyond. The picture is $look$lens.}",
+       "$subject$twist, lit by $light, $frame$beyond. The picture is $look$lens."
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "The picture is a cubist painting that breaks the subject into overlapping planes seen from several angles at once, in ochre and grey: a back-alley street medic in her forties, Vietnamese, calm hands and exhausted eyes, with a shaved head with a glowing ultraviolet circuit tattoo, one eye replaced by a many-lensed camera, wearing a quilted kimono jacket with a holographic obi, framed by a doorway in darkness, lit by flickering cold fluorescent light.",
+     "picks": [
+      [
+       "{tame|curious|unhinged}",
+       "curious"
+      ],
+      [
+       "{person|animal|thing|idea|place}",
+       "person"
+      ],
+      [
+       "{average_joes|models|gothic|cyberpunk|horror|noir|fantasy}",
+       "cyberpunk"
+      ],
+      [
+       "$who ← __characters/cyberpunk__",
+       "a back-alley street medic in her forties, Vietnamese, calm hands and exhausted eyes, with __characters/cyberpunk/hair__, __characters/cyberpunk/augment__, wearing __characters/cyberpunk/outfit__"
+      ],
+      [
+       "$who ← __characters/cyberpunk/hair__",
+       "a shaved head with a glowing __characters/cyberpunk/dye__ circuit tattoo"
+      ],
+      [
+       "$who ← __characters/cyberpunk/dye__",
+       "ultraviolet"
+      ],
+      [
+       "$who ← __characters/cyberpunk/augment__",
+       "one eye replaced by a many-lensed camera"
+      ],
+      [
+       "$who ← __characters/cyberpunk/outfit__",
+       "a quilted kimono jacket with a holographic obi"
+      ],
+      [
+       "$look ← __looks/still__",
+       "a cubist painting that breaks the subject into overlapping planes seen from several angles at once, in ochre and grey"
+      ],
+      [
+       "{|, __subjects/twists__}",
+       ""
+      ],
+      [
+       "$frame ← __frame/compositions__",
+       "framed by a doorway in darkness"
+      ],
+      [
+       "$light ← __light__",
+       "flickering cold fluorescent light"
+      ],
+      [
+       "{$subject$twist, $frame, lit by $light$beyond. The picture is $look$lens.|The picture is $look$lens: $subject$twist, $frame, lit by $light$beyond.|$subject$twist, lit by $light, $frame$beyond. The picture is $look$lens.}",
+       "The picture is $look$lens: $subject$twist, $frame, lit by $light$beyond."
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "the garden where statues grow from seeds, seen through a rain-streaked window, lit by soft overcast north light. The picture is a colour infrared photograph on false-colour film: foliage turned candy pink and red, skies deep blue, skin pale and waxy, with a very shallow depth of field, the background melting into soft round blur.",
+     "picks": [
+      [
+       "{tame|curious|unhinged}",
+       "tame"
+      ],
+      [
+       "{person|animal|thing|idea|place}",
+       "idea"
+      ],
+      [
+       "{average_joes|models|gothic|cyberpunk|horror|noir|fantasy}",
+       "gothic"
+      ],
+      [
+       "$who ← __characters/gothic__",
+       "an aristocratic recluse in his seventies, tall and bloodless, with __characters/gothic/hair__, a signet ring worn thin and a silver-topped cane he does not need, wearing __characters/gothic/attire__"
+      ],
+      [
+       "$who ← __characters/gothic/hair__",
+       "silver-white hair pinned in Victorian coils"
+      ],
+      [
+       "$who ← __characters/gothic/attire__",
+       "a high-necked black lace blouse under a velvet frock coat"
+      ],
+      [
+       "$subject ← __subjects/concepts__",
+       "the garden where statues grow from seeds"
+      ],
+      [
+       "$look ← __looks/still__",
+       "a colour infrared photograph on false-colour film: foliage turned candy pink and red, skies deep blue, skin pale and waxy"
+      ],
+      [
+       "{|, __subjects/twists__}",
+       ""
+      ],
+      [
+       "$lens ← __frame/optics__",
+       "a very shallow depth of field, the background melting into soft round blur"
+      ],
+      [
+       "$frame ← __frame/compositions__",
+       "seen through a rain-streaked window"
+      ],
+      [
+       "$light ← __light__",
+       "soft overcast north light"
+      ],
+      [
+       "{$subject$twist, $frame, lit by $light$beyond. The picture is $look$lens.|The picture is $look$lens: $subject$twist, $frame, lit by $light$beyond.|$subject$twist, lit by $light, $frame$beyond. The picture is $look$lens.}",
+       "$subject$twist, $frame, lit by $light$beyond. The picture is $look$lens."
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

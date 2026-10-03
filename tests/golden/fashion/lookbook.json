@@ -1,0 +1,116 @@
+{
+ "preset": "fashion/lookbook",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "an editorial lookbook photograph on a seamless acid-green backdrop, a gaunt model with a shaved head standing perfectly still in an ontologically draped, melancholic baroque look by Atelier Sans Titre: sleeves that forget where the arm ends made of moss velvet, styled with shoes carved from pale wood, soft even studio light, medium-format digital photograph",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "{bone-white|charcoal|acid-green|dusty pink}",
+       "acid-green"
+      ],
+      [
+       "__couture_adjective__ ×2",
+       "ontologically draped, melancholic baroque"
+      ],
+      [
+       "{absurdly small sunglasses|a single enormous glove|shoes carved from pale wood|a veil of fishing line|a handbag shaped like a brick}",
+       "shoes carved from pale wood"
+      ],
+      [
+       "__couture_model__",
+       "a gaunt model with a shaved head"
+      ],
+      [
+       "__couture_form__",
+       "sleeves that forget where the arm ends"
+      ],
+      [
+       "__couture_material__",
+       "moss velvet"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "an editorial lookbook photograph on a seamless acid-green backdrop, a stern silver-haired model standing perfectly still in a post-luxury, sartorially agnostic look by Studio Kessler-Mourne: lapels that fold back into themselves made of boiled wool, styled with absurdly small sunglasses, soft even studio light, medium-format digital photograph",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Studio Kessler-Mourne"
+      ],
+      [
+       "{bone-white|charcoal|acid-green|dusty pink}",
+       "acid-green"
+      ],
+      [
+       "__couture_adjective__ ×2",
+       "post-luxury, sartorially agnostic"
+      ],
+      [
+       "{absurdly small sunglasses|a single enormous glove|shoes carved from pale wood|a veil of fishing line|a handbag shaped like a brick}",
+       "absurdly small sunglasses"
+      ],
+      [
+       "__couture_model__",
+       "a stern silver-haired model"
+      ],
+      [
+       "__couture_form__",
+       "lapels that fold back into themselves"
+      ],
+      [
+       "__couture_material__",
+       "boiled wool"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "an editorial lookbook photograph on a seamless acid-green backdrop, a pale model with bleached eyelashes and no brows standing perfectly still in a quietly unwearable, deconstructed look by Maison Absente: pockets placed exactly where regret lives made of crushed silver lamé, styled with a handbag shaped like a brick, soft even studio light, medium-format digital photograph",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Absente"
+      ],
+      [
+       "{bone-white|charcoal|acid-green|dusty pink}",
+       "acid-green"
+      ],
+      [
+       "__couture_adjective__ ×2",
+       "quietly unwearable, deconstructed"
+      ],
+      [
+       "{absurdly small sunglasses|a single enormous glove|shoes carved from pale wood|a veil of fishing line|a handbag shaped like a brick}",
+       "a handbag shaped like a brick"
+      ],
+      [
+       "__couture_model__",
+       "a pale model with bleached eyelashes and no brows"
+      ],
+      [
+       "__couture_form__",
+       "pockets placed exactly where regret lives"
+      ],
+      [
+       "__couture_material__",
+       "crushed silver lamé"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

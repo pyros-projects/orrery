@@ -1,0 +1,80 @@
+{
+ "preset": "h3/11_world_swap",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward. The camera glides forward at eye level through an iceberg-strewn bay where humpback whales surface between the ice. The camera tracks the moving subject at slow speed. Midway, an iceberg-strewn bay where humpback whales surface between the ice folds flat like the page of a pop-up book, and the next page unfolds into a slot canyon of striped red sandstone, light falling in a single shaft. The camera glides on into a slot canyon of striped red sandstone, light falling in a single shaft without ever stopping, as if this were the most ordinary thing in the world.\n\noverall_soundscape: Whale blows, the slap of flukes and grinding ice, a heavy paper page turning and card creaking upright, and wind moaning through the narrow rock and trickling sand.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$from ← __world/landscapes__",
+       "an iceberg-strewn bay where humpback whales surface between the ice"
+      ],
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$to ← __world/landscapes__",
+       "a slot canyon of striped red sandstone, light falling in a single shaft"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "$from folds flat like the page of a pop-up book, and the next page unfolds into $to"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward. The camera glides forward at eye level through a boreal forest of snow-loaded spruce under a pale winter sun. The camera tracks the moving subject at slow speed. Midway, a wall of fog rolls through a boreal forest of snow-loaded spruce under a pale winter sun until everything is white, and as it thins, rows of lavender running toward a lone stone farmhouse has taken its place. The camera glides on into rows of lavender running toward a lone stone farmhouse without ever stopping, as if this were the most ordinary thing in the world.\n\noverall_soundscape: Snow sliding off branches in soft thumps, a raven calling, the world going muffled and slowly coming back, and bees humming over the lavender and cicadas in the heat.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$from ← __world/landscapes__",
+       "a boreal forest of snow-loaded spruce under a pale winter sun"
+      ],
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$to ← __world/landscapes__",
+       "rows of lavender running toward a lone stone farmhouse"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "a wall of fog rolls through $from until everything is white, and as it thins, $to has taken its place"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward. The camera glides forward at eye level through a bamboo forest with stalks towering into a green ceiling. The camera tracks the moving subject at slow speed. Midway, a wall of fog rolls through a bamboo forest with stalks towering into a green ceiling until everything is white, and as it thins, a giant sinkhole with a whole rainforest growing at its bottom has taken its place. The camera glides on into a giant sinkhole with a whole rainforest growing at its bottom without ever stopping, as if this were the most ordinary thing in the world.\n\noverall_soundscape: Bamboo creaking and knocking together in the wind, the world going muffled and slowly coming back, and birdsong echoing inside the rock walls.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$from ← __world/landscapes__",
+       "a bamboo forest with stalks towering into a green ceiling"
+      ],
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$to ← __world/landscapes__",
+       "a giant sinkhole with a whole rainforest growing at its bottom"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "a wall of fog rolls through $from until everything is white, and as it thins, $to has taken its place"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

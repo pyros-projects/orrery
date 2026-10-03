@@ -1,0 +1,80 @@
+{
+ "preset": "krea/03_field_guide",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "a page from a Victorian naturalist's sketchbook, a delicate watercolor study of a red panda shown from the side, small numbered detail studies of its head and feet arranged around it, aged cream paper with foxing stains and a faint coffee ring, a hand-lettered caption at the bottom reading \"red panda\", the plate number \"XXIII\" in the top right corner",
+     "picks": [
+      [
+       "$beast ← __creature__",
+       "red panda"
+      ],
+      [
+       "{19th-century natural history field guide|Victorian naturalist's sketchbook|1950s children's encyclopedia}",
+       "Victorian naturalist's sketchbook"
+      ],
+      [
+       "{hand-colored copperplate engraving|delicate watercolor study|gouache illustration}",
+       "delicate watercolor study"
+      ],
+      [
+       "{IV|VII|XII|XXIII}",
+       "XXIII"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "a page from a 1950s children's encyclopedia, a hand-colored copperplate engraving of an axolotl shown from the side, small numbered detail studies of its head and feet arranged around it, aged cream paper with foxing stains and a faint coffee ring, a hand-lettered caption at the bottom reading \"axolotl\", the plate number \"XII\" in the top right corner",
+     "picks": [
+      [
+       "$beast ← __creature__",
+       "axolotl"
+      ],
+      [
+       "{19th-century natural history field guide|Victorian naturalist's sketchbook|1950s children's encyclopedia}",
+       "1950s children's encyclopedia"
+      ],
+      [
+       "{hand-colored copperplate engraving|delicate watercolor study|gouache illustration}",
+       "hand-colored copperplate engraving"
+      ],
+      [
+       "{IV|VII|XII|XXIII}",
+       "XII"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "a page from a Victorian naturalist's sketchbook, a gouache illustration of a giant isopod shown from the side, small numbered detail studies of its head and feet arranged around it, aged cream paper with foxing stains and a faint coffee ring, a hand-lettered caption at the bottom reading \"giant isopod\", the plate number \"XXIII\" in the top right corner",
+     "picks": [
+      [
+       "$beast ← __creature__",
+       "giant isopod"
+      ],
+      [
+       "{19th-century natural history field guide|Victorian naturalist's sketchbook|1950s children's encyclopedia}",
+       "Victorian naturalist's sketchbook"
+      ],
+      [
+       "{hand-colored copperplate engraving|delicate watercolor study|gouache illustration}",
+       "gouache illustration"
+      ],
+      [
+       "{IV|VII|XII|XXIII}",
+       "XXIII"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,56 @@
+{
+ "preset": "h3/01_spaeti_dialogue",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, handheld night footage. A tiny corner shop at 2 a.m., fluorescent tubes flickering over shelves of crisps and bottled drinks. The camera holds a static shot. A tired young man in a rain-soaked hoodie puts a carton of oat milk on the counter. Behind the counter an old cashier with reading glasses scans it without looking up, a red panda asleep next to the till. The customer with a tired young male voice (S1) says: <d>[German] Ist das Ihr Tier?</d> The cashier with a gravelly old female voice (S2) says: <d>[German] Der wohnt hier.</d>\n\noverall_soundscape: Fluorescent tubes buzz and rain drums on the shop window.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$pet ← __creature[mammal]__",
+       "red panda"
+      ],
+      [
+       "{Nein, das ist der Chef.|Der wohnt hier.|Welches Tier?}",
+       "Der wohnt hier."
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, handheld night footage. A tiny corner shop at 2 a.m., fluorescent tubes flickering over shelves of crisps and bottled drinks. The camera holds a static shot. A tired young man in a rain-soaked hoodie puts a carton of oat milk on the counter. Behind the counter an old cashier with reading glasses scans it without looking up, a red panda asleep next to the till. The customer with a tired young male voice (S1) says: <d>[German] Ist das Ihr Tier?</d> The cashier with a gravelly old female voice (S2) says: <d>[German] Nein, das ist der Chef.</d>\n\noverall_soundscape: Fluorescent tubes buzz and rain drums on the shop window.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$pet ← __creature[mammal]__",
+       "red panda"
+      ],
+      [
+       "{Nein, das ist der Chef.|Der wohnt hier.|Welches Tier?}",
+       "Nein, das ist der Chef."
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, handheld night footage. A tiny corner shop at 2 a.m., fluorescent tubes flickering over shelves of crisps and bottled drinks. The camera holds a static shot. A tired young man in a rain-soaked hoodie puts a carton of oat milk on the counter. Behind the counter an old cashier with reading glasses scans it without looking up, a snow leopard asleep next to the till. The customer with a tired young male voice (S1) says: <d>[German] Ist das Ihr Tier?</d> The cashier with a gravelly old female voice (S2) says: <d>[German] Welches Tier?</d>\n\noverall_soundscape: Fluorescent tubes buzz and rain drums on the shop window.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$pet ← __creature[mammal]__",
+       "snow leopard"
+      ],
+      [
+       "{Nein, das ist der Chef.|Der wohnt hier.|Welches Tier?}",
+       "Welches Tier?"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

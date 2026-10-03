@@ -1,0 +1,104 @@
+{
+ "preset": "tutorial/08_photo_brief",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "fine-art photograph of a kitsune in a laundromat at 3 a.m, anamorphic lens with blue flares, aurora light, shot on Fuji Velvia slide film",
+     "picks": [
+      [
+       "$subject ← __creature__",
+       "kitsune"
+      ],
+      [
+       "{editorial|documentary|fine-art}",
+       "fine-art"
+      ],
+      [
+       "{Kodak Portra 400|Ilford HP5 black and white|Fuji Velvia slide film}",
+       "Fuji Velvia slide film"
+      ],
+      [
+       "__place__",
+       "a laundromat at 3 a.m."
+      ],
+      [
+       "__lens__",
+       "anamorphic lens with blue flares"
+      ],
+      [
+       "__light__",
+       "aurora light"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "fine-art photograph of an anglerfish in a snowed-in train station, fisheye lens, neon reflections on wet asphalt, shot on Fuji Velvia slide film",
+     "picks": [
+      [
+       "$subject ← __creature__",
+       "anglerfish"
+      ],
+      [
+       "{editorial|documentary|fine-art}",
+       "fine-art"
+      ],
+      [
+       "{Kodak Portra 400|Ilford HP5 black and white|Fuji Velvia slide film}",
+       "Fuji Velvia slide film"
+      ],
+      [
+       "__place__",
+       "a snowed-in train station"
+      ],
+      [
+       "__lens__",
+       "fisheye lens"
+      ],
+      [
+       "__light__",
+       "neon reflections on wet asphalt"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "fine-art photograph of a griffin in a greenhouse on the moon, 400mm telephoto compression, soft overcast north light, shot on Fuji Velvia slide film",
+     "picks": [
+      [
+       "$subject ← __creature__",
+       "griffin"
+      ],
+      [
+       "{editorial|documentary|fine-art}",
+       "fine-art"
+      ],
+      [
+       "{Kodak Portra 400|Ilford HP5 black and white|Fuji Velvia slide film}",
+       "Fuji Velvia slide film"
+      ],
+      [
+       "__place__",
+       "a greenhouse on the moon"
+      ],
+      [
+       "__lens__",
+       "400mm telephoto compression"
+      ],
+      [
+       "__light__",
+       "soft overcast north light"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

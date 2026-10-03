@@ -1,0 +1,56 @@
+{
+ "preset": "tutorial/03_weights",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "an ordinary street market at dusk, strings of paper lanterns, aurora light",
+     "picks": [
+      [
+       "{an ordinary street market|a street market on the back of a sleeping whale}",
+       "an ordinary street market"
+      ],
+      [
+       "__light__",
+       "aurora light"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "a street market on the back of a sleeping whale at dusk, strings of paper lanterns, neon reflections on wet asphalt",
+     "picks": [
+      [
+       "{an ordinary street market|a street market on the back of a sleeping whale}",
+       "a street market on the back of a sleeping whale"
+      ],
+      [
+       "__light__",
+       "neon reflections on wet asphalt"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "an ordinary street market at dusk, strings of paper lanterns, soft overcast north light",
+     "picks": [
+      [
+       "{an ordinary street market|a street market on the back of a sleeping whale}",
+       "an ordinary street market"
+      ],
+      [
+       "__light__",
+       "soft overcast north light"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

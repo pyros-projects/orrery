@@ -1,0 +1,80 @@
+{
+ "preset": "h3/10_impossible_camera",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot. The camera begins wide over tea plantations combed across rolling hills in morning haze, then descends toward one tiny detail in it, a hairline crack in an old stone wall, pushing in without a single cut until the detail fills the frame. The camera pushes in with large amplitude at slow speed. The crack widens into a canyon and the camera flies out of it, and the camera emerges into white gypsum dunes rippling under a hard blue sky, at a completely different scale, still moving forward in the same smooth motion.\n\noverall_soundscape: Pickers calling to each other and birds in the hedges, a hush as the camera closes in, and fine sand hissing across the dune crests.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$start ← __world/landscapes__",
+       "tea plantations combed across rolling hills in morning haze"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a hairline crack in an old stone wall"
+      ],
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$end ← __world/landscapes__",
+       "white gypsum dunes rippling under a hard blue sky"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot. The camera begins wide over a bamboo forest with stalks towering into a green ceiling, then descends toward one tiny detail in it, a keyhole glowing with light from the other side, pushing in without a single cut until the detail fills the frame. The camera pushes in with large amplitude at slow speed. The camera squeezes through the keyhole into brightness, and the camera emerges into karst peaks rising out of river mist, fishing boats small below them, at a completely different scale, still moving forward in the same smooth motion.\n\noverall_soundscape: Bamboo creaking and knocking together in the wind, a hush as the camera closes in, and a boat engine putt-putting far away and water against hulls.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$start ← __world/landscapes__",
+       "a bamboo forest with stalks towering into a green ceiling"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a keyhole glowing with light from the other side"
+      ],
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$end ← __world/landscapes__",
+       "karst peaks rising out of river mist, fishing boats small below them"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot. The camera begins wide over an alpine valley meadow blazing with wildflowers under glaciers, then descends toward one tiny detail in it, a single dewdrop hanging from a blade of grass, pushing in without a single cut until the detail fills the frame. The camera pushes in with large amplitude at slow speed. The camera bursts out through the dewdrop's shimmering skin, and the camera emerges into tea plantations combed across rolling hills in morning haze, at a completely different scale, still moving forward in the same smooth motion.\n\noverall_soundscape: A meltwater stream, marmot whistles and insects, a hush as the camera closes in, and pickers calling to each other and birds in the hedges.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$start ← __world/landscapes__",
+       "an alpine valley meadow blazing with wildflowers under glaciers"
+      ],
+      [
+       "$portal ← __scale/portals__",
+       "a single dewdrop hanging from a blade of grass"
+      ],
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$end ← __world/landscapes__",
+       "tea plantations combed across rolling hills in morning haze"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

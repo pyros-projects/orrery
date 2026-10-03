@@ -1,0 +1,68 @@
+{
+ "preset": "h3/05_street_musician",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic. An elderly street musician plays a trumpet alone in a laundromat at 3 a.m, fog drifting through the light of a single lamp. The camera arcs around the subject at slow speed. A few coins glint in an open case at their feet. Their eyes are closed.\n\noverall_soundscape: A slow, bare trumpet melody is played live, close to the microphone and a city hums in the distance.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{cello|upright piano|koto|accordion|trumpet|theremin}",
+       "trumpet"
+      ],
+      [
+       "{snow|rain|fog}",
+       "fog"
+      ],
+      [
+       "__place__",
+       "a laundromat at 3 a.m."
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic. An elderly street musician plays a koto alone in a snowed-in train station, fog drifting through the light of a single lamp. The camera arcs around the subject at slow speed. A few coins glint in an open case at their feet. Their eyes are closed.\n\noverall_soundscape: A slow, bare koto melody is played live, close to the microphone and a city hums in the distance.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{cello|upright piano|koto|accordion|trumpet|theremin}",
+       "koto"
+      ],
+      [
+       "{snow|rain|fog}",
+       "fog"
+      ],
+      [
+       "__place__",
+       "a snowed-in train station"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic. An elderly street musician plays a trumpet alone in a greenhouse on the moon, snow drifting through the light of a single lamp. The camera arcs around the subject at slow speed. A few coins glint in an open case at their feet. Their eyes are closed.\n\noverall_soundscape: A slow, bare trumpet melody is played live, close to the microphone and a city hums in the distance.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{cello|upright piano|koto|accordion|trumpet|theremin}",
+       "trumpet"
+      ],
+      [
+       "{snow|rain|fog}",
+       "snow"
+      ],
+      [
+       "__place__",
+       "a greenhouse on the moon"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

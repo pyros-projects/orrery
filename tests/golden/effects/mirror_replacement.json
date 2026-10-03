@@ -1,0 +1,68 @@
+{
+ "preset": "effects/mirror_replacement",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n<Subject 2> = the mirror reflection, identical except for a smile that arrives too early\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands alone before a tall mirror in an empty dance studio lined with mirrors, in a medium shot that holds both <Subject 1> and <Subject 2>. The camera pushes in at slow speed. At first everything is normal; then <Subject 2> smiles a little too early and lifts one hand before <Subject 1> does. <Subject 2> places both hands against the inside of the glass and climbs out in one smooth, impossible motion, as though the mirror were a flexible membrane, and steps fully into the room while <Subject 1> freezes. <Subject 2> calmly raises one hand to the jaw of <Subject 1> and, with controlled unnatural strength, opens the mouth far wider than a human mouth can open. <Subject 2> leans forward and slides head-first into the open mouth, shoulders and torso following in one continuous movement. <Subject 1> sways but stays standing, slowly closes their mouth and straightens. In the final moment <Subject 1> lifts their head wearing the exact unnerving smile of <Subject 2>, and the new reflection lags a full second behind every movement.\n\noverall_soundscape: Quiet room ambience, light breathing, soft glass-contact sounds at the mirror surface, and a smooth, unnatural sliding sound.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "{a dim apartment bathroom at night|a narrow hotel corridor with a full-length mirror|an empty dance studio lined with mirrors}",
+       "an empty dance studio lined with mirrors"
+      ],
+      [
+       "{the reflection in the mirror is now the original, hammering silently on the inside of the glass|the mirror behind them now shows an empty room|the new reflection lags a full second behind every movement}",
+       "the new reflection lags a full second behind every movement"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the young man of <Picture 1>\n<Subject 2> = the mirror reflection, identical except for a smile that arrives too early\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands alone before a tall mirror in an empty dance studio lined with mirrors, in a medium shot that holds both <Subject 1> and <Subject 2>. The camera pushes in at slow speed. At first everything is normal; then <Subject 2> smiles a little too early and lifts one hand before <Subject 1> does. <Subject 2> places both hands against the inside of the glass and climbs out in one smooth, impossible motion, as though the mirror were a flexible membrane, and steps fully into the room while <Subject 1> freezes. <Subject 2> calmly raises one hand to the jaw of <Subject 1> and, with controlled unnatural strength, opens the mouth far wider than a human mouth can open. <Subject 2> leans forward and slides head-first into the open mouth, shoulders and torso following in one continuous movement. <Subject 1> sways but stays standing, slowly closes their mouth and straightens. In the final moment <Subject 1> lifts their head wearing the exact unnerving smile of <Subject 2>, and the new reflection lags a full second behind every movement.\n\noverall_soundscape: Quiet room ambience, light breathing, soft glass-contact sounds at the mirror surface, and a smooth, unnatural sliding sound.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the young man"
+      ],
+      [
+       "{a dim apartment bathroom at night|a narrow hotel corridor with a full-length mirror|an empty dance studio lined with mirrors}",
+       "an empty dance studio lined with mirrors"
+      ],
+      [
+       "{the reflection in the mirror is now the original, hammering silently on the inside of the glass|the mirror behind them now shows an empty room|the new reflection lags a full second behind every movement}",
+       "the new reflection lags a full second behind every movement"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n<Subject 2> = the mirror reflection, identical except for a smile that arrives too early\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands alone before a tall mirror in an empty dance studio lined with mirrors, in a medium shot that holds both <Subject 1> and <Subject 2>. The camera pushes in at slow speed. At first everything is normal; then <Subject 2> smiles a little too early and lifts one hand before <Subject 1> does. <Subject 2> places both hands against the inside of the glass and climbs out in one smooth, impossible motion, as though the mirror were a flexible membrane, and steps fully into the room while <Subject 1> freezes. <Subject 2> calmly raises one hand to the jaw of <Subject 1> and, with controlled unnatural strength, opens the mouth far wider than a human mouth can open. <Subject 2> leans forward and slides head-first into the open mouth, shoulders and torso following in one continuous movement. <Subject 1> sways but stays standing, slowly closes their mouth and straightens. In the final moment <Subject 1> lifts their head wearing the exact unnerving smile of <Subject 2>, and the mirror behind them now shows an empty room.\n\noverall_soundscape: Quiet room ambience, light breathing, soft glass-contact sounds at the mirror surface, and a smooth, unnatural sliding sound.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "{a dim apartment bathroom at night|a narrow hotel corridor with a full-length mirror|an empty dance studio lined with mirrors}",
+       "an empty dance studio lined with mirrors"
+      ],
+      [
+       "{the reflection in the mirror is now the original, hammering silently on the inside of the glass|the mirror behind them now shows an empty room|the new reflection lags a full second behind every movement}",
+       "the mirror behind them now shows an empty room"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

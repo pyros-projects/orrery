@@ -1,0 +1,440 @@
+{
+ "preset": "loops/drone_odyssey",
+ "seeds": {
+  "0": {
+   "path": [
+    "takeoff",
+    "onward 1/∞",
+    "onward 2/∞",
+    "onward 3/∞",
+    "onward 4/∞",
+    "onward 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. Over a highland moor of heather and standing stones under racing clouds, in a thunderstorm rolling in, lightning flickering inside black cloud, the drone rises slowly from ground level past the foreground until the land opens out below. The camera pedestals up with large amplitude at slow speed. The scale reads from small things in the frame: a road, a boat, a single tree. In the final second the drone flies straight into a wall of falling snow. The shot ends as the drone flies straight into a wall of falling snow.\n\noverall_soundscape: Wind flattening the heather and a curlew crying and rolling thunder and the first heavy drops.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a highland moor of heather and standing stones under racing clouds"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "a thunderstorm rolling in, lightning flickering inside black cloud"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "rises slowly from ground level past the foreground until the land opens out below"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "a wall of falling snow"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. The shot opens as the drone flies straight into a wall of falling snow. The camera holds a static shot. The snow thins to single flakes and the land opens up, and below lies white gypsum dunes rippling under a hard blue sky in first light before sunrise, the sky pale lemon over blue shadows. The drone hovers almost still while weather and light move across the land, the scale reading from small things in the frame. In the final second the drone flies straight into the drifting spray of a huge waterfall. The shot ends as the drone flies straight into the drifting spray of a huge waterfall.\n\noverall_soundscape: Fine sand hissing across the dune crests and the first birds and a stillness.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "white gypsum dunes rippling under a hard blue sky"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "first light before sunrise, the sky pale lemon over blue shadows"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "hovers almost still while weather and light move across the land"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "the drifting spray of a huge waterfall"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. The shot opens as the drone flies straight into the drifting spray of a huge waterfall. The camera pulls out with large amplitude at slow speed. The spray thins and falls away behind the drone, and below lies a fjord between sheer granite walls, a thread of waterfall falling into dark water in a dust storm advancing as a brown wall across the land. The drone flies backward away from a close detail until it becomes a tiny point in the vast land, the scale reading from small things in the frame. In the final second the drone flies straight into a wall of falling snow. The shot ends as the drone flies straight into a wall of falling snow.\n\noverall_soundscape: Distant falling water echoing off the cliffs and a rising roar of wind and hissing sand.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a fjord between sheer granite walls, a thread of waterfall falling into dark water"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "a dust storm advancing as a brown wall across the land"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "flies backward away from a close detail until it becomes a tiny point in the vast land"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "a wall of falling snow"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. The shot opens as the drone flies straight into a wall of falling snow. The camera tracks the moving subject at slow speed. The snow thins to single flakes and the land opens up, and below lies a glacier tongue calving into a turquoise lagoon full of floating ice in a full moon night, silver light and hard black shadows. The drone follows a river, road or coastline, banking gently with each curve, the scale reading from small things in the frame. In the final second the drone flies straight into a column of smoke rising from a valley. The shot ends as the drone flies straight into a column of smoke rising from a valley.\n\noverall_soundscape: The deep crack and roar of calving ice, then water lapping and night insects and an owl far away.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a glacier tongue calving into a turquoise lagoon full of floating ice"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "a full moon night, silver light and hard black shadows"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "follows a river, road or coastline, banking gently with each curve"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "a column of smoke rising from a valley"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. The shot opens as the drone flies straight into a column of smoke rising from a valley. The camera pedestals up with large amplitude at slow speed. The smoke tears apart and the view clears, and below lies a salt flat after rain, a perfect mirror of the sky stretching to the horizon in a sun shower, bright rain glittering in low sunlight. The drone rises slowly from ground level past the foreground until the land opens out below, the scale reading from small things in the frame. In the final second the drone flies straight into a column of smoke rising from a valley. The shot ends as the drone flies straight into a column of smoke rising from a valley.\n\noverall_soundscape: A thin wind over wet salt and utter silence beyond it and light rain pattering while birds keep singing.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a salt flat after rain, a perfect mirror of the sky stretching to the horizon"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "a sun shower, bright rain glittering in low sunlight"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "rises slowly from ground level past the foreground until the land opens out below"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "a column of smoke rising from a valley"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. The shot opens as the drone flies straight into a column of smoke rising from a valley. The camera tracks the moving subject at slow speed. The smoke tears apart and the view clears, and below lies a giant sinkhole with a whole rainforest growing at its bottom in first light before sunrise, the sky pale lemon over blue shadows. The drone looks straight down and glides forward, turning the land below into a moving abstract pattern, the scale reading from small things in the frame. In the final second the drone flies straight into the black mouth of a tunnel through a mountain. The shot ends as the drone flies straight into the black mouth of a tunnel through a mountain.\n\noverall_soundscape: Birdsong echoing inside the rock walls and the first birds and a stillness.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a giant sinkhole with a whole rainforest growing at its bottom"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "first light before sunrise, the sky pale lemon over blue shadows"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "looks straight down and glides forward, turning the land below into a moving abstract pattern"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "the black mouth of a tunnel through a mountain"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "path": [
+    "takeoff",
+    "onward 1/∞",
+    "onward 2/∞",
+    "onward 3/∞",
+    "onward 4/∞",
+    "onward 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. Over a coral atoll ringed by turquoise shallows and a line of white surf, in a dust storm advancing as a brown wall across the land, the drone flies backward away from a close detail until it becomes a tiny point in the vast land. The camera pulls out with large amplitude at slow speed. The scale reads from small things in the frame: a road, a boat, a single tree. In the final second the drone flies straight into the black mouth of a tunnel through a mountain. The shot ends as the drone flies straight into the black mouth of a tunnel through a mountain.\n\noverall_soundscape: Surf on the reef and wind in palm fronds and a rising roar of wind and hissing sand.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a coral atoll ringed by turquoise shallows and a line of white surf"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "a dust storm advancing as a brown wall across the land"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "flies backward away from a close detail until it becomes a tiny point in the vast land"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "the black mouth of a tunnel through a mountain"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. The shot opens as the drone flies straight into the black mouth of a tunnel through a mountain. The camera pushes in with large amplitude at slow speed. The drone shoots out of the tunnel into daylight, and below lies karst peaks rising out of river mist, fishing boats small below them in high noon under a fierce white sun and heat shimmer. The drone skims a few metres above the surface toward the horizon, then climbs steeply to reveal the whole expanse at once, the scale reading from small things in the frame. In the final second the drone flies straight into the black mouth of a tunnel through a mountain. The shot ends as the drone flies straight into the black mouth of a tunnel through a mountain.\n\noverall_soundscape: A boat engine putt-putting far away and water against hulls and cicadas screaming in the heat.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "karst peaks rising out of river mist, fishing boats small below them"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "high noon under a fierce white sun and heat shimmer"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "skims a few metres above the surface toward the horizon, then climbs steeply to reveal the whole expanse at once"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "the black mouth of a tunnel through a mountain"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. The shot opens as the drone flies straight into the black mouth of a tunnel through a mountain. The camera tracks the moving subject at slow speed. The drone shoots out of the tunnel into daylight, and below lies a frozen lake under green aurora curtains, cracks glowing in the ice in a full moon night, silver light and hard black shadows. The drone follows a river, road or coastline, banking gently with each curve, the scale reading from small things in the frame. In the final second the drone flies straight into a column of smoke rising from a valley. The shot ends as the drone flies straight into a column of smoke rising from a valley.\n\noverall_soundscape: The eerie singing and pinging of lake ice and night insects and an owl far away.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a frozen lake under green aurora curtains, cracks glowing in the ice"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "a full moon night, silver light and hard black shadows"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "follows a river, road or coastline, banking gently with each curve"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "a column of smoke rising from a valley"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. The shot opens as the drone flies straight into a column of smoke rising from a valley. The camera tracks the moving subject at fast speed. The smoke tears apart and the view clears, and below lies a bamboo forest with stalks towering into a green ceiling in high noon under a fierce white sun and heat shimmer. The drone threads low through a narrow gap between rocks or trees and bursts out into open space, the scale reading from small things in the frame. In the final second the drone flies straight into a wall of falling snow. The shot ends as the drone flies straight into a wall of falling snow.\n\noverall_soundscape: Bamboo creaking and knocking together in the wind and cicadas screaming in the heat.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a bamboo forest with stalks towering into a green ceiling"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "high noon under a fierce white sun and heat shimmer"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "threads low through a narrow gap between rocks or trees and bursts out into open space"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "a wall of falling snow"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. The shot opens as the drone flies straight into a wall of falling snow. The camera tracks the moving subject at slow speed. The snow thins to single flakes and the land opens up, and below lies a lighthouse on a lone rock in a storm-whipped sea in drifting morning fog that hides and reveals the land. The drone follows a river, road or coastline, banking gently with each curve, the scale reading from small things in the frame. In the final second the drone flies straight into a column of smoke rising from a valley. The shot ends as the drone flies straight into a column of smoke rising from a valley.\n\noverall_soundscape: Storm wind, waves exploding on rock and a foghorn and muffled, damp silence and dripping.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a lighthouse on a lone rock in a storm-whipped sea"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "drifting morning fog that hides and reveals the land"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "follows a river, road or coastline, banking gently with each curve"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "a column of smoke rising from a valley"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. The shot opens as the drone flies straight into a column of smoke rising from a valley. The camera holds a static shot. The smoke tears apart and the view clears, and below lies a bamboo forest with stalks towering into a green ceiling in the blue hour after sunset, the last light fading into deep blue. The drone hovers almost still while weather and light move across the land, the scale reading from small things in the frame. In the final second the drone flies straight into a towering bank of white cloud. The shot ends as the drone flies straight into a towering bank of white cloud.\n\noverall_soundscape: Bamboo creaking and knocking together in the wind and crickets starting and the day's wind dropping.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a bamboo forest with stalks towering into a green ceiling"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "the blue hour after sunset, the last light fading into deep blue"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "hovers almost still while weather and light move across the land"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "a towering bank of white cloud"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "path": [
+    "takeoff",
+    "onward 1/∞",
+    "onward 2/∞",
+    "onward 3/∞",
+    "onward 4/∞",
+    "onward 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. Over an iceberg-strewn bay where humpback whales surface between the ice, in high noon under a fierce white sun and heat shimmer, the drone orbits a single striking landmark in one long unbroken circle. The camera arcs around the subject with large amplitude at slow speed. The scale reads from small things in the frame: a road, a boat, a single tree. In the final second the drone flies straight into a column of smoke rising from a valley. The shot ends as the drone flies straight into a column of smoke rising from a valley.\n\noverall_soundscape: Whale blows, the slap of flukes and grinding ice and cicadas screaming in the heat.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "an iceberg-strewn bay where humpback whales surface between the ice"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "high noon under a fierce white sun and heat shimmer"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "orbits a single striking landmark in one long unbroken circle"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "a column of smoke rising from a valley"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. The shot opens as the drone flies straight into a column of smoke rising from a valley. The camera tracks the moving subject at slow speed. The smoke tears apart and the view clears, and below lies a flooded forest where the trunks stand in still black water in a sky full of stars and the Milky Way arching overhead. The drone follows a river, road or coastline, banking gently with each curve, the scale reading from small things in the frame. In the final second the drone flies straight into the blinding disc of the low sun. The shot ends as the drone flies straight into the blinding disc of the low sun.\n\noverall_soundscape: Drips, a paddle dipping and distant howler monkeys and a deep night silence and faint wind.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a flooded forest where the trunks stand in still black water"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "a sky full of stars and the Milky Way arching overhead"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "follows a river, road or coastline, banking gently with each curve"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "the blinding disc of the low sun"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. The shot opens as the drone flies straight into the blinding disc of the low sun. The camera tilts up with small amplitude at slow speed. The glare fades and the land below comes into focus, and below lies a salt flat after rain, a perfect mirror of the sky stretching to the horizon in shafts of light breaking through clouds after rain. The drone crests a ridge low and slow, the view beyond appearing inch by inch, the scale reading from small things in the frame. In the final second the drone flies straight into a wall of falling snow. The shot ends as the drone flies straight into a wall of falling snow.\n\noverall_soundscape: A thin wind over wet salt and utter silence beyond it and dripping and water running off everything.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a salt flat after rain, a perfect mirror of the sky stretching to the horizon"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "shafts of light breaking through clouds after rain"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "crests a ridge low and slow, the view beyond appearing inch by inch"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "a wall of falling snow"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. The shot opens as the drone flies straight into a wall of falling snow. The camera holds a static shot. The snow thins to single flakes and the land opens up, and below lies a canyon river of emerald water between orange cliffs, a lone kayak on it in the blue hour after sunset, the last light fading into deep blue. The drone hovers almost still while weather and light move across the land, the scale reading from small things in the frame. In the final second the drone flies straight into a column of smoke rising from a valley. The shot ends as the drone flies straight into a column of smoke rising from a valley.\n\noverall_soundscape: Rushing rapids echoing off the canyon walls and crickets starting and the day's wind dropping.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a canyon river of emerald water between orange cliffs, a lone kayak on it"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "the blue hour after sunset, the last light fading into deep blue"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "hovers almost still while weather and light move across the land"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "a column of smoke rising from a valley"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. The shot opens as the drone flies straight into a column of smoke rising from a valley. The camera arcs around the subject with large amplitude at slow speed. The smoke tears apart and the view clears, and below lies a canyon river of emerald water between orange cliffs, a lone kayak on it in shafts of light breaking through clouds after rain. The drone orbits a single striking landmark in one long unbroken circle, the scale reading from small things in the frame. In the final second the drone flies straight into the black mouth of a tunnel through a mountain. The shot ends as the drone flies straight into the black mouth of a tunnel through a mountain.\n\noverall_soundscape: Rushing rapids echoing off the canyon walls and dripping and water running off everything.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a canyon river of emerald water between orange cliffs, a lone kayak on it"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "shafts of light breaking through clouds after rain"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "orbits a single striking landmark in one long unbroken circle"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "the black mouth of a tunnel through a mountain"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage. The shot opens as the drone flies straight into the black mouth of a tunnel through a mountain. The camera pushes in with large amplitude at fast speed. The drone shoots out of the tunnel into daylight, and below lies a savanna with one acacia tree and a herd of elephants crossing it in a thunderstorm rolling in, lightning flickering inside black cloud. The drone dives from high above in a fast FPV plunge and pulls out just above the ground, the scale reading from small things in the frame. In the final second the drone flies straight into a wall of falling snow. The shot ends as the drone flies straight into a wall of falling snow.\n\noverall_soundscape: Elephants rumbling, dry grass rustling and distant birds and rolling thunder and the first heavy drops.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a savanna with one acacia tree and a herd of elephants crossing it"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "a thunderstorm rolling in, lightning flickering inside black cloud"
+      ],
+      [
+       "$move ← __drone/moves__",
+       "dives from high above in a fast FPV plunge and pulls out just above the ground"
+      ],
+      [
+       "$veil ← __drone/veils__",
+       "a wall of falling snow"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

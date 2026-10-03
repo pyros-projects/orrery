@@ -1,0 +1,368 @@
+{
+ "preset": "loops/endless_tour",
+ "seeds": {
+  "0": {
+   "path": [
+    "the entrance",
+    "the next room 1/∞",
+    "the next room 2/∞",
+    "the next room 3/∞",
+    "the next room 4/∞",
+    "the next room 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The camera glides at eye level into a gallery of empty picture frames, one of them showing a moving landscape, inside an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying. The camera pushes in at slow speed. It moves no faster than a slow walk and never shakes. Nobody looks at the camera, and the room simply goes on around it. In the final second the camera turns slightly and comes to rest exactly facing closed brass elevator doors with a floor dial above them. The shot ends as the camera rests squarely facing closed brass elevator doors with a floor dial above them.\n\noverall_soundscape: A hush and faint wind coming from inside one frame and the deep throb of engines and a jazz band two decks away.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "a gallery of empty picture frames, one of them showing a moving landscape"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "closed brass elevator doors with a floor dial above them"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The shot opens as the camera rests squarely facing closed brass elevator doors with a floor dial above them. The camera tracks the moving subject at slow speed. The dial swings, a chime sounds and the doors open, into a private cinema of red velvet seats, a film flickering on the screen, inside an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying. The camera glides on at eye level, taking in the room from one side to the other without hurrying, while the life of the room goes on around it and nobody looks at the camera. In the final second it turns slightly and comes to rest exactly facing a sliding paper screen glowing with warm light from the other side. The shot ends as the camera rests squarely facing a sliding paper screen glowing with warm light from the other side.\n\noverall_soundscape: A projector rattling and muffled film dialogue and the deep throb of engines and a jazz band two decks away.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "a private cinema of red velvet seats, a film flickering on the screen"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "a sliding paper screen glowing with warm light from the other side"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The shot opens as the camera rests squarely facing a sliding paper screen glowing with warm light from the other side. The camera tracks the moving subject at slow speed. The screen slides open with a soft wooden sound, into a vaulted wine cellar lit by candles between oak barrels, inside an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying. The camera glides on at eye level, taking in the room from one side to the other without hurrying, while the life of the room goes on around it and nobody looks at the camera. In the final second it turns slightly and comes to rest exactly facing a narrow gap between two bookcases with a sliver of light beyond. The shot ends as the camera rests squarely facing a narrow gap between two bookcases with a sliver of light beyond.\n\noverall_soundscape: Dripping and a cork pulled somewhere in the dark and the deep throb of engines and a jazz band two decks away.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "a vaulted wine cellar lit by candles between oak barrels"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "a narrow gap between two bookcases with a sliver of light beyond"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The shot opens as the camera rests squarely facing a narrow gap between two bookcases with a sliver of light beyond. The camera tracks the moving subject at slow speed. The bookcases slide apart like a secret door, into a music room where a grand piano plays itself, inside an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying. The camera glides on at eye level, taking in the room from one side to the other without hurrying, while the life of the room goes on around it and nobody looks at the camera. In the final second it turns slightly and comes to rest exactly facing the edge of a balcony railing over a large hall below. The shot ends as the camera rests squarely facing the edge of a balcony railing over a large hall below.\n\noverall_soundscape: A slow melancholy piano piece and the deep throb of engines and a jazz band two decks away.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "a music room where a grand piano plays itself"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "the edge of a balcony railing over a large hall below"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The shot opens as the camera rests squarely facing the edge of a balcony railing over a large hall below. The camera tracks the moving subject at slow speed. The camera floats out over the railing and descends into the hall, into a kitchen of copper pots and steam where cooks move in a quick choreography, inside an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying. The camera glides on at eye level, taking in the room from one side to the other without hurrying, while the life of the room goes on around it and nobody looks at the camera. In the final second it turns slightly and comes to rest exactly facing a narrow gap between two bookcases with a sliver of light beyond. The shot ends as the camera rests squarely facing a narrow gap between two bookcases with a sliver of light beyond.\n\noverall_soundscape: Sizzling pans, clattering and a shouted order and the deep throb of engines and a jazz band two decks away.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "a kitchen of copper pots and steam where cooks move in a quick choreography"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "a narrow gap between two bookcases with a sliver of light beyond"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The shot opens as the camera rests squarely facing a narrow gap between two bookcases with a sliver of light beyond. The camera tracks the moving subject at slow speed. The bookcases slide apart like a secret door, into a winter garden of palms and orchids around a stone fountain, inside an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying. The camera glides on at eye level, taking in the room from one side to the other without hurrying, while the life of the room goes on around it and nobody looks at the camera. In the final second it turns slightly and comes to rest exactly facing an archway hung with strings of glass beads. The shot ends as the camera rests squarely facing an archway hung with strings of glass beads.\n\noverall_soundscape: A splashing fountain and tropical birds and the deep throb of engines and a jazz band two decks away.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "a winter garden of palms and orchids around a stone fountain"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "an archway hung with strings of glass beads"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "path": [
+    "the entrance",
+    "the next room 1/∞",
+    "the next room 2/∞",
+    "the next room 3/∞",
+    "the next room 4/∞",
+    "the next room 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The camera glides at eye level into a private cinema of red velvet seats, a film flickering on the screen, inside an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light. The camera pushes in at slow speed. It moves no faster than a slow walk and never shakes. Nobody looks at the camera, and the room simply goes on around it. In the final second the camera turns slightly and comes to rest exactly facing an archway hung with strings of glass beads. The shot ends as the camera rests squarely facing an archway hung with strings of glass beads.\n\noverall_soundscape: A projector rattling and muffled film dialogue and dripping water, pigeons and a door creaking in a draught.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "a private cinema of red velvet seats, a film flickering on the screen"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "an archway hung with strings of glass beads"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The shot opens as the camera rests squarely facing an archway hung with strings of glass beads. The camera tracks the moving subject at slow speed. The camera passes through the beads, which ripple and chime, into a flooded ground floor where furniture floats in knee-deep water, inside an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light. The camera glides on at eye level, taking in the room from one side to the other without hurrying, while the life of the room goes on around it and nobody looks at the camera. In the final second it turns slightly and comes to rest exactly facing a dark doorway with a single lit candle standing on the floor before it. The shot ends as the camera rests squarely facing a dark doorway with a single lit candle standing on the floor before it.\n\noverall_soundscape: Water sloshing and furniture bumping gently and dripping water, pigeons and a door creaking in a draught.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "a flooded ground floor where furniture floats in knee-deep water"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "a dark doorway with a single lit candle standing on the floor before it"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The shot opens as the camera rests squarely facing a dark doorway with a single lit candle standing on the floor before it. The camera tracks the moving subject at slow speed. The camera passes the candle into the dark, and the dark brightens into a room, into a flooded ground floor where furniture floats in knee-deep water, inside an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light. The camera glides on at eye level, taking in the room from one side to the other without hurrying, while the life of the room goes on around it and nobody looks at the camera. In the final second it turns slightly and comes to rest exactly facing a pair of closed velvet curtains six metres ahead, centred in the frame. The shot ends as the camera rests squarely facing a pair of closed velvet curtains six metres ahead, centred in the frame.\n\noverall_soundscape: Water sloshing and furniture bumping gently and dripping water, pigeons and a door creaking in a draught.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "a flooded ground floor where furniture floats in knee-deep water"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "a pair of closed velvet curtains six metres ahead, centred in the frame"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The shot opens as the camera rests squarely facing a pair of closed velvet curtains six metres ahead, centred in the frame. The camera tracks the moving subject at slow speed. The curtains part silently to both sides and the camera glides through, into a ballroom with a sprung wooden floor and couples turning slowly, inside an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light. The camera glides on at eye level, taking in the room from one side to the other without hurrying, while the life of the room goes on around it and nobody looks at the camera. In the final second it turns slightly and comes to rest exactly facing two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera. The shot ends as the camera rests squarely facing two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera.\n\noverall_soundscape: A slow waltz and shoes brushing wood and dripping water, pigeons and a door creaking in a draught.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "a ballroom with a sprung wooden floor and couples turning slowly"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The shot opens as the camera rests squarely facing two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera. The camera tracks the moving subject at slow speed. The mirrored doors swing inward and the camera's own reflection slides away, into an observatory dome opening onto a night full of stars, inside an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light. The camera glides on at eye level, taking in the room from one side to the other without hurrying, while the life of the room goes on around it and nobody looks at the camera. In the final second it turns slightly and comes to rest exactly facing a round steel vault door standing slightly ajar. The shot ends as the camera rests squarely facing a round steel vault door standing slightly ajar.\n\noverall_soundscape: Gears grinding as the dome turns and dripping water, pigeons and a door creaking in a draught.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "an observatory dome opening onto a night full of stars"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "a round steel vault door standing slightly ajar"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The shot opens as the camera rests squarely facing a round steel vault door standing slightly ajar. The camera tracks the moving subject at slow speed. The vault door swings open on its hinge with a heavy sigh, into a bar of backlit bottles where a bartender pours in slow ritual, inside an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light. The camera glides on at eye level, taking in the room from one side to the other without hurrying, while the life of the room goes on around it and nobody looks at the camera. In the final second it turns slightly and comes to rest exactly facing the bottom three steps of a wide staircase filling the lower foreground. The shot ends as the camera rests squarely facing the bottom three steps of a wide staircase filling the lower foreground.\n\noverall_soundscape: Ice clinking, a cocktail shaker and low talk and dripping water, pigeons and a door creaking in a draught.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "a bar of backlit bottles where a bartender pours in slow ritual"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "the bottom three steps of a wide staircase filling the lower foreground"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "path": [
+    "the entrance",
+    "the next room 1/∞",
+    "the next room 2/∞",
+    "the next room 3/∞",
+    "the next room 4/∞",
+    "the next room 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The camera glides at eye level into a music room where a grand piano plays itself, inside an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues. The camera pushes in at slow speed. It moves no faster than a slow walk and never shakes. Nobody looks at the camera, and the room simply goes on around it. In the final second the camera turns slightly and comes to rest exactly facing a narrow gap between two bookcases with a sliver of light beyond. The shot ends as the camera rests squarely facing a narrow gap between two bookcases with a sliver of light beyond.\n\noverall_soundscape: A slow melancholy piano piece and dripping condensation, birds inside and rain on the glass.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "a music room where a grand piano plays itself"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "a narrow gap between two bookcases with a sliver of light beyond"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The shot opens as the camera rests squarely facing a narrow gap between two bookcases with a sliver of light beyond. The camera tracks the moving subject at slow speed. The bookcases slide apart like a secret door, into a spiral stairwell winding up a tall tower around an empty core, inside an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues. The camera glides on at eye level, taking in the room from one side to the other without hurrying, while the life of the room goes on around it and nobody looks at the camera. In the final second it turns slightly and comes to rest exactly facing two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera. The shot ends as the camera rests squarely facing two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera.\n\noverall_soundscape: Footsteps ringing up and down the spiral and dripping condensation, birds inside and rain on the glass.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "a spiral stairwell winding up a tall tower around an empty core"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The shot opens as the camera rests squarely facing two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera. The camera tracks the moving subject at slow speed. The mirrored doors swing inward and the camera's own reflection slides away, into a vaulted wine cellar lit by candles between oak barrels, inside an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues. The camera glides on at eye level, taking in the room from one side to the other without hurrying, while the life of the room goes on around it and nobody looks at the camera. In the final second it turns slightly and comes to rest exactly facing a dark doorway with a single lit candle standing on the floor before it. The shot ends as the camera rests squarely facing a dark doorway with a single lit candle standing on the floor before it.\n\noverall_soundscape: Dripping and a cork pulled somewhere in the dark and dripping condensation, birds inside and rain on the glass.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "a vaulted wine cellar lit by candles between oak barrels"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "a dark doorway with a single lit candle standing on the floor before it"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The shot opens as the camera rests squarely facing a dark doorway with a single lit candle standing on the floor before it. The camera tracks the moving subject at slow speed. The camera passes the candle into the dark, and the dark brightens into a room, into a long hall of mirrors where every candle multiplies into infinity, inside an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues. The camera glides on at eye level, taking in the room from one side to the other without hurrying, while the life of the room goes on around it and nobody looks at the camera. In the final second it turns slightly and comes to rest exactly facing a sliding paper screen glowing with warm light from the other side. The shot ends as the camera rests squarely facing a sliding paper screen glowing with warm light from the other side.\n\noverall_soundscape: Light footsteps and a soft diffuse echo and dripping condensation, birds inside and rain on the glass.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "a long hall of mirrors where every candle multiplies into infinity"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "a sliding paper screen glowing with warm light from the other side"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The shot opens as the camera rests squarely facing a sliding paper screen glowing with warm light from the other side. The camera tracks the moving subject at slow speed. The screen slides open with a soft wooden sound, into a spiral stairwell winding up a tall tower around an empty core, inside an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues. The camera glides on at eye level, taking in the room from one side to the other without hurrying, while the life of the room goes on around it and nobody looks at the camera. In the final second it turns slightly and comes to rest exactly facing two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera. The shot ends as the camera rests squarely facing two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera.\n\noverall_soundscape: Footsteps ringing up and down the spiral and dripping condensation, birds inside and rain on the glass.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "a spiral stairwell winding up a tall tower around an empty core"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, smooth and stabilised at eye level. The shot opens as the camera rests squarely facing two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera. The camera tracks the moving subject at slow speed. The mirrored doors swing inward and the camera's own reflection slides away, into a kitchen of copper pots and steam where cooks move in a quick choreography, inside an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues. The camera glides on at eye level, taking in the room from one side to the other without hurrying, while the life of the room goes on around it and nobody looks at the camera. In the final second it turns slightly and comes to rest exactly facing a dark doorway with a single lit candle standing on the floor before it. The shot ends as the camera rests squarely facing a dark doorway with a single lit candle standing on the floor before it.\n\noverall_soundscape: Sizzling pans, clattering and a shouted order and dripping condensation, birds inside and rain on the glass.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$house ← __tour/architecture__",
+       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+      ],
+      [
+       "$room ← __tour/rooms__",
+       "a kitchen of copper pots and steam where cooks move in a quick choreography"
+      ],
+      [
+       "$thr ← __tour/thresholds__",
+       "a dark doorway with a single lit candle standing on the floor before it"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

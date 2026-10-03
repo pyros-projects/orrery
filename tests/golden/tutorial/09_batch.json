@@ -1,0 +1,68 @@
+{
+ "preset": "tutorial/09_batch",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "a kitsune posing for a passport photo, aurora light",
+     "picks": [
+      [
+       "$subject ← __creature__",
+       "kitsune"
+      ],
+      [
+       "{a passport photo|a Renaissance court portrait|a 1980s school yearbook|a collectible trading card}",
+       "a passport photo"
+      ],
+      [
+       "__light__",
+       "aurora light"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "an anglerfish posing for a passport photo, neon reflections on wet asphalt",
+     "picks": [
+      [
+       "$subject ← __creature__",
+       "anglerfish"
+      ],
+      [
+       "{a passport photo|a Renaissance court portrait|a 1980s school yearbook|a collectible trading card}",
+       "a passport photo"
+      ],
+      [
+       "__light__",
+       "neon reflections on wet asphalt"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "a griffin posing for a Renaissance court portrait, soft overcast north light",
+     "picks": [
+      [
+       "$subject ← __creature__",
+       "griffin"
+      ],
+      [
+       "{a passport photo|a Renaissance court portrait|a 1980s school yearbook|a collectible trading card}",
+       "a Renaissance court portrait"
+      ],
+      [
+       "__light__",
+       "soft overcast north light"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

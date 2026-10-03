@@ -1,0 +1,80 @@
+{
+ "preset": "effects/elastic_body",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands beside an iron stair railing in an empty dance studio, framed from the knees up, and grips it firmly with the right hand. The camera pulls out at slow speed. The hand stays fixed there for the rest of the shot. <Subject 1> takes one slow step backward: the body moves away while the gripping hand stays exactly in place, and the right arm visibly lengthens between the fixed hand and the retreating shoulder. <Subject 1> takes another step back, and the distance between wrist and shoulder doubles, the arm keeping one continuous human shape. The camera pulls back with <Subject 1>, keeping both the fixed hand and the retreating body in frame, as the arm stretches across several metres of empty space. <Subject 1> looks along its impossible length, then pulls sideways on the forearm with the free hand; the arm bends into a huge smooth curve and swings back straight with a delayed elastic rebound. In the final moment <Subject 1> takes one step toward the camera, and the leading leg stretches far ahead while the torso stays behind, the whole body drawn out across the room.\n\noverall_soundscape: Quiet room ambience, footsteps moving away from the fixed hand, continuous rubber-like tension as the arm lengthens, and a deep elastic twang on the sideways pull.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "{a heavy vertical metal pole|an iron stair railing|a steel door handle}",
+       "an iron stair railing"
+      ],
+      [
+       "{a large dim warehouse|a long empty office corridor|an empty dance studio}",
+       "an empty dance studio"
+      ],
+      [
+       "{HOST reaches toward the camera for balance, and the arm lengthens straight at the lens until the hand fills the foreground while the body stays several metres away|HOST lets go, and the long arm snaps back across the room, overshoots into a short thick stump beside the shoulder, then stretches out again|HOST takes one step toward the camera, and the leading leg stretches far ahead while the torso stays behind, the whole body drawn out across the room}",
+       "HOST takes one step toward the camera, and the leading leg stretches far ahead while the torso stays behind, the whole body drawn out across the room"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the young man of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands beside a steel door handle in a long empty office corridor, framed from the knees up, and grips it firmly with the right hand. The camera pulls out at slow speed. The hand stays fixed there for the rest of the shot. <Subject 1> takes one slow step backward: the body moves away while the gripping hand stays exactly in place, and the right arm visibly lengthens between the fixed hand and the retreating shoulder. <Subject 1> takes another step back, and the distance between wrist and shoulder doubles, the arm keeping one continuous human shape. The camera pulls back with <Subject 1>, keeping both the fixed hand and the retreating body in frame, as the arm stretches across several metres of empty space. <Subject 1> looks along its impossible length, then pulls sideways on the forearm with the free hand; the arm bends into a huge smooth curve and swings back straight with a delayed elastic rebound. In the final moment <Subject 1> reaches toward the camera for balance, and the arm lengthens straight at the lens until the hand fills the foreground while the body stays several metres away.\n\noverall_soundscape: Quiet room ambience, footsteps moving away from the fixed hand, continuous rubber-like tension as the arm lengthens, and a deep elastic twang on the sideways pull.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the young man"
+      ],
+      [
+       "{a heavy vertical metal pole|an iron stair railing|a steel door handle}",
+       "a steel door handle"
+      ],
+      [
+       "{a large dim warehouse|a long empty office corridor|an empty dance studio}",
+       "a long empty office corridor"
+      ],
+      [
+       "{HOST reaches toward the camera for balance, and the arm lengthens straight at the lens until the hand fills the foreground while the body stays several metres away|HOST lets go, and the long arm snaps back across the room, overshoots into a short thick stump beside the shoulder, then stretches out again|HOST takes one step toward the camera, and the leading leg stretches far ahead while the torso stays behind, the whole body drawn out across the room}",
+       "HOST reaches toward the camera for balance, and the arm lengthens straight at the lens until the hand fills the foreground while the body stays several metres away"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands beside a steel door handle in a large dim warehouse, framed from the knees up, and grips it firmly with the right hand. The camera pulls out at slow speed. The hand stays fixed there for the rest of the shot. <Subject 1> takes one slow step backward: the body moves away while the gripping hand stays exactly in place, and the right arm visibly lengthens between the fixed hand and the retreating shoulder. <Subject 1> takes another step back, and the distance between wrist and shoulder doubles, the arm keeping one continuous human shape. The camera pulls back with <Subject 1>, keeping both the fixed hand and the retreating body in frame, as the arm stretches across several metres of empty space. <Subject 1> looks along its impossible length, then pulls sideways on the forearm with the free hand; the arm bends into a huge smooth curve and swings back straight with a delayed elastic rebound. In the final moment <Subject 1> lets go, and the long arm snaps back across the room, overshoots into a short thick stump beside the shoulder, then stretches out again.\n\noverall_soundscape: Quiet room ambience, footsteps moving away from the fixed hand, continuous rubber-like tension as the arm lengthens, and a deep elastic twang on the sideways pull.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "{a heavy vertical metal pole|an iron stair railing|a steel door handle}",
+       "a steel door handle"
+      ],
+      [
+       "{a large dim warehouse|a long empty office corridor|an empty dance studio}",
+       "a large dim warehouse"
+      ],
+      [
+       "{HOST reaches toward the camera for balance, and the arm lengthens straight at the lens until the hand fills the foreground while the body stays several metres away|HOST lets go, and the long arm snaps back across the room, overshoots into a short thick stump beside the shoulder, then stretches out again|HOST takes one step toward the camera, and the leading leg stretches far ahead while the torso stays behind, the whole body drawn out across the room}",
+       "HOST lets go, and the long arm snaps back across the room, overshoots into a short thick stump beside the shoulder, then stretches out again"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

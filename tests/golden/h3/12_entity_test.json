@@ -1,0 +1,68 @@
+{
+ "preset": "h3/12_entity_test",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, crisp detail in skin, slime and scales. In a dark, dripping concrete cell lit only by a dim red lamp waits SCP-939, a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back. The camera holds a static shot. It climbs out of the darkness on all fours toward the camera, the spines along its back rising one by one as it senses the air, then opens its jaws and says \"Hello? Is someone there? I'm hurt\" in a calm human man's voice, its jaws barely moving.\n\noverall_soundscape: Wet claws clicking on concrete, water dripping and slow, heavy breathing.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$entity ← __scp/entities__",
+       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "{cinematic|cctv}",
+       "cinematic"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, crisp detail in skin, slime and scales. In a bright, tidy pen with a padded floor, scattered toys and a bowl of sweets waits SCP-999, a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it. The camera holds a static shot. It wobbles with excitement, slithers across the floor toward the camera, rises up tall and wraps two soft pseudopods around the lens as if hugging it.\n\noverall_soundscape: Happy high-pitched gurgling and cooing and a wet squelch with every movement.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$entity ← __scp/entities__",
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+      ],
+      [
+       "{no|yes}",
+       "yes"
+      ],
+      [
+       "{cinematic|cctv}",
+       "cinematic"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot, crisp detail in skin, slime and scales. In a bright, tidy pen with a padded floor, scattered toys and a bowl of sweets waits a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it. The camera holds a static shot. It wobbles with excitement, slithers across the floor toward the camera, rises up tall and wraps two soft pseudopods around the lens as if hugging it.\n\noverall_soundscape: Happy high-pitched gurgling and cooing and a wet squelch with every movement.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$entity ← __scp/entities__",
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+      ],
+      [
+       "{no|yes}",
+       "no"
+      ],
+      [
+       "{cinematic|cctv}",
+       "cinematic"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

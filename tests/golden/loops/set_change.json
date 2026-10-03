@@ -1,0 +1,356 @@
+{
+ "preset": "loops/set_change",
+ "seeds": {
+  "0": {
+   "path": [
+    "the first place",
+    "the set change 1/∞",
+    "the set change 2/∞",
+    "the set change 3/∞",
+    "the set change 4/∞",
+    "the set change 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The camera glides forward at eye level through a dormitory of identical beds under high windows, taking it in. The camera tracks the moving subject at slow speed. Light and air move through it, and nothing else happens yet. The shot ends as the camera glides on through a dormitory of identical beds under high windows.\n\noverall_soundscape: A clock and wind at the windows.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__tour/rooms__"
+      ],
+      [
+       "$place ← __tour/rooms__",
+       "a dormitory of identical beds under high windows"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The shot opens as the camera glides on through a dormitory of identical beds under high windows. The camera tracks the moving subject at slow speed. The camera keeps gliding forward at the same steady pace. A huge flock of starlings pours across the frame over a dormitory of identical beds under high windows, and when it disperses the camera is over a savanna with one acacia tree and a herd of elephants crossing it. The camera glides on into a savanna with one acacia tree and a herd of elephants crossing it as if nothing unusual had happened. The shot ends as the camera glides on through a savanna with one acacia tree and a herd of elephants crossing it.\n\noverall_soundscape: The roar of thousands of wingbeats and elephants rumbling, dry grass rustling and distant birds.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$place ← __world/landscapes__",
+       "a savanna with one acacia tree and a herd of elephants crossing it"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "a huge flock of starlings pours across the frame over $from, and when it disperses the camera is over $to"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The shot opens as the camera glides on through a savanna with one acacia tree and a herd of elephants crossing it. The camera tracks the moving subject at slow speed. The camera keeps gliding forward at the same steady pace. The camera tilts down into a puddle that reflects a savanna with one acacia tree and a herd of elephants crossing it, the reflection ripples and becomes a tidal island crowned by a stone abbey, the sea retreating across wet sand, and the camera rises into it. The camera glides on into a tidal island crowned by a stone abbey, the sea retreating across wet sand as if nothing unusual had happened. The shot ends as the camera glides on through a tidal island crowned by a stone abbey, the sea retreating across wet sand.\n\noverall_soundscape: A single drop falling and rippling water and gulls and the hiss of shallow water draining over sand.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$place ← __world/landscapes__",
+       "a tidal island crowned by a stone abbey, the sea retreating across wet sand"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "the camera tilts down into a puddle that reflects $from, the reflection ripples and becomes $to, and the camera rises into it"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The shot opens as the camera glides on through a tidal island crowned by a stone abbey, the sea retreating across wet sand. The camera tracks the moving subject at slow speed. The camera keeps gliding forward at the same steady pace. A long train thunders between the camera and a tidal island crowned by a stone abbey, the sea retreating across wet sand, and when the last carriage has passed, an indoor swimming pool under a glass roof, light rippling on the tiles stands there. The camera glides on into an indoor swimming pool under a glass roof, light rippling on the tiles as if nothing unusual had happened. The shot ends as the camera glides on through an indoor swimming pool under a glass roof, light rippling on the tiles.\n\noverall_soundscape: A passing train roaring and fading and water lapping and a splash echoing under glass.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__tour/rooms__"
+      ],
+      [
+       "$place ← __tour/rooms__",
+       "an indoor swimming pool under a glass roof, light rippling on the tiles"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "a long train thunders between the camera and $from, and when the last carriage has passed, $to stands there"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The shot opens as the camera glides on through an indoor swimming pool under a glass roof, light rippling on the tiles. The camera tracks the moving subject at slow speed. The camera keeps gliding forward at the same steady pace. A long train thunders between the camera and an indoor swimming pool under a glass roof, light rippling on the tiles, and when the last carriage has passed, a cherry orchard in full bloom, petals drifting over a mossy temple roof stands there. The camera glides on into a cherry orchard in full bloom, petals drifting over a mossy temple roof as if nothing unusual had happened. The shot ends as the camera glides on through a cherry orchard in full bloom, petals drifting over a mossy temple roof.\n\noverall_soundscape: A passing train roaring and fading and a temple bell, soft wind and falling petals.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$place ← __world/landscapes__",
+       "a cherry orchard in full bloom, petals drifting over a mossy temple roof"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "a long train thunders between the camera and $from, and when the last carriage has passed, $to stands there"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The shot opens as the camera glides on through a cherry orchard in full bloom, petals drifting over a mossy temple roof. The camera tracks the moving subject at slow speed. The camera keeps gliding forward at the same steady pace. Dozens of stagehands in black run into frame and strike a cherry orchard in full bloom, petals drifting over a mossy temple roof piece by piece, carrying off walls, trees and props, until a tidal island crowned by a stone abbey, the sea retreating across wet sand stands revealed behind it. The camera glides on into a tidal island crowned by a stone abbey, the sea retreating across wet sand as if nothing unusual had happened. The shot ends as the camera glides on through a tidal island crowned by a stone abbey, the sea retreating across wet sand.\n\noverall_soundscape: Hurried footsteps, rolling casters and props thudding into place and gulls and the hiss of shallow water draining over sand.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$place ← __world/landscapes__",
+       "a tidal island crowned by a stone abbey, the sea retreating across wet sand"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "dozens of stagehands in black run into frame and strike $from piece by piece, carrying off walls, trees and props, until $to stands revealed behind it"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "path": [
+    "the first place",
+    "the set change 1/∞",
+    "the set change 2/∞",
+    "the set change 3/∞",
+    "the set change 4/∞",
+    "the set change 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The camera glides forward at eye level through a coast of hexagonal basalt columns stepping down into the sea, taking it in. The camera tracks the moving subject at slow speed. Light and air move through it, and nothing else happens yet. The shot ends as the camera glides on through a coast of hexagonal basalt columns stepping down into the sea.\n\noverall_soundscape: Waves sucking and spilling between the columns.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$place ← __world/landscapes__",
+       "a coast of hexagonal basalt columns stepping down into the sea"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The shot opens as the camera glides on through a coast of hexagonal basalt columns stepping down into the sea. The camera tracks the moving subject at slow speed. The camera keeps gliding forward at the same steady pace. The camera tilts down into a puddle that reflects a coast of hexagonal basalt columns stepping down into the sea, the reflection ripples and becomes a salt flat after rain, a perfect mirror of the sky stretching to the horizon, and the camera rises into it. The camera glides on into a salt flat after rain, a perfect mirror of the sky stretching to the horizon as if nothing unusual had happened. The shot ends as the camera glides on through a salt flat after rain, a perfect mirror of the sky stretching to the horizon.\n\noverall_soundscape: A single drop falling and rippling water and a thin wind over wet salt and utter silence beyond it.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$place ← __world/landscapes__",
+       "a salt flat after rain, a perfect mirror of the sky stretching to the horizon"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "the camera tilts down into a puddle that reflects $from, the reflection ripples and becomes $to, and the camera rises into it"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The shot opens as the camera glides on through a salt flat after rain, a perfect mirror of the sky stretching to the horizon. The camera tracks the moving subject at slow speed. The camera keeps gliding forward at the same steady pace. A salt flat after rain, a perfect mirror of the sky stretching to the horizon turns away on a giant stage revolve, carrying a boreal forest of snow-loaded spruce under a pale winter sun around into view. The camera glides on into a boreal forest of snow-loaded spruce under a pale winter sun as if nothing unusual had happened. The shot ends as the camera glides on through a boreal forest of snow-loaded spruce under a pale winter sun.\n\noverall_soundscape: A slow grinding of machinery beneath the floor and snow sliding off branches in soft thumps, a raven calling.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$place ← __world/landscapes__",
+       "a boreal forest of snow-loaded spruce under a pale winter sun"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "$from turns away on a giant stage revolve, carrying $to around into view"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The shot opens as the camera glides on through a boreal forest of snow-loaded spruce under a pale winter sun. The camera tracks the moving subject at slow speed. The camera keeps gliding forward at the same steady pace. A boreal forest of snow-loaded spruce under a pale winter sun turns away on a giant stage revolve, carrying a double-height library with rolling brass ladders and reading lamps around into view. The camera glides on into a double-height library with rolling brass ladders and reading lamps as if nothing unusual had happened. The shot ends as the camera glides on through a double-height library with rolling brass ladders and reading lamps.\n\noverall_soundscape: A slow grinding of machinery beneath the floor and pages turning and a chair creaking.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__tour/rooms__"
+      ],
+      [
+       "$place ← __tour/rooms__",
+       "a double-height library with rolling brass ladders and reading lamps"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "$from turns away on a giant stage revolve, carrying $to around into view"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The shot opens as the camera glides on through a double-height library with rolling brass ladders and reading lamps. The camera tracks the moving subject at slow speed. The camera keeps gliding forward at the same steady pace. Time rushes forward: plants overgrow a double-height library with rolling brass ladders and reading lamps and crumble it to ruins, and out of the ruins karst peaks rising out of river mist, fishing boats small below them grows up. The camera glides on into karst peaks rising out of river mist, fishing boats small below them as if nothing unusual had happened. The shot ends as the camera glides on through karst peaks rising out of river mist, fishing boats small below them.\n\noverall_soundscape: Days and nights whooshing past and creaking growth and a boat engine putt-putting far away and water against hulls.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$place ← __world/landscapes__",
+       "karst peaks rising out of river mist, fishing boats small below them"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "time rushes forward: plants overgrow $from and crumble it to ruins, and out of the ruins $to grows up"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The shot opens as the camera glides on through karst peaks rising out of river mist, fishing boats small below them. The camera tracks the moving subject at slow speed. The camera keeps gliding forward at the same steady pace. Every light in karst peaks rising out of river mist, fishing boats small below them goes out, then a match flares in the dark and its small glow shows a private cinema of red velvet seats, a film flickering on the screen. The camera glides on into a private cinema of red velvet seats, a film flickering on the screen as if nothing unusual had happened. The shot ends as the camera glides on through a private cinema of red velvet seats, a film flickering on the screen.\n\noverall_soundscape: A power-down hum, darkness and the scratch of a match and a projector rattling and muffled film dialogue.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__tour/rooms__"
+      ],
+      [
+       "$place ← __tour/rooms__",
+       "a private cinema of red velvet seats, a film flickering on the screen"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "every light in $from goes out, then a match flares in the dark and its small glow shows $to"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "path": [
+    "the first place",
+    "the set change 1/∞",
+    "the set change 2/∞",
+    "the set change 3/∞",
+    "the set change 4/∞",
+    "the set change 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The camera glides forward at eye level through a private cinema of red velvet seats, a film flickering on the screen, taking it in. The camera tracks the moving subject at slow speed. Light and air move through it, and nothing else happens yet. The shot ends as the camera glides on through a private cinema of red velvet seats, a film flickering on the screen.\n\noverall_soundscape: A projector rattling and muffled film dialogue.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__tour/rooms__"
+      ],
+      [
+       "$place ← __tour/rooms__",
+       "a private cinema of red velvet seats, a film flickering on the screen"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The shot opens as the camera glides on through a private cinema of red velvet seats, a film flickering on the screen. The camera tracks the moving subject at slow speed. The camera keeps gliding forward at the same steady pace. Time rushes forward: plants overgrow a private cinema of red velvet seats, a film flickering on the screen and crumble it to ruins, and out of the ruins a cabinet of curiosities crowded with specimens, globes and brass instruments grows up. The camera glides on into a cabinet of curiosities crowded with specimens, globes and brass instruments as if nothing unusual had happened. The shot ends as the camera glides on through a cabinet of curiosities crowded with specimens, globes and brass instruments.\n\noverall_soundscape: Days and nights whooshing past and creaking growth and a clock ticking and a music box winding down.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__tour/rooms__"
+      ],
+      [
+       "$place ← __tour/rooms__",
+       "a cabinet of curiosities crowded with specimens, globes and brass instruments"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "time rushes forward: plants overgrow $from and crumble it to ruins, and out of the ruins $to grows up"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The shot opens as the camera glides on through a cabinet of curiosities crowded with specimens, globes and brass instruments. The camera tracks the moving subject at slow speed. The camera keeps gliding forward at the same steady pace. A cabinet of curiosities crowded with specimens, globes and brass instruments turns away on a giant stage revolve, carrying a giant sinkhole with a whole rainforest growing at its bottom around into view. The camera glides on into a giant sinkhole with a whole rainforest growing at its bottom as if nothing unusual had happened. The shot ends as the camera glides on through a giant sinkhole with a whole rainforest growing at its bottom.\n\noverall_soundscape: A slow grinding of machinery beneath the floor and birdsong echoing inside the rock walls.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$place ← __world/landscapes__",
+       "a giant sinkhole with a whole rainforest growing at its bottom"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "$from turns away on a giant stage revolve, carrying $to around into view"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The shot opens as the camera glides on through a giant sinkhole with a whole rainforest growing at its bottom. The camera tracks the moving subject at slow speed. The camera keeps gliding forward at the same steady pace. A theatre curtain drops across a giant sinkhole with a whole rainforest growing at its bottom and rises again a moment later on a boreal forest of snow-loaded spruce under a pale winter sun. The camera glides on into a boreal forest of snow-loaded spruce under a pale winter sun as if nothing unusual had happened. The shot ends as the camera glides on through a boreal forest of snow-loaded spruce under a pale winter sun.\n\noverall_soundscape: The swish of heavy velvet and a single cough from an unseen audience and snow sliding off branches in soft thumps, a raven calling.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$place ← __world/landscapes__",
+       "a boreal forest of snow-loaded spruce under a pale winter sun"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "a theatre curtain drops across $from and rises again a moment later on $to"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The shot opens as the camera glides on through a boreal forest of snow-loaded spruce under a pale winter sun. The camera tracks the moving subject at slow speed. The camera keeps gliding forward at the same steady pace. Everything in a boreal forest of snow-loaded spruce under a pale winter sun rises gently into the air and drifts away like dust, leaving white gypsum dunes rippling under a hard blue sky underneath. The camera glides on into white gypsum dunes rippling under a hard blue sky as if nothing unusual had happened. The shot ends as the camera glides on through white gypsum dunes rippling under a hard blue sky.\n\noverall_soundscape: A soft rising whoosh, like a held breath released and fine sand hissing across the dune crests.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$place ← __world/landscapes__",
+       "white gypsum dunes rippling under a hard blue sky"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "everything in $from rises gently into the air and drifts away like dust, leaving $to underneath"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken ten-second shot gliding forward at walking pace. The shot opens as the camera glides on through white gypsum dunes rippling under a hard blue sky. The camera tracks the moving subject at slow speed. The camera keeps gliding forward at the same steady pace. Every light in white gypsum dunes rippling under a hard blue sky goes out, then a match flares in the dark and its small glow shows a lighthouse on a lone rock in a storm-whipped sea. The camera glides on into a lighthouse on a lone rock in a storm-whipped sea as if nothing unusual had happened. The shot ends as the camera glides on through a lighthouse on a lone rock in a storm-whipped sea.\n\noverall_soundscape: A power-down hum, darkness and the scratch of a match and storm wind, waves exploding on rock and a foghorn.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{__world/landscapes__|__tour/rooms__}",
+       "__world/landscapes__"
+      ],
+      [
+       "$place ← __world/landscapes__",
+       "a lighthouse on a lone rock in a storm-whipped sea"
+      ],
+      [
+       "$shift ← __transitions/between__",
+       "every light in $from goes out, then a match flares in the dark and its small glow shows $to"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

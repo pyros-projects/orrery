@@ -1,0 +1,80 @@
+{
+ "preset": "effects/filament",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a tiled changing room at a public swimming pool, framed from the waist up, dressed so that the neck and upper chest are clearly visible. The camera pushes in at slow speed. A single fine ivory filament emerges from a tiny point in the skin at the centre of the sternum, clearly growing out of the body itself. <Subject 1> pinches it between two fingers and pulls steadily outward, and the body changes in direct response: a narrow band of <Subject 1> unwinds and becomes the same continuous filament, and every new length pulled out removes another visible strip of volume. The unwinding path travels across the chest toward one shoulder, which shrinks and simplifies; the upper arm thins from shoulder to elbow. Loops of ivory filament gather around the feet. The body does not tear or bleed; it is smoothly converted into one continuous strand. <Subject 1> pauses, a great length stretched between hand and body. In the final moment the loose end begins moving on its own and draws another short length out of <Subject 1>, and <Subject 1> lowers their gaze toward it.\n\noverall_soundscape: Quiet room ambience, restrained breathing, a continuous fine sliding sound as the filament leaves the body, and soft loops landing on the floor.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a tiled changing room at a public swimming pool"
+      ],
+      [
+       "{a tiny point in the skin at the centre of the sternum|the skin at the side of the neck|a small point in the skin just below one cheekbone}",
+       "a tiny point in the skin at the centre of the sternum"
+      ],
+      [
+       "{pale|ivory|silver-white}",
+       "ivory"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the young man of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a dim apartment sitting room, framed from the waist up, dressed so that the neck and upper chest are clearly visible. The camera pushes in at slow speed. A single fine silver-white filament emerges from the skin at the side of the neck, clearly growing out of the body itself. <Subject 1> pinches it between two fingers and pulls steadily outward, and the body changes in direct response: a narrow band of <Subject 1> unwinds and becomes the same continuous filament, and every new length pulled out removes another visible strip of volume. The unwinding path travels across the chest toward one shoulder, which shrinks and simplifies; the upper arm thins from shoulder to elbow. Loops of silver-white filament gather around the feet. The body does not tear or bleed; it is smoothly converted into one continuous strand. <Subject 1> pauses, a great length stretched between hand and body. In the final moment the loose end begins moving on its own and draws another short length out of <Subject 1>, and <Subject 1> lowers their gaze toward it.\n\noverall_soundscape: Quiet room ambience, restrained breathing, a continuous fine sliding sound as the filament leaves the body, and soft loops landing on the floor.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the young man"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a dim apartment sitting room"
+      ],
+      [
+       "{a tiny point in the skin at the centre of the sternum|the skin at the side of the neck|a small point in the skin just below one cheekbone}",
+       "the skin at the side of the neck"
+      ],
+      [
+       "{pale|ivory|silver-white}",
+       "silver-white"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a narrow hotel corridor, framed from the waist up, dressed so that the neck and upper chest are clearly visible. The camera pushes in at slow speed. A single fine ivory filament emerges from a tiny point in the skin at the centre of the sternum, clearly growing out of the body itself. <Subject 1> pinches it between two fingers and pulls steadily outward, and the body changes in direct response: a narrow band of <Subject 1> unwinds and becomes the same continuous filament, and every new length pulled out removes another visible strip of volume. The unwinding path travels across the chest toward one shoulder, which shrinks and simplifies; the upper arm thins from shoulder to elbow. Loops of ivory filament gather around the feet. The body does not tear or bleed; it is smoothly converted into one continuous strand. <Subject 1> pauses, a great length stretched between hand and body. In the final moment the loose end begins moving on its own and draws another short length out of <Subject 1>, and <Subject 1> lowers their gaze toward it.\n\noverall_soundscape: Quiet room ambience, restrained breathing, a continuous fine sliding sound as the filament leaves the body, and soft loops landing on the floor.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a narrow hotel corridor"
+      ],
+      [
+       "{a tiny point in the skin at the centre of the sternum|the skin at the side of the neck|a small point in the skin just below one cheekbone}",
+       "a tiny point in the skin at the centre of the sternum"
+      ],
+      [
+       "{pale|ivory|silver-white}",
+       "ivory"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

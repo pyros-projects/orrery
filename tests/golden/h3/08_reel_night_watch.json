@@ -1,0 +1,125 @@
+{
+ "preset": "h3/08_reel_night_watch",
+ "seeds": {
+  "0": {
+   "path": [
+    "the stairs",
+    "the lamp",
+    "the ship"
+   ],
+   "ended": true,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic. <Subject 1>'s weathered face is lit by his lantern as he looks up the iron spiral stairs of the lighthouse; then he turns and climbs them while a thunderstorm rolling in from the sea batters the tower. The camera tracks the moving subject at slow speed. The shot ends as <Subject 1> reaches the top of the lighthouse and looks out over the sea for boats.\n\noverall_soundscape: Boots ring on iron steps and wind howls against the walls.\n\nnon_diegetic_music: A low, sustained cello drone at a slow tempo.",
+     "picks": [
+      [
+       "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
+       "a thunderstorm rolling in from the sea"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "<Subject 1> = an old lighthouse keeper of <Picture 1>, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic. The shot opens as <Subject 1> reaches the top of the lighthouse and looks out over the sea for boats. The camera pushes in with small amplitude at slow speed. At the top, <Subject 1> sees a small fishing boat far below, fighting the waves, and the boat turns toward the light. The shot ends as the small boat is fighting the waves.\n\noverall_soundscape: Waves crash against the rocks and a distant ship's horn answers.\n\nnon_diegetic_music: A low, sustained cello drone at a slow tempo.",
+     "picks": [
+      [
+       "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
+       "a thunderstorm rolling in from the sea"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "<Subject 1> = an old lighthouse keeper of <Picture 1>, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic. The shot opens as the small boat is fighting the waves. The camera arcs around the subject. After four seconds the camera moves in to a close-up of <Subject 1>'s face, with a sorrowful expression.\n\noverall_soundscape: Waves crash against the rocks and a distant ship's horn answers.\n\nnon_diegetic_music: A low, sustained cello drone at a slow tempo.",
+     "picks": [
+      [
+       "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
+       "a thunderstorm rolling in from the sea"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "path": [
+    "the stairs",
+    "the lamp",
+    "the ship"
+   ],
+   "ended": true,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic. <Subject 1>'s weathered face is lit by his lantern as he looks up the iron spiral stairs of the lighthouse; then he turns and climbs them while a rising gale batters the tower. The camera tracks the moving subject at slow speed. The shot ends as <Subject 1> reaches the top of the lighthouse and looks out over the sea for boats.\n\noverall_soundscape: Boots ring on iron steps and wind howls against the walls.\n\nnon_diegetic_music: A low, sustained cello drone at a slow tempo.",
+     "picks": [
+      [
+       "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
+       "a rising gale"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "<Subject 1> = an old lighthouse keeper of <Picture 1>, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic. The shot opens as <Subject 1> reaches the top of the lighthouse and looks out over the sea for boats. The camera pushes in with small amplitude at slow speed. At the top, <Subject 1> sees a small fishing boat far below, fighting the waves, and the boat turns toward the light. The shot ends as the small boat is fighting the waves.\n\noverall_soundscape: Waves crash against the rocks and a distant ship's horn answers.\n\nnon_diegetic_music: A low, sustained cello drone at a slow tempo.",
+     "picks": [
+      [
+       "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
+       "a rising gale"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "<Subject 1> = an old lighthouse keeper of <Picture 1>, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic. The shot opens as the small boat is fighting the waves. The camera arcs around the subject. After four seconds the camera moves in to a close-up of <Subject 1>'s face, with a sorrowful expression.\n\noverall_soundscape: Waves crash against the rocks and a distant ship's horn answers.\n\nnon_diegetic_music: A low, sustained cello drone at a slow tempo.",
+     "picks": [
+      [
+       "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
+       "a rising gale"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "path": [
+    "the stairs",
+    "the lamp",
+    "the ship"
+   ],
+   "ended": true,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "<Subject 1> = an old lighthouse keeper, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic. <Subject 1>'s weathered face is lit by his lantern as he looks up the iron spiral stairs of the lighthouse; then he turns and climbs them while a heavy sea fog batters the tower. The camera tracks the moving subject at slow speed. The shot ends as <Subject 1> reaches the top of the lighthouse and looks out over the sea for boats.\n\noverall_soundscape: Boots ring on iron steps and wind howls against the walls.\n\nnon_diegetic_music: A low, sustained cello drone at a slow tempo.",
+     "picks": [
+      [
+       "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
+       "a heavy sea fog"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "<Subject 1> = an old lighthouse keeper of <Picture 1>, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic. The shot opens as <Subject 1> reaches the top of the lighthouse and looks out over the sea for boats. The camera pushes in with small amplitude at slow speed. At the top, <Subject 1> sees a small fishing boat far below, fighting the waves, and the boat turns toward the light. The shot ends as the small boat is fighting the waves.\n\noverall_soundscape: Waves crash against the rocks and a distant ship's horn answers.\n\nnon_diegetic_music: A low, sustained cello drone at a slow tempo.",
+     "picks": [
+      [
+       "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
+       "a heavy sea fog"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "<Subject 1> = an old lighthouse keeper of <Picture 1>, in a yellow oilskin coat and a knitted cap\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic. The shot opens as the small boat is fighting the waves. The camera arcs around the subject. After four seconds the camera moves in to a close-up of <Subject 1>'s face, with a sorrowful expression.\n\noverall_soundscape: Waves crash against the rocks and a distant ship's horn answers.\n\nnon_diegetic_music: A low, sustained cello drone at a slow tempo.",
+     "picks": [
+      [
+       "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
+       "a heavy sea fog"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

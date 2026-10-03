@@ -1,0 +1,1590 @@
+{
+ "preset": "loops/dice_dungeon",
+ "seeds": {
+  "0": {
+   "path": [
+    "the gate",
+    "the rooms",
+    "the rooms",
+    "the relic"
+   ],
+   "ended": true,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with snow-white box braids gathered at the nape, silver freckles that shimmer in moonlight, wearing a feathered cloak clasped with a bone pin pushes open a massive iron gate and steps into a long vaulted corridor lined with guttering torches, torch held high. The camera pushes in at slow speed. The shot ends as the adventurer walks deeper into the dark.\n\noverall_soundscape: The gate grinding on its hinges and water dripping somewhere far off.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "__characters/looks/hair_color__ box braids gathered at the nape"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "snow-white"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "silver freckles that shimmer in moonlight"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a feathered cloak clasped with a bone pin"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a long vaulted corridor lined with guttering torches"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer walks deeper into the dark. The camera tracks the moving subject at slow speed. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with snow-white box braids gathered at the nape, silver freckles that shimmer in moonlight, wearing a feathered cloak clasped with a bone pin moves carefully through a chamber of empty iron cages swaying on chains, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "__characters/looks/hair_color__ box braids gathered at the nape"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "snow-white"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "silver freckles that shimmer in moonlight"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a feathered cloak clasped with a bone pin"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a chamber of empty iron cages swaying on chains"
+      ],
+      [
+       "{30% a foe}",
+       ""
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera tracks the moving subject at slow speed. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with snow-white box braids gathered at the nape, silver freckles that shimmer in moonlight, wearing a feathered cloak clasped with a bone pin moves carefully through a chamber of empty iron cages swaying on chains, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "__characters/looks/hair_color__ box braids gathered at the nape"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "snow-white"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "silver freckles that shimmer in moonlight"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a feathered cloak clasped with a bone pin"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a chamber of empty iron cages swaying on chains"
+      ],
+      [
+       "{30% a foe}",
+       ""
+      ],
+      [
+       "{8% the relic}",
+       "the relic"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera pushes in at slow speed. In the last chamber, on a stone altar, lies a golden crown that hums with light. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with snow-white box braids gathered at the nape, silver freckles that shimmer in moonlight, wearing a feathered cloak clasped with a bone pin lifts it, and its light floods the chamber, driving every shadow back into the walls.\n\noverall_soundscape: A rising choir of voices and stone cracking as the roots pull back.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "__characters/looks/hair_color__ box braids gathered at the nape"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "snow-white"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "silver freckles that shimmer in moonlight"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a feathered cloak clasped with a bone pin"
+      ],
+      [
+       "$relic ← __dungeon_relics__",
+       "a golden crown that hums with light"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "path": [
+    "the gate",
+    "the rooms",
+    "the fight",
+    "the rooms",
+    "the rooms",
+    "the relic"
+   ],
+   "ended": true,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. A plague doctor in their forties, beaked mask pushed up on the head, with long straight chestnut hair with a blunt fringe, veins that glow faintly amber when angry, wearing a hooded cloak of moss-green wool pushes open a massive iron gate and steps into a hall of collapsed pillars choked with pale roots, torch held high. The camera pushes in at slow speed. The shot ends as the adventurer walks deeper into the dark.\n\noverall_soundscape: The gate grinding on its hinges and water dripping somewhere far off.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "chestnut"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "veins that glow faintly amber when angry"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a hooded cloak of moss-green wool"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a hall of collapsed pillars choked with pale roots"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer walks deeper into the dark. The camera tracks the moving subject at slow speed. A plague doctor in their forties, beaked mask pushed up on the head, with long straight chestnut hair with a blunt fringe, veins that glow faintly amber when angry, wearing a hooded cloak of moss-green wool moves carefully through a hall of collapsed pillars choked with pale roots, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "chestnut"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "veins that glow faintly amber when angry"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a hooded cloak of moss-green wool"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a hall of collapsed pillars choked with pale roots"
+      ],
+      [
+       "{30% a foe}",
+       "a foe"
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera arcs around the subject at fast speed. Out of the dark comes a hulking troll swinging a club made from a tree trunk. A plague doctor in their forties, beaked mask pushed up on the head, with long straight chestnut hair with a blunt fringe, veins that glow faintly amber when angry, wearing a hooded cloak of moss-green wool draws a blade and they clash in the flickering torchlight. The shot ends as the torchlight steadies on the floor.\n\noverall_soundscape: Steel on steel, a roar echoing off the vaults, and the torch hissing.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "chestnut"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "veins that glow faintly amber when angry"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a hooded cloak of moss-green wool"
+      ],
+      [
+       "$foe ← __dungeon_foes__",
+       "a hulking troll swinging a club made from a tree trunk"
+      ],
+      [
+       "{80% victory|defeat}",
+       "80% victory"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the torchlight steadies on the floor. The camera tracks the moving subject at slow speed. A plague doctor in their forties, beaked mask pushed up on the head, with long straight chestnut hair with a blunt fringe, veins that glow faintly amber when angry, wearing a hooded cloak of moss-green wool moves carefully through a long vaulted corridor lined with guttering torches, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "chestnut"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "veins that glow faintly amber when angry"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a hooded cloak of moss-green wool"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a long vaulted corridor lined with guttering torches"
+      ],
+      [
+       "{30% a foe}",
+       ""
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera tracks the moving subject at slow speed. A plague doctor in their forties, beaked mask pushed up on the head, with long straight chestnut hair with a blunt fringe, veins that glow faintly amber when angry, wearing a hooded cloak of moss-green wool moves carefully through a chamber of empty iron cages swaying on chains, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "chestnut"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "veins that glow faintly amber when angry"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a hooded cloak of moss-green wool"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a chamber of empty iron cages swaying on chains"
+      ],
+      [
+       "{30% a foe}",
+       ""
+      ],
+      [
+       "{8% the relic}",
+       "the relic"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera pushes in at slow speed. In the last chamber, on a stone altar, lies a golden crown that hums with light. A plague doctor in their forties, beaked mask pushed up on the head, with long straight chestnut hair with a blunt fringe, veins that glow faintly amber when angry, wearing a hooded cloak of moss-green wool lifts it, and its light floods the chamber, driving every shadow back into the walls.\n\noverall_soundscape: A rising choir of voices and stone cracking as the roots pull back.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "chestnut"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "veins that glow faintly amber when angry"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a hooded cloak of moss-green wool"
+      ],
+      [
+       "$relic ← __dungeon_relics__",
+       "a golden crown that hums with light"
+      ]
+     ]
+    }
+   ]
+  },
+  "2": {
+   "path": [
+    "the gate",
+    "the rooms",
+    "the rooms",
+    "the rooms",
+    "the fight",
+    "the rooms"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with long straight warm caramel hair with a blunt fringe, eyes of two different colours, wearing robes embroidered with silver constellations pushes open a massive iron gate and steps into a flooded crypt where the black water reaches the knees, torch held high. The camera pushes in at slow speed. The shot ends as the adventurer walks deeper into the dark.\n\noverall_soundscape: The gate grinding on its hinges and water dripping somewhere far off.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "warm caramel"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "eyes of two different colours"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "robes embroidered with silver constellations"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a flooded crypt where the black water reaches the knees"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer walks deeper into the dark. The camera tracks the moving subject at slow speed. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with long straight warm caramel hair with a blunt fringe, eyes of two different colours, wearing robes embroidered with silver constellations moves carefully through a hall of collapsed pillars choked with pale roots, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "warm caramel"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "eyes of two different colours"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "robes embroidered with silver constellations"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a hall of collapsed pillars choked with pale roots"
+      ],
+      [
+       "{30% a foe}",
+       ""
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera tracks the moving subject at slow speed. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with long straight warm caramel hair with a blunt fringe, eyes of two different colours, wearing robes embroidered with silver constellations moves carefully through a library of rotting books with a ladder that ends in the dark, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "warm caramel"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "eyes of two different colours"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "robes embroidered with silver constellations"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a library of rotting books with a ladder that ends in the dark"
+      ],
+      [
+       "{30% a foe}",
+       ""
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera tracks the moving subject at slow speed. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with long straight warm caramel hair with a blunt fringe, eyes of two different colours, wearing robes embroidered with silver constellations moves carefully through a library of rotting books with a ladder that ends in the dark, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "warm caramel"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "eyes of two different colours"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "robes embroidered with silver constellations"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a library of rotting books with a ladder that ends in the dark"
+      ],
+      [
+       "{30% a foe}",
+       "a foe"
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera arcs around the subject at fast speed. Out of the dark comes a skeleton knight in rusted plate, dragging a notched sword. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with long straight warm caramel hair with a blunt fringe, eyes of two different colours, wearing robes embroidered with silver constellations draws a blade and they clash in the flickering torchlight. The shot ends as the torchlight steadies on the floor.\n\noverall_soundscape: Steel on steel, a roar echoing off the vaults, and the torch hissing.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "warm caramel"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "eyes of two different colours"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "robes embroidered with silver constellations"
+      ],
+      [
+       "$foe ← __dungeon_foes__",
+       "a skeleton knight in rusted plate, dragging a notched sword"
+      ],
+      [
+       "{80% victory|defeat}",
+       "80% victory"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the torchlight steadies on the floor. The camera tracks the moving subject at slow speed. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with long straight warm caramel hair with a blunt fringe, eyes of two different colours, wearing robes embroidered with silver constellations moves carefully through a flooded crypt where the black water reaches the knees, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "warm caramel"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "eyes of two different colours"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "robes embroidered with silver constellations"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a flooded crypt where the black water reaches the knees"
+      ],
+      [
+       "{30% a foe}",
+       "a foe"
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    }
+   ]
+  },
+  "3": {
+   "path": [
+    "the gate",
+    "the rooms",
+    "the rooms",
+    "the rooms",
+    "the rooms",
+    "the rooms"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with long copper-red hair tied in a low ponytail, a missing ear replaced by carved wood, wearing a ceremonial gown of layered autumn leaves pushes open a massive iron gate and steps into a chamber of empty iron cages swaying on chains, torch held high. The camera pushes in at slow speed. The shot ends as the adventurer walks deeper into the dark.\n\noverall_soundscape: The gate grinding on its hinges and water dripping somewhere far off.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "copper-red"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "a missing ear replaced by carved wood"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a ceremonial gown of layered autumn leaves"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a chamber of empty iron cages swaying on chains"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer walks deeper into the dark. The camera tracks the moving subject at slow speed. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with long copper-red hair tied in a low ponytail, a missing ear replaced by carved wood, wearing a ceremonial gown of layered autumn leaves moves carefully through a long vaulted corridor lined with guttering torches, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "copper-red"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "a missing ear replaced by carved wood"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a ceremonial gown of layered autumn leaves"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a long vaulted corridor lined with guttering torches"
+      ],
+      [
+       "{30% a foe}",
+       ""
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera tracks the moving subject at slow speed. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with long copper-red hair tied in a low ponytail, a missing ear replaced by carved wood, wearing a ceremonial gown of layered autumn leaves moves carefully through a library of rotting books with a ladder that ends in the dark, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "copper-red"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "a missing ear replaced by carved wood"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a ceremonial gown of layered autumn leaves"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a library of rotting books with a ladder that ends in the dark"
+      ],
+      [
+       "{30% a foe}",
+       ""
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera tracks the moving subject at slow speed. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with long copper-red hair tied in a low ponytail, a missing ear replaced by carved wood, wearing a ceremonial gown of layered autumn leaves moves carefully through a library of rotting books with a ladder that ends in the dark, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "copper-red"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "a missing ear replaced by carved wood"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a ceremonial gown of layered autumn leaves"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a library of rotting books with a ladder that ends in the dark"
+      ],
+      [
+       "{30% a foe}",
+       ""
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera tracks the moving subject at slow speed. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with long copper-red hair tied in a low ponytail, a missing ear replaced by carved wood, wearing a ceremonial gown of layered autumn leaves moves carefully through a library of rotting books with a ladder that ends in the dark, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "copper-red"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "a missing ear replaced by carved wood"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a ceremonial gown of layered autumn leaves"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a library of rotting books with a ladder that ends in the dark"
+      ],
+      [
+       "{30% a foe}",
+       ""
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera tracks the moving subject at slow speed. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with long copper-red hair tied in a low ponytail, a missing ear replaced by carved wood, wearing a ceremonial gown of layered autumn leaves moves carefully through a long vaulted corridor lined with guttering torches, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "copper-red"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "a missing ear replaced by carved wood"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a ceremonial gown of layered autumn leaves"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a long vaulted corridor lined with guttering torches"
+      ],
+      [
+       "{30% a foe}",
+       ""
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    }
+   ]
+  },
+  "4": {
+   "path": [
+    "the gate",
+    "the rooms",
+    "the rooms",
+    "the fight",
+    "the fall",
+    "the gate"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. A ranger in her thirties, weathered and silent, bow across her back, with a high salt-and-pepper bun, eyes of two different colours, wearing a hooded cloak of moss-green wool pushes open a massive iron gate and steps into a long vaulted corridor lined with guttering torches, torch held high. The camera pushes in at slow speed. The shot ends as the adventurer walks deeper into the dark.\n\noverall_soundscape: The gate grinding on its hinges and water dripping somewhere far off.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a high __characters/looks/hair_color__ bun"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "salt-and-pepper"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "eyes of two different colours"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a hooded cloak of moss-green wool"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a long vaulted corridor lined with guttering torches"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer walks deeper into the dark. The camera tracks the moving subject at slow speed. A ranger in her thirties, weathered and silent, bow across her back, with a high salt-and-pepper bun, eyes of two different colours, wearing a hooded cloak of moss-green wool moves carefully through a flooded crypt where the black water reaches the knees, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a high __characters/looks/hair_color__ bun"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "salt-and-pepper"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "eyes of two different colours"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a hooded cloak of moss-green wool"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a flooded crypt where the black water reaches the knees"
+      ],
+      [
+       "{30% a foe}",
+       ""
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera tracks the moving subject at slow speed. A ranger in her thirties, weathered and silent, bow across her back, with a high salt-and-pepper bun, eyes of two different colours, wearing a hooded cloak of moss-green wool moves carefully through a hall of collapsed pillars choked with pale roots, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a high __characters/looks/hair_color__ bun"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "salt-and-pepper"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "eyes of two different colours"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a hooded cloak of moss-green wool"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a hall of collapsed pillars choked with pale roots"
+      ],
+      [
+       "{30% a foe}",
+       "a foe"
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera arcs around the subject at fast speed. Out of the dark comes a swarm of shrieking bats pouring out of a crack in the wall. A ranger in her thirties, weathered and silent, bow across her back, with a high salt-and-pepper bun, eyes of two different colours, wearing a hooded cloak of moss-green wool draws a blade and they clash in the flickering torchlight. The adventurer is thrown to the stone floor, and the torch rolls away, guttering. The shot ends as the torchlight steadies on the floor.\n\noverall_soundscape: Steel on steel, a roar echoing off the vaults, and the torch hissing.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a high __characters/looks/hair_color__ bun"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "salt-and-pepper"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "eyes of two different colours"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a hooded cloak of moss-green wool"
+      ],
+      [
+       "$foe ← __dungeon_foes__",
+       "a swarm of shrieking bats pouring out of a crack in the wall"
+      ],
+      [
+       "{80% victory|defeat}",
+       "defeat"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the torchlight steadies on the floor. The camera pulls out at slow speed. The torch dies on the floor beside a ranger in her thirties, weathered and silent, bow across her back, with a high salt-and-pepper bun, eyes of two different colours, wearing a hooded cloak of moss-green wool, the darkness closes in, and far above a bell begins to toll. Then the light swells again, and the adventurer stands once more before the iron gate, as if waking from a dream. The shot ends as the adventurer stands before the iron gate again.\n\noverall_soundscape: The torch hissing out, a slow, distant bell, and a sharp breath.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a high __characters/looks/hair_color__ bun"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "salt-and-pepper"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "eyes of two different colours"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a hooded cloak of moss-green wool"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stands before the iron gate again. The camera pushes in at slow speed. A ranger in her thirties, weathered and silent, bow across her back, with a high salt-and-pepper bun, eyes of two different colours, wearing a hooded cloak of moss-green wool pushes open a massive iron gate and steps into a narrow stone bridge over a bottomless chasm, torch held high. The shot ends as the adventurer walks deeper into the dark.\n\noverall_soundscape: The gate grinding on its hinges and water dripping somewhere far off.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a high __characters/looks/hair_color__ bun"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "salt-and-pepper"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "eyes of two different colours"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a hooded cloak of moss-green wool"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a narrow stone bridge over a bottomless chasm"
+      ]
+     ]
+    }
+   ]
+  },
+  "5": {
+   "path": [
+    "the gate",
+    "the rooms",
+    "the rooms",
+    "the fight",
+    "the fall",
+    "the gate"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. An elven cartographer in his thirties by appearance, long-limbed and far-sighted, with a chin-length ash-blonde bob, a crown of small antlers, wearing a feathered cloak clasped with a bone pin pushes open a massive iron gate and steps into a chamber of empty iron cages swaying on chains, torch held high. The camera pushes in at slow speed. The shot ends as the adventurer walks deeper into the dark.\n\noverall_soundscape: The gate grinding on its hinges and water dripping somewhere far off.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a chin-length __characters/looks/hair_color__ bob"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "ash-blonde"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "a crown of small antlers"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a feathered cloak clasped with a bone pin"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a chamber of empty iron cages swaying on chains"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer walks deeper into the dark. The camera tracks the moving subject at slow speed. An elven cartographer in his thirties by appearance, long-limbed and far-sighted, with a chin-length ash-blonde bob, a crown of small antlers, wearing a feathered cloak clasped with a bone pin moves carefully through a hall of collapsed pillars choked with pale roots, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a chin-length __characters/looks/hair_color__ bob"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "ash-blonde"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "a crown of small antlers"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a feathered cloak clasped with a bone pin"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a hall of collapsed pillars choked with pale roots"
+      ],
+      [
+       "{30% a foe}",
+       ""
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera tracks the moving subject at slow speed. An elven cartographer in his thirties by appearance, long-limbed and far-sighted, with a chin-length ash-blonde bob, a crown of small antlers, wearing a feathered cloak clasped with a bone pin moves carefully through a hall of collapsed pillars choked with pale roots, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a chin-length __characters/looks/hair_color__ bob"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "ash-blonde"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "a crown of small antlers"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a feathered cloak clasped with a bone pin"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a hall of collapsed pillars choked with pale roots"
+      ],
+      [
+       "{30% a foe}",
+       "a foe"
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera arcs around the subject at fast speed. Out of the dark comes a skeleton knight in rusted plate, dragging a notched sword. An elven cartographer in his thirties by appearance, long-limbed and far-sighted, with a chin-length ash-blonde bob, a crown of small antlers, wearing a feathered cloak clasped with a bone pin draws a blade and they clash in the flickering torchlight. The adventurer is thrown to the stone floor, and the torch rolls away, guttering. The shot ends as the torchlight steadies on the floor.\n\noverall_soundscape: Steel on steel, a roar echoing off the vaults, and the torch hissing.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a chin-length __characters/looks/hair_color__ bob"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "ash-blonde"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "a crown of small antlers"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a feathered cloak clasped with a bone pin"
+      ],
+      [
+       "$foe ← __dungeon_foes__",
+       "a skeleton knight in rusted plate, dragging a notched sword"
+      ],
+      [
+       "{80% victory|defeat}",
+       "defeat"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the torchlight steadies on the floor. The camera pulls out at slow speed. The torch dies on the floor beside an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with a chin-length ash-blonde bob, a crown of small antlers, wearing a feathered cloak clasped with a bone pin, the darkness closes in, and far above a bell begins to toll. Then the light swells again, and the adventurer stands once more before the iron gate, as if waking from a dream. The shot ends as the adventurer stands before the iron gate again.\n\noverall_soundscape: The torch hissing out, a slow, distant bell, and a sharp breath.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a chin-length __characters/looks/hair_color__ bob"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "ash-blonde"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "a crown of small antlers"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a feathered cloak clasped with a bone pin"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stands before the iron gate again. The camera pushes in at slow speed. An elven cartographer in his thirties by appearance, long-limbed and far-sighted, with a chin-length ash-blonde bob, a crown of small antlers, wearing a feathered cloak clasped with a bone pin pushes open a massive iron gate and steps into a chamber of empty iron cages swaying on chains, torch held high. The shot ends as the adventurer walks deeper into the dark.\n\noverall_soundscape: The gate grinding on its hinges and water dripping somewhere far off.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a chin-length __characters/looks/hair_color__ bob"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "ash-blonde"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "a crown of small antlers"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "a feathered cloak clasped with a bone pin"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a chamber of empty iron cages swaying on chains"
+      ]
+     ]
+    }
+   ]
+  },
+  "6": {
+   "path": [
+    "the gate",
+    "the rooms",
+    "the rooms",
+    "the rooms",
+    "the rooms",
+    "the fight"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with a black streaked with grey mullet, silver freckles that shimmer in moonlight, wearing chain mail under a fur mantle pushes open a massive iron gate and steps into a narrow stone bridge over a bottomless chasm, torch held high. The camera pushes in at slow speed. The shot ends as the adventurer walks deeper into the dark.\n\noverall_soundscape: The gate grinding on its hinges and water dripping somewhere far off.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a __characters/looks/hair_color__ mullet"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "black streaked with grey"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "silver freckles that shimmer in moonlight"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "chain mail under a fur mantle"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a narrow stone bridge over a bottomless chasm"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer walks deeper into the dark. The camera tracks the moving subject at slow speed. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with a black streaked with grey mullet, silver freckles that shimmer in moonlight, wearing chain mail under a fur mantle moves carefully through a chamber of empty iron cages swaying on chains, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a __characters/looks/hair_color__ mullet"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "black streaked with grey"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "silver freckles that shimmer in moonlight"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "chain mail under a fur mantle"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a chamber of empty iron cages swaying on chains"
+      ],
+      [
+       "{30% a foe}",
+       ""
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera tracks the moving subject at slow speed. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with a black streaked with grey mullet, silver freckles that shimmer in moonlight, wearing chain mail under a fur mantle moves carefully through a hall of collapsed pillars choked with pale roots, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a __characters/looks/hair_color__ mullet"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "black streaked with grey"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "silver freckles that shimmer in moonlight"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "chain mail under a fur mantle"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a hall of collapsed pillars choked with pale roots"
+      ],
+      [
+       "{30% a foe}",
+       ""
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera tracks the moving subject at slow speed. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with a black streaked with grey mullet, silver freckles that shimmer in moonlight, wearing chain mail under a fur mantle moves carefully through a library of rotting books with a ladder that ends in the dark, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a __characters/looks/hair_color__ mullet"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "black streaked with grey"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "silver freckles that shimmer in moonlight"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "chain mail under a fur mantle"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a library of rotting books with a ladder that ends in the dark"
+      ],
+      [
+       "{30% a foe}",
+       ""
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera tracks the moving subject at slow speed. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with a black streaked with grey mullet, silver freckles that shimmer in moonlight, wearing chain mail under a fur mantle moves carefully through a hall of collapsed pillars choked with pale roots, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a __characters/looks/hair_color__ mullet"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "black streaked with grey"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "silver freckles that shimmer in moonlight"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "chain mail under a fur mantle"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a hall of collapsed pillars choked with pale roots"
+      ],
+      [
+       "{30% a foe}",
+       "a foe"
+      ],
+      [
+       "{8% the relic}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera arcs around the subject at fast speed. Out of the dark comes a hulking troll swinging a club made from a tree trunk. An orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with a black streaked with grey mullet, silver freckles that shimmer in moonlight, wearing chain mail under a fur mantle draws a blade and they clash in the flickering torchlight. The adventurer is thrown to the stone floor, and the torch rolls away, guttering. The shot ends as the torchlight steadies on the floor.\n\noverall_soundscape: Steel on steel, a roar echoing off the vaults, and the torch hissing.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "a __characters/looks/hair_color__ mullet"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "black streaked with grey"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "silver freckles that shimmer in moonlight"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "chain mail under a fur mantle"
+      ],
+      [
+       "$foe ← __dungeon_foes__",
+       "a hulking troll swinging a club made from a tree trunk"
+      ],
+      [
+       "{80% victory|defeat}",
+       "defeat"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "path": [
+    "the gate",
+    "the rooms",
+    "the relic"
+   ],
+   "ended": true,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. A ranger in her thirties, weathered and silent, bow across her back, with shoulder-length black streaked with grey waves, veins that glow faintly amber when angry, wearing dented plate armour under a travel-stained tabard pushes open a massive iron gate and steps into a chamber of empty iron cages swaying on chains, torch held high. The camera pushes in at slow speed. The shot ends as the adventurer walks deeper into the dark.\n\noverall_soundscape: The gate grinding on its hinges and water dripping somewhere far off.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "shoulder-length __characters/looks/hair_color__ waves"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "black streaked with grey"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "veins that glow faintly amber when angry"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "dented plate armour under a travel-stained tabard"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a chamber of empty iron cages swaying on chains"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer walks deeper into the dark. The camera tracks the moving subject at slow speed. A ranger in her thirties, weathered and silent, bow across her back, with shoulder-length black streaked with grey waves, veins that glow faintly amber when angry, wearing dented plate armour under a travel-stained tabard moves carefully through a flooded crypt where the black water reaches the knees, torch raised, every shadow shifting at the edge of the light. The shot ends as the adventurer stops at the threshold of the next chamber.\n\noverall_soundscape: Footsteps on wet stone and the torch crackling.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "shoulder-length __characters/looks/hair_color__ waves"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "black streaked with grey"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "veins that glow faintly amber when angry"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "dented plate armour under a travel-stained tabard"
+      ],
+      [
+       "$room ← __dungeon_rooms__",
+       "a flooded crypt where the black water reaches the knees"
+      ],
+      [
+       "{30% a foe}",
+       ""
+      ],
+      [
+       "{8% the relic}",
+       "the relic"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, dark fantasy adventure, torchlight and deep shadow, one continuous shot. The shot opens as the adventurer stops at the threshold of the next chamber. The camera pushes in at slow speed. In the last chamber, on a stone altar, lies a golden crown that hums with light. A ranger in her thirties, weathered and silent, bow across her back, with shoulder-length black streaked with grey waves, veins that glow faintly amber when angry, wearing dented plate armour under a travel-stained tabard lifts it, and its light floods the chamber, driving every shadow back into the walls.\n\noverall_soundscape: A rising choir of voices and stone cracking as the roots pull back.\n\nnon_diegetic_music: A low, pulsing drum at a slow tempo under a quiet, sustained horn.",
+     "picks": [
+      [
+       "$hero ← __characters/fantasy__",
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+      ],
+      [
+       "$hero ← __characters/looks/hair__",
+       "shoulder-length __characters/looks/hair_color__ waves"
+      ],
+      [
+       "$hero ← __characters/looks/hair_color__",
+       "black streaked with grey"
+      ],
+      [
+       "$hero ← __characters/fantasy/mark__",
+       "veins that glow faintly amber when angry"
+      ],
+      [
+       "$hero ← __characters/fantasy/attire__",
+       "dented plate armour under a travel-stained tabard"
+      ],
+      [
+       "$relic ← __dungeon_relics__",
+       "a golden crown that hums with light"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}
