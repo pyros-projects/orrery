@@ -755,6 +755,9 @@ def test_annotate_says_what_each_line_gives_at_a_seed(home):
     assert out["bindings"]["a"] in ("fox", "heron", "owl") and out["bindings"]["plain"] == "a grey wall"
     assert out["exports"]["mood"] in ("calm", "grim") and out["grid"] == "2 runs: dawn · noon"
     screenplay = "@h3 references\nCAST\n@HERO (image 2): a tall man\n@DOG: a dog\nSHOT 5s: static\n@HERO walks @DOG."
-    assert ok(home, webapi.annotate, template=screenplay, seed=1, target="h3-base")["cast"] == \
-           {"HERO": "image 2", "DOG": "no picture in this clip"}
+    out = ok(home, webapi.annotate, template=screenplay.replace("SHOT 5s", "SET: @HERO(0.6, 35%)\nSHOT 5s"), seed=1,
+             target="h3-base")
+    assert out["cast"] == {"HERO": "image 2", "DOG": "no picture in this clip"}
+    assert out["members"]["HERO"] == {"who": "a tall man", "pictures": [{"image": 2, "strength": 0.6, "from": 0.35, "to": 1.0}],
+                                      "refmods": [], "voice": ""}  # the hover's record (#147)
     assert ok(home, webapi.annotate, template="A __missing_lib__.", seed=1, target="text")["bindings"] == {}  # never fails

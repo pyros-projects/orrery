@@ -7,7 +7,7 @@ export const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "
 const CLI_ONLY = "CLI only: in ComfyUI, use the Run count and the seed widget";
 // a line's head: the screenplay words (the earlier CHUNK, HANDOFF:, GOTO:, SEND: too), IF before a
 // condition, and a name with a colon (a CAST member, a speaker), `@` before it or not
-const HEAD = /^(\s*)(SHOT\s+[\d.]+\s*s\b:?|SFX:|MUSIC:|LORA:|END ON:|START WITH:|REMEMBER:|CUT TO:|AFTER:|HANDOFF:|SEND:|GOTO:|SET:|style:|summary:|voice:|keep:|context:|refmods:|(?:SCENE|CHUNK)(?=\s|$)|IF(?=\s+\$)|CAST(?=\s*$)|@?[A-Z][A-Z0-9 _-]*?(?:\s*\([^)]*\))?\s*:(?=\s))/;
+const HEAD = /^(\s*)(SHOT\s+[\d.]+\s*s\b:?|EXPORT:|SFX:|MUSIC:|LORA:|END ON:|START WITH:|REMEMBER:|CUT TO:|AFTER:|HANDOFF:|SEND:|GOTO:|SET:|style:|summary:|voice:|keep:|context:|refmods:|(?:SCENE|CHUNK)(?=\s|$)|IF(?=\s+\$)|CAST(?=\s*$)|@?[A-Z][A-Z0-9 _-]*?(?:\s*\([^)]*\))?\s*:(?=\s))/;
 const TOKEN = /(\\[{}|$_@#[\]\\<>])|((?<!\\)__([\w*]+(?:\/[\w*]+)*)(?:\[[^\[\]\n]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\([^()]*\))?)|(\$[A-Za-z_]\w*(?:~\d+)?(?:\.[A-Za-z_][\w-]*)?)|(\d+(?:-\d+)?\$\$)|([{}|])|([^_${}|]+|[_$])/g;
 
 // A glob (`clothing/*`, `clothing/**`) is known when it matches a library.

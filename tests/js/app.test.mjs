@@ -570,3 +570,17 @@ test("annotations sit at the ends of the lines they belong to (#163)", async () 
   const merged = mergeHints(new Map([[0, { text: "frames → image 3" }]]), annotationLines(text, ann));
   assert.equal(merged.get(0).text, "frames → image 3");  // REMEMBER's hint wins
 });
+
+test("hover knows each keyword's forms and a picture's dials (#136, #147)", async () => {
+  const { keywordHelp, directiveHelp, dialText } = await import("../../comfyui/web/app/hover.js");
+  assert.equal(keywordHelp("REMEMBER:").word, "REMEMBER:");
+  assert.ok(keywordHelp("REMEMBER:").forms.some(([f]) => f === "REMEMBER: frames 0, 50 as @NAME"));
+  assert.equal(keywordHelp("SHOT 5s:").word, "SHOT");
+  assert.equal(keywordHelp("IF").word, "IF");
+  assert.equal(keywordHelp("EXPORT:").word, "EXPORT:");
+  assert.equal(keywordHelp("style:").word, "style:");
+  assert.equal(keywordHelp("@HERO (image 1):"), null);  // a CAST member's head is no keyword
+  assert.equal(directiveHelp("@grid").word, "@grid");
+  assert.equal(dialText({ strength: 0.6, from: 0.35, to: 1 }), "at 0.6 from 35%");
+  assert.equal(dialText({ strength: 1 }), "");
+});

@@ -763,7 +763,7 @@ def annotate(home: Home, args: dict) -> dict:
     text, target = _template_for(home, args)
     seed, libs = _int(args, "seed", 0), home.libraries()
     src = long_form(strip_comments(text))
-    out: dict = {"bindings": {}, "exports": {}, "grid": "", "cast": {}}
+    out: dict = {"bindings": {}, "exports": {}, "grid": "", "cast": {}, "members": {}}
     grid = None
     try:
         if parse(src).params.grid is not None:
@@ -788,6 +788,17 @@ def annotate(home: Home, args: dict) -> dict:
                 refmods = [s.name for s in m.sources if s.kind == "refmod"]
                 parts = [_slots(images), *named, *(f"refmod {r}" for r in refmods)]
                 out["cast"][m.name] = _short(" · ".join(p for p in parts if p) or "no picture in this clip", 90)
+                dials = {i["image"]: i for i in c.images if i.get("member") == m.name}
+                mods = {r["name"]: r for r in c.refmods}
+                out["members"][m.name] = {  # who the member is in this clip, for the editor's hover (#147)
+                    "who": " ".join(f"{m.head}{m.tail}".split()),
+                    "pictures": [{"image": n, **({"name": c.pictures[n]["name"], "id": c.pictures[n].get("id")} if n in c.pictures else {}),
+                                  **{k: dials[n][k] for k in ("strength", "from", "to", "start", "end") if n in dials and dials[n].get(k) is not None}}
+                                 for n in images],
+                    "refmods": [{"name": r, **{k: mods[r][k] for k in ("strength", "from", "to", "start", "end") if r in mods and mods[r].get(k) is not None}}
+                                for r in refmods],
+                    "voice": m.voice_note or "",
+                }
         except (ValueError, KeyError, MissingLibrary):
             pass
     return out

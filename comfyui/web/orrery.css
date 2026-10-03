@@ -176,6 +176,18 @@
 .orrery-app .editor .hint > span { margin-left: 1.5ch; color: var(--teal); opacity: .75; font-style: italic; }
 .orrery-app .editor .hint.replaced > span { color: var(--faint); text-decoration: line-through; }
 .orrery-app .editor .hint.note > span { color: var(--muted); opacity: .55; }
+.orrery-app .hv { position: absolute; z-index: 25; pointer-events: none; width: max-content; max-width: min(440px, calc(100% - 8px)); background: #1f2029; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.5); padding: 8px 10px; font-size: 12px; line-height: 1.45; display: grid; gap: 4px; }
+.orrery-app .hv b { color: var(--ink); }
+.orrery-app .hv .hv-t { color: var(--muted); }
+.orrery-app .hv .hv-who { font-family: var(--mono); color: var(--ink); overflow-wrap: anywhere; }
+.orrery-app .hv ul { margin: 0; padding-left: 14px; display: grid; gap: 2px; }
+.orrery-app .hv code { font-family: var(--mono); color: var(--brass); }
+.orrery-app .hv .hv-f { color: var(--faint); font-size: 11px; }
+.orrery-app .hv .hv-pics { display: flex; flex-wrap: wrap; gap: 6px; }
+.orrery-app .hv figure { margin: 0; display: grid; gap: 2px; justify-items: center; }
+.orrery-app .hv figure img { width: 64px; height: 80px; object-fit: cover; border-radius: 5px; background: #14151b; }
+.orrery-app .hv figcaption { font: 10.5px var(--mono); color: var(--muted); }
+.orrery-app .hv .hv-none { width: 64px; height: 80px; display: grid; place-items: center; border: 1px dashed var(--line); border-radius: 5px; color: var(--faint); font-size: 10.5px; }
   scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
 .orrery-app .chunkmedia .tl-clip { flex: none; }
 .orrery-app .chunkmedia .cm-none { font-size: 11.5px; padding: 4px 0; }

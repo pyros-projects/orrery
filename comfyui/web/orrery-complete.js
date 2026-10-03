@@ -417,7 +417,7 @@ function refmodsLineItems(before, line) {
 }
 
 // `@` at the start of a line: the directives, each on a line of its own.
-const DIRECTIVES = [
+export const DIRECTIVES = [
   ["@grid ", "every combination, one run each: @grid __style__ × {dawn|noon}"],
   ["@unique ", "seeds in a row never repeat it: @unique $hero"],
   ["@size ", "the node's width and height: @size 832x1216"],

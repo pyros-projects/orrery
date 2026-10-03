@@ -3,6 +3,7 @@ import { inlineLibraries, suggest } from "../orrery-complete.js";
 import { chosen, closeMenu, drawMenu, joinChoices } from "./dialmenu.js";
 import { esc, highlight } from "./highlight.js";
 import { annotationLines, mergeHints } from "./annotate.js";
+import { wireHover } from "./hover.js";
 import { hintsFor } from "./remember.js";
 import { icon } from "./icons.js";
 import { applyDials, chunkInfo, dials, hasGoto, plays, folderColor, pickerGroups, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
@@ -134,6 +135,7 @@ export function renderPrompt(app) {
     ed.addEventListener("blur", () => blur(ed));
     ed.addEventListener("focus", focus);
   }
+  wireHover(app, app.view.querySelector(".editor"));
   if (app.data.timeline !== false && app.chunks()) loadChain(app).then(paint);
 
   app.view.onclick = (e) => {
