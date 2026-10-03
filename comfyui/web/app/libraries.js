@@ -139,7 +139,7 @@ export async function renderLibraries(app) {
         : ro ? `<div class="banner">${icon("lock")}Built-in and read-only. <b>Make it mine</b> copies it into your library folder, where yours wins over the built-in.</div>` : ""}
       ${tags.length ? `<div class="bar flat"><span class="label">Tags</span>${tags.map((t) => `<button class="chip" aria-pressed="${s.libTag === t}" data-ltag="${esc(t)}">${esc(t)}</button>`).join("")}</div>` : ""}
       <div class="scroll"><table class="entries"><colgroup><col><col class="cw"><col class="cl"><col class="cx"></colgroup><thead><tr><th class="label">Entry <span class="sub">· tags and properties under it</span></th><th class="label" title="Static weight in the file">Weight</th><th class="label" title="Learned from your gallery ratings">Learned</th><th></th></tr></thead><tbody>
-      ${rows.map(({ e, i }) => rowHTML(e, i, ro, (L.pending_entries || []).includes(e.value))).join("") || '<tr><td colspan="4" class="empty">No entries yet. Add some below.</td></tr>'}
+      ${rows.map(({ e, i }) => rowHTML(e, i, ro, (L.pending_entries || []).includes(e.value), L.source === "gallery" ? app.api.thumbURL : null)).join("") || '<tr><td colspan="4" class="empty">No entries yet. Add some below.</td></tr>'}
       </tbody></table>${total > rows.length ? `<div class="addrow"><button class="btn ghost wide" data-lact="more">Show ${Math.min(LIB_PAGE, total - rows.length)} more of ${total - rows.length}</button></div>` : ""}</div>
       ${ro ? "" : `<div class="addrow"><input class="input" id="oa-add" placeholder="Add entries: one per line or comma-separated, then ↵"><button class="btn" data-lact="add">${icon("plus")}Add</button></div>`}
       <div class="ask">${icon("spark")}<span>Ask the LLM, e.g. “remove all cats and make them a new list feline”: coming in stage 5. It runs in the ComfyUI queue and shows a diff before anything changes.</span></div>
@@ -155,12 +155,14 @@ function fit(t) {
   t.style.height = `${t.scrollHeight}px`;
 }
 
-function rowHTML(e, i, ro, fresh) {
+// `thumb(id)`: a gallery library's entry shows its pictures, and its own bookkeeping (ids, files) stays out of the chips.
+function rowHTML(e, i, ro, fresh, thumb = null) {
   const lw = e.learned ?? 1, pct = Math.min(50, (Math.abs(Math.log(lw)) / Math.log(4)) * 50);
   const bar = lw >= 1 ? `left:50%;width:${pct}%` : `left:${50 - pct}%;width:${pct}%`;
   const chips = e.tags.map((t) => `<span class="tagchip">${esc(t)}${ro ? "" : `<button data-rmtag="${i}" data-tag="${esc(t)}" aria-label="Remove tag">${icon("x")}</button>`}</span>`).join("")
-    + Object.entries(e.props || {}).map(([k, v]) => `<span class="tagchip prop" tabindex="0" title="${esc(k)}: ${esc(v)}&#10;&#10;__name#${esc(k)}:…__ filters on it · click to read it all"><span class="pv"><b>${esc(k)}</b> ${esc(v)}</span>${ro ? "" : `<button data-rmprop="${i}" data-key="${esc(k)}" aria-label="Remove property">${icon("x")}</button>`}</span>`).join("")
-    + (ro ? "" : `<input class="tagadd" data-addtag="${i}" placeholder="+ tag or key:value">`);
+    + (thumb ? `<span class="libpics">${(e.props?.ids || "").split("\n").filter(Boolean).map((id) => `<img src="${esc(thumb(id))}" alt="" loading="lazy">`).join("")}</span>` : "")
+    + Object.entries(e.props || {}).filter(([k]) => !thumb || !["ids", "pictures"].includes(k)).map(([k, v]) => `<span class="tagchip prop" tabindex="0" title="${esc(k)}: ${esc(v)}&#10;&#10;__name#${esc(k)}:…__ filters on it · click to read it all"><span class="pv"><b>${esc(k)}</b> ${esc(v)}</span>${ro ? "" : `<button data-rmprop="${i}" data-key="${esc(k)}" aria-label="Remove property">${icon("x")}</button>`}</span>`).join("")
+    + (ro ? "" : `<input class="tagadd" data-addtag="${i}" placeholder="+ tag" title="A tag, or key:value for a property">`);
   return `<tr class="${fresh ? "pend" : ""}"><td class="v"><textarea rows="1" data-ev="${i}" ${ro ? "disabled" : ""} aria-label="Entry" spellcheck="false">${esc(e.value)}</textarea>`
     + `${chips ? `<div class="chips">${chips}</div>` : ""}</td>
     <td class="w"><input type="number" step="0.1" min="0" value="${e.weight}" data-ew="${i}" ${ro ? "disabled" : ""} aria-label="Weight"></td>

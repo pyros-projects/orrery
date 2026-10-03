@@ -365,7 +365,10 @@
 .orrery-app .addrow { display: flex; gap: 6px; padding: 10px 12px; border-top: 1px solid var(--line); flex: none; }
 .orrery-app .ask { margin: 0 12px 12px; display: flex; gap: 8px; align-items: center; border: 1px dashed #3d3f58; border-radius: 8px; padding: 7px 10px; color: var(--faint); font-size: 12px; flex: none; }
 .orrery-app .ask .i { color: var(--violet); }
-.orrery-app .tagadd { width: 64px; background: transparent; border: 1px dashed var(--line); border-radius: 5px; font: 11px var(--mono); padding: 2px 5px; color: var(--muted); }
+.orrery-app .libpics { display: inline-flex; gap: 4px; margin-right: 4px; }
+.orrery-app .libpics img { width: 44px; height: 56px; object-fit: cover; border-radius: 4px; background: #14151b; }
+.orrery-app .tagadd:focus { width: 18ch; }
+.orrery-app .tagadd { width: 7ch; background: transparent; border: 1px dashed var(--line); border-radius: 5px; font: 11px var(--mono); padding: 2px 5px; color: var(--muted); }
 
 /* galaxy tab */
 .orrery-app .rule { font-size: 11.5px; color: var(--faint); padding: 10px 12px 0; margin: 0; }
