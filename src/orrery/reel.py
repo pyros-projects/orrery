@@ -55,6 +55,10 @@ repeats continues itself from its second time on.
 film. It starts afresh (unless an `AFTER:` names a scene), and a scene after it continues the last
 clip that is in the film. What it sends and rolls reaches the clips after it all the same: the
 memory follows the clips in order, the picture follows the film (`Reel.recalls`, `Reel.before`).
+
+The head is the scene of the Orrery Prompt's input video, if one is wired: `REMEMBER:` there keeps
+frames of that video for every clip, `END ON:` there is how it ends, and a scene with `AFTER: the
+input video` continues it (its last 22 frames, picture and sound, and that END ON:).
 """
 
 import hashlib
@@ -75,6 +79,8 @@ SEND = re.compile(r"^SEND:\s*(.*)$")
 REMEMBER = re.compile(r"^REMEMBER:\s*(.*)$")
 AFTER = re.compile(r"^AFTER:\s*(.*)$")
 TEST = re.compile(r"(?<!\S)\(test\)(?!\S)", re.IGNORECASE)  # `SCENE the forest (test)`
+INPUT = -1  # the input video: what `AFTER: the input video` continues, the clip a head REMEMBER keeps
+INPUT_NAMES = ("the input video", "input video")
 GOTO_LINE = re.compile(r"^(?:(?:\?|IF\s+(?=\$))[^\n]*?:\s*)?(?:CUT\s+TO|GOTO):", re.IGNORECASE)  # a cut, `? cond:` / `IF …:` or not
 _GOTO = re.compile(r"(?:CUT\s+TO|GOTO):\s*(.+?)\s*(?:[×x]\s*(\d+))?\s*$", re.IGNORECASE)
 _CUT_CHANCE = re.compile(r"\s*\((\d+(?:\.\d+)?)\s*%\)")  # `CUT TO: the fight (30%)`
@@ -279,6 +285,20 @@ class Reel:
     head: list[str]
     blocks: list[Block]
     rng: int | None = None  # `@rng 1`: the dice its template was made with
+    head_sends: list[Send] = field(default_factory=list)  # REMEMBER: in the head: frames of the input video
+    input_end: str | None = None  # END ON: in the head: how the input video ends
+
+    @property
+    def uses_input(self) -> bool:
+        """Whether the reel reads the input video: a REMEMBER: in the head, or a scene that continues it."""
+        return bool(self.head_sends) or any(b.after == INPUT for b in self.blocks)
+
+    def sources(self, starts: list[int | None]) -> list[tuple[int, int | None, Send]]:
+        """(scene, the segment its frames come from, line) for every REMEMBER: (SEND:) line, the head's
+        first, as (-1, INPUT, line): they come from the input video, before clip 1."""
+        return ([(-1, INPUT, send) for send in self.head_sends]
+                + [(i, start, send) for i, (block, start) in enumerate(zip(self.blocks, starts, strict=True))
+                   for send in block.sends])
 
     @property
     def jumps_on_rolls(self) -> bool:
@@ -336,12 +356,15 @@ class Reel:
 
     def before(self, segment: int, path: list[tuple[int, int]]) -> int | None:
         """The segment whose picture `segment` continues (its pinned frames, its END ON:), on `path`: with
-        `AFTER:` the last clip of that scene, else the last clip before it that is in the film. None for
-        the first clip and for a test scene without `AFTER:`, which start afresh."""
-        if segment == 0:
-            return None
+        `AFTER:` the last clip of that scene (INPUT for the input video), else the last clip before it
+        that is in the film. None for the first clip and for a test scene without `AFTER:`, which start
+        afresh."""
         block, rep = path[segment]
         here = self.blocks[block]
+        if here.after == INPUT and not rep:  # the first clip too
+            return INPUT
+        if segment == 0:
+            return None
         if rep:
             return segment - 1
         if here.after is not None:
@@ -356,9 +379,11 @@ class Reel:
 
     def recalls(self, segment: int, path: list[tuple[int, int]]) -> int | None:
         """The segment whose memory `segment` carries on (what was sent, `$x~N`): the one it continues
-        with `AFTER:`, so a branch keeps its own; else the clip before it, a test scene's too."""
+        with `AFTER:`, so a branch keeps its own (none after the input video: what the head remembers
+        reaches every clip anyway); else the clip before it, a test scene's too."""
         if segment and self.blocks[path[segment][0]].after is not None:
-            return self.before(segment, path)
+            before = self.before(segment, path)
+            return None if before == INPUT else before
         return segment - 1 if segment else None
 
     def chain(self, segment: int, path: list[tuple[int, int]]) -> list[int]:
@@ -371,13 +396,15 @@ class Reel:
 
     @property
     def send_slots(self) -> list[int]:
-        """Every image a SEND: line fills."""
-        return sorted({send.image for block in self.blocks for send in block.sends if send.refmod is None})
+        """Every image a REMEMBER: (SEND:) line fills, the head's too."""
+        return sorted({send.image for send in self.head_sends + [s for b in self.blocks for s in b.sends]
+                       if send.refmod is None})
 
     @property
     def send_refmods(self) -> list[str]:
-        """Every RefMod a SEND: line makes."""
-        return sorted({send.refmod for block in self.blocks for send in block.sends if send.refmod is not None})
+        """Every RefMod a REMEMBER: (SEND:) line makes, the head's too."""
+        return sorted({send.refmod for send in self.head_sends + [s for b in self.blocks for s in b.sends]
+                       if send.refmod is not None})
 
     def starts(self, path: list[tuple[int, int]] | None = None) -> list[int | None]:
         """The segment each chunk first plays in, on `path` or the reel's own; None for a chunk it
@@ -412,19 +439,18 @@ class Reel:
         # what this clip continues; past the reel's end, every clip before it
         behind = set(self.chain(segment, path)) if segment < len(path) else set(range(segment))
         starts = self.starts(path)
-        for block, start in zip(self.blocks, starts, strict=True):
-            for send in block.sends:
-                if (send.refmod is not None) != refmods:
-                    continue
-                key = send.target
-                spans = (send.segments or [[0, None]]) if key in held else fills(send, start, starts)
-                when = -1 if start is None else start
-                if (any(lo <= segment and (hi is None or segment <= hi) for lo, hi in spans)
-                        and (key in held or start in behind) and when >= latest.get(key, -1)):
-                    latest[key] = when
-                    out[key] = ({"held": True} if key in held
-                                else {"segment": start, "frames": [list(f) for f in send.frames],
-                                      **({"step": send.step} if send.step > 1 else {})})
+        for _, start, send in self.sources(starts):
+            if (send.refmod is not None) != refmods:
+                continue
+            key = send.target
+            spans = (send.segments or [[0, None]]) if key in held else fills(send, start, starts)
+            when = -2 if start is None else start
+            if (any(lo <= segment and (hi is None or segment <= hi) for lo, hi in spans)
+                    and (key in held or start in behind or start == INPUT) and when >= latest.get(key, -2)):
+                latest[key] = when
+                out[key] = ({"held": True} if key in held
+                            else {"segment": start, "frames": [list(f) for f in send.frames],
+                                  **({"step": send.step} if send.step > 1 else {})})
         return out
 
     def label(self, segment: int, path: list[tuple[int, int]] | None = None) -> str:
@@ -443,6 +469,8 @@ def split_reel(src: str) -> Reel | None:
         return None
     head: list[str] = []
     blocks: list[Block] = []
+    head_sends: list[Send] = []
+    input_end = None
     gotos: list[tuple[int, str]] = []  # (chunk, line): resolved once every title is known
     afters: list[tuple[int, str]] = []  # (chunk, what its AFTER: names), the same
     untils: list[tuple[Send, str]] = []  # (a REMEMBER:, the scene its `until` names), the same
@@ -454,13 +482,15 @@ def split_reel(src: str) -> Reel | None:
                 title, times = r.group(1).strip(), r.group(2) or r.group(3) or "forever"
                 repeat = None if times.lower() == "forever" else max(1, int(times))
             blocks.append(Block(title, repeat, test=bool(TEST.search(heading))))
-        elif (send := SEND.match(raw.strip())) and blocks:
-            blocks[-1].sends.append(parse_send(send.group(1)))
-        elif (remember := REMEMBER.match(raw.strip())) and blocks:
+        elif send := SEND.match(raw.strip()):  # in the head: frames of the input video
+            (blocks[-1].sends if blocks else head_sends).append(parse_send(send.group(1)))
+        elif remember := REMEMBER.match(raw.strip()):
             kept, until = parse_remember(remember.group(1))
-            blocks[-1].sends.append(kept)
+            (blocks[-1].sends if blocks else head_sends).append(kept)
             if until:
                 untils.append((kept, until))
+        elif (end := HANDOFF.match(raw.strip())) and not blocks:  # how the input video ends
+            input_end = end.group(1).strip()
         elif GOTO_LINE.match(raw.strip()) and blocks:
             gotos.append((len(blocks) - 1, raw.strip()))
         elif (after := AFTER.match(raw.strip())) and blocks:
@@ -470,7 +500,7 @@ def split_reel(src: str) -> Reel | None:
     for i, line in gotos:
         blocks[i].gotos.append(_goto(line, blocks))
     for i, name in afters:
-        index = _scene(name, blocks)
+        index = INPUT if " ".join(name.split()).casefold() in INPUT_NAMES else _scene(name, blocks)
         if index is None or index == i:
             problem = "a scene cannot continue itself" if index == i else f"no SCENE is called {name!r}"
             titles = ", ".join(b.title or f"scene {k + 1}" for k, b in enumerate(blocks))
@@ -481,10 +511,10 @@ def split_reel(src: str) -> Reel | None:
         if kept.until is None:
             titles = ", ".join(b.title or f"scene {k + 1}" for k, b in enumerate(blocks))
             raise ValueError(f"REMEMBER: … until {name}: no SCENE is called {name!r} (there are {titles}).")
-    _remembered(head, blocks)
+    _remembered(head, blocks, head_sends)
     from orrery.dsl import parse
 
-    return Reel(head, blocks, parse(src).params.rng)
+    return Reel(head, blocks, parse(src).params.rng, head_sends, input_end)
 
 
 def _cast_lines(lines: list[str]) -> list[int]:
@@ -501,15 +531,15 @@ def _cast_lines(lines: list[str]) -> list[int]:
     return out
 
 
-def _remembered(head: list[str], blocks: list[Block]) -> None:
+def _remembered(head: list[str], blocks: list[Block], head_sends: list[Send] = ()) -> None:
     """`REMEMBER: … as @KEEPER`: the frames become KEEPER's picture, the first image his CAST lines give
     him, or a free slot they are given (`KEEPER: …` reads `KEEPER (image 3): …` from then on)."""
-    wanted = [send for block in blocks for send in block.sends if send.member]
+    wanted = [send for send in [*head_sends, *(s for block in blocks for s in block.sends)] if send.member]
     if not wanted:
         return
     groups = [head, *(block.lines for block in blocks)]
     taken = {int(n) for n in re.findall(r"\bimage[\s_]*(\d+)", "\n".join(line for g in groups for line in g), re.IGNORECASE)}
-    taken |= {send.image for block in blocks for send in block.sends if send.image}
+    taken |= {send.image for send in [*head_sends, *(s for block in blocks for s in block.sends)] if send.image}
     for send in wanted:
         lines = [(g, i) for g in groups for i in _cast_lines(g)
                  if MEMBER.match(g[i].strip().removeprefix("@")).group(1).strip() == send.member]
@@ -544,19 +574,20 @@ def shared_sends(reel: Reel, starts: list[int | None]) -> list[str]:
     """A warning for each two SEND: lines that fill one image in the same segment: there the one sent
     last takes over (Reel.ready)."""
     out: list[str] = []
-    claims: dict = {}  # image or RefMod → (chunk, start, spans) per line
-    for i, (block, start) in enumerate(zip(reel.blocks, starts, strict=True)):
-        for send in block.sends:
-            spans = fills(send, start, starts)
-            for j, other_start, other in claims.get((send.refmod is None, send.target), []):
-                shared = [max(lo, olo) for lo, hi in spans for olo, ohi in other
-                          if max(lo, olo) <= min([x for x in (hi, ohi) if x is not None], default=max(lo, olo))]
-                if shared:
-                    later = i if start >= other_start else j
-                    out.append(f"{send.what} is filled by two REMEMBER: lines in clip {min(shared) + 1} (SCENE "
-                               f"{j + 1} and SCENE {i + 1}): where they meet, the one sent last (SCENE {later + 1}) "
-                               "takes over.")
-            claims.setdefault((send.refmod is None, send.target), []).append((i, start, spans))
+    claims: dict = {}  # image or RefMod → (scene, start, spans) per line
+    where = lambda k: "the head" if k < 0 else f"SCENE {k + 1}"
+    for i, start, send in reel.sources(starts):
+        if start is None:
+            continue
+        spans = fills(send, start, starts)
+        for j, other_start, other in claims.get((send.refmod is None, send.target), []):
+            shared = [max(lo, olo) for lo, hi in spans for olo, ohi in other
+                      if max(lo, olo) <= min([x for x in (hi, ohi) if x is not None], default=max(lo, olo))]
+            if shared:
+                later = i if start >= other_start else j
+                out.append(f"{send.what} is filled by two REMEMBER: lines in clip {min(shared) + 1} ({where(j)} "
+                           f"and {where(i)}): where they meet, the one remembered last ({where(later)}) takes over.")
+        claims.setdefault((send.refmod is None, send.target), []).append((i, start, spans))
     return out
 
 
@@ -721,8 +752,16 @@ def build_segment(reel: Reel, seed: int, libraries: Mapping[str, Library],
     world, head, expand, (path, _) = _unroll(reel, seed, libraries, weights, segment)
     lines, handoff, picks, _, opening = expand(segment)
     continues = reel.before(segment, path)
-    before, before_picks = (expand(continues)[1:4:2] if continues is not None and not opening else (None, []))
+    if opening or continues is None:
+        before, before_picks = None, []
+    elif continues == INPUT:  # the head's END ON: is how the input video ends
+        before, before_picks = (world.expr(reel.input_end).strip().rstrip(".") if reel.input_end else None), []
+    else:
+        before, before_picks = expand(continues)[1:4:2]
     before = opening or before  # START WITH: the scene's own opening, in place of the END ON: before it
+    if any(" ".join(b.title.split()).casefold() in INPUT_NAMES for b in reel.blocks):
+        lint.append(Issue("warn", "A SCENE is titled the input video: AFTER: the input video means the Orrery "
+                                  "Prompt's input video, not that scene. Give the scene another title."))
     lint += [Issue("warn", w) for w in world.warnings]
     scene = parse_scene("\n".join(head + lines), Expander(0, {}), lint, expanded=True)
     if scene.shots and before:
