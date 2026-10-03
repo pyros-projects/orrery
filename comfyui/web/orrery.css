@@ -139,11 +139,20 @@
 .orrery-app .chunkline.now .chunkinfo { border-top: 1px solid var(--brass); background: var(--brass-soft); }
 .orrery-app .chunkline.now .chunkinfo > span { color: var(--brass); background: color-mix(in srgb, var(--brass) 14%, var(--well)); }
 .orrery-app .editor.nodiv .chunkinfo { display: none; }
-/* the timeline: each chunk's clips and sent frames, level with its lines */
-.orrery-app .timeline { position: relative; width: var(--tl-w, 132px); flex: none; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: var(--well); }
-.orrery-app.big .timeline { width: var(--tl-w, 210px); }
-.orrery-app .tl-grip { width: 8px; flex: none; cursor: col-resize; border-radius: 4px; touch-action: none; }
-.orrery-app .tl-grip:hover, .orrery-app .tl-grip:focus-visible { background: var(--line); outline: none; }
+/* the dials' sidebar (#184): beside the editor, as wide as its grip sets (--side-w), one dial a row */
+.orrery-app .side-grip { width: 8px; flex: none; cursor: col-resize; border-radius: 4px; touch-action: none; }
+.orrery-app .side-grip:hover, .orrery-app .side-grip:focus-visible { background: var(--line); outline: none; }
+.orrery-app .side-grip[hidden], .orrery-app .dials[hidden] { display: none; }
+.orrery-app .dials { width: var(--side-w, 300px); max-width: 60%; flex: none; display: flex; flex-direction: column; min-height: 0; border: 1px solid var(--line); border-radius: 8px; background: var(--well); overflow: hidden; }
+.orrery-app .dials.folded { width: 30px; }
+.orrery-app .side-head { display: flex; align-items: center; gap: 6px; padding: 5px 6px 5px 10px; border-bottom: 1px solid var(--line); font-size: 11.5px; flex: none; }
+.orrery-app .side-head .btn { padding: 2px 8px; font-size: 11px; }
+.orrery-app .side-head [data-dfold] .i { transform: rotate(-90deg); }
+.orrery-app .dlist { flex: 1 1 auto; overflow-y: auto; padding: 6px; display: grid; gap: 4px; align-content: start; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+.orrery-app .side-strip { width: 100%; height: 100%; background: none; border: 0; color: var(--muted); font: 11px var(--ui); display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 8px 0; cursor: pointer; }
+.orrery-app .side-strip span { writing-mode: vertical-rl; white-space: nowrap; }
+.orrery-app .side-strip .i { transform: rotate(90deg); }
+.orrery-app .side-strip:hover { color: var(--ink); background: var(--hover); }
 /* the cells view: one cell per CHUNK, each with its clips in a section under it */
 .orrery-app .editor.cells { overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: var(--line) transparent; padding: 6px 0 24px; }
 .orrery-app .editor.cells .cell { position: relative; }
@@ -193,11 +202,6 @@
   scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
 .orrery-app .chunkmedia .tl-clip { flex: none; }
 .orrery-app .chunkmedia .cm-none { font-size: 11.5px; padding: 4px 0; }
-.orrery-app .timeline[hidden] { display: none; }
-.orrery-app .tl-track { position: absolute; left: 0; right: 0; top: 0; }
-.orrery-app .tl-chunk { position: absolute; left: 0; right: 0; border-top: 1px dashed #3d3f56; padding: 4px 5px; display: flex; flex-direction: column; gap: 4px; overflow: hidden; }
-.orrery-app .tl-chunk.now { border-top: 1px solid var(--brass); background: var(--brass-soft); }
-.orrery-app .tl-clips { display: grid; grid-template-columns: repeat(var(--cols), var(--clip-w)); gap: 3px; justify-content: center; }
 .orrery-app .tl-clip { position: relative; width: var(--clip-w); height: var(--clip-h); padding: 0; border-radius: 4px; overflow: hidden; background: #22232e; border: 1px solid transparent; }
 .orrery-app .tl-clip.empty { background: none; border: 1px dashed #3d3f56; cursor: default; }
 .orrery-app .tl-clip.empty:disabled { opacity: 1; }
@@ -207,10 +211,6 @@
 .orrery-app .tl-clip video { z-index: 1; }
 .orrery-app .tl-clip .n { position: absolute; left: 3px; bottom: 2px; z-index: 2; font: 500 9.5px/1 var(--mono); color: #fff; text-shadow: 0 0 3px #000, 0 0 2px #000; }
 .orrery-app .tl-clip.empty .n { color: var(--faint); text-shadow: none; }
-.orrery-app .tl-send { display: flex; align-items: center; gap: 5px; font: 10px/1 var(--mono); color: var(--teal); min-width: 0; }
-.orrery-app .tl-send img { width: auto; height: auto; max-width: 40px; max-height: 22px; border-radius: 3px; flex: none; background: #22232e; }
-.orrery-app .tl-send .missing { width: 34px; height: 22px; aspect-ratio: auto; border-radius: 3px; flex: none; cursor: default; }
-.orrery-app .tl-send .missing .i { width: 12px; height: 12px; }
 .orrery-app .tl-video { width: 100%; max-height: 60vh; border-radius: 8px; background: #000; }
 .orrery-app .ac { position: absolute; z-index: 20; width: max-content; min-width: 260px; max-width: min(560px, calc(100% - 8px)); background: #1f2029; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.5); overflow: hidden; font-size: 12px; }
 .orrery-app .ac ul { list-style: none; margin: 0; padding: 3px 0; max-height: 264px; overflow-y: auto; }
@@ -226,17 +226,24 @@
 .orrery-app .ac .pv:has(img) { display: flex; gap: 8px; align-items: flex-start; }
 .orrery-app .ac .pv img { height: 88px; border-radius: 5px; flex: none; }
 .orrery-app .ac .pv span { flex: 1; min-width: 0; }
-.orrery-app .dials { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px 0; flex: none; max-height: 96px; overflow-y: auto; }
-.orrery-app .dials:empty { display: none; }
-.orrery-app .dial { display: inline-flex; align-items: center; background: var(--well); border: 1px solid var(--line); border-radius: 7px; font: 12px var(--mono); max-width: 100%; }
-.orrery-app .dial .dn { color: var(--rose); padding: 4px 7px 4px 8px; border-right: 1px solid var(--line); white-space: nowrap; }
-.orrery-app .dial .dv { background: none; border: 0; color: var(--ink); font: inherit; padding: 4px 8px; width: 18ch; min-width: 0; outline: none; }
+.orrery-app .dial { display: grid; gap: 3px; padding: 4px 6px 6px; border-radius: 7px; font: 12px var(--mono); min-width: 0; }
+.orrery-app .dial:hover, .orrery-app .dial:focus-within { background: var(--card); }
+.orrery-app .dial .dtop { display: flex; align-items: center; gap: 6px; min-width: 0; min-height: 20px; }
+.orrery-app .dial .dn { color: var(--rose); white-space: nowrap; cursor: pointer; }
+.orrery-app .dial .droll { color: var(--faint); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1 1 auto; }
+.orrery-app .dial .dv { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; color: var(--ink); font: inherit; padding: 4px 8px; width: 100%; min-width: 0; outline: none; box-sizing: border-box; }
 .orrery-app .dial .dv::placeholder { color: var(--faint); }
-.orrery-app .dial:focus-within { border-color: #4a4c63; }
-.orrery-app .dial.on { border-color: rgba(240,122,160,.55); background: rgba(240,122,160,.08); }
-.orrery-app .dial .mini { display: none; margin-right: 4px; }
+.orrery-app .dial .dv:focus { border-color: #4a4c63; }
+.orrery-app .dial.on .dv { border-color: rgba(240,122,160,.55); background: rgba(240,122,160,.08); }
+.orrery-app .dial .mini { display: none; margin-left: auto; flex: none; }
 .orrery-app .dial.on .mini { display: inline-flex; }
 .orrery-app .dm { position: absolute; z-index: 30; max-width: min(460px, calc(100% - 8px)); max-height: 260px; overflow-y: auto; background: #1f2029; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.5); padding: 3px 0; font: 12px/1.4 var(--mono); }
+.orrery-app .dm-head { position: sticky; top: -3px; z-index: 1; display: flex; gap: 4px; align-items: center; padding: 5px 6px; margin-top: -3px; background: #1f2029; border-bottom: 1px solid var(--line); }
+.orrery-app .dm-filter { flex: 1 1 auto; min-width: 0; background: var(--well); border: 1px solid var(--line); border-radius: 6px; color: var(--ink); font: inherit; padding: 3px 7px; outline: none; }
+.orrery-app .dm-filter:focus { border-color: #4a4c63; }
+.orrery-app .dm-filter::placeholder { color: var(--faint); font-family: var(--ui); }
+.orrery-app .dm-act { flex: none; background: var(--raised); border: 1px solid var(--line); border-radius: 6px; color: var(--muted); font: 11px var(--ui); padding: 3px 8px; cursor: pointer; }
+.orrery-app .dm-act:hover { color: var(--ink); border-color: #4a4c63; }
 .orrery-app .dm-item { padding: 4px 10px 4px 6px; cursor: pointer; white-space: normal; overflow-wrap: anywhere; display: flex; gap: 7px; align-items: flex-start; }
 .orrery-app .dm-box { flex: none; width: 15px; height: 15px; margin-top: 1px; border: 1px solid var(--line); border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; color: var(--rose); }
 .orrery-app .dm-box:hover { border-color: var(--rose); }

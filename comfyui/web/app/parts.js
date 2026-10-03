@@ -25,6 +25,21 @@ function fallbackCopy(app, text, done) {
   if (ok) done(); else app.toast("Copy was blocked by the browser");
 }
 
+// A pointer drag in the node's CSS pixels: the canvas zoom scales the screen pixels the pointer moves.
+export function drag(grip, move, start, done) {
+  grip.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    grip.setPointerCapture(e.pointerId);
+    const scale = grip.getBoundingClientRect().width / (grip.offsetWidth || 1) || 1;
+    const x0 = e.clientX, y0 = e.clientY, from = start();
+    const onMove = (m) => move((m.clientX - x0) / scale, from, (m.clientY - y0) / scale);
+    const up = () => { grip.removeEventListener("pointermove", onMove); grip.removeEventListener("pointerup", up); done(); };
+    grip.addEventListener("pointermove", onMove);
+    grip.addEventListener("pointerup", up);
+  });
+}
+
 // A side list as wide as you drag its edge (or press ← →); the node remembers the width in props[prop].
 // box holds the width in the CSS variable cssVar; list is the column the grip sits on.
 export function resizable(app, { box, grip, list, cssVar, prop, done = () => {} }) {

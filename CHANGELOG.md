@@ -55,6 +55,9 @@ checks) are left out.
 
 ### Changed
 
+- The dials are a list in a sidebar beside the editor, one a row with what it rolls at this seed, to widen,
+  fold or clear; a dial's menu filters by a regex over text, properties and tags, with All and None; a reel's
+  clips show only under its scenes, and the column beside the editor is gone (#183).
 - `REMEMBER: frames 0, 50 as @NAME` gives her one picture per frame (it was one batch, of which
   Reference to Video read only the first); the lint names the two lines that fill one picture (#97).
 - The galaxy is the gallery now, and Generate is Roll, with how many runs it queues after it:

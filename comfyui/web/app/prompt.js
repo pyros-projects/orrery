@@ -1,18 +1,18 @@
 // Prompt tab: preset bar, the highlighted editor with completion, dials, and a way into Test.
 import { KEYWORDS, inlineLibraries, suggest } from "../orrery-complete.js";
-import { chosen, closeMenu, drawMenu, joinChoices } from "./dialmenu.js";
+import { chosen, closeMenu, drawMenu, fillMenu, joinChoices } from "./dialmenu.js";
 import { esc, highlight } from "./highlight.js";
 import { annotationLines, mergeHints } from "./annotate.js";
 import { wireHover } from "./hover.js";
 import { hintsFor } from "./remember.js";
 import { icon } from "./icons.js";
 import { applyDials, chunkInfo, dials, hasGoto, plays, folderColor, pickerGroups, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
-import { thumbHTML } from "./parts.js";
+import { drag, thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
 import { STARTERS } from "./starters.js";
 import { runRolls } from "./test.js";
 import { caretPoint, cellStart, inCell, jumpCell, paintCells, renderCells, wireCells } from "./cells.js";
-import { layoutTimeline, loadChain, scrollTimeline, wireTimeline } from "./timeline.js";
+import { loadChain } from "./timeline.js";
 import { openLibraries, openWrite, writeMenuHTML, writeNow } from "./write.js";
 
 function statsHTML(app) {
@@ -46,8 +46,6 @@ function statsHTML(app) {
       ? `<span class="stat live" title="The clip of the reel this node is rendering now (its segment widget counts from 0)">Rolling clip <b>${Number(app.run.segment) + 1}</b></span>`
       : `<span class="stat" title="The clip Roll plays next: the node's segment widget, which counts from 0">Next clip <b>${Number(app.bridge.getSegment()) + 1}</b></span>`)
       + `<button class="btn ghost" data-act="jump" title="Scroll the editor to the scene that plays the next clip">${icon("jump")}Jump</button>`
-      + (app.data.timeline === false ? "" : `<button class="btn ghost" data-act="tlview" aria-pressed="${cellsView(app)}" title="${cellsView(app)
-        ? "Clips under each scene: show them in a column beside the editor instead" : "Clips in a column beside the editor: show them under each scene instead"}">${icon("film")}${cellsView(app) ? "Clips below" : "Clips beside"}</button>`)
       + `<button class="btn" data-act="restart" title="Cancel this node's queued and running clips, set segment to 0 and generate from the start">${icon("undo")}Restart</button>` : "")
     + (app.state.sweepQueue
       ? `<button class="btn primary" data-act="stopsweep" title="Stop queueing the sweep; what is queued already still runs">${icon("x")}Stop<small class="sweep">${app.state.sweepQueue.done}/${app.state.sweepQueue.total} queued</small></button>`
@@ -71,8 +69,12 @@ function writeNowHTML(app) {
 const plural = (n, noun) => (n === 1 ? noun : `${noun}s`);
 
 // The cells view: each chunk its own cell with its clips under it (a reel, the timeline on, chosen in the footer).
-// The clips under each scene unless the node was set to beside them (Pyro, 3 October: the default).
-const cellsView = (app) => app.data.timeline !== false && app.bridge.props.orrery_tl_view !== "beside" && !!app.chunks();
+// A reel's clips under each scene, the timeline on (the column beside the editor went in #185).
+const cellsView = (app) => app.data.timeline !== false && !!app.chunks();
+
+// The dials' sidebar (#184): its width, kept in the node, and whether it is folded.
+const SIDE_W = 300, ROOMY = 900;  // a row narrower than ROOMY starts with the sidebar folded
+const sideWidth = (app) => Number(app.bridge.props.orrery_side_w) || SIDE_W;
 
 // `0.6MP` in the @h3 line: the area a frame-shaped clip gets.
 const headerMP = (text) => /^\s*@h3\b[^\n]*\s\d+(?:\.\d+)?mp\b/im.test(stripComments(text));
@@ -104,11 +106,11 @@ export function renderPrompt(app) {
       ${app.state.writeMenu ? writeMenuHTML(app) : ""}
     </div>
     ${card?.note ? `<p class="pnote"><b>${esc(card.title)}.</b> ${esc(card.note)}</p>` : '<p class="pnote">Type a template, or open a preset. <b>__</b> lists your libraries, <b>$</b> your bindings.</p>'}
-    <div class="edrow"${app.bridge.props.orrery_tl_w ? ` style="--tl-w:${Number(app.bridge.props.orrery_tl_w)}px"` : ""}>${cellsView(app)
+    <div class="edrow" style="--side-w:${sideWidth(app)}px">${cellsView(app)
       ? `<div class="editor cells${app.data.dividers === false ? " nodiv" : ""}"></div>`
-      : `<div class="editor${app.data.dividers === false ? " nodiv" : ""}"><pre class="hl" aria-hidden="true"></pre><textarea spellcheck="false" aria-label="Template"></textarea></div>
-      ${app.data.timeline === false ? "" : '<div class="tl-grip" role="separator" aria-orientation="vertical" tabindex="0" title="Drag to resize the timeline"></div><div class="timeline" hidden aria-label="The reel\'s clips"><div class="tl-track"></div></div>'}`}</div>
-    <div class="dials"></div>
+      : `<div class="editor${app.data.dividers === false ? " nodiv" : ""}"><pre class="hl" aria-hidden="true"></pre><textarea spellcheck="false" aria-label="Template"></textarea></div>`}
+      <div class="side-grip" role="separator" aria-orientation="vertical" tabindex="0" title="Drag to resize the dials" hidden></div>
+      <aside class="dials" aria-label="Dials" hidden></aside></div>
     <div class="pfoot">${statsHTML(app)}</div>
     ${app.state.pick ? pickerHTML(app) : ""}`;
 
@@ -124,7 +126,6 @@ export function renderPrompt(app) {
   // only this textarea's completion: in the cells view focus moves between textareas while typing goes on
   const blur = (ta) => setTimeout(() => { if (!app.ac || app.ac.ta === ta) closeCompletion(app); }, 120);
   const focus = () => app.refreshCompletion().then(paint).catch(() => {});
-  app.edResize?.disconnect();
   if (cellsView(app)) {
     renderCells(app);
     wireCells(app, { onEdit: afterEdit, onKey: (e) => completionKey(app, e), onFocus: focus, onBlur: blur });
@@ -138,10 +139,7 @@ export function renderPrompt(app) {
       paint();
       afterEdit(ed);
     });
-    ed.addEventListener("scroll", () => { pre.scrollTop = ed.scrollTop; scrollTimeline(app); });
-    app.edResize = new ResizeObserver(() => layoutTimeline(app, app.chunks()));  // wrapped lines move the chunks
-    app.edResize.observe(ed);
-    wireTimeline(app);
+    ed.addEventListener("scroll", () => { pre.scrollTop = ed.scrollTop; });
     ed.addEventListener("keydown", (e) => completionKey(app, e));
     ed.addEventListener("blur", () => blur(ed));
     ed.addEventListener("focus", focus);
@@ -162,7 +160,6 @@ export function renderPrompt(app) {
     if (act === "generate") return generate(app);
     if (act === "restart") restart(app);
     if (act === "jump") jumpToChunk(app);
-    if (act === "tlview") { app.bridge.props.orrery_tl_view = cellsView(app) ? "beside" : "below"; return renderPrompt(app); }
     if (act === "new") { app.state.newMenu = !app.state.newMenu; app.state.writeMenu = false; return renderPrompt(app); }
     if (act === "write") { app.state.writeMenu = !app.state.writeMenu; app.state.newMenu = false; return renderPrompt(app); }
     const writer = e.target.closest("[data-write]")?.dataset.write;
@@ -251,15 +248,15 @@ function generateSweep(app, cancelled = 0) {
   sheet.querySelector("button.primary").focus();
 }
 
-// The highlight with the reel's chunk dividers, the next segment's chunk marked, and the timeline level with them.
+// The highlight with the reel's chunk dividers and the next segment's chunk marked; the dials say what they roll.
 function paintEditor(app) {
+  paintRolls(app);
   if (app.view.querySelector(".editor.cells")) return paintCells(app);
   const pre = app.view.querySelector(".editor pre.hl");
   if (!pre) return;
   const chunks = app.chunks();
   pre.innerHTML = `${highlight(app.text, app.known(), { llm: app.llmActive(), chunks, segment: chunks && Number(app.bridge.getSegment()),
     hints: mergeHints(hintsFor(app.text, app.remembered()), annotationLines(app.text, app.annotations(), app.api.thumbURL)) })}\n`;
-  layoutTimeline(app, chunks);
   if (chunks && app.data.timeline !== false && app.data.chain === undefined) {  // a reel typed or pasted in
     app.data.chain = null;
     loadChain(app).then(() => paintEditor(app));
@@ -404,7 +401,6 @@ function fixReelSeed(app) {
 const dialKey = (text) => dials(text).map((d) => `${d.name}=${d.expr}`).join("\n");
 const setDials = (app) => Object.keys(app.bridge.getParams()).length;
 
-const DIAL_CHOICES = 500;  // a dial lists this many of its library's entries; any other can be typed
 
 // A dial's choices: its braces' options, or its library's entries (null while they are on their way).
 function dialChoices(app, d) {
@@ -420,9 +416,11 @@ function dialChoices(app, d) {
       .finally(() => { delete app.libsLoading[d.lib]; refreshMenu(app); });  // asked again after a run empties the cache
     return null;
   }
-  return lib.entries.filter((e) => matches(d.tag, e.tags, e.props)).slice(0, DIAL_CHOICES).map((e) => e.value);
+  return lib.entries.filter((e) => matches(d.tag, e.tags, e.props)).map((e) => e.value);  // the menu shows the first MENU_MAX
 }
 
+// The dials (#184): a list in the sidebar beside the editor, one binding a row: its name, what it rolls at the
+// node's seed, its box (the default expression as placeholder) and its menu. Folded, the sidebar is a strip.
 function renderDials(app) {
   const box = app.view.querySelector(".dials");
   if (!box) return;
@@ -431,22 +429,69 @@ function renderDials(app) {
   const kept = Object.fromEntries(Object.entries(values).filter(([k]) => list.some((d) => d.name === k)));
   if (Object.keys(kept).length !== Object.keys(values).length) app.bridge.setParams(kept);
   app.state.dialKey = dialKey(app.text);
-  box.innerHTML = list.length ? `<span class="label" title="Turn a binding without editing the template. Empty means its default roll; saving bakes the dials in.">Dials</span>`
-    + list.map((d) => {
+  const chosen = app.bridge.props.orrery_side, set = Object.keys(kept).length;
+  const folded = chosen === "folded" || (chosen !== "open" && (app.view.querySelector(".edrow")?.clientWidth || ROOMY) < ROOMY);
+  box.hidden = !list.length;
+  box.classList.toggle("folded", folded);
+  app.view.querySelector(".side-grip").hidden = !list.length || folded;
+  if (!list.length) return void (box.innerHTML = "");
+  if (folded) {
+    box.innerHTML = `<button class="side-strip" data-dfold title="Show the dials">${icon("chev")}<span>Dials · ${list.length}${set ? ` · ${set} dialed` : ""}</span></button>`;
+    return;
+  }
+  box.innerHTML = `<div class="side-head">${sideHead(list.length, set)}</div><div class="dlist">${list.map((d) => {
       const v = kept[d.name] || "", id = `oa-${app.uid}-dl-${d.name}`;
-      return `<label class="dial${v ? " on" : ""}" title="$${esc(d.name)} = ${esc(d.expr)}"><span class="dn">$${esc(d.name)}</span>`
-        + `<input class="dv" id="${id}" data-dial="${esc(d.name)}" value="${esc(v)}" placeholder="${esc(d.expr)}" spellcheck="false" autocomplete="off" role="combobox" aria-expanded="false">`
-        + `<button type="button" class="mini" data-dreset="${esc(d.name)}" aria-label="Back to the default roll">${icon("x")}</button></label>`;
-    }).join("") : "";
+      return `<div class="dial${v ? " on" : ""}" title="$${esc(d.name)} = ${esc(d.expr)}"><div class="dtop"><label class="dn" for="${id}">$${esc(d.name)}</label>`
+        + `<span class="droll" data-roll="${esc(d.name)}"></span>`
+        + `<button type="button" class="mini" data-dreset="${esc(d.name)}" aria-label="Back to the default roll">${icon("x")}</button></div>`
+        + `<input class="dv" id="${id}" data-dial="${esc(d.name)}" value="${esc(v)}" placeholder="${esc(d.expr)}" spellcheck="false" autocomplete="off" role="combobox" aria-expanded="false"></div>`;
+    }).join("")}</div>`;
+  paintRolls(app);
+}
+
+function sideHead(n, set) {
+  return `<span class="label" title="Turn a binding without editing the template. Empty means its default roll; saving bakes the dials in.">Dials</span>`
+    + `<span class="muted">${n}${set ? ` · <b>${set}</b> dialed` : ""}</span><span class="grow"></span>`
+    + (set ? '<button type="button" class="btn ghost" data-dclear title="Every dial back to its default roll">Clear</button>' : "")
+    + `<button type="button" class="icon-btn" data-dfold aria-label="Fold the dials">${icon("chev")}</button>`;
+}
+
+// What each dial rolls at the node's seed, from the annotations (#163): the binding's value, else nothing yet.
+function paintRolls(app) {
+  const rolled = app.annotations?.()?.bindings || {};
+  app.view.querySelectorAll(".dials [data-roll]").forEach((el) => {
+    const v = rolled[el.dataset.roll];
+    el.textContent = v ? `= ${v}` : "";
+    el.title = v ? `At this seed: ${v}` : "";
+  });
 }
 
 function wireDials(app) {
-  const box = app.view.querySelector(".dials");
+  const box = app.view.querySelector(".dials"), row = app.view.querySelector(".edrow"), grip = app.view.querySelector(".side-grip");
+  const width = (px) => {
+    const w = Math.round(Math.min(Math.max(px, 200), row.clientWidth * 0.6));
+    row.style.setProperty("--side-w", `${w}px`);
+    app.bridge.props.orrery_side_w = w;
+  };
+  drag(grip, (dx, from) => width(from - dx), () => box.offsetWidth, () => {});
+  grip.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault();
+    width(box.offsetWidth + (e.key === "ArrowLeft" ? 16 : -16));
+  });
+  box.addEventListener("scroll", (e) => {  // the menu follows its box while the list scrolls; gone from view, it closes
+    if (!app.dm) return;
+    const list = e.target.getBoundingClientRect?.(), at = app.dm.input.getBoundingClientRect();
+    if (list && (at.bottom < list.top || at.top > list.bottom)) shutMenu(app);
+    else refreshMenu(app);
+  }, true);
   const put = (name, value) => {
     const values = app.bridge.getParams();
     if (value.trim()) values[name] = value.trim(); else delete values[name];
     app.bridge.setParams(values);
     box.querySelector(`[data-dial="${CSS.escape(name)}"]`)?.closest(".dial").classList.toggle("on", !!value.trim());
+    const head = box.querySelector(".side-head");
+    if (head) head.innerHTML = sideHead(box.querySelectorAll(".dial").length, Object.keys(values).length);
     refreshBar(app);
   };
   box.addEventListener("input", (e) => {
@@ -456,7 +501,9 @@ function wireDials(app) {
   });
   box.addEventListener("focusin", (e) => { if (e.target.dataset.dial) openMenu(app, e.target, -1); });
   box.addEventListener("mousedown", (e) => { if (e.target.dataset.dial && !app.dm) openMenu(app, e.target, -1); });
-  box.addEventListener("focusout", (e) => { if (e.target.dataset.dial) setTimeout(() => { if (app.dm?.input === e.target) shutMenu(app); }, 0); });
+  box.addEventListener("focusout", (e) => {  // into the menu's filter, the menu stays
+    if (e.target.dataset.dial) setTimeout(() => { if (app.dm?.input === e.target && !app.dm.box.contains(document.activeElement)) shutMenu(app); }, 0);
+  });
   box.addEventListener("keydown", (e) => {
     const input = e.target;
     if (!input.dataset.dial) return;
@@ -478,6 +525,15 @@ function wireDials(app) {
   });
   app.pickChoice = (input, value) => { input.value = value; put(input.dataset.dial, value); };
   box.addEventListener("click", (e) => {
+    if (e.target.closest("[data-dfold]")) {
+      app.bridge.props.orrery_side = box.classList.contains("folded") ? "open" : "folded";
+      return renderDials(app);
+    }
+    if (e.target.closest("[data-dclear]")) {
+      app.bridge.setParams({});
+      renderDials(app);
+      return refreshBar(app);
+    }
     const r = e.target.closest("[data-dreset]");
     if (!r) return;
     e.preventDefault();
@@ -493,21 +549,41 @@ function openMenu(app, input, at) {
   const d = dials(app.text).find((x) => x.name === input.dataset.dial);
   if (!d) return;
   const lib = d.lib && (app.data.libFull?.[d.lib] || app.dialLibs?.[d.lib]);
-  const gallery = lib && d.lib.startsWith("pictures/") ? new Map(lib.entries.map((e) => [e.value, e.props || {}])) : null;
-  const describe = gallery && ((c) => {
-    const p = gallery.get(c);
+  const entries = lib ? new Map(lib.entries.map((e) => [e.value, e])) : null;
+  const describe = lib && d.lib.startsWith("pictures/") ? (c) => {
+    const p = entries.get(c)?.props;
     const id = p?.ids?.split("\n")[0];
     return p && { sub: p.who || (p.prompt || "").slice(0, 110), thumb: id && app.api.thumbURL(id) };
-  });
-  const state = drawMenu(menuHost(app), input, dialChoices(app, d), at, describe);
-  app.dm = { ...state, input };
+  } : null;
+  const info = entries ? (c) => entries.get(c) : null;  // the filter reads an entry's properties and tags (#186)
+  const filter = app.dm?.input === input ? app.dm.filter || "" : "";
+  const refocus = !!app.dm?.box.contains(document.activeElement);  // a redraw while the filter is typed in keeps it there
+  const choices = dialChoices(app, d);
+  const state = drawMenu(menuHost(app), input, choices, at, describe, { filter, info });
+  app.dm = { ...state, input, filter };
   input.setAttribute("aria-expanded", "true");
+  const field = state.box.querySelector(".dm-filter");
+  if (refocus && field) { field.focus(); field.setSelectionRange(field.value.length, field.value.length); }
   state.box.addEventListener("mousedown", (e) => {
+    if (e.target === field) return;  // the filter takes the focus; everything else leaves it with the box
     const item = e.target.closest("[data-n]"), box = e.target.closest("[data-toggle]");
-    e.preventDefault();  // the box keeps the focus
+    e.preventDefault();
+    if (e.target.closest("[data-all]")) return pickAll(app, input, app.dm.items);
+    if (e.target.closest("[data-none]")) return pickAll(app, input, []);
     if (box) toggleChoice(app, input, app.dm.items[Number(box.dataset.toggle)]);
     else if (item) pickChoice(app, input, app.dm.items[Number(item.dataset.n)]);
   });
+  field?.addEventListener("input", () => {
+    app.dm.filter = field.value;
+    app.dm.at = -1;
+    app.dm.items = fillMenu(state.box, input, choices, -1, describe, { filter: field.value, info });
+  });
+  field?.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") { e.preventDefault(); input.focus(); shutMenu(app); }
+  });
+  field?.addEventListener("blur", () => setTimeout(() => {
+    if (app.dm?.input === input && document.activeElement !== input && !app.dm.box.contains(document.activeElement)) shutMenu(app);
+  }, 0));
 }
 
 function refreshMenu(app) {
@@ -526,6 +602,12 @@ function toggleChoice(app, input, value) {
   const now = chosen(all, input.value), next = now.includes(value) ? now.filter((c) => c !== value) : [...now, value];
   app.pickChoice(input, joinChoices(all.filter((c) => next.includes(c))));  // in the list's order
   openMenu(app, input, app.dm ? app.dm.at : -1);
+}
+
+// All (the choices the menu shows) or None (the default roll); the menu stays open.
+function pickAll(app, input, items) {
+  app.pickChoice(input, joinChoices(items));
+  openMenu(app, input, -1);
 }
 
 function pickChoice(app, input, value) {

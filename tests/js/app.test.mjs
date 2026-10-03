@@ -1,7 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { highlight } from "../../comfyui/web/app/highlight.js";
-import { fitThumbs } from "../../comfyui/web/app/timeline.js";
 import { openLibraries, writerBlock } from "../../comfyui/web/app/write.js";
 import {
   applyDials, dials, downstream, nextSeed, queueSweep, entryPage, libraryHead, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
@@ -411,17 +410,6 @@ test("CHUNK lines get a divider with their label, and the next segment's chunk i
   assert.doesNotMatch(highlight(REEL_TEXT, new Set()), /chunkinfo/);
 });
 
-test("timeline thumbs keep the clips' aspect ratio, portrait as well as landscape, and always fit their chunk", () => {
-  assert.deepEqual(fitThumbs(1, 120, 74, 16 / 9), { cols: 1, w: 120, h: 67 });
-  assert.deepEqual(fitThumbs(1, 120, 74, 9 / 16), { cols: 1, w: 41, h: 74 });
-  assert.deepEqual(fitThumbs(4, 120, 53, 9 / 16), { cols: 4, w: 27, h: 49 });  // portrait repeats side by side
-  assert.deepEqual(fitThumbs(1, 120, 400, 9 / 16), { cols: 1, w: 101, h: 180 });  // a tall chunk stops at 180 px
-  for (const ratio of [16 / 9, 1, 9 / 16]) {
-    const { cols, w, h } = fitThumbs(20, 120, 53, ratio), rows = Math.ceil(20 / cols);
-    assert.ok(cols * w + (cols - 1) * 3 <= 120 && rows * h + (rows - 1) * 3 <= 53, `ratio ${ratio}`);
-  }
-});
-
 test("the cells view splits a reel at its CHUNK lines, and joining the cells gives the text back", () => {
   const cells = splitCells(REEL_TEXT);
   assert.deepEqual(cells.map((c) => [c.line, c.chunk, c.text.split("\n")[0]]),
@@ -563,6 +551,25 @@ test("a dial ticks several choices into one that rolls among them (#156)", async
   assert.equal(joinChoices([]), "");
   assert.equal(joinChoices(["noir"]), "noir");
   assert.equal(joinChoices(["noir", "gothic"]), "{noir|gothic}");
+});
+
+test("the dial menu's filter reads a choice's text, properties and tags, as a regex or as plain text (#186)", async () => {
+  const { filterChoices, matchedBy, filterPattern } = await import("../../comfyui/web/app/dialmenu.js");
+  const outfits = { "a trench coat": { props: { genre: "noir", fit: "all" }, tags: ["coat"] },
+    "a corset gown": { props: { genre: "gothic", fit: "women" }, tags: [] }, "a flight suit": { props: { genre: "spacefarer" }, tags: ["space"] } };
+  const names = Object.keys(outfits), info = (c) => outfits[c];
+  assert.deepEqual(filterChoices(names, "noir|gothic", info), ["a trench coat", "a corset gown"]);
+  assert.deepEqual(filterChoices(names, "^genre=goth", info), ["a corset gown"]);
+  assert.deepEqual(filterChoices(names, "fit: women", info), ["a corset gown"]);
+  assert.deepEqual(filterChoices(names, "SPACE", info), ["a flight suit"]);  // case-insensitive, a tag
+  assert.deepEqual(filterChoices(names, "suit", info), ["a flight suit"]);
+  assert.deepEqual(filterChoices(names, "coat (", info), []);  // no regex: plain text, which nothing holds
+  assert.deepEqual(filterChoices(names, "  ", info), names);
+  assert.deepEqual(filterChoices(["noir", "gothic"], "oi"), ["noir"]);  // a choice list without properties
+  const rx = filterPattern("noir");
+  assert.equal(matchedBy("a trench coat", rx, info), "genre: noir");
+  assert.equal(matchedBy("noir", rx), "");
+  assert.equal(matchedBy("a corset gown", rx, info), null);
 });
 
 test("annotations sit at the ends of the lines they belong to (#163)", async () => {

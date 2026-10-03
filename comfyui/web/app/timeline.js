@@ -1,10 +1,8 @@
-// The film beside the editor: each CHUNK's clips as Orrery Film (or H3 Motion Context's Chain Video) keeps them, and
-// the frames its SEND: lines handed on (Orrery Refs' anchors), level with the chunk's lines. The cells view
-// (cells.js) shows the same under each chunk, in a section of its own.
+// A reel's clips as Orrery Film (or H3 Motion Context's Chain Video) keeps them, under each scene in the cells
+// view (cells.js), each scene's in a section of its own. The column beside the editor went in #185: the dials
+// have that place now.
 import { icon } from "./icons.js";
-import { plays, shape } from "./model.js";
-
-const GAP = 3, MAX_H = 180, SEND_ROW = 26;
+import { shape } from "./model.js";
 
 // The clips the chain holds, fetched again after every run.
 export async function loadChain(app) {
@@ -32,23 +30,6 @@ function clipHTML(app, s, clip, segment) {
   return `<button class="tl-clip${clip ? "" : " empty"}${s === segment ? " now" : ""}" data-seg="${s}" title="${title}" ${clip ? "" : "disabled"}>`
     + (clip ? `<img loading="lazy" alt="" src="${app.api.chainThumbURL(s, path, clip.version)}">` : "")
     + `<span class="n">${s + 1}</span></button>`;
-}
-
-function sendHTML(app, n) {
-  return `<div class="tl-send" title="Image ${n}: the frames Orrery Refs last sent to it"><img alt="" src="${app.api.anchorURL(n, app.data.anchorV)}"><span>→ image ${n}</span></div>`;
-}
-
-// The largest thumbs of the clips' aspect ratio (width / height) that fit n of them into the chunk,
-// and the columns that make it: landscape stacks, portrait sits side by side. At most MAX_H tall.
-export function fitThumbs(n, width, height, ratio) {
-  let cols = 1, w = 0;
-  for (let c = 1; c <= Math.max(1, n); c++) {
-    const rows = Math.ceil(n / c);
-    const cw = Math.min((width - (c - 1) * GAP) / c, ((height - (rows - 1) * GAP) / rows) * ratio);
-    if (cw > w) [cols, w] = [c, cw];
-  }
-  w = Math.max(4, Math.min(w, MAX_H * ratio));
-  return { cols, w: Math.floor(w), h: Math.floor(w / ratio) };
 }
 
 // The clips' width / height: a chain keeps one frame size; before it holds a clip, the size the template asks for.
@@ -82,77 +63,6 @@ export function sourceClip(app, source) {
   if (source < 0) return { url: app.api.chainVideoURL(-1, app.bridge.latentPath()), frames: null };
   const clip = (app.data.chain?.clips || []).find((x) => x.segment === source);
   return clip ? { url: app.api.chainVideoURL(source, app.bridge.latentPath(), clip.version), frames: clip.frames ?? null } : null;
-}
-
-// Blocks level with the CHUNK lines the highlight drew; the track follows the textarea's scroll.
-export function layoutTimeline(app, chunks) {
-  const box = app.view.querySelector(".timeline");
-  if (!box) return;
-  box.hidden = !chunks;
-  if (!chunks) return;
-  const pre = app.view.querySelector(".editor pre.hl"), ed = app.view.querySelector(".editor textarea");
-  const heads = [...pre.querySelectorAll(".chunkinfo")].map((el) => el.offsetTop);
-  const end = pre.scrollHeight;
-  const clips = new Map((app.data.chain?.clips || []).map((c) => [c.segment, c]));
-  const segment = Number(app.bridge.getSegment());
-  const ratio = clipRatio(app);
-  const track = box.querySelector(".tl-track");
-  track.style.height = `${end}px`;
-  track.innerHTML = chunks.map((c, i) => {
-    const top = heads[i] ?? 0, rowsH = (heads[i + 1] ?? end) - top;
-    const segs = segmentsOf(c, clips);
-    const now = plays(c, segment);
-    const fit = fitThumbs(segs.length, box.clientWidth - 10, rowsH - 9 - c.images.length * SEND_ROW, ratio);
-    return `<div class="tl-chunk${now ? " now" : ""}" style="top:${top}px;height:${rowsH}px">`
-      + `<div class="tl-clips" style="--cols:${fit.cols};--clip-w:${fit.w}px;--clip-h:${fit.h}px">${segs.map((s) => clipHTML(app, s, clips.get(s), segment)).join("")}</div>`
-      + c.images.map((n) => sendHTML(app, n)).join("") + "</div>";
-  }).join("");
-  track.style.transform = `translateY(${-ed.scrollTop}px)`;
-}
-
-export function scrollTimeline(app) {
-  const track = app.view.querySelector(".timeline .tl-track"), ed = app.view.querySelector(".editor textarea");
-  if (track && ed) track.style.transform = `translateY(${-ed.scrollTop}px)`;
-}
-
-// The column: the wheel scrolls the editor, and the grip before it sets its width (kept in the node).
-export function wireTimeline(app) {
-  const box = app.view.querySelector(".timeline");
-  if (!box) return;
-  box.addEventListener("wheel", (e) => {
-    const ed = app.view.querySelector(".editor textarea");
-    ed.scrollTop += e.deltaY;
-    e.preventDefault();
-  }, { passive: false });
-  wireClips(app, box);
-  const row = app.view.querySelector(".edrow"), grip = row.querySelector(".tl-grip");
-  const set = (w) => {
-    const px = Math.round(Math.min(Math.max(w, 90), row.clientWidth * 0.6));
-    row.style.setProperty("--tl-w", `${px}px`);
-    app.bridge.props.orrery_tl_w = px;
-  };
-  drag(grip, (dx, start) => set(start - dx), () => box.offsetWidth, () => layoutTimeline(app, app.chunks()));
-  grip.addEventListener("keydown", (e) => {
-    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-    e.preventDefault();
-    set(box.offsetWidth + (e.key === "ArrowLeft" ? 16 : -16));
-    layoutTimeline(app, app.chunks());
-  });
-}
-
-// A pointer drag in the node's CSS pixels: the canvas zoom scales the screen pixels the pointer moves.
-export function drag(grip, move, start, done) {
-  grip.addEventListener("pointerdown", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    grip.setPointerCapture(e.pointerId);
-    const scale = grip.getBoundingClientRect().width / (grip.offsetWidth || 1) || 1;
-    const x0 = e.clientX, y0 = e.clientY, from = start();
-    const onMove = (m) => move((m.clientX - x0) / scale, from, (m.clientY - y0) / scale);
-    const up = () => { grip.removeEventListener("pointermove", onMove); grip.removeEventListener("pointerup", up); done(); };
-    grip.addEventListener("pointermove", onMove);
-    grip.addEventListener("pointerup", up);
-  });
 }
 
 // Hover plays a clip in place; a click opens it large.

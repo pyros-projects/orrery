@@ -75,9 +75,14 @@ Nodes under **orrery**:
     H3 references, H3 keyframes (image, first-last, last) or a Krea prompt,
     each with a quickstart of the essentials as `#` comments on top (the gear
     turns the quickstart off). Open a preset from the bar above it; ● marks unsaved
-    edits; Save, Save as…, Revert. Under the editor, every binding is a
-    **dial**: pick a library entry or choice, tick several to roll among them
-    (`{noir|gothic}`), or type any expression; empty means its default roll. Saving bakes the dials in, and a gallery output
+    edits; Save, Save as…, Revert. Beside the editor, in a sidebar, every
+    binding is a **dial**, one a row, with what it rolls at the node's seed:
+    pick a library entry or choice, tick several to roll among them
+    (`{noir|gothic}`), or type any expression; empty means its default roll,
+    and **Clear** sets them all back. A dial's menu has a filter, a regex over
+    the choices, their properties (`genre: noir`) and tags, and **All** (roll
+    among every choice it shows) and **None**. Drag the sidebar's edge to widen it, or
+    fold it to a strip. Saving bakes the dials in, and a gallery output
     restores them. **Test** jumps to the Test tab and rolls. **Write** has
     the language model write the reel's next scene, the shot between two
     frames or a prompt from a picture, one idea per short run, browsed
@@ -105,10 +110,7 @@ Nodes under **orrery**:
     frame opens its clip with a slider: **Use frame N** writes that frame into
     the line. Arrow keys cross from cell to cell, Backspace at a cell's start
     and Delete at its end join two, and a SCENE line typed or removed cuts
-    the text anew. **Clips beside** in the footer puts the clips in a
-    **timeline** beside the editor instead, level with their scenes, with the
-    frames Orrery Refs last fetched (drag the edge between editor and
-    timeline to widen it). It reads the chain from the string wired into
+    the text anew. It reads the chain from the string wired into
     `latent_path`, else `h3_context`, and refreshes after every run. The gear
     turns dividers and the clips off.
   - **Test**: what the template makes, without queueing anything. **Rolls**
