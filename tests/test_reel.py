@@ -417,6 +417,14 @@ def test_remember_as_a_member_without_a_picture_gives_the_member_a_free_one():
         split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", "REMEMBER: first frame as the moon"))
 
 
+def test_a_wired_picture_stands_in_until_the_frames_kept_for_it_exist():
+    then, now = (compile_scene(SEND_REEL, 1, {}, target="h3-base", segment=0, packed=True, standing=s) for s in ((), {3}))
+    assert then.refs == [1] and now.refs == [1, 3]  # wired: the picture is there before the frames are
+    assert any("image 3 is wired and kept by a REMEMBER: line too: the wired picture until" in i.message for i in now.lint)
+    later = compile_scene(SEND_REEL, 1, {}, target="h3-base", segment=2, packed=True, standing={3})
+    assert 3 in later.sends and any("frames from clip 1 replace the wired picture" in i.message for i in later.lint)
+
+
 def test_an_image_exists_only_in_the_segments_its_send_lists():
     reel = split_reel(SEND_REEL.replace("SEND: frame 0 to image 3", "SEND: frame 0 to image 3 for segment 2+"))
     assert 3 not in reel.ready(1) and reel.ready(2)[3] == {"segment": 0, "frames": [[0, 0]]}

@@ -245,7 +245,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                wired: int | None = None, chain: str = DEFAULT_CHAIN,
                keep: bool = False, sweep: str = "",
                continued: bool = False, sizes: tuple[Size, Size] = (None, None),
-               refmodded: bool = True) -> tuple[str, str, int, int, int, int, list, int, int]:
+               refmodded: bool = True, standing: frozenset[int] = frozenset()) -> tuple[str, str, int, int, int, int, list, int, int]:
     """`frames`: the previous clip's stills, which the model sees when it writes `--…--` slots.
     `packed`: Orrery Refs routes the images per clip; `wired`: the reference images Reference to
     Video has (both from the graph, see `wiring`). `chain`: the Motion Context chain SEND: reads;
@@ -304,7 +304,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
             lint = [{"severity": "warn", "message": w} for w in result.warnings]
         else:
             result = compile_scene(source, seed, h.libraries(), h.weights(), target=target, segment=segment,
-                                   packed=packed, held=anchors.stored(h) if keep else frozenset(), cell=cell)
+                                   packed=packed, held=anchors.stored(h) if keep else frozenset(), cell=cell,
+                                   standing=standing)
             lint = [{"severity": i.severity, "message": i.message} for i in result.lint]
             needed = len(result.refs) if packed else max(image_slots(result.scene), default=0)
             if wired is not None and wired < needed:
@@ -574,12 +575,12 @@ class OrreryPrompt:
             latent_path=DEFAULT_CHAIN, sweep="", unique_id=None, extra_pnginfo=None, prompt=None,
             first_frame=None, last_frame=None):
         stills = _previous(latent_path, segment)
-        packed, wired, keep = wiring(prompt, unique_id)
+        packed, wired, keep, standing = wiring(prompt, unique_id)
         try:
             outputs = run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
                                  params, segment, clip, stills, packed, wired, latent_path or DEFAULT_CHAIN, keep,
                                  sweep, continued(prompt, unique_id), (_size(first_frame), _size(last_frame)),
-                                 reads_picks(prompt, unique_id, "OrreryRefMods"))
+                                 reads_picks(prompt, unique_id, "OrreryRefMods"), standing)
             data = json.loads(outputs[1])
             h = resolve_home(home or None)
             history.record(h, data)
@@ -716,25 +717,27 @@ def continued(prompt: dict | None, unique_id) -> bool:
                for n in prompt.values())
 
 
-def wiring(prompt: dict | None, unique_id) -> tuple[bool, int | None, bool]:
+def wiring(prompt: dict | None, unique_id) -> tuple[bool, int | None, bool, frozenset[int]]:
     """What the node's graph says (R2): whether an Orrery Refs reads its picks (then the images are
     packed per clip), how many reference images the Reference to Video node its text reaches
-    (directly or through a few text nodes) has wired (None when there is none), and whether that
-    Orrery Refs has keep_sent on."""
+    (directly or through a few text nodes) has wired (None when there is none), whether that
+    Orrery Refs has keep_sent on, and which of its image_N have a picture wired in."""
     if not prompt or unique_id is None:
-        return False, None, False
+        return False, None, False, frozenset()
     uid = str(unique_id)
     link = lambda v: (str(v[0]), v[1]) if isinstance(v, list) and len(v) == 2 else None
     readers = [n for n in prompt.values()
                if n.get("class_type") == "OrreryRefs" and link(n.get("inputs", {}).get("picks")) == (uid, 1)]
     packed, keep = bool(readers), any(n.get("inputs", {}).get("keep_sent") is True for n in readers)
+    standing = frozenset(int(k.removeprefix("image_")) for n in readers for k, v in n.get("inputs", {}).items()
+                         if k.startswith("image_") and k.removeprefix("image_").isdigit() and link(v))
     reach = {(uid, 0)}
     for _ in range(3):  # through Text Concatenate and friends
         reach |= {(str(nid), i) for nid, n in prompt.items() if n.get("class_type") != REF2VA
                   for v in n.get("inputs", {}).values() if link(v) in reach for i in range(4)}
     wired = [sum(1 for k, v in n["inputs"].items() if "ref_image" in k and link(v))
              for n in prompt.values() if n.get("class_type") == REF2VA and link(n.get("inputs", {}).get("prompt")) in reach]
-    return packed, (max(wired) if wired else None), keep
+    return packed, (max(wired) if wired else None), keep, standing
 
 
 class OrreryRefs:
@@ -776,10 +779,11 @@ class OrreryRefs:
     def route(self, picks, prompt=None, unique_id=None, keep_sent=False, **images):
         data = json.loads(picks or "{}")
         refs, sends = data.get("refs"), data.get("sends") or {}
-        clash = sorted(n for n in sends.get("slots", []) if images.get(f"image_{n}") is not None)
-        if clash:
-            raise ValueError(f"image {clash[0]} is wired into Orrery Refs and also filled by a SEND: line; "
-                             "unwire it, or send to an image nothing is wired into.")
+        for n in sorted(n for n in sends.get("slots", []) if images.get(f"image_{n}") is not None):
+            sent = sends.get("ready", {}).get(str(n), {})
+            print(f"[orrery] warn: image {n} is wired into Orrery Refs and kept by a REMEMBER: (SEND:) line too: "
+                  + (f"the frames from clip {sent['segment'] + 1} replace the wired picture." if "segment" in sent
+                     else "the wired picture until those frames exist."))
         if refs is None:  # nothing packed: pass the images through as wired
             order = [images.get(f"image_{i}") for i in range(1, self.SLOTS + 1)]
         else:

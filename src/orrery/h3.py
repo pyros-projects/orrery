@@ -856,10 +856,11 @@ def render_scene(scene: Scene, target: str, lint: list[Issue]) -> str:
 def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                   weights: Mapping[str, float] | None = None, target: str = "h3-base",
                   segment: int = 0, packed: bool = False, held: set[int] | frozenset = frozenset(),
-                  cell: int | None = None) -> Compiled:
+                  cell: int | None = None, standing: set[int] | frozenset = frozenset()) -> Compiled:
     """`segment` picks a reel's clip (see orrery.reel); plain screenplays ignore it. `packed`: the
     images are renumbered to the ones this clip uses (Orrery Refs hands on only those). `cell`: the
-    run of a `: grid` (orrery.batch); None rolls its axes."""
+    run of a `: grid` (orrery.batch); None rolls its axes. `standing`: the images wired into Orrery
+    Refs: one a REMEMBER: line keeps stays in the clip as wired until those frames exist."""
     from orrery.batch import prepare
     from orrery.dsl import parse, with_inline
     from orrery.reel import build_segment, shared_sends, split_reel
@@ -891,7 +892,11 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
             named = cast_images(reel.head).union(*(cast_images(b.lines) for b in reel.blocks))
             ours = {s.index for m in scene.cast for s in m.sources if s.kind == "image"}
             sends = {n: send for n, send in sends.items() if n in ours or n not in named}
-            withhold_images(scene, set(reel.send_slots) - set(sends), lint)
+            withhold_images(scene, set(reel.send_slots) - set(sends) - set(standing), lint)
+            for n in sorted(set(standing) & set(reel.send_slots) & ours):
+                lint.append(Issue("info", f"image {n} is wired and kept by a REMEMBER: line too: "
+                                          + (f"the frames from clip {sends[n]['segment'] + 1} replace the wired picture."
+                                             if "segment" in sends.get(n, {}) else "the wired picture until those frames exist.")))
         if reel.send_refmods:
             sent_mods = reel.refmods_ready(segment, path)
             late = set(reel.send_refmods) - set(sent_mods)  # its chunk has not played yet: nothing to bring back

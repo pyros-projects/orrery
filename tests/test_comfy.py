@@ -658,11 +658,21 @@ def test_orrery_refs_fills_a_sent_image_with_its_frames(tmp_path, monkeypatch):
     assert out[0] == "img1" and out[1].label == "clip_00002:[[0, 0]]" and out[2] is None
 
 
-def test_orrery_refs_refuses_a_slot_both_wired_and_sent(tmp_path, monkeypatch):
+def test_the_graph_says_which_images_are_wired_into_orrery_refs():
+    from orrery.comfy import wiring
+    graph = {"1": {"class_type": "OrreryPrompt", "inputs": {}},
+             "12": {"class_type": "OrreryRefs", "inputs": {"picks": ["1", 1], "image_1": ["5", 0], "image_3": ["6", 0],
+                                                           "keep_sent": False}}}
+    assert wiring(graph, "1") == (True, None, False, frozenset({1, 3}))
+
+
+def test_a_slot_both_wired_and_sent_is_the_wired_picture_until_the_frames_exist(tmp_path, monkeypatch, capsys):
     from orrery.comfy import OrreryRefs
     send_chain(tmp_path, monkeypatch)
-    with pytest.raises(ValueError, match="image 3"):
-        OrreryRefs().route(sends({}, refs=[1]), image_1="img1", image_3="img3")
+    out = OrreryRefs().route(sends({}, refs=[1, 3]), image_1="img1", image_3="img3")
+    assert out[:2] == ("img1", "img3") and "the wired picture until those frames exist" in capsys.readouterr().out
+    out = OrreryRefs().route(sends({"3": {"segment": 1, "frames": [[0, 0]]}}), image_1="img1", image_3="img3")
+    assert out[1].label == "clip_00002:[[0, 0]]" and "frames from clip 2 replace the wired picture" in capsys.readouterr().out
 
 
 def test_orrery_refs_says_when_the_chain_lacks_the_sending_clip(tmp_path, monkeypatch):
