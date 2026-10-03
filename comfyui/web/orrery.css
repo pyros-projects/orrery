@@ -142,15 +142,19 @@
 .orrery-app .editor.nodiv .chunkinfo { display: none; }
 /* a scene's buttons (#204, #206): part of the divider's label, in its colour (brass on the scene that plays next),
    above the textarea and clickable while the rest of the divider is not */
-.orrery-app .chunkinfo > span.scene-acts { display: inline-flex; align-items: center; gap: 0; padding: 2px 6px 2px 4px; margin-left: -1px;
+.orrery-app .chunkinfo > span.scene-acts { display: inline-flex; align-items: center; gap: 3px; padding: 1px 6px 1px 6px; margin-left: -1px;
   max-width: none; overflow: visible; pointer-events: auto; position: relative; z-index: 2; }
-.orrery-app .scene-act { display: inline-flex; align-items: center; justify-content: center; height: 14px; min-width: 16px; padding: 0 3px;
-  border: 0; border-radius: 3px; background: none; color: inherit; font: inherit; cursor: pointer; opacity: .85; }
-.orrery-app .scene-act .i { width: 11px; height: 11px; }
-.orrery-app .scene-act:hover:not(:disabled) { opacity: 1; background: color-mix(in srgb, currentColor 16%, transparent); }
-.orrery-app .scene-act:disabled { opacity: .3; cursor: default; }
-.orrery-app .scene-act[aria-pressed="false"] { opacity: .45; }
-.orrery-app .scene-act[aria-pressed="true"] { opacity: 1; }
+/* small raised keys: a rim and a hint of fill in the label's colour, a shadow under them; they sink when pressed */
+.orrery-app .scene-act { display: inline-flex; align-items: center; justify-content: center; height: 15px; min-width: 18px; padding: 0 3px;
+  border: 1px solid color-mix(in srgb, currentColor 38%, transparent); border-radius: 4px; color: inherit; font: inherit; cursor: pointer;
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  box-shadow: 0 1px 0 rgba(0,0,0,.55), inset 0 1px 0 color-mix(in srgb, currentColor 18%, transparent); }
+.orrery-app .scene-act .i { width: 10px; height: 10px; }
+.orrery-app .scene-act:hover:not(:disabled) { background: color-mix(in srgb, currentColor 22%, transparent); border-color: color-mix(in srgb, currentColor 60%, transparent); }
+.orrery-app .scene-act:active:not(:disabled) { transform: translateY(1px); box-shadow: inset 0 1px 1px rgba(0,0,0,.35); }
+.orrery-app .scene-act:disabled { opacity: .3; cursor: default; box-shadow: none; }
+.orrery-app .scene-act[aria-pressed="false"] { opacity: .55; }
+.orrery-app .scene-act[aria-pressed="true"] { background: color-mix(in srgb, currentColor 26%, transparent); box-shadow: inset 0 1px 1px rgba(0,0,0,.35); }
 /* a clip's takes (#206): a strip under the scene's clips; the one in the film is marked */
 .orrery-app .cm-takes { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; }
 .orrery-app .cm-takes .muted { margin-right: 4px; }
