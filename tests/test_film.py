@@ -163,13 +163,24 @@ def test_a_scene_after_the_input_video_pins_its_last_frames_and_sound(tmp_path, 
     assert tuple(tail.video.shape) == (1, 24, 7, 30, 40) and tuple(tail.audio.shape) == (1, 32, 2, 37)
 
 
-def test_segment_0_starts_a_new_run(tmp_path):
-    take(tmp_path, 0)
+def test_clip_1_again_stays_in_its_run_beside_its_other_takes(tmp_path):
+    first = take(tmp_path, 0)
     take(tmp_path, 1)
     before = active_run(tmp_path)
-    take(tmp_path, 0, n=30)
-    assert active_run(tmp_path) != before and before.is_dir()
+    again = take(tmp_path, 0, n=30)
+    assert active_run(tmp_path) == before  # clip 2 continued the first take: it leaves the film
     assert [c["frames"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [30]
+    assert [t["folder"] for t in film.takes(tmp_path, "h3_context")[0]] == [first.name, again.name]
+    film.pick_take(tmp_path, "h3_context", 0, first.name)
+    assert [c["frames"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [24]
+
+
+def test_clip_1_in_another_size_starts_a_new_run(tmp_path):
+    take(tmp_path, 0)
+    before = active_run(tmp_path)
+    take(tmp_path, 0, w=96)
+    assert active_run(tmp_path) != before and before.is_dir()
+    assert len(film.takes(tmp_path, "h3_context")[0]) == 1
 
 
 def test_a_segment_continues_only_the_one_before_it(tmp_path):

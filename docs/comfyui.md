@@ -218,8 +218,8 @@ Nodes under **orrery**:
   (`images`, `audio`) and `film`, the reel so far, and keeps the takes under
   `output/<the reel's folder>/orrery_film/`: each clip, its sound and the tail the
   next one continues from. Rendering a clip again replaces its take and drops
-  the ones after it that continue it (branches beside it stay); clip 1 starts a new
-  run; older takes stay on disk. A `(test)` scene's take is kept but left out of
+  the ones after it that continue it (branches beside it stay), clip 1 too: its
+  takes stay side by side (another size or sound starts a new run); older takes stay on disk. A `(test)` scene's take is kept but left out of
   the joined film. The previous clip, `REMEMBER:` and the timeline read
   this store or H3 Motion Context's Chain Video, whichever was written last.
   Another `context:` than 22 is a warning: 22 frames are pinned all the same.

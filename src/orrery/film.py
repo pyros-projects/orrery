@@ -11,7 +11,8 @@ orrery.chain reads either store; `film.mp4` joins them. A take is a folder:
     meta.json    segment, frames, seed, template …
 
 Rendering segment N again makes the new take active and drops the takes after it, which continued
-another one; segment 0 starts a new run. Older takes and runs stay on disk. A take's meta names the take
+another one; segment 0 starts a new run only when the size or the sound changes. Older takes and runs stay
+on disk. A take's meta names the take
 it continues (`after`), so sample surfing (#206) offers only the takes that fit the clip before, and
 `pick_take` makes one of them active again.
 """
@@ -24,6 +25,7 @@ import shutil
 import time
 import uuid
 from collections.abc import Sequence
+from datetime import UTC, datetime
 from fractions import Fraction
 from pathlib import Path
 
@@ -100,13 +102,13 @@ def save_take(output: Path | str, latent_path: str, segment: int, frames: Sequen
     first = next(rest)
     height, width = int(first.shape[0]), int(first.shape[1])
     settings = [width, height, str(FPS), int(sample_rate), int(sound.shape[0])]
-    if segment == 0:
+    run, state = _active(root)
+    clips = state.get("clips", [])
+    was = state.get("settings") or settings
+    if segment == 0 and (run is None or was != settings):  # clip 1 stays in its run, beside its other takes
         run, clips = root / f"run_{time.strftime('%Y%m%d-%H%M%S')}_{uuid.uuid4().hex[:6]}", []
-    else:
-        run, state = _active(root)
-        clips = state.get("clips", [])
+    elif segment:
         _before(latent_path, segment, run, clips)
-        was = state.get("settings") or settings
         if was[:2] != settings[:2]:
             raise FilmError(f"clip {segment + 1} is {width}×{height}, the reel's clips before it "
                             f"{was[0]}×{was[1]}: a reel keeps one size (Restart it to change).")
@@ -124,7 +126,7 @@ def save_take(output: Path | str, latent_path: str, segment: int, frames: Sequen
     np.savez(tmp / "tail.npz", video=np.asarray(tail.video, np.float32), audio=np.asarray(tail.audio, np.float32))
     (tmp / "meta.json").write_text(json.dumps({**meta, "segment": segment, "frames": count, "continues": continues,
                                                "after": after, "grid_offset": tail.grid_offset,
-                                               "created": time.strftime("%Y-%m-%dT%H:%M:%S")}, indent=2),
+                                               "created": datetime.now(UTC).astimezone().isoformat(timespec="microseconds")}, indent=2),
                                    encoding="utf-8")
     os.replace(tmp, run / name)
     later = list(itertools.takewhile(lambda c: not _continues(clips, c, segment), range(segment + 1, len(clips))))
@@ -225,9 +227,9 @@ def takes(output: Path | str, latent_path: str) -> dict[int, list[dict]]:
         if fits and segment < len(clips):
             out.setdefault(segment, []).append({"folder": take.name, "seed": meta.get("seed"), "take": meta.get("take") or 0,
                                                 "created": meta.get("created"), "active": clips[segment]["folder"] == take.name,
-                                                "_at": (take / "meta.json").stat().st_mtime_ns})
+                                                "_at": (meta.get("created") or "", (take / "meta.json").stat().st_mtime_ns)})
     for listed in out.values():
-        listed.sort(key=lambda t: t.pop("_at"))  # the order they were made in: created counts whole seconds
+        listed.sort(key=lambda t: t.pop("_at"))  # the order they were made in (older takes count whole seconds)
     return out
 
 

@@ -62,7 +62,8 @@ checks) are left out.
   shows the sampler's preview and its step under its scene (KJNodes' Model Preview Override, or ComfyUI's own) (#197).
 - Sample surfing: a scene's Generate makes ×2, ×4 or ×8 takes of its clip, you pick the best under it, and the
   film, `REMEMBER:` and the next clip use that one; 📌 keeps the scene's rolled prompt so only the noise changes, and
-  the gear numbers the takes' seeds and can delete the takes not picked (#197).
+  the gear numbers the takes' seeds and can delete the takes not picked. Clip 1 too: rendering it again stays in
+  its run beside its other takes; another size or sound starts a new run (#197).
 - The Orrery Prompt takes the model through it: the clip being sampled then shows in orrery's clip box as it
   forms, every frame (the tiny VAE taeh3, else Latent2RGB). Without it, ComfyUI's own preview reaches the clip box
   in every open tab (#197).
