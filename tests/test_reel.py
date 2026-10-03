@@ -506,6 +506,17 @@ def test_a_sent_image_of_a_member_not_in_the_chunk_stays_out():
     assert [sorted(c.sends) for c in clips] == [[], [], [3]] and [c.refs for c in clips] == [[], [], [3]]
 
 
+def test_a_sent_image_stays_out_where_the_chunks_cast_redefines_its_member_without_it():
+    src = LEAVES.replace("EMMA (refmod emma_canon)", "EMMA (refmod emma_canon, image 3)").replace(
+        "HANDOFF: only the room is left\nCHUNK", "HANDOFF: only the room is left\nSEND: frame 0 to image 3\n"
+        "SEND: frame 0 to image 5\nCHUNK", 1).replace(
+        "CHUNK\nSHOT 5s: static\nEMMA slides back",
+        "CHUNK\nCAST\nEMMA (refmod emma_canon): a young woman in a red coat\nSHOT 5s: static\nEMMA slides back")
+    back = ref2va(src, segment=2)
+    assert sorted(back.sends) == [5] and back.refs == [5]  # image 3 is EMMA's no more; image 5 is nobody's: it goes along
+    assert ref2va(src.replace("CAST\nEMMA (refmod emma_canon): a young woman in a red coat\n", ""), segment=2).refs == [3, 5]
+
+
 def test_a_chunks_own_cast_replaces_the_member_for_that_clip():
     src = LEAVES.replace("CHUNK\nSHOT 5s: static\nEMMA slides back", (
         "CHUNK\nCAST\nEMMA (refmod emma_canon at 0.3, image 1 at 0.5): a young woman in a red coat\n"

@@ -731,6 +731,20 @@ def pack_images(scene: Scene) -> list[int]:
     return used
 
 
+def cast_images(lines: list[str]) -> set[int]:
+    """Every picture a CAST block among these lines gives a member (`NAME (image 3): …`)."""
+    out, in_cast = set(), False
+    for raw in lines:
+        line = raw.strip()
+        if line == "CAST":
+            in_cast = True
+        elif _SHOT.match(line):
+            in_cast = False
+        elif in_cast and (m := MEMBER.match(line)):
+            out |= {s.index for s in parse_member(m.group(1), m.group(2), m.group(3)).sources if s.kind == "image"}
+    return out
+
+
 def zero_images(scene: Scene) -> set[int]:
     """The pictures this clip has at 0 (`SET: image_1(0)`, or `image 1 at 0` in its CAST)."""
     zero = {n for (kind, n), dial in scene.dials.items() if kind == "image" and dial.get("strength", 1.0) <= 0}
@@ -805,9 +819,12 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                 raise ValueError("SEND: hands frames to Reference to Video as reference images, so it needs an "
                                  "@h3 ref2va screenplay.")
             sends = reel.ready(segment, set(held) & set(reel.send_slots), path)
-            theirs = {s.index for m in absent for s in m.sources if s.kind == "image"}
+            # a sent image that some CAST gives a member goes only where a member of this clip has it (not to a
+            # clip without that member, nor to one whose CAST redefines it without the image); one that no CAST
+            # names goes along with every clip after it
+            named = cast_images(reel.head).union(*(cast_images(b.lines) for b in reel.blocks))
             ours = {s.index for m in scene.cast for s in m.sources if s.kind == "image"}
-            sends = {n: send for n, send in sends.items() if n not in theirs - ours}  # a sent image of a member not here
+            sends = {n: send for n, send in sends.items() if n in ours or n not in named}
             withhold_images(scene, set(reel.send_slots) - set(sends), lint)
         if reel.send_refmods:
             sent_mods = reel.refmods_ready(segment, path)
