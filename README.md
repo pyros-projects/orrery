@@ -224,6 +224,7 @@ every one continuing the last 22 frames, picture and sound, of the one before.
 | [Orrery Refs](docs/orrery-refs.md) | a tutorial: reference images per clip, numbers that match, frames of earlier clips with `REMEMBER:` |
 | [Presets and the content pack](docs/presets.md) | template references, saving presets, what ships built in |
 | [The ComfyUI nodes](docs/comfyui.md) | outputs, the app's six tabs, Roll and Restart |
+| [The language model](docs/llm.md) | everything it writes on one page: lists, slots, `>` enhance, the Write menu, a model in ComfyUI or over an API, what to test, what is planned |
 | [The wildcard manager](docs/wildcard-manager.md) | editing libraries in plain language, the language model in ComfyUI, the Write menu |
 | [Configuration](docs/configuration.md) | the orrery home folder and model settings |
 | [Changelog](CHANGELOG.md) | what changed, version by version |

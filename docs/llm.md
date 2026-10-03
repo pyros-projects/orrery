@@ -1,0 +1,102 @@
+# The language model in orrery
+
+Everything orrery's language model does, how to switch it on, how to try each part, and what is
+planned. The model is there for creative work: lists, slots, rewrites, the next scene. Copying what
+a template rolled needs no model, so orrery never asks one for that.
+
+## Choosing the model
+
+The gear in the node, **Language model**:
+
+| Choice | What it is | Where it runs |
+|---|---|---|
+| **A text encoder in ComfyUI** | A text encoder that is a whole language model: Krea 2's `qwen3vl_4b`, or a Qwen3-VL 8B build. MiniMax H3's encoder is cut short and cannot write. A text encoder wired into the node's `clip` input wins over the choice. | In ComfyUI's queue, on the GPU. It loads when the node runs and answers **once per run**. ComfyUI moves it out when the video model needs the room. |
+| **An API endpoint** (#165) | OpenAI, or a server that speaks its protocol (llama.cpp, LM Studio, OpenRouter): the endpoint, a key, a model. **Check** lists the models and asks for one answer; **Save** checks first. The key goes into the home folder's `.env`, never into `orrery.yaml`. It wins over a wired `clip`. | Beside ComfyUI: no VRAM, no queue. It can be asked more than once per run, and in parallel. |
+
+`orrery.yaml` (`llm:`) also holds:
+- `entries`: how many entries a new library starts with, 12 by default;
+- `max_tokens`: the longest answer, 16000 by default;
+- `temperature`: 0.3, for lists, slots and rewrites;
+- `writer_temperature`: 0.8, for the Write menu.
+
+The CLI's `orrery lib` uses `models.library`, else the API endpoint ([configuration.md](configuration.md)).
+
+The footer of the Prompt tab names the active model: `LLM qwen3vl_8b…`, or `LLM gpt-6-luna · API`.
+
+## What it writes
+
+| Feature | In a template | What happens |
+|---|---|---|
+| **A new library** | `__runway_shoes__` | A library you don't have is written when the node runs, from the lines around it. The editor marks it as "made when the node runs". |
+| **A top-up** | `__runway_shoes:30__` | A library with fewer entries is topped up to at least 30, once. |
+| **Directions for a list** | `__film_scene__(at least 30 words, set and characters)` | The list gets only these directions, never the prompt. They stay with the library for later top-ups. |
+| **Review** | Libraries tab, **To review** (violet) | What the model wrote waits: **Accept** keeps it, **Discard** drops it. `orrery lib undo` undoes a write. |
+| **A slot** | `--one small object in their hands, 4 to 8 words--` | Prose written where it stands, after everything else has rolled. The model sees the whole prompt. In a screenplay, CAST names in the directions arrive as `<Subject N>` labels. |
+| **A slot in a reel** | `--what WASHER does next, moving the story on--` | From the second clip on, the model also watches the clip before (one frame a second and its last frame) and continues it. |
+| **A CAST description from a named picture** | `@MIRA (image krea/09_character_creator/…): --who she is, one sentence--` | The model is told the prompt that made the picture, so it needs no vision for this. |
+| **A slot in an export** | `EXPORT:` block, `backstory = --two sentences of backstory for $who--` | It is written with the run and kept with the picture, never in the prompt. A screenplay that casts the picture reads it as `$hero.backstory`. |
+| **`> enhance`** | `> make it moody and cinematic` | It rewrites the rolled prompt as asked. In a screenplay, a `>` before the first SHOT covers every shot's prose, and one inside a SHOT only that shot; dialogue is never touched. |
+| **Write menu: Continue the reel** | a reel (SCENE lines) | The next SCENE, from every scene as it rolls at the node's seed, with an `END ON:`. It is appended. |
+| **Write menu: Story between frames** | `@h3 fl2va`, both frames wired | The shot that gets from the first frame to the last. |
+| **Write menu: Prompt from image** | a picture in `first_frame` | A Krea image prompt, or an i2va shot when the template is `@h3`. |
+| **The writers' prompts** | the gear, **Writers** | What each writer is sent, editable, with **Reset to default**. |
+| **Write now** (API only, #168) | a template with libraries still to write | A button in the footer writes them all at once, one request each, before any run. They wait in To review. |
+| **`orrery lib`** (CLI) | `gen`, `more`, `edit`, `undo` | Libraries in plain language: `orrery lib edit animal 'make a feline list from the cats'`. Nothing is kept until you confirm it. |
+
+The Write menu shows its ideas in a sheet: ‹ › pages through them, **Another idea** asks again, and
+**Insert** puts one into the editor as an unsaved edit, with Undo. With an API endpoint the server
+asks the model directly, so an idea comes while a render runs. A frame that something other than a
+Load Image computes still takes a run of its own.
+
+### What changes with an API endpoint
+
+- A run writes each missing library in a request of its own, all at once. Then the slots and
+  rewrites follow in one more request, and they see the compiled prompt. `> enhance` runs in the same run.
+- Frames go to the model as pictures.
+- Newer OpenAI models want other parameters. orrery asks again the way the model accepts and
+  remembers that. A busy endpoint is asked twice more.
+- A refused key says so, and points at the gear.
+
+## Test it
+
+The tutorials are the quickest way in: **17 · The language model writes your lists** and
+**18 · Slots and > enhance**. The Character creator (`krea/09_character_creator`) takes a
+`backstory = --…--` in its EXPORT block.
+
+With a **text encoder** (the gear → A text encoder in ComfyUI):
+
+- [ ] Tutorial 17: Run writes `__runway_shoes__` and `__unusual_runway_venue__`. They appear under To review; accept one, discard one.
+- [ ] Tutorial 18: Run writes the slot, and the `>` line rewrites the prompt.
+- [ ] A reel with a slot from the second clip on: the text continues the clip before.
+- [ ] A CAST member with `image krea/09_character_creator/…` and `--who she is--`: the sentence fits the picture's prompt.
+- [ ] The creator with `backstory = --…--` in EXPORT: the Gallery's sheet shows it.
+- [ ] Write → Continue the reel, Story between frames (fl2va, two frames wired), Prompt from image.
+- [ ] The gear → Writers: edit one, run it, Reset to default.
+
+With an **API endpoint** (the gear → An API endpoint, then Check and Save):
+
+- [ ] A wrong key is refused on Save; the right one shows only how it ends.
+- [ ] The footer says `LLM <model> · API`.
+- [ ] Tutorial 17 with fresh library names: **Write now** appears in the footer, writes them, and disappears.
+- [ ] Tutorial 18 with a new library added (`… on the last night bus that smells of __bus_smells__`): one Run writes the library, the slot and the rewrite. With a text encoder the rewrite waits for the next run.
+- [ ] Write → Prompt from image while a render runs: the idea comes before the render ends.
+- [ ] Write → Story between frames, both frames from Load Image nodes.
+- [ ] Back to the text encoder in the gear: everything goes through the queue again.
+
+## Planned
+
+- 🎲 **The language model at the line** (#170). A button at the end of a slot's line, of a library
+  still to be written, and of a `> enhance` line opens three takes. You can ask for more, steer
+  them with a line of your own, **Insert** one, or keep your steer as the slot's direction.
+  - Slots can see pictures: `--a full character sheet from $who, as image output shows them--`, and also `image first_frame`, `image last_frame`, `image 3` or a gallery name.
+  - A slot with `image output` is written after the picture exists, on demand from the Gallery's export sheet, for the characters worth it.
+- 🏠 **Local language models, one task per run** (#171). A text encoder can answer only once per
+  run, so orrery queues mini-runs, one task each: Write now with a text encoder, a run's libraries
+  and slots each in a request of its own, and the line sheet's takes. Small models do better with
+  one task at a time.
+- 🧠 **The model watches the input video** (#82). It goes on with the video's story, writes the
+  head's `END ON:` and draws CAST descriptions from what the video shows.
+
+An idea, not planned: a director that runs outside the canvas, renders, looks at the result with a
+vision model, and decides what comes next (keep, reroll, rewrite). See the studio concept,
+[concept-studio.md](concept-studio.md).
