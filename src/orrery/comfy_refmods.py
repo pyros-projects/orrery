@@ -32,6 +32,15 @@ def _pack():
                      "it in custom_nodes and restart ComfyUI.")
 
 
+def pack_installed() -> bool:
+    """Whether ComfyUI's custom_nodes hold the RefMod pack (it may load after orrery, so look on disk)."""
+    try:
+        import folder_paths  # ComfyUI
+    except ImportError:
+        return False
+    return any(any(Path(base).glob("*/nodes/refmod_loader.py")) for base in folder_paths.get_folder_paths("custom_nodes"))
+
+
 def refmod_names() -> list[str]:
     """The RefMods in models/refmods as a CAST names them (`NAME` for `NAME_Video`), for the editor's
     completion; empty outside ComfyUI or before the pack has registered its folder."""

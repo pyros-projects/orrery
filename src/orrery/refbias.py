@@ -133,23 +133,20 @@ def _forward(original):
     return forward
 
 
-def install() -> bool:
-    """Wrap H3 in this ComfyUI; False outside ComfyUI, or when H3 is not as orrery expects (then
-    RefMods still work, at full strength)."""
+def install() -> str:
+    """Wrap H3 in this ComfyUI: "on", or why the strengths are off (outside ComfyUI, or H3 is not as
+    orrery expects); without them RefMods still work, at full strength. orrery's boot banner says which."""
     try:
         import comfy.ldm.minimax.model as h3
         from comfy.ldm.modules.attention import AttentionTensorContainer
     except Exception:  # noqa: BLE001 - not inside ComfyUI, or no H3 in it
-        return False
+        return "no H3 in this ComfyUI"
     if getattr(h3, "_orrery_refbias", False):
-        return True
+        return "on"
     model = getattr(h3, "MiniMaxH3Model", None)
     if not callable(getattr(h3, "optimized_attention", None)) or not callable(getattr(model, "_forward", None)):
-        print("[orrery] H3 is not as orrery expects (comfy.ldm.minimax.model changed), so RefMod strengths are off: "
-              "every RefMod runs at 1.")
-        return False
+        return "H3 is not as orrery expects: comfy.ldm.minimax.model changed"
     h3.optimized_attention = _attention(h3.optimized_attention, AttentionTensorContainer)
     model._forward = _forward(model._forward)
     h3._orrery_refbias = True
-    print("[orrery] RefMod strengths are on: orrery wraps H3's attention in memory (ComfyUI's files stay as they are).")
-    return True
+    return "on"
