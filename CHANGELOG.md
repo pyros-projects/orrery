@@ -9,6 +9,10 @@ checks) are left out.
 
 ### Added
 
+- `EXPORT:` keeps what a template rolled beside its prompt, never in it: the gallery, History and
+  `orrery expand --json` hold it for other systems, the Gallery shows it as a sheet, and a picture
+  carries it into the screenplays that cast it (`$hero.mood`). The Character creator exports who it
+  drew (`$who`), a mood, a quirk, two skills and a voice (#157).
 - Pictures by name in the CAST: `@HERO (image krea/09_character_creator/1283456183)` takes a character
   from the gallery with all its views, `image __pictures/<preset>__` rolls one (the gallery is a library,
   steered by ratings, `[origin!=$hero.origin]` for one who differs), Orrery Refs loads them without a Load Image, and a `--…--` description is written

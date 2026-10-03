@@ -911,11 +911,16 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
     run of a `: grid` (orrery.batch); None rolls its axes. `standing`: the images wired into Orrery
     Refs: one a REMEMBER: line keeps stays in the clip as wired until those frames exist."""
     from orrery.batch import prepare
-    from orrery.dsl import parse, with_inline
+    from orrery.dsl import parse, strip_exports, with_inline
     from orrery.reel import build_segment, shared_sends, split_reel
 
     lint: list[Issue] = []
     src, libraries = with_inline(strip_comments(src), libraries)
+    if parse(src).exports:
+        lint.append(Issue("warn", "EXPORT: is for text templates (Krea and other image models): a screenplay reads "
+                                  "what a picture exported from the gallery ($hero.mood, with $hero = "
+                                  "__pictures/…__). The EXPORT: lines are left out."))
+        src = strip_exports(src)
     src = bare(src)  # `@JINX` is JINX
     reel = split_reel(src)
     params = parse(src).params

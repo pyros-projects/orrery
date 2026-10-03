@@ -26,6 +26,7 @@ Every construct of orrery's template language, where libraries live, how Dynamic
 | `IF $w.kind is rain, snow: …` | the same on a property of what `$w` rolled (`is not` for neither) |
 | `{IF $w.kind is rain: wet \| dry}` | a choice made by a condition instead of the dice |
 | `IF $c[myth, size=small\|tiny]: …`, `{IF $w[kind=rain]: wet \| dry}` | a condition in the brackets' language, against what `$c` rolled: all of them (`,`), either (`\|`), not (`!`). There is no AND or OR word: the brackets say it. Earlier orrery wrote `?` for `IF` (`? $c[wren]: It sings.`), and still may |
+| `EXPORT: mood = __moods__`, `EXPORT: $who, $job`, `EXPORT:` + indented `name = …` lines | what the run keeps beside its prompt, never in it: it rolls like a binding (seeded, recorded, learned) and goes with the output into History, the gallery (`exports` in `galaxy.jsonl`) and `orrery expand --json`, for other systems and for screenplays that cast the picture (`$hero.mood`, see below). An exported entry brings its properties, a `{N$$…}` pick is a list, and a `--…--` in an export is written with the run. Text templates only: a screenplay leaves it out |
 | `> make it moody and cinematic` | with a language model set in the node, it rewrites the rolled prompt as asked; in a screenplay a `>` before the first `SHOT` rewrites every shot's prose and one inside a `SHOT` only that shot's, never dialogue. The CLI records it with the picks |
 | `--one detail, 5 to 8 words--` | a slot: the language model writes it where it stands, after everything else has rolled (see [wildcard-manager.md](wildcard-manager.md)) |
 | `\{` `\}` `\|` `\$` `\__` `\@` `\#` `\\` | the character as written, not syntax: `a sign reading \{OPEN\}`, `\__init__` |
@@ -87,10 +88,30 @@ finds libraries by name and by entry, and filters the open library's entries. Th
 `~/.config/orrery/home`); `ORRERY_HOME`, `--home` and a node's own home field win
 over it.
 
+**What a picture carries.** A Krea template can keep data with its pictures, so they become
+characters, places or creatures that a screenplay casts later:
+
+```
+$who = a {young|old} lighthouse keeper with __characters/looks/hair__
+EXPORT:
+  who = $who
+  mood = __characters/creator/mood__
+  skills = {2$$__characters/creator/skill__}
+  backstory = --two sentences of backstory for $who, nothing the picture shows--
+A studio photograph of $who.
+```
+
+None of it reaches the prompt. The gallery keeps it (`{"who": "…", "mood": "…", "skills": ["…", "…"],
+"backstory": "…"}`), its Gallery detail shows it as a sheet, and the picture carries it as properties.
+`EXPORT: $job` exports a binding; when it rolled an entry with properties they come along (`"job":
+{"value": "a ferryman", "tool": "a long pole"}`, `$hero.job_tool` in a screenplay). A slot in an export
+is written by the language model with the run: the place for what is creative, since copying what the
+template rolled needs none.
+
 The gallery's pictures are libraries too, read-only: `__pictures/<preset>__` holds one entry per
 character the preset made (a seed with its dials, `krea/09_character_creator/1283456183`), carrying
-all its pictures, the prompt that made them and what its template rolled (properties named after the
-bindings, so `[origin!=$hero.origin]` finds one who differs), weighted by your ratings and tagged
+all its pictures, the prompt that made them, what its template rolled (properties named after the
+bindings, so `[origin!=$hero.origin]` finds one who differs) and what it EXPORTed (`$hero.mood`), weighted by your ratings and tagged
 `loved`, `liked`, `noped` or `hated`. A screenplay's CAST names one with `image NAME` or rolls one with
 `image __pictures/<preset>__` ([orrery-refs.md](orrery-refs.md#pictures-by-name)).
 

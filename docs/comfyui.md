@@ -116,7 +116,8 @@ Nodes under **orrery**:
   - **Gallery**: every logged output. love / like / nope / hate multiply the
     learned weight of each pick by 1.5 / 1.2 / 0.8 / 0.5 (re-rating replaces
     the factor). **Use template + seed** restores an output and sets the seed
-    to fixed. Folders on the left sort outputs without moving their files:
+    to fixed. An output whose template EXPORTed data shows it as a sheet
+    under its prompt (**JSON** copies it). Folders on the left sort outputs without moving their files:
     drag cards onto a folder (a selected card brings the whole selection),
     drag a folder onto another to nest it, double-click to rename. Removing
     a folder moves what is in it up a level. Select with the checkbox,

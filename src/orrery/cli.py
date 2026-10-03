@@ -73,7 +73,7 @@ def _cmd_expand(args: argparse.Namespace) -> int:
     if args.json:
         print(json.dumps([
             {"seed": e.seed, **({} if e.cell is None else {"cell": e.cell}), "text": e.text,
-             "picks": {p.label: p.value for p in e.picks}}
+             "picks": {p.label: p.value for p in e.picks}, **({"exports": e.exports} if e.exports else {})}
             for e in rows
         ], ensure_ascii=False, indent=2))
         return 0

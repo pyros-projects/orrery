@@ -1,0 +1,18 @@
+# Krea builds the world, H3 directs it (#157): a character from the Character creator and a place from "A place and who lives there", both cast from the gallery and read through what they exported (who, mood, quirk, voice; the place's sound, its weather and the animal that lives there). Render a few of each with the new creator first: [exported] keeps the pictures that carry data.
+# Workflow: orrery_h3_ref2va (Orrery Prompt picks → Orrery Refs → Reference to Video).
+@h3 references 16:9 0.6MP
+style: live-action, natural light, handheld, photorealistic
+$hero = __pictures/krea/09_character_creator[exported]__
+$place = __pictures/experiments/export/a_place_and_who_lives_there[exported]__
+
+CAST
+@HERO (image $hero): $hero.who
+@PLACE (image $place): $place.land
+
+SHOT 5s: wide, static
+@HERO walks into @PLACE under $place.weather; far off, $place.animal moves through the frame.
+SFX: $place.land_sfx; $place.animal_sfx; $place.weather_sfx
+
+SHOT 4s: push in, small, slow
+@HERO stops, $hero.mood, and $hero.quirk.
+@HERO ($hero.voice): Nobody told me it would be this quiet.

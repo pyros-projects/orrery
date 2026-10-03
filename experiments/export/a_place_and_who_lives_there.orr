@@ -1,0 +1,10 @@
+# Krea builds the world (#157): an empty landscape, a stage waiting for someone to walk in. The picture shows the place and its weather; EXPORT keeps the place with its sound, the weather with its light, and an animal that lives there (by habitat), for a reel that casts it.
+$place = __world/habitats__
+$weather = __world/weather__
+$animal = __subjects/animals#habitat:$place.habitat__
+EXPORT:
+  land = $place
+  $weather
+  animal = $animal
+A wide landscape photograph of $place, $weather, no people and no animals, an empty stage waiting for someone to walk in. Shot on a 35mm lens at eye level, natural colour.
+@size 1216x832

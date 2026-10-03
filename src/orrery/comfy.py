@@ -48,7 +48,18 @@ from orrery.presets import (
     resolve_includes,
 )
 from orrery.reel import ReelEnd
-from orrery.slots import SLOT, fill, keep_marks, put_back, request, rewrites_in, slots, write
+from orrery.slots import (
+    SLOT,
+    export_slots,
+    fill,
+    fill_exports,
+    keep_marks,
+    put_back,
+    request,
+    rewrites_in,
+    slots,
+    write,
+)
 
 TARGETS = ["text", "h3-base", "flat"]
 NO_PRESET = "(none)"
@@ -316,6 +327,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         raise ValueError(f"{err}, or pick a language model in orrery's settings (the gear in the node) "
                          "and it is created when the node runs") from err
     todo = slots(result.text)
+    todo += [d for d in export_slots(getattr(result, "exports", {})) if d not in todo]  # EXPORT: lines write too
     passages = _passages(result, target)
     enhanced: list[dict] = []
     if passages and wanted:
@@ -351,6 +363,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     lint += [{"severity": "warn", "message": f"--{d}-- got no text from the language model; its directions stand in."}
              for d in unanswered]
     result.text = fill(result.text, texts)
+    if getattr(result, "exports", None):
+        result.exports = fill_exports(result.exports, texts)
     if texts and "\ndetailed_description:\n" in result.text:  # count what the model wrote too
         lint = [i for i in lint if not i["message"].startswith("detailed_description has")]
         described = result.text.split("\ndetailed_description:\n", 1)[1].split("\n\noverall_soundscape:", 1)[0]
@@ -383,6 +397,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         "preset": linked,
         "edited": bool(linked) and template != load_preset(h, linked),
         "params": dials,
+        **({"exports": result.exports} if target == "text" and getattr(result, "exports", None) else {}),
         "rng": parse(source).params.rng or RNG,  # the dice: a replay of an older run puts @rng 1 on top
         # a screenplay's format (lite by default since 2026-10-02, `full` the guide's): a replay of an older run adds full
         **({"format": "lite" if result.scene.lite else "full"} if target != "text" and getattr(result, "scene", None) else {}),
@@ -507,6 +522,7 @@ def log_outputs(home: Home, picks_json: str, media: list[str]) -> list[dict]:
         "params": data.get("params") or {},
         "text": data.get("text"),
         "picks": data.get("picks", []),
+        **({"exports": data["exports"]} if data.get("exports") else {}),  # what EXPORT: kept beside the prompt
         **({"rng": data["rng"]} if data.get("rng") else {}),
         **({"format": data["format"]} if data.get("format") else {}),
         **({"segment": data["segment"], "chunks": data["chunks"]} if data.get("chunks") else {}),

@@ -533,3 +533,13 @@ test("a dial's menu lists every choice while the box holds one of them, and filt
   assert.deepEqual(menuItems(choices, "an"), ["fantasy"]);
   assert.deepEqual(menuItems(choices, "zz"), []);
 });
+
+test("a picture's sheet lists what it exported: texts, lists and an entry's fields (#160)", async () => {
+  const { exportRows } = await import("../../comfyui/web/app/model.js");
+  assert.deepEqual(exportRows({ who: "a tall heron", skills: ["fishing", "waiting"], job: { value: "a ferryman", tool: "a long pole" } }), [
+    { name: "who", value: "a tall heron", items: [], fields: [] },
+    { name: "skills", value: null, items: ["fishing", "waiting"], fields: [] },
+    { name: "job", value: "a ferryman", items: [], fields: [["tool", "a long pole"]] },
+  ]);
+  assert.deepEqual(exportRows(undefined), []);
+});

@@ -3,7 +3,7 @@
 // deleted into the home's trash.
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
-import { applyDials, FACTORS, filterRows, folderDropPath, folderTree, markPicks, rangeIds, templateHash, withDice } from "./model.js";
+import { applyDials, exportRows, FACTORS, filterRows, folderDropPath, folderTree, markPicks, rangeIds, templateHash, withDice } from "./model.js";
 import { copyText, resizable } from "./parts.js";
 import { openSave } from "./save.js";
 
@@ -174,11 +174,23 @@ function detailHTML(app, r) {
       <p class="flush prose">${markPicks(r.text || "", r.picks)}</p>
       <div class="row"><button class="btn primary" data-gact="use">Use template + seed</button><button class="btn" data-gact="save">${icon("save")}Save as preset</button>`
     + `<button class="btn ghost" data-gact="copyp">${icon("copy")}Prompt</button><button class="btn ghost" data-gact="copys">${icon("copy")}Seed</button></div>
+      ${sheetHTML(r)}
       <div><span class="label">Picks · click one to see every output that shares it</span><div class="picklist">
         ${r.picks.map((p) => p.keys.map((k) => `<button class="pick" data-gpick="${esc(k)}"><span>${esc(k.split("=").slice(1).join("="))}<small>${esc(p.label)}</small></span>`
           + `<span class="wv ${w(k) > 1.001 ? "up" : w(k) < 0.999 ? "dn" : ""}">×${w(k).toFixed(2)}</span></button>`).join("")).join("")}</div></div>
       <div class="stat">template #${esc(r.template)}${r.preset ? ` · @${esc(r.preset)}` : ""}${r.folder ? ` · in ${esc(r.folder)}` : ""}${Object.entries(r.params || {}).map(([k, v]) => ` · $${esc(k)} = ${esc(v)}`).join("")} · ${esc((r.ts || "").replace("T", " ").slice(0, 16))} · ${esc(r.target || "")}</div>
     </div></div></aside>`;
+}
+
+// What the picture carries beyond its prompt (EXPORT:): a reel reads it as $hero.mood, other systems from the gallery.
+function sheetHTML(r) {
+  const rows = exportRows(r.exports);
+  if (!rows.length) return "";
+  return `<div class="sheet"><div class="row spread"><span class="label">What it carries · EXPORT:</span>`
+    + `<button class="btn ghost" data-gact="copyx">${icon("copy")}JSON</button></div><dl>`
+    + rows.map((x) => `<dt>${esc(x.name)}</dt><dd>${x.items.length ? x.items.map((i) => `<span class="tagchip">${esc(i)}</span>`).join(" ") : esc(x.value)}`
+      + x.fields.map(([k, v]) => `<small><b>${esc(k)}</b> ${esc(v)}</small>`).join("") + "</dd>").join("")
+    + "</dl></div>";
 }
 
 async function rate(app, id, rating) {
@@ -508,4 +520,5 @@ async function onClick(app, e, open, rows) {
   }
   if (act === "copyp") copyText(app, open.text || "", "Prompt");
   if (act === "copys") copyText(app, String(open.seed), "Seed");
+  if (act === "copyx") copyText(app, JSON.stringify(open.exports || {}, null, 2), "Exports");
 }

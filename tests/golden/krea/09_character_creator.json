@@ -5,7 +5,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "A studio photograph of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes. Dressed in a crimson reflective rain poncho over a black tracksuit, wearing a crimson beret tilted to one side, with a steady, amused half-smile. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, dressed in a crimson reflective rain poncho over a black tracksuit, wearing a crimson beret tilted to one side, with a steady, amused half-smile. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -102,12 +102,42 @@
       [
        "{portrait|three-quarter|full-length|profile}",
        "portrait"
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "brightly optimistic"
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "brushes invisible dust off their clothes"
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "sketching faces quickly, telling tall tales"
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a fast, breathless voice that runs sentences together"
       ]
-     ]
+     ],
+     "exports": {
+      "who": "a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, dressed in a crimson reflective rain poncho over a black tracksuit, wearing a crimson beret tilted to one side, with a steady, amused half-smile",
+      "age": "58",
+      "gender": "man",
+      "genre": "cyberpunk",
+      "colour": "crimson",
+      "mood": "brightly optimistic",
+      "quirk": "brushes invisible dust off their clothes",
+      "skills": [
+       "sketching faces quickly",
+       "telling tall tales"
+      ],
+      "voice": "a fast, breathless voice that runs sentences together"
+     }
     },
     {
      "cell": 1,
-     "text": "A studio photograph of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes. Dressed in a crimson reflective rain poncho over a black tracksuit, wearing a crimson beret tilted to one side, with a steady, amused half-smile. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, dressed in a crimson reflective rain poncho over a black tracksuit, wearing a crimson beret tilted to one side, with a steady, amused half-smile. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -204,12 +234,42 @@
       [
        "{portrait|three-quarter|full-length|profile}",
        "three-quarter"
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "brightly optimistic"
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "brushes invisible dust off their clothes"
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "sketching faces quickly, telling tall tales"
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a fast, breathless voice that runs sentences together"
       ]
-     ]
+     ],
+     "exports": {
+      "who": "a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, dressed in a crimson reflective rain poncho over a black tracksuit, wearing a crimson beret tilted to one side, with a steady, amused half-smile",
+      "age": "58",
+      "gender": "man",
+      "genre": "cyberpunk",
+      "colour": "crimson",
+      "mood": "brightly optimistic",
+      "quirk": "brushes invisible dust off their clothes",
+      "skills": [
+       "sketching faces quickly",
+       "telling tall tales"
+      ],
+      "voice": "a fast, breathless voice that runs sentences together"
+     }
     },
     {
      "cell": 2,
-     "text": "A studio photograph of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes. Dressed in a crimson reflective rain poncho over a black tracksuit, wearing a crimson beret tilted to one side, with a steady, amused half-smile. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, dressed in a crimson reflective rain poncho over a black tracksuit, wearing a crimson beret tilted to one side, with a steady, amused half-smile. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -306,12 +366,42 @@
       [
        "{portrait|three-quarter|full-length|profile}",
        "full-length"
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "brightly optimistic"
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "brushes invisible dust off their clothes"
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "sketching faces quickly, telling tall tales"
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a fast, breathless voice that runs sentences together"
       ]
-     ]
+     ],
+     "exports": {
+      "who": "a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, dressed in a crimson reflective rain poncho over a black tracksuit, wearing a crimson beret tilted to one side, with a steady, amused half-smile",
+      "age": "58",
+      "gender": "man",
+      "genre": "cyberpunk",
+      "colour": "crimson",
+      "mood": "brightly optimistic",
+      "quirk": "brushes invisible dust off their clothes",
+      "skills": [
+       "sketching faces quickly",
+       "telling tall tales"
+      ],
+      "voice": "a fast, breathless voice that runs sentences together"
+     }
     },
     {
      "cell": 3,
-     "text": "A studio photograph of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes. Dressed in a crimson reflective rain poncho over a black tracksuit, wearing a crimson beret tilted to one side, with a steady, amused half-smile. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, dressed in a crimson reflective rain poncho over a black tracksuit, wearing a crimson beret tilted to one side, with a steady, amused half-smile. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -408,8 +498,38 @@
       [
        "{portrait|three-quarter|full-length|profile}",
        "profile"
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "brightly optimistic"
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "brushes invisible dust off their clothes"
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "sketching faces quickly, telling tall tales"
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a fast, breathless voice that runs sentences together"
       ]
-     ]
+     ],
+     "exports": {
+      "who": "a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, dressed in a crimson reflective rain poncho over a black tracksuit, wearing a crimson beret tilted to one side, with a steady, amused half-smile",
+      "age": "58",
+      "gender": "man",
+      "genre": "cyberpunk",
+      "colour": "crimson",
+      "mood": "brightly optimistic",
+      "quirk": "brushes invisible dust off their clothes",
+      "skills": [
+       "sketching faces quickly",
+       "telling tall tales"
+      ],
+      "voice": "a fast, breathless voice that runs sentences together"
+     }
     }
    ]
   },
@@ -417,7 +537,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "A studio photograph of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe. Dressed in a mustard-yellow pleated skirt with chrome buckles and a short mesh top, wearing chunky mustard-yellow headphones around the neck, with a brooding, lowered brow. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, dressed in a mustard-yellow pleated skirt with chrome buckles and a short mesh top, wearing chunky mustard-yellow headphones around the neck, with a brooding, lowered brow. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -518,12 +638,42 @@
       [
        "{portrait|three-quarter|full-length|profile}",
        "portrait"
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "mischievously secretive"
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "points with the whole hand, never a finger"
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "rewiring a cyber arm, tying sailor's knots"
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a heavy, tired voice that trails off mid-sentence"
       ]
-     ]
+     ],
+     "exports": {
+      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, dressed in a mustard-yellow pleated skirt with chrome buckles and a short mesh top, wearing chunky mustard-yellow headphones around the neck, with a brooding, lowered brow",
+      "age": "24",
+      "gender": "woman",
+      "genre": "cyberpunk",
+      "colour": "mustard-yellow",
+      "mood": "mischievously secretive",
+      "quirk": "points with the whole hand, never a finger",
+      "skills": [
+       "rewiring a cyber arm",
+       "tying sailor's knots"
+      ],
+      "voice": "a heavy, tired voice that trails off mid-sentence"
+     }
     },
     {
      "cell": 1,
-     "text": "A studio photograph of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe. Dressed in a mustard-yellow pleated skirt with chrome buckles and a short mesh top, wearing chunky mustard-yellow headphones around the neck, with a brooding, lowered brow. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, dressed in a mustard-yellow pleated skirt with chrome buckles and a short mesh top, wearing chunky mustard-yellow headphones around the neck, with a brooding, lowered brow. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -624,12 +774,42 @@
       [
        "{portrait|three-quarter|full-length|profile}",
        "three-quarter"
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "mischievously secretive"
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "points with the whole hand, never a finger"
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "rewiring a cyber arm, tying sailor's knots"
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a heavy, tired voice that trails off mid-sentence"
       ]
-     ]
+     ],
+     "exports": {
+      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, dressed in a mustard-yellow pleated skirt with chrome buckles and a short mesh top, wearing chunky mustard-yellow headphones around the neck, with a brooding, lowered brow",
+      "age": "24",
+      "gender": "woman",
+      "genre": "cyberpunk",
+      "colour": "mustard-yellow",
+      "mood": "mischievously secretive",
+      "quirk": "points with the whole hand, never a finger",
+      "skills": [
+       "rewiring a cyber arm",
+       "tying sailor's knots"
+      ],
+      "voice": "a heavy, tired voice that trails off mid-sentence"
+     }
     },
     {
      "cell": 2,
-     "text": "A studio photograph of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe. Dressed in a mustard-yellow pleated skirt with chrome buckles and a short mesh top, wearing chunky mustard-yellow headphones around the neck, with a brooding, lowered brow. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, dressed in a mustard-yellow pleated skirt with chrome buckles and a short mesh top, wearing chunky mustard-yellow headphones around the neck, with a brooding, lowered brow. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -730,12 +910,42 @@
       [
        "{portrait|three-quarter|full-length|profile}",
        "full-length"
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "mischievously secretive"
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "points with the whole hand, never a finger"
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "rewiring a cyber arm, tying sailor's knots"
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a heavy, tired voice that trails off mid-sentence"
       ]
-     ]
+     ],
+     "exports": {
+      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, dressed in a mustard-yellow pleated skirt with chrome buckles and a short mesh top, wearing chunky mustard-yellow headphones around the neck, with a brooding, lowered brow",
+      "age": "24",
+      "gender": "woman",
+      "genre": "cyberpunk",
+      "colour": "mustard-yellow",
+      "mood": "mischievously secretive",
+      "quirk": "points with the whole hand, never a finger",
+      "skills": [
+       "rewiring a cyber arm",
+       "tying sailor's knots"
+      ],
+      "voice": "a heavy, tired voice that trails off mid-sentence"
+     }
     },
     {
      "cell": 3,
-     "text": "A studio photograph of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe. Dressed in a mustard-yellow pleated skirt with chrome buckles and a short mesh top, wearing chunky mustard-yellow headphones around the neck, with a brooding, lowered brow. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, dressed in a mustard-yellow pleated skirt with chrome buckles and a short mesh top, wearing chunky mustard-yellow headphones around the neck, with a brooding, lowered brow. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -836,8 +1046,38 @@
       [
        "{portrait|three-quarter|full-length|profile}",
        "profile"
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "mischievously secretive"
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "points with the whole hand, never a finger"
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "rewiring a cyber arm, tying sailor's knots"
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a heavy, tired voice that trails off mid-sentence"
       ]
-     ]
+     ],
+     "exports": {
+      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, dressed in a mustard-yellow pleated skirt with chrome buckles and a short mesh top, wearing chunky mustard-yellow headphones around the neck, with a brooding, lowered brow",
+      "age": "24",
+      "gender": "woman",
+      "genre": "cyberpunk",
+      "colour": "mustard-yellow",
+      "mood": "mischievously secretive",
+      "quirk": "points with the whole hand, never a finger",
+      "skills": [
+       "rewiring a cyber arm",
+       "tying sailor's knots"
+      ],
+      "voice": "a heavy, tired voice that trails off mid-sentence"
+     }
     }
    ]
   },
@@ -845,7 +1085,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "A studio photograph of a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points. Dressed in a black military jacket with silver frogging and camel fringed epaulettes, with a sheepish, apologetic look. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, dressed in a black military jacket with silver frogging and camel fringed epaulettes, with a sheepish, apologetic look. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -942,12 +1182,42 @@
       [
        "{portrait|three-quarter|full-length|profile}",
        "portrait"
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "theatrically dramatic"
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "stands a little too close when talking"
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "playing a pipe organ, playing a battered fiddle"
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a scratchy, high voice like an old record"
       ]
-     ]
+     ],
+     "exports": {
+      "who": "a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, dressed in a black military jacket with silver frogging and camel fringed epaulettes, with a sheepish, apologetic look",
+      "age": "50",
+      "gender": "man",
+      "genre": "gothic",
+      "colour": "camel",
+      "mood": "theatrically dramatic",
+      "quirk": "stands a little too close when talking",
+      "skills": [
+       "playing a pipe organ",
+       "playing a battered fiddle"
+      ],
+      "voice": "a scratchy, high voice like an old record"
+     }
     },
     {
      "cell": 1,
-     "text": "A studio photograph of a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points. Dressed in a black military jacket with silver frogging and camel fringed epaulettes, with a sheepish, apologetic look. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, dressed in a black military jacket with silver frogging and camel fringed epaulettes, with a sheepish, apologetic look. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -1044,12 +1314,42 @@
       [
        "{portrait|three-quarter|full-length|profile}",
        "three-quarter"
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "theatrically dramatic"
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "stands a little too close when talking"
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "playing a pipe organ, playing a battered fiddle"
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a scratchy, high voice like an old record"
       ]
-     ]
+     ],
+     "exports": {
+      "who": "a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, dressed in a black military jacket with silver frogging and camel fringed epaulettes, with a sheepish, apologetic look",
+      "age": "50",
+      "gender": "man",
+      "genre": "gothic",
+      "colour": "camel",
+      "mood": "theatrically dramatic",
+      "quirk": "stands a little too close when talking",
+      "skills": [
+       "playing a pipe organ",
+       "playing a battered fiddle"
+      ],
+      "voice": "a scratchy, high voice like an old record"
+     }
     },
     {
      "cell": 2,
-     "text": "A studio photograph of a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points. Dressed in a black military jacket with silver frogging and camel fringed epaulettes, with a sheepish, apologetic look. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, dressed in a black military jacket with silver frogging and camel fringed epaulettes, with a sheepish, apologetic look. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -1146,12 +1446,42 @@
       [
        "{portrait|three-quarter|full-length|profile}",
        "full-length"
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "theatrically dramatic"
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "stands a little too close when talking"
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "playing a pipe organ, playing a battered fiddle"
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a scratchy, high voice like an old record"
       ]
-     ]
+     ],
+     "exports": {
+      "who": "a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, dressed in a black military jacket with silver frogging and camel fringed epaulettes, with a sheepish, apologetic look",
+      "age": "50",
+      "gender": "man",
+      "genre": "gothic",
+      "colour": "camel",
+      "mood": "theatrically dramatic",
+      "quirk": "stands a little too close when talking",
+      "skills": [
+       "playing a pipe organ",
+       "playing a battered fiddle"
+      ],
+      "voice": "a scratchy, high voice like an old record"
+     }
     },
     {
      "cell": 3,
-     "text": "A studio photograph of a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points. Dressed in a black military jacket with silver frogging and camel fringed epaulettes, with a sheepish, apologetic look. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, dressed in a black military jacket with silver frogging and camel fringed epaulettes, with a sheepish, apologetic look. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -1248,8 +1578,38 @@
       [
        "{portrait|three-quarter|full-length|profile}",
        "profile"
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "theatrically dramatic"
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "stands a little too close when talking"
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "playing a pipe organ, playing a battered fiddle"
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a scratchy, high voice like an old record"
       ]
-     ]
+     ],
+     "exports": {
+      "who": "a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, dressed in a black military jacket with silver frogging and camel fringed epaulettes, with a sheepish, apologetic look",
+      "age": "50",
+      "gender": "man",
+      "genre": "gothic",
+      "colour": "camel",
+      "mood": "theatrically dramatic",
+      "quirk": "stands a little too close when talking",
+      "skills": [
+       "playing a pipe organ",
+       "playing a battered fiddle"
+      ],
+      "voice": "a scratchy, high voice like an old record"
+     }
     }
    ]
   }

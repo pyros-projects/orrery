@@ -1,0 +1,62 @@
+meta: {source: "orrery character creator: what a character can do, exported for screenplays; `genre` says where it belongs (all fits anywhere)", builtin: true}
+entries:
+  - {value: "picking old locks", props: {genre: all}}
+  - {value: "reading a crowd", props: {genre: all}}
+  - {value: "mending torn clothes", props: {genre: all}}
+  - {value: "cooking with scraps", props: {genre: all}}
+  - {value: "telling tall tales", props: {genre: all}}
+  - {value: "haggling at market stalls", props: {genre: all}}
+  - {value: "playing a battered fiddle", props: {genre: all}}
+  - {value: "sketching faces quickly", props: {genre: all}}
+  - {value: "tying sailor's knots", props: {genre: all}}
+  - {value: "balancing on narrow ledges", props: {genre: all}}
+  - {value: "shuffling cards one-handed", props: {genre: all}}
+  - {value: "calming frightened animals", props: {genre: all}}
+  - {value: "lip-reading across a room", props: {genre: all}}
+  - {value: "copying handwriting", props: {genre: all}}
+  - {value: "singing old ballads", props: {genre: all}}
+  - {value: "bandaging wounds", props: {genre: all}}
+  - {value: "juggling anything at hand", props: {genre: all}}
+  - {value: "whistling bird calls", props: {genre: all}}
+  - {value: "talking past guards", props: {genre: all}}
+  - {value: "throwing knives at a target", props: {genre: all}}
+  - {value: "baking bread before dawn", props: {genre: everyday}}
+  - {value: "fixing leaky pipes", props: {genre: everyday}}
+  - {value: "changing a flat tire", props: {genre: everyday}}
+  - {value: "teaching kids to swim", props: {genre: everyday}}
+  - {value: "carrying four plates at once", props: {genre: everyday}}
+  - {value: "giving quick haircuts", props: {genre: everyday}}
+  - {value: "reading animal tracks", props: {genre: adventure}}
+  - {value: "paddling white water", props: {genre: adventure}}
+  - {value: "building a raft", props: {genre: adventure}}
+  - {value: "starting fires without matches", props: {genre: adventure}}
+  - {value: "scaling icy cliffs", props: {genre: adventure}}
+  - {value: "navigating by the stars", props: {genre: adventure}}
+  - {value: "brewing bitter remedies", props: {genre: fantasy}}
+  - {value: "speaking with ravens", props: {genre: fantasy}}
+  - {value: "carving protective runes", props: {genre: fantasy}}
+  - {value: "riding a winged beast", props: {genre: fantasy}}
+  - {value: "casting small illusions", props: {genre: fantasy}}
+  - {value: "fencing with a rapier", props: {genre: fantasy}}
+  - {value: "hot-wiring cars", props: {genre: cyberpunk}}
+  - {value: "cracking door keypads", props: {genre: cyberpunk}}
+  - {value: "soldering tiny circuits", props: {genre: cyberpunk}}
+  - {value: "piloting a delivery drone", props: {genre: cyberpunk}}
+  - {value: "spoofing face scanners", props: {genre: cyberpunk}}
+  - {value: "rewiring a cyber arm", props: {genre: cyberpunk}}
+  - {value: "tailing someone unseen", props: {genre: noir}}
+  - {value: "mixing stiff drinks", props: {genre: noir}}
+  - {value: "spotting a lie", props: {genre: noir}}
+  - {value: "dusting for fingerprints", props: {genre: noir}}
+  - {value: "taking photos from parked cars", props: {genre: noir}}
+  - {value: "coaxing out a confession", props: {genre: noir}}
+  - {value: "playing a pipe organ", props: {genre: gothic}}
+  - {value: "reading tarot cards", props: {genre: gothic}}
+  - {value: "restoring old portraits", props: {genre: gothic}}
+  - {value: "tending crumbling graves", props: {genre: gothic}}
+  - {value: "writing letters by candlelight", props: {genre: gothic}}
+  - {value: "patching a hull breach", props: {genre: spacefarer}}
+  - {value: "drifting through zero gravity", props: {genre: spacefarer}}
+  - {value: "plotting orbits by hand", props: {genre: spacefarer}}
+  - {value: "docking a small shuttle", props: {genre: spacefarer}}
+  - {value: "tending hydroponic gardens", props: {genre: spacefarer}}
