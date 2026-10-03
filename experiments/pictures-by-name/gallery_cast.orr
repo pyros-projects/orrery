@@ -1,0 +1,18 @@
+# Pictures by name (#128): two characters rolled from the gallery's Character creator pictures, each with all its views, meet in one clip. Orrery Refs loads their pictures itself, no Load Image needed; the language model writes who they are from the prompts that made them.
+# Workflow: orrery_h3_ref2va (Orrery Prompt picks → Orrery Refs → Reference to Video). Try: a seed per pair · __pictures/krea/09_character_creator[loved]__ for the ones you loved · a name from the Libraries tab (image krea/09_character_creator/SEED) to pin one.
+@h3 references 16:9 0.6MP
+style: live-action, warm evening light in a roadside diner, photorealistic, handheld, shallow depth of field
+
+CAST
+@HERO (image __pictures/krea/09_character_creator__): --who they are, in one sentence--
+@STRANGER (image __pictures/krea/09_character_creator__): --who they are, in one sentence--
+keep: face, outfit
+
+SHOT 3s: static, medium
+@HERO stirs a cup of coffee in a red vinyl booth, rain running down the window behind.
+SFX: rain on the glass, a spoon against a mug, a fridge humming
+
+SHOT 3s: push in, small, slow
+@STRANGER slides into the seat across and sets a key on the table between them.
+@STRANGER (low, calm): You kept it.
+SFX: vinyl creaking, the key clicking on formica
