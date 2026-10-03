@@ -675,6 +675,25 @@ def test_a_slot_both_wired_and_sent_is_the_wired_picture_until_the_frames_exist(
     assert out[1].label == "clip_00002:[[0, 0]]" and "frames from clip 2 replace the wired picture" in capsys.readouterr().out
 
 
+def test_orrery_refs_reads_what_the_head_remembers_from_the_input_video(tmp_path, monkeypatch):
+    from orrery.comfy import OrreryRefs
+    send_chain(tmp_path, monkeypatch)
+    with pytest.raises(ValueError, match="remembered from the input video"):
+        OrreryRefs().route(sends({"3": {"segment": -1, "frames": [[24, 24]]}}), image_1="img1")
+    (tmp_path / "h3_context" / "orrery_input.mp4").write_bytes(b"")
+    out = OrreryRefs().route(sends({"3": {"segment": -1, "frames": [[24, 24]]}}), image_1="img1")
+    assert out[1].label == "h3_context:[[24, 24]]"
+
+
+def test_a_reel_that_reads_the_input_video_needs_one_wired(home, monkeypatch, tmp_path):
+    monkeypatch.setitem(sys.modules, "folder_paths", types.SimpleNamespace(get_output_directory=lambda: str(tmp_path)))
+    reel = "@h3 text\nEND ON: she sits down\nSCENE a\nAFTER: the input video\nSHOT 5s\nShe stands up."
+    with pytest.raises(ValueError, match="video input"):
+        OrreryPrompt().run(reel, 5, "h3-base", home=str(home))
+    text, picks, *_ = OrreryPrompt().run(reel.replace("AFTER: the input video\n", ""), 5, "h3-base", home=str(home))
+    assert "input" not in json.loads(picks)
+
+
 def test_orrery_refs_says_when_the_chain_lacks_the_sending_clip(tmp_path, monkeypatch):
     from orrery.comfy import OrreryRefs
     send_chain(tmp_path, monkeypatch, clips=1)

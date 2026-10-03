@@ -89,6 +89,36 @@ def test_test_takes_are_kept_and_the_film_is_joined_without_them(tmp_path):
     assert decoded(active_run(tmp_path) / "film.mp4")[0] == 60
 
 
+def source_video(path, seconds=2, fps=30, w=65, h=49):
+    """A test video at another frame rate, odd-sized, its frames numbered by shade, with a tone."""
+    with av.open(str(path), "w") as out:
+        video = out.add_stream("ffv1", rate=fps)  # lossless, and odd sizes are fine
+        video.width, video.height, video.pix_fmt = w, h, "yuv444p"
+        audio = out.add_stream("aac", rate=SR)
+        for i in range(seconds * fps):
+            frame = np.full((h, w, 3), (i * 4) % 256, np.uint8)
+            for packet in video.encode(av.VideoFrame.from_ndarray(frame, format="rgb24")):
+                out.mux(packet)
+        for packet in video.encode(None):
+            out.mux(packet)
+        tone = (np.sin(np.linspace(0, 600, seconds * SR, dtype=np.float32)) * 0.1)[None]
+        film._encode_sound(out, audio, tone, SR)
+    return path
+
+
+def test_the_input_video_is_kept_at_24_fps_as_the_clip_before_clip_1(tmp_path):
+    source = source_video(tmp_path / "mine.mkv")
+    kept = film.keep_input(source, tmp_path, "h3_context")
+    assert kept == chain.clip_file(tmp_path, "h3_context", -1) == tmp_path / "h3_context" / chain.INPUT_FILE
+    with av.open(str(kept)) as c:
+        stream = c.streams.video[0]
+        assert (stream.average_rate, stream.width, stream.height) == (24, 64, 48)  # even-sized for H.264
+        assert abs(sum(1 for _ in c.decode(stream)) - 48) <= 1 and c.streams.audio
+    written = kept.stat().st_mtime_ns
+    assert film.keep_input(source, tmp_path, "h3_context").stat().st_mtime_ns == written  # the same source: kept
+    assert chain.clip_file(tmp_path / "elsewhere", "h3_context", -1) is None
+
+
 def test_segment_0_starts_a_new_run(tmp_path):
     take(tmp_path, 0)
     take(tmp_path, 1)

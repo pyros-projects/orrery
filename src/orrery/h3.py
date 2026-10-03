@@ -167,6 +167,7 @@ class Compiled:
     images: list[dict] = field(default_factory=list)  # the clip's pictures with an at or a from (clip_images)
     continues: int | None = None  # the segment whose picture this clip continues (Reel.before); None: afresh
     test: bool = False  # a test scene's clip: Orrery Film leaves it out of the film
+    uses_input: bool = False  # the reel reads the Orrery Prompt's input video (Reel.uses_input)
 
 
 # --- front end ------------------------------------------------------------------------------
@@ -939,4 +940,4 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                     sends, reel.send_slots if reel else [],
                     [{**r, "sent": sent_mods[r["name"]]} if r["name"] in sent_mods else r for r in clip_refmods(scene)],
                     clip_images(scene, refs), reel.before(segment, path) if reel else None,
-                    bool(reel and reel.blocks[path[segment][0]].test))
+                    bool(reel and reel.blocks[path[segment][0]].test), bool(reel and reel.uses_input))
