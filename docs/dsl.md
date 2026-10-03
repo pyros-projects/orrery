@@ -101,6 +101,8 @@ uv run orrery compile @effects/subsurface_travel --set start="upper back" --set 
 
 ## What the language guarantees
 
+The language is DSL 2.0 (2026-10-03, #81), the words these docs teach; its version is its own, apart
+from the package's. The earlier words (`CHUNK`, `HANDOFF:`, `SEND:`, `GOTO:`, `?`) still work.
 What a change to orrery must keep, and the tests that hold it. The golden corpus
 (`tests/test_golden.py`) is the executable half: it pins what every built-in preset rolls.
 
