@@ -1,6 +1,6 @@
 # The orrery node app: spec and plan
 
-Status: approved 2026-09-24 ("bau mir die node bitte so wie im mock").
+Status: approved 2026-09-24 ("bau mir die node bitte so wie im mock"), built the same day.
 Design: the clickable mock at https://claude.ai/artifact/V2dGVzCEwNi1QCgUrfvKhm
 (source: `docs/mock/orrery-node-mock.html`). Research that shaped it: three
 installed node packs (NO8D prompt libraries, Pixaroma, Camera H3, Deno, Bernini

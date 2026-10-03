@@ -1,7 +1,7 @@
 # orrery backlog: toward the optimal orrery
 
-Status: brainstorm, 2026-09-24. Nothing here is scheduled. The approved build is
-[plan-node-app.md](plan-node-app.md).
+Status: brainstorm, 2026-09-24, not a schedule: work is planned in the issues. Built from it since:
+structured library entries (properties, 2026-09-25).
 
 ## Thesis
 

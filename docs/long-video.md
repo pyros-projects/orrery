@@ -5,8 +5,9 @@ The reels below are written in the words of their day. DSL 2.0 (#39, 2026-10-03)
 `$x[-1]` (`$x~1`), `IF $x is …:` (`? $x[…]:`) and `always` (`global`); the earlier words still work.
 See [h3.md](h3.md) 1d and 1e.
 
-Status: agreed 2026-09-24. This is orrery's end stage. Built: R1 (Ref2VA), and
-the reel (stage 4, without memory lists). The engine is orrery's own Orrery
+Status: agreed 2026-09-24. This is orrery's end stage. Built: R1 (Ref2VA), the reel (stage 4),
+its memory lists and RefMods per clip (2026-10-02/03), and a reel that goes on from an input video
+(2026-10-03). Open: the "recent" memory and making canon (#58). The engine is orrery's own Orrery
 Continue / Orrery Film (Masked AV from H3 Continuum, since 2026-10-02); H3
 Motion Context, which Pyro's workflow used before, and Contex Loop stay
 options outside orrery. Sources: a design chat between Pyro and Codie

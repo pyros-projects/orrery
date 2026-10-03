@@ -1,6 +1,7 @@
 # Plan: SEND, frames of a reel's clip as reference images for later clips
 
-Status: approved 2026-09-30.
+Status: approved and built 2026-09-30. DSL 2.0 (2026-10-03) writes `SEND: … to image N` as
+`REMEMBER: … as image N`.
 
 ## Why
 

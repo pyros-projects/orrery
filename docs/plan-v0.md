@@ -1,5 +1,7 @@
 # orrery v0 build plan
 
+Status: built 2026-09-23 to 2026-10-02, merged as PR #1 on 2026-10-02.
+
 Goal: software Pyro can use in ComfyUI: seeded prompt expansion that records
 picks, the H3 compiler, the LLM wildcard manager (the differentiator), and the
 nodes. Galaxy UI comes after v0.

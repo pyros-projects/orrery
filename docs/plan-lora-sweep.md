@@ -1,6 +1,6 @@
 # Plan: LoRA sweeps, one Generate for every strength
 
-Status: approved 2026-10-01.
+Status: approved and built 2026-10-01.
 
 ## The tag
 
