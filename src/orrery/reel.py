@@ -21,8 +21,8 @@ The words of an earlier orrery keep working, with the same dice: CHUNK for SCENE
 
 A segment is one clip. Its seed derives from the node's seed and the segment number, so every
 clip is reproducible and a repeated scene still varies; `$x~N` recomputes the earlier clip's
-bindings instead of remembering them. The previous segment's END ON: opens this one, its own
-closes it, and from the second segment on Shot 1 also covers the frames Motion Context pins.
+bindings instead of remembering them. The previous segment's END ON: opens this one (`START WITH:
+the door bursts open` opens it instead), its own closes it, and from the second segment on Shot 1 also covers the frames Motion Context pins.
 
 `REMEMBER:` (`SEND:`, the earlier word, writes `to` for `as` and `for segments` from 0 for `in
 clips`) keeps frames of a scene's clip for the clips after it:
@@ -70,6 +70,7 @@ from orrery.library import Library
 CHUNK = re.compile(r"^(?:SCENE|CHUNK)\b\s*(.*)$")  # a scene's heading; CHUNK is the earlier word
 REPEAT = re.compile(r"^(.*?)\s*(?:\brepeat\s+(\d+|forever)|(?<!\S)[×x]\s*(\d+)|(?<!\S)(forever))\s*$", re.IGNORECASE)
 HANDOFF = re.compile(r"^(?:END ON|HANDOFF):\s*(.+)$")
+START_WITH = re.compile(r"^START WITH:\s*(.+)$")  # the scene's own opening sentence
 SEND = re.compile(r"^SEND:\s*(.*)$")
 REMEMBER = re.compile(r"^REMEMBER:\s*(.*)$")
 AFTER = re.compile(r"^AFTER:\s*(.*)$")
@@ -659,9 +660,9 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
         raise ReelEnd(f"The reel has {len(path)} clips at this seed; segment {last} (clip {last + 1}) is past its end "
                       "(the segment counts from 0, like Load Latent's clip_index).")
 
-    def expand(t: int) -> tuple[list[str], str | None, list[Pick], list[Pick]]:
+    def expand(t: int) -> tuple[list[str], str | None, list[Pick], list[Pick], str | None]:
         ex, block = expander(t)
-        lines, handoff, handoff_picks = [], None, []
+        lines, handoff, handoff_picks, opening = [], None, [], None
         for raw in block.lines:
             line = raw.strip()
             if not line or BINDING.match(line):
@@ -670,9 +671,11 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
                 before = len(ex.picks)
                 handoff = ex.expr(m.group(1)).strip().rstrip(".")
                 handoff_picks = ex.picks[before:]
+            elif m := START_WITH.match(line):
+                opening = ex.expr(m.group(1)).strip().rstrip(".")
             else:
                 lines.append(ex.expr(line))
-        return lines, handoff, ex.picks, handoff_picks
+        return lines, handoff, ex.picks, handoff_picks, opening
 
     return world, head, expand, (path, ended)
 
@@ -693,7 +696,7 @@ def resolved(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: M
     _, head, expand, (path, _) = _unroll(reel, seed, libraries, weights, segments - 1)
     out = []
     for t in range(segments):
-        lines, handoff, _, _ = expand(t)
+        lines, handoff, *_ = expand(t)
         out.append({"title": reel.blocks[path[t][0]].title, "lines": lines, "handoff": handoff})
     return head, out
 
@@ -716,9 +719,10 @@ def build_segment(reel: Reel, seed: int, libraries: Mapping[str, Library],
                                       "it never plays."))
 
     world, head, expand, (path, _) = _unroll(reel, seed, libraries, weights, segment)
-    lines, handoff, picks, _ = expand(segment)
+    lines, handoff, picks, _, opening = expand(segment)
     continues = reel.before(segment, path)
-    before, before_picks = (expand(continues)[1::2] if continues is not None else (None, []))
+    before, before_picks = (expand(continues)[1:4:2] if continues is not None and not opening else (None, []))
+    before = opening or before  # START WITH: the scene's own opening, in place of the END ON: before it
     lint += [Issue("warn", w) for w in world.warnings]
     scene = parse_scene("\n".join(head + lines), Expander(0, {}), lint, expanded=True)
     if scene.shots and before:

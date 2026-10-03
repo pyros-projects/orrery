@@ -79,6 +79,7 @@ _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
 _HANDOFF = re.compile(r"^(?:END ON|HANDOFF):\s*(.+)$")
 _SEND_LINE = re.compile(r"^SEND:")
 _AFTER = re.compile(r"^AFTER:")
+_START_WITH = re.compile(r"^START WITH:")
 _LORA = re.compile(r"^LORA:\s*(.+)$")
 _CONTEXT = re.compile(r"^context:\s*(\d+)\s*f?$", re.IGNORECASE)
 _REFMODS = re.compile(r"^refmods:\s*(?:at\s+(\d*\.?\d+))?\s*(?:from\s+(\d+(?:\.\d+)?)\s*%)?\s*(?:to\s+(\d+(?:\.\d+)?)\s*%)?\s*$",
@@ -209,6 +210,8 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
             lint.append(Issue("warn", "END ON: only works inside a SCENE; it is ignored."))
         elif _AFTER.match(line):
             lint.append(Issue("warn", "AFTER: only works inside a SCENE of a reel; it is ignored."))
+        elif _START_WITH.match(line):
+            lint.append(Issue("warn", "START WITH: only works inside a SCENE of a reel; it is ignored."))
         elif _SEND_LINE.match(line):
             raise ValueError("SEND: belongs inside a SCENE: it sends frames of that scene's clip to the clips after it.")
         elif m := _CONTEXT.match(line):

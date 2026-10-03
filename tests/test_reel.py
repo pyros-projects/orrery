@@ -616,6 +616,17 @@ def test_after_names_a_scene_that_played_and_a_repeat_continues_itself():
                for i in compile_scene("@h3 text\nAFTER: 2\nSHOT 5s\nA fox.", 1, {}).lint)
 
 
+def test_start_with_opens_a_scene_in_its_own_words_and_the_next_still_opens_on_its_end():
+    src = film(GOTO_REEL).replace("SCENE the stairs\n", "SCENE the stairs\nSTART WITH: the door bursts open\n")
+    stairs, lamp = (compile_scene(src, 1, {}, target="h3-base", segment=t).text for t in (1, 2))
+    assert "The shot opens as the door bursts open" in stairs and "opens as the keeper" not in stairs
+    assert "The shot opens as the keeper reaches the landing" in lamp
+    first = compile_scene(src.replace("SCENE the gate\n", "SCENE the gate\nSTART WITH: dawn breaks\n"), 1, {}, target="h3-base")
+    assert "The shot opens as dawn breaks" in first.text  # the first clip too
+    assert any("START WITH: only works inside a SCENE" in i.message
+               for i in compile_scene("@h3 text\nSTART WITH: x\nSHOT 5s\nA fox.", 1, {}).lint)
+
+
 def test_a_cut_with_a_chance_holds_that_often_and_each_seed_its_own_way():
     story = film(GOTO_REEL).replace("CUT TO: the stairs ×2", "CUT TO: the stairs (50%) ×3")
     reel = split_reel(story)
