@@ -103,7 +103,17 @@ Nodes under **orrery**:
     clips not rendered yet. A scene's divider has three buttons: ▷
     **Generate** its clip (↻ **Regenerate** once it has one, a new take) and
     stay on the scene, ⏭ go to the **next scene** (Next clip becomes its first
-    clip), and ⏩ go there **and generate** it. While a clip renders, its box
+    clip), and ⏩ go there **and generate** it. **Sample surfing**: ×1 beside
+    ▷ turns to ×2, ×4, ×8, and Generate renders that many **takes** of the
+    clip. They line up under it; hover plays one, a click puts it in the film
+    (the next clip and `REMEMBER:` then use it too). 📌 in a scene keeps its
+    rolled prompt, so the takes change only the sampler's noise (the Orrery
+    Prompt's `seed` output carries seed + take into the noise, as in the
+    example workflows); without it each take rolls anew, and the one you pick
+    gives the node its seed, so the clips after it roll the same world. The
+    gear's **Sample surfing** numbers the takes' seeds (seed+1, seed+2 …: the
+    same takes tomorrow) or follows the node's control after generate, and can
+    delete the takes you don't pick. While a clip renders, its box
     shows the sampler's preview and the step it is at: KJNodes' Model Preview
     Override (a picture, or the whole clip as it forms), else ComfyUI's own
     preview when its live preview is on. Under a scene's clips come the frames its

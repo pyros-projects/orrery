@@ -1,6 +1,7 @@
 // A reel's clips as Orrery Film (or H3 Motion Context's Chain Video) keeps them, under each scene in the cells
 // view (cells.js), each scene's in a section of its own. The column beside the editor went in #185: the dials
 // have that place now.
+import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
 import { shape } from "./model.js";
 
@@ -53,8 +54,30 @@ function bigClipHTML(app, s, clip, segment) {
 export function sectionHTML(app, c) {
   if (c.first === null) return '<span class="muted cm-none">never plays: a scene before it repeats forever</span>';
   const clips = new Map((app.data.chain?.clips || []).map((x) => [x.segment, x]));
-  const segment = Number(app.bridge.getSegment());
-  return `<div class="cm-clips">${segmentsOf(c, clips).map((s) => bigClipHTML(app, s, clips.get(s), segment)).join("")}</div>`;
+  const segment = Number(app.bridge.getSegment()), segs = segmentsOf(c, clips);
+  return `<div class="cm-clips">${segs.map((s) => bigClipHTML(app, s, clips.get(s), segment)).join("")}</div>${segs.map((s) => takesHTML(app, s)).join("")}`;
+}
+
+// A clip's takes (#206), where it has more than one: hover plays one, a click puts it in the film.
+function takesHTML(app, s) {
+  const takes = app.data.chain?.takes?.[s] || [];
+  if (takes.length < 2) return "";
+  return `<div class="cm-takes" data-seg="${s}"><span class="muted">clip ${s + 1} · ${takes.length} takes</span>${takes.map((t, i) =>
+    `<button type="button" class="take${t.active ? " on" : ""}" data-take="${esc(t.folder)}" data-seg="${s}" title="Take ${i + 1} · seed ${t.seed ?? "?"}`
+    + `${t.take ? ` + ${t.take}` : ""}${t.active ? " · in the film" : " · click to put it in the film"}">`
+    + `<img loading="lazy" alt="" src="${app.api.takeThumbURL(app.bridge.chain(), t.folder)}"><span class="n">${i + 1}</span></button>`).join("")}</div>`;
+}
+
+// Sample surfing (#206): the take picked is the one the film, REMEMBER: and the next clip use. A take that rolled
+// anew sets the node's seed to its own, so the clips after it roll the same world.
+async function pickTake(app, segment, folder) {
+  try {
+    const got = await app.api.pickTake(app.bridge.chain(), segment, folder, app.data.keep_takes === false);
+    if (!got.take && got.seed != null && Number(got.seed) !== Number(app.bridge.getSeed())) app.bridge.setSeed(Number(got.seed));
+    await loadChain(app);
+    app.refreshRun?.();
+    app.toast(`This take of clip ${segment + 1} is in the film${app.data.keep_takes === false ? "; the others are deleted" : ""}`);
+  } catch (err) { app.fail(err); }
 }
 
 // The clip a scene's REMEMBER: lines cut their frames from (its first), when the chain holds it; -1 the input video.
@@ -104,6 +127,13 @@ export function paintLive(app) {
 // Hover plays a clip in place; a click opens it large.
 export function wireClips(app, box) {
   box.addEventListener("pointerover", (e) => {
+    const take = e.target.closest(".take");
+    if (take && !take.querySelector("video")) {
+      const v = Object.assign(document.createElement("video"), { muted: true, loop: true, autoplay: true, playsInline: true });
+      v.src = app.api.takeVideoURL(app.bridge.chain(), take.dataset.take);
+      take.prepend(v);
+      return;
+    }
     const clip = e.target.closest(".tl-clip:not(.empty)");
     if (clip?.classList.contains("big")) { clip.querySelector("video")?.play().catch(() => {}); return; }
     if (!clip || clip.querySelector("video")) return;
@@ -113,12 +143,16 @@ export function wireClips(app, box) {
     clip.prepend(v);
   });
   box.addEventListener("pointerout", (e) => {
+    const take = e.target.closest(".take");
+    if (take && !take.contains(e.relatedTarget)) take.querySelector("video")?.remove();
     const clip = e.target.closest(".tl-clip");
     if (!clip || clip.contains(e.relatedTarget)) return;
     if (clip.classList.contains("big")) clip.querySelector("video")?.pause();
     else clip.querySelector("video")?.remove();
   });
   box.addEventListener("click", (e) => {
+    const take = e.target.closest(".take");
+    if (take) { if (!take.classList.contains("on")) pickTake(app, Number(take.dataset.seg), take.dataset.take); return; }
     const clip = e.target.closest(".tl-clip:not(.empty)");
     if (!clip) return;
     const s = clip.dataset.seg, made = app.data.chain?.clips.find((c) => String(c.segment) === s);

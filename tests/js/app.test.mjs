@@ -451,6 +451,19 @@ test("a scene's buttons: the clip it generates and where the next scene starts (
   assert.equal(nextSceneClip(end, [end]), null);  // the reel's last scene
 });
 
+test("sample surfing numbers its takes on from the ones a clip has, or follows the seed's control (#206)", async () => {
+  const { surfSeeds } = await import("../../comfyui/web/app/prompt.js");
+  const app = (takes, { control = "fixed", numbered = true, clips = [] } = {}) => ({
+    data: { chain: { takes, clips }, surf_numbered: numbered }, bridge: { getSeed: () => 100, getControl: () => control } });
+  assert.deepEqual(surfSeeds(app({}), 2, 4, true), [0, 1, 2, 3]);  // a clip not rendered yet: the plain take first
+  assert.deepEqual(surfSeeds(app({}, { clips: [{ segment: 2 }] }), 2, 2, true), [1, 2]);  // its one clip is take 0
+  assert.deepEqual(surfSeeds(app({ 2: [{ take: 0, seed: 100 }, { take: 3, seed: 100 }] }), 2, 2, true), [4, 5]);
+  assert.deepEqual(surfSeeds(app({ 2: [{ take: 0, seed: 100 }, { take: 0, seed: 102 }] }), 2, 2, false), [3, 4]);  // seeds, rolled anew
+  assert.deepEqual(surfSeeds(app({}, { numbered: false, control: "fixed" }), 2, 2, true), [0, 0]);  // the same take again
+  const random = surfSeeds(app({}, { numbered: false, control: "randomize" }), 2, 3, true);
+  assert.equal(new Set(random).size, 3);
+});
+
 test("Write now counts the libraries a template still needs, as autolib does", () => {
   const libs = [{ name: "animal", count: 3 }, { name: "style", count: 2 }];
   const text = "# __commented__\na __animal:5__ in __style__ by __makers/new__ <lora:__x__:1>\n__style:2__ \\__escaped__ __clothing/*__ __mine__";

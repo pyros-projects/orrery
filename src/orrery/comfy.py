@@ -605,6 +605,9 @@ class OrreryPrompt:
                     "AFTER: the input video continues it.")}),
                 "sweep": ("STRING", {"default": "", "tooltip": (
                     "Set by Roll for each run of a LoRA sweep (run|gallery folder); empty runs the first.")}),
+                "take": ("INT", {"default": 0, "min": 0, "max": 0xFFFFFFFF, "tooltip": (
+                    "Set by the app for sample surfing (#206): the seed output carries seed + take, so the sampler's "
+                    "noise changes while the prompt rolls at the seed as before.")}),
                 "chain": ("STRING", {"default": "", "tooltip": (
                     "Set by the app (#197): the folder under ComfyUI's output where this reel's clips live, "
                     "reels/<preset> or reels/untitled/<date time>; empty is h3_context. Orrery Film keeps them in "
@@ -615,13 +618,13 @@ class OrreryPrompt:
 
     @classmethod
     def IS_CHANGED(cls, template, seed, target, preset=NO_PRESET, home="", params="", segment=0,
-                   sweep="", chain="", **_):
+                   sweep="", chain="", take=0, **_):
         h = resolve_home(home or None)
         chosen = load_preset(h, preset) if preset and preset != NO_PRESET else template
-        return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{segment}:{chain}:{sweep}:{state_token(h)}"
+        return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{segment}:{chain}:{take}:{sweep}:{state_token(h)}"
 
     def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, clip=None,
-            sweep="", chain="", unique_id=None, extra_pnginfo=None, prompt=None,
+            sweep="", chain="", take=0, unique_id=None, extra_pnginfo=None, prompt=None,
             first_frame=None, last_frame=None, video=None):
         chain = chain or DEFAULT_CHAIN  # the app names it after the reel; old workflows and the CLI keep h3_context
         stills = _previous(chain, segment)
@@ -632,6 +635,9 @@ class OrreryPrompt:
                                  sweep, continued(prompt, unique_id), (_size(first_frame), _size(last_frame)),
                                  reads_picks(prompt, unique_id, "OrreryRefMods"), standing)
             data = json.loads(outputs[1])
+            if take:  # sample surfing (#206): the rolls as at the seed, the sampler's noise from seed + take
+                data["take"] = take
+                outputs = (outputs[0], json.dumps(data, ensure_ascii=False), (seed + take) % 2**32, *outputs[3:])
             h = resolve_home(home or None)
             history.record(h, data)
             if uistate.load_ui(h)["log_prompts"]:

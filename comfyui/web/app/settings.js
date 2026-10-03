@@ -82,6 +82,14 @@ export async function openSettings(app) {
       <span><b>Timeline</b>: a reel's clips as the reel keeps them (Orrery Film or Chain Video), under each scene, and the frames its <code>REMEMBER:</code> lines take</span></label>
     <div class="field"><label class="label" for="oa-clipmin">Clip size</label>
       <div class="row"><input class="input narrow" id="oa-clipmin" type="number" min="96" max="1600" step="8" value="${app.data.clip_min ?? 360}"><span class="muted">px: a clip's shorter side under its scene, as far as the editor is wide</span></div></div>
+    <div class="row spread"><h5 class="label">Sample surfing</h5></div>
+    <p class="muted flush">A scene's <b>×N</b> renders N takes of its clip; you pick the best under it (📌 in the scene keeps its rolled prompt, so only the noise changes).
+      The takes differ only if their seeds do.</p>
+    <div class="llm-pick" role="radiogroup" aria-label="The takes' seeds">
+      <label class="check"><input type="radio" name="oa-surf" value="numbered" ${app.data.surf_numbered !== false ? "checked" : ""}><span><b>Numbered</b> from the node's seed: seed+1, seed+2 … (the same takes again tomorrow)</span></label>
+      <label class="check"><input type="radio" name="oa-surf" value="control" ${app.data.surf_numbered === false ? "checked" : ""}><span>As the node's <b>control after generate</b> says (randomize: new ones every time; fixed: the same take again)</span></label></div>
+    <label class="check"><input type="checkbox" id="oa-deltakes" ${app.data.keep_takes === false ? "checked" : ""}>
+      <span><b>Delete the takes you don't pick</b>, so they don't fill the disk</span></label>
     <label class="check"><input type="checkbox" id="oa-log" ${app.data.log_prompts !== false ? "checked" : ""}>
       <span><b>Log each run</b> to ComfyUI's console: its seed, every pick and the resolved prompt (the <b>History</b> tab keeps them either way)</span></label>
     <div class="acts"><button type="button" class="btn ghost" data-cancel>Cancel</button><button class="btn primary">${icon("save")}Save</button></div>
@@ -125,7 +133,8 @@ export async function openSettings(app) {
         app.toast(`Home folder: <b>${esc(moved.home)}</b>`);
       }
       const flags = { quickstart: sheet.querySelector("#oa-qs").checked, dividers: sheet.querySelector("#oa-div").checked,
-        timeline: sheet.querySelector("#oa-tl").checked, log_prompts: sheet.querySelector("#oa-log").checked };
+        timeline: sheet.querySelector("#oa-tl").checked, log_prompts: sheet.querySelector("#oa-log").checked,
+        surf_numbered: sheet.querySelector('[name="oa-surf"]:checked').value === "numbered", keep_takes: !sheet.querySelector("#oa-deltakes").checked };
       if (Object.entries(flags).some(([k, on]) => on !== (app.data[k] !== false))) Object.assign(app.data, await app.api.saveUi(flags));
       const clipMin = Number(sheet.querySelector("#oa-clipmin").value) || 360;
       if (clipMin !== (app.data.clip_min ?? 360)) { Object.assign(app.data, await app.api.saveUi({ clip_min: clipMin })); app.cellsSig = null; }

@@ -89,6 +89,9 @@ export function client(home) {
     chainThumbURL: (segment, chain, v) => url("chain/thumb", { segment, ...(chain ? { chain } : {}), v: v ?? "" }),
     chainVideoURL: (segment, chain, v) => url("chain/video", { segment, ...(chain ? { chain } : {}), v: v ?? "" }),
     moveChain: (from, to) => call("chain/move", { body: { from, to } }),
+    pickTake: (chain, segment, folder, del) => call("chain/pick", { body: { chain, segment, folder, delete: !!del } }),
+    takeThumbURL: (chain, take) => url("chain/thumb", { take, ...(chain ? { chain } : {}) }),
+    takeVideoURL: (chain, take) => url("chain/video", { take, ...(chain ? { chain } : {}) }),
     anchorURL: (image, v) => url("anchor", { image, v: v ?? "" }),
   };
 }

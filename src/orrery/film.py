@@ -11,12 +11,16 @@ orrery.chain reads either store; `film.mp4` joins them. A take is a folder:
     meta.json    segment, frames, seed, template …
 
 Rendering segment N again makes the new take active and drops the takes after it, which continued
-another one; segment 0 starts a new run. Older takes and runs stay on disk.
+another one; segment 0 starts a new run. Older takes and runs stay on disk. A take's meta names the take
+it continues (`after`), so sample surfing (#206) offers only the takes that fit the clip before, and
+`pick_take` makes one of them active again.
 """
 
 import itertools
 import json
 import os
+import re
+import shutil
 import time
 import uuid
 from collections.abc import Sequence
@@ -109,6 +113,8 @@ def save_take(output: Path | str, latent_path: str, segment: int, frames: Sequen
         if was[3:] != settings[3:]:
             raise FilmError(f"clip {segment + 1}'s sound is {sample_rate} Hz × {sound.shape[0]}, the reel's "
                             f"{was[3]} Hz × {was[4]}.")
+    continues = segment - 1 if continues == -1 else continues
+    after = clips[continues]["folder"] if continues is not None and 0 <= continues < len(clips) else None
     name = f"seg_{segment:04d}_{uuid.uuid4().hex[:8]}"
     tmp = run / f".{name}.tmp"
     tmp.mkdir(parents=True)
@@ -116,12 +122,11 @@ def save_take(output: Path | str, latent_path: str, segment: int, frames: Sequen
     _write_clip(tmp / "video.mp4", first, rest, sound, sample_rate)
     np.save(tmp / "audio.npy", sound)
     np.savez(tmp / "tail.npz", video=np.asarray(tail.video, np.float32), audio=np.asarray(tail.audio, np.float32))
-    (tmp / "meta.json").write_text(json.dumps({**meta, "segment": segment, "frames": count,
-                                               "grid_offset": tail.grid_offset,
+    (tmp / "meta.json").write_text(json.dumps({**meta, "segment": segment, "frames": count, "continues": continues,
+                                               "after": after, "grid_offset": tail.grid_offset,
                                                "created": time.strftime("%Y-%m-%dT%H:%M:%S")}, indent=2),
                                    encoding="utf-8")
     os.replace(tmp, run / name)
-    continues = segment - 1 if continues == -1 else continues
     later = list(itertools.takewhile(lambda c: not _continues(clips, c, segment), range(segment + 1, len(clips))))
     clips = [*clips[:segment], {"folder": name, "frames": count, "continues": continues, **({"test": True} if test else {})},
              *(clips[c] for c in later)]
@@ -193,6 +198,73 @@ def _input_sound(container):
     parts = [r.to_ndarray() for frame in container.decode(stream) for r in resampler.resample(frame)]
     parts += [r.to_ndarray() for r in resampler.resample(None)]
     return (np.concatenate(parts, axis=1).astype(np.float32) if parts else None), int(stream.rate)
+
+
+_TAKE = re.compile(r"^seg_(\d{4})_[0-9a-f]{8}$")
+
+
+def _meta(take: Path) -> dict:
+    try:
+        return json.loads((take / "meta.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+def takes(output: Path | str, latent_path: str) -> dict[int, list[dict]]:
+    """The takes of every segment in the active run that fit the clip before as it is now (a take made on
+    another take of it would not continue it), oldest first: {segment: [{folder, seed, take, created, active}]}."""
+    run, state = _active(_root(output, latent_path))
+    if run is None:
+        return {}
+    clips, out = state.get("clips", []), {}
+    for take in sorted(p for p in run.iterdir() if p.is_dir() and _TAKE.match(p.name)):
+        segment, meta = int(_TAKE.match(take.name).group(1)), _meta(take)
+        before = meta.get("continues")
+        fits = meta.get("after") is None or (before is not None and 0 <= before < len(clips)
+                                            and clips[before]["folder"] == meta["after"])
+        if fits and segment < len(clips):
+            out.setdefault(segment, []).append({"folder": take.name, "seed": meta.get("seed"), "take": meta.get("take") or 0,
+                                                "created": meta.get("created"), "active": clips[segment]["folder"] == take.name,
+                                                "_at": (take / "meta.json").stat().st_mtime_ns})
+    for listed in out.values():
+        listed.sort(key=lambda t: t.pop("_at"))  # the order they were made in: created counts whole seconds
+    return out
+
+
+def take_file(output: Path | str, latent_path: str, folder: str) -> Path | None:
+    """A take's video in the active run, by its folder's name."""
+    run, _ = _active(_root(output, latent_path))
+    path = run / folder / "video.mp4" if run is not None and _TAKE.match(folder) else None
+    return path if path is not None and path.is_file() else None
+
+
+def pick_take(output: Path | str, latent_path: str, segment: int, folder: str, delete: bool = False) -> dict:
+    """Make a take of `segment` the active one (sample surfing, #206): the film is joined again with it, and the
+    takes after it that continued the one it replaces leave the run, as when the segment renders again.
+    `delete`: the segment's other takes are deleted from disk. Returns the take's seed and take number."""
+    run, state = _active(_root(output, latent_path))
+    clips = state.get("clips", [])
+    match = _TAKE.match(folder or "")
+    if run is None or segment >= len(clips) or not match or int(match.group(1)) != segment or not (run / folder).is_dir():
+        raise FilmError(f"clip {segment + 1} has no take {folder!r} in the reel {latent_path!r}.")
+    fitting = {t["folder"] for t in takes(output, latent_path).get(segment, [])}
+    if folder not in fitting:
+        raise FilmError(f"take {folder!r} was made on another take of clip {segment}: it would not continue it.")
+    meta = _meta(run / folder)
+    later = list(itertools.takewhile(lambda c: not _continues(clips, c, segment), range(segment + 1, len(clips))))
+    old = clips[segment]
+    clips = [*clips[:segment], {"folder": folder, "frames": meta.get("frames", old.get("frames")),
+                                "continues": meta.get("continues", old.get("continues")),
+                                **({"test": True} if old.get("test") else {})},
+             *(clips[c] for c in later)]
+    settings = state.get("settings") or []
+    write_atomic(run / "clips.json", json.dumps({"settings": settings, "clips": clips}, indent=2))
+    _join(run, clips, int(settings[3]) if len(settings) > 3 else 48000)
+    if delete:
+        for other in run.iterdir():
+            if other.is_dir() and other.name != folder and _TAKE.match(other.name) and int(_TAKE.match(other.name).group(1)) == segment:
+                shutil.rmtree(other)
+    return {"folder": folder, "seed": meta.get("seed"), "take": meta.get("take") or 0}
 
 
 def film_file(take: Path) -> Path:

@@ -148,6 +148,18 @@
 .orrery-app .scene-act:hover:not(:disabled) { color: var(--brass); background: var(--hover); }
 .orrery-app .scene-act:disabled { color: var(--line); cursor: default; }
 .orrery-app .chunkline.now .scene-act { background: color-mix(in srgb, var(--brass) 14%, var(--well)); }
+.orrery-app .scene-act[data-scene-act="takes"] { width: auto; padding: 0 4px; font: 500 10px/1 var(--mono); }
+.orrery-app .scene-act[aria-pressed="true"] { color: var(--brass); }
+/* a clip's takes (#206): a strip under the scene's clips; the one in the film is marked */
+.orrery-app .cm-takes { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; }
+.orrery-app .cm-takes .muted { margin-right: 4px; }
+.orrery-app .take { position: relative; width: 72px; height: 42px; padding: 0; border: 1px solid var(--line); border-radius: 4px; overflow: hidden;
+  background: #22232e; cursor: pointer; }
+.orrery-app .take img, .orrery-app .take video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.orrery-app .take video { z-index: 1; }
+.orrery-app .take .n { position: absolute; left: 3px; bottom: 2px; z-index: 2; font: 500 9.5px/1 var(--mono); color: #fff; text-shadow: 0 0 3px #000; }
+.orrery-app .take:hover { border-color: var(--muted); }
+.orrery-app .take.on { border: 2px solid var(--brass); cursor: default; }
 /* the dials' sidebar (#184): beside the editor, as wide as its grip sets (--side-w), one dial a row */
 .orrery-app .side-grip { width: 8px; flex: none; cursor: col-resize; border-radius: 4px; touch-action: none; }
 .orrery-app .side-grip:hover, .orrery-app .side-grip:focus-visible { background: var(--line); outline: none; }

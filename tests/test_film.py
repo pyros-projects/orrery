@@ -203,3 +203,39 @@ def test_the_readers_follow_the_store_written_last(tmp_path):
     os.utime(theirs / "clips.json", (0, 0))
     os.utime(clips_json, (5, 5))
     assert chain.clip_file(tmp_path, "h3_context", 0) == ours / "video.mp4"
+
+
+def test_sample_surfing_offers_a_clips_takes_and_picks_one(tmp_path):
+    """#206: four takes of clip 2, the best one picked; the film and the next clip follow it."""
+    take(tmp_path, 0)
+    surf = [take(tmp_path, 1, n=24 + k) for k in range(4)]  # the newest is active, as after a render
+    listed = film.takes(tmp_path, "h3_context")
+    assert [t["folder"] for t in listed[1]] == [p.name for p in surf] and listed[1][-1]["active"]
+    assert len(listed[0]) == 1
+    picked = film.pick_take(tmp_path, "h3_context", 1, surf[1].name)
+    assert picked == {"folder": surf[1].name, "seed": 7, "take": 0}
+    assert [(c["segment"], c["frames"]) for c in chain.listing(tmp_path, "h3_context")["clips"]] == [(0, 24), (1, 25)]
+    assert chain.clip_file(tmp_path, "h3_context", 1) == surf[1] / "video.mp4"
+    assert decoded(active_run(tmp_path) / "film.mp4")[0] == 49
+    assert film.take_file(tmp_path, "h3_context", surf[2].name) == surf[2] / "video.mp4"
+
+
+def test_a_picked_take_drops_the_clips_that_continued_another_and_hides_their_takes(tmp_path):
+    take(tmp_path, 0)
+    a, _ = take(tmp_path, 1), take(tmp_path, 1, n=30)  # the second, b, is the active one
+    on_b = take(tmp_path, 2)  # made on take b of clip 2
+    film.pick_take(tmp_path, "h3_context", 1, a.name)
+    assert [c["segment"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [0, 1]  # clip 3 continued b
+    assert 2 not in film.takes(tmp_path, "h3_context")  # nothing of clip 3 fits take a
+    with pytest.raises(film.FilmError):  # clip 3 has left the film: none of its takes is offered or picked
+        film.pick_take(tmp_path, "h3_context", 2, on_b.name)
+    with pytest.raises(film.FilmError):
+        film.pick_take(tmp_path, "h3_context", 1, "seg_0001_../../x")
+
+
+def test_picking_a_take_can_delete_the_others(tmp_path):
+    take(tmp_path, 0)
+    surf = [take(tmp_path, 1) for _ in range(3)]
+    film.pick_take(tmp_path, "h3_context", 1, surf[0].name, delete=True)
+    assert surf[0].is_dir() and not surf[1].exists() and not surf[2].exists()
+    assert [t["folder"] for t in film.takes(tmp_path, "h3_context")[1]] == [surf[0].name]
