@@ -62,6 +62,7 @@ checks) are left out.
 
 ### Fixed
 
+- A new Orrery Prompt starts 1300 px wide, so the footer of a prompt or an H3 scene fits on one line (#181).
 - A dial's list of choices opens every time: a menu of its own shows every choice while the dial holds
   one of them, filters what you type, and a library's choices come back after a run (#155).
 - The Libraries tab opens at once with a home of a hundred thousand entries (it loaded all of them,
