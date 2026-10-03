@@ -731,6 +731,110 @@ def reel_remembered(home: Home, args: dict) -> dict:
         raise ApiError(400, str(err)) from None
 
 
+def _short(text, most: int = 72) -> str:
+    text = " ".join(str(text).split())
+    return text if len(text) <= most else text[:most - 1].rstrip(" ,") + "…"
+
+
+def _shown(value) -> str:
+    """An export as one line: its text, a list's items, an entry's value and its fields."""
+    if isinstance(value, list):
+        return ", ".join(map(str, value))
+    if isinstance(value, dict):
+        rest = " · ".join(f"{k} {v}" for k, v in value.items() if k != "value")
+        return f"{value.get('value', '')}{f' · {rest}' if rest else ''}"
+    return str(value)
+
+
+def _slots(numbers: list[int]) -> str:
+    """image 6–9, images 2, 5: how a member's pictures read at a line's end."""
+    if not numbers:
+        return ""
+    if len(numbers) > 2 and numbers == list(range(numbers[0], numbers[-1] + 1)):
+        return f"images {numbers[0]}–{numbers[-1]}"
+    return f"image{'s' if len(numbers) > 1 else ''} {', '.join(map(str, numbers))}"
+
+
+def annotate(home: Home, args: dict) -> dict:
+    """What lines of a template give at a seed, for the editor to show at their ends (#163): each binding
+    as it rolled, each export, a grid's cells, and in a screenplay where each CAST member's pictures go
+    (a named picture with its name). Errors leave a part empty: the editor shows what it can."""
+    from orrery.dsl import parse, with_inline
+    from orrery.loras import long_form
+
+    text, target = _template_for(home, args)
+    seed, libs = _int(args, "seed", 0), home.libraries()
+    src = long_form(strip_comments(text))
+    out: dict = {"bindings": {}, "fields": {}, "exports": {}, "grid": "", "cast": {}, "members": {}}
+    grid = None
+    try:
+        if parse(src).params.grid is not None:
+            from orrery import batch
+
+            grid = batch.axes(*with_inline(src, libs))
+            out["grid"] = _short(f"{batch.cells(grid)} runs: " + " × ".join(" · ".join(a.options) for a in grid), 110)
+    except ValueError:
+        pass
+    try:
+        for _ in range(8):  # a library still to be written stands in as its name, so the rest still shows
+            try:
+                x = expand(src, seed, libs, home.weights(), cell=0 if grid else None)
+                break
+            except MissingLibrary as err:
+                libs = {**libs, err.name: Library(err.name, [Entry(f"\\__{err.name}\\__")])}  # escaped: shown, not rolled
+        else:
+            raise ValueError("too many libraries still to be written")
+        out["bindings"] = {k: _short(v) for k, v in x.bound.items()}
+        for name, expr in parse(src).bindings:  # a binding to one library: the fields of the entry it rolled
+            m = re.match(r"^__([\w/]+?)(?:\[[^\]]*\]|#[\w-]+:\$?[\w.-]+)*__$", expr.strip())
+            entry = m and libs.get(m.group(1)) and next((e for e in libs[m.group(1)].entries if e.value == x.bound.get(name)), None)
+            if entry:
+                out["fields"][name] = {k: _short(v, 160) for k, v in entry.props if k not in ("ids", "pictures")}
+        out["exports"] = {k: _short(_shown(v)) for k, v in x.exports.items()}
+    except (ValueError, KeyError, MissingLibrary):
+        pass
+    if target != "text" and src.lstrip().startswith("@h3"):
+        try:
+            c = compile_scene(src, seed, libs, home.weights(), segment=_int(args, "segment", 0), cell=0 if grid else None)
+            for m in c.scene.cast:
+                images = sorted({s.index for s in m.sources if s.kind == "image"})
+                named = list(dict.fromkeys(c.pictures[n]["name"] for n in images if n in c.pictures))
+                refmods = [s.name for s in m.sources if s.kind == "refmod"]
+                parts = [_slots(images), *named, *(f"refmod {r}" for r in refmods)]
+                out["cast"][m.name] = _short(" · ".join(p for p in parts if p) or "no picture in this clip", 90)
+                dials = {i["image"]: i for i in c.images if i.get("member") == m.name}
+                mods = {r["name"]: r for r in c.refmods}
+                out["members"][m.name] = {  # who the member is in this clip, for the editor's hover (#147)
+                    "who": " ".join(f"{m.head}{m.tail}".split()),
+                    "pictures": [{"image": n, **({"name": c.pictures[n]["name"], "id": c.pictures[n].get("id")} if n in c.pictures else {}),
+                                  **{k: dials[n][k] for k in ("strength", "from", "to", "start", "end") if n in dials and dials[n].get(k) is not None}}
+                                 for n in images],
+                    "refmods": [{"name": r, **{k: mods[r][k] for k in ("strength", "from", "to", "start", "end") if r in mods and mods[r].get(k) is not None}}
+                                for r in refmods],
+                    "voice": m.voice_note or "",
+                }
+        except (ValueError, KeyError, MissingLibrary):
+            pass
+    return out
+
+
+def gallery_pictures(home: Home, args: dict) -> dict:
+    """The gallery's pictures by preset, newest character first, for the editor's completion after
+    `image ` (#137): a character's name, its pictures' gallery ids and who it is (its export, else its prompt)."""
+    out = []
+    for name, lib in sorted(pictures.libraries(home).items()):
+        characters = []
+        for entry in reversed(lib.entries[-PICTURES_MAX:]):
+            ids = (entry.prop("ids") or "").splitlines()
+            characters.append({"name": entry.value, "ids": ids[:4], "views": len(ids), "tags": list(entry.tags),
+                               "who": _short(entry.prop("who") or entry.prop("prompt") or "", 110)})
+        out.append({"preset": name.removeprefix(pictures.PREFIX), "count": len(lib.entries), "characters": characters})
+    return {"presets": out}
+
+
+PICTURES_MAX = 60  # characters per preset the completion lists, the newest
+
+
 def roll(home: Home, args: dict) -> dict:
     text, target = _template_for(home, args)
     seed, n = _int(args, "seed", 0), min(max(_int(args, "n", 3), 1), MAX_ROLLS)
@@ -936,6 +1040,8 @@ ROUTES = [
     ("POST", "/orrery/plan", generate_plan),
     ("POST", "/orrery/reel", reel_walk),
     ("POST", "/orrery/remembered", reel_remembered),
+    ("POST", "/orrery/annotate", annotate),
+    ("GET", "/orrery/pictures", gallery_pictures),
     ("POST", "/orrery/frequency", frequency),
     ("GET", "/orrery/home", home_settings),
     ("POST", "/orrery/home", home_save),

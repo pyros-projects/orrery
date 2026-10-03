@@ -816,8 +816,9 @@ def name_pictures(scene: Scene, libraries: Mapping[str, Library], lint: list[Iss
                                               "left out."))
                 slots = sorted(free[:min(len(found), len(free))])
                 free = [n for n in free if n not in slots]
-                made = pictures.prompt(s.name, libraries)
-                files.update({n: {"file": str(f), "prompt": made} for n, f in zip(slots, found, strict=False)})
+                made, row = pictures.prompt(s.name, libraries), pictures.ids(s.name, libraries)
+                files.update({n: {"file": str(f), "prompt": made, "name": s.name, "id": row.get(str(f))}
+                              for n, f in zip(slots, found, strict=False)})
                 given[s.name] = slots
             out += [replace(s, index=n, name="") for n in given[s.name]]
         m.sources = out

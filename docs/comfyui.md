@@ -59,14 +59,25 @@ Nodes under **orrery**:
     `SHOT 5s:`, your LoRA files after `LORA:`, your RefMods after `refmod ` in
     a CAST member's parentheses, the scenes after `CUT TO:` and `AFTER:`, what to
     keep after `REMEMBER:`, the dials after `SET:` (`@JINX(1)`, and inside it the
-    words `refmods`, `images` …), the mode words after `@h3 `). **New** starts a fresh
+    words `refmods`, `images` …), the mode words after `@h3 `, the gallery's
+    characters with their pictures after `image ` in a CAST member's parentheses,
+    a binding's fields after `$hero.`). Typing a keyword's start offers the
+    keyword and every form of it (`REME` → `REMEMBER: frames 0, 50 as @NAME` …),
+    `EXPORT:` and `IF` in text templates too; Ctrl+Space opens the completion where
+    the caret is. Each line shows at its end what it gives at the node's seed: a
+    binding what it rolled, an EXPORT what it keeps, a grid its cells, a CAST
+    member where its pictures go (gallery pictures as thumbnails), a REMEMBER:
+    line where its frames go. Hovering a keyword shows what it does and its
+    forms; a CAST member who it is in this clip (description, pictures and their
+    strengths, RefMods, voice); a library its size and entries; a binding what it
+    rolled. **New** starts a fresh
     template linked to no preset: an H3 scene, an H3 reel,
     H3 references, H3 keyframes (image, first-last, last) or a Krea prompt,
     each with a quickstart of the essentials as `#` comments on top (the gear
     turns the quickstart off). Open a preset from the bar above it; ● marks unsaved
     edits; Save, Save as…, Revert. Under the editor, every binding is a
-    **dial**: pick a library entry or choice, or type any expression; empty
-    means its default roll. Saving bakes the dials in, and a gallery output
+    **dial**: pick a library entry or choice, tick several to roll among them
+    (`{noir|gothic}`), or type any expression; empty means its default roll. Saving bakes the dials in, and a gallery output
     restores them. **Test** jumps to the Test tab and rolls. **Write** has
     the language model write the reel's next scene, the shot between two
     frames or a prompt from a picture, one idea per short run, browsed

@@ -24,7 +24,9 @@ const REF = [
   ["Bindings and extras", [
     ["$hero = __creature__", "roll once on its own line, reuse everywhere as $hero", "$hero = __creature__\n$hero meets another $hero"],
     ["@lib crowd", "a library of this template's own: indented lines under it are its entries; use it as __crowd__", "@lib crowd\n  a few __creature__s\n  a lone __creature__\nA meadow with __crowd__"],
-    ["$hero → dial", "every binding is a dial under the editor: pick an entry (it keeps its properties) or type any expression, empty = its default roll; Save bakes dials in (CLI: --set hero=owl)", ""],
+    ["Ctrl+Space", "opens the completion where the caret is; a keyword's first letters offer every form of it, $hero. the fields of what it rolls, image in a CAST the gallery's characters", ""],
+    ["line ends, hover", "each line shows at its end what it gives at the node's seed (a binding's roll, an export, a grid's cells, where a member's pictures go); hovering a keyword shows its forms, a CAST member who it is in this clip", ""],
+    ["$hero → dial", "every binding is a dial under the editor: pick an entry (it keeps its properties), tick several to roll among them ({a|b}), or type any expression; empty = its default roll; Save bakes dials in (CLI: --set hero=owl)", ""],
     ["EXPORT:\n  mood = __moods__", "what the run keeps beside its prompt, never in it: rolled like a binding, kept with the picture in the gallery (its sheet), read by other systems and by screenplays that cast the picture ($hero.mood); EXPORT: $who exports a binding, with its entry's fields", "EXPORT:"],
     ["> make it moody and cinematic", "with a language model set (the gear), it rewrites the rolled prompt as asked; in a screenplay a > before the first SHOT covers every shot's prose, one inside a SHOT only that shot, never dialogue", "> make it moody and cinematic"],
     ["--one detail, 5 to 8 words--", "a slot the language model writes where it stands, seeing the whole rolled prompt (and, in a reel, the clip before)", ""],

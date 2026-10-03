@@ -79,6 +79,7 @@ export class OrreryApp {
   reelPath() { return this.data.reelPath?.key === this.reelKey() && !this.data.reelPath.error ? this.data.reelPath : null; }
   chunks() { return chunkInfo(this.text, this.reelPath()); }
   remembered() { return this.data.remembered?.key === this.reelKey() && !this.data.remembered.error ? this.data.remembered : null; }
+  annotations() { return this.data.annotations?.key === `${this.reelKey()}\n${this.bridge.getSegment?.() ?? 0}` ? this.data.annotations : null; }
 
   known() {  // the home's libraries and the template's own (@lib)
     return new Set([...(this.data.completion?.libraries || []).map((l) => l.name), ...inlineLibraries(this.text).map((l) => l.name)]);
@@ -134,7 +135,10 @@ export class OrreryApp {
     this.data.log_prompts = d.log_prompts !== false;
     this.data.clip_min = d.clip_min ?? 360;
   }
-  async refreshCompletion() { this.data.completion = await this.api.completions(); }
+  async refreshCompletion() {
+    const [completion, gallery] = await Promise.all([this.api.completions(), this.api.pictures().catch(() => ({ presets: [] }))]);
+    this.data.completion = { ...completion, pictures: gallery.presets };  // `image ` in a CAST offers the gallery (#137)
+  }
 
   render() {
     const n = { presets: this.data.presets.length, libraries: this.data.completion?.libraries.length, galaxy: this.data.gTotal ?? this.data.rows?.length,
