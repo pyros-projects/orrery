@@ -813,7 +813,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a soft jaw and a dimpled chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a long black frock coat lined with sky-blue silk, with a proudly lifted chin. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a strong aquiline nose and a cleft chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a long black frock coat lined with sky-blue silk, with a proudly lifted chin. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -861,7 +861,7 @@
       ],
       [
        "$face ← __characters/creator/face__",
-       "a soft jaw and a dimpled chin"
+       "a strong aquiline nose and a cleft chin"
       ],
       [
        "$eyes ← __characters/creator/eyes__",
@@ -915,7 +915,7 @@
     },
     {
      "cell": 1,
-     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a soft jaw and a dimpled chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a long black frock coat lined with sky-blue silk, with a proudly lifted chin. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a strong aquiline nose and a cleft chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a long black frock coat lined with sky-blue silk, with a proudly lifted chin. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -963,7 +963,7 @@
       ],
       [
        "$face ← __characters/creator/face__",
-       "a soft jaw and a dimpled chin"
+       "a strong aquiline nose and a cleft chin"
       ],
       [
        "$eyes ← __characters/creator/eyes__",
@@ -1017,7 +1017,7 @@
     },
     {
      "cell": 2,
-     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a soft jaw and a dimpled chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a long black frock coat lined with sky-blue silk, with a proudly lifted chin. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a strong aquiline nose and a cleft chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a long black frock coat lined with sky-blue silk, with a proudly lifted chin. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -1065,7 +1065,7 @@
       ],
       [
        "$face ← __characters/creator/face__",
-       "a soft jaw and a dimpled chin"
+       "a strong aquiline nose and a cleft chin"
       ],
       [
        "$eyes ← __characters/creator/eyes__",
@@ -1119,7 +1119,7 @@
     },
     {
      "cell": 3,
-     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a soft jaw and a dimpled chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a long black frock coat lined with sky-blue silk, with a proudly lifted chin. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a strong aquiline nose and a cleft chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a long black frock coat lined with sky-blue silk, with a proudly lifted chin. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -1167,7 +1167,7 @@
       ],
       [
        "$face ← __characters/creator/face__",
-       "a soft jaw and a dimpled chin"
+       "a strong aquiline nose and a cleft chin"
       ],
       [
        "$eyes ← __characters/creator/eyes__",
