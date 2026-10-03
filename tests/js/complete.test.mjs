@@ -90,9 +90,15 @@ test("cast keywords at line start in screenplays", () => {
   assert.ok(at("@h3 ref2va\nCAST\nA (image 1): a dancer\nv").items.some((i) => i.insert === "voice: "));
 });
 
-test("reel keywords at line start in screenplays", () => {
-  const items = at("@h3 t2va\nSHOT 5s\nA.\n").items.map((i) => i.insert);
-  assert.ok(["CHUNK", "HANDOFF: ", "SEND: ", "LORA: ", "context: "].every((k) => at(`@h3 t2va\n${k[0]}`).items.some((i) => i.insert === k)), items.join());
+test("reel keywords at line start in screenplays, the film words and not the earlier ones", () => {
+  const offered = (k) => at(`@h3 text\n${k.slice(0, 2)}`).items.some((i) => i.insert === k);
+  assert.ok(["SCENE ", "END ON: ", "CUT TO: ", "AFTER: ", "START WITH: ", "REMEMBER: ", "IF $", "LORA: ", "context: "].every(offered));
+  assert.ok(!["CHUNK", "HANDOFF: ", "GOTO: ", "SEND: "].some(offered));
+});
+
+test("the @h3 line completes the mode words", () => {
+  assert.deepEqual(names("@h3 "), ["text", "references", "image", "first-last", "last"]);
+  assert.deepEqual(names("@h3 fi"), ["first-last"]);
 });
 
 test("LORA: lists your loras in the syntax LoRA Text Loader reads", () => {
@@ -201,12 +207,12 @@ test("globs: ** offered when it reaches further, known when they match, missing 
 });
 
 
-test("GOTO: completes the chunk titles, after a condition too", () => {
+test("GOTO: (the earlier CUT TO:) completes the titles, after a condition too", () => {
   const text = "@h3 t2va\nCHUNK the gate\nSHOT 5s\nA.\nCHUNK the stairs repeat 2\nSHOT 5s\nB.\nGOTO: the s";
   assert.deepEqual(suggest(text, text.length, DATA).items.map((i) => i.insert), ["the stairs"]);
   const cond = text.replace("GOTO: the s", "? $w[rain]: GOTO: ");
   assert.deepEqual(suggest(cond, cond.length, DATA).items.map((i) => i.insert), ["the gate", "the stairs"]);
-  assert.ok(suggest("@h3 t2va\nCHUNK a\nGO", 19, DATA).items.some((i) => i.insert === "GOTO: "));
+  assert.ok(suggest("@h3 t2va\nCHUNK a\nCU", 19, DATA).items.some((i) => i.insert === "CUT TO: "));
 });
 
 test("CUT TO: completes the scene titles, as GOTO: does", () => {
@@ -241,9 +247,9 @@ test("refmod in a CAST member's parentheses lists the RefMods, prefix matches fi
   assert.equal(at(`${CAST_HEAD}SALON (refmod sal`).replaceFrom, `${CAST_HEAD}SALON (refmod `.length);
 });
 
-test("the parentheses offer refmod and global, then a RefMod's strength and start", () => {
+test("the parentheses offer refmod and always, then a RefMod's strength and start", () => {
   assert.deepEqual(names(`${CAST_HEAD}SALON (re`), ["refmod "]);
-  assert.deepEqual(names(`${CAST_HEAD}SALON (image 1, gl`), ["global"]);
+  assert.deepEqual(names(`${CAST_HEAD}@SALON (image 1, al`), ["always"]);
   assert.deepEqual(names(`${CAST_HEAD}SALON (refmod orrery_abc_salon `), ["at 1", "from 35%", "to 50%"]);
   assert.deepEqual(names(`${CAST_HEAD}SALON (refmod orrery_abc_salon at 0.5 f`), ["from 35%"]);
 });
@@ -259,7 +265,26 @@ test("the refmods: line completes as a keyword, then its defaults", () => {
 
 test("SET: lists the CAST's RefMods and pictures as name(strength, start)", () => {
   const head = `${CAST_HEAD}EMMA (refmod emma_canon, image 1): a woman\nTOM (image 3): a man\nCHUNK\nSHOT 5s: static\n`;
-  assert.deepEqual(names(`${head}SET: `), ["emma_canon(1, 0%)", "image_1(1, 0%)", "image_3(1, 0%)"]);
+  assert.deepEqual(names(`${head}SET: `), ["@EMMA(1)", "@TOM(1)", "emma_canon(1, 0%)", "image_1(1, 0%)", "image_3(1, 0%)", "refmods(1, 0%)"]);
   assert.deepEqual(names(`${head}SET: image_1(0.5, 35%), em`), ["emma_canon(1, 0%)"]);
   assert.deepEqual(names(`${head}SET: image_1(0.`), []);
+  assert.deepEqual(names(`${head}SET: @EMMA(0.6, `), ["refmods", "images", "refmod emma_canon", "image 1"]);
+  assert.deepEqual(names(`${head}SET: @EMMA(0.6, re`), ["refmods", "refmod emma_canon"]);
+});
+
+test("@ names a CAST member: in prose, in a line of speech, and next to the directives at a line's start", () => {
+  const head = `${CAST_HEAD}JINX (refmod jinx): a young woman\nOLD_MAN: a fisher\nSHOT 5s: static\n`;
+  assert.deepEqual(names(`${head}The light finds @J`), ["@JINX"]);
+  assert.deepEqual(names(`${head}@`).slice(0, 4), ["@JINX", "@JINX (", "@OLD_MAN", "@OLD_MAN ("]);
+  assert.ok(names(`${head}@`).includes("@grid "));
+  assert.deepEqual(names("@h3 text\nSHOT 5s\nA @"), []);  // no CAST: nothing to name
+});
+
+test("AFTER: completes the scene titles, and REMEMBER: what to keep, as whom, for which clips", () => {
+  const reel = `${CAST_HEAD}KEEPER: an old keeper\nSCENE the gate\nSHOT 5s\nA.\nSCENE the stairs (test)\nSHOT 5s\nB.\n`;
+  assert.deepEqual(names(`${reel}AFTER: the s`), ["the stairs"]);
+  assert.deepEqual(names(`${reel}REMEMBER: `), ["first frame as ", "last frame as ", "frame at 1s as ", "frames 34-46 as ", "every 10th frame as "]);
+  assert.deepEqual(names(`${reel}REMEMBER: first frame as `), ["@KEEPER", "image ", "refmod "]);
+  assert.deepEqual(names(`${reel}REMEMBER: first frame as @KEEPER `), ["in clips 2-5", "until "]);
+  assert.deepEqual(names(`${reel}REMEMBER: first frame as @KEEPER until the g`), ["the gate"]);
 });

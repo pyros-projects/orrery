@@ -358,6 +358,18 @@ test("a chunk that repeats forever runs on, and the ones after it never play", (
   assert.equal(chunkLabel(info[0]), "clip 1 · 0:00 → 0:05");
 });
 
+test("the film words are keywords, and a CAST member is brass, with @ or without, also in SET: and speech", () => {
+  const text = "@h3 references\nCAST\n@JINX (refmod x): a woman\nSCENE the room (test)\nAFTER: 2\nSTART WITH: the door\nSHOT 5s\n"
+    + "@JINX waves, JINXED stays.\nJINX (whispering): hi\nIF $m is tense: she runs\nREMEMBER: first frame as @JINX\n"
+    + "SET: @JINX(0.6, refmods), @style(0.8)\nEND ON: done\nCUT TO: the room (30%)";
+  const html = highlight(text, new Set());
+  for (const kw of ["SCENE", "AFTER:", "START WITH:", "IF", "REMEMBER:", "SET:", "END ON:", "CUT TO:"]) assert.match(html, new RegExp(`<span class="t-kw">${kw}</span>`));
+  assert.match(html, /<span class="t-cast">@JINX<\/span> waves, JINXED stays/);
+  assert.match(html, /<span class="t-kw"><span class="t-cast">JINX<\/span> \(whispering\):<\/span>/);
+  assert.match(html, /<span class="t-cast">@JINX<\/span>\(0\.6, refmods\), <span class="t-lora">@style\(0\.8\)<\/span>/);
+  assert.doesNotMatch(highlight("a cat @JINX(0.6)", new Set()), /t-cast/);  // no CAST: a LoRA
+});
+
 test("CHUNK lines get a divider with their label, and the next segment's chunk is marked", () => {
   const info = chunkInfo(REEL_TEXT);
   const html = highlight(REEL_TEXT, new Set(), { chunks: info, segment: 2 });

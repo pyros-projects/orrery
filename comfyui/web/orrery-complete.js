@@ -3,8 +3,9 @@
 // suggest(text, caret, data) -> { items: [{ insert, detail, preview }], replaceFrom }
 // Accepting an item replaces text[replaceFrom:caret] with item.insert.
 
+// The words the editor teaches; the earlier CHUNK, HANDOFF:, GOTO: and SEND: still work, unoffered.
 const KEYWORDS = ["SHOT ", "SFX: ", "MUSIC: ", "style: ", "summary: ", "CAST", "voice: ", "keep: ",
-  "CHUNK", "HANDOFF: ", "SEND: ", "GOTO: ", "LORA: ", "context: ", "refmods: ", "SET: "];
+  "SCENE ", "END ON: ", "CUT TO: ", "AFTER: ", "START WITH: ", "REMEMBER: ", "IF $", "LORA: ", "context: ", "refmods: ", "SET: "];
 const NONE = { items: [], replaceFrom: 0 };
 
 const startsWith = (word, prefix) => word.toLowerCase().startsWith(prefix.toLowerCase());
@@ -131,16 +132,64 @@ function shotItems(before, line, data) {
   };
 }
 
-// CUT TO: (GOTO:, the earlier word; alone, or after `? cond:`): the scenes to jump to, by title.
+// The reel's scene titles (a number for a scene without one), as CUT TO:, AFTER: and `until` name them.
+const sceneTitles = (text) => text.split("\n")
+  .map((l) => /^\s*(?:SCENE|CHUNK)\b\s*(.*?)(?:\s+repeat\s+(?:\d+|forever)|\s+[×x]\s*\d+|\s+forever)?\s*$/i.exec(l)).filter(Boolean)
+  .map((c, i) => c[1].replace(/(?<!\S)\(test\)(?!\S)/i, " ").split(/\s+/).filter(Boolean).join(" ") || String(i + 1));
+
+// CUT TO: (GOTO:, the earlier word; alone, or after `? cond:` / `IF …:`) and AFTER:: the scenes, by title.
 function gotoItems(before, line, text) {
-  const m = /^\s*(?:\?[^\n]*?:\s*)?(?:CUT\s+TO|GOTO):\s*([^×]*)$/i.exec(line);
+  const cut = /^\s*(?:(?:\?|IF\s+(?=\$))[^\n]*?:\s*)?(?:CUT\s+TO|GOTO):\s*([^×(]*)$/i.exec(line);
+  const after = /^\s*AFTER:\s*(.*)$/.exec(line);
+  const m = cut || after;
   if (!m) return null;
-  const titles = text.split("\n")
-    .map((l) => /^\s*(?:SCENE|CHUNK)\b\s*(.*?)(?:\s+repeat\s+(?:\d+|forever)|\s+[×x]\s*\d+|\s+forever)?\s*$/i.exec(l)).filter(Boolean)
-    .map((c, i) => c[1].replace(/(?<!\S)\(test\)(?!\S)/i, " ").split(/\s+/).filter(Boolean).join(" ") || String(i + 1));
+  const detail = cut ? "jump to this scene; ×N after it: N times, (30%) that often" : "continue this scene's last clip";
   return {
-    items: titles.filter((t) => startsWith(t, m[1])).map((t) => ({ insert: t, detail: "jump to this scene; ×N after it: N times", preview: "" })),
+    items: sceneTitles(text).filter((t) => startsWith(t, m[1])).map((t) => ({ insert: t, detail, preview: "" })),
     replaceFrom: before.length - m[1].length,
+  };
+}
+
+// REMEMBER: what to keep (first frame, frame at 1s, every 10th frame), then as whom or what, then for
+// which clips (in clips 2-5, until a scene).
+function rememberItems(before, line, text) {
+  const m = /^\s*REMEMBER:\s*(.*)$/.exec(line);
+  if (!m) return null;
+  const said = m[1];
+  const until = /\buntil\s+(.*)$/i.exec(said);
+  let options, typed;
+  if (until) {
+    [typed, options] = [until[1], sceneTitles(text).map((t) => [t, "until that scene first plays"])];
+  } else if (/\bas\s+\S+.*\s$/i.test(said)) {
+    [typed, options] = ["", [["in clips 2-5", "only those clips, counted from 1"], ["until ", "until a scene first plays"]]];
+  } else if (/\bas\s+(\S*)$/i.test(said)) {
+    typed = /\bas\s+(\S*)$/i.exec(said)[1];
+    options = [...castNames(text).map((n) => [`@${n}`, `${n}'s picture: the CAST's, or a free one`]),
+               ["image ", "a picture: image N, as the CAST numbers them"], ["refmod ", "a RefMod made of the frames: refmod NAME"]];
+  } else if (!/\bas\b/i.test(said) && !/\S\s+\S+\s/.test(said)) {
+    typed = said;
+    options = [["first frame as ", "the clip's first frame (after the pinned ones)"], ["last frame as ", "its last frame"],
+               ["frame at 1s as ", "the frame at that second"], ["frames 34-46 as ", "frames by number, from 0; -1 the last"],
+               ["every 10th frame as ", "every 10th frame of the clip; … of 1s-4s: of a range"]];
+  } else return null;
+  const items = options.filter(([o]) => startsWith(o, typed) && o !== typed).map(([insert, detail]) => ({ insert, detail, preview: "" }));
+  return items.length ? { items, replaceFrom: before.length - typed.length } : null;
+}
+
+// `@` in a screenplay: the CAST's members, as @NAME (the way to name one you don't know the letters of).
+function atCastItems(before, line, text) {
+  const m = /(?:^|[^\w@<\\])@([A-Z][A-Z0-9_]*)?$/.exec(before);
+  if (!m) return null;
+  const typed = m[1] || "";
+  const names = castNames(text).filter((n) => n.startsWith(typed) && n !== typed);
+  if (!names.length) return null;
+  const lineStart = new RegExp(`^\\s*@${typed}$`).test(line);
+  return {
+    items: names.flatMap((n) => [
+      { insert: `@${n}`, detail: "cast", preview: "" },
+      ...(lineStart ? [{ insert: `@${n} (`, label: `@${n} (…): `, detail: "a line of speech: how it sounds, then the words", preview: "" }] : []),
+    ]),
+    replaceFrom: before.length - typed.length - 1,
   };
 }
 
@@ -224,7 +273,7 @@ function inCast(before) {
 const REFMOD_CAP = 80;
 
 function refmodItems(before, line, data) {
-  const m = /^\s*[A-Z][A-Z0-9 _-]*?\s*\(([^)]*)$/.exec(line);
+  const m = /^\s*@?[A-Z][A-Z0-9 _-]*?\s*\(([^)]*)$/.exec(line);
   if (!m || !inCast(before)) return null;
   const token = m[1].split(",").pop().replace(/^\s+/, "");
   const named = /^refmod\s+(\S*)$/i.exec(token);
@@ -243,25 +292,53 @@ function refmodItems(before, line, data) {
     ...(/\bfrom\b/i.test(after[1]) ? [] : [["from 35%", "it waits while the picture is laid out: a place drags less of its framing along"]]),
     ...(/\bto\b/i.test(after[1]) ? [] : [["to 50%", "it stops there, and the prompt takes over"]]),
   ] : [["refmod ", "a RefMod from models/refmods: refmod NAME at 1"],
-       ["global", "its RefMods go with every clip, not only with the clips that name it"]];
+       ["always", "the member goes with every clip, not only with the clips that name it"]];
   const items = options.filter(([o]) => startsWith(o, word)).map(([insert, detail]) => ({ insert, detail, preview: "" }));
   return items.length ? { items, replaceFrom: before.length - word.length } : null;
 }
 
-// `SET: ` the CAST's RefMods and pictures as name(strength, start), one item after another.
+// `SET: ` the CAST's members, RefMods and pictures as name(strength, start), and the RefMod defaults,
+// one item after another; inside a member's parentheses, after a comma, the words that choose among
+// its references.
 function setItems(before, line, text) {
   const m = /^\s*SET:(.*)$/.exec(line);
   if (!m) return null;
+  const inside = /@?([A-Z][A-Z0-9 _-]*?)\(([^()]*),\s*([a-z][\w ]*)?$/.exec(m[1]);
+  if (inside && castNames(text).includes(inside[1])) return choiceItems(before, inside[1], inside[3] || "", text);
   const token = /(?:^|,)\s*([^,()]*)$/.exec(m[1]);
   if (!token) return null;  // inside the parentheses: the numbers are the user's
   const cast = uncommented(text);
   const refmods = [...new Set([...cast.matchAll(/\brefmod\s+([\w./-]+)/g)].map((r) => r[1]))];
   const images = [...new Set([...cast.matchAll(/^\s*[A-Z][A-Z0-9 _-]*?\s*\(([^)]*)\)\s*:/gm)]
     .flatMap((c) => [...c[1].matchAll(/\bimage\s+(\d+)/g)].map((i) => Number(i[1]))))].sort((a, b) => a - b);
-  const targets = [...refmods.map((r) => [`${r}(1, 0%)`, "a RefMod: (strength, start), or (strength, start, end)"]),
-                   ...images.map((n) => [`image_${n}(1, 0%)`, "a picture: (strength, start), or (strength, start, end)"])];
+  const targets = [...castNames(text).map((n) => [`@${n}(1)`, `all of ${n}'s pictures and RefMods; (0.6, refmods): only the RefMods`]),
+                   ...refmods.map((r) => [`${r}(1, 0%)`, "a RefMod: (strength, start), or (strength, start, end)"]),
+                   ...images.map((n) => [`image_${n}(1, 0%)`, "a picture: (strength, start), or (strength, start, end)"]),
+                   ["refmods(1, 0%)", "the RefMods without their own dials, as a refmods: line"]];
   const items = targets.filter(([t]) => startsWith(t, token[1])).map(([insert, detail]) => ({ insert, detail, preview: "" }));
   return items.length ? { items, replaceFrom: before.length - token[1].length } : null;
+}
+
+// The words that choose among a member's references in `SET: @NAME(0.6, …)`, in the CAST's own words.
+function choiceItems(before, name, typed, text) {
+  const line = uncommented(text).split("\n").find((l) => new RegExp(`^\\s*@?${name}\\s*\\(`).test(l)) || "";
+  const own = [...line.matchAll(/\b(image\s+\d+|refmod\s+[\w./-]+)/g)].map((r) => r[1].replace(/\s+/, " "));
+  const options = [["refmods", `all of ${name}'s RefMods`], ["images", `all of ${name}'s pictures`],
+                   ...own.map((o) => [o, `just this one of ${name}'s`])];
+  const items = options.filter(([o]) => startsWith(o, typed) && o !== typed).map(([insert, detail]) => ({ insert, detail, preview: "" }));
+  return items.length ? { items, replaceFrom: before.length - typed.length } : null;
+}
+
+// `@h3 ` the mode: what the clip is made from.
+const MODES = [["text", "from the words alone (t2va)"], ["references", "from a CAST of pictures, videos and voices (ref2va)"],
+               ["image", "from a first frame (i2va)"], ["first-last", "between a first and a last frame (fl2va)"],
+               ["last", "toward a last frame (l2va)"]];
+
+function modeItems(before, line) {
+  const m = /^\s*@h3\s+([\w-]*)$/.exec(line);
+  if (!m) return null;
+  const items = MODES.filter(([o]) => startsWith(o, m[1]) && o !== m[1]).map(([insert, detail]) => ({ insert, detail, preview: "" }));
+  return items.length ? { items, replaceFrom: before.length - m[1].length } : null;
 }
 
 // The `refmods:` line: the defaults for RefMods without their own `at` or `from`.
@@ -332,12 +409,16 @@ export function suggest(text, caret, data) {
   const line = before.slice(before.lastIndexOf("\n") + 1);
   if (/^\s*#/.test(line)) return NONE;
   const screenplay = uncommented(text).trimStart().startsWith("@h3");
+  const mode = modeItems(before, line);
   const directive = directiveItems(line);
   if (directive) directive.replaceFrom += before.length;
-  const found = directive ?? (screenplay ? loraItems(before, line, data) : null)
+  const cast = screenplay ? atCastItems(before, line, text) : null;
+  if (directive && cast) directive.items = [...cast.items, ...directive.items];  // `@` at a line's start: both
+  const found = mode ?? directive ?? cast ?? (screenplay ? loraItems(before, line, data) : null)
     ?? libraryItems(before, data)
     ?? bindingItems(before, text)
     ?? (screenplay ? refmodsLineItems(before, line) ?? setItems(before, line, text) ?? refmodItems(before, line, data) ?? gotoItems(before, line, text)
+      ?? rememberItems(before, line, text)
       ?? castItems(before, line, text) ?? shotItems(before, line, data) ?? keywordItems(before, line) : null)
     ?? NONE;
   const typed = before.slice(found.replaceFrom);

@@ -3,6 +3,7 @@
 // its highlight, as tall as its text; the cells together scroll. Arrow keys cross from cell to cell,
 // Backspace at a cell's start and Delete at its end join two, and a CHUNK line typed or removed cuts the
 // text again, the caret where it was. Each section's height is dragged at its foot and kept per chunk.
+import { castNames } from "../orrery-complete.js";
 import { highlight } from "./highlight.js";
 import { splitCells } from "./model.js";
 import { clipRatio, drag, sectionHTML, wireClips } from "./timeline.js";
@@ -51,7 +52,7 @@ export function paintCells(app) {
     const c = cells[i];
     if (!c) return;
     const local = c.chunk >= 0 && chunks[c.chunk] ? [{ ...chunks[c.chunk], line: 0 }] : null;
-    cell.querySelector("pre").innerHTML = `${highlight(c.text, app.known(), { llm: app.llmActive(), chunks: local, segment })}​`;
+    cell.querySelector("pre").innerHTML = `${highlight(c.text, app.known(), { llm: app.llmActive(), chunks: local, segment, cast: castNames(app.text) })}​`;
   });
   const ratio = clipRatio(app);
   const sig = JSON.stringify([chunks.map((c) => [c.first, c.last, c.segs, c.images]), (app.data.chain?.clips || []).map((c) => c.version),

@@ -1,9 +1,13 @@
 // Syntax colouring for orrery templates. Pure: returns HTML for a <pre> under the editor.
 
+import { castNames } from "../orrery-complete.js";
+
 export const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
 const CLI_ONLY = "CLI only: in ComfyUI, use the Run count and the seed widget";
-const HEAD = /^(\s*)(SHOT\s+[\d.]+\s*s\b:?|SFX:|MUSIC:|LORA:|HANDOFF:|SEND:|GOTO:|SET:|style:|summary:|voice:|keep:|context:|refmods:|CHUNK(?=\s|$)|CAST(?=\s*$)|[A-Z][A-Z0-9 _-]*?(?:\s*\([^)]*\))?\s*:(?=\s))/;
+// a line's head: the screenplay words (the earlier CHUNK, HANDOFF:, GOTO:, SEND: too), IF before a
+// condition, and a name with a colon (a CAST member, a speaker), `@` before it or not
+const HEAD = /^(\s*)(SHOT\s+[\d.]+\s*s\b:?|SFX:|MUSIC:|LORA:|END ON:|START WITH:|REMEMBER:|CUT TO:|AFTER:|HANDOFF:|SEND:|GOTO:|SET:|style:|summary:|voice:|keep:|context:|refmods:|(?:SCENE|CHUNK)(?=\s|$)|IF(?=\s+\$)|CAST(?=\s*$)|@?[A-Z][A-Z0-9 _-]*?(?:\s*\([^)]*\))?\s*:(?=\s))/;
 const TOKEN = /(\\[{}|$_@#[\]\\<>])|((?<!\\)__([\w*]+(?:\/[\w*]+)*)(?:\[[^\[\]\n]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\([^()]*\))?)|(\$[A-Za-z_]\w*(?:~\d+)?(?:\.[A-Za-z_][\w-]*)?)|(\d+(?:-\d+)?\$\$)|([{}|])|([^_${}|]+|[_$])/g;
 
 // A glob (`clothing/*`, `clothing/**`) is known when it matches a library.
@@ -16,7 +20,13 @@ function isKnown(name, known) {
 
 const TO_MAKE = "Not a library yet: the language model creates it when the node runs";
 
-function line(text, known, llm) {
+// The members of the CAST, `@` before them or not, as a pattern (null without a CAST).
+const memberPattern = (names) => (names.length
+  ? new RegExp(`(?<![\\w@])@?(?:${[...names].sort((a, b) => b.length - a.length).map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})(?![\\w-])`, "g")
+  : null);
+const brass = (html, members) => (members ? html.replace(members, (m) => `<span class="t-cast">${m}</span>`) : html);
+
+function line(text, known, llm, members) {
   if (/^\s*#/.test(text)) return `<span class="t-comment">${esc(text)}</span>`;
   if (/^\s*@h3\b/.test(text)) return `<span class="t-head">${esc(text)}</span>`;
   if (/^\s*>/.test(text)) return `<span class="t-enh">${esc(text)}</span>`;
@@ -32,22 +42,26 @@ function line(text, known, llm) {
   let rest = text;
   const head = text.match(HEAD);
   if (head) {
-    out = esc(head[1]) + `<span class="t-kw">${esc(head[2])}</span>`;
+    const name = /^@?([A-Z][A-Z0-9 _-]*?)\s*(?:\(|:)/.exec(head[2]);
+    const member = members && name && new RegExp(`^${members.source}$`).test(`${name[1]}`);
+    out = esc(head[1]) + (member ? `<span class="t-kw">${brass(esc(head[2]), members)}</span>` : `<span class="t-kw">${esc(head[2])}</span>`);
     rest = text.slice(head[0].length);
   }
   // <lora:…> tags and their @name(0.8) short form are opaque (file names may contain __), as orrery's expander treats them
-  return out + rest.split(/((?<!\\)<lora:[^<>]*>|(?<![\w@<\\])@[\w./\\-]+\([^()<>]*\))/).map((part, i) => (i % 2 ? `<span class="t-lora">${esc(part)}</span>`
+  const lora = (part) => (members && new RegExp(`^${members.source}\\(`).test(part) ? brass(esc(part), members)  // SET: @JINX(0.6)
+    : `<span class="t-lora">${esc(part)}</span>`);
+  return out + rest.split(/((?<!\\)<lora:[^<>]*>|(?<![\w@<\\])@[\w./\\-]+\([^()<>]*\))/).map((part, i) => (i % 2 ? lora(part)
     : part.replace(TOKEN, (m, escaped, lib, name, v, multi, brace) => {
       if (escaped) return `<span class="t-esc" title="Written as it is: the backslash keeps it from being syntax">${esc(m)}</span>`;
       if (lib) return isKnown(name, known) ? `<span class="t-lib">${esc(lib)}</span>`
         : llm ? `<span class="t-lib t-new" title="${TO_MAKE}">${esc(lib)}</span>` : `<span class="t-lib t-miss">${esc(lib)}</span>`;
       if (v) return `<span class="t-var">${esc(v)}</span>`;
       if (multi || brace) return `<span class="t-brace">${esc(m)}</span>`;
-      return esc(m);
+      return brass(esc(m), members);
     }))).join("");
 }
 
-// The divider on a CHUNK line: absolutely placed, so the text keeps its place under the textarea's caret;
+// The divider on a SCENE line: absolutely placed, so the text keeps its place under the textarea's caret;
 // first in the line, so its static top is the line's top.
 function chunkLine(html, c, segment) {
   const now = segment !== null && (c.segs ? c.segs.includes(segment) : c.first !== null && segment >= c.first && segment <= c.last);
@@ -58,8 +72,11 @@ function chunkLine(html, c, segment) {
 }
 
 // options.llm: a language model is set, so unknown libraries are to be made, not missing.
-// options.chunks (model.chunkInfo): CHUNK lines get dividers; the one playing options.segment is marked.
-export function highlight(src, known, { llm = false, chunks = null, segment = null } = {}) {
+// options.chunks (model.chunkInfo): SCENE lines get dividers; the one playing options.segment is marked.
+// options.cast: the CAST's names, in brass (a cell passes the whole template's); else read from src.
+export function highlight(src, known, { llm = false, chunks = null, segment = null, cast = null } = {}) {
   const at = new Map((chunks || []).map((c) => [c.line, c]));
-  return src.split("\n").map((l, i) => (at.has(i) ? chunkLine(line(l, known, llm), at.get(i), segment) : line(l, known, llm))).join("\n");
+  const members = memberPattern(cast ?? castNames(src));
+  return src.split("\n").map((l, i) => (at.has(i) ? chunkLine(line(l, known, llm, members), at.get(i), segment)
+    : line(l, known, llm, members))).join("\n");
 }
