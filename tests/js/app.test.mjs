@@ -584,3 +584,10 @@ test("hover knows each keyword's forms and a picture's dials (#136, #147)", asyn
   assert.equal(dialText({ strength: 0.6, from: 0.35, to: 1 }), "at 0.6 from 35%");
   assert.equal(dialText({ strength: 1 }), "");
 });
+
+test("a CAST line with gallery pictures shows them after it (#137)", async () => {
+  const { annotationLines } = await import("../../comfyui/web/app/annotate.js");
+  const ann = { cast: { HERO: "images 8–9 · krea/x/7" }, members: { HERO: { pictures: [{ image: 8, id: "a1" }, { image: 9, id: "a2" }] } } };
+  const hint = annotationLines("CAST\n@HERO (image krea/x/7): a heron\nSHOT 5s", ann, (id) => `/t/${id}`).get(1);
+  assert.deepEqual(hint.thumbs, ["/t/a1", "/t/a2"]);
+});

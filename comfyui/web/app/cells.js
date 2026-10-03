@@ -60,7 +60,7 @@ export function paintCells(app) {
     const c = cells[i];
     if (!c) return;
     const local = c.chunk >= 0 && chunks[c.chunk] ? [{ ...chunks[c.chunk], line: 0 }] : null;
-    const hints = mergeHints(hintsFor(c.text, remembered, before), annotationLines(c.text, app.annotations()));
+    const hints = mergeHints(hintsFor(c.text, remembered, before), annotationLines(c.text, app.annotations(), app.api.thumbURL));
     before += rememberLines(c.text).length;
     cell.querySelector("pre").innerHTML = `${highlight(c.text, app.known(), { llm: app.llmActive(), chunks: local, segment, cast: castNames(app.text), hints })}​`;
   });

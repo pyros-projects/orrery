@@ -176,6 +176,8 @@
 .orrery-app .editor .hint > span { margin-left: 1.5ch; color: var(--teal); opacity: .75; font-style: italic; }
 .orrery-app .editor .hint.replaced > span { color: var(--faint); text-decoration: line-through; }
 .orrery-app .editor .hint.note > span { color: var(--muted); opacity: .55; }
+.orrery-app .editor .hint .hint-pic { height: 1.45em; width: auto; border-radius: 3px; margin-right: 3px; vertical-align: top; opacity: 1; }
+.orrery-app .editor .hint.note > span:has(.hint-pic) { opacity: .8; }
 .orrery-app .hv { position: absolute; z-index: 25; pointer-events: none; width: max-content; max-width: min(440px, calc(100% - 8px)); background: #1f2029; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.5); padding: 8px 10px; font-size: 12px; line-height: 1.45; display: grid; gap: 4px; }
 .orrery-app .hv b { color: var(--ink); }
 .orrery-app .hv .hv-t { color: var(--muted); }

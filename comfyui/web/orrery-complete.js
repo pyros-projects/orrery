@@ -339,6 +339,8 @@ function refmodItems(before, line, data) {
   const m = /^\s*@?[A-Z][A-Z0-9 _-]*?\s*\(([^)]*)$/.exec(line);
   if (!m || !inCast(before)) return null;
   const token = m[1].split(",").pop().replace(/^\s+/, "");
+  const picture = /^image\s+(\S*)$/i.exec(token);
+  if (picture && !/^\d+$/.test(picture[1])) return pictureItems(picture[1], data, before.length - picture[1].length);
   const named = /^refmod\s+(\S*)$/i.exec(token);
   if (named) {
     const query = named[1].toLowerCase();
@@ -354,10 +356,31 @@ function refmodItems(before, line, data) {
     ...(/\bat\b/i.test(after[1]) ? [] : [["at 1", "its strength: 1 as it is, 0.5 about half its share of attention"]]),
     ...(/\bfrom\b/i.test(after[1]) ? [] : [["from 35%", "it waits while the picture is laid out: a place drags less of its framing along"]]),
     ...(/\bto\b/i.test(after[1]) ? [] : [["to 50%", "it stops there, and the prompt takes over"]]),
-  ] : [["refmod ", "a RefMod from models/refmods: refmod NAME at 1"],
+  ] : [["image ", "a picture: image N as wired into Orrery Refs, or a gallery picture by name"],
+       ["refmod ", "a RefMod from models/refmods: refmod NAME at 1"],
        ["always", "the member goes with every clip, not only with the clips that name it"]];
   const items = options.filter(([o]) => startsWith(o, word)).map(([insert, detail]) => ({ insert, detail, preview: "" }));
   return items.length ? { items, replaceFrom: before.length - word.length } : null;
+}
+
+// After `image ` in a CAST: each preset's gallery as a library that rolls a character, then the characters
+// by name, newest first, each with its pictures (thumbIds) and who it is; any part of a name or of who
+// matches (#137).
+function pictureItems(typed, data, replaceFrom) {
+  const q = typed.toLowerCase(), items = [];
+  for (const p of data.pictures || []) {
+    const lib = `__pictures/${p.preset}__`;
+    if (!q || lib.toLowerCase().includes(q) || p.preset.toLowerCase().includes(q)) {
+      items.push({ insert: lib, detail: `rolls a character of ${p.preset} (${p.count}); [exported] keeps those with data`,
+        preview: "", thumbIds: p.characters.slice(0, 6).map((c) => c.ids[0]).filter(Boolean) });
+    }
+    for (const c of p.characters) {
+      if (q && !c.name.toLowerCase().includes(q) && !c.who.toLowerCase().includes(q)) continue;
+      items.push({ insert: c.name, label: c.who || c.name, detail: `${c.name} · ${c.views} picture${c.views === 1 ? "" : "s"}${c.tags.length ? ` · ${c.tags.join(", ")}` : ""}`,
+        preview: c.who, thumbId: c.ids[0], thumbIds: c.ids });
+    }
+  }
+  return items.length ? { kind: "picture", items: items.slice(0, 80), replaceFrom } : null;
 }
 
 // `SET: ` the CAST's members, RefMods and pictures as name(strength, start), and the RefMod defaults,

@@ -246,7 +246,7 @@ function paintEditor(app) {
   if (!pre) return;
   const chunks = app.chunks();
   pre.innerHTML = `${highlight(app.text, app.known(), { llm: app.llmActive(), chunks, segment: chunks && Number(app.bridge.getSegment()),
-    hints: mergeHints(hintsFor(app.text, app.remembered()), annotationLines(app.text, app.annotations())) })}\n`;
+    hints: mergeHints(hintsFor(app.text, app.remembered()), annotationLines(app.text, app.annotations(), app.api.thumbURL)) })}\n`;
   layoutTimeline(app, chunks);
   if (chunks && app.data.timeline !== false && app.data.chain === undefined) {  // a reel typed or pasted in
     app.data.chain = null;
@@ -622,6 +622,10 @@ function complete(app, ta) {
   const offset = inCell(ta) ? cellStart(app, ta) : 0;
   const found = suggest(inCell(ta) ? app.text : ta.value, offset + ta.selectionEnd, app.data.completion);
   if (!found.items.length) return closeCompletion(app);
+  for (const it of found.items) {  // gallery pictures: their thumbnails, by id
+    if (it.thumbId) it.thumb = app.api.thumbURL(it.thumbId);
+    if (it.thumbIds) it.thumbs = it.thumbIds.map((id) => app.api.thumbURL(id));
+  }
   app.ac = { ...found, i: 0, ta, offset };
   drawCompletion(app);
 }

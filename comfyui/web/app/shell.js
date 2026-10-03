@@ -134,7 +134,10 @@ export class OrreryApp {
     this.data.log_prompts = d.log_prompts !== false;
     this.data.clip_min = d.clip_min ?? 360;
   }
-  async refreshCompletion() { this.data.completion = await this.api.completions(); }
+  async refreshCompletion() {
+    const [completion, gallery] = await Promise.all([this.api.completions(), this.api.pictures().catch(() => ({ presets: [] }))]);
+    this.data.completion = { ...completion, pictures: gallery.presets };  // `image ` in a CAST offers the gallery (#137)
+  }
 
   render() {
     const n = { presets: this.data.presets.length, libraries: this.data.completion?.libraries.length, galaxy: this.data.gTotal ?? this.data.rows?.length,

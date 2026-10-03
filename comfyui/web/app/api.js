@@ -59,6 +59,7 @@ export function client(home) {
     plan: (body) => call("plan", { body }),
     remembered: (body) => call("remembered", { body }),
     annotate: (body) => call("annotate", { body }),
+    pictures: () => call("pictures"),
     reel: (body) => call("reel", { body }),
     frequency: (body) => call("frequency", { body }),
     homeFolder: () => call("home"),

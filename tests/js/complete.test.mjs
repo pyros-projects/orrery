@@ -318,3 +318,18 @@ test("after $name. the fields of what the binding rolls, and @h3 and @lib among 
   const directives = at("@").items.map((i) => i.insert);
   assert.ok(directives.includes("@h3 ") && directives.includes("@lib "));
 });
+
+test("after image in a CAST: the gallery's presets to roll from and its characters, with their pictures (#137)", () => {
+  const data = { ...DATA, pictures: [{ preset: "krea/09_character_creator", count: 2, characters: [
+    { name: "krea/09_character_creator/7", ids: ["a1", "a2"], views: 2, tags: ["exported"], who: "a tall heron in a red coat" },
+    { name: "krea/09_character_creator/9", ids: ["b1"], views: 1, tags: [], who: "an old fox" }] }] };
+  const text = "@h3 references\nCAST\n@HERO (image ";
+  const items = suggest(text, text.length, data).items;
+  assert.equal(items[0].insert, "__pictures/krea/09_character_creator__");
+  assert.deepEqual(items[0].thumbIds, ["a1", "b1"]);
+  assert.deepEqual(items.slice(1).map((i) => [i.insert, i.thumbId]), [["krea/09_character_creator/7", "a1"], ["krea/09_character_creator/9", "b1"]]);
+  const fox = suggest(`${text}fox`, text.length + 3, data).items.map((i) => i.insert);
+  assert.deepEqual(fox, ["krea/09_character_creator/9"]);  // who matches too
+  const typed = "@h3 references\nCAST\n@HERO (i";
+  assert.ok(suggest(typed, typed.length, data).items.some((i) => i.insert === "image "));
+});

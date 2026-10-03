@@ -8,8 +8,9 @@ const GRID = /^\s*(?:@grid\b|:\s*grid\b)/;
 const MEMBER = /^\s*@?([A-Z][A-Z0-9 _-]*?)\s*(?:\([^)]*\))?\s*:\s*\S/;
 const ENDS_CAST = /^\s*(?:SHOT|SCENE|CHUNK)\b/;
 
-// line index → { text, kind: "note" }; `offset` is where `text` starts in the template (a cell's lines).
-export function annotationLines(text, ann) {
+// line index → { text, kind: "note", thumbs }; `thumb(id)` makes a gallery picture's thumbnail URL, so a
+// CAST line with named pictures shows them after it (#137).
+export function annotationLines(text, ann, thumb = null) {
   const out = new Map();
   if (!ann) return out;
   const put = (i, value) => { if (value) out.set(i, { text: value, kind: "note" }); };
@@ -34,7 +35,11 @@ export function annotationLines(text, ann) {
       return put(i, value && value.trim() !== m[2].trim() ? `= ${value}` : "");  // a plain text says itself
     }
     if (GRID.test(line)) return put(i, ann.grid && `→ ${ann.grid}`);
-    if (cast && (m = MEMBER.exec(line)) && ann.cast?.[m[1].trim()]) return put(i, `→ ${ann.cast[m[1].trim()]}`);
+    if (cast && (m = MEMBER.exec(line)) && ann.cast?.[m[1].trim()]) {
+      put(i, `→ ${ann.cast[m[1].trim()]}`);
+      const ids = (ann.members?.[m[1].trim()]?.pictures || []).map((p) => p.id).filter(Boolean);
+      if (thumb && ids.length && out.has(i)) out.get(i).thumbs = ids.slice(0, 4).map(thumb);
+    }
   });
   return out;
 }

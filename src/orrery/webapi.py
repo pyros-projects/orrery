@@ -804,6 +804,23 @@ def annotate(home: Home, args: dict) -> dict:
     return out
 
 
+def gallery_pictures(home: Home, args: dict) -> dict:
+    """The gallery's pictures by preset, newest character first, for the editor's completion after
+    `image ` (#137): a character's name, its pictures' gallery ids and who it is (its export, else its prompt)."""
+    out = []
+    for name, lib in sorted(pictures.libraries(home).items()):
+        characters = []
+        for entry in reversed(lib.entries[-PICTURES_MAX:]):
+            ids = (entry.prop("ids") or "").splitlines()
+            characters.append({"name": entry.value, "ids": ids[:4], "views": len(ids), "tags": list(entry.tags),
+                               "who": _short(entry.prop("who") or entry.prop("prompt") or "", 110)})
+        out.append({"preset": name.removeprefix(pictures.PREFIX), "count": len(lib.entries), "characters": characters})
+    return {"presets": out}
+
+
+PICTURES_MAX = 60  # characters per preset the completion lists, the newest
+
+
 def roll(home: Home, args: dict) -> dict:
     text, target = _template_for(home, args)
     seed, n = _int(args, "seed", 0), min(max(_int(args, "n", 3), 1), MAX_ROLLS)
@@ -934,6 +951,7 @@ ROUTES = [
     ("POST", "/orrery/reel", reel_walk),
     ("POST", "/orrery/remembered", reel_remembered),
     ("POST", "/orrery/annotate", annotate),
+    ("GET", "/orrery/pictures", gallery_pictures),
     ("POST", "/orrery/frequency", frequency),
     ("GET", "/orrery/home", home_settings),
     ("POST", "/orrery/home", home_save),

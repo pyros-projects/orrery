@@ -61,7 +61,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/writers"),
         ("POST", "/orrery/plan"),
         ("POST", "/orrery/reel"),
-        ("POST", "/orrery/remembered"), ("POST", "/orrery/annotate"),
+        ("POST", "/orrery/remembered"), ("POST", "/orrery/annotate"), ("GET", "/orrery/pictures"),
     }
 
 
