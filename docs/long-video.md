@@ -170,9 +170,10 @@ H3 ──▶ Review Gate / Galaxy ♥ ──▶ "make canon" ──▶ new RefMo
 3. **R3, the cast describes itself:** Qwen3-VL (Krea 2's text encoder) writes a
    member's description from its reference image.
 4. **Reel (built; Orrery Continue / Orrery Film):** `CHUNK`,
-   `HANDOFF`, `LORA:`, `context:`, the `segment` input. Open: memory lists.
-5. **Memory router and canon:** the per-chunk RefMod node, "make canon" from
-   the galaxy.
+   `HANDOFF`, `LORA:`, `context:`, the `segment` input, and the memory lists.
+5. **Memory router (built) and canon (open):** Orrery RefMods puts each clip's
+   RefMods on it, with a strength, a start and an end, also those made from the
+   reel's own frames; "make canon" from the galaxy is still open.
 
 ## The experiment before stages 4 and 5
 
@@ -189,7 +190,50 @@ Test it by hand with the installed H3RefMods (Codie's A/B/C):
 Same seed and prompt; judge room identity, material drift, recurring objects,
 seam quality and composition leakage. Build the RefMods from stills: the
 installed pack trims a video reference to 4k+1 frames, while H3's own Reference
-to Video trims to 17k+5 (checked in both sources, 2026-10-02). Whether "Create
-From Inputs" saves correctly is still unchecked; the experiment builds its
-RefMods in the graph without saving them. The setup, the three workflows and
-the run sheet are in [experiments/refmod-abc/](../experiments/refmod-abc/run_sheet.md).
+to Video trims to 17k+5 (checked in both sources, 2026-10-02); "Create From
+Inputs" cannot save, "From Folder" can. The setup, the workflows and the run
+sheet are in [experiments/refmod-abc/](../experiments/refmod-abc/run_sheet.md).
+
+### What it showed (2026-10-02 and 03)
+
+Run locally on an RTX 4090 with a 4-step turbo LoRA, seed 7. A four-chunk tour
+(salon, hallway, library, back in the salon from the other side). Segment 3 is
+the one that decides, scored from 1 to 5 (leakage 5 = none):
+
+| Segment 3, back in the salon | Identity | Leakage | Time |
+|---|---|---|---|
+| A, the latent tail only | 2 | 5 | 99 s |
+| B, plus a recent RefMod (the chunk before) | 1 | 1 | |
+| C, plus a place RefMod (four stills of chunk 1), from 0% | 5 | 1 | 107 s |
+| C with the model's condition noise 0.9 | 5 | 2 | 114 s |
+| **C from 35% of sampling on** | **4** | **4** | **104 s** |
+| C from 60% | 4 | 4 | 102 s |
+
+![segment 3, round 2](../experiments/refmod-abc/results/round2/seg3_salon_again.jpg)
+
+- **The place RefMod works, but from the first step it is too literal.** It
+  brings back every object of the salon and chunk 1's framings with them.
+  Starting it at 35% keeps the salon and lets go of the framing, at no extra
+  cost: the first steps carry no RefMod tokens.
+- **The automatic recent RefMod fails.** B copies the clip before: B3 repeats
+  B2 almost frame for frame.
+- **A character needs the first steps.** Jinx's RefMod from 35% did not come
+  through at all; from 0% she was unmistakable
+  ([sheet](../experiments/refmod-abc/results/jinx/start_35_vs_0.jpg)). With 4
+  steps the start is a coarse dial; at 20 steps the thresholds may move.
+- **Cost:** 576 tokens per still at 0.6 MP. C (seven stills, 4,032 tokens)
+  was 3 to 10 s slower per clip. Peak VRAM stayed under 23 GB.
+- **The pack's own strength only blurs a RefMod.** orrery's strength works
+  through an attention bias instead (#30).
+
+**Decision: go.** The RefMod memory is in v1:
+- each clip gets the RefMods of the CAST members it names, plus the `global` ones;
+- RefMods start at 0% by default (characters), and a place takes `from 35%`;
+- each has a strength, a start and an end (`at`, `from`, `to`, or
+  `SET: name(1, 0%, 10%)`).
+- The automatic recent memory did not earn a place. It comes in as an explicit
+  choice instead: `SEND: every 10 frames to refmod NAME` makes a RefMod from a
+  clip's own frames, for the clips after it.
+
+The rounds with every sheet are in the comments of
+[#4](https://github.com/pyros-projects/orrery/issues/4).
