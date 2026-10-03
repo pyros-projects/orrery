@@ -354,6 +354,16 @@ CAST
   grid's four views come along, and it is weighted by your ratings: loved characters come back more
   often, and `[loved]` keeps only those. `image __pictures/krea/09_character_creator__` rolls one
   like any library, seeded and recorded; the Libraries tab lists them, read-only.
+- **Two who differ.** A character also carries what its template rolled for it, as properties named
+  after the bindings (`gender`, `origin`, `genre`, `colour` …, its dials included). So a second one
+  can be told to differ from the first, and two look-alikes don't meet:
+
+  ```
+  $hero = __pictures/krea/09_character_creator__
+  CAST
+  @HERO (image $hero): …
+  @STRANGER (image __pictures/krea/09_character_creator[origin!=$hero.origin, colour!=$hero.colour]__): …
+  ```
 - **One picture** is named by its file: `image krea/09_character_creator/krea2_00092_`.
   Pictures of a template without a preset are under `unsaved/<its hash>`.
 - **Slots:** a named picture takes the highest free slots (9, 8, 7 …), each view one, so your

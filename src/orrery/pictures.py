@@ -7,16 +7,22 @@ the pictures that seed made (a grid's views) and the prompt that made them. So
 (seeded, recorded, steered by ratings), and `@HERO (image krea/09_character_creator/1283456183)` names
 one. A picture of a character is also named by its file: `krea/09_character_creator/krea2_00092_`.
 Pictures a template without a preset made are under `unsaved/<template hash>`.
+
+A character also carries what its template rolled for it, as properties named after the bindings
+(`gender`, `origin`, `genre`, `colour` …, its dials included), so a second character can be told to
+differ from the first: `__pictures/krea/09_character_creator[origin!=$hero.origin]__`.
 """
 
 from __future__ import annotations
 
 import hashlib
 import json
+import re
 from collections.abc import Mapping
 from pathlib import Path
 
 from orrery import galaxy
+from orrery.dsl import bindings, split_options
 from orrery.library import Entry, Library
 
 PREFIX = "pictures/"
@@ -34,6 +40,51 @@ def _character(row: dict) -> str:
     return f"{_owner(row)}/{row.get('seed')}{tail}"
 
 
+_OWN = ("pictures", "prompt")  # the properties every character has; a binding of that name gives way
+_PICKED = re.compile(r"^\$(\w+) ← ")  # `$origin ← __characters/creator/origin__`: a library binding's pick
+
+
+def _plain(value) -> str:
+    """A rolled value as a property to compare: its own choices, bindings and libraries left out, so
+    `Tamil descent, with {deep brown|dark brown} skin` reads the same however its skin rolled."""
+    text = str(value)
+    while (shorter := re.sub(r"\{[^{}]*\}", "", text)) != text:
+        text = shorter
+    text = re.sub(r"__[\w/*\[\]=|!,$. -]*?__|\$\w+(?:\.\w+)?", "", text)
+    return " ".join(text.replace(" ,", ",").split()).strip(" ,")
+
+
+def _choices_by_label(template: str) -> dict[str, str]:
+    """The template's choice bindings by the label their picks carry: `{woman|man|nonbinary person}` → gender."""
+    out = {}
+    for name, expr in bindings(template):
+        e = expr.strip()
+        if e.startswith("{") and e.endswith("}") and not re.match(r"\{\s*(IF\b|\?|\d+(-\d+)?\$\$)", e):
+            options = [re.sub(r":\d+(\.\d+)?$|^\d+(\.\d+)?::", "", o.strip()) for o in split_options(e[1:-1])]
+            out["{" + "|".join(options) + "}"] = name
+    return out
+
+
+def _traits(home, row: dict, labels: dict) -> dict[str, str]:
+    """What the row's template rolled, by binding name, and its dials."""
+    digest = str(row.get("template") or "")
+    if digest not in labels:
+        from orrery import presets
+
+        text = presets.recall_template(home, digest) if re.fullmatch(r"[0-9a-f]{16}", digest) else None
+        labels[digest] = _choices_by_label(text or "")
+    out = {}
+    for pick in row.get("picks") or []:
+        label = str(pick.get("label") or "")
+        name = m.group(1) if (m := _PICKED.match(label)) else labels[digest].get(label)
+        if name and name not in _OWN and (value := _plain(pick.get("value", ""))):
+            out[name] = value
+    for name, value in (row.get("params") or {}).items():
+        if name not in _OWN and (value := _plain(value)):
+            out[name] = value
+    return out
+
+
 def libraries(home) -> dict[str, Library]:
     """The gallery's pictures as libraries, one per preset; a picture whose file is gone is left out."""
     groups: dict[str, dict[str, list[dict]]] = {}
@@ -42,15 +93,16 @@ def libraries(home) -> dict[str, Library]:
         if row.get("kind") != "image" or not media or not Path(media).is_file():
             continue
         groups.setdefault(_owner(row), {}).setdefault(_character(row), []).append(row)
-    out = {}
+    out, labels = {}, {}
     for owner, characters in groups.items():
         entries = []
         for name, rows in characters.items():
             factors = [RATING.get(r.get("rating") or "", 1.0) for r in rows]
             rated = sorted({f"{r['rating']}d" for r in rows if r.get("rating") in RATING})  # loved, liked, noped, hated
-            entries.append(Entry(name, tuple(rated), round(sum(factors) / len(factors), 3),
-                                 (("pictures", "\n".join(str(r["media"]) for r in rows)),
-                                  ("prompt", str(rows[0].get("text") or "")))))
+            each = [_traits(home, r, labels) for r in rows]
+            traits = {k: v for k, v in each[0].items() if all(t.get(k) == v for t in each)}  # not the view, say
+            props = {**traits, "pictures": "\n".join(str(r["media"]) for r in rows), "prompt": str(rows[0].get("text") or "")}
+            entries.append(Entry(name, tuple(rated), round(sum(factors) / len(factors), 3), tuple(sorted(props.items()))))
         out[PREFIX + owner] = Library(PREFIX + owner, entries, {"source": f"the gallery's pictures of {owner}",
                                                                 "gallery": True})
     return out

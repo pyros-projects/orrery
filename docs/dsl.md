@@ -89,8 +89,9 @@ over it.
 
 The gallery's pictures are libraries too, read-only: `__pictures/<preset>__` holds one entry per
 character the preset made (a seed with its dials, `krea/09_character_creator/1283456183`), carrying
-all its pictures and the prompt that made them, weighted by your ratings and tagged `loved`, `liked`,
-`noped` or `hated`. A screenplay's CAST names one with `image NAME` or rolls one with
+all its pictures, the prompt that made them and what its template rolled (properties named after the
+bindings, so `[origin!=$hero.origin]` finds one who differs), weighted by your ratings and tagged
+`loved`, `liked`, `noped` or `hated`. A screenplay's CAST names one with `image NAME` or rolls one with
 `image __pictures/<preset>__` ([orrery-refs.md](orrery-refs.md#pictures-by-name)).
 
 ```bash

@@ -158,3 +158,26 @@ def test_a_filter_keeps_the_loved_characters_and_ratings_weigh_the_roll(home):
     assert loved == {f"{CREATOR}/7"}
     rolls = [compile_scene(REEL.format(who=f"__pictures/{CREATOR}__"), s, libs).picks[0].value for s in range(300)]
     assert rolls.count(f"{CREATOR}/7") > rolls.count(f"{CREATOR}/8") > rolls.count(f"{CREATOR}/9")
+
+
+def test_a_character_carries_what_its_template_rolled_so_another_can_differ(home):
+    from orrery.presets import remember_template
+
+    gallery(home, [(7, {"gender": "woman"}, None, 2), (8, {}, None, 1), (9, {}, None, 1)])
+    digest = remember_template(Home(home), "$origin = __origin__\n$view = {portrait:3|profile}\n$origin, $view")
+    origin = {7: "Tamil descent, with {deep|dark} skin", 8: "Tamil descent, with {dark|deep} skin", 9: "Greek descent"}
+    rows = [json.loads(line) for line in (home / "galaxy.jsonl").read_text().splitlines()]
+    for k, row in enumerate(rows):
+        row["template"] = digest
+        row["picks"] = [{"label": "$origin ← __origin__", "value": origin[row["seed"]]},
+                        {"label": "{portrait|profile}", "value": "profile" if k == 1 else "portrait"}]
+    (home / "galaxy.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows))
+    libs = Home(home).libraries()
+    first = dict(next(e for e in libs["pictures/" + CREATOR].entries if e.value == f"{CREATOR}/7-" + e.value[-4:]).props)
+    assert (first["origin"], first["gender"]) == ("Tamil descent, with skin", "woman")
+    assert "view" not in first  # its two pictures differ there: not the character's
+    pair = f"$hero = __pictures/{CREATOR}__\n" + REEL.format(who="$hero").replace(
+        "@DOG (image 1): a dog", f"@DOG (image __pictures/{CREATOR}[origin!=$hero.origin]__): a stranger")
+    for s in range(12):
+        hero, other = (p.value for p in compile_scene(pair, s, libs).picks)
+        assert (hero.split("/")[-1][0] == "9") != (other.split("/")[-1][0] == "9")  # one is Greek, one is not
