@@ -27,7 +27,8 @@ FIX = "\x1f"  # FIX n FIX inside a library or a brace: the draw lands on option 
 # library and never reach the prompt. [tags]: `myth` · `myth,!bird` (all, none of) · `water|deep_sea` (either).
 _LIB = re.compile(r"(?<!\\)__([\w*]+(?:/[\w*]+)*)(?:\[([^\[\]\n]+)\])?((?:#[\w-]+:\$?[\w.-]+)*)(?::(\d+))?(?:\x1f(\d+)\x1f)?__"
                   r"(?:\(([^()]*)\))?")
-_VAR = re.compile(r"\$([A-Za-z_]\w*)(?:~(\d+))?(?:\.([A-Za-z_][\w-]*))?")  # $x, $x~N (N clips ago), $x.field
+# $x, $x[-N] (N clips ago, or the earlier $x~N), $x["the stairs"] (the last time that scene played), $x.field
+_VAR = re.compile(r'\$([A-Za-z_]\w*)(?:~(\d+)|\[-(\d+)\]|\["([^"\]\n]+)"\])?(?:\.([A-Za-z_][\w-]*))?')
 # `$w.kind=rain,snow`, `$w!=x`: a condition on a binding's text or on a property of its pick
 _COND = r"\$([A-Za-z_]\w*)(?:\.([A-Za-z_][\w-]*))?\s*(!=|=)\s*([\w-]+(?:\s*,\s*[\w-]+)*)"
 _GUARD = re.compile(rf"^\?\s*{_COND}\s*:\s*(.*)$", re.DOTALL)  # ? cond: a line kept only when it holds
@@ -380,13 +381,13 @@ class Expander:
         self.picks: list[Pick] = []
         self.vars: dict[str, str] = {}
         # (name, clips back) → that clip's value; set by reels. Without it, $x~N is $x.
-        self.history: Callable[[str, int], str | None] | None = None
+        self.history: Callable[[str, int | str], str | None] | None = None
         self.var_props: dict[str, dict[str, str]] = {}  # a binding → the properties of the picks it rolled
         self.var_fields: dict[str, dict[str, str]] = {}  # the same, each rolled once as a template ($x.field reads it)
         self.var_tags: dict[str, set[str]] = {}  # a binding → the tags of the picks it rolled (`? $c[myth]: …`)
         self._tags_seen: set[str] = set()
         # (name, clips back) → that clip's fields of the binding, as it showed them; set by reels, for $x~N.field
-        self.history_props: Callable[[str, int], dict[str, str]] | None = None
+        self.history_props: Callable[[str, int | str], dict[str, str]] | None = None
         self._props_seen: dict[str, str] = {}
         self._within: list[str] = []  # the libraries whose entry is being expanded, outermost first
         self._where: list[tuple[str, str]] = []  # (what is being expanded, the grid that would run all of it)
@@ -524,14 +525,16 @@ class Expander:
         return self._articles(text)
 
     def _var(self, m: re.Match) -> str:
-        name, back, field = m.group(1), m.group(2), m.group(3)
-        if field:  # a property of the pick behind the binding (N clips back with ~N); empty when it has none
+        name, field = m.group(1), m.group(5)
+        clips = m.group(2) or m.group(3)
+        back = int(clips) if clips else m.group(4)  # clips back, or a scene's title
+        if field:  # a property of the pick behind the binding (back in the reel); empty when it has none
             if back is not None:
-                return (self.history_props(name, int(back)) if self.history_props else self.var_fields.get(name, {})).get(field, "")
+                return (self.history_props(name, back) if self.history_props else self.var_fields.get(name, {})).get(field, "")
             if name not in self.vars:
                 self._unbound(name)
             return self._field_of(name, field)
-        value = self.history(name, int(back)) if back is not None and self.history else None
+        value = self.history(name, back) if back is not None and self.history else None
         if value is None:
             value = self.vars.get(name)
         if value is None:

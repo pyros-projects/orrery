@@ -589,6 +589,38 @@ def test_a_cut_on_if_takes_the_path_the_condition_took():
         assert reel_path(split_reel(worded), seed, {}, None) == reel_path(split_reel(story), seed, {}, None)
 
 
+HISTORY = """@h3 text
+SCENE the room
+$light = {dawn|noon|dusk|night|storm}
+SHOT 5s
+In the $light light.
+SCENE the stairs ×2
+$light = {dawn|noon|dusk|night|storm}
+SHOT 5s
+Now $light, then $light[-1], before $light[-2], in the room $light["the room"], on the stairs $light["the stairs"].
+"""
+
+
+def test_history_in_brackets_is_the_value_clips_back_or_when_a_scene_last_played():
+    for seed in range(8):
+        lights = [re.search(r"Now (\w+)", c.text) or re.search(r"In the (\w+)", c.text)
+                  for c in (compile_scene(HISTORY, seed, {}, target="h3-base", segment=t) for t in range(3))]
+        room, first, second = (m.group(1) for m in lights)
+        clip = compile_scene(HISTORY, seed, {}, target="h3-base", segment=2).text
+        assert f"Now {second}, then {first}, before {room}, in the room {room}, on the stairs {first}" in clip
+        tilde = HISTORY.replace("$light[-1]", "$light~1").replace("$light[-2]", "$light~2")
+        assert compile_scene(tilde, seed, {}, target="h3-base", segment=2).text == clip
+
+
+def test_history_of_a_scene_that_has_not_played_is_this_clips_value_with_a_warning():
+    clip = compile_scene(HISTORY, 3, {}, target="h3-base", segment=1)
+    now = re.search(r"Now (\w+)", clip.text).group(1)
+    assert f"on the stairs {now}" in clip.text
+    assert any('$light["the stairs"]: SCENE the stairs has not played before this clip' in i.message for i in clip.lint)
+    hall = compile_scene(HISTORY.replace('"the room"', '"the hall"'), 3, {}, target="h3-base", segment=1)
+    assert any("no SCENE is called 'the hall'" in i.message for i in hall.lint)
+
+
 def test_a_chance_on_a_cut_moves_no_pick():
     rolls = GOTO_REEL.replace("The keeper climbs.", "The keeper climbs in {rain|fog|snow}.")
     chance = film(rolls).replace("CUT TO: the stairs ×2", "CUT TO: the stairs (100%) ×2")

@@ -470,12 +470,21 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
         ex.var_tags = dict(world.var_tags)
         ex.var_fields = dict(world.var_fields)  # the head's fields rolled once, for every clip
 
-        def back(n: int) -> int:  # the clip n back along what t continues; the first one it reaches
+        def back(name: str, n: int | str) -> int:
+            """The clip n back along what t remembers (the first one it reaches), or for a scene's title or
+            number the last time it played there; t itself when there is none."""
             behind = reel.chain(t, walked)
-            return behind[min(n, len(behind)) - 1] if n > 0 and behind else t
+            if isinstance(n, int):
+                return behind[min(n, len(behind)) - 1] if n > 0 and behind else t
+            scene = _scene(n, reel.blocks)
+            last = next((s for s in behind if walked[s][0] == scene), None)
+            if last is None:
+                ex.warn(f'${name}["{n}"]: ' + (f"no SCENE is called {n!r}" if scene is None else
+                        f"SCENE {n} has not played before this clip") + f", so it is ${name} as this clip rolls it.")
+            return t if last is None else last
 
-        ex.history = lambda name, n: ex.vars.get(name) if back(n) == t else history[back(n)].get(name)
-        ex.history_props = lambda name, n: (ex.var_fields if back(n) == t else history_props[back(n)]).get(name, {})
+        ex.history = lambda name, n: ex.vars.get(name) if back(name, n) == t else history[back(name, n)].get(name)
+        ex.history_props = lambda name, n: (ex.var_fields if back(name, n) == t else history_props[back(name, n)]).get(name, {})
         for line in block.lines:
             if m := BINDING.match(line.strip()):
                 ex.bind(m.group(1), m.group(2))
