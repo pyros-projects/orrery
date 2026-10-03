@@ -1,7 +1,7 @@
 // The Orrery Prompt node becomes one app: prompt, presets, libraries, galaxy, help.
 import { api } from "../../scripts/api.js";
 import { app } from "../../scripts/app.js";
-import { downstream } from "./app/model.js";
+import { downstream, queueSweep } from "./app/model.js";
 import { OrreryApp } from "./app/shell.js";
 
 const NO_PRESET = "(none)";
@@ -28,15 +28,6 @@ function hide(widget) {
 }
 
 // The graph as the Generate button sees it: which node feeds which, and which ones are outputs.
-// The seed for the next sweep, as the seed's control after generate would step it.
-function nextSeed(widget, mode) {
-  const seed = Number(widget?.value) || 0;
-  if (mode === "increment") return seed + 1;
-  if (mode === "decrement") return Math.max(0, seed - 1);
-  if (mode === "randomize") return Math.floor(Math.random() * 2 ** 32);
-  return seed;
-}
-
 function graphOf(node) {
   const g = node.graph || app.graph;
   const linkOf = (id) => (g.links?.get ? g.links.get(id) : g.links?.[id]);
@@ -121,14 +112,12 @@ function mount(node) {
         try {
           if (seedControl) seedControl.value = "fixed";
           if (segmentControl) segmentControl.value = "fixed";
-          for (let s = 0; s < seeds && id === batch.id; s++) {
-            if (s > 0) set("seed", nextSeed(find("seed"), was[0]));
-            for (let i = 0; i < count && id === batch.id; i++) {
-              set("sweep", `${i}|${folder}`);
-              await app.queuePrompt(0, 1, { queueNodeIds: outputs.map(String) });
-              progress(++queued);
-            }
-          }
+          queued = await queueSweep({
+            count, seeds, mode: was[0], progress,
+            getSeed: () => find("seed")?.value, setSeed: (seed) => set("seed", seed),
+            queue: async (i) => { set("sweep", `${i}|${folder}`); await app.queuePrompt(0, 1, { queueNodeIds: outputs.map(String) }); },
+            live: () => id === batch.id,
+          });
         } finally {
           if (seedControl) seedControl.value = was[0];
           if (segmentControl) segmentControl.value = was[1];

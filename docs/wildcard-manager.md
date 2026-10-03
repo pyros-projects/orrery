@@ -80,7 +80,8 @@ Strength 0 is off (the tag leaves the prompt), and identical runs run once, so
 `0,1` on two solo LoRAs gives one bare baseline. The button says what it will
 do (`Roll ×4 · sweep 2 + 2`) and asks first above 50 runs. One seed holds
 for the whole sweep; the `×` field becomes the number of seeds, each running
-the whole sweep. A reel's segment stays, so every run renders the same clip.
+the whole sweep, and the seed steps between them and after the last as its
+control after generate says, so the next Roll starts on a seed of its own. A reel's segment stays, so every run renders the same clip.
 While the runs are being queued, the editor waits (each queue item reads the
 template) and **Stop** ends the queueing. Every output records the swept
 strengths as picks (`<lora:a>` = 0.5, or off) and lands in a gallery folder

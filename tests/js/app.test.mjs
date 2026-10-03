@@ -4,7 +4,7 @@ import { highlight } from "../../comfyui/web/app/highlight.js";
 import { fitThumbs } from "../../comfyui/web/app/timeline.js";
 import { writerBlock } from "../../comfyui/web/app/write.js";
 import {
-  applyDials, dials, downstream, entryPage, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
+  applyDials, dials, downstream, nextSeed, queueSweep, entryPage, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
   chunkInfo, chunkLabel, splitCells, rangeIds, shape, stats, PLAN_HINT, templateHash, hasGoto, plays, longForm, matches, splitOptions, tagsMatch, withDice,
 } from "../../comfyui/web/app/model.js";
 
@@ -280,6 +280,30 @@ test("generate finds the output nodes downstream of the orrery node, and whether
   assert.deepEqual(downstream(nodes, 9), { outputs: [31], log: false });
   nodes[0].targets.push(41); nodes.push({ id: 41, type: "OrreryLog", output: true, targets: [] });
   assert.deepEqual(downstream(nodes, 9), { outputs: [31, 41], log: true });
+});
+
+test("a sweep holds the seed for its runs, steps it between seeds and once after the last run", async () => {
+  const sweep = async (mode, seeds, stopAfter = Infinity) => {
+    let seed = 100, ran = 0;
+    const used = [];
+    const queued = await queueSweep({
+      count: 3, seeds, mode, getSeed: () => seed, setSeed: (s) => { seed = s; },
+      queue: async (i) => { used.push([seed, i]); ran++; }, live: () => ran < stopAfter,
+    });
+    return { queued, used, seed };
+  };
+  const inc = await sweep("increment", 2);
+  assert.equal(inc.queued, 6);
+  assert.deepEqual(inc.used, [[100, 0], [100, 1], [100, 2], [101, 0], [101, 1], [101, 2]]);
+  assert.equal(inc.seed, 102);  // the next Roll starts on a seed of its own
+  assert.equal((await sweep("fixed", 2)).seed, 100);
+  const rnd = await sweep("randomize", 1);
+  assert.deepEqual(rnd.used.map(([s]) => s), [100, 100, 100]);  // one character from every side
+  assert.notEqual(rnd.seed, 100);
+  const stopped = await sweep("increment", 3, 4);  // Stop after four runs: still a seed of its own next
+  assert.deepEqual([stopped.queued, stopped.seed], [4, 102]);
+  assert.equal(await queueSweep({ count: 2, seeds: 1, mode: "increment", getSeed: () => 7, setSeed: () => assert.fail(), queue: async () => {}, live: () => false }), 0);
+  assert.equal(nextSeed(0, "decrement"), 0);
 });
 
 test("# lines are comments: grey, and nothing in them rolls, counts or opens a screenplay", () => {
