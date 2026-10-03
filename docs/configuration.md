@@ -35,5 +35,21 @@ llm:
   writer_temperature: 0.8             # the Write menu: each idea a different one
 ```
 
+Or an API endpoint, which then does all of the language model's work
+([wildcard-manager.md](wildcard-manager.md#the-language-model-over-an-api)):
+
+```yaml
+llm:
+  source: api                         # api, or comfy for the text encoder above
+  api:
+    base_url: https://api.openai.com/v1
+    model: gpt-6-luna
+    key_env: OPENAI_API_KEY           # ComfyUI's environment, else the home's .env
+```
+
+The key stays out of `orrery.yaml`: the gear writes it to `.env` in the orrery
+home (`OPENAI_API_KEY=…`, readable by you only). Without a `models.library`,
+`orrery lib` uses the endpoint too.
+
 The Write menu's prompts, one per writer, are edited in the gear's **Writers**
 section; an edit lives in `writers/` in the orrery home.

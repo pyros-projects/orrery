@@ -1,6 +1,6 @@
 # The wildcard manager
 
-orrery's libraries can be edited in plain language from the CLI, and inside ComfyUI a local language model writes the libraries and `--slots--` a template asks for. Nothing it writes is kept until you accept it.
+orrery's libraries can be edited in plain language from the CLI, and inside ComfyUI a language model (a local one, or an [API endpoint](#the-language-model-over-an-api)) writes the libraries and `--slots--` a template asks for. Nothing it writes is kept until you accept it.
 
 ```bash
 uv run orrery lib list
@@ -103,7 +103,9 @@ of gallery folder. A grid that cannot run says why in the footer.
 
 Everything a run needs goes to the model in one request (ComfyUI cannot
 safely generate twice in one run); ComfyUI moves the model out when the video
-model needs the room, and orrery keeps it for the next run. What it wrote waits
+model needs the room, and orrery keeps it for the next run. An API endpoint
+can be asked more than once: each library in a request of its own, all at
+once, then the slots and rewrites, which see the compiled prompt. What it wrote waits
 on top of the Libraries tab under **To review**, marked in violet: **Accept**
 keeps it, **Discard** drops it (a discarded library is written again on the
 next run, so change the directions first). After every run the node refreshes
@@ -140,3 +142,36 @@ own prompt (the image prompt and the i2va shot of Prompt from image are two),
 with only the rules and examples it needs, so a small model is not confused by
 the others'. Each is editable, with **Reset to default**; an edit lives in `writers/` in the orrery home, so an
 update of orrery leaves it alone.
+
+## The language model over an API
+
+The gear's **Language model** can be an API endpoint instead of a text
+encoder: OpenAI, or any server that speaks its chat protocol (llama.cpp, LM
+Studio, OpenRouter). It takes the endpoint (`https://api.openai.com/v1`), a
+key and a model; **Check** lists the endpoint's chat models and has the model
+answer once, and **Save** checks the same way before it switches. The key goes
+into the home folder's `.env` (readable by you only), never into
+`orrery.yaml`, and the gear shows only how it ends; `OPENAI_API_KEY` in
+ComfyUI's environment wins over it.
+
+From then on every language-model task goes to the endpoint: a run's
+libraries, slots and `> enhance` (the frames a slot watches go as pictures),
+the Write menu, and `orrery lib`, when `orrery.yaml` names no
+`models.library`. It runs beside ComfyUI: no VRAM, no text encoder pushing
+the video model out, no waiting behind a render. It wins over a text encoder
+wired into `clip`. Models that want `max_completion_tokens` or refuse a
+temperature (the newer OpenAI ones) are asked again the way they accept, and
+a busy endpoint twice more before the run fails with its own words.
+
+- **The Write menu** asks the endpoint directly, without a run: an idea comes
+  while a render runs. Frames from a Load Image node go as its file; a frame
+  that something else computes still takes a run (Orrery Write), which
+  computes it.
+- **Write now** stands in the Prompt tab's footer, beside the model's name,
+  while the template names libraries to write (unknown ones, `__name:N__`
+  above what a library holds): it writes them all at once, a request each,
+  and they wait under **To review** in Libraries as a run's do. The next run
+  finds them done, before any GPU time is spent on them.
+
+A smoke test of every path against a real endpoint, and its results with
+`gpt-6-luna`, is in `experiments/api-llm/`.

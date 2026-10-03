@@ -70,7 +70,10 @@ Nodes under **orrery**:
     restores them. **Test** jumps to the Test tab and rolls. **Write** has
     the language model write the reel's next scene, the shot between two
     frames or a prompt from a picture, one idea per short run, browsed
-    before it goes in ([wildcard-manager.md](wildcard-manager.md)).
+    before it goes in ([wildcard-manager.md](wildcard-manager.md)). With an
+    API endpoint as the language model (the gear), it asks the endpoint
+    directly, beside ComfyUI's queue, and **Write now** in the footer writes
+    the libraries the template still needs, all at once.
     In a reel, every `SCENE` line carries a divider that says which clips
     it plays (counted from 1), when and how much film is left (`clips 2–5 · 4 × 5 s · 0:05 →
     0:25 · 1:35 left`); the scene that plays the next clip is

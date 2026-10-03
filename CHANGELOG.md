@@ -9,6 +9,10 @@ checks) are left out.
 
 ### Added
 
+- The language model can be an API endpoint (OpenAI, or a server that speaks its protocol), set in the gear
+  with a key kept in the home's `.env`: a run's libraries, slots and `> enhance`, the Write menu and
+  `orrery lib` go through it, beside ComfyUI (no VRAM, no queue). The Write menu answers while a render
+  runs, and **Write now** writes a template's open libraries at once (#165).
 - `EXPORT:` keeps what a template rolled beside its prompt, never in it: the gallery, History and
   `orrery expand --json` hold it for other systems, the Gallery shows it as a sheet, and a picture
   carries it into the screenplays that cast it (`$hero.mood`). The Character creator exports who it

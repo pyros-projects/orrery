@@ -1,0 +1,160 @@
+{
+ "model": "gpt-6-luna",
+ "home": "/tmp/claude-1000/-home-pyro-projects-private-orrery/4d92503d-bf51-43c0-a952-ac267f5f4a77/scratchpad/api-home-luna",
+ "steps": {
+  "1 check: key, models, one answer": {
+   "seconds": 2.3,
+   "ok": true,
+   "answer": "OK",
+   "error": null,
+   "models": 60,
+   "luna_sol": [
+    "gpt-5.6-luna",
+    "gpt-5.6-sol",
+    "gpt-6-luna",
+    "gpt-6-sol",
+    "gpt-6.1-sol"
+   ]
+  },
+  "2 settings: a wrong key is refused, the right one saved to .env": {
+   "seconds": 2.3,
+   "wrong": 400,
+   "wrong_error": "https://api.openai.com/v1 answered HTTP 401 for its model list. The endpoint refused the key.",
+   "right": 200,
+   "active": {
+    "kind": "api",
+    "name": "gpt-6-luna"
+   },
+   "key_shown_as_hint": true,
+   "key_in_yaml": false,
+   "key_in_env_file": true,
+   "env_mode": "0o600"
+  },
+  "3 write now: three new libraries and a top-up, in parallel": {
+   "seconds": 4.5,
+   "status": 200,
+   "body": {
+    "asked": [
+     "fantasy_peoples",
+     "fantasy_trades",
+     "haunted_places",
+     "odd_heirlooms"
+    ],
+    "notes": [
+     "Created __fantasy_peoples__ with 8 entries (gpt-6-luna); review it in Libraries.",
+     "Created __fantasy_trades__ with 8 entries (gpt-6-luna); review it in Libraries.",
+     "Created __haunted_places__ with 8 entries (gpt-6-luna); review it in Libraries.",
+     "Added 3 entries to __odd_heirlooms__ (gpt-6-luna), now 6; review them in Libraries."
+    ]
+   },
+   "libraries": {
+    "fantasy_peoples": [
+     "mossborn giants",
+     "glass-skinned elves",
+     "ash dwarves",
+     "moonlit merfolk",
+     "goblin kin",
+     "marsh oracles",
+     "feathered folk",
+     "hollow-eyed fae"
+    ],
+    "fantasy_trades": [
+     "grave-ink scribe",
+     "bell diver",
+     "curse cartographer",
+     "marrow jeweler",
+     "ghost beekeeper",
+     "tomb locksmith",
+     "ash botanist",
+     "candle smuggler"
+    ],
+    "haunted_places": [
+     "The drowned bell tower",
+     "Abandoned moonlit railway station",
+     "Fogbound children's hospital",
+     "The whispering salt mine",
+     "Overgrown plague cemetery",
+     "Crumbling seaside funhouse",
+     "Blackwater forest chapel",
+     "The sealed underground ballroom"
+    ],
+    "odd_heirlooms": [
+     "a cracked pocket watch",
+     "a ring of braided hair",
+     "a key to no door",
+     "a moth-eaten crown",
+     "a glass tooth",
+     "a map of yesterday"
+    ]
+   },
+   "again": {
+    "asked": [],
+    "notes": []
+   }
+  },
+  "4 run (text): a new library apart, then slot and enhance in one request": {
+   "seconds": 6.7,
+   "text": "A painterly portrait of marsh oracles beneath neon-soaked rain, candlelight warming their textured, peat-dark robes as raindrops stipple the misty air and shimmer across the wet reeds. Their face is pale as moonlit peat, with amber eyes gleaming beneath rain-dark lashes and silver droplets tracing the fine cracks in their skin.",
+   "lint": [
+    "Created __rain_moods__ with 8 entries (gpt-6-luna); review it in Libraries."
+   ],
+   "rain_moods": [
+    "silver drizzle",
+    "monsoon gloom",
+    "sunshower shimmer",
+    "thunderous downpour",
+    "misty rain",
+    "rain-lashed fury",
+    "soft spring shower",
+    "neon-soaked rain"
+   ]
+  },
+  "5 run (h3): a slot that sees the previous clip's frames": {
+   "seconds": 5.0,
+   "text": "integrated_multimodal_description: [Shot 1] The uniformed figure’s stern gaze shifts toward the creaking door offscreen; they turn their head slightly, shoulders tensing, while keeping their hands clasped behind their back. The camera gently pushes in. Camera movement: medium shot.\n\noverall_soundscape: A door creaks.\n\nnon_diegetic_music: N/A",
+   "lint": [
+    "Shot 1: \"medium shot\" is not in the guide's camera vocabulary (push in, pull out, zoom in, zoom out, pan left, pan right, truck left, truck right, tilt up, tilt down, pedestal up, pedestal down, arc, tracking, static, shake slightly, shake strongly, pov, roll clockwise, roll counterclockwise); it goes in as written."
+   ]
+  },
+  "6 write menu: describe, from a picture (Load Image)": {
+   "seconds": 2.0,
+   "task": "describe",
+   "seed": 1,
+   "idea": 0,
+   "text": "A studio portrait photograph of a young woman with warm brown skin, freckles across her cheeks and nose, light gray-green eyes, and curly brown hair gathered high in a loose puff. She wears a rust-orange velvet dress with a wide square neckline, fitted bodice, and gathered long sleeves. She faces the camera with a calm, serious expression against a plain gray backdrop, softly lit from the front, framed from the waist up.",
+   "problem": null,
+   "template": "A studio portrait photograph of a young woman with warm brown skin, freckles across her cheeks and nose, light gray-green eyes, and curly brown hair gathered high in a loose puff. She wears a rust-orange velvet dress with a wide square neckline, fitted bodice, and gathered long sleeves. She faces the camera with a calm, serious expression against a plain gray backdrop, softly lit from the front, framed from the waist up.\n"
+  },
+  "7 write menu: story between two frames (fl2va)": {
+   "seconds": 4.5,
+   "task": "story",
+   "seed": 1,
+   "idea": 0,
+   "text": "SHOT 5s: static\nThe woman holds still as her auburn curls tighten into a short dark crop and her face reshapes into a stern man’s features, his earlobes stretching into dark plugs. Her rust-colored dress reforms into a high-collared olive military jacket with purple trim and a plum skirt as he draws his arms behind his back and settles into the exact final pose.\nSFX: a soft, rising transformation hum; velvet rustling and uniform fabric settling into place",
+   "problem": null,
+   "template": "@h3 fl2va 9:16\n\nSHOT 5s: static\nThe woman holds still as her auburn curls tighten into a short dark crop and her face reshapes into a stern man’s features, his earlobes stretching into dark plugs. Her rust-colored dress reforms into a high-collared olive military jacket with purple trim and a plum skirt as he draws his arms behind his back and settles into the exact final pose.\nSFX: a soft, rising transformation hum; velvet rustling and uniform fabric settling into place\n"
+  },
+  "8 write menu: continue a reel": {
+   "seconds": 5.7,
+   "task": "continue",
+   "seed": 1,
+   "idea": 0,
+   "text": "SCENE the hidden mark\nSHOT 6s: push in, slow, close\nThe lighthouse keeper holds still beside the dark lamp as the stranger’s lantern burns in its place. She leans closer, and its wavering light reveals a fresh, wet handprint on the inside of the glass.\nSFX: rain lashes the windows; the lantern flame flickers\nEND ON: a wet handprint on the glass beside the burning lantern",
+   "problem": null,
+   "template": "@h3 t2va 16:9\nSCENE arrival\nSHOT 5s: wide\nA lighthouse keeper climbs the stairs in a storm.\nSFX: wind, rain on glass\nSCENE the lamp\nSHOT 5s: close\nShe finds the lamp dark and a stranger's lantern burning in its place.\nSFX: a match strikes\n\nSCENE the hidden mark\nSHOT 6s: push in, slow, close\nThe lighthouse keeper holds still beside the dark lamp as the stranger’s lantern burns in its place. She leans closer, and its wavering light reveals a fresh, wet handprint on the inside of the glass.\nSFX: rain lashes the windows; the lantern flame flickers\nEND ON: a wet handprint on the glass beside the burning lantern\n"
+  },
+  "9 orrery lib gen (CLI) through the endpoint": {
+   "seconds": 2.6,
+   "code": 0,
+   "out": "__storm_omens__ (new)\n  + copper lightning\n  + black snow\n  + eclipsed sun\n  + singing wires\n  + red tide\n  + ashen halo\nCreated __storm_omens__. Undo with: orrery lib undo\n",
+   "err": "gpt-6-luna is writing __storm_omens__ …\n"
+  },
+  "10 a refused key: write now says so": {
+   "seconds": 0.4,
+   "status": 502,
+   "body": {
+    "error": "gpt-6-luna: Incorrect API key provided: sk-wrong*0000. You can find your API key at https://platform.openai.com/account/api-keys. (HTTP 401). Check the key in orrery's settings."
+   }
+  }
+ }
+}
