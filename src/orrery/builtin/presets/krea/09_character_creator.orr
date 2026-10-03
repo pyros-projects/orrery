@@ -24,7 +24,7 @@ $backdrop = a seamless mid-grey studio backdrop
 $look = {photo:6|animated:2|anime:2|painted}
 $view = {portrait|three-quarter|full-length|profile}
 $opening = {IF $look is photo: A studio photograph|{IF $look is animated: A 3D character render, in the style of a modern animated feature film,|{IF $look is anime: An anime character design|A gouache character study}}}
-$frame = {IF $view is portrait: A head-and-shoulders portrait, facing the camera|{IF $view is three-quarter: A head-and-shoulders view turned three-quarters to the left|{IF $view is full-length: A full-length view from head to toe, standing straight with the arms relaxed, facing the camera|A head-and-shoulders profile, facing left}}}
+$frame = {IF $view is portrait: A head-and-shoulders portrait, facing the camera|{IF $view is three-quarter: A head-and-shoulders view turned three-quarters to the left|{IF $view is full-length: A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera|A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible}}}
 $finish = {IF $look is photo: Shot on an 85mm lens at eye level, true colours.|{IF $look is animated: Stylised proportions, soft subsurface skin.|{IF $look is anime: Clean line art and flat cel shading.|Visible brush strokes on warm paper.}}}
 $opening of a $years-year-old $gender of $origin: $build, $face, $eyes, $hair and $mark. Dressed in $outfit{IF $accessorize is yes: , wearing $accessory|}, with $presence. $frame, against $backdrop, in soft, even light. $finish
 @size 832x1216
