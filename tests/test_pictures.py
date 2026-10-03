@@ -149,3 +149,12 @@ def test_a_slot_in_a_cast_line_keeps_its_commas():
     m = parse_member("HERO", "image 2", "--who they are, in one sentence--, in a red coat")
     assert (m.head, m.tail) == ("--who they are, in one sentence--", ", in a red coat")
     assert m.split_head() == (m.head, "")
+
+
+def test_a_filter_keeps_the_loved_characters_and_ratings_weigh_the_roll(home):
+    gallery(home, [(7, {}, "love", 1), (8, {}, None, 1), (9, {}, "hate", 1)])
+    libs = Home(home).libraries()
+    loved = {compile_scene(REEL.format(who=f"__pictures/{CREATOR}[loved]__"), s, libs).picks[0].value for s in range(10)}
+    assert loved == {f"{CREATOR}/7"}
+    rolls = [compile_scene(REEL.format(who=f"__pictures/{CREATOR}__"), s, libs).picks[0].value for s in range(300)]
+    assert rolls.count(f"{CREATOR}/7") > rolls.count(f"{CREATOR}/8") > rolls.count(f"{CREATOR}/9")
