@@ -77,9 +77,11 @@ export function client(home) {
     onPreview: (fn) => {
       const kj = ({ detail: d }) => d?.image && fn({ src: `data:${d.mime || "image/jpeg"};base64,${d.image}`, video: d.mime === "video/mp4", kj: true,
         step: d.step, total: d.total });
-      const own = ({ detail }) => { const blob = detail?.blob || detail; if (blob instanceof Blob) fn({ blob }); };
+      let tagged = false;  // newer frontends send each picture twice, with its prompt and without: the first is enough
+      const meta = ({ detail: d }) => { if (d?.blob instanceof Blob) { tagged = true; fn({ blob: d.blob, prompt: d.jobId }); } };
+      const own = ({ detail }) => { const blob = detail?.blob || detail; if (!tagged && blob instanceof Blob) fn({ blob }); };
       const step = ({ detail: d }) => d && fn({ step: d.value, total: d.max, prompt: d.prompt_id });
-      const on = [["kj_preview_override", kj], ["b_preview", own], ["progress", step]];
+      const on = [["kj_preview_override", kj], ["b_preview_with_metadata", meta], ["b_preview", own], ["progress", step]];
       on.forEach(([kind, f]) => api.addEventListener(kind, f));
       return () => on.forEach(([kind, f]) => api.removeEventListener(kind, f));
     },
