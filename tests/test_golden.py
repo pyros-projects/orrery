@@ -39,7 +39,9 @@ PRESETS = sorted(p.relative_to(BUILTIN_PRESETS).with_suffix("").as_posix()
 
 
 def take(result, **where) -> dict:
-    return {**where, "text": result.text, "picks": [[p.label, p.value] for p in result.picks]}
+    exports = getattr(result, "exports", None)  # EXPORT: (#157), pinned like the text when a preset has any
+    return {**where, "text": result.text, "picks": [[p.label, p.value] for p in result.picks],
+            **({"exports": exports} if exports else {})}
 
 
 def snapshot(home: Home, name: str) -> dict:

@@ -364,6 +364,19 @@ CAST
   @HERO (image $hero): …
   @STRANGER (image __pictures/krea/09_character_creator[origin!=$hero.origin, colour!=$hero.colour]__): …
   ```
+- **What a picture carries.** What its template EXPORTed comes along as properties
+  ([dsl.md](dsl.md), *What a picture carries*): with the Character creator, `$hero.who` is the
+  whole character as a CAST description, and `$hero.mood`, `$hero.quirk`, `$hero.voice` and
+  `$hero.skills` direct the shots and the lines, so the screenplay stays short:
+
+  ```
+  $hero = __pictures/krea/09_character_creator[genre=noir]__
+  CAST
+  @HERO (image $hero): $hero.who
+  SHOT 4s: tracking
+  @HERO crosses the market and $hero.quirk.
+  @HERO ($hero.voice): You owe me.
+  ```
 - **One picture** is named by its file: `image krea/09_character_creator/krea2_00092_`.
   Pictures of a template without a preset are under `unsaved/<its hash>`.
 - **Slots:** a named picture takes the highest free slots (9, 8, 7 …), each view one, so your
