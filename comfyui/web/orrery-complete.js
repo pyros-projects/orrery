@@ -131,14 +131,15 @@ function shotItems(before, line, data) {
   };
 }
 
-// GOTO: (alone, or after `? cond:`): the chunks to jump to, by title.
+// CUT TO: (GOTO:, the earlier word; alone, or after `? cond:`): the scenes to jump to, by title.
 function gotoItems(before, line, text) {
-  const m = /^\s*(?:\?[^\n]*?:\s*)?GOTO:\s*([^×]*)$/i.exec(line);
+  const m = /^\s*(?:\?[^\n]*?:\s*)?(?:CUT\s+TO|GOTO):\s*([^×]*)$/i.exec(line);
   if (!m) return null;
-  const titles = text.split("\n").map((l) => /^\s*CHUNK\b\s*(.*?)(?:\s+repeat\s+(?:\d+|forever))?\s*$/i.exec(l)).filter(Boolean)
+  const titles = text.split("\n")
+    .map((l) => /^\s*(?:SCENE|CHUNK)\b\s*(.*?)(?:\s+repeat\s+(?:\d+|forever)|\s+[×x]\s*\d+|\s+forever)?\s*$/i.exec(l)).filter(Boolean)
     .map((c, i) => c[1] || String(i + 1));
   return {
-    items: titles.filter((t) => startsWith(t, m[1])).map((t) => ({ insert: t, detail: "jump to this chunk; ×N after it: N times", preview: "" })),
+    items: titles.filter((t) => startsWith(t, m[1])).map((t) => ({ insert: t, detail: "jump to this scene; ×N after it: N times", preview: "" })),
     replaceFrom: before.length - m[1].length,
   };
 }
@@ -150,7 +151,7 @@ export function castNames(text) {
   for (const raw of uncommented(text).split("\n")) {
     const l = raw.trim();
     if (/^CAST\s*$/.test(l)) { inCast = true; continue; }
-    if (/^(SHOT\b|CHUNK\b|@)/.test(l) || (inCast && !l)) { inCast = false; continue; }
+    if (/^(SHOT\b|SCENE\b|CHUNK\b|@)/.test(l) || (inCast && !l)) { inCast = false; continue; }
     const m = inCast && /^([A-Z][A-Z0-9 _-]*?)\s*(?:\([^)]*\))?\s*:\s*\S/.exec(l);
     if (m && !names.includes(m[1])) names.push(m[1]);
   }
@@ -212,7 +213,7 @@ function inCast(before) {
   for (const raw of uncommented(before).split("\n").slice(0, -1)) {
     const l = raw.trim();
     if (/^CAST\s*$/.test(l)) open = true;
-    else if (/^(SHOT\b|CHUNK\b|@)/.test(l) || (open && !l)) open = false;
+    else if (/^(SHOT\b|SCENE\b|CHUNK\b|@)/.test(l) || (open && !l)) open = false;
   }
   return open;
 }

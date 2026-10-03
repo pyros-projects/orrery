@@ -24,7 +24,7 @@ TASKS = ("continue", "story", "describe")
 DEFAULT_SECONDS = 5
 
 _SHOT = re.compile(r"^\s*SHOT\s+(\d+(?:\.\d+)?)\s*s\b", re.IGNORECASE)
-_CHUNK = re.compile(r"^\s*CHUNK\b", re.IGNORECASE)
+_CHUNK = re.compile(r"^\s*(?:SCENE|CHUNK)\b", re.IGNORECASE)
 _FORBIDDEN = (
     (re.compile(r"__[\w/]+__"), "wildcards (__name__)"),
     (re.compile(r"\$[A-Za-z_]"), "variables ($name)"),
@@ -113,17 +113,17 @@ def request(home: Home, task: str, template: str, seed: int, libraries, weights)
     name = task_name(task, template)
     if name != "continue" and any(_CHUNK.match(ln) for ln in template.splitlines()):
         raise WriterError("This writer writes one shot, and this template is a reel: its shot would take the "
-                          "place of every chunk. Use Continue the reel, or a template without CHUNK lines.")
+                          "place of every scene. Use Continue the reel, or a template without SCENE lines.")
     if name == "continue":
         from orrery.reel import reel_path, resolved, split_reel
 
         reel = split_reel(template)
         if reel is None:
-            raise WriterError("Continue the reel needs a reel: a screenplay with CHUNK lines.")
+            raise WriterError("Continue the reel needs a reel: a screenplay with SCENE lines.")
         path, ended = reel_path(reel, seed, libraries, weights)
         if not ended:
-            raise WriterError("This reel plays on and on (a chunk that repeats forever, or a GOTO without ×N), "
-                              "so there is no next chunk to write.")
+            raise WriterError("This reel plays on and on (a scene that repeats forever, or a CUT TO: without ×N), "
+                              "so there is no next scene to write.")
         head, segments = resolved(reel, seed, libraries, weights, len(path))
         chunks = "\n\n".join(
             f"CHUNK {s['title'] or f'clip {i + 1}'}\n" + "\n".join(s["lines"])
@@ -202,7 +202,7 @@ def _compile(lines: list[str]) -> None:
     """The written shots alone, as a screenplay: the template's own wildcards stay out of it."""
     from orrery.h3 import compile_scene
 
-    shots = [ln for ln in lines if not _CHUNK.match(ln) and not re.match(r"\s*HANDOFF:", ln, re.IGNORECASE)]
+    shots = [ln for ln in lines if not _CHUNK.match(ln) and not re.match(r"\s*(?:END ON|HANDOFF):", ln, re.IGNORECASE)]
     compile_scene("@h3 t2va 16:9\n" + "\n".join(shots), 0, {}, {}, target="h3-base")
 
 

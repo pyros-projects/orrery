@@ -100,7 +100,7 @@ def test_describe_writes_an_image_prompt_for_a_still(home):
 def test_a_reel_that_repeats_forever_has_no_next_chunk(home):
     with pytest.raises(writers.WriterError, match="forever"):
         writers.request(Home(home), "continue", "@h3 t2va\nCHUNK a repeat forever\nSHOT 5s\nA.", 1, {}, {})
-    with pytest.raises(writers.WriterError, match="CHUNK"):
+    with pytest.raises(writers.WriterError, match="SCENE"):
         writers.request(Home(home), "continue", "@h3 t2va\nSHOT 5s\nA.", 1, {}, {})
 
 

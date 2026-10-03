@@ -330,6 +330,17 @@ test("every CHUNK line knows its segments, where it sits in the film and what is
   assert.deepEqual(sends[0].images, [1, 3]);
 });
 
+test("SCENE, ×N and forever give what CHUNK and repeat gave, and CUT TO: walks the reel as GOTO: did", () => {
+  const film = REEL_TEXT.replaceAll("CHUNK", "SCENE").replace("repeat 4", "×4");
+  const fields = (info) => info.map((c) => [c.line, c.title, c.repeat, c.first, c.last, c.secs, c.label]);
+  assert.deepEqual(fields(chunkInfo(film)), fields(chunkInfo(REEL_TEXT)));
+  assert.deepEqual(splitCells(film).map((c) => [c.line, c.chunk]), splitCells(REEL_TEXT).map((c) => [c.line, c.chunk]));
+  assert.equal(stats(film).h3.reel.clips, 6);
+  assert.deepEqual(chunkInfo("SCENE a forever\nSHOT 5s\nA.\nSCENE the 4x4 room\nSHOT 5s\nB.").map((c) => [c.title, c.repeat]),
+    [["a", Infinity], ["the 4x4 room", 1]]);
+  assert.ok(hasGoto("SCENE a\nSHOT 5s\nA.\nCUT TO: a ×2") && hasGoto("? $w[rain]: CUT TO: a") && !hasGoto("SCENE a\nSHOT 5s\nA."));
+});
+
 test("a chunk that repeats forever runs on, and the ones after it never play", () => {
   const info = chunkInfo("CHUNK a\nSHOT 5s\nA.\nCHUNK b repeat forever\nSHOT 6s\nB.\nCHUNK c\nSHOT 5s\nC.");
   assert.equal(chunkLabel(info[1]), "seg 1 → ∞ · 6 s each · from 0:05");

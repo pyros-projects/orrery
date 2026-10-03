@@ -1,37 +1,40 @@
 """Reels: one screenplay for a chain of H3 Motion Context clips.
 
-    @h3 t2va 9:16
+    @h3 text 9:16
     $venue = __couture_venue__             the head is the world: it rolls once per seed
-    CHUNK the opening
-    $look = __couture_form__               a chunk rolls anew in every segment it plays
+    SCENE the opening
+    $look = __couture_form__               a scene rolls anew in every segment it plays
     SHOT 6s: tracking, slow
     …
-    HANDOFF: the model reaches the end of the runway
-    CHUNK the rotation repeat forever      repeat N | forever: one segment per repetition
+    END ON: the model reaches the end of the runway
+    SCENE the rotation forever             ×N | forever: one segment per repetition
     $look = __couture_form__
     SHOT 6s: static
     A model in $look~1 walks back while one in $look walks in.   $x~N: x as it was N clips ago
     SEND: frame 0 to image 3               this clip's frame 0 is image 3 for every later clip
     SEND: frame -1 to image 4 for segment 6+          its last frame, only for segments 6, 7, 8 …
-    GOTO: the opening ×2                   after this chunk, back to that one (twice, then on)
-    ? $look[kind=gown]: GOTO: the finale   a jump on what this clip rolled
+    CUT TO: the opening ×2                 after this scene, back to that one (twice, then on)
+    ? $look[kind=gown]: CUT TO: the finale   a jump on what this clip rolled
+
+The words of an earlier orrery keep working, with the same dice: CHUNK for SCENE, `repeat N` and
+`repeat forever` for ×N and forever, HANDOFF: for END ON:, GOTO: for CUT TO:.
 
 A segment is one clip. Its seed derives from the node's seed and the segment number, so every
-clip is reproducible and a repeated chunk still varies; `$x~N` recomputes the earlier clip's
-bindings instead of remembering them. The previous segment's handoff opens this one, its own
+clip is reproducible and a repeated scene still varies; `$x~N` recomputes the earlier clip's
+bindings instead of remembering them. The previous segment's END ON: opens this one, its own
 closes it, and from the second segment on Shot 1 also covers the frames Motion Context pins.
 
-`SEND:` hands frames of a chunk's clip (counted from 0 in the clip Chain Video keeps, the pinned
+`SEND:` hands frames of a scene's clip (counted from 0 in the clip Chain Video keeps, the pinned
 frames trimmed off; -1 is the last) to later clips as a reference image, the CAST's `image N`;
-several frames make one image batch. A chunk that repeats sends from the first time it plays.
+several frames make one image batch. A scene that repeats sends from the first time it plays.
 `for segment 4+` / `4, 6, 7` / `2-5` limits the clips that get it, so several lines may fill one
 image in turns. Orrery Refs fetches the frames; where they do not exist, the compiler leaves the
 image out of the clip.
 
-`GOTO: <title or number> [×N]` at a chunk's end jumps instead of going on: N times (then the chunk
-after it), or for good without ×N. Several GOTO lines: the first that holds and has jumps left wins;
-`? cond: GOTO: …` holds on what that clip rolled. So the path through the chunks is walked clip by
-clip (`Reel.walk`): which chunk a segment plays can depend on the seed.
+`CUT TO: <title or number> [×N]` at a scene's end jumps instead of going on: N times (then the scene
+after it), or for good without ×N. Several CUT TO: lines: the first that holds and has jumps left
+wins; `? cond: CUT TO: …` holds on what that clip rolled. So the path through the scenes is walked
+clip by clip (`Reel.walk`): which scene a segment plays can depend on the seed.
 """
 
 import hashlib
@@ -43,12 +46,12 @@ from orrery.dsl import Expander, Pick
 from orrery.h3 import DEFAULT_CONTEXT, H3_FPS, Issue, Scene, _clause, parse_scene
 from orrery.library import Library
 
-CHUNK = re.compile(r"^CHUNK\b\s*(.*)$")
-REPEAT = re.compile(r"^(.*?)\s*\brepeat\s+(\d+|forever)\s*$", re.IGNORECASE)
-HANDOFF = re.compile(r"^HANDOFF:\s*(.+)$")
+CHUNK = re.compile(r"^(?:SCENE|CHUNK)\b\s*(.*)$")  # a scene's heading; CHUNK is the earlier word
+REPEAT = re.compile(r"^(.*?)\s*(?:\brepeat\s+(\d+|forever)|(?<!\S)[×x]\s*(\d+)|(?<!\S)(forever))\s*$", re.IGNORECASE)
+HANDOFF = re.compile(r"^(?:END ON|HANDOFF):\s*(.+)$")
 SEND = re.compile(r"^SEND:\s*(.*)$")
-GOTO_LINE = re.compile(r"^(?:\?[^\n]*?:\s*)?GOTO:", re.IGNORECASE)  # a GOTO line, with its `? cond:` or without
-_GOTO = re.compile(r"GOTO:\s*(.+?)\s*(?:[×x]\s*(\d+))?\s*$", re.IGNORECASE)
+GOTO_LINE = re.compile(r"^(?:\?[^\n]*?:\s*)?(?:CUT\s+TO|GOTO):", re.IGNORECASE)  # a cut, with its `? cond:` or without
+_GOTO = re.compile(r"(?:CUT\s+TO|GOTO):\s*(.+?)\s*(?:[×x]\s*(\d+))?\s*$", re.IGNORECASE)
 MAX_WALK = 500  # clips a walk through a reel follows before it calls the reel endless
 _SEND = re.compile(r"^(?:frames?\b\s*(?P<frames>.*?)|every\s+(?P<every>\d+)(?:st|nd|rd|th)?\s+frames?)"
                    r"\s*\bto\s+(?P<target>.+?)\s*$", re.IGNORECASE)
@@ -175,7 +178,7 @@ class Reel:
 
     @property
     def jumps_on_rolls(self) -> bool:
-        """A `? cond: GOTO:` line: the path depends on the seed."""
+        """A `? cond: CUT TO:` line: the path depends on the seed."""
         return any(g.conditional for b in self.blocks for g in b.gotos)
 
     def walk(self, decide=None, upto: int = MAX_WALK, on_segment=None) -> tuple[list[tuple[int, int]], bool]:
@@ -283,14 +286,14 @@ class Reel:
     def label(self, segment: int, path: list[tuple[int, int]] | None = None) -> str:
         i, rep = self.locate(segment, path)
         block = self.blocks[i]
-        name = block.title or f"chunk {i + 1}"
+        name = block.title or f"scene {i + 1}"
         if block.repeat == 1:
             return name
         return f"{name} {rep + 1}/{'∞' if block.repeat is None else block.repeat}"
 
 
 def split_reel(src: str) -> Reel | None:
-    """The reel in a template, or None when it has no CHUNK line."""
+    """The reel in a template, or None when it has no SCENE line."""
     lines = src.splitlines()
     if not any(CHUNK.match(line.strip()) for line in lines):
         return None
@@ -301,8 +304,8 @@ def split_reel(src: str) -> Reel | None:
         if m := CHUNK.match(raw.strip()):
             title, repeat = m.group(1).strip(), 1
             if r := REPEAT.match(title):
-                title = r.group(1).strip()
-                repeat = None if r.group(2).lower() == "forever" else max(1, int(r.group(2)))
+                title, times = r.group(1).strip(), r.group(2) or r.group(3) or "forever"
+                repeat = None if times.lower() == "forever" else max(1, int(times))
             blocks.append(Block(title, repeat))
         elif (send := SEND.match(raw.strip())) and blocks:
             blocks[-1].sends.append(parse_send(send.group(1)))
@@ -330,8 +333,8 @@ def shared_sends(reel: Reel, starts: list[int | None]) -> list[str]:
                           if max(lo, olo) <= min([x for x in (hi, ohi) if x is not None], default=max(lo, olo))]
                 if shared:
                     later = i if start >= other_start else j
-                    out.append(f"{send.what} is filled by two SEND: lines in segment {min(shared)} (CHUNK "
-                               f"{j + 1} and CHUNK {i + 1}): where they meet, the one sent last (CHUNK {later + 1}) "
+                    out.append(f"{send.what} is filled by two SEND: lines in segment {min(shared)} (SCENE "
+                               f"{j + 1} and SCENE {i + 1}): where they meet, the one sent last (SCENE {later + 1}) "
                                "takes over.")
             claims.setdefault((send.refmod is None, send.target), []).append((i, start, spans))
     return out
@@ -345,8 +348,8 @@ def _goto(line: str, blocks: list[Block]) -> Goto:
     else:
         index = next((i for i, b in enumerate(blocks) if b.title.casefold() == target.casefold()), None)
     if index is None:
-        titles = ", ".join(b.title or f"chunk {i + 1}" for i, b in enumerate(blocks))
-        raise ValueError(f"{line}: no CHUNK is called {target!r} (there are {titles}; a number counts them from 1).")
+        titles = ", ".join(b.title or f"scene {i + 1}" for i, b in enumerate(blocks))
+        raise ValueError(f"{line}: no SCENE is called {target!r} (there are {titles}; a number counts them from 1).")
     return Goto(line, index, int(m.group(2)) if m.group(2) else None)
 
 
@@ -464,12 +467,12 @@ def build_segment(reel: Reel, seed: int, libraries: Mapping[str, Library],
         raise ValueError(f"segment {segment} is negative; segments count from 0.")
     forever = next((i for i, b in enumerate(reel.blocks) if b.repeat is None), None)
     if forever is not None and forever < len(reel.blocks) - 1 and not reel.blocks[forever].gotos:
-        lint.append(Issue("warn", f"CHUNK {forever + 1} repeats forever, so the "
-                                  f"{len(reel.blocks) - forever - 1} CHUNK(s) after it never play."))
+        lint.append(Issue("warn", f"SCENE {forever + 1} repeats forever, so the "
+                                  f"{len(reel.blocks) - forever - 1} SCENE(s) after it never play."))
     elif not reel.jumps_on_rolls and any(b.gotos for b in reel.blocks):
         never = [i + 1 for i, start in enumerate(reel.starts()) if start is None]
         if never:
-            lint.append(Issue("warn", f"The GOTO lines jump past CHUNK {', '.join(map(str, never))}: "
+            lint.append(Issue("warn", f"The CUT TO: lines jump past SCENE {', '.join(map(str, never))}: "
                                       "it never plays."))
 
     world, head, expand, (path, _) = _unroll(reel, seed, libraries, weights, segment)

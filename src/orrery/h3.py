@@ -6,7 +6,7 @@ mechanical rule of the official guide (VIDEO_PROMPT_WRITING_GUIDE_base_en.md):
 alignment lines, shot timestamps, speaker IDs, `<d>` tags, camera sentences,
 soundscape and `N/A` rules. Randomness only ever fills slots.
 
-    @h3 t2va 16:9
+    @h3 text 16:9
     style: live-action, cinematic
     SHOT 5s: push in, small, slow
     A misty forest at dawn.
@@ -58,11 +58,13 @@ TRANSITIONS = {
     "wipe": "the shot wipes to",
 }
 MODES = ("t2va", "i2va", "fl2va", "l2va", "ref2va")
+MODE_WORDS = {"text": "t2va", "image": "i2va", "first-last": "fl2va", "last": "l2va", "references": "ref2va"}
+WORD = {mode: word for word, mode in MODE_WORDS.items()}  # `@h3 references` for ref2va, MiniMax's own name
 MOOD_WORDS = re.compile(
     r"\b(sad|happy|epic|emotional|melancholic|melancholy|uplifting|tense|dramatic|romantic|"
     r"hopeful|joyful|nostalgic|heartwarming|mournful|moody)\b", re.IGNORECASE)
 
-_HEADER = re.compile(r"^@h3\s+(\w+)(.*)$", re.IGNORECASE)
+_HEADER = re.compile(r"^@h3\s+([\w-]+)(.*)$", re.IGNORECASE)
 _RATIO = re.compile(r"^\d+(?:\.\d+)?:\d+(?:\.\d+)?$")
 _STYLE = re.compile(r"^style:\s*(.+)$", re.IGNORECASE)
 _SUMMARY = re.compile(r"^summary:\s*(.+)$", re.IGNORECASE)
@@ -73,7 +75,7 @@ _MUSIC = re.compile(r"^MUSIC:\s*(.+)$", re.IGNORECASE)
 _SFX = re.compile(r"^SFX:\s*(.+)$", re.IGNORECASE)
 _VOICE = re.compile(r"^([A-Z][A-Z0-9 _-]*?)\s*(?:\(([^)]*)\))?\s*:\s*(.+)$")
 _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
-_HANDOFF = re.compile(r"^HANDOFF:\s*(.+)$")
+_HANDOFF = re.compile(r"^(?:END ON|HANDOFF):\s*(.+)$")
 _SEND_LINE = re.compile(r"^SEND:")
 _LORA = re.compile(r"^LORA:\s*(.+)$")
 _CONTEXT = re.compile(r"^context:\s*(\d+)\s*f?$", re.IGNORECASE)
@@ -186,7 +188,7 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
             else:
                 cur.enhance = m.group(1).strip()
         elif m := _HEADER.match(line):
-            scene.mode = m.group(1).lower()
+            scene.mode = MODE_WORDS.get(m.group(1).lower(), m.group(1).lower())
             for token in m.group(2).split():
                 if token.lower() in ("lite", "full"):
                     scene.lite = token.lower() == "lite"
@@ -199,9 +201,9 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
         elif m := _LORA.match(line):
             scene.loras.append(m.group(1).strip())
         elif _HANDOFF.match(line):
-            lint.append(Issue("warn", "HANDOFF only works inside a CHUNK; it is ignored."))
+            lint.append(Issue("warn", "END ON: only works inside a SCENE; it is ignored."))
         elif _SEND_LINE.match(line):
-            raise ValueError("SEND: belongs inside a CHUNK: it sends frames of that chunk's clip to the clips after it.")
+            raise ValueError("SEND: belongs inside a SCENE: it sends frames of that scene's clip to the clips after it.")
         elif m := _CONTEXT.match(line):
             scene.context = int(m.group(1))
         elif m := _SET.match(line):
@@ -595,7 +597,7 @@ def write_flat(scene: Scene) -> str:
 def _scene_lint(src: str, scene: Scene, lint: list[Issue]) -> None:
     n = len(scene.shots)
     if scene.mode not in MODES:
-        lint.append(Issue("warn", f"Unknown mode \"{scene.mode}\" ({', '.join(MODES)}); compiled like t2va."))
+        lint.append(Issue("warn", f"Unknown mode \"{scene.mode}\" ({', '.join(MODE_WORDS)}); compiled like text."))
     _cast_lint(scene, lint)
     if not n:
         lint.append(Issue("error", "No SHOT yet."))
@@ -608,19 +610,19 @@ def _scene_lint(src: str, scene: Scene, lint: list[Issue]) -> None:
                    for it in scene.shots[i].items)
 
     if scene.mode == "i2va" and not mentions(0, r"Picture 1"):
-        lint.append(Issue("warn", "I2VA: anchor <Picture 1> in Shot 1, then describe the action."))
+        lint.append(Issue("warn", "@h3 image: anchor <Picture 1> in Shot 1, then describe the action."))
     if scene.mode == "fl2va":
         if n > 1:
-            lint.append(Issue("warn", "FL2VA: the guide favors a single shot so the model can "
+            lint.append(Issue("warn", "@h3 first-last: the guide favors a single shot so the model can "
                                       "interpolate between the frames."))
         if not mentions(0, r"Picture 1"):
-            lint.append(Issue("warn", "FL2VA: Shot 1 should start from Picture 1."))
+            lint.append(Issue("warn", "@h3 first-last: Shot 1 should start from Picture 1."))
         if not mentions(n - 1, r"Picture 2"):
-            lint.append(Issue("warn", "FL2VA: the final shot should land on Picture 2."))
+            lint.append(Issue("warn", "@h3 first-last: the final shot should land on Picture 2."))
     if scene.mode == "l2va" and not mentions(n - 1, r"Picture 1"):
-        lint.append(Issue("warn", "L2VA: the final shot must converge on <Picture 1>."))
+        lint.append(Issue("warn", "@h3 last: the final shot must converge on <Picture 1>."))
     if scene.mode == "t2va" and any(mentions(i, r"Picture \d") for i in range(n)):
-        lint.append(Issue("warn", "T2VA has no reference pictures; drop them or switch mode."))
+        lint.append(Issue("warn", "@h3 text has no reference pictures; drop them or switch mode."))
     if _CLIP_WEIGHT.search(src):
         lint.append(Issue("warn", "CLIP weight syntax like (word:1.2) is inert on H3: its "
                                   "tokenizer disables weights."))
@@ -635,15 +637,15 @@ def _cast_lint(scene: Scene, lint: list[Issue]) -> None:
                 lint.append(Issue("warn", f"{m.name} uses {src.kind} {src.index}; the Reference to Video node "
                                           f"takes {src.kind} 1–{MAX_SLOTS[src.kind]}."))
         if not ref and (m.voice or any(s.kind != "refmod" for s in m.sources)):
-            still = "" if scene.lite else f"; in {scene.mode} its name still expands to its description"
+            still = "" if scene.lite else f"; in @h3 {WORD.get(scene.mode, scene.mode)} its name still expands to its description"
             lint.append(Issue("warn", f"{m.name}: image, video and audio references only take effect in "
-                                      f"ref2va{still}."))
+                                      f"@h3 references{still}."))
         if m.voice and not any(isinstance(it, Voice) and it.name == m.name for s in scene.shots for it in s.items):
             lint.append(Issue("warn", f"{m.name} has a voice reference but never speaks."))
     if not ref and any(s.first_frame or s.last_frame or s.continues for s in scene.shots):
-        lint.append(Issue("warn", "Frame anchors (from/to image N, after video N) only take effect in ref2va."))
+        lint.append(Issue("warn", "Frame anchors (from/to image N, after video N) only take effect in @h3 references."))
     if ref and not scene.lite and not scene.summary:
-        lint.append(Issue("warn", "ref2va reads best with a summary: line (one short paragraph about the "
+        lint.append(Issue("warn", "@h3 references reads best with a summary: line (one short paragraph about the "
                                   "target video, using CAST names)."))
 
 
@@ -817,7 +819,7 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
         if reel.send_slots:
             if scene.mode != "ref2va":
                 raise ValueError("SEND: hands frames to Reference to Video as reference images, so it needs an "
-                                 "@h3 ref2va screenplay.")
+                                 "@h3 references screenplay.")
             sends = reel.ready(segment, set(held) & set(reel.send_slots), path)
             # a sent image that some CAST gives a member goes only where a member of this clip has it (not to a
             # clip without that member, nor to one whose CAST redefines it without the image); one that no CAST
@@ -850,7 +852,7 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
         absent = drop_absent(scene)
         lint += [Issue("warn", problem) for m in absent for problem in m.problems]
         lint += [Issue("warn", f"{m.name} is in the CAST, but no shot, voice or summary names it, so it is left out "
-                               "of the prompt (global keeps a member in).") for m in absent]
+                               "of the prompt (always keeps a member in).") for m in absent]
     # A picture at 0 leaves the clip: Reference to Video shows its pictures to the text encoder too, so
     # only one it never gets is gone. Not named, and not handed on as a sent image either.
     if zero := zero_images(scene):

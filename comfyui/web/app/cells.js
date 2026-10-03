@@ -32,7 +32,7 @@ export function renderCells(app, at = null) {
   if (!host) return;
   const cells = splitCells(app.text);
   host.innerHTML = cells.map((c, i) => `<div class="cell" data-cell="${i}" data-chunk="${c.chunk}">`
-    + `<pre class="hl" aria-hidden="true"></pre><textarea spellcheck="false" aria-label="${c.chunk < 0 ? "Before the first CHUNK" : `CHUNK ${c.chunk + 1}`}"></textarea></div>`
+    + `<pre class="hl" aria-hidden="true"></pre><textarea spellcheck="false" aria-label="${c.chunk < 0 ? "Before the first SCENE" : `SCENE ${c.chunk + 1}`}"></textarea></div>`
     + (c.chunk >= 0 ? `<div class="chunkmedia" data-chunk="${c.chunk}"><div class="cm-body"></div>`
       + '<div class="cm-grip" title="Drag to resize this section"></div></div>' : "")).join("");
   areas(app).forEach((ta, i) => { ta.value = cells[i].text; ta.readOnly = !!app.state.sweepQueue; });

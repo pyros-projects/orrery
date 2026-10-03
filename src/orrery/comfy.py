@@ -856,7 +856,7 @@ class OrreryRefs:
                 continue
             if REF2VA in cls._readers(prompt, unique_id, k):
                 print(f"[orrery] ref_{k + 1} carries {img.shape[0]} frames, but Reference to Video reads only the first "
-                      "image of a reference; send several stills to several images for ref2va.")
+                      "image of a reference; send several stills to several images for @h3 references.")
 
 
 NODE_CLASS_MAPPINGS = {"OrreryPrompt": OrreryPrompt, "OrreryLog": OrreryLog, "OrreryRefs": OrreryRefs,

@@ -707,7 +707,7 @@ def frequency(home: Home, args: dict) -> dict:
     reel = split_reel(text) if target != "text" else None
     if across == "clips":
         if not reel:
-            raise ApiError(400, "Counting across clips needs a reel (CHUNK lines) and a screenplay target.")
+            raise ApiError(400, "Counting across clips needs a reel (SCENE lines) and a screenplay target.")
         n = min(n, MAX_FREQUENCY_CLIPS, _clips(home, text, reel, seed, n) or MAX_FREQUENCY_CLIPS)
         runs = [(seed, k) for k in range(n)]
     elif across == "seeds":

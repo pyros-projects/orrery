@@ -273,7 +273,7 @@ def test_two_sends_to_one_image_warn_and_the_later_takes_over():
     src = SEND_REEL.replace("GIRL walks to the window.", "GIRL walks to the window.\nSEND: frame 9 to image 3")
     assert split_reel(src).ready(3)[3] == {"segment": 2, "frames": [[9, 9]]}
     lint = [i.message for i in ref2va(src, segment=2).lint]
-    assert any("image 3" in m and "segment 3" in m and "(CHUNK 2) takes over" in m for m in lint)
+    assert any("image 3" in m and "segment 3" in m and "(SCENE 2) takes over" in m for m in lint)
 
 
 MOD_REEL = """@h3 t2va 16:9
@@ -309,18 +309,18 @@ def test_two_sends_to_one_refmod_warn_and_the_later_takes_over():
     src = MOD_REEL.replace("The empty room.", "The empty room.\nSEND: frame -1 to refmod jinx_look")
     assert split_reel(src).refmods_ready(2)["jinx_look"] == {"segment": 1, "frames": [[-1, -1]]}
     lint = [i.message for i in compile_scene(src, 1, {}, segment=2).lint]
-    assert any("refmod jinx_look is filled by two SEND: lines" in m and "(CHUNK 2) takes over" in m for m in lint)
+    assert any("refmod jinx_look is filled by two SEND: lines" in m and "(SCENE 2) takes over" in m for m in lint)
 
 
 def test_send_outside_a_chunk_or_outside_ref2va_is_an_error():
     head = SEND_REEL.replace("CAST\n", "SEND: frame 0 to image 5\nCAST\n")
-    with pytest.raises(ValueError, match="inside a CHUNK"):
+    with pytest.raises(ValueError, match="inside a SCENE"):
         ref2va(head)
     plain = "@h3 ref2va 16:9\nSHOT 5s\nA fox.\nSEND: frame 0 to image 3\n"
-    with pytest.raises(ValueError, match="inside a CHUNK"):
+    with pytest.raises(ValueError, match="inside a SCENE"):
         ref2va(plain)
     t2va = SEND_REEL.replace("@h3 ref2va 16:9 lite", "@h3 t2va 16:9")
-    with pytest.raises(ValueError, match="ref2va"):
+    with pytest.raises(ValueError, match="@h3 references"):
         ref2va(t2va)
 
 
@@ -388,7 +388,7 @@ def test_two_sends_claiming_one_segment_for_one_image_hand_over_to_the_later():
     clash = REANCHOR.replace("for segments 1-4", "for segments 1-5")
     assert [split_reel(clash).ready(t)[3]["segment"] for t in (4, 5, 6)] == [0, 4, 4]
     lint = [i.message for i in ref2va(clash, segment=5).lint]
-    assert any("segment 5" in m and "(CHUNK 2) takes over" in m for m in lint)
+    assert any("segment 5" in m and "(SCENE 2) takes over" in m for m in lint)
     assert not any("takes over" in i.message for i in ref2va(REANCHOR, segment=5).lint)
 
 
@@ -441,8 +441,36 @@ def test_goto_loops_back_n_times_then_goes_on():
     assert split_reel(GOTO_REEL.replace("GOTO: the stairs ×2", "GOTO: 2 x1")).segments == 5  # a number, an x
     endless = split_reel(GOTO_REEL.replace(" ×2", ""))
     assert endless.segments is None and [b for b, _ in endless.walk(upto=6)[0]] == [0, 1, 2, 1, 2, 1]
-    with pytest.raises(ValueError, match="no CHUNK is called 'the cellar'"):
+    with pytest.raises(ValueError, match="no SCENE is called 'the cellar'"):
         split_reel(GOTO_REEL.replace("the stairs ×2", "the cellar"))
+
+
+FILM_WORDS = {"@h3 t2va": "@h3 text", "CHUNK": "SCENE", "HANDOFF:": "END ON:", "GOTO:": "CUT TO:"}
+
+
+def film(src: str) -> str:
+    for old, new in FILM_WORDS.items():
+        src = src.replace(old, new)
+    return src
+
+
+def test_the_film_words_compile_what_the_earlier_words_compile():
+    for reel in (REEL, GOTO_REEL):
+        assert split_reel(film(reel)).walk() == split_reel(reel).walk()
+        for segment in range(3 if reel is REEL else 7):
+            then, now = (compile_scene(src, 5, MANY, target="h3-base", segment=segment) for src in (reel, film(reel)))
+            assert (now.text, now.picks, now.lint) == (then.text, then.picks, then.lint)
+
+
+@pytest.mark.parametrize("then, now", [("CHUNK the turn repeat 3", "SCENE the turn ×3"),
+                                       ("CHUNK the turn repeat 3", "SCENE the turn x3"),
+                                       ("CHUNK the turn repeat forever", "SCENE the turn forever"),
+                                       ("CHUNK repeat 2", "SCENE ×2")])
+def test_a_scene_repeats_n_times_or_forever(then, now):
+    blocks = [split_reel(f"@h3 t2va\n{head}\nSHOT 5s\nA fox.\n").blocks for head in (then, now)]
+    assert [(b.title, b.repeat) for b in blocks[1]] == [(b.title, b.repeat) for b in blocks[0]]
+    assert [(b.title, b.repeat) for b in split_reel("@h3 text\nSCENE the 4x4 room\nSHOT 5s\nA fox.\n").blocks] == [
+        ("the 4x4 room", 1)]  # an x inside the title is no repeat
 
 
 def test_a_jump_opens_on_the_handoff_before_it_and_its_line_stays_out_of_the_prose():
@@ -471,7 +499,7 @@ def test_several_gotos_the_first_that_holds_and_has_jumps_left():
 def test_a_chunk_every_goto_jumps_past_is_flagged():
     src = GOTO_REEL.replace("GOTO: the stairs ×2", "GOTO: the gate") + "CHUNK the cellar\nSHOT 5s: static\nDark.\n"
     lint = [i.message for i in compile_scene(src, 1, {}, segment=0).lint]
-    assert any("CHUNK 4" in m and "never plays" in m for m in lint)
+    assert any("SCENE 4" in m and "never plays" in m for m in lint)
 
 
 LEAVES = """@h3 ref2va 2:3

@@ -209,6 +209,13 @@ test("GOTO: completes the chunk titles, after a condition too", () => {
   assert.ok(suggest("@h3 t2va\nCHUNK a\nGO", 19, DATA).items.some((i) => i.insert === "GOTO: "));
 });
 
+test("CUT TO: completes the scene titles, as GOTO: does", () => {
+  const text = "@h3 text\nSCENE the gate\nSHOT 5s\nA.\nSCENE the stairs ×2\nSHOT 5s\nB.\nCUT TO: the s";
+  assert.deepEqual(suggest(text, text.length, DATA).items.map((i) => i.insert), ["the stairs"]);
+  const cond = text.replace("CUT TO: the s", "? $w[rain]: CUT TO: ");
+  assert.deepEqual(suggest(cond, cond.length, DATA).items.map((i) => i.insert), ["the gate", "the stairs"]);
+});
+
 test("two capitals complete a CAST name; at a line's start also as a line of speech", () => {
   const head = "@h3 ref2va 16:9\nCAST\nKEEPER (image 1): an old lighthouse keeper\nMAYA: a young woman\n\nSHOT 5s: static\n";
   const inProse = head + "The light finds KE";

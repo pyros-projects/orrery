@@ -9,7 +9,8 @@
 A member is a memory: a description (head noun phrase, then details after the first comma)
 plus where it comes from (`image N`, `video N`, `video N + audio`, `refmod NAME`). An image and a
 RefMod can carry a strength and a start (`refmod salon_canon at 0.5 from 35%`, `image 1 at 0.5`), and
-`global` keeps the member in every clip, not only in the clips that name it. In ref2va the
+`always` (`global`, the earlier word) keeps the member in every clip, not only in the clips that name
+it. In `@h3 references` (ref2va) the
 compiler turns members into <Subject N> labels and sources into the labels the MiniMax H3
 Reference to Video node gives its inputs; in the other modes names expand to descriptions,
 which is also how RefMods bind to a prompt.
@@ -97,11 +98,11 @@ def parse_member(name: str, spec: str, text: str) -> Member:
     member = Member(name.strip(), head.strip(), f", {rest.strip()}" if rest.strip() else "")
     for raw in filter(None, (s.strip() for s in (spec or "").split(","))):
         m = _SOURCE.match(raw)
-        if raw.lower() == "global":
+        if raw.lower() in ("always", "global"):  # global: the earlier word
             member.everywhere = True
         elif not m:
             member.problems.append(f"{member.name}: \"{raw}\" is not a reference orrery knows (image N, "
-                                   "video N, video N + audio, audio N, refmod NAME, global), so it is left out.")
+                                   "video N, video N + audio, audio N, refmod NAME, always), so it is left out.")
         else:
             refmod = m.group(7)
             at, start, end = (m.group(8), m.group(9), m.group(10)) if refmod else (m.group(4), m.group(5), m.group(6))

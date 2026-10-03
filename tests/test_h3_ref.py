@@ -331,6 +331,10 @@ def test_a_clip_gets_the_refmods_of_the_members_it_names_and_the_global_ones():
     assert [m["name"] for m in h3(quiet).refmods] == ["garden_canon"]  # lowercase prose names no member
 
 
+def test_always_keeps_a_member_in_as_global_did():
+    assert h3(REFMOD_TOUR.replace(", global", ", always")).refmods == h3(REFMOD_TOUR).refmods
+
+
 def test_refmod_syntax_problems_are_lint_not_failures():
     src = REFMOD_TOUR.replace("refmod hall_canon", "refmod hall_canon from 150%").replace(", global", ", everywhere")
     lint = [i.message for i in h3(src).lint]
@@ -345,7 +349,7 @@ SHOT 5s
 MAYA waves.
 SFX: wind
 """
-    assert any("ref2va" in i.message for i in h3(src).lint)
+    assert any("@h3 references" in i.message for i in h3(src).lint)
 
 
 def test_word_count_is_linted_for_generation():
