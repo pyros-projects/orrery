@@ -119,6 +119,50 @@ def test_the_input_video_is_kept_at_24_fps_as_the_clip_before_clip_1(tmp_path):
     assert chain.clip_file(tmp_path / "elsewhere", "h3_context", -1) is None
 
 
+class FakeVAE:
+    """Encodes as the H3 VAEs shape it: video 17k+5 frames → 5k+2 slots at /16, audio 800 samples a tick."""
+
+    audio_sample_rate = 32000
+
+    def __init__(self):
+        self.seen = []
+
+    def encode(self, x):
+        import torch
+
+        self.seen.append(tuple(x.shape))
+        if x.ndim == 4:  # frames [T, H, W, 3]
+            slots = 2 if x.shape[0] <= 5 else (x.shape[0] - 5) // 17 * 5 + 2
+            return torch.ones((1, 24, slots, x.shape[1] // 16, x.shape[2] // 16))
+        return torch.ones((1, 32, 2, -(-x.shape[1] // 800)))  # sound [1, samples, channels]
+
+
+def test_a_scene_after_the_input_video_pins_its_last_frames_and_sound(tmp_path, monkeypatch):
+    torch = pytest.importorskip("torch")
+    import sys
+    import types
+
+    from orrery import comfy_film
+
+    monkeypatch.setitem(sys.modules, "folder_paths", types.SimpleNamespace(get_output_directory=lambda: str(tmp_path)))
+    upscale = lambda x, w, h, method, crop: torch.nn.functional.interpolate(x, size=(h, w))
+    comfy = types.ModuleType("comfy")
+    comfy.utils, comfy.audio = types.SimpleNamespace(common_upscale=upscale), types.SimpleNamespace(resample=lambda w, a, b: w)
+    monkeypatch.setitem(sys.modules, "comfy", comfy)
+    monkeypatch.setitem(sys.modules, "comfy.utils", comfy.utils)
+    monkeypatch.setitem(sys.modules, "comfy.audio", comfy.audio)
+    video, audio = torch.zeros((1, 24, 27, 30, 40)), torch.zeros((1, 32, 2, 160))  # this clip: 640×480
+    vae, audio_vae = FakeVAE(), FakeVAE()
+    with pytest.raises(ValueError, match="video input"):
+        comfy_film._input_tail("h3_context", video, audio, vae, audio_vae)
+    film.keep_input(source_video(tmp_path / "mine.mkv"), tmp_path, "h3_context")
+    with pytest.raises(ValueError, match="audio_vae"):
+        comfy_film._input_tail("h3_context", video, audio, vae, None)
+    tail = comfy_film._input_tail("h3_context", video, audio, vae, audio_vae)
+    assert vae.seen == [(22, 480, 640, 3)]  # its last 22 frames, at this clip's canvas
+    assert tuple(tail.video.shape) == (1, 24, 7, 30, 40) and tuple(tail.audio.shape) == (1, 32, 2, 37)
+
+
 def test_segment_0_starts_a_new_run(tmp_path):
     take(tmp_path, 0)
     take(tmp_path, 1)

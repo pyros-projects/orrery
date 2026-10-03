@@ -690,7 +690,7 @@ def test_a_reel_that_reads_the_input_video_needs_one_wired(home, monkeypatch, tm
     reel = "@h3 text\nEND ON: she sits down\nSCENE a\nAFTER: the input video\nSHOT 5s\nShe stands up."
     with pytest.raises(ValueError, match="video input"):
         OrreryPrompt().run(reel, 5, "h3-base", home=str(home))
-    text, picks, *_ = OrreryPrompt().run(reel.replace("AFTER: the input video\n", ""), 5, "h3-base", home=str(home))
+    _, picks, *_ = OrreryPrompt().run(reel.replace("AFTER: the input video\n", ""), 5, "h3-base", home=str(home))
     assert "input" not in json.loads(picks)
 
 

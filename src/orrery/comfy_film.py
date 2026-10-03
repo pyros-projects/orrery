@@ -2,7 +2,8 @@
 ComfyUI-H3-Continuum (see orrery.continuum, orrery.film, docs/plan-continuation.md).
 
 Orrery Continue starts the clip's latent with the last 22 frames of the clip before, picture and
-sound, under a noise_mask, and leaves what it did in the latent; the sampler copies the latent's
+sound, under a noise_mask, and leaves what it did in the latent (for a scene AFTER: the input video,
+the input video's last 22 frames, fitted to the canvas and encoded with the VAEs wired into it); the sampler copies the latent's
 keys, so Orrery Film finds it in the sampled latent. Orrery Film trims those frames off the decoded
 clip, keeps the take and joins the film. ComfyUI only (torch).
 """
@@ -10,6 +11,7 @@ clip, keeps the take and joins the film. ComfyUI only (torch).
 import json
 from pathlib import Path
 
+from orrery import chain as chains
 from orrery import film
 from orrery.chain import DEFAULT_CHAIN
 from orrery.continuum import masked
@@ -54,6 +56,40 @@ def _drop_first_frame(conditioning):
     return out
 
 
+def _input_tail(chain: str, video, audio, vae, audio_vae) -> masked.Tail:
+    """The tail of the input video (orrery.film.keep_input): its last 22 frames, fitted to this clip's
+    canvas, and their sound, encoded as H3 encodes a clip, in the shape a rendered clip's tail has."""
+    import av
+    import comfy.audio
+    import comfy.utils
+    import torch
+
+    path = chains.clip_file(_output(), chain, -1)
+    if path is None:
+        raise ValueError(f"This scene continues the input video, but the chain {chain!r} holds none: wire a Load "
+                         "Video into the Orrery Prompt's video input.")
+    if vae is None or audio_vae is None:
+        raise ValueError("This scene continues the input video, so Orrery Continue encodes its last frames and sound: "
+                         "wire the H3 video VAE into vae and the H3 audio VAE into audio_vae.")
+    frames, dropped = chains.frames(path, [[-CONTEXT, -1]])
+    if dropped or frames.shape[0] < CONTEXT:
+        raise ValueError(f"The input video is shorter than the {CONTEXT} frames a scene continues from.")
+    height, width = int(video.shape[-2]) * 16, int(video.shape[-1]) * 16
+    frames = comfy.utils.common_upscale(frames.movedim(-1, 1), width, height, "lanczos", "center").movedim(1, -1)
+    picture = vae.encode(frames)  # [1, 24, 7, h, w]
+    with av.open(str(path)) as container:
+        sound, rate = film._input_sound(container)
+    ticks = round(CONTEXT / 24 * 40)
+    vae_rate = getattr(audio_vae, "audio_sample_rate", 32000)
+    if sound is None:
+        sound, rate = torch.zeros((1, vae_rate * 2)).numpy(), vae_rate
+    wave = torch.from_numpy(sound[:, -int(rate * 1.5):])[None]  # the last 1.5 s: more than the 22 frames need
+    if rate != vae_rate:
+        wave = comfy.audio.resample(wave, rate, vae_rate)
+    sounds = audio_vae.encode(wave[:1].movedim(1, -1))[..., -ticks:]  # [1, 32, 2, 37]: the ticks at its end
+    return masked.tail(picture.to(video.device, video.dtype), sounds.to(audio.device, audio.dtype), CONTEXT)
+
+
 class OrreryContinue:
     """Continues a reel: from its second segment on, the clip's latent starts with the last 22 frames
     of the segment before (picture and sound), which a noise_mask keeps as they are."""
@@ -74,28 +110,36 @@ class OrreryContinue:
         return {"required": {"picks": ("STRING", {"forceInput": True}),
                              "latent": ("LATENT", {"tooltip": "The H3 node's latent, as long as the Orrery Prompt's "
                                                               "length (it counts the 22 pinned frames)."})},
-                "optional": {"conditioning": ("CONDITIONING",)}}
+                "optional": {"conditioning": ("CONDITIONING",),
+                             "vae": ("VAE", {"tooltip": "The H3 video VAE: it encodes the input video's last frames for "
+                                                        "a scene AFTER: the input video."}),
+                             "audio_vae": ("VAE", {"tooltip": "The H3 audio VAE: it encodes the input video's sound for "
+                                                              "a scene AFTER: the input video."})}}
 
     @classmethod
     def IS_CHANGED(cls, **_):
         """Always run: the segment before can be rendered again while the picks stay the same."""
         return float("NaN")
 
-    def pin(self, picks, latent, conditioning=None):
+    def pin(self, picks, latent, conditioning=None, vae=None, audio_vae=None):
         import torch
         from comfy.nested_tensor import NestedTensor
 
         data = json.loads(picks or "{}")
         segment, chain = int(data.get("segment") or 0), data.get("chain") or DEFAULT_CHAIN
-        continues = data.get("continues", segment - 1 if segment else None)  # see Reel.before
-        info = {"chain": chain, "segment": segment, "continues": continues, "test": bool(data.get("test")),
+        continues = data.get("continues", segment - 1 if segment else None)  # see Reel.before; -1 the input video
+        info = {"chain": chain, "segment": segment, "continues": None if continues == -1 else continues,
+                "test": bool(data.get("test")),
                 "meta": {k: data.get(k) for k in ("seed", "template", "preset", "picks")}}
         if continues is None:  # the first clip, or a test scene: it starts afresh
             return conditioning, {**latent, KEY: info}
         video, audio = _streams(latent)
-        before = film.previous_tail(_output(), chain, segment, continues)
-        tail = masked.Tail(torch.from_numpy(before.video).to(video.device, video.dtype),
-                           torch.from_numpy(before.audio).to(audio.device, audio.dtype), before.grid_offset)
+        if continues == -1:
+            tail = _input_tail(chain, video, audio, vae, audio_vae)
+        else:
+            before = film.previous_tail(_output(), chain, segment, continues)
+            tail = masked.Tail(torch.from_numpy(before.video).to(video.device, video.dtype),
+                               torch.from_numpy(before.audio).to(audio.device, audio.dtype), before.grid_offset)
         video, audio = video.clone(), audio.clone()
         video_mask = torch.ones((video.shape[0], 1, *video.shape[2:]), dtype=torch.float32, device=video.device)
         audio_mask = torch.ones((audio.shape[0], 1, *audio.shape[2:]), dtype=torch.float32, device=audio.device)
