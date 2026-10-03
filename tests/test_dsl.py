@@ -480,6 +480,29 @@ def test_a_condition_takes_the_same_brackets_and_reads_tags_props_and_the_value(
     assert seen("$c = __creature[bird]__\n? $c[!myth]: no myth\n? $c[myth]: myth") == {"no myth", "myth"}
 
 
+@pytest.mark.parametrize("now, then", [
+    ("IF $a is fox: a fox line", "? $a[fox]: a fox line"),
+    ("IF $a is not fox, owl: neither", "? $a[!fox, !owl]: neither"),
+    ("IF $a is feline, heron: cat or heron", "? $a[feline|heron]: cat or heron"),
+    ("if $a is heron: lower case", "? $a[heron]: lower case"),
+    ("IF $a[feline, !lynx]: the ocelot", "? $a[feline, !lynx]: the ocelot"),
+    ("{IF $a is owl: an owl | no owl}", "{? $a[owl]: an owl|no owl}"),
+    ("{IF $a is not owl: no owl | an owl}", "{? $a[!owl]: no owl|an owl}"),
+])
+def test_if_reads_aloud_and_rolls_as_the_condition_it_means(now, then):
+    for seed in range(12):
+        a, b = (expand(f"$a = __animal__\n{line}\n$a", seed, LIBS) for line in (now, then))
+        assert (a.text, a.picks) == (b.text, b.picks)
+
+
+def test_if_compares_a_field_and_leaves_other_text_alone():
+    from orrery.dsl import question
+
+    assert question("IF $w.kind is rain, snow: SFX: rain") == "? $w.kind=rain,snow: SFX: rain"
+    assert question("IF $w.kind is not rain: dry") == "? $w.kind!=rain: dry"
+    assert question("If the door opens: run") == "If the door opens: run"  # no $binding: prose
+
+
 # --- second pass: the template's own libraries, chance (phase 5) -------------------------------
 
 CROWD = "@lib crowd\n  a few __animal__s\n  - a lone __animal__\n\nA meadow with __crowd__."

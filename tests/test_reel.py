@@ -580,6 +580,15 @@ def test_a_cut_with_a_chance_holds_that_often_and_each_seed_its_own_way():
     assert firsts == {0, 1}  # tried in order: the gate when its 30% holds, else the stairs
 
 
+def test_a_cut_on_if_takes_the_path_the_condition_took():
+    story = GOTO_REEL.replace("CHUNK the lamp\n", "CHUNK the lamp\n$w = {rain|clear}\n").replace(
+        "GOTO: the stairs ×2", "? $w[rain]: GOTO: the stairs ×3")
+    worded = film(story).replace("? $w[rain]: CUT TO:", "IF $w is rain: CUT TO:")
+    assert split_reel(worded).jumps_on_rolls and split_reel(worded).blocks[2].gotos[0].conditional
+    for seed in range(20):
+        assert reel_path(split_reel(worded), seed, {}, None) == reel_path(split_reel(story), seed, {}, None)
+
+
 def test_a_chance_on_a_cut_moves_no_pick():
     rolls = GOTO_REEL.replace("The keeper climbs.", "The keeper climbs in {rain|fog|snow}.")
     chance = film(rolls).replace("CUT TO: the stairs ×2", "CUT TO: the stairs (100%) ×2")

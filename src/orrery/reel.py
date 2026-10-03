@@ -52,7 +52,7 @@ import re
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 
-from orrery.dsl import Expander, Pick
+from orrery.dsl import Expander, Pick, question
 from orrery.h3 import DEFAULT_CONTEXT, H3_FPS, Issue, Scene, _clause, parse_scene
 from orrery.library import Library
 
@@ -62,7 +62,7 @@ HANDOFF = re.compile(r"^(?:END ON|HANDOFF):\s*(.+)$")
 SEND = re.compile(r"^SEND:\s*(.*)$")
 AFTER = re.compile(r"^AFTER:\s*(.*)$")
 TEST = re.compile(r"(?<!\S)\(test\)(?!\S)", re.IGNORECASE)  # `SCENE the forest (test)`
-GOTO_LINE = re.compile(r"^(?:\?[^\n]*?:\s*)?(?:CUT\s+TO|GOTO):", re.IGNORECASE)  # a cut, with its `? cond:` or without
+GOTO_LINE = re.compile(r"^(?:(?:\?|IF\s+(?=\$))[^\n]*?:\s*)?(?:CUT\s+TO|GOTO):", re.IGNORECASE)  # a cut, `? cond:` / `IF …:` or not
 _GOTO = re.compile(r"(?:CUT\s+TO|GOTO):\s*(.+?)\s*(?:[×x]\s*(\d+))?\s*$", re.IGNORECASE)
 _CUT_CHANCE = re.compile(r"\s*\((\d+(?:\.\d+)?)\s*%\)")  # `CUT TO: the fight (30%)`
 MAX_WALK = 500  # clips a walk through a reel follows before it calls the reel endless
@@ -172,7 +172,7 @@ class Goto:
 
     @property
     def conditional(self) -> bool:
-        return self.line.lstrip().startswith("?")
+        return question(self.line).lstrip().startswith("?")
 
     @property
     def rolls(self) -> bool:

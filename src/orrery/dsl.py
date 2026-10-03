@@ -36,6 +36,10 @@ _IF = re.compile(rf"^\?\s*{_COND}\s*:(.*)$", re.DOTALL)  # {? cond: then|else}
 _PRED = r"\$([A-Za-z_]\w*)\[([^\[\]]*)\]"
 _GUARD_PRED = re.compile(rf"^\?\s*{_PRED}\s*:\s*(.*)$", re.DOTALL)
 _IF_PRED = re.compile(rf"^\?\s*{_PRED}\s*:(.*)$", re.DOTALL)
+# the words for them: `IF $x is victory: …`, `IF $w.kind is not rain, snow: …`, `IF $c[myth, !bird]: …`
+_IS = re.compile(r"^IF\s+\$([A-Za-z_]\w*)(?:\.([A-Za-z_][\w-]*))?\s+is\s+(not\s+)?([\w-]+(?:\s*,\s*[\w-]+)*)\s*:",
+                 re.IGNORECASE)
+_IF_WORD = re.compile(r"^IF\s+(?=\$)", re.IGNORECASE)
 _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
 _BINDING_LINE = re.compile(r"^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$")
 _MULTI = re.compile(r"^(\d+)(?:-(\d+))?\$\$(?:(.*?)\$\$)?(.+)$")  # {2$$ and $$a|b|c}: Dynamic Prompts' joiner
@@ -69,6 +73,23 @@ def _wants_an(word: str) -> bool:
     if w.startswith(_AN_PREFIXES):
         return True
     return w[:1] in "aeiou" and not w.startswith(_A_PREFIXES)
+
+
+def question(text: str) -> str:
+    """`IF $x is victory: …` as the `? $x[victory]: …` it means: `is a, b` either of them, `is not a, b`
+    none; `$x.field is …` compares the field; `IF` before any other condition is `?`. Other text as is."""
+    line = text.lstrip()
+    if m := _IS.match(line):
+        name, field, negated, values = m.groups()
+        words = [v.strip() for v in values.split(",")]
+        if field:
+            cond = f"${name}.{field}{'!=' if negated else '='}{','.join(words)}"
+        else:
+            cond = f"${name}[{', '.join('!' + w for w in words) if negated else '|'.join(words)}]"
+        return f"? {cond}:{line[m.end():]}"
+    if m := _IF_WORD.match(line):
+        return "? " + line[m.end():]
+    return text
 
 
 class MissingLibrary(KeyError):
@@ -447,7 +468,9 @@ class Expander:
         return matches(spec, self.var_tags.get(name, set()) | {value}, self.var_props.get(name, {}), self._resolve)
 
     def guarded(self, line: str) -> str | None:
-        """A `? cond: rest` line: its rest when the condition holds, else None. Other lines as they are."""
+        """A `? cond: rest` line (or `IF …:`, see `question`): its rest when the condition holds, else None.
+        Other lines as they are."""
+        line = question(line)
         if m := _GUARD_PRED.match(line.strip()):
             return m.group(3) if self.holds_pred(m.group(1), m.group(2)) else None
         if not (m := _GUARD.match(line.strip())):
@@ -617,6 +640,7 @@ class Expander:
         if inner.startswith(FIX):
             n, _, inner = inner[1:].partition(FIX)
             fixed = int(n)
+        inner = question(inner)
         if m := _IF_PRED.match(inner.strip()):
             then, otherwise = (split_options(m.group(3), 1) + [""])[:2]
             return (then if self.holds_pred(m.group(1), m.group(2)) else otherwise).strip()
