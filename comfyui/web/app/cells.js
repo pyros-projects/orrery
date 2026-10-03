@@ -9,7 +9,7 @@ import { highlight } from "./highlight.js";
 import { splitCells } from "./model.js";
 import { annotationLines, mergeHints } from "./annotate.js";
 import { fillStrip, hintsFor, openPicker, rememberLines, stripHTML } from "./remember.js";
-import { clipRatio, sectionHTML, sourceClip, wireClips } from "./timeline.js";
+import { clipRatio, paintLive, sectionHTML, sourceClip, wireClips } from "./timeline.js";
 
 const box = (app) => app.view.querySelector(".editor.cells");
 const areas = (app) => [...(box(app)?.querySelectorAll("textarea") || [])];
@@ -59,10 +59,11 @@ export function paintCells(app) {
   host.querySelectorAll(".cell").forEach((cell, i) => {
     const c = cells[i];
     if (!c) return;
-    const local = c.chunk >= 0 && chunks[c.chunk] ? [{ ...chunks[c.chunk], line: 0 }] : null;
+    const local = c.chunk >= 0 && chunks[c.chunk] ? [{ ...chunks[c.chunk], line: 0, index: c.chunk }] : null;
     const hints = mergeHints(hintsFor(c.text, remembered, before), annotationLines(c.text, app.annotations(), app.api.thumbURL));
     before += rememberLines(c.text).length;
-    cell.querySelector("pre").innerHTML = `${highlight(c.text, app.known(), { llm: app.llmActive(), chunks: local, segment, cast: castNames(app.text), hints })}​`;
+    cell.querySelector("pre").innerHTML = `${highlight(c.text, app.known(), { llm: app.llmActive(), chunks: local, segment, cast: castNames(app.text), hints,
+      sceneActs: app.sceneActs?.() })}​`;
   });
   const sig = JSON.stringify([chunks.map((c) => [c.first, c.last, c.segs]), (app.data.chain?.clips || []).map((c) => c.version),
     segment, clipRatio(app), app.data.clip_min, remembered?.key, remembered?.lines]);
@@ -78,6 +79,7 @@ export function paintCells(app) {
     fillStrip(body, source?.frames);
   });
   sizeSections(app);
+  paintLive(app);  // the clip rendering now keeps its preview through a redraw
 }
 
 // Every section's clips at the settings' clip size, as far as the section is wide.

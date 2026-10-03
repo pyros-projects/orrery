@@ -65,6 +65,42 @@ export function sourceClip(app, source) {
   return clip ? { url: app.api.chainVideoURL(source, app.bridge.chain(), clip.version), frames: clip.frames ?? null } : null;
 }
 
+// The clip rendering now (#205): its tile under the scene shows the sampler's preview (a picture, or KJNodes'
+// whole clip as a video) and the step it is at. The tile is drawn again when the sections change, so this paints
+// over whatever is there; without a live clip it takes the overlay off.
+export function paintLive(app) {
+  const host = app.view?.querySelector(".editor.cells");
+  if (!host) return;
+  const live = app.live;
+  host.querySelectorAll(".tl-clip.live").forEach((tile) => {
+    if (!live || tile.dataset.seg !== String(live.segment)) {
+      tile.classList.remove("live");
+      tile.querySelectorAll(".tl-live, .tl-step").forEach((el) => el.remove());
+    }
+  });
+  if (!live) return;
+  const tile = host.querySelector(`.tl-clip[data-seg="${live.segment}"]`);
+  if (!tile) return;
+  tile.classList.add("live");
+  let view = tile.querySelector(".tl-live");
+  if (live.url && (!view || (view.tagName === "VIDEO") !== live.video)) {
+    view?.remove();
+    view = document.createElement(live.video ? "video" : "img");
+    view.className = "tl-live";
+    if (live.video) Object.assign(view, { muted: true, loop: true, autoplay: true, playsInline: true });
+    tile.prepend(view);
+  }
+  if (view && live.url && view.src !== live.url) view.src = live.url;
+  let step = tile.querySelector(".tl-step");
+  if (!step) {
+    step = Object.assign(document.createElement("span"), { className: "tl-step" });
+    tile.append(step);
+  }
+  const p = live.total ? live.step / live.total : 0;
+  step.textContent = live.total ? `step ${live.step} / ${live.total}` : "starting…";
+  step.style.setProperty("--p", `${Math.round(p * 100)}%`);
+}
+
 // Hover plays a clip in place; a click opens it large.
 export function wireClips(app, box) {
   box.addEventListener("pointerover", (e) => {

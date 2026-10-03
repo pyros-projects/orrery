@@ -325,6 +325,21 @@ function walkedInfo(out, walked) {
 // Does chunk c play segment s? On its range, or on its list when GOTO lines set the path.
 export const plays = (c, s) => s != null && (c.segs ? c.segs.includes(s) : c.first !== null && s >= c.first && s <= c.last);
 
+// A scene's buttons (#204): the clip Generate renders, the next one while the scene plays it, else the scene's first;
+// null when the scene never plays.
+export function sceneTarget(c, segment) {
+  if (plays(c, segment)) return segment;
+  return c.segs ? c.segs[0] ?? null : c.first;
+}
+
+// The clip the scene after this one starts on: the one after this scene's last, when the reel plays it; null after
+// a scene that repeats forever, at the reel's end, or before a walk has found the path.
+export function nextSceneClip(c, chunks) {
+  const last = c.segs ? c.segs[c.segs.length - 1] ?? null : c.last;
+  if (last === null || last === Infinity) return null;
+  return chunks.some((o) => plays(o, last + 1)) ? last + 1 : null;
+}
+
 // 1, 3–4, 7: a scene's clips in short, counted from 1 (segments from 0).
 function runs(segs) {
   const parts = [];

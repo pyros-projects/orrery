@@ -72,6 +72,17 @@ export function client(home) {
     thumbURL: (id) => url("galaxy/thumb", { id }),
     onRunDone: (fn) => { api.addEventListener("execution_success", fn); return () => api.removeEventListener("execution_success", fn); },
     onExecuted: (fn) => { api.addEventListener("executed", fn); return () => api.removeEventListener("executed", fn); },
+    // The sampler's previews while a clip renders (#205): KJNodes' Model Preview Override (a picture, or the whole
+    // clip as an animated WebP or an MP4), else ComfyUI's own preview (b_preview); and the step progress.
+    onPreview: (fn) => {
+      const kj = ({ detail: d }) => d?.image && fn({ src: `data:${d.mime || "image/jpeg"};base64,${d.image}`, video: d.mime === "video/mp4", kj: true,
+        step: d.step, total: d.total });
+      const own = ({ detail }) => { const blob = detail?.blob || detail; if (blob instanceof Blob) fn({ blob }); };
+      const step = ({ detail: d }) => d && fn({ step: d.value, total: d.max, prompt: d.prompt_id });
+      const on = [["kj_preview_override", kj], ["b_preview", own], ["progress", step]];
+      on.forEach(([kind, f]) => api.addEventListener(kind, f));
+      return () => on.forEach(([kind, f]) => api.removeEventListener(kind, f));
+    },
     captureOutputs: (body) => call("galaxy/capture", { body }),
     mediaURL: (id) => url("galaxy/media", { id }),
     chain: (chain) => call("chain", { query: chain ? { chain } : {} }),

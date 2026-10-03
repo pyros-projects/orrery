@@ -6,7 +6,7 @@ import { annotationLines, mergeHints } from "./annotate.js";
 import { wireHover } from "./hover.js";
 import { hintsFor } from "./remember.js";
 import { icon } from "./icons.js";
-import { applyDials, chunkInfo, dials, hasGoto, plays, folderColor, pickerGroups, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
+import { applyDials, chunkInfo, dials, hasGoto, nextSceneClip, plays, folderColor, pickerGroups, sceneTarget, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
 import { drag, thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
 import { STARTERS } from "./starters.js";
@@ -74,6 +74,37 @@ function syncChain(app) {
   if (name === app.bridge.chain?.() || app.bridge.sweeping?.()) return;
   app.bridge.setChain?.(name);
   if (name) app.data.chain = undefined;  // paintEditor loads the new chain's clips
+}
+
+// A scene's buttons in its divider (#204): generate its clip and stay on it, go to the next scene, or both.
+export function sceneActs(app) {
+  const chunks = app.chunks() || [], segment = Number(app.bridge.getSegment()), busy = !!app.state.sweepQueue;
+  const made = new Set((app.data.chain?.clips || []).map((c) => c.segment));
+  const button = (act, name, title, off, n) => `<button type="button" class="scene-act" data-scene-act="${act}" data-chunk="${n}" `
+    + `title="${esc(title)}" aria-label="${esc(title)}" ${off ? "disabled" : ""}>${icon(name)}</button>`;
+  return (c, n) => {
+    const target = sceneTarget(c, segment), next = nextSceneClip(c, chunks), again = target !== null && made.has(target);
+    const none = c.last === Infinity ? "This scene repeats forever: no scene comes after it" : "No scene comes after this one";
+    return `<span class="scene-acts">${button("gen", again ? "redo" : "play", target === null ? "This scene never plays"
+      : again ? `Regenerate clip ${target + 1}: a new take, and stay on this scene` : `Generate clip ${target + 1}, and stay on this scene`, target === null || busy, n)}`
+      + button("jump", "skip", next === null ? none : `To the next scene: Next clip becomes ${next + 1}`, next === null || busy, n)
+      + button("jumpgen", "ffwd", next === null ? none : `To the next scene, and generate its clip ${next + 1}`, next === null || busy, n) + "</span>";
+  };
+}
+
+async function sceneAct(app, act, n) {
+  const chunks = app.chunks() || [], c = chunks[n];
+  if (!c || app.state.sweepQueue) return;
+  const to = act === "gen" ? sceneTarget(c, Number(app.bridge.getSegment())) : nextSceneClip(c, chunks);
+  if (to === null) return;
+  app.bridge.setSegment(to);
+  if (act === "jump") return refreshFoot(app);
+  try {
+    const queued = await app.bridge.generate(1);
+    if (!queued) app.toast("Nothing to generate: connect this node's outputs toward a Save or Preview node.");
+  } catch (err) { app.fail(err); }
+  app.bridge.setSegment(to);  // the clip steps on after it is queued: back, so the scene stays where it is
+  refreshFoot(app);
 }
 
 // Write now (#168): with an API endpoint, the libraries the template still needs, written at once beside ComfyUI.
@@ -169,7 +200,10 @@ export function renderPrompt(app) {
   wireHover(app, app.view.querySelector(".editor"));
   if (app.data.timeline !== false && app.chunks()) loadChain(app).then(paint);
 
+  app.sceneActs = () => sceneActs(app);
   app.view.onclick = (e) => {
+    const scene = e.target.closest("[data-scene-act]");
+    if (scene) return sceneAct(app, scene.dataset.sceneAct, Number(scene.dataset.chunk));
     const act = e.target.closest("[data-act]")?.dataset.act;
     const load = e.target.closest("[data-load]");
     if (load) return app.loadPreset(load.dataset.load);
@@ -279,7 +313,7 @@ function paintEditor(app) {
   const pre = app.view.querySelector(".editor pre.hl");
   if (!pre) return;
   const chunks = app.chunks();
-  pre.innerHTML = `${highlight(app.text, app.known(), { llm: app.llmActive(), chunks, segment: chunks && Number(app.bridge.getSegment()),
+  pre.innerHTML = `${highlight(app.text, app.known(), { llm: app.llmActive(), chunks, segment: chunks && Number(app.bridge.getSegment()), sceneActs: chunks && sceneActs(app),
     hints: mergeHints(hintsFor(app.text, app.remembered()), annotationLines(app.text, app.annotations(), app.api.thumbURL)) })}\n`;
   if (chunks && app.data.timeline !== false && app.data.chain === undefined) {  // a reel typed or pasted in
     app.data.chain = null;

@@ -140,6 +140,14 @@
 .orrery-app .chunkline.now .chunkinfo { border-top: 1px solid var(--brass); background: var(--brass-soft); }
 .orrery-app .chunkline.now .chunkinfo > span { color: var(--brass); background: color-mix(in srgb, var(--brass) 14%, var(--well)); }
 .orrery-app .editor.nodiv .chunkinfo { display: none; }
+/* a scene's buttons (#204), at the divider's end: above the textarea and clickable, the rest of the divider not */
+.orrery-app .scene-acts { display: inline-flex; gap: 1px; margin-left: 6px; pointer-events: auto; position: relative; z-index: 2; }
+.orrery-app .scene-act { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 18px; padding: 0; border: 0;
+  border-radius: 4px; background: var(--well); color: var(--muted); cursor: pointer; }
+.orrery-app .scene-act .i { width: 12px; height: 12px; }
+.orrery-app .scene-act:hover:not(:disabled) { color: var(--brass); background: var(--hover); }
+.orrery-app .scene-act:disabled { color: var(--line); cursor: default; }
+.orrery-app .chunkline.now .scene-act { background: color-mix(in srgb, var(--brass) 14%, var(--well)); }
 /* the dials' sidebar (#184): beside the editor, as wide as its grip sets (--side-w), one dial a row */
 .orrery-app .side-grip { width: 8px; flex: none; cursor: col-resize; border-radius: 4px; touch-action: none; }
 .orrery-app .side-grip:hover, .orrery-app .side-grip:focus-visible { background: var(--line); outline: none; }
@@ -210,6 +218,12 @@
 .orrery-app .tl-clip:not(.empty):hover { border-color: var(--muted); }
 .orrery-app .tl-clip img, .orrery-app .tl-clip video, .orrery-app .tl-clip .missing { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .orrery-app .tl-clip video { z-index: 1; }
+/* the clip rendering now (#205): as big as a made one, with the sampler's preview and its step */
+.orrery-app .tl-clip.live, .orrery-app .tl-clip.empty.small.live { width: var(--clip-w); height: var(--clip-h); border: 1px solid var(--brass); }
+.orrery-app .tl-clip .tl-live { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+.orrery-app .tl-step { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; font: 500 10px/1 var(--mono); color: #fff; padding: 4px 6px 6px;
+  background: linear-gradient(to top, rgba(0,0,0,.65), transparent); text-shadow: 0 0 3px #000; }
+.orrery-app .tl-step::after { content: ""; position: absolute; left: 0; bottom: 0; height: 3px; width: var(--p, 0%); background: var(--brass); transition: width .3s; }
 .orrery-app .tl-clip .n { position: absolute; left: 3px; bottom: 2px; z-index: 2; font: 500 9.5px/1 var(--mono); color: #fff; text-shadow: 0 0 3px #000, 0 0 2px #000; }
 .orrery-app .tl-clip.empty .n { color: var(--faint); text-shadow: none; }
 .orrery-app .tl-video { width: 100%; max-height: 60vh; border-radius: 8px; background: #000; }

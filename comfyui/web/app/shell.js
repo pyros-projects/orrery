@@ -9,6 +9,7 @@ import { refreshHistory, renderHistory } from "./history.js";
 import { icon, LOGO } from "./icons.js";
 import { renderLibraries } from "./libraries.js";
 import { renderPresets } from "./presets.js";
+import { paintLive } from "./timeline.js";
 import { refreshReel, renderPrompt } from "./prompt.js";
 import { openSettings } from "./settings.js";
 import { renderTest } from "./test.js";
@@ -98,6 +99,7 @@ export class OrreryApp {
     else if (this.preset) await this.fetchBase();
     this.stopListening = this.api.onRunDone(() => this.afterRun());
     this.stopCapture = this.api.onExecuted((e) => this.capture(e.detail || {}));
+    this.stopPreview = this.api.onPreview((p) => this.preview(p));
     this.render();
   }
 
@@ -273,14 +275,35 @@ export class OrreryApp {
     } catch { /* an older run or a restarted ComfyUI: nothing to log */ }
   }
 
+  // The clip rendering now, as the sampler previews it (#205): only while this node's reel clip runs.
+  preview(p) {
+    if (!this.run || (p.prompt && this.run.prompt && p.prompt !== this.run.prompt)) return;
+    const live = (this.live ??= { segment: this.run.segment });
+    if (p.kj) live.kj = true;
+    if (p.src || (p.blob && !live.kj)) {  // KJ's whole clip wins over the core's single frame
+      if (live.url?.startsWith("blob:")) URL.revokeObjectURL(live.url);
+      Object.assign(live, { url: p.src || URL.createObjectURL(p.blob), video: !!p.video });
+    }
+    if (p.total) Object.assign(live, { step: p.step, total: p.total });
+    paintLive(this);
+  }
+
   showRun(d) {
     this.run = d.end ? null : { segment: d.segment, prompt: d.prompt_id };
+    this.endLive();
     if (d.end) this.toast(`Clip <b>${d.segment + 1}</b> is past the end of the reel, so nothing ran. Restart plays it from the beginning.`);
     this.refreshRun();
   }
+  endLive() {
+    if (this.live?.url?.startsWith("blob:")) URL.revokeObjectURL(this.live.url);
+    this.live = null;
+    paintLive(this);
+  }
+
   runDone(prompt) {
     if (!this.run || (prompt && this.run.prompt && prompt !== this.run.prompt)) return;
     this.run = null;
+    this.endLive();
     this.refreshRun();
   }
   refreshRun() { refreshReel(this); }
@@ -288,6 +311,7 @@ export class OrreryApp {
   destroy() {
     this.stopListening?.();
     this.stopCapture?.();
+    this.stopPreview?.();
     clearTimeout(this.toastTimer);
     this.overlay?.remove();
     this.parked?.remove();

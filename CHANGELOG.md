@@ -58,6 +58,8 @@ checks) are left out.
 - A reel keeps its clips in a folder named after it, `output/reels/<preset>` or `reels/untitled/<date time>`, which
   moves with Save as; two reels no longer write into one `h3_context`. The Orrery Prompt's `latent_path` input
   is gone (#197).
+- A scene's divider generates its clip and stays on it, goes to the next scene, or both; the clip rendering now
+  shows the sampler's preview and its step under its scene (KJNodes' Model Preview Override, or ComfyUI's own) (#197).
 - The dials are a list in a sidebar beside the editor, one a row with what it rolls at this seed, to widen,
   fold or clear; a dial's menu filters by a regex over text, properties and tags, with All and None; a reel's
   clips show only under its scenes, and the column beside the editor is gone; the node's segment widget is

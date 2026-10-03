@@ -100,7 +100,13 @@ Nodes under **orrery**:
     Motion Context's Chain Video) keeps them, big: a clip's shorter side is
     the **Clip size** in the gear (360 px unless set otherwise), as far as the
     editor is wide. Hover plays one, a click opens it; small dashed boxes are
-    clips not rendered yet. Under a scene's clips come the frames its
+    clips not rendered yet. A scene's divider has three buttons: ▷
+    **Generate** its clip (↻ **Regenerate** once it has one, a new take) and
+    stay on the scene, ⏭ go to the **next scene** (Next clip becomes its first
+    clip), and ⏩ go there **and generate** it. While a clip renders, its box
+    shows the sampler's preview and the step it is at: KJNodes' Model Preview
+    Override (a picture, or the whole clip as it forms), else ComfyUI's own
+    preview when its live preview is on. Under a scene's clips come the frames its
     `REMEMBER:` lines take, cut from that clip in the browser as you type
     (`frame 50` → `frame 20` shows frame 20 at once, a range as a strip with
     its count, frames past the end in red), and each says where they go;

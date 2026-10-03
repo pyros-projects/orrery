@@ -437,6 +437,20 @@ test("the Write menu offers a writer only where it can write", () => {
   assert.equal(writerBlock(app("a photo of a fox", { frames: ["last_frame"] }), "describe"), "");
 });
 
+test("a scene's buttons: the clip it generates and where the next scene starts (#204)", async () => {
+  const { chunkInfo, nextSceneClip, sceneTarget } = await import("../../comfyui/web/app/model.js");
+  const reel = "@h3 t2va\nSCENE a\nSHOT 5s\nA.\nSCENE b ×3\nSHOT 5s\nB.\nSCENE c forever\nSHOT 5s\nC.";
+  const [a, b, c] = chunkInfo(reel), all = [a, b, c];
+  assert.equal(sceneTarget(a, 2), 0);  // the next clip is elsewhere: the scene's first
+  assert.equal(sceneTarget(b, 2), 2);  // the scene plays the next clip: that one
+  assert.equal(sceneTarget(b, 0), 1);
+  assert.equal(nextSceneClip(a, all), 1);
+  assert.equal(nextSceneClip(b, all), 4);
+  assert.equal(nextSceneClip(c, all), null);  // forever: nothing after it
+  const [end] = chunkInfo("@h3 t2va\nSCENE only\nSHOT 5s\nA.");
+  assert.equal(nextSceneClip(end, [end]), null);  // the reel's last scene
+});
+
 test("Write now counts the libraries a template still needs, as autolib does", () => {
   const libs = [{ name: "animal", count: 3 }, { name: "style", count: 2 }];
   const text = "# __commented__\na __animal:5__ in __style__ by __makers/new__ <lora:__x__:1>\n__style:2__ \\__escaped__ __clothing/*__ __mine__";
