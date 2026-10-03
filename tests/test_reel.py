@@ -473,6 +473,69 @@ def test_a_scene_repeats_n_times_or_forever(then, now):
         ("the 4x4 room", 1)]  # an x inside the title is no repeat
 
 
+BRANCHES = """@h3 references 16:9 lite
+CAST
+GIRL (image 1, image 3): the young woman
+SCENE the room
+$light = {dawn|noon|dusk|night}
+SHOT 5s: static
+GIRL waits in the $light light.
+END ON: the girl looks at the door
+SCENE the door
+$light = {dawn|noon|dusk|night}
+SHOT 5s: static
+GIRL opens the door in the $light light.
+SEND: frame 0 to image 3
+END ON: the door stands open
+SCENE case A
+AFTER: the door
+SHOT 5s: static
+GIRL steps out, as before $light~1.
+SEND: frame 0 to image 4
+END ON: case A ends
+SCENE case B
+AFTER: 2
+SHOT 5s: static
+GIRL steps out, as before $light~1.
+"""
+
+
+def test_scenes_after_one_scene_each_continue_its_clip():
+    reel = split_reel(BRANCHES)
+    path, _ = reel.walk()
+    assert [reel.before(t, path) for t in range(4)] == [None, 0, 1, 1] and reel.chain(3, path) == [1, 0]
+    a, b, door = (compile_scene(BRANCHES, 4, {}, target="h3-base", segment=t) for t in (2, 3, 1))
+    light = re.search(r"in the (\w+) light", door.text).group(1)
+    for clip in (a, b):  # both open on the door's END ON:, and $light~1 is the door's light
+        assert "opens as the door stands open" in clip.text and f"as before {light}" in clip.text
+    assert "case A ends" not in b.text
+    assert 3 in reel.ready(3, path=path) and 4 not in reel.ready(3, path=path)  # case A's send stays in case A's branch
+
+
+def test_a_scene_after_nothing_starts_afresh():
+    fresh = BRANCHES.replace("AFTER: 2", "AFTER: nothing")
+    reel = split_reel(fresh)
+    assert reel.before(3, reel.walk()[0]) is None and reel.ready(3) == {}
+    then, now = (compile_scene(src, 4, {}, target="h3-base", segment=3) for src in (BRANCHES, fresh))
+    assert "opens as" in then.text and "opens as" not in now.text
+    assert now.scene.duration == 5 and then.scene.duration > 5  # no pinned context
+    assert now.continues is None and then.continues == 1
+
+
+def test_after_names_a_scene_that_played_and_a_repeat_continues_itself():
+    with pytest.raises(ValueError, match="no SCENE is called 'the hall'"):
+        split_reel(BRANCHES.replace("AFTER: 2", "AFTER: the hall"))
+    with pytest.raises(ValueError, match="cannot continue itself"):
+        split_reel(BRANCHES.replace("AFTER: 2", "AFTER: case B"))
+    later = BRANCHES.replace("AFTER: the door", "AFTER: case B")
+    with pytest.raises(ValueError, match="has not played before clip 3"):
+        compile_scene(later, 4, {}, target="h3-base", segment=2)
+    twice = split_reel(BRANCHES.replace("SCENE case B", "SCENE case B ×2"))
+    assert [twice.before(t, twice.walk()[0]) for t in (3, 4)] == [1, 3]
+    assert any("AFTER: only works inside a SCENE" in i.message
+               for i in compile_scene("@h3 text\nAFTER: 2\nSHOT 5s\nA fox.", 1, {}).lint)
+
+
 def test_a_jump_opens_on_the_handoff_before_it_and_its_line_stays_out_of_the_prose():
     clip = compile_scene(GOTO_REEL, 1, {}, target="h3-base", segment=3)  # the stairs again, after the lamp
     assert "The keeper climbs" in clip.text and "beam sweeps the sea" in clip.text and "GOTO" not in clip.text

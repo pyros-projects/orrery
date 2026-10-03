@@ -240,20 +240,23 @@ function heading(rest) {
 }
 
 // A reel's scenes: the seconds of their shots (without the pinned context), how often each plays
-// (Infinity for forever) and the clips in all. Null without SCENE lines. Mirrors orrery.reel.
+// (Infinity for forever), the clips in all, and which start afresh (`AFTER: nothing`, no pinned
+// context). Null without SCENE lines. Mirrors orrery.reel.
 function reelSecs(text) {
   let secs = null;
-  const repeats = [];
+  const repeats = [], fresh = [];
   for (const l of text.split("\n").map((x) => x.trim())) {
     const c = SCENE.exec(l);
     if (c) {
       (secs ??= []).push(0);
       repeats.push(heading(c[1]).repeat);
+      fresh.push(secs.length === 1);  // the first scene has no clip before it
     }
+    if (secs && /^AFTER:\s*nothing\s*$/i.test(l)) fresh[secs.length - 1] = true;
     const m = /^SHOT\s+(\d+(?:\.\d+)?)\s*s\b/i.exec(l);
     if (m && secs) secs[secs.length - 1] += Number(m[1]);
   }
-  return secs && { chunks: secs.length, secs, repeats, clips: repeats.reduce((a, b) => a + b, 0) };
+  return secs && { chunks: secs.length, secs, repeats, fresh, clips: repeats.reduce((a, b) => a + b, 0) };
 }
 
 // Each SCENE line of a reel, for the editor's dividers and the timeline: the line it is on, its
@@ -390,7 +393,7 @@ export function shape(raw) {
   const seconds = lines.reduce((s, l) => { const m = /^SHOT\s+(\d+(?:\.\d+)?)\s*s\b/i.exec(l); return s + (m ? Number(m[1]) : 0); }, 0);
   const reel = header ? reelSecs(text) : null;
   const ctx = Number((/^context:\s*(\d+)/im.exec(text) || [0, 22])[1]);
-  const lengths = reel && reel.secs.map((s, i) => (s ? h3Length(s + (i ? ctx / 24 : 0)) : 124));
+  const lengths = reel && reel.secs.map((s, i) => (s ? h3Length(s + (reel.fresh[i] ? 0 : ctx / 24)) : 124));
   const length = lengths ? lengths[0] : seconds ? h3Length(seconds) : 124;
   const width = num(/\bw(\d+)/) ?? canvas[0], height = num(/\bh(\d+)/) ?? canvas[1];
   return {

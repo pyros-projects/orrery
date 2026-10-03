@@ -35,6 +35,12 @@ image out of the clip.
 after it), or for good without ×N. Several CUT TO: lines: the first that holds and has jumps left
 wins; `? cond: CUT TO: …` holds on what that clip rolled. So the path through the scenes is walked
 clip by clip (`Reel.walk`): which scene a segment plays can depend on the seed.
+
+`AFTER: <title or number>` in a scene makes it continue the last clip of that scene instead of the
+clip before it, so many scenes can branch off one clip (each with its own `SET:`): its opening
+sentence, the frames Orrery Continue pins, `$x~N` and what was sent follow that chain. `AFTER:
+nothing` starts the scene afresh, as the reel's first clip starts. A scene that repeats continues
+itself from its second time on.
 """
 
 import hashlib
@@ -50,6 +56,8 @@ CHUNK = re.compile(r"^(?:SCENE|CHUNK)\b\s*(.*)$")  # a scene's heading; CHUNK is
 REPEAT = re.compile(r"^(.*?)\s*(?:\brepeat\s+(\d+|forever)|(?<!\S)[×x]\s*(\d+)|(?<!\S)(forever))\s*$", re.IGNORECASE)
 HANDOFF = re.compile(r"^(?:END ON|HANDOFF):\s*(.+)$")
 SEND = re.compile(r"^SEND:\s*(.*)$")
+AFTER = re.compile(r"^AFTER:\s*(.*)$")
+NOTHING = -1  # `AFTER: nothing`: the scene continues no clip
 GOTO_LINE = re.compile(r"^(?:\?[^\n]*?:\s*)?(?:CUT\s+TO|GOTO):", re.IGNORECASE)  # a cut, with its `? cond:` or without
 _GOTO = re.compile(r"(?:CUT\s+TO|GOTO):\s*(.+?)\s*(?:[×x]\s*(\d+))?\s*$", re.IGNORECASE)
 MAX_WALK = 500  # clips a walk through a reel follows before it calls the reel endless
@@ -168,6 +176,7 @@ class Block:
     lines: list[str] = field(default_factory=list)
     sends: list[Send] = field(default_factory=list)
     gotos: list[Goto] = field(default_factory=list)
+    after: int | None = None  # `AFTER:`: the scene it continues (an index), NOTHING, or None for the clip before
 
 
 @dataclass
@@ -191,7 +200,7 @@ class Reel:
         while len(path) < upto:
             path.append((block, rep))
             if on_segment:
-                on_segment(len(path) - 1, block)
+                on_segment(len(path) - 1, block, rep)
             here = self.blocks[block]
             if here.repeat is None or rep + 1 < here.repeat:
                 rep += 1
@@ -229,6 +238,31 @@ class Reel:
             raise ReelEnd(f"The reel has {len(path)} clips; segment {segment} (clip {segment + 1}) is past its end "
                           "(the segment counts from 0, like Load Latent's clip_index).")
         return path[segment]
+
+    def before(self, segment: int, path: list[tuple[int, int]]) -> int | None:
+        """The segment `segment` continues, on `path`: the one before it, or with `AFTER:` the last clip
+        of that scene (None for the first clip and `AFTER: nothing`)."""
+        if segment == 0:
+            return None
+        block, rep = path[segment]
+        after = self.blocks[block].after
+        if rep or after is None:
+            return segment - 1
+        if after == NOTHING:
+            return None
+        last = next((t for t in range(segment - 1, -1, -1) if path[t][0] == after), None)
+        if last is None:
+            raise ValueError(f"SCENE {block + 1} continues SCENE {after + 1} (AFTER:), which has not played before "
+                             f"clip {segment + 1}.")
+        return last
+
+    def chain(self, segment: int, path: list[tuple[int, int]]) -> list[int]:
+        """The segments `segment` continues, nearest first: `before` again and again."""
+        out, t = [], self.before(segment, path)
+        while t is not None:
+            out.append(t)
+            t = self.before(t, path)
+        return out
 
     @property
     def send_slots(self) -> list[int]:
@@ -268,6 +302,10 @@ class Reel:
     def _ready(self, segment: int, held, path, refmods: bool) -> dict:
         out: dict = {}
         latest: dict = {}  # target → the segment its winning send so far comes from
+        if path is None:
+            path, _ = self.walk(upto=segment + 1)
+        # what this clip continues; past the reel's end, every clip before it
+        behind = set(self.chain(segment, path)) if segment < len(path) else set(range(segment))
         for block, start in zip(self.blocks, self.starts(path), strict=True):
             for send in block.sends:
                 if (send.refmod is not None) != refmods:
@@ -276,7 +314,7 @@ class Reel:
                 spans = (send.segments or [[0, None]]) if key in held else fills(send, start)
                 when = -1 if start is None else start
                 if (any(lo <= segment and (hi is None or segment <= hi) for lo, hi in spans)
-                        and when >= latest.get(key, -1)):
+                        and (key in held or start in behind) and when >= latest.get(key, -1)):
                     latest[key] = when
                     out[key] = ({"held": True} if key in held
                                 else {"segment": start, "frames": [list(f) for f in send.frames],
@@ -300,6 +338,7 @@ def split_reel(src: str) -> Reel | None:
     head: list[str] = []
     blocks: list[Block] = []
     gotos: list[tuple[int, str]] = []  # (chunk, line): resolved once every title is known
+    afters: list[tuple[int, str]] = []  # (chunk, what its AFTER: names), the same
     for raw in lines:
         if m := CHUNK.match(raw.strip()):
             title, repeat = m.group(1).strip(), 1
@@ -311,10 +350,20 @@ def split_reel(src: str) -> Reel | None:
             blocks[-1].sends.append(parse_send(send.group(1)))
         elif GOTO_LINE.match(raw.strip()) and blocks:
             gotos.append((len(blocks) - 1, raw.strip()))
+        elif (after := AFTER.match(raw.strip())) and blocks:
+            afters.append((len(blocks) - 1, after.group(1).strip()))
         else:
             (blocks[-1].lines if blocks else head).append(raw)
     for i, line in gotos:
         blocks[i].gotos.append(_goto(line, blocks))
+    for i, name in afters:
+        index = NOTHING if name.casefold() == "nothing" else _scene(name, blocks)
+        if index is None or index == i:
+            problem = "a scene cannot continue itself" if index == i else f"no SCENE is called {name!r}"
+            titles = ", ".join(b.title or f"scene {k + 1}" for k, b in enumerate(blocks))
+            raise ValueError(f"AFTER: {name}: {problem} (there are {titles}; a number counts them from 1, "
+                             "and AFTER: nothing starts afresh).")
+        blocks[i].after = index
     from orrery.dsl import parse
 
     return Reel(head, blocks, parse(src).params.rng)
@@ -340,13 +389,17 @@ def shared_sends(reel: Reel, starts: list[int | None]) -> list[str]:
     return out
 
 
+def _scene(name: str, blocks: list[Block]) -> int | None:
+    """The scene a CUT TO: or AFTER: names, by its number from 1 or its title."""
+    if name.isdigit() and 1 <= int(name) <= len(blocks):
+        return int(name) - 1
+    return next((i for i, b in enumerate(blocks) if b.title.casefold() == name.casefold()), None)
+
+
 def _goto(line: str, blocks: list[Block]) -> Goto:
     m = _GOTO.search(line)
     target = m.group(1).strip() if m else ""
-    if target.isdigit() and 1 <= int(target) <= len(blocks):
-        index = int(target) - 1
-    else:
-        index = next((i for i, b in enumerate(blocks) if b.title.casefold() == target.casefold()), None)
+    index = _scene(target, blocks)
     if index is None:
         titles = ", ".join(b.title or f"scene {i + 1}" for i, b in enumerate(blocks))
         raise ValueError(f"{line}: no SCENE is called {target!r} (there are {titles}; a number counts them from 1).")
@@ -381,11 +434,11 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
     history: list[dict[str, str]] = []  # every earlier segment's bindings, recomputed
     history_props: list[dict[str, dict[str, str]]] = []  # and the fields of what they rolled, as their clips showed them
 
-    blocks: list[int] = []  # the chunk of each segment walked so far
+    walked: list[tuple[int, int]] = []  # (scene, repetition) of each segment walked so far
     rolled: dict[int, Expander] = {}
 
     def expander(t: int) -> tuple[Expander, Block]:
-        block = reel.blocks[blocks[t]]
+        block = reel.blocks[walked[t][0]]
         ex = Expander(derive(seed, t), libraries, weights, reel.rng)
         ex.warnings = world.warnings  # one list for the whole reel
         ex.vars = dict(world.vars)
@@ -393,20 +446,19 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
         ex.var_tags = dict(world.var_tags)
         ex.var_fields = dict(world.var_fields)  # the head's fields rolled once, for every clip
 
-        def back(name: str, n: int) -> str | None:
-            target = max(t - n, 0)
-            return ex.vars.get(name) if target >= t else history[target].get(name)
+        def back(n: int) -> int:  # the clip n back along what t continues; the first one it reaches
+            behind = reel.chain(t, walked)
+            return behind[min(n, len(behind)) - 1] if n > 0 and behind else t
 
-        ex.history = back
-        ex.history_props = lambda name, n: (ex.var_fields if max(t - n, 0) >= t
-                                            else history_props[max(t - n, 0)]).get(name, {})
+        ex.history = lambda name, n: ex.vars.get(name) if back(n) == t else history[back(n)].get(name)
+        ex.history_props = lambda name, n: (ex.var_fields if back(n) == t else history_props[back(n)]).get(name, {})
         for line in block.lines:
             if m := BINDING.match(line.strip()):
                 ex.bind(m.group(1), m.group(2))
         return ex, block
 
-    def record(t: int, block: int) -> None:
-        blocks.append(block)
+    def record(t: int, block: int, rep: int) -> None:
+        walked.append((block, rep))
         rolled[t] = ex_t = expander(t)[0]
         history.append(dict(ex_t.vars))
         history_props.append(dict(ex_t.var_fields))
@@ -477,7 +529,8 @@ def build_segment(reel: Reel, seed: int, libraries: Mapping[str, Library],
 
     world, head, expand, (path, _) = _unroll(reel, seed, libraries, weights, segment)
     lines, handoff, picks, _ = expand(segment)
-    before, before_picks = (expand(segment - 1)[1::2] if segment else (None, []))
+    continues = reel.before(segment, path)
+    before, before_picks = (expand(continues)[1::2] if continues is not None else (None, []))
     lint += [Issue("warn", w) for w in world.warnings]
     scene = parse_scene("\n".join(head + lines), Expander(0, {}), lint, expanded=True)
     if scene.shots and before:
@@ -485,7 +538,7 @@ def build_segment(reel: Reel, seed: int, libraries: Mapping[str, Library],
     if scene.shots and handoff:
         scene.shots[-1].items.append(f"The shot ends as {_clause(handoff)}")
     context = DEFAULT_CONTEXT if scene.context is None else scene.context
-    if scene.shots and segment and context:
+    if scene.shots and continues is not None and context:
         scene.shots[0].duration += context / H3_FPS
     t = 0.0
     for shot in scene.shots:

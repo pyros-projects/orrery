@@ -77,6 +77,7 @@ _VOICE = re.compile(r"^([A-Z][A-Z0-9 _-]*?)\s*(?:\(([^)]*)\))?\s*:\s*(.+)$")
 _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
 _HANDOFF = re.compile(r"^(?:END ON|HANDOFF):\s*(.+)$")
 _SEND_LINE = re.compile(r"^SEND:")
+_AFTER = re.compile(r"^AFTER:")
 _LORA = re.compile(r"^LORA:\s*(.+)$")
 _CONTEXT = re.compile(r"^context:\s*(\d+)\s*f?$", re.IGNORECASE)
 _REFMODS = re.compile(r"^refmods:\s*(?:at\s+(\d*\.?\d+))?\s*(?:from\s+(\d+(?:\.\d+)?)\s*%)?\s*(?:to\s+(\d+(?:\.\d+)?)\s*%)?\s*$",
@@ -161,6 +162,7 @@ class Compiled:
     send_slots: list[int] = field(default_factory=list)  # every image a SEND: line of the reel fills
     refmods: list[dict] = field(default_factory=list)  # the RefMods this clip gets (clip_refmods), for Orrery RefMods
     images: list[dict] = field(default_factory=list)  # the clip's pictures with an at or a from (clip_images)
+    continues: int | None = None  # the segment this clip continues (Reel.before): None first and after AFTER: nothing
 
 
 # --- front end ------------------------------------------------------------------------------
@@ -202,6 +204,8 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
             scene.loras.append(m.group(1).strip())
         elif _HANDOFF.match(line):
             lint.append(Issue("warn", "END ON: only works inside a SCENE; it is ignored."))
+        elif _AFTER.match(line):
+            lint.append(Issue("warn", "AFTER: only works inside a SCENE of a reel; it is ignored."))
         elif _SEND_LINE.match(line):
             raise ValueError("SEND: belongs inside a SCENE: it sends frames of that scene's clip to the clips after it.")
         elif m := _CONTEXT.match(line):
@@ -868,4 +872,4 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                     segment if reel else 0, reel.segments if reel else 0, refs,
                     sends, reel.send_slots if reel else [],
                     [{**r, "sent": sent_mods[r["name"]]} if r["name"] in sent_mods else r for r in clip_refmods(scene)],
-                    clip_images(scene, refs))
+                    clip_images(scene, refs), reel.before(segment, path) if reel else None)
