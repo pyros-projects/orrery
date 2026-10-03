@@ -43,5 +43,8 @@ SHOT 7s: static
 #SET: image_1(0), minimaxh3_jinx_v1_refmod(1, 0%, 30%)
 # K (#61): the picture as good as gone from H3's attention, while its text encoder sees it in full.
 # Like C: the text encoder carries the picture. Like A: the latents do.
+# L (#61): the same SET with #63 installed, so its vision block in the text is at 0.01 too: what is
+# left of Jinx then came through the prompt Qwen read after the picture. Render A, C and L with SLA off:
+# a strength other than 1 runs dense anyway, a case at 1 would lose reference blocks to sparsity.
 SET: image_1(0.01), minimaxh3_jinx_v1_refmod(0)
 JINX is entering the scene from the side and standing in front of the camera. JINX is showcasing her outfit.
