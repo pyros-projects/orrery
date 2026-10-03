@@ -79,7 +79,9 @@ output:
 - Code, docs, issues, commits and PRs are in English.
 - Write like the surrounding code: its naming, its comment density, its idiom.
 - A user-visible change updates its docs in the same PR (`docs/`, the in-app help in
-  `comfyui/web/app/help.js`, and the example workflows when their templates or nodes change).
+  `comfyui/web/app/help.js`, and the example workflows when their templates or nodes change), and
+  adds its line to `CHANGELOG.md` under Unreleased (Added, Changed or Fixed), naming its feature
+  or bug. Dev-flow and check changes stay out of it.
 - Determinism is a promise: the same template and seed give the same picks. A change that moves
   existing picks needs a reason in the PR and a way back (as `@rng 1` keeps the old dice).
 - The golden corpus (`tests/test_golden.py`, snapshots in `tests/golden/`) pins what every built-in
