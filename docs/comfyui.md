@@ -190,5 +190,15 @@ Nodes under **orrery**:
   is the k-th packed ref. A RefMod or a picture that starts later goes into a
   timestep range of its own, as ConditioningSetTimestepRange would put it. The strength comes from orrery's
   wrap of H3's attention, which orrery installs in memory when its nodes load.
+  A picture's strength covers its reference latents and the vision tokens its
+  text encoder left in the text. Outside its `from` and `to`, the picture stays
+  on the conditioning at 0, so both stay hidden.
+
+  With **H3SLAAttention** (sparse attention), every step where a strength other
+  than 1 is in play runs dense: orrery's wrap widens the attention heads, and SLA
+  takes only H3's own. The clip then renders at dense speed for those steps. A
+  picture or RefMod at 1 runs sparse and can lose part of its reference to the
+  sparsity, unless SLA's Protect Vid/Ref holds it (Light or Heavy). At 0.99 it
+  runs dense and keeps all of it, so under SLA 0.99 can hold more than 1.
 - **Orrery Write** (`orrery/internal`): the Write menu queues it on its own;
   you don't add it.
