@@ -75,7 +75,7 @@ def test_a_range_the_conditioning_already_has_is_kept(pack):
     assert [(m["start_percent"], m["end_percent"], len(m["minimax_refs"])) for _, m in out] == [(0.5, 1.0, 1)]
 
 
-def test_a_picture_with_at_and_from_is_marked_and_waits_without_the_pack(monkeypatch):
+def test_a_picture_with_at_and_from_is_marked_and_waits_at_zero_without_the_pack(monkeypatch):
     for name in [n for n in sys.modules if n.endswith(".nodes.refmod_loader")]:
         monkeypatch.delitem(sys.modules, name)
     cond = [["text", {"minimax_refs": [{"kind": "image", "latent": "one"}, {"kind": "image", "latent": "two"},
@@ -83,13 +83,13 @@ def test_a_picture_with_at_and_from_is_marked_and_waits_without_the_pack(monkeyp
     picks = {"images": [{"ref": 2, "image": 5, "member": "TOM", "strength": 0.5, "from": 0.35}]}
     (out,) = OrreryRefMods().apply(cond, json.dumps(picks))
     (early, late) = out
-    assert [b["latent"] for b in early[1]["minimax_refs"]] == ["one", "clip"]  # image 2 waits
-    assert [(b["latent"], b.get(refbias.KEY)) for b in late[1]["minimax_refs"]] == [("one", None), ("two", 0.5),
-                                                                                   ("clip", None)]
-    assert [b.get(refbias.PICTURE) for b in late[1]["minimax_refs"]] == [None, 2, None]  # <Picture 2>
+    marks = lambda c: [(b["latent"], b.get(refbias.KEY), b.get(refbias.PICTURE)) for b in c[1]["minimax_refs"]]
+    # image 2 waits at 0, so refbias hides its vision block in the text too, which leaving would not
+    assert marks(early) == [("one", None, None), ("two", 0.0, 2), ("clip", None, None)]
+    assert marks(late) == [("one", None, None), ("two", 0.5, 2), ("clip", None, None)]
     picks["images"][0].update({"from": 0.0, "to": 0.5})  # image 2 only for the first half
     (out,) = OrreryRefMods().apply(cond, json.dumps(picks))
-    assert [[b["latent"] for b in c[1]["minimax_refs"]] for c in out] == [["one", "two", "clip"], ["one", "clip"]]
+    assert [[b.get(refbias.KEY) for b in c[1]["minimax_refs"]] for c in out] == [[None, 0.5, None], [None, 0.0, None]]
     assert [(c[1].get("start_percent"), c[1].get("end_percent")) for c in out] == [(0.0, 0.5), (0.5, 1.0)]
 
 

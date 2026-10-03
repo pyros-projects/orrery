@@ -158,9 +158,10 @@ def sent_block(name: str, sent: dict, latent_path: str, vae) -> dict:
 def _ranged(conditioning, blocks: list[dict], lo: float, hi: float, images: dict | None = None) -> list:
     """The conditioning with `blocks` added to its refs, for sampling from `lo` to `hi` (within any range
     an entry already has); entries that leave nothing of the range are dropped. `images`: {k: (strength,
-    from, to)} for the k-th picture Reference to Video put on the conditioning; a picture that waits past
-    `lo`, stops before `hi` or is at 0 is left out of this range, any other strength marks it for
-    orrery.refbias."""
+    from, to)} for the k-th picture Reference to Video put on the conditioning, marked for orrery.refbias
+    when its strength is not 1. A picture that waits past `lo`, stops before `hi` or is at 0 stays at 0
+    for this range: refbias then hides its latents and the vision block its text encoder left in the text,
+    which would stay if the picture left the refs (and the target would move between steps)."""
     out = []
     for tensor, meta in conditioning:
         meta = dict(meta)
@@ -172,8 +173,8 @@ def _ranged(conditioning, blocks: list[dict], lo: float, hi: float, images: dict
             if images and block.get("kind") == "image":
                 k += 1
                 strength, wait, until = images.get(k, (1.0, 0.0, 1.0))
-                if wait > lo or until < hi or strength <= 0.0:
-                    continue
+                if wait > lo or until < hi:
+                    strength = 0.0
                 if strength != 1.0:
                     block = {**block, KEY: strength, PICTURE: k}
             refs.append(block)
