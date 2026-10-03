@@ -18,6 +18,12 @@ def test_each_share_of_sampling_carries_the_refmods_that_have_started():
     assert schedule([{**SALON, "from": 1.0}]) == [(0.0, 1.0, [])]  # waits for ever: never runs
 
 
+def test_a_refmod_or_a_picture_that_stops_leaves_the_ranges_after():
+    early = {**HALL, "to": 0.2}
+    assert schedule([early]) == [(0.0, 0.2, [early]), (0.2, 1.0, [])]
+    assert schedule([SALON], [{"from": 0.0, "to": 0.5}]) == [(0.0, 0.35, []), (0.35, 0.5, [SALON]), (0.5, 1.0, [SALON])]
+
+
 def test_a_refmod_is_found_by_its_name_or_its_video_half():
     assert resolve("salon_canon", ["salon_canon_Video", "other"]) == "salon_canon_Video"
     assert resolve("x", ["x", "x_Video"]) == "x"
@@ -80,6 +86,10 @@ def test_a_picture_with_at_and_from_is_marked_and_waits_without_the_pack(monkeyp
     assert [b["latent"] for b in early[1]["minimax_refs"]] == ["one", "clip"]  # image 2 waits
     assert [(b["latent"], b.get(refbias.KEY)) for b in late[1]["minimax_refs"]] == [("one", None), ("two", 0.5),
                                                                                    ("clip", None)]
+    picks["images"][0].update({"from": 0.0, "to": 0.5})  # image 2 only for the first half
+    (out,) = OrreryRefMods().apply(cond, json.dumps(picks))
+    assert [[b["latent"] for b in c[1]["minimax_refs"]] for c in out] == [["one", "two", "clip"], ["one", "clip"]]
+    assert [(c[1].get("start_percent"), c[1].get("end_percent")) for c in out] == [(0.0, 0.5), (0.5, 1.0)]
 
 
 def test_without_the_pack_the_node_says_where_to_get_it(monkeypatch):

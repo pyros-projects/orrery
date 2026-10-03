@@ -475,7 +475,7 @@ def test_a_chunks_own_cast_replaces_the_member_for_that_clip():
     first, _, back = (ref2va(src, segment=s) for s in range(3))
     assert [m["strength"] for m in first.refmods] == [1.0] and [m["strength"] for m in back.refmods] == [0.3]
     assert back.scene.cast[0].name == "EMMA"  # in her place: still <Subject 1>
-    assert back.images == [{"ref": 1, "image": 1, "member": "EMMA", "strength": 0.5, "from": 0.0}]
+    assert back.images == [{"ref": 1, "image": 1, "member": "EMMA", "strength": 0.5, "from": 0.0, "to": 1.0}]
     assert not any("twice" in i.message for i in back.lint)
 
 
@@ -486,7 +486,7 @@ def test_set_lines_turn_the_dials_in_the_head_and_per_chunk():
     first, _, back = (ref2va(src, segment=s) for s in range(3))
     assert [(m["strength"], m["from"]) for m in first.refmods] == [(0.8, 0.0)] and first.images == []
     assert [(m["strength"], m["from"]) for m in back.refmods] == [(0.4, 0.2)]
-    assert back.images == [{"ref": 1, "image": 1, "member": "EMMA", "strength": 0.5, "from": 0.35}]
+    assert back.images == [{"ref": 1, "image": 1, "member": "EMMA", "strength": 0.5, "from": 0.35, "to": 1.0}]
     assert "SET" not in back.text  # never prose
 
 
@@ -502,6 +502,19 @@ def test_a_picture_at_0_leaves_the_clip_so_not_even_the_text_encoder_sees_it():
     wired = ref2va(LEAVES.replace("EMMA (refmod emma_canon)", "EMMA (image 1)").replace(
         "EMMA slides back", "SET: image_1(0)\nEMMA slides back"), segment=2)
     assert wired.refs == [] and "<Picture" not in wired.text
+
+
+def test_a_dial_can_stop_before_sampling_does():
+    src = LEAVES.replace("EMMA (refmod emma_canon)", "EMMA (refmod emma_canon from 10% to 50%, image 1 to 30%)").replace(
+        "EMMA slides back", "SET: emma_canon(1, 0%, 20%)\nEMMA slides back")
+    first, _, back = (ref2va(src, segment=s) for s in range(3))
+    assert [(m["from"], m["to"]) for m in first.refmods] == [(0.1, 0.5)]
+    assert [(m["from"], m["to"]) for m in back.refmods] == [(0.0, 0.2)]  # SET wins over the CAST
+    assert [(p["from"], p["to"]) for p in back.images] == [(0.0, 0.3)]
+    head = ref2va(LEAVES.replace("CAST\n", "refmods: to 40%\nCAST\n", 1), segment=0)
+    assert [m["to"] for m in head.refmods] == [0.4]
+    wrong = ref2va(LEAVES.replace("EMMA (refmod emma_canon)", "EMMA (refmod emma_canon from 50% to 20%)"), segment=0)
+    assert any("stops before it starts" in i.message for i in wrong.lint) and wrong.refmods[0]["to"] == 1.0
 
 
 def test_a_set_line_written_wrong_or_naming_nothing_is_lint():

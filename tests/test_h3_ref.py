@@ -304,7 +304,7 @@ SFX: wind
 """
     res = h3(src)
     assert "A young blonde woman, in a light-pink shirt, waves." in res.text
-    assert res.refmods == [{"name": "maya_canon", "member": "MAYA", "strength": 1.0, "from": 0.0}]
+    assert res.refmods == [{"name": "maya_canon", "member": "MAYA", "strength": 1.0, "from": 0.0, "to": 1.0}]
     assert not any("maya_canon" in i.message for i in res.lint)
 
 
@@ -321,7 +321,7 @@ The camera crosses SALON toward the doors.
 
 def test_a_refmod_carries_its_strength_and_start_or_the_screenplay_defaults():
     mods = {m["name"]: m for m in h3(REFMOD_TOUR.replace("crosses SALON", "crosses SALON into HALL")).refmods}
-    assert mods["salon_canon"] == {"name": "salon_canon", "member": "SALON", "strength": 0.5, "from": 0.2}
+    assert mods["salon_canon"] == {"name": "salon_canon", "member": "SALON", "strength": 0.5, "from": 0.2, "to": 1.0}
     assert (mods["hall_canon"]["strength"], mods["hall_canon"]["from"]) == (0.9, 0.4)
 
 
@@ -447,10 +447,10 @@ SHOT 5s: static
 EMMA waves to TOM.
 """
     assert compile_scene(src, 1, LIBS, packed=True).images == [
-        {"ref": 1, "image": 3, "member": "EMMA", "strength": 0.5, "from": 0.35}]
+        {"ref": 1, "image": 3, "member": "EMMA", "strength": 0.5, "from": 0.35, "to": 1.0}]
     assert h3(src).images[0]["ref"] == 3  # without Orrery Refs: the slot as wired
     bad = h3(src.replace("TOM (image 5)", "TOM (video 1 at 0.4)"))
-    assert any("video 1 takes no at or from" in i.message for i in bad.lint)
+    assert any("video 1 takes no at, from or to" in i.message for i in bad.lint)
 
 
 def test_a_member_twice_in_one_cast_block_warns_and_the_first_counts():
