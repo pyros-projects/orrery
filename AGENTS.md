@@ -2,10 +2,10 @@
 
 orrery is a seeded prompt language that records every decision it makes. A template rolls
 libraries, choices and bindings from a seed; every pick stays addressable, so a run can be
-reproduced, rated, and the ratings steer the next rolls (the galaxy). On top of the language sit
+reproduced, rated, and the ratings steer the next rolls (the gallery). On top of the language sit
 compilers: plain text (Krea 2 and other image models) and MiniMax H3 screenplays (`@h3`: shots,
 voices, sound, a CAST of references, and reels of chained clips with `CHUNK`, `HANDOFF`, `SEND:`
-and `GOTO:`). In ComfyUI it is one node, Orrery Prompt, with an app in it (Prompt, Test, Galaxy,
+and `GOTO:`). In ComfyUI it is one node, Orrery Prompt, with an app in it (Prompt, Test, Gallery,
 History), plus Orrery Refs, Orrery Continue, Orrery Film and Orrery Log.
 
 ## Layout
@@ -79,9 +79,16 @@ output:
 - Code, docs, issues, commits and PRs are in English.
 - Write like the surrounding code: its naming, its comment density, its idiom.
 - A user-visible change updates its docs in the same PR (`docs/`, the in-app help in
-  `comfyui/web/app/help.js`, and the example workflows when their templates or nodes change).
+  `comfyui/web/app/help.js`, and the example workflows when their templates or nodes change), and
+  adds its line to `CHANGELOG.md` under Unreleased (Added, Changed or Fixed), naming its feature
+  or bug. Dev-flow and check changes stay out of it.
 - Determinism is a promise: the same template and seed give the same picks. A change that moves
   existing picks needs a reason in the PR and a way back (as `@rng 1` keeps the old dice).
+- The golden corpus (`tests/test_golden.py`, snapshots in `tests/golden/`) pins what every built-in
+  preset rolls: its text, its picks and a reel's path. When it fails, either the change is a mistake,
+  or it is meant: then the PR says what moved and why, and `uv run python tests/test_golden.py --write`
+  rewrites the snapshots. A new built-in preset gets its snapshot the same way. The corpus is the
+  presets, so a language feature no preset uses yet gets a preset worth shipping, not a dry test case.
 - Test ComfyUI changes in the ComfyUI that is already running, and only after asking. Never start
   a second instance, or any other process that loads models on the GPU next to it: two at once
   freeze the machine.

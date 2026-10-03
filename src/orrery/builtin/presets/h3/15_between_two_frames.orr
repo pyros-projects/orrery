@@ -1,0 +1,15 @@
+---
+title: "Between two frames"
+note: "Any two pictures, one impossible take between them. Wire a first and a last frame, and the camera travels from the one to the other without a cut or a dissolve: stagehands strike the first set, a giant hand swaps the diorama, the sky tears open (transitions/between, twenty ways, each with its own sound). Another seed is another way across; the frames stay yours."
+tags: [h3, transition, keyframes]
+---
+@h3 first-last 16:9
+style: live-action, cinematic, photorealistic, one continuous unbroken shot gliding forward
+$from = the place in <Picture 1>
+$to = the place in <Picture 2>
+$shift = __transitions/between__
+
+SHOT 8s: push in, slow
+The camera glides forward through $from. Midway, $shift. The camera glides on into $to without ever stopping, as if this were the most ordinary thing in the world.
+SFX: $shift.sfx
+MUSIC: N/A

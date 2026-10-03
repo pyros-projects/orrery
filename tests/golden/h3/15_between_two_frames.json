@@ -1,0 +1,44 @@
+{
+ "preset": "h3/15_between_two_frames",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "How the reference pictures align with the target video — Picture 1 (from Shot 1) aligns with the 0.00-second mark of the target video; Picture 2 (from Shot 1) aligns with the 8.00-second mark of the target video.\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken shot gliding forward. The camera glides forward through the place in <Picture 1>. The camera pushes in at slow speed. Midway, the place in <Picture 1> folds flat like the page of a pop-up book, and the next page unfolds into the place in <Picture 2>. The camera glides on into the place in <Picture 2> without ever stopping, as if this were the most ordinary thing in the world.\n\noverall_soundscape: A heavy paper page turning and card creaking upright.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$shift ← __transitions/between__",
+       "$from folds flat like the page of a pop-up book, and the next page unfolds into $to"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "How the reference pictures align with the target video — Picture 1 (from Shot 1) aligns with the 0.00-second mark of the target video; Picture 2 (from Shot 1) aligns with the 8.00-second mark of the target video.\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken shot gliding forward. The camera glides forward through the place in <Picture 1>. The camera pushes in at slow speed. Midway, a wall of fog rolls through the place in <Picture 1> until everything is white, and as it thins, the place in <Picture 2> has taken its place. The camera glides on into the place in <Picture 2> without ever stopping, as if this were the most ordinary thing in the world.\n\noverall_soundscape: The world going muffled and slowly coming back.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$shift ← __transitions/between__",
+       "a wall of fog rolls through $from until everything is white, and as it thins, $to has taken its place"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "How the reference pictures align with the target video — Picture 1 (from Shot 1) aligns with the 0.00-second mark of the target video; Picture 2 (from Shot 1) aligns with the 8.00-second mark of the target video.\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, photorealistic, one continuous unbroken shot gliding forward. The camera glides forward through the place in <Picture 1>. The camera pushes in at slow speed. Midway, a wall of fog rolls through the place in <Picture 1> until everything is white, and as it thins, the place in <Picture 2> has taken its place. The camera glides on into the place in <Picture 2> without ever stopping, as if this were the most ordinary thing in the world.\n\noverall_soundscape: The world going muffled and slowly coming back.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$shift ← __transitions/between__",
+       "a wall of fog rolls through $from until everything is white, and as it thins, $to has taken its place"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

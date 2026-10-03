@@ -1,6 +1,6 @@
 # Plan: library completion by any part of the name; galaxy folders, delete, export
 
-Status: approved 2026-09-30. Two independent pieces: a completion fix and three
+Status: approved and built 2026-09-30. Two independent pieces: a completion fix and three
 galaxy features.
 
 ## 1. Library completion matches any part of the name

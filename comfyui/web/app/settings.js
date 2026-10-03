@@ -12,8 +12,8 @@ const WRITER_TEXTS = { continue: "Continue the reel", story: "Story between fram
 
 const HOME_NOTE = {
   env: (h) => `ORRERY_HOME is set to <code>${esc(h)}</code> and wins over this setting; unset it to use the folder below.`,
-  setting: () => "Libraries, presets, the galaxy and these settings live here. Existing files are not moved when you change it.",
-  default: () => "Libraries, presets, the galaxy and these settings live here; empty means <code>~/.orrery</code>. Existing files are not moved when you change it.",
+  setting: () => "Libraries, presets, the gallery and these settings live here. Existing files are not moved when you change it.",
+  default: () => "Libraries, presets, the gallery and these settings live here; empty means <code>~/.orrery</code>. Existing files are not moved when you change it.",
 };
 
 export async function openSettings(app) {

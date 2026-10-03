@@ -1,6 +1,6 @@
 ---
 title: "Haute nonsense"
-note: "OneButtonPrompt's spirit: a fictional house strings together two or three snobby adjectives and shapes that make no sense, and Krea has to decide what that looks like. Run it as a batch and rate; the galaxy learns which adjectives turn into clothes."
+note: "OneButtonPrompt's spirit: a fictional house strings together two or three snobby adjectives and shapes that make no sense, and Krea has to decide what that looks like. Run it as a batch and rate; the gallery learns which adjectives turn into clothes."
 tags: [fashion, krea, explore]
 ---
 $house = __couture_house__

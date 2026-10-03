@@ -1,0 +1,92 @@
+{
+ "preset": "effects/surface_press",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a tiled changing room at a public swimming pool, framed from the waist up, dressed so that the inside of the forearm is bare and clearly visible. The camera pushes in at slow speed. The skin of the inside of the forearm begins to bulge outward from inside, slowly, as if something behind it were leaning against a sheet of rubber. The bulge sharpens into an open hand, and the skin stretches thin and glossy over it, following every contour exactly while staying intact. <Subject 1> holds completely still and looks down at it. The shape presses harder; the skin around it pulls taut in fine radiating creases, then relaxes a little as the pressure eases, and presses again, patient and deliberate. <Subject 1> lifts one trembling hand toward it but stops a few centimetres away. In the final moment the shape withdraws and the skin settles smooth, then a second shape presses out right beside it.\n\noverall_soundscape: Quiet room ambience, shallow breathing, the soft squeak of stretched skin, and a slow deep pressure sound from inside the body.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a tiled changing room at a public swimming pool"
+      ],
+      [
+       "{an open hand|a face|five fingertips}",
+       "an open hand"
+      ],
+      [
+       "{the chest|the stomach|the inside of the forearm}",
+       "the inside of the forearm"
+      ],
+      [
+       "{HOST presses their own palm against it from outside, palm to palm through the skin|the shape withdraws and the skin settles smooth, then a second shape presses out right beside it|the pressing face slowly opens its mouth beneath the stretched skin}",
+       "the shape withdraws and the skin settles smooth, then a second shape presses out right beside it"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the young man of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a dim apartment sitting room, framed from the waist up, dressed so that the inside of the forearm is bare and clearly visible. The camera pushes in at slow speed. The skin of the inside of the forearm begins to bulge outward from inside, slowly, as if something behind it were leaning against a sheet of rubber. The bulge sharpens into five fingertips, and the skin stretches thin and glossy over it, following every contour exactly while staying intact. <Subject 1> holds completely still and looks down at it. The shape presses harder; the skin around it pulls taut in fine radiating creases, then relaxes a little as the pressure eases, and presses again, patient and deliberate. <Subject 1> lifts one trembling hand toward it but stops a few centimetres away. In the final moment the pressing face slowly opens its mouth beneath the stretched skin.\n\noverall_soundscape: Quiet room ambience, shallow breathing, the soft squeak of stretched skin, and a slow deep pressure sound from inside the body.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the young man"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a dim apartment sitting room"
+      ],
+      [
+       "{an open hand|a face|five fingertips}",
+       "five fingertips"
+      ],
+      [
+       "{the chest|the stomach|the inside of the forearm}",
+       "the inside of the forearm"
+      ],
+      [
+       "{HOST presses their own palm against it from outside, palm to palm through the skin|the shape withdraws and the skin settles smooth, then a second shape presses out right beside it|the pressing face slowly opens its mouth beneath the stretched skin}",
+       "the pressing face slowly opens its mouth beneath the stretched skin"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a narrow hotel corridor, framed from the waist up, dressed so that the chest is bare and clearly visible. The camera pushes in at slow speed. The skin of the chest begins to bulge outward from inside, slowly, as if something behind it were leaning against a sheet of rubber. The bulge sharpens into a face, and the skin stretches thin and glossy over it, following every contour exactly while staying intact. <Subject 1> holds completely still and looks down at it. The shape presses harder; the skin around it pulls taut in fine radiating creases, then relaxes a little as the pressure eases, and presses again, patient and deliberate. <Subject 1> lifts one trembling hand toward it but stops a few centimetres away. In the final moment <Subject 1> presses their own palm against it from outside, palm to palm through the skin.\n\noverall_soundscape: Quiet room ambience, shallow breathing, the soft squeak of stretched skin, and a slow deep pressure sound from inside the body.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a narrow hotel corridor"
+      ],
+      [
+       "{an open hand|a face|five fingertips}",
+       "a face"
+      ],
+      [
+       "{the chest|the stomach|the inside of the forearm}",
+       "the chest"
+      ],
+      [
+       "{HOST presses their own palm against it from outside, palm to palm through the skin|the shape withdraws and the skin settles smooth, then a second shape presses out right beside it|the pressing face slowly opens its mouth beneath the stretched skin}",
+       "HOST presses their own palm against it from outside, palm to palm through the skin"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

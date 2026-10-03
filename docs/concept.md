@@ -1,6 +1,7 @@
 # orrery: concept
 
-Status: concept, nothing built yet (2026-09-23).
+Status: concept, 2026-09-23; built as v0 from that day on and merged on 2026-10-02 (PR #1). The galaxy
+becomes the gallery (#89).
 Interactive mock: https://claude.ai/artifact/9RpLrL2GnDKfaiUZo8fGYC
 
 ## One sentence

@@ -1,0 +1,68 @@
+{
+ "preset": "tutorial/14_follow_a_roll",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "a wildlife photograph of a giant tortoise in a volcanic island shore of black rock, morning light, long telephoto lens, crisp detail in fur, feathers and water",
+     "picks": [
+      [
+       "$animal ← __subjects/animals__",
+       "a giant tortoise"
+      ],
+      [
+       "$home ← __world/habitats#habitat:$animal.habitat__",
+       "a volcanic island shore of black rock"
+      ],
+      [
+       "{|golden |misty }",
+       ""
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "a wildlife photograph of a humpback whale in a coral reef crowded with small fish, misty morning light, long telephoto lens, crisp detail in fur, feathers and water",
+     "picks": [
+      [
+       "$animal ← __subjects/animals__",
+       "a humpback whale"
+      ],
+      [
+       "$home ← __world/habitats#habitat:$animal.habitat__",
+       "a coral reef crowded with small fish"
+      ],
+      [
+       "{|golden |misty }",
+       "misty "
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "a wildlife photograph of a giant tortoise in a volcanic island shore of black rock, golden morning light, long telephoto lens, crisp detail in fur, feathers and water",
+     "picks": [
+      [
+       "$animal ← __subjects/animals__",
+       "a giant tortoise"
+      ],
+      [
+       "$home ← __world/habitats#habitat:$animal.habitat__",
+       "a volcanic island shore of black rock"
+      ],
+      [
+       "{|golden |misty }",
+       "golden "
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

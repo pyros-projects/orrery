@@ -1,0 +1,49 @@
+---
+title: "Three endings"
+note: "One setup, three films. A woman knocks on a strange door in a storm, and the door opens; then three scenes each continue that same clip (AFTER: the knock), as a sitcom, a horror film and a romance, each in a style of its own. One Roll (next 4 clips) renders all four; Orrery Film keeps every branch, so you can watch the same door open three ways. Her dog is cast as always: it trots through every ending, even the ones that forget to mention it. The storm and the house roll per seed."
+tags: [h3, reel, branches, motion_context]
+---
+@h3 text 16:9
+style: live-action, cinematic, one continuous shot
+context: 22
+$storm = {a howling gale|a downpour lit by lightning|wet snow driving sideways}
+$house = {a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}
+
+CAST
+@MAYA: a young woman in a yellow raincoat, soaked to the skin
+@BISCUIT (always): her old grey greyhound, in a tartan dog coat
+
+SCENE the knock
+MUSIC: N/A
+SHOT 7s: push in, slow
+@MAYA runs through $storm up to the door of $house, @BISCUIT at her heels, and knocks three times. Nobody answers; then the lock clicks by itself.
+@MAYA (a young woman's voice, out of breath): Hello? My car broke down…
+SFX: the storm roaring; three heavy knocks; a lock clicking open
+END ON: the door swings open on a dark hallway, and somewhere inside a light comes on
+
+SCENE the sitcom
+AFTER: the knock
+style: a bright multi-camera sitcom, flat warm studio light, a laugh track
+MUSIC: a bouncy slap-bass sting
+SHOT 7s: static
+The lights blaze on: the hallway is packed with strangers in party hats who shout "Surprise!" at the wrong person. @MAYA freezes, dripping, and someone hands her a slice of cake.
+SFX: party horns; a studio audience bursting into laughter
+END ON: @MAYA takes a bite of the cake and shrugs
+
+SCENE the horror
+AFTER: 1
+style: a slow-burning horror film, deep shadows, cold blue moonlight, the grain of 35 mm film
+MUSIC: a single low string note that will not resolve
+SHOT 7s: push in, slow
+@MAYA steps into the hallway. The light at the far end is a single candle, and as she reaches it the door slams shut behind her; in the dark, something breathes on the stairs above.
+SFX: the storm cut off at once; a slow creak on each stair; breathing that is not hers
+END ON: the candle goes out
+
+SCENE the romance
+AFTER: the knock
+style: a warm romantic drama, golden firelight, soft focus, shallow depth of field
+MUSIC: a gentle solo piano at a slow tempo
+SHOT 7s: arc, slow
+A man in a knitted jumper appears in the warm light with a towel over his arm, as surprised as she is. He hands her the towel; she laughs for the first time all night, and the fire crackles behind them.
+SFX: a crackling fire; the storm muffled outside; soft laughter
+END ON: the door closes on the storm, and the two of them stand by the fire

@@ -1,0 +1,104 @@
+{
+ "preset": "krea/05_tiny_world",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "a tilt-shift photograph of a tabletop diorama of a laundromat at 3 a.m, hand-built from cardboard and balsa wood, tiny figurines of people taking photos, a real red panda as tall as the tallest building, aurora light, shallow depth of field, a blurred living room in the background",
+     "picks": [
+      [
+       "$beast ← __creature__",
+       "red panda"
+      ],
+      [
+       "{cardboard and balsa wood|clay and real moss|plastic toy bricks|folded paper}",
+       "cardboard and balsa wood"
+      ],
+      [
+       "{waiting in line|taking photos|fleeing in panic}",
+       "taking photos"
+      ],
+      [
+       "{as tall as the tallest building|peeking in from the edge of the table|asleep across the middle of it}",
+       "as tall as the tallest building"
+      ],
+      [
+       "__place__",
+       "a laundromat at 3 a.m."
+      ],
+      [
+       "__light__",
+       "aurora light"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "a tilt-shift photograph of a tabletop diorama of a snowed-in train station, hand-built from plastic toy bricks, tiny figurines of people waiting in line, a real axolotl as tall as the tallest building, neon reflections on wet asphalt, shallow depth of field, a blurred living room in the background",
+     "picks": [
+      [
+       "$beast ← __creature__",
+       "axolotl"
+      ],
+      [
+       "{cardboard and balsa wood|clay and real moss|plastic toy bricks|folded paper}",
+       "plastic toy bricks"
+      ],
+      [
+       "{waiting in line|taking photos|fleeing in panic}",
+       "waiting in line"
+      ],
+      [
+       "{as tall as the tallest building|peeking in from the edge of the table|asleep across the middle of it}",
+       "as tall as the tallest building"
+      ],
+      [
+       "__place__",
+       "a snowed-in train station"
+      ],
+      [
+       "__light__",
+       "neon reflections on wet asphalt"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "a tilt-shift photograph of a tabletop diorama of a greenhouse on the moon, hand-built from folded paper, tiny figurines of people waiting in line, a real giant isopod asleep across the middle of it, soft overcast north light, shallow depth of field, a blurred living room in the background",
+     "picks": [
+      [
+       "$beast ← __creature__",
+       "giant isopod"
+      ],
+      [
+       "{cardboard and balsa wood|clay and real moss|plastic toy bricks|folded paper}",
+       "folded paper"
+      ],
+      [
+       "{waiting in line|taking photos|fleeing in panic}",
+       "waiting in line"
+      ],
+      [
+       "{as tall as the tallest building|peeking in from the edge of the table|asleep across the middle of it}",
+       "asleep across the middle of it"
+      ],
+      [
+       "__place__",
+       "a greenhouse on the moon"
+      ],
+      [
+       "__light__",
+       "soft overcast north light"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,124 @@
+{
+ "preset": "tutorial/10_woah_still",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "a train station built entirely from candle wax, a colossal basilisk asleep coiled around its departure board, tiny visitors in 1970s clothing photographing it, aurora light, anamorphic lens with blue flares",
+     "picks": [
+      [
+       "$beast ← __creature[myth]__",
+       "basilisk"
+      ],
+      [
+       "$made_of ← __material__",
+       "candle wax"
+      ],
+      [
+       "{museum|cathedral|train station}",
+       "train station"
+      ],
+      [
+       "{clock tower|bell tower|departure board}",
+       "departure board"
+      ],
+      [
+       "{Victorian|1970s|far-future}",
+       "1970s"
+      ],
+      [
+       "{an aurora overhead|__light__}",
+       "__light__"
+      ],
+      [
+       "__light__",
+       "aurora light"
+      ],
+      [
+       "__lens__",
+       "anamorphic lens with blue flares"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "a train station built entirely from polished obsidian, a colossal jackalope asleep coiled around its departure board, tiny visitors in 1970s clothing photographing it, an aurora overhead, fisheye lens",
+     "picks": [
+      [
+       "$beast ← __creature[myth]__",
+       "jackalope"
+      ],
+      [
+       "$made_of ← __material__",
+       "polished obsidian"
+      ],
+      [
+       "{museum|cathedral|train station}",
+       "train station"
+      ],
+      [
+       "{clock tower|bell tower|departure board}",
+       "departure board"
+      ],
+      [
+       "{Victorian|1970s|far-future}",
+       "1970s"
+      ],
+      [
+       "{an aurora overhead|__light__}",
+       "an aurora overhead"
+      ],
+      [
+       "__lens__",
+       "fisheye lens"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "a train station built entirely from gold leaf, a colossal griffin asleep coiled around its clock tower, tiny visitors in Victorian clothing photographing it, soft overcast north light, 400mm telephoto compression",
+     "picks": [
+      [
+       "$beast ← __creature[myth]__",
+       "griffin"
+      ],
+      [
+       "$made_of ← __material__",
+       "gold leaf"
+      ],
+      [
+       "{museum|cathedral|train station}",
+       "train station"
+      ],
+      [
+       "{clock tower|bell tower|departure board}",
+       "clock tower"
+      ],
+      [
+       "{Victorian|1970s|far-future}",
+       "Victorian"
+      ],
+      [
+       "{an aurora overhead|__light__}",
+       "__light__"
+      ],
+      [
+       "__light__",
+       "soft overcast north light"
+      ],
+      [
+       "__lens__",
+       "400mm telephoto compression"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

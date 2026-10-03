@@ -1,0 +1,92 @@
+{
+ "preset": "tutorial/06_nesting",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "a lone astronaut in a paper spacesuit wandering through a laundromat at 3 a.m.",
+     "picks": [
+      [
+       "{tiny|colossal}",
+       "tiny"
+      ],
+      [
+       "{clockwork|origami|glass}",
+       "origami"
+      ],
+      [
+       "{fox|heron|octopus}",
+       "fox"
+      ],
+      [
+       "{tiny origami fox|lone astronaut in a paper spacesuit}",
+       "lone astronaut in a paper spacesuit"
+      ],
+      [
+       "__place__",
+       "a laundromat at 3 a.m."
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "a tiny clockwork fox wandering through a snowed-in train station",
+     "picks": [
+      [
+       "{tiny|colossal}",
+       "tiny"
+      ],
+      [
+       "{clockwork|origami|glass}",
+       "clockwork"
+      ],
+      [
+       "{fox|heron|octopus}",
+       "fox"
+      ],
+      [
+       "{tiny clockwork fox|lone astronaut in a paper spacesuit}",
+       "tiny clockwork fox"
+      ],
+      [
+       "__place__",
+       "a snowed-in train station"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "a tiny origami octopus wandering through a greenhouse on the moon",
+     "picks": [
+      [
+       "{tiny|colossal}",
+       "tiny"
+      ],
+      [
+       "{clockwork|origami|glass}",
+       "origami"
+      ],
+      [
+       "{fox|heron|octopus}",
+       "octopus"
+      ],
+      [
+       "{tiny origami octopus|lone astronaut in a paper spacesuit}",
+       "tiny origami octopus"
+      ],
+      [
+       "__place__",
+       "a greenhouse on the moon"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

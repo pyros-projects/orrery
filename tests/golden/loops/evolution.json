@@ -1,0 +1,1197 @@
+{
+ "preset": "loops/evolution",
+ "seeds": {
+  "0": {
+   "path": [
+    "the origin",
+    "the generations",
+    "the generations",
+    "the generations",
+    "the generations",
+    "the generations"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. On the clear ice of a frozen lake, a small creature stirs for the first time: it has a slender body balanced on a long tail, mottled green scales, six thin jointed legs and a single huge dark eye. The camera pushes in at slow speed. It tests its limbs and creeps forward into the light. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: A soft wet click and the faint rustle of its first steps.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "the clear ice of a frozen lake"
+      ],
+      [
+       "$body ← __evo_bodies__",
+       "a slender body balanced on a long tail"
+      ],
+      [
+       "$skin ← __evo_skins__",
+       "mottled green scales"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "six thin jointed legs"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "a single huge dark eye"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on the clear ice of a frozen lake, the creature has changed: it has a slender body balanced on a long tail, mottled green scales, six thin jointed legs and a single huge dark eye. It blinks and looks around as if seeing for the first time. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "the clear ice of a frozen lake"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "eyes"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "a single huge dark eye"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on the clear ice of a frozen lake, the creature has changed: it has a slender body balanced on a long tail, mottled green scales, six thin jointed legs and a single huge dark eye. It tries its new limbs clumsily, then with growing confidence. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "the clear ice of a frozen lake"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "limbs"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "six thin jointed legs"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on the clear ice of a frozen lake, the creature has changed: it has a slender body balanced on a long tail, mottled green scales, six thin jointed legs and no eyes at all, only quivering feelers. It blinks and looks around as if seeing for the first time. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "the clear ice of a frozen lake"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "eyes"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "no eyes at all, only quivering feelers"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on the clear ice of a frozen lake, the creature has changed: it has a slender body balanced on a long tail, mottled green scales, two broad paddle fins and no eyes at all, only quivering feelers. It tries its new limbs clumsily, then with growing confidence. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "the clear ice of a frozen lake"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "limbs"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "two broad paddle fins"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on the clear ice of a frozen lake, the creature has changed: it has a slender body balanced on a long tail, iridescent feathers, two broad paddle fins and no eyes at all, only quivering feelers. The light plays over its new skin as it turns. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "the clear ice of a frozen lake"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "skin"
+      ],
+      [
+       "$skin ← __evo_skins__",
+       "iridescent feathers"
+      ],
+      [
+       "{6% leap}",
+       "leap"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "path": [
+    "the origin",
+    "the generations",
+    "the generations",
+    "the generations",
+    "the generations",
+    "the generations"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. On a rainforest floor of wet leaves, a small creature stirs for the first time: it has a slender body balanced on a long tail, translucent skin that glows faintly blue, six thin jointed legs and no eyes at all, only quivering feelers. The camera pushes in at slow speed. It tests its limbs and creeps forward into the light. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: A soft wet click and the faint rustle of its first steps.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "$body ← __evo_bodies__",
+       "a slender body balanced on a long tail"
+      ],
+      [
+       "$skin ← __evo_skins__",
+       "translucent skin that glows faintly blue"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "six thin jointed legs"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "no eyes at all, only quivering feelers"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a slender body balanced on a long tail, ridged amber plates, six thin jointed legs and no eyes at all, only quivering feelers. The light plays over its new skin as it turns. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "skin"
+      ],
+      [
+       "$skin ← __evo_skins__",
+       "ridged amber plates"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a slender body balanced on a long tail, ridged amber plates, six thin jointed legs and eyes on long stalks. It blinks and looks around as if seeing for the first time. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "eyes"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "eyes on long stalks"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a slender body balanced on a long tail, iridescent feathers, six thin jointed legs and eyes on long stalks. The light plays over its new skin as it turns. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "skin"
+      ],
+      [
+       "$skin ← __evo_skins__",
+       "iridescent feathers"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a slender body balanced on a long tail, iridescent feathers, a ring of soft tentacles and eyes on long stalks. It tries its new limbs clumsily, then with growing confidence. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "limbs"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "a ring of soft tentacles"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a slender body balanced on a long tail, iridescent feathers, a ring of soft tentacles and a row of tiny bright eyes. It blinks and looks around as if seeing for the first time. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "eyes"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "a row of tiny bright eyes"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    }
+   ]
+  },
+  "2": {
+   "path": [
+    "the origin",
+    "the generations",
+    "the generations",
+    "the generations",
+    "the generations",
+    "the generations"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. On the clear ice of a frozen lake, a small creature stirs for the first time: it has a slender body balanced on a long tail, translucent skin that glows faintly blue, two broad paddle fins and a row of tiny bright eyes. The camera pushes in at slow speed. It tests its limbs and creeps forward into the light. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: A soft wet click and the faint rustle of its first steps.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "the clear ice of a frozen lake"
+      ],
+      [
+       "$body ← __evo_bodies__",
+       "a slender body balanced on a long tail"
+      ],
+      [
+       "$skin ← __evo_skins__",
+       "translucent skin that glows faintly blue"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "two broad paddle fins"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "a row of tiny bright eyes"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on the clear ice of a frozen lake, the creature has changed: it has a slender body balanced on a long tail, translucent skin that glows faintly blue, two broad paddle fins and a single huge dark eye. It blinks and looks around as if seeing for the first time. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "the clear ice of a frozen lake"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "eyes"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "a single huge dark eye"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on the clear ice of a frozen lake, the creature has changed: it has a slender body balanced on a long tail, translucent skin that glows faintly blue, two broad paddle fins and a single huge dark eye. It tries its new limbs clumsily, then with growing confidence. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "the clear ice of a frozen lake"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "limbs"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "two broad paddle fins"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on the clear ice of a frozen lake, the creature has changed: it has a slender body balanced on a long tail, translucent skin that glows faintly blue, two broad paddle fins and a row of tiny bright eyes. It blinks and looks around as if seeing for the first time. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "the clear ice of a frozen lake"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "eyes"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "a row of tiny bright eyes"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on the clear ice of a frozen lake, the creature has changed: it has a slender body balanced on a long tail, translucent skin that glows faintly blue, a ring of soft tentacles and a row of tiny bright eyes. It tries its new limbs clumsily, then with growing confidence. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "the clear ice of a frozen lake"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "limbs"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "a ring of soft tentacles"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on the clear ice of a frozen lake, the creature has changed: it has a round, armoured body, translucent skin that glows faintly blue, a ring of soft tentacles and a row of tiny bright eyes. It stretches its new body slowly, as if getting used to its size. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "the clear ice of a frozen lake"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "body"
+      ],
+      [
+       "$body ← __evo_bodies__",
+       "a round, armoured body"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    }
+   ]
+  },
+  "3": {
+   "path": [
+    "the origin",
+    "the generations",
+    "the generations",
+    "the generations",
+    "the generations",
+    "the generations"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. On a tide pool among black rocks, a small creature stirs for the first time: it has a long segmented body, mottled green scales, a pair of delicate wings and eyes on long stalks. The camera pushes in at slow speed. It tests its limbs and creeps forward into the light. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: A soft wet click and the faint rustle of its first steps.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a tide pool among black rocks"
+      ],
+      [
+       "$body ← __evo_bodies__",
+       "a long segmented body"
+      ],
+      [
+       "$skin ← __evo_skins__",
+       "mottled green scales"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "a pair of delicate wings"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "eyes on long stalks"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a tide pool among black rocks, the creature has changed: it has a long segmented body, mottled green scales, a pair of delicate wings and a row of tiny bright eyes. It blinks and looks around as if seeing for the first time. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a tide pool among black rocks"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "eyes"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "a row of tiny bright eyes"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a tide pool among black rocks, the creature has changed: it has a body like a soft glass bead, mottled green scales, a pair of delicate wings and a row of tiny bright eyes. It stretches its new body slowly, as if getting used to its size. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a tide pool among black rocks"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "body"
+      ],
+      [
+       "$body ← __evo_bodies__",
+       "a body like a soft glass bead"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a tide pool among black rocks, the creature has changed: it has a body like a soft glass bead, mottled green scales, a pair of delicate wings and a row of tiny bright eyes. It tries its new limbs clumsily, then with growing confidence. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a tide pool among black rocks"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "limbs"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "a pair of delicate wings"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a tide pool among black rocks, the creature has changed: it has a body like a soft glass bead, mottled green scales, a pair of delicate wings and a row of tiny bright eyes. It tries its new limbs clumsily, then with growing confidence. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a tide pool among black rocks"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "limbs"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "a pair of delicate wings"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a tide pool among black rocks, the creature has changed: it has a body like a soft glass bead, iridescent feathers, a pair of delicate wings and a row of tiny bright eyes. The light plays over its new skin as it turns. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a tide pool among black rocks"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "skin"
+      ],
+      [
+       "$skin ← __evo_skins__",
+       "iridescent feathers"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    }
+   ]
+  },
+  "4": {
+   "path": [
+    "the origin",
+    "the generations",
+    "the generations",
+    "the generations",
+    "the generations",
+    "the generations"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. On a rainforest floor of wet leaves, a small creature stirs for the first time: it has a round, armoured body, ridged amber plates, a pair of delicate wings and eyes on long stalks. The camera pushes in at slow speed. It tests its limbs and creeps forward into the light. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: A soft wet click and the faint rustle of its first steps.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "$body ← __evo_bodies__",
+       "a round, armoured body"
+      ],
+      [
+       "$skin ← __evo_skins__",
+       "ridged amber plates"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "a pair of delicate wings"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "eyes on long stalks"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a round, armoured body, ridged amber plates, a ring of soft tentacles and eyes on long stalks. It tries its new limbs clumsily, then with growing confidence. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "limbs"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "a ring of soft tentacles"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a round, armoured body, ridged amber plates, a ring of soft tentacles and eyes on long stalks. It stretches its new body slowly, as if getting used to its size. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "body"
+      ],
+      [
+       "$body ← __evo_bodies__",
+       "a round, armoured body"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a round, armoured body, ridged amber plates, a pair of delicate wings and eyes on long stalks. It tries its new limbs clumsily, then with growing confidence. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "limbs"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "a pair of delicate wings"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a round, armoured body, ridged amber plates, a pair of delicate wings and eyes on long stalks. It blinks and looks around as if seeing for the first time. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "eyes"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "eyes on long stalks"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a slender body balanced on a long tail, ridged amber plates, a pair of delicate wings and eyes on long stalks. It stretches its new body slowly, as if getting used to its size. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "body"
+      ],
+      [
+       "$body ← __evo_bodies__",
+       "a slender body balanced on a long tail"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    }
+   ]
+  },
+  "5": {
+   "path": [
+    "the origin",
+    "the generations",
+    "the generations",
+    "the generations",
+    "the generations",
+    "the generations"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. On a tide pool among black rocks, a small creature stirs for the first time: it has a round, armoured body, mottled green scales, six thin jointed legs and a row of tiny bright eyes. The camera pushes in at slow speed. It tests its limbs and creeps forward into the light. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: A soft wet click and the faint rustle of its first steps.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a tide pool among black rocks"
+      ],
+      [
+       "$body ← __evo_bodies__",
+       "a round, armoured body"
+      ],
+      [
+       "$skin ← __evo_skins__",
+       "mottled green scales"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "six thin jointed legs"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "a row of tiny bright eyes"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a tide pool among black rocks, the creature has changed: it has a round, armoured body, mottled green scales, six thin jointed legs and a row of tiny bright eyes. It stretches its new body slowly, as if getting used to its size. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a tide pool among black rocks"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "body"
+      ],
+      [
+       "$body ← __evo_bodies__",
+       "a round, armoured body"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a tide pool among black rocks, the creature has changed: it has a round, armoured body, mottled green scales, two broad paddle fins and a row of tiny bright eyes. It tries its new limbs clumsily, then with growing confidence. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a tide pool among black rocks"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "limbs"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "two broad paddle fins"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a tide pool among black rocks, the creature has changed: it has a round, armoured body, mottled green scales, two broad paddle fins and eyes on long stalks. It blinks and looks around as if seeing for the first time. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a tide pool among black rocks"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "eyes"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "eyes on long stalks"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a tide pool among black rocks, the creature has changed: it has a round, armoured body, mottled green scales, a pair of delicate wings and eyes on long stalks. It tries its new limbs clumsily, then with growing confidence. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a tide pool among black rocks"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "limbs"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "a pair of delicate wings"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a tide pool among black rocks, the creature has changed: it has a round, armoured body, mottled green scales, two broad paddle fins and eyes on long stalks. It tries its new limbs clumsily, then with growing confidence. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a tide pool among black rocks"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "limbs"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "two broad paddle fins"
+      ],
+      [
+       "{6% leap}",
+       "leap"
+      ]
+     ]
+    }
+   ]
+  },
+  "6": {
+   "path": [
+    "the origin",
+    "the generations",
+    "the generations",
+    "the generations",
+    "the generations",
+    "the generations"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. On a rainforest floor of wet leaves, a small creature stirs for the first time: it has a slender body balanced on a long tail, mottled green scales, a pair of delicate wings and no eyes at all, only quivering feelers. The camera pushes in at slow speed. It tests its limbs and creeps forward into the light. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: A soft wet click and the faint rustle of its first steps.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "$body ← __evo_bodies__",
+       "a slender body balanced on a long tail"
+      ],
+      [
+       "$skin ← __evo_skins__",
+       "mottled green scales"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "a pair of delicate wings"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "no eyes at all, only quivering feelers"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a slender body balanced on a long tail, mottled green scales, a pair of delicate wings and no eyes at all, only quivering feelers. It blinks and looks around as if seeing for the first time. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "eyes"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "no eyes at all, only quivering feelers"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a slender body balanced on a long tail, translucent skin that glows faintly blue, a pair of delicate wings and no eyes at all, only quivering feelers. The light plays over its new skin as it turns. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "skin"
+      ],
+      [
+       "$skin ← __evo_skins__",
+       "translucent skin that glows faintly blue"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a slender body balanced on a long tail, translucent skin that glows faintly blue, a pair of delicate wings and no eyes at all, only quivering feelers. It tries its new limbs clumsily, then with growing confidence. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "limbs"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "a pair of delicate wings"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a slender body balanced on a long tail, translucent skin that glows faintly blue, a pair of delicate wings and no eyes at all, only quivering feelers. It tries its new limbs clumsily, then with growing confidence. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "limbs"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "a pair of delicate wings"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a body like a soft glass bead, translucent skin that glows faintly blue, a pair of delicate wings and no eyes at all, only quivering feelers. It stretches its new body slowly, as if getting used to its size. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "body"
+      ],
+      [
+       "$body ← __evo_bodies__",
+       "a body like a soft glass bead"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "path": [
+    "the origin",
+    "the generations",
+    "the generations",
+    "the generations",
+    "the generations",
+    "the generations"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. On a rainforest floor of wet leaves, a small creature stirs for the first time: it has a long segmented body, ridged amber plates, six thin jointed legs and a row of tiny bright eyes. The camera pushes in at slow speed. It tests its limbs and creeps forward into the light. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: A soft wet click and the faint rustle of its first steps.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "$body ← __evo_bodies__",
+       "a long segmented body"
+      ],
+      [
+       "$skin ← __evo_skins__",
+       "ridged amber plates"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "six thin jointed legs"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "a row of tiny bright eyes"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a long segmented body, ridged amber plates, a pair of delicate wings and a row of tiny bright eyes. It tries its new limbs clumsily, then with growing confidence. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "limbs"
+      ],
+      [
+       "$limbs ← __evo_limbs__",
+       "a pair of delicate wings"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a round, armoured body, ridged amber plates, a pair of delicate wings and a row of tiny bright eyes. It stretches its new body slowly, as if getting used to its size. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "body"
+      ],
+      [
+       "$body ← __evo_bodies__",
+       "a round, armoured body"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a round, armoured body, ridged amber plates, a pair of delicate wings and no eyes at all, only quivering feelers. It blinks and looks around as if seeing for the first time. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "eyes"
+      ],
+      [
+       "$eyes ← __evo_eyes__",
+       "no eyes at all, only quivering feelers"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a long segmented body, ridged amber plates, a pair of delicate wings and no eyes at all, only quivering feelers. It stretches its new body slowly, as if getting used to its size. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "body"
+      ],
+      [
+       "$body ← __evo_bodies__",
+       "a long segmented body"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Nature documentary, macro photography, soft natural light, one continuous shot. The shot opens as the creature pauses, perfectly still. The camera holds a static shot. A generation later, on a rainforest floor of wet leaves, the creature has changed: it has a long segmented body, ridged amber plates, a pair of delicate wings and no eyes at all, only quivering feelers. It stretches its new body slowly, as if getting used to its size. The shot ends as the creature pauses, perfectly still.\n\noverall_soundscape: Soft rustling and a quiet chirp.\n\nnon_diegetic_music: A slow, curious marimba at a soft volume.",
+     "picks": [
+      [
+       "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
+       "a rainforest floor of wet leaves"
+      ],
+      [
+       "{body|skin|limbs|eyes}",
+       "body"
+      ],
+      [
+       "$body ← __evo_bodies__",
+       "a long segmented body"
+      ],
+      [
+       "{6% leap}",
+       ""
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

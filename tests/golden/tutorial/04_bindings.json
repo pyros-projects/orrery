@@ -1,0 +1,56 @@
+{
+ "preset": "tutorial/04_bindings",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "a medieval altarpiece of a selkie as a patron saint, gold halo, the selkie blessing tiny kneeling pilgrims, but the shadow the selkie casts on the wall is a snow leopard",
+     "picks": [
+      [
+       "$hero ← __creature__",
+       "selkie"
+      ],
+      [
+       "__creature__",
+       "snow leopard"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "a medieval altarpiece of a red panda as a patron saint, gold halo, the red panda blessing tiny kneeling pilgrims, but the shadow the red panda casts on the wall is a qilin",
+     "picks": [
+      [
+       "$hero ← __creature__",
+       "red panda"
+      ],
+      [
+       "__creature__",
+       "qilin"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "a medieval altarpiece of a selkie as a patron saint, gold halo, the selkie blessing tiny kneeling pilgrims, but the shadow the selkie casts on the wall is an anglerfish",
+     "picks": [
+      [
+       "$hero ← __creature__",
+       "selkie"
+      ],
+      [
+       "__creature__",
+       "anglerfish"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

@@ -442,7 +442,7 @@ def galaxy(home: Home, args: dict) -> dict:
 def _ids(args: dict) -> list[str]:
     ids = args.get("ids")
     if not isinstance(ids, list) or not ids or not all(isinstance(i, str) for i in ids):
-        raise ApiError(400, "'ids' must be a list of galaxy output ids.")
+        raise ApiError(400, "'ids' must be a list of gallery output ids.")
     return ids
 
 

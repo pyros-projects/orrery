@@ -1,0 +1,68 @@
+{
+ "preset": "h3/06_i2va_bring_to_life",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "For the target video, at 0.00 seconds into the target video, <Picture 1> (from [Shot 1]) is fully referenced.\n\nintegrated_multimodal_description: [Shot 1] The scene begins exactly as in <Picture 1>. The camera pulls out with small amplitude at slow speed. Then the light shifts slowly as a cloud passes, and the main subject slowly turns toward the camera.\n\noverall_soundscape: A light breeze blows and the surroundings murmur faintly.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "__camera__",
+       "pull out, small, slow"
+      ],
+      [
+       "{a light breeze moves hair, fabric and leaves|dust drifts slowly through the light|the light shifts slowly as a cloud passes}",
+       "the light shifts slowly as a cloud passes"
+      ],
+      [
+       "{slowly turns toward the camera|blinks and takes a slow breath|looks up at something above the frame}",
+       "slowly turns toward the camera"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "For the target video, at 0.00 seconds into the target video, <Picture 1> (from [Shot 1]) is fully referenced.\n\nintegrated_multimodal_description: [Shot 1] The scene begins exactly as in <Picture 1>. The camera arcs around the subject at slow speed. Then dust drifts slowly through the light, and the main subject slowly turns toward the camera.\n\noverall_soundscape: A light breeze blows and the surroundings murmur faintly.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "__camera__",
+       "arc, slow"
+      ],
+      [
+       "{a light breeze moves hair, fabric and leaves|dust drifts slowly through the light|the light shifts slowly as a cloud passes}",
+       "dust drifts slowly through the light"
+      ],
+      [
+       "{slowly turns toward the camera|blinks and takes a slow breath|looks up at something above the frame}",
+       "slowly turns toward the camera"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "For the target video, at 0.00 seconds into the target video, <Picture 1> (from [Shot 1]) is fully referenced.\n\nintegrated_multimodal_description: [Shot 1] The scene begins exactly as in <Picture 1>. The camera pushes in with small amplitude at slow speed. Then dust drifts slowly through the light, and the main subject blinks and takes a slow breath.\n\noverall_soundscape: A light breeze blows and the surroundings murmur faintly.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "__camera__",
+       "push in, small, slow"
+      ],
+      [
+       "{a light breeze moves hair, fabric and leaves|dust drifts slowly through the light|the light shifts slowly as a cloud passes}",
+       "dust drifts slowly through the light"
+      ],
+      [
+       "{slowly turns toward the camera|blinks and takes a slow breath|looks up at something above the frame}",
+       "blinks and takes a slow breath"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

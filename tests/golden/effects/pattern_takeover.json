@@ -1,0 +1,80 @@
+{
+ "preset": "effects/pattern_takeover",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands in a dim room, framed from the waist up, one hand resting on the pages of an open book in <Subject 1>'s hands, which is covered in a fine honeycomb of hexagons. The camera pushes in at slow speed. The pattern starts to creep off it and onto the skin of the hand, a clean advancing edge moving a few centimetres at a time, and wherever it passes the skin simply becomes a fine honeycomb of hexagons, flat and exact, as though printed from the inside. <Subject 1> pulls the hand away, but the pattern keeps travelling up the wrist, across the forearm and over the shoulder, its edge sharp against the untouched skin. It reaches the neck and climbs along the jaw. <Subject 1> touches the changed skin and it feels exactly like skin. In the final moment the whole pattern begins to move, slowly turning across the body.\n\noverall_soundscape: Quiet room ambience, uneasy breathing, a dry whispering sound like ink spreading across paper, and the rustle of fabric.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "{tight black spirals|the faded floral print of old wallpaper|tiny handwritten lines of text|a fine honeycomb of hexagons}",
+       "a fine honeycomb of hexagons"
+      ],
+      [
+       "{the wall HOST leans against|the pages of an open book in HOST's hands|a small tattoo on HOST's wrist}",
+       "the pages of an open book in HOST's hands"
+      ],
+      [
+       "{the pattern reaches the eyes and the irises become part of it|HOST steps back, and where the body was the pattern now covers the empty air in a person-shaped outline|the whole pattern begins to move, slowly turning across the body}",
+       "the whole pattern begins to move, slowly turning across the body"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the young man of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands in a dim room, framed from the waist up, one hand resting on the wall <Subject 1> leans against, which is covered in the faded floral print of old wallpaper. The camera pushes in at slow speed. The pattern starts to creep off it and onto the skin of the hand, a clean advancing edge moving a few centimetres at a time, and wherever it passes the skin simply becomes the faded floral print of old wallpaper, flat and exact, as though printed from the inside. <Subject 1> pulls the hand away, but the pattern keeps travelling up the wrist, across the forearm and over the shoulder, its edge sharp against the untouched skin. It reaches the neck and climbs along the jaw. <Subject 1> touches the changed skin and it feels exactly like skin. In the final moment <Subject 1> steps back, and where the body was the pattern now covers the empty air in a person-shaped outline.\n\noverall_soundscape: Quiet room ambience, uneasy breathing, a dry whispering sound like ink spreading across paper, and the rustle of fabric.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the young man"
+      ],
+      [
+       "{tight black spirals|the faded floral print of old wallpaper|tiny handwritten lines of text|a fine honeycomb of hexagons}",
+       "the faded floral print of old wallpaper"
+      ],
+      [
+       "{the wall HOST leans against|the pages of an open book in HOST's hands|a small tattoo on HOST's wrist}",
+       "the wall HOST leans against"
+      ],
+      [
+       "{the pattern reaches the eyes and the irises become part of it|HOST steps back, and where the body was the pattern now covers the empty air in a person-shaped outline|the whole pattern begins to move, slowly turning across the body}",
+       "HOST steps back, and where the body was the pattern now covers the empty air in a person-shaped outline"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands in a dim room, framed from the waist up, one hand resting on the pages of an open book in <Subject 1>'s hands, which is covered in the faded floral print of old wallpaper. The camera pushes in at slow speed. The pattern starts to creep off it and onto the skin of the hand, a clean advancing edge moving a few centimetres at a time, and wherever it passes the skin simply becomes the faded floral print of old wallpaper, flat and exact, as though printed from the inside. <Subject 1> pulls the hand away, but the pattern keeps travelling up the wrist, across the forearm and over the shoulder, its edge sharp against the untouched skin. It reaches the neck and climbs along the jaw. <Subject 1> touches the changed skin and it feels exactly like skin. In the final moment the whole pattern begins to move, slowly turning across the body.\n\noverall_soundscape: Quiet room ambience, uneasy breathing, a dry whispering sound like ink spreading across paper, and the rustle of fabric.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "{tight black spirals|the faded floral print of old wallpaper|tiny handwritten lines of text|a fine honeycomb of hexagons}",
+       "the faded floral print of old wallpaper"
+      ],
+      [
+       "{the wall HOST leans against|the pages of an open book in HOST's hands|a small tattoo on HOST's wrist}",
+       "the pages of an open book in HOST's hands"
+      ],
+      [
+       "{the pattern reaches the eyes and the irises become part of it|HOST steps back, and where the body was the pattern now covers the empty air in a person-shaped outline|the whole pattern begins to move, slowly turning across the body}",
+       "the whole pattern begins to move, slowly turning across the body"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

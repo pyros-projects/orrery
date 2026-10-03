@@ -54,16 +54,16 @@ setting. When the node runs, the model
   `output/h3_context`; wire a string into `latent_path` if yours lives
   elsewhere.
 
-**Generate** (next to Test in the Prompt tab) queues only what this node feeds,
+**Roll** (next to Test in the Prompt tab, with how many runs after it: next 3 clips, next 8 images) queues only what this node feeds,
 up to its Save and Preview nodes, and the files those Save nodes write go to
-the galaxy with this run's picks, so Orrery Log is optional. The `×` field
+the gallery with this run's picks, so Orrery Log is optional. The `×` field
 beside it queues that many runs in a row, seed and segment stepping between
 them. For a reel the bar shows the segment being generated (or the next one),
 and **Restart** cancels this node's queued and running clips, sets segment to
 0 and generates from the start; other jobs in the queue stay.
 
 **LoRA sweeps.** A LoRA tag with several strengths, in a text prompt or on a
-`LORA:` line, makes Generate run once per strength:
+`LORA:` line, makes Roll run once per strength:
 
 ```
 <lora:relim_v2_lora_500:0.5,0.6,0.7>                      3 runs
@@ -78,12 +78,12 @@ Swept LoRAs combine, the first in the text changing slowest; `solo` ones take
 turns with the other solo LoRAs off, and combined ones run with every turn.
 Strength 0 is off (the tag leaves the prompt), and identical runs run once, so
 `0,1` on two solo LoRAs gives one bare baseline. The button says what it will
-do (`Generate ×4 · sweep 2 + 2`) and asks first above 50 runs. One seed holds
+do (`Roll ×4 · sweep 2 + 2`) and asks first above 50 runs. One seed holds
 for the whole sweep; the `×` field becomes the number of seeds, each running
 the whole sweep. A reel's segment stays, so every run renders the same clip.
 While the runs are being queued, the editor waits (each queue item reads the
 template) and **Stop** ends the queueing. Every output records the swept
-strengths as picks (`<lora:a>` = 0.5, or off) and lands in a galaxy folder
+strengths as picks (`<lora:a>` = 0.5, or off) and lands in a gallery folder
 `sweeps/<first swept LoRA> <date> <time>`. ComfyUI's own Run takes the first
 run. `@style(0.5,0.7)` is short for the tag and sweeps the same; a range without
 a step, `<lora:style:0.4-0.9>`, rolls a strength per run instead. A library
@@ -96,9 +96,9 @@ entry takes its first strength and warns.
 sweeps strengths, and a LoRA strength can be one of its axes
 (`<lora:x:{0.5|0.7}>` with `@grid {0.5|0.7}`): one run per combination, everything else rolled the same, so
 the cells compare. The server plans both (it knows the libraries), the
-button says `Generate ×12 · sweep 2 × grid 3 × 2` with a LoRA sweep in the
+button says `Roll ×12 · sweep 2 × grid 3 × 2` with a LoRA sweep in the
 template too (its runs the outer loop), and the outputs land in the same kind
-of galaxy folder. A grid that cannot run says why in the footer.
+of gallery folder. A grid that cannot run says why in the footer.
 
 Everything a run needs goes to the model in one request (ComfyUI cannot
 safely generate twice in one run); ComfyUI moves the model out when the video

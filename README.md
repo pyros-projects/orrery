@@ -32,7 +32,7 @@
 ---
 
 <div align="center">
-  <img src=".github/showcase.png" alt="The orrery node in ComfyUI: the Backrooms preset, an endless found-footage reel, with its variables, reel timing and Generate ×N" width="820">
+  <img src=".github/showcase.png" alt="The orrery node in ComfyUI: the Backrooms preset, an endless found-footage reel, with its variables, reel timing and Roll" width="820">
 </div>
 
 ## Why orrery?
@@ -58,7 +58,7 @@ run to be different, and a little better than the last, orrery is for you.
   one click, watch which one is rendering, restart from the top. `REMEMBER:`
   hands frames of an early clip to the later ones as references, so a face or an
   outfit holds for the whole reel; `AFTER:` branches several scenes off one clip.
-- **Ships a content pack worth pressing Generate for.** 75 presets and 878
+- **Ships a content pack worth pressing Roll for.** 80 presets and 878
   hand-written entries: drone odysseys, set changes, the Backrooms, a time
   machine, one-click random stills and clips, a creature test for H3.
 - **Keeps random coherent.** The sound matches the place, the animal lands in
@@ -71,7 +71,7 @@ run to be different, and a little better than the last, orrery is for you.
   browse its ideas and insert the one you like.
 - **Tests your LoRAs.** `<lora:style:0.5,0.7,1.0>` or `0-1;0.1` and one click
   runs every strength on the same seed, several LoRAs combined or in turns,
-  the whole sweep in a galaxy folder of its own to compare and rate.
+  the whole sweep in a gallery folder of its own to compare and rate.
 - **Traces every output back.** Each output remembers its template, seed and
   every choice it rolled: re-run it exactly, or change one choice and keep the
   rest.
@@ -107,7 +107,7 @@ built from ComfyUI's own nodes plus orrery's, each with notes on the models it
 needs and where they go. Or add **orrery → Orrery Prompt** to a graph of your
 own: wire its `text` output into your prompt input (and `width`, `height`,
 `length` into the latent for H3), open a preset such as `@onebutton/clip` or
-`@loops/backrooms`, and press **Generate**. **New** starts a blank H3 scene,
+`@loops/backrooms`, and press **Roll**. **New** starts a blank H3 scene,
 reel, reference or keyframe screenplay, or a Krea prompt, each with a
 quickstart in its comments.
 
@@ -212,20 +212,21 @@ END ON: the camera rests squarely facing a closed door
 ```
 
 Each run writes one clip. Wire the picks into Orrery Continue (and the clip
-into Orrery Film), set Generate to ×10, and the reel plays clip after clip,
+into Orrery Film), set Roll to the next 10 clips, and the reel plays clip after clip,
 every one continuing the last 22 frames, picture and sound, of the one before.
 
 ## Documentation
 
 | Guide | What is in it |
 |---|---|
-| [The prompt language](docs/dsl.md) | every construct, libraries and wildcard packs, variables you turn from outside |
+| [The prompt language](docs/dsl.md) | every construct, libraries and wildcard packs, variables you turn from outside, what the language guarantees |
 | [H3 screenplays](docs/h3.md) | modes, casts, reels, the compiler's output and lint |
 | [Orrery Refs](docs/orrery-refs.md) | a tutorial: reference images per clip, numbers that match, frames of earlier clips with `REMEMBER:` |
 | [Presets and the content pack](docs/presets.md) | template references, saving presets, what ships built in |
-| [The ComfyUI nodes](docs/comfyui.md) | outputs, the app's six tabs, Generate and Restart |
+| [The ComfyUI nodes](docs/comfyui.md) | outputs, the app's six tabs, Roll and Restart |
 | [The wildcard manager](docs/wildcard-manager.md) | editing libraries in plain language, the language model in ComfyUI, the Write menu |
 | [Configuration](docs/configuration.md) | the orrery home folder and model settings |
+| [Changelog](CHANGELOG.md) | what changed, version by version |
 
 ## How It Works
 

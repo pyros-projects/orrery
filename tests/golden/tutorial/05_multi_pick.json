@@ -1,0 +1,56 @@
+{
+ "preset": "tutorial/05_multi_pick",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "a chess set frozen mid-game, every piece carved from polished obsidian, stained glass, on a board of frosted glass, macro lens, museum lighting",
+     "picks": [
+      [
+       "__material__ ×2",
+       "polished obsidian, stained glass"
+      ],
+      [
+       "__material__",
+       "frosted glass"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "a chess set frozen mid-game, every piece carved from polished obsidian, rusted iron, on a board of rusted iron, macro lens, museum lighting",
+     "picks": [
+      [
+       "__material__ ×2",
+       "polished obsidian, rusted iron"
+      ],
+      [
+       "__material__",
+       "rusted iron"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "a chess set frozen mid-game, every piece carved from polished obsidian, cracked marble, on a board of folded paper, macro lens, museum lighting",
+     "picks": [
+      [
+       "__material__ ×2",
+       "polished obsidian, cracked marble"
+      ],
+      [
+       "__material__",
+       "folded paper"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

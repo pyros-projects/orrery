@@ -61,7 +61,7 @@ def _find(home: Home, rid: str) -> dict:
     for row in read_rows(home):
         if row["id"] == rid:
             return row
-    raise KeyError(f"no galaxy output {rid}")
+    raise KeyError(f"no gallery output {rid}")
 
 
 def rate(home: Home, rid: str, rating: str | None) -> tuple[dict, dict[str, float]]:
@@ -73,7 +73,7 @@ def rate(home: Home, rid: str, rating: str | None) -> tuple[dict, dict[str, floa
         if row is not None and row_id(row) == rid:
             break
     else:
-        raise KeyError(f"no galaxy output {rid}")
+        raise KeyError(f"no gallery output {rid}")
     factor = FACTORS.get(rating, 1.0) / FACTORS.get(row.get("rating"), 1.0)
     keys = list(dict.fromkeys(k for p in row.get("picks") or [] for k in p.get("keys") or []))
     weights = home.weights()
@@ -94,7 +94,7 @@ def media_path(home: Home, rid: str) -> Path:
     """The output's file, only for paths the galaxy recorded."""
     media = _find(home, rid).get("media")
     if not media or not Path(media).is_file():
-        raise KeyError(f"galaxy output {rid} has no file on disk")
+        raise KeyError(f"gallery output {rid} has no file on disk")
     return Path(media)
 
 
@@ -121,7 +121,7 @@ def _poster(src: Path):
 def thumbnail(home: Home, rid: str) -> Path:
     src = media_path(home, rid)
     if media_kind(src) not in ("image", "video"):
-        raise KeyError(f"galaxy output {rid} has no picture to preview")
+        raise KeyError(f"gallery output {rid} has no picture to preview")
     return thumb_file(src, home.root / "thumbs" / f"{rid}.webp")
 
 
@@ -224,7 +224,7 @@ def _check_ids(home: Home, ids) -> set[str]:
         raise ValueError("choose at least one output")
     missing = wanted - {r["id"] for r in read_rows(home)}
     if missing:
-        raise KeyError(f"no galaxy output {min(missing)}")
+        raise KeyError(f"no gallery output {min(missing)}")
     return wanted
 
 
@@ -249,7 +249,7 @@ def move(home: Home, ids, folder) -> int:
 def _known(home: Home, path) -> str:
     path = clean_folder(path)
     if not path or path not in {f["path"] for f in folders(home)}:
-        raise KeyError(f"no galaxy folder {path or '(none)'}")
+        raise KeyError(f"no gallery folder {path or '(none)'}")
     return path
 
 

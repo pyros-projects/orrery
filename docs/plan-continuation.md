@@ -1,6 +1,6 @@
 # Plan: orrery's own continuation, on Continuum's Masked AV
 
-Status: approved 2026-10-02.
+Status: approved and built 2026-10-02.
 
 ## Why
 

@@ -1,0 +1,44 @@
+{
+ "preset": "tutorial/02_inline_choices",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "a paper boat with a tiny lantern on its mast, drifting through the rings of Saturn",
+     "picks": [
+      [
+       "{a flooded cathedral|a neon-lit city gutter|the rings of Saturn|a teacup the size of a lake}",
+       "the rings of Saturn"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "a paper boat with a tiny lantern on its mast, drifting through the rings of Saturn",
+     "picks": [
+      [
+       "{a flooded cathedral|a neon-lit city gutter|the rings of Saturn|a teacup the size of a lake}",
+       "the rings of Saturn"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "a paper boat with a tiny lantern on its mast, drifting through a teacup the size of a lake",
+     "picks": [
+      [
+       "{a flooded cathedral|a neon-lit city gutter|the rings of Saturn|a teacup the size of a lake}",
+       "a teacup the size of a lake"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,104 @@
+{
+ "preset": "fashion/runway_walk",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = a gaunt model with a shaved head\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film. <Subject 1> walks down the runway at the ballroom of a crumbling palace in an ontologically draped, melancholic baroque look from Atelier Sans Titre: sleeves that forget where the arm ends in moss velvet. The camera tracks the moving subject at slow speed. Camera flashes burst from both sides while the front row watches in total silence. [Shot 2] At 00:06.000, the camera cuts to a close-up of <Subject 1> stopping at the end of the runway, holding a blank stare for a beat, then turning away. The camera holds a static shot.\n\noverall_soundscape: Sharp heel strikes on a hard floor and a rapid ripple of camera shutters. A single cough in the audience.\n\nnon_diegetic_music: A heavy techno pulse at a slow tempo with a distorted kick drum.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Atelier Sans Titre"
+      ],
+      [
+       "__couture_adjective__ ×2",
+       "ontologically draped, melancholic baroque"
+      ],
+      [
+       "__couture_model__",
+       "a gaunt model with a shaved head"
+      ],
+      [
+       "__couture_venue__",
+       "the ballroom of a crumbling palace"
+      ],
+      [
+       "__couture_form__",
+       "sleeves that forget where the arm ends"
+      ],
+      [
+       "__couture_material__",
+       "moss velvet"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = a stern silver-haired model\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film. <Subject 1> walks down the runway at a runway of wet black sand in a post-luxury, sartorially agnostic look from Studio Kessler-Mourne: lapels that fold back into themselves in boiled wool. The camera tracks the moving subject at slow speed. Camera flashes burst from both sides while the front row watches in total silence. [Shot 2] At 00:06.000, the camera cuts to a close-up of <Subject 1> stopping at the end of the runway, holding a blank stare for a beat, then turning away. The camera holds a static shot.\n\noverall_soundscape: Sharp heel strikes on a hard floor and a rapid ripple of camera shutters. A single cough in the audience.\n\nnon_diegetic_music: A heavy techno pulse at a slow tempo with a distorted kick drum.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Studio Kessler-Mourne"
+      ],
+      [
+       "__couture_adjective__ ×2",
+       "post-luxury, sartorially agnostic"
+      ],
+      [
+       "__couture_model__",
+       "a stern silver-haired model"
+      ],
+      [
+       "__couture_venue__",
+       "a runway of wet black sand"
+      ],
+      [
+       "__couture_form__",
+       "lapels that fold back into themselves"
+      ],
+      [
+       "__couture_material__",
+       "boiled wool"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = a pale model with bleached eyelashes and no brows\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic fashion film. <Subject 1> walks down the runway at a greenhouse full of dead orchids in a quietly unwearable, deconstructed look from Maison Absente: pockets placed exactly where regret lives in crushed silver lamé. The camera tracks the moving subject at slow speed. Camera flashes burst from both sides while the front row watches in total silence. [Shot 2] At 00:06.000, the camera cuts to a close-up of <Subject 1> stopping at the end of the runway, holding a blank stare for a beat, then turning away. The camera holds a static shot.\n\noverall_soundscape: Sharp heel strikes on a hard floor and a rapid ripple of camera shutters. A single cough in the audience.\n\nnon_diegetic_music: A heavy techno pulse at a slow tempo with a distorted kick drum.",
+     "picks": [
+      [
+       "$house ← __couture_house__",
+       "Maison Absente"
+      ],
+      [
+       "__couture_adjective__ ×2",
+       "quietly unwearable, deconstructed"
+      ],
+      [
+       "__couture_model__",
+       "a pale model with bleached eyelashes and no brows"
+      ],
+      [
+       "__couture_venue__",
+       "a greenhouse full of dead orchids"
+      ],
+      [
+       "__couture_form__",
+       "pockets placed exactly where regret lives"
+      ],
+      [
+       "__couture_material__",
+       "crushed silver lamé"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

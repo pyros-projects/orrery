@@ -1,0 +1,92 @@
+{
+ "preset": "effects/feature_multiply",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a tiled changing room at a public swimming pool, framed from the chest up, calm and ordinary. The camera pushes in at slow speed. A thin line appears on the skin along the inside of the forearm and opens like an eyelid: a perfectly formed human eye looks out, glistening, and blinks. A moment later a second line opens beside it, then a third, each eye appearing in the same neat row at the same careful distance, until there are four of them. They blink slightly out of time with one another, and each one looks in its own direction. <Subject 1>'s own eyes stay wide and still, as if afraid that moving them would wake the others. In the final moment the newest eye opens last and it is a different colour from all the others.\n\noverall_soundscape: Quiet room ambience, shallow breathing, a soft moist click each time an eye opens, and overlapping blinks like tiny wet shutters.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a tiled changing room at a public swimming pool"
+      ],
+      [
+       "{down the side of the neck|across the forehead|along the inside of the forearm}",
+       "along the inside of the forearm"
+      ],
+      [
+       "{four|seven|a dozen}",
+       "four"
+      ],
+      [
+       "{all the eyes blink together once, perfectly in time for the first time|every eye turns at once to look straight into the camera|the newest eye opens last and it is a different colour from all the others}",
+       "the newest eye opens last and it is a different colour from all the others"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the young man of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a dim apartment sitting room, framed from the chest up, calm and ordinary. The camera pushes in at slow speed. A thin line appears on the skin across the forehead and opens like an eyelid: a perfectly formed human eye looks out, glistening, and blinks. A moment later a second line opens beside it, then a third, each eye appearing in the same neat row at the same careful distance, until there are four of them. They blink slightly out of time with one another, and each one looks in its own direction. <Subject 1>'s own eyes stay wide and still, as if afraid that moving them would wake the others. In the final moment the newest eye opens last and it is a different colour from all the others.\n\noverall_soundscape: Quiet room ambience, shallow breathing, a soft moist click each time an eye opens, and overlapping blinks like tiny wet shutters.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the young man"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a dim apartment sitting room"
+      ],
+      [
+       "{down the side of the neck|across the forehead|along the inside of the forearm}",
+       "across the forehead"
+      ],
+      [
+       "{four|seven|a dozen}",
+       "four"
+      ],
+      [
+       "{all the eyes blink together once, perfectly in time for the first time|every eye turns at once to look straight into the camera|the newest eye opens last and it is a different colour from all the others}",
+       "the newest eye opens last and it is a different colour from all the others"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a narrow hotel corridor, framed from the chest up, calm and ordinary. The camera pushes in at slow speed. A thin line appears on the skin along the inside of the forearm and opens like an eyelid: a perfectly formed human eye looks out, glistening, and blinks. A moment later a second line opens beside it, then a third, each eye appearing in the same neat row at the same careful distance, until there are seven of them. They blink slightly out of time with one another, and each one looks in its own direction. <Subject 1>'s own eyes stay wide and still, as if afraid that moving them would wake the others. In the final moment all the eyes blink together once, perfectly in time for the first time.\n\noverall_soundscape: Quiet room ambience, shallow breathing, a soft moist click each time an eye opens, and overlapping blinks like tiny wet shutters.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a narrow hotel corridor"
+      ],
+      [
+       "{down the side of the neck|across the forehead|along the inside of the forearm}",
+       "along the inside of the forearm"
+      ],
+      [
+       "{four|seven|a dozen}",
+       "seven"
+      ],
+      [
+       "{all the eyes blink together once, perfectly in time for the first time|every eye turns at once to look straight into the camera|the newest eye opens last and it is a different colour from all the others}",
+       "all the eyes blink together once, perfectly in time for the first time"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

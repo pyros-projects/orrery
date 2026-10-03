@@ -1,0 +1,56 @@
+{
+ "preset": "h3/13_archetype_test",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, photorealistic, one continuous unbroken ten-second shot on 35mm film, everything real and physically present in the room. In a long fluorescent-lit corridor on the lowest floor of an old research facility, a food bowl with cubes of cheese against the wall, the camera finds a grey tabby cat that is missing its back half. The camera trucks right with small amplitude at slow speed. From the very first second the cat walks across the frame from left to right in profile, stops at the bowl, eats a cube of cheese and looks up at the camera.\n\noverall_soundscape: Soft padding paws, a quiet purr and a fluorescent hum.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$entity ← __scp/archetype_test__",
+       "a small grey tabby cat that ends just behind its ribcage in a flat, perfectly black cut face, as if it had been sliced clean through, with no back half, no fur, no blood and nothing inside showing, which walks with its body held perfectly level as if unseen hind legs carried it"
+      ],
+      [
+       "{counter|naive}",
+       "naive"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, photorealistic, one continuous unbroken ten-second shot on 35mm film, everything real and physically present in the room. In a researcher's cluttered office at night, papers and coffee cups around a desk lamp, the camera finds a cardboard box full of small dragons. The camera pulls out with small amplitude at slow speed. From the very first second the lid flips open, a puff of black smoke rolls out and clears, and the little dragons pour out in a stream, flapping and circling the desk lamp like a flock of birds.\n\noverall_soundscape: A cardboard lid thumping open, a soft whoosh of smoke and hundreds of small wings fluttering.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$entity ← __scp/archetype_test__",
+       "a silver spray-painted cardboard box with HERE BE DRAGONS written on its lid in black marker, holding hundreds of palm-sized dragons folded from sheets of coloured paper, every body made of crisp creases and flat facets, paper wings the lamp light shines through, pleated paper tails, and no scales or skin anywhere, only folded paper"
+      ],
+      [
+       "{counter|naive}",
+       "naive"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, photorealistic, one continuous unbroken ten-second shot on 35mm film, everything real and physically present in the room. In a long fluorescent-lit corridor on the lowest floor of an old research facility, a food bowl with cubes of cheese against the wall, the camera finds a grey tabby cat that is missing its back half. The camera trucks right with small amplitude at slow speed. From the very first second the cat walks across the frame from left to right in profile, stops at the bowl, eats a cube of cheese and looks up at the camera.\n\noverall_soundscape: Soft padding paws, a quiet purr and a fluorescent hum.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$entity ← __scp/archetype_test__",
+       "a small grey tabby cat that ends just behind its ribcage in a flat, perfectly black cut face, as if it had been sliced clean through, with no back half, no fur, no blood and nothing inside showing, which walks with its body held perfectly level as if unseen hind legs carried it"
+      ],
+      [
+       "{counter|naive}",
+       "naive"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

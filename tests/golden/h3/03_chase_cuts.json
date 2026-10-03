@@ -1,0 +1,44 @@
+{
+ "preset": "h3/03_chase_cuts",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic. A crowded night market on a bridge in monsoon rain, paper lanterns swinging. The camera tracks the moving subject at fast speed. A pangolin sprints between the stalls with a glowing paper lantern in its mouth, knocking over a crate of oranges. [Shot 2] At 00:03.000, the camera cuts to a stall owner in a yellow raincoat vaulting over his counter to give chase. The camera shakes strongly. The owner with a hoarse middle-aged male voice (S1) says: <d>[Cantonese] 站住!</d> [Shot 3] At 00:05.000, the camera cuts to the pangolin leaping off the bridge railing onto a passing boat and vanishing under its canopy, the lantern still glowing. The camera pans right with large amplitude at fast speed.\n\noverall_soundscape: Rain hammers on tarpaulins and oranges bounce across wet planks. A metal gong clatters to the ground.\n\nnon_diegetic_music: Fast taiko drums and a driving upright bass at a quick tempo, building in volume.",
+     "picks": [
+      [
+       "$thief ← __creature[mammal]__",
+       "pangolin"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic. A crowded night market on a bridge in monsoon rain, paper lanterns swinging. The camera tracks the moving subject at fast speed. A pangolin sprints between the stalls with a glowing paper lantern in its mouth, knocking over a crate of oranges. [Shot 2] At 00:03.000, the camera cuts to a stall owner in a yellow raincoat vaulting over his counter to give chase. The camera shakes strongly. The owner with a hoarse middle-aged male voice (S1) says: <d>[Cantonese] 站住!</d> [Shot 3] At 00:05.000, the camera cuts to the pangolin leaping off the bridge railing onto a passing boat and vanishing under its canopy, the lantern still glowing. The camera pans right with large amplitude at fast speed.\n\noverall_soundscape: Rain hammers on tarpaulins and oranges bounce across wet planks. A metal gong clatters to the ground.\n\nnon_diegetic_music: Fast taiko drums and a driving upright bass at a quick tempo, building in volume.",
+     "picks": [
+      [
+       "$thief ← __creature[mammal]__",
+       "pangolin"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic. A crowded night market on a bridge in monsoon rain, paper lanterns swinging. The camera tracks the moving subject at fast speed. A pangolin sprints between the stalls with a glowing paper lantern in its mouth, knocking over a crate of oranges. [Shot 2] At 00:03.000, the camera cuts to a stall owner in a yellow raincoat vaulting over his counter to give chase. The camera shakes strongly. The owner with a hoarse middle-aged male voice (S1) says: <d>[Cantonese] 站住!</d> [Shot 3] At 00:05.000, the camera cuts to the pangolin leaping off the bridge railing onto a passing boat and vanishing under its canopy, the lantern still glowing. The camera pans right with large amplitude at fast speed.\n\noverall_soundscape: Rain hammers on tarpaulins and oranges bounce across wet planks. A metal gong clatters to the ground.\n\nnon_diegetic_music: Fast taiko drums and a driving upright bass at a quick tempo, building in volume.",
+     "picks": [
+      [
+       "$thief ← __creature[mammal]__",
+       "pangolin"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

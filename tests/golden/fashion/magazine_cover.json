@@ -1,0 +1,92 @@
+{
+ "preset": "fashion/magazine_cover",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "a glossy fashion magazine cover, the masthead \"SILHOUETTE\" in huge high-contrast serif letters across the top, a gaunt model with a shaved head wearing sleeves that forget where the arm ends in moss velvet, a cover line on the left reading \"the hauntological issue\", a small barcode in the corner, studio flash, printed paper texture",
+     "picks": [
+      [
+       "$adjective ← __couture_adjective__",
+       "hauntological"
+      ],
+      [
+       "{VOID|OBJET|ÉPOQUE|SILHOUETTE|NOTHING}",
+       "SILHOUETTE"
+      ],
+      [
+       "__couture_model__",
+       "a gaunt model with a shaved head"
+      ],
+      [
+       "__couture_form__",
+       "sleeves that forget where the arm ends"
+      ],
+      [
+       "__couture_material__",
+       "moss velvet"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "a glossy fashion magazine cover, the masthead \"ÉPOQUE\" in huge high-contrast serif letters across the top, a stern silver-haired model wearing lapels that fold back into themselves in boiled wool, a cover line on the left reading \"the neo-ecclesiastical issue\", a small barcode in the corner, studio flash, printed paper texture",
+     "picks": [
+      [
+       "$adjective ← __couture_adjective__",
+       "neo-ecclesiastical"
+      ],
+      [
+       "{VOID|OBJET|ÉPOQUE|SILHOUETTE|NOTHING}",
+       "ÉPOQUE"
+      ],
+      [
+       "__couture_model__",
+       "a stern silver-haired model"
+      ],
+      [
+       "__couture_form__",
+       "lapels that fold back into themselves"
+      ],
+      [
+       "__couture_material__",
+       "boiled wool"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "a glossy fashion magazine cover, the masthead \"VOID\" in huge high-contrast serif letters across the top, a pale model with bleached eyelashes and no brows wearing pockets placed exactly where regret lives in crushed silver lamé, a cover line on the left reading \"the radically tailored issue\", a small barcode in the corner, studio flash, printed paper texture",
+     "picks": [
+      [
+       "$adjective ← __couture_adjective__",
+       "radically tailored"
+      ],
+      [
+       "{VOID|OBJET|ÉPOQUE|SILHOUETTE|NOTHING}",
+       "VOID"
+      ],
+      [
+       "__couture_model__",
+       "a pale model with bleached eyelashes and no brows"
+      ],
+      [
+       "__couture_form__",
+       "pockets placed exactly where regret lives"
+      ],
+      [
+       "__couture_material__",
+       "crushed silver lamé"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

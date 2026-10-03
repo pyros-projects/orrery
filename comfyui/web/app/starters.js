@@ -29,7 +29,7 @@ const REEL = `# H3 REEL · quickstart: one screenplay, one clip per run, each co
 # Wiring: picks → Orrery Continue, with the H3 node's latent (length → that node: it counts the 22
 #   pinned frames) and conditioning; its latent → the sampler · sampled latent + decoded images and
 #   audio → Orrery Film, whose film is the reel so far
-# Run it: Generate ×N plays N clips · Restart goes back to clip 1 · keep the seed fixed
+# Run it: Roll next N clips · Restart goes back to clip 1 · keep the seed fixed
 # Before the first SCENE is the world (header, style, CAST, $bindings, LORA:, MUSIC:, context:):
 #   it rolls once, so a $binding there stays the same in every clip
 # SCENE [title] [×N | forever] [(test)]   one clip; a $binding inside it rolls again for every clip;

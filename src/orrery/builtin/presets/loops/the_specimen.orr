@@ -1,0 +1,51 @@
+---
+title: "The specimen"
+note: "A Backrooms film that casts its monster first. A test scene films the SCP the seed rolled, alone in its containment cell; it stays out of the film, and REMEMBER keeps a frame of it as @ENTITY. Then the camera wakes in the Backrooms (START WITH opens it) and walks, a new level every clip. After the walk there is a 35% chance that the thing from the footage is waiting, twice at most (CUT TO … ×2 (35%)), and it is the same thing every time, because its picture rides along (dialled to 0.85 with SET). When the walk is over, the camera stumbles back into the level where it woke ($level[\"the waking\"]). Wire the picks into Orrery Refs. The scp/ library is CC BY-SA 3.0: credit the entity's cite when you share what you make."
+tags: [loops, h3, reel, goto, horror, ref2va, send, test]
+---
+@h3 references 16:9 lite 0.6MP
+style: found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height
+context: 22
+MUSIC: N/A
+$scp = __scp/entities__
+
+CAST
+@ENTITY (image 1): the thing from the containment footage
+
+SCENE the specimen (test)
+style: archival containment footage from a fixed camera behind thick glass, flat clinical light, a typed caption burnt into the lower corner
+SHOT 5s: static
+In $scp.cell waits $scp. It $scp.act.
+SFX: $scp.sfx
+REMEMBER: frame at 2s as @ENTITY
+
+SCENE the waking
+$level = __backrooms/levels#start:yes__
+START WITH: the camera lies on its side on damp carpet, then the operator picks it up with shaking hands
+SHOT 6s: push in, slow
+The operator gets to their feet in $level and walks forward. The place is completely empty and goes on in every direction.
+SFX: $level.sfx; the operator's breathing close to the microphone
+END ON: the camera reaches a doorway at the end of the room, dark on the other side
+
+SCENE the walk ×2
+$level = __backrooms/levels__
+SHOT 6s: push in, slow
+The operator steps through into $level, which looks nothing like $level[-1]. They walk on, slower now, the camera sweeping every corner.
+SFX: $level.sfx; footsteps and breath close to the microphone
+END ON: something moves at the edge of the light
+CUT TO: contact ×2 (35%)
+CUT TO: the way back
+
+SCENE contact
+SET: @ENTITY(0.85)
+SHOT 6s: static
+The operator freezes. @ENTITY is in the room, between the camera and the way on, and it is exactly the thing from the containment footage. The picture trembles in the operator's hands; then they turn and run.
+SFX: $scp.sfx, suddenly very close; the operator's breath catching
+END ON: the operator throws themselves through the nearest doorway
+CUT TO: the walk
+
+SCENE the way back
+SHOT 8s: tracking, slow
+The operator stumbles through one more doorway and stops: it is $level["the waking"] again, the room where the camera woke, exactly as it was. Far behind them, something follows.
+SFX: the fluorescent hum swelling; slow footsteps that are not the operator's
+END ON: the tape runs out into blue static

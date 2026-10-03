@@ -1,0 +1,80 @@
+{
+ "preset": "effects/zipper_spine",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands with their back to the camera in a tiled changing room at a public swimming pool, framed from the hips up. The camera pushes in at slow speed. A narrow seam appears along the spine from the base of the neck downward, and small interlocking teeth organise along both sides of it into a perfect living zipper; a small pull tab forms at the nape. <Subject 1> reaches behind the head, finds the tab and slowly pulls it down. The back opens along the centreline, the two sides hinging outward around the ribs like flexible panels, and inside is not anatomy but a dim staircase leading down and away, far deeper than the torso. <Subject 1> stops at the lower back and turns the head over one shoulder toward the camera while the open back stays perfectly still. In the final moment a small light switches on far down inside.\n\noverall_soundscape: Quiet room ambience, restrained breathing, a precise zipper sound, the soft separation of the back, and a distant hollow room tone from the impossible interior.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a tiled changing room at a public swimming pool"
+      ],
+      [
+       "{a narrow vertical corridor descending into darkness|a dim staircase leading down and away|a long hallway with a single lit doorway far away}",
+       "a dim staircase leading down and away"
+      ],
+      [
+       "{a faint movement appears deep inside and comes slightly closer before HOST can close the zipper|a pale hand reaches up from the dark interior toward the opening|a small light switches on far down inside}",
+       "a small light switches on far down inside"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the young man of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands with their back to the camera in a dim apartment sitting room, framed from the hips up. The camera pushes in at slow speed. A narrow seam appears along the spine from the base of the neck downward, and small interlocking teeth organise along both sides of it into a perfect living zipper; a small pull tab forms at the nape. <Subject 1> reaches behind the head, finds the tab and slowly pulls it down. The back opens along the centreline, the two sides hinging outward around the ribs like flexible panels, and inside is not anatomy but a dim staircase leading down and away, far deeper than the torso. <Subject 1> stops at the lower back and turns the head over one shoulder toward the camera while the open back stays perfectly still. In the final moment a faint movement appears deep inside and comes slightly closer before <Subject 1> can close the zipper.\n\noverall_soundscape: Quiet room ambience, restrained breathing, a precise zipper sound, the soft separation of the back, and a distant hollow room tone from the impossible interior.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the young man"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a dim apartment sitting room"
+      ],
+      [
+       "{a narrow vertical corridor descending into darkness|a dim staircase leading down and away|a long hallway with a single lit doorway far away}",
+       "a dim staircase leading down and away"
+      ],
+      [
+       "{a faint movement appears deep inside and comes slightly closer before HOST can close the zipper|a pale hand reaches up from the dark interior toward the opening|a small light switches on far down inside}",
+       "a faint movement appears deep inside and comes slightly closer before HOST can close the zipper"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands with their back to the camera in a narrow hotel corridor, framed from the hips up. The camera pushes in at slow speed. A narrow seam appears along the spine from the base of the neck downward, and small interlocking teeth organise along both sides of it into a perfect living zipper; a small pull tab forms at the nape. <Subject 1> reaches behind the head, finds the tab and slowly pulls it down. The back opens along the centreline, the two sides hinging outward around the ribs like flexible panels, and inside is not anatomy but a narrow vertical corridor descending into darkness, far deeper than the torso. <Subject 1> stops at the lower back and turns the head over one shoulder toward the camera while the open back stays perfectly still. In the final moment a small light switches on far down inside.\n\noverall_soundscape: Quiet room ambience, restrained breathing, a precise zipper sound, the soft separation of the back, and a distant hollow room tone from the impossible interior.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a narrow hotel corridor"
+      ],
+      [
+       "{a narrow vertical corridor descending into darkness|a dim staircase leading down and away|a long hallway with a single lit doorway far away}",
+       "a narrow vertical corridor descending into darkness"
+      ],
+      [
+       "{a faint movement appears deep inside and comes slightly closer before HOST can close the zipper|a pale hand reaches up from the dark interior toward the opening|a small light switches on far down inside}",
+       "a small light switches on far down inside"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

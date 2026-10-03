@@ -1,0 +1,224 @@
+{
+ "preset": "loops/and_then",
+ "seeds": {
+  "0": {
+   "path": [
+    "and then",
+    "and then some 1/∞",
+    "and then some 2/∞",
+    "and then some 3/∞",
+    "and then some 4/∞",
+    "and then some 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as the footage reaches its last moment, everything exactly where it was. The camera holds a static shot. Everything carries on exactly where the footage left off, and then everything begins to move in slow motion except one small dog. Nobody seems to find it strange. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The footage's own sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "everything begins to move in slow motion except one small dog"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as everyone settles back into what they were doing, as if nothing had happened. The camera holds a static shot. The scene carries on, still marked by the moment everything begins to move in slow motion except one small dog, and then it starts to snow, softly, indoors as much as out. Everyone takes it in their stride. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The scene's sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "it starts to snow, softly, indoors as much as out"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as everyone settles back into what they were doing, as if nothing had happened. The camera holds a static shot. The scene carries on, still marked by the moment it starts to snow, softly, indoors as much as out, and then it starts to snow, softly, indoors as much as out. Everyone takes it in their stride. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The scene's sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "it starts to snow, softly, indoors as much as out"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as everyone settles back into what they were doing, as if nothing had happened. The camera holds a static shot. The scene carries on, still marked by the moment it starts to snow, softly, indoors as much as out, and then gravity tips sideways, and everyone leans into it calmly. Everyone takes it in their stride. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The scene's sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "gravity tips sideways, and everyone leans into it calmly"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as everyone settles back into what they were doing, as if nothing had happened. The camera holds a static shot. The scene carries on, still marked by the moment gravity tips sideways, and everyone leans into it calmly, and then a brass band marches straight through the middle of the scene and out the other side. Everyone takes it in their stride. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The scene's sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "a brass band marches straight through the middle of the scene and out the other side"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as everyone settles back into what they were doing, as if nothing had happened. The camera holds a static shot. The scene carries on, still marked by the moment a brass band marches straight through the middle of the scene and out the other side, and then every loose object lifts a few centimetres off the ground and hangs there. Everyone takes it in their stride. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The scene's sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "every loose object lifts a few centimetres off the ground and hangs there"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "path": [
+    "and then",
+    "and then some 1/∞",
+    "and then some 2/∞",
+    "and then some 3/∞",
+    "and then some 4/∞",
+    "and then some 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as the footage reaches its last moment, everything exactly where it was. The camera holds a static shot. Everything carries on exactly where the footage left off, and then a single red balloon drifts slowly through the frame. Nobody seems to find it strange. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The footage's own sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "a single red balloon drifts slowly through the frame"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as everyone settles back into what they were doing, as if nothing had happened. The camera holds a static shot. The scene carries on, still marked by the moment a single red balloon drifts slowly through the frame, and then a single red balloon drifts slowly through the frame. Everyone takes it in their stride. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The scene's sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "a single red balloon drifts slowly through the frame"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as everyone settles back into what they were doing, as if nothing had happened. The camera holds a static shot. The scene carries on, still marked by the moment a single red balloon drifts slowly through the frame, and then the walls fold away like stage flats, and behind them is a beach at noon. Everyone takes it in their stride. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The scene's sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "the walls fold away like stage flats, and behind them is a beach at noon"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as everyone settles back into what they were doing, as if nothing had happened. The camera holds a static shot. The scene carries on, still marked by the moment the walls fold away like stage flats, and behind them is a beach at noon, and then gravity tips sideways, and everyone leans into it calmly. Everyone takes it in their stride. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The scene's sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "gravity tips sideways, and everyone leans into it calmly"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as everyone settles back into what they were doing, as if nothing had happened. The camera holds a static shot. The scene carries on, still marked by the moment gravity tips sideways, and everyone leans into it calmly, and then a whale glides past in the sky, close enough to touch. Everyone takes it in their stride. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The scene's sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "a whale glides past in the sky, close enough to touch"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as everyone settles back into what they were doing, as if nothing had happened. The camera holds a static shot. The scene carries on, still marked by the moment a whale glides past in the sky, close enough to touch, and then a whale glides past in the sky, close enough to touch. Everyone takes it in their stride. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The scene's sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "a whale glides past in the sky, close enough to touch"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "path": [
+    "and then",
+    "and then some 1/∞",
+    "and then some 2/∞",
+    "and then some 3/∞",
+    "and then some 4/∞",
+    "and then some 5/∞"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as the footage reaches its last moment, everything exactly where it was. The camera holds a static shot. Everything carries on exactly where the footage left off, and then the camera's own reflection appears in the air, waving. Nobody seems to find it strange. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The footage's own sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "the camera's own reflection appears in the air, waving"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as everyone settles back into what they were doing, as if nothing had happened. The camera holds a static shot. The scene carries on, still marked by the moment the camera's own reflection appears in the air, waving, and then a second, identical version of the scene slides in from the left and overlaps the first. Everyone takes it in their stride. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The scene's sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "a second, identical version of the scene slides in from the left and overlaps the first"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as everyone settles back into what they were doing, as if nothing had happened. The camera holds a static shot. The scene carries on, still marked by the moment a second, identical version of the scene slides in from the left and overlaps the first, and then gravity tips sideways, and everyone leans into it calmly. Everyone takes it in their stride. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The scene's sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "gravity tips sideways, and everyone leans into it calmly"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as everyone settles back into what they were doing, as if nothing had happened. The camera holds a static shot. The scene carries on, still marked by the moment gravity tips sideways, and everyone leans into it calmly, and then every loose object lifts a few centimetres off the ground and hangs there. Everyone takes it in their stride. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The scene's sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "every loose object lifts a few centimetres off the ground and hangs there"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as everyone settles back into what they were doing, as if nothing had happened. The camera holds a static shot. The scene carries on, still marked by the moment every loose object lifts a few centimetres off the ground and hangs there, and then gravity tips sideways, and everyone leans into it calmly. Everyone takes it in their stride. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The scene's sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "gravity tips sideways, and everyone leans into it calmly"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, the same look, light and camera as the footage before it, one continuous shot. The shot opens as everyone settles back into what they were doing, as if nothing had happened. The camera holds a static shot. The scene carries on, still marked by the moment gravity tips sideways, and everyone leans into it calmly, and then the light turns to a deep golden sunset in a matter of seconds. Everyone takes it in their stride. The shot ends as everyone settles back into what they were doing, as if nothing had happened.\n\noverall_soundscape: The scene's sound carrying on and then the sound of what happens, close and clear.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$event ← __and_then__",
+       "the light turns to a deep golden sunset in a matter of seconds"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

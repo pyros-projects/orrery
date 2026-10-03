@@ -1,0 +1,56 @@
+{
+ "preset": "tutorial/17_llm_writes_lists",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "a runway photograph: a model walks through unusual_runway_venue 0 in runway_shoes 12, direct on-camera flash, a crowded front row blurred at the edges",
+     "picks": [
+      [
+       "$shoe ← __runway_shoes__",
+       "runway_shoes 12"
+      ],
+      [
+       "$venue ← __unusual_runway_venue__",
+       "unusual_runway_venue 0"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "a runway photograph: a model walks through unusual_runway_venue 1 in runway_shoes 10, direct on-camera flash, a crowded front row blurred at the edges",
+     "picks": [
+      [
+       "$shoe ← __runway_shoes__",
+       "runway_shoes 10"
+      ],
+      [
+       "$venue ← __unusual_runway_venue__",
+       "unusual_runway_venue 1"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "a runway photograph: a model walks through unusual_runway_venue 2 in runway_shoes 19, direct on-camera flash, a crowded front row blurred at the edges",
+     "picks": [
+      [
+       "$shoe ← __runway_shoes__",
+       "runway_shoes 19"
+      ],
+      [
+       "$venue ← __unusual_runway_venue__",
+       "unusual_runway_venue 2"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,80 @@
+{
+ "preset": "effects/glass_body",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a tiled changing room at a public swimming pool, framed from the waist up, moving naturally. The camera pushes in at slow speed. A subtle stiffness begins in the neck: <Subject 1> turns the head and it stops almost instantly, with unusual precision. <Subject 1> raises one hand; the fingers settle into exact angles, each small adjustment producing a faint crystalline tension. <Subject 1> rotates carefully, and a fine hairline fracture appears across the skin near the wrist and travels a few centimetres before stopping. <Subject 1> notices it and becomes extremely careful, lowering the arm with slow controlled movement. Each breath now barely lifts the chest. A thin fracture forms at the temple and branches slowly across the cheek in a beautiful pattern, dividing into finer lines around the jaw. <Subject 1> freezes. Only the eyes move, toward the camera. In the final moment a final tiny crack advances a few millimetres beneath one eye, and <Subject 1> becomes even more still.\n\noverall_soundscape: Quiet room ambience, shallow careful breathing, delicate crystalline tension, and tiny high-pitched crackling as each fracture travels.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a tiled changing room at a public swimming pool"
+      ],
+      [
+       "{the wrist|the collarbone|the knuckles of one hand}",
+       "the wrist"
+      ],
+      [
+       "{a final tiny crack advances a few millimetres beneath one eye, and HOST becomes even more still|HOST exhales, and a delicate web of hairline cracks blooms across the chest and stops|a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor}",
+       "a final tiny crack advances a few millimetres beneath one eye, and HOST becomes even more still"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the young man of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a dim apartment sitting room, framed from the waist up, moving naturally. The camera pushes in at slow speed. A subtle stiffness begins in the neck: <Subject 1> turns the head and it stops almost instantly, with unusual precision. <Subject 1> raises one hand; the fingers settle into exact angles, each small adjustment producing a faint crystalline tension. <Subject 1> rotates carefully, and a fine hairline fracture appears across the skin near the collarbone and travels a few centimetres before stopping. <Subject 1> notices it and becomes extremely careful, lowering the arm with slow controlled movement. Each breath now barely lifts the chest. A thin fracture forms at the temple and branches slowly across the cheek in a beautiful pattern, dividing into finer lines around the jaw. <Subject 1> freezes. Only the eyes move, toward the camera. In the final moment a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor.\n\noverall_soundscape: Quiet room ambience, shallow careful breathing, delicate crystalline tension, and tiny high-pitched crackling as each fracture travels.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the young man"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a dim apartment sitting room"
+      ],
+      [
+       "{the wrist|the collarbone|the knuckles of one hand}",
+       "the collarbone"
+      ],
+      [
+       "{a final tiny crack advances a few millimetres beneath one eye, and HOST becomes even more still|HOST exhales, and a delicate web of hairline cracks blooms across the chest and stops|a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor}",
+       "a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a narrow hotel corridor, framed from the waist up, moving naturally. The camera pushes in at slow speed. A subtle stiffness begins in the neck: <Subject 1> turns the head and it stops almost instantly, with unusual precision. <Subject 1> raises one hand; the fingers settle into exact angles, each small adjustment producing a faint crystalline tension. <Subject 1> rotates carefully, and a fine hairline fracture appears across the skin near the collarbone and travels a few centimetres before stopping. <Subject 1> notices it and becomes extremely careful, lowering the arm with slow controlled movement. Each breath now barely lifts the chest. A thin fracture forms at the temple and branches slowly across the cheek in a beautiful pattern, dividing into finer lines around the jaw. <Subject 1> freezes. Only the eyes move, toward the camera. In the final moment a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor.\n\noverall_soundscape: Quiet room ambience, shallow careful breathing, delicate crystalline tension, and tiny high-pitched crackling as each fracture travels.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a narrow hotel corridor"
+      ],
+      [
+       "{the wrist|the collarbone|the knuckles of one hand}",
+       "the collarbone"
+      ],
+      [
+       "{a final tiny crack advances a few millimetres beneath one eye, and HOST becomes even more still|HOST exhales, and a delicate web of hairline cracks blooms across the chest and stops|a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor}",
+       "a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

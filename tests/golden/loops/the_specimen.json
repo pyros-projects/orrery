@@ -1,0 +1,657 @@
+{
+ "preset": "loops/the_specimen",
+ "seeds": {
+  "0": {
+   "path": [
+    "the specimen",
+    "the waking",
+    "the walk 1/2",
+    "the walk 2/2",
+    "the way back"
+   ],
+   "ended": true,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Archival containment footage from a fixed camera behind thick glass, flat clinical light, a typed caption burnt into the lower corner. In a bright, tidy pen with a padded floor, scattered toys and a bowl of sweets waits a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it. The camera holds a static shot. It wobbles with excitement, slithers across the floor toward the camera, rises up tall and wraps two soft pseudopods around the lens as if hugging it.\n\noverall_soundscape: Happy high-pitched gurgling and cooing and a wet squelch with every movement.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera lies on its side on damp carpet, then the operator picks it up with shaking hands. The camera pushes in at slow speed. The operator gets to their feet in an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it and walks forward. The place is completely empty and goes on in every direction. The shot ends as the camera reaches a doorway at the end of the room, dark on the other side.\n\noverall_soundscape: The loud, even buzz of fluorescent lights and the soft squelch of damp carpet and the operator's breathing close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+      ],
+      [
+       "$level ← __backrooms/levels#start:yes__",
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: A clock ticking loudly and a floor polisher somewhere far away and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into an airport gate lounge at night, rows of empty seats and departure boards showing nothing, which looks nothing like a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: An announcement chime with no announcement and an empty baggage belt turning and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera tracks the moving subject at slow speed. The operator stumbles through one more doorway and stops: it is an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it again, the room where the camera woke, exactly as it was. Far behind them, something follows. The shot ends as the tape runs out into blue static.\n\noverall_soundscape: The fluorescent hum swelling and slow footsteps that are not the operator's.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "path": [
+    "the specimen",
+    "the waking",
+    "the walk 1/2",
+    "the walk 2/2",
+    "contact",
+    "the walk 1/2"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Archival containment footage from a fixed camera behind thick glass, flat clinical light, a typed caption burnt into the lower corner. In the pitch-black deep sea, far below any sunlight, lit only by the floodlights of a small research submersible waits a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions. The camera holds a static shot. It slowly turns its enormous head into the floodlights, its jaw opening and closing as its gills pulse, while a thin film of dark grey slime drifts off its skin.\n\noverall_soundscape: The deep hum of water pressure, a sonar ping and a slow, enormous grinding movement.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera lies on its side on damp carpet, then the operator picks it up with shaking hands. The camera pushes in at slow speed. The operator gets to their feet in an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it and walks forward. The place is completely empty and goes on in every direction. The shot ends as the camera reaches a doorway at the end of the room, dark on the other side.\n\noverall_soundscape: The loud, even buzz of fluorescent lights and the soft squelch of damp carpet and the operator's breathing close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+      ],
+      [
+       "$level ← __backrooms/levels#start:yes__",
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into a concrete stairwell that goes down floor after floor, the same number painted on every landing, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Footsteps echoing from far below and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "a concrete stairwell that goes down floor after floor, the same number painted on every landing"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into a 24-hour laundromat where every machine is turning and no one is there, which looks nothing like a concrete stairwell that goes down floor after floor, the same number painted on every landing. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Dryers tumbling and a fluorescent tube ticking and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "a 24-hour laundromat where every machine is turning and no one is there"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "<Subject 1> = the thing from the containment footage of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera holds a static shot. The operator freezes. <Subject 1> is in the room, between the camera and the way on, and it is exactly the thing from the containment footage. The picture trembles in the operator's hands; then they turn and run. The shot ends as the operator throws themselves through the nearest doorway.\n\noverall_soundscape: The deep hum of water pressure, a sonar ping and a slow, enormous grinding movement, suddenly very close and the operator's breath catching.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the operator throws themselves through the nearest doorway. The camera pushes in at slow speed. The operator steps through into a 24-hour laundromat where every machine is turning and no one is there, which looks nothing like a 24-hour laundromat where every machine is turning and no one is there. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Dryers tumbling and a fluorescent tube ticking and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "a 24-hour laundromat where every machine is turning and no one is there"
+      ]
+     ]
+    }
+   ]
+  },
+  "2": {
+   "path": [
+    "the specimen",
+    "the waking",
+    "the walk 1/2",
+    "the walk 2/2",
+    "the way back"
+   ],
+   "ended": true,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Archival containment footage from a fixed camera behind thick glass, flat clinical light, a typed caption burnt into the lower corner. In a bright, tidy pen with a padded floor, scattered toys and a bowl of sweets waits a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it. The camera holds a static shot. It wobbles with excitement, slithers across the floor toward the camera, rises up tall and wraps two soft pseudopods around the lens as if hugging it.\n\noverall_soundscape: Happy high-pitched gurgling and cooing and a wet squelch with every movement.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera lies on its side on damp carpet, then the operator picks it up with shaking hands. The camera pushes in at slow speed. The operator gets to their feet in an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it and walks forward. The place is completely empty and goes on in every direction. The shot ends as the camera reaches a doorway at the end of the room, dark on the other side.\n\noverall_soundscape: The loud, even buzz of fluorescent lights and the soft squelch of damp carpet and the operator's breathing close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+      ],
+      [
+       "$level ← __backrooms/levels#start:yes__",
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Soft background music from ceiling speakers and a distant escalator running and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere, which looks nothing like an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Water lapping gently and a long, hollow echo and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera tracks the moving subject at slow speed. The operator stumbles through one more doorway and stops: it is an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it again, the room where the camera woke, exactly as it was. Far behind them, something follows. The shot ends as the tape runs out into blue static.\n\noverall_soundscape: The fluorescent hum swelling and slow footsteps that are not the operator's.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+      ]
+     ]
+    }
+   ]
+  },
+  "3": {
+   "path": [
+    "the specimen",
+    "the waking",
+    "the walk 1/2",
+    "the walk 2/2",
+    "contact",
+    "the walk 1/2"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Archival containment footage from a fixed camera behind thick glass, flat clinical light, a typed caption burnt into the lower corner. In a bare steel cube five metres wide, lit by a single caged lamp waits a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees. The camera holds a static shot. It paces slowly along the far wall with its back to the camera, stops, turns its head halfway toward the lens, then snaps its long hands up over its face as its whole body begins to shake.\n\noverall_soundscape: Bare feet slapping on steel, then a thin, rising human wail that breaks into sobbing.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera lies on its side on damp carpet, then the operator picks it up with shaking hands. The camera pushes in at slow speed. The operator gets to their feet in an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it and walks forward. The place is completely empty and goes on in every direction. The shot ends as the camera reaches a doorway at the end of the room, dark on the other side.\n\noverall_soundscape: The loud, even buzz of fluorescent lights and the soft squelch of damp carpet and the operator's breathing close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+      ],
+      [
+       "$level ← __backrooms/levels#start:yes__",
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Water lapping gently and a long, hollow echo and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into an empty indoor play area of coloured ball pits and plastic tubes, half the lights switched off, which looks nothing like endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: A buzzing arcade machine and a single ball rolling somewhere and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "an empty indoor play area of coloured ball pits and plastic tubes, half the lights switched off"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "<Subject 1> = the thing from the containment footage of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera holds a static shot. The operator freezes. <Subject 1> is in the room, between the camera and the way on, and it is exactly the thing from the containment footage. The picture trembles in the operator's hands; then they turn and run. The shot ends as the operator throws themselves through the nearest doorway.\n\noverall_soundscape: Bare feet slapping on steel, then a thin, rising human wail that breaks into sobbing, suddenly very close and the operator's breath catching.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the operator throws themselves through the nearest doorway. The camera pushes in at slow speed. The operator steps through into endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere, which looks nothing like endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Water lapping gently and a long, hollow echo and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+      ]
+     ]
+    }
+   ]
+  },
+  "4": {
+   "path": [
+    "the specimen",
+    "the waking",
+    "the walk 1/2",
+    "the walk 2/2",
+    "contact",
+    "the walk 1/2"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Archival containment footage from a fixed camera behind thick glass, flat clinical light, a typed caption burnt into the lower corner. In a dark, dripping concrete cell lit only by a dim red lamp waits a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back. The camera holds a static shot. It climbs out of the darkness on all fours toward the camera, the spines along its back rising one by one as it senses the air, then opens its jaws and says \"Hello? Is someone there? I'm hurt\" in a calm human man's voice, its jaws barely moving.\n\noverall_soundscape: Wet claws clicking on concrete, water dripping and slow, heavy breathing.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera lies on its side on damp carpet, then the operator picks it up with shaking hands. The camera pushes in at slow speed. The operator gets to their feet in an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it and walks forward. The place is completely empty and goes on in every direction. The shot ends as the camera reaches a doorway at the end of the room, dark on the other side.\n\noverall_soundscape: The loud, even buzz of fluorescent lights and the soft squelch of damp carpet and the operator's breathing close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+      ],
+      [
+       "$level ← __backrooms/levels#start:yes__",
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into narrow maintenance tunnels lined with dripping pipes, valves and dim caged bulbs, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Pipes clanking and steam hissing and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "narrow maintenance tunnels lined with dripping pipes, valves and dim caged bulbs"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into an airport gate lounge at night, rows of empty seats and departure boards showing nothing, which looks nothing like narrow maintenance tunnels lined with dripping pipes, valves and dim caged bulbs. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: An announcement chime with no announcement and an empty baggage belt turning and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "<Subject 1> = the thing from the containment footage of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera holds a static shot. The operator freezes. <Subject 1> is in the room, between the camera and the way on, and it is exactly the thing from the containment footage. The picture trembles in the operator's hands; then they turn and run. The shot ends as the operator throws themselves through the nearest doorway.\n\noverall_soundscape: Wet claws clicking on concrete, water dripping and slow, heavy breathing, suddenly very close and the operator's breath catching.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the operator throws themselves through the nearest doorway. The camera pushes in at slow speed. The operator steps through into a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs, which looks nothing like a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: A clock ticking loudly and a floor polisher somewhere far away and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+      ]
+     ]
+    }
+   ]
+  },
+  "5": {
+   "path": [
+    "the specimen",
+    "the waking",
+    "the walk 1/2",
+    "the walk 2/2",
+    "contact",
+    "the walk 1/2"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Archival containment footage from a fixed camera behind thick glass, flat clinical light, a typed caption burnt into the lower corner. In the pitch-black deep sea, far below any sunlight, lit only by the floodlights of a small research submersible waits a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions. The camera holds a static shot. It slowly turns its enormous head into the floodlights, its jaw opening and closing as its gills pulse, while a thin film of dark grey slime drifts off its skin.\n\noverall_soundscape: The deep hum of water pressure, a sonar ping and a slow, enormous grinding movement.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera lies on its side on damp carpet, then the operator picks it up with shaking hands. The camera pushes in at slow speed. The operator gets to their feet in an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it and walks forward. The place is completely empty and goes on in every direction. The shot ends as the camera reaches a doorway at the end of the room, dark on the other side.\n\noverall_soundscape: The loud, even buzz of fluorescent lights and the soft squelch of damp carpet and the operator's breathing close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+      ],
+      [
+       "$level ← __backrooms/levels#start:yes__",
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into a vast open-plan office of grey cubicles, old monitors glowing green on every desk, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: The high whine of old monitors and a photocopier running by itself and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "a vast open-plan office of grey cubicles, old monitors glowing green on every desk"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into a concrete stairwell that goes down floor after floor, the same number painted on every landing, which looks nothing like a vast open-plan office of grey cubicles, old monitors glowing green on every desk. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Footsteps echoing from far below and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "a concrete stairwell that goes down floor after floor, the same number painted on every landing"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "<Subject 1> = the thing from the containment footage of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera holds a static shot. The operator freezes. <Subject 1> is in the room, between the camera and the way on, and it is exactly the thing from the containment footage. The picture trembles in the operator's hands; then they turn and run. The shot ends as the operator throws themselves through the nearest doorway.\n\noverall_soundscape: The deep hum of water pressure, a sonar ping and a slow, enormous grinding movement, suddenly very close and the operator's breath catching.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the operator throws themselves through the nearest doorway. The camera pushes in at slow speed. The operator steps through into endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere, which looks nothing like endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Water lapping gently and a long, hollow echo and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+      ]
+     ]
+    }
+   ]
+  },
+  "6": {
+   "path": [
+    "the specimen",
+    "the waking",
+    "the walk 1/2",
+    "the walk 2/2",
+    "the way back"
+   ],
+   "ended": true,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Archival containment footage from a fixed camera behind thick glass, flat clinical light, a typed caption burnt into the lower corner. In a bare steel cube five metres wide, lit by a single caged lamp waits a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees. The camera holds a static shot. It paces slowly along the far wall with its back to the camera, stops, turns its head halfway toward the lens, then snaps its long hands up over its face as its whole body begins to shake.\n\noverall_soundscape: Bare feet slapping on steel, then a thin, rising human wail that breaks into sobbing.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera lies on its side on damp carpet, then the operator picks it up with shaking hands. The camera pushes in at slow speed. The operator gets to their feet in an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it and walks forward. The place is completely empty and goes on in every direction. The shot ends as the camera reaches a doorway at the end of the room, dark on the other side.\n\noverall_soundscape: The loud, even buzz of fluorescent lights and the soft squelch of damp carpet and the operator's breathing close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+      ],
+      [
+       "$level ← __backrooms/levels#start:yes__",
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into a huge, dim hall of carpet and square support pillars with no walls in sight, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: A very low hum and an almost total silence and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "a huge, dim hall of carpet and square support pillars with no walls in sight"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights, which looks nothing like a huge, dim hall of carpet and square support pillars with no walls in sight. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Soft background music from ceiling speakers and a distant escalator running and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera tracks the moving subject at slow speed. The operator stumbles through one more doorway and stops: it is an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it again, the room where the camera woke, exactly as it was. Far behind them, something follows. The shot ends as the tape runs out into blue static.\n\noverall_soundscape: The fluorescent hum swelling and slow footsteps that are not the operator's.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "path": [
+    "the specimen",
+    "the waking",
+    "the walk 1/2",
+    "the walk 2/2",
+    "the way back"
+   ],
+   "ended": true,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Archival containment footage from a fixed camera behind thick glass, flat clinical light, a typed caption burnt into the lower corner. In a steel chamber five metres wide, filled almost to the top with steaming acid waits a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils. The camera holds a static shot. It heaves itself up out of the acid, the dissolved flesh on its back knitting itself together as it climbs, and slams its forelimbs against the steel wall hard enough to dent it.\n\noverall_soundscape: Acid hissing and bubbling, a deep wet growl and steel booming and groaning under the blows.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera lies on its side on damp carpet, then the operator picks it up with shaking hands. The camera pushes in at slow speed. The operator gets to their feet in an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it and walks forward. The place is completely empty and goes on in every direction. The shot ends as the camera reaches a doorway at the end of the room, dark on the other side.\n\noverall_soundscape: The loud, even buzz of fluorescent lights and the soft squelch of damp carpet and the operator's breathing close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils"
+      ],
+      [
+       "$level ← __backrooms/levels#start:yes__",
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into an airport gate lounge at night, rows of empty seats and departure boards showing nothing, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: An announcement chime with no announcement and an empty baggage belt turning and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into a 24-hour laundromat where every machine is turning and no one is there, which looks nothing like an airport gate lounge at night, rows of empty seats and departure boards showing nothing. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Dryers tumbling and a fluorescent tube ticking and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils"
+      ],
+      [
+       "$level ← __backrooms/levels__",
+       "a 24-hour laundromat where every machine is turning and no one is there"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera tracks the moving subject at slow speed. The operator stumbles through one more doorway and stops: it is an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it again, the room where the camera woke, exactly as it was. Far behind them, something follows. The shot ends as the tape runs out into blue static.\n\noverall_soundscape: The fluorescent hum swelling and slow footsteps that are not the operator's.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$scp ← __scp/entities__",
+       "a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

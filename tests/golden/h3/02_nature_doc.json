@@ -1,0 +1,44 @@
+{
+ "preset": "h3/02_nature_doc",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, nature documentary footage. Deep underwater, darkness except for a faint blue glow. The camera tracks the moving subject at slow speed. A siphonophore drifts into the beam of a submersible's searchlight, marine snow falling around it. The narrator with a calm, low British male voice (S1) says in an off-screen voiceover: <d>[English] At this depth, sunlight is only a rumour.</d> while their lips remain completely closed. [Shot 2] At 00:05.000, the camera cuts to a close-up of the siphonophore as faint blue and violet light pulses slowly along its body. The camera pushes in with small amplitude at slow speed. The narrator (S1) says in an off-screen voiceover: <d>[English] And yet, the siphonophore makes its own.</d> while their lips remain completely closed.\n\noverall_soundscape: A sonar ping repeats and the submersible's motors hum low. A muffled, slow pulse throbs like a heartbeat.\n\nnon_diegetic_music: A sustained analog synth pad at a slow tempo, very quiet, with a deep bass note entering halfway.",
+     "picks": [
+      [
+       "$beast ← __creature[deep_sea]__",
+       "siphonophore"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, nature documentary footage. Deep underwater, darkness except for a faint blue glow. The camera tracks the moving subject at slow speed. An anglerfish drifts into the beam of a submersible's searchlight, marine snow falling around it. The narrator with a calm, low British male voice (S1) says in an off-screen voiceover: <d>[English] At this depth, sunlight is only a rumour.</d> while their lips remain completely closed. [Shot 2] At 00:05.000, the camera cuts to a close-up of the anglerfish as faint blue and violet light pulses slowly along its body. The camera pushes in with small amplitude at slow speed. The narrator (S1) says in an off-screen voiceover: <d>[English] And yet, the anglerfish makes its own.</d> while their lips remain completely closed.\n\noverall_soundscape: A sonar ping repeats and the submersible's motors hum low. A muffled, slow pulse throbs like a heartbeat.\n\nnon_diegetic_music: A sustained analog synth pad at a slow tempo, very quiet, with a deep bass note entering halfway.",
+     "picks": [
+      [
+       "$beast ← __creature[deep_sea]__",
+       "anglerfish"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, nature documentary footage. Deep underwater, darkness except for a faint blue glow. The camera tracks the moving subject at slow speed. A vampire squid drifts into the beam of a submersible's searchlight, marine snow falling around it. The narrator with a calm, low British male voice (S1) says in an off-screen voiceover: <d>[English] At this depth, sunlight is only a rumour.</d> while their lips remain completely closed. [Shot 2] At 00:05.000, the camera cuts to a close-up of the vampire squid as faint blue and violet light pulses slowly along its body. The camera pushes in with small amplitude at slow speed. The narrator (S1) says in an off-screen voiceover: <d>[English] And yet, the vampire squid makes its own.</d> while their lips remain completely closed.\n\noverall_soundscape: A sonar ping repeats and the submersible's motors hum low. A muffled, slow pulse throbs like a heartbeat.\n\nnon_diegetic_music: A sustained analog synth pad at a slow tempo, very quiet, with a deep bass note entering halfway.",
+     "picks": [
+      [
+       "$beast ← __creature[deep_sea]__",
+       "vampire squid"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

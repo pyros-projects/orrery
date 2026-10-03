@@ -1,0 +1,1593 @@
+{
+ "preset": "loops/the_relay",
+ "seeds": {
+  "0": {
+   "path": [
+    "the start",
+    "the handoff 1/4",
+    "the handoff 2/4",
+    "the handoff 3/4",
+    "the handoff 4/4",
+    "the scramble"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. At a crowded tram stop, a retired watchmaker in his seventies, small and exact, with a high dark brown bun, magnifying loupe marks around one eye and ink-stained fingertips, wearing a cheap grey suit that almost fits finds a potted lemon tree waiting on a bench, as if it had been left for them, picks it up and sets off at a brisk walk. The camera tracks the moving subject at slow speed. The shot ends as the one carrying it hurries around a corner.\n\noverall_soundscape: The city murmuring and quick footsteps.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a potted lemon tree"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a high __characters/looks/hair_color__ bun"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "dark brown"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a cheap grey suit that almost fits"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a crowded tram stop"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the one carrying it hurries around a corner. The camera tracks the moving subject. At a flower market under striped awnings, a retired watchmaker in his seventies, small and exact, with a high dark brown bun, magnifying loupe marks around one eye and ink-stained fingertips, wearing a cheap grey suit that almost fits arrives out of breath with a potted lemon tree and presses it into the hands of a primary school teacher in her thirties, tall and warm, with a close-cropped ginger buzz cut, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing a navy windbreaker and worn jeans, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a potted lemon tree"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a close-cropped __characters/looks/hair_color__ buzz cut"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "ginger"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a navy windbreaker and worn jeans"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a flower market under striped awnings"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a rooftop garden above the traffic, a primary school teacher in her thirties, tall and warm, with a close-cropped ginger buzz cut, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing a navy windbreaker and worn jeans arrives out of breath with a potted lemon tree and presses it into the hands of a hospital cleaner in her sixties, wiry and quick, with short sandy-brown hair in a messy crop, calloused hands, deep laugh lines and a small gold cross at the throat, wearing a creased white shirt with the sleeves rolled up, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a potted lemon tree"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "short __characters/looks/hair_color__ hair in a messy crop"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "sandy-brown"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a creased white shirt with the sleeves rolled up"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a rooftop garden above the traffic"
+      ],
+      [
+       "{25% slips}",
+       "slips"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a narrow stairway between old houses, a hospital cleaner in her sixties, wiry and quick, with short sandy-brown hair in a messy crop, calloused hands, deep laugh lines and a small gold cross at the throat, wearing a creased white shirt with the sleeves rolled up arrives out of breath with a potted lemon tree and presses it into the hands of a lanky pizza courier in his early twenties, all elbows and nervous energy, with short silver-grey hair in a messy crop, a chipped front tooth and a scooter helmet hooked over one arm, wearing a creased white shirt with the sleeves rolled up, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a potted lemon tree"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "short __characters/looks/hair_color__ hair in a messy crop"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "silver-grey"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a creased white shirt with the sleeves rolled up"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a narrow stairway between old houses"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a laundromat late at night, a lanky pizza courier in his early twenties, all elbows and nervous energy, with short silver-grey hair in a messy crop, a chipped front tooth and a scooter helmet hooked over one arm, wearing a creased white shirt with the sleeves rolled up arrives out of breath with a potted lemon tree and presses it into the hands of a single father in his thirties, broad-shouldered and permanently tired, with a ginger pixie cut, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing a green supermarket fleece with a name badge, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a potted lemon tree"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a __characters/looks/hair_color__ pixie cut"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "ginger"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a green supermarket fleece with a name badge"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a laundromat late at night"
+      ],
+      [
+       "{25% slips}",
+       "slips"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject at fast speed. At a laundromat late at night, a potted lemon tree slips out of the carrier's hands and tumbles away across the ground; passers-by dodge and lunge for it until a barista in their twenties, freckled and soft-spoken, with short jet-black hair in a messy crop, small silver hoops along both ears and a burn scar on one wrist, wearing a tracksuit in two slightly different blues snatches it up just in time and walks on, grinning. The shot ends as the new carrier walks on, holding it tight.\n\noverall_soundscape: A clatter, a gasp from the crowd, and scattered laughter.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a potted lemon tree"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "short __characters/looks/hair_color__ hair in a messy crop"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "jet-black"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a tracksuit in two slightly different blues"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a laundromat late at night"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "path": [
+    "the start",
+    "the handoff 1/4",
+    "the handoff 2/4",
+    "the handoff 3/4",
+    "the handoff 4/4",
+    "the pause"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. At a bridge over a slow green river, a primary school teacher in her thirties, tall and warm, with ash-blonde hair in a neat side part, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing a creased white shirt with the sleeves rolled up finds a sealed blue envelope waiting on a bench, as if it had been left for them, picks it up and sets off at a brisk walk. The camera tracks the moving subject at slow speed. The shot ends as the one carrying it hurries around a corner.\n\noverall_soundscape: The city murmuring and quick footsteps.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a sealed blue envelope"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "__characters/looks/hair_color__ hair in a neat side part"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "ash-blonde"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a creased white shirt with the sleeves rolled up"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a bridge over a slow green river"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the one carrying it hurries around a corner. The camera tracks the moving subject. At a narrow stairway between old houses, a primary school teacher in her thirties, tall and warm, with ash-blonde hair in a neat side part, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing a creased white shirt with the sleeves rolled up arrives out of breath with a sealed blue envelope and presses it into the hands of a primary school teacher in her thirties, tall and warm, with salt-and-pepper hair slicked straight back, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing a tracksuit in two slightly different blues, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a sealed blue envelope"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "__characters/looks/hair_color__ hair slicked straight back"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "salt-and-pepper"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a tracksuit in two slightly different blues"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a narrow stairway between old houses"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a flower market under striped awnings, a primary school teacher in her thirties, tall and warm, with salt-and-pepper hair slicked straight back, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing a tracksuit in two slightly different blues arrives out of breath with a sealed blue envelope and presses it into the hands of a single father in his thirties, broad-shouldered and permanently tired, with wind-blown black streaked with grey hair down to the collar, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing a puffy black winter jacket zipped to the chin, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a sealed blue envelope"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "wind-blown __characters/looks/hair_color__ hair down to the collar"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "black streaked with grey"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a puffy black winter jacket zipped to the chin"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a flower market under striped awnings"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a laundromat late at night, a single father in his thirties, broad-shouldered and permanently tired, with wind-blown black streaked with grey hair down to the collar, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing a puffy black winter jacket zipped to the chin arrives out of breath with a sealed blue envelope and presses it into the hands of a primary school teacher in her thirties, tall and warm, with short strawberry-blonde hair in a messy crop, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing a cable-knit cardigan over a plain T-shirt, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a sealed blue envelope"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "short __characters/looks/hair_color__ hair in a messy crop"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "strawberry-blonde"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a cable-knit cardigan over a plain T-shirt"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a laundromat late at night"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a rooftop garden above the traffic, a primary school teacher in her thirties, tall and warm, with short strawberry-blonde hair in a messy crop, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing a cable-knit cardigan over a plain T-shirt arrives out of breath with a sealed blue envelope and presses it into the hands of a retired watchmaker in his seventies, small and exact, with a chin-length warm caramel bob, magnifying loupe marks around one eye and ink-stained fingertips, wearing a cheap grey suit that almost fits, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a sealed blue envelope"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a chin-length __characters/looks/hair_color__ bob"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "warm caramel"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a cheap grey suit that almost fits"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a rooftop garden above the traffic"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera holds a static shot. At a crowded tram stop, a retired watchmaker in his seventies, small and exact, with a chin-length warm caramel bob, magnifying loupe marks around one eye and ink-stained fingertips, wearing a cheap grey suit that almost fits sits down for a moment with a sealed blue envelope on their lap, catches their breath and looks at it as if wondering where it is going; then they stand and walk on. The shot ends as the carrier walks on with it.\n\noverall_soundscape: A quiet moment in the city, a bird, and a long breath out.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a sealed blue envelope"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a crowded tram stop"
+      ]
+     ]
+    }
+   ]
+  },
+  "2": {
+   "path": [
+    "the start",
+    "the handoff 1/4",
+    "the handoff 2/4",
+    "the handoff 3/4",
+    "the handoff 4/4",
+    "the pause"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. At a crowded tram stop, a single father in his thirties, broad-shouldered and permanently tired, with thick jet-black curls pinned up loosely, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing a navy windbreaker and worn jeans finds a sealed blue envelope waiting on a bench, as if it had been left for them, picks it up and sets off at a brisk walk. The camera tracks the moving subject at slow speed. The shot ends as the one carrying it hurries around a corner.\n\noverall_soundscape: The city murmuring and quick footsteps.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a sealed blue envelope"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "thick __characters/looks/hair_color__ curls pinned up loosely"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "jet-black"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a navy windbreaker and worn jeans"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a crowded tram stop"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the one carrying it hurries around a corner. The camera tracks the moving subject. At the doorway of a busy bakery, a single father in his thirties, broad-shouldered and permanently tired, with thick jet-black curls pinned up loosely, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing a navy windbreaker and worn jeans arrives out of breath with a sealed blue envelope and presses it into the hands of a school bus driver in her fifties, sturdy and unhurried, with a long warm caramel braid over one shoulder, a patient crease between the brows and reading glasses on a beaded chain, wearing a rain-spotted beige trench coat, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a sealed blue envelope"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a long __characters/looks/hair_color__ braid over one shoulder"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "warm caramel"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a rain-spotted beige trench coat"
+      ],
+      [
+       "$place ← __relay_places__",
+       "the doorway of a busy bakery"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a rooftop garden above the traffic, a school bus driver in her fifties, sturdy and unhurried, with a long warm caramel braid over one shoulder, a patient crease between the brows and reading glasses on a beaded chain, wearing a rain-spotted beige trench coat arrives out of breath with a sealed blue envelope and presses it into the hands of a supermarket cashier in her twenties, round-faced and sharp-eyed, with a shaved head, chipped purple nail polish and a pen tucked behind one ear, wearing a polo shirt tucked into khakis, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a sealed blue envelope"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a shaved head"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a polo shirt tucked into khakis"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a rooftop garden above the traffic"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a crowded tram stop, a supermarket cashier in her twenties, round-faced and sharp-eyed, with a shaved head, chipped purple nail polish and a pen tucked behind one ear, wearing a polo shirt tucked into khakis arrives out of breath with a sealed blue envelope and presses it into the hands of a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with long copper-red hair tied in a low ponytail, a grey-shot beard and a toothpick he never lights, wearing a corduroy blazer with elbow patches, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a sealed blue envelope"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "copper-red"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a corduroy blazer with elbow patches"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a crowded tram stop"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a laundromat late at night, a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with long copper-red hair tied in a low ponytail, a grey-shot beard and a toothpick he never lights, wearing a corduroy blazer with elbow patches arrives out of breath with a sealed blue envelope and presses it into the hands of a lanky pizza courier in his early twenties, all elbows and nervous energy, with a long honey-blonde braid over one shoulder, a chipped front tooth and a scooter helmet hooked over one arm, wearing a cheap grey suit that almost fits, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a sealed blue envelope"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a long __characters/looks/hair_color__ braid over one shoulder"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "honey-blonde"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a cheap grey suit that almost fits"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a laundromat late at night"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera holds a static shot. At the doorway of a busy bakery, a lanky pizza courier in his early twenties, all elbows and nervous energy, with a long honey-blonde braid over one shoulder, a chipped front tooth and a scooter helmet hooked over one arm, wearing a cheap grey suit that almost fits sits down for a moment with a sealed blue envelope on their lap, catches their breath and looks at it as if wondering where it is going; then they stand and walk on. The shot ends as the carrier walks on with it.\n\noverall_soundscape: A quiet moment in the city, a bird, and a long breath out.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a sealed blue envelope"
+      ],
+      [
+       "$place ← __relay_places__",
+       "the doorway of a busy bakery"
+      ]
+     ]
+    }
+   ]
+  },
+  "3": {
+   "path": [
+    "the start",
+    "the handoff 1/4",
+    "the handoff 2/4",
+    "the handoff 3/4",
+    "the handoff 4/4",
+    "the scramble"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. At a rooftop garden above the traffic, a retired watchmaker in his seventies, small and exact, with warm caramel box braids gathered at the nape, magnifying loupe marks around one eye and ink-stained fingertips, wearing a navy windbreaker and worn jeans finds a small brass key on a red ribbon waiting on a bench, as if it had been left for them, picks it up and sets off at a brisk walk. The camera tracks the moving subject at slow speed. The shot ends as the one carrying it hurries around a corner.\n\noverall_soundscape: The city murmuring and quick footsteps.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "__characters/looks/hair_color__ box braids gathered at the nape"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "warm caramel"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a navy windbreaker and worn jeans"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a rooftop garden above the traffic"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the one carrying it hurries around a corner. The camera tracks the moving subject. At a laundromat late at night, a retired watchmaker in his seventies, small and exact, with warm caramel box braids gathered at the nape, magnifying loupe marks around one eye and ink-stained fingertips, wearing a navy windbreaker and worn jeans arrives out of breath with a small brass key on a red ribbon and presses it into the hands of a primary school teacher in her thirties, tall and warm, with a black streaked with grey mullet, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing a cable-knit cardigan over a plain T-shirt, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a __characters/looks/hair_color__ mullet"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "black streaked with grey"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a cable-knit cardigan over a plain T-shirt"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a laundromat late at night"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a flower market under striped awnings, a primary school teacher in her thirties, tall and warm, with a black streaked with grey mullet, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing a cable-knit cardigan over a plain T-shirt arrives out of breath with a small brass key on a red ribbon and presses it into the hands of a lanky pizza courier in his early twenties, all elbows and nervous energy, with short honey-blonde hair in a messy crop, a chipped front tooth and a scooter helmet hooked over one arm, wearing a faded denim jacket over a grey hoodie, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "short __characters/looks/hair_color__ hair in a messy crop"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "honey-blonde"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a faded denim jacket over a grey hoodie"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a flower market under striped awnings"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a crowded tram stop, a lanky pizza courier in his early twenties, all elbows and nervous energy, with short honey-blonde hair in a messy crop, a chipped front tooth and a scooter helmet hooked over one arm, wearing a faded denim jacket over a grey hoodie arrives out of breath with a small brass key on a red ribbon and presses it into the hands of a supermarket cashier in her twenties, round-faced and sharp-eyed, with tousled snow-white hair that never quite behaves, chipped purple nail polish and a pen tucked behind one ear, wearing a cheap grey suit that almost fits, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "tousled __characters/looks/hair_color__ hair that never quite behaves"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "snow-white"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a cheap grey suit that almost fits"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a crowded tram stop"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a laundromat late at night, a supermarket cashier in her twenties, round-faced and sharp-eyed, with tousled snow-white hair that never quite behaves, chipped purple nail polish and a pen tucked behind one ear, wearing a cheap grey suit that almost fits arrives out of breath with a small brass key on a red ribbon and presses it into the hands of a single father in his thirties, broad-shouldered and permanently tired, with a snow-white pixie cut, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing a creased white shirt with the sleeves rolled up, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a __characters/looks/hair_color__ pixie cut"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "snow-white"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a creased white shirt with the sleeves rolled up"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a laundromat late at night"
+      ],
+      [
+       "{25% slips}",
+       "slips"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject at fast speed. At a crowded tram stop, a small brass key on a red ribbon slips out of the carrier's hands and tumbles away across the ground; passers-by dodge and lunge for it until a school bus driver in her fifties, sturdy and unhurried, with a full strawberry-blonde afro, a patient crease between the brows and reading glasses on a beaded chain, wearing a polo shirt tucked into khakis snatches it up just in time and walks on, grinning. The shot ends as the new carrier walks on, holding it tight.\n\noverall_soundscape: A clatter, a gasp from the crowd, and scattered laughter.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a full __characters/looks/hair_color__ afro"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "strawberry-blonde"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a polo shirt tucked into khakis"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a crowded tram stop"
+      ]
+     ]
+    }
+   ]
+  },
+  "4": {
+   "path": [
+    "the start",
+    "the handoff 1/4",
+    "the handoff 2/4",
+    "the handoff 3/4",
+    "the handoff 4/4",
+    "the pause"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. At a crowded tram stop, a hospital cleaner in her sixties, wiry and quick, with long auburn hair tied in a low ponytail, calloused hands, deep laugh lines and a small gold cross at the throat, wearing a green supermarket fleece with a name badge finds a battered red umbrella waiting on a bench, as if it had been left for them, picks it up and sets off at a brisk walk. The camera tracks the moving subject at slow speed. The shot ends as the one carrying it hurries around a corner.\n\noverall_soundscape: The city murmuring and quick footsteps.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a battered red umbrella"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "auburn"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a green supermarket fleece with a name badge"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a crowded tram stop"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the one carrying it hurries around a corner. The camera tracks the moving subject. At a rooftop garden above the traffic, a hospital cleaner in her sixties, wiry and quick, with long auburn hair tied in a low ponytail, calloused hands, deep laugh lines and a small gold cross at the throat, wearing a green supermarket fleece with a name badge arrives out of breath with a battered red umbrella and presses it into the hands of a single father in his thirties, broad-shouldered and permanently tired, with chestnut hair in a neat side part, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing a rain-spotted beige trench coat, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a battered red umbrella"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "__characters/looks/hair_color__ hair in a neat side part"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "chestnut"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a rain-spotted beige trench coat"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a rooftop garden above the traffic"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a rooftop garden above the traffic, a single father in his thirties, broad-shouldered and permanently tired, with chestnut hair in a neat side part, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing a rain-spotted beige trench coat arrives out of breath with a battered red umbrella and presses it into the hands of a retired watchmaker in his seventies, small and exact, with a long mousy brown braid over one shoulder, magnifying loupe marks around one eye and ink-stained fingertips, wearing a navy windbreaker and worn jeans, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a battered red umbrella"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a long __characters/looks/hair_color__ braid over one shoulder"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "mousy brown"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a navy windbreaker and worn jeans"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a rooftop garden above the traffic"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a bridge over a slow green river, a retired watchmaker in his seventies, small and exact, with a long mousy brown braid over one shoulder, magnifying loupe marks around one eye and ink-stained fingertips, wearing a navy windbreaker and worn jeans arrives out of breath with a battered red umbrella and presses it into the hands of a hospital cleaner in her sixties, wiry and quick, with a copper-red mullet, calloused hands, deep laugh lines and a small gold cross at the throat, wearing a red-and-black flannel shirt, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a battered red umbrella"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a __characters/looks/hair_color__ mullet"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "copper-red"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a red-and-black flannel shirt"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a bridge over a slow green river"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At the doorway of a busy bakery, a hospital cleaner in her sixties, wiry and quick, with a copper-red mullet, calloused hands, deep laugh lines and a small gold cross at the throat, wearing a red-and-black flannel shirt arrives out of breath with a battered red umbrella and presses it into the hands of a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with tousled sandy-brown hair that never quite behaves, a grey-shot beard and a toothpick he never lights, wearing a rain-spotted beige trench coat, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a battered red umbrella"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "tousled __characters/looks/hair_color__ hair that never quite behaves"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "sandy-brown"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a rain-spotted beige trench coat"
+      ],
+      [
+       "$place ← __relay_places__",
+       "the doorway of a busy bakery"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera holds a static shot. At a rooftop garden above the traffic, a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with tousled sandy-brown hair that never quite behaves, a grey-shot beard and a toothpick he never lights, wearing a rain-spotted beige trench coat sits down for a moment with a battered red umbrella on their lap, catches their breath and looks at it as if wondering where it is going; then they stand and walk on. The shot ends as the carrier walks on with it.\n\noverall_soundscape: A quiet moment in the city, a bird, and a long breath out.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a battered red umbrella"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a rooftop garden above the traffic"
+      ]
+     ]
+    }
+   ]
+  },
+  "5": {
+   "path": [
+    "the start",
+    "the handoff 1/4",
+    "the handoff 2/4",
+    "the handoff 3/4",
+    "the handoff 4/4",
+    "the pause"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. At a laundromat late at night, a hospital cleaner in her sixties, wiry and quick, with a high silver-grey bun, calloused hands, deep laugh lines and a small gold cross at the throat, wearing a navy windbreaker and worn jeans finds a battered red umbrella waiting on a bench, as if it had been left for them, picks it up and sets off at a brisk walk. The camera tracks the moving subject at slow speed. The shot ends as the one carrying it hurries around a corner.\n\noverall_soundscape: The city murmuring and quick footsteps.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a battered red umbrella"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a high __characters/looks/hair_color__ bun"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "silver-grey"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a navy windbreaker and worn jeans"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a laundromat late at night"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the one carrying it hurries around a corner. The camera tracks the moving subject. At a rooftop garden above the traffic, a hospital cleaner in her sixties, wiry and quick, with a high silver-grey bun, calloused hands, deep laugh lines and a small gold cross at the throat, wearing a navy windbreaker and worn jeans arrives out of breath with a battered red umbrella and presses it into the hands of a hospital cleaner in her sixties, wiry and quick, with warm caramel hair in a neat side part, calloused hands, deep laugh lines and a small gold cross at the throat, wearing a knitted sweater with a reindeer pattern, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a battered red umbrella"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "__characters/looks/hair_color__ hair in a neat side part"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "warm caramel"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a knitted sweater with a reindeer pattern"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a rooftop garden above the traffic"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a crowded tram stop, a hospital cleaner in her sixties, wiry and quick, with warm caramel hair in a neat side part, calloused hands, deep laugh lines and a small gold cross at the throat, wearing a knitted sweater with a reindeer pattern arrives out of breath with a battered red umbrella and presses it into the hands of a supermarket cashier in her twenties, round-faced and sharp-eyed, with long honey-blonde hair tied in a low ponytail, chipped purple nail polish and a pen tucked behind one ear, wearing a hi-vis vest over a hoodie, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a battered red umbrella"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "honey-blonde"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a hi-vis vest over a hoodie"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a crowded tram stop"
+      ],
+      [
+       "{25% slips}",
+       "slips"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a crowded tram stop, a supermarket cashier in her twenties, round-faced and sharp-eyed, with long honey-blonde hair tied in a low ponytail, chipped purple nail polish and a pen tucked behind one ear, wearing a hi-vis vest over a hoodie arrives out of breath with a battered red umbrella and presses it into the hands of a primary school teacher in her thirties, tall and warm, with a close-cropped black streaked with grey buzz cut, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing a green supermarket fleece with a name badge, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a battered red umbrella"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a close-cropped __characters/looks/hair_color__ buzz cut"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "black streaked with grey"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a green supermarket fleece with a name badge"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a crowded tram stop"
+      ],
+      [
+       "{25% slips}",
+       "slips"
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a narrow stairway between old houses, a primary school teacher in her thirties, tall and warm, with a close-cropped black streaked with grey buzz cut, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing a green supermarket fleece with a name badge arrives out of breath with a battered red umbrella and presses it into the hands of a lanky pizza courier in his early twenties, all elbows and nervous energy, with wind-blown platinum-blonde hair down to the collar, a chipped front tooth and a scooter helmet hooked over one arm, wearing a faded denim jacket over a grey hoodie, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a battered red umbrella"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "wind-blown __characters/looks/hair_color__ hair down to the collar"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "platinum-blonde"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a faded denim jacket over a grey hoodie"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a narrow stairway between old houses"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera holds a static shot. At a rooftop garden above the traffic, a lanky pizza courier in his early twenties, all elbows and nervous energy, with wind-blown platinum-blonde hair down to the collar, a chipped front tooth and a scooter helmet hooked over one arm, wearing a faded denim jacket over a grey hoodie sits down for a moment with a battered red umbrella on their lap, catches their breath and looks at it as if wondering where it is going; then they stand and walk on. The shot ends as the carrier walks on with it.\n\noverall_soundscape: A quiet moment in the city, a bird, and a long breath out.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a battered red umbrella"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a rooftop garden above the traffic"
+      ]
+     ]
+    }
+   ]
+  },
+  "6": {
+   "path": [
+    "the start",
+    "the handoff 1/4",
+    "the handoff 2/4",
+    "the handoff 3/4",
+    "the handoff 4/4",
+    "the pause"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. At a narrow stairway between old houses, a retired watchmaker in his seventies, small and exact, with long straight ash-blonde hair with a blunt fringe, magnifying loupe marks around one eye and ink-stained fingertips, wearing a hi-vis vest over a hoodie finds a small brass key on a red ribbon waiting on a bench, as if it had been left for them, picks it up and sets off at a brisk walk. The camera tracks the moving subject at slow speed. The shot ends as the one carrying it hurries around a corner.\n\noverall_soundscape: The city murmuring and quick footsteps.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "ash-blonde"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a hi-vis vest over a hoodie"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a narrow stairway between old houses"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the one carrying it hurries around a corner. The camera tracks the moving subject. At a bridge over a slow green river, a retired watchmaker in his seventies, small and exact, with long straight ash-blonde hair with a blunt fringe, magnifying loupe marks around one eye and ink-stained fingertips, wearing a hi-vis vest over a hoodie arrives out of breath with a small brass key on a red ribbon and presses it into the hands of a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with tousled jet-black hair that never quite behaves, a grey-shot beard and a toothpick he never lights, wearing a cable-knit cardigan over a plain T-shirt, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "tousled __characters/looks/hair_color__ hair that never quite behaves"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "jet-black"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a cable-knit cardigan over a plain T-shirt"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a bridge over a slow green river"
+      ],
+      [
+       "{25% slips}",
+       "slips"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a bridge over a slow green river, a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with tousled jet-black hair that never quite behaves, a grey-shot beard and a toothpick he never lights, wearing a cable-knit cardigan over a plain T-shirt arrives out of breath with a small brass key on a red ribbon and presses it into the hands of a barista in their twenties, freckled and soft-spoken, with a long jet-black braid over one shoulder, small silver hoops along both ears and a burn scar on one wrist, wearing a polo shirt tucked into khakis, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a long __characters/looks/hair_color__ braid over one shoulder"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "jet-black"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a polo shirt tucked into khakis"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a bridge over a slow green river"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a bridge over a slow green river, a barista in their twenties, freckled and soft-spoken, with a long jet-black braid over one shoulder, small silver hoops along both ears and a burn scar on one wrist, wearing a polo shirt tucked into khakis arrives out of breath with a small brass key on a red ribbon and presses it into the hands of a hospital cleaner in her sixties, wiry and quick, with honey-blonde box braids gathered at the nape, calloused hands, deep laugh lines and a small gold cross at the throat, wearing a navy windbreaker and worn jeans, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "__characters/looks/hair_color__ box braids gathered at the nape"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "honey-blonde"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a navy windbreaker and worn jeans"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a bridge over a slow green river"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At the doorway of a busy bakery, a hospital cleaner in her sixties, wiry and quick, with honey-blonde box braids gathered at the nape, calloused hands, deep laugh lines and a small gold cross at the throat, wearing a navy windbreaker and worn jeans arrives out of breath with a small brass key on a red ribbon and presses it into the hands of a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with a high jet-black bun, a grey-shot beard and a toothpick he never lights, wearing a green supermarket fleece with a name badge, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a high __characters/looks/hair_color__ bun"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "jet-black"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a green supermarket fleece with a name badge"
+      ],
+      [
+       "$place ← __relay_places__",
+       "the doorway of a busy bakery"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera holds a static shot. At a laundromat late at night, a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with a high jet-black bun, a grey-shot beard and a toothpick he never lights, wearing a green supermarket fleece with a name badge sits down for a moment with a small brass key on a red ribbon on their lap, catches their breath and looks at it as if wondering where it is going; then they stand and walk on. The shot ends as the carrier walks on with it.\n\noverall_soundscape: A quiet moment in the city, a bird, and a long breath out.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a laundromat late at night"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "path": [
+    "the start",
+    "the handoff 1/4",
+    "the handoff 2/4",
+    "the handoff 3/4",
+    "the handoff 4/4",
+    "the scramble"
+   ],
+   "ended": false,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. At the doorway of a busy bakery, a school bus driver in her fifties, sturdy and unhurried, with a long black streaked with grey braid over one shoulder, a patient crease between the brows and reading glasses on a beaded chain, wearing a tracksuit in two slightly different blues finds a small brass key on a red ribbon waiting on a bench, as if it had been left for them, picks it up and sets off at a brisk walk. The camera tracks the moving subject at slow speed. The shot ends as the one carrying it hurries around a corner.\n\noverall_soundscape: The city murmuring and quick footsteps.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a long __characters/looks/hair_color__ braid over one shoulder"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "black streaked with grey"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a tracksuit in two slightly different blues"
+      ],
+      [
+       "$place ← __relay_places__",
+       "the doorway of a busy bakery"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the one carrying it hurries around a corner. The camera tracks the moving subject. At a crowded tram stop, a school bus driver in her fifties, sturdy and unhurried, with a long black streaked with grey braid over one shoulder, a patient crease between the brows and reading glasses on a beaded chain, wearing a tracksuit in two slightly different blues arrives out of breath with a small brass key on a red ribbon and presses it into the hands of a single father in his thirties, broad-shouldered and permanently tired, with a loose snow-white top knot, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing a red-and-black flannel shirt, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a loose __characters/looks/hair_color__ top knot"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "snow-white"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a red-and-black flannel shirt"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a crowded tram stop"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a flower market under striped awnings, a single father in his thirties, broad-shouldered and permanently tired, with a loose snow-white top knot, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing a red-and-black flannel shirt arrives out of breath with a small brass key on a red ribbon and presses it into the hands of a lanky pizza courier in his early twenties, all elbows and nervous energy, with wind-blown honey-blonde hair down to the collar, a chipped front tooth and a scooter helmet hooked over one arm, wearing a polo shirt tucked into khakis, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "wind-blown __characters/looks/hair_color__ hair down to the collar"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "honey-blonde"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a polo shirt tucked into khakis"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a flower market under striped awnings"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a flower market under striped awnings, a lanky pizza courier in his early twenties, all elbows and nervous energy, with wind-blown honey-blonde hair down to the collar, a chipped front tooth and a scooter helmet hooked over one arm, wearing a polo shirt tucked into khakis arrives out of breath with a small brass key on a red ribbon and presses it into the hands of a single father in his thirties, broad-shouldered and permanently tired, with strawberry-blonde hair slicked straight back, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing a puffy black winter jacket zipped to the chin, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "__characters/looks/hair_color__ hair slicked straight back"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "strawberry-blonde"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a puffy black winter jacket zipped to the chin"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a flower market under striped awnings"
+      ],
+      [
+       "{25% slips}",
+       ""
+      ]
+     ]
+    },
+    {
+     "clip": 4,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject. At a laundromat late at night, a single father in his thirties, broad-shouldered and permanently tired, with strawberry-blonde hair slicked straight back, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing a puffy black winter jacket zipped to the chin arrives out of breath with a small brass key on a red ribbon and presses it into the hands of a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with a loose dark brown top knot, a grey-shot beard and a toothpick he never lights, wearing a faded denim jacket over a grey hoodie, who nods once and sets off the other way. The shot ends as the new carrier hurries off with it.\n\noverall_soundscape: Footsteps meeting and parting and the city around them.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "a loose __characters/looks/hair_color__ top knot"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "dark brown"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a faded denim jacket over a grey hoodie"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a laundromat late at night"
+      ],
+      [
+       "{25% slips}",
+       "slips"
+      ]
+     ]
+    },
+    {
+     "clip": 5,
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, warm city documentary, handheld, one continuous take. The shot opens as the new carrier hurries off with it. The camera tracks the moving subject at fast speed. At a crowded tram stop, a small brass key on a red ribbon slips out of the carrier's hands and tumbles away across the ground; passers-by dodge and lunge for it until a school bus driver in her fifties, sturdy and unhurried, with tousled ash-blonde hair that never quite behaves, a patient crease between the brows and reading glasses on a beaded chain, wearing a cable-knit cardigan over a plain T-shirt snatches it up just in time and walks on, grinning. The shot ends as the new carrier walks on, holding it tight.\n\noverall_soundscape: A clatter, a gasp from the crowd, and scattered laughter.\n\nnon_diegetic_music: A light, rolling piano at a walking tempo.",
+     "picks": [
+      [
+       "$thing ← __relay_things__",
+       "a small brass key on a red ribbon"
+      ],
+      [
+       "$holder ← __characters/average_joes__",
+       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+      ],
+      [
+       "$holder ← __characters/looks/hair__",
+       "tousled __characters/looks/hair_color__ hair that never quite behaves"
+      ],
+      [
+       "$holder ← __characters/looks/hair_color__",
+       "ash-blonde"
+      ],
+      [
+       "$holder ← __characters/average_joes/outfit__",
+       "a cable-knit cardigan over a plain T-shirt"
+      ],
+      [
+       "$place ← __relay_places__",
+       "a crowded tram stop"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

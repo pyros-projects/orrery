@@ -1,0 +1,92 @@
+{
+ "preset": "tutorial/13_properties",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = a switchboard operator in her forties who listens in on every call, with jet-black hair slicked straight back, wearing a rumpled shirt with braces and rolled sleeves and a headset around her neck\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic noir. <Subject 1> walks alone down an empty street in a glittering sun shower, the collar turned up against the water. The camera tracks the moving subject at slow speed.\n\noverall_soundscape: Light rain patters while birds keep singing. Distant traffic.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$w ← __weather__",
+       "a glittering sun shower"
+      ],
+      [
+       "$lead ← __characters/noir#gender:female__",
+       "a switchboard operator in her forties who listens in on every call, with __characters/looks/hair__, wearing __characters/noir/attire__ and a headset around her neck"
+      ],
+      [
+       "$lead ← __characters/looks/hair__",
+       "__characters/looks/hair_color__ hair slicked straight back"
+      ],
+      [
+       "$lead ← __characters/looks/hair_color__",
+       "jet-black"
+      ],
+      [
+       "$lead ← __characters/noir/attire__",
+       "a rumpled shirt with braces and rolled sleeves"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = a wealthy widow in her sixties, composed and dangerous, pearls at the throat and a small pistol in her purse, with a copper-red mullet, wearing a sequinned cocktail dress and long satin gloves\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic noir. <Subject 1> walks alone down an empty street in first snow, the coat buttoned to the chin. The camera tracks the moving subject at slow speed. Her breath hangs white in the air.\n\noverall_soundscape: Snow squeaks softly under every step. Distant traffic.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$w ← __weather__",
+       "first snow"
+      ],
+      [
+       "$lead ← __characters/noir#gender:female__",
+       "a wealthy widow in her sixties, composed and dangerous, pearls at the throat and a small pistol in her purse, with __characters/looks/hair__, wearing __characters/noir/attire__"
+      ],
+      [
+       "$lead ← __characters/looks/hair__",
+       "a __characters/looks/hair_color__ mullet"
+      ],
+      [
+       "$lead ← __characters/looks/hair_color__",
+       "copper-red"
+      ],
+      [
+       "$lead ← __characters/noir/attire__",
+       "a sequinned cocktail dress and long satin gloves"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = a switchboard operator in her forties who listens in on every call, with a close-cropped sandy-brown buzz cut, wearing a double-breasted chalk-stripe suit and a loosened tie and a headset around her neck\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic noir. <Subject 1> walks alone down an empty street in thick fog, the coat buttoned to the chin. The camera tracks the moving subject at slow speed.\n\noverall_soundscape: A foghorn moans far away through the muffled air. Distant traffic.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$w ← __weather__",
+       "thick fog"
+      ],
+      [
+       "$lead ← __characters/noir#gender:female__",
+       "a switchboard operator in her forties who listens in on every call, with __characters/looks/hair__, wearing __characters/noir/attire__ and a headset around her neck"
+      ],
+      [
+       "$lead ← __characters/looks/hair__",
+       "a close-cropped __characters/looks/hair_color__ buzz cut"
+      ],
+      [
+       "$lead ← __characters/looks/hair_color__",
+       "sandy-brown"
+      ],
+      [
+       "$lead ← __characters/noir/attire__",
+       "a double-breasted chalk-stripe suit and a loosened tie"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

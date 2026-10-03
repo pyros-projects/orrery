@@ -1,0 +1,68 @@
+{
+ "preset": "h3/04_animated_fable",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Claymation. A tiny praying mantis stands on a mushroom in a mossy forest clearing, holding a dewdrop like a lantern. The camera pushes in with small amplitude at slow speed. A huge shoebill stork lands on a branch above it and peers down. The giant with a deep, slow, booming voice (S1) says: <d>[English] What are you carrying, little one?</d> [Shot 2] At 00:05.000, the shot fades to the praying mantis lifting the dewdrop high, a miniature sunrise glowing orange and gold inside it. The camera holds a static shot. The little one with a tiny, squeaky, excited voice (S2) says: <d>[English] Tomorrow!</d>\n\noverall_soundscape: Leaves rustle as the bird lands. A soft crystalline chime rings out.\n\nnon_diegetic_music: A music box melody over pizzicato strings at a slow tempo, quiet throughout.",
+     "picks": [
+      [
+       "$small ← __creature[insect]__",
+       "praying mantis"
+      ],
+      [
+       "$big ← __creature[bird]__",
+       "shoebill stork"
+      ],
+      [
+       "{claymation|2D-animated|3D CG}",
+       "claymation"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Claymation. A tiny atlas moth stands on a mushroom in a mossy forest clearing, holding a dewdrop like a lantern. The camera pushes in with small amplitude at slow speed. A huge barn owl lands on a branch above it and peers down. The giant with a deep, slow, booming voice (S1) says: <d>[English] What are you carrying, little one?</d> [Shot 2] At 00:05.000, the shot fades to the atlas moth lifting the dewdrop high, a miniature sunrise glowing orange and gold inside it. The camera holds a static shot. The little one with a tiny, squeaky, excited voice (S2) says: <d>[English] Tomorrow!</d>\n\noverall_soundscape: Leaves rustle as the bird lands. A soft crystalline chime rings out.\n\nnon_diegetic_music: A music box melody over pizzicato strings at a slow tempo, quiet throughout.",
+     "picks": [
+      [
+       "$small ← __creature[insect]__",
+       "atlas moth"
+      ],
+      [
+       "$big ← __creature[bird]__",
+       "barn owl"
+      ],
+      [
+       "{claymation|2D-animated|3D CG}",
+       "claymation"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Claymation. A tiny atlas moth stands on a mushroom in a mossy forest clearing, holding a dewdrop like a lantern. The camera pushes in with small amplitude at slow speed. A huge raven lands on a branch above it and peers down. The giant with a deep, slow, booming voice (S1) says: <d>[English] What are you carrying, little one?</d> [Shot 2] At 00:05.000, the shot fades to the atlas moth lifting the dewdrop high, a miniature sunrise glowing orange and gold inside it. The camera holds a static shot. The little one with a tiny, squeaky, excited voice (S2) says: <d>[English] Tomorrow!</d>\n\noverall_soundscape: Leaves rustle as the bird lands. A soft crystalline chime rings out.\n\nnon_diegetic_music: A music box melody over pizzicato strings at a slow tempo, quiet throughout.",
+     "picks": [
+      [
+       "$small ← __creature[insect]__",
+       "atlas moth"
+      ],
+      [
+       "$big ← __creature[bird]__",
+       "raven"
+      ],
+      [
+       "{claymation|2D-animated|3D CG}",
+       "claymation"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

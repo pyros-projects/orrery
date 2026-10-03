@@ -1,6 +1,6 @@
 ---
 title: "Runway loop"
-note: "An endless show: every clip, the last model turns and walks back in her look ($look[-1]) while the next one comes in wearing a new one ($look). Chain it with Orrery Continue and Orrery Film, then Run (Instant); rate the looks in the galaxy and the show learns your taste."
+note: "An endless show: every clip, the last model turns and walks back in her look ($look[-1]) while the next one comes in wearing a new one ($look). Chain it with Orrery Continue and Orrery Film, then Run (Instant); rate the looks in the gallery and the show learns your taste."
 tags: [fashion, h3, reel, motion_context]
 ---
 @h3 text 9:16

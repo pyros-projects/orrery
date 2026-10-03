@@ -1,0 +1,56 @@
+{
+ "preset": "tutorial/07_tags",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "a museum diorama of a vampire squid and a jackalope sharing a candlelit dinner on the ocean floor, a brass museum placard reading \"Unlikely Friends\"",
+     "picks": [
+      [
+       "$deep ← __creature[deep_sea]__",
+       "vampire squid"
+      ],
+      [
+       "$myth ← __creature[myth]__",
+       "jackalope"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "a museum diorama of a giant isopod and a kitsune sharing a candlelit dinner on the ocean floor, a brass museum placard reading \"Unlikely Friends\"",
+     "picks": [
+      [
+       "$deep ← __creature[deep_sea]__",
+       "giant isopod"
+      ],
+      [
+       "$myth ← __creature[myth]__",
+       "kitsune"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "a museum diorama of a giant isopod and a kitsune sharing a candlelit dinner on the ocean floor, a brass museum placard reading \"Unlikely Friends\"",
+     "picks": [
+      [
+       "$deep ← __creature[deep_sea]__",
+       "giant isopod"
+      ],
+      [
+       "$myth ← __creature[myth]__",
+       "kitsune"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

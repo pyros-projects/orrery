@@ -1,0 +1,80 @@
+{
+ "preset": "fashion/designer_interview",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = a severe designer, in an all-black smock and tinted glasses\n\nintegrated_multimodal_description: [Shot 1] Live-action, documentary interview footage. A medium close-up of <Subject 1> (S1) seated in a white-walled atelier crowded with half-finished garments on dress forms. The camera holds a static shot. <Subject 1> (S1) says in a quiet, precise voice: <d>[English] We are post-shoulder now.</d> [Shot 2] At 00:05.000, the camera cuts to a close-up of the hands of <Subject 1> (S1) smoothing a length of moss velvet across a cutting table. The camera pushes in with small amplitude at slow speed. <Subject 1> (S1) says in an off-screen voiceover: <d>[English] Beige is not a colour. It is a decision.</d> while their lips remain completely closed.\n\noverall_soundscape: A sewing machine rattles somewhere in the back and muffled street noise drifts in. Scissors cut slowly through heavy fabric.\n\nnon_diegetic_music: A sparse, detuned piano figure at a slow tempo.",
+     "picks": [
+      [
+       "{turtleneck|smock|suit}",
+       "smock"
+      ],
+      [
+       "__couture_quote__",
+       "We are post-shoulder now."
+      ],
+      [
+       "__couture_material__",
+       "moss velvet"
+      ],
+      [
+       "__couture_quote__",
+       "Beige is not a colour. It is a decision."
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = a severe designer, in an all-black smock and tinted glasses\n\nintegrated_multimodal_description: [Shot 1] Live-action, documentary interview footage. A medium close-up of <Subject 1> (S1) seated in a white-walled atelier crowded with half-finished garments on dress forms. The camera holds a static shot. <Subject 1> (S1) says in a quiet, precise voice: <d>[English] This season, we asked what a sleeve owes the arm.</d> [Shot 2] At 00:05.000, the camera cuts to a close-up of the hands of <Subject 1> (S1) smoothing a length of boiled wool across a cutting table. The camera pushes in with small amplitude at slow speed. <Subject 1> (S1) says in an off-screen voiceover: <d>[English] It is not a coat. It is a coat remembering a coat.</d> while their lips remain completely closed.\n\noverall_soundscape: A sewing machine rattles somewhere in the back and muffled street noise drifts in. Scissors cut slowly through heavy fabric.\n\nnon_diegetic_music: A sparse, detuned piano figure at a slow tempo.",
+     "picks": [
+      [
+       "{turtleneck|smock|suit}",
+       "smock"
+      ],
+      [
+       "__couture_quote__",
+       "This season, we asked what a sleeve owes the arm."
+      ],
+      [
+       "__couture_material__",
+       "boiled wool"
+      ],
+      [
+       "__couture_quote__",
+       "It is not a coat. It is a coat remembering a coat."
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = a severe designer, in an all-black suit and tinted glasses\n\nintegrated_multimodal_description: [Shot 1] Live-action, documentary interview footage. A medium close-up of <Subject 1> (S1) seated in a white-walled atelier crowded with half-finished garments on dress forms. The camera holds a static shot. <Subject 1> (S1) says in a quiet, precise voice: <d>[English] The hem is where the garment admits it is afraid.</d> [Shot 2] At 00:05.000, the camera cuts to a close-up of the hands of <Subject 1> (S1) smoothing a length of crushed silver lamé across a cutting table. The camera pushes in with small amplitude at slow speed. <Subject 1> (S1) says in an off-screen voiceover: <d>[English] Every button is a small betrayal.</d> while their lips remain completely closed.\n\noverall_soundscape: A sewing machine rattles somewhere in the back and muffled street noise drifts in. Scissors cut slowly through heavy fabric.\n\nnon_diegetic_music: A sparse, detuned piano figure at a slow tempo.",
+     "picks": [
+      [
+       "{turtleneck|smock|suit}",
+       "suit"
+      ],
+      [
+       "__couture_quote__",
+       "The hem is where the garment admits it is afraid."
+      ],
+      [
+       "__couture_material__",
+       "crushed silver lamé"
+      ],
+      [
+       "__couture_quote__",
+       "Every button is a small betrayal."
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

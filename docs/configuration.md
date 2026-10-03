@@ -3,7 +3,7 @@
 Where orrery keeps its files and which language model the wildcard manager uses.
 
 Everything lives in the **orrery home** (`$ORRERY_HOME`, default `~/.orrery`):
-`library/*.yaml`, `weights.json`, `galaxy.jsonl`, `orrery.yaml`, `history/`.
+`library/*.yaml`, `weights.json`, `galaxy.jsonl` (the gallery; the file keeps the name it had when the gallery was the galaxy), `orrery.yaml`, `history/`.
 The CLI and the ComfyUI nodes share it. Inside ComfyUI the node's gear sets the
 home folder (a pointer in `~/.config/orrery/home`); `ORRERY_HOME`, the CLI's
 `--home` and a node's own `home` field win over it.

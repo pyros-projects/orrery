@@ -1,0 +1,68 @@
+{
+ "preset": "tutorial/12_h3_woah",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic. A lighthouse keeper's kitchen at the edge of the world. The camera pulls out with small amplitude at slow speed. Beyond the windows, a glittering sun shower over a black sea. An axolotl in a knitted scarf pours tea for two. The keeper with a warm, raspy old voice (S1) says: <d>[English] The ships stopped coming years ago.</d> [Shot 2] At 00:04.000, the camera cuts to a close-up of the second teacup, steam curling up, the chair across the table still empty. The camera pulls out with small amplitude at slow speed. [Shot 3] At 00:07.000, the shot transitions with a cross-dissolve to the empty chair, now holding a translucent woman made of sea spray who smiles at the axolotl. The camera arcs around the subject at slow speed. The ghost with a soft, echoing voice (S2) says: <d>[French] Je suis toujours venue.</d> The keeper (S1) says: <d>[English] I know.</d>\n\noverall_soundscape: A kettle hisses and wind worries the shutters. A clock ticks. Waves swell far below and a single gull cries.\n\nnon_diegetic_music: A music box melody at a slow tempo, joined by sustained low strings that rise and then fade.",
+     "picks": [
+      [
+       "$keeper ← __creature__",
+       "axolotl"
+      ],
+      [
+       "__weather__",
+       "a glittering sun shower"
+      ],
+      [
+       "__camera__",
+       "pull out, small, slow"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic. A lighthouse keeper's kitchen at the edge of the world. The camera pulls out with small amplitude at slow speed. Beyond the windows, a gathering thunderstorm over a black sea. A vampire squid in a knitted scarf pours tea for two. The keeper with a warm, raspy old voice (S1) says: <d>[English] The ships stopped coming years ago.</d> [Shot 2] At 00:04.000, the camera cuts to a close-up of the second teacup, steam curling up, the chair across the table still empty. The camera arcs around the subject at slow speed. [Shot 3] At 00:07.000, the shot transitions with a cross-dissolve to the empty chair, now holding a translucent woman made of sea spray who smiles at the vampire squid. The camera arcs around the subject at slow speed. The ghost with a soft, echoing voice (S2) says: <d>[French] Je suis toujours venue.</d> The keeper (S1) says: <d>[English] I know.</d>\n\noverall_soundscape: A kettle hisses and wind worries the shutters. A clock ticks. Waves swell far below and a single gull cries.\n\nnon_diegetic_music: A music box melody at a slow tempo, joined by sustained low strings that rise and then fade.",
+     "picks": [
+      [
+       "$keeper ← __creature__",
+       "vampire squid"
+      ],
+      [
+       "__weather__",
+       "a gathering thunderstorm"
+      ],
+      [
+       "__camera__",
+       "arc, slow"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic. A lighthouse keeper's kitchen at the edge of the world. The camera pulls out with small amplitude at slow speed. Beyond the windows, a gathering thunderstorm over a black sea. A giant isopod in a knitted scarf pours tea for two. The keeper with a warm, raspy old voice (S1) says: <d>[English] The ships stopped coming years ago.</d> [Shot 2] At 00:04.000, the camera cuts to a close-up of the second teacup, steam curling up, the chair across the table still empty. The camera pushes in with small amplitude at slow speed. [Shot 3] At 00:07.000, the shot transitions with a cross-dissolve to the empty chair, now holding a translucent woman made of sea spray who smiles at the giant isopod. The camera arcs around the subject at slow speed. The ghost with a soft, echoing voice (S2) says: <d>[French] Je suis toujours venue.</d> The keeper (S1) says: <d>[English] I know.</d>\n\noverall_soundscape: A kettle hisses and wind worries the shutters. A clock ticks. Waves swell far below and a single gull cries.\n\nnon_diegetic_music: A music box melody at a slow tempo, joined by sustained low strings that rise and then fade.",
+     "picks": [
+      [
+       "$keeper ← __creature__",
+       "giant isopod"
+      ],
+      [
+       "__weather__",
+       "a gathering thunderstorm"
+      ],
+      [
+       "__camera__",
+       "push in, small, slow"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

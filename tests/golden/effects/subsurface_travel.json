@@ -1,0 +1,104 @@
+{
+ "preset": "effects/subsurface_travel",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n<Subject 2> = a gaunt second person, curled tight like a folded umbrella\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic body horror, photorealistic. <Subject 1> stands facing the camera, framed from the waist up, and at first appears completely normal. The camera pushes in at slow speed. A localized pressure begins beneath the skin as <Subject 2> starts moving inside <Subject 1>, travelling from the thigh up through the hip and across the belly. Throughout the movement <Subject 1> keeps perfectly smooth skin, the shape beneath visible only in the way the light falls across it, and <Subject 2> is perceived only as a three-dimensional shape pressing outward from within. The movement stays patient, advancing a little with every breath the host takes, and the areas it has already passed slowly return to their original form. In the final phase <Subject 2> reaches the end of its path and presses its face outward until the stretched skin shows its features in sharp relief, staring into the camera.\n\noverall_soundscape: Restrained breathing, subtle internal shifting, and soft surface tension following the moving shape.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$entity ← __bh_entity__",
+       "a gaunt second person, curled tight like a folded umbrella"
+      ],
+      [
+       "$route ← __bh_route__",
+       "from the thigh up through the hip and across the belly"
+      ],
+      [
+       "$surface ← __bh_surface__",
+       "perfectly smooth skin, the shape beneath visible only in the way the light falls across it"
+      ],
+      [
+       "$motion ← __bh_motion__",
+       "patient, advancing a little with every breath the host takes"
+      ],
+      [
+       "$reveal ← __bh_reveal__",
+       "presses its face outward until the stretched skin shows its features in sharp relief, staring into the camera"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the young man of <Picture 1>\n<Subject 2> = a long-limbed insectile creature, with jointed legs folded against its body\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic body horror, photorealistic. <Subject 1> stands facing the camera, framed from the waist up, and at first appears completely normal. The camera pushes in at slow speed. A localized pressure begins beneath the skin as <Subject 2> starts moving inside <Subject 1>, travelling from one wrist up the inside of the forearm, across the shoulder and into the chest. Throughout the movement <Subject 1> keeps normal opaque skin with its natural color and texture, never breaking, and <Subject 2> is perceived only as a three-dimensional shape pressing outward from within. The movement stays slow, continuous and deliberate, and the areas it has already passed slowly return to their original form. In the final phase <Subject 2> reaches the end of its path and splits into two smaller shapes that slide apart in opposite directions.\n\noverall_soundscape: Restrained breathing, subtle internal shifting, and soft surface tension following the moving shape.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the young man"
+      ],
+      [
+       "$entity ← __bh_entity__",
+       "a long-limbed insectile creature, with jointed legs folded against its body"
+      ],
+      [
+       "$route ← __bh_route__",
+       "from one wrist up the inside of the forearm, across the shoulder and into the chest"
+      ],
+      [
+       "$surface ← __bh_surface__",
+       "normal opaque skin with its natural color and texture, never breaking"
+      ],
+      [
+       "$motion ← __bh_motion__",
+       "slow, continuous and deliberate"
+      ],
+      [
+       "$reveal ← __bh_reveal__",
+       "splits into two smaller shapes that slide apart in opposite directions"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n<Subject 2> = a long-limbed insectile creature, with jointed legs folded against its body\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic body horror, photorealistic. <Subject 1> stands facing the camera, framed from the waist up, and at first appears completely normal. The camera pushes in at slow speed. A localized pressure begins beneath the skin as <Subject 2> starts moving inside <Subject 1>, travelling from one wrist up the inside of the forearm, across the shoulder and into the chest. Throughout the movement <Subject 1> keeps skin that ripples in slow waves like fabric over moving water, and <Subject 2> is perceived only as a three-dimensional shape pressing outward from within. The movement stays slow, continuous and deliberate, and the areas it has already passed slowly return to their original form. In the final phase <Subject 2> reaches the end of its path and pushes one long hand outward until every finger shows through the skin.\n\noverall_soundscape: Restrained breathing, subtle internal shifting, and soft surface tension following the moving shape.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$entity ← __bh_entity__",
+       "a long-limbed insectile creature, with jointed legs folded against its body"
+      ],
+      [
+       "$route ← __bh_route__",
+       "from one wrist up the inside of the forearm, across the shoulder and into the chest"
+      ],
+      [
+       "$surface ← __bh_surface__",
+       "skin that ripples in slow waves like fabric over moving water"
+      ],
+      [
+       "$motion ← __bh_motion__",
+       "slow, continuous and deliberate"
+      ],
+      [
+       "$reveal ← __bh_reveal__",
+       "pushes one long hand outward until every finger shows through the skin"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

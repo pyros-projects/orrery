@@ -1,0 +1,80 @@
+{
+ "preset": "tutorial/15_include",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "The picture is a Japanese woodblock print with flat colour, fine carved outlines and a sky graded from indigo to white: an iceberg-strewn bay where humpback whales surface between the ice, seen from a high ridge, in a thunderstorm rolling in, lightning flickering inside black cloud.",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "an iceberg-strewn bay where humpback whales surface between the ice"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "a thunderstorm rolling in, lightning flickering inside black cloud"
+      ],
+      [
+       "{|, one small figure in a red coat standing on it for scale|, a lone cabin with a single lit window|, a line of power pylons marching into the distance|, a small boat leaving a long wake|, a road winding through it with one car on it|, a flock of birds lifting off together}",
+       ""
+      ],
+      [
+       "{$land, $vantage, in $sky$scale. The picture is $medium.|The picture is $medium: $land, $vantage, in $sky$scale.}",
+       "The picture is $medium: $land, $vantage, in $sky$scale."
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "The picture is a Japanese woodblock print with flat colour, fine carved outlines and a sky graded from indigo to white: a savanna with one acacia tree and a herd of elephants crossing it, seen from a high ridge, in a thunderstorm rolling in, lightning flickering inside black cloud, a lone cabin with a single lit window.",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a savanna with one acacia tree and a herd of elephants crossing it"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "a thunderstorm rolling in, lightning flickering inside black cloud"
+      ],
+      [
+       "{|, one small figure in a red coat standing on it for scale|, a lone cabin with a single lit window|, a line of power pylons marching into the distance|, a small boat leaving a long wake|, a road winding through it with one car on it|, a flock of birds lifting off together}",
+       ", a lone cabin with a single lit window"
+      ],
+      [
+       "{$land, $vantage, in $sky$scale. The picture is $medium.|The picture is $medium: $land, $vantage, in $sky$scale.}",
+       "The picture is $medium: $land, $vantage, in $sky$scale."
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "a lighthouse on a lone rock in a storm-whipped sea, seen from a high ridge, in high noon under a fierce white sun and heat shimmer, a flock of birds lifting off together. The picture is a Japanese woodblock print with flat colour, fine carved outlines and a sky graded from indigo to white.",
+     "picks": [
+      [
+       "$land ← __world/landscapes__",
+       "a lighthouse on a lone rock in a storm-whipped sea"
+      ],
+      [
+       "$sky ← __world/weather__",
+       "high noon under a fierce white sun and heat shimmer"
+      ],
+      [
+       "{|, one small figure in a red coat standing on it for scale|, a lone cabin with a single lit window|, a line of power pylons marching into the distance|, a small boat leaving a long wake|, a road winding through it with one car on it|, a flock of birds lifting off together}",
+       ", a flock of birds lifting off together"
+      ],
+      [
+       "{$land, $vantage, in $sky$scale. The picture is $medium.|The picture is $medium: $land, $vantage, in $sky$scale.}",
+       "$land, $vantage, in $sky$scale. The picture is $medium."
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

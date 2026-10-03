@@ -1,0 +1,44 @@
+{
+ "preset": "tutorial/01_first_wildcard",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "a snow leopard asleep in the lantern room of a lighthouse, storm waves crashing far below, warm lamplight on its face",
+     "picks": [
+      [
+       "__creature__",
+       "snow leopard"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "a qilin asleep in the lantern room of a lighthouse, storm waves crashing far below, warm lamplight on its face",
+     "picks": [
+      [
+       "__creature__",
+       "qilin"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "an anglerfish asleep in the lantern room of a lighthouse, storm waves crashing far below, warm lamplight on its face",
+     "picks": [
+      [
+       "__creature__",
+       "anglerfish"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

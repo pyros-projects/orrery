@@ -1,0 +1,92 @@
+{
+ "preset": "tutorial/11_h3_first_scene",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Vintage film. A selkie waits alone in a laundromat at 3 a.m. The camera pushes in with small amplitude at slow speed. Beyond the windows, a glittering sun shower.\n\noverall_soundscape: A clock ticks and wind presses against old glass.\n\nnon_diegetic_music: A slow, sparse acoustic guitar line that fades out.",
+     "picks": [
+      [
+       "$hero ← __creature__",
+       "selkie"
+      ],
+      [
+       "__h3style__",
+       "vintage film"
+      ],
+      [
+       "__place__",
+       "a laundromat at 3 a.m."
+      ],
+      [
+       "__weather__",
+       "a glittering sun shower"
+      ],
+      [
+       "__instrument__",
+       "acoustic guitar"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic. A red panda waits alone in a snowed-in train station. The camera pushes in with small amplitude at slow speed. Beyond the windows, a gathering thunderstorm.\n\noverall_soundscape: A clock ticks and wind presses against old glass.\n\nnon_diegetic_music: A slow, sparse acoustic guitar line that fades out.",
+     "picks": [
+      [
+       "$hero ← __creature__",
+       "red panda"
+      ],
+      [
+       "__h3style__",
+       "live-action, cinematic"
+      ],
+      [
+       "__place__",
+       "a snowed-in train station"
+      ],
+      [
+       "__weather__",
+       "a gathering thunderstorm"
+      ],
+      [
+       "__instrument__",
+       "acoustic guitar"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic. A selkie waits alone in a greenhouse on the moon. The camera pushes in with small amplitude at slow speed. Beyond the windows, a gathering thunderstorm.\n\noverall_soundscape: A clock ticks and wind presses against old glass.\n\nnon_diegetic_music: A slow, sparse upright bass line that fades out.",
+     "picks": [
+      [
+       "$hero ← __creature__",
+       "selkie"
+      ],
+      [
+       "__h3style__",
+       "live-action, cinematic"
+      ],
+      [
+       "__place__",
+       "a greenhouse on the moon"
+      ],
+      [
+       "__weather__",
+       "a gathering thunderstorm"
+      ],
+      [
+       "__instrument__",
+       "upright bass"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

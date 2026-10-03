@@ -1,0 +1,206 @@
+{
+ "preset": "h3/14_three_endings",
+ "seeds": {
+  "0": {
+   "path": [
+    "the knock",
+    "the sitcom",
+    "the horror",
+    "the romance"
+   ],
+   "ended": true,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "<Subject 1> = a young woman in a yellow raincoat, soaked to the skin\n<Subject 2> = her old grey greyhound, in a tartan dog coat\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous shot. <Subject 1> (S1) runs through wet snow driving sideways up to the door of a crooked Victorian house on a hill, <Subject 2> at her heels, and knocks three times. The camera pushes in at slow speed. Nobody answers; then the lock clicks by itself. <Subject 1> (S1) says in a young woman's voice, out of breath: <d>[English] Hello? My car broke down…</d> The shot ends as the door swings open on a dark hallway, and somewhere inside a light comes on.\n\noverall_soundscape: The storm roaring, three heavy knocks, and a lock clicking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
+       "wet snow driving sideways"
+      ],
+      [
+       "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
+       "a crooked Victorian house on a hill"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "<Subject 1> = a young woman in a yellow raincoat, soaked to the skin\n<Subject 2> = her old grey greyhound, in a tartan dog coat\n\nintegrated_multimodal_description: [Shot 1] A bright multi-camera sitcom, flat warm studio light, a laugh track. The shot opens as the door swings open on a dark hallway, and somewhere inside a light comes on. The camera holds a static shot. The lights blaze on: the hallway is packed with strangers in party hats who shout \"Surprise!\" at the wrong person. <Subject 1> freezes, dripping, and someone hands her a slice of cake. The shot ends as <Subject 1> takes a bite of the cake and shrugs.\n\noverall_soundscape: Party horns and a studio audience bursting into laughter.\n\nnon_diegetic_music: A bouncy slap-bass sting.",
+     "picks": [
+      [
+       "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
+       "wet snow driving sideways"
+      ],
+      [
+       "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
+       "a crooked Victorian house on a hill"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "<Subject 1> = a young woman in a yellow raincoat, soaked to the skin\n<Subject 2> = her old grey greyhound, in a tartan dog coat\n\nintegrated_multimodal_description: [Shot 1] A slow-burning horror film, deep shadows, cold blue moonlight, the grain of 35 mm film. The shot opens as the door swings open on a dark hallway, and somewhere inside a light comes on. The camera pushes in at slow speed. <Subject 1> steps into the hallway. The light at the far end is a single candle, and as she reaches it the door slams shut behind her; in the dark, something breathes on the stairs above. The shot ends as the candle goes out.\n\noverall_soundscape: The storm cut off at once, a slow creak on each stair, and breathing that is not hers.\n\nnon_diegetic_music: A single low string note that will not resolve.",
+     "picks": [
+      [
+       "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
+       "wet snow driving sideways"
+      ],
+      [
+       "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
+       "a crooked Victorian house on a hill"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "<Subject 1> = her old grey greyhound, in a tartan dog coat\n\nintegrated_multimodal_description: [Shot 1] A warm romantic drama, golden firelight, soft focus, shallow depth of field. The shot opens as the door swings open on a dark hallway, and somewhere inside a light comes on. The camera arcs around the subject at slow speed. A man in a knitted jumper appears in the warm light with a towel over his arm, as surprised as she is. He hands her the towel; she laughs for the first time all night, and the fire crackles behind them. The shot ends as the door closes on the storm, and the two of them stand by the fire.\n\noverall_soundscape: A crackling fire, the storm muffled outside, and soft laughter.\n\nnon_diegetic_music: A gentle solo piano at a slow tempo.",
+     "picks": [
+      [
+       "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
+       "wet snow driving sideways"
+      ],
+      [
+       "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
+       "a crooked Victorian house on a hill"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "path": [
+    "the knock",
+    "the sitcom",
+    "the horror",
+    "the romance"
+   ],
+   "ended": true,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "<Subject 1> = a young woman in a yellow raincoat, soaked to the skin\n<Subject 2> = her old grey greyhound, in a tartan dog coat\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous shot. <Subject 1> (S1) runs through wet snow driving sideways up to the door of a crooked Victorian house on a hill, <Subject 2> at her heels, and knocks three times. The camera pushes in at slow speed. Nobody answers; then the lock clicks by itself. <Subject 1> (S1) says in a young woman's voice, out of breath: <d>[English] Hello? My car broke down…</d> The shot ends as the door swings open on a dark hallway, and somewhere inside a light comes on.\n\noverall_soundscape: The storm roaring, three heavy knocks, and a lock clicking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
+       "wet snow driving sideways"
+      ],
+      [
+       "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
+       "a crooked Victorian house on a hill"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "<Subject 1> = a young woman in a yellow raincoat, soaked to the skin\n<Subject 2> = her old grey greyhound, in a tartan dog coat\n\nintegrated_multimodal_description: [Shot 1] A bright multi-camera sitcom, flat warm studio light, a laugh track. The shot opens as the door swings open on a dark hallway, and somewhere inside a light comes on. The camera holds a static shot. The lights blaze on: the hallway is packed with strangers in party hats who shout \"Surprise!\" at the wrong person. <Subject 1> freezes, dripping, and someone hands her a slice of cake. The shot ends as <Subject 1> takes a bite of the cake and shrugs.\n\noverall_soundscape: Party horns and a studio audience bursting into laughter.\n\nnon_diegetic_music: A bouncy slap-bass sting.",
+     "picks": [
+      [
+       "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
+       "wet snow driving sideways"
+      ],
+      [
+       "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
+       "a crooked Victorian house on a hill"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "<Subject 1> = a young woman in a yellow raincoat, soaked to the skin\n<Subject 2> = her old grey greyhound, in a tartan dog coat\n\nintegrated_multimodal_description: [Shot 1] A slow-burning horror film, deep shadows, cold blue moonlight, the grain of 35 mm film. The shot opens as the door swings open on a dark hallway, and somewhere inside a light comes on. The camera pushes in at slow speed. <Subject 1> steps into the hallway. The light at the far end is a single candle, and as she reaches it the door slams shut behind her; in the dark, something breathes on the stairs above. The shot ends as the candle goes out.\n\noverall_soundscape: The storm cut off at once, a slow creak on each stair, and breathing that is not hers.\n\nnon_diegetic_music: A single low string note that will not resolve.",
+     "picks": [
+      [
+       "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
+       "wet snow driving sideways"
+      ],
+      [
+       "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
+       "a crooked Victorian house on a hill"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "<Subject 1> = her old grey greyhound, in a tartan dog coat\n\nintegrated_multimodal_description: [Shot 1] A warm romantic drama, golden firelight, soft focus, shallow depth of field. The shot opens as the door swings open on a dark hallway, and somewhere inside a light comes on. The camera arcs around the subject at slow speed. A man in a knitted jumper appears in the warm light with a towel over his arm, as surprised as she is. He hands her the towel; she laughs for the first time all night, and the fire crackles behind them. The shot ends as the door closes on the storm, and the two of them stand by the fire.\n\noverall_soundscape: A crackling fire, the storm muffled outside, and soft laughter.\n\nnon_diegetic_music: A gentle solo piano at a slow tempo.",
+     "picks": [
+      [
+       "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
+       "wet snow driving sideways"
+      ],
+      [
+       "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
+       "a crooked Victorian house on a hill"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "path": [
+    "the knock",
+    "the sitcom",
+    "the horror",
+    "the romance"
+   ],
+   "ended": true,
+   "takes": [
+    {
+     "clip": 0,
+     "text": "<Subject 1> = a young woman in a yellow raincoat, soaked to the skin\n<Subject 2> = her old grey greyhound, in a tartan dog coat\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic, one continuous shot. <Subject 1> (S1) runs through a howling gale up to the door of a crooked Victorian house on a hill, <Subject 2> at her heels, and knocks three times. The camera pushes in at slow speed. Nobody answers; then the lock clicks by itself. <Subject 1> (S1) says in a young woman's voice, out of breath: <d>[English] Hello? My car broke down…</d> The shot ends as the door swings open on a dark hallway, and somewhere inside a light comes on.\n\noverall_soundscape: The storm roaring, three heavy knocks, and a lock clicking open.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
+       "a howling gale"
+      ],
+      [
+       "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
+       "a crooked Victorian house on a hill"
+      ]
+     ]
+    },
+    {
+     "clip": 1,
+     "text": "<Subject 1> = a young woman in a yellow raincoat, soaked to the skin\n<Subject 2> = her old grey greyhound, in a tartan dog coat\n\nintegrated_multimodal_description: [Shot 1] A bright multi-camera sitcom, flat warm studio light, a laugh track. The shot opens as the door swings open on a dark hallway, and somewhere inside a light comes on. The camera holds a static shot. The lights blaze on: the hallway is packed with strangers in party hats who shout \"Surprise!\" at the wrong person. <Subject 1> freezes, dripping, and someone hands her a slice of cake. The shot ends as <Subject 1> takes a bite of the cake and shrugs.\n\noverall_soundscape: Party horns and a studio audience bursting into laughter.\n\nnon_diegetic_music: A bouncy slap-bass sting.",
+     "picks": [
+      [
+       "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
+       "a howling gale"
+      ],
+      [
+       "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
+       "a crooked Victorian house on a hill"
+      ]
+     ]
+    },
+    {
+     "clip": 2,
+     "text": "<Subject 1> = a young woman in a yellow raincoat, soaked to the skin\n<Subject 2> = her old grey greyhound, in a tartan dog coat\n\nintegrated_multimodal_description: [Shot 1] A slow-burning horror film, deep shadows, cold blue moonlight, the grain of 35 mm film. The shot opens as the door swings open on a dark hallway, and somewhere inside a light comes on. The camera pushes in at slow speed. <Subject 1> steps into the hallway. The light at the far end is a single candle, and as she reaches it the door slams shut behind her; in the dark, something breathes on the stairs above. The shot ends as the candle goes out.\n\noverall_soundscape: The storm cut off at once, a slow creak on each stair, and breathing that is not hers.\n\nnon_diegetic_music: A single low string note that will not resolve.",
+     "picks": [
+      [
+       "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
+       "a howling gale"
+      ],
+      [
+       "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
+       "a crooked Victorian house on a hill"
+      ]
+     ]
+    },
+    {
+     "clip": 3,
+     "text": "<Subject 1> = her old grey greyhound, in a tartan dog coat\n\nintegrated_multimodal_description: [Shot 1] A warm romantic drama, golden firelight, soft focus, shallow depth of field. The shot opens as the door swings open on a dark hallway, and somewhere inside a light comes on. The camera arcs around the subject at slow speed. A man in a knitted jumper appears in the warm light with a towel over his arm, as surprised as she is. He hands her the towel; she laughs for the first time all night, and the fire crackles behind them. The shot ends as the door closes on the storm, and the two of them stand by the fire.\n\noverall_soundscape: A crackling fire, the storm muffled outside, and soft laughter.\n\nnon_diegetic_music: A gentle solo piano at a slow tempo.",
+     "picks": [
+      [
+       "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
+       "a howling gale"
+      ],
+      [
+       "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
+       "a crooked Victorian house on a hill"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

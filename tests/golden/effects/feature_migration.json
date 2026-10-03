@@ -1,0 +1,92 @@
+{
+ "preset": "effects/feature_migration",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a tiled changing room at a public swimming pool, framed from the chest up, one hand raised with the palm open beside the face. The camera pushes in at slow speed. A small dark mole beneath the eye begins to slide slowly out of its place, moving across the skin like a reflection gliding over glass, while the skin it leaves behind closes smooth and featureless. It travels steadily down along the jaw and the neck, a small living shape crossing the surface of the body in one continuous path. <Subject 1> holds very still, breathing carefully, and turns the raised hand to watch it arrive. In the final moment <Subject 1> raises the hand to the camera, and a small dark mole beneath the eye looks back from the palm of the right hand.\n\noverall_soundscape: Quiet room ambience, restrained breathing, a soft sliding sound across the skin, and a small wet settling as the feature arrives.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a tiled changing room at a public swimming pool"
+      ],
+      [
+       "{the mouth|the left eye|a small dark mole beneath the eye}",
+       "a small dark mole beneath the eye"
+      ],
+      [
+       "{the palm of the right hand|the side of the neck|the inside of the forearm}",
+       "the palm of the right hand"
+      ],
+      [
+       "{it settles into $target and opens, alive, while the old place stays smooth and blank|HOST raises the hand to the camera, and $feature looks back from $target|HOST touches the blank skin where it used to be, and a faint line begins to form there again}",
+       "HOST raises the hand to the camera, and $feature looks back from $target"
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the young man of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a dim apartment sitting room, framed from the chest up, one hand raised with the palm open beside the face. The camera pushes in at slow speed. The mouth begins to slide slowly out of its place, moving across the skin like a reflection gliding over glass, while the skin it leaves behind closes smooth and featureless. It travels steadily down along the jaw and the neck, a small living shape crossing the surface of the body in one continuous path. <Subject 1> holds very still, breathing carefully, and turns the raised hand to watch it arrive. In the final moment <Subject 1> touches the blank skin where it used to be, and a faint line begins to form there again.\n\noverall_soundscape: Quiet room ambience, restrained breathing, a soft sliding sound across the skin, and a small wet settling as the feature arrives.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the young man"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a dim apartment sitting room"
+      ],
+      [
+       "{the mouth|the left eye|a small dark mole beneath the eye}",
+       "the mouth"
+      ],
+      [
+       "{the palm of the right hand|the side of the neck|the inside of the forearm}",
+       "the palm of the right hand"
+      ],
+      [
+       "{it settles into $target and opens, alive, while the old place stays smooth and blank|HOST raises the hand to the camera, and $feature looks back from $target|HOST touches the blank skin where it used to be, and a faint line begins to form there again}",
+       "HOST touches the blank skin where it used to be, and a faint line begins to form there again"
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "<Subject 1> = the older woman of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] Live-action, cinematic surreal body horror, photorealistic. <Subject 1> stands facing the camera in a narrow hotel corridor, framed from the chest up, one hand raised with the palm open beside the face. The camera pushes in at slow speed. The mouth begins to slide slowly out of its place, moving across the skin like a reflection gliding over glass, while the skin it leaves behind closes smooth and featureless. It travels steadily down along the jaw and the neck, a small living shape crossing the surface of the body in one continuous path. <Subject 1> holds very still, breathing carefully, and turns the raised hand to watch it arrive. In the final moment it settles into the palm of the right hand and opens, alive, while the old place stays smooth and blank.\n\noverall_soundscape: Quiet room ambience, restrained breathing, a soft sliding sound across the skin, and a small wet settling as the feature arrives.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "$host ← __bh_host__",
+       "the older woman"
+      ],
+      [
+       "$room ← __bh_room__",
+       "a narrow hotel corridor"
+      ],
+      [
+       "{the mouth|the left eye|a small dark mole beneath the eye}",
+       "the mouth"
+      ],
+      [
+       "{the palm of the right hand|the side of the neck|the inside of the forearm}",
+       "the palm of the right hand"
+      ],
+      [
+       "{it settles into $target and opens, alive, while the old place stays smooth and blank|HOST raises the hand to the camera, and $feature looks back from $target|HOST touches the blank skin where it used to be, and a faint line begins to form there again}",
+       "it settles into $target and opens, alive, while the old place stays smooth and blank"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}
