@@ -24,8 +24,8 @@ Nodes under **orrery**:
 
 - **Orrery Prompt**: seed and target (`text`, `h3-base`, `flat`), optional
   `segment`, `first_frame` and `last_frame` → `text`, `picks`, `seed`, `width`,
-  `height`, `length`, `lora_stack`, `load_index`, `save_index`, `previous`,
-  `previous_audio`, `megapixels`. A picture wired into `first_frame` (else
+  `height`, `length`, `lora_stack` and
+  `megapixels`. A picture wired into `first_frame` (else
   `last_frame`), the same one the H3 node gets, gives `width`/`height` its shape
   at the header's megapixels (else H3's canvas area), on the 32 grid as close to
   its shape as the grid allows: H3 stretches a first frame and crops a last one
@@ -41,8 +41,7 @@ Nodes under **orrery**:
   reported in the log and in the Test tab. A reel (`CHUNK` blocks,
   `repeat N|forever`, `$x~N`; see [h3.md](h3.md) 1d) writes one clip per run:
   `segment` counts up by itself, and Orrery Continue / Orrery Film (below)
-  chain the clips; with H3 Motion Context instead, `load_index`/`save_index`
-  go into its Load and Save Latent's `clip_index`. The node is the whole of orrery, in six tabs (⤢ opens the
+  chain the clips. The node is the whole of orrery, in six tabs (⤢ opens the
   same app over the canvas, Esc brings it back):
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `__creature#` properties and their

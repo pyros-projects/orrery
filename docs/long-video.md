@@ -3,8 +3,8 @@
 Status: agreed 2026-09-24. This is orrery's end stage. Built: R1 (Ref2VA), and
 the reel (stage 4, without memory lists). The engine is orrery's own Orrery
 Continue / Orrery Film (Masked AV from H3 Continuum, since 2026-10-02); H3
-Motion Context, which Pyro's workflow used before, still works, and Contex Loop
-stays an option. Sources: a design chat between Pyro and Codie
+Motion Context, which Pyro's workflow used before, and Contex Loop stay
+options outside orrery. Sources: a design chat between Pyro and Codie
 (a Garamonde virtual tour chained from 10 s clips with 1 s overlap), the
 installed `ComfyUI-H3RefMods`, `comfyui-minimaxh3-contex-loop` and
 `ComfyUI-H3-Motion-Context` packs, and the official full-reference guide.
@@ -71,8 +71,7 @@ Per chunk orrery emits (built):
 - `--…--` slots written by the language model, which from the second segment
   on watches the previous clip from the chain (one frame a second and the
   last one): the semantic memory grounded in what H3 actually rendered, not
-  only in what was asked for; `previous`/`previous_audio`, the last 3 s of that
-  clip, for `SHOT …: after video 1` (`[video continuation]`).
+  only in what was asked for.
 
 Built (2026-09-25): **Orrery Refs** routes the reference images per chunk. Wire
 every image as `image_N` (N as in the CAST's `(image N)`) and the prompt's
@@ -103,9 +102,9 @@ Built (2026-10-02): **orrery's own continuation** ([plan](plan-continuation.md),
 the last 22 frames of the one before, picture and sound, held by a
 `noise_mask` (Masked AV, taken from H3 Continuum, MIT, with attribution); Orrery
 Film trims them, keeps one take per segment and joins the film. It replaces
-Motion Context's six nodes and the `load_index`/`save_index` wiring, and needs
-no model or layout patch. Motion Context still works; the previous clip, `SEND:`
-and the timeline read whichever store was written last.
+Motion Context's six nodes and needs no model or layout patch. The previous
+clip, `SEND:` and the timeline read Orrery Film's takes, or Motion Context's
+Chain Video, whichever was written last.
 
 Built (2026-10-02): the **memory list** per chunk. A clip keeps the CAST members
 it names and the `global` ones, with their RefMods, and leaves the others out, so
@@ -117,13 +116,10 @@ memory (a RefMod of the chunk before), and making canon from the galaxy.
 
 Wiring: Orrery `picks` → Orrery Continue, with the H3 node's latent (and
 conditioning) on their way to the sampler, and the sampled latent with the
-decoded clip into Orrery Film (with Motion Context instead: `load_index` → Load
-Latent `clip_index`, `save_index` → Save Latent `clip_index`; orrery counts the
-segments itself, so the Chain node's buttons are not needed); `text` →
+decoded clip into Orrery Film (orrery counts the segments itself); `text` →
 Reference to Video `prompt`; `length` → its `length`;
 `lora_stack` → the `lora_stack` input of Lora Loader (LoraManager) or any
-other stack loader; `previous` → Reference to Video `ref_video_0`,
-`previous_audio` → `ref_video_audio_0`. Queue with a Run count of the reel's clips (the stats line
+other stack loader. Queue with a Run count of the reel's clips (the stats line
 shows it), or Run (Instant) for `repeat forever`; the Orrery seed stays fixed
 (the node does that for a reel). `CHUNK … repeat N|forever` and `$x~N` make
 loops such as `fashion/runway_loop`.
@@ -173,7 +169,7 @@ H3 ──▶ Review Gate / Galaxy ♥ ──▶ "make canon" ──▶ new RefMo
    connected. Declarations stay the source of truth.
 3. **R3, the cast describes itself:** Qwen3-VL (Krea 2's text encoder) writes a
    member's description from its reference image.
-4. **Reel (built; Orrery Continue / Orrery Film, or Motion Context):** `CHUNK`,
+4. **Reel (built; Orrery Continue / Orrery Film):** `CHUNK`,
    `HANDOFF`, `LORA:`, `context:`, the `segment` input. Open: memory lists.
 5. **Memory router and canon:** the per-chunk RefMod node, "make canon" from
    the galaxy.

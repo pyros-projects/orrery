@@ -72,7 +72,7 @@ const REF = [
     ["SHOT 5s: from image 5", "ref2va: the shot begins from a reference picture (to image N: ends on it)", ""],
     ["[audio 1]", "a reference slot in prose; orrery writes the label the node uses", ""],
   ]],
-  ["Reels (Orrery Continue, or H3 Motion Context)", [
+  ["Reels (Orrery Continue)", [
     ["CHUNK the salon", "one clip, continuing the one before; everything before the first CHUNK (style, CAST, bindings) is the world and holds for every clip", "CHUNK\nSHOT 5s: push in, slow\n"],
     ["CHUNK the walk repeat 8", "plays this chunk 8 times (repeat forever: until you stop); bindings inside a chunk roll anew every clip", "CHUNK the walk repeat forever\n"],
     ["$look~1", "$look as it was one clip ago (~2: two clips); the model who walks back keeps her look", "$look~1"],
@@ -84,7 +84,6 @@ const REF = [
     ["LORA: <lora:name:0.8>", "the lora_stack output, for any loader with a lora_stack input: lines before the first CHUNK always, a chunk's own only there; after LORA: the editor lists your LoRA files; <lora:name:model:clip> sets both strengths", "LORA: "],
     ["context: 22", "the frames each clip continues from (Orrery Continue pins 22; Motion Context 5, 22, 39, 56); from the second chunk on, Shot 1 and length include them", "context: 22"],
     ["Orrery Continue · Orrery Film", "picks and the H3 node's latent into Orrery Continue, its latent into the sampler; the sampled latent and the decoded clip into Orrery Film, which keeps the takes and joins the film; segment counts up by itself, so Generate ×N plays the reel", ""],
-    ["load_index · save_index", "with H3 Motion Context instead: wire them into its Load and Save Latent's clip_index", ""],
   ]],
 ];
 

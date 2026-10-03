@@ -36,14 +36,12 @@ setting. When the node runs, the model
   without gets the lines around it and a default of 1-4 lowercase words.
 - writes `--directions--` slots where they stand, seeing the whole compiled
   prompt around them. From a reel's second segment on it also watches the clip
-  before (H3 Motion Context's Chain Video, one frame a second and the last one)
-  and continues it; the node's `previous` and `previous_audio` outputs hand the
-  last 3 s of that clip to the Reference to Video node's `ref_video`, for
-  `SHOT …: after video 1`:
+  before (one frame a second and the last one, from Orrery Film's takes or H3
+  Motion Context's Chain Video) and continues it:
 
   ```
   CHUNK next repeat forever
-  SHOT 5s: after video 1, tracking, slow
+  SHOT 5s: tracking, slow
   --what WASHER does in the next 5 seconds, moving the story on--
   ```
 
