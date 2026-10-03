@@ -102,7 +102,7 @@ def test_node_classes_declare_comfy_interfaces():
     inputs = OrreryPrompt.INPUT_TYPES()["required"]
     assert inputs["target"][0] == ["text", "h3-base", "flat"]
     assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length", "lora_stack",
-                                         "load_index", "save_index", "previous", "previous_audio", "megapixels")
+                                         "megapixels")
     assert OrreryLog.OUTPUT_NODE is True
     film, cont = NODE_CLASS_MAPPINGS["OrreryFilm"], NODE_CLASS_MAPPINGS["OrreryContinue"]
     assert film.OUTPUT_NODE is True and film.RETURN_TYPES == ("IMAGE", "AUDIO", "VIDEO")
@@ -136,7 +136,7 @@ def test_prompt_node_offers_presets_in_a_dropdown(home):
 
 
 def test_prompt_node_outputs_size_and_h3_length(home):
-    *_, width, height, length, _, _, _ = run_prompt("a __animal__\n: x8 seed=100 w832 h1216", 1, "text", str(home))
+    *_, width, height, length, _ = run_prompt("a __animal__\n: x8 seed=100 w832 h1216", 1, "text", str(home))
     assert (width, height, length) == (832, 1216, 124)
 
 
@@ -314,14 +314,12 @@ def test_unresolved_loras_are_left_out_and_reported(home, monkeypatch):
     assert any("two" in i["message"] for i in json.loads(picks)["lint"])
 
 
-def test_the_node_counts_segments_and_outputs_motion_context_indices(home):
+def test_the_node_counts_segments(home):
     optional = OrreryPrompt.INPUT_TYPES()["optional"]
     assert optional["segment"][0] == "INT" and optional["segment"][1]["control_after_generate"]
     assert "forceInput" not in optional["segment"][1]
-    assert OrreryPrompt.RETURN_NAMES[6:9] == ("lora_stack", "load_index", "save_index")
-    assert OrreryPrompt.RETURN_TYPES[6:9] == ("LORA_STACK", "INT", "INT")
-    *_, load, save = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
-    assert (load, save) == (1, 2)
+    _, picks, *_ = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
+    assert json.loads(picks)["segment"] == 1
 
 
 def test_a_reel_tells_orrery_continue_its_chain_and_context(home):
@@ -449,15 +447,10 @@ def test_an_unusable_answer_keeps_the_directions_and_says_so(home, monkeypatch):
     assert any(i["severity"] == "warn" and "slot" in i["message"] for i in json.loads(picks)["lint"])
 
 
-def test_the_node_hands_on_the_previous_clip_for_ref2va():
-    assert OrreryPrompt.RETURN_NAMES[-3:-1] == ("previous", "previous_audio")
-    assert OrreryPrompt.RETURN_TYPES[-3:-1] == ("IMAGE", "AUDIO")
+def test_outside_a_chain_the_node_runs_without_a_previous_clip(home):
     assert OrreryPrompt.INPUT_TYPES()["optional"]["latent_path"][1]["forceInput"] is True
-
-
-def test_outside_a_chain_there_is_no_previous_clip(home):
     outputs = OrreryPrompt().run("a quiet street", 1, "text", home=str(home), segment=2)
-    assert len(outputs) == len(OrreryPrompt.RETURN_TYPES) and outputs[-3:-1] == (None, None)
+    assert len(outputs) == len(OrreryPrompt.RETURN_TYPES) and outputs[-1] > 0  # megapixels
 
 
 def test_only_slots_in_the_played_chunk_can_go_unanswered(home, monkeypatch):

@@ -54,13 +54,6 @@ def test_the_model_sees_one_frame_a_second_and_the_last_one():
     assert still_indices(1, 24.0) == [0]
 
 
-def test_ref2va_gets_the_last_three_seconds():
-    """What video continuation wants (the H3 prompt builders' "last 3s")."""
-    from orrery.chain import tail_start
-    assert tail_start(120, 24.0) == 48
-    assert tail_start(50, 24.0) == 0
-
-
 def test_a_segments_own_clip_is_found_by_its_segment(tmp_path):
     """SEND: reads the sending segment's own clip: segment 0 is Chain Video's clip 1."""
     from orrery.chain import clip_file
