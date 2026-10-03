@@ -427,6 +427,7 @@ def _row_json(row: dict, by_hash: dict[str, str], known: set[str]) -> dict:
         "id": row["id"], "ts": row.get("ts"), "seed": row.get("seed"),
         "target": row.get("target"), "template": row.get("template"), "text": row.get("text"),
         "picks": row.get("picks") or [], "rating": row.get("rating"), "params": row.get("params") or {},
+        "exports": row.get("exports") or {},
         "media_name": Path(media).name if media else None, "kind": row["kind"],
         "preset": _owner(row, by_hash, known), "folder": row.get("folder") or "",
     }

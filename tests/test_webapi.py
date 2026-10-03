@@ -318,7 +318,7 @@ def test_galaxy_rows_name_their_preset_and_filter_by_template(home, tmp_path):
     log_row(home, tmp_path, "something else", seed=2, name="2.png")
     rows = ok(home, webapi.galaxy)["rows"]
     assert [r["seed"] for r in rows] == [2, 1]
-    assert set(rows[0]) == {"id", "ts", "seed", "target", "template", "text", "picks", "rating",
+    assert set(rows[0]) == {"id", "ts", "seed", "target", "template", "text", "picks", "rating", "exports",
                             "media_name", "kind", "preset", "params", "folder"}
     assert rows[1]["preset"] == "tutorial/01_first_wildcard" and rows[0]["preset"] is None
     assert rows[1]["media_name"] == "1.png" and rows[1]["kind"] == "image"

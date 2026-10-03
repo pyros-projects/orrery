@@ -427,6 +427,12 @@
 .orrery-app .gal.dragging .gcard { cursor: grabbing; }
 .orrery-app .prose { line-height: 1.6; }
 .orrery-app .picklist { display: grid; gap: 4px; margin-top: 6px; }
+.orrery-app .sheet { background: var(--surface); border: 1px solid var(--line); border-radius: 9px; padding: 8px 10px; }
+.orrery-app .sheet dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 12px; margin: 6px 0 0; font-size: 12.5px; }
+.orrery-app .sheet dt { font: 600 11.5px var(--mono); color: var(--brass); padding-top: 1px; }
+.orrery-app .sheet dd { margin: 0; overflow-wrap: anywhere; }
+.orrery-app .sheet dd small { display: block; color: var(--muted); }
+.orrery-app .sheet dd small b { color: var(--ink); font-weight: 600; margin-right: 4px; }
 .orrery-app .pick { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 7px; padding: 5px 8px; text-align: left; font-size: 12px; }
 .orrery-app .pick:hover { border-color: var(--teal); }
 .orrery-app .pick small { display: block; font: 11px var(--mono); color: var(--faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

@@ -438,6 +438,16 @@ export function applyDials(text, values) {
 // the rest. A folder is a real one (film/genre → film: genre) or, for flat names such as the
 // built-ins, a shared prefix (couture_form, couture_house → couture: form, house). Each item carries
 // its name without the folder.
+// A picture's sheet: what its template EXPORTed, one line each; an entry's fields and a list's items apart.
+export function exportRows(exports) {
+  return Object.entries(exports || {}).map(([name, v]) => {
+    const fields = v && typeof v === "object" && !Array.isArray(v) ? v : { value: v };
+    const value = fields.value;
+    return { name, value: Array.isArray(value) ? null : String(value ?? ""), items: Array.isArray(value) ? value.map(String) : [],
+      fields: Object.entries(fields).filter(([k]) => k !== "value").map(([k, x]) => [k, Array.isArray(x) ? x.join(", ") : String(x)]) };
+  });
+}
+
 // A library's line in the list, from the library with its entries (what the server sends after an edit).
 export function libraryHead(lib) {
   return { name: lib.name, source: lib.source, count: lib.entries.length, tags: lib.tags || [], pending: !!lib.pending,
