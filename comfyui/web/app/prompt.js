@@ -277,6 +277,7 @@ export function renderPrompt(app) {
   fixReelSeed(app);
   fixUniqueSeed(app);
   refreshPlan(app);
+  refreshReelPath(app);  // a reel with CUT TO: walks at the seed: without it no scene knows its clips
   refreshRemembered(app);  // the hints and the remembered frames of a reel just opened
   refreshAnnotations(app);
 }

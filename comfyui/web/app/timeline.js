@@ -52,7 +52,10 @@ function bigClipHTML(app, s, clip, segment) {
 // A chunk's clips for its section in the cells view; the section sizes them (--clip-w, --clip-h). The frames
 // its REMEMBER: lines take come under them (remember.js stripHTML).
 export function sectionHTML(app, c) {
-  if (c.first === null) return '<span class="muted cm-none">never plays: a scene before it repeats forever</span>';
+  if (c.first === null) {
+    return `<span class="muted cm-none">${!c.segs ? "never plays: a scene before it repeats forever"
+      : app.reelPath() ? "never plays at this seed: the walk does not reach it" : "walking the reel at this seed…"}</span>`;
+  }
   const clips = new Map((app.data.chain?.clips || []).map((x) => [x.segment, x]));
   const segment = Number(app.bridge.getSegment()), segs = segmentsOf(c, clips);
   return `<div class="cm-clips">${segs.map((s) => bigClipHTML(app, s, clips.get(s), segment)).join("")}</div>${segs.map((s) => takesHTML(app, s)).join("")}`;

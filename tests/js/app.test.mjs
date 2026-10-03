@@ -464,6 +464,14 @@ test("sample surfing numbers its takes on from the ones a clip has, or follows t
   assert.equal(new Set(random).size, 3);
 });
 
+test("a scene that plays no clip says why: the walk not known yet, not reached, or after a forever (#210)", async () => {
+  const { sectionHTML } = await import("../../comfyui/web/app/timeline.js");
+  const app = (walked) => ({ reelPath: () => walked });
+  assert.match(sectionHTML(app(null), { first: null, segs: [] }), /walking the reel at this seed/);
+  assert.match(sectionHTML(app({ path: [0, 2] }), { first: null, segs: [] }), /walk does not reach it/);
+  assert.match(sectionHTML(app(null), { first: null }), /a scene before it repeats forever/);
+});
+
 test("Write now counts the libraries a template still needs, as autolib does", () => {
   const libs = [{ name: "animal", count: 3 }, { name: "style", count: 2 }];
   const text = "# __commented__\na __animal:5__ in __style__ by __makers/new__ <lora:__x__:1>\n__style:2__ \\__escaped__ __clothing/*__ __mine__";
