@@ -24,7 +24,11 @@ History), plus Orrery Refs, Orrery Continue, Orrery Film and Orrery Log.
 
 ## Checks
 
-All three pass before a PR:
+While you work, `scripts/check` runs all three in seconds: pytest in parallel over every core, the
+tests that failed last time first, stopping at the first failure.
+
+All three pass in full before a PR. CI (`.github/workflows/ci.yml`) runs them on every PR and on
+`main`:
 
 ```
 uv run pytest
