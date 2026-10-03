@@ -109,6 +109,8 @@ def test_a_grid_axis_dialed_to_one_value_is_a_grid_of_one():
     assert [expand(t, 4, LIBS, cell=c).text for c in range(3)] == [
         expand(override(t, {"view": v}), 4, LIBS, cell=0).text for v in ("front", "side", "back")]
     assert batch.axes(override(t, {"view": "side"}), LIBS)[0].options == ["side"]
+    lib = "$s = __style__\n$s, __style__ again\n: grid $s"  # a library dialed to its entry keeps it
+    assert [expand(override(lib, {"s": "clay"}), 4, LIBS, cell=0).text.split(",")[0]] == ["clay"]
 
 
 def test_expand_batch_gives_every_cell_at_each_seed():

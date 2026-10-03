@@ -84,6 +84,11 @@ def _choices(expr: str, libraries: Mapping[str, Library], what: str) -> list[str
 _SYNTAX = re.compile(r"[{}$<@]|__")  # what makes an expression roll; plain words are one value
 
 
+def _one_value(expr: str) -> bool:
+    """A binding dialed to one value: plain words, or a library dialed to its entry (FIX p<hex> FIX)."""
+    return not _SYNTAX.search(expr) or f"{FIX}p" in expr
+
+
 def _binding(source: str, name: str, what: str) -> str:
     for bound, expr in parse(source).bindings:
         if bound == name:
@@ -95,7 +100,7 @@ def _axis(text: str, source: str, libraries: Mapping[str, Library], what: str) -
     text = text.strip()
     if text.startswith("$"):
         expr = _binding(source, text[1:], what)
-        if not _SYNTAX.search(expr):  # a dial set to one of its options: a grid of one
+        if _one_value(expr):  # a dial set to one of its options: a grid of one
             return Axis(text, expr.strip(), [expr.strip()])
         return Axis(text, expr.strip(), _choices(expr, libraries, f"{what} {text}"))
     return Axis(text, without_directions(text), _choices(text, libraries, what))
@@ -143,7 +148,7 @@ def _fix(source: str, axis: Axis, index) -> str:
             if done or not m or m.group(2) != name:
                 return raw
             done = True
-            if not _SYNTAX.search(axis.expr):  # dialed to one value: it is already what the cell holds
+            if _one_value(axis.expr):  # dialed to one value: it is already what the cell holds
                 index(0)
                 return raw
             return m.group(1) + _fix(m.group(3), Axis(axis.expr, axis.expr, axis.options), lambda _: index(0))
