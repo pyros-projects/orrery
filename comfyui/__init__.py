@@ -13,8 +13,13 @@ _SRC = Path(__file__).resolve().parent.parent / "src"
 if str(_SRC) not in sys.path:
     sys.path.insert(0, str(_SRC))
 
+from orrery import refbias
 from orrery.comfy import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
+from orrery.comfy_refmods import register_examples
 from orrery.webapi import register
+
+refbias.install()  # a strength per RefMod: wraps H3's attention in memory, ComfyUI's files stay as they are
+register_examples()  # the RefMods that ship with orrery (Jinx), for the completion
 
 WEB_DIRECTORY = "./web"
 

@@ -261,6 +261,8 @@ def test_a_bracket_before_its_image_exists_is_flagged():
     ("SEND: frame 0 to image 10", "1–9"),
     ("SEND: frame 0 to picture 3", "image N"),
     ("SEND: frame to image 3", "frame"),
+    ("SEND: frame 0 to refmod", "refmod NAME"),
+    ("SEND: every 0 frames to refmod jinx_look", "every 0 frames"),
 ])
 def test_malformed_send_lines_are_clear_errors(line, words):
     with pytest.raises(ValueError, match=re.escape(words)):
@@ -272,6 +274,42 @@ def test_two_sends_to_one_image_warn_and_the_later_takes_over():
     assert split_reel(src).ready(3)[3] == {"segment": 2, "frames": [[9, 9]]}
     lint = [i.message for i in ref2va(src, segment=2).lint]
     assert any("image 3" in m and "segment 3" in m and "(CHUNK 2) takes over" in m for m in lint)
+
+
+MOD_REEL = """@h3 t2va 16:9
+CAST
+JINX (refmod jinx_look): a young woman
+CHUNK the outfit
+SHOT 5s: static
+JINX shows her outfit and walks out.
+SEND: every 10 frames to refmod jinx_look
+CHUNK the room
+SHOT 5s: static
+The empty room.
+CHUNK the return
+SHOT 5s: static
+JINX slides back in.
+"""
+
+
+def test_frames_sent_to_a_refmod_become_it_from_the_clip_after():
+    from orrery.reel import Send
+    reel = split_reel(MOD_REEL)
+    assert reel.blocks[0].sends == [Send([[0, -1]], None, refmod="jinx_look", step=10)]
+    assert (reel.send_slots, reel.send_refmods) == ([], ["jinx_look"])
+    first, _, back = (compile_scene(MOD_REEL, 1, {}, segment=s) for s in range(3))
+    assert first.refmods == []  # its chunk has not played yet: nothing to bring back (and no ref2va needed)
+    assert back.refmods == [{"name": "jinx_look", "member": "JINX", "strength": 1.0, "from": 0.0, "to": 1.0,
+                             "sent": {"segment": 0, "frames": [[0, -1]], "step": 10}}]
+    picked = split_reel(MOD_REEL.replace("every 10 frames", "frames 0, 24-48")).blocks[0].sends[0]
+    assert (picked.frames, picked.step) == ([[0, 0], [24, 48]], 1)
+
+
+def test_two_sends_to_one_refmod_warn_and_the_later_takes_over():
+    src = MOD_REEL.replace("The empty room.", "The empty room.\nSEND: frame -1 to refmod jinx_look")
+    assert split_reel(src).refmods_ready(2)["jinx_look"] == {"segment": 1, "frames": [[-1, -1]]}
+    lint = [i.message for i in compile_scene(src, 1, {}, segment=2).lint]
+    assert any("refmod jinx_look is filled by two SEND: lines" in m and "(CHUNK 2) takes over" in m for m in lint)
 
 
 def test_send_outside_a_chunk_or_outside_ref2va_is_an_error():
@@ -434,3 +472,102 @@ def test_a_chunk_every_goto_jumps_past_is_flagged():
     src = GOTO_REEL.replace("GOTO: the stairs ×2", "GOTO: the gate") + "CHUNK the cellar\nSHOT 5s: static\nDark.\n"
     lint = [i.message for i in compile_scene(src, 1, {}, segment=0).lint]
     assert any("CHUNK 4" in m and "never plays" in m for m in lint)
+
+
+LEAVES = """@h3 ref2va 2:3
+CAST
+EMMA (refmod emma_canon): a young woman in a red coat
+GARDEN (global): a small walled garden
+CHUNK
+SHOT 5s: static
+EMMA waves and walks out of the frame.
+HANDOFF: only the room is left
+CHUNK
+SHOT 5s: static
+Nothing happens in the empty room.
+HANDOFF: only the room is left
+CHUNK
+SHOT 5s: static
+EMMA slides back into the frame, laughing.
+"""
+
+
+def test_a_chunk_without_a_member_leaves_its_definition_and_its_refmod_out():
+    clips = [ref2va(LEAVES, segment=s) for s in range(3)]
+    assert ["a young woman in a red coat" in c.text for c in clips] == [True, False, True]
+    assert [[m["name"] for m in c.refmods] for c in clips] == [["emma_canon"], [], ["emma_canon"]]
+    assert all("a small walled garden" in c.text for c in clips)  # global: in every clip
+
+
+def test_a_sent_image_of_a_member_not_in_the_chunk_stays_out():
+    src = LEAVES.replace("EMMA (refmod emma_canon)", "EMMA (image 3)").replace(
+        "HANDOFF: only the room is left\nCHUNK\nSHOT 5s: static\nNothing", "HANDOFF: only the room is left\nSEND: frame 0 to image 3\nCHUNK\nSHOT 5s: static\nNothing", 1)
+    clips = [ref2va(src, segment=s) for s in range(3)]
+    assert [sorted(c.sends) for c in clips] == [[], [], [3]] and [c.refs for c in clips] == [[], [], [3]]
+
+
+def test_a_sent_image_stays_out_where_the_chunks_cast_redefines_its_member_without_it():
+    src = LEAVES.replace("EMMA (refmod emma_canon)", "EMMA (refmod emma_canon, image 3)").replace(
+        "HANDOFF: only the room is left\nCHUNK", "HANDOFF: only the room is left\nSEND: frame 0 to image 3\n"
+        "SEND: frame 0 to image 5\nCHUNK", 1).replace(
+        "CHUNK\nSHOT 5s: static\nEMMA slides back",
+        "CHUNK\nCAST\nEMMA (refmod emma_canon): a young woman in a red coat\nSHOT 5s: static\nEMMA slides back")
+    back = ref2va(src, segment=2)
+    assert sorted(back.sends) == [5] and back.refs == [5]  # image 3 is EMMA's no more; image 5 is nobody's: it goes along
+    assert ref2va(src.replace("CAST\nEMMA (refmod emma_canon): a young woman in a red coat\n", ""), segment=2).refs == [3, 5]
+
+
+def test_a_chunks_own_cast_replaces_the_member_for_that_clip():
+    src = LEAVES.replace("CHUNK\nSHOT 5s: static\nEMMA slides back", (
+        "CHUNK\nCAST\nEMMA (refmod emma_canon at 0.3, image 1 at 0.5): a young woman in a red coat\n"
+        "SHOT 5s: static\nEMMA slides back"))
+    first, _, back = (ref2va(src, segment=s) for s in range(3))
+    assert [m["strength"] for m in first.refmods] == [1.0] and [m["strength"] for m in back.refmods] == [0.3]
+    assert back.scene.cast[0].name == "EMMA"  # in her place: still <Subject 1>
+    assert back.images == [{"ref": 1, "image": 1, "member": "EMMA", "strength": 0.5, "from": 0.0, "to": 1.0}]
+    assert not any("twice" in i.message for i in back.lint)
+
+
+
+def test_set_lines_turn_the_dials_in_the_head_and_per_chunk():
+    src = LEAVES.replace("CAST\nEMMA (refmod emma_canon)", "SET: emma_canon(0.8)\nCAST\nEMMA (refmod emma_canon_Video, image 1)").replace(
+        "EMMA slides back", "SET: image_1(0.5,0.35)\nSET: emma_canon_Video(0.4, 20%)\nEMMA slides back")
+    first, _, back = (ref2va(src, segment=s) for s in range(3))
+    assert [(m["strength"], m["from"]) for m in first.refmods] == [(0.8, 0.0)] and first.images == []
+    assert [(m["strength"], m["from"]) for m in back.refmods] == [(0.4, 0.2)]
+    assert back.images == [{"ref": 1, "image": 1, "member": "EMMA", "strength": 0.5, "from": 0.35, "to": 1.0}]
+    assert "SET" not in back.text  # never prose
+
+
+def test_a_picture_at_0_leaves_the_clip_so_not_even_the_text_encoder_sees_it():
+    # Reference to Video shows its pictures to the text encoder too: at 0 Orrery Refs must not hand it on
+    sent = LEAVES.replace("EMMA (refmod emma_canon)", "EMMA (refmod emma_canon, image 3)").replace(
+        "HANDOFF: only the room is left\nCHUNK", "HANDOFF: only the room is left\nSEND: frame 0 to image 3\nCHUNK", 1)
+    assert ref2va(sent, segment=2).refs == [3]
+    back = ref2va(sent.replace("EMMA slides back", "SET: image_3(0)\nEMMA slides back"), segment=2)
+    assert back.refs == [] and back.sends == {} and back.images == [] and "<Picture" not in back.text
+    assert [m["name"] for m in back.refmods] == ["emma_canon"]  # the RefMod stays
+    assert ref2va(sent.replace("image 3)", "image 3 at 0)"), segment=2).refs == []  # the CAST's own dial
+    wired = ref2va(LEAVES.replace("EMMA (refmod emma_canon)", "EMMA (image 1)").replace(
+        "EMMA slides back", "SET: image_1(0)\nEMMA slides back"), segment=2)
+    assert wired.refs == [] and "<Picture" not in wired.text
+
+
+def test_a_dial_can_stop_before_sampling_does():
+    src = LEAVES.replace("EMMA (refmod emma_canon)", "EMMA (refmod emma_canon from 10% to 50%, image 1 to 30%)").replace(
+        "EMMA slides back", "SET: emma_canon(1, 0%, 20%)\nEMMA slides back")
+    first, _, back = (ref2va(src, segment=s) for s in range(3))
+    assert [(m["from"], m["to"]) for m in first.refmods] == [(0.1, 0.5)]
+    assert [(m["from"], m["to"]) for m in back.refmods] == [(0.0, 0.2)]  # SET wins over the CAST
+    assert [(p["from"], p["to"]) for p in back.images] == [(0.0, 0.3)]
+    head = ref2va(LEAVES.replace("CAST\n", "refmods: to 40%\nCAST\n", 1), segment=0)
+    assert [m["to"] for m in head.refmods] == [0.4]
+    wrong = ref2va(LEAVES.replace("EMMA (refmod emma_canon)", "EMMA (refmod emma_canon from 50% to 20%)"), segment=0)
+    assert any("stops before it starts" in i.message for i in wrong.lint) and wrong.refmods[0]["to"] == 1.0
+
+
+def test_a_set_line_written_wrong_or_naming_nothing_is_lint():
+    lint = lambda line: [i.message for i in ref2va(LEAVES.replace("EMMA slides back", f"{line}\nEMMA slides back"), segment=2).lint]
+    assert any("is not name(strength, start)" in m for m in lint("SET: image_1 at 0.5"))
+    assert any("SET: image_4 is not a picture or a RefMod of the CAST" in m for m in lint("SET: image_4(0.5)"))
+    assert any("takes numbers" in m for m in lint("SET: emma_canon(half)"))

@@ -3,7 +3,7 @@
 export const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
 const CLI_ONLY = "CLI only: in ComfyUI, use the Run count and the seed widget";
-const HEAD = /^(\s*)(SHOT\s+[\d.]+\s*s\b:?|SFX:|MUSIC:|LORA:|HANDOFF:|SEND:|GOTO:|style:|summary:|voice:|keep:|context:|CHUNK(?=\s|$)|CAST(?=\s*$)|[A-Z][A-Z0-9 _-]*?(?:\s*\([^)]*\))?\s*:(?=\s))/;
+const HEAD = /^(\s*)(SHOT\s+[\d.]+\s*s\b:?|SFX:|MUSIC:|LORA:|HANDOFF:|SEND:|GOTO:|SET:|style:|summary:|voice:|keep:|context:|refmods:|CHUNK(?=\s|$)|CAST(?=\s*$)|[A-Z][A-Z0-9 _-]*?(?:\s*\([^)]*\))?\s*:(?=\s))/;
 const TOKEN = /(\\[{}|$_@#[\]\\<>])|((?<!\\)__([\w*]+(?:\/[\w*]+)*)(?:\[[^\[\]\n]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\([^()]*\))?)|(\$[A-Za-z_]\w*(?:~\d+)?(?:\.[A-Za-z_][\w-]*)?)|(\d+(?:-\d+)?\$\$)|([{}|])|([^_${}|]+|[_$])/g;
 
 // A glob (`clothing/*`, `clothing/**`) is known when it matches a library.

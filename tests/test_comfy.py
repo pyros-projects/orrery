@@ -97,15 +97,18 @@ def test_save_png_embeds_the_picks(tmp_path):
 
 
 def test_node_classes_declare_comfy_interfaces():
-    assert set(NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm", "OrreryWrite"}
+    assert set(NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm",
+                                        "OrreryWrite", "OrreryRefMods"}
     inputs = OrreryPrompt.INPUT_TYPES()["required"]
     assert inputs["target"][0] == ["text", "h3-base", "flat"]
     assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length", "lora_stack",
-                                         "load_index", "save_index", "previous", "previous_audio", "megapixels")
+                                         "megapixels")
     assert OrreryLog.OUTPUT_NODE is True
     film, cont = NODE_CLASS_MAPPINGS["OrreryFilm"], NODE_CLASS_MAPPINGS["OrreryContinue"]
     assert film.OUTPUT_NODE is True and film.RETURN_TYPES == ("IMAGE", "AUDIO", "VIDEO")
     assert list(cont.INPUT_TYPES()["required"]) == ["picks", "latent"] and cont.RETURN_TYPES == ("CONDITIONING", "LATENT")
+    refmods = NODE_CLASS_MAPPINGS["OrreryRefMods"]
+    assert list(refmods.INPUT_TYPES()["required"]) == ["conditioning", "picks"] and refmods.RETURN_TYPES == ("CONDITIONING",)
 
 
 def test_node_pack_imports_from_the_repo_folder(monkeypatch):
@@ -113,7 +116,8 @@ def test_node_pack_imports_from_the_repo_folder(monkeypatch):
     spec = importlib.util.spec_from_file_location("orrery_pack", REPO / "comfyui" / "__init__.py")
     pack = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(pack)
-    assert set(pack.NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm", "OrreryWrite"}
+    assert set(pack.NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm",
+                                             "OrreryWrite", "OrreryRefMods"}
 
 
 def test_prompt_node_uses_a_preset_and_remembers_the_template(home):
@@ -132,7 +136,7 @@ def test_prompt_node_offers_presets_in_a_dropdown(home):
 
 
 def test_prompt_node_outputs_size_and_h3_length(home):
-    *_, width, height, length, _, _, _ = run_prompt("a __animal__\n: x8 seed=100 w832 h1216", 1, "text", str(home))
+    *_, width, height, length, _ = run_prompt("a __animal__\n: x8 seed=100 w832 h1216", 1, "text", str(home))
     assert (width, height, length) == (832, 1216, 124)
 
 
@@ -310,14 +314,12 @@ def test_unresolved_loras_are_left_out_and_reported(home, monkeypatch):
     assert any("two" in i["message"] for i in json.loads(picks)["lint"])
 
 
-def test_the_node_counts_segments_and_outputs_motion_context_indices(home):
+def test_the_node_counts_segments(home):
     optional = OrreryPrompt.INPUT_TYPES()["optional"]
     assert optional["segment"][0] == "INT" and optional["segment"][1]["control_after_generate"]
     assert "forceInput" not in optional["segment"][1]
-    assert OrreryPrompt.RETURN_NAMES[6:9] == ("lora_stack", "load_index", "save_index")
-    assert OrreryPrompt.RETURN_TYPES[6:9] == ("LORA_STACK", "INT", "INT")
-    *_, load, save = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
-    assert (load, save) == (1, 2)
+    _, picks, *_ = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
+    assert json.loads(picks)["segment"] == 1
 
 
 def test_a_reel_tells_orrery_continue_its_chain_and_context(home):
@@ -445,15 +447,10 @@ def test_an_unusable_answer_keeps_the_directions_and_says_so(home, monkeypatch):
     assert any(i["severity"] == "warn" and "slot" in i["message"] for i in json.loads(picks)["lint"])
 
 
-def test_the_node_hands_on_the_previous_clip_for_ref2va():
-    assert OrreryPrompt.RETURN_NAMES[-3:-1] == ("previous", "previous_audio")
-    assert OrreryPrompt.RETURN_TYPES[-3:-1] == ("IMAGE", "AUDIO")
+def test_outside_a_chain_the_node_runs_without_a_previous_clip(home):
     assert OrreryPrompt.INPUT_TYPES()["optional"]["latent_path"][1]["forceInput"] is True
-
-
-def test_outside_a_chain_there_is_no_previous_clip(home):
     outputs = OrreryPrompt().run("a quiet street", 1, "text", home=str(home), segment=2)
-    assert len(outputs) == len(OrreryPrompt.RETURN_TYPES) and outputs[-3:-1] == (None, None)
+    assert len(outputs) == len(OrreryPrompt.RETURN_TYPES) and outputs[-1] > 0  # megapixels
 
 
 def test_only_slots_in_the_played_chunk_can_go_unanswered(home, monkeypatch):
@@ -642,7 +639,7 @@ def send_chain(tmp_path, monkeypatch, clips=2, dropped=()):
         def __init__(self, path, wanted):
             self.label, self.shape = f"{Path(path).parent.name}:{wanted}", (len(wanted), 8, 8, 3)
 
-    monkeypatch.setattr(ch, "frames", lambda path, wanted: (Batch(path, wanted), list(dropped)))
+    monkeypatch.setattr(ch, "frames", lambda path, wanted, step=1: (Batch(path, wanted), list(dropped)))
     from orrery import anchors
     saved = []
     monkeypatch.setattr(anchors, "save", lambda home, n, frames: saved.append((str(home.root), n, frames.label)))
@@ -872,3 +869,27 @@ def test_a_logged_sweep_output_lands_in_its_folder(home, tmp_path):
     [row] = log_outputs(Home(home), json.dumps(data), [str(tmp_path / "y.png")])
     assert "folder" not in row
 
+
+REFMOD_SCENE = """@h3 ref2va 16:9
+CAST
+SALON (refmod salon_canon at 0.5): a grand salon
+SHOT 5s
+The camera crosses SALON.
+"""
+
+
+def test_the_picks_carry_the_clips_refmods_and_lint_asks_for_orrery_refmods(home):
+    _, picks, *_ = run_prompt(REFMOD_SCENE, 1, "h3-base", str(home))
+    data = json.loads(picks)
+    assert data["refmods"] == [{"name": "salon_canon", "member": "SALON", "strength": 0.5, "from": 0.0, "to": 1.0}]
+    assert not any("Orrery RefMods" in i["message"] for i in data["lint"])
+    _, picks, *_ = run_prompt(REFMOD_SCENE, 1, "h3-base", str(home), refmodded=False)
+    assert any("Orrery RefMods" in i["message"] for i in json.loads(picks)["lint"])
+
+
+def test_the_picks_carry_picture_strengths(home):
+    src = REFMOD_SCENE.replace("SALON (refmod salon_canon at 0.5)", "SALON (image 1 at 0.5)")
+    _, picks, *_ = run_prompt(src, 1, "h3-base", str(home), refmodded=False)
+    data = json.loads(picks)
+    assert data["images"] == [{"ref": 1, "image": 1, "member": "SALON", "strength": 0.5, "from": 0.0, "to": 1.0}]
+    assert any("picture strengths (image 1 at 0.5)" in i["message"] for i in data["lint"])

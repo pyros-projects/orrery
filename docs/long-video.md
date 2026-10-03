@@ -3,8 +3,8 @@
 Status: agreed 2026-09-24. This is orrery's end stage. Built: R1 (Ref2VA), and
 the reel (stage 4, without memory lists). The engine is orrery's own Orrery
 Continue / Orrery Film (Masked AV from H3 Continuum, since 2026-10-02); H3
-Motion Context, which Pyro's workflow used before, still works, and Contex Loop
-stays an option. Sources: a design chat between Pyro and Codie
+Motion Context, which Pyro's workflow used before, and Contex Loop stay
+options outside orrery. Sources: a design chat between Pyro and Codie
 (a Garamonde virtual tour chained from 10 s clips with 1 s overlap), the
 installed `ComfyUI-H3RefMods`, `comfyui-minimaxh3-contex-loop` and
 `ComfyUI-H3-Motion-Context` packs, and the official full-reference guide.
@@ -71,8 +71,7 @@ Per chunk orrery emits (built):
 - `--…--` slots written by the language model, which from the second segment
   on watches the previous clip from the chain (one frame a second and the
   last one): the semantic memory grounded in what H3 actually rendered, not
-  only in what was asked for; `previous`/`previous_audio`, the last 3 s of that
-  clip, for `SHOT …: after video 1` (`[video continuation]`).
+  only in what was asked for.
 
 Built (2026-09-25): **Orrery Refs** routes the reference images per chunk. Wire
 every image as `image_N` (N as in the CAST's `(image N)`) and the prompt's
@@ -103,23 +102,24 @@ Built (2026-10-02): **orrery's own continuation** ([plan](plan-continuation.md),
 the last 22 frames of the one before, picture and sound, held by a
 `noise_mask` (Masked AV, taken from H3 Continuum, MIT, with attribution); Orrery
 Film trims them, keeps one take per segment and joins the film. It replaces
-Motion Context's six nodes and the `load_index`/`save_index` wiring, and needs
-no model or layout patch. Motion Context still works; the previous clip, `SEND:`
-and the timeline read whichever store was written last.
+Motion Context's six nodes and needs no model or layout patch. The previous
+clip, `SEND:` and the timeline read Orrery Film's takes, or Motion Context's
+Chain Video, whichever was written last.
 
-Still planned: the **memory list** per chunk (global, the places and people it
-mentions, optionally the previous chunk as "recent"); the retrieval query for
-this RefMod-RAG is the screenplay itself.
+Built (2026-10-02): the **memory list** per chunk. A clip keeps the CAST members
+it names and the `global` ones, with their RefMods, and leaves the others out, so
+the retrieval query for this RefMod-RAG is the screenplay itself. **Orrery RefMods** puts them on the
+conditioning, each with a strength (`at 0.5`, an attention bias orrery wraps
+around H3) and a start (`from 35%`, a timestep range), see
+[h3.md](h3.md#1e-refmods-refmod-name-at-05-from-35). Still open: the "recent"
+memory (a RefMod of the chunk before), and making canon from the galaxy.
 
 Wiring: Orrery `picks` → Orrery Continue, with the H3 node's latent (and
 conditioning) on their way to the sampler, and the sampled latent with the
-decoded clip into Orrery Film (with Motion Context instead: `load_index` → Load
-Latent `clip_index`, `save_index` → Save Latent `clip_index`; orrery counts the
-segments itself, so the Chain node's buttons are not needed); `text` →
+decoded clip into Orrery Film (orrery counts the segments itself); `text` →
 Reference to Video `prompt`; `length` → its `length`;
 `lora_stack` → the `lora_stack` input of Lora Loader (LoraManager) or any
-other stack loader; `previous` → Reference to Video `ref_video_0`,
-`previous_audio` → `ref_video_audio_0`. Queue with a Run count of the reel's clips (the stats line
+other stack loader. Queue with a Run count of the reel's clips (the stats line
 shows it), or Run (Instant) for `repeat forever`; the Orrery seed stays fixed
 (the node does that for a reel). `CHUNK … repeat N|forever` and `$x~N` make
 loops such as `fashion/runway_loop`.
@@ -169,10 +169,11 @@ H3 ──▶ Review Gate / Galaxy ♥ ──▶ "make canon" ──▶ new RefMo
    connected. Declarations stay the source of truth.
 3. **R3, the cast describes itself:** Qwen3-VL (Krea 2's text encoder) writes a
    member's description from its reference image.
-4. **Reel (built; Orrery Continue / Orrery Film, or Motion Context):** `CHUNK`,
-   `HANDOFF`, `LORA:`, `context:`, the `segment` input. Open: memory lists.
-5. **Memory router and canon:** the per-chunk RefMod node, "make canon" from
-   the galaxy.
+4. **Reel (built; Orrery Continue / Orrery Film):** `CHUNK`,
+   `HANDOFF`, `LORA:`, `context:`, the `segment` input, and the memory lists.
+5. **Memory router (built) and canon (open):** Orrery RefMods puts each clip's
+   RefMods on it, with a strength, a start and an end, also those made from the
+   reel's own frames; "make canon" from the galaxy is still open.
 
 ## The experiment before stages 4 and 5
 
@@ -187,7 +188,52 @@ Test it by hand with the installed H3RefMods (Codie's A/B/C):
 | C | ✓ | ✓ | ✓ |
 
 Same seed and prompt; judge room identity, material drift, recurring objects,
-seam quality and composition leakage. Build the RefMods from stills (Create
-From Folder): the video path of the installed pack snaps to a 4k+1 frame grid
-instead of H3's 17k+5, and "Create From Inputs" with saving looks broken
-(both unverified).
+seam quality and composition leakage. Build the RefMods from stills: the
+installed pack trims a video reference to 4k+1 frames, while H3's own Reference
+to Video trims to 17k+5 (checked in both sources, 2026-10-02); "Create From
+Inputs" cannot save, "From Folder" can. The setup, the workflows and the run
+sheet are in [experiments/refmod-abc/](../experiments/refmod-abc/run_sheet.md).
+
+### What it showed (2026-10-02 and 03)
+
+Run locally on an RTX 4090 with a 4-step turbo LoRA, seed 7. A four-chunk tour
+(salon, hallway, library, back in the salon from the other side). Segment 3 is
+the one that decides, scored from 1 to 5 (leakage 5 = none):
+
+| Segment 3, back in the salon | Identity | Leakage | Time |
+|---|---|---|---|
+| A, the latent tail only | 2 | 5 | 99 s |
+| B, plus a recent RefMod (the chunk before) | 1 | 1 | |
+| C, plus a place RefMod (four stills of chunk 1), from 0% | 5 | 1 | 107 s |
+| C with the model's condition noise 0.9 | 5 | 2 | 114 s |
+| **C from 35% of sampling on** | **4** | **4** | **104 s** |
+| C from 60% | 4 | 4 | 102 s |
+
+![segment 3, round 2](../experiments/refmod-abc/results/round2/seg3_salon_again.jpg)
+
+- **The place RefMod works, but from the first step it is too literal.** It
+  brings back every object of the salon and chunk 1's framings with them.
+  Starting it at 35% keeps the salon and lets go of the framing, at no extra
+  cost: the first steps carry no RefMod tokens.
+- **The automatic recent RefMod fails.** B copies the clip before: B3 repeats
+  B2 almost frame for frame.
+- **A character needs the first steps.** Jinx's RefMod from 35% did not come
+  through at all; from 0% she was unmistakable
+  ([sheet](../experiments/refmod-abc/results/jinx/start_35_vs_0.jpg)). With 4
+  steps the start is a coarse dial; at 20 steps the thresholds may move.
+- **Cost:** 576 tokens per still at 0.6 MP. C (seven stills, 4,032 tokens)
+  was 3 to 10 s slower per clip. Peak VRAM stayed under 23 GB.
+- **The pack's own strength only blurs a RefMod.** orrery's strength works
+  through an attention bias instead (#30).
+
+**Decision: go.** The RefMod memory is in v1:
+- each clip gets the RefMods of the CAST members it names, plus the `global` ones;
+- RefMods start at 0% by default (characters), and a place takes `from 35%`;
+- each has a strength, a start and an end (`at`, `from`, `to`, or
+  `SET: name(1, 0%, 10%)`).
+- The automatic recent memory did not earn a place. It comes in as an explicit
+  choice instead: `SEND: every 10 frames to refmod NAME` makes a RefMod from a
+  clip's own frames, for the clips after it.
+
+The rounds with every sheet are in the comments of
+[#4](https://github.com/pyros-projects/orrery/issues/4).
