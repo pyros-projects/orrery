@@ -5,7 +5,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "A studio photograph of a 58-year-old man of Kenyan descent, with dark brown skin: gaunt and angular, a heart-shaped face with wide-set eyes, deep-set grey-green eyes, long honey-blonde hair tied in a low ponytail and vitiligo patches around the eyes and mouth. Dressed in a battered crimson bomber jacket patched with corporate logos, wearing a crimson hood pulled up, with a guarded, watchful look. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 58-year-old man of Kenyan descent, with dark brown skin: gaunt and angular, a heart-shaped face with wide-set eyes, deep-set grey-green eyes, long honey-blonde hair tied in a low ponytail and vitiligo patches around the eyes and mouth. Dressed in a high-collared techwear coat with glowing crimson seams, wearing a crimson bandana tied over the hair, with a guarded, watchful look. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -80,16 +80,16 @@
        "vitiligo patches around the eyes and mouth"
       ],
       [
-       "$outfit ← __characters/creator/outfit#genre:$genre__",
-       "a battered $colour bomber jacket patched with corporate logos"
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a high-collared techwear coat with glowing $colour seams"
       ],
       [
        "{no|yes}",
        "yes"
       ],
       [
-       "$accessory ← __characters/creator/accessory__",
-       "a $colour hood pulled up"
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "a $colour bandana tied over the hair"
       ],
       [
        "$presence ← __characters/creator/presence__",
@@ -107,7 +107,7 @@
     },
     {
      "cell": 1,
-     "text": "A studio photograph of a 58-year-old man of Kenyan descent, with dark brown skin: gaunt and angular, a heart-shaped face with wide-set eyes, deep-set grey-green eyes, long honey-blonde hair tied in a low ponytail and vitiligo patches around the eyes and mouth. Dressed in a battered crimson bomber jacket patched with corporate logos, wearing a crimson hood pulled up, with a guarded, watchful look. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 58-year-old man of Kenyan descent, with dark brown skin: gaunt and angular, a heart-shaped face with wide-set eyes, deep-set grey-green eyes, long honey-blonde hair tied in a low ponytail and vitiligo patches around the eyes and mouth. Dressed in a high-collared techwear coat with glowing crimson seams, wearing a crimson bandana tied over the hair, with a guarded, watchful look. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -182,16 +182,16 @@
        "vitiligo patches around the eyes and mouth"
       ],
       [
-       "$outfit ← __characters/creator/outfit#genre:$genre__",
-       "a battered $colour bomber jacket patched with corporate logos"
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a high-collared techwear coat with glowing $colour seams"
       ],
       [
        "{no|yes}",
        "yes"
       ],
       [
-       "$accessory ← __characters/creator/accessory__",
-       "a $colour hood pulled up"
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "a $colour bandana tied over the hair"
       ],
       [
        "$presence ← __characters/creator/presence__",
@@ -209,7 +209,7 @@
     },
     {
      "cell": 2,
-     "text": "A studio photograph of a 58-year-old man of Kenyan descent, with dark brown skin: gaunt and angular, a heart-shaped face with wide-set eyes, deep-set grey-green eyes, long honey-blonde hair tied in a low ponytail and vitiligo patches around the eyes and mouth. Dressed in a battered crimson bomber jacket patched with corporate logos, wearing a crimson hood pulled up, with a guarded, watchful look. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 58-year-old man of Kenyan descent, with dark brown skin: gaunt and angular, a heart-shaped face with wide-set eyes, deep-set grey-green eyes, long honey-blonde hair tied in a low ponytail and vitiligo patches around the eyes and mouth. Dressed in a high-collared techwear coat with glowing crimson seams, wearing a crimson bandana tied over the hair, with a guarded, watchful look. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -284,16 +284,16 @@
        "vitiligo patches around the eyes and mouth"
       ],
       [
-       "$outfit ← __characters/creator/outfit#genre:$genre__",
-       "a battered $colour bomber jacket patched with corporate logos"
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a high-collared techwear coat with glowing $colour seams"
       ],
       [
        "{no|yes}",
        "yes"
       ],
       [
-       "$accessory ← __characters/creator/accessory__",
-       "a $colour hood pulled up"
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "a $colour bandana tied over the hair"
       ],
       [
        "$presence ← __characters/creator/presence__",
@@ -311,7 +311,7 @@
     },
     {
      "cell": 3,
-     "text": "A studio photograph of a 58-year-old man of Kenyan descent, with dark brown skin: gaunt and angular, a heart-shaped face with wide-set eyes, deep-set grey-green eyes, long honey-blonde hair tied in a low ponytail and vitiligo patches around the eyes and mouth. Dressed in a battered crimson bomber jacket patched with corporate logos, wearing a crimson hood pulled up, with a guarded, watchful look. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 58-year-old man of Kenyan descent, with dark brown skin: gaunt and angular, a heart-shaped face with wide-set eyes, deep-set grey-green eyes, long honey-blonde hair tied in a low ponytail and vitiligo patches around the eyes and mouth. Dressed in a high-collared techwear coat with glowing crimson seams, wearing a crimson bandana tied over the hair, with a guarded, watchful look. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -386,16 +386,16 @@
        "vitiligo patches around the eyes and mouth"
       ],
       [
-       "$outfit ← __characters/creator/outfit#genre:$genre__",
-       "a battered $colour bomber jacket patched with corporate logos"
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a high-collared techwear coat with glowing $colour seams"
       ],
       [
        "{no|yes}",
        "yes"
       ],
       [
-       "$accessory ← __characters/creator/accessory__",
-       "a $colour hood pulled up"
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "a $colour bandana tied over the hair"
       ],
       [
        "$presence ← __characters/creator/presence__",
@@ -417,7 +417,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "A studio photograph of a 24-year-old woman of Mongolian descent, with light tan skin: athletic, with a swimmer's shoulders, a broad face with a flat nose and a wide, easy mouth, green eyes flecked with gold, a cobalt-blue-dyed pixie cut and ears pierced all the way up with small hoops. Dressed in a quilted cobalt-blue kimono jacket with a holographic obi, wearing a cobalt-blue bandana tied over the hair, with a grin only just held back. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 24-year-old woman of Mongolian descent, with light tan skin: athletic, with a swimmer's shoulders, a broad face with a flat nose and a wide, easy mouth, green eyes flecked with gold, a cobalt-blue-dyed pixie cut and ears pierced all the way up with small hoops. Dressed in a quilted cobalt-blue kimono jacket with a holographic obi, wearing thick black-framed glasses, with a grin only just held back. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -488,7 +488,7 @@
        "ears pierced all the way up with small hoops"
       ],
       [
-       "$outfit ← __characters/creator/outfit#genre:$genre__",
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
        "a quilted $colour kimono jacket with a holographic obi"
       ],
       [
@@ -496,8 +496,8 @@
        "yes"
       ],
       [
-       "$accessory ← __characters/creator/accessory__",
-       "a $colour bandana tied over the hair"
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "thick black-framed glasses"
       ],
       [
        "$presence ← __characters/creator/presence__",
@@ -515,7 +515,7 @@
     },
     {
      "cell": 1,
-     "text": "A studio photograph of a 24-year-old woman of Mongolian descent, with light tan skin: athletic, with a swimmer's shoulders, a broad face with a flat nose and a wide, easy mouth, green eyes flecked with gold, a cobalt-blue-dyed pixie cut and ears pierced all the way up with small hoops. Dressed in a quilted cobalt-blue kimono jacket with a holographic obi, wearing a cobalt-blue bandana tied over the hair, with a grin only just held back. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 24-year-old woman of Mongolian descent, with light tan skin: athletic, with a swimmer's shoulders, a broad face with a flat nose and a wide, easy mouth, green eyes flecked with gold, a cobalt-blue-dyed pixie cut and ears pierced all the way up with small hoops. Dressed in a quilted cobalt-blue kimono jacket with a holographic obi, wearing thick black-framed glasses, with a grin only just held back. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -586,7 +586,7 @@
        "ears pierced all the way up with small hoops"
       ],
       [
-       "$outfit ← __characters/creator/outfit#genre:$genre__",
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
        "a quilted $colour kimono jacket with a holographic obi"
       ],
       [
@@ -594,8 +594,8 @@
        "yes"
       ],
       [
-       "$accessory ← __characters/creator/accessory__",
-       "a $colour bandana tied over the hair"
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "thick black-framed glasses"
       ],
       [
        "$presence ← __characters/creator/presence__",
@@ -613,7 +613,7 @@
     },
     {
      "cell": 2,
-     "text": "A studio photograph of a 24-year-old woman of Mongolian descent, with light tan skin: athletic, with a swimmer's shoulders, a broad face with a flat nose and a wide, easy mouth, green eyes flecked with gold, a cobalt-blue-dyed pixie cut and ears pierced all the way up with small hoops. Dressed in a quilted cobalt-blue kimono jacket with a holographic obi, wearing a cobalt-blue bandana tied over the hair, with a grin only just held back. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 24-year-old woman of Mongolian descent, with light tan skin: athletic, with a swimmer's shoulders, a broad face with a flat nose and a wide, easy mouth, green eyes flecked with gold, a cobalt-blue-dyed pixie cut and ears pierced all the way up with small hoops. Dressed in a quilted cobalt-blue kimono jacket with a holographic obi, wearing thick black-framed glasses, with a grin only just held back. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -684,7 +684,7 @@
        "ears pierced all the way up with small hoops"
       ],
       [
-       "$outfit ← __characters/creator/outfit#genre:$genre__",
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
        "a quilted $colour kimono jacket with a holographic obi"
       ],
       [
@@ -692,8 +692,8 @@
        "yes"
       ],
       [
-       "$accessory ← __characters/creator/accessory__",
-       "a $colour bandana tied over the hair"
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "thick black-framed glasses"
       ],
       [
        "$presence ← __characters/creator/presence__",
@@ -711,7 +711,7 @@
     },
     {
      "cell": 3,
-     "text": "A studio photograph of a 24-year-old woman of Mongolian descent, with light tan skin: athletic, with a swimmer's shoulders, a broad face with a flat nose and a wide, easy mouth, green eyes flecked with gold, a cobalt-blue-dyed pixie cut and ears pierced all the way up with small hoops. Dressed in a quilted cobalt-blue kimono jacket with a holographic obi, wearing a cobalt-blue bandana tied over the hair, with a grin only just held back. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 24-year-old woman of Mongolian descent, with light tan skin: athletic, with a swimmer's shoulders, a broad face with a flat nose and a wide, easy mouth, green eyes flecked with gold, a cobalt-blue-dyed pixie cut and ears pierced all the way up with small hoops. Dressed in a quilted cobalt-blue kimono jacket with a holographic obi, wearing thick black-framed glasses, with a grin only just held back. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -782,7 +782,7 @@
        "ears pierced all the way up with small hoops"
       ],
       [
-       "$outfit ← __characters/creator/outfit#genre:$genre__",
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
        "a quilted $colour kimono jacket with a holographic obi"
       ],
       [
@@ -790,8 +790,8 @@
        "yes"
       ],
       [
-       "$accessory ← __characters/creator/accessory__",
-       "a $colour bandana tied over the hair"
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "thick black-framed glasses"
       ],
       [
        "$presence ← __characters/creator/presence__",
@@ -813,7 +813,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a soft jaw and a dimpled chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a leather greatcoat with a sky-blue scarf wound twice around the neck, with a proudly lifted chin. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a soft jaw and a dimpled chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a long black frock coat lined with sky-blue silk, with a proudly lifted chin. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -888,16 +888,16 @@
        "a notch missing from the top of one ear"
       ],
       [
-       "$outfit ← __characters/creator/outfit#genre:$genre__",
-       "a leather greatcoat with a $colour scarf wound twice around the neck"
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a long black frock coat lined with $colour silk"
       ],
       [
        "{no|yes}",
        "no"
       ],
       [
-       "$accessory ← __characters/creator/accessory__",
-       "chunky $colour headphones around the neck"
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "small round tinted sunglasses"
       ],
       [
        "$presence ← __characters/creator/presence__",
@@ -915,7 +915,7 @@
     },
     {
      "cell": 1,
-     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a soft jaw and a dimpled chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a leather greatcoat with a sky-blue scarf wound twice around the neck, with a proudly lifted chin. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a soft jaw and a dimpled chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a long black frock coat lined with sky-blue silk, with a proudly lifted chin. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -990,16 +990,16 @@
        "a notch missing from the top of one ear"
       ],
       [
-       "$outfit ← __characters/creator/outfit#genre:$genre__",
-       "a leather greatcoat with a $colour scarf wound twice around the neck"
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a long black frock coat lined with $colour silk"
       ],
       [
        "{no|yes}",
        "no"
       ],
       [
-       "$accessory ← __characters/creator/accessory__",
-       "chunky $colour headphones around the neck"
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "small round tinted sunglasses"
       ],
       [
        "$presence ← __characters/creator/presence__",
@@ -1017,7 +1017,7 @@
     },
     {
      "cell": 2,
-     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a soft jaw and a dimpled chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a leather greatcoat with a sky-blue scarf wound twice around the neck, with a proudly lifted chin. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a soft jaw and a dimpled chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a long black frock coat lined with sky-blue silk, with a proudly lifted chin. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -1092,16 +1092,16 @@
        "a notch missing from the top of one ear"
       ],
       [
-       "$outfit ← __characters/creator/outfit#genre:$genre__",
-       "a leather greatcoat with a $colour scarf wound twice around the neck"
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a long black frock coat lined with $colour silk"
       ],
       [
        "{no|yes}",
        "no"
       ],
       [
-       "$accessory ← __characters/creator/accessory__",
-       "chunky $colour headphones around the neck"
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "small round tinted sunglasses"
       ],
       [
        "$presence ← __characters/creator/presence__",
@@ -1119,7 +1119,7 @@
     },
     {
      "cell": 3,
-     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a soft jaw and a dimpled chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a leather greatcoat with a sky-blue scarf wound twice around the neck, with a proudly lifted chin. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
+     "text": "A studio photograph of a 50-year-old man of Filipino descent, with golden tan skin: curvy and strong, a soft jaw and a dimpled chin, pale grey eyes, a close-cropped chestnut buzz cut and a notch missing from the top of one ear. Dressed in a long black frock coat lined with sky-blue silk, with a proudly lifted chin. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours.",
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
@@ -1194,16 +1194,16 @@
        "a notch missing from the top of one ear"
       ],
       [
-       "$outfit ← __characters/creator/outfit#genre:$genre__",
-       "a leather greatcoat with a $colour scarf wound twice around the neck"
+       "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
+       "a long black frock coat lined with $colour silk"
       ],
       [
        "{no|yes}",
        "no"
       ],
       [
-       "$accessory ← __characters/creator/accessory__",
-       "chunky $colour headphones around the neck"
+       "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
+       "small round tinted sunglasses"
       ],
       [
        "$presence ← __characters/creator/presence__",

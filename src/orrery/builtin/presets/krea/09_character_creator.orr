@@ -15,9 +15,10 @@ $eyes = __characters/creator/eyes__
 $haircolour = {IF $age is old: {silver|white|iron-grey|salt-and-pepper}|{IF $age is young: {__characters/looks/hair_color__:4|$colour-dyed}|__characters/looks/hair_color__}}
 $hair = __characters/creator/hair__
 $mark = __characters/creator/mark__
-$outfit = __characters/creator/outfit#genre:$genre__
+$fit = {IF $gender is woman: women|{IF $gender is man: men|all}}
+$outfit = __characters/creator/outfit[genre=$genre, fit=$fit|all]__
 $accessorize = {no:3|yes:2}
-$accessory = __characters/creator/accessory__
+$accessory = __characters/creator/accessory[fit=$fit|all]__
 $presence = __characters/creator/presence__
 $backdrop = a seamless mid-grey studio backdrop
 # The grid runs every view: one character from four sides. Set $view to one of them to try characters faster.

@@ -1,14 +1,14 @@
-meta: {source: "orrery character creator: something worn on the head or face; several read the creator's $colour", needs: [colour], builtin: true}
+meta: {source: "orrery character creator: something worn on the head or face, for whom (`fit`: women or all); several read the creator's $colour", needs: [colour], builtin: true}
 entries:
-  - round wire-rimmed glasses
-  - thick black-framed glasses
-  - a black eyepatch over the left eye
-  - a wide-brimmed $colour hat
-  - a $colour beanie pulled low
-  - a $colour bandana tied over the hair
-  - small round tinted sunglasses
-  - welding goggles pushed up on the forehead
-  - chunky $colour headphones around the neck
-  - a $colour hood pulled up
-  - a veil of fine $colour netting over the eyes
-  - a $colour headscarf
+  - {value: "round wire-rimmed glasses", props: {fit: all}}
+  - {value: "thick black-framed glasses", props: {fit: all}}
+  - {value: "a black eyepatch over the left eye", props: {fit: all}}
+  - {value: "a wide-brimmed $colour hat", props: {fit: all}}
+  - {value: "a $colour beanie pulled low", props: {fit: all}}
+  - {value: "a $colour bandana tied over the hair", props: {fit: all}}
+  - {value: "small round tinted sunglasses", props: {fit: all}}
+  - {value: "welding goggles pushed up on the forehead", props: {fit: all}}
+  - {value: "chunky $colour headphones around the neck", props: {fit: all}}
+  - {value: "a $colour hood pulled up", props: {fit: all}}
+  - {value: "a veil of fine $colour netting over the eyes", props: {fit: women}}
+  - {value: "a $colour headscarf", props: {fit: women}}
