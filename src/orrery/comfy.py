@@ -360,7 +360,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         what = "LoRA sweep" if not grid else "Grid" if not plan else "LoRA sweep and grid"
         on = " on this clip (the segment holds still)" if getattr(result, "chunks", 0) else ""
         lint.append({"severity": "info", "message": f"{what}: {max(len(plan), 1) * cells} runs ({planned}); "
-                                                     f"Generate runs them all{on}, Run takes the first."})
+                                                     f"Roll runs them all{on}, Run takes the first."})
     stack: list = []
     if target != "text" and result.loras:
         stack, warnings = lora_stack(result.loras, lora_files())
@@ -583,7 +583,7 @@ class OrreryPrompt:
                     "chain_video. From the second segment on the model watches the previous clip when it writes "
                     "--…-- slots.")}),
                 "sweep": ("STRING", {"default": "", "tooltip": (
-                    "Set by Generate for each run of a LoRA sweep (run|galaxy folder); empty runs the first.")}),
+                    "Set by Roll for each run of a LoRA sweep (run|gallery folder); empty runs the first.")}),
             },
             "hidden": {"unique_id": "UNIQUE_ID", "extra_pnginfo": "EXTRA_PNGINFO", "prompt": "PROMPT"},
         }

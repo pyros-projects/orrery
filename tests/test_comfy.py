@@ -826,10 +826,10 @@ def test_a_sweep_run_writes_its_tags_records_them_and_names_its_galaxy_folder(ho
     assert data["folder"] == "sweeps/a 2026-10-01 14.03" and data["sweep"] == {"run": 1, "runs": 3}
 
 
-def test_run_without_generate_takes_the_first_and_says_how_many_there_are(home):
+def test_run_without_roll_takes_the_first_and_says_how_many_there_are(home):
     text, picks, *_ = OrreryPrompt().run(SWEEP, 5, "text", home=str(home))
     assert text == "a cat on a roof <lora:a:0.5>"
-    assert any("3 runs" in i["message"] and "Generate" in i["message"] for i in json.loads(picks)["lint"])
+    assert any("3 runs" in i["message"] and "Roll" in i["message"] for i in json.loads(picks)["lint"])
     with pytest.raises(ValueError, match="run 7"):
         OrreryPrompt().run(SWEEP, 5, "text", home=str(home), sweep="7|x")
 

@@ -37,8 +37,8 @@ function statsHTML(app) {
     + `${outs ? `<button class="btn ghost" data-act="outputs">${icon("image")}${outs} output${outs === 1 ? "" : "s"}</button>` : ""}`
     + `<button class="btn" data-act="test" title="Roll it in the Test tab: a few seeds, or a reel's clips">${icon("dice")}Test</button>`
     + (reel ? (app.run
-      ? `<span class="stat live" title="The clip of the reel this node is generating now (its segment widget counts from 0)">Generating clip <b>${Number(app.run.segment) + 1}</b></span>`
-      : `<span class="stat" title="The clip Generate plays next: the node's segment widget, which counts from 0">Next clip <b>${Number(app.bridge.getSegment()) + 1}</b></span>`)
+      ? `<span class="stat live" title="The clip of the reel this node is rendering now (its segment widget counts from 0)">Rolling clip <b>${Number(app.run.segment) + 1}</b></span>`
+      : `<span class="stat" title="The clip Roll plays next: the node's segment widget, which counts from 0">Next clip <b>${Number(app.bridge.getSegment()) + 1}</b></span>`)
       + `<button class="btn ghost" data-act="jump" title="Scroll the editor to the scene that plays the next clip">${icon("jump")}Jump</button>`
       + (app.data.timeline === false ? "" : `<button class="btn ghost" data-act="tlview" aria-pressed="${cellsView(app)}" title="${cellsView(app)
         ? "Clips under each scene: show them in a column beside the editor instead" : "Clips in a column beside the editor: show them under each scene instead"}">${icon("film")}${cellsView(app) ? "Clips below" : "Clips beside"}</button>`)
@@ -46,11 +46,14 @@ function statsHTML(app) {
     + (app.state.sweepQueue
       ? `<button class="btn primary" data-act="stopsweep" title="Stop queueing the sweep; what is queued already still runs">${icon("x")}Stop<small class="sweep">${app.state.sweepQueue.done}/${app.state.sweepQueue.total} queued</small></button>`
       : plan
-      ? `<label class="rep" title="How many seeds: each runs the whole sweep, the seed stepping between them as its control after generate says">×<input type="number" min="1" max="999" value="${repeats(app)}" data-rep aria-label="Seeds per sweep"></label>`
-        + `<button class="btn primary" data-act="generate" title="The sweep: every LoRA strength (solo LoRAs in turn) and every cell of the grid, one seed per sweep; the outputs go to a galaxy folder of their own">${icon("play")}Generate ×${plan.runs * repeats(app)}<small class="sweep">sweep ${esc(plan.formula)}${repeats(app) > 1 ? ` · ${repeats(app)} seeds` : ""}</small></button>`
-      : `<label class="rep" title="How many runs Generate queues, one after another; seed and segment step between them as their control after generate says, so a reel plays that many clips">×<input type="number" min="1" max="999" value="${repeats(app)}" data-rep aria-label="Runs per Generate"></label>`
-        + `<button class="btn primary" data-act="generate" title="Queue only what this node feeds, up to its Save nodes; their files go to the galaxy">${icon("play")}Generate</button>`);
+      ? `<button class="btn primary" data-act="generate" title="The sweep: every LoRA strength (solo LoRAs in turn) and every cell of the grid, one seed per sweep; the outputs go to a gallery folder of their own">${icon("play")}Roll ×${plan.runs * repeats(app)}<small class="sweep">sweep ${esc(plan.formula)}</small></button>`
+        + `<label class="rep" title="How many seeds: each runs the whole sweep, the seed stepping between them as its control after generate says">next<input type="number" min="1" max="999" value="${repeats(app)}" data-rep aria-label="Seeds per sweep">${plural(repeats(app), "seed")}</label>`
+      : `<button class="btn primary" data-act="generate" title="Queue only what this node feeds, up to its Save nodes; their files go to the gallery">${icon("play")}Roll</button>`
+        + `<label class="rep" title="How many runs Roll queues, one after another; seed and segment step between them as their control after generate says, so a reel plays that many clips">next<input type="number" min="1" max="999" value="${repeats(app)}" data-rep aria-label="Runs per Roll">${plural(repeats(app), reel ? "clip" : st.h3 ? "video" : "image")}</label>`);
 }
+
+// What Roll's number counts: "next 1 clip", "next 3 clips".
+const plural = (n, noun) => (n === 1 ? noun : `${noun}s`);
 
 // The cells view: each chunk its own cell with its clips under it (a reel, the timeline on, chosen in the footer).
 const cellsView = (app) => app.data.timeline !== false && app.bridge.props.orrery_tl_view === "below" && !!app.chunks();
@@ -58,7 +61,7 @@ const cellsView = (app) => app.data.timeline !== false && app.bridge.props.orrer
 // `0.6MP` in the @h3 line: the area a frame-shaped clip gets.
 const headerMP = (text) => /^\s*@h3\b[^\n]*\s\d+(?:\.\d+)?mp\b/im.test(stripComments(text));
 
-// Runs per Generate, kept in the node's properties so the workflow remembers it.
+// Runs per Roll, kept in the node's properties so the workflow remembers it.
 const repeats = (app) => Math.min(999, Math.max(1, Math.floor(Number(app.bridge.props.repeat) || 1)));
 
 function chipHTML(app) {
@@ -156,7 +159,7 @@ export function renderPrompt(app) {
     if (e.target.dataset.rep === undefined) return;
     app.bridge.props.repeat = Number(e.target.value) || 1;
     e.target.value = repeats(app);
-    if (planOf(app)) refreshFoot(app);  // the sweep button counts runs × seeds
+    refreshFoot(app);  // the sweep button counts runs × seeds, and the noun after the number follows it
   };
   if (app.state.pick) wirePicker(app);
   renderDials(app);
@@ -215,7 +218,7 @@ function generateSweep(app, cancelled = 0) {
   };
   const report = (n) => {
     if (!n) return app.toast("Nothing to generate: connect this node's outputs toward a Save or Preview node.");
-    app.toast(`Queued <b>${n}</b> runs · sweep ${esc(plan.formula)}${seeds > 1 ? ` × ${seeds} seeds` : ""} · galaxy folder <b>${esc(folder)}</b>`
+    app.toast(`Queued <b>${n}</b> runs · sweep ${esc(plan.formula)}${seeds > 1 ? ` × ${seeds} seeds` : ""} · gallery folder <b>${esc(folder)}</b>`
       + `${cancelled ? ` · cancelled ${cancelled} earlier run${cancelled === 1 ? "" : "s"} of this node` : ""}`
       + `${n < total ? ` · stopped after ${n} of ${total}` : ""}`);
   };

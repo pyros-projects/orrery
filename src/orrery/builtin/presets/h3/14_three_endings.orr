@@ -1,6 +1,6 @@
 ---
 title: "Three endings"
-note: "One setup, three films. A woman knocks on a strange door in a storm, and the door opens; then three scenes each continue that same clip (AFTER: the knock), as a sitcom, a horror film and a romance, each in a style of its own. One Generate renders all four clips; Orrery Film keeps every branch, so you can watch the same door open three ways. Her dog is cast as always: it trots through every ending, even the ones that forget to mention it. The storm and the house roll per seed."
+note: "One setup, three films. A woman knocks on a strange door in a storm, and the door opens; then three scenes each continue that same clip (AFTER: the knock), as a sitcom, a horror film and a romance, each in a style of its own. One Roll (next 4 clips) renders all four; Orrery Film keeps every branch, so you can watch the same door open three ways. Her dog is cast as always: it trots through every ending, even the ones that forget to mention it. The storm and the house roll per seed."
 tags: [h3, reel, branches, motion_context]
 ---
 @h3 text 16:9

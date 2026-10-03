@@ -73,7 +73,7 @@ Per chunk orrery emits (built):
 - the `lora_stack` output: the `LORA:` lines before the first `CHUNK` plus the
   chunk's own, as a LORA_STACK;
 - the picks of the head, the chunk and its handoffs only, so ratings teach the
-  galaxy what was in the clip;
+  gallery what was in the clip;
 - `--…--` slots written by the language model, which from the second segment
   on watches the previous clip from the chain (one frame a second and the
   last one): the semantic memory grounded in what H3 actually rendered, not
@@ -118,7 +118,7 @@ the retrieval query for this RefMod-RAG is the screenplay itself. **Orrery RefMo
 conditioning, each with a strength (`at 0.5`, an attention bias orrery wraps
 around H3) and a start (`from 35%`, a timestep range), see
 [h3.md](h3.md#1e-refmods-refmod-name-at-05-from-35). Still open: the "recent"
-memory (a RefMod of the chunk before), and making canon from the galaxy.
+memory (a RefMod of the chunk before), and making canon from the gallery.
 
 Wiring: Orrery `picks` → Orrery Continue, with the H3 node's latent (and
 conditioning) on their way to the sampler, and the sampled latent with the
@@ -134,7 +134,7 @@ loops such as `fashion/runway_loop`.
 reel ──orrery──▶ Contex Loop plan (prompts, lengths, seeds)
           └────▶ memory lists ──▶ Orrery Memory Router (inside the loop, loads RefMods per chunk)
                                         │
-H3 ──▶ Review Gate / Galaxy ♥ ──▶ "make canon" ──▶ new RefMod ──▶ CAST entry
+H3 ──▶ Review Gate / Gallery ♥ ──▶ "make canon" ──▶ new RefMod ──▶ CAST entry
 ```
 
 - **Contex Loop stays the engine.** It already does seams, review, retry,
@@ -179,7 +179,7 @@ H3 ──▶ Review Gate / Galaxy ♥ ──▶ "make canon" ──▶ new RefMo
    `HANDOFF`, `LORA:`, `context:`, the `segment` input, and the memory lists.
 5. **Memory router (built) and canon (open):** Orrery RefMods puts each clip's
    RefMods on it, with a strength, a start and an end, also those made from the
-   reel's own frames; "make canon" from the galaxy is still open.
+   reel's own frames; "make canon" from the gallery is still open.
 
 ## The experiment before stages 4 and 5
 

@@ -2,10 +2,10 @@
 
 orrery is a seeded prompt language that records every decision it makes. A template rolls
 libraries, choices and bindings from a seed; every pick stays addressable, so a run can be
-reproduced, rated, and the ratings steer the next rolls (the galaxy). On top of the language sit
+reproduced, rated, and the ratings steer the next rolls (the gallery). On top of the language sit
 compilers: plain text (Krea 2 and other image models) and MiniMax H3 screenplays (`@h3`: shots,
 voices, sound, a CAST of references, and reels of chained clips with `CHUNK`, `HANDOFF`, `SEND:`
-and `GOTO:`). In ComfyUI it is one node, Orrery Prompt, with an app in it (Prompt, Test, Galaxy,
+and `GOTO:`). In ComfyUI it is one node, Orrery Prompt, with an app in it (Prompt, Test, Gallery,
 History), plus Orrery Refs, Orrery Continue, Orrery Film and Orrery Log.
 
 ## Layout

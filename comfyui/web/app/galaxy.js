@@ -41,7 +41,7 @@ let painting = false;
 export async function renderGalaxy(app) {
   if (!app.data.gRows || !app.state.gFetched) {
     app.state.gFetched = true;
-    if (!app.data.gRows) app.view.innerHTML = '<div class="empty">Loading the galaxy…</div>';
+    if (!app.data.gRows) app.view.innerHTML = '<div class="empty">Loading the gallery…</div>';
     await refresh(app);
     if (app.state.tab !== "galaxy") return;
     app.render();
@@ -63,7 +63,7 @@ export async function renderGalaxy(app) {
     <div class="bar">${seg("all", "All outputs")}${seg("prompt", "This prompt")}${seg("preset", "This preset")}<span class="sep"></span>`
     + `${rch("love", `${icon("heart")}Loved`)}${rch("like", `${icon("up")}Liked`)}${rch("unrated", "Unrated")}`
     + `${s.gPick ? `<span class="chip mono" aria-pressed="true">${esc(s.gPick)}<button class="mini" data-gp="" aria-label="Clear pick filter">${icon("x")}</button></span>` : ""}
-      <span class="grow"></span><button class="icon-btn" data-gact="reload" title="Reload the galaxy">${icon("undo")}</button></div>
+      <span class="grow"></span><button class="icon-btn" data-gact="reload" title="Reload the gallery">${icon("undo")}</button></div>
     ${s.gSel.size ? selBarHTML(s.gSel.size, rows.length) : ""}
     <div class="split ${open ? "has-detail" : ""}">
       <div class="scroll"><p class="rule">Ratings teach the dice: every pick in a <b class="love">loved</b> output weighs ×1.5, <b class="like">liked</b> ×1.2, <b class="nope">nope</b> ×0.8, <b class="hate">hate</b> ×0.5. Click an image for its picks; drag it onto a folder to sort it. Shift-click selects a range, Ctrl-click one more.</p>
@@ -212,7 +212,7 @@ function select(app, id, e, rows) {
 function confirmDelete(app) {
   const s = app.state, ids = [...s.gSel], n = ids.length;
   const sheet = app.openSheet(`<form class="panel"><div class="row spread"><h4>Delete ${plural(n, "output")}?</h4></div>
-    <p class="muted flush">They leave the galaxy, and their files move to the <code>trash</code> folder in your orrery home, where you can still fetch them back. What their ratings taught the dice stays.</p>
+    <p class="muted flush">They leave the gallery, and their files move to the <code>trash</code> folder in your orrery home, where you can still fetch them back. What their ratings taught the dice stays.</p>
     <div class="acts"><button type="button" class="btn ghost" data-cancel>Cancel</button><button class="btn danger">${icon("trash")}Delete ${n}</button></div></form>`);
   sheet.querySelector("[data-cancel]").onclick = () => app.closeSheet();
   sheet.querySelector("form").onsubmit = async (e) => {
@@ -439,7 +439,7 @@ async function dropAsFile(e, { url, name }) {
   let file;
   try {
     const res = await fetch(url);
-    if (!res.ok) throw new Error(`the galaxy answered ${res.status}`);
+    if (!res.ok) throw new Error(`the gallery answered ${res.status}`);
     const blob = await res.blob();
     file = new File([blob], name, { type: blob.type });
   } catch (err) { console.warn("[orrery] the output could not be fetched for the drop", err); return; }

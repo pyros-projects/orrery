@@ -92,4 +92,4 @@ tags: [moody, winter]
 ```
 
 The ComfyUI node records every template it uses under its hash, so each
-galaxy line can be traced back to, and re-run from, its exact template.
+gallery line can be traced back to, and re-run from, its exact template.

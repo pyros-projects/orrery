@@ -26,6 +26,11 @@ checks) are left out.
   end, including RefMods made from the reel's own frames (#59).
 - orrery's boot banner stands out in the ComfyUI console, with what loaded and what did not (#60).
 
+### Changed
+
+- The galaxy is the gallery now, and Generate is Roll, with how many runs it queues after it:
+  **Roll** next 3 clips, next 8 images (#23). Ratings and folders on disk stay as they are.
+
 ### Fixed
 
 - Frequencies and Rolls load the libraries once per request instead of once per roll (#47).

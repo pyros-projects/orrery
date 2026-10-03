@@ -18,7 +18,7 @@ const TABS = [
   ["test", "Test", renderTest],
   ["presets", "Presets", renderPresets],
   ["libraries", "Libraries", renderLibraries],
-  ["galaxy", "Galaxy", renderGalaxy],
+  ["galaxy", "Gallery", renderGalaxy],
   ["history", "History", renderHistory],
   ["help", "Help", renderHelp],
 ];

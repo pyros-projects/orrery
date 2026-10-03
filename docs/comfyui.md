@@ -1,6 +1,6 @@
 # The ComfyUI nodes
 
-Everything the Orrery Prompt node puts out, the six tabs of its app, Generate and Restart, Orrery Log and Orrery Refs.
+Everything the Orrery Prompt node puts out, the six tabs of its app, Roll and Restart, Orrery Log and Orrery Refs.
 
 ```bash
 cd /path/to/ComfyUI/custom_nodes && git clone https://github.com/pyros-projects/orrery.git
@@ -66,7 +66,7 @@ Nodes under **orrery**:
     turns the quickstart off). Open a preset from the bar above it; ● marks unsaved
     edits; Save, Save as…, Revert. Under the editor, every binding is a
     **dial**: pick a library entry or choice, or type any expression; empty
-    means its default roll. Saving bakes the dials in, and a galaxy output
+    means its default roll. Saving bakes the dials in, and a gallery output
     restores them. **Test** jumps to the Test tab and rolls. **Write** has
     the language model write the reel's next scene, the shot between two
     frames or a prompt from a picture, one idea per short run, browsed
@@ -101,7 +101,7 @@ Nodes under **orrery**:
     what the language model wrote waits on top for review. Built-ins become
     yours with **Make it mine**. Drag the list's edge to widen it; a long
     property opens when you click it.
-  - **Galaxy**: every logged output. love / like / nope / hate multiply the
+  - **Gallery**: every logged output. love / like / nope / hate multiply the
     learned weight of each pick by 1.5 / 1.2 / 0.8 / 0.5 (re-rating replaces
     the factor). **Use template + seed** restores an output and sets the seed
     to fixed. Folders on the left sort outputs without moving their files:
@@ -111,7 +111,7 @@ Nodes under **orrery**:
     Shift-click for a range, Ctrl/Cmd-click for one more; then **Export
     pairs** copies each picture or video into `~/.orrery/export/<name>/`
     with a `.txt` of the prompt that made it (training pairs), and
-    **Delete** takes outputs out of the galaxy and moves their files to
+    **Delete** takes outputs out of the gallery and moves their files to
     `~/.orrery/trash/`. Learned weights stay. The big picture of an open
     output drags onto the canvas like the file itself: a new Load Image node,
     a Load Image node's new picture, or the workflow the picture carries.

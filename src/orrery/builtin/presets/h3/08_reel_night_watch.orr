@@ -1,6 +1,6 @@
 ---
 title: "Reel: the night watch"
-note: "A three-clip reel from references that keeps a face: the first clip opens on the keeper's face, and REMEMBER makes that frame image 1 for every later clip, so the last clip can come back to his face in close-up after two clips that never show it. Generate ×3 plays it (Orrery Continue / Orrery Film, or H3 Motion Context); wire the picks into Orrery Refs and its ref_N into Reference to Video. No input image: image 1 comes from the reel itself, and image 2 (the lamp clip's first frame) goes along as a reference for the view from the top."
+note: "A three-clip reel from references that keeps a face: the first clip opens on the keeper's face, and REMEMBER makes that frame image 1 for every later clip, so the last clip can come back to his face in close-up after two clips that never show it. Roll next 3 clips plays it (Orrery Continue / Orrery Film, or H3 Motion Context); wire the picks into Orrery Refs and its ref_N into Reference to Video. No input image: image 1 comes from the reel itself, and image 2 (the lamp clip's first frame) goes along as a reference for the view from the top."
 tags: [h3, reel, ref2va, send, motion_context]
 ---
 @h3 references 16:9 lite 0.6MP

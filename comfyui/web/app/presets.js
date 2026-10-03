@@ -59,7 +59,7 @@ function detailHTML(app) {
       <div class="row"><button class="btn primary" data-pact="load">Load into editor</button><button class="btn" data-pact="roll">${icon("dice")}Sample roll</button>`
     + `<button class="btn ghost" data-pact="copy">${icon("copy")}Copy</button><button class="btn ghost" data-pact="dup">Duplicate</button>`
     + `${c.builtin ? "" : `<button class="btn ghost danger" data-pact="del">${icon("trash")}Delete</button>`}</div>
-      ${s.pConfirm ? `<div class="confirm">Delete @${esc(c.name)}? Its outputs stay in the galaxy. <button class="btn danger" data-pact="delyes">Delete</button><button class="btn ghost" data-pact="delno">Keep</button></div>` : ""}
+      ${s.pConfirm ? `<div class="confirm">Delete @${esc(c.name)}? Its outputs stay in the gallery. <button class="btn danger" data-pact="delyes">Delete</button><button class="btn ghost" data-pact="delno">Keep</button></div>` : ""}
       ${s.pRoll ? `<div class="roll"><span class="seed">seed ${s.pRoll.seed}</span>${markPicks(s.pRoll.text, s.pRoll.picks)}</div>` : ""}
       <div><span class="label">Template</span><pre class="codebox">${highlight(d.text, app.known())}</pre></div>
     </div></div></aside>`;
