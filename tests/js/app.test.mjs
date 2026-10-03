@@ -523,3 +523,13 @@ test("with GOTO lines the chunks follow the path the server walked", () => {
   assert.match(endless[2].label, /^clips 3, 5, … · 2\+ × 6 s/);
   assert.match(highlight(text, known, { chunks: walked, segment: 3 }), /▶ next 2\/3/);
 });
+
+test("a dial's menu lists every choice while the box holds one of them, and filters what is typed (#155)", async () => {
+  const { menuItems } = await import("../../comfyui/web/app/dialmenu.js");
+  const choices = ["everyday", "adventure", "fantasy", "cyberpunk", "spacefarer"];
+  assert.deepEqual(menuItems(choices, ""), choices);
+  assert.deepEqual(menuItems(choices, "spacefarer"), choices);  // the datalist showed only this one
+  assert.deepEqual(menuItems(choices, "SpaceFarer "), choices);
+  assert.deepEqual(menuItems(choices, "an"), ["fantasy"]);
+  assert.deepEqual(menuItems(choices, "zz"), []);
+});

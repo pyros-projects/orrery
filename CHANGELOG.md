@@ -46,6 +46,8 @@ checks) are left out.
 
 ### Fixed
 
+- A dial's list of choices opens every time: a menu of its own shows every choice while the dial holds
+  one of them, filters what you type, and a library's choices come back after a run (#155).
 - The Libraries tab opens at once with a home of a hundred thousand entries (it loaded all of them,
   30 MB, and after every run), keeps its place when a folder unfolds, and shows tags and properties
   on a line under each entry (#152).
