@@ -83,6 +83,7 @@ def test_the_gallery_keeps_the_exports_and_its_pictures_carry_them(home, tmp_pat
     entry = Home(home).libraries()["pictures/krea/x"].entries[0]
     assert (entry.prop("who"), entry.prop("skills"), entry.prop("job"), entry.prop("job_tool")) == \
            ("a tall heron", "fishing, waiting", "a ferryman", "a long pole")
+    assert entry.tags == ("exported",)  # `[exported]` keeps the pictures that carry data
 
 
 def test_a_screenplay_leaves_exports_out_and_says_where_they_belong():

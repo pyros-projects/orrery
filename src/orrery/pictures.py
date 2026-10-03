@@ -107,7 +107,8 @@ def libraries(home) -> dict[str, Library]:
         entries = []
         for name, rows in characters.items():
             factors = [RATING.get(r.get("rating") or "", 1.0) for r in rows]
-            rated = sorted({f"{r['rating']}d" for r in rows if r.get("rating") in RATING})  # loved, liked, noped, hated
+            rated = sorted({f"{r['rating']}d" for r in rows if r.get("rating") in RATING}  # loved, liked, noped, hated
+                           | ({"exported"} if any(r.get("exports") for r in rows) else set()))  # it carries EXPORT: data
             each = [_traits(home, r, labels) for r in rows]
             traits = {k: v for k, v in each[0].items() if all(t.get(k) == v for t in each)}  # not the view, say
             props = {**traits, "pictures": "\n".join(str(r["media"]) for r in rows), "prompt": str(rows[0].get("text") or "")}
