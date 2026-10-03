@@ -3,7 +3,7 @@ title: "Animated fable"
 note: "Two non-human characters talk, joined by a fade. Tests lip sync on creatures in claymation, 2D and 3D CG (the style is rolled), plus a very small and a very big voice."
 tags: [h3, animation, dialogue]
 ---
-@h3 t2va 16:9
+@h3 text 16:9
 style: {claymation|2D-animated|3D CG}
 $small = __creature[insect]__
 $big = __creature[bird]__

@@ -3,7 +3,7 @@ title: "12 · Everything at once (H3)"
 lesson: "Three shots, three transitions, rolled camera and weather, two voices in two languages. The compiler computes timestamps, speaker IDs and <d> tags, and lints the result against the official guide."
 tags: [tutorial, h3, woah]
 ---
-@h3 t2va 16:9
+@h3 text 16:9
 style: live-action, cinematic
 $keeper = __creature__
 

@@ -6,11 +6,11 @@ tags: [onebutton, krea]
 $wild = {tame:3|curious:2|unhinged}
 $kind = {person:3|animal:2|thing:2|idea:2|place:2}
 $who = __characters/{average_joes|models|gothic|cyberpunk|horror|noir|fantasy}__
-$subject = {? $kind=person: $who|{? $kind=animal: __subjects/animals__|{? $kind=thing: __subjects/still_life__|{? $kind=idea: __subjects/concepts__|__world/landscapes__}}}}
+$subject = {IF $kind=person: $who|{IF $kind=animal: __subjects/animals__|{IF $kind=thing: __subjects/still_life__|{IF $kind=idea: __subjects/concepts__|__world/landscapes__}}}}
 $look = __looks/still__
-$twist = {? $wild=tame: |{? $wild=curious: {:3|, __subjects/twists__}|, __subjects/twists__}}
-$lens = {? $look.family=photo: , with __frame/optics__|}
-$beyond = {? $wild=unhinged: , with __subjects/concepts__ in the background|}
+$twist = {IF $wild=tame: |{IF $wild=curious: {:3|, __subjects/twists__}|, __subjects/twists__}}
+$lens = {IF $look.family is photo: , with __frame/optics__|}
+$beyond = {IF $wild=unhinged: , with __subjects/concepts__ in the background|}
 $frame = __frame/compositions__
 $light = __light__
 {$subject$twist, $frame, lit by $light$beyond. The picture is $look$lens.|The picture is $look$lens: $subject$twist, $frame, lit by $light$beyond.|$subject$twist, lit by $light, $frame$beyond. The picture is $look$lens.}
