@@ -74,6 +74,32 @@ output:
 - **A PR ready for review or merge:** say so, with its link, and stop. Don't go on with other
   work in the same turn.
 
+Test live, with the human watching. A change they can see in ComfyUI is shown to them in the
+running instance before its PR, in a browser window of its own (Playwright), and they approve it
+test by test:
+
+1. **The plan first.** A numbered list of the tests. Each gets one line: what you do and what they
+   should see. They may strike one ("that needs no watching") or add one. Start on their go.
+2. **One test at a time.** Announce it ("Test 2: the filter on the outfit dial …") and run it at
+   human speed. Then say in one line what you expected and what came, and ask whether it passes.
+   Wait for the answer before the next test.
+3. **A failing test stops the run.** Say what happened and what you would change. Fix it only when
+   they agree, then run that test again.
+4. **What a test is:** one behaviour a user checks by eye, from its start to its result (pick a
+   dial's choice, and the row and the sidebar's head change). Mostly 3 to 10 actions and under two
+   minutes. Never one test per click, and never so long that a failure is hard to place.
+5. **Human speed:** they follow every step.
+   - Put what the test is about on screen first (scroll, zoom the canvas), and keep it there.
+   - Wait about 1.5 s between two actions.
+   - Type at about 15 characters a second (Playwright: `delay: 60`).
+   - Move the pointer to what you click, so they see where.
+   - Leave each result on screen 3 s before you name it or go on.
+
+   When they say "faster" or "the rest without me", run the rest at normal speed and report.
+6. **The usual limits hold.** Nothing that loads a model runs without their OK (see the running
+   ComfyUI under Conventions). The test leaves the home as it found it: discard what a test wrote,
+   and set back the settings it changed.
+
 ## Conventions
 
 - Code, docs, issues, commits and PRs are in English.
