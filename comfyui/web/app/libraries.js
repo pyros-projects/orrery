@@ -2,13 +2,50 @@
 // language model wrote waits on top for review; the rest is grouped into folders by name prefix.
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
-import { entryPage, libraryGroups, LIB_PAGE } from "./model.js";
+import { entryPage, libraryHead, libraryGroups, LIB_PAGE } from "./model.js";
 import { resizable } from "./parts.js";
 
+// The list holds names and counts only (a home can hold a hundred thousand entries); a library's
+// entries come when it is opened and stay in libFull until the folder is read again.
 async function ensure(app) {
   if (app.data.libraries && !app.data.libStale) return;
   app.data.libStale = false;
+  app.data.libFull = {};
   try { app.data.libraries = (await app.api.libraries()).libraries; } catch (e) { app.data.libraries ??= []; app.fail(e); }
+}
+
+async function loadFull(app, name) {
+  app.data.libFull ??= {};
+  if (app.data.libFull[name]) return app.data.libFull[name];
+  try { return setFull(app, await app.api.library(name)); } catch (e) { app.fail(e); return null; }
+}
+
+// A library as the server returned it after a load or an edit: kept whole, and its line in the list follows.
+function setFull(app, lib) {
+  (app.data.libFull ??= {})[lib.name] = lib;
+  const head = libraryHead(lib), known = app.data.libraries.some((l) => l.name === lib.name);
+  app.data.libraries = known ? app.data.libraries.map((l) => (l.name === lib.name ? head : l))
+    : [...app.data.libraries, head].sort((a, b) => a.name.localeCompare(b.name));
+  return lib;
+}
+
+function dropLibrary(app, name) {
+  app.data.libraries = app.data.libraries.filter((l) => l.name !== name);
+  if (app.data.libFull) delete app.data.libFull[name];
+}
+
+// Search: names match at once, entries on the server (debounced), and the list shows both.
+function searchEntries(app) {
+  const q = app.state.libSearch.trim();
+  clearTimeout(app.state.libSearchTimer);
+  if (!q || app.data.libFound?.q === q) return;
+  app.state.libSearchTimer = setTimeout(async () => {
+    let names;
+    try { names = new Set((await app.api.libraries(q)).libraries.map((l) => l.name)); } catch { return; }
+    if (app.state.libSearch.trim() !== q) return;
+    app.data.libFound = { q, names };
+    if (app.state.tab === "libraries") renderLibraries(app);
+  }, 250);
 }
 
 const SOURCE = { llm: "written by the language model", user: "yours", builtin: "built-in" };
@@ -16,15 +53,15 @@ const SOURCE = { llm: "written by the language model", user: "yours", builtin: "
 function listHTML(app, libs, current) {
   const s = app.state, open = s.libOpen ??= new Set(), searching = !!s.libSearch.trim();
   return libraryGroups(libs).map((g) => {
-    const shown = searching || g.key === "review" || g.key === "" || open.has(g.key) || g.items.some((i) => i.lib.name === current);
+    const shown = searching || g.key === "review" || g.key === "" || open.has(g.key);
     const head = g.key === "review"
       ? `<li class="grp review">${icon("spark")}To review · ${g.items.length}</li>`
       : g.key ? `<li class="grp"><button class="fold-btn" data-lfold="${esc(g.key)}" aria-expanded="${shown}">${icon("chev", shown ? "" : "rot")}<span>${esc(g.key)}</span><span class="lc">${g.items.length}</span></button></li>`
         : (libs.length > g.items.length ? '<li class="grp">Other</li>' : "");
     const items = shown ? g.items.map(({ lib: l, short }) => {
-      const pend = l.pending ? '<span class="pend-chip">new</span>' : (l.pending_entries || []).length ? `<span class="pend-chip">+${l.pending_entries.length}</span>` : "";
+      const pend = l.pending ? '<span class="pend-chip">new</span>' : l.pending_count ? `<span class="pend-chip">+${l.pending_count}</span>` : "";
       return `<li><button class="${l.name === current ? "on" : ""}${g.key && g.key !== "review" ? " inset" : ""}" data-lib="${esc(l.name)}" title="__${esc(l.name)}__ · ${SOURCE[l.source] || l.source}">`
-        + `<span class="dot ${l.source}"></span><span class="ln">${esc(short)}</span>${pend}<span class="lc">${l.entries.length}</span></button></li>`;
+        + `<span class="dot ${l.source}"></span><span class="ln">${esc(short)}</span>${pend}<span class="lc">${l.count}</span></button></li>`;
     }).join("") : "";
     return head + items;
   }).join("");
@@ -41,6 +78,23 @@ function reviewHTML(L) {
 
 const libBy = (app, name) => app.data.libraries.find((l) => l.name === name);
 
+// What has the focus and where the lists stand, so a render (a folder unfolded, a search typed) keeps them.
+function keepPlace(app) {
+  const a = document.activeElement, view = app.view;
+  const sel = !a || !view.contains(a) ? null : a.id ? `#${a.id}` : a.dataset.lfold !== undefined ? `[data-lfold="${CSS.escape(a.dataset.lfold)}"]`
+    : a.dataset.lib !== undefined ? `[data-lib="${CSS.escape(a.dataset.lib)}"]` : null;
+  const caret = sel && a.selectionEnd !== undefined ? [a.selectionStart, a.selectionEnd] : null;
+  const list = view.querySelector(".liblist .scroll")?.scrollTop, main = view.querySelector(".libmain .scroll")?.scrollTop;
+  const lib = app.state.lib;
+  return () => {
+    const ls = view.querySelector(".liblist .scroll"), ms = view.querySelector(".libmain .scroll");
+    if (ls && list) ls.scrollTop = list;
+    if (ms && main && app.state.lib === lib) ms.scrollTop = main;
+    const el = sel && view.querySelector(sel);
+    if (el) { el.focus({ preventScroll: true }); if (caret) el.setSelectionRange(...caret); }
+  };
+}
+
 export async function renderLibraries(app) {
   if (!app.data.libraries || app.data.libStale) {
     if (!app.data.libraries) app.view.innerHTML = '<div class="empty">Loading libraries…</div>';
@@ -48,11 +102,26 @@ export async function renderLibraries(app) {
     if (app.state.tab !== "libraries") return;
   }
   const s = app.state;
-  const q = s.libSearch.toLowerCase();
-  const libs = app.data.libraries.filter((l) => !q || l.name.includes(q) || l.entries.some((e) => e.value.toLowerCase().includes(q)));
-  const L = libBy(app, s.lib) || libraryGroups(app.data.libraries)[0]?.items[0]?.lib;
-  if (!L) { app.view.innerHTML = '<div class="empty">No libraries yet.</div>'; return; }
-  s.lib = L.name;
+  const q = s.libSearch.trim().toLowerCase(), found = app.data.libFound?.q === s.libSearch.trim() ? app.data.libFound.names : null;
+  const libs = app.data.libraries.filter((l) => !q || l.name.includes(q) || found?.has(l.name));
+  const head = libBy(app, s.lib) || libraryGroups(app.data.libraries)[0]?.items[0]?.lib;
+  if (!head) { app.view.innerHTML = '<div class="empty">No libraries yet.</div>'; return; }
+  s.lib = head.name;
+  if (s.libShownFor !== head.name) {  // a library just chosen (here, from a toast, by search): its folder opens
+    const key = libraryGroups(app.data.libraries).find((g) => g.items.some((i) => i.lib.name === head.name))?.key;
+    if (key && key !== "review") (s.libOpen ??= new Set()).add(key);
+  }
+  const L = app.data.libFull?.[head.name];
+  if (!L) {
+    const back = keepPlace(app);
+    app.view.querySelector(".libmain")?.replaceChildren(Object.assign(document.createElement("div"), { className: "empty", textContent: `Loading __${head.name}__…` }));
+    if (!app.view.querySelector(".libs")) app.view.innerHTML = '<div class="empty">Loading libraries…</div>';
+    back();
+    await loadFull(app, head.name);
+    if (app.state.tab === "libraries" && app.state.lib === head.name && app.data.libFull?.[head.name]) return renderLibraries(app);
+    return;
+  }
+  const back = keepPlace(app);
   const ro = L.source === "builtin";
   const tags = [...new Set(L.entries.flatMap((e) => e.tags))].sort();
   if (s.libShownFor !== L.name) { s.libShownFor = L.name; s.libShown = LIB_PAGE; }
@@ -68,14 +137,15 @@ export async function renderLibraries(app) {
       ${reviewHTML(L)}
       ${ro ? `<div class="banner">${icon("lock")}Built-in and read-only. <b>Make it mine</b> copies it into your library folder, where yours wins over the built-in.</div>` : ""}
       ${tags.length ? `<div class="bar flat"><span class="label">Tags</span>${tags.map((t) => `<button class="chip" aria-pressed="${s.libTag === t}" data-ltag="${esc(t)}">${esc(t)}</button>`).join("")}</div>` : ""}
-      <div class="scroll"><table class="entries"><colgroup><col class="cv"><col><col class="cw"><col class="cl"><col class="cx"></colgroup><thead><tr><th class="label">Entry</th><th class="label">Tags</th><th class="label" title="Static weight in the file">Weight</th><th class="label" title="Learned from your gallery ratings">Learned</th><th></th></tr></thead><tbody>
-      ${rows.map(({ e, i }) => rowHTML(e, i, ro, (L.pending_entries || []).includes(e.value))).join("") || '<tr><td colspan="5" class="empty">No entries yet. Add some below.</td></tr>'}
+      <div class="scroll"><table class="entries"><colgroup><col><col class="cw"><col class="cl"><col class="cx"></colgroup><thead><tr><th class="label">Entry <span class="sub">· tags and properties under it</span></th><th class="label" title="Static weight in the file">Weight</th><th class="label" title="Learned from your gallery ratings">Learned</th><th></th></tr></thead><tbody>
+      ${rows.map(({ e, i }) => rowHTML(e, i, ro, (L.pending_entries || []).includes(e.value))).join("") || '<tr><td colspan="4" class="empty">No entries yet. Add some below.</td></tr>'}
       </tbody></table>${total > rows.length ? `<div class="addrow"><button class="btn ghost wide" data-lact="more">Show ${Math.min(LIB_PAGE, total - rows.length)} more of ${total - rows.length}</button></div>` : ""}</div>
       ${ro ? "" : `<div class="addrow"><input class="input" id="oa-add" placeholder="Add entries: one per line or comma-separated, then ↵"><button class="btn" data-lact="add">${icon("plus")}Add</button></div>`}
       <div class="ask">${icon("spark")}<span>Ask the LLM, e.g. “remove all cats and make them a new list feline”: coming in stage 5. It runs in the ComfyUI queue and shows a diff before anything changes.</span></div>
     </div></div>`;
   app.view.querySelectorAll(".entries textarea").forEach(fit);
   wire(app, L);
+  back();
 }
 
 // An entry grows with its text: scene descriptions stay readable in a narrow column.
@@ -87,10 +157,11 @@ function fit(t) {
 function rowHTML(e, i, ro, fresh) {
   const lw = e.learned ?? 1, pct = Math.min(50, (Math.abs(Math.log(lw)) / Math.log(4)) * 50);
   const bar = lw >= 1 ? `left:50%;width:${pct}%` : `left:${50 - pct}%;width:${pct}%`;
-  return `<tr class="${fresh ? "pend" : ""}"><td class="v"><textarea rows="1" data-ev="${i}" ${ro ? "disabled" : ""} aria-label="Entry" spellcheck="false">${esc(e.value)}</textarea></td>
-    <td class="t"><div class="row">${e.tags.map((t) => `<span class="tagchip">${esc(t)}${ro ? "" : `<button data-rmtag="${i}" data-tag="${esc(t)}" aria-label="Remove tag">${icon("x")}</button>`}</span>`).join("")}`
+  const chips = e.tags.map((t) => `<span class="tagchip">${esc(t)}${ro ? "" : `<button data-rmtag="${i}" data-tag="${esc(t)}" aria-label="Remove tag">${icon("x")}</button>`}</span>`).join("")
     + Object.entries(e.props || {}).map(([k, v]) => `<span class="tagchip prop" tabindex="0" title="${esc(k)}: ${esc(v)}&#10;&#10;__name#${esc(k)}:…__ filters on it · click to read it all"><span class="pv"><b>${esc(k)}</b> ${esc(v)}</span>${ro ? "" : `<button data-rmprop="${i}" data-key="${esc(k)}" aria-label="Remove property">${icon("x")}</button>`}</span>`).join("")
-    + `${ro ? "" : `<input class="tagadd" data-addtag="${i}" placeholder="+ tag or key:value">`}</div></td>
+    + (ro ? "" : `<input class="tagadd" data-addtag="${i}" placeholder="+ tag or key:value">`);
+  return `<tr class="${fresh ? "pend" : ""}"><td class="v"><textarea rows="1" data-ev="${i}" ${ro ? "disabled" : ""} aria-label="Entry" spellcheck="false">${esc(e.value)}</textarea>`
+    + `${chips ? `<div class="chips">${chips}</div>` : ""}</td>
     <td class="w"><input type="number" step="0.1" min="0" value="${e.weight}" data-ew="${i}" ${ro ? "disabled" : ""} aria-label="Weight"></td>
     <td><span class="learn ${lw > 1.001 ? "up" : lw < 0.999 ? "dn" : ""}"><span class="bar2"><i class="${lw < 1 ? "down" : ""}" style="${bar}"></i></span>×${lw.toFixed(2)}</span></td>
     <td>${ro ? "" : `<button class="mini" data-rm="${i}" aria-label="Delete entry">${icon("x")}</button>`}</td></tr>`;
@@ -100,8 +171,7 @@ function rowHTML(e, i, ro, fresh) {
 async function commit(app, L, entries, { renames, message } = {}) {
   const before = plain(L);
   try {
-    const saved = await app.api.saveLibrary({ name: L.name, entries, ...(renames ? { renames } : {}) });
-    app.data.libraries = app.data.libraries.map((l) => (l.name === L.name ? saved : l));
+    setFull(app, await app.api.saveLibrary({ name: L.name, entries, ...(renames ? { renames } : {}) }));
     app.refreshCompletion().catch(() => {});
   } catch (e) { app.fail(e); }
   renderLibraries(app);
@@ -110,7 +180,7 @@ async function commit(app, L, entries, { renames, message } = {}) {
       label: "Undo",
       run: () => {
         const back = renames ? Object.fromEntries(Object.entries(renames).map(([a, b]) => [b, a])) : undefined;
-        commit(app, libBy(app, L.name), before, { renames: back });
+        commit(app, app.data.libFull?.[L.name] || L, before, { renames: back });
       },
     });
   }
@@ -132,12 +202,9 @@ function wire(app, L) {
   const s = app.state;
   const ls = app.$("#oa-ls");
   ls.addEventListener("input", () => {
-    const pos = ls.selectionEnd;
     s.libSearch = ls.value;
     renderLibraries(app);
-    const n = app.$("#oa-ls");
-    n.focus();
-    n.setSelectionRange(pos, pos);
+    searchEntries(app);
   });
   app.view.onclick = async (e) => {
     const lib = e.target.closest("[data-lib]");
@@ -146,8 +213,6 @@ function wire(app, L) {
     if (fold) {
       const open = s.libOpen ??= new Set(), k = fold.dataset.lfold;
       if (open.has(k)) open.delete(k); else open.add(k);
-      const current = libBy(app, s.lib)?.name || "";
-      if (!open.has(k) && (current.startsWith(`${k}_`) || current.startsWith(`${k}/`))) s.lib = null;
       return renderLibraries(app);
     }
     const t = e.target.closest("[data-ltag]");
@@ -172,8 +237,7 @@ function wire(app, L) {
     const act = e.target.closest("[data-lact]")?.dataset.lact;
     if (act === "own") {
       try {
-        const own = await app.api.ownLibrary(L.name);
-        app.data.libraries = app.data.libraries.map((l) => (l.name === L.name ? own : l));
+        setFull(app, await app.api.ownLibrary(L.name));
         app.toast(`<b>__${esc(L.name)}__</b> is yours now; edits go to your library folder`);
       } catch (err) { app.fail(err); }
       return renderLibraries(app);
@@ -181,7 +245,7 @@ function wire(app, L) {
     if (act === "del") {
       const gone = plain(L), name = L.name;
       try { await app.api.deleteLibrary(name); } catch (err) { return app.fail(err); }
-      app.data.libraries = app.data.libraries.filter((l) => l.name !== name);
+      dropLibrary(app, name);
       s.lib = null;
       app.refreshCompletion().then(() => app.render()).catch(() => {});
       renderLibraries(app);
@@ -189,8 +253,7 @@ function wire(app, L) {
         label: "Undo",
         run: async () => {
           try {
-            const back = await app.api.saveLibrary({ name, entries: gone });
-            app.data.libraries = [...app.data.libraries, back].sort((a, b) => a.name.localeCompare(b.name));
+            setFull(app, await app.api.saveLibrary({ name, entries: gone }));
             s.lib = name;
             renderLibraries(app);
           } catch (err) { app.fail(err); }
@@ -259,7 +322,7 @@ async function renameLibrary(app, from, to) {
 async function review(app, L, act) {
   try {
     const out = act === "accept" ? await app.api.acceptLibrary(L.name) : await app.api.discardLibrary(L.name);
-    app.data.libraries = out.deleted ? app.data.libraries.filter((l) => l.name !== L.name) : app.data.libraries.map((l) => (l.name === L.name ? out : l));
+    if (out.deleted) dropLibrary(app, L.name); else setFull(app, out);
     if (out.deleted) app.state.lib = null;
     app.refreshCompletion().catch(() => {});
     app.toast(act === "accept" ? `Kept <b>__${esc(L.name)}__</b>` : out.deleted ? `Discarded <b>__${esc(L.name)}__</b>; the next run writes it again`
@@ -275,8 +338,7 @@ async function createLibrary(app, raw) {
   if (!name) return renderLibraries(app);
   if (libBy(app, name)) { s.lib = name; return renderLibraries(app); }
   try {
-    const lib = await app.api.saveLibrary({ name, entries: [] });
-    app.data.libraries = [...app.data.libraries, lib].sort((a, b) => a.name.localeCompare(b.name));
+    setFull(app, await app.api.saveLibrary({ name, entries: [] }));
     s.lib = name;
   } catch (e) { app.fail(e); }
   await renderLibraries(app);

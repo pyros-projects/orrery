@@ -81,8 +81,9 @@ is `__80s_pack/daily_wear__`), references between its files follow, readmes and
 duplicate files are skipped, and `--merge` turns a folder of one-prompt files
 into one library. `orrery lib mv OLD NEW` (or Rename in the Libraries tab)
 moves a library into a folder or a new name; its learned weights and every
-`__OLD__` in your libraries and presets follow. The Libraries tab rereads the folder whenever you open it and
-shows big libraries 200 entries at a time; its search filters the entries. The home folder is set in the node's gear (a pointer in
+`__OLD__` in your libraries and presets follow. The Libraries tab rereads the folder whenever you open it,
+loads a library's entries when you open that library and shows big ones 200 entries at a time; its search
+finds libraries by name and by entry, and filters the open library's entries. The home folder is set in the node's gear (a pointer in
 `~/.config/orrery/home`); `ORRERY_HOME`, `--home` and a node's own home field win
 over it.
 

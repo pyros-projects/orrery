@@ -42,6 +42,9 @@ checks) are left out.
 
 ### Fixed
 
+- The Libraries tab opens at once with a home of a hundred thousand entries (it loaded all of them,
+  30 MB, and after every run), keeps its place when a folder unfolds, and shows tags and properties
+  on a line under each entry (#152).
 - A dial set to a library entry keeps the entry's properties and tags, so what reads them (a
   photo look's lens in One button) still works (#122).
 - After a grid or a LoRA sweep the seed steps as its control after generate says, so the next Roll

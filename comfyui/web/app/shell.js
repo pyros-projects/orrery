@@ -103,13 +103,15 @@ export class OrreryApp {
   async afterRun() {
     refreshReel(this, { chain: true });  // the reel may hold a new clip, Orrery Refs new anchors
     if (this.state.tab === "history") refreshHistory(this);
-    const before = new Set((this.data.libraries || []).filter((l) => l.pending || (l.pending_entries || []).length).map((l) => l.name));
+    const before = new Set((this.data.libraries || []).filter((l) => l.pending || l.pending_count).map((l) => l.name));
     let libs;
     try { libs = (await this.api.libraries()).libraries; } catch { return; }
     this.data.libraries = libs;
+    this.data.libFull = {};  // the language model may have written into one: read it again when it opens
+    this.dialLibs = {};
     this.data.libStale = false;
     this.refreshCompletion().catch(() => {});
-    const fresh = libs.filter((l) => (l.pending || (l.pending_entries || []).length) && !before.has(l.name));
+    const fresh = libs.filter((l) => (l.pending || l.pending_count) && !before.has(l.name));
     if (this.state.tab === "libraries") this.render();
     if (fresh.length) {
       this.toast(`The language model wrote ${fresh.map((l) => `<b>__${esc(l.name)}__</b>`).join(", ")}`, {

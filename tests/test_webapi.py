@@ -44,7 +44,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/preset/save"), ("POST", "/orrery/preset/delete"),
         ("POST", "/orrery/preset/rename"), ("POST", "/orrery/preset/meta"),
         ("POST", "/orrery/favorite"), ("POST", "/orrery/recent"), ("POST", "/orrery/ui"), ("GET", "/orrery/template"),
-        ("GET", "/orrery/libraries"), ("POST", "/orrery/library/save"),
+        ("GET", "/orrery/libraries"), ("GET", "/orrery/library"), ("POST", "/orrery/library/save"),
         ("POST", "/orrery/library/own"), ("POST", "/orrery/library/delete"), ("POST", "/orrery/library/rename"), ("POST", "/orrery/galaxy/capture"),
         ("GET", "/orrery/galaxy"), ("POST", "/orrery/galaxy/rate"),
         ("GET", "/orrery/galaxy/thumb"), ("GET", "/orrery/galaxy/media"), ("POST", "/orrery/roll"),
@@ -241,7 +241,22 @@ def test_template_by_hash_from_the_store_or_a_preset(home):
 # --- libraries ------------------------------------------------------------------------------
 
 def libs(home):
-    return {lib["name"]: lib for lib in ok(home, webapi.libraries)["libraries"]}
+    """Every library with its entries, as the tab opens them one by one."""
+    return {head["name"]: ok(home, webapi.library, name=head["name"]) for head in ok(home, webapi.libraries)["libraries"]}
+
+
+def test_the_list_carries_no_entries_and_searches_them_on_the_server(home):
+    """#152: a home of 109,722 entries sent them all (30 MB) whenever the tab opened."""
+    (home / "library" / "big.yaml").write_text("entries: [" + ", ".join(f"thing {i}" for i in range(5000)) + ", a lone heron]\n")
+    heads = {h["name"]: h for h in ok(home, webapi.libraries)["libraries"]}
+    assert heads["big"] == {"name": "big", "source": "user", "count": 5001, "tags": [], "pending": False,
+                            "pending_count": 0, "directions": ""}
+    assert all("entries" not in h for h in heads.values())
+    found = {h["name"] for h in ok(home, webapi.libraries, q="Lone Heron")["libraries"]}
+    assert found == {"big"}
+    assert "big" in {h["name"] for h in ok(home, webapi.libraries, q="bi")["libraries"]}  # the name counts too
+    assert len(ok(home, webapi.library, name="big")["entries"]) == 5001
+    assert api(home, webapi.library, name="missing")[0] == 404
 
 
 def test_libraries_carry_source_tags_and_learned_weights(home):
@@ -503,10 +518,11 @@ def test_llm_made_libraries_are_accepted_or_discarded(home):
     (lib / "animal.yaml").write_text("meta: {pending_entries: [lynx]}\nentries: [fox, heron, owl, lynx]\n")
     listed = {l["name"]: l for l in ok(home, webapi.libraries)["libraries"]}
     assert listed["runway_shoes"]["pending"] and listed["runway_shoes"]["directions"] == "short"
-    assert listed["animal"]["pending_entries"] == ["lynx"] and not listed["animal"]["pending"]
+    assert listed["animal"]["pending_count"] == 1 and not listed["animal"]["pending"]
+    assert ok(home, webapi.library, name="animal")["pending_entries"] == ["lynx"]
     ok(home, webapi.library_accept, name="runway_shoes")
     ok(home, webapi.library_discard, name="animal")
-    listed = {l["name"]: l for l in ok(home, webapi.libraries)["libraries"]}
+    listed = libs(home)
     assert not listed["runway_shoes"]["pending"] and listed["runway_shoes"]["directions"] == "short"
     assert [e["value"] for e in listed["animal"]["entries"]] == ["fox", "heron", "owl"] and listed["animal"]["pending_entries"] == []
     (lib / "shoes2.yaml").write_text("meta: {pending: true}\nentries: [clog]\n")
@@ -518,7 +534,7 @@ def test_folder_and_text_libraries_through_the_api(home):
     lib = home / "library"
     (lib / "film").mkdir()
     (lib / "film" / "genre.txt").write_text("noir\nwestern\n")
-    listed = {l["name"]: l for l in ok(home, webapi.libraries)["libraries"]}
+    listed = libs(home)
     assert listed["film/genre"]["source"] == "user" and [e["value"] for e in listed["film/genre"]["entries"]] == ["noir", "western"]
     ok(home, webapi.library_save, name="film/genre", entries=[{"value": "noir", "tags": ["dark"]}, {"value": "western"}])
     assert (lib / "film" / "genre.yaml").exists() and not (lib / "film" / "genre.txt").exists()
