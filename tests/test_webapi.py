@@ -52,6 +52,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/galaxy/folder/add"), ("POST", "/orrery/galaxy/folder/rename"),
         ("POST", "/orrery/galaxy/folder/delete"),
         ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
+        ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"),
         ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/discard"),
         ("GET", "/orrery/home"), ("POST", "/orrery/home"),
         ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("GET", "/orrery/chain/video"),
@@ -511,6 +512,53 @@ def test_llm_settings_list_text_encoders_and_are_saved(home, monkeypatch):
     status, _ = api(home, webapi.llm_save, file="qwen3vl_32b_minimax_h3_int8_convrot.safetensors")
     assert status == 400
 
+
+
+def test_an_api_endpoint_is_saved_only_once_it_answers_and_its_key_never_comes_back(home, fake_api):
+    fake_api.key = "sk-right-0042"
+    status, body = api(home, webapi.llm_save, source="api", base_url=fake_api.url, model="gpt-5.4-mini", key="sk-wrong")
+    assert status == 400 and "refused the key" in body["error"] and not (home / ".env").exists()
+    body = ok(home, webapi.llm_save, source="api", base_url=fake_api.url, model="gpt-5.4-mini", key="sk-right-0042")
+    assert body["active"] == {"kind": "api", "name": "gpt-5.4-mini"}
+    assert body["api"]["key"] == "…0042" and body["api"]["key_from"] == "file" and "sk-right" not in json.dumps(body)
+    assert "sk-right" not in (home / "orrery.yaml").read_text() and "sk-right-0042" in (home / ".env").read_text()
+    body = ok(home, webapi.llm_save, source="api", model="gpt-6-luna")  # the stored key and URL stay
+    assert body["api"]["model"] == "gpt-6-luna" and body["api"]["base_url"] == fake_api.url
+    assert ok(home, webapi.llm_save, source="comfy")["active"] is None
+
+
+def test_the_check_offers_the_endpoints_chat_models(home, fake_api):
+    body = ok(home, webapi.llm_check, base_url=fake_api.url, model="gpt-6-luna", key="sk-any")
+    assert body["ok"] and body["models"] == ["gpt-5.4-mini", "gpt-6-luna"]
+
+
+def test_the_write_menu_asks_the_endpoint_outside_the_queue(home, fake_api, tmp_path, monkeypatch):
+    status, body = api(home, webapi.write_idea, task="describe", template="a cat")
+    assert status == 400 and "queue" in body["error"]
+    Home(home).save_config({"llm": {"source": "api", "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})
+    fake_api.answer = lambda body: "A tabby cat asleep on a sunlit windowsill."
+    picture = tmp_path / "cat.png"
+    Image.new("RGB", (64, 48), "orange").save(picture)
+    monkeypatch.setattr(webapi, "_input_picture", lambda name: picture if name else None)
+    body = ok(home, webapi.write_idea, task="describe", template="a cat", seed=3, frames={"first_frame": "cat.png"})
+    assert body["text"] == "A tabby cat asleep on a sunlit windowsill." and body["template"].startswith("A tabby cat")
+    content = fake_api.requests[-1]["messages"][0]["content"]
+    assert content[0]["type"] == "image_url" and fake_api.requests[-1]["temperature"] == 0.8  # the writers' own
+    body = ok(home, webapi.write_idea, task="describe", template="a cat")
+    assert "first_frame" in body["error"]
+
+
+def test_write_now_writes_the_templates_open_libraries(home, fake_api):
+    status, _ = api(home, webapi.write_libraries, template="a __runway_shoes__")
+    assert status == 400
+    Home(home).save_config({"llm": {"source": "api", "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"},
+                                    "entries": 3}})
+    fake_api.answer = lambda body: json.dumps(["velvet mule", "chrome boot", "paper sandal"])
+    body = ok(home, webapi.write_libraries, template="# __not_this__\na $x in __runway_shoes__\n$x = {__animal:4__}",
+              params={"x": "__runway_hats__"})
+    assert sorted(body["asked"]) == ["runway_hats", "runway_shoes"] and len(fake_api.requests) == 2  # the dial wins
+    assert {"runway_shoes", "runway_hats"} <= set(Home(home).libraries()) and len(body["notes"]) == 2
+    assert ok(home, webapi.write_libraries, template="a __runway_shoes__") == {"asked": [], "notes": []}
 
 def test_llm_made_libraries_are_accepted_or_discarded(home):
     lib = home / "library"

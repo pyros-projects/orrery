@@ -13,10 +13,10 @@ import re
 from datetime import UTC, datetime
 from pathlib import Path
 
-from orrery import anchors, history, runs, uistate
+from orrery import anchors, endpoint, history, runs, uistate
 from orrery import batch as batches
 from orrery import sweep as sweeps
-from orrery.autolib import needs
+from orrery.autolib import needs, write_apart
 from orrery.chain import DEFAULT_CHAIN, load, previous_clip
 from orrery.comfy_film import OrreryContinue, OrreryFilm
 from orrery.comfy_llm import ComfyBackend, can_write, llm_config
@@ -38,7 +38,7 @@ from orrery.h3 import DEFAULT_CONTEXT, compile_scene, image_slots, render_scene
 from orrery.h3_ref import word_issue
 from orrery.home import Home, resolve_home
 from orrery.library import library_files
-from orrery.llm import InvalidProposal
+from orrery.llm import Backend, InvalidProposal, OpenAIBackend
 from orrery.loras import long_form, lora_files, lora_stack
 from orrery.presets import (
     list_presets,
@@ -210,12 +210,15 @@ def dial_values(params: str) -> dict[str, str]:
     return {str(k).lstrip("$"): str(v).strip() for k, v in values.items() if str(v).strip()} if isinstance(values, dict) else {}
 
 
-def llm_for(home: Home, clip=None, seed: int = 0, temperature: float | None = None) -> ComfyBackend | None:
-    """The active language model: a text encoder on the node's clip input, else the one chosen in
-    orrery's settings, else none. `temperature` overrides the configured one (the writers' own)."""
+def llm_for(home: Home, clip=None, seed: int = 0, temperature: float | None = None) -> Backend | None:
+    """The active language model: an API endpoint chosen in orrery's settings (it wins over a wired text
+    encoder, #165), else a text encoder on the node's clip input, else the one chosen in the settings, else
+    none. `temperature` overrides the configured one (the writers' own)."""
     cfg = llm_config(home)
     options = {"temperature": float(cfg["temperature"] if temperature is None else temperature),
                "max_length": int(cfg["max_tokens"]), "seed": seed}
+    if (api := endpoint.backend(home, options["temperature"])) is not None:
+        return api
     if clip is not None:
         return ComfyBackend(clip=clip, **options)
     if cfg["file"] and can_write(cfg["file"]):
@@ -302,6 +305,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     notes: list[str] = []
     missed: dict[str, str] = {}  # marker → directions of the slots the combined answer left out
     wanted = needs(h, source, int(llm_config(h)["entries"])) if missing and backend is not None else []
+    if wanted and isinstance(backend, OpenAIBackend):  # an endpoint writes each library apart, at once, and can be
+        notes, wanted = write_apart(h, wanted, backend), []  # asked again: the slots then see the compiled prompt
     if wanted:
         see = frames if written else None
         reply = backend.complete(request(wanted, written, source, _count(see)), images=see)

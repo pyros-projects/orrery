@@ -507,6 +507,21 @@ def test_without_its_libraries_enhance_waits_for_the_next_run(home, monkeypatch)
     assert any("enhance" in i["message"] for i in json.loads(picks)["lint"])
 
 
+
+def test_an_endpoint_writes_the_libraries_first_then_slots_and_enhance_in_the_same_run(home, monkeypatch, fake_api):
+    """An API can be asked more than once a run (#165): each library apart, then the slots on the compiled prompt."""
+    from orrery import comfy
+    from orrery.llm import OpenAIBackend
+    backend = OpenAIBackend(fake_api.url, "gpt-5.4-mini")
+    monkeypatch.setattr(comfy, "llm_for", lambda h, clip=None, **_: backend)
+    fake_api.answer = lambda body: (json.dumps(["A hush."]) if body["messages"][0]["content"].startswith("You write wildcard")
+                                    else json.dumps({"slot 1": "she runs", "rewrite 1": "A hush falls. Then [keep 1]."}))
+    text, picks, *_ = run_prompt("__mood__(one sentence) Then --what happens next--.\n> moody", 1, "text", str(home))
+    prompts = [r["messages"][0]["content"] for r in fake_api.requests]
+    assert len(prompts) == 2 and "A hush. Then [slot 1]" in prompts[1]  # the compiled prompt, the library rolled
+    assert text == "A hush falls. Then she runs."
+    assert not any("next run" in i["message"] for i in json.loads(picks)["lint"])
+
 REF_REEL = "@h3 ref2va 16:9\nsummary: A waits.\nCAST\nA (image 3): a woman\nSHOT 5s\nA waits.\nSFX: wind\n"
 
 
