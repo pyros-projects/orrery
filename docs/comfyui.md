@@ -37,50 +37,52 @@ Nodes under **orrery**:
   into any other shape. A written `: w… h…` still wins, and the lint says when
   the header's ratio is set aside or two frames differ in shape.
   Wire `text` into your text encoder or the MiniMax H3 prompt input;
-  `width`/`height` come from `: w… h…` or the `@h3` ratio (`@h3 ref2va 16:9 0.6MP`
+  `width`/`height` come from `: w… h…` or the `@h3` ratio (`@h3 references 16:9 0.6MP`
   sizes the canvas by area, and `megapixels` puts that out for resolution and
   scale nodes), `length` is the
   screenplay's duration in frames for the H3 latent, `lora_stack` carries the
   `LORA:` lines as a LORA_STACK for any loader with a `lora_stack` input
   (LoraManager, Efficiency, Easy-Use …); unknown or ambiguous names are
-  reported in the log and in the Test tab. A reel (`CHUNK` blocks,
-  `repeat N|forever`, `$x~N`; see [h3.md](h3.md) 1d) writes one clip per run:
+  reported in the log and in the Test tab. A reel (`SCENE` blocks, `×N` and
+  `forever`, `$x[-1]`, `AFTER:`, `(test)`; see [h3.md](h3.md) 1d) writes one clip per run:
   `segment` counts up by itself, and Orrery Continue / Orrery Film (below)
   chain the clips. The node is the whole of orrery, in six tabs (⤢ opens the
   same app over the canvas, Esc brings it back):
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `__creature#` properties and their
-    values, `$` bindings, CAST names after two capitals (`KE` → `KEEPER`; at a
-    line's start also `KEEPER (…): ` for speech), camera words after
+    values, `$` bindings, the CAST after `@` (`@KEEPER`; at a line's start also
+    `@KEEPER (…): ` for speech; every member shows in brass), camera words after
     `SHOT 5s:`, your LoRA files after `LORA:`, your RefMods after `refmod ` in
-    a CAST member's parentheses, then `at 1` and `from 35%`). **New** starts a fresh
+    a CAST member's parentheses, the scenes after `CUT TO:` and `AFTER:`, what to
+    keep after `REMEMBER:`, the dials after `SET:` (`@JINX(1)`, and inside it the
+    words `refmods`, `images` …), the mode words after `@h3 `). **New** starts a fresh
     template linked to no preset: an H3 scene, an H3 reel,
-    H3 references (ref2va), H3 keyframes (i2va, fl2va, l2va) or a Krea prompt,
+    H3 references, H3 keyframes (image, first-last, last) or a Krea prompt,
     each with a quickstart of the essentials as `#` comments on top (the gear
     turns the quickstart off). Open a preset from the bar above it; ● marks unsaved
     edits; Save, Save as…, Revert. Under the editor, every binding is a
     **dial**: pick a library entry or choice, or type any expression; empty
     means its default roll. Saving bakes the dials in, and a galaxy output
     restores them. **Test** jumps to the Test tab and rolls. **Write** has
-    the language model write the reel's next chunk, the shot between two
+    the language model write the reel's next scene, the shot between two
     frames or a prompt from a picture, one idea per short run, browsed
     before it goes in ([wildcard-manager.md](wildcard-manager.md)).
-    In a reel, every `CHUNK` line carries a divider that says which segments
-    it plays, when and how much film is left (`seg 1–4 · 4 × 5 s · 0:05 →
-    0:25 · 1:35 left`); the chunk that plays the node's `segment` next is
-    marked (`▶ next`), and **Jump** beside *Next segment* puts the caret
-    there. Beside the editor, the **timeline** lines up each chunk's clips
+    In a reel, every `SCENE` line carries a divider that says which clips
+    it plays (counted from 1), when and how much film is left (`clips 2–5 · 4 × 5 s · 0:05 →
+    0:25 · 1:35 left`); the scene that plays the next clip is
+    marked (`▶ next`), and **Jump** beside *Next clip* puts the caret
+    there. Beside the editor, the **timeline** lines up each scene's clips
     as Orrery Film (or H3 Motion Context's Chain Video) keeps them (hover plays one, a click
-    opens it; dashed boxes are segments not rendered yet) and, under a chunk
-    with `SEND:` lines, the frames Orrery Refs last sent to each image (its
+    opens it; dashed boxes are clips not rendered yet) and, under a scene
+    with `REMEMBER:` lines, the frames Orrery Refs last fetched for each image (its
     anchors). It reads the chain from the string wired into `latent_path`,
     else `h3_context`, and refreshes after every run. Drag the edge between
     editor and timeline to widen it. **Clips beside / Clips below** in the
     footer switches to the cells view: the editor cut into one cell per
-    CHUNK, each followed by a section with that chunk's clips and sent
-    frames; drag a section's lower edge to resize it (kept per chunk, like
+    SCENE, each followed by a section with that scene's clips and remembered
+    frames; drag a section's lower edge to resize it (kept per scene, like
     the width, in the node). Arrow keys cross from cell to cell, Backspace at
-    a cell's start and Delete at its end join two, and a CHUNK line typed or
+    a cell's start and Delete at its end join two, and a SCENE line typed or
     removed cuts the text anew. The gear turns dividers and timeline off.
   - **Test**: what the template makes, without queueing anything. **Rolls**
     shows three seeds (a reel: six clips at one seed, pageable through a
@@ -128,16 +130,17 @@ Nodes under **orrery**:
 - **Orrery Refs**: `picks` + `image_1` … `image_9` → `ref_1` … `ref_9` and `preview`, between
   your reference images and MiniMax H3 Reference to Video. Every clip gets only
   the images its screenplay uses, packed from `ref_1` and numbered as the prompt
-  numbers them, plus the frames of earlier clips a reel `SEND:`s; `preview` shows
-  them all in one Preview Image, each labelled with its ref. Sent frames are kept
-  as anchors in the orrery home; `keep_sent` on holds them from segment 0 for the
+  numbers them, plus the frames of earlier clips a reel `REMEMBER:`s (a picture
+  wired into that image stands in until they exist); `preview` shows
+  them all in one Preview Image, each labelled with its ref. Remembered frames are kept
+  as anchors in the orrery home; `keep_sent` on holds them from clip 1 for the
   next run, so a character stays. The tutorial:
   [orrery-refs.md](orrery-refs.md).
 - **Orrery Continue** and **Orrery Film**: orrery chains a reel's clips itself,
   on the Masked AV continuation of
   [H3 Continuum](https://github.com/ukr8b3g-cmyk/ComfyUI-H3-Continuum) (MIT).
-  From the second segment on, Orrery Continue starts the clip's latent with the
-  last 22 frames of the segment before, picture and sound, and a `noise_mask`
+  In every clip that continues one, Orrery Continue starts the clip's latent with the
+  last 22 frames of that clip (the one before, or the one `AFTER:` names), picture and sound, and a `noise_mask`
   keeps the sampler off them; no model or layout patch is involved. Wire:
 
   ```
@@ -150,21 +153,22 @@ Nodes under **orrery**:
   ```
 
   The H3 node's `length` comes from the Orrery Prompt (it counts the 22 frames).
-  Orrery Continue drops a first-frame image from the conditioning in segments
-  after the first (the clip starts with the one before); Orrery Film refuses a
+  Orrery Continue drops a first-frame image from the conditioning in those
+  clips (they start with the one before); the first clip and a `(test)` scene start afresh; Orrery Film refuses a
   clip whose pinned frames the sampler changed (a sampler that ignores
   `noise_mask`). Orrery Film trims the 22 frames, puts out the clip
   (`images`, `audio`) and `film`, the reel so far, and keeps the takes under
   `output/<latent_path>/orrery_film/` (`h3_context` unless the Orrery Prompt's
-  `latent_path` says otherwise): each segment's clip, its sound and the tail the
-  next one continues from. Rendering a segment again replaces its take and drops
-  the segments after it (they continued the old one); segment 0 starts a new
-  run; older takes stay on disk. The previous clip, `SEND:` and the timeline read
+  `latent_path` says otherwise): each clip, its sound and the tail the
+  next one continues from. Rendering a clip again replaces its take and drops
+  the ones after it that continue it (branches beside it stay); clip 1 starts a new
+  run; older takes stay on disk. A `(test)` scene's take is kept but left out of
+  the joined film. The previous clip, `REMEMBER:` and the timeline read
   this store or H3 Motion Context's Chain Video, whichever was written last.
   Another `context:` than 22 is a warning: 22 frames are pinned all the same.
 - **Orrery RefMods**: `conditioning` + `picks` → `conditioning`. It puts the
   clip's RefMods on the conditioning, the ones its CAST names
-  (`refmod NAME at 0.5 from 35%`, see [h3.md](h3.md#1e-refmods-refmod-name-at-05-from-35)),
+  (`refmod NAME` with `SET: @JINX(0.5, 35%)`, see [h3.md](h3.md#1e-refmods-refmod-name-set-jinx05-35)),
   each with its strength and its start. It loads them from `models/refmods`
   with the [ComfyUI-H3RefMods](https://github.com/FranckyB/ComfyUI-H3RefMods)
   pack, which needs to be installed; the pack's Load and Apply nodes are not
@@ -177,13 +181,13 @@ Nodes under **orrery**:
   H3 video VAE ───────────────────▶ Orrery RefMods vae (for RefMods made from the reel)
   ```
 
-  A RefMod that a `SEND:` line makes from the reel's own frames (`SEND: every 10
-  frames to refmod NAME`) needs no pack: the node takes those frames of the
-  sending segment's clip from the chain and encodes them with the `vae` as
+  A RefMod that a `REMEMBER:` line makes from the reel's own frames (`REMEMBER: every
+  10th frame as refmod NAME`) needs no pack: the node takes those frames of the
+  remembering clip from the chain and encodes them with the `vae` as
   Reference to Video encodes a video reference, on its 768 canvas and on the
   VAE's frame grid (the last frame held to fill it up, at most 73 frames spread
   out evenly). It encodes them once and keeps the result for the run; a new take
-  of that segment encodes them again.
+  of that clip encodes them again.
 
   It also applies a picture's dials (`image 1 at 0.5 from 35%`) to the pictures
   Reference to Video put on the conditioning: with Orrery Refs, the k-th picture

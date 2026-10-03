@@ -55,9 +55,9 @@ run to be different, and a little better than the last, orrery is for you.
   format and warns about what the model would ignore.
 - **Makes videos that go on for ever.** Reels chain clips through H3 Motion
   Context, each clip opening where the last one ended; queue ten clips with
-  one click, watch which one is rendering, restart from the top. `SEND:` hands
-  frames of an early clip to the later ones as references, so a face or an
-  outfit holds for the whole reel.
+  one click, watch which one is rendering, restart from the top. `REMEMBER:`
+  hands frames of an early clip to the later ones as references, so a face or an
+  outfit holds for the whole reel; `AFTER:` branches several scenes off one clip.
 - **Ships a content pack worth pressing Generate for.** 75 presets and 878
   hand-written entries: drone odysseys, set changes, the Backrooms, a time
   machine, one-click random stills and clips, a creature test for H3.
@@ -100,7 +100,8 @@ git clone https://github.com/pyros-projects/orrery.git
 
 Restart ComfyUI and open a workflow from **Templates → orrery** (or drag one in
 from [`example_workflows/`](example_workflows)): Krea 2 text to image, and
-MiniMax H3 t2va, i2va, fl2va, l2va, ref2va and reels (t2va, ref2va, and one
+MiniMax H3 from text, from an image, between a first and a last frame, toward a
+last frame and from references, and reels (from text, from references, and one
 with RefMods), all
 built from ComfyUI's own nodes plus orrery's, each with notes on the models it
 needs and where they go. Or add **orrery → Orrery Prompt** to a graph of your
@@ -168,7 +169,7 @@ a photograph of $hero in a {misty|frozen:3} forest at dawn, 35mm film' --seed 5 
 | `{a\|b\|c:3}` | an inline choice, weighted (`{3::c\|a\|b}` works too) |
 | `$hero = __animal__` | roll once, reuse everywhere |
 | `$w.sfx` | a property of what was rolled: the sound follows the weather |
-| `? $w.kind=rain,snow: …` | a line kept only when the condition holds |
+| `IF $w.kind is rain, snow: …` | a line kept only when the condition holds |
 | `@include effects/living_clay` | embed another preset, overriding its variables |
 | `# a note` | a comment; it never reaches the model |
 
@@ -178,7 +179,7 @@ variables you turn from outside, and importing wildcard packs.
 ### A MiniMax H3 screenplay
 
 ```text
-@h3 t2va 16:9 0.6MP
+@h3 text 16:9 0.6MP
 style: live-action nature documentary, telephoto, crisp detail
 $animal = __subjects/animals__
 
@@ -197,17 +198,17 @@ speaker IDs, `<d>` dialogue tags, the soundscape and the music field. `0.6MP`
 sizes the canvas by area. The same file compiles on the command line with
 `uv run orrery compile scene.orr --seed 7`.
 
-→ [H3 screenplays](docs/h3.md): every mode (t2va, i2va, fl2va, l2va, ref2va),
-casts of reference images and videos, and lint.
+→ [H3 screenplays](docs/h3.md): every mode (text, image, first-last, last,
+references), casts of reference images, videos and RefMods, and lint.
 
 ### An endless reel
 
 ```text
-CHUNK the next room repeat forever
+SCENE the next room forever
 $room = __tour/rooms__
 SHOT 10s: push in, slow
 The door swings open and the camera glides into $room, and comes to rest facing a closed door.
-HANDOFF: the camera rests squarely facing a closed door
+END ON: the camera rests squarely facing a closed door
 ```
 
 Each run writes one clip. Wire the picks into Orrery Continue (and the clip
@@ -220,7 +221,7 @@ every one continuing the last 22 frames, picture and sound, of the one before.
 |---|---|
 | [The prompt language](docs/dsl.md) | every construct, libraries and wildcard packs, variables you turn from outside |
 | [H3 screenplays](docs/h3.md) | modes, casts, reels, the compiler's output and lint |
-| [Orrery Refs](docs/orrery-refs.md) | a tutorial: reference images per clip, numbers that match, frames of earlier clips with `SEND:` |
+| [Orrery Refs](docs/orrery-refs.md) | a tutorial: reference images per clip, numbers that match, frames of earlier clips with `REMEMBER:` |
 | [Presets and the content pack](docs/presets.md) | template references, saving presets, what ships built in |
 | [The ComfyUI nodes](docs/comfyui.md) | outputs, the app's six tabs, Generate and Restart |
 | [The wildcard manager](docs/wildcard-manager.md) | editing libraries in plain language, the language model in ComfyUI, the Write menu |

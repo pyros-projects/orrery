@@ -44,9 +44,9 @@ each with `gender` and `age` properties and hair and clothes rolled from nested
 libraries: `__characters/noir#gender:female__`. The two Katamori curators live
 in `__characters/horror#role:curator__`. `fashion/` strings snobby adjectives and impossible shapes
 into runway looks for Krea and H3 (`couture_*` libraries); `infinite_cakewalk` is an endless show
-steered by GOTO: every clip rolls who walks next and jumps to the chunk that dresses them, and the
+steered by CUT TO:: every clip rolls who walks next and cuts to the scene that dresses them, and the
 season (a dial) puts the runway outside in spring and summer, inside in autumn and winter. `loops/` holds H3 Motion Context reels
-that never end (`repeat forever` or GOTO, Run (Instant)). Five are steered by GOTO and play out differently
+that never end (`forever` or `CUT TO:`, Run (Instant)). Five are steered by `CUT TO:` and play out differently
 with every seed: `infinite_backrooms` (a found-footage horror film: after every third level a chance that
 an SCP finds the camera, and which one decides how it gets away), `dice_dungeon` (rooms, foes and a relic
 that ends it, so every seed is an adventure of its own length), `the_relay` (a thing passed from hand to
@@ -82,7 +82,7 @@ before expansion:
 ---
 tags: [moody, winter]
 ---
-@h3 t2va 16:9
+@h3 text 16:9
 …
 ```
 

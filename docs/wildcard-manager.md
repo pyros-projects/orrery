@@ -35,12 +35,12 @@ setting. When the node runs, the model
   length (**Max tokens** in the gear, 16000 by default, bounds one answer); one
   without gets the lines around it and a default of 1-4 lowercase words.
 - writes `--directions--` slots where they stand, seeing the whole compiled
-  prompt around them. From a reel's second segment on it also watches the clip
+  prompt around them. From a reel's second clip on it also watches the clip
   before (one frame a second and the last one, from Orrery Film's takes or H3
   Motion Context's Chain Video) and continues it:
 
   ```
-  CHUNK next repeat forever
+  SCENE next forever
   SHOT 5s: tracking, slow
   --what WASHER does in the next 5 seconds, moving the story on--
   ```
@@ -113,9 +113,9 @@ with `orrery lib undo`.
 for the editor, in the static screenplay language (no wildcards, bindings or
 slots, which keeps it within a 4B or 8B model's reach):
 
-- **Continue the reel**: it reads every chunk as it rolls at the node's seed
+- **Continue the reel**: it reads every scene as it rolls at the node's seed
   (picks filled in, with the reel's style and CAST) and writes the next
-  `CHUNK`, with a `HANDOFF:` that picks up the last one's. It is appended to
+  `SCENE`, with an `END ON:` that picks up the last one's. It is appended to
   the reel.
 - **Story between frames**: it sees the pictures wired into `first_frame` and
   `last_frame` and writes the shot that gets from one to the other (fl2va). It

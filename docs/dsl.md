@@ -22,9 +22,10 @@ Every construct of orrery's template language, where libraries live, how Dynamic
 | `@include effects/living_clay` + indented `room = the salon` | embed a preset where it stands; indented `key = value` lines turn its dials, so a preset is an operator with parameters (its `@h3` line gives way to yours) |
 | `$w.sfx` | a property of the entry `$w` rolled (empty if it has none): the sound follows the weather. A property is a template like an entry (`{a\|b}`, `__lib__`, `$w`, LoRA tags), rolled once when `$w` is bound, so every `$w.sfx` reads the same; filters and `?` conditions compare it as written |
 | `__world/habitats#habitat:$animal.habitat__` | a filter that depends on what was rolled before (`#key:$var` or `#key:$var.field`): the manta ray lands in the sea, never on a beach |
-| `? $w.kind=rain,snow: …` | a line kept only when the condition holds (`!=` for not); works for SFX lines too |
-| `{? $w.kind=rain: wet\|dry}` | a choice made by a condition instead of the dice |
-| `? $c[myth, size=small\|tiny]: …`, `{? $w[kind=rain]: wet\|dry}` | a condition in the brackets' language, against what `$c` rolled: its tags, its properties and its value (`? $c[wren]: It sings.`) |
+| `IF $c is wren, owl: …` | a line kept only when the condition holds: `$c` rolled either of them (its value, a tag or a property); `is not wren, owl`: neither. Works for SFX lines too |
+| `IF $w.kind is rain, snow: …` | the same on a property of what `$w` rolled (`is not` for neither) |
+| `{IF $w.kind is rain: wet \| dry}` | a choice made by a condition instead of the dice |
+| `IF $c[myth, size=small\|tiny]: …`, `{IF $w[kind=rain]: wet \| dry}` | a condition in the brackets' language, against what `$c` rolled: all of them (`,`), either (`\|`), not (`!`). There is no AND or OR word: the brackets say it. Earlier orrery wrote `?` for `IF` (`? $c[wren]: It sings.`), and still may |
 | `> make it moody and cinematic` | with a language model set in the node, it rewrites the rolled prompt as asked; in a screenplay a `>` before the first `SHOT` rewrites every shot's prose and one inside a `SHOT` only that shot's, never dialogue. The CLI records it with the picks |
 | `--one detail, 5 to 8 words--` | a slot: the language model writes it where it stands, after everything else has rolled (see [wildcard-manager.md](wildcard-manager.md)) |
 | `\{` `\}` `\|` `\$` `\__` `\@` `\#` `\\` | the character as written, not syntax: `a sign reading \{OPEN\}`, `\__init__` |
