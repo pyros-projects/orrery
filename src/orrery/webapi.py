@@ -5,15 +5,17 @@ comfyui/__init__.py registers ROUTES with ComfyUI's server. `call` turns ApiErro
 UI can show. The contract lives in docs/plan-node-app.md.
 """
 
+import asyncio
 import hashlib
 import re
 import traceback
 from collections import Counter
 from pathlib import Path
 
+from orrery import endpoint, manager, pictures, uistate
 from orrery import galaxy as gx
-from orrery import manager, pictures, uistate
 from orrery import presets as ps
+from orrery.autolib import needs, write_apart
 from orrery.chain import DEFAULT_CHAIN
 from orrery.comfy_llm import can_write, llm_config, text_encoders
 from orrery.completion import completion_data
@@ -903,9 +905,15 @@ def home_save(home: Home, args: dict) -> dict:
 # --- llm settings ---------------------------------------------------------------------------
 
 def llm_settings(home: Home, args: dict) -> dict:
-    cfg = llm_config(home)
+    cfg, api = llm_config(home), endpoint.config(home)
+    value, where = endpoint.key(home, api)
+    active = ({"kind": "api", "name": api["model"]} if api["source"] == "api" and api["model"]
+              else {"kind": "comfy", "name": Path(cfg["file"]).stem} if cfg["file"] else None)
     return {"file": cfg["file"], "clip_type": cfg["clip_type"], "entries": int(cfg["entries"]),
-            "max_tokens": int(cfg["max_tokens"]), "files": text_encoders()}
+            "max_tokens": int(cfg["max_tokens"]), "files": text_encoders(), "source": api["source"],
+            "api": {"base_url": api["base_url"], "model": api["model"], "key_env": api["key_env"],
+                    "key": endpoint.hint(value) if value else "", "key_from": where},
+            "active": active}
 
 
 def llm_save(home: Home, args: dict) -> dict:
@@ -913,13 +921,83 @@ def llm_save(home: Home, args: dict) -> dict:
     if file and not can_write(file):
         raise ApiError(400, f"{file} is a truncated text encoder (MiniMax H3's): it loads but cannot write. "
                             "Pick a Qwen3-VL build such as Krea 2's qwen3vl_4b.")
+    source = str(args.get("source") or endpoint.config(home)["source"])
+    if source not in ("comfy", "api"):
+        raise ApiError(400, "'source' must be comfy or api.")
     config = home.config()
+    api = {**((config.get("llm") or {}).get("api") or {})}
+    api.update({k: str(args[k]).strip() for k in ("base_url", "model") if args.get(k) is not None})
+    typed = str(args.get("key") or "").strip()
+    if source == "api":  # the endpoint has to answer before it writes for orrery
+        cfg = {**endpoint.config(home), **api}
+        checked = endpoint.check(cfg["base_url"], typed or endpoint.key(home, cfg)[0], cfg["model"])
+        if not checked["ok"]:
+            raise ApiError(400, checked["error"])
+    if typed:
+        endpoint.save_key(home, api.get("key_env") or endpoint.DEFAULT_KEY_ENV, typed)
     llm = {**(config.get("llm") or {}), "file": file, "entries": min(max(_int(args, "entries", 12), 1), 200),
-           "max_tokens": min(max(_int(args, "max_tokens", 16000), 64), 131072)}
+           "max_tokens": min(max(_int(args, "max_tokens", 16000), 64), 131072), "source": source,
+           **({"api": api} if api else {})}
     if args.get("clip_type"):
         llm["clip_type"] = str(args["clip_type"])
     home.save_config({**config, "llm": llm})
     return llm_settings(home, {})
+
+
+def llm_check(home: Home, args: dict) -> dict:
+    """Whether an endpoint takes its key and its model answers, before it is saved; the models it offers."""
+    cfg = {**endpoint.config(home), **{k: str(args[k]).strip() for k in ("base_url", "model") if args.get(k)}}
+    return endpoint.check(cfg["base_url"], str(args.get("key") or "").strip() or endpoint.key(home, cfg)[0], cfg["model"])
+
+
+def _input_picture(name) -> Path | None:
+    """A picture ComfyUI holds, named as a Load Image node names it (`a.png`, `sub/a.png [output]`)."""
+    if not name:
+        return None
+    import folder_paths  # ComfyUI
+
+    path = Path(folder_paths.get_annotated_filepath(str(name))).resolve()
+    roots = [Path(d).resolve() for d in (folder_paths.get_input_directory(), folder_paths.get_output_directory(),
+                                         folder_paths.get_temp_directory())]
+    if not path.is_file() or not any(path.is_relative_to(r) for r in roots):
+        raise ApiError(400, f"No picture {name} in ComfyUI's input, output or temp folder.")
+    return path
+
+
+def write_idea(home: Home, args: dict) -> dict:
+    """The Write menu over the API endpoint, outside ComfyUI's queue (#167): one idea, as Orrery Write gives it.
+    `frames`: the files of the Load Image nodes wired into first_frame and last_frame."""
+    from orrery import comfy_write, writers
+
+    task = str(args.get("task") or "")
+    if task not in writers.TASKS:
+        raise ApiError(400, f"'task' must be one of {', '.join(writers.TASKS)}.")
+    temperature = float(llm_config(home)["writer_temperature"])
+    if endpoint.backend(home, temperature) is None:
+        raise ApiError(400, "No API endpoint is set: the Write menu runs in ComfyUI's queue.")
+    frames = args.get("frames") if isinstance(args.get("frames"), dict) else {}
+    pictures_ = lambda: comfy_write.pick_frames(task, _input_picture(frames.get("first_frame")),
+                                                _input_picture(frames.get("last_frame")))
+    return comfy_write.write_idea(home, task, _text(args, "template"), _int(args, "seed", 0), _int(args, "idea", 0),
+                                  args.get("params") or "", lambda: endpoint.backend(home, temperature), pictures_)
+
+
+def write_libraries(home: Home, args: dict) -> dict:
+    """Write now (#168): every library the template still needs, one request each, all at once."""
+    from orrery.loras import long_form
+
+    api = endpoint.backend(home)
+    if api is None:
+        raise ApiError(400, "Write now needs an API endpoint: set one in orrery's settings.")
+    text, _ = _template_for(home, {**args, "target": "text"})
+    wanted = needs(home, long_form(strip_comments(text)), int(llm_config(home)["entries"]))
+    if not wanted:
+        return {"asked": [], "notes": []}
+    try:
+        notes = write_apart(home, wanted, api)
+    except RuntimeError as err:
+        raise ApiError(502, str(err)) from None
+    return {"asked": [n.name for n in wanted], "notes": notes}
 
 
 ROUTES = [
@@ -969,9 +1047,16 @@ ROUTES = [
     ("POST", "/orrery/home", home_save),
     ("GET", "/orrery/llm", llm_settings),
     ("POST", "/orrery/llm", llm_save),
+    ("POST", "/orrery/llm/check", llm_check),
+    ("POST", "/orrery/llm/libraries", write_libraries),
+    ("POST", "/orrery/write", write_idea),
     ("POST", "/orrery/library/accept", library_accept),
     ("POST", "/orrery/library/discard", library_discard),
 ]
+
+
+# routes that wait for a language model run in a thread, so ComfyUI's server answers meanwhile
+SLOW = {llm_save, llm_check, write_libraries, write_idea}
 
 
 def _handler(fn, method: str, web):
@@ -985,7 +1070,7 @@ def _handler(fn, method: str, web):
             if not isinstance(body, dict):
                 return web.json_response({"error": "Send a JSON object."}, status=400)
             args.update(body)
-        status, result = call(fn, args)
+        status, result = await asyncio.to_thread(call, fn, args) if fn in SLOW else call(fn, args)
         if isinstance(result, Path):
             return web.FileResponse(result)
         return web.json_response(result, status=status)

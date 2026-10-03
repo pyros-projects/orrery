@@ -185,6 +185,22 @@ function mount(node) {
     // The frames wired into the node: they shape width and height (the server reads their size when it runs).
     frames: () => ["first_frame", "last_frame"].filter((name) => node.inputs?.find((i) => i.name === name)?.link != null),
     wired: (name) => node.inputs?.find((i) => i.name === name)?.link != null,
+    // The files behind the frames, for the Write menu over an API (#167): { names: {first_frame: "a.png"} }, and
+    // other: true when a frame comes from anything but a Load Image (a run computes it, so the queue writes).
+    frameFiles: async () => {
+      const { output } = await app.graphToPrompt();
+      const key = Object.keys(output).find((k) => output[k]?.class_type === "OrreryPrompt" && (k === String(node.id) || k.endsWith(`:${node.id}`)));
+      const names = {};
+      let other = false;
+      for (const name of ["first_frame", "last_frame"]) {
+        const from = key && output[key].inputs[name];
+        if (!Array.isArray(from)) continue;
+        const source = output[String(from[0])];
+        if (source?.class_type === "LoadImage" && typeof source.inputs?.image === "string") names[name] = source.inputs.image;
+        else other = true;
+      }
+      return { names, other };
+    },
     getSegment: () => find("segment")?.value ?? 0,
     setSegment: (value) => set("segment", value),
     // Restart: dequeue this node's pending runs and interrupt its running one; other jobs stay queued.

@@ -89,3 +89,37 @@ def test_entries_of_any_length_are_kept_whole(home):
     saga = "Harry Potter and the Philosopher's Stone. " + "The boy who lived goes back to Hogwarts. " * 400
     ensure_libraries(Home(home), "__saga__", FakeBackend([json.dumps([saga.strip(), "b"])]), default_n=2)
     assert Home(home).libraries()["saga"].values()[0] == " ".join(saga.split())
+
+
+def wildcards(body):
+    """A fake endpoint's answer to a library request: four entries named after the list it asks for."""
+    import re
+    names = re.findall(r"- __([\w/]+)__:", body["messages"][0]["content"])
+    return json.dumps({n: [f"{n} {i}" for i in range(4)] for n in names})
+
+
+def test_an_endpoint_writes_each_library_in_a_request_of_its_own(home, fake_api):
+    from orrery.autolib import needs, write_apart
+    from orrery.llm import OpenAIBackend
+    fake_api.answer = wildcards
+    wanted = needs(Home(home), "__runway_shoes__ and __runway_hats__ on an __animal:5__", 4)
+    notes = write_apart(Home(home), wanted, OpenAIBackend(fake_api.url, "gpt-5.4-mini"))
+    asked = sorted(r["messages"][0]["content"].count("- __") for r in fake_api.requests)
+    assert asked == [1, 1, 1] and len(notes) == 3
+    libs = Home(home).libraries()
+    assert libs["runway_hats"].values() == [f"runway_hats {i}" for i in range(4)] and len(libs["animal"].entries) == 5
+
+
+def test_a_library_the_endpoint_fails_is_a_note_and_a_refused_key_an_error(home, fake_api):
+    import pytest
+
+    from orrery.autolib import needs, write_apart
+    from orrery.llm import OpenAIBackend
+    fake_api.answer = lambda body: "sorry" if "- __runway_hats__:" in body["messages"][0]["content"] else wildcards(body)
+    wanted = needs(Home(home), "__runway_shoes__ and __runway_hats__", 4)
+    notes = write_apart(Home(home), wanted, OpenAIBackend(fake_api.url, "gpt-5.4-mini"))
+    assert "runway_shoes" in Home(home).libraries() and "runway_hats" not in Home(home).libraries()
+    assert any(n.startswith("__runway_hats__ was not written: the model gave no usable JSON") for n in notes)
+    fake_api.key = "sk-right"
+    with pytest.raises(RuntimeError, match="HTTP 401"):
+        write_apart(Home(home), needs(Home(home), "__runway_hats__", 4), OpenAIBackend(fake_api.url, "gpt-5.4-mini"))

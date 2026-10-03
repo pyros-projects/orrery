@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { highlight } from "../../comfyui/web/app/highlight.js";
 import { fitThumbs } from "../../comfyui/web/app/timeline.js";
-import { writerBlock } from "../../comfyui/web/app/write.js";
+import { openLibraries, writerBlock } from "../../comfyui/web/app/write.js";
 import {
   applyDials, dials, downstream, nextSeed, queueSweep, entryPage, libraryHead, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
   chunkInfo, chunkLabel, splitCells, rangeIds, shape, stats, PLAN_HINT, templateHash, hasGoto, plays, longForm, matches, splitOptions, tagsMatch, withDice,
@@ -447,6 +447,13 @@ test("the Write menu offers a writer only where it can write", () => {
   assert.match(writerBlock(app("a photo of a fox", { frames: ["first_frame", "last_frame"] }), "story"), /@h3/);
   assert.match(writerBlock(app("a photo of a fox"), "describe"), /first_frame/);
   assert.equal(writerBlock(app("a photo of a fox", { frames: ["last_frame"] }), "describe"), "");
+});
+
+test("Write now counts the libraries a template still needs, as autolib does", () => {
+  const libs = [{ name: "animal", count: 3 }, { name: "style", count: 2 }];
+  const text = "# __commented__\na __animal:5__ in __style__ by __makers/new__ <lora:__x__:1>\n__style:2__ \\__escaped__ __clothing/*__ __mine__";
+  assert.deepEqual(openLibraries(text, libs, new Set(["mine"])), ["animal", "makers/new"]);
+  assert.deepEqual(openLibraries("__animal[tag=a]#k:v:2__ and __style__", libs), []);
 });
 
 test("tag algebra, brace options and the LoRA short form mirror the expander", () => {

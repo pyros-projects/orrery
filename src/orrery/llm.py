@@ -11,12 +11,17 @@
       #   model: qwen3.5-2b
       #   api_key_env: OPENAI_API_KEY  # optional
 
+Without a `models.library`, the API endpoint set in the node's settings writes (orrery.endpoint).
 Models only ever *propose*; orrery validates their JSON before anything is written.
 """
 
+import base64
+import io
 import json
 import os
 import re
+import time
+import urllib.error
 import urllib.request
 from typing import Protocol
 
@@ -65,32 +70,113 @@ class FakeBackend:
         return self.replies[min(len(self.prompts) - 1, len(self.replies) - 1)]
 
 
+FRAME_EDGE = 768  # the long edge of a frame the model sees: enough to read it, a few hundred tokens
+RETRIES = (2, 6)  # seconds to wait before asking a busy endpoint again
+_QUIRKS: dict[tuple[str, str], set[str]] = {}  # (url, model) → what the model refused, so the next request adapts
+
+
+def data_urls(images, edge: int = FRAME_EDGE) -> list[str]:
+    """Frames as JPEG data URLs, the long edge at most `edge`: a ComfyUI IMAGE batch (frames × height × width ×
+    RGB, 0–1), PIL images, or paths."""
+    from PIL import Image  # ComfyUI ships Pillow; only frames need it
+
+    if hasattr(images, "shape") and len(images.shape) == 4:  # an IMAGE batch, torch or numpy
+        import numpy as np
+        batch = images.detach().cpu().numpy() if hasattr(images, "detach") else np.asarray(images)
+        pictures = [Image.fromarray((batch[i].clip(0, 1) * 255).round().astype("uint8")) for i in range(len(batch))]
+    else:
+        pictures = [p if isinstance(p, Image.Image) else Image.open(p) for p in images]
+    urls = []
+    for picture in pictures:
+        picture = picture.convert("RGB")
+        picture.thumbnail((edge, edge))
+        buffer = io.BytesIO()
+        picture.save(buffer, "JPEG", quality=88)
+        urls.append("data:image/jpeg;base64," + base64.b64encode(buffer.getvalue()).decode())
+    return urls
+
+
 class OpenAIBackend:
-    """Any server that speaks the OpenAI chat-completions protocol."""
+    """Any server that speaks the OpenAI chat-completions protocol. It adapts to what a model refuses (newer
+    OpenAI models want max_completion_tokens, and some no temperature but their own) and remembers it per model."""
 
     def __init__(self, base_url: str, model: str, api_key_env: str | None = None,
-                 temperature: float = 0.7, max_tokens: int = 1024, name: str | None = None) -> None:
+                 temperature: float = 0.7, max_tokens: int = 1024, name: str | None = None,
+                 api_key: str | None = None) -> None:
         self.url = base_url.rstrip("/") + "/chat/completions"
         self.model = model
-        self.api_key = os.environ.get(api_key_env, "") if api_key_env else ""
+        self.api_key = api_key if api_key is not None else os.environ.get(api_key_env, "") if api_key_env else ""
         self.temperature, self.max_tokens = temperature, max_tokens
         self.name = name or model
 
+    def _body(self, prompt: str, images) -> dict:
+        content = prompt if images is None or not len(images) else [
+            *({"type": "image_url", "image_url": {"url": url}} for url in data_urls(images)),
+            {"type": "text", "text": prompt}]  # the frames first, as Picture 1, 2 … in the prompt
+        body = {"model": self.model, "messages": [{"role": "user", "content": content}],
+                "temperature": self.temperature, "max_tokens": self.max_tokens}
+        for quirk in _QUIRKS.get((self.url, self.model), ()):
+            _adapt(body, quirk)
+        return body
+
     def complete(self, prompt: str, images=None) -> str:
-        if images is not None:
-            raise ValueError(f"{self.name} cannot see images; pick a Qwen3-VL text encoder in ComfyUI.")
-        body = json.dumps({
-            "model": self.model,
-            "messages": [{"role": "user", "content": prompt}],
-            "temperature": self.temperature,
-            "max_tokens": self.max_tokens,
-        }).encode()
-        headers = {"Content-Type": "application/json"}
-        if self.api_key:
-            headers["Authorization"] = f"Bearer {self.api_key}"
-        request = urllib.request.Request(self.url, data=body, headers=headers, method="POST")
-        with urllib.request.urlopen(request, timeout=300) as response:
-            return json.loads(response.read())["choices"][0]["message"]["content"]
+        body, waits = self._body(prompt, images), list(RETRIES)
+        while True:
+            request = urllib.request.Request(self.url, data=json.dumps(body).encode(), method="POST",
+                                             headers={"Content-Type": "application/json",
+                                                      **({"Authorization": f"Bearer {self.api_key}"} if self.api_key else {})})
+            try:
+                with urllib.request.urlopen(request, timeout=300) as response:
+                    return json.loads(response.read())["choices"][0]["message"]["content"] or ""
+            except urllib.error.HTTPError as err:
+                message, param = _error(err)
+                quirk = _quirk(err.code, param, message)
+                if quirk and quirk not in _QUIRKS.setdefault((self.url, self.model), set()):
+                    _QUIRKS[(self.url, self.model)].add(quirk)
+                    _adapt(body, quirk)
+                    continue
+                if err.code in (408, 429, 500, 502, 503, 504) and waits:
+                    time.sleep(min(float(err.headers.get("Retry-After") or waits[0]), 30))
+                    waits.pop(0)
+                    continue
+                hint = " Check the key in orrery's settings." if err.code in (401, 403) else ""
+                raise RuntimeError(f"{self.name}: {message} (HTTP {err.code}).{hint}") from None
+            except (urllib.error.URLError, TimeoutError) as err:
+                if waits:
+                    time.sleep(waits.pop(0))
+                    continue
+                reason = getattr(err, "reason", err)
+                raise RuntimeError(f"{self.name}: cannot reach {self.url} ({reason}).") from None
+
+
+def _error(err: urllib.error.HTTPError) -> tuple[str, str]:
+    """The endpoint's own words for an error, and the parameter it names."""
+    try:
+        data = json.loads(err.read() or b"{}")
+    except ValueError:
+        data = {}
+    error = data.get("error") if isinstance(data, dict) else None
+    if isinstance(error, dict):
+        return str(error.get("message") or err.reason), str(error.get("param") or "")
+    return str(error or err.reason), ""
+
+
+def _quirk(status: int, param: str, message: str) -> str | None:
+    """What to change when a model refuses a parameter: `max_tokens` for `max_completion_tokens`, or no temperature."""
+    if status != 400:
+        return None
+    if param == "max_tokens" or "max_completion_tokens" in message:
+        return "completion_tokens"
+    if param == "temperature" or "'temperature'" in message:
+        return "no_temperature"
+    return None
+
+
+def _adapt(body: dict, quirk: str) -> None:
+    if quirk == "completion_tokens" and "max_tokens" in body:
+        body["max_completion_tokens"] = body.pop("max_tokens")
+    elif quirk == "no_temperature":
+        body.pop("temperature", None)
 
 
 class TransformersBackend:
@@ -134,6 +220,9 @@ class TransformersBackend:
 def backend_for(home, role: str) -> Backend:
     cfg = (home.config().get("models") or {}).get(role)
     if not cfg:
+        from orrery import endpoint  # it builds on this module
+        if (api := endpoint.backend(home)) is not None:
+            return api
         raise RuntimeError(f"no model configured for '{role}': add models.{role} to "
                            f"{home.config_path} (see `orrery lib --help`)")
     kind = cfg.get("backend")

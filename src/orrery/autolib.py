@@ -10,6 +10,7 @@ for review: a new library is marked `pending`, entries added to an existing one 
 """
 
 import json
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 
@@ -93,6 +94,24 @@ def ensure_libraries(home: Home, template: str, backend: Backend | None, default
     if not wanted:
         return []
     return write_lists(home, wanted, _answers(backend.complete(prompt_for(wanted)), wanted), backend)
+
+
+def write_apart(home: Home, wanted: list[Need], backend: Backend) -> list[str]:
+    """Each library in a request of its own, all at once: an API endpoint writes them in parallel and can be
+    asked more than once (#165). One that fails is a note; when every request fails, its error is raised."""
+    def ask(n: Need):
+        try:
+            return lists_in(extract_json(backend.complete(prompt_for([n]))), [n]), None
+        except (InvalidProposal, RuntimeError) as err:
+            return {}, err
+
+    with ThreadPoolExecutor(max_workers=min(len(wanted), 8)) as pool:
+        results = list(pool.map(ask, wanted))
+    errors = [err for _, err in results if err is not None]
+    if errors and len(errors) == len(wanted) and all(isinstance(e, RuntimeError) for e in errors):
+        raise errors[0]
+    notes = write_lists(home, wanted, {k: v for got, _ in results for k, v in got.items()}, backend)
+    return notes + [f"__{n.name}__ was not written: {err}" for n, (_, err) in zip(wanted, results, strict=True) if err]
 
 
 def write_lists(home: Home, wanted: list[Need], answers: dict[str, list[str]], backend: Backend) -> list[str]:

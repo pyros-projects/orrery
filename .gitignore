@@ -10,3 +10,6 @@ __pycache__/
 .claude/
 .devin/
 skills-lock.json
+
+# secrets (an API key for the language model)
+.env

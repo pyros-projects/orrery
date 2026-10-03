@@ -84,7 +84,8 @@ export class OrreryApp {
   known() {  // the home's libraries and the template's own (@lib)
     return new Set([...(this.data.completion?.libraries || []).map((l) => l.name), ...inlineLibraries(this.text).map((l) => l.name)]);
   }
-  llmActive() { return !!this.data.llm?.file; }
+  llmActive() { return !!this.data.llm?.active; }
+  llmApi() { return this.data.llm?.active?.kind === "api"; }  // an API endpoint: beside ComfyUI, not in its queue (#165)
   dirty() { return this.preset ? this.base !== null && this.text !== this.base : this.text.trim() !== ""; }
 
   async start() {

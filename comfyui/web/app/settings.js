@@ -1,6 +1,6 @@
 // Settings sheet: where orrery keeps its libraries, presets and galaxy (the home folder), and the
 // language model it uses (a text encoder from ComfyUI's text_encoders folder, as in Pixaroma's
-// prompt nodes) with how many entries a library it creates starts with.
+// prompt nodes, or an API endpoint beside ComfyUI, #165) with how many entries a library it creates starts with.
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
 
@@ -9,6 +9,16 @@ const gb = (bytes) => (bytes ? `${(bytes / 1e9).toFixed(1)} GB` : "");
 // What the Write menu sends the model: each writer a prompt of its own, with only its own rules.
 const WRITER_TEXTS = { continue: "Continue the reel", story: "Story between frames", describe: "Prompt from image: an image prompt",
   describe_shot: "Prompt from image: an @h3 i2va shot" };
+
+// The model field: a list once the endpoint has named its models, else a text field.
+const modelField = (models, current) => (models.length
+  ? `<select class="input mono" id="oa-api-model">${[...new Set([current, ...models].filter(Boolean))].map((m) =>
+    `<option ${m === current ? "selected" : ""}>${esc(m)}</option>`).join("")}</select>`
+  : `<input class="input mono" id="oa-api-model" value="${esc(current)}" placeholder="gpt-6-luna" spellcheck="false">`);
+
+const keyNote = (api) => (api.key_from === "env" ? `From <code>${esc(api.key_env)}</code> in ComfyUI's environment (it wins over a key typed here).`
+  : api.key_from === "file" ? `Kept in the home folder's <code>.env</code>, never in orrery.yaml; type a new one to replace it.`
+    : `Kept in the home folder's <code>.env</code>, never in orrery.yaml. A local server may need none.`);
 
 const HOME_NOTE = {
   env: (h) => `ORRERY_HOME is set to <code>${esc(h)}</code> and wins over this setting; unset it to use the folder below.`,
@@ -29,11 +39,28 @@ export async function openSettings(app) {
       <input class="input mono" id="oa-home" value="${esc(h.setting || h.home)}" placeholder="/path/to/orrery" ${h.source === "env" ? "disabled" : ""} spellcheck="false">
       <span class="muted">${HOME_NOTE[h.source](h.home)}</span></div>
     <div class="row spread"><h5 class="label">Language model</h5></div>
+    <div class="row" role="radiogroup" aria-label="The language model">
+      <label class="check"><input type="radio" name="oa-src" value="comfy" ${s.source !== "api" ? "checked" : ""}><span>A text encoder in ComfyUI</span></label>
+      <label class="check"><input type="radio" name="oa-src" value="api" ${s.source === "api" ? "checked" : ""}><span>An API endpoint: OpenAI, or a server that speaks its protocol</span></label></div>
+    <div class="src-comfy">
     <p class="muted flush">A text encoder that is a whole language model can write: Krea 2's <code>qwen3vl_4b</code> or a Qwen3-VL 8B build.
       MiniMax H3's encoder is cut short and cannot. The model loads when the node runs and writes once; ComfyUI moves it out when the video model needs the room.
       A text encoder wired into the node's <b>clip</b> input wins over this choice.</p>
     <div class="field"><label class="label" for="oa-llm">Model</label><select class="input" id="oa-llm">${options}</select>
-      ${s.files.length ? "" : '<span class="warn">No text encoders found (is this running inside ComfyUI?).</span>'}</div>
+      ${s.files.length ? "" : '<span class="warn">No text encoders found (is this running inside ComfyUI?).</span>'}</div></div>
+    <div class="src-api">
+    <p class="muted flush">Every language-model task goes to the endpoint: the libraries, <code>--slots--</code> and <code>&gt; enhance</code> of a run, the <b>Write</b> menu, <code>orrery lib</code>.
+      It runs beside ComfyUI: no VRAM, no text encoder pushing the video model out, no waiting behind a render. It wins over a text encoder wired into <b>clip</b>.
+      Saving checks it first: the key, and one short answer from the model.</p>
+    <div class="field"><label class="label" for="oa-api-url">Endpoint</label>
+      <input class="input mono" id="oa-api-url" value="${esc(s.api.base_url)}" spellcheck="false"></div>
+    <div class="field"><label class="label" for="oa-api-key">Key</label>
+      <input class="input mono" id="oa-api-key" type="password" autocomplete="off" placeholder="${s.api.key ? `set · ${esc(s.api.key)}` : "sk-…"}" ${s.api.key_from === "env" ? "disabled" : ""}>
+      <span class="muted">${keyNote(s.api)}</span></div>
+    <div class="field"><label class="label" for="oa-api-model">Model</label>
+      <div class="row"><span id="oa-api-model-box" class="grow">${modelField([], s.api.model)}</span>
+        <button type="button" class="btn ghost" data-check title="Ask the endpoint for its models and the model for one short answer">${icon("spark")}Check</button></div>
+      <span class="muted" id="oa-api-status"></span></div></div>
     <div class="field"><label class="label" for="oa-llm-n">A library it creates starts with</label>
       <div class="row"><input class="input narrow" id="oa-llm-n" type="number" min="1" max="200" value="${s.entries}"><span class="muted">entries · <code>__name:30__</code> asks for at least 30</span></div></div>
     <div class="field"><label class="label" for="oa-llm-t">Max tokens</label>
@@ -60,6 +87,28 @@ export async function openSettings(app) {
     <div class="acts"><button type="button" class="btn ghost" data-cancel>Cancel</button><button class="btn primary">${icon("save")}Save</button></div>
   </form>`);
   sheet.querySelector("[data-cancel]").onclick = () => app.closeSheet();
+  const source = () => sheet.querySelector('[name="oa-src"]:checked').value;
+  const api = () => ({ base_url: sheet.querySelector("#oa-api-url").value.trim(), model: sheet.querySelector("#oa-api-model").value.trim(),
+    key: sheet.querySelector("#oa-api-key").value.trim() });
+  const check = async (ask) => {
+    const status = sheet.querySelector("#oa-api-status");
+    status.className = "muted";
+    status.textContent = ask ? "Asking the endpoint…" : "Fetching the models…";
+    try {
+      const got = await app.api.checkLlm(ask ? api() : { ...api(), model: "" });
+      if (got.models.length) sheet.querySelector("#oa-api-model-box").innerHTML = modelField(got.models, api().model);
+      status.className = got.ok || (!ask && got.models.length) ? "muted" : "warn";
+      status.textContent = got.ok ? `✓ ${api().model} answered in ${got.seconds} s` : !ask && got.models.length ? `${got.models.length} models` : got.error;
+    } catch (err) { status.className = "warn"; status.textContent = err.message; }
+  };
+  const showSource = () => {
+    sheet.querySelector(".src-comfy").hidden = source() === "api";
+    sheet.querySelector(".src-api").hidden = source() !== "api";
+  };
+  sheet.querySelectorAll('[name="oa-src"]').forEach((r) => { r.onchange = () => { showSource(); if (source() === "api") check(false); }; });
+  sheet.querySelector("[data-check]").onclick = () => check(true);
+  showSource();
+  if (s.source === "api") check(false);
   const wsel = sheet.querySelector("#oa-wr"), wtext = sheet.querySelector("#oa-wt");
   let wcur = wsel.value;
   wtext.value = drafts[wcur];
@@ -84,10 +133,13 @@ export async function openSettings(app) {
       const edits = Object.keys(drafts).filter((k) => drafts[k] !== wr[k].text);
       for (const k of edits) await app.api.saveWriter(k, drafts[k]);
       app.data.llm = await app.api.saveLlm({ file: sheet.querySelector("#oa-llm").value, entries: Number(sheet.querySelector("#oa-llm-n").value) || 12,
-        max_tokens: Number(sheet.querySelector("#oa-llm-t").value) || 16000 });
+        max_tokens: Number(sheet.querySelector("#oa-llm-t").value) || 16000, source: source(), ...api() });
       app.closeSheet();
       app.render();
-      if (app.data.llm.file !== s.file) app.toast(app.data.llm.file ? `Language model: <b>${esc(app.data.llm.file)}</b>` : "No language model: unknown libraries stay an error");
+      const now = app.data.llm.active, before = s.active;
+      if (now?.kind !== before?.kind || now?.name !== before?.name) {
+        app.toast(now ? `Language model: <b>${esc(now.name)}</b>${now.kind === "api" ? " · API" : ""}` : "No language model: unknown libraries stay an error");
+      }
     } catch (err) { app.fail(err); }
   });
 }
