@@ -5,16 +5,21 @@ ComfyUI-H3RefMods pack and adds one block per RefMod to the conditioning's `mini
 pack's Apply H3 RefMod does, marked with its strength for orrery.refbias. A RefMod that waits
 (`from 35%`) stays out of the conditioning for that share of sampling: the node splits the
 conditioning into timestep ranges, as ConditioningSetTimestepRange does, so each range carries the
-RefMods that have started by then. ComfyUI only.
+RefMods that have started by then. A RefMod that a SEND: line makes from frames of the reel (#13) is
+built here, without the pack: the frames come from the chain and are encoded the way Reference to
+Video encodes a video reference, then kept for the run. ComfyUI only.
 """
 
 import json
 import sys
 from itertools import pairwise
+from pathlib import Path
 
 from orrery.refbias import KEY
 
 PACK = "ComfyUI-H3RefMods"
+MAX_FRAMES = 73  # a sent RefMod's frames at most: 22 latents, about 23K tokens on the 768 canvas
+_BUILT: dict[tuple, dict] = {}  # sent RefMods already encoded: (clip, its mtime, frames, step) → block
 
 
 def _pack():
@@ -64,6 +69,65 @@ def schedule(refmods: list[dict], images: list[dict] = ()) -> list[tuple[float, 
 
 def _share(value) -> float:
     return min(1.0, max(0.0, float(value)))
+
+
+def video_frames(n: int) -> int:
+    """How many frames a sent RefMod of n frames is encoded from: the next count on the grid H3's video VAE
+    encodes (17k+5 frames to 5k+2 latents), so none is lost, and at most MAX_FRAMES."""
+    if n >= MAX_FRAMES:
+        return MAX_FRAMES
+    return n + (5 - n) % 17
+
+
+def encode(frames, vae) -> dict:
+    """A ref block from frames [N, H, W, 3] in 0..1, as Reference to Video makes one: on its 768 canvas
+    (never larger than the frames), a single frame as an image, more as a video of 17k+5 frames (the last
+    one held to fill up, more than MAX_FRAMES spread out evenly)."""
+    import torch
+    from comfy_extras.nodes_minimax_h3 import _resize, adapt_canvas
+
+    n, h, w = frames.shape[0], frames.shape[1], frames.shape[2]
+    cw, ch = adapt_canvas(w, h)
+    if w * h < cw * ch:
+        cw, ch = max(32, round(w / 32) * 32), max(32, round(h / 32) * 32)
+    if n == 1:
+        return {"kind": "image", "latent_h": ch // 16, "latent_w": cw // 16,
+                "latent": vae.encode(_resize(frames, cw, ch, "disabled"))}
+    count = video_frames(n)
+    if n > count:
+        frames = frames[torch.linspace(0, n - 1, count).round().long()]
+    elif n < count:
+        frames = torch.cat([frames, frames[-1:].expand(count - n, -1, -1, -1)])
+    z = vae.encode(_resize(frames, cw, ch, "disabled"))
+    return {"kind": "video", "latent_t": z.shape[2], "latent_h": ch // 16, "latent_w": cw // 16,
+            "ref_audio_t": 0, "latent": z, "audio_latent": None}
+
+
+def sent_block(name: str, sent: dict, latent_path: str, vae) -> dict:
+    """The block of a RefMod that a SEND: line makes from frames of the sending segment's clip, encoded
+    once and kept for the run (a new take of that clip encodes it again)."""
+    import folder_paths  # ComfyUI
+
+    from orrery import chain
+
+    segment, step = sent["segment"], int(sent.get("step", 1))
+    path = chain.clip_file(Path(folder_paths.get_output_directory()), latent_path, segment)
+    if path is None:
+        raise ValueError(f"refmod {name} is sent from segment {segment}, but the chain {latent_path!r} has no clip for "
+                         f"segment {segment}: render the reel from that chunk on, or check the Orrery Prompt's "
+                         "latent_path.")
+    key = (str(path), Path(path).stat().st_mtime_ns, json.dumps(sent["frames"]), step)
+    if key not in _BUILT:
+        if vae is None:
+            raise ValueError(f"refmod {name} is made from frames of the reel, so Orrery RefMods needs the VAE: wire "
+                             "the H3 video VAE (the one Reference to Video takes) into its vae input.")
+        frames, dropped = chain.frames(path, sent["frames"], step)
+        if dropped:
+            print(f"[orrery] SEND to refmod {name}: frames {', '.join(map(str, dropped))} are not in segment "
+                  f"{segment}'s clip, so they are left out.")
+        _BUILT[key] = encode(frames, vae)
+        print(f"[orrery] Orrery RefMods: built refmod {name} from {frames.shape[0]} frames of segment {segment}")
+    return _BUILT[key]
 
 
 def _ranged(conditioning, blocks: list[dict], lo: float, hi: float, images: dict | None = None) -> list:
@@ -117,28 +181,40 @@ class OrreryRefMods:
     DESCRIPTION = ("Loads the RefMods the clip's CAST names (refmod NAME at 0.5 from 35%) and puts them on the "
                    "conditioning, and applies a picture's at and from (image 1 at 0.5): wire Reference to Video's "
                    "conditioning and the Orrery Prompt's picks in, and the output on to Orrery Continue or the "
-                   "guider. RefMods need the ComfyUI-H3RefMods pack.")
+                   "guider. RefMods from files need the ComfyUI-H3RefMods pack; one a SEND: line makes from the "
+                   "reel's frames (SEND: every 10 frames to refmod NAME) needs the H3 video VAE in vae.")
 
     @classmethod
     def INPUT_TYPES(cls):
         return {"required": {"conditioning": ("CONDITIONING",),
-                             "picks": ("STRING", {"forceInput": True})}}
+                             "picks": ("STRING", {"forceInput": True})},
+                "optional": {"vae": ("VAE", {"tooltip": "The H3 video VAE (Reference to Video's): it encodes the "
+                                                        "RefMods a SEND: line makes from the reel's frames."})}}
 
-    def apply(self, conditioning, picks):
+    @classmethod
+    def IS_CHANGED(cls, **_):
+        """Always run: the chain behind a sent RefMod changes while the picks stay the same (a segment rendered
+        again), and a cached output would bring back an older take; the encoded blocks are kept all the same."""
+        return float("NaN")
+
+    def apply(self, conditioning, picks, vae=None):
         data = json.loads(picks or "{}")
         refmods, images = data.get("refmods") or [], data.get("images") or []
         if not refmods and not images:
             return (conditioning,)
         blocks: dict[str, dict] = {}
-        if refmods:
+        files = [r for r in refmods if float(r["strength"]) > 0.0 and "sent" not in r]  # at 0 a RefMod is left out
+        if files:
             pack = _pack()
             available = pack._list_mod_names()
-            for r in refmods:
-                if float(r["strength"]) <= 0.0:
-                    continue  # at 0 a RefMod is left out, as the pack does
+            for r in files:
                 block = pack._load_mod(resolve(r["name"], available)).ref_block(1.0, curve=None)
                 if block is not None:
                     blocks[r["name"]] = {**block, KEY: float(r["strength"])}
+        for r in refmods:
+            if float(r["strength"]) > 0.0 and "sent" in r:
+                block = sent_block(r["name"], r["sent"], data.get("chain") or "h3_context", vae)
+                blocks[r["name"]] = {**block, KEY: float(r["strength"])}
         pictures = {int(i["ref"]): (float(i["strength"]), float(i["from"]), float(i.get("to", 1.0))) for i in images}
         out = []
         for lo, hi, active in schedule([r for r in refmods if r["name"] in blocks], images):

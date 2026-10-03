@@ -168,7 +168,16 @@ Nodes under **orrery**:
   ```
   Reference to Video conditioning ▶ Orrery RefMods conditioning ▶ Orrery Continue conditioning (or the guider)
   Orrery Prompt picks ────────────▶ Orrery RefMods picks
+  H3 video VAE ───────────────────▶ Orrery RefMods vae (for RefMods made from the reel)
   ```
+
+  A RefMod that a `SEND:` line makes from the reel's own frames (`SEND: every 10
+  frames to refmod NAME`) needs no pack: the node takes those frames of the
+  sending segment's clip from the chain and encodes them with the `vae` as
+  Reference to Video encodes a video reference, on its 768 canvas and on the
+  VAE's frame grid (the last frame held to fill it up, at most 73 frames spread
+  out evenly). It encodes them once and keeps the result for the run; a new take
+  of that segment encodes them again.
 
   It also applies a picture's dials (`image 1 at 0.5 from 35%`) to the pictures
   Reference to Video put on the conditioning: with Orrery Refs, the k-th picture
