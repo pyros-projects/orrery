@@ -137,6 +137,9 @@ def sent_block(name: str, sent: dict, latent_path: str, vae) -> dict:
 
     segment, step = sent["segment"], int(sent.get("step", 1))
     path = chain.clip_file(Path(folder_paths.get_output_directory()), latent_path, segment)
+    if path is None and segment == -1:
+        raise ValueError(f"refmod {name} is remembered from the input video, but the chain {latent_path!r} holds "
+                         "none: wire a Load Video into the Orrery Prompt's video input.")
     if path is None:
         raise ValueError(f"refmod {name} is sent from clip {segment + 1}, but the chain {latent_path!r} has no clip "
                          f"{segment + 1}: render the reel from that scene on, or check the Orrery Prompt's "

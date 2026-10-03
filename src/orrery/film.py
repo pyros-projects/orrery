@@ -23,7 +23,7 @@ from collections.abc import Sequence
 from fractions import Fraction
 from pathlib import Path
 
-from orrery.chain import chain_folder
+from orrery.chain import chain_folder, input_file
 from orrery.continuum.grid import FPS
 from orrery.continuum.masked import Tail
 from orrery.home import write_atomic
@@ -129,6 +129,70 @@ def save_take(output: Path | str, latent_path: str, segment: int, frames: Sequen
     write_atomic(root / "active.json", json.dumps({"run": run.name}))
     _join(run, clips, int(sample_rate))
     return run / name
+
+
+def keep_input(source: Path | str, output: Path | str, latent_path: str) -> Path:
+    """The Orrery Prompt's input video as the chain's clip before clip 1 (chain.clip_file(-1)): at 24 fps
+    (each frame the one showing at that moment), even-sized for H.264, its sound as it is. Written again
+    only when the source file changes."""
+    import av
+    import numpy as np
+
+    source, target = Path(source), input_file(output, latent_path)
+    if target is None:
+        raise FilmError(f"the reel's latent_path {latent_path!r} lies outside ComfyUI's output folder.")
+    stat = source.stat()
+    stamp = {"source": str(source.resolve()), "size": stat.st_size, "mtime": stat.st_mtime_ns}
+    kept = target.with_suffix(".json")
+    if target.is_file() and kept.is_file() and json.loads(kept.read_text(encoding="utf-8")) == stamp:
+        return target
+    with av.open(str(source)) as container:
+        sound, rate = _input_sound(container)
+    tmp = target.with_name(f".{target.name}.tmp.mp4")
+    tmp.parent.mkdir(parents=True, exist_ok=True)
+    with av.open(str(source)) as container:
+        frames = _at_24_fps(container)
+        first = next(frames, None)
+        if first is None:
+            raise FilmError(f"the input video {source.name} has no frames.")
+        _write_clip(tmp, first, frames, sound if sound is not None else np.zeros((1, 0), np.float32), rate)
+    os.replace(tmp, target)
+    write_atomic(kept, json.dumps(stamp))
+    return target
+
+
+def _at_24_fps(container):
+    """The video's frames at FPS, as uint8 [height, width, 3] cut to even sizes: for every 1/24 s the frame
+    showing then (repeated when the source is slower, skipped when it is faster)."""
+    stream, k = container.streams.video[0], 0
+    held, start = None, None
+    for i, frame in enumerate(container.decode(stream)):
+        t = float(frame.pts * stream.time_base) if frame.pts is not None else i / float(stream.average_rate or FPS)
+        start = t if start is None else start
+        t -= start  # a stream may start late: its first frame is the clip's first
+        picture = frame.to_ndarray(format="rgb24")
+        picture = picture[: picture.shape[0] // 2 * 2, : picture.shape[1] // 2 * 2]
+        while held is not None and k / FPS < t - 1e-6:
+            yield held
+            k += 1
+        held = picture
+    if held is not None:
+        yield held
+
+
+def _input_sound(container):
+    """The input video's sound as float32 [channels, samples] and its rate, or (None, 48000) without one."""
+    import av
+    import numpy as np
+
+    if not container.streams.audio:
+        return None, 48000
+    stream = container.streams.audio[0]
+    layout = "mono" if stream.channels == 1 else "stereo"
+    resampler = av.AudioResampler(format="fltp", layout=layout, rate=stream.rate)
+    parts = [r.to_ndarray() for frame in container.decode(stream) for r in resampler.resample(frame)]
+    parts += [r.to_ndarray() for r in resampler.resample(None)]
+    return (np.concatenate(parts, axis=1).astype(np.float32) if parts else None), int(stream.rate)
 
 
 def film_file(take: Path) -> Path:

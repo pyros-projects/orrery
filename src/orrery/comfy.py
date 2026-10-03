@@ -409,6 +409,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
             data["continues"] = result.continues
             if result.test:
                 data["test"] = True
+            if result.uses_input:
+                data["input"] = True
             context = DEFAULT_CONTEXT if result.scene.context is None else result.scene.context
             data["chain"], data["context"] = chain, context
             if continued and context != CONTEXT:
@@ -420,6 +422,24 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                     "leave the line out; H3 Motion Context takes other lengths.")})
                 print(f"[orrery] warn: {data['lint'][-1]['message']}")
     return result.text, json.dumps(data, ensure_ascii=False), seed, width, height, length, stack
+
+
+def _keep_input(video, latent_path: str) -> None:
+    """The input video, kept in the reel's chain (orrery.film.keep_input) for Orrery Refs, Orrery RefMods
+    and Orrery Continue to read."""
+    if video is None:
+        raise ValueError("This reel reads the input video (a REMEMBER: in the head, or a scene AFTER: the input "
+                         "video), but nothing is wired into the Orrery Prompt's video input: wire a Load Video.")
+    import folder_paths  # ComfyUI
+
+    from orrery import film
+
+    output = Path(folder_paths.get_output_directory())
+    source = video.get_stream_source()
+    if not isinstance(source, str):  # a video held in memory: written out first
+        source = str(Path(folder_paths.get_temp_directory()) / "orrery_input_source.mp4")
+        video.save_to(source)
+    film.keep_input(source, output, latent_path)
 
 
 def _previous(latent_path: str, segment: int):
@@ -553,6 +573,10 @@ class OrreryPrompt:
                 "last_frame": ("IMAGE", {"tooltip": (
                     "Optional: the picture the clip ends on (and the H3 node's last_frame). Without a first frame, width "
                     "and height take its shape, so H3 does not crop it.")}),
+                "video": ("VIDEO", {"tooltip": (
+                    "Optional: a video of your own that the reel starts from (a Load Video). The template's head is "
+                    "its scene: REMEMBER: there keeps its frames, END ON: there says how it ends, and a scene with "
+                    "AFTER: the input video continues it.")}),
                 "latent_path": ("STRING", {"forceInput": True, "tooltip": (
                     "Where the reel's clips live, under ComfyUI's output (default h3_context; H3 Motion "
                     "Context's latent_path): Orrery Film keeps them in its orrery_film folder, Chain Video in "
@@ -573,7 +597,7 @@ class OrreryPrompt:
 
     def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, clip=None,
             latent_path=DEFAULT_CHAIN, sweep="", unique_id=None, extra_pnginfo=None, prompt=None,
-            first_frame=None, last_frame=None):
+            first_frame=None, last_frame=None, video=None):
         stills = _previous(latent_path, segment)
         packed, wired, keep, standing = wiring(prompt, unique_id)
         try:
@@ -586,6 +610,8 @@ class OrreryPrompt:
             history.record(h, data)
             if uistate.load_ui(h)["log_prompts"]:
                 print("\n".join(history.log_lines(data)))
+            if data.get("input"):
+                _keep_input(video, latent_path or DEFAULT_CHAIN)
             if "sends" in data and not packed:
                 raise ValueError("This reel REMEMBERs frames as reference images, which Orrery Refs fetches: wire this "
                                  "node's picks into an Orrery Refs, and its ref outputs into Reference to Video.")
@@ -844,6 +870,9 @@ class OrreryRefs:
 
         segment = send["segment"]
         path = chain.clip_file(Path(folder_paths.get_output_directory()), latent_path, segment)
+        if path is None and segment == -1:
+            raise ValueError(f"image {n} is remembered from the input video, but the chain {latent_path!r} holds "
+                             "none: wire a Load Video into the Orrery Prompt's video input.")
         if path is None:
             raise ValueError(f"image {n} is sent from clip {segment + 1}, but the chain {latent_path!r} has no clip "
                              f"{segment + 1}: render the reel from that scene on, or check the Orrery Prompt's "

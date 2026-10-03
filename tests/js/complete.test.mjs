@@ -283,6 +283,8 @@ test("@ names a CAST member: in prose, in a line of speech, and next to the dire
 test("AFTER: completes the scene titles, and REMEMBER: what to keep, as whom, for which clips", () => {
   const reel = `${CAST_HEAD}KEEPER: an old keeper\nSCENE the gate\nSHOT 5s\nA.\nSCENE the stairs (test)\nSHOT 5s\nB.\n`;
   assert.deepEqual(names(`${reel}AFTER: the s`), ["the stairs"]);
+  assert.deepEqual(names(`${reel}AFTER: the `), ["the gate", "the stairs", "the input video"]);
+  assert.deepEqual(names(`${reel}CUT TO: the `), ["the gate", "the stairs"]);  // a jump never goes to the video
   assert.deepEqual(names(`${reel}REMEMBER: `), ["first frame as ", "last frame as ", "frame at 1s as ", "frames 34-46 as ", "every 10th frame as "]);
   assert.deepEqual(names(`${reel}REMEMBER: first frame as `), ["@KEEPER", "image ", "refmod "]);
   assert.deepEqual(names(`${reel}REMEMBER: first frame as @KEEPER `), ["in clips 2-5", "until "]);

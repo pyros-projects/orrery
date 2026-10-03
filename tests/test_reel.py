@@ -312,10 +312,7 @@ def test_two_sends_to_one_refmod_warn_and_the_later_takes_over():
     assert any("refmod jinx_look is filled by two REMEMBER: lines" in m and "(SCENE 2) takes over" in m for m in lint)
 
 
-def test_send_outside_a_chunk_or_outside_ref2va_is_an_error():
-    head = SEND_REEL.replace("CAST\n", "SEND: frame 0 to image 5\nCAST\n")
-    with pytest.raises(ValueError, match="inside a SCENE"):
-        ref2va(head)
+def test_send_outside_a_reel_or_outside_ref2va_is_an_error():
     plain = "@h3 ref2va 16:9\nSHOT 5s\nA fox.\nSEND: frame 0 to image 3\n"
     with pytest.raises(ValueError, match="inside a SCENE"):
         ref2va(plain)
@@ -694,6 +691,47 @@ def test_a_chance_on_a_cut_moves_no_pick():
     for segment in range(7):
         then, now = (compile_scene(src, 9, {}, target="h3-base", segment=segment) for src in (rolls, chance))
         assert (now.text, now.picks) == (then.text, then.picks)
+
+
+INPUT_REEL = """@h3 references 16:9 lite
+CAST
+@GIRL: the young woman
+@ROOM: the bedroom
+REMEMBER: frame at 1s as @GIRL
+REMEMBER: every 10th frame as refmod room_today
+END ON: the girl sits down on the bed
+SCENE the bed
+AFTER: the input video
+SHOT 5s: static
+@GIRL lies back on the bed in @ROOM.
+SCENE the window
+SHOT 5s: static
+@GIRL stands at the window.
+"""
+
+
+def test_the_head_remembers_the_input_video_for_every_clip():
+    reel = split_reel(INPUT_REEL)
+    assert reel.uses_input and [s.frames for s in reel.head_sends] == [[[24, 24]], [[0, -1]]]
+    assert reel.send_slots == [1] and reel.send_refmods == ["room_today"]
+    assert any(line.strip() == "GIRL (image 1): the young woman" for line in reel.head)  # her picture now
+    for t in (0, 1):
+        assert reel.ready(t) == {1: {"segment": -1, "frames": [[24, 24]]}}
+        assert reel.refmods_ready(t) == {"room_today": {"segment": -1, "frames": [[0, -1]], "step": 10}}
+
+
+def test_a_scene_after_the_input_video_continues_it_and_opens_on_the_heads_end():
+    reel = split_reel(INPUT_REEL)
+    path, _ = reel.walk()
+    assert [reel.before(t, path) for t in (0, 1)] == [-1, 0] and reel.chain(0, path) == []
+    bed, window = (compile_scene(INPUT_REEL, 1, {}, target="h3-base", segment=t) for t in (0, 1))
+    assert bed.continues == -1 and "The shot opens as the girl sits down on the bed" in bed.text
+    assert bed.scene.duration > 5  # the input video's last frames are pinned in front of it
+    assert window.continues == 0 and 1 in bed.sends and 1 in window.sends
+    fresh = compile_scene(INPUT_REEL.replace("AFTER: the input video\n", ""), 1, {}, target="h3-base")
+    assert fresh.continues is None and "opens as" not in fresh.text and fresh.scene.duration == 5
+    titled = compile_scene(INPUT_REEL.replace("SCENE the window", "SCENE the input video"), 1, {}, target="h3-base")
+    assert any("titled the input video" in i.message for i in titled.lint)
 
 
 def test_a_jump_opens_on_the_handoff_before_it_and_its_line_stays_out_of_the_prose():

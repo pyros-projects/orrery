@@ -15,6 +15,7 @@ import json
 from pathlib import Path
 
 DEFAULT_CHAIN = "h3_context"  # Chain Video's and Load Latent's default latent_path
+INPUT_FILE = "orrery_input.mp4"  # the Orrery Prompt's input video at 24 fps (orrery.film.keep_input): segment -1
 STORES = ("orrery_film", "chain_video")  # Orrery Film's takes, H3 Motion Context's Chain Video
 STILL_WIDTH = 672
 
@@ -66,8 +67,18 @@ def _video(run: Path, clip) -> Path | None:
     return path if path.is_relative_to(run) and path.is_file() else None
 
 
+def input_file(output: Path | str, latent_path: str) -> Path | None:
+    """Where the chain keeps the Orrery Prompt's input video (None for a path outside the output)."""
+    folder = chain_folder(output, latent_path)
+    return folder / INPUT_FILE if folder else None
+
+
 def clip_file(output: Path | str, latent_path: str, index: int) -> Path | None:
-    """The video file of segment `index`'s own clip, or None."""
+    """The video file of segment `index`'s own clip (-1: the input video, the clip before the first), or
+    None."""
+    if index == -1:
+        path = input_file(output, latent_path)
+        return path if path and path.is_file() else None
     active = _active(output, latent_path) if index >= 0 else None
     if active is None or len(active[1]) <= index:
         return None
