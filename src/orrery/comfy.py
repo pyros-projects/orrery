@@ -17,7 +17,6 @@ from orrery import anchors, history, runs, uistate
 from orrery import batch as batches
 from orrery import sweep as sweeps
 from orrery.autolib import needs
-from orrery.cast import oxford
 from orrery.chain import DEFAULT_CHAIN, load, previous_clip
 from orrery.comfy_film import OrreryContinue, OrreryFilm
 from orrery.comfy_llm import ComfyBackend, can_write, llm_config
@@ -727,14 +726,12 @@ def stack_preview(labelled: list[tuple[str, object]]):
     return torch.from_numpy(preview_frames(labelled))
 
 
-def _made(result, packed: bool) -> list[str]:
-    """For the slots: what the gallery pictures of the clip show, from the prompts that made them, as the
-    compiled prompt labels them (packed: in Orrery Refs' order)."""
-    by: dict[str, list[str]] = {}
-    for n, picture in sorted(getattr(result, "pictures", {}).items()):
-        if picture.get("prompt") and (not packed or n in result.refs):
-            by.setdefault(picture["prompt"], []).append(f"<Picture {result.refs.index(n) + 1 if packed else n}>")
-    return [f"{oxford(labels)}: {made}" for made, labels in by.items()]
+def _made(result, packed: bool) -> dict[str, str]:
+    """For the slots: the prompt that made each gallery picture of the clip, by its label in the compiled
+    prompt (packed: in Orrery Refs' order)."""
+    return {f"<Picture {result.refs.index(n) + 1 if packed else n}>": picture["prompt"]
+            for n, picture in sorted(getattr(result, "pictures", {}).items())
+            if picture.get("prompt") and (not packed or n in result.refs)}
 
 
 def load_picture(path: str):

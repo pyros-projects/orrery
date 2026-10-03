@@ -133,14 +133,21 @@ def test_the_gallery_libraries_are_read_only_in_the_tab(home):
 
 
 def test_the_slot_writer_learns_what_the_pictures_show(home):
+    """Each definition slot gets its own pictures' prompt beside it: given a list of pictures and their
+    prompts instead, both models wrote one character's description into the other's slot."""
     from orrery.comfy import _made
-    from orrery.slots import request
+    from orrery.slots import request, slots
 
     gallery(home, [(7, {}, None, 2)])
     c = compile_scene(REEL.format(who=f"{CREATOR}/7"), 1, Home(home).libraries(), packed=True)
-    assert _made(c, packed=True) == ["<Picture 2> and <Picture 3>: a character of seed 7"]
-    assert "<Picture 2> and <Picture 3>: a character of seed 7" in request([], ["who"], "A --who-- waits.",
-                                                                           made=_made(c, True))
+    assert _made(c, packed=True) == {"<Picture 2>": "a character of seed 7", "<Picture 3>": "a character of seed 7"}
+    text = c.text.replace("a stranger", "--who they are--")
+    asked = request([], slots(text), text, made=_made(c, True))
+    assert "<Subject 1> is the one made from this prompt; describe them from it, and from nothing else: " \
+           "«a character of seed 7»" in asked
+    assert "Reference pictures and the prompts" not in asked  # every picture is beside its slot
+    loose = request([], ["what happens"], "A --what happens--.", made={"<Picture 4>": "a red fox"})
+    assert "- <Picture 4>: a red fox" in loose
 
 
 def test_a_slot_in_a_cast_line_keeps_its_commas():

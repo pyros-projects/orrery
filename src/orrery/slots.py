@@ -45,10 +45,12 @@ def fill(text: str, texts: dict[str, str]) -> str:
 
 
 def request(wanted: list[Need], directions: list[str], context: str, frames: int = 0,
-            rewrites: list[tuple[str, str]] = (), made: list[str] = ()) -> str:
+            rewrites: list[tuple[str, str]] = (), made: dict[str, str] | None = None) -> str:
     """The one request of a run: libraries to write, slots to fill, passages to rewrite (`> …`,
-    as (instruction, passage)), and the clip to continue. `made`: what the gallery pictures the CAST
-    names show, as "<Picture 2> and <Picture 3>: the prompt that made them"."""
+    as (instruction, passage)), and the clip to continue. `made`: the prompt that made each gallery
+    picture the CAST names, by its label (`<Picture 2>`); a slot that defines a subject gets its own
+    pictures' prompt beside it, so the model never has to work out which picture is whose."""
+    made = made or {}
     if not directions and not rewrites:
         return prompt_for(wanted)
     keys = {d: f"slot {i}" for i, d in enumerate(directions, start=1)}
@@ -63,14 +65,26 @@ def request(wanted: list[Need], directions: list[str], context: str, frames: int
     replies = ["each list name (without underscores) to a JSON array of its entries"] if wanted else []
     if directions:
         parts.append(f"The prompt, with each part you write marked [slot N]:\n\n{shown.strip()}")
-        if made:
-            parts.append("The reference pictures were made from these prompts, so a part that describes who or what "
-                         "they show draws on what the prompt says about them:\n" + "\n".join(f"- {m}" for m in made))
+        defines = {m.group(2): (m.group(1), re.findall(r"<Picture \d+>", m.group(3)))
+                   for m in re.finditer(r"(<Subject \d+>) = --([^\n]*?[^\s-])--([^\n]*)", context)}
+        loose = [label for label in made if not any(label in pics for _, pics in defines.values())]
+        if loose:
+            parts.append("Reference pictures and the prompts that made them:\n"
+                         + "\n".join(f"- {label}: {made[label]}" for label in loose))
         labels = " Name people and things by their labels (<Subject N>, <Video N> …) as the prompt does." \
             if re.search(r"<(?:Subject|Picture|Video|Audio) \d+>", context) else ""
-        defines = {m.group(2): m.group(1) for m in re.finditer(r"(<Subject \d+>) = --([^\n]*?[^\s-])--", context)}
-        hint = lambda d: (f" (this is {defines[d]}'s definition, as \"{defines[d]} = …\" reads it: a noun phrase in lower "
-                          "case that names who or what it is, no full stop)") if d in defines else ""
+
+        def hint(d: str) -> str:
+            if d not in defines:
+                return ""
+            subject, pics = defines[d]
+            out = (f" (this is {subject}'s definition, as \"{subject} = …\" reads it: a noun phrase in lower case that "
+                   "names who or what it is, no full stop)")
+            prompts = list(dict.fromkeys(made[label] for label in pics if label in made))
+            if prompts:
+                out += (f"\n  {subject} is the one made from this prompt; describe them from it, and from nothing else: "
+                        + " / ".join(f"«{p}»" for p in prompts))
+            return out
         parts.append(f"Parts to write, each as prose that fits where it stands and follows its directions exactly.{labels}\n"
                      + "\n".join(f'- "{keys[d]}": {d}{hint(d)}' for d in directions))
         replies.append('each part ("slot 1", …) to its text')

@@ -1,0 +1,1010 @@
+[
+ {
+  "model": "4b",
+  "n": 2,
+  "seed": 1,
+  "text": "<Subject 1> = a 21-year-old woman of Samoan descent with golden brown skin, hazel eyes, and thick auburn curls pinned up loosely, wearing an ochre velvet coat and a black eyepatch over her left eye of <Picture 2>\n<Subject 2> = a 24-year-old man of Egyptian descent with olive skin, pale grey eyes, and a sandy-brown afro, wearing a ruffled shirt under an ivory brocade waistcoat of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] <Subject 1>, <Subject 2> stand side by side and look into the camera. The camera holds a static shot.\n\noverall_soundscape: Natural foley and ambient sound that fit the scene.\n\nnon_diegetic_music: N/A",
+  "picks": {
+   "seed": 1,
+   "target": "h3-base",
+   "template": "97d353f3354d8130",
+   "preset": null,
+   "edited": false,
+   "params": {},
+   "rng": 2,
+   "format": "lite",
+   "text": "<Subject 1> = a 21-year-old woman of Samoan descent with golden brown skin, hazel eyes, and thick auburn curls pinned up loosely, wearing an ochre velvet coat and a black eyepatch over her left eye of <Picture 2>\n<Subject 2> = a 24-year-old man of Egyptian descent with olive skin, pale grey eyes, and a sandy-brown afro, wearing a ruffled shirt under an ivory brocade waistcoat of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] <Subject 1>, <Subject 2> stand side by side and look into the camera. The camera holds a static shot.\n\noverall_soundscape: Natural foley and ambient sound that fit the scene.\n\nnon_diegetic_music: N/A",
+   "picks": [],
+   "lint": [
+    {
+     "severity": "info",
+     "message": "No SFX lines, so overall_soundscape asks for natural foley and ambience; SFX: lines choose the sounds, SFX: silence means none."
+    }
+   ],
+   "refs": [
+    8,
+    9
+   ],
+   "pictures": {
+    "9": "/home/pyro/repos/comfy-ui/output/orrery/krea2_00030_.png",
+    "8": "/home/pyro/repos/comfy-ui/output/orrery/krea2_00034_.png"
+   },
+   "megapixels": 1.032
+  },
+  "seconds": 3.3,
+  "error": null,
+  "scored": [
+   {
+    "subject": 1,
+    "desc": "a 21-year-old woman of Samoan descent with golden brown skin, hazel eyes, and thick auburn curls pinned up loosely, wearing an ochre velvet coat and a black eyepatch over her left eye",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": false
+    },
+    "score": 0,
+    "swap": true,
+    "unwritten": false,
+    "form": true,
+    "words": 32
+   },
+   {
+    "subject": 2,
+    "desc": "a 24-year-old man of Egyptian descent with olive skin, pale grey eyes, and a sandy-brown afro, wearing a ruffled shirt under an ivory brocade waistcoat",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": false
+    },
+    "score": 0,
+    "swap": true,
+    "unwritten": false,
+    "form": true,
+    "words": 25
+   }
+  ],
+  "cast": [
+   {
+    "name": "krea/09_character_creator/krea2_00030_",
+    "origin": "Egyptian descent, with skin",
+    "gender": "man",
+    "colour": "ivory",
+    "hair": "a full afro",
+    "outfit": "a ruffled shirt under a brocade waistcoat"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00034_",
+    "origin": "Samoan descent, with skin",
+    "gender": "woman",
+    "colour": "ochre",
+    "hair": "thick curls pinned up loosely",
+    "outfit": "a high-necked velvet coat with jet buttons"
+   }
+  ]
+ },
+ {
+  "model": "4b",
+  "n": 2,
+  "seed": 2,
+  "text": "<Subject 1> = 73-year-old woman of Greek descent of <Picture 2>\n<Subject 2> = 58-year-old man of Kenyan descent of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] <Subject 1>, <Subject 2> stand side by side and look into the camera. The camera holds a static shot.\n\noverall_soundscape: Natural foley and ambient sound that fit the scene.\n\nnon_diegetic_music: N/A",
+  "picks": {
+   "seed": 2,
+   "target": "h3-base",
+   "template": "02aa82a43361604a",
+   "preset": null,
+   "edited": false,
+   "params": {},
+   "rng": 2,
+   "format": "lite",
+   "text": "<Subject 1> = 73-year-old woman of Greek descent of <Picture 2>\n<Subject 2> = 58-year-old man of Kenyan descent of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] <Subject 1>, <Subject 2> stand side by side and look into the camera. The camera holds a static shot.\n\noverall_soundscape: Natural foley and ambient sound that fit the scene.\n\nnon_diegetic_music: N/A",
+   "picks": [],
+   "lint": [
+    {
+     "severity": "info",
+     "message": "No SFX lines, so overall_soundscape asks for natural foley and ambience; SFX: lines choose the sounds, SFX: silence means none."
+    }
+   ],
+   "refs": [
+    8,
+    9
+   ],
+   "pictures": {
+    "9": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00065_.png",
+    "8": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00073_.png"
+   },
+   "megapixels": 1.032
+  },
+  "seconds": 2.0,
+  "error": null,
+  "scored": [
+   {
+    "subject": 1,
+    "desc": "73-year-old woman of Greek descent",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": false
+    },
+    "score": 0,
+    "swap": true,
+    "unwritten": false,
+    "form": false,
+    "words": 5
+   },
+   {
+    "subject": 2,
+    "desc": "58-year-old man of Kenyan descent",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": false
+    },
+    "score": 0,
+    "swap": true,
+    "unwritten": false,
+    "form": false,
+    "words": 5
+   }
+  ],
+  "cast": [
+   {
+    "name": "krea/09_character_creator/krea2_00065_",
+    "origin": "Kenyan descent, with skin",
+    "gender": "man",
+    "colour": "crimson",
+    "hair": "long hair tied in a low ponytail",
+    "outfit": "a high-collared techwear coat with glowing seams"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00073_",
+    "origin": "Greek descent, with skin",
+    "gender": "woman",
+    "colour": "sky-blue",
+    "hair": "thick curls pinned up loosely",
+    "outfit": "a down parka with a fur-trimmed hood thrown back"
+   }
+  ]
+ },
+ {
+  "model": "4b",
+  "n": 5,
+  "seed": 1,
+  "text": "<Subject 1> = 73-year-old woman of Greek descent of <Picture 5>\n<Subject 2> = 58-year-old man of Kenyan descent of <Picture 4>\n<Subject 3> = 25-year-old woman of Mexican descent of <Picture 3>\n<Subject 4> = 21-year-old woman of Samoan descent of <Picture 2>\n<Subject 5> = 24-year-old man of Egyptian descent of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] <Subject 1>, <Subject 2>, <Subject 3>, <Subject 4>, <Subject 5> stand side by side and look into the camera. The camera holds a static shot.\n\noverall_soundscape: Natural foley and ambient sound that fit the scene.\n\nnon_diegetic_music: N/A",
+  "picks": {
+   "seed": 1,
+   "target": "h3-base",
+   "template": "49682a22afa7a68b",
+   "preset": null,
+   "edited": false,
+   "params": {},
+   "rng": 2,
+   "format": "lite",
+   "text": "<Subject 1> = 73-year-old woman of Greek descent of <Picture 5>\n<Subject 2> = 58-year-old man of Kenyan descent of <Picture 4>\n<Subject 3> = 25-year-old woman of Mexican descent of <Picture 3>\n<Subject 4> = 21-year-old woman of Samoan descent of <Picture 2>\n<Subject 5> = 24-year-old man of Egyptian descent of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] <Subject 1>, <Subject 2>, <Subject 3>, <Subject 4>, <Subject 5> stand side by side and look into the camera. The camera holds a static shot.\n\noverall_soundscape: Natural foley and ambient sound that fit the scene.\n\nnon_diegetic_music: N/A",
+   "picks": [],
+   "lint": [
+    {
+     "severity": "info",
+     "message": "No SFX lines, so overall_soundscape asks for natural foley and ambience; SFX: lines choose the sounds, SFX: silence means none."
+    }
+   ],
+   "refs": [
+    5,
+    6,
+    7,
+    8,
+    9
+   ],
+   "pictures": {
+    "9": "/home/pyro/repos/comfy-ui/output/orrery/krea2_00030_.png",
+    "8": "/home/pyro/repos/comfy-ui/output/orrery/krea2_00034_.png",
+    "7": "/home/pyro/repos/comfy-ui/output/orrery/krea2_00050_.png",
+    "6": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00065_.png",
+    "5": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00073_.png"
+   },
+   "megapixels": 1.032
+  },
+  "seconds": 2.0,
+  "error": null,
+  "scored": [
+   {
+    "subject": 1,
+    "desc": "73-year-old woman of Greek descent",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": false
+    },
+    "score": 0,
+    "swap": true,
+    "unwritten": false,
+    "form": false,
+    "words": 5
+   },
+   {
+    "subject": 2,
+    "desc": "58-year-old man of Kenyan descent",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": false
+    },
+    "score": 0,
+    "swap": true,
+    "unwritten": false,
+    "form": false,
+    "words": 5
+   },
+   {
+    "subject": 3,
+    "desc": "25-year-old woman of Mexican descent",
+    "fits": {
+     "origin": true,
+     "gender": true,
+     "colour": false,
+     "hair": false,
+     "outfit": false
+    },
+    "score": 2,
+    "swap": false,
+    "unwritten": false,
+    "form": false,
+    "words": 5
+   },
+   {
+    "subject": 4,
+    "desc": "21-year-old woman of Samoan descent",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": false
+    },
+    "score": 0,
+    "swap": true,
+    "unwritten": false,
+    "form": false,
+    "words": 5
+   },
+   {
+    "subject": 5,
+    "desc": "24-year-old man of Egyptian descent",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": false
+    },
+    "score": 0,
+    "swap": true,
+    "unwritten": false,
+    "form": false,
+    "words": 5
+   }
+  ],
+  "cast": [
+   {
+    "name": "krea/09_character_creator/krea2_00030_",
+    "origin": "Egyptian descent, with skin",
+    "gender": "man",
+    "colour": "ivory",
+    "hair": "a full afro",
+    "outfit": "a ruffled shirt under a brocade waistcoat"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00034_",
+    "origin": "Samoan descent, with skin",
+    "gender": "woman",
+    "colour": "ochre",
+    "hair": "thick curls pinned up loosely",
+    "outfit": "a high-necked velvet coat with jet buttons"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00050_",
+    "origin": "Mexican descent, with skin",
+    "gender": "woman",
+    "colour": "rust-red",
+    "hair": "a shaved head",
+    "outfit": "a double-breasted chalk-stripe suit and a loosened tie"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00065_",
+    "origin": "Kenyan descent, with skin",
+    "gender": "man",
+    "colour": "crimson",
+    "hair": "long hair tied in a low ponytail",
+    "outfit": "a high-collared techwear coat with glowing seams"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00073_",
+    "origin": "Greek descent, with skin",
+    "gender": "woman",
+    "colour": "sky-blue",
+    "hair": "thick curls pinned up loosely",
+    "outfit": "a down parka with a fur-trimmed hood thrown back"
+   }
+  ]
+ },
+ {
+  "model": "4b",
+  "n": 5,
+  "seed": 2,
+  "text": "<Subject 1> = a 23-year-old woman of Malagasy descent in a teal surcoat over a hauberk of <Picture 5>\n<Subject 2> = a 19-year-old nonbinary person of Peruvian descent in a chocolate-brown fur-trimmed mantle of <Picture 4>\n<Subject 3> = a 45-year-old woman of Nigerian descent in a burnt-orange sailing jacket of <Picture 3>\n<Subject 4> = a 73-year-old woman of Greek descent in a sky-blue down parka of <Picture 2>\n<Subject 5> = a 58-year-old man of Kenyan descent in a high-collared techwear coat of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] <Subject 1>, <Subject 2>, <Subject 3>, <Subject 4>, <Subject 5> stand side by side and look into the camera. The camera holds a static shot.\n\noverall_soundscape: Natural foley and ambient sound that fit the scene.\n\nnon_diegetic_music: N/A",
+  "picks": {
+   "seed": 2,
+   "target": "h3-base",
+   "template": "00537b54d61da0d3",
+   "preset": null,
+   "edited": false,
+   "params": {},
+   "rng": 2,
+   "format": "lite",
+   "text": "<Subject 1> = a 23-year-old woman of Malagasy descent in a teal surcoat over a hauberk of <Picture 5>\n<Subject 2> = a 19-year-old nonbinary person of Peruvian descent in a chocolate-brown fur-trimmed mantle of <Picture 4>\n<Subject 3> = a 45-year-old woman of Nigerian descent in a burnt-orange sailing jacket of <Picture 3>\n<Subject 4> = a 73-year-old woman of Greek descent in a sky-blue down parka of <Picture 2>\n<Subject 5> = a 58-year-old man of Kenyan descent in a high-collared techwear coat of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] <Subject 1>, <Subject 2>, <Subject 3>, <Subject 4>, <Subject 5> stand side by side and look into the camera. The camera holds a static shot.\n\noverall_soundscape: Natural foley and ambient sound that fit the scene.\n\nnon_diegetic_music: N/A",
+   "picks": [],
+   "lint": [
+    {
+     "severity": "info",
+     "message": "No SFX lines, so overall_soundscape asks for natural foley and ambience; SFX: lines choose the sounds, SFX: silence means none."
+    }
+   ],
+   "refs": [
+    5,
+    6,
+    7,
+    8,
+    9
+   ],
+   "pictures": {
+    "9": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00065_.png",
+    "8": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00073_.png",
+    "7": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00085_.png",
+    "6": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00093_.png",
+    "5": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00095_.png"
+   },
+   "megapixels": 1.032
+  },
+  "seconds": 4.0,
+  "error": null,
+  "scored": [
+   {
+    "subject": 1,
+    "desc": "a 23-year-old woman of Malagasy descent in a teal surcoat over a hauberk",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": false
+    },
+    "score": 0,
+    "swap": true,
+    "unwritten": false,
+    "form": true,
+    "words": 13
+   },
+   {
+    "subject": 2,
+    "desc": "a 19-year-old nonbinary person of Peruvian descent in a chocolate-brown fur-trimmed mantle",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": true
+    },
+    "score": 1,
+    "swap": true,
+    "unwritten": false,
+    "form": true,
+    "words": 12
+   },
+   {
+    "subject": 3,
+    "desc": "a 45-year-old woman of Nigerian descent in a burnt-orange sailing jacket",
+    "fits": {
+     "origin": true,
+     "gender": true,
+     "colour": true,
+     "hair": false,
+     "outfit": true
+    },
+    "score": 4,
+    "swap": false,
+    "unwritten": false,
+    "form": true,
+    "words": 11
+   },
+   {
+    "subject": 4,
+    "desc": "a 73-year-old woman of Greek descent in a sky-blue down parka",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": false
+    },
+    "score": 0,
+    "swap": true,
+    "unwritten": false,
+    "form": true,
+    "words": 11
+   },
+   {
+    "subject": 5,
+    "desc": "a 58-year-old man of Kenyan descent in a high-collared techwear coat",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": false
+    },
+    "score": 0,
+    "swap": true,
+    "unwritten": false,
+    "form": true,
+    "words": 11
+   }
+  ],
+  "cast": [
+   {
+    "name": "krea/09_character_creator/krea2_00065_",
+    "origin": "Kenyan descent, with skin",
+    "gender": "man",
+    "colour": "crimson",
+    "hair": "long hair tied in a low ponytail",
+    "outfit": "a high-collared techwear coat with glowing seams"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00073_",
+    "origin": "Greek descent, with skin",
+    "gender": "woman",
+    "colour": "sky-blue",
+    "hair": "thick curls pinned up loosely",
+    "outfit": "a down parka with a fur-trimmed hood thrown back"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00085_",
+    "origin": "Nigerian descent, with skin",
+    "gender": "woman",
+    "colour": "burnt-orange",
+    "hair": "long hair tied in a low ponytail",
+    "outfit": "a sailing jacket with salt stains on the sleeves"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00093_",
+    "origin": "Peruvian descent, with skin",
+    "gender": "nonbinary person",
+    "colour": "chocolate-brown",
+    "hair": "straight shoulder-length hair parted in the middle",
+    "outfit": "chain mail under a fur-trimmed mantle"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00095_",
+    "origin": "Malagasy descent, with skin",
+    "gender": "woman",
+    "colour": "teal",
+    "hair": "a sleek low bun with a centre part",
+    "outfit": "a surcoat over a hauberk with a coin purse at the waist"
+   }
+  ]
+ },
+ {
+  "model": "8b",
+  "n": 2,
+  "seed": 1,
+  "text": "<Subject 1> = a 24-year-old man of egyptian descent with olive skin and a sandy-brown afro of <Picture 2>\n<Subject 2> = a 21-year-old woman of samoan descent with golden brown skin and thick auburn curls of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] <Subject 1>, <Subject 2> stand side by side and look into the camera. The camera holds a static shot.\n\noverall_soundscape: Natural foley and ambient sound that fit the scene.\n\nnon_diegetic_music: N/A",
+  "picks": {
+   "seed": 1,
+   "target": "h3-base",
+   "template": "97d353f3354d8130",
+   "preset": null,
+   "edited": false,
+   "params": {},
+   "rng": 2,
+   "format": "lite",
+   "text": "<Subject 1> = a 24-year-old man of egyptian descent with olive skin and a sandy-brown afro of <Picture 2>\n<Subject 2> = a 21-year-old woman of samoan descent with golden brown skin and thick auburn curls of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] <Subject 1>, <Subject 2> stand side by side and look into the camera. The camera holds a static shot.\n\noverall_soundscape: Natural foley and ambient sound that fit the scene.\n\nnon_diegetic_music: N/A",
+   "picks": [],
+   "lint": [
+    {
+     "severity": "info",
+     "message": "No SFX lines, so overall_soundscape asks for natural foley and ambience; SFX: lines choose the sounds, SFX: silence means none."
+    }
+   ],
+   "refs": [
+    8,
+    9
+   ],
+   "pictures": {
+    "9": "/home/pyro/repos/comfy-ui/output/orrery/krea2_00030_.png",
+    "8": "/home/pyro/repos/comfy-ui/output/orrery/krea2_00034_.png"
+   },
+   "megapixels": 1.032
+  },
+  "seconds": 6.0,
+  "error": null,
+  "scored": [
+   {
+    "subject": 1,
+    "desc": "a 24-year-old man of egyptian descent with olive skin and a sandy-brown afro",
+    "fits": {
+     "origin": true,
+     "gender": true,
+     "colour": false,
+     "hair": true,
+     "outfit": false
+    },
+    "score": 3,
+    "swap": false,
+    "unwritten": false,
+    "form": true,
+    "words": 13
+   },
+   {
+    "subject": 2,
+    "desc": "a 21-year-old woman of samoan descent with golden brown skin and thick auburn curls",
+    "fits": {
+     "origin": true,
+     "gender": true,
+     "colour": false,
+     "hair": true,
+     "outfit": false
+    },
+    "score": 3,
+    "swap": false,
+    "unwritten": false,
+    "form": true,
+    "words": 14
+   }
+  ],
+  "cast": [
+   {
+    "name": "krea/09_character_creator/krea2_00030_",
+    "origin": "Egyptian descent, with skin",
+    "gender": "man",
+    "colour": "ivory",
+    "hair": "a full afro",
+    "outfit": "a ruffled shirt under a brocade waistcoat"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00034_",
+    "origin": "Samoan descent, with skin",
+    "gender": "woman",
+    "colour": "ochre",
+    "hair": "thick curls pinned up loosely",
+    "outfit": "a high-necked velvet coat with jet buttons"
+   }
+  ]
+ },
+ {
+  "model": "8b",
+  "n": 2,
+  "seed": 2,
+  "text": "<Subject 1> = a 73-year-old greek woman with silver curls and a sky-blue parka of <Picture 2>\n<Subject 2> = a 58-year-old kenyan man in a techwear coat with glowing seams of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] <Subject 1>, <Subject 2> stand side by side and look into the camera. The camera holds a static shot.\n\noverall_soundscape: Natural foley and ambient sound that fit the scene.\n\nnon_diegetic_music: N/A",
+  "picks": {
+   "seed": 2,
+   "target": "h3-base",
+   "template": "02aa82a43361604a",
+   "preset": null,
+   "edited": false,
+   "params": {},
+   "rng": 2,
+   "format": "lite",
+   "text": "<Subject 1> = a 73-year-old greek woman with silver curls and a sky-blue parka of <Picture 2>\n<Subject 2> = a 58-year-old kenyan man in a techwear coat with glowing seams of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] <Subject 1>, <Subject 2> stand side by side and look into the camera. The camera holds a static shot.\n\noverall_soundscape: Natural foley and ambient sound that fit the scene.\n\nnon_diegetic_music: N/A",
+   "picks": [],
+   "lint": [
+    {
+     "severity": "info",
+     "message": "No SFX lines, so overall_soundscape asks for natural foley and ambience; SFX: lines choose the sounds, SFX: silence means none."
+    }
+   ],
+   "refs": [
+    8,
+    9
+   ],
+   "pictures": {
+    "9": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00065_.png",
+    "8": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00073_.png"
+   },
+   "megapixels": 1.032
+  },
+  "seconds": 2.0,
+  "error": null,
+  "scored": [
+   {
+    "subject": 1,
+    "desc": "a 73-year-old greek woman with silver curls and a sky-blue parka",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": false
+    },
+    "score": 0,
+    "swap": true,
+    "unwritten": false,
+    "form": true,
+    "words": 11
+   },
+   {
+    "subject": 2,
+    "desc": "a 58-year-old kenyan man in a techwear coat with glowing seams",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": false
+    },
+    "score": 0,
+    "swap": true,
+    "unwritten": false,
+    "form": true,
+    "words": 11
+   }
+  ],
+  "cast": [
+   {
+    "name": "krea/09_character_creator/krea2_00065_",
+    "origin": "Kenyan descent, with skin",
+    "gender": "man",
+    "colour": "crimson",
+    "hair": "long hair tied in a low ponytail",
+    "outfit": "a high-collared techwear coat with glowing seams"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00073_",
+    "origin": "Greek descent, with skin",
+    "gender": "woman",
+    "colour": "sky-blue",
+    "hair": "thick curls pinned up loosely",
+    "outfit": "a down parka with a fur-trimmed hood thrown back"
+   }
+  ]
+ },
+ {
+  "model": "8b",
+  "n": 5,
+  "seed": 1,
+  "text": "<Subject 1> = a 73-year-old greek woman with silver curls and a sky-blue parka of <Picture 5>\n<Subject 2> = a 58-year-old kenyan man in a techwear coat with glowing seams of <Picture 4>\n<Subject 3> = a 25-year-old mexican woman in a chalk-stripe suit with a crooked nose of <Picture 3>\n<Subject 4> = a 21-year-old samoan woman with an eyepatch and ochre velvet coat of <Picture 2>\n<Subject 5> = a 24-year-old egyptian man with a sandy afro and ivory brocade waistcoat of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] <Subject 1>, <Subject 2>, <Subject 3>, <Subject 4>, <Subject 5> stand side by side and look into the camera. The camera holds a static shot.\n\noverall_soundscape: Natural foley and ambient sound that fit the scene.\n\nnon_diegetic_music: N/A",
+  "picks": {
+   "seed": 1,
+   "target": "h3-base",
+   "template": "49682a22afa7a68b",
+   "preset": null,
+   "edited": false,
+   "params": {},
+   "rng": 2,
+   "format": "lite",
+   "text": "<Subject 1> = a 73-year-old greek woman with silver curls and a sky-blue parka of <Picture 5>\n<Subject 2> = a 58-year-old kenyan man in a techwear coat with glowing seams of <Picture 4>\n<Subject 3> = a 25-year-old mexican woman in a chalk-stripe suit with a crooked nose of <Picture 3>\n<Subject 4> = a 21-year-old samoan woman with an eyepatch and ochre velvet coat of <Picture 2>\n<Subject 5> = a 24-year-old egyptian man with a sandy afro and ivory brocade waistcoat of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] <Subject 1>, <Subject 2>, <Subject 3>, <Subject 4>, <Subject 5> stand side by side and look into the camera. The camera holds a static shot.\n\noverall_soundscape: Natural foley and ambient sound that fit the scene.\n\nnon_diegetic_music: N/A",
+   "picks": [],
+   "lint": [
+    {
+     "severity": "info",
+     "message": "No SFX lines, so overall_soundscape asks for natural foley and ambience; SFX: lines choose the sounds, SFX: silence means none."
+    }
+   ],
+   "refs": [
+    5,
+    6,
+    7,
+    8,
+    9
+   ],
+   "pictures": {
+    "9": "/home/pyro/repos/comfy-ui/output/orrery/krea2_00030_.png",
+    "8": "/home/pyro/repos/comfy-ui/output/orrery/krea2_00034_.png",
+    "7": "/home/pyro/repos/comfy-ui/output/orrery/krea2_00050_.png",
+    "6": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00065_.png",
+    "5": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00073_.png"
+   },
+   "megapixels": 1.032
+  },
+  "seconds": 4.2,
+  "error": null,
+  "scored": [
+   {
+    "subject": 1,
+    "desc": "a 73-year-old greek woman with silver curls and a sky-blue parka",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": false
+    },
+    "score": 0,
+    "swap": true,
+    "unwritten": false,
+    "form": true,
+    "words": 11
+   },
+   {
+    "subject": 2,
+    "desc": "a 58-year-old kenyan man in a techwear coat with glowing seams",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": true
+    },
+    "score": 1,
+    "swap": true,
+    "unwritten": false,
+    "form": true,
+    "words": 11
+   },
+   {
+    "subject": 3,
+    "desc": "a 25-year-old mexican woman in a chalk-stripe suit with a crooked nose",
+    "fits": {
+     "origin": true,
+     "gender": true,
+     "colour": false,
+     "hair": false,
+     "outfit": true
+    },
+    "score": 3,
+    "swap": false,
+    "unwritten": false,
+    "form": true,
+    "words": 12
+   },
+   {
+    "subject": 4,
+    "desc": "a 21-year-old samoan woman with an eyepatch and ochre velvet coat",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": true
+    },
+    "score": 1,
+    "swap": true,
+    "unwritten": false,
+    "form": true,
+    "words": 11
+   },
+   {
+    "subject": 5,
+    "desc": "a 24-year-old egyptian man with a sandy afro and ivory brocade waistcoat",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": false
+    },
+    "score": 0,
+    "swap": true,
+    "unwritten": false,
+    "form": true,
+    "words": 12
+   }
+  ],
+  "cast": [
+   {
+    "name": "krea/09_character_creator/krea2_00030_",
+    "origin": "Egyptian descent, with skin",
+    "gender": "man",
+    "colour": "ivory",
+    "hair": "a full afro",
+    "outfit": "a ruffled shirt under a brocade waistcoat"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00034_",
+    "origin": "Samoan descent, with skin",
+    "gender": "woman",
+    "colour": "ochre",
+    "hair": "thick curls pinned up loosely",
+    "outfit": "a high-necked velvet coat with jet buttons"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00050_",
+    "origin": "Mexican descent, with skin",
+    "gender": "woman",
+    "colour": "rust-red",
+    "hair": "a shaved head",
+    "outfit": "a double-breasted chalk-stripe suit and a loosened tie"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00065_",
+    "origin": "Kenyan descent, with skin",
+    "gender": "man",
+    "colour": "crimson",
+    "hair": "long hair tied in a low ponytail",
+    "outfit": "a high-collared techwear coat with glowing seams"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00073_",
+    "origin": "Greek descent, with skin",
+    "gender": "woman",
+    "colour": "sky-blue",
+    "hair": "thick curls pinned up loosely",
+    "outfit": "a down parka with a fur-trimmed hood thrown back"
+   }
+  ]
+ },
+ {
+  "model": "8b",
+  "n": 5,
+  "seed": 2,
+  "text": "<Subject 1> = a kenyan man in a techwear coat with glowing seams of <Picture 5>\n<Subject 2> = a peruvian nonbinary person in a fur-trimmed mantle and earmuffs of <Picture 4>\n<Subject 3> = a nigerian woman in a salt-stained sailing jacket and glasses of <Picture 3>\n<Subject 4> = a greek woman in a down parka with silver curls of <Picture 2>\n<Subject 5> = a malagasy woman in a teal surcoat over a hauberk of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] <Subject 1>, <Subject 2>, <Subject 3>, <Subject 4>, <Subject 5> stand side by side and look into the camera. The camera holds a static shot.\n\noverall_soundscape: Natural foley and ambient sound that fit the scene.\n\nnon_diegetic_music: N/A",
+  "picks": {
+   "seed": 2,
+   "target": "h3-base",
+   "template": "00537b54d61da0d3",
+   "preset": null,
+   "edited": false,
+   "params": {},
+   "rng": 2,
+   "format": "lite",
+   "text": "<Subject 1> = a kenyan man in a techwear coat with glowing seams of <Picture 5>\n<Subject 2> = a peruvian nonbinary person in a fur-trimmed mantle and earmuffs of <Picture 4>\n<Subject 3> = a nigerian woman in a salt-stained sailing jacket and glasses of <Picture 3>\n<Subject 4> = a greek woman in a down parka with silver curls of <Picture 2>\n<Subject 5> = a malagasy woman in a teal surcoat over a hauberk of <Picture 1>\n\nintegrated_multimodal_description: [Shot 1] <Subject 1>, <Subject 2>, <Subject 3>, <Subject 4>, <Subject 5> stand side by side and look into the camera. The camera holds a static shot.\n\noverall_soundscape: Natural foley and ambient sound that fit the scene.\n\nnon_diegetic_music: N/A",
+   "picks": [],
+   "lint": [
+    {
+     "severity": "info",
+     "message": "No SFX lines, so overall_soundscape asks for natural foley and ambience; SFX: lines choose the sounds, SFX: silence means none."
+    }
+   ],
+   "refs": [
+    5,
+    6,
+    7,
+    8,
+    9
+   ],
+   "pictures": {
+    "9": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00065_.png",
+    "8": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00073_.png",
+    "7": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00085_.png",
+    "6": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00093_.png",
+    "5": "/home/pyro/repos/comfy-ui/output/Krea2/krea2_00095_.png"
+   },
+   "megapixels": 1.032
+  },
+  "seconds": 4.0,
+  "error": null,
+  "scored": [
+   {
+    "subject": 1,
+    "desc": "a kenyan man in a techwear coat with glowing seams",
+    "fits": {
+     "origin": true,
+     "gender": true,
+     "colour": false,
+     "hair": false,
+     "outfit": true
+    },
+    "score": 3,
+    "swap": false,
+    "unwritten": false,
+    "form": true,
+    "words": 10
+   },
+   {
+    "subject": 2,
+    "desc": "a peruvian nonbinary person in a fur-trimmed mantle and earmuffs",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": true
+    },
+    "score": 1,
+    "swap": true,
+    "unwritten": false,
+    "form": true,
+    "words": 10
+   },
+   {
+    "subject": 3,
+    "desc": "a nigerian woman in a salt-stained sailing jacket and glasses",
+    "fits": {
+     "origin": true,
+     "gender": true,
+     "colour": false,
+     "hair": false,
+     "outfit": true
+    },
+    "score": 3,
+    "swap": false,
+    "unwritten": false,
+    "form": true,
+    "words": 10
+   },
+   {
+    "subject": 4,
+    "desc": "a greek woman in a down parka with silver curls",
+    "fits": {
+     "origin": false,
+     "gender": false,
+     "colour": false,
+     "hair": false,
+     "outfit": false
+    },
+    "score": 0,
+    "swap": true,
+    "unwritten": false,
+    "form": true,
+    "words": 10
+   },
+   {
+    "subject": 5,
+    "desc": "a malagasy woman in a teal surcoat over a hauberk",
+    "fits": {
+     "origin": true,
+     "gender": true,
+     "colour": true,
+     "hair": false,
+     "outfit": true
+    },
+    "score": 4,
+    "swap": false,
+    "unwritten": false,
+    "form": true,
+    "words": 10
+   }
+  ],
+  "cast": [
+   {
+    "name": "krea/09_character_creator/krea2_00065_",
+    "origin": "Kenyan descent, with skin",
+    "gender": "man",
+    "colour": "crimson",
+    "hair": "long hair tied in a low ponytail",
+    "outfit": "a high-collared techwear coat with glowing seams"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00073_",
+    "origin": "Greek descent, with skin",
+    "gender": "woman",
+    "colour": "sky-blue",
+    "hair": "thick curls pinned up loosely",
+    "outfit": "a down parka with a fur-trimmed hood thrown back"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00085_",
+    "origin": "Nigerian descent, with skin",
+    "gender": "woman",
+    "colour": "burnt-orange",
+    "hair": "long hair tied in a low ponytail",
+    "outfit": "a sailing jacket with salt stains on the sleeves"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00093_",
+    "origin": "Peruvian descent, with skin",
+    "gender": "nonbinary person",
+    "colour": "chocolate-brown",
+    "hair": "straight shoulder-length hair parted in the middle",
+    "outfit": "chain mail under a fur-trimmed mantle"
+   },
+   {
+    "name": "krea/09_character_creator/krea2_00095_",
+    "origin": "Malagasy descent, with skin",
+    "gender": "woman",
+    "colour": "teal",
+    "hair": "a sleek low bun with a centre part",
+    "outfit": "a surcoat over a hauberk with a coin purse at the waist"
+   }
+  ]
+ }
+]
