@@ -3,7 +3,7 @@ title: "10 · Impossible camera"
 note: "One unbroken camera move that no real camera could make: from a wide view the camera flies through a keyhole, a dewdrop or a bird's pupil and comes out somewhere else entirely, at another scale. H3 reads it as one continuous shot because it is written as one path with a clear before and after, not as a cut."
 tags: [h3, camera]
 ---
-@h3 t2va 16:9
+@h3 text 16:9
 style: live-action, cinematic, photorealistic, one continuous unbroken ten-second shot
 $start = __world/landscapes__
 $portal = __scale/portals__

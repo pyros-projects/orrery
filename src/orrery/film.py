@@ -14,6 +14,7 @@ Rendering segment N again makes the new take active and drops the takes after it
 another one; segment 0 starts a new run. Older takes and runs stay on disk.
 """
 
+import itertools
 import json
 import os
 import time
@@ -50,20 +51,28 @@ def _active(root: Path) -> tuple[Path | None, dict]:
         return None, {"clips": []}
 
 
+def _continues(clips: list, take: int, segment: int) -> bool:
+    """Whether the take of segment `take` continues segment `segment`, itself or through the ones between."""
+    while take is not None and take > segment:
+        take = clips[take].get("continues", take - 1)
+    return take == segment
+
+
 def _before(latent_path: str, segment: int, run: Path | None, clips: list) -> None:
     if run is None or len(clips) < segment:
-        raise FilmError(f"segment {segment} continues segment {segment - 1}, which the reel {latent_path!r} "
-                        f"does not hold yet: render segment {len(clips)} first, or Restart the reel.")
+        raise FilmError(f"clip {segment + 1} continues clip {segment}, which the reel {latent_path!r} does not hold "
+                        f"yet: render clip {len(clips) + 1} first (segment {len(clips)}), or Restart the reel.")
 
 
-def previous_tail(output: Path | str, latent_path: str, segment: int) -> Tail:
-    """The tail of the take segment `segment` continues: segment - 1's in the active run."""
+def previous_tail(output: Path | str, latent_path: str, segment: int, continues: int | None = None) -> Tail:
+    """The tail of the take segment `segment` continues: `continues`' in the active run (a scene's AFTER:),
+    else segment - 1's."""
     run, state = _active(_root(output, latent_path))
     clips = state.get("clips", [])
     _before(latent_path, segment, run, clips)
     import numpy as np
 
-    take = run / clips[segment - 1]["folder"]
+    take = run / clips[segment - 1 if continues is None else continues]["folder"]
     with np.load(take / "tail.npz") as stored:
         video, audio = stored["video"], stored["audio"]
     meta = json.loads((take / "meta.json").read_text(encoding="utf-8"))
@@ -71,10 +80,12 @@ def previous_tail(output: Path | str, latent_path: str, segment: int) -> Tail:
 
 
 def save_take(output: Path | str, latent_path: str, segment: int, frames: Sequence, sound, sample_rate: int,
-              tail: Tail, meta: dict) -> Path:
+              tail: Tail, meta: dict, continues: int | None = -1, test: bool = False) -> Path:
     """Keep a clip as segment `segment`'s take and join the film again; returns the take's folder.
     `frames`: the clip's frames as uint8 [height, width, 3], one by one (anything with len() that
-    iterates); `sound`: float32 [channels, samples]."""
+    iterates); `sound`: float32 [channels, samples]. `continues`: the segment it continues (-1: the one
+    before; None: none, it started afresh). The takes after it stay as long as none of them continues it.
+    A `test` take (a test scene's) is kept, and the film is joined without it."""
     import numpy as np
 
     root = _root(output, latent_path)
@@ -93,10 +104,10 @@ def save_take(output: Path | str, latent_path: str, segment: int, frames: Sequen
         _before(latent_path, segment, run, clips)
         was = state.get("settings") or settings
         if was[:2] != settings[:2]:
-            raise FilmError(f"segment {segment} is {width}×{height}, the reel's segments before it "
+            raise FilmError(f"clip {segment + 1} is {width}×{height}, the reel's clips before it "
                             f"{was[0]}×{was[1]}: a reel keeps one size (Restart it to change).")
         if was[3:] != settings[3:]:
-            raise FilmError(f"segment {segment}'s sound is {sample_rate} Hz × {sound.shape[0]}, the reel's "
+            raise FilmError(f"clip {segment + 1}'s sound is {sample_rate} Hz × {sound.shape[0]}, the reel's "
                             f"{was[3]} Hz × {was[4]}.")
     name = f"seg_{segment:04d}_{uuid.uuid4().hex[:8]}"
     tmp = run / f".{name}.tmp"
@@ -110,7 +121,10 @@ def save_take(output: Path | str, latent_path: str, segment: int, frames: Sequen
                                                "created": time.strftime("%Y-%m-%dT%H:%M:%S")}, indent=2),
                                    encoding="utf-8")
     os.replace(tmp, run / name)
-    clips = [*clips[:segment], {"folder": name, "frames": count}]
+    continues = segment - 1 if continues == -1 else continues
+    later = list(itertools.takewhile(lambda c: not _continues(clips, c, segment), range(segment + 1, len(clips))))
+    clips = [*clips[:segment], {"folder": name, "frames": count, "continues": continues, **({"test": True} if test else {})},
+             *(clips[c] for c in later)]
     write_atomic(run / "clips.json", json.dumps({"settings": settings, "clips": clips}, indent=2))
     write_atomic(root / "active.json", json.dumps({"run": run.name}))
     _join(run, clips, int(sample_rate))
@@ -118,7 +132,9 @@ def save_take(output: Path | str, latent_path: str, segment: int, frames: Sequen
 
 
 def film_file(take: Path) -> Path:
-    return take.parent / "film.mp4"
+    """The film the take belongs to; the take itself while the film has only test takes."""
+    film = take.parent / "film.mp4"
+    return film if film.exists() else take / "video.mp4"
 
 
 def _layout(sound) -> str:
@@ -165,9 +181,15 @@ def _chain(first, rest):
 
 
 def _join(run: Path, clips: list[dict], sample_rate: int) -> None:
-    """film.mp4: the takes' video stream-copied one after another, their sound joined and encoded once."""
+    """film.mp4: the takes' video stream-copied one after another, their sound joined and encoded once;
+    test takes are left out (none left: no film)."""
     import av
     import numpy as np
+
+    clips = [c for c in clips if not c.get("test")]
+    if not clips:
+        (run / "film.mp4").unlink(missing_ok=True)
+        return
 
     sound = np.concatenate([np.load(run / c["folder"] / "audio.npy") for c in clips], axis=1)
     tmp = run / "film.tmp.mp4"

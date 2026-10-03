@@ -9,10 +9,15 @@
 A member is a memory: a description (head noun phrase, then details after the first comma)
 plus where it comes from (`image N`, `video N`, `video N + audio`, `refmod NAME`). An image and a
 RefMod can carry a strength and a start (`refmod salon_canon at 0.5 from 35%`, `image 1 at 0.5`), and
-`global` keeps the member in every clip, not only in the clips that name it. In ref2va the
+`always` (`global`, the earlier word) keeps the member in every clip, not only in the clips that name
+it. In `@h3 references` (ref2va) the
 compiler turns members into <Subject N> labels and sources into the labels the MiniMax H3
 Reference to Video node gives its inputs; in the other modes names expand to descriptions,
 which is also how RefMods bind to a prompt.
+
+A member may be written `@JINX` anywhere (in the CAST, the prose, a voice, SET:), as Fountain forces
+a character with `@`; `bare` writes it `JINX` before the screenplay is read. `@name(0.8)` stays the
+LoRA shortcut for every name that is not a member's (orrery.loras.long_form asks `names`).
 """
 
 import re
@@ -54,6 +59,30 @@ KEEP_WHOLE = {
 _KEEP = re.compile(r"^([A-Za-z_ -]+?)\s*(?:[-–—:,]\s*(.*))?$")
 _BRACKET = re.compile(r"\[(image|video|audio)\s+(\d+)(\s+audio)?\]", re.IGNORECASE)
 _DETAIL = re.compile(r"\s+(?:with|wearing|in|who|whose|that|holding|carrying|facing|dressed)\s", re.IGNORECASE)
+_ENDS_CAST = re.compile(r"^(?:SHOT|SCENE|CHUNK)\b")
+
+
+def names(text: str) -> list[str]:
+    """The names the CAST blocks of a template give their members, written with `@` or without."""
+    out, in_cast = [], False
+    for raw in text.splitlines():
+        line = raw.strip()
+        if line == "CAST":
+            in_cast = True
+        elif _ENDS_CAST.match(line):
+            in_cast = False
+        elif in_cast and (m := MEMBER.match(line.removeprefix("@"))) and m.group(1).strip() not in out:
+            out.append(m.group(1).strip())
+    return out
+
+
+def bare(text: str) -> str:
+    """The template with every `@NAME` of a CAST member written `NAME`."""
+    found = names(text) if "@" in text else []
+    if not found:
+        return text
+    member = "|".join(re.escape(n) for n in sorted(found, key=len, reverse=True))
+    return re.sub(rf"(?<![\w@<\\])@({member})(?![\w-])", r"\1", text)
 
 
 @dataclass(frozen=True)
@@ -97,11 +126,11 @@ def parse_member(name: str, spec: str, text: str) -> Member:
     member = Member(name.strip(), head.strip(), f", {rest.strip()}" if rest.strip() else "")
     for raw in filter(None, (s.strip() for s in (spec or "").split(","))):
         m = _SOURCE.match(raw)
-        if raw.lower() == "global":
+        if raw.lower() in ("always", "global"):  # global: the earlier word
             member.everywhere = True
         elif not m:
             member.problems.append(f"{member.name}: \"{raw}\" is not a reference orrery knows (image N, "
-                                   "video N, video N + audio, audio N, refmod NAME, global), so it is left out.")
+                                   "video N, video N + audio, audio N, refmod NAME, always), so it is left out.")
         else:
             refmod = m.group(7)
             at, start, end = (m.group(8), m.group(9), m.group(10)) if refmod else (m.group(4), m.group(5), m.group(6))

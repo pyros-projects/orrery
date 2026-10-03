@@ -1,9 +1,9 @@
 ---
 title: "Evolution"
-note: "A creature that evolves one trait at a time, for ever. Each clip is a generation: one of its body, skin, limbs or eyes changes ($change) and the rest stays as it was ($body~1 …). Now and then (6%) it spins a cocoon and climbs out as something entirely new. The world is rolled once per seed (dial $world). GOTO lines steer it; the traits come with the preset (@lib). Run (Instant) plays it until you stop."
+note: "A creature that evolves one trait at a time, for ever. Each clip is a generation: one of its body, skin, limbs or eyes changes ($change) and the rest stays as it was ($body[-1] …). Now and then (6%) it spins a cocoon and climbs out as something entirely new. The world is rolled once per seed (dial $world). CUT TO: lines steer it; the traits come with the preset (@lib). Run (Instant) plays it until you stop."
 tags: [loops, h3, reel, goto, nature, motion_context]
 ---
-@h3 t2va 16:9
+@h3 text 16:9
 context: 22
 style: nature documentary, macro photography, soft natural light, one continuous shot
 $world = {a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}
@@ -31,7 +31,7 @@ MUSIC: a slow, curious marimba at a soft volume
   eyes on long stalks
   no eyes at all, only quivering feelers
 
-CHUNK the origin
+SCENE the origin
 $body = __evo_bodies__
 $skin = __evo_skins__
 $limbs = __evo_limbs__
@@ -39,27 +39,27 @@ $eyes = __evo_eyes__
 SHOT 8s: push in, slow
 On $world, a small creature stirs for the first time: it has $body, $skin, $limbs and $eyes. It tests its limbs and creeps forward into the light.
 SFX: a soft wet click; the faint rustle of its first steps
-HANDOFF: the creature pauses, perfectly still
+END ON: the creature pauses, perfectly still
 
-CHUNK the generations
+SCENE the generations
 $change = {body|skin|limbs|eyes}
-$body = {? $change[body]: __evo_bodies__|$body~1}
-$skin = {? $change[skin]: __evo_skins__|$skin~1}
-$limbs = {? $change[limbs]: __evo_limbs__|$limbs~1}
-$eyes = {? $change[eyes]: __evo_eyes__|$eyes~1}
+$body = {IF $change is body: __evo_bodies__|$body[-1]}
+$skin = {IF $change is skin: __evo_skins__|$skin[-1]}
+$limbs = {IF $change is limbs: __evo_limbs__|$limbs[-1]}
+$eyes = {IF $change is eyes: __evo_eyes__|$eyes[-1]}
 $leap = {6% leap}
 SHOT 8s: static
 A generation later, on $world, the creature has changed: it has $body, $skin, $limbs and $eyes.
-? $change[body]: It stretches its new body slowly, as if getting used to its size.
-? $change[skin]: The light plays over its new skin as it turns.
-? $change[limbs]: It tries its new limbs clumsily, then with growing confidence.
-? $change[eyes]: It blinks and looks around as if seeing for the first time.
+IF $change is body: It stretches its new body slowly, as if getting used to its size.
+IF $change is skin: The light plays over its new skin as it turns.
+IF $change is limbs: It tries its new limbs clumsily, then with growing confidence.
+IF $change is eyes: It blinks and looks around as if seeing for the first time.
 SFX: soft rustling; a quiet chirp
-HANDOFF: the creature pauses, perfectly still
-? $leap[leap]: GOTO: the metamorphosis
-GOTO: the generations
+END ON: the creature pauses, perfectly still
+IF $leap is leap: CUT TO: the metamorphosis
+CUT TO: the generations
 
-CHUNK the metamorphosis
+SCENE the metamorphosis
 $body = __evo_bodies__
 $skin = __evo_skins__
 $limbs = __evo_limbs__
@@ -67,5 +67,5 @@ $eyes = __evo_eyes__
 SHOT 10s: push in, slow
 On $world, the creature curls up and spins itself into a glowing cocoon. The cocoon trembles and splits, and out climbs something new: it has $body, $skin, $limbs and $eyes.
 SFX: a low hum rising; silk tearing slowly
-HANDOFF: the new creature pauses, perfectly still
-GOTO: the generations
+END ON: the new creature pauses, perfectly still
+CUT TO: the generations

@@ -245,7 +245,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                wired: int | None = None, chain: str = DEFAULT_CHAIN,
                keep: bool = False, sweep: str = "",
                continued: bool = False, sizes: tuple[Size, Size] = (None, None),
-               refmodded: bool = True) -> tuple[str, str, int, int, int, int, list, int, int]:
+               refmodded: bool = True, standing: frozenset[int] = frozenset()) -> tuple[str, str, int, int, int, int, list, int, int]:
     """`frames`: the previous clip's stills, which the model sees when it writes `--…--` slots.
     `packed`: Orrery Refs routes the images per clip; `wired`: the reference images Reference to
     Video has (both from the graph, see `wiring`). `chain`: the Motion Context chain SEND: reads;
@@ -304,7 +304,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
             lint = [{"severity": "warn", "message": w} for w in result.warnings]
         else:
             result = compile_scene(source, seed, h.libraries(), h.weights(), target=target, segment=segment,
-                                   packed=packed, held=anchors.stored(h) if keep else frozenset(), cell=cell)
+                                   packed=packed, held=anchors.stored(h) if keep else frozenset(), cell=cell,
+                                   standing=standing)
             lint = [{"severity": i.severity, "message": i.message} for i in result.lint]
             needed = len(result.refs) if packed else max(image_slots(result.scene), default=0)
             if wired is not None and wired < needed:
@@ -357,8 +358,9 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     lint = [{"severity": "info", "message": n} for n in notes] + lint
     if (plan or grid) and not sweep:
         what = "LoRA sweep" if not grid else "Grid" if not plan else "LoRA sweep and grid"
+        on = " on this clip (the segment holds still)" if getattr(result, "chunks", 0) else ""
         lint.append({"severity": "info", "message": f"{what}: {max(len(plan), 1) * cells} runs ({planned}); "
-                                                     "Generate runs them all, Run takes the first."})
+                                                     f"Generate runs them all{on}, Run takes the first."})
     stack: list = []
     if target != "text" and result.loras:
         stack, warnings = lora_stack(result.loras, lora_files())
@@ -404,6 +406,9 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
             length = h3_length(result.scene.duration)
         if result.chunks:
             data["segment"], data["chunks"], data["segments"] = result.segment, result.chunks, result.segments
+            data["continues"] = result.continues
+            if result.test:
+                data["test"] = True
             context = DEFAULT_CONTEXT if result.scene.context is None else result.scene.context
             data["chain"], data["context"] = chain, context
             if continued and context != CONTEXT:
@@ -512,9 +517,9 @@ class OrreryPrompt:
     OUTPUT_TOOLTIPS = ("", "", "", "From `: w…` in the template, else the @h3 ratio, else 1024.",
                        "From `: h…` in the template, else the @h3 ratio, else 1024.",
                        ("Frames at 24 fps for the MiniMax H3 nodes' length input: the sum of the SHOT "
-                        "durations (in a reel: the chunk's, plus the pinned context from the second "
-                        "chunk on), snapped up to H3's 17k+5 grid (124 without SHOTs)."),
-                       ("The LORA: lines (global, plus the chunk's in a reel) as a LORA_STACK for any "
+                        "durations (in a reel: the scene's, plus the pinned context from the second "
+                        "clip on), snapped up to H3's 17k+5 grid (124 without SHOTs)."),
+                       ("The LORA: lines (the head's, plus the scene's in a reel) as a LORA_STACK for any "
                         "loader with a lora_stack input (LoraManager, Efficiency, Easy-Use …)."),
                        ("The canvas area: `0.6MP` from the @h3 line, else width × height, for resolution and "
                         "scale nodes that take megapixels."))
@@ -539,9 +544,9 @@ class OrreryPrompt:
                 "clip": ("CLIP", {"tooltip": "Optional: a text encoder that can write (Krea 2's Qwen3-VL) "
                                              "as the language model, in place of the one in orrery's settings."}),
                 "segment": ("INT", {"default": 0, "min": 0, "max": 99999, "control_after_generate": True,
-                                    "tooltip": "The reel's clip to write, from 0. With increment, every queued "
-                                               "run plays the next clip, which Orrery Continue chains to the one "
-                                               "before. Plain screenplays ignore it."}),
+                                    "tooltip": "The reel's clip to write, counted from 0 here (0 is clip 1). With "
+                                               "increment, every queued run plays the next clip, which Orrery "
+                                               "Continue chains to the one before. Plain screenplays ignore it."}),
                 "first_frame": ("IMAGE", {"tooltip": (
                     "Optional: the picture the clip starts on (wire it into the H3 node's first_frame too). Width and "
                     "height then take its shape at the header's megapixels, so H3 does not stretch it.")}),
@@ -570,19 +575,19 @@ class OrreryPrompt:
             latent_path=DEFAULT_CHAIN, sweep="", unique_id=None, extra_pnginfo=None, prompt=None,
             first_frame=None, last_frame=None):
         stills = _previous(latent_path, segment)
-        packed, wired, keep = wiring(prompt, unique_id)
+        packed, wired, keep, standing = wiring(prompt, unique_id)
         try:
             outputs = run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
                                  params, segment, clip, stills, packed, wired, latent_path or DEFAULT_CHAIN, keep,
                                  sweep, continued(prompt, unique_id), (_size(first_frame), _size(last_frame)),
-                                 reads_picks(prompt, unique_id, "OrreryRefMods"))
+                                 reads_picks(prompt, unique_id, "OrreryRefMods"), standing)
             data = json.loads(outputs[1])
             h = resolve_home(home or None)
             history.record(h, data)
             if uistate.load_ui(h)["log_prompts"]:
                 print("\n".join(history.log_lines(data)))
             if "sends" in data and not packed:
-                raise ValueError("This reel SENDs frames as reference images, which Orrery Refs fetches: wire this "
+                raise ValueError("This reel REMEMBERs frames as reference images, which Orrery Refs fetches: wire this "
                                  "node's picks into an Orrery Refs, and its ref outputs into Reference to Video.")
             if (prompt_id := runs.current_prompt()) and unique_id is not None:
                 runs.remember(prompt_id, unique_id, outputs[1])  # for Generate: Save nodes log to the galaxy
@@ -712,25 +717,27 @@ def continued(prompt: dict | None, unique_id) -> bool:
                for n in prompt.values())
 
 
-def wiring(prompt: dict | None, unique_id) -> tuple[bool, int | None, bool]:
+def wiring(prompt: dict | None, unique_id) -> tuple[bool, int | None, bool, frozenset[int]]:
     """What the node's graph says (R2): whether an Orrery Refs reads its picks (then the images are
     packed per clip), how many reference images the Reference to Video node its text reaches
-    (directly or through a few text nodes) has wired (None when there is none), and whether that
-    Orrery Refs has keep_sent on."""
+    (directly or through a few text nodes) has wired (None when there is none), whether that
+    Orrery Refs has keep_sent on, and which of its image_N have a picture wired in."""
     if not prompt or unique_id is None:
-        return False, None, False
+        return False, None, False, frozenset()
     uid = str(unique_id)
     link = lambda v: (str(v[0]), v[1]) if isinstance(v, list) and len(v) == 2 else None
     readers = [n for n in prompt.values()
                if n.get("class_type") == "OrreryRefs" and link(n.get("inputs", {}).get("picks")) == (uid, 1)]
     packed, keep = bool(readers), any(n.get("inputs", {}).get("keep_sent") is True for n in readers)
+    standing = frozenset(int(k.removeprefix("image_")) for n in readers for k, v in n.get("inputs", {}).items()
+                         if k.startswith("image_") and k.removeprefix("image_").isdigit() and link(v))
     reach = {(uid, 0)}
     for _ in range(3):  # through Text Concatenate and friends
         reach |= {(str(nid), i) for nid, n in prompt.items() if n.get("class_type") != REF2VA
                   for v in n.get("inputs", {}).values() if link(v) in reach for i in range(4)}
     wired = [sum(1 for k, v in n["inputs"].items() if "ref_image" in k and link(v))
              for n in prompt.values() if n.get("class_type") == REF2VA and link(n.get("inputs", {}).get("prompt")) in reach]
-    return packed, (max(wired) if wired else None), keep
+    return packed, (max(wired) if wired else None), keep, standing
 
 
 class OrreryRefs:
@@ -758,8 +765,8 @@ class OrreryRefs:
         return {"required": {"picks": ("STRING", {"forceInput": True})},
                 "optional": {**{f"image_{i}": ("IMAGE",) for i in range(1, cls.SLOTS + 1)},
                              "keep_sent": ("BOOLEAN", {"default": False, "tooltip": (
-                                 "On: every SEND: image with a stored anchor (the frames last fetched for it) uses that "
-                                 "anchor from segment 0 and for the whole run, so a character you liked stays. "
+                                 "On: every remembered image with a stored anchor (the frames last fetched for it) uses "
+                                 "that anchor from clip 1 and for the whole run, so a character you liked stays. "
                                  "Off: fresh frames from this run's chain, which replace the anchors.")})},
                 "hidden": {"prompt": "PROMPT", "unique_id": "UNIQUE_ID"}}
 
@@ -772,10 +779,11 @@ class OrreryRefs:
     def route(self, picks, prompt=None, unique_id=None, keep_sent=False, **images):
         data = json.loads(picks or "{}")
         refs, sends = data.get("refs"), data.get("sends") or {}
-        clash = sorted(n for n in sends.get("slots", []) if images.get(f"image_{n}") is not None)
-        if clash:
-            raise ValueError(f"image {clash[0]} is wired into Orrery Refs and also filled by a SEND: line; "
-                             "unwire it, or send to an image nothing is wired into.")
+        for n in sorted(n for n in sends.get("slots", []) if images.get(f"image_{n}") is not None):
+            sent = sends.get("ready", {}).get(str(n), {})
+            print(f"[orrery] warn: image {n} is wired into Orrery Refs and kept by a REMEMBER: (SEND:) line too: "
+                  + (f"the frames from clip {sent['segment'] + 1} replace the wired picture." if "segment" in sent
+                     else "the wired picture until those frames exist."))
         if refs is None:  # nothing packed: pass the images through as wired
             order = [images.get(f"image_{i}") for i in range(1, self.SLOTS + 1)]
         else:
@@ -837,14 +845,14 @@ class OrreryRefs:
         segment = send["segment"]
         path = chain.clip_file(Path(folder_paths.get_output_directory()), latent_path, segment)
         if path is None:
-            raise ValueError(f"image {n} is sent from segment {segment}, but the chain {latent_path!r} has no clip for "
-                             f"segment {segment}: render the reel from that chunk on, or check the Orrery Prompt's "
+            raise ValueError(f"image {n} is sent from clip {segment + 1}, but the chain {latent_path!r} has no clip "
+                             f"{segment + 1}: render the reel from that scene on, or check the Orrery Prompt's "
                              "latent_path.")
         batch, dropped = chain.frames(path, send["frames"], send.get("step", 1))
         if dropped:
             many = len(dropped) > 1
-            print(f"[orrery] SEND to image {n}: frame{'s' if many else ''} {', '.join(map(str, dropped))} "
-                  f"{'are' if many else 'is'} not in segment {segment}'s clip, so "
+            print(f"[orrery] REMEMBER as image {n}: frame{'s' if many else ''} {', '.join(map(str, dropped))} "
+                  f"{'are' if many else 'is'} not in clip {segment + 1}, so "
                   f"{'they are' if many else 'it is'} left out.")
         return batch
 
@@ -856,7 +864,7 @@ class OrreryRefs:
                 continue
             if REF2VA in cls._readers(prompt, unique_id, k):
                 print(f"[orrery] ref_{k + 1} carries {img.shape[0]} frames, but Reference to Video reads only the first "
-                      "image of a reference; send several stills to several images for ref2va.")
+                      "image of a reference; send several stills to several images for @h3 references.")
 
 
 NODE_CLASS_MAPPINGS = {"OrreryPrompt": OrreryPrompt, "OrreryLog": OrreryLog, "OrreryRefs": OrreryRefs,

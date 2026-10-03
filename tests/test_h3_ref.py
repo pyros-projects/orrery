@@ -331,6 +331,66 @@ def test_a_clip_gets_the_refmods_of_the_members_it_names_and_the_global_ones():
     assert [m["name"] for m in h3(quiet).refmods] == ["garden_canon"]  # lowercase prose names no member
 
 
+AT_CAST = """@h3 references 16:9
+CAST
+@KEEPER (image 1, refmod keeper_canon): an old lighthouse keeper, in a yellow raincoat
+@OLD MAN: a fisherman with a white beard
+SHOT 5s: static
+@KEEPER climbs the stairs while @OLD MAN watches. A note to @keeper@example.org.
+@KEEPER (whispering): The light is out.
+SFX: rain on the glass
+LORA: @style(0.8)
+"""
+
+
+def test_a_member_written_with_at_is_the_member_without_it():
+    plain = AT_CAST.replace("@KEEPER", "KEEPER").replace("@OLD MAN", "OLD MAN")
+    then, now = h3(plain), h3(AT_CAST)
+    assert (now.text, now.refmods, [i.message for i in now.lint]) == (then.text, then.refmods, [i.message for i in then.lint])
+    assert "@keeper@example.org" in now.text and "<lora:style:0.8>" in now.loras  # not members: as written
+
+
+def test_a_members_name_is_no_lora_shortcut():
+    from orrery.loras import long_form
+
+    text = AT_CAST + "SET: @KEEPER(0.6)\n"
+    assert "SET: @KEEPER(0.6)" in long_form(text) and "<lora:style:0.8>" in long_form(text)
+    assert long_form("a cat @KEEPER(0.6)") == "a cat <lora:KEEPER:0.6>"  # no CAST: a LoRA, as before
+
+
+def dialed(sets: str):
+    """(the keeper's RefMod's (strength, from), his picture's (strength, from) or None, the lint) with these SET lines."""
+    r = h3(AT_CAST.replace("SHOT 5s: static", sets + "\nSHOT 5s: static"))
+    mod = next(m for m in r.refmods if m["name"] == "keeper_canon")
+    pic = next(((i["strength"], i["from"]) for i in r.images if i["image"] == 1), None)
+    return (mod["strength"], mod["from"]), pic, [i.message for i in r.lint]
+
+
+def test_set_by_member_turns_all_its_references_or_the_ones_its_words_choose():
+    assert dialed("SET: @KEEPER(0.6)")[:2] == ((0.6, 0.0), (0.6, 0.0))
+    assert dialed("SET: KEEPER(0.6, refmods)")[:2] == ((0.6, 0.0), None)
+    assert dialed("SET: @KEEPER(0.3, image 1)")[:2] == ((1.0, 0.0), (0.3, 0.0))
+    assert dialed("SET: @KEEPER(1, 35%, refmod keeper_canon)")[:2] == ((1.0, 0.35), None)
+    assert dialed("SET: @KEEPER(0.5, images)")[:2] == ((1.0, 0.0), (0.5, 0.0))
+
+
+def test_the_later_set_wins_and_a_word_that_matches_nothing_is_lint():
+    assert dialed("SET: @KEEPER(0.6)\nSET: image_1(1)")[:2] == ((0.6, 0.0), (1.0, 0.0))
+    assert dialed("SET: image_1(1)\nSET: @KEEPER(0.6)")[:2] == ((0.6, 0.0), (0.6, 0.0))
+    *_, lint = dialed("SET: @KEEPER(0.3, image 3)")
+    assert any("KEEPER has no image 3 (image 1, refmod keeper_canon)" in m for m in lint)
+
+
+def test_set_refmods_is_the_refmod_default_and_a_member_may_be_set_before_its_cast():
+    assert dialed("SET: refmods(0.8, 40%)")[0] == (0.8, 0.4)
+    early = h3(AT_CAST.replace("CAST\n", "SET: @KEEPER(0.4, refmods)\nCAST\n", 1))
+    assert next(m for m in early.refmods if m["name"] == "keeper_canon")["strength"] == 0.4
+
+
+def test_always_keeps_a_member_in_as_global_did():
+    assert h3(REFMOD_TOUR.replace(", global", ", always")).refmods == h3(REFMOD_TOUR).refmods
+
+
 def test_refmod_syntax_problems_are_lint_not_failures():
     src = REFMOD_TOUR.replace("refmod hall_canon", "refmod hall_canon from 150%").replace(", global", ", everywhere")
     lint = [i.message for i in h3(src).lint]
@@ -345,7 +405,7 @@ SHOT 5s
 MAYA waves.
 SFX: wind
 """
-    assert any("ref2va" in i.message for i in h3(src).lint)
+    assert any("@h3 references" in i.message for i in h3(src).lint)
 
 
 def test_word_count_is_linted_for_generation():

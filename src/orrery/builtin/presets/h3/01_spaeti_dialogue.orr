@@ -3,7 +3,7 @@ title: "Späti at 2 a.m. (German dialogue)"
 note: "Two speakers in one shot, speaking German. Tests lip sync, stable speaker IDs and language tags. The cashier's answer is rolled, and so is the animal asleep by the till."
 tags: [h3, dialogue, german]
 ---
-@h3 t2va 16:9
+@h3 text 16:9
 style: live-action, cinematic, handheld night footage
 $pet = __creature[mammal]__
 

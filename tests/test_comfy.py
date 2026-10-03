@@ -658,17 +658,27 @@ def test_orrery_refs_fills_a_sent_image_with_its_frames(tmp_path, monkeypatch):
     assert out[0] == "img1" and out[1].label == "clip_00002:[[0, 0]]" and out[2] is None
 
 
-def test_orrery_refs_refuses_a_slot_both_wired_and_sent(tmp_path, monkeypatch):
+def test_the_graph_says_which_images_are_wired_into_orrery_refs():
+    from orrery.comfy import wiring
+    graph = {"1": {"class_type": "OrreryPrompt", "inputs": {}},
+             "12": {"class_type": "OrreryRefs", "inputs": {"picks": ["1", 1], "image_1": ["5", 0], "image_3": ["6", 0],
+                                                           "keep_sent": False}}}
+    assert wiring(graph, "1") == (True, None, False, frozenset({1, 3}))
+
+
+def test_a_slot_both_wired_and_sent_is_the_wired_picture_until_the_frames_exist(tmp_path, monkeypatch, capsys):
     from orrery.comfy import OrreryRefs
     send_chain(tmp_path, monkeypatch)
-    with pytest.raises(ValueError, match="image 3"):
-        OrreryRefs().route(sends({}, refs=[1]), image_1="img1", image_3="img3")
+    out = OrreryRefs().route(sends({}, refs=[1, 3]), image_1="img1", image_3="img3")
+    assert out[:2] == ("img1", "img3") and "the wired picture until those frames exist" in capsys.readouterr().out
+    out = OrreryRefs().route(sends({"3": {"segment": 1, "frames": [[0, 0]]}}), image_1="img1", image_3="img3")
+    assert out[1].label == "clip_00002:[[0, 0]]" and "frames from clip 2 replace the wired picture" in capsys.readouterr().out
 
 
 def test_orrery_refs_says_when_the_chain_lacks_the_sending_clip(tmp_path, monkeypatch):
     from orrery.comfy import OrreryRefs
     send_chain(tmp_path, monkeypatch, clips=1)
-    with pytest.raises(ValueError, match="no clip for segment 4"):
+    with pytest.raises(ValueError, match="has no clip 5"):
         OrreryRefs().route(sends({"3": {"segment": 4, "frames": [[0, 0]]}}), image_1="img1")
 
 
@@ -680,7 +690,7 @@ def test_orrery_refs_warns_about_dropped_frames_and_batches_for_reference_to_vid
     OrreryRefs().route(sends({"3": {"segment": 0, "frames": [[2, 2], [5, 5], [60, 60]]}}), prompt=graph, unique_id="12",
                        image_1="img1")
     said = capsys.readouterr().out
-    assert "60" in said and "not in segment 0's clip" in said
+    assert "60" in said and "not in clip 1" in said
     assert "reads only the first" in said
 
 
@@ -821,6 +831,14 @@ def test_a_grid_runs_one_cell_per_sweep_run_and_multiplies_with_a_lora_sweep(hom
     assert any("LoRA sweep and grid: 4 runs (2 × 2)" in i["message"] for i in lint)
     with pytest.raises(ValueError, match="run 4"):
         OrreryPrompt().run(both, 5, "text", home=str(home), sweep="4|g")
+
+
+def test_a_grid_in_a_reel_runs_its_cells_on_one_clip(home):
+    reel = "@h3 text\nSCENE a\nSHOT 5s\nA fox.\nSCENE b\nSHOT 5s\nA heron in __style__.\n: grid __style__"
+    texts = [OrreryPrompt().run(reel, 5, "h3-base", home=str(home), segment=1, sweep=f"{i}|g")[0] for i in range(2)]
+    assert "in linocut" in texts[0] and "in gouache" in texts[1]
+    lint = json.loads(OrreryPrompt().run(reel, 5, "h3-base", home=str(home), segment=1)[1])["lint"]
+    assert any("Grid: 2 runs" in i["message"] and "on this clip" in i["message"] for i in lint)
 
 
 def test_a_sweep_in_a_library_entry_warns_in_the_node(home):

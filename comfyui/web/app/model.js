@@ -228,39 +228,57 @@ export function folderDropPath(path, target) {
   return to === path ? null : to;
 }
 
-// A reel's CHUNKs: the seconds of their shots (without the pinned context), how often each plays
-// (Infinity for forever) and the clips in all. Null without CHUNK lines. Mirrors orrery.reel.
+// A scene's heading (CHUNK, the earlier word) and how often it plays: `×4`, `x4`, `forever`, or the
+// earlier `repeat 4` / `repeat forever`. Mirrors orrery.reel.
+const SCENE = /^(?:SCENE|CHUNK)\b\s*(.*)$/;
+const REPEAT = /^(.*?)\s*(?:\brepeat\s+(\d+|forever)|(?<!\S)[×x]\s*(\d+)|(?<!\S)(forever))\s*$/i;
+
+const TEST = /(?<!\S)\(test\)(?!\S)/i;  // `SCENE the forest (test)`: kept, left out of the film
+
+// The title of a scene's heading, how often it plays (Infinity for forever) and whether it is a test scene.
+function heading(rest) {
+  const plain = rest.replace(TEST, " ").split(/\s+/).filter(Boolean).join(" ");
+  const r = REPEAT.exec(plain), times = r && (r[2] ?? r[3] ?? "forever");
+  return { title: (r ? r[1] : plain).trim(), repeat: !r ? 1 : times.toLowerCase() === "forever" ? Infinity : Math.max(1, Number(times)),
+    test: TEST.test(rest) };
+}
+
+// A reel's scenes: the seconds of their shots (without the pinned context), how often each plays
+// (Infinity for forever), the clips in all, and which start afresh, with no pinned context: the
+// first scene, a test scene without AFTER:, a scene with only test scenes before it. Null without
+// SCENE lines. Mirrors orrery.reel.
 function reelSecs(text) {
   let secs = null;
-  const repeats = [];
+  const repeats = [], fresh = [], tests = [], after = [];
   for (const l of text.split("\n").map((x) => x.trim())) {
-    const c = /^CHUNK\b(.*)$/.exec(l);
+    const c = SCENE.exec(l);
     if (c) {
+      const h = heading(c[1]);
       (secs ??= []).push(0);
-      const r = /\brepeat\s+(\d+|forever)\s*$/i.exec(c[1]);
-      repeats.push(!r ? 1 : r[1].toLowerCase() === "forever" ? Infinity : Math.max(1, Number(r[1])));
+      repeats.push(h.repeat);
+      tests.push(h.test);
+      after.push(false);
     }
+    if (secs && /^AFTER:/.test(l)) after[secs.length - 1] = true;
     const m = /^SHOT\s+(\d+(?:\.\d+)?)\s*s\b/i.exec(l);
     if (m && secs) secs[secs.length - 1] += Number(m[1]);
   }
-  return secs && { chunks: secs.length, secs, repeats, clips: repeats.reduce((a, b) => a + b, 0) };
+  if (!secs) return null;
+  secs.forEach((_, i) => fresh.push(!after[i] && (tests[i] || tests.slice(0, i).every(Boolean))));
+  return { chunks: secs.length, secs, repeats, fresh, clips: repeats.reduce((a, b) => a + b, 0) };
 }
 
-// Each CHUNK line of a reel, for the editor's dividers and the timeline: the line it is on, its
+// Each SCENE line of a reel, for the editor's dividers and the timeline: the line it is on, its
 // title, the images its SEND: lines fill, the segments it plays (last Infinity when it repeats forever; first null when a chunk before
 // it does), the seconds of one clip (kept without the pinned frames), where it starts
 // and ends in the film, the seconds left after it (null when the film runs forever) and a label.
-// Null without CHUNK lines. Mirrors orrery.reel.
+// Null without SCENE lines. Mirrors orrery.reel.
 export function chunkInfo(text, walked = null) {
   const out = [];
   text.split("\n").forEach((raw, line) => {
-    const l = raw.trim(), c = /^CHUNK\b\s*(.*)$/.exec(l);
-    if (c) {
-      const r = /^(.*?)\s*\brepeat\s+(\d+|forever)\s*$/i.exec(c[1]);
-      const repeat = !r ? 1 : r[2].toLowerCase() === "forever" ? Infinity : Math.max(1, Number(r[2]));
-      out.push({ line, title: (r ? r[1] : c[1]).trim(), repeat, secs: 0, images: [] });
-    }
-    const m = /^SHOT\s+(\d+(?:\.\d+)?)\s*s\b/i.exec(l), send = /^SEND:.*\bto\s+image\s+(\d+)/i.exec(l);
+    const l = raw.trim(), c = SCENE.exec(l);
+    if (c) out.push({ line, ...heading(c[1]), secs: 0, images: [] });
+    const m = /^SHOT\s+(\d+(?:\.\d+)?)\s*s\b/i.exec(l), send = /^(?:SEND:.*\bto|REMEMBER:.*\bas)\s+image\s+(\d+)/i.exec(l);
     if (m && out.length) out[out.length - 1].secs += Number(m[1]);
     if (send && out.length && !out[out.length - 1].images.includes(Number(send[1]))) out[out.length - 1].images.push(Number(send[1]));
   });
@@ -282,13 +300,13 @@ export function chunkInfo(text, walked = null) {
   return out;
 }
 
-// A reel with GOTO lines plays a chunk wherever the server's walk at the node's seed puts it
+// A reel with CUT TO: lines plays a scene wherever the server's walk at the node's seed puts it
 // (`walked`: {path: chunk index per segment, ended}): each chunk its list of segments, `segs`.
-export const hasGoto = (text) => /^\s*(?:\?[^\n]*?:\s*)?GOTO:/im.test(stripComments(text));
+export const hasGoto = (text) => /^\s*(?:\?[^\n]*?:\s*)?(?:CUT\s+TO|GOTO):/im.test(stripComments(text));
 
 function walkedInfo(out, walked) {
   if (!walked) {
-    for (const c of out) Object.assign(c, { segs: [], first: null, last: null, start: null, end: null, left: null, label: "GOTO: walking the reel at this seed…" });
+    for (const c of out) Object.assign(c, { segs: [], first: null, last: null, start: null, end: null, left: null, label: "CUT TO: walking the reel at this seed…" });
     return out;
   }
   const at = [0];
@@ -307,7 +325,7 @@ function walkedInfo(out, walked) {
 // Does chunk c play segment s? On its range, or on its list when GOTO lines set the path.
 export const plays = (c, s) => s != null && (c.segs ? c.segs.includes(s) : c.first !== null && s >= c.first && s <= c.last);
 
-// 1, 3–4, 7: a chunk's segments in short.
+// 1, 3–4, 7: a scene's clips in short, counted from 1 (segments from 0).
 function runs(segs) {
   const parts = [];
   for (const s of segs) {
@@ -315,14 +333,14 @@ function runs(segs) {
     if (last && s === last[1] + 1) last[1] = s;
     else parts.push([s, s]);
   }
-  return parts.map(([a, b]) => (a === b ? `${a}` : `${a}–${b}`)).join(", ");
+  return parts.map(([a, b]) => (a === b ? `${a + 1}` : `${a + 1}–${b + 1}`)).join(", ");
 }
 
-// The cells view: the text cut before every CHUNK line, the world above the first one its own cell
+// The cells view: the text cut before every SCENE line, the world above the first one its own cell
 // (chunk -1). Joined with newlines, the cells are the text again.
 export function splitCells(text) {
   const lines = text.split("\n");
-  const starts = lines.flatMap((l, i) => (/^CHUNK\b/.test(l.trim()) ? [i] : []));
+  const starts = lines.flatMap((l, i) => (SCENE.test(l.trim()) ? [i] : []));
   if (!starts.length) return [{ line: 0, chunk: -1, text }];
   const cells = starts[0] > 0 ? [{ line: 0, chunk: -1, text: lines.slice(0, starts[0]).join("\n") }] : [];
   starts.forEach((s, k) => cells.push({ line: s, chunk: k, text: lines.slice(s, starts[k + 1] ?? lines.length).join("\n") }));
@@ -335,17 +353,18 @@ const clock = (secs) => {
 };
 const span = (secs) => `${Math.round(secs * 100) / 100} s`;
 
-// `seg 4 · 0:20 → 0:25 · 1:35 left`, `seg 1–4 · 4 × 5 s · …`, `seg 7 → ∞ · 6 s each · from 0:35`
+// `clip 5 · 0:20 → 0:25 · 1:35 left`, `clips 2–5 · 4 × 5 s · …`, `clip 8 → ∞ · 6 s each · from 0:35`:
+// clips count from 1, the segments behind them from 0.
 export function chunkLabel(c) {
   if (c.segs) {
     if (!c.segs.length) return c.endless ? "not on the path yet: the reel loops before it" : "never plays at this seed";
     const shown = c.segs.slice(0, 12), more = c.segs.length > 12 || c.endless ? ", …" : "";
     const left = c.left === null ? "" : c.left > 0 ? ` · ${clock(c.left)} left` : " · the end";
-    return `seg ${runs(shown)}${more} · ${c.segs.length > 1 ? `${c.segs.length}${c.endless ? "+" : ""} × ` : ""}${span(c.secs)} · from ${clock(c.start)}${left}`;
+    return `clip${c.segs.length > 1 ? "s" : ""} ${runs(shown)}${more} · ${c.segs.length > 1 ? `${c.segs.length}${c.endless ? "+" : ""} × ` : ""}${span(c.secs)} · from ${clock(c.start)}${left}`;
   }
-  if (c.first === null) return "never plays: a chunk before it repeats forever";
-  if (c.repeat === Infinity) return `seg ${c.first} → ∞ · ${span(c.secs)} each · from ${clock(c.start)}`;
-  const segs = c.repeat > 1 ? `seg ${c.first}–${c.last} · ${c.repeat} × ${span(c.secs)}` : `seg ${c.first}`;
+  if (c.first === null) return "never plays: a scene before it repeats forever";
+  if (c.repeat === Infinity) return `clip ${c.first + 1} → ∞ · ${span(c.secs)} each · from ${clock(c.start)}`;
+  const segs = c.repeat > 1 ? `clips ${c.first + 1}–${c.last + 1} · ${c.repeat} × ${span(c.secs)}` : `clip ${c.first + 1}`;
   const left = c.left === null ? "" : c.left > 0 ? ` · ${clock(c.left)} left` : " · the end";
   return `${segs} · ${clock(c.start)} → ${clock(c.end)}${left}`;
 }
@@ -375,7 +394,7 @@ export function shape(raw) {
     + lines.map((l) => /^@size\s+(\d+)\s*[x×*\s]\s*(\d+)\s*$/.exec(l)).filter(Boolean).map((m) => `w${m[1]} h${m[2]}`).join(" ");
   const cliDirectives = lines.filter((l) => /^@(seed|batch)\b/.test(l));
   const num = (re) => { const m = re.exec(params); return m ? Number(m[1]) : null; };
-  const header = /^@h3\s+\w+(.*)$/i.exec(lines[0] || "");
+  const header = /^@h3\s+[\w-]+(.*)$/i.exec(lines[0] || "");
   const tokens = header ? header[1].split(/\s+/) : [];
   const mp = tokens.map((t) => /^(\d+(?:\.\d+)?)mp$/i.exec(t)).find(Boolean);
   const megapixels = mp ? Number(mp[1]) : null;
@@ -383,7 +402,7 @@ export function shape(raw) {
   const seconds = lines.reduce((s, l) => { const m = /^SHOT\s+(\d+(?:\.\d+)?)\s*s\b/i.exec(l); return s + (m ? Number(m[1]) : 0); }, 0);
   const reel = header ? reelSecs(text) : null;
   const ctx = Number((/^context:\s*(\d+)/im.exec(text) || [0, 22])[1]);
-  const lengths = reel && reel.secs.map((s, i) => (s ? h3Length(s + (i ? ctx / 24 : 0)) : 124));
+  const lengths = reel && reel.secs.map((s, i) => (s ? h3Length(s + (reel.fresh[i] ? 0 : ctx / 24)) : 124));
   const length = lengths ? lengths[0] : seconds ? h3Length(seconds) : 124;
   const width = num(/\bw(\d+)/) ?? canvas[0], height = num(/\bh(\d+)/) ?? canvas[1];
   return {

@@ -170,7 +170,7 @@ test("applyDials mirrors orrery's override", () => {
 test("reels: chunk timing, per-chunk lengths, keywords are not voices", () => {
   const reel = "@h3 t2va 16:9\nLORA: <lora:a:1>\ncontext: 22\nCHUNK\nSHOT 5s\nA.\nHANDOFF: b\nSEND: frame 0 to image 3\nCHUNK the hall\nSHOT 3s\nB.\nSHOT 1s\nC.";
   const st = stats(reel);
-  assert.deepEqual([st.h3.voices, st.h3.reel], [0, { chunks: 2, secs: [5, 4], repeats: [1, 1], clips: 2 }]);
+  assert.deepEqual([st.h3.voices, st.h3.reel], [0, { chunks: 2, secs: [5, 4], repeats: [1, 1], fresh: [true, false], clips: 2 }]);
   const out = shape(reel);
   assert.deepEqual([out.length, out.lengths], [124, [124, 124]]);
   assert.deepEqual(shape(reel.replace("context: 22", "context: 56")).lengths, [124, 158]);
@@ -191,7 +191,7 @@ test("lora tags are coloured as loras, not as libraries, and are not counted", (
 
 test("repeated chunks count as clips; forever has no end", () => {
   const loop = "@h3 t2va\nCHUNK intro\nSHOT 5s\nA.\nCHUNK walk repeat 8\nSHOT 6s\nB.";
-  assert.deepEqual(stats(loop).h3.reel, { chunks: 2, secs: [5, 6], repeats: [1, 8], clips: 9 });
+  assert.deepEqual(stats(loop).h3.reel, { chunks: 2, secs: [5, 6], repeats: [1, 8], fresh: [true, false], clips: 9 });
   const forever = stats(loop.replace("repeat 8", "repeat forever")).h3.reel;
   assert.deepEqual([forever.repeats, forever.clips], [[1, Infinity], Infinity]);
 });
@@ -322,27 +322,60 @@ test("every CHUNK line knows its segments, where it sits in the film and what is
   const info = chunkInfo(REEL_TEXT);
   assert.deepEqual(info.map((c) => [c.line, c.first, c.last, c.secs, c.start, c.end, c.left]),
     [[2, 0, 0, 5, 0, 5, 30], [5, 1, 4, 5, 5, 25, 10], [10, 5, 5, 10, 25, 35, 0]]);
-  assert.equal(chunkLabel(info[0]), "seg 0 · 0:00 → 0:05 · 0:30 left");
-  assert.equal(chunkLabel(info[1]), "seg 1–4 · 4 × 5 s · 0:05 → 0:25 · 0:10 left");
-  assert.equal(chunkLabel(info[2]), "seg 5 · 0:25 → 0:35 · the end");
+  assert.equal(chunkLabel(info[0]), "clip 1 · 0:00 → 0:05 · 0:30 left");
+  assert.equal(chunkLabel(info[1]), "clips 2–5 · 4 × 5 s · 0:05 → 0:25 · 0:10 left");
+  assert.equal(chunkLabel(info[2]), "clip 6 · 0:25 → 0:35 · the end");
   assert.equal(chunkInfo("@h3 t2va\nSHOT 5s\nA."), null);
   const sends = chunkInfo("CHUNK a\nSHOT 5s\nSEND: frame 0 to image 1\nSEND: frames -1 to image 3 for segment 4+\nSEND: frame 9 to image 1 for segment 9\nA.");
   assert.deepEqual(sends[0].images, [1, 3]);
+  assert.deepEqual(chunkInfo("SCENE a\nSHOT 5s\nREMEMBER: first frame as image 2\nA.")[0].images, [2]);
+});
+
+test("SCENE, ×N and forever give what CHUNK and repeat gave, and CUT TO: walks the reel as GOTO: did", () => {
+  const film = REEL_TEXT.replaceAll("CHUNK", "SCENE").replace("repeat 4", "×4");
+  const fields = (info) => info.map((c) => [c.line, c.title, c.repeat, c.first, c.last, c.secs, c.label]);
+  assert.deepEqual(fields(chunkInfo(film)), fields(chunkInfo(REEL_TEXT)));
+  assert.deepEqual(splitCells(film).map((c) => [c.line, c.chunk]), splitCells(REEL_TEXT).map((c) => [c.line, c.chunk]));
+  assert.equal(stats(film).h3.reel.clips, 6);
+  assert.deepEqual(chunkInfo("SCENE a forever\nSHOT 5s\nA.\nSCENE the 4x4 room\nSHOT 5s\nB.").map((c) => [c.title, c.repeat]),
+    [["a", Infinity], ["the 4x4 room", 1]]);
+  assert.ok(hasGoto("SCENE a\nSHOT 5s\nA.\nCUT TO: a ×2") && hasGoto("? $w[rain]: CUT TO: a") && !hasGoto("SCENE a\nSHOT 5s\nA."));
+});
+
+test("a test scene starts afresh, and so does the first scene after only tests: no pinned context", () => {
+  const reel = "@h3 text\ncontext: 22\nSCENE forest (test)\nSHOT 5s\nA.\nSCENE beach (test)\nAFTER: forest\nSHOT 5s\nB.\n"
+    + "SCENE walk\nSHOT 5s\nC.\nSCENE end\nSHOT 5s\nD.\nSCENE dune (test)\nSHOT 5s\nE.";
+  assert.deepEqual(stats(reel).h3.reel.fresh, [true, false, true, false, true]);
+  const [a, b, c, d, e] = shape(reel).lengths;
+  assert.ok(b > a && c === a && d > a && e === a, `${a} ${b} ${c} ${d} ${e}`);
+  assert.deepEqual(chunkInfo(reel).map((x) => x.title), ["forest", "beach", "walk", "end", "dune"]);
 });
 
 test("a chunk that repeats forever runs on, and the ones after it never play", () => {
   const info = chunkInfo("CHUNK a\nSHOT 5s\nA.\nCHUNK b repeat forever\nSHOT 6s\nB.\nCHUNK c\nSHOT 5s\nC.");
-  assert.equal(chunkLabel(info[1]), "seg 1 → ∞ · 6 s each · from 0:05");
-  assert.equal(chunkLabel(info[2]), "never plays: a chunk before it repeats forever");
-  assert.equal(chunkLabel(info[0]), "seg 0 · 0:00 → 0:05");
+  assert.equal(chunkLabel(info[1]), "clip 2 → ∞ · 6 s each · from 0:05");
+  assert.equal(chunkLabel(info[2]), "never plays: a scene before it repeats forever");
+  assert.equal(chunkLabel(info[0]), "clip 1 · 0:00 → 0:05");
+});
+
+test("the film words are keywords, and a CAST member is brass, with @ or without, also in SET: and speech", () => {
+  const text = "@h3 references\nCAST\n@JINX (refmod x): a woman\nSCENE the room (test)\nAFTER: 2\nSTART WITH: the door\nSHOT 5s\n"
+    + "@JINX waves, JINXED stays.\nJINX (whispering): hi\nIF $m is tense: she runs\nREMEMBER: first frame as @JINX\n"
+    + "SET: @JINX(0.6, refmods), @style(0.8)\nEND ON: done\nCUT TO: the room (30%)";
+  const html = highlight(text, new Set());
+  for (const kw of ["SCENE", "AFTER:", "START WITH:", "IF", "REMEMBER:", "SET:", "END ON:", "CUT TO:"]) assert.match(html, new RegExp(`<span class="t-kw">${kw}</span>`));
+  assert.match(html, /<span class="t-cast">@JINX<\/span> waves, JINXED stays/);
+  assert.match(html, /<span class="t-kw"><span class="t-cast">JINX<\/span> \(whispering\):<\/span>/);
+  assert.match(html, /<span class="t-cast">@JINX<\/span>\(0\.6, refmods\), <span class="t-lora">@style\(0\.8\)<\/span>/);
+  assert.doesNotMatch(highlight("a cat @JINX(0.6)", new Set()), /t-cast/);  // no CAST: a LoRA
 });
 
 test("CHUNK lines get a divider with their label, and the next segment's chunk is marked", () => {
   const info = chunkInfo(REEL_TEXT);
   const html = highlight(REEL_TEXT, new Set(), { chunks: info, segment: 2 });
   assert.equal(html.split("\n").length, REEL_TEXT.split("\n").length);  // no extra lines: the caret stays put
-  assert.match(html, /<span class="chunkline"><span class="chunkinfo"><span>seg 0 · 0:00 → 0:05 · 0:30 left<\/span><\/span><span class="t-kw">CHUNK<\/span> the opening<\/span>/);
-  assert.match(html, /<span class="chunkline now"><span class="chunkinfo"><span>▶ next 2\/4 · seg 1–4 [^<]*<\/span><\/span><span class="t-kw">CHUNK<\/span> the walk repeat 4/);
+  assert.match(html, /<span class="chunkline"><span class="chunkinfo"><span>clip 1 · 0:00 → 0:05 · 0:30 left<\/span><\/span><span class="t-kw">CHUNK<\/span> the opening<\/span>/);
+  assert.match(html, /<span class="chunkline now"><span class="chunkinfo"><span>▶ next 2\/4 · clips 2–5 [^<]*<\/span><\/span><span class="t-kw">CHUNK<\/span> the walk repeat 4/);
   assert.doesNotMatch(highlight(REEL_TEXT, new Set()), /chunkinfo/);
 });
 
@@ -452,9 +485,9 @@ test("with GOTO lines the chunks follow the path the server walked", () => {
   assert.match(chunkInfo(text)[1].label, /walking the reel/);  // the path is not there yet
   const walked = chunkInfo(text, { path: [0, 1, 2, 1, 2, 1, 2], ended: true });
   assert.deepEqual(walked.map((c) => c.segs), [[0], [1, 3, 5], [2, 4, 6]]);
-  assert.equal(walked[1].label, "seg 1, 3, 5 · 3 × 4 s · from 0:05 · 0:06 left");  // left after its last play
+  assert.equal(walked[1].label, "clips 2, 4, 6 · 3 × 4 s · from 0:05 · 0:06 left");  // left after its last play
   assert.ok(plays(walked[2], 4) && !plays(walked[2], 3) && plays(chunkInfo("CHUNK a\nSHOT 5s\nA.")[0], 0));
   const endless = chunkInfo(text, { path: [0, 1, 2, 1, 2], ended: false });
-  assert.match(endless[2].label, /^seg 2, 4, … · 2\+ × 6 s/);
+  assert.match(endless[2].label, /^clips 3, 5, … · 2\+ × 6 s/);
   assert.match(highlight(text, known, { chunks: walked, segment: 3 }), /▶ next 2\/3/);
 });

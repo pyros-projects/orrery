@@ -50,9 +50,9 @@ export async function openSettings(app) {
     <label class="check"><input type="checkbox" id="oa-qs" ${app.data.quickstart !== false ? "checked" : ""}>
       <span><b>New</b> templates open with a quickstart: the essentials as <code># …</code> comments above the template</span></label>
     <label class="check"><input type="checkbox" id="oa-div" ${app.data.dividers !== false ? "checked" : ""}>
-      <span><b>Chunk dividers</b>: a reel's CHUNK lines say which segments they play, when, and how much film is left; the chunk of the next segment is marked</span></label>
+      <span><b>Scene dividers</b>: a reel's SCENE lines say which clips they play, when, and how much film is left; the scene of the next clip is marked</span></label>
     <label class="check"><input type="checkbox" id="oa-tl" ${app.data.timeline !== false ? "checked" : ""}>
-      <span><b>Timeline</b>: a reel's clips as the reel keeps them (Orrery Film or Chain Video), beside the editor or under each chunk (Clips beside / below in the footer), and the frames its <code>SEND:</code> lines handed on</span></label>
+      <span><b>Timeline</b>: a reel's clips as the reel keeps them (Orrery Film or Chain Video), beside the editor or under each scene (Clips beside / below in the footer), and the frames its <code>SEND:</code> lines handed on</span></label>
     <label class="check"><input type="checkbox" id="oa-log" ${app.data.log_prompts !== false ? "checked" : ""}>
       <span><b>Log each run</b> to ComfyUI's console: its seed, every pick and the resolved prompt (the <b>History</b> tab keeps them either way)</span></label>
     <div class="acts"><button type="button" class="btn ghost" data-cancel>Cancel</button><button class="btn primary">${icon("save")}Save</button></div>

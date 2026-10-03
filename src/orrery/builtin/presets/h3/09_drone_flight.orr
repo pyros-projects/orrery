@@ -3,7 +3,7 @@ title: "09 · Drone flight"
 note: "One drone shot over a landscape that reads at a glance: the land, the light and the move each roll (the move's camera spec rides along as a property), and the soundscape comes from the land and the weather, so it always fits. For an endless flight across the world, see loops/drone_odyssey."
 tags: [h3, drone, landscape]
 ---
-@h3 t2va 16:9
+@h3 text 16:9
 style: live-action aerial cinematography, photorealistic, one continuous unbroken ten-second shot of smooth gimbal-stabilised drone footage
 $land = __world/landscapes__
 $sky = __world/weather__

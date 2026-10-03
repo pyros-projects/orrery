@@ -3,7 +3,7 @@ title: "Night market chase"
 note: "Three fast cuts in eight seconds: timestamps, cut verbs, a shaking camera and a fast pan. Tests whether H3 keeps the same thief across cuts. One shouted line in Cantonese."
 tags: [h3, action, cuts]
 ---
-@h3 t2va 16:9
+@h3 text 16:9
 style: live-action, cinematic
 $thief = __creature[mammal]__
 

@@ -58,8 +58,8 @@ REEL = "@h3 t2va\nLORA: <lora:a:1>\nCHUNK\nSHOT 5s\nA fox.\nSFX: x\nCHUNK\nSHOT 
 def test_compile_prints_every_chunk_of_a_reel(home, capsys):
     assert main(["compile", REEL]) == 0
     out = capsys.readouterr().out
-    assert "# SEGMENT 1/2 · chunk 1 · 5.00 s · 124 frames · <lora:a:1>" in out
-    assert "# SEGMENT 2/2 · chunk 2 · 4.92 s · 124 frames · <lora:a:1>" in out
+    assert "# SEGMENT 1/2 · scene 1 · 5.00 s · 124 frames · <lora:a:1>" in out
+    assert "# SEGMENT 2/2 · scene 2 · 4.92 s · 124 frames · <lora:a:1>" in out
     assert out.index("A fox.") < out.index("A heron.")
 
 

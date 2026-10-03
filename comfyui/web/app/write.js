@@ -7,7 +7,7 @@ import { icon } from "./icons.js";
 import { stats } from "./model.js";
 
 export const WRITERS = {
-  continue: { label: "Continue the reel", hint: "The next chunk, after the chunks as they roll at this seed", goes: "It is appended to the reel as its next chunk." },
+  continue: { label: "Continue the reel", hint: "The next scene, after the scenes as they roll at this seed", goes: "It is appended to the reel as its next scene." },
   story: { label: "Story between frames", hint: "The shot from the first frame to the last (fl2va)", goes: "It takes the place of the shots below the header." },
   describe: { label: "Prompt from image", hint: "A prompt for the picture in first_frame", goes: "It takes the place of the prompt; comments and `: …` lines stay." },
 };
@@ -18,7 +18,7 @@ const WRITING = "The language model is writing. It loads first (a while the firs
 export function writerBlock(app, task) {
   if (!app.llmActive() && !app.bridge.wired("clip")) return "Needs a language model: pick one in the settings, or wire a text encoder into clip";
   const h3 = stats(app.text).h3, reel = h3?.reel, frames = app.bridge.frames();
-  if (task === "continue") return !reel ? "Needs a reel: a screenplay with CHUNK lines" : reel.clips === Infinity ? "The reel repeats a chunk forever: there is no next chunk" : "";
+  if (task === "continue") return !reel ? "Needs a reel: a screenplay with SCENE lines" : reel.clips === Infinity ? "The reel repeats a scene forever: there is no next scene" : "";
   if (reel) return "Writes one shot, so not for a reel";
   if (task === "story") return !h3 ? "Needs an @h3 screenplay (fl2va)" : frames.length < 2 ? "Wire the first and the last frame into first_frame and last_frame" : "";
   return frames.length ? "" : "Wire a picture into first_frame";

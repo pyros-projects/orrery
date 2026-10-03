@@ -40,16 +40,16 @@ def test_continue_reads_every_segment_resolved_and_asks_for_the_next(home):
     prompt = writers.request(h, "continue", REEL, 3, {}, {})
     storm = "a rising gale" if "a rising gale" in prompt else "a heavy sea fog"
     assert f"KEEPER climbs the stairs while {storm} batters the tower." in prompt and "$storm" not in prompt
-    assert prompt.count("CHUNK the lamp") == 2  # repeat 2: both clips, as they were made
+    assert prompt.count("SCENE the lamp") == 2  # ×2: both clips, as they were made
     assert "Write clip 4, from the last clip ended as: the beam sweeps over the sea." in prompt
     assert "style: live-action, cinematic" in prompt and "@h3" not in prompt
 
 
 @pytest.mark.parametrize("task, template, foreign", [
     ("continue", REEL, ("Krea", "Picture 1")),
-    ("story", "@h3 fl2va\nSHOT 5s\nA.", ("Krea", "CHUNK", "HANDOFF")),
-    ("describe", "a photo", ("SHOT", "CHUNK", "H3")),
-    ("describe", "@h3 i2va\nSHOT 5s\nA.", ("Krea", "CHUNK", "HANDOFF")),
+    ("story", "@h3 fl2va\nSHOT 5s\nA.", ("Krea", "SCENE", "END ON")),
+    ("describe", "a photo", ("SHOT", "SCENE", "H3")),
+    ("describe", "@h3 i2va\nSHOT 5s\nA.", ("Krea", "SCENE", "END ON")),
 ])
 def test_each_writer_sends_only_its_own_rules(home, task, template, foreign):
     prompt = writers.request(Home(home), task, template, 1, {}, {})
@@ -66,9 +66,9 @@ def test_a_continued_chunk_is_cleaned_checked_and_appended():
 @pytest.mark.parametrize("answer, words", [
     ("CHUNK a\nSHOT 5s: static\n__animal__ walks.", "wildcards"),
     ("CHUNK a\nSHOT 5s: static\nA {cat|dog} walks.", "choices"),
-    ("SHOT 5s: static\nA cat walks.", "does not start with a CHUNK"),
+    ("SHOT 5s: static\nA cat walks.", "does not start with a SCENE"),
     ("CHUNK a\nA cat walks.", "no SHOT"),
-    ("CHUNK a\nSHOT 5s: static\nA.\nCHUNK b\nSHOT 5s: static\nB.", "2 chunks"),
+    ("CHUNK a\nSHOT 5s: static\nA.\nCHUNK b\nSHOT 5s: static\nB.", "2 scenes"),
     ("", "empty"),
 ])
 def test_a_continued_chunk_that_does_not_fit_is_reported(answer, words):
@@ -100,7 +100,7 @@ def test_describe_writes_an_image_prompt_for_a_still(home):
 def test_a_reel_that_repeats_forever_has_no_next_chunk(home):
     with pytest.raises(writers.WriterError, match="forever"):
         writers.request(Home(home), "continue", "@h3 t2va\nCHUNK a repeat forever\nSHOT 5s\nA.", 1, {}, {})
-    with pytest.raises(writers.WriterError, match="CHUNK"):
+    with pytest.raises(writers.WriterError, match="SCENE"):
         writers.request(Home(home), "continue", "@h3 t2va\nSHOT 5s\nA.", 1, {}, {})
 
 
@@ -172,7 +172,7 @@ def test_continue_follows_a_loop_and_refuses_one_without_end(home):
     loop = "@h3 t2va\nCHUNK a\nSHOT 5s\nA.\nCHUNK b\nSHOT 5s\nB.\nGOTO: a ×1"
     writers.save(Home(home), "continue", "{chunks}\nWrite clip {next}.")
     prompt = writers.request(Home(home), "continue", loop, 1, {}, {})
-    assert prompt.count("CHUNK a") == 2 and "Write clip 5." in prompt
+    assert prompt.count("SCENE a") == 2 and "Write clip 5." in prompt
     with pytest.raises(writers.WriterError, match="on and on"):
         writers.request(Home(home), "continue", loop.replace(" ×1", ""), 1, {}, {})
 

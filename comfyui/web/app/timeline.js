@@ -28,7 +28,7 @@ function segmentsOf(c, clips) {
 
 function clipHTML(app, s, clip, segment) {
   const path = app.bridge.latentPath();
-  const title = `Segment ${s}${clip ? ` · ${clip.frames ?? "?"} frames · hover to play, click to open` : " · not rendered yet"}${s === segment ? " · next" : ""}`;
+  const title = `Clip ${s + 1}${clip ? ` · ${clip.frames ?? "?"} frames · hover to play, click to open` : " · not rendered yet"}${s === segment ? " · next" : ""}`;
   return `<button class="tl-clip${clip ? "" : " empty"}${s === segment ? " now" : ""}" data-seg="${s}" title="${title}" ${clip ? "" : "disabled"}>`
     + (clip ? `<img loading="lazy" alt="" src="${app.api.chainThumbURL(s, path, clip.version)}">` : "")
     + `<span class="n">${s}</span></button>`;
@@ -59,7 +59,7 @@ export function clipRatio(app) {
 
 // A chunk's clips and sent frames for its section in the cells view; the section sizes them (--clip-h).
 export function sectionHTML(app, c) {
-  if (c.first === null) return '<span class="muted cm-none">never plays: a chunk before it repeats forever</span>';
+  if (c.first === null) return '<span class="muted cm-none">never plays: a scene before it repeats forever</span>';
   const clips = new Map((app.data.chain?.clips || []).map((x) => [x.segment, x]));
   const segment = Number(app.bridge.getSegment());
   return segmentsOf(c, clips).map((s) => clipHTML(app, s, clips.get(s), segment)).join("")

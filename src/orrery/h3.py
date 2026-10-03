@@ -6,7 +6,7 @@ mechanical rule of the official guide (VIDEO_PROMPT_WRITING_GUIDE_base_en.md):
 alignment lines, shot timestamps, speaker IDs, `<d>` tags, camera sentences,
 soundscape and `N/A` rules. Randomness only ever fills slots.
 
-    @h3 t2va 16:9
+    @h3 text 16:9
     style: live-action, cinematic
     SHOT 5s: push in, small, slow
     A misty forest at dawn.
@@ -32,6 +32,7 @@ from orrery.cast import (
     Names,
     article,
     attach,
+    bare,
     bracket_sources,
     oxford,
     parse_member,
@@ -58,11 +59,13 @@ TRANSITIONS = {
     "wipe": "the shot wipes to",
 }
 MODES = ("t2va", "i2va", "fl2va", "l2va", "ref2va")
+MODE_WORDS = {"text": "t2va", "image": "i2va", "first-last": "fl2va", "last": "l2va", "references": "ref2va"}
+WORD = {mode: word for word, mode in MODE_WORDS.items()}  # `@h3 references` for ref2va, MiniMax's own name
 MOOD_WORDS = re.compile(
     r"\b(sad|happy|epic|emotional|melancholic|melancholy|uplifting|tense|dramatic|romantic|"
     r"hopeful|joyful|nostalgic|heartwarming|mournful|moody)\b", re.IGNORECASE)
 
-_HEADER = re.compile(r"^@h3\s+(\w+)(.*)$", re.IGNORECASE)
+_HEADER = re.compile(r"^@h3\s+([\w-]+)(.*)$", re.IGNORECASE)
 _RATIO = re.compile(r"^\d+(?:\.\d+)?:\d+(?:\.\d+)?$")
 _STYLE = re.compile(r"^style:\s*(.+)$", re.IGNORECASE)
 _SUMMARY = re.compile(r"^summary:\s*(.+)$", re.IGNORECASE)
@@ -73,8 +76,10 @@ _MUSIC = re.compile(r"^MUSIC:\s*(.+)$", re.IGNORECASE)
 _SFX = re.compile(r"^SFX:\s*(.+)$", re.IGNORECASE)
 _VOICE = re.compile(r"^([A-Z][A-Z0-9 _-]*?)\s*(?:\(([^)]*)\))?\s*:\s*(.+)$")
 _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
-_HANDOFF = re.compile(r"^HANDOFF:\s*(.+)$")
-_SEND_LINE = re.compile(r"^SEND:")
+_HANDOFF = re.compile(r"^(?:END ON|HANDOFF):\s*(.+)$")
+_SEND_LINE = re.compile(r"^(?:REMEMBER|SEND):")
+_AFTER = re.compile(r"^AFTER:")
+_START_WITH = re.compile(r"^START WITH:")
 _LORA = re.compile(r"^LORA:\s*(.+)$")
 _CONTEXT = re.compile(r"^context:\s*(\d+)\s*f?$", re.IGNORECASE)
 _REFMODS = re.compile(r"^refmods:\s*(?:at\s+(\d*\.?\d+))?\s*(?:from\s+(\d+(?:\.\d+)?)\s*%)?\s*(?:to\s+(\d+(?:\.\d+)?)\s*%)?\s*$",
@@ -137,6 +142,7 @@ class Scene:
     refmod_start: float = REFMOD_START
     refmod_end: float = 1.0  # `refmods: … to 80%`: where a RefMod without its own `to` stops
     dials: dict = field(default_factory=dict)  # `SET: image_1(0.5, 35%)`: ("image", 1) or ("refmod", name) → {"strength", "from"}
+    sets: list = field(default_factory=list)  # the SET: items in order, (target, strength, start, end, words): see _apply_sets
     enhance: str = ""  # a `> instruction` before the first shot: for every shot without its own
 
     @property
@@ -159,6 +165,8 @@ class Compiled:
     send_slots: list[int] = field(default_factory=list)  # every image a SEND: line of the reel fills
     refmods: list[dict] = field(default_factory=list)  # the RefMods this clip gets (clip_refmods), for Orrery RefMods
     images: list[dict] = field(default_factory=list)  # the clip's pictures with an at or a from (clip_images)
+    continues: int | None = None  # the segment whose picture this clip continues (Reel.before); None: afresh
+    test: bool = False  # a test scene's clip: Orrery Film leaves it out of the film
 
 
 # --- front end ------------------------------------------------------------------------------
@@ -186,7 +194,7 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
             else:
                 cur.enhance = m.group(1).strip()
         elif m := _HEADER.match(line):
-            scene.mode = m.group(1).lower()
+            scene.mode = MODE_WORDS.get(m.group(1).lower(), m.group(1).lower())
             for token in m.group(2).split():
                 if token.lower() in ("lite", "full"):
                     scene.lite = token.lower() == "lite"
@@ -199,9 +207,14 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
         elif m := _LORA.match(line):
             scene.loras.append(m.group(1).strip())
         elif _HANDOFF.match(line):
-            lint.append(Issue("warn", "HANDOFF only works inside a CHUNK; it is ignored."))
+            lint.append(Issue("warn", "END ON: only works inside a SCENE; it is ignored."))
+        elif _AFTER.match(line):
+            lint.append(Issue("warn", "AFTER: only works inside a SCENE of a reel; it is ignored."))
+        elif _START_WITH.match(line):
+            lint.append(Issue("warn", "START WITH: only works inside a SCENE of a reel; it is ignored."))
         elif _SEND_LINE.match(line):
-            raise ValueError("SEND: belongs inside a CHUNK: it sends frames of that chunk's clip to the clips after it.")
+            raise ValueError("REMEMBER: (SEND:) belongs inside a SCENE: it keeps frames of that scene's clip for the "
+                             "clips after it.")
         elif m := _CONTEXT.match(line):
             scene.context = int(m.group(1))
         elif m := _SET.match(line):
@@ -254,6 +267,7 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
     t = 0.0
     for shot in scene.shots:
         shot.start, t = t, t + shot.duration
+    _apply_sets(scene, lint)
     pictures = {s.index for m in scene.cast for s in m.sources if s.kind == "image"}
     refmods = {_refmod_key(s.name) for m in scene.cast for s in m.sources if s.kind == "refmod"}
     for kind, target in scene.dials:
@@ -277,8 +291,10 @@ def _share(text: str) -> float | None:
 
 
 def _set_line(scene: Scene, text: str, lint: list[Issue]) -> None:
-    """`SET: image_1(0.5, 35%), emma_canon(0.3)`: a picture's or a RefMod's strength and start, for
-    every clip in the head, for that clip in a chunk; a later SET wins, and SET wins over the CAST."""
+    """`SET: image_1(0.5, 35%), emma_canon(0.3), @JINX(0.6, refmods), refmods(1, 35%)`: the dials of a
+    picture, a RefMod, a member's references (all, or those its words choose) and the RefMod defaults,
+    for every clip in the head, for that clip in a chunk. Kept in order and applied once the CAST is
+    read (_apply_sets): a later SET wins, and SET wins over the CAST."""
     items = _SET_ITEM.findall(text)
     rest = _SET_ITEM.sub("", text).replace(",", "").strip()
     if not items or rest:
@@ -287,23 +303,73 @@ def _set_line(scene: Scene, text: str, lint: list[Issue]) -> None:
         return
     for target, args in items:
         values = [v.strip() for v in args.split(",")]
+        words = [v for v in values if v[:1].isalpha()]  # `refmods`, `image 1`: which of a member's references
+        numbers = [v for v in values if not v[:1].isalpha()]
         try:
-            strength = float(values[0]) if values[0] else None
-            start = _share(values[1]) if len(values) > 1 else None
-            end = _share(values[2]) if len(values) > 2 else None
+            strength = float(numbers[0]) if numbers and numbers[0] else None
+            start = _share(numbers[1]) if len(numbers) > 1 else None
+            end = _share(numbers[2]) if len(numbers) > 2 else None
         except ValueError:
             lint.append(Issue("warn", f"SET: {target.strip()}({args}) takes numbers: (strength), (strength, start) or "
                                       "(strength, start, end)."))
             continue
-        image = _SET_IMAGE.match(target.strip())
-        key = ("image", int(image.group(1))) if image else ("refmod", _refmod_key(target.strip()))
-        dial = scene.dials.setdefault(key, {})
-        if strength is not None:
-            dial["strength"] = strength
-        if start is not None:
-            dial["from"] = start
-        if end is not None:
-            dial["to"] = end
+        scene.sets.append((target.strip(), strength, start, end, words))
+
+
+_CHOICE = re.compile(r"^(images?|refmods?)$|^image\s+(\d+)$|^refmod\s+([\w./-]+)$", re.IGNORECASE)
+
+
+def _apply_sets(scene: Scene, lint: list[Issue]) -> None:
+    """The SET: items as dials, in the order written, now that the CAST is known: a member's name turns
+    all its pictures and RefMods, or the ones its words choose (`images`, `refmods`, `image 1`, `refmod
+    NAME`); `refmods` alone sets the RefMod defaults, as a `refmods:` line does."""
+    for target, strength, start, end, words in scene.sets:
+        member = next((m for m in scene.cast if m.name == target), None)
+        if member is None and target.lower() == "refmods" and not words:
+            for name, value in (("refmod_strength", strength), ("refmod_start", start), ("refmod_end", end)):
+                if value is not None:
+                    setattr(scene, name, value)
+            continue
+        if member is not None:
+            keys = _chosen(member, words, lint)
+        elif words:
+            lint.append(Issue("warn", f"SET: {target}({', '.join(words)}) takes numbers: (strength), (strength, start) "
+                                      "or (strength, start, end). Words choose among a member's references, as in "
+                                      "SET: @JINX(0.6, refmods), and it is not in the CAST."))
+            continue
+        else:
+            image = _SET_IMAGE.match(target)
+            keys = [("image", int(image.group(1))) if image else ("refmod", _refmod_key(target))]
+        for key in keys:
+            dial = scene.dials.setdefault(key, {})
+            for name, value in (("strength", strength), ("from", start), ("to", end)):
+                if value is not None:
+                    dial[name] = value
+
+
+def _chosen(member: Member, words: list[str], lint: list[Issue]) -> list[tuple]:
+    """The dial keys of the member's pictures and RefMods its words choose; all of them without words."""
+    own = [("image", s.index) if s.kind == "image" else ("refmod", _refmod_key(s.name))
+           for s in member.sources if s.kind in ("image", "refmod")]
+    if not words:
+        return own
+    out = []
+    for word in words:
+        m = _CHOICE.match(" ".join(word.split()))
+        if not m:
+            found = []
+        elif m.group(1):  # images, refmods: every one of that kind
+            found = [k for k in own if k[0] == m.group(1).lower().rstrip("s")]
+        elif m.group(2):
+            found = [k for k in own if k == ("image", int(m.group(2)))]
+        else:
+            found = [k for k in own if k == ("refmod", _refmod_key(m.group(3)))]
+        if not found:
+            has = ", ".join(f"image {n}" if kind == "image" else f"refmod {n}" for kind, n in own) or "no picture or RefMod"
+            lint.append(Issue("warn", f"SET: {member.name}({word}): {member.name} has no {word} ({has}), so it "
+                                      "changes nothing there."))
+        out += [k for k in found if k not in out]
+    return out
 
 
 def _cast_line(scene: Scene, line: str, lint: list[Issue], block: int = 0, last: Member | None = None) -> Member | None:
@@ -595,7 +661,7 @@ def write_flat(scene: Scene) -> str:
 def _scene_lint(src: str, scene: Scene, lint: list[Issue]) -> None:
     n = len(scene.shots)
     if scene.mode not in MODES:
-        lint.append(Issue("warn", f"Unknown mode \"{scene.mode}\" ({', '.join(MODES)}); compiled like t2va."))
+        lint.append(Issue("warn", f"Unknown mode \"{scene.mode}\" ({', '.join(MODE_WORDS)}); compiled like text."))
     _cast_lint(scene, lint)
     if not n:
         lint.append(Issue("error", "No SHOT yet."))
@@ -608,19 +674,19 @@ def _scene_lint(src: str, scene: Scene, lint: list[Issue]) -> None:
                    for it in scene.shots[i].items)
 
     if scene.mode == "i2va" and not mentions(0, r"Picture 1"):
-        lint.append(Issue("warn", "I2VA: anchor <Picture 1> in Shot 1, then describe the action."))
+        lint.append(Issue("warn", "@h3 image: anchor <Picture 1> in Shot 1, then describe the action."))
     if scene.mode == "fl2va":
         if n > 1:
-            lint.append(Issue("warn", "FL2VA: the guide favors a single shot so the model can "
+            lint.append(Issue("warn", "@h3 first-last: the guide favors a single shot so the model can "
                                       "interpolate between the frames."))
         if not mentions(0, r"Picture 1"):
-            lint.append(Issue("warn", "FL2VA: Shot 1 should start from Picture 1."))
+            lint.append(Issue("warn", "@h3 first-last: Shot 1 should start from Picture 1."))
         if not mentions(n - 1, r"Picture 2"):
-            lint.append(Issue("warn", "FL2VA: the final shot should land on Picture 2."))
+            lint.append(Issue("warn", "@h3 first-last: the final shot should land on Picture 2."))
     if scene.mode == "l2va" and not mentions(n - 1, r"Picture 1"):
-        lint.append(Issue("warn", "L2VA: the final shot must converge on <Picture 1>."))
+        lint.append(Issue("warn", "@h3 last: the final shot must converge on <Picture 1>."))
     if scene.mode == "t2va" and any(mentions(i, r"Picture \d") for i in range(n)):
-        lint.append(Issue("warn", "T2VA has no reference pictures; drop them or switch mode."))
+        lint.append(Issue("warn", "@h3 text has no reference pictures; drop them or switch mode."))
     if _CLIP_WEIGHT.search(src):
         lint.append(Issue("warn", "CLIP weight syntax like (word:1.2) is inert on H3: its "
                                   "tokenizer disables weights."))
@@ -635,15 +701,15 @@ def _cast_lint(scene: Scene, lint: list[Issue]) -> None:
                 lint.append(Issue("warn", f"{m.name} uses {src.kind} {src.index}; the Reference to Video node "
                                           f"takes {src.kind} 1–{MAX_SLOTS[src.kind]}."))
         if not ref and (m.voice or any(s.kind != "refmod" for s in m.sources)):
-            still = "" if scene.lite else f"; in {scene.mode} its name still expands to its description"
+            still = "" if scene.lite else f"; in @h3 {WORD.get(scene.mode, scene.mode)} its name still expands to its description"
             lint.append(Issue("warn", f"{m.name}: image, video and audio references only take effect in "
-                                      f"ref2va{still}."))
+                                      f"@h3 references{still}."))
         if m.voice and not any(isinstance(it, Voice) and it.name == m.name for s in scene.shots for it in s.items):
             lint.append(Issue("warn", f"{m.name} has a voice reference but never speaks."))
     if not ref and any(s.first_frame or s.last_frame or s.continues for s in scene.shots):
-        lint.append(Issue("warn", "Frame anchors (from/to image N, after video N) only take effect in ref2va."))
+        lint.append(Issue("warn", "Frame anchors (from/to image N, after video N) only take effect in @h3 references."))
     if ref and not scene.lite and not scene.summary:
-        lint.append(Issue("warn", "ref2va reads best with a summary: line (one short paragraph about the "
+        lint.append(Issue("warn", "@h3 references reads best with a summary: line (one short paragraph about the "
                                   "target video, using CAST names)."))
 
 
@@ -770,7 +836,7 @@ def withhold_images(scene: Scene, missing: set[int], lint: list[Issue], at_zero:
     texts = [scene.summary, *(it for shot in scene.shots for it in shot.items if isinstance(it, str))]
     for n in sorted({int(x) for text in texts for x in _IMAGE_BRACKET.findall(text)} & missing):
         lint.append(Issue("warn", f"image {n} is at 0, but [image {n}] in the prose still hands it to H3 in this clip."
-                          if at_zero else f"[image {n}] is mentioned before the SEND: line that fills it has played, "
+                          if at_zero else f"[image {n}] is mentioned before the REMEMBER: line that keeps it has played, "
                                           "so in this clip it points at nothing."))
 
 
@@ -791,21 +857,23 @@ def render_scene(scene: Scene, target: str, lint: list[Issue]) -> str:
 def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                   weights: Mapping[str, float] | None = None, target: str = "h3-base",
                   segment: int = 0, packed: bool = False, held: set[int] | frozenset = frozenset(),
-                  cell: int | None = None) -> Compiled:
+                  cell: int | None = None, standing: set[int] | frozenset = frozenset()) -> Compiled:
     """`segment` picks a reel's clip (see orrery.reel); plain screenplays ignore it. `packed`: the
     images are renumbered to the ones this clip uses (Orrery Refs hands on only those). `cell`: the
-    run of a `: grid` (orrery.batch); None rolls its axes."""
+    run of a `: grid` (orrery.batch); None rolls its axes. `standing`: the images wired into Orrery
+    Refs: one a REMEMBER: line keeps stays in the clip as wired until those frames exist."""
     from orrery.batch import prepare
     from orrery.dsl import parse, with_inline
     from orrery.reel import build_segment, shared_sends, split_reel
 
     lint: list[Issue] = []
     src, libraries = with_inline(strip_comments(src), libraries)
+    src = bare(src)  # `@JINX` is JINX
     reel = split_reel(src)
     params = parse(src).params
-    if reel and (params.grid is not None or params.unique):
-        raise ValueError("@grid and @unique vary a template across runs; a reel already gives every run a "
-                         "clip of its own. Use them in a single clip.")
+    if reel and params.unique:
+        raise ValueError("@unique varies a template across runs; a reel already gives every run a clip of its "
+                         "own. Use it in a single clip.")
     src = prepare(src, seed, libraries, cell)
     reel = split_reel(src) if reel else None
     sends: dict[int, dict] = {}
@@ -816,8 +884,8 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
         lint += [Issue("warn", problem) for m in absent for problem in m.problems]
         if reel.send_slots:
             if scene.mode != "ref2va":
-                raise ValueError("SEND: hands frames to Reference to Video as reference images, so it needs an "
-                                 "@h3 ref2va screenplay.")
+                raise ValueError("REMEMBER: hands frames to Reference to Video as reference images, so it needs an "
+                                 "@h3 references screenplay.")
             sends = reel.ready(segment, set(held) & set(reel.send_slots), path)
             # a sent image that some CAST gives a member goes only where a member of this clip has it (not to a
             # clip without that member, nor to one whose CAST redefines it without the image); one that no CAST
@@ -825,7 +893,11 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
             named = cast_images(reel.head).union(*(cast_images(b.lines) for b in reel.blocks))
             ours = {s.index for m in scene.cast for s in m.sources if s.kind == "image"}
             sends = {n: send for n, send in sends.items() if n in ours or n not in named}
-            withhold_images(scene, set(reel.send_slots) - set(sends), lint)
+            withhold_images(scene, set(reel.send_slots) - set(sends) - set(standing), lint)
+            for n in sorted(set(standing) & set(reel.send_slots) & ours):
+                lint.append(Issue("info", f"image {n} is wired and kept by a REMEMBER: line too: "
+                                          + (f"the frames from clip {sends[n]['segment'] + 1} replace the wired picture."
+                                             if "segment" in sends.get(n, {}) else "the wired picture until those frames exist.")))
         if reel.send_refmods:
             sent_mods = reel.refmods_ready(segment, path)
             late = set(reel.send_refmods) - set(sent_mods)  # its chunk has not played yet: nothing to bring back
@@ -840,8 +912,8 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                     early = [lo for lo, _ in send.segments or []
                              if start is not None and lo <= start and send.target not in held]
                     if early:
-                        lint.append(Issue("warn", f"SEND: to {send.what} lists segment {min(early)}, but its "
-                                                  f"frames come from segment {start}: up to segment {start} the clips "
+                        lint.append(Issue("warn", f"REMEMBER: … as {send.what} lists clip {min(early) + 1}, but its "
+                                                  f"frames come from clip {start + 1}: up to clip {start + 1} the clips "
                                                   "go without it."))
     else:
         ex = Expander(seed, libraries, weights, params.rng)
@@ -850,7 +922,7 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
         absent = drop_absent(scene)
         lint += [Issue("warn", problem) for m in absent for problem in m.problems]
         lint += [Issue("warn", f"{m.name} is in the CAST, but no shot, voice or summary names it, so it is left out "
-                               "of the prompt (global keeps a member in).") for m in absent]
+                               "of the prompt (always keeps a member in).") for m in absent]
     # A picture at 0 leaves the clip: Reference to Video shows its pictures to the text encoder too, so
     # only one it never gets is gone. Not named, and not handed on as a sent image either.
     if zero := zero_images(scene):
@@ -866,4 +938,5 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                     segment if reel else 0, reel.segments if reel else 0, refs,
                     sends, reel.send_slots if reel else [],
                     [{**r, "sent": sent_mods[r["name"]]} if r["name"] in sent_mods else r for r in clip_refmods(scene)],
-                    clip_images(scene, refs))
+                    clip_images(scene, refs), reel.before(segment, path) if reel else None,
+                    bool(reel and reel.blocks[path[segment][0]].test))

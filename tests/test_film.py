@@ -25,10 +25,10 @@ def tail(fill=0.0):
     return Tail(np.full((1, 24, 7, 3, 4), fill, np.float32), np.full((1, 32, 2, 37), fill, np.float32), 0.25)
 
 
-def take(out, segment, n=24, w=64, fill=0.0):
+def take(out, segment, n=24, w=64, fill=0.0, continues=-1, test=False):
     sound = np.sin(np.linspace(0, 400, round(n / 24 * SR), dtype=np.float32))[None].repeat(2, 0) * 0.1
     return film.save_take(out, "h3_context", segment, frames(n, w=w, shade=40 * segment), sound, SR, tail(fill),
-                          {"seed": 7})
+                          {"seed": 7}, continues, test)
 
 
 def active_run(out):
@@ -63,6 +63,30 @@ def test_rendering_a_segment_again_drops_the_ones_after_it(tmp_path):
     assert [(c["segment"], c["frames"]) for c in chain.listing(tmp_path, "h3_context")["clips"]] == [(0, 24), (1, 41)]
     assert again != first[1] and first[1].is_dir() and first[2].is_dir()  # older takes stay on disk
     assert decoded(active_run(tmp_path) / "film.mp4")[0] == 65
+
+
+def test_a_branch_continues_the_scene_it_names_and_a_retake_keeps_the_branches_beside_it(tmp_path):
+    take(tmp_path, 0)
+    take(tmp_path, 1, fill=0.5)  # scene 2
+    take(tmp_path, 2, fill=0.1, continues=1)  # case A, AFTER: 2
+    take(tmp_path, 3, fill=0.2, continues=1)  # case B, AFTER: 2
+    assert (film.previous_tail(tmp_path, "h3_context", 4, continues=1).video == 0.5).all()
+    take(tmp_path, 2, n=30, fill=0.3, continues=1)  # case A again: case B continues scene 2, not case A
+    assert [c["frames"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [24, 24, 30, 24]
+    take(tmp_path, 4, n=12, continues=None)  # a test scene: continues no clip
+    take(tmp_path, 1, n=36, fill=0.5)  # scene 2 again: every branch of it goes, and what comes after them
+    assert [c["frames"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [24, 36]
+
+
+def test_test_takes_are_kept_and_the_film_is_joined_without_them(tmp_path):
+    first = take(tmp_path, 0, n=24, continues=None, test=True)
+    assert film.film_file(first) == first / "video.mp4"  # no film yet: the take stands in
+    take(tmp_path, 1, n=30, continues=None, test=True)
+    shot = take(tmp_path, 2, n=48, continues=None)
+    take(tmp_path, 3, n=12, continues=2)
+    assert [c["frames"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [24, 30, 48, 12]
+    assert film.film_file(shot) == active_run(tmp_path) / "film.mp4"
+    assert decoded(active_run(tmp_path) / "film.mp4")[0] == 60
 
 
 def test_segment_0_starts_a_new_run(tmp_path):

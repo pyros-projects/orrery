@@ -1,14 +1,14 @@
 ---
 title: "Infinite cakewalk"
-note: "A runway show that never ends, steered by GOTO. Every clip rolls who walks next ($who), and its last line jumps to the womenswear or the menswear chunk, which dresses that model in clothes of their own. The season is rolled once per show (dial $season): spring and summer walk outside, autumn and winter inside, each with its own weather. The libraries come with the preset (@lib). Run (Instant) plays clip after clip; another seed is another show."
+note: "A runway show that never ends, steered by CUT TO:. Every clip rolls who walks next ($who), and its last line jumps to the womenswear or the menswear scene, which dresses that model in clothes of their own. The season is rolled once per show (dial $season): spring and summer walk outside, autumn and winter inside, each with its own weather. The libraries come with the preset (@lib). Run (Instant) plays clip after clip; another seed is another show."
 tags: [fashion, h3, reel, goto, motion_context]
 ---
-@h3 t2va 9:16
+@h3 text 9:16
 style: live-action, cinematic fashion film, one continuous take
 context: 22
 $house = __couture_house__
 $season = {spring|summer|autumn|winter}
-$venue = {? $season[spring|summer]: __cakewalk_outdoor__|__cakewalk_indoor__}
+$venue = {IF $season is spring, summer: __cakewalk_outdoor__|__cakewalk_indoor__}
 
 MUSIC: a swaggering brass cakewalk over a slow, heavy techno kick
 
@@ -49,41 +49,41 @@ MUSIC: a swaggering brass cakewalk over a slow, heavy techno kick
   a boiler suit in raw white canvas with exaggerated shoulders
   a long cape of black feathers over a bare chest and tailored trousers
 
-CHUNK the curtain
+SCENE the curtain
 $who = {woman|man}
 SHOT 6s: tracking, slow
 The $house $season show opens at $venue: the guests settle along both sides of the runway with their phones raised as the lights come up.
-? $season[spring]: Blossom drifts across the runway in the breeze.
-? $season[summer]: The low sun glares off every lens in the front row.
-? $season[autumn]: Rain streaks the tall windows behind the crowd.
-? $season[winter]: Snow drifts past the tall windows behind the crowd.
+IF $season is spring: Blossom drifts across the runway in the breeze.
+IF $season is summer: The low sun glares off every lens in the front row.
+IF $season is autumn: Rain streaks the tall windows behind the crowd.
+IF $season is winter: Snow drifts past the tall windows behind the crowd.
 SFX: a murmuring crowd; the first notes of a brass band
-HANDOFF: the runway lies empty under the lights, waiting
-? $who[woman]: GOTO: womenswear
-GOTO: menswear
+END ON: the runway lies empty under the lights, waiting
+IF $who is woman: CUT TO: womenswear
+CUT TO: menswear
 
-CHUNK womenswear
+SCENE womenswear
 $model = __cakewalk_women__
 $look = __cakewalk_womenswear__
 $who = {woman|man}
 SHOT 6s: tracking, slow
 $model struts down the runway toward the camera in $look, high-stepping in time with the brass like an old cakewalk.
-? $season[spring|summer]: The open air tugs at the hem as she passes.
-? $season[autumn|winter]: Her steps echo off the walls as she passes.
+IF $season is spring, summer: The open air tugs at the hem as she passes.
+IF $season is autumn, winter: Her steps echo off the walls as she passes.
 SFX: heel strikes in time with the brass; a ripple of camera shutters
-HANDOFF: the model reaches the end of the runway, poses and turns back
-? $who[woman]: GOTO: womenswear
-GOTO: menswear
+END ON: the model reaches the end of the runway, poses and turns back
+IF $who is woman: CUT TO: womenswear
+CUT TO: menswear
 
-CHUNK menswear
+SCENE menswear
 $model = __cakewalk_men__
 $look = __cakewalk_menswear__
 $who = {woman|man}
 SHOT 6s: tracking, slow
 $model struts down the runway toward the camera in $look, high-stepping in time with the brass like an old cakewalk.
-? $season[spring|summer]: The open air tugs at the coat as he passes.
-? $season[autumn|winter]: His steps echo off the walls as he passes.
+IF $season is spring, summer: The open air tugs at the coat as he passes.
+IF $season is autumn, winter: His steps echo off the walls as he passes.
 SFX: hard soles strike in time with the brass; a ripple of camera shutters
-HANDOFF: the model reaches the end of the runway, poses and turns back
-? $who[woman]: GOTO: womenswear
-GOTO: menswear
+END ON: the model reaches the end of the runway, poses and turns back
+IF $who is woman: CUT TO: womenswear
+CUT TO: menswear

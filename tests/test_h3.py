@@ -85,6 +85,14 @@ def test_l2va_alignment_line_is_byte_identical_to_the_guide():
     assert h3(src).text.startswith(GUIDE_L2VA_6S + "\n\n")
 
 
+@pytest.mark.parametrize("word, mode", [("text", "t2va"), ("image", "i2va"), ("first-last", "fl2va"),
+                                        ("last", "l2va"), ("references", "ref2va")])
+def test_the_mode_words_compile_as_minimax_modes(word, mode):
+    src = "@h3 {} 16:9\nSHOT 6s: push in, small, slow\nA glass settles into <Picture 1>.\nSFX: the glass breaks\n"
+    then, now = h3(src.format(mode)), h3(src.format(word))
+    assert (now.text, [i.message for i in now.lint]) == (then.text, [i.message for i in then.lint])
+
+
 # --- mechanics ----------------------------------------------------------------------------
 
 def test_timestamps_accumulate_shot_durations():

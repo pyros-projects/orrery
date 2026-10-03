@@ -3,7 +3,7 @@ title: "Deep-sea documentary"
 note: "A voiceover narrator across a cut. Tests the voiceover phrase with closed lips, one speaker ID over two shots and slow camera moves. The narrator names the rolled creature."
 tags: [h3, voiceover, documentary]
 ---
-@h3 t2va 16:9
+@h3 text 16:9
 style: live-action, nature documentary footage
 $beast = __creature[deep_sea]__
 

@@ -103,6 +103,7 @@
 .orrery-app .t-brace { color: var(--violet); }
 .orrery-app .t-kw, .orrery-app .t-head { color: var(--sky); }
 .orrery-app .t-kw { font-weight: 500; }
+.orrery-app .t-cast, .orrery-app .t-kw .t-cast { color: var(--brass); }  /* a CAST member, @JINX or JINX */
 .orrery-app .t-enh { color: var(--rose); font-style: italic; }
 .orrery-app .t-comment { color: var(--faint); font-style: italic; }
 .orrery-app .t-param { color: var(--faint); }

@@ -3,7 +3,7 @@ title: "Street musician"
 note: "The music comes from the picture: an instrument played on screen, heard as sound, with no score on top (music is N/A). Tests whether H3 syncs hands and sound. Instrument and place are rolled."
 tags: [h3, music, performance]
 ---
-@h3 t2va 16:9
+@h3 text 16:9
 style: live-action, cinematic
 $instrument = {cello|upright piano|koto|accordion|trumpet|theremin}
 

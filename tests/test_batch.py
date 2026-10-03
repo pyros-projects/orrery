@@ -109,12 +109,15 @@ def test_expand_batch_gives_every_cell_at_each_seed():
     assert [(r.seed, r.cell) for r in rows] == [(s, c) for s in (10, 11) for c in range(6)]
 
 
-def test_a_screenplay_grids_too_but_a_reel_does_not():
+def test_a_screenplay_grids_too_and_so_does_one_clip_of_a_reel():
     h3 = "@h3 t2va\nSHOT 5s: static\nA __creature__ paints in __style__.\n: grid __style__"
     assert "in clay" in compile_scene(h3, 3, LIBS, cell=1).text
-    reel = "@h3 t2va\nCHUNK a\nSHOT 5s\nA __style__.\n: grid __style__"
+    reel = "@h3 text\nSCENE a\nSHOT 5s\nA fox.\nEND ON: the fox sits\nSCENE b\nSHOT 5s\nA heron in __style__.\n: grid __style__"
+    first, second = (compile_scene(reel, 3, LIBS, segment=1, cell=c).text for c in (0, 1))
+    assert first != second and "in clay" in second and "the fox sits" in first and "the fox sits" in second
+    assert compile_scene(reel, 3, LIBS, segment=0, cell=1).text == compile_scene(reel, 3, LIBS, segment=0, cell=0).text
     with pytest.raises(ValueError, match="reel"):
-        compile_scene(reel, 3, LIBS, cell=0)
+        compile_scene(reel.replace(": grid __style__", ": unique=__style__"), 3, LIBS)
 
 
 @pytest.mark.parametrize("template, words", [

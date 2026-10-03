@@ -1,6 +1,6 @@
 ---
 title: "15 · Presets as building blocks"
-lesson: "@include embeds another preset where it stands, and the indented key = value lines under it turn that preset's dials: its $bindings. The preset stays as it is; you choose the medium and the vantage, the rest still rolls. The effects/ presets are made for this: @include effects/living_clay inside an H3 reel chunk turns it into an operator on your own scene."
+lesson: "@include embeds another preset where it stands, and the indented key = value lines under it turn that preset's dials: its $bindings. The preset stays as it is; you choose the medium and the vantage, the rest still rolls. The effects/ presets are made for this: @include effects/living_clay inside a scene of an H3 reel turns it into an operator on your own scene."
 tags: [tutorial]
 ---
 # Everything the landscape preset rolls, with two of its dials turned.
