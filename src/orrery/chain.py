@@ -17,7 +17,6 @@ from pathlib import Path
 DEFAULT_CHAIN = "h3_context"  # Chain Video's and Load Latent's default latent_path
 STORES = ("orrery_film", "chain_video")  # Orrery Film's takes, H3 Motion Context's Chain Video
 STILL_WIDTH = 672
-TAIL_SECONDS = 3.0
 
 
 def previous_clip(output: Path | str, latent_path: str, segment: int) -> Path | None:
@@ -140,12 +139,8 @@ def still_indices(frames: int, fps: float) -> list[int]:
     return picks
 
 
-def tail_start(frames: int, fps: float, seconds: float = TAIL_SECONDS) -> int:
-    return max(0, frames - round(seconds * fps))
-
-
 def load(path: Path):
-    """(stills for the model, the tail as an IMAGE batch, its AUDIO or None). ComfyUI only."""
+    """The clip's stills, for the language model that writes `--…--` slots. ComfyUI only."""
     import comfy.utils
     from comfy_api.latest import InputImpl
 
@@ -156,9 +151,4 @@ def load(path: Path):
     if width > STILL_WIDTH:
         stills = comfy.utils.common_upscale(stills.movedim(-1, 1), STILL_WIDTH, round(height * STILL_WIDTH / width),
                                             "bilinear", "disabled").movedim(1, -1)
-    start = tail_start(len(images), fps)
-    audio = parts.audio
-    if audio is not None:
-        rate = audio["sample_rate"]
-        audio = {"waveform": audio["waveform"][..., round(start / fps * rate):], "sample_rate": rate}
-    return stills, images[start:], audio
+    return stills

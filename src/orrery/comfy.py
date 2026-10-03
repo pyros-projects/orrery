@@ -414,18 +414,17 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                     f"{'longer' if context > CONTEXT else 'shorter'} than its shots. Write context: {CONTEXT}, or "
                     "leave the line out; H3 Motion Context takes other lengths.")})
                 print(f"[orrery] warn: {data['lint'][-1]['message']}")
-    return (result.text, json.dumps(data, ensure_ascii=False), seed, width, height, length, stack,
-            segment, segment + 1)
+    return result.text, json.dumps(data, ensure_ascii=False), seed, width, height, length, stack
 
 
 def _previous(latent_path: str, segment: int):
-    """(stills, tail, audio) of the clip before this segment in the Motion Context chain, else Nones."""
+    """The stills of the clip before this segment in the chain, for the model's `--…--` slots, else None."""
     try:
         import folder_paths  # ComfyUI
     except ImportError:
-        return None, None, None
+        return None
     path = previous_clip(Path(folder_paths.get_output_directory()), latent_path or DEFAULT_CHAIN, segment)
-    return load(path) if path else (None, None, None)
+    return load(path) if path else None
 
 
 def _announce(unique_id, segment: int, end: bool = False) -> None:
@@ -508,10 +507,8 @@ def save_png(image, path: Path | str, picks_json: str) -> None:
 class OrreryPrompt:
     CATEGORY = "orrery"
     FUNCTION = "run"
-    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "LORA_STACK", "INT", "INT", "IMAGE", "AUDIO",
-                    "FLOAT")
-    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "lora_stack", "load_index", "save_index",
-                    "previous", "previous_audio", "megapixels")
+    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "LORA_STACK", "FLOAT")
+    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "lora_stack", "megapixels")
     OUTPUT_TOOLTIPS = ("", "", "", "From `: w…` in the template, else the @h3 ratio, else 1024.",
                        "From `: h…` in the template, else the @h3 ratio, else 1024.",
                        ("Frames at 24 fps for the MiniMax H3 nodes' length input: the sum of the SHOT "
@@ -519,13 +516,6 @@ class OrreryPrompt:
                         "chunk on), snapped up to H3's 17k+5 grid (124 without SHOTs)."),
                        ("The LORA: lines (global, plus the chunk's in a reel) as a LORA_STACK for any "
                         "loader with a lora_stack input (LoraManager, Efficiency, Easy-Use …)."),
-                       ("The segment, for H3 Motion Context only: wire it into its Load Latent's clip_index "
-                        "(Orrery Continue reads the segment from the picks)."),
-                       "The segment + 1, for H3 Motion Context only: wire it into its Save Latent's clip_index.",
-                       ("The last 3 s of the clip before this segment (from Orrery Film or H3 Motion Context's "
-                        "Chain Video), for the Reference to Video node's ref_video; None in the first segment, "
-                        "which ref2va skips."),
-                       "The soundtrack of `previous`, for the Reference to Video node's ref_video_audio.",
                        ("The canvas area: `0.6MP` from the @h3 line, else width × height, for resolution and "
                         "scale nodes that take megapixels."))
     DESCRIPTION = ("Expands an orrery template (text) or compiles a screenplay (h3-base, flat) "
@@ -550,8 +540,7 @@ class OrreryPrompt:
                                              "as the language model, in place of the one in orrery's settings."}),
                 "segment": ("INT", {"default": 0, "min": 0, "max": 99999, "control_after_generate": True,
                                     "tooltip": "The reel's clip to write, from 0. With increment, every queued "
-                                               "run plays the next clip, which Orrery Continue (or H3 Motion "
-                                               "Context, through load_index and save_index) chains to the one "
+                                               "run plays the next clip, which Orrery Continue chains to the one "
                                                "before. Plain screenplays ignore it."}),
                 "first_frame": ("IMAGE", {"tooltip": (
                     "Optional: the picture the clip starts on (wire it into the H3 node's first_frame too). Width and "
@@ -580,7 +569,7 @@ class OrreryPrompt:
     def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, clip=None,
             latent_path=DEFAULT_CHAIN, sweep="", unique_id=None, extra_pnginfo=None, prompt=None,
             first_frame=None, last_frame=None):
-        stills, tail, audio = _previous(latent_path, segment)
+        stills = _previous(latent_path, segment)
         packed, wired, keep = wiring(prompt, unique_id)
         try:
             outputs = run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
@@ -599,7 +588,7 @@ class OrreryPrompt:
                 runs.remember(prompt_id, unique_id, outputs[1])  # for Generate: Save nodes log to the galaxy
             if "segments" in data:  # a reel
                 _announce(unique_id, data["segment"])
-            return (*outputs, tail, audio, data["megapixels"])
+            return (*outputs, data["megapixels"])
         except ReelEnd as end:
             try:
                 from comfy_execution.graph_utils import ExecutionBlocker  # ComfyUI
