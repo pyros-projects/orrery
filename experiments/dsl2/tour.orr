@@ -1,0 +1,28 @@
+# DSL 2.0 in one reel (#39): a test scene, @JINX, REMEMBER as a member, START WITH:, IF, history in
+# brackets, SET by member with a word, and a cut with a chance. Generate from clip 1, seed fixed.
+@h3 references 2:3 0.6MP
+style: live-action, TikTok reel
+
+CAST
+@JINX (refmod minimaxh3_jinx_v1_refmod): a skinny and pretty alternative young woman around 20 years old.
+
+SCENE the mirror (test)
+SHOT 5s: static
+@JINX stands in front of a mirror in a small bedroom and shows her outfit.
+REMEMBER: frame at 2s as @JINX
+
+SCENE the room
+$mood = {calm|tense|playful}
+START WITH: the camera faces a closed bedroom door
+SHOT 6s: static
+The door opens and @JINX steps into the room, $mood.
+END ON: @JINX stands at the window
+
+SCENE the window ×2
+SET: @JINX(0.6, refmods)
+$mood = {calm|tense|playful}
+SHOT 5s: push in
+@JINX looks out of the window, now $mood, a moment ago $mood[-1].
+IF $mood is tense: @JINX (whispering): Someone is out there.
+END ON: @JINX turns to the camera
+CUT TO: the room (30%) ×1
