@@ -252,7 +252,7 @@ def test_a_frame_anchor_on_a_sent_image_waits_for_it():
 def test_a_bracket_before_its_image_exists_is_flagged():
     src = SEND_REEL.replace("GIRL stretches on a mat.", "GIRL stretches like in [image 3].")
     lint = [i.message for i in ref2va(src, segment=0).lint]
-    assert any("[image 3]" in m and "SEND" in m for m in lint)
+    assert any("[image 3]" in m and "REMEMBER" in m for m in lint)
 
 
 @pytest.mark.parametrize("line, words", [
@@ -309,7 +309,7 @@ def test_two_sends_to_one_refmod_warn_and_the_later_takes_over():
     src = MOD_REEL.replace("The empty room.", "The empty room.\nSEND: frame -1 to refmod jinx_look")
     assert split_reel(src).refmods_ready(2)["jinx_look"] == {"segment": 1, "frames": [[-1, -1]]}
     lint = [i.message for i in compile_scene(src, 1, {}, segment=2).lint]
-    assert any("refmod jinx_look is filled by two SEND: lines" in m and "(SCENE 2) takes over" in m for m in lint)
+    assert any("refmod jinx_look is filled by two REMEMBER: lines" in m and "(SCENE 2) takes over" in m for m in lint)
 
 
 def test_send_outside_a_chunk_or_outside_ref2va_is_an_error():
@@ -451,7 +451,7 @@ def test_two_sends_claiming_one_segment_for_one_image_hand_over_to_the_later():
 def test_a_listed_segment_before_the_frame_exists_is_flagged():
     src = SEND_REEL.replace("GIRL walks to the window.", "GIRL walks to the window.\nSEND: frame 0 to image 5 for segment 1+")
     lint = [i.message for i in ref2va(src, segment=0).lint]
-    assert any("image 5" in m and "segment 1" in m for m in lint)
+    assert any("image 5" in m and "clip 2" in m for m in lint)
 
 
 def test_a_held_image_exists_from_segment_0_within_its_for_list():

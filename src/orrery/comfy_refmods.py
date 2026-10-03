@@ -148,7 +148,7 @@ def sent_block(name: str, sent: dict, latent_path: str, vae) -> dict:
                              "the H3 video VAE (the one Reference to Video takes) into its vae input.")
         frames, dropped = chain.frames(path, sent["frames"], step)
         if dropped:
-            print(f"[orrery] SEND to refmod {name}: frames {', '.join(map(str, dropped))} are not in clip "
+            print(f"[orrery] REMEMBER as refmod {name}: frames {', '.join(map(str, dropped))} are not in clip "
                   f"{segment + 1}, so they are left out.")
         _BUILT[key] = encode(frames, vae)
         print(f"[orrery] Orrery RefMods: built refmod {name} from {frames.shape[0]} frames of clip {segment + 1}")
@@ -204,18 +204,18 @@ class OrreryRefMods:
     FUNCTION = "apply"
     RETURN_TYPES = ("CONDITIONING",)
     RETURN_NAMES = ("conditioning",)
-    DESCRIPTION = ("Loads the RefMods the clip's CAST names (refmod NAME at 0.5 from 35%) and puts them on the "
-                   "conditioning, and applies a picture's at and from (image 1 at 0.5): wire Reference to Video's "
+    DESCRIPTION = ("Loads the RefMods the clip's CAST names (refmod NAME) and puts them on the conditioning, with "
+                   "their dials and a picture's (SET: @JINX(0.5, 35%), SET: image_1(0.5)): wire Reference to Video's "
                    "conditioning and the Orrery Prompt's picks in, and the output on to Orrery Continue or the "
-                   "guider. RefMods from files need the ComfyUI-H3RefMods pack; one a SEND: line makes from the "
-                   "reel's frames (SEND: every 10 frames to refmod NAME) needs the H3 video VAE in vae.")
+                   "guider. RefMods from files need the ComfyUI-H3RefMods pack; one a REMEMBER: line makes from the "
+                   "reel's frames (REMEMBER: every 10th frame as refmod NAME) needs the H3 video VAE in vae.")
 
     @classmethod
     def INPUT_TYPES(cls):
         return {"required": {"conditioning": ("CONDITIONING",),
                              "picks": ("STRING", {"forceInput": True})},
                 "optional": {"vae": ("VAE", {"tooltip": "The H3 video VAE (Reference to Video's): it encodes the "
-                                                        "RefMods a SEND: line makes from the reel's frames."})}}
+                                                        "RefMods a REMEMBER: line makes from the reel's frames."})}}
 
     @classmethod
     def IS_CHANGED(cls, **_):

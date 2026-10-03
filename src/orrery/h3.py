@@ -77,7 +77,7 @@ _SFX = re.compile(r"^SFX:\s*(.+)$", re.IGNORECASE)
 _VOICE = re.compile(r"^([A-Z][A-Z0-9 _-]*?)\s*(?:\(([^)]*)\))?\s*:\s*(.+)$")
 _BINDING = re.compile(r"^\$([A-Za-z_]\w*)\s*=\s*(.+)$")
 _HANDOFF = re.compile(r"^(?:END ON|HANDOFF):\s*(.+)$")
-_SEND_LINE = re.compile(r"^SEND:")
+_SEND_LINE = re.compile(r"^(?:REMEMBER|SEND):")
 _AFTER = re.compile(r"^AFTER:")
 _START_WITH = re.compile(r"^START WITH:")
 _LORA = re.compile(r"^LORA:\s*(.+)$")
@@ -213,7 +213,8 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
         elif _START_WITH.match(line):
             lint.append(Issue("warn", "START WITH: only works inside a SCENE of a reel; it is ignored."))
         elif _SEND_LINE.match(line):
-            raise ValueError("SEND: belongs inside a SCENE: it sends frames of that scene's clip to the clips after it.")
+            raise ValueError("REMEMBER: (SEND:) belongs inside a SCENE: it keeps frames of that scene's clip for the "
+                             "clips after it.")
         elif m := _CONTEXT.match(line):
             scene.context = int(m.group(1))
         elif m := _SET.match(line):
@@ -835,7 +836,7 @@ def withhold_images(scene: Scene, missing: set[int], lint: list[Issue], at_zero:
     texts = [scene.summary, *(it for shot in scene.shots for it in shot.items if isinstance(it, str))]
     for n in sorted({int(x) for text in texts for x in _IMAGE_BRACKET.findall(text)} & missing):
         lint.append(Issue("warn", f"image {n} is at 0, but [image {n}] in the prose still hands it to H3 in this clip."
-                          if at_zero else f"[image {n}] is mentioned before the SEND: line that fills it has played, "
+                          if at_zero else f"[image {n}] is mentioned before the REMEMBER: line that keeps it has played, "
                                           "so in this clip it points at nothing."))
 
 
@@ -883,7 +884,7 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
         lint += [Issue("warn", problem) for m in absent for problem in m.problems]
         if reel.send_slots:
             if scene.mode != "ref2va":
-                raise ValueError("SEND: hands frames to Reference to Video as reference images, so it needs an "
+                raise ValueError("REMEMBER: hands frames to Reference to Video as reference images, so it needs an "
                                  "@h3 references screenplay.")
             sends = reel.ready(segment, set(held) & set(reel.send_slots), path)
             # a sent image that some CAST gives a member goes only where a member of this clip has it (not to a
@@ -911,8 +912,8 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                     early = [lo for lo, _ in send.segments or []
                              if start is not None and lo <= start and send.target not in held]
                     if early:
-                        lint.append(Issue("warn", f"SEND: to {send.what} lists segment {min(early)}, but its "
-                                                  f"frames come from segment {start}: up to segment {start} the clips "
+                        lint.append(Issue("warn", f"REMEMBER: … as {send.what} lists clip {min(early) + 1}, but its "
+                                                  f"frames come from clip {start + 1}: up to clip {start + 1} the clips "
                                                   "go without it."))
     else:
         ex = Expander(seed, libraries, weights, params.rng)

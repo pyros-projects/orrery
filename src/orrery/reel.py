@@ -553,7 +553,7 @@ def shared_sends(reel: Reel, starts: list[int | None]) -> list[str]:
                           if max(lo, olo) <= min([x for x in (hi, ohi) if x is not None], default=max(lo, olo))]
                 if shared:
                     later = i if start >= other_start else j
-                    out.append(f"{send.what} is filled by two SEND: lines in clip {min(shared) + 1} (SCENE "
+                    out.append(f"{send.what} is filled by two REMEMBER: lines in clip {min(shared) + 1} (SCENE "
                                f"{j + 1} and SCENE {i + 1}): where they meet, the one sent last (SCENE {later + 1}) "
                                "takes over.")
             claims.setdefault((send.refmod is None, send.target), []).append((i, start, spans))

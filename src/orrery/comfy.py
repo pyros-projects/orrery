@@ -587,7 +587,7 @@ class OrreryPrompt:
             if uistate.load_ui(h)["log_prompts"]:
                 print("\n".join(history.log_lines(data)))
             if "sends" in data and not packed:
-                raise ValueError("This reel SENDs frames as reference images, which Orrery Refs fetches: wire this "
+                raise ValueError("This reel REMEMBERs frames as reference images, which Orrery Refs fetches: wire this "
                                  "node's picks into an Orrery Refs, and its ref outputs into Reference to Video.")
             if (prompt_id := runs.current_prompt()) and unique_id is not None:
                 runs.remember(prompt_id, unique_id, outputs[1])  # for Generate: Save nodes log to the galaxy
@@ -765,8 +765,8 @@ class OrreryRefs:
         return {"required": {"picks": ("STRING", {"forceInput": True})},
                 "optional": {**{f"image_{i}": ("IMAGE",) for i in range(1, cls.SLOTS + 1)},
                              "keep_sent": ("BOOLEAN", {"default": False, "tooltip": (
-                                 "On: every SEND: image with a stored anchor (the frames last fetched for it) uses that "
-                                 "anchor from segment 0 and for the whole run, so a character you liked stays. "
+                                 "On: every remembered image with a stored anchor (the frames last fetched for it) uses "
+                                 "that anchor from clip 1 and for the whole run, so a character you liked stays. "
                                  "Off: fresh frames from this run's chain, which replace the anchors.")})},
                 "hidden": {"prompt": "PROMPT", "unique_id": "UNIQUE_ID"}}
 
@@ -851,7 +851,7 @@ class OrreryRefs:
         batch, dropped = chain.frames(path, send["frames"], send.get("step", 1))
         if dropped:
             many = len(dropped) > 1
-            print(f"[orrery] SEND to image {n}: frame{'s' if many else ''} {', '.join(map(str, dropped))} "
+            print(f"[orrery] REMEMBER as image {n}: frame{'s' if many else ''} {', '.join(map(str, dropped))} "
                   f"{'are' if many else 'is'} not in clip {segment + 1}, so "
                   f"{'they are' if many else 'it is'} left out.")
         return batch
