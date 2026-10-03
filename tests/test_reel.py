@@ -568,6 +568,26 @@ def test_after_names_a_scene_that_played_and_a_repeat_continues_itself():
                for i in compile_scene("@h3 text\nAFTER: 2\nSHOT 5s\nA fox.", 1, {}).lint)
 
 
+def test_a_cut_with_a_chance_holds_that_often_and_each_seed_its_own_way():
+    story = film(GOTO_REEL).replace("CUT TO: the stairs ×2", "CUT TO: the stairs (50%) ×3")
+    reel = split_reel(story)
+    assert reel.jumps_on_rolls and reel.blocks[2].gotos[0].chance == 0.5 and reel.segments is None
+    lengths = [len(reel_path(reel, seed, {}, None)[0]) for seed in range(200)]
+    assert set(lengths) <= {3, 5, 7, 9} and lengths.count(3) in range(70, 131)  # no jump about every other seed
+    assert lengths == [len(reel_path(reel, seed, {}, None)[0]) for seed in range(200)]  # the same seed, the same story
+    either = story.replace("CUT TO: the stairs (50%) ×3", "CUT TO: the gate (30%)\nCUT TO: the stairs (100%) ×1")
+    firsts = {reel_path(split_reel(either), seed, {}, None)[0][3][0] for seed in range(40)}
+    assert firsts == {0, 1}  # tried in order: the gate when its 30% holds, else the stairs
+
+
+def test_a_chance_on_a_cut_moves_no_pick():
+    rolls = GOTO_REEL.replace("The keeper climbs.", "The keeper climbs in {rain|fog|snow}.")
+    chance = film(rolls).replace("CUT TO: the stairs ×2", "CUT TO: the stairs (100%) ×2")
+    for segment in range(7):
+        then, now = (compile_scene(src, 9, {}, target="h3-base", segment=segment) for src in (rolls, chance))
+        assert (now.text, now.picks) == (then.text, then.picks)
+
+
 def test_a_jump_opens_on_the_handoff_before_it_and_its_line_stays_out_of_the_prose():
     clip = compile_scene(GOTO_REEL, 1, {}, target="h3-base", segment=3)  # the stairs again, after the lamp
     assert "The keeper climbs" in clip.text and "beam sweeps the sea" in clip.text and "GOTO" not in clip.text

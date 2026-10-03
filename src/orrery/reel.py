@@ -31,9 +31,9 @@ several frames make one image batch. A scene that repeats sends from the first t
 image in turns. Orrery Refs fetches the frames; where they do not exist, the compiler leaves the
 image out of the clip.
 
-`CUT TO: <title or number> [×N]` at a scene's end jumps instead of going on: N times (then the scene
-after it), or for good without ×N. Several CUT TO: lines: the first that holds and has jumps left
-wins; `? cond: CUT TO: …` holds on what that clip rolled. So the path through the scenes is walked
+`CUT TO: <title or number> [×N] [(30%)]` at a scene's end jumps instead of going on: N times (then
+the scene after it), or for good without ×N; with a chance, only that often. Several CUT TO: lines:
+the first that holds and has jumps left wins; `? cond: CUT TO: …` holds on what that clip rolled. So the path through the scenes is walked
 clip by clip (`Reel.walk`): which scene a segment plays can depend on the seed.
 
 `AFTER: <title or number>` in a scene makes it continue the last clip of that scene instead of the
@@ -64,6 +64,7 @@ AFTER = re.compile(r"^AFTER:\s*(.*)$")
 TEST = re.compile(r"(?<!\S)\(test\)(?!\S)", re.IGNORECASE)  # `SCENE the forest (test)`
 GOTO_LINE = re.compile(r"^(?:\?[^\n]*?:\s*)?(?:CUT\s+TO|GOTO):", re.IGNORECASE)  # a cut, with its `? cond:` or without
 _GOTO = re.compile(r"(?:CUT\s+TO|GOTO):\s*(.+?)\s*(?:[×x]\s*(\d+))?\s*$", re.IGNORECASE)
+_CUT_CHANCE = re.compile(r"\s*\((\d+(?:\.\d+)?)\s*%\)")  # `CUT TO: the fight (30%)`
 MAX_WALK = 500  # clips a walk through a reel follows before it calls the reel endless
 _SEND = re.compile(r"^(?:frames?\b\s*(?P<frames>.*?)|every\s+(?P<every>\d+)(?:st|nd|rd|th)?\s+frames?)"
                    r"\s*\bto\s+(?P<target>.+?)\s*$", re.IGNORECASE)
@@ -167,10 +168,16 @@ class Goto:
     line: str  # as written, its `? cond:` included
     target: int  # the chunk it jumps to (an index)
     count: int | None  # jumps it makes; None: every time
+    chance: float | None = None  # `(30%)`: how often it holds, rolled each time it is tried
 
     @property
     def conditional(self) -> bool:
         return self.line.lstrip().startswith("?")
+
+    @property
+    def rolls(self) -> bool:
+        """Whether it holds on what rolls: a `? cond:` or a chance."""
+        return self.conditional or self.chance is not None
 
 
 @dataclass
@@ -192,8 +199,8 @@ class Reel:
 
     @property
     def jumps_on_rolls(self) -> bool:
-        """A `? cond: CUT TO:` line: the path depends on the seed."""
-        return any(g.conditional for b in self.blocks for g in b.gotos)
+        """A `? cond: CUT TO:` line or a cut with a chance: the path depends on the seed."""
+        return any(g.rolls for b in self.blocks for g in b.gotos)
 
     def walk(self, decide=None, upto: int = MAX_WALK, on_segment=None) -> tuple[list[tuple[int, int]], bool]:
         """(chunk, repetition) of each segment from 0, and whether the reel ended within `upto`. At a
@@ -214,7 +221,7 @@ class Reel:
             for k, goto in enumerate(here.gotos):
                 if goto.count is not None and used.get((block, k), 0) >= goto.count:
                     continue
-                if goto.conditional and not (decide and decide(len(path) - 1, goto)):
+                if goto.rolls and not (decide and decide(len(path) - 1, goto)):
                     continue
                 used[(block, k)] = used.get((block, k), 0) + 1
                 nxt = goto.target
@@ -412,13 +419,15 @@ def _scene(name: str, blocks: list[Block]) -> int | None:
 
 
 def _goto(line: str, blocks: list[Block]) -> Goto:
-    m = _GOTO.search(line)
+    chance = _CUT_CHANCE.search(line)
+    m = _GOTO.search(_CUT_CHANCE.sub("", line))
     target = m.group(1).strip() if m else ""
     index = _scene(target, blocks)
     if index is None:
         titles = ", ".join(b.title or f"scene {i + 1}" for i, b in enumerate(blocks))
         raise ValueError(f"{line}: no SCENE is called {target!r} (there are {titles}; a number counts them from 1).")
-    return Goto(line, index, int(m.group(2)) if m.group(2) else None)
+    return Goto(line, index, int(m.group(2)) if m.group(2) else None,
+                min(float(chance.group(1)) / 100, 1.0) if chance else None)
 
 
 def fills(send: Send, start: int | None) -> list[list[int | None]]:
@@ -478,8 +487,11 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
         history.append(dict(ex_t.vars))
         history_props.append(dict(ex_t.var_fields))
 
-    def holds(t: int, goto: Goto) -> bool:  # `? cond: GOTO: …` on what segment t rolled
-        return rolled[t].guarded(goto.line) is not None
+    def holds(t: int, goto: Goto) -> bool:  # a chance, and `? cond: CUT TO: …` on what segment t rolled
+        # the chance rolls on the expander kept for this, under the cut's own label: no pick moves
+        if goto.chance is not None and rolled[t]._stream(goto.line.strip()).random() >= goto.chance:
+            return False
+        return not goto.conditional or rolled[t].guarded(goto.line) is not None
 
     path, ended = reel.walk(holds, upto=max(last + 1, upto or 0), on_segment=record)
     if last >= len(path):
