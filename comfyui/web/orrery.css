@@ -223,7 +223,9 @@
 .orrery-app .ac li.on { background: var(--hover); }
 .orrery-app .ac li.on .acd { color: var(--muted); }
 .orrery-app .ac .pv { padding: 6px 10px; border-top: 1px solid var(--line); color: var(--muted); white-space: normal; overflow-wrap: anywhere; font-family: var(--mono); max-height: 150px; overflow-y: auto; }
-.orrery-app .ac .pv img { height: 88px; border-radius: 5px; margin: 0 6px 4px 0; vertical-align: top; }
+.orrery-app .ac .pv:has(img) { display: flex; gap: 8px; align-items: flex-start; }
+.orrery-app .ac .pv img { height: 88px; border-radius: 5px; flex: none; }
+.orrery-app .ac .pv span { flex: 1; min-width: 0; }
 .orrery-app .dials { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px 0; flex: none; max-height: 96px; overflow-y: auto; }
 .orrery-app .dials:empty { display: none; }
 .orrery-app .dial { display: inline-flex; align-items: center; background: var(--well); border: 1px solid var(--line); border-radius: 7px; font: 12px var(--mono); max-width: 100%; }
@@ -242,6 +244,10 @@
 .orrery-app .dm-item:hover, .orrery-app .dm-item.on { background: var(--hover); }
 .orrery-app .dm-item.cur { color: var(--rose); }
 .orrery-app .dm-note { padding: 6px 10px; color: var(--faint); font-family: var(--ui); }
+.orrery-app .dm-pic { width: 34px; height: 42px; object-fit: cover; border-radius: 4px; flex: none; background: #14151b; }
+.orrery-app .dm-text { display: grid; gap: 1px; min-width: 0; }
+.orrery-app .dm-text > span { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.orrery-app .dm-text small { color: var(--faint); font-size: 10.5px; }
 .orrery-app .pfoot { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px; flex: none; }
 .orrery-app .stat.live b { color: var(--brass); }
 .orrery-app .stat.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--brass); display: inline-block; margin-right: 6px; animation: oa-pulse 1.2s ease-in-out infinite; }

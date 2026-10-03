@@ -66,9 +66,10 @@ function card(app, span) {
       + `<ul>${(lib.sample || []).slice(0, 4).map((s) => `<li>${esc(s)}</li>`).join("")}</ul>`;
   }
   if (span.classList.contains("t-var")) {
-    const name = /^\$([A-Za-z_]\w*)/.exec(text)?.[1], ann = app.annotations?.();
-    const value = name && (ann?.bindings?.[name] ?? (ann?.exports?.[name] && `kept: ${ann.exports[name]}`));
-    return value ? `<div class="hv-t"><b>$${esc(name)}</b> at this seed</div><div class="hv-who">${esc(value)}</div>` : "";
+    const [, name, field] = /^\$([A-Za-z_]\w*)(?:\.([\w-]+))?/.exec(text) || [], ann = app.annotations?.();
+    const value = name && (field ? ann?.fields?.[name]?.[field]
+      : ann?.bindings?.[name] ?? (ann?.exports?.[name] && `kept: ${ann.exports[name]}`));
+    return value ? `<div class="hv-t"><b>$${esc(name)}${field ? `.${esc(field)}` : ""}</b> at this seed</div><div class="hv-who">${esc(value)}</div>` : "";
   }
   return "";
 }

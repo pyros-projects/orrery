@@ -36,7 +36,8 @@ export function menuItems(choices, value) {
 
 // The menu under (or, near the bottom, above) the dial's box, inside `host`. `choices` is null while a
 // library's entries are still on their way. Returns the menu's state for keys and picks.
-export function drawMenu(host, input, choices, at = -1) {
+// `describe(choice)` → { sub, thumb } shows more than a choice's text (a gallery character: who it is, its picture).
+export function drawMenu(host, input, choices, at = -1, describe = null) {
   host.querySelector(".dm")?.remove();
   const items = choices ? menuItems(choices, input.value) : [];
   const box = document.createElement("div");
@@ -46,7 +47,7 @@ export function drawMenu(host, input, choices, at = -1) {
   const head = picked.size > 1 ? `<div class="dm-note">${picked.size} chosen · rolls among them</div>` : "";
   box.innerHTML = !choices ? '<div class="dm-note">Loading the choices…</div>'
     : items.length ? head + items.map((c, n) => `<div role="option" aria-selected="${picked.has(c)}" class="dm-item${n === at ? " on" : ""}${picked.has(c) ? " cur" : ""}" data-n="${n}">`
-      + `<span class="dm-box" data-toggle="${n}" title="Add to the choices it rolls among (Space)">${picked.has(c) ? "✓" : ""}</span><span>${esc(c)}</span></div>`).join("")
+      + `<span class="dm-box" data-toggle="${n}" title="Add to the choices it rolls among (Space)">${picked.has(c) ? "✓" : ""}</span>${itemHTML(c, describe?.(c))}</div>`).join("")
       : `<div class="dm-note">${choices.length ? "Nothing matches: the dial takes what you type." : "No list here: type any value or expression."}</div>`;
   host.appendChild(box);
   // the host may be scaled (the node on ComfyUI's canvas): place it in the host's own pixels
@@ -58,6 +59,12 @@ export function drawMenu(host, input, choices, at = -1) {
   box.style.top = `${roomBelow >= Math.min(box.offsetHeight, 160) ? below + 4 : Math.max(4, above - box.offsetHeight - 4)}px`;
   box.querySelector(".on")?.scrollIntoView({ block: "nearest" });
   return { box, items, at };
+}
+
+function itemHTML(choice, more) {
+  if (!more) return `<span>${esc(choice)}</span>`;
+  return `${more.thumb ? `<img class="dm-pic" src="${esc(more.thumb)}" alt="" loading="lazy">` : ""}`
+    + `<span class="dm-text"><span>${esc(more.sub || choice)}</span>${more.sub ? `<small>${esc(choice)}</small>` : ""}</span>`;
 }
 
 export function closeMenu(host) {

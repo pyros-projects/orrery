@@ -591,3 +591,12 @@ test("a CAST line with gallery pictures shows them after it (#137)", async () =>
   const hint = annotationLines("CAST\n@HERO (image krea/x/7): a heron\nSHOT 5s", ann, (id) => `/t/${id}`).get(1);
   assert.deepEqual(hint.thumbs, ["/t/a1", "/t/a2"]);
 });
+
+test("a CAST line's note says nothing the line says itself", async () => {
+  const { annotationLines, slotsText } = await import("../../comfyui/web/app/annotate.js");
+  assert.equal(slotsText([9, 6, 7, 8]), "images 6–9");
+  assert.equal(slotsText([2, 5]), "images 2, 5");
+  const ann = { cast: { PLACE: "image 1", HERO: "image 9 · krea/x/7" } };
+  const notes = annotationLines("CAST\n@PLACE (image 1): a street\n@HERO (image krea/x/7): a heron", ann);
+  assert.deepEqual([...notes.keys()], [2]);
+});

@@ -761,3 +761,5 @@ def test_annotate_says_what_each_line_gives_at_a_seed(home):
     assert out["members"]["HERO"] == {"who": "a tall man", "pictures": [{"image": 2, "strength": 0.6, "from": 0.35, "to": 1.0}],
                                       "refmods": [], "voice": ""}  # the hover's record (#147)
     assert ok(home, webapi.annotate, template="A __missing_lib__.", seed=1, target="text")["bindings"] == {}  # never fails
+    held = ok(home, webapi.annotate, template="$a = __animal__\nEXPORT: mood = __moods__\nA $a.", seed=3, target="text")
+    assert held["bindings"]["a"] in ("fox", "heron", "owl") and held["exports"]["mood"] == "__moods__"  # one missing library

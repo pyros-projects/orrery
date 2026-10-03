@@ -44,8 +44,8 @@ export const KEYWORDS = [
     ["IF $x is a, b: the line", "x rolled either"], ["IF $x is not a: the line", "x rolled something else"],
     ["IF $x[myth]: the line", "a tag or a property of what x rolled"], ["IF $w.kind is rain: the line", "a property's value"]] },
   { word: "EXPORT: ", where: "text", says: "kept with the picture, never in the prompt", forms: [
-    ["EXPORT: mood = __moods__", "one value"], ["EXPORT: $who", "a binding, with its entry's fields"],
-    ["EXPORT:\n  who = $who\n  mood = __moods__", "a block: one per line"], ["EXPORT: backstory = --two sentences of backstory for $who--", "written by the language model"]] },
+    ["EXPORT: mood = __characters/creator/mood__", "one value"], ["EXPORT: $who", "a binding, with its entry's fields"],
+    ["EXPORT:\n  who = $who\n  mood = __characters/creator/mood__", "a block: one per line"], ["EXPORT: backstory = --two sentences of backstory for $who--", "written by the language model"]] },
   { word: "LORA: ", where: "h3", says: "LoRAs for this clip", forms: [["LORA: <lora:NAME:0.8>", "a LoRA and its strength"], ["LORA: __my_lora_sets__", "a library of LoRA sets"]] },
   { word: "context: ", where: "h3", says: "how many frames a continuation pins", forms: [["context: 22", "the last 22 frames"]] },
   { word: "refmods: ", where: "h3", says: "the RefMods' defaults", forms: [["refmods: at 1 from 35%", "strength and start"]] },
@@ -149,8 +149,12 @@ function fieldItems(before, text, data) {
   if (!m) return null;
   const bound = new RegExp(`^\\s*\\$${m[1]}\\s*=\\s*__([\\w*/]+?)(?=__|\\[|#|:\\d)`, "m").exec(text);
   const lib = bound && data.libraries.find((l) => l.name === bound[1]);
-  const fields = lib ? (lib.fields || Object.keys(lib.props || {})) : [];
-  const items = fields.filter((f) => startsWith(f, m[2]) && f !== m[2]).map((f) => ({ insert: f, detail: `a field of __${lib.name}__`, preview: "" }));
+  const first = ["who", "mood", "quirk", "voice", "skills"];  // what a gallery character carries, first
+  const fields = (lib ? (lib.fields || Object.keys(lib.props || {})) : []).filter((f) => !["ids", "pictures"].includes(f))
+    .sort((a, b) => (first.indexOf(a) + 1 || 99) - (first.indexOf(b) + 1 || 99) || a.localeCompare(b));
+  const now = data.fieldValues?.[m[1]] || {};  // what the binding rolled at the node's seed (the annotations)
+  const items = fields.filter((f) => startsWith(f, m[2]) && f !== m[2])
+    .map((f) => ({ insert: f, detail: now[f] ? `now: ${now[f]}` : `a field of __${lib.name}__`, preview: now[f] || "" }));
   return items.length ? { items, replaceFrom: before.length - m[2].length } : null;
 }
 
@@ -169,7 +173,7 @@ function shotItems(before, line, data, text = "") {
   const m = line.match(/^\s*SHOT\s+[\d.]+s?\s*[:|](.*)$/i);  // `|`: the older spelling
   if (!m) return null;
   const anchor = /\b(?:from|to)\s+image\s+(\d*)$/i.exec(m[1]);
-  if (anchor) return slotItems(anchor[1], text, before.length - anchor[1].length);
+  if (anchor) return slotItems(anchor[1], text, before.length - anchor[1].length, data);
   const segments = m[1].split(",");
   const fragment = segments.pop().trimStart();
   const used = segments.map((s) => s.trim().toLowerCase());
@@ -212,8 +216,8 @@ function gotoItems(before, line, text) {
 
 // `image ` where a number goes (REMEMBER: … as image, SHOT …: from/to image): 1–9, each saying what has it
 // already: a CAST member's picture, a REMEMBER: line's frames, or free.
-export function imageSlots(text) {
-  const taken = new Map();
+export function imageSlots(text, known = {}) {
+  const taken = new Map(Object.entries(known).map(([n, what]) => [Number(n), what]));  // a gallery picture's slot
   let cast = false;
   for (const raw of uncommented(text).split("\n")) {
     const line = raw.trim();
@@ -227,20 +231,20 @@ export function imageSlots(text) {
   return Array.from({ length: 9 }, (_, i) => [String(i + 1), taken.get(i + 1) || "free"]);
 }
 
-function slotItems(typed, text, replaceFrom) {
-  const items = imageSlots(text).filter(([n]) => n.startsWith(typed) && n !== typed)
+function slotItems(typed, text, replaceFrom, data = {}) {
+  const items = imageSlots(text, data.taken).filter(([n]) => n.startsWith(typed) && n !== typed)
     .map(([n, what]) => ({ insert: `${n} `, label: `image ${n}`, detail: what, preview: "" }));
   return items.length ? { items, replaceFrom } : null;
 }
 
 // REMEMBER: what to keep (first frame, frame at 1s, every 10th frame), then as whom or what, then for
 // which clips (in clips 2-5, until a scene).
-function rememberItems(before, line, text) {
+function rememberItems(before, line, text, data = {}) {
   const m = /^\s*REMEMBER:\s*(.*)$/.exec(line);
   if (!m) return null;
   const said = m[1];
   const slot = /\bas\s+image\s+(\d*)$/i.exec(said);
-  if (slot) return slotItems(slot[1], text, before.length - slot[1].length);
+  if (slot) return slotItems(slot[1], text, before.length - slot[1].length, data);
   const until = /\buntil\s+(.*)$/i.exec(said);
   let options, typed;
   if (until) {
@@ -534,7 +538,7 @@ export function suggest(text, caret, data) {
     ?? fieldItems(before, text, data)
     ?? bindingItems(before, text)
     ?? (screenplay ? refmodsLineItems(before, line) ?? setItems(before, line, text) ?? refmodItems(before, line, data) ?? gotoItems(before, line, text)
-      ?? rememberItems(before, line, text)
+      ?? rememberItems(before, line, text, data)
       ?? castItems(before, line, text) ?? shotItems(before, line, data, text) ?? keywordItems(before, line) : keywordItems(before, line, false))
     ?? NONE;
   const typed = before.slice(found.replaceFrom);

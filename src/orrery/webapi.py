@@ -763,7 +763,7 @@ def annotate(home: Home, args: dict) -> dict:
     text, target = _template_for(home, args)
     seed, libs = _int(args, "seed", 0), home.libraries()
     src = long_form(strip_comments(text))
-    out: dict = {"bindings": {}, "exports": {}, "grid": "", "cast": {}, "members": {}}
+    out: dict = {"bindings": {}, "fields": {}, "exports": {}, "grid": "", "cast": {}, "members": {}}
     grid = None
     try:
         if parse(src).params.grid is not None:
@@ -774,8 +774,20 @@ def annotate(home: Home, args: dict) -> dict:
     except ValueError:
         pass
     try:
-        x = expand(src, seed, libs, home.weights(), cell=0 if grid else None)
+        for _ in range(8):  # a library still to be written stands in as its name, so the rest still shows
+            try:
+                x = expand(src, seed, libs, home.weights(), cell=0 if grid else None)
+                break
+            except MissingLibrary as err:
+                libs = {**libs, err.name: Library(err.name, [Entry(f"\\__{err.name}\\__")])}  # escaped: shown, not rolled
+        else:
+            raise ValueError("too many libraries still to be written")
         out["bindings"] = {k: _short(v) for k, v in x.bound.items()}
+        for name, expr in parse(src).bindings:  # a binding to one library: the fields of the entry it rolled
+            m = re.match(r"^__([\w/]+?)(?:\[[^\]]*\]|#[\w-]+:\$?[\w.-]+)*__$", expr.strip())
+            entry = m and libs.get(m.group(1)) and next((e for e in libs[m.group(1)].entries if e.value == x.bound.get(name)), None)
+            if entry:
+                out["fields"][name] = {k: _short(v, 160) for k, v in entry.props if k not in ("ids", "pictures")}
         out["exports"] = {k: _short(_shown(v)) for k, v in x.exports.items()}
     except (ValueError, KeyError, MissingLibrary):
         pass

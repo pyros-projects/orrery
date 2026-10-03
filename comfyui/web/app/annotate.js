@@ -36,12 +36,22 @@ export function annotationLines(text, ann, thumb = null) {
     }
     if (GRID.test(line)) return put(i, ann.grid && `→ ${ann.grid}`);
     if (cast && (m = MEMBER.exec(line)) && ann.cast?.[m[1].trim()]) {
+      const own = [...(/\(([^)]*)\)/.exec(line)?.[1] || "").matchAll(/\bimage\s+(\d+)/gi)].map((x) => +x[1]);
+      if (ann.cast[m[1].trim()] === slotsText(own)) return;  // `(image 1)` → image 1 says nothing new
       put(i, `→ ${ann.cast[m[1].trim()]}`);
       const ids = (ann.members?.[m[1].trim()]?.pictures || []).map((p) => p.id).filter(Boolean);
       if (thumb && ids.length && out.has(i)) out.get(i).thumbs = ids.slice(0, 4).map(thumb);
     }
   });
   return out;
+}
+
+// image 6–9, images 2, 5: as the server writes a member's slots (webapi._slots).
+export function slotsText(numbers) {
+  const n = [...new Set(numbers)].sort((a, b) => a - b);
+  if (!n.length) return "";
+  if (n.length > 2 && n.every((v, k) => v === n[0] + k)) return `images ${n[0]}–${n[n.length - 1]}`;
+  return `image${n.length > 1 ? "s" : ""} ${n.join(", ")}`;
 }
 
 // REMEMBER's hints win where a line has both; `lines` maps a cell's lines into the template's (offset).
