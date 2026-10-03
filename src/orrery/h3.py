@@ -141,6 +141,7 @@ class Scene:
     refmod_start: float = REFMOD_START
     refmod_end: float = 1.0  # `refmods: … to 80%`: where a RefMod without its own `to` stops
     dials: dict = field(default_factory=dict)  # `SET: image_1(0.5, 35%)`: ("image", 1) or ("refmod", name) → {"strength", "from"}
+    sets: list = field(default_factory=list)  # the SET: items in order, (target, strength, start, end, words): see _apply_sets
     enhance: str = ""  # a `> instruction` before the first shot: for every shot without its own
 
     @property
@@ -262,6 +263,7 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
     t = 0.0
     for shot in scene.shots:
         shot.start, t = t, t + shot.duration
+    _apply_sets(scene, lint)
     pictures = {s.index for m in scene.cast for s in m.sources if s.kind == "image"}
     refmods = {_refmod_key(s.name) for m in scene.cast for s in m.sources if s.kind == "refmod"}
     for kind, target in scene.dials:
@@ -285,8 +287,10 @@ def _share(text: str) -> float | None:
 
 
 def _set_line(scene: Scene, text: str, lint: list[Issue]) -> None:
-    """`SET: image_1(0.5, 35%), emma_canon(0.3)`: a picture's or a RefMod's strength and start, for
-    every clip in the head, for that clip in a chunk; a later SET wins, and SET wins over the CAST."""
+    """`SET: image_1(0.5, 35%), emma_canon(0.3), @JINX(0.6, refmods), refmods(1, 35%)`: the dials of a
+    picture, a RefMod, a member's references (all, or those its words choose) and the RefMod defaults,
+    for every clip in the head, for that clip in a chunk. Kept in order and applied once the CAST is
+    read (_apply_sets): a later SET wins, and SET wins over the CAST."""
     items = _SET_ITEM.findall(text)
     rest = _SET_ITEM.sub("", text).replace(",", "").strip()
     if not items or rest:
@@ -295,23 +299,73 @@ def _set_line(scene: Scene, text: str, lint: list[Issue]) -> None:
         return
     for target, args in items:
         values = [v.strip() for v in args.split(",")]
+        words = [v for v in values if v[:1].isalpha()]  # `refmods`, `image 1`: which of a member's references
+        numbers = [v for v in values if not v[:1].isalpha()]
         try:
-            strength = float(values[0]) if values[0] else None
-            start = _share(values[1]) if len(values) > 1 else None
-            end = _share(values[2]) if len(values) > 2 else None
+            strength = float(numbers[0]) if numbers and numbers[0] else None
+            start = _share(numbers[1]) if len(numbers) > 1 else None
+            end = _share(numbers[2]) if len(numbers) > 2 else None
         except ValueError:
             lint.append(Issue("warn", f"SET: {target.strip()}({args}) takes numbers: (strength), (strength, start) or "
                                       "(strength, start, end)."))
             continue
-        image = _SET_IMAGE.match(target.strip())
-        key = ("image", int(image.group(1))) if image else ("refmod", _refmod_key(target.strip()))
-        dial = scene.dials.setdefault(key, {})
-        if strength is not None:
-            dial["strength"] = strength
-        if start is not None:
-            dial["from"] = start
-        if end is not None:
-            dial["to"] = end
+        scene.sets.append((target.strip(), strength, start, end, words))
+
+
+_CHOICE = re.compile(r"^(images?|refmods?)$|^image\s+(\d+)$|^refmod\s+([\w./-]+)$", re.IGNORECASE)
+
+
+def _apply_sets(scene: Scene, lint: list[Issue]) -> None:
+    """The SET: items as dials, in the order written, now that the CAST is known: a member's name turns
+    all its pictures and RefMods, or the ones its words choose (`images`, `refmods`, `image 1`, `refmod
+    NAME`); `refmods` alone sets the RefMod defaults, as a `refmods:` line does."""
+    for target, strength, start, end, words in scene.sets:
+        member = next((m for m in scene.cast if m.name == target), None)
+        if member is None and target.lower() == "refmods" and not words:
+            for name, value in (("refmod_strength", strength), ("refmod_start", start), ("refmod_end", end)):
+                if value is not None:
+                    setattr(scene, name, value)
+            continue
+        if member is not None:
+            keys = _chosen(member, words, lint)
+        elif words:
+            lint.append(Issue("warn", f"SET: {target}({', '.join(words)}) takes numbers: (strength), (strength, start) "
+                                      "or (strength, start, end). Words choose among a member's references, as in "
+                                      "SET: @JINX(0.6, refmods), and it is not in the CAST."))
+            continue
+        else:
+            image = _SET_IMAGE.match(target)
+            keys = [("image", int(image.group(1))) if image else ("refmod", _refmod_key(target))]
+        for key in keys:
+            dial = scene.dials.setdefault(key, {})
+            for name, value in (("strength", strength), ("from", start), ("to", end)):
+                if value is not None:
+                    dial[name] = value
+
+
+def _chosen(member: Member, words: list[str], lint: list[Issue]) -> list[tuple]:
+    """The dial keys of the member's pictures and RefMods its words choose; all of them without words."""
+    own = [("image", s.index) if s.kind == "image" else ("refmod", _refmod_key(s.name))
+           for s in member.sources if s.kind in ("image", "refmod")]
+    if not words:
+        return own
+    out = []
+    for word in words:
+        m = _CHOICE.match(" ".join(word.split()))
+        if not m:
+            found = []
+        elif m.group(1):  # images, refmods: every one of that kind
+            found = [k for k in own if k[0] == m.group(1).lower().rstrip("s")]
+        elif m.group(2):
+            found = [k for k in own if k == ("image", int(m.group(2)))]
+        else:
+            found = [k for k in own if k == ("refmod", _refmod_key(m.group(3)))]
+        if not found:
+            has = ", ".join(f"image {n}" if kind == "image" else f"refmod {n}" for kind, n in own) or "no picture or RefMod"
+            lint.append(Issue("warn", f"SET: {member.name}({word}): {member.name} has no {word} ({has}), so it "
+                                      "changes nothing there."))
+        out += [k for k in found if k not in out]
+    return out
 
 
 def _cast_line(scene: Scene, line: str, lint: list[Issue], block: int = 0, last: Member | None = None) -> Member | None:
