@@ -247,8 +247,11 @@ function mount(node) {
   const ENDS = ["execution_success", "execution_error", "execution_interrupted"];
   api.addEventListener("orrery.segment", onSegment);
   ENDS.forEach((e) => api.addEventListener(e, onDone));
-  const segment = find("segment"), segmentChanged = segment?.callback;
-  if (segment) segment.callback = function (...args) { const r = segmentChanged?.apply(this, args); orrery.refreshRun(); return r; };
+  // the segment, the seed and the target change what the editor shows (its annotations, the scene marked next)
+  for (const name of ["segment", "seed", "target"]) {
+    const widget = find(name), changed = widget?.callback;
+    if (widget) widget.callback = function (...args) { const r = changed?.apply(this, args); orrery.refreshRun(); return r; };
+  }
 
   const onRemoved = node.onRemoved;
   node.onRemoved = function (...args) {
