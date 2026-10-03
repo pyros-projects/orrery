@@ -4,8 +4,8 @@ orrery is a seeded prompt language that records every decision it makes. A templ
 libraries, choices and bindings from a seed; every pick stays addressable, so a run can be
 reproduced, rated, and the ratings steer the next rolls (the gallery). On top of the language sit
 compilers: plain text (Krea 2 and other image models) and MiniMax H3 screenplays (`@h3`: shots,
-voices, sound, a CAST of references, and reels of chained clips with `CHUNK`, `HANDOFF`, `SEND:`
-and `GOTO:`). In ComfyUI it is one node, Orrery Prompt, with an app in it (Prompt, Test, Gallery,
+voices, sound, a CAST of references, and reels of chained clips with `SCENE`, `END ON:`, `AFTER:`,
+`CUT TO:`, `REMEMBER:` and `SET:`). In ComfyUI it is one node, Orrery Prompt, with an app in it (Prompt, Test, Gallery,
 History), plus Orrery Refs, Orrery Continue, Orrery Film and Orrery Log.
 
 ## Layout
@@ -77,6 +77,12 @@ output:
 ## Conventions
 
 - Code, docs, issues, commits and PRs are in English.
+- The language is frozen at DSL 2.0 (`docs/dsl.md`, `docs/h3.md`). New things come as libraries,
+  presets and operators (`@include`), compiler targets or UI, not as syntax. A fix where two existing
+  constructs don't work together (a dial that loses an entry's properties) is allowed, with the
+  golden corpus showing what moved. New syntax comes only when a real preset cannot be written
+  without it, and never in the earlier words (`CHUNK`, `HANDOFF:`, `SEND:`, `GOTO:`, `?`): they
+  still work, and nothing new is built on them.
 - Write like the surrounding code: its naming, its comment density, its idiom.
 - A user-visible change updates its docs in the same PR (`docs/`, the in-app help in
   `comfyui/web/app/help.js`, and the example workflows when their templates or nodes change), and
