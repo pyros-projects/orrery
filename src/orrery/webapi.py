@@ -561,14 +561,40 @@ def galaxy_media(home: Home, args: dict) -> Path:
 # --- the timeline: the chain's clips and the sent frames ------------------------------------
 
 def _latent_path(args: dict) -> str:
-    return str(args.get("latent_path") or DEFAULT_CHAIN)
+    """The reel's chain folder under ComfyUI's output, as the app names it (#197), else h3_context."""
+    return str(args.get("chain") or DEFAULT_CHAIN)
 
 
 def chain(home: Home, args: dict) -> dict:
     """The clips the reel's chain holds (Orrery Film's or Chain Video's), by segment."""
     from orrery.chain import listing
 
-    return {"latent_path": _latent_path(args), **listing(_output_dir(), _latent_path(args))}
+    return {"chain": _latent_path(args), **listing(_output_dir(), _latent_path(args))}
+
+
+REELS = "reels"  # the reels the app names (#197) live under output/reels/
+
+
+def chain_move(home: Home, args: dict) -> dict:
+    """An unsaved reel saved as a preset (#197): its folder moves to the preset's name, so the next clip still
+    continues the last. A folder already there is not touched: the reel then keeps its own."""
+    from orrery.chain import chain_folder
+
+    out, names = _output_dir().resolve(), [_text(args, k).strip().strip("/") for k in ("from", "to")]
+    if not all(n.startswith(f"{REELS}/") and len(n) > len(REELS) + 1 for n in names):
+        raise ApiError(400, f"Only a reel's own folder moves: both names start with {REELS}/.")
+    source, target = (chain_folder(out, n) for n in names)
+    if source is None or target is None or not source.is_relative_to(out / REELS) or not target.is_relative_to(out / REELS):
+        raise ApiError(400, "A reel's folder stays inside ComfyUI's output.")
+    if not source.is_dir():
+        return {"moved": False, "chain": names[1]}  # no clip yet: the new name is simply used
+    if target.exists() and any(target.iterdir()):
+        return {"moved": False, "chain": names[0], "reason": f"{names[1]} already holds a reel"}
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if target.exists():
+        target.rmdir()
+    source.rename(target)
+    return {"moved": True, "chain": names[1]}
 
 
 def chain_video(home: Home, args: dict) -> Path:
@@ -1025,6 +1051,7 @@ ROUTES = [
     ("GET", "/orrery/galaxy/media", galaxy_media),
     ("GET", "/orrery/chain", chain),
     ("GET", "/orrery/chain/thumb", chain_thumb),
+    ("POST", "/orrery/chain/move", chain_move),
     ("GET", "/orrery/chain/video", chain_video),
     ("GET", "/orrery/anchor", anchor),
     ("GET", "/orrery/history", history_runs),

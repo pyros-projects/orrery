@@ -44,7 +44,7 @@ function mount(node) {
   loadStyles();
   const find = (name) => node.widgets?.find((w) => w.name === name);
   const template = find("template"), preset = find("preset"), home = find("home"), params = find("params");
-  [template, preset, home, params, find("sweep")].forEach(hide);
+  [template, preset, home, params, find("sweep"), find("chain")].forEach(hide);
   node.properties = node.properties || {};
 
   // the control_after_generate combo that belongs to an INT widget (seed and segment each have one); newer frontends
@@ -178,14 +178,10 @@ function mount(node) {
         Object.entries(on).forEach(([kind, f]) => api.removeEventListener(kind, f));
       }
     },
-    // The chain the reel's clips live in: the string wired into latent_path, else the default h3_context.
-    latentPath: () => {
-      const input = node.inputs?.find((i) => i.name === "latent_path"), g = node.graph || app.graph;
-      const link = input?.link != null && (g.links?.get ? g.links.get(input.link) : g.links?.[input.link]);
-      const source = link && g.getNodeById?.(link.origin_id);
-      const text = source?.widgets?.find((w) => typeof w.value === "string" && w.value.trim());
-      return text ? text.value.trim() : "";
-    },
+    // The folder the reel's clips live in (#197): the hidden chain widget, which the app names after the reel
+    // (reels/<preset>, reels/untitled/<date time>); empty is the server's default, h3_context.
+    chain: () => find("chain")?.value || "",
+    setChain: (name) => { if (!sweep.on && (find("chain")?.value || "") !== name) set("chain", name); },
     // The frames wired into the node: they shape width and height (the server reads their size when it runs).
     frames: () => ["first_frame", "last_frame"].filter((name) => node.inputs?.find((i) => i.name === name)?.link != null),
     wired: (name) => node.inputs?.find((i) => i.name === name)?.link != null,

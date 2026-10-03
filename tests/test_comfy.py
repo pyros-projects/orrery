@@ -458,7 +458,8 @@ def test_an_unusable_answer_keeps_the_directions_and_says_so(home, monkeypatch):
 
 
 def test_outside_a_chain_the_node_runs_without_a_previous_clip(home):
-    assert OrreryPrompt.INPUT_TYPES()["optional"]["latent_path"][1]["forceInput"] is True
+    optional = OrreryPrompt.INPUT_TYPES()["optional"]
+    assert "latent_path" not in optional and optional["chain"][1]["default"] == ""  # the app names it (#197)
     outputs = OrreryPrompt().run("a quiet street", 1, "text", home=str(home), segment=2)
     assert len(outputs) == len(OrreryPrompt.RETURN_TYPES) and outputs[-1] > 0  # megapixels
 
@@ -630,11 +631,11 @@ REFS_GRAPH = {"9": {"class_type": "OrreryPrompt", "inputs": {}},
 
 def test_the_picks_tell_orrery_refs_what_is_sent_and_from_which_chain(home):
     _, picks, *_ = OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), segment=0,
-                                      latent_path="reels/one", prompt=REFS_GRAPH, unique_id="9")
+                                      chain="reels/one", prompt=REFS_GRAPH, unique_id="9")
     data = json.loads(picks)
     assert data["refs"] == [1] and data["sends"] == {"chain": "reels/one", "home": str(home), "slots": [3, 4], "ready": {}}
     _, picks, *_ = OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), segment=1,
-                                      latent_path="reels/one", prompt=REFS_GRAPH, unique_id="9")
+                                      chain="reels/one", prompt=REFS_GRAPH, unique_id="9")
     data = json.loads(picks)
     assert data["refs"] == [1, 3, 4]
     assert data["sends"]["ready"] == {"3": {"segment": 0, "frames": [[0, 0]]},

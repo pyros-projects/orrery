@@ -50,9 +50,8 @@ setting. When the node runs, the model
   the prompt renumbers `<Picture N>` to match ([tutorial](orrery-refs.md)).
 
   A slot the model leaves out keeps its directions as text (and a warning), so
-  a queued chain never breaks on one bad answer. The chain is found under
-  `output/h3_context`; wire a string into `latent_path` if yours lives
-  elsewhere.
+  a queued chain never breaks on one bad answer. The chain is the reel's own
+  folder, which orrery names after it ([comfyui.md](comfyui.md)).
 
 **Roll** (next to Test in the Prompt tab, with how many runs after it: next 3 clips, next 8 images) queues only what this node feeds,
 up to its Save and Preview nodes, and the files those Save nodes write go to

@@ -603,32 +603,32 @@ class OrreryPrompt:
                     "Optional: a video of your own that the reel starts from (a Load Video). The template's head is "
                     "its scene: REMEMBER: there keeps its frames, END ON: there says how it ends, and a scene with "
                     "AFTER: the input video continues it.")}),
-                "latent_path": ("STRING", {"forceInput": True, "tooltip": (
-                    "Where the reel's clips live, under ComfyUI's output (default h3_context; H3 Motion "
-                    "Context's latent_path): Orrery Film keeps them in its orrery_film folder, Chain Video in "
-                    "chain_video. From the second segment on the model watches the previous clip when it writes "
-                    "--…-- slots.")}),
                 "sweep": ("STRING", {"default": "", "tooltip": (
                     "Set by Roll for each run of a LoRA sweep (run|gallery folder); empty runs the first.")}),
+                "chain": ("STRING", {"default": "", "tooltip": (
+                    "Set by the app (#197): the folder under ComfyUI's output where this reel's clips live, "
+                    "reels/<preset> or reels/untitled/<date time>; empty is h3_context. Orrery Film keeps them in "
+                    "its orrery_film folder.")}),
             },
             "hidden": {"unique_id": "UNIQUE_ID", "extra_pnginfo": "EXTRA_PNGINFO", "prompt": "PROMPT"},
         }
 
     @classmethod
     def IS_CHANGED(cls, template, seed, target, preset=NO_PRESET, home="", params="", segment=0,
-                   latent_path=DEFAULT_CHAIN, sweep="", **_):
+                   sweep="", chain="", **_):
         h = resolve_home(home or None)
         chosen = load_preset(h, preset) if preset and preset != NO_PRESET else template
-        return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{segment}:{latent_path}:{sweep}:{state_token(h)}"
+        return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{segment}:{chain}:{sweep}:{state_token(h)}"
 
     def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, clip=None,
-            latent_path=DEFAULT_CHAIN, sweep="", unique_id=None, extra_pnginfo=None, prompt=None,
+            sweep="", chain="", unique_id=None, extra_pnginfo=None, prompt=None,
             first_frame=None, last_frame=None, video=None):
-        stills = _previous(latent_path, segment)
+        chain = chain or DEFAULT_CHAIN  # the app names it after the reel; old workflows and the CLI keep h3_context
+        stills = _previous(chain, segment)
         packed, wired, keep, standing = wiring(prompt, unique_id)
         try:
             outputs = run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
-                                 params, segment, clip, stills, packed, wired, latent_path or DEFAULT_CHAIN, keep,
+                                 params, segment, clip, stills, packed, wired, chain, keep,
                                  sweep, continued(prompt, unique_id), (_size(first_frame), _size(last_frame)),
                                  reads_picks(prompt, unique_id, "OrreryRefMods"), standing)
             data = json.loads(outputs[1])
@@ -637,7 +637,7 @@ class OrreryPrompt:
             if uistate.load_ui(h)["log_prompts"]:
                 print("\n".join(history.log_lines(data)))
             if data.get("input"):
-                _keep_input(video, latent_path or DEFAULT_CHAIN)
+                _keep_input(video, chain)
             if "sends" in data and not packed:
                 raise ValueError("This reel REMEMBERs frames as reference images, which Orrery Refs fetches: wire this "
                                  "node's picks into an Orrery Refs, and its ref outputs into Reference to Video.")
@@ -927,8 +927,7 @@ class OrreryRefs:
                              "none: wire a Load Video into the Orrery Prompt's video input.")
         if path is None:
             raise ValueError(f"image {n} is sent from clip {segment + 1}, but the chain {latent_path!r} has no clip "
-                             f"{segment + 1}: render the reel from that scene on, or check the Orrery Prompt's "
-                             "latent_path.")
+                             f"{segment + 1}: render the reel from that scene on.")
         batch, dropped = chain.frames(path, send["frames"], send.get("step", 1))
         if dropped:
             many = len(dropped) > 1

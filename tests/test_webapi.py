@@ -55,7 +55,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"),
         ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/discard"),
         ("GET", "/orrery/home"), ("POST", "/orrery/home"),
-        ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("GET", "/orrery/chain/video"),
+        ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("POST", "/orrery/chain/move"), ("GET", "/orrery/chain/video"),
         ("GET", "/orrery/anchor"),
         ("GET", "/orrery/history"),
         ("GET", "/orrery/writers"),
@@ -691,9 +691,9 @@ def test_outputs_of_ordinary_save_nodes_reach_the_galaxy(home, tmp_path, monkeyp
 
 # --- the timeline: the chain's clips and the sent frames ----------------------------------------
 
-def fake_chain(output, clips=2):
+def fake_chain(output, folder="h3_context", clips=2):
     import av
-    run = output / "h3_context" / "chain_video" / "run_1"
+    run = output / folder / "chain_video" / "run_1"
     run.mkdir(parents=True)
     folders = []
     for i in range(1, clips + 1):
@@ -717,15 +717,32 @@ def test_the_chain_lists_its_clips_by_segment_and_serves_them(home, tmp_path, mo
     fake_chain(out)
     monkeypatch.setattr(webapi, "_output_dir", lambda: out)
     body = ok(home, webapi.chain)
-    assert body == {"latent_path": "h3_context", "width": 64, "height": 48,  # Chain Video keeps one size per chain
+    assert body == {"chain": "h3_context", "width": 64, "height": 48,  # Chain Video keeps one size per chain
                     "clips": [{"segment": 0, "frames": 24, "version": "clip_00001_abc"},
                               {"segment": 1, "frames": 24, "version": "clip_00002_abc"}]}
     assert ok(home, webapi.chain_video, segment="1").name == "video.mp4"
     thumb = ok(home, webapi.chain_thumb, segment="0")
     assert thumb.suffix == ".webp" and thumb.is_file()
     assert api(home, webapi.chain_video, segment="5")[0] == 404
-    assert ok(home, webapi.chain, latent_path="nowhere") == {"latent_path": "nowhere", "width": None, "height": None, "clips": []}
-    assert api(home, webapi.chain, latent_path="../../etc")[0] in (400, 200)
+    assert ok(home, webapi.chain, chain="nowhere") == {"chain": "nowhere", "width": None, "height": None, "clips": []}
+    assert api(home, webapi.chain, chain="../../etc")[0] in (400, 200)
+
+
+def test_an_unsaved_reels_folder_moves_to_its_presets_name(home, tmp_path, monkeypatch):
+    """Saved as a preset after three clips, the reel goes on with clip 4 (#197)."""
+    out = tmp_path / "out"
+    fake_chain(out, "reels/untitled/2026-10-03 23-15")
+    monkeypatch.setattr(webapi, "_output_dir", lambda: out)
+    body = ok(home, webapi.chain_move, **{"from": "reels/untitled/2026-10-03 23-15", "to": "reels/h3/night_watch"})
+    assert body == {"moved": True, "chain": "reels/h3/night_watch"}
+    assert (out / "reels/h3/night_watch/chain_video").is_dir() and not (out / "reels/untitled/2026-10-03 23-15").exists()
+    assert len(ok(home, webapi.chain, chain="reels/h3/night_watch")["clips"]) == 2
+    fake_chain(out, "reels/untitled/second")
+    body = ok(home, webapi.chain_move, **{"from": "reels/untitled/second", "to": "reels/h3/night_watch"})
+    assert body["moved"] is False and body["chain"] == "reels/untitled/second" and "already holds" in body["reason"]
+    assert ok(home, webapi.chain_move, **{"from": "reels/untitled/none", "to": "reels/new"}) == {"moved": False, "chain": "reels/new"}
+    for bad in ({"from": "", "to": "reels/x"}, {"from": "h3_context", "to": "reels/x"}, {"from": "reels/../..", "to": "reels/x"}):
+        assert api(home, webapi.chain_move, **bad)[0] == 400
 
 
 def test_an_anchor_is_served_by_image_number(home):

@@ -24,7 +24,7 @@ function statsHTML(app) {
   const wired = /^\s*(:\s*.*\b[wh]\d|@size\b)/m.test(app.text) ? [] : app.bridge.frames?.() || [];  // `@size` wins
   const outs = (app.data.rows || []).filter((r) => r.template === templateHash(app.text)).length;
   const forever = reel && reel.clips === Infinity, clips = !reel ? "" : forever ? "∞" : Number.isNaN(reel.clips) ? "?" : reel.clips;
-  const how = !reel ? "" : "Wire the picks into Orrery Continue (and the clip into Orrery Film). Next clip counts up by itself after each run (unless held): "
+  const how = !reel ? "" : `Its clips live in output/${app.bridge.chain?.() || "h3_context"}. Wire the picks into Orrery Continue (and the clip into Orrery Film). Next clip counts up by itself after each run (unless held): `
     + (forever ? "Run (Instant) plays clip after clip until you stop it." : `a Run count of ${clips} plays the whole reel${reel.goto ? " at this seed (its GOTO lines may jump on what rolls)" : ""}; after the last clip nothing downstream runs.`);
   const timing = reel
     ? `<span class="stat" title="${esc(how)}"><b>Reel</b> · ${reel.secs.map((s, i) => `<b>${s.toFixed(1)} s</b>${reel.repeats[i] === 1 ? "" : ` ×${reel.repeats[i] === Infinity ? "∞" : reel.repeats[i]}`}`).join(" + ")}${reel.goto ? " · GOTO" : ""} · <b>${clips}</b> clip${reel.clips === 1 ? "" : "s"}</span>`
@@ -56,6 +56,24 @@ function statsHTML(app) {
         + `<label class="rep" title="How many seeds: each runs the whole sweep, the seed stepping between them and after the last as its control after generate says">next<input type="number" min="1" max="999" value="${repeats(app)}" data-rep aria-label="Seeds per sweep">${plural(repeats(app), "seed")}</label>`
       : `<button class="btn primary" data-act="generate" title="Queue only what this node feeds, up to its Save nodes; their files go to the gallery">${icon("play")}Roll</button>`
         + `<label class="rep" title="How many runs Roll queues, one after another; seed and segment step between them as their control after generate says, so a reel plays that many clips">next<input type="number" min="1" max="999" value="${repeats(app)}" data-rep aria-label="Runs per Roll">${plural(repeats(app), reel ? "clip" : st.h3 ? "video" : "image")}</label>`);
+}
+
+// The folder a reel's clips live in (#197): reels/<preset>, or for an unsaved reel reels/untitled/<date time>,
+// named the first time it is needed and kept in the node until New starts another; "" without scenes.
+export function chainName(app) {
+  if (!app.chunks()) return "";
+  if (app.preset) return `reels/${app.preset}`;
+  const now = new Date(), two = (n) => String(n).padStart(2, "0");
+  return (app.bridge.props.orrery_untitled ||= `reels/untitled/${now.getFullYear()}-${two(now.getMonth() + 1)}-${two(now.getDate())} `
+    + `${two(now.getHours())}-${two(now.getMinutes())}`);
+}
+
+// The hidden chain widget follows the reel; another chain is another film, so the clips load again.
+function syncChain(app) {
+  const name = chainName(app);
+  if (name === app.bridge.chain?.() || app.bridge.sweeping?.()) return;
+  app.bridge.setChain?.(name);
+  if (name) app.data.chain = undefined;  // paintEditor loads the new chain's clips
 }
 
 // Write now (#168): with an API endpoint, the libraries the template still needs, written at once beside ComfyUI.
@@ -95,6 +113,7 @@ function chipHTML(app) {
 
 export function renderPrompt(app) {
   app.bridge.syncSegment?.(!!app.chunks());
+  syncChain(app);
   const card = app.preset && app.card(app.preset);
   const d = app.dirty();
   app.view.innerHTML = `
@@ -291,6 +310,7 @@ function jumpToChunk(app) {
 
 export function refreshFoot(app) {
   app.bridge.syncSegment?.(!!app.chunks());  // a template without scenes: clip 0, not stepping (#190)
+  syncChain(app);
   refreshPlan(app);  // a dial or an edit can change what Generate queues
   refreshReelPath(app);
   refreshRemembered(app);
@@ -625,10 +645,12 @@ function pickChoice(app, input, value) {
 
 function startNew(app, kind) {
   if (app.busy()) return;
-  const s = STARTERS[kind], prev = { preset: app.preset, base: app.base, text: app.text, params: app.bridge.getParams(), target: app.bridge.getTarget() };
+  const s = STARTERS[kind], prev = { preset: app.preset, base: app.base, text: app.text, params: app.bridge.getParams(), target: app.bridge.getTarget(),
+    untitled: app.bridge.props.orrery_untitled };
   const hadWork = app.dirty();
   app.preset = null;
   app.base = null;
+  delete app.bridge.props.orrery_untitled;  // a new reel gets a folder of its own (#197)
   app.text = app.data.quickstart === false ? stripComments(s.text).trimStart() : s.text;  // the gear turns it off
   app.bridge.setParams({});
   app.bridge.setTarget(s.target);
@@ -639,6 +661,7 @@ function startNew(app, kind) {
     label: "Undo",
     run: () => {
       app.preset = prev.preset; app.base = prev.base; app.text = prev.text;
+      if (prev.untitled) app.bridge.props.orrery_untitled = prev.untitled;  // the unsaved reel's clips are there
       app.bridge.setParams(prev.params); app.bridge.setTarget(prev.target); renderPrompt(app);
     },
   } : null);

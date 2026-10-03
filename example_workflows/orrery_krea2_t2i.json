@@ -27,13 +27,6 @@
           "link": 4
         },
         {
-          "localized_name": "latent_path",
-          "name": "latent_path",
-          "shape": 7,
-          "type": "STRING",
-          "link": null
-        },
-        {
           "localized_name": "template",
           "name": "template",
           "type": "STRING",
@@ -182,6 +175,7 @@
         "",
         0,
         "increment",
+        "",
         ""
       ],
       "widgets_values_named": {

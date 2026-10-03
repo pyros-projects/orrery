@@ -6,7 +6,7 @@ import { shape } from "./model.js";
 
 // The clips the chain holds, fetched again after every run.
 export async function loadChain(app) {
-  try { app.data.chain = await app.api.chain(app.bridge.latentPath()); } catch { app.data.chain = null; }
+  try { app.data.chain = await app.api.chain(app.bridge.chain()); } catch { app.data.chain = null; }
   app.data.anchorV = Date.now();  // anchors change in place: a new run, a new URL
 }
 
@@ -25,7 +25,7 @@ function segmentsOf(c, clips) {
 }
 
 function clipHTML(app, s, clip, segment) {
-  const path = app.bridge.latentPath();
+  const path = app.bridge.chain();
   const title = `Clip ${s + 1}${clip ? ` · ${clip.frames ?? "?"} frames · hover to play, click to open` : " · not rendered yet"}${s === segment ? " · next" : ""}`;  // clips count from 1
   return `<button class="tl-clip${clip ? "" : " empty"}${s === segment ? " now" : ""}" data-seg="${s}" title="${title}" ${clip ? "" : "disabled"}>`
     + (clip ? `<img loading="lazy" alt="" src="${app.api.chainThumbURL(s, path, clip.version)}">` : "")
@@ -42,7 +42,7 @@ export function clipRatio(app) {
 // --clip-h); one not rendered yet is a small placeholder.
 function bigClipHTML(app, s, clip, segment) {
   if (!clip) return clipHTML(app, s, clip, segment).replace('class="tl-clip empty', 'class="tl-clip empty small');
-  const path = app.bridge.latentPath(), src = app.api.chainVideoURL(s, path, clip.version);
+  const path = app.bridge.chain(), src = app.api.chainVideoURL(s, path, clip.version);
   return `<button class="tl-clip big${s === segment ? " now" : ""}" data-seg="${s}" title="Clip ${s + 1} · ${clip.frames ?? "?"} frames · hover to play, click to open${s === segment ? " · next" : ""}">`
     + `<video muted loop playsinline preload="metadata" poster="${app.api.chainThumbURL(s, path, clip.version)}" src="${src}#t=0.05"></video>`
     + `<span class="n">${s + 1}</span></button>`;
@@ -60,9 +60,9 @@ export function sectionHTML(app, c) {
 // The clip a scene's REMEMBER: lines cut their frames from (its first), when the chain holds it; -1 the input video.
 export function sourceClip(app, source) {
   if (source === null || source === undefined) return null;
-  if (source < 0) return { url: app.api.chainVideoURL(-1, app.bridge.latentPath()), frames: null };
+  if (source < 0) return { url: app.api.chainVideoURL(-1, app.bridge.chain()), frames: null };
   const clip = (app.data.chain?.clips || []).find((x) => x.segment === source);
-  return clip ? { url: app.api.chainVideoURL(source, app.bridge.latentPath(), clip.version), frames: clip.frames ?? null } : null;
+  return clip ? { url: app.api.chainVideoURL(source, app.bridge.chain(), clip.version), frames: clip.frames ?? null } : null;
 }
 
 // Hover plays a clip in place; a click opens it large.
@@ -73,7 +73,7 @@ export function wireClips(app, box) {
     if (!clip || clip.querySelector("video")) return;
     const v = document.createElement("video");
     Object.assign(v, { muted: true, loop: true, autoplay: true, playsInline: true });
-    v.src = app.api.chainVideoURL(clip.dataset.seg, app.bridge.latentPath(), app.data.chain?.clips.find((c) => String(c.segment) === clip.dataset.seg)?.version);
+    v.src = app.api.chainVideoURL(clip.dataset.seg, app.bridge.chain(), app.data.chain?.clips.find((c) => String(c.segment) === clip.dataset.seg)?.version);
     clip.prepend(v);
   });
   box.addEventListener("pointerout", (e) => {
@@ -88,7 +88,7 @@ export function wireClips(app, box) {
     const s = clip.dataset.seg, made = app.data.chain?.clips.find((c) => String(c.segment) === s);
     const sheet = app.openSheet(`<div class="panel"><div class="row spread"><h4>Clip ${Number(s) + 1}</h4>`
       + `<button class="icon-btn" data-close title="Close">${icon("x")}</button></div>`
-      + `<video class="tl-video" controls autoplay loop src="${app.api.chainVideoURL(s, app.bridge.latentPath(), made?.version)}"></video>`
+      + `<video class="tl-video" controls autoplay loop src="${app.api.chainVideoURL(s, app.bridge.chain(), made?.version)}"></video>`
       + `<p class="muted flush">${made?.frames ?? "?"} frames, as the reel keeps them (without the pinned frames)</p></div>`);
     sheet.querySelector("[data-close]").onclick = () => app.closeSheet();
   });

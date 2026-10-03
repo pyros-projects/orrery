@@ -111,9 +111,8 @@ Nodes under **orrery**:
     frame opens its clip with a slider: **Use frame N** writes that frame into
     the line. Arrow keys cross from cell to cell, Backspace at a cell's start
     and Delete at its end join two, and a SCENE line typed or removed cuts
-    the text anew. It reads the chain from the string wired into
-    `latent_path`, else `h3_context`, and refreshes after every run. The gear
-    turns dividers and the clips off.
+    the text anew. It reads the reel's folder (below) and refreshes after
+    every run. The gear turns dividers and the clips off.
   - **Test**: what the template makes, without queueing anything. **Rolls**
     shows three seeds (a reel: six clips at one seed, pageable through a
     forever loop). **Frequencies** rolls it 50, 200 or 500 times, across seeds
@@ -195,14 +194,25 @@ Nodes under **orrery**:
   clip whose pinned frames the sampler changed (a sampler that ignores
   `noise_mask`). Orrery Film trims the 22 frames, puts out the clip
   (`images`, `audio`) and `film`, the reel so far, and keeps the takes under
-  `output/<latent_path>/orrery_film/` (`h3_context` unless the Orrery Prompt's
-  `latent_path` says otherwise): each clip, its sound and the tail the
+  `output/<the reel's folder>/orrery_film/`: each clip, its sound and the tail the
   next one continues from. Rendering a clip again replaces its take and drops
   the ones after it that continue it (branches beside it stay); clip 1 starts a new
   run; older takes stay on disk. A `(test)` scene's take is kept but left out of
   the joined film. The previous clip, `REMEMBER:` and the timeline read
   this store or H3 Motion Context's Chain Video, whichever was written last.
   Another `context:` than 22 is a warning: 22 frames are pinned all the same.
+
+  **The reel's folder.** orrery names it, under `output/reels/`, so reels keep
+  their clips apart (the Prompt tab's Reel shows it on hover):
+
+  | The reel | Its folder |
+  |---|---|
+  | a saved preset | named after it: `reels/h3/08_reel_night_watch` |
+  | unsaved | `reels/untitled/2026-10-03 23-15`, named when it is first needed and kept in the node until **New** |
+  | unsaved, then saved | the folder moves to the preset's name with **Save as**, so the next clip continues the last |
+  | the same preset in two nodes | the same folder, as it is the same reel; **Save as** makes a second one |
+
+  A template run outside the app (the CLI, an old workflow) keeps `output/h3_context`.
 - **Orrery RefMods**: `conditioning` + `picks` → `conditioning`. It puts the
   clip's RefMods on the conditioning, the ones its CAST names
   (`refmod NAME` with `SET: @JINX(0.5, 35%)`, see [h3.md](h3.md#1e-refmods-refmod-name-set-jinx05-35)),
