@@ -61,6 +61,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/writers"),
         ("POST", "/orrery/plan"),
         ("POST", "/orrery/reel"),
+        ("POST", "/orrery/remembered"),
     }
 
 
@@ -706,6 +707,18 @@ def test_the_app_gets_the_path_a_reel_takes_at_its_seed(home):
     endless = ok(home, webapi.reel_walk, template=loop.replace(" ×1", ""), seed=3)
     assert endless["ended"] is False and endless["path"][:5] == [0, 1, 0, 1, 0]
     assert ok(home, webapi.reel_walk, template="a fox", seed=1) == {"path": [], "ended": True}
+
+
+def test_the_app_learns_where_each_remember_line_goes(home):
+    reel = ("@h3 references\nCAST\n@WOMAN: a woman\nSCENE a\nSHOT 5s\nREMEMBER: frame 0 as @WOMAN\n"
+            "REMEMBER: frame 50 as @WOMAN\n@WOMAN waves.\nSCENE b\nSHOT 5s\n@WOMAN sits.")
+    lines = ok(home, webapi.reel_remembered, template=reel, seed=0)["lines"]
+    assert [(line["line"], line["source"], [f["what"] for f in line["fills"]]) for line in lines] == \
+        [(0, 0, ["image 1"]), (1, 0, ["image 1"])]
+    assert lines[0]["fills"][0]["replaced"] == {"from": 1, "by": 1} and lines[1]["fills"][0]["replaced"] is None
+    assert ok(home, webapi.reel_remembered, template="a fox", seed=0) == {"lines": []}
+    status, body = api(home, webapi.reel_remembered, template=reel.replace("as @WOMAN", "as @CAT", 1))
+    assert status == 400 and "CAT is not in a CAST" in body["error"]
 
 
 def test_the_writer_texts_are_read_edited_and_reset(home):
