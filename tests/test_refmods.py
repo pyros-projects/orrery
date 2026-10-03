@@ -92,6 +92,21 @@ def test_a_picture_with_at_and_from_is_marked_and_waits_without_the_pack(monkeyp
     assert [(c[1].get("start_percent"), c[1].get("end_percent")) for c in out] == [(0.0, 0.5), (0.5, 1.0)]
 
 
+def test_a_refmod_that_ships_with_orrery_is_loaded_from_its_own_folder(pack, monkeypatch, tmp_path):
+    from orrery import comfy_refmods as cr
+    assert "minimaxh3_jinx_v1_refmod" in cr.shipped()  # the example RefMod is in the repository
+    (tmp_path / "jinx.safetensors").write_bytes(b"")
+    monkeypatch.setattr(cr, "EXAMPLES", tmp_path)
+    loader = next(m for n, m in sys.modules.items() if n.endswith(".nodes.refmod_loader"))
+    paths = []
+    monkeypatch.setattr(loader, "H3RefMod", types.SimpleNamespace(
+        load=lambda path, device="cpu": paths.append(path) or loader._load_mod("jinx")), raising=False)
+    jinx = {"name": "jinx", "member": "JINX", "strength": 1.0, "from": 0.0, "to": 1.0}
+    (out,) = OrreryRefMods().apply([["text", {}]], json.dumps({"refmods": [jinx]}))
+    assert paths == [str(tmp_path / "jinx")]  # not in models/refmods: from orrery's folder, with the pack's class
+    assert [b["latent"] for b in out[0][1]["minimax_refs"]] == ["latent of jinx"]
+
+
 def test_without_the_pack_the_node_says_where_to_get_it(monkeypatch):
     for name in [n for n in sys.modules if n.endswith(".nodes.refmod_loader")]:
         monkeypatch.delitem(sys.modules, name)

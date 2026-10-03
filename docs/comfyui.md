@@ -10,8 +10,9 @@ ln -s /path/to/orrery/comfyui /path/to/ComfyUI/custom_nodes/orrery   # Windows: 
 
 Restart ComfyUI. **Templates → orrery** (or `example_workflows/` in the
 repository) holds a workflow per mode, built from ComfyUI's own nodes plus
-orrery's: Krea 2 (`text`), MiniMax H3 t2va, i2va, fl2va, l2va, ref2va, and reels
-on t2va and on ref2va with Orrery Continue / Orrery Film. Their notes name the
+orrery's: Krea 2 (`text`), MiniMax H3 t2va, i2va, fl2va, l2va, ref2va, reels
+on t2va and on ref2va with Orrery Continue / Orrery Film, and a reel with
+RefMods (Orrery RefMods, with the Jinx RefMod that ships with orrery). Their notes name the
 models and where they go; sampling follows ComfyUI's own templates (H3:
 `res_multistep`, 20 steps; Krea 2 Turbo: 8 steps). Each puts ComfyUI's Model
 Attention Backend on `comfy kitchen attention` after the model loader: INT8
@@ -163,7 +164,8 @@ Nodes under **orrery**:
   each with its strength and its start. It loads them from `models/refmods`
   with the [ComfyUI-H3RefMods](https://github.com/FranckyB/ComfyUI-H3RefMods)
   pack, which needs to be installed; the pack's Load and Apply nodes are not
-  needed. Wire:
+  needed. One RefMod ships with orrery, in `examples/refmods` (Jinx, Apache 2.0):
+  the node finds it there without copying, and the completion offers it. Wire:
 
   ```
   Reference to Video conditioning ▶ Orrery RefMods conditioning ▶ Orrery Continue conditioning (or the guider)

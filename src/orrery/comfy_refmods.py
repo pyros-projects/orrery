@@ -18,6 +18,7 @@ from pathlib import Path
 from orrery.refbias import KEY
 
 PACK = "ComfyUI-H3RefMods"
+EXAMPLES = Path(__file__).resolve().parents[2] / "examples" / "refmods"  # RefMods that ship with orrery
 MAX_FRAMES = 73  # a sent RefMod's frames at most: 22 latents, about 23K tokens on the 768 canvas
 _BUILT: dict[tuple, dict] = {}  # sent RefMods already encoded: (clip, its mtime, frames, step) → block
 
@@ -45,6 +46,21 @@ def refmod_names() -> list[str]:
         if stem.endswith(".safetensors") and not stem.endswith("_Audio.safetensors"):
             names.add(stem.removesuffix(".safetensors").removesuffix("_Video"))
     return sorted(names, key=str.lower)
+
+
+def shipped() -> list[str]:
+    """The RefMods that ship with orrery (examples/refmods), by name."""
+    return sorted(p.stem for p in EXAMPLES.glob("*.safetensors")) if EXAMPLES.is_dir() else []
+
+
+def register_examples() -> None:
+    """Lists orrery's own RefMods among ComfyUI's refmods, for the completion. The pack reads only
+    models/refmods, so Orrery RefMods loads these itself."""
+    try:
+        import folder_paths  # ComfyUI
+    except ImportError:  # not inside ComfyUI
+        return
+    folder_paths.add_model_folder_path("refmods", str(EXAMPLES))
 
 
 def resolve(name: str, available: list[str]) -> str:
@@ -206,9 +222,11 @@ class OrreryRefMods:
         files = [r for r in refmods if float(r["strength"]) > 0.0 and "sent" not in r]  # at 0 a RefMod is left out
         if files:
             pack = _pack()
-            available = pack._list_mod_names()
+            available, ours = pack._list_mod_names(), shipped()
             for r in files:
-                block = pack._load_mod(resolve(r["name"], available)).ref_block(1.0, curve=None)
+                name = resolve(r["name"], [*available, *ours])
+                mod = pack._load_mod(name) if name in available else pack.H3RefMod.load(str(EXAMPLES / name), device="cpu")
+                block = mod.ref_block(1.0, curve=None)
                 if block is not None:
                     blocks[r["name"]] = {**block, KEY: float(r["strength"])}
         for r in refmods:

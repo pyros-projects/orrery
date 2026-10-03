@@ -100,7 +100,8 @@ git clone https://github.com/pyros-projects/orrery.git
 
 Restart ComfyUI and open a workflow from **Templates → orrery** (or drag one in
 from [`example_workflows/`](example_workflows)): Krea 2 text to image, and
-MiniMax H3 t2va, i2va, fl2va, l2va, ref2va and reels (t2va and ref2va), all
+MiniMax H3 t2va, i2va, fl2va, l2va, ref2va and reels (t2va, ref2va, and one
+with RefMods), all
 built from ComfyUI's own nodes plus orrery's, each with notes on the models it
 needs and where they go. Or add **orrery → Orrery Prompt** to a graph of your
 own: wire its `text` output into your prompt input (and `width`, `height`,
