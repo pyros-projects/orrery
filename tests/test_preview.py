@@ -52,15 +52,23 @@ def test_a_flat_tiny_decoder_is_built_from_its_checkpoint():
     assert len(pictures) == preview.MAX_LATENT_FRAMES and pictures[0].size == (48, 32)  # a picture per latent frame
 
 
-def test_the_wrapper_keeps_the_samplers_callback_and_sends_the_clip(monkeypatch):
+def test_a_smooth_preview_has_so_many_pictures_a_second_as_its_latent_frames_give():
+    clip = torch.zeros(1, 4, 47, 8, 12)  # 6.66 s of MiniMax H3
+    assert round(preview.seconds(clip), 2) == 6.66
+    assert len(preview.frames(("rgb", RGB()), clip, fps=2)) == 13
+    assert len(preview.frames(("rgb", RGB()), clip, fps=12)) == 47  # one a latent frame: about 7 a second
+    assert len(preview.frames(("rgb", RGB()), clip)) == preview.MAX_LATENT_FRAMES  # light
+
+
+def sampled(monkeypatch, wrapper, latent_frames=6):
+    """The last clip the wrapper sent, sampling two steps; checks that the sampler's own callback still runs."""
     sent, called = [], []
     monkeypatch.setattr(preview, "_send", sent.append)
     monkeypatch.setattr(preview, "_decoder", lambda model_patcher: ("rgb", RGB()))
-    wrapper = preview._Wrapper("24")
 
     def executor(noise, latent_image, sampler, sigmas, denoise_mask, callback, disable_pbar, seed, latent_shapes=None):
         for step in range(2):
-            callback(step, torch.rand(1, 4, 6, 8, 12) * 2 - 1, None, 2)
+            callback(step, torch.rand(1, 4, latent_frames, 8, 12) * 2 - 1, None, 2)
         return "sampled"
 
     executor.class_obj = types.SimpleNamespace(model_patcher=None)
@@ -70,14 +78,32 @@ def test_the_wrapper_keeps_the_samplers_callback_and_sends_the_clip(monkeypatch)
         if sent and sent[-1]["step"] == 2:
             break
         time.sleep(0.02)
-    last = sent[-1]
-    assert last["step"] == 2 and last["total"] == 2 and last["node"] == "24"
     import base64
     import io
 
     from PIL import Image
-    clip = Image.open(io.BytesIO(base64.b64decode(last["image"])))
+    clip = Image.open(io.BytesIO(base64.b64decode(sent[-1]["image"])))
+    clip.load()  # its first frame, and how long it shows
+    return sent[-1], clip
+
+
+def test_the_wrapper_keeps_the_samplers_callback_and_sends_the_clip_in_real_time(monkeypatch):
+    last, clip = sampled(monkeypatch, preview._Wrapper("24"))
+    assert last["step"] == 2 and last["total"] == 2 and last["node"] == "24"
     assert last["mime"] == "image/webp" and last["animated"] and clip.format == "WEBP" and clip.n_frames == 6
+    assert clip.info["duration"] == 142  # 6 latent frames are 0.85 s: 6 pictures of 142 ms
+
+
+def test_the_wrapper_reads_the_smooth_preview_from_the_home_as_it_samples(monkeypatch, tmp_path):
+    from orrery.home import Home
+    from orrery.uistate import set_flag, set_size
+
+    home = Home(tmp_path)
+    wrapper = preview._Wrapper("24", home)
+    set_flag(home, "preview_light", False)
+    set_size(home, "preview_fps", 4)
+    _, clip = sampled(monkeypatch, wrapper, latent_frames=30)  # 4.25 s
+    assert clip.n_frames == 17 and clip.info["duration"] == 250
 
 
 def test_the_patched_model_is_a_clone_with_the_wrapper(monkeypatch):

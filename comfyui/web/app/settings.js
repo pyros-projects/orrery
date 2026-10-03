@@ -82,6 +82,13 @@ export async function openSettings(app) {
       <span><b>Timeline</b>: a reel's clips as the reel keeps them (Orrery Film or Chain Video), under each scene, and the frames its <code>REMEMBER:</code> lines take</span></label>
     <div class="field"><label class="label" for="oa-clipmin">Clip size</label>
       <div class="row"><input class="input narrow" id="oa-clipmin" type="number" min="96" max="1600" step="8" value="${app.data.clip_min ?? 360}"><span class="muted">px: a clip's shorter side under its scene, as far as the editor is wide</span></div></div>
+    <div class="row spread"><h5 class="label">Live preview</h5></div>
+    <p class="muted flush">With the model wired through the Orrery Prompt, the clip being sampled plays in its box under its scene, in real time.</p>
+    <div class="llm-pick" role="radiogroup" aria-label="The live preview">
+      <label class="check"><input type="radio" name="oa-pv" value="light" ${app.data.preview_light !== false ? "checked" : ""}><span><b>Light</b>: a few pictures, spread over the clip</span></label>
+      <label class="check"><input type="radio" name="oa-pv" value="smooth" ${app.data.preview_light === false ? "checked" : ""}><span><b>Smooth</b>:
+        <input class="input narrow" id="oa-pvfps" type="number" min="1" max="24" step="1" value="${app.data.preview_fps ?? 12}" aria-label="Pictures a second">
+        pictures a second, as far as the clip gives them (taeh3 and Latent2RGB: one a latent frame, about 7 a second for H3)</span></label></div>
     <div class="row spread"><h5 class="label">Sample surfing</h5></div>
     <p class="muted flush">A scene's <b>×N</b> renders N takes of its clip; you pick the best under it (📌 in the scene keeps its rolled prompt, so only the noise changes).
       The takes differ only if their seeds do.</p>
@@ -95,6 +102,7 @@ export async function openSettings(app) {
     <div class="acts"><button type="button" class="btn ghost" data-cancel>Cancel</button><button class="btn primary">${icon("save")}Save</button></div>
   </form>`);
   sheet.querySelector("[data-cancel]").onclick = () => app.closeSheet();
+  sheet.querySelector("#oa-pvfps").oninput = () => { sheet.querySelector('[name="oa-pv"][value="smooth"]').checked = true; };
   const source = () => sheet.querySelector('[name="oa-src"]:checked').value;
   const api = () => ({ base_url: sheet.querySelector("#oa-api-url").value.trim(), model: sheet.querySelector("#oa-api-model").value.trim(),
     key: sheet.querySelector("#oa-api-key").value.trim() });
@@ -134,10 +142,13 @@ export async function openSettings(app) {
       }
       const flags = { quickstart: sheet.querySelector("#oa-qs").checked, dividers: sheet.querySelector("#oa-div").checked,
         timeline: sheet.querySelector("#oa-tl").checked, log_prompts: sheet.querySelector("#oa-log").checked,
-        surf_numbered: sheet.querySelector('[name="oa-surf"]:checked').value === "numbered", keep_takes: !sheet.querySelector("#oa-deltakes").checked };
+        surf_numbered: sheet.querySelector('[name="oa-surf"]:checked').value === "numbered", keep_takes: !sheet.querySelector("#oa-deltakes").checked,
+        preview_light: sheet.querySelector('[name="oa-pv"]:checked').value === "light" };
       if (Object.entries(flags).some(([k, on]) => on !== (app.data[k] !== false))) Object.assign(app.data, await app.api.saveUi(flags));
       const clipMin = Number(sheet.querySelector("#oa-clipmin").value) || 360;
       if (clipMin !== (app.data.clip_min ?? 360)) { Object.assign(app.data, await app.api.saveUi({ clip_min: clipMin })); app.cellsSig = null; }
+      const fps = Number(sheet.querySelector("#oa-pvfps").value) || 12;
+      if (fps !== (app.data.preview_fps ?? 12)) Object.assign(app.data, await app.api.saveUi({ preview_fps: fps }));
       drafts[wcur] = wtext.value;
       const edits = Object.keys(drafts).filter((k) => drafts[k] !== wr[k].text);
       for (const k of edits) await app.api.saveWriter(k, drafts[k]);

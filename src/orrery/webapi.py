@@ -227,8 +227,8 @@ def recent(home: Home, args: dict) -> dict:
 def ui_save(home: Home, args: dict) -> dict:
     """App switches kept in the home: `quickstart` (New templates open with their comments),
     `dividers` (chunk dividers in the editor), `timeline` (the reel's clips under its scenes), sample surfing's
-    `surf_numbered` and `keep_takes` (#206), and its sizes
-    (`clip_min`: a clip's shorter side in the clips view)."""
+    `surf_numbered` and `keep_takes` (#206), the live preview's `preview_light` (#205), and its sizes
+    (`clip_min`: a clip's shorter side in the clips view; `preview_fps`: the smooth live preview's pictures a second)."""
     for flag in uistate.FLAGS:
         if flag in args:
             uistate.set_flag(home, flag, bool(args[flag]))

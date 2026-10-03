@@ -600,8 +600,9 @@ class OrreryPrompt:
                     "Optional: the picture the clip ends on (and the H3 node's last_frame). Without a first frame, width "
                     "and height take its shape, so H3 does not crop it.")}),
                 "model": ("MODEL", {"tooltip": (
-                    "Optional: the model, through orrery to the sampler (#209). The clip being sampled then shows in "
-                    "orrery's clip box as it forms, every frame, decoded with the tiny VAE (taeh3 in models/vae_approx). "
+                    "Optional: the model, through orrery to the sampler (#209). The clip being sampled then plays in "
+                    "orrery's clip box as it forms, in real time, decoded with the tiny VAE (taeh3 in models/vae_approx); "
+                    "the gear's Live preview makes it light or smooth. "
                     "The model output is this model with that preview; nothing loads again.")}),
                 "video": ("VIDEO", {"tooltip": (
                     "Optional: a video of your own that the reel starts from (a Load Video). The template's head is "
@@ -659,7 +660,7 @@ class OrreryPrompt:
                 runs.remember(prompt_id, unique_id, outputs[1])  # for Generate: Save nodes log to the galaxy
             if "segments" in data:  # a reel
                 _announce(unique_id, data["segment"])
-            return (*outputs, data["megapixels"], preview.patched(model, unique_id) if model is not None else None)
+            return (*outputs, data["megapixels"], preview.patched(model, unique_id, h) if model is not None else None)
         except ReelEnd as end:
             try:
                 from comfy_execution.graph_utils import ExecutionBlocker  # ComfyUI

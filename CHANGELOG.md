@@ -64,9 +64,9 @@ checks) are left out.
   film, `REMEMBER:` and the next clip use that one; 📌 keeps the scene's rolled prompt so only the noise changes, and
   the gear numbers the takes' seeds and can delete the takes not picked. Clip 1 too: rendering it again stays in
   its run beside its other takes; another size or sound starts a new run (#197).
-- The Orrery Prompt takes the model through it: the clip being sampled then shows in orrery's clip box as it
-  forms, every frame (the tiny VAE taeh3, else Latent2RGB). Without it, ComfyUI's own preview reaches the clip box
-  in every open tab (#197).
+- The Orrery Prompt takes the model through it: the clip being sampled then plays in orrery's clip box as it
+  forms, in real time (the tiny VAE taeh3, else Latent2RGB), light or smooth at the pictures a second the gear's
+  Live preview sets. Without it, ComfyUI's own preview reaches the clip box in every open tab (#197).
 - The dials are a list in a sidebar beside the editor, one a row with what it rolls at this seed, to widen,
   fold or clear; a dial's menu filters by a regex over text, properties and tags, with All and None; a reel's
   clips show only under its scenes, and the column beside the editor is gone; the node's segment widget is

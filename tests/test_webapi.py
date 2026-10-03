@@ -129,7 +129,7 @@ def test_register_attaches_every_route_through_one_adapter(home, tmp_path):
     kind, status, body = hit("GET", "/orrery/presets", query=q)
     assert (kind, status) == ("json", 200) and body["favorites"] == [] and body["quickstart"] is True
     assert hit("POST", "/orrery/ui", query=q, body={"quickstart": False}) == \
-        ("json", 200, {"quickstart": False, "dividers": True, "timeline": True, "log_prompts": True, "surf_numbered": True, "keep_takes": True, "clip_min": 360})
+        ("json", 200, {"quickstart": False, "dividers": True, "timeline": True, "log_prompts": True, "surf_numbered": True, "keep_takes": True, "preview_light": True, "clip_min": 360, "preview_fps": 12})
     assert hit("GET", "/orrery/presets", query=q)[2]["quickstart"] is False
     assert hit("GET", "/orrery/preset", query={**q, "name": "nope"})[1] == 404
     assert hit("POST", "/orrery/recent", query=q, broken=True)[1] == 400
@@ -758,7 +758,7 @@ def test_an_anchor_is_served_by_image_number(home):
 def test_the_editor_switches_travel_with_the_presets_and_are_saved(home):
     assert ok(home, webapi.presets)["dividers"] is True and ok(home, webapi.presets)["timeline"] is True
     assert ok(home, webapi.ui_save, timeline=False) == {"quickstart": True, "dividers": True, "timeline": False, "log_prompts": True,
-                                                         "surf_numbered": True, "keep_takes": True, "clip_min": 360}
+                                                         "surf_numbered": True, "keep_takes": True, "preview_light": True, "clip_min": 360, "preview_fps": 12}
     assert ok(home, webapi.ui_save, clip_min=480)["clip_min"] == 480 and ok(home, webapi.presets)["clip_min"] == 480
     assert ok(home, webapi.presets)["timeline"] is False
 

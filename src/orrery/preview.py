@@ -7,7 +7,8 @@ them whichever tab queued the run (ComfyUI sends its own previews to the queuing
   tiny VAE, as ComfyUI's live preview setting says), passed on as a still.
 - The whole clip: when the model is wired through the Orrery Prompt, a wrapper around the sampler
   decodes each step's denoised estimate, all its frames, with the tiny VAE for the model's latents
-  (taeh3 for MiniMax H3, from models/vae_approx; Latent2RGB without one) into a short animated WebP.
+  (taeh3 for MiniMax H3, from models/vae_approx; Latent2RGB without one) into an animated WebP that plays in
+  real time: light (a few pictures spread over the clip) or smooth (so many a second), as the gear says.
 
 Written for orrery on ComfyUI's own previewers; KJNodes' Model Preview Override (GPL-3.0) gave the
 idea, not the code.
@@ -22,9 +23,11 @@ log = logging.getLogger("orrery.preview")
 
 EVENT = "orrery.preview"
 MAX_EDGE = 384  # the long edge of a preview: the clip's box is no bigger
-MAX_LATENT_FRAMES = 12  # latent frames decoded per step, spread over the clip (each is about 4 video frames)
-FPS = 12
+MAX_LATENT_FRAMES = 12  # the light preview: latent frames decoded per step, spread over the clip
 SPATIAL = 16  # MiniMax H3's VAE: one latent pixel is 16×16 video pixels
+FRAMES_PER_LATENT = 17 / 5  # and 17 video frames are 5 latent frames
+VIDEO_FPS = 24
+CHUNK = 8  # pictures a flat tiny VAE decodes at once: full-size pictures on the GPU, beside the model
 
 
 def _send(payload: dict) -> None:
@@ -153,9 +156,21 @@ def _decoder(model_patcher):
     return None
 
 
-def frames(decoder, video):
-    """The clip's frames as PIL pictures from its latent [batch, channels, time, height, width]: up to
-    MAX_LATENT_FRAMES of its latent frames, spread over the clip, scaled to about MAX_EDGE."""
+def seconds(video) -> float:
+    """How long the clip of a latent [batch, channels, time, height, width] plays."""
+    return (video.shape[2] if video.ndim == 5 else 1) * FRAMES_PER_LATENT / VIDEO_FPS
+
+
+def _spread(count: int, wanted: int):
+    import torch
+
+    return torch.linspace(0, count - 1, min(count, wanted)).round().long()
+
+
+def frames(decoder, video, fps: int | None = None):
+    """The clip's frames as PIL pictures from its latent [batch, channels, time, height, width], scaled to about
+    MAX_EDGE: light (`fps` None), MAX_LATENT_FRAMES of its latent frames spread over the clip; smooth, `fps`
+    pictures a second of it, as far as its latent frames give them (a flat tiny VAE or Latent2RGB: one each)."""
     import numpy as np
     import torch
     from PIL import Image
@@ -163,8 +178,9 @@ def frames(decoder, video):
     x = video[:1].float()
     if x.ndim == 4:
         x = x.unsqueeze(2)
-    if x.shape[2] > MAX_LATENT_FRAMES:
-        x = x[:, :, torch.linspace(0, x.shape[2] - 1, MAX_LATENT_FRAMES).round().long().to(x.device)]
+    wanted = MAX_LATENT_FRAMES if fps is None else max(1, round(seconds(x) * fps))
+    if x.shape[2] > wanted:
+        x = x[:, :, _spread(x.shape[2], wanted).to(x.device)]
     kind, it = decoder
     with torch.no_grad():
         if kind in ("tae", "tae2d"):
@@ -173,14 +189,17 @@ def frames(decoder, video):
                 x = torch.nn.functional.interpolate(x, scale_factor=(1, scale, scale), mode="trilinear")
             if kind == "tae":
                 out = it.decode(x)[0]  # ComfyUI's VAE moves and casts it: [frames, h, w, rgb] in 0..1
-            else:  # a picture per latent frame
-                out = it.to(x.device)(x[0].movedim(1, 0)).movedim(1, -1)
+            else:  # a picture per latent frame, a few at a time
+                it = it.to(x.device)
+                out = torch.cat([it(chunk).movedim(1, -1).cpu() for chunk in x[0].movedim(1, 0).split(CHUNK)])
         else:
             factors = torch.tensor(it.latent_rgb_factors, device=x.device, dtype=x.dtype)
             rgb = torch.nn.functional.linear(x[0].movedim(0, -1), factors.transpose(0, 1))  # [time, h, w, rgb] in -1..1
             if getattr(it, "latent_rgb_factors_bias", None) is not None:
                 rgb = rgb + torch.tensor(it.latent_rgb_factors_bias, device=x.device, dtype=x.dtype)
             out = (rgb + 1) / 2
+    if fps is not None and out.shape[0] > wanted:  # a temporal tiny VAE gives more
+        out = out[_spread(out.shape[0], wanted).to(out.device)]
     array = (out.clamp(0, 1) * 255).round().to(torch.uint8).cpu().numpy()
     pictures = [Image.fromarray(np.ascontiguousarray(f)) for f in array]
     for picture in pictures:
@@ -197,9 +216,10 @@ class _Sender:
         self._thread = threading.Thread(target=self._run, daemon=True)
         self._thread.start()
 
-    def put(self, pictures, payload: dict) -> None:
+    def put(self, pictures, payload: dict, duration: int) -> None:
+        """`duration`: how long each picture shows, in ms."""
         with self._lock:
-            self._next = (pictures, payload)
+            self._next = (pictures, payload, duration)
         self._wake.set()
 
     def _run(self) -> None:
@@ -209,10 +229,10 @@ class _Sender:
             with self._lock:
                 job, self._next = self._next, None
             if job is not None:
-                pictures, payload = job
+                pictures, payload, duration = job
                 try:
                     first, rest = pictures[0], pictures[1:]
-                    image = _b64(first, "WEBP", save_all=True, append_images=rest, duration=round(1000 / FPS), loop=0,
+                    image = _b64(first, "WEBP", save_all=True, append_images=rest, duration=duration, loop=0,
                                  quality=70) if rest else _b64(first, quality=80)
                     _send({**payload, "image": image, "mime": "image/webp" if rest else "image/jpeg", "animated": bool(rest)})
                 except Exception as err:  # noqa: BLE001 - a preview never stops a run
@@ -226,10 +246,20 @@ class _Sender:
 
 
 class _Wrapper:
-    """Around the sampler (ComfyUI's OUTER_SAMPLE): the callback also previews the whole clip."""
+    """Around the sampler (ComfyUI's OUTER_SAMPLE): the callback also previews the whole clip, light or smooth as
+    the home's settings say when it samples (a cached Orrery Prompt hands on this wrapper)."""
 
-    def __init__(self, node_id: str | None):
-        self.node_id = node_id
+    def __init__(self, node_id: str | None, home=None):
+        self.node_id, self.home = node_id, home
+
+    def _fps(self) -> int | None:
+        from orrery import uistate
+
+        try:
+            ui = uistate.load_ui(self.home)
+        except Exception:  # noqa: BLE001 - no home: the light preview
+            return None
+        return None if ui["preview_light"] else ui["preview_fps"]
 
     def __call__(self, executor, noise, latent_image, sampler, sigmas, denoise_mask=None, callback=None,
                  disable_pbar=False, seed=None, latent_shapes=None):
@@ -243,7 +273,7 @@ class _Wrapper:
         if decoder is None:
             return executor(noise, latent_image, sampler, sigmas, denoise_mask, callback, disable_pbar, seed,
                             latent_shapes=latent_shapes)
-        sender, prompt_id = _Sender(), runs.current_prompt()
+        sender, prompt_id, fps = _Sender(), runs.current_prompt(), self._fps()
 
         def previewing(step, x0, x, total_steps):
             if callback is not None:
@@ -253,8 +283,9 @@ class _Wrapper:
                 if latent_shapes and len(latent_shapes) > 1:  # video and sound packed together (MiniMax H3): the video
                     import comfy.utils
                     video = comfy.utils.unpack_latents(x0, latent_shapes)[0]
-                sender.put(frames(decoder, video), {"step": step + 1, "total": total_steps, "prompt_id": prompt_id,
-                                                    "node": self.node_id})
+                pictures = frames(decoder, video, fps)
+                sender.put(pictures, {"step": step + 1, "total": total_steps, "prompt_id": prompt_id, "node": self.node_id},
+                           max(20, round(1000 * seconds(video) / len(pictures))))  # in real time
             except Exception as err:  # noqa: BLE001 - a preview never stops a run
                 log.debug(f"[orrery] preview skipped: {err}")
 
@@ -265,10 +296,10 @@ class _Wrapper:
             sender.close()
 
 
-def patched(model, node_id: str | None):
+def patched(model, node_id: str | None, home=None):
     """The model with orrery's preview around its sampler; the weights are shared, nothing loads again."""
     import comfy.patcher_extension
 
     m = model.clone()
-    m.add_wrapper_with_key(comfy.patcher_extension.WrappersMP.OUTER_SAMPLE, "orrery_preview", _Wrapper(node_id))
+    m.add_wrapper_with_key(comfy.patcher_extension.WrappersMP.OUTER_SAMPLE, "orrery_preview", _Wrapper(node_id, home))
     return m
