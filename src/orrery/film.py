@@ -80,11 +80,12 @@ def previous_tail(output: Path | str, latent_path: str, segment: int, continues:
 
 
 def save_take(output: Path | str, latent_path: str, segment: int, frames: Sequence, sound, sample_rate: int,
-              tail: Tail, meta: dict, continues: int | None = -1) -> Path:
+              tail: Tail, meta: dict, continues: int | None = -1, test: bool = False) -> Path:
     """Keep a clip as segment `segment`'s take and join the film again; returns the take's folder.
     `frames`: the clip's frames as uint8 [height, width, 3], one by one (anything with len() that
     iterates); `sound`: float32 [channels, samples]. `continues`: the segment it continues (-1: the one
-    before; None: none, it started afresh). The takes after it stay as long as none of them continues it."""
+    before; None: none, it started afresh). The takes after it stay as long as none of them continues it.
+    A `test` take (a test scene's) is kept, and the film is joined without it."""
     import numpy as np
 
     root = _root(output, latent_path)
@@ -122,7 +123,8 @@ def save_take(output: Path | str, latent_path: str, segment: int, frames: Sequen
     os.replace(tmp, run / name)
     continues = segment - 1 if continues == -1 else continues
     later = list(itertools.takewhile(lambda c: not _continues(clips, c, segment), range(segment + 1, len(clips))))
-    clips = [*clips[:segment], {"folder": name, "frames": count, "continues": continues}, *(clips[c] for c in later)]
+    clips = [*clips[:segment], {"folder": name, "frames": count, "continues": continues, **({"test": True} if test else {})},
+             *(clips[c] for c in later)]
     write_atomic(run / "clips.json", json.dumps({"settings": settings, "clips": clips}, indent=2))
     write_atomic(root / "active.json", json.dumps({"run": run.name}))
     _join(run, clips, int(sample_rate))
@@ -130,7 +132,9 @@ def save_take(output: Path | str, latent_path: str, segment: int, frames: Sequen
 
 
 def film_file(take: Path) -> Path:
-    return take.parent / "film.mp4"
+    """The film the take belongs to; the take itself while the film has only test takes."""
+    film = take.parent / "film.mp4"
+    return film if film.exists() else take / "video.mp4"
 
 
 def _layout(sound) -> str:
@@ -177,9 +181,15 @@ def _chain(first, rest):
 
 
 def _join(run: Path, clips: list[dict], sample_rate: int) -> None:
-    """film.mp4: the takes' video stream-copied one after another, their sound joined and encoded once."""
+    """film.mp4: the takes' video stream-copied one after another, their sound joined and encoded once;
+    test takes are left out (none left: no film)."""
     import av
     import numpy as np
+
+    clips = [c for c in clips if not c.get("test")]
+    if not clips:
+        (run / "film.mp4").unlink(missing_ok=True)
+        return
 
     sound = np.concatenate([np.load(run / c["folder"] / "audio.npy") for c in clips], axis=1)
     tmp = run / "film.tmp.mp4"

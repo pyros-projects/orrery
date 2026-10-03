@@ -233,30 +233,39 @@ export function folderDropPath(path, target) {
 const SCENE = /^(?:SCENE|CHUNK)\b\s*(.*)$/;
 const REPEAT = /^(.*?)\s*(?:\brepeat\s+(\d+|forever)|(?<!\S)[×x]\s*(\d+)|(?<!\S)(forever))\s*$/i;
 
-// The title of a scene's heading and how often it plays (Infinity for forever).
+const TEST = /(?<!\S)\(test\)(?!\S)/i;  // `SCENE the forest (test)`: kept, left out of the film
+
+// The title of a scene's heading, how often it plays (Infinity for forever) and whether it is a test scene.
 function heading(rest) {
-  const r = REPEAT.exec(rest), times = r && (r[2] ?? r[3] ?? "forever");
-  return { title: (r ? r[1] : rest).trim(), repeat: !r ? 1 : times.toLowerCase() === "forever" ? Infinity : Math.max(1, Number(times)) };
+  const plain = rest.replace(TEST, " ").split(/\s+/).filter(Boolean).join(" ");
+  const r = REPEAT.exec(plain), times = r && (r[2] ?? r[3] ?? "forever");
+  return { title: (r ? r[1] : plain).trim(), repeat: !r ? 1 : times.toLowerCase() === "forever" ? Infinity : Math.max(1, Number(times)),
+    test: TEST.test(rest) };
 }
 
 // A reel's scenes: the seconds of their shots (without the pinned context), how often each plays
-// (Infinity for forever), the clips in all, and which start afresh (`AFTER: nothing`, no pinned
-// context). Null without SCENE lines. Mirrors orrery.reel.
+// (Infinity for forever), the clips in all, and which start afresh, with no pinned context: the
+// first scene, a test scene without AFTER:, a scene with only test scenes before it. Null without
+// SCENE lines. Mirrors orrery.reel.
 function reelSecs(text) {
   let secs = null;
-  const repeats = [], fresh = [];
+  const repeats = [], fresh = [], tests = [], after = [];
   for (const l of text.split("\n").map((x) => x.trim())) {
     const c = SCENE.exec(l);
     if (c) {
+      const h = heading(c[1]);
       (secs ??= []).push(0);
-      repeats.push(heading(c[1]).repeat);
-      fresh.push(secs.length === 1);  // the first scene has no clip before it
+      repeats.push(h.repeat);
+      tests.push(h.test);
+      after.push(false);
     }
-    if (secs && /^AFTER:\s*nothing\s*$/i.test(l)) fresh[secs.length - 1] = true;
+    if (secs && /^AFTER:/.test(l)) after[secs.length - 1] = true;
     const m = /^SHOT\s+(\d+(?:\.\d+)?)\s*s\b/i.exec(l);
     if (m && secs) secs[secs.length - 1] += Number(m[1]);
   }
-  return secs && { chunks: secs.length, secs, repeats, fresh, clips: repeats.reduce((a, b) => a + b, 0) };
+  if (!secs) return null;
+  secs.forEach((_, i) => fresh.push(!after[i] && (tests[i] || tests.slice(0, i).every(Boolean))));
+  return { chunks: secs.length, secs, repeats, fresh, clips: repeats.reduce((a, b) => a + b, 0) };
 }
 
 // Each SCENE line of a reel, for the editor's dividers and the timeline: the line it is on, its

@@ -512,14 +512,46 @@ def test_scenes_after_one_scene_each_continue_its_clip():
     assert 3 in reel.ready(3, path=path) and 4 not in reel.ready(3, path=path)  # case A's send stays in case A's branch
 
 
-def test_a_scene_after_nothing_starts_afresh():
-    fresh = BRANCHES.replace("AFTER: 2", "AFTER: nothing")
-    reel = split_reel(fresh)
-    assert reel.before(3, reel.walk()[0]) is None and reel.ready(3) == {}
-    then, now = (compile_scene(src, 4, {}, target="h3-base", segment=3) for src in (BRANCHES, fresh))
+def test_a_test_scene_starts_afresh_and_its_memory_reaches_the_clips_after_it():
+    tested = BRANCHES.replace("SCENE case B\nAFTER: 2", "SCENE case B (test)")
+    reel = split_reel(tested)
+    path, _ = reel.walk()
+    assert reel.blocks[3].test and reel.blocks[3].title == "case B" and reel.before(3, path) is None
+    assert set(reel.ready(3, path=path)) == {3, 4}  # what the door and case A sent, in the order they played
+    then, now = (compile_scene(src, 4, {}, target="h3-base", segment=3) for src in (BRANCHES, tested))
     assert "opens as" in then.text and "opens as" not in now.text
     assert now.scene.duration == 5 and then.scene.duration > 5  # no pinned context
-    assert now.continues is None and then.continues == 1
+    assert (now.continues, now.test, then.continues, then.test) == (None, True, 1, False)
+
+
+def test_scenes_after_test_scenes_continue_the_film_and_remember_the_tests():
+    src = """@h3 references 16:9 lite
+CAST
+GIRL (image 1, image 3): the young woman
+SCENE the forest (test) ×2
+SHOT 5s: static
+A forest.
+SEND: frame 0 to image 3
+END ON: the forest is still
+SCENE the beach (test)
+AFTER: the forest
+SHOT 5s: static
+A beach.
+SCENE the walk
+SHOT 5s: static
+GIRL walks.
+END ON: the girl stops
+SCENE the end
+SHOT 5s: static
+GIRL waves.
+"""
+    reel = split_reel(src)
+    path, _ = reel.walk()
+    assert [(b.title, b.test, b.repeat) for b in reel.blocks[:2]] == [("the forest", True, 2), ("the beach", True, 1)]
+    assert [reel.before(t, path) for t in range(5)] == [None, 0, 1, None, 3]  # a test repeats and AFTER: as any
+    assert 3 in reel.ready(3, path=path) and 3 in reel.ready(4, path=path)
+    walk = compile_scene(src, 1, {}, target="h3-base", segment=3)
+    assert "opens as" not in walk.text and walk.continues is None and not walk.test
 
 
 def test_after_names_a_scene_that_played_and_a_repeat_continues_itself():

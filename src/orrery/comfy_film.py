@@ -87,10 +87,10 @@ class OrreryContinue:
 
         data = json.loads(picks or "{}")
         segment, chain = int(data.get("segment") or 0), data.get("chain") or DEFAULT_CHAIN
-        continues = data.get("continues", segment - 1 if segment else None)  # AFTER: in the scene, or the clip before
-        info = {"chain": chain, "segment": segment, "continues": continues,
+        continues = data.get("continues", segment - 1 if segment else None)  # see Reel.before
+        info = {"chain": chain, "segment": segment, "continues": continues, "test": bool(data.get("test")),
                 "meta": {k: data.get(k) for k in ("seed", "template", "preset", "picks")}}
-        if continues is None:  # the first clip, or AFTER: nothing: it starts afresh
+        if continues is None:  # the first clip, or a test scene: it starts afresh
             return conditioning, {**latent, KEY: info}
         video, audio = _streams(latent)
         before = film.previous_tail(_output(), chain, segment, continues)
@@ -173,7 +173,8 @@ class OrreryFilm:
         last = masked.tail(video, audio_latent, frames)
         tail = masked.Tail(last.video.float().cpu().numpy(), last.audio.float().cpu().numpy(), last.grid_offset)
         take = film.save_take(_output(), chain, segment, _Frames(kept), wave[0].float().cpu().numpy(), rate, tail,
-                              info.get("meta") or {}, info.get("continues", segment - 1 if segment else None))
+                              info.get("meta") or {}, info.get("continues", segment - 1 if segment else None),
+                              info.get("test", False))
         print(f"[orrery] Orrery Film: clip {segment + 1} kept, {kept.shape[0]} frames "
               f"({kept.shape[0] / 24:.2f} s); the film is {film.film_file(take)}")
         sound = {**audio, "waveform": wave.contiguous(), "sample_rate": rate}

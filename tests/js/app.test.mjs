@@ -341,11 +341,13 @@ test("SCENE, ×N and forever give what CHUNK and repeat gave, and CUT TO: walks 
   assert.ok(hasGoto("SCENE a\nSHOT 5s\nA.\nCUT TO: a ×2") && hasGoto("? $w[rain]: CUT TO: a") && !hasGoto("SCENE a\nSHOT 5s\nA."));
 });
 
-test("a scene after nothing starts afresh: its length has no pinned context", () => {
-  const reel = "@h3 text\ncontext: 22\nSCENE a\nSHOT 5s\nA.\nSCENE b\nSHOT 5s\nB.\nSCENE c\nAFTER: nothing\nSHOT 5s\nC.";
-  assert.deepEqual(stats(reel).h3.reel.fresh, [true, false, true]);
-  const [a, b, c] = shape(reel).lengths;
-  assert.ok(b > a && c === a, `${a} ${b} ${c}`);
+test("a test scene starts afresh, and so does the first scene after only tests: no pinned context", () => {
+  const reel = "@h3 text\ncontext: 22\nSCENE forest (test)\nSHOT 5s\nA.\nSCENE beach (test)\nAFTER: forest\nSHOT 5s\nB.\n"
+    + "SCENE walk\nSHOT 5s\nC.\nSCENE end\nSHOT 5s\nD.\nSCENE dune (test)\nSHOT 5s\nE.";
+  assert.deepEqual(stats(reel).h3.reel.fresh, [true, false, true, false, true]);
+  const [a, b, c, d, e] = shape(reel).lengths;
+  assert.ok(b > a && c === a && d > a && e === a, `${a} ${b} ${c} ${d} ${e}`);
+  assert.deepEqual(chunkInfo(reel).map((x) => x.title), ["forest", "beach", "walk", "end", "dune"]);
 });
 
 test("a chunk that repeats forever runs on, and the ones after it never play", () => {

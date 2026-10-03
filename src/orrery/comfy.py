@@ -406,6 +406,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         if result.chunks:
             data["segment"], data["chunks"], data["segments"] = result.segment, result.chunks, result.segments
             data["continues"] = result.continues
+            if result.test:
+                data["test"] = True
             context = DEFAULT_CONTEXT if result.scene.context is None else result.scene.context
             data["chain"], data["context"] = chain, context
             if continued and context != CONTEXT:

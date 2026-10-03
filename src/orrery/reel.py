@@ -38,9 +38,13 @@ clip by clip (`Reel.walk`): which scene a segment plays can depend on the seed.
 
 `AFTER: <title or number>` in a scene makes it continue the last clip of that scene instead of the
 clip before it, so many scenes can branch off one clip (each with its own `SET:`): its opening
-sentence, the frames Orrery Continue pins, `$x~N` and what was sent follow that chain. `AFTER:
-nothing` starts the scene afresh, as the reel's first clip starts. A scene that repeats continues
-itself from its second time on.
+sentence, the frames Orrery Continue pins, `$x~N` and what was sent follow that chain. A scene that
+repeats continues itself from its second time on.
+
+`SCENE the forest (test)` is a test scene: rendered and kept, but Orrery Film leaves it out of the
+film. It starts afresh (unless an `AFTER:` names a scene), and a scene after it continues the last
+clip that is in the film. What it sends and rolls reaches the clips after it all the same: the
+memory follows the clips in order, the picture follows the film (`Reel.recalls`, `Reel.before`).
 """
 
 import hashlib
@@ -57,7 +61,7 @@ REPEAT = re.compile(r"^(.*?)\s*(?:\brepeat\s+(\d+|forever)|(?<!\S)[×x]\s*(\d+)|
 HANDOFF = re.compile(r"^(?:END ON|HANDOFF):\s*(.+)$")
 SEND = re.compile(r"^SEND:\s*(.*)$")
 AFTER = re.compile(r"^AFTER:\s*(.*)$")
-NOTHING = -1  # `AFTER: nothing`: the scene continues no clip
+TEST = re.compile(r"(?<!\S)\(test\)(?!\S)", re.IGNORECASE)  # `SCENE the forest (test)`
 GOTO_LINE = re.compile(r"^(?:\?[^\n]*?:\s*)?(?:CUT\s+TO|GOTO):", re.IGNORECASE)  # a cut, with its `? cond:` or without
 _GOTO = re.compile(r"(?:CUT\s+TO|GOTO):\s*(.+?)\s*(?:[×x]\s*(\d+))?\s*$", re.IGNORECASE)
 MAX_WALK = 500  # clips a walk through a reel follows before it calls the reel endless
@@ -176,7 +180,8 @@ class Block:
     lines: list[str] = field(default_factory=list)
     sends: list[Send] = field(default_factory=list)
     gotos: list[Goto] = field(default_factory=list)
-    after: int | None = None  # `AFTER:`: the scene it continues (an index), NOTHING, or None for the clip before
+    after: int | None = None  # `AFTER:`: the scene it continues (an index); None: the clip before
+    test: bool = False  # `(test)`: rendered and kept, left out of the film
 
 
 @dataclass
@@ -240,28 +245,38 @@ class Reel:
         return path[segment]
 
     def before(self, segment: int, path: list[tuple[int, int]]) -> int | None:
-        """The segment `segment` continues, on `path`: the one before it, or with `AFTER:` the last clip
-        of that scene (None for the first clip and `AFTER: nothing`)."""
+        """The segment whose picture `segment` continues (its pinned frames, its END ON:), on `path`: with
+        `AFTER:` the last clip of that scene, else the last clip before it that is in the film. None for
+        the first clip and for a test scene without `AFTER:`, which start afresh."""
         if segment == 0:
             return None
         block, rep = path[segment]
-        after = self.blocks[block].after
-        if rep or after is None:
+        here = self.blocks[block]
+        if rep:
             return segment - 1
-        if after == NOTHING:
+        if here.after is not None:
+            last = next((t for t in range(segment - 1, -1, -1) if path[t][0] == here.after), None)
+            if last is None:
+                raise ValueError(f"SCENE {block + 1} continues SCENE {here.after + 1} (AFTER:), which has not played "
+                                 f"before clip {segment + 1}.")
+            return last
+        if here.test:
             return None
-        last = next((t for t in range(segment - 1, -1, -1) if path[t][0] == after), None)
-        if last is None:
-            raise ValueError(f"SCENE {block + 1} continues SCENE {after + 1} (AFTER:), which has not played before "
-                             f"clip {segment + 1}.")
-        return last
+        return next((t for t in range(segment - 1, -1, -1) if not self.blocks[path[t][0]].test), None)
+
+    def recalls(self, segment: int, path: list[tuple[int, int]]) -> int | None:
+        """The segment whose memory `segment` carries on (what was sent, `$x~N`): the one it continues
+        with `AFTER:`, so a branch keeps its own; else the clip before it, a test scene's too."""
+        if segment and self.blocks[path[segment][0]].after is not None:
+            return self.before(segment, path)
+        return segment - 1 if segment else None
 
     def chain(self, segment: int, path: list[tuple[int, int]]) -> list[int]:
-        """The segments `segment` continues, nearest first: `before` again and again."""
-        out, t = [], self.before(segment, path)
+        """The segments whose memory `segment` carries on, nearest first: `recalls` again and again."""
+        out, t = [], self.recalls(segment, path)
         while t is not None:
             out.append(t)
-            t = self.before(t, path)
+            t = self.recalls(t, path)
         return out
 
     @property
@@ -341,11 +356,12 @@ def split_reel(src: str) -> Reel | None:
     afters: list[tuple[int, str]] = []  # (chunk, what its AFTER: names), the same
     for raw in lines:
         if m := CHUNK.match(raw.strip()):
-            title, repeat = m.group(1).strip(), 1
+            heading, repeat = m.group(1).strip(), 1
+            title = " ".join(TEST.sub(" ", heading).split())
             if r := REPEAT.match(title):
                 title, times = r.group(1).strip(), r.group(2) or r.group(3) or "forever"
                 repeat = None if times.lower() == "forever" else max(1, int(times))
-            blocks.append(Block(title, repeat))
+            blocks.append(Block(title, repeat, test=bool(TEST.search(heading))))
         elif (send := SEND.match(raw.strip())) and blocks:
             blocks[-1].sends.append(parse_send(send.group(1)))
         elif GOTO_LINE.match(raw.strip()) and blocks:
@@ -357,12 +373,11 @@ def split_reel(src: str) -> Reel | None:
     for i, line in gotos:
         blocks[i].gotos.append(_goto(line, blocks))
     for i, name in afters:
-        index = NOTHING if name.casefold() == "nothing" else _scene(name, blocks)
+        index = _scene(name, blocks)
         if index is None or index == i:
             problem = "a scene cannot continue itself" if index == i else f"no SCENE is called {name!r}"
             titles = ", ".join(b.title or f"scene {k + 1}" for k, b in enumerate(blocks))
-            raise ValueError(f"AFTER: {name}: {problem} (there are {titles}; a number counts them from 1, "
-                             "and AFTER: nothing starts afresh).")
+            raise ValueError(f"AFTER: {name}: {problem} (there are {titles}; a number counts them from 1).")
         blocks[i].after = index
     from orrery.dsl import parse
 

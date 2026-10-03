@@ -137,7 +137,7 @@ function gotoItems(before, line, text) {
   if (!m) return null;
   const titles = text.split("\n")
     .map((l) => /^\s*(?:SCENE|CHUNK)\b\s*(.*?)(?:\s+repeat\s+(?:\d+|forever)|\s+[×x]\s*\d+|\s+forever)?\s*$/i.exec(l)).filter(Boolean)
-    .map((c, i) => c[1] || String(i + 1));
+    .map((c, i) => c[1].replace(/(?<!\S)\(test\)(?!\S)/i, " ").split(/\s+/).filter(Boolean).join(" ") || String(i + 1));
   return {
     items: titles.filter((t) => startsWith(t, m[1])).map((t) => ({ insert: t, detail: "jump to this scene; ×N after it: N times", preview: "" })),
     replaceFrom: before.length - m[1].length,

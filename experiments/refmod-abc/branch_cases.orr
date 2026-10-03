@@ -48,10 +48,9 @@ SET: image_1(1, 0%, 10%), minimaxh3_jinx_v1_refmod(0)
 SHOT 7s: static
 JINX is entering the scene from the side and standing in front of the camera. JINX is showcasing her outfit.
 
-# AFTER: nothing: a fresh start, no pinned frames and no opening sentence. What was sent does not
-# reach it either (see #39), so here only the RefMod brings Jinx.
-SCENE fresh
-AFTER: nothing
-SET: minimaxh3_jinx_v1_refmod(1)
+# A test scene (#80): a fresh start, no pinned frames and no opening sentence, and left out of the film.
+# What was sent reaches it all the same: frame 30 of scene 1 is its image 1.
+SCENE fresh (test)
+SET: image_1(1), minimaxh3_jinx_v1_refmod(0)
 SHOT 7s: static
 JINX is standing in front of the camera in a room. JINX is showcasing her outfit.
