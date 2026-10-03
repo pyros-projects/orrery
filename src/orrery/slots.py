@@ -42,9 +42,10 @@ def fill(text: str, texts: dict[str, str]) -> str:
 
 
 def request(wanted: list[Need], directions: list[str], context: str, frames: int = 0,
-            rewrites: list[tuple[str, str]] = ()) -> str:
+            rewrites: list[tuple[str, str]] = (), made: list[str] = ()) -> str:
     """The one request of a run: libraries to write, slots to fill, passages to rewrite (`> …`,
-    as (instruction, passage)), and the clip to continue."""
+    as (instruction, passage)), and the clip to continue. `made`: what the gallery pictures the CAST
+    names show, as "<Picture 2> and <Picture 3>: the prompt that made them"."""
     if not directions and not rewrites:
         return prompt_for(wanted)
     keys = {d: f"slot {i}" for i, d in enumerate(directions, start=1)}
@@ -59,6 +60,9 @@ def request(wanted: list[Need], directions: list[str], context: str, frames: int
     replies = ["each list name (without underscores) to a JSON array of its entries"] if wanted else []
     if directions:
         parts.append(f"The prompt, with each part you write marked [slot N]:\n\n{shown.strip()}")
+        if made:
+            parts.append("The reference pictures were made from these prompts, so a part that describes who or what "
+                         "they show says what the prompt says, in a sentence:\n" + "\n".join(f"- {m}" for m in made))
         labels = " Name people and things by their labels (<Subject N>, <Video N> …) as the prompt does." \
             if re.search(r"<(?:Subject|Picture|Video|Audio) \d+>", context) else ""
         parts.append(f"Parts to write, each as prose that fits where it stands and follows its directions exactly.{labels}\n"

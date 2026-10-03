@@ -480,6 +480,7 @@
 .orrery-app .liblist .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; background: var(--line); }
 .orrery-app .liblist .dot.user { background: var(--teal); }
 .orrery-app .liblist .dot.llm { background: var(--violet); }
+.orrery-app .liblist .dot.gallery { background: var(--brass); }
 .orrery-app .pend-chip { font: 600 10px var(--mono); color: var(--violet); background: rgba(180,148,245,.14); border-radius: 4px; padding: 1px 5px; flex: none; }
 .orrery-app .banner.review { border-color: rgba(180,148,245,.45); background: rgba(180,148,245,.08); color: var(--ink); display: flex; align-items: center; gap: 8px; }
 .orrery-app .banner.review > .i { color: var(--violet); flex: none; }

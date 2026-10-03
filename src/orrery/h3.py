@@ -168,6 +168,7 @@ class Compiled:
     continues: int | None = None  # the segment whose picture this clip continues (Reel.before); None: afresh
     test: bool = False  # a test scene's clip: Orrery Film leaves it out of the film
     uses_input: bool = False  # the reel reads the Orrery Prompt's input video (Reel.uses_input)
+    pictures: dict[int, dict] = field(default_factory=dict)  # image slot → {file, prompt} a CAST names (name_pictures)
 
 
 # --- front end ------------------------------------------------------------------------------
@@ -269,7 +270,7 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
     for shot in scene.shots:
         shot.start, t = t, t + shot.duration
     _apply_sets(scene, lint)
-    pictures = {s.index for m in scene.cast for s in m.sources if s.kind == "image"}
+    pictures = {s.name or s.index for m in scene.cast for s in m.sources if s.kind == "image"}
     refmods = {_refmod_key(s.name) for m in scene.cast for s in m.sources if s.kind == "refmod"}
     for kind, target in scene.dials:
         if (kind == "image" and target not in pictures) or (kind == "refmod" and target not in refmods):
@@ -350,8 +351,8 @@ def _apply_sets(scene: Scene, lint: list[Issue]) -> None:
 
 def _chosen(member: Member, words: list[str], lint: list[Issue]) -> list[tuple]:
     """The dial keys of the member's pictures and RefMods its words choose; all of them without words."""
-    own = [("image", s.index) if s.kind == "image" else ("refmod", _refmod_key(s.name))
-           for s in member.sources if s.kind in ("image", "refmod")]
+    own = [("image", s.name or s.index) if s.kind == "image" else ("refmod", _refmod_key(s.name))
+           for s in member.sources if s.kind in ("image", "refmod")]  # a named picture's dials move to its slots later
     if not words:
         return own
     out = []
@@ -782,6 +783,51 @@ def image_slots(scene: Scene) -> list[int]:
     return sorted(used)
 
 
+def name_pictures(scene: Scene, libraries: Mapping[str, Library], lint: list[Issue],
+                  reserved: set[int] | frozenset = frozenset()) -> dict[int, dict]:
+    """Gives every `image <name>` of the clip's CAST slots of its own, the highest free ones, and returns
+    {slot: {file, prompt}}: the file for Orrery Refs to load, the prompt that made it for the language
+    model that writes the member's `--…--`. A character's name brings all its pictures (a grid's views),
+    one slot each, in the order they were made; the same name twice shares its slots. `reserved`: slots
+    taken elsewhere (wired into Orrery Refs, kept by REMEMBER: lines)."""
+    from orrery import pictures
+
+    if not any(s.kind == "image" and s.name for m in scene.cast for s in m.sources):
+        return {}
+    taken = {n for n in image_slots(scene) if n} | set(reserved)
+    free = [n for n in range(MAX_SLOTS["image"], 0, -1) if n not in taken]
+    given: dict[str, list[int]] = {}
+    files: dict[int, dict] = {}
+    for m in scene.cast:
+        out = []
+        for s in m.sources:
+            if not (s.kind == "image" and s.name):
+                out.append(s)
+                continue
+            if s.name not in given:
+                found = pictures.find(s.name, libraries) or []
+                if not found:
+                    lint.append(Issue("warn", f"{m.name}: image {s.name} is no picture of the gallery "
+                                              "(__pictures/…__ lists them), so it is left out."))
+                elif len(found) > len(free):
+                    lint.append(Issue("warn", f"{m.name}: image {s.name} has {len(found)} pictures, but only {len(free)} "
+                                              f"of the {MAX_SLOTS['image']} image slots are free, so "
+                                              f"{len(found) - len(free)} {'is' if len(found) - len(free) == 1 else 'are'} "
+                                              "left out."))
+                slots = sorted(free[:min(len(found), len(free))])
+                free = [n for n in free if n not in slots]
+                made = pictures.prompt(s.name, libraries)
+                files.update({n: {"file": str(f), "prompt": made} for n, f in zip(slots, found, strict=False)})
+                given[s.name] = slots
+            out += [replace(s, index=n, name="") for n in given[s.name]]
+        m.sources = out
+    for name, slots in given.items():  # SET: @HERO(0.5) reached the picture by its name: now by its slots
+        if dial := scene.dials.pop(("image", name), None):
+            for n in slots:
+                scene.dials.setdefault(("image", n), {}).update(dial)
+    return files
+
+
 def pack_images(scene: Scene) -> list[int]:
     """Renumber the images a scene uses to 1, 2, 3 … as Orrery Refs hands them to Reference to Video,
     which counts only the images wired. Returns the original slots in their new order."""
@@ -808,7 +854,8 @@ def cast_images(lines: list[str]) -> set[int]:
         elif _SHOT.match(line):
             in_cast = False
         elif in_cast and (m := MEMBER.match(line)):
-            out |= {s.index for s in parse_member(m.group(1), m.group(2), m.group(3)).sources if s.kind == "image"}
+            out |= {s.index for s in parse_member(m.group(1), m.group(2), m.group(3)).sources
+                    if s.kind == "image" and not s.name}
     return out
 
 
@@ -924,6 +971,7 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
         lint += [Issue("warn", problem) for m in absent for problem in m.problems]
         lint += [Issue("warn", f"{m.name} is in the CAST, but no shot, voice or summary names it, so it is left out "
                                "of the prompt (always keeps a member in).") for m in absent]
+    named = name_pictures(scene, libraries, lint, set(standing) | set(sends) | set(reel.send_slots if reel else ()))
     # A picture at 0 leaves the clip: Reference to Video shows its pictures to the text encoder too, so
     # only one it never gets is gone. Not named, and not handed on as a sent image either.
     if zero := zero_images(scene):
@@ -940,4 +988,4 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                     sends, reel.send_slots if reel else [],
                     [{**r, "sent": sent_mods[r["name"]]} if r["name"] in sent_mods else r for r in clip_refmods(scene)],
                     clip_images(scene, refs), reel.before(segment, path) if reel else None,
-                    bool(reel and reel.blocks[path[segment][0]].test), bool(reel and reel.uses_input))
+                    bool(reel and reel.blocks[path[segment][0]].test), bool(reel and reel.uses_input), named)

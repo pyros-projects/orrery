@@ -338,6 +338,32 @@ edits as long as the character keeps her `image N`.
   is for nodes that take many images, such as Create H3 RefMod From Inputs (not
   tested with orrery yet).
 
+### Pictures by name
+
+A picture orrery made can stand in the CAST by its name, without a Load Image:
+
+```
+CAST
+@HERO (image krea/09_character_creator/1283456183): --who they are, in one sentence--
+@PAL (image __pictures/krea/09_character_creator__): a stranger
+```
+
+- **The gallery is a library.** Every preset's pictures are `__pictures/<preset>__`, one entry per
+  character: a seed of the preset with its dials (`krea/09_character_creator/1283456183`, with
+  `-ab12` after it when it had dials). The entry carries all the pictures that seed made, so a
+  grid's four views come along, and it is weighted by your ratings: loved characters come back more
+  often, and `[loved]` keeps only those. `image __pictures/krea/09_character_creator__` rolls one
+  like any library, seeded and recorded; the Libraries tab lists them, read-only.
+- **One picture** is named by its file: `image krea/09_character_creator/krea2_00092_`.
+  Pictures of a template without a preset are under `unsaved/<its hash>`.
+- **Slots:** a named picture takes the highest free slots (9, 8, 7 …), each view one, so your
+  numbered images keep theirs; `SET: @HERO(0.5)` and `image NAME at 0.5 from 35%` reach them as
+  they reach numbered ones. More views than free slots are left out, with a warning.
+- **Orrery Refs** loads each named picture into its slot (one wired there too gives way, with a
+  warning); without an Orrery Refs reading the picks, the run stops and says so.
+- **The description:** a `--…--` in the member's line is written by the language model, which is
+  told the prompt that made the pictures, so one sentence of who they are needs no vision model.
+
 ## 7. What reaches the outputs, precisely
 
 For every clip, Orrery Refs fills `ref_1`, `ref_2`, … in this order:

@@ -48,7 +48,7 @@ function searchEntries(app) {
   }, 250);
 }
 
-const SOURCE = { llm: "written by the language model", user: "yours", builtin: "built-in" };
+const SOURCE = { llm: "written by the language model", user: "yours", builtin: "built-in", gallery: "the gallery's pictures" };
 
 function listHTML(app, libs, current) {
   const s = app.state, open = s.libOpen ??= new Set(), searching = !!s.libSearch.trim();
@@ -122,7 +122,7 @@ export async function renderLibraries(app) {
     return;
   }
   const back = keepPlace(app);
-  const ro = L.source === "builtin";
+  const ro = L.source === "builtin" || L.source === "gallery";
   const tags = [...new Set(L.entries.flatMap((e) => e.tags))].sort();
   if (s.libShownFor !== L.name) { s.libShownFor = L.name; s.libShown = LIB_PAGE; }
   const { rows, total } = entryPage(L.entries, { name: L.name, query: s.libSearch, tag: s.libTag, shown: s.libShown });
@@ -133,9 +133,10 @@ export async function renderLibraries(app) {
       <div class="addrow">${s.libNew !== null ? '<input class="input mono" id="oa-newlib" placeholder="name or folder/name, e.g. film/genre">' : `<button class="btn wide" data-lact="new">${icon("plus")}New library</button>`}</div></div>
     <div class="libmain">
       <div class="libhead">${s.libRen === L.name ? `<input class="input mono" id="oa-ren" value="${esc(L.name)}" aria-label="New name" spellcheck="false">` : `<h3>__${esc(L.name)}__</h3>`}<span class="stat">${L.entries.length} entries</span>
-        ${ro ? '<button class="btn primary" data-lact="own">Make it mine</button>' : `<button class="btn ghost" data-lact="ren">Rename</button><button class="btn ghost danger" data-lact="del">${icon("trash")}Delete</button>`}</div>
+        ${L.source === "gallery" ? "" : ro ? '<button class="btn primary" data-lact="own">Make it mine</button>' : `<button class="btn ghost" data-lact="ren">Rename</button><button class="btn ghost danger" data-lact="del">${icon("trash")}Delete</button>`}</div>
       ${reviewHTML(L)}
-      ${ro ? `<div class="banner">${icon("lock")}Built-in and read-only. <b>Make it mine</b> copies it into your library folder, where yours wins over the built-in.</div>` : ""}
+      ${L.source === "gallery" ? `<div class="banner">${icon("lock")}The gallery's pictures of this preset: one entry per character (a seed and its dials) with all its pictures, weighted by your ratings. A CAST names one as <code>image ${esc(L.entries[0]?.value || "preset/seed")}</code> or rolls one with <code>image __${esc(L.name)}__</code>.</div>`
+        : ro ? `<div class="banner">${icon("lock")}Built-in and read-only. <b>Make it mine</b> copies it into your library folder, where yours wins over the built-in.</div>` : ""}
       ${tags.length ? `<div class="bar flat"><span class="label">Tags</span>${tags.map((t) => `<button class="chip" aria-pressed="${s.libTag === t}" data-ltag="${esc(t)}">${esc(t)}</button>`).join("")}</div>` : ""}
       <div class="scroll"><table class="entries"><colgroup><col><col class="cw"><col class="cl"><col class="cx"></colgroup><thead><tr><th class="label">Entry <span class="sub">· tags and properties under it</span></th><th class="label" title="Static weight in the file">Weight</th><th class="label" title="Learned from your gallery ratings">Learned</th><th></th></tr></thead><tbody>
       ${rows.map(({ e, i }) => rowHTML(e, i, ro, (L.pending_entries || []).includes(e.value))).join("") || '<tr><td colspan="4" class="empty">No entries yet. Add some below.</td></tr>'}

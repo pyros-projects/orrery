@@ -38,6 +38,9 @@ MEMBER = re.compile(r"^([A-Z][A-Z0-9 _-]*?)\s*(?:\(([^)]*)\))?\s*:\s*(.+)$")
 _DIALS = r"(?:\s+at\s+(\d*\.?\d+))?(?:\s+from\s+(\d+(?:\.\d+)?)\s*%)?(?:\s+to\s+(\d+(?:\.\d+)?)\s*%)?"  # `at 0.5 from 35% to 80%`
 _SOURCE = re.compile(rf"^(image|video|audio)\s+(\d+)(\s*\+\s*audio)?{_DIALS}$|^refmod\s+([\w./-]+){_DIALS}$",
                      re.IGNORECASE)
+# `image krea/09_character_creator/1283456183`: a picture of the gallery by name (orrery.pictures), or a
+# library of them (`image __pictures/krea/09_character_creator__`, rolled before the CAST is read)
+_NAMED = re.compile(rf"^image\s+((?!\d+\b)[\w./-]+){_DIALS}$", re.IGNORECASE)
 _VOICE = re.compile(r"^(?:(audio)\s+(\d+)|video\s+(\d+)\s+audio)\s*(?:,\s*(.*))?$", re.IGNORECASE)
 # keep: macros, written out as a marker and a reason ({who} is the member's head noun)
 KEEP_PARTS = {"face": "face", "identity": "face", "hair": "hair", "body": "build", "build": "build",
@@ -111,7 +114,7 @@ class Member:
 
     def split_head(self) -> tuple[str, str]:
         """The head as (noun phrase, detail): 'a man in a suit' → ('a man', ' in a suit')."""
-        m = _DETAIL.search(self.head)
+        m = _DETAIL.search(_SLOT_SPAN.sub(lambda s: "-" * len(s.group(0)), self.head))  # a slot's words are its own
         return (self.head[:m.start()], self.head[m.start():]) if m and m.start() else (self.head, "")
 
     @property
@@ -121,21 +124,30 @@ class Member:
         return re.sub(r"^(an?)\s+", "the ", self.split_head()[0], flags=re.IGNORECASE)
 
 
+_SLOT_SPAN = re.compile(r"--(?=[^\s-])[^\n]*?[^\s-]--")  # a `--…--` slot (orrery.slots.SLOT): its commas are its own
+
+
 def parse_member(name: str, spec: str, text: str) -> Member:
-    head, _, rest = text.strip().partition(",")
+    text = text.strip()
+    hidden = _SLOT_SPAN.sub(lambda m: "-" * len(m.group(0)), text)  # where the head ends: the first comma outside a slot
+    cut = hidden.find(",")
+    head, rest = (text, "") if cut < 0 else (text[:cut], text[cut + 1:])
     member = Member(name.strip(), head.strip(), f", {rest.strip()}" if rest.strip() else "")
     for raw in filter(None, (s.strip() for s in (spec or "").split(","))):
-        m = _SOURCE.match(raw)
+        m, named = _SOURCE.match(raw), _NAMED.match(raw)
         if raw.lower() in ("always", "global"):  # global: the earlier word
             member.everywhere = True
-        elif not m:
+        elif not (m or named):
             member.problems.append(f"{member.name}: \"{raw}\" is not a reference orrery knows (image N, "
-                                   "video N, video N + audio, audio N, refmod NAME, always), so it is left out.")
+                                   "image NAME, video N, video N + audio, audio N, refmod NAME, always), so it is "
+                                   "left out.")
         else:
-            refmod = m.group(7)
-            at, start, end = (m.group(8), m.group(9), m.group(10)) if refmod else (m.group(4), m.group(5), m.group(6))
-            what = f"refmod {refmod}" if refmod else f"{m.group(1).lower()} {m.group(2)}"
-            if (at or start or end) and not refmod and m.group(1).lower() != "image":
+            refmod = m.group(7) if m else None
+            at, start, end = (named.group(2, 3, 4) if named else m.group(8, 9, 10) if refmod
+                              else m.group(4, 5, 6))
+            what = (f"image {named.group(1)}" if named else f"refmod {refmod}" if refmod
+                    else f"{m.group(1).lower()} {m.group(2)}")
+            if (at or start or end) and not (refmod or named) and m.group(1).lower() != "image":
                 member.problems.append(f"{member.name}: {what} takes no at, from or to (images and RefMods do), so "
                                        "they are left out.")
                 at = start = end = None
@@ -151,6 +163,8 @@ def parse_member(name: str, spec: str, text: str) -> Member:
             strength = float(at) if at else None
             if refmod:
                 member.sources.append(Source("refmod", name=refmod, strength=strength, start=share, end=until))
+            elif named:  # its number comes when the clip is compiled (orrery.h3.name_pictures)
+                member.sources.append(Source("image", name=named.group(1), strength=strength, start=share, end=until))
             else:
                 member.sources.append(Source(m.group(1).lower(), int(m.group(2)), soundtrack=bool(m.group(3)),
                                              strength=strength, start=share, end=until))

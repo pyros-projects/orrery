@@ -9,6 +9,10 @@ checks) are left out.
 
 ### Added
 
+- Pictures by name in the CAST: `@HERO (image krea/09_character_creator/1283456183)` takes a character
+  from the gallery with all its views, `image __pictures/<preset>__` rolls one (the gallery is a library,
+  steered by ratings), Orrery Refs loads them without a Load Image, and a `--…--` description is written
+  from the prompt that made them. A slot's commas in a CAST line stay inside the slot (#128).
 - A character creator for Krea 2 (`krea/09_character_creator`): an original character from about 800 parts
   (a silhouette, a signature colour carried through clothes and accents, one detail you remember, a face,
   hair that fits the age, seven genres, women in women's clothes and men in men's), every part a dial,

@@ -566,7 +566,7 @@ def _remembered(head: list[str], blocks: list[Block], head_sends: list[Send] = (
         if not lines:
             raise ValueError(f"REMEMBER: … as {send.member}: {send.member} is not in a CAST; give the member a line "
                              f"there ({send.member}: who it is), or remember the frames as an image N.")
-        images = [s.index for g, i in lines for s in _member_of(g[i]).sources if s.kind == "image"]
+        images = [s.index for g, i in lines for s in _member_of(g[i]).sources if s.kind == "image" and not s.name]
         if len(images) > send.nth:
             send.image = images[send.nth]
             continue
