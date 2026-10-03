@@ -57,10 +57,11 @@ setting. When the node runs, the model
 **Roll** (next to Test in the Prompt tab, with how many runs after it: next 3 clips, next 8 images) queues only what this node feeds,
 up to its Save and Preview nodes, and the files those Save nodes write go to
 the gallery with this run's picks, so Orrery Log is optional. The `×` field
-beside it queues that many runs in a row, seed and segment stepping between
-them. For a reel the bar shows the segment being generated (or the next one),
-and **Restart** cancels this node's queued and running clips, sets segment to
-0 and generates from the start; other jobs in the queue stay.
+beside it queues that many runs in a row, seed and clip stepping between
+them. For a reel the bar shows the clip being generated, or **Next clip**: a
+field (type another to play it next) with **Hold** beside it, which plays the
+same clip on every run, for takes. **Restart** cancels this node's queued and
+running clips and generates from clip 1; other jobs in the queue stay.
 
 **LoRA sweeps.** A LoRA tag with several strengths, in a text prompt or on a
 `LORA:` line, makes Roll run once per strength:

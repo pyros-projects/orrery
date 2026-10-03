@@ -46,7 +46,8 @@ Nodes under **orrery**:
   (LoraManager, Efficiency, Easy-Use …); unknown or ambiguous names are
   reported in the log and in the Test tab. A reel (`SCENE` blocks, `×N` and
   `forever`, `$x[-1]`, `AFTER:`, `(test)`; see [h3.md](h3.md) 1d) writes one clip per run:
-  `segment` counts up by itself, and Orrery Continue / Orrery Film (below)
+  the next clip counts up by itself (the Prompt tab's **Next clip**, and **Hold**
+  for takes; the node's `segment` input is orrery's, hidden), and Orrery Continue / Orrery Film (below)
   chain the clips. A video wired into `video` (Load Video) is the scene before
   the reel's first: the node keeps it at 24 fps beside the clips, a head
   `REMEMBER:` keeps its frames, and a scene with `AFTER: the input video`

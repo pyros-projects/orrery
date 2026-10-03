@@ -24,7 +24,7 @@ function statsHTML(app) {
   const wired = /^\s*(:\s*.*\b[wh]\d|@size\b)/m.test(app.text) ? [] : app.bridge.frames?.() || [];  // `@size` wins
   const outs = (app.data.rows || []).filter((r) => r.template === templateHash(app.text)).length;
   const forever = reel && reel.clips === Infinity, clips = !reel ? "" : forever ? "∞" : Number.isNaN(reel.clips) ? "?" : reel.clips;
-  const how = !reel ? "" : "Wire the picks into Orrery Continue (and the clip into Orrery Film). The segment widget counts up by itself (increment): "
+  const how = !reel ? "" : "Wire the picks into Orrery Continue (and the clip into Orrery Film). Next clip counts up by itself after each run (unless held): "
     + (forever ? "Run (Instant) plays clip after clip until you stop it." : `a Run count of ${clips} plays the whole reel${reel.goto ? " at this seed (its GOTO lines may jump on what rolls)" : ""}; after the last clip nothing downstream runs.`);
   const timing = reel
     ? `<span class="stat" title="${esc(how)}"><b>Reel</b> · ${reel.secs.map((s, i) => `<b>${s.toFixed(1)} s</b>${reel.repeats[i] === 1 ? "" : ` ×${reel.repeats[i] === Infinity ? "∞" : reel.repeats[i]}`}`).join(" + ")}${reel.goto ? " · GOTO" : ""} · <b>${clips}</b> clip${reel.clips === 1 ? "" : "s"}</span>`
@@ -43,8 +43,10 @@ function statsHTML(app) {
     + `${outs ? `<button class="btn ghost" data-act="outputs">${icon("image")}${outs} output${outs === 1 ? "" : "s"}</button>` : ""}`
     + `<button class="btn" data-act="test" title="Roll it in the Test tab: a few seeds, or a reel's clips">${icon("dice")}Test</button>`
     + (reel ? (app.run
-      ? `<span class="stat live" title="The clip of the reel this node is rendering now (its segment widget counts from 0)">Rolling clip <b>${Number(app.run.segment) + 1}</b></span>`
-      : `<span class="stat" title="The clip Roll plays next: the node's segment widget, which counts from 0">Next clip <b>${Number(app.bridge.getSegment()) + 1}</b></span>`)
+      ? `<span class="stat live" title="The clip of the reel this node is rendering now">Rolling clip <b>${Number(app.run.segment) + 1}</b></span>`
+      : `<label class="rep" title="The clip Roll plays next; after each run it steps on to the next, unless held">Next clip<input type="number" min="1" value="${Number(app.bridge.getSegment()) + 1}" data-nextclip aria-label="The clip Roll plays next"></label>`
+        + `<button class="btn ghost" data-act="hold" aria-pressed="${!!app.bridge.segmentHeld?.()}" title="${app.bridge.segmentHeld?.()
+          ? "Held: every Roll plays this clip again, for takes. Press to step on after each run" : "Hold this clip: every Roll plays it again, for takes"}">${icon("lock")}Hold</button>`)
       + `<button class="btn ghost" data-act="jump" title="Scroll the editor to the scene that plays the next clip">${icon("jump")}Jump</button>`
       + `<button class="btn" data-act="restart" title="Cancel this node's queued and running clips, set segment to 0 and generate from the start">${icon("undo")}Restart</button>` : "")
     + (app.state.sweepQueue
@@ -92,6 +94,7 @@ function chipHTML(app) {
 }
 
 export function renderPrompt(app) {
+  app.bridge.syncSegment?.(!!app.chunks());
   const card = app.preset && app.card(app.preset);
   const d = app.dirty();
   app.view.innerHTML = `
@@ -168,9 +171,11 @@ export function renderPrompt(app) {
     if (starter) startNew(app, starter);
     if (act === "outputs") { app.state.gScope = "prompt"; app.go("galaxy"); }
     if (act === "writenow") return writeNow(app);
+    if (act === "hold") { app.bridge.holdSegment(!app.bridge.segmentHeld()); return refreshFoot(app); }
     if (act === "browse") app.go("presets");
   };
   app.view.onchange = (e) => {
+    if (e.target.dataset.nextclip !== undefined) return app.bridge.setSegment(Math.max(0, Math.floor(Number(e.target.value) || 1) - 1));
     if (e.target.dataset.rep === undefined) return;
     app.bridge.props.repeat = Number(e.target.value) || 1;
     e.target.value = repeats(app);
@@ -285,6 +290,7 @@ function jumpToChunk(app) {
 }
 
 export function refreshFoot(app) {
+  app.bridge.syncSegment?.(!!app.chunks());  // a template without scenes: clip 0, not stepping (#190)
   refreshPlan(app);  // a dial or an edit can change what Generate queues
   refreshReelPath(app);
   refreshRemembered(app);

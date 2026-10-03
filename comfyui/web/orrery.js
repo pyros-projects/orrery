@@ -47,16 +47,19 @@ function mount(node) {
   [template, preset, home, params, find("sweep")].forEach(hide);
   node.properties = node.properties || {};
 
-  // the control_after_generate combo that belongs to an INT widget (seed and segment each have one)
+  // the control_after_generate combo that belongs to an INT widget (seed and segment each have one); newer frontends
+  // name the second one control_after_generate#1, so the name is matched by its start
+  const isControl = (w) => /^control_after_generate/.test(w?.name || "");
   const controlOf = (name) => {
     const i = node.widgets?.findIndex((w) => w.name === name) ?? -1;
     const w = node.widgets?.[i];
-    return w?.linkedWidgets?.find((l) => l.name === "control_after_generate")
-      ?? (node.widgets?.[i + 1]?.name === "control_after_generate" ? node.widgets[i + 1] : null);
+    return w?.linkedWidgets?.find(isControl) ?? (isControl(node.widgets?.[i + 1]) ? node.widgets[i + 1] : null);
   };
-  // A new node plays a reel clip after clip; configure() restores a saved workflow's choice later.
+  // A new node plays a reel clip after clip; configure() restores a saved workflow's choice later. The segment and
+  // its control are orrery's (#190): the footer's Next clip and Hold set them, so the node shows neither.
   const segmentControl = controlOf("segment");
   if (segmentControl) segmentControl.value = "increment";
+  [find("segment"), segmentControl].forEach(hide);
 
   const set = (name, value) => {
     const w = find(name);
@@ -204,6 +207,16 @@ function mount(node) {
     },
     getSegment: () => find("segment")?.value ?? 0,
     setSegment: (value) => set("segment", value),
+    // The segment is orrery's (#190): a reel steps on after each run unless held (the same clip again, for takes);
+    // a template without scenes stays at 0 and never steps, so it is never taken for a reel's next clip.
+    segmentHeld: () => !!node.properties.orrery_hold,
+    holdSegment: (on) => { node.properties.orrery_hold = !!on; bridge.syncSegment(true); },
+    syncSegment: (reel) => {
+      if (sweep.on) return;  // a sweep holds the segment still until its last run is queued
+      const control = controlOf("segment"), want = reel && !node.properties.orrery_hold ? "increment" : "fixed";
+      if (control && control.value !== want) { control.value = want; node.setDirtyCanvas?.(true, true); }
+      if (!reel && Number(find("segment")?.value ?? 0) !== 0) set("segment", 0);
+    },
     // Restart: dequeue this node's pending runs and interrupt its running one; other jobs stay queued.
     cancelRuns: async () => {
       const q = await (await api.fetchApi("/queue")).json();

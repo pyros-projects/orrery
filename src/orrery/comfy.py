@@ -47,7 +47,7 @@ from orrery.presets import (
     remember_template,
     resolve_includes,
 )
-from orrery.reel import ReelEnd
+from orrery.reel import ReelEnd, split_reel
 from orrery.slots import (
     SLOT,
     export_slots,
@@ -277,6 +277,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     known = {name for name, _ in bindings(template)}
     dials = {k: v for k, v in dial_values(params).items() if k in known}
     source = long_form(strip_comments(resolve_includes(h, override(template, dials))))  # the hash keeps the comments
+    if target == "text" or split_reel(source) is None:  # no SCENE: one clip on its own, never a reel's next (#190)
+        segment, frames = 0, None
     plan, sweep_picks, sweep_data, folder, cell = sweeps.runs(source), [], None, "", None
     grid = batches.axes(*with_inline(source, h.libraries())) if parse(source).params.grid is not None else []
     cells = batches.cells(grid) if grid else 1
