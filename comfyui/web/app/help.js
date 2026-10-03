@@ -74,6 +74,7 @@ const REF = [
   ]],
   ["Reels (Orrery Continue)", [
     ["CHUNK the salon", "one clip, continuing the one before; everything before the first CHUNK (style, CAST, bindings) is the world and holds for every clip", "CHUNK\nSHOT 5s: push in, slow\n"],
+    ["style: … (in a CHUNK)", "that clip's own style, in place of the head's", "style: "],
     ["CHUNK the walk repeat 8", "plays this chunk 8 times (repeat forever: until you stop); bindings inside a chunk roll anew every clip", "CHUNK the walk repeat forever\n"],
     ["$look~1", "$look as it was one clip ago (~2: two clips); the model who walks back keeps her look", "$look~1"],
     ["HANDOFF: MAYA reaches the door", "closes this chunk and opens the next with the same words", "HANDOFF: "],
