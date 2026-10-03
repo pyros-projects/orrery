@@ -1,0 +1,15 @@
+# A character without its picture (#157): cast from the gallery for its data only (no image source), so H3 is free to draw them anew. The exports give the description, the mood, the quirk and the voice; the rest still rolls. Try: --$hero.who, as an anime character-- or --$hero.who, ten years older and a villain-- as the description (with a language model set). Render a few characters with the new creator first: [exported] keeps the pictures that carry data.
+@h3 t2va 16:9 0.6MP
+style: live-action, neon night market after rain, handheld, photorealistic
+$hero = __pictures/krea/09_character_creator[exported]__
+
+CAST
+@HERO: $hero.who
+
+SHOT 5s: tracking
+@HERO pushes through a crowded night market, {furious|giddy|wary|exhausted}, and $hero.quirk.
+SFX: rain dripping from awnings, sizzling woks, a crowd haggling
+
+SHOT 4s: push in, small, slow
+@HERO stops at a stall and looks up.
+@HERO ($hero.voice): You owe me.
