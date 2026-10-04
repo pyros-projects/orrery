@@ -1,0 +1,88 @@
+meta: {source: "orrery landscape creator: one sign of life in the land, never a person: an animal, a building, a boat, a track, smoke; `climate` where it lives (any, cold, temperate, hot, tropical), `water` what it needs (any, sea, lake: open fresh water, stream: small water, or yes for any water), `trace` what it leaves on the ground, for a close-up", builtin: true}
+entries:
+  - {value: "a flock of birds lifting off together", props: {climate: any, water: any, trace: "a small feather caught on the ground"}}
+  - {value: "a narrow dirt track winding through it", props: {climate: any, water: any, trace: "a tyre track pressed into the ground"}}
+  - {value: "a weathered wooden signpost at a fork in a path", props: {climate: any, water: any, trace: "a splinter of painted wood and a rusty nail"}}
+  - {value: "a small tent pitched in a sheltered spot", props: {climate: any, water: any, trace: "a tent peg driven into the ground"}}
+  - {value: "a thin column of smoke rising from a campfire", props: {climate: any, water: any, trace: "a ring of blackened stones with cold ash"}}
+  - {value: "the crumbling stone ruin of an old tower", props: {climate: any, water: any, trace: "a carved stone fallen from a ruin, half sunk in the ground"}}
+  - {value: "a line of power pylons marching into the distance", props: {climate: any, water: any, trace: "a broken ceramic insulator lying on the ground"}}
+  - {value: "a single old tree standing alone", props: {climate: any, water: any, trace: "a twisted root gripping the ground"}}
+  - {value: "a radio mast with a red light on a rise", props: {climate: any, water: any, trace: "a coil of old cable"}}
+  - {value: "a road with one car on it, its headlights on", props: {climate: any, water: any, trace: "the crumbling edge of an old road"}}
+  - {value: "a lone wind turbine turning slowly", props: {climate: any, water: any, trace: "a bolt and a flake of white paint"}}
+  - {value: "a stone cairn on a high point", props: {climate: any, water: any, trace: "flat stones stacked by hand"}}
+  - {value: "a raven flying low", props: {climate: any, water: any, trace: "a glossy black feather"}}
+  - {value: "a small red fishing boat moored near the shore", props: {climate: any, water: sea, trace: "a frayed mooring rope tied to an iron ring"}}
+  - {value: "a wooden jetty reaching out into the water", props: {climate: any, water: lake, trace: "weathered planks and a rusted cleat"}}
+  - {value: "a white sailboat on the water", props: {climate: any, water: sea, trace: "a coil of rope washed up at the water's edge"}}
+  - {value: "a kayak pulled up on the shore", props: {climate: any, water: lake, trace: "the drag mark of a hull in the wet ground"}}
+  - {value: "a lighthouse on a rocky point", props: {climate: any, water: sea, trace: "a chip of red-and-white painted stone"}}
+  - {value: "a flock of gulls wheeling over the water", props: {climate: any, water: sea, trace: "a gull's footprints at the water's edge"}}
+  - {value: "a rusting shipwreck lying on its side near the shore", props: {climate: any, water: sea, trace: "a rusted rivet plate furred with weed"}}
+  - {value: "a grey heron standing in the shallows", props: {climate: temperate, water: "yes", trace: "a long grey feather floating on the water"}}
+  - {value: "a pair of swans gliding on the water", props: {climate: temperate, water: lake, trace: "a white feather drifting on the water"}}
+  - {value: "an old stone bridge arching over the water", props: {climate: temperate, water: stream, trace: "a mossy stone fallen from the bridge into the shallows"}}
+  - {value: "an old watermill with its wheel turning", props: {climate: temperate, water: stream, trace: "a wooden paddle broken off a mill wheel"}}
+  - {value: "a beaver lodge of piled sticks", props: {climate: temperate, water: lake, trace: "a gnawed, pointed stump"}}
+  - {value: "an otter slipping into the water", props: {climate: temperate, water: "yes", trace: "an otter's footprints in the soft mud"}}
+  - {value: "a stone farmhouse with smoke rising from its chimney", props: {climate: temperate, water: any, trace: "a cracked roof slate"}}
+  - {value: "a herd of red deer", props: {climate: temperate, water: any, trace: "a deer's hoofprint in the soft ground"}}
+  - {value: "a flock of sheep scattered over it", props: {climate: temperate, water: any, trace: "a tuft of white wool snagged on a thorn"}}
+  - {value: "a lone horse grazing", props: {climate: temperate, water: any, trace: "a hoofprint pressed into the earth"}}
+  - {value: "a small white chapel on a rise", props: {climate: temperate, water: any, trace: "a weathered carved stone from an old wall"}}
+  - {value: "a windmill with its sails turning", props: {climate: temperate, water: any, trace: "a scrap of sailcloth caught on a post"}}
+  - {value: "a fox trotting along", props: {climate: temperate, water: any, trace: "a fox's paw prints"}}
+  - {value: "a red tractor parked at the edge of a field", props: {climate: temperate, water: any, trace: "a deep tyre tread in the earth"}}
+  - {value: "a hay barn of weathered boards", props: {climate: temperate, water: any, trace: "a wisp of straw"}}
+  - {value: "a pair of hares sitting up in the open", props: {climate: temperate, water: any, trace: "a hare's tracks"}}
+  - {value: "a castle ruin on a crag", props: {climate: temperate, water: any, trace: "a dressed stone fallen from a castle wall"}}
+  - {value: "a row of beehives at the edge of a meadow", props: {climate: temperate, water: any, trace: "a bee crawling over the ground"}}
+  - {value: "a herd of wild horses", props: {climate: temperate, water: any, trace: "an unshod hoofprint in the ground"}}
+  - {value: "a herd of cattle grazing", props: {climate: temperate, water: any, trace: "hoofprints in trampled ground"}}
+  - {value: "a herd of reindeer", props: {climate: cold, water: any, trace: "reindeer hoofprints in the soft ground"}}
+  - {value: "a red wooden hut with a turf roof", props: {climate: cold, water: any, trace: "a weathered red-painted board"}}
+  - {value: "a polar bear walking alone", props: {climate: cold, water: any, trace: "huge paw prints"}}
+  - {value: "a musk ox standing in the wind", props: {climate: cold, water: any, trace: "a tuft of brown wool snagged on a twig"}}
+  - {value: "an arctic fox", props: {climate: cold, water: any, trace: "small paw prints"}}
+  - {value: "a herd of yaks", props: {climate: cold, water: any, trace: "a tuft of long black hair on a stone"}}
+  - {value: "a row of prayer flags strung between rocks", props: {climate: cold, water: any, trace: "a faded prayer flag torn free"}}
+  - {value: "a small mountain hut with a red roof", props: {climate: cold, water: any, trace: "a weathered red roof tile"}}
+  - {value: "a seal hauled out on a rock", props: {climate: cold, water: sea, trace: "a seal's flipper marks on the wet ground"}}
+  - {value: "a colony of puffins on the clifftop", props: {climate: cold, water: sea, trace: "a puffin's small black feather"}}
+  - {value: "a row of wooden fish-drying racks", props: {climate: cold, water: sea, trace: "a dried fish head on a wooden peg"}}
+  - {value: "a string of camels resting in the shade", props: {climate: hot, water: any, trace: "camel footprints in the dust"}}
+  - {value: "a herd of zebras", props: {climate: hot, water: any, trace: "a hoofprint in the dust"}}
+  - {value: "an adobe house with a blue door", props: {climate: hot, water: any, trace: "a sun-cracked adobe brick"}}
+  - {value: "a herd of elephants", props: {climate: hot, water: any, trace: "a huge round footprint"}}
+  - {value: "a lone giraffe browsing a tree", props: {climate: hot, water: any, trace: "a giraffe's hoofprint in the dust"}}
+  - {value: "an old windpump with a rusted wheel", props: {climate: hot, water: any, trace: "a rusted pump blade"}}
+  - {value: "a coyote trotting along", props: {climate: hot, water: any, trace: "coyote tracks"}}
+  - {value: "a long freight train crossing", props: {climate: hot, water: any, trace: "a rusted railway spike"}}
+  - {value: "a desert tortoise", props: {climate: hot, water: any, trace: "a tortoise's trail in the dust"}}
+  - {value: "a vulture perched on a dead branch", props: {climate: hot, water: any, trace: "a long dark feather"}}
+  - {value: "a dusty old pickup truck parked by itself", props: {climate: hot, water: any, trace: "a tyre track in the dust"}}
+  - {value: "a nomad tent of dark woven wool", props: {climate: hot, water: any, trace: "a tent peg and a frayed guy rope"}}
+  - {value: "a white-washed village on a hilltop", props: {climate: hot, water: any, trace: "a chip of white-washed plaster"}}
+  - {value: "a flock of flamingos in the shallows", props: {climate: hot, water: lake, trace: "a pink feather on the water"}}
+  - {value: "a stilt house with a thatched roof", props: {climate: tropical, water: any, trace: "a strand of dried thatch"}}
+  - {value: "a flock of scarlet macaws", props: {climate: tropical, water: any, trace: "a bright red feather"}}
+  - {value: "a troop of monkeys in the trees", props: {climate: tropical, water: any, trace: "a half-eaten fruit"}}
+  - {value: "a water buffalo standing still", props: {climate: tropical, water: any, trace: "a deep hoofprint filled with water"}}
+  - {value: "a temple ruin overgrown by roots", props: {climate: tropical, water: any, trace: "a carved stone face half swallowed by roots"}}
+  - {value: "a small shrine with a thread of incense smoke", props: {climate: tropical, water: any, trace: "a stick of incense burnt down to ash"}}
+  - {value: "a tiger walking along", props: {climate: tropical, water: any, trace: "a large pugmark in the mud"}}
+  - {value: "a flock of white egrets", props: {climate: tropical, water: any, trace: "a white plume"}}
+  - {value: "a hammock strung between two trees", props: {climate: tropical, water: any, trace: "a coconut lying on the ground"}}
+  - {value: "an outrigger canoe drawn up on the shore", props: {climate: tropical, water: sea, trace: "a carved paddle lying on the ground"}}
+  - {value: "a sea turtle crawling up the shore", props: {climate: tropical, water: sea, trace: "the broad track of a turtle"}}
+  - {value: "a fishing hut on stilts above the water", props: {climate: tropical, water: lake, trace: "a fishing net hung to dry"}}
+  - {value: "a crocodile basking on a mudbank", props: {climate: tropical, water: lake, trace: "a tail's drag mark through the mud"}}
+  - {value: "a pod of dolphins breaking the surface", props: {climate: tropical, water: sea, trace: "a ring of ripples spreading on the water"}}
+  - {value: "a wooden rowing boat tied up at the bank", props: {climate: any, water: lake, trace: "an oar lying in the reeds"}}
+  - {value: "a stone harbour wall with a few moored boats", props: {climate: any, water: sea, trace: "a tangle of fishing net and a cork float"}}
+  - {value: "a kingfisher on a branch over the water", props: {climate: any, water: "yes", trace: "a tiny electric-blue feather"}}
+  - {value: "a dipper bobbing on a stone in the stream", props: {climate: temperate, water: stream, trace: "a wet stone splashed white"}}
+  - {value: "a wooden footbridge over the stream", props: {climate: any, water: stream, trace: "a worn plank with a nail head"}}
+  - {value: "a bamboo raft drawn up on the bank", props: {climate: tropical, water: lake, trace: "a lashed bamboo pole"}}
+  - {value: "a moose standing in the shallows", props: {climate: cold, water: lake, trace: "a split hoofprint in the mud"}}

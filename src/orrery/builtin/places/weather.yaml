@@ -1,0 +1,36 @@
+meta: {source: "orrery landscape creator: the sky and the weather, a noun phrase after `with`; `cold` which seasons it fits (yes: snow and frost, no: heat, any), `clear` whether the sun, moon or stars can show through, `near` how it shows on the ground up close, `sfx` how it sounds", builtin: true}
+entries:
+  - {value: "a clear blue sky", props: {cold: any, clear: "yes", near: "dry and sharp in the clear air", sfx: "a light breeze"}}
+  - {value: "a few small white clouds drifting across a clear sky", props: {cold: any, clear: "yes", near: "dry, a cloud's shadow sliding over it", sfx: "a soft breeze"}}
+  - {value: "towering white cumulus clouds piling up in a blue sky", props: {cold: any, clear: "yes", near: "warm and dry", sfx: "a gusting breeze"}}
+  - {value: "high thin streaks of cirrus across a pale sky", props: {cold: any, clear: "yes", near: "dry in the soft hazy light", sfx: "a faint wind"}}
+  - {value: "perfectly still, windless air", props: {cold: any, clear: "yes", near: "utterly still", sfx: "a deep stillness"}}
+  - {value: "a strong wind bending the grass and tearing at the clouds", props: {cold: any, clear: "yes", near: "trembling in the wind", sfx: "a roaring wind"}}
+  - {value: "heavy dew and still, clear air", props: {cold: any, clear: "yes", near: "beaded with dew", sfx: "a few drops falling"}}
+  - {value: "a bright sky washed clean after rain", props: {cold: any, clear: "yes", near: "still wet and shining from the rain", sfx: "dripping and a bird starting to sing"}}
+  - {value: "soft, hazy sunshine", props: {cold: any, clear: "yes", near: "warm in the hazy light", sfx: "insects humming"}}
+  - {value: "a low, flat grey overcast", props: {cold: any, clear: "no", near: "dull and soft-edged under grey cloud", sfx: "a muted wind"}}
+  - {value: "a soft drizzle drifting down", props: {cold: any, clear: "no", near: "beaded with fine drizzle", sfx: "a soft patter"}}
+  - {value: "steady rain falling from a grey sky", props: {cold: any, clear: "no", near: "glistening with rain", sfx: "rain falling steadily"}}
+  - {value: "a heavy downpour, sheets of rain sweeping across", props: {cold: any, clear: "no", near: "running with rainwater", sfx: "a roaring downpour"}}
+  - {value: "a thunderstorm, lightning forking out of black clouds", props: {cold: any, clear: "no", near: "wet and flickering in lightning", sfx: "thunder cracking and heavy rain"}}
+  - {value: "thick fog, the far side lost in white", props: {cold: any, clear: "no", near: "beaded with fog", sfx: "a muffled silence"}}
+  - {value: "low mist lying in the hollows", props: {cold: any, clear: "no", near: "damp with mist", sfx: "a damp quiet and a far-off bird"}}
+  - {value: "storm clouds breaking up, shafts of light falling through them", props: {cold: any, clear: "no", near: "wet, a shaft of light falling on it", sfx: "the wind dropping after a storm"}}
+  - {value: "fast low clouds racing over and sudden bursts of sun", props: {cold: any, clear: "no", near: "flickering between sun and shadow", sfx: "a gusting wind"}}
+  - {value: "dark squalls of rain trailing from the clouds in the distance", props: {cold: any, clear: "no", near: "dark and damp under a passing cloud", sfx: "a distant rumble and the wind rising"}}
+  - {value: "a still, pale grey haze", props: {cold: any, clear: "no", near: "soft and grey in the still air", sfx: "a deep hush"}}
+  - {value: "gently falling snow", props: {cold: "yes", clear: "no", near: "dusted with fresh snow", sfx: "the hush of falling snow"}}
+  - {value: "a blizzard of driving snow", props: {cold: "yes", clear: "no", near: "half buried in drifting snow", sfx: "a howling wind and hissing snow"}}
+  - {value: "a hard frost, everything rimed white", props: {cold: "yes", clear: "yes", near: "rimed with white frost", sfx: "a brittle silence and ice creaking"}}
+  - {value: "a fresh blanket of snow under a clear sky", props: {cold: "yes", clear: "yes", near: "under a crust of fresh snow", sfx: "snow creaking and a far-off crow"}}
+  - {value: "freezing fog, hoarfrost growing on everything", props: {cold: "yes", clear: "no", near: "furred with hoarfrost", sfx: "a frozen silence"}}
+  - {value: "ice-cold, sparkling clear air", props: {cold: "yes", clear: "yes", near: "glittering with frost crystals", sfx: "a thin cold wind"}}
+  - {value: "wet sleet blowing in on a cold wind", props: {cold: "yes", clear: "no", near: "wet with half-melted sleet", sfx: "sleet hissing on the ground"}}
+  - {value: "a shimmering heat haze", props: {cold: "no", clear: "yes", near: "baking dry in the heat", sfx: "cicadas in the heat"}}
+  - {value: "a blazing sun in a cloudless sky", props: {cold: "no", clear: "yes", near: "bleached and hot in the hard sun", sfx: "a dry, ringing heat"}}
+  - {value: "a hot dry wind lifting the dust", props: {cold: "no", clear: "yes", near: "dusty in a hot wind", sfx: "a hot wind hissing"}}
+  - {value: "a dust storm rolling in, the sky turned orange", props: {cold: "no", clear: "no", near: "dusted with fine blown sand", sfx: "a roaring wind full of sand"}}
+  - {value: "a warm monsoon downpour", props: {cold: "no", clear: "no", near: "streaming with warm rain", sfx: "warm rain drumming"}}
+  - {value: "a humid haze, the air thick and steamy", props: {cold: "no", clear: "no", near: "glistening in the humid air", sfx: "insects and a heavy drip"}}
+  - {value: "a tropical thunderstorm building in tall dark clouds", props: {cold: "no", clear: "no", near: "dark under the gathering storm", sfx: "distant thunder rolling"}}

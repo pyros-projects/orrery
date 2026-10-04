@@ -1,0 +1,22 @@
+meta: {source: "orrery landscape creator: the time of day and its light, a phrase after `It is`; `clear` yes when it needs a clear sky (the sun's disc, the moon, the stars), `climate` where it happens (any, or cold for the far north's lights), `light` the light alone, for a close-up", builtin: true}
+entries:
+  - {value: "just before dawn, the land in deep blue shadow and the sky pale at the horizon", props: {clear: any, climate: any, light: "cool blue pre-dawn light"}}
+  - {value: "sunrise, the sun just breaking over the horizon", props: {clear: "yes", climate: any, light: "low pink-gold sunrise light"}}
+  - {value: "early morning, the light soft and cool", props: {clear: any, climate: any, light: "soft, cool early-morning light"}}
+  - {value: "mid-morning, the day well begun", props: {clear: any, climate: any, light: "fresh mid-morning light"}}
+  - {value: "high noon, the sun overhead and the shadows short", props: {clear: "yes", climate: any, light: "hard overhead noon sun"}}
+  - {value: "midday, the light falling from high above", props: {clear: any, climate: any, light: "even, bright midday light"}}
+  - {value: "afternoon, the light slowly warming", props: {clear: any, climate: any, light: "warm afternoon light"}}
+  - {value: "golden hour, the low sun raking across the land", props: {clear: "yes", climate: any, light: "low, warm golden light"}}
+  - {value: "sunset, the sky on fire in red and orange", props: {clear: "yes", climate: any, light: "red-orange sunset light"}}
+  - {value: "the afterglow just after sunset, the sky fading from rose to violet", props: {clear: any, climate: any, light: "soft rose afterglow"}}
+  - {value: "dusk, the last light fading", props: {clear: any, climate: any, light: "dim, fading dusk light"}}
+  - {value: "the blue hour, everything in deep blue twilight", props: {clear: any, climate: any, light: "cool blue twilight"}}
+  - {value: "night under a full moon, the land silver and pale", props: {clear: "yes", climate: any, light: "silver moonlight"}}
+  - {value: "a starry night, the Milky Way arching overhead", props: {clear: "yes", climate: any, light: "faint blue starlight"}}
+  - {value: "a dark night, the land lit only by a faint glow in the sky", props: {clear: any, climate: any, light: "the dim glow of night"}}
+  - {value: "night, the northern lights rippling green across the sky", props: {clear: "yes", climate: cold, light: "the green glow of the northern lights"}}
+  - {value: "a quiet morning, the light pale and soft", props: {clear: any, climate: any, light: "pale, soft morning light"}}
+  - {value: "late afternoon, long shadows stretching across the land", props: {clear: "yes", climate: any, light: "slanting late-afternoon light"}}
+  - {value: "the first light of morning, the sun not yet up", props: {clear: any, climate: any, light: "pale first light"}}
+  - {value: "a moonrise at dusk, a huge orange moon lifting over the horizon", props: {clear: "yes", climate: any, light: "dusky light with a warm moon glow"}}

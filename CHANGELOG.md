@@ -9,6 +9,10 @@ checks) are left out.
 
 ### Added
 
+- A landscape creator for Krea 2 (#144): `krea/16_landscape_creator` rolls one of eighty lands in a season of its
+  climate, a sky the season allows, an hour the sky allows and one sign of life that belongs there, never a person,
+  and the grid shows the place from four distances: establishing, wide, medium and the ground up close, with the trace
+  the sign of life left. It exports the land, the sky and their sounds for a reel that casts it.
 - The Gallery in albums (#290): on the left every output, every picture and every video, then the days (each with its
   images and videos) and the collections; a sweep's or a grid's runs, a reel's clips and each of its scenes are one
   album's card with up to eight of its pictures, opened with a click. Collections take the place of folders: they hold
