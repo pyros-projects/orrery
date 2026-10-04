@@ -167,6 +167,8 @@ checks) are left out.
 - The docs name DSL 2.0 as the language's version, apart from the package's, and `docs/h3.md`
   describes the Ref2VA writer as built (#123).
 - Frequencies and Rolls load the libraries once per request instead of once per roll (#47).
+- A gallery picture's EXPORT list sits in the detail under its prompt again, instead of opening as a blurred overlay
+  over the whole app that hid the close button (#278).
 
 ## [0.1.0] - 2026-10-02
 

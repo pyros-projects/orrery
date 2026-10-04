@@ -191,7 +191,7 @@ const slotted = (v) => pictureSlots(v).map((p) => (p.slot === undefined ? esc(p.
 function sheetHTML(r) {
   const rows = exportRows(r.exports);
   if (!rows.length) return "";
-  return `<div class="sheet"><div class="row spread"><span class="label">What it carries · EXPORT:</span>`
+  return `<div class="exports"><div class="row spread"><span class="label">What it carries · EXPORT:</span>`
     + `<button class="btn ghost" data-gact="copyx">${icon("copy")}JSON</button></div><dl>`
     + rows.map((x) => `<dt>${esc(x.name)}</dt><dd>${x.items.length ? x.items.map((i) => `<span class="tagchip">${slotted(i)}</span>`).join(" ") : slotted(x.value)}`
       + x.fields.map(([k, v]) => `<small><b>${esc(k)}</b> ${slotted(v)}</small>`).join("") + "</dd>").join("")
