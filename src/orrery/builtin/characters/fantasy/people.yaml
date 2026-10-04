@@ -34,7 +34,7 @@ entries:
   - {value: "tortle", props: {like: beast, gender: "yes", beard: "no", look: "a turtle's beaked face, {mossy green|sand-brown} leathery skin and a great domed shell"}}
   - {value: "frogfolk", props: {like: beast, gender: "yes", beard: "no", look: "{bright green|speckled brown|poison-dart blue} glistening skin and a wide frog's mouth"}}
   - {value: "minotaur", props: {like: beast, gender: "yes", beard: "no", look: "a bull's head with great curving horns and {black|brown|white} hide over a massive frame"}}
-  - {value: "centaur", props: {like: beast, gender: "yes", beard: "yes", look: "a human torso on the body of a {chestnut|dapple-grey|black|palomino} horse"}}
+  - {value: "centaur", props: {like: beast, gender: "yes", beard: "yes", look: "a human upper body rising from a {chestnut|dapple-grey|black|palomino} horse's body where its neck and head would be, with four hooves and a long tail"}}
   - {value: "harpy", props: {like: beast, gender: "yes", beard: "no", look: "great {brown|grey|black} feathered wings for arms and taloned bird's feet"}}
   - {value: "naga", props: {like: beast, gender: "yes", beard: "no", look: "a human torso flowing into a long serpent's tail of {jade|gold-banded|black} scales"}}
   - {value: "kobold", props: {like: beast, gender: "yes", beard: "no", look: "a small dog-like reptile body with {rust|ochre|grey} scales and stubby horns"}}
