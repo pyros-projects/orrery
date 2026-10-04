@@ -203,8 +203,9 @@ Nodes under **orrery**:
     click it.
   - **Gallery**: every logged output. love / like / nope / hate multiply the
     learned weight of each pick by 1.5 / 1.2 / 0.8 / 0.5 (re-rating replaces
-    the factor). **Use template + seed** restores an output and sets the seed
-    to fixed. An output whose template EXPORTed data shows it as a sheet
+    the factor). **Use template + seed** restores an output's template and seed
+    and sets the seed to fixed; the next run rolls them with today's libraries
+    and learned weights (#259). An output whose template EXPORTed data shows it as a sheet
     under its prompt (**JSON** copies it). Folders on the left sort outputs without moving their files:
     drag cards onto a folder (a selected card brings the whole selection),
     drag a folder onto another to nest it, double-click to rename. Removing
@@ -221,7 +222,10 @@ Nodes under **orrery**:
     the output was not (the last 2000 runs, in `prompt_history.jsonl` in the
     orrery home). Search by prompt, pick, preset or seed; **Use template +
     seed** puts the run back in the Prompt tab (segment included, control
-    after generate fixed), so a lucky roll can be made again (a run from before
+    after generate fixed), so a lucky roll can be rolled again: with today's
+    libraries, learned weights and included presets, so a library edited or an
+    output rated since rolls something else, and the prompt it made is a copy
+    away (#259) (a run from before
     2026-10-02 comes back with `@rng 1` on top: the dice it was made with). Each run is
     also printed to ComfyUI's console (seed, picks, prompt); the gear turns
     that off.

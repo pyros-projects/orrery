@@ -108,6 +108,8 @@ checks) are left out.
 
 ### Fixed
 
+- History's and the Gallery's restore no longer promise that the next run reproduces a run: it rolls again with today's
+  libraries and learned weights, and says so (#259).
 - Typing in a long reel no longer lags: the editor highlights a scene again only when something it shows
   changed, and works out once what every scene reads, instead of every scene on every keystroke (#218).
 - Save as, the gear and the app's other sheets open at the top of the app, where their buttons are, not at the
