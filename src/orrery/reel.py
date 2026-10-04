@@ -682,16 +682,48 @@ def derive(seed: int, segment: int) -> int:
     return int.from_bytes(hashlib.sha256(f"orrery-reel:{seed}:{segment}".encode()).digest()[:4], "big")
 
 
+def _short(text, most: int = 48) -> str:
+    """A value as a lint quotes it: one line, cut at `most`."""
+    text = " ".join(str(text).split())
+    return repr(text if len(text) <= most else text[:most - 1].rstrip() + "…")
+
+
+def kept_bindings(ex: Expander) -> dict[str, dict]:
+    """What an expander's bindings rolled, to keep with a take (#261): each one's value, fields, properties and tags."""
+    return {name: {"value": value, "fields": dict(ex.var_fields.get(name, {})), "props": dict(ex.var_props.get(name, {})),
+                   "tags": sorted(ex.var_tags.get(name, set()))}
+            for name, value in ex.vars.items() if not name.startswith("\x1e")}
+
+
+def _restore(ex: Expander, name: str, kept: dict) -> None:
+    ex.vars[name] = kept["value"]
+    ex.var_fields[name], ex.var_props[name], ex.var_tags[name] = dict(kept["fields"]), dict(kept["props"]), set(kept["tags"])
+
+
 def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Mapping[str, float] | None,
-            last: int, upto: int | None = None):
+            last: int, upto: int | None = None, past: Mapping[int, dict] | None = None):
     """The world (its expander and its expanded lines), `expand(t)` for segments up to `last` (the
     chunk's screenplay lines as segment t rolls them: its own seed, the world's bindings, `$x~N`
     recomputed; its handoff and the picks), and the path the reel takes at this seed with whether it
-    ended: walked to `last`, or to `upto` when given. A segment past the end raises ReelEnd."""
+    ended: walked to `last`, or to `upto` when given. A segment past the end raises ReelEnd.
+
+    `past` (#261): what the clips already rendered rolled, segment → {scene, bindings, handoff}, from their
+    takes. Their scenes lead the walk, their bindings are the history `$x~N` reads and the world's own (the
+    head's), their END ON: the one the next clip opens with; a segment it does not know rolls as before."""
+    past = past or {}
     world = Expander(seed, libraries, weights, reel.rng)
     for line in reel.head:
         if m := BINDING.match(line.strip()):
             world.bind(m.group(1), m.group(2))
+    world.kept = []  # the head's bindings kept as the film rendered them, which would roll otherwise now
+    if past:  # the world as the latest rendered clip had it
+        latest = past[max(past)]["bindings"]
+        for line in reel.head:
+            if (m := BINDING.match(line.strip())) and m.group(1) in latest:
+                name = m.group(1)
+                if latest[name]["value"] != world.vars.get(name):
+                    world.kept.append((name, latest[name]["value"], world.vars.get(name)))
+                _restore(world, name, latest[name])
     head = [world.expr(line.strip()) for line in reel.head if line.strip() and not BINDING.match(line.strip())]
 
     history: list[dict[str, str]] = []  # every earlier segment's bindings, recomputed
@@ -729,13 +761,22 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
                 ex.bind(m.group(1), m.group(2))
         return ex, block
 
+    def rendered(t: int) -> dict | None:  # what segment t's take rolled, when it played the scene it plays here
+        kept = past.get(t)
+        return kept if kept is not None and t < len(walked) and kept.get("scene") == walked[t][0] else None
+
     def record(t: int, block: int, rep: int) -> None:
         walked.append((block, rep))
         rolled[t] = ex_t = expander(t)[0]
+        if (kept := rendered(t)) is not None:  # its take's bindings, not a new roll (#261)
+            for name, binding in kept["bindings"].items():
+                _restore(ex_t, name, binding)
         history.append(dict(ex_t.vars))
         history_props.append(dict(ex_t.var_fields))
 
     def holds(t: int, goto: Goto) -> bool:  # a chance, and `? cond: CUT TO: …` on what segment t rolled
+        if t + 1 in past and rendered(t) is not None:  # the film went on to the scene its next take played (#261)
+            return goto.target == past[t + 1].get("scene")
         # the chance rolls on the expander kept for this, under the cut's own label: no pick moves
         if goto.chance is not None and rolled[t]._stream(goto.line.strip()).random() >= goto.chance:
             return False
@@ -746,8 +787,11 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
         raise ReelEnd(f"The reel has {len(path)} clips at this seed; segment {last} (clip {last + 1}) is past its end "
                       "(the segment counts from 0, like Load Latent's clip_index).")
 
-    def expand(t: int) -> tuple[list[str], str | None, list[Pick], list[Pick], str | None]:
+    def expand(t: int) -> tuple[list[str], str | None, list[Pick], list[Pick], str | None, Expander]:
         ex, block = expander(t)
+        if t < len(walked) and (kept := rendered(t)) is not None:
+            for name, binding in kept["bindings"].items():
+                _restore(ex, name, binding)
         lines, handoff, handoff_picks, opening = [], None, [], None
         for raw in block.lines:
             line = raw.strip()
@@ -761,7 +805,9 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
                 opening = ex.expr(m.group(1)).strip().rstrip(".")
             else:
                 lines.append(ex.expr(line))
-        return lines, handoff, ex.picks, handoff_picks, opening
+        if t < len(walked) and (kept := rendered(t)) is not None and "handoff" in kept:
+            handoff, handoff_picks = kept["handoff"], []  # the END ON: its clip was made with (#261)
+        return lines, handoff, ex.picks, handoff_picks, opening, ex
 
     return world, head, expand, (path, ended)
 
@@ -789,9 +835,9 @@ def resolved(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: M
 
 def build_segment(reel: Reel, seed: int, libraries: Mapping[str, Library],
                   weights: Mapping[str, float] | None, segment: int,
-                  lint: list[Issue]) -> tuple[Scene, list[Pick], list[tuple[int, int]]]:
-    """Segment `segment` of the reel as a scene, with the picks that went into it and the path the reel
-    took to it."""
+                  lint: list[Issue], past: Mapping[int, dict] | None = None) -> tuple[Scene, list[Pick], list[tuple[int, int]], dict]:
+    """Segment `segment` of the reel as a scene, with the picks that went into it, the path the reel took to it
+    and what its take keeps (#261): its bindings and its END ON:. `past`: what the clips before it rendered."""
     if segment < 0:
         raise ValueError(f"segment {segment} is negative; segments count from 0.")
     forever = next((i for i, b in enumerate(reel.blocks) if b.repeat is None), None)
@@ -804,8 +850,11 @@ def build_segment(reel: Reel, seed: int, libraries: Mapping[str, Library],
             lint.append(Issue("warn", f"The CUT TO: lines jump past SCENE {', '.join(map(str, never))}: "
                                       "it never plays."))
 
-    world, head, expand, (path, _) = _unroll(reel, seed, libraries, weights, segment)
-    lines, handoff, picks, _, opening = expand(segment)
+    world, head, expand, (path, _) = _unroll(reel, seed, libraries, weights, segment, past=past)
+    lines, handoff, picks, _, opening, ex = expand(segment)
+    for name, was, now in world.kept:
+        lint.append(Issue("info", f"${name} stays {_short(was)} as the film rendered it (now it would roll {_short(now)}): "
+                                  "render clip 1 again to change it."))
     continues = reel.before(segment, path)
     if opening or continues is None:
         before, before_picks = None, []
@@ -829,4 +878,4 @@ def build_segment(reel: Reel, seed: int, libraries: Mapping[str, Library],
     t = 0.0
     for shot in scene.shots:
         shot.start, t = t, t + shot.duration
-    return scene, world.picks + picks + before_picks, path
+    return scene, world.picks + picks + before_picks, path, {"bindings": kept_bindings(ex), "handoff": handoff}

@@ -334,3 +334,14 @@ def test_a_take_names_the_scene_and_the_template_it_was_made_with(tmp_path):
     assert [(t["scene"], t["template"]) for t in listed] == [(0, "0123456789abcdef"), (0, "fedcba9876543210")]
     grown = film.tree(tmp_path, "h3_context")["takes"]
     assert [(t["scene"], t["template"]) for t in grown] == [(0, "0123456789abcdef"), (0, "fedcba9876543210")]
+
+
+def test_the_past_comes_from_the_takes_on_the_films_path(tmp_path):
+    """#261: what the clips before a segment rendered; a take from before takes kept it says nothing."""
+    kept = {"bindings": {"hero": {"value": "fox", "fields": {}, "props": {}, "tags": []}}, "handoff": "the fox turns"}
+    take(tmp_path, 0, meta={"chunk": 0, "kept": kept})
+    take(tmp_path, 1, meta={"chunk": 1})  # an older take: nothing kept
+    take(tmp_path, 2, meta={"chunk": 1, "kept": {"bindings": {}, "handoff": None}})
+    assert film.past(tmp_path, "h3_context", 2) == {0: {"scene": 0, **kept}}
+    assert film.past(tmp_path, "h3_context", 3) == {0: {"scene": 0, **kept}, 2: {"scene": 1, "bindings": {}, "handoff": None}}
+    assert film.past(tmp_path, "h3_context", 0) == {} and film.past(tmp_path / "none", "h3_context", 2) == {}

@@ -344,6 +344,18 @@ def end_film(output: Path | str, latent_path: str, segment: int) -> dict:
     return {"clips": segment + 1}
 
 
+def past(output: Path | str, latent_path: str, segment: int) -> dict[int, dict]:
+    """What the clips before `segment` on the film's path rendered (#261): segment → {scene, bindings, handoff},
+    from their takes; a take from before they kept it says nothing, so that clip rolls as before."""
+    run, state = _active(_root(output, latent_path))
+    out = {}
+    for t, clip in enumerate(state.get("clips", [])[:max(segment, 0)] if run is not None else []):
+        meta = _meta(run / clip["folder"])
+        if isinstance(meta.get("kept"), dict) and meta.get("chunk") is not None:
+            out[t] = {"scene": meta["chunk"], **meta["kept"]}
+    return out
+
+
 def tree(output: Path | str, latent_path: str) -> dict:
     """The run's takes as a tree (#240): every take with its clip, its parent, seed, take number, when it was made,
     the scene it plays and its template; the film's path; and the take last walked on from each."""

@@ -9,6 +9,9 @@ checks) are left out.
 
 ### Added
 
+- A reel's past is what was rendered: each take keeps its bindings and its `END ON:`, and the clips after it read
+  them (and the scenes the film went through) from the takes, not from a new roll with libraries, ratings or earlier
+  scenes changed since; what has no take rolls as before (#261).
 - A template without scenes, a Krea prompt or an `@h3` scene, has its results under the prompt: the live preview while
   it samples (an image model's preview sized by its own latent format), then what it made; every run a take under the
   result, a click shows it, and +, ×N and 📌 make takes as in a reel's scenes (#211).
