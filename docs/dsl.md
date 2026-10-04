@@ -71,7 +71,8 @@ template itself: `__80s/Women/80s_sports__` or `{a|b}` inside it expand too,
 as in Dynamic Prompts (a library that comes back to itself is an error). Entries
 may hold LoRAs, so a library can be a set of LoRA combinations
 (`- <lora:ink:0.8> <lora:grain:0.4>`, `- @clay(0.4-0.9)`, `- ""` for none) used
-as `LORA: __my_lora_sets__` or in a text prompt; which set rolled is a pick that
+as `LORA: __my_lora_sets__` or in a text prompt (a `LORA:` line, in a screenplay or a plain text template, goes on the
+model that passes through the Orrery Prompt and never into the prompt, #311); which set rolled is a pick that
 learns like any other. To keep LoRAs with the words they belong to, give one entry
 both as fields and bind it: `$p = __poses__`, then `LORA: $p.loras` and `$p.action`. A sweep in an entry (`0.5,1.0`) runs at its first
 strength and warns: `@grid __my_lora_sets__` runs every entry instead.

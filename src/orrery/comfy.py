@@ -570,7 +570,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         lint.append({"severity": "info", "message": f"{what}: {max(len(plan), 1) * cells} runs ({planned}); "
                                                      f"Roll runs them all{on}, Run takes the first."})
     stack: list = []
-    if target != "text" and result.loras:
+    if result.loras:  # a screenplay's LORA: lines, or a text template's (#311)
         stack, warnings = lora_stack(result.loras, lora_files())
         lint += [{"severity": "warn", "message": w} for w in warnings]
     refmods = getattr(result, "refmods", []) if target != "text" else []

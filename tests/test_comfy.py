@@ -309,6 +309,16 @@ def test_the_node_writes_the_chunk_its_segment_asks_for(home, monkeypatch):
     assert set(json.loads(first[1])["kept"]) == {"bindings", "handoff"}  # what its take keeps for the clips after it (#261)
 
 
+def test_a_text_templates_lora_line_goes_on_the_model_not_into_the_prompt(home, monkeypatch):
+    """#311: a Krea template's LORA: line stayed in the prompt, and the model got no LoRA."""
+    fake_loras(monkeypatch, ["girls/nicegirls_krea2.safetensors", "lenovo_krea2.safetensors"])
+    template = "LORA: <lora:nicegirls_krea2:1.00><lora:lenovo_krea2:{0.5|0.5}>\n$x = {fox|owl}\nA studio photograph of a $x."
+    text, picks, _, _, _, _, stack, *_ = run_prompt(template, 1, "text", str(home))
+    assert "LORA" not in text and "lora" not in text and text.startswith("A studio photograph of a ")
+    assert stack == [("girls/nicegirls_krea2.safetensors", 1.0, 1.0, 0.0, 1.0), ("lenovo_krea2.safetensors", 0.5, 0.5, 0.0, 1.0)]
+    assert json.loads(picks)["lint"] == []
+
+
 def test_unresolved_loras_are_left_out_and_reported(home, monkeypatch):
     fake_loras(monkeypatch, ["x/all.safetensors"])
     _, picks, _, _, _, _, stack, *_ = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
