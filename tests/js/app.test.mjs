@@ -796,3 +796,15 @@ test("the film plays in the tree: its clips in film.mp4's time, a test scene's t
   assert.deepEqual(filmClips({ takes, path: ["a", "t", "b"] }), [{ folder: "a", n: 1, start: 0, end: 10 }, { folder: "b", n: 3, start: 10, end: 15 }]);
   assert.deepEqual(filmClips({ takes, path: [] }), []);
 });
+
+test("a clip's takes have a head that reads as content: play on top, the clip in numbers, deleting at the bottom (#245)", async () => {
+  const { takesHeadHTML } = await import("../../comfyui/web/app/timeline.js");
+  const app = { data: {}, text: "" };
+  const takes = [{ folder: "a", seed: 3, created: "2026-10-04T05:01:02.1+02:00" }, { folder: "b", seed: 7, take: 2, active: true, created: "2026-10-04T05:09:12.5+02:00" }];
+  const html = takesHeadHTML(app, 1, takes, "the walk");
+  const at = (s) => html.indexOf(s);
+  assert.ok(at("data-playall") < at("th-mid") && at("th-mid") < at('data-clear="others"'));  // play, numbers, deleting
+  assert.match(html, /clip 2<\/span><span class="th-scene" title="the walk">the walk/);
+  assert.match(html, /<i>takes<\/i><b>2<\/b>.*<i>in the film<\/i><b>#2<\/b>.*<i>seed<\/i><b>7 \+ 2<\/b>.*<i>newest<\/i><b>05:09<\/b>/);
+  assert.doesNotMatch(html, /other prompt/);  // none made with another prompt
+});
