@@ -101,7 +101,7 @@ def test_node_classes_declare_comfy_interfaces():
                                         "OrreryWrite", "OrreryRefMods"}
     inputs = OrreryPrompt.INPUT_TYPES()["required"]
     assert inputs["target"][0] == ["text", "h3-base", "flat"]
-    assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length", "lora_stack",
+    assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length",
                                          "megapixels", "model")  # the model through orrery (#209)
     assert OrreryLog.OUTPUT_NODE is True
     film, cont = NODE_CLASS_MAPPINGS["OrreryFilm"], NODE_CLASS_MAPPINGS["OrreryContinue"]

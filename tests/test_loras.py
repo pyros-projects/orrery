@@ -1,4 +1,4 @@
-"""`<lora:name:strength>` tags become a LORA_STACK: (path as ComfyUI lists it, model, clip)."""
+"""`<lora:name:strength>` tags become a stack: (path as ComfyUI lists it, model, clip), put on the model."""
 
 from orrery.loras import lora_stack
 
@@ -57,11 +57,3 @@ def test_the_stack_goes_on_the_model_with_model_strengths_only(monkeypatch):
     assert reads == ["/loras/turbo.safetensors", "/loras/style.safetensors"]  # read once while the clips use it
     assert list(loras._LOADED) == ["/loras/turbo.safetensors"]  # the ones the last clip used stay
 
-
-def test_a_wired_lora_stack_leaves_the_loras_to_its_loader():
-    from orrery.comfy import stack_wired
-
-    loader = {"class_type": "LoraManagerLoader", "inputs": {"lora_stack": ["24", 6], "model": ["3", 0]}}
-    assert stack_wired({"24": {"class_type": "OrreryPrompt", "inputs": {}}, "30": loader}, 24)
-    assert not stack_wired({"30": {**loader, "inputs": {"lora_stack": ["24", 7]}}}, 24)  # megapixels, not the stack
-    assert not stack_wired(None, 24)

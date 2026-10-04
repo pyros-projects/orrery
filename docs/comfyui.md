@@ -30,7 +30,7 @@ Nodes under **orrery**:
 
 - **Orrery Prompt**: seed and target (`text`, `h3-base`, `flat`), optional
   `model`, `first_frame`, `last_frame` and `video` → `text`, `picks`, `seed`, `width`,
-  `height`, `length`, `lora_stack`,
+  `height`, `length`,
   `megapixels` and `model`. Wire the model through it (loader → Orrery Prompt
   → guider or sampler) and the clip being sampled plays in its box as it
   forms, in real time, decoded with the tiny VAE for the model's latents
@@ -52,10 +52,10 @@ Nodes under **orrery**:
   screenplay's duration in frames for the H3 latent. The `LORA:` lines go on
   the model that passes through the node (model strengths, as
   LoraLoaderModelOnly puts them: a clip's own LoRAs, the head's, a sweep's run),
-  so no LoRA node is needed; `lora_stack` still carries them as a LORA_STACK
-  for a loader with a `lora_stack` input (LoraManager, Efficiency, Easy-Use …),
-  and when it is wired that loader puts them on instead. Unknown or ambiguous
-  names are reported in the log and in the Test tab. A reel (`SCENE` blocks, `×N` and
+  so no LoRA node is needed; without the model wired through, they change
+  nothing (the log says so). Unknown or ambiguous names are reported in the log
+  and in the Test tab. A workflow saved with the earlier `lora_stack` output
+  loses it when it opens, and the outputs after it keep their links. A reel (`SCENE` blocks, `×N` and
   `forever`, `$x[-1]`, `AFTER:`, `(test)`; see [h3.md](h3.md) 1d) writes one clip per run:
   the next clip counts up by itself (the Prompt tab's **Next clip**, and **Hold**
   for takes; the node's `segment` input is orrery's, hidden), and Orrery Continue / Orrery Film (below)

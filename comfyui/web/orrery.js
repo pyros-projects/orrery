@@ -253,6 +253,9 @@ function mount(node) {
     // a workflow saved before #199 brings the latent_path input back with it: the node has none now, the app names the folder
     const stale = node.inputs?.findIndex((i) => i.name === "latent_path") ?? -1;
     if (stale >= 0) node.removeInput(stale);
+    // and the lora_stack output before #208: the LoRAs go on the model now; the outputs after it move up with their links
+    const stack = node.outputs?.findIndex((o) => o.name === "lora_stack") ?? -1;
+    if (stack >= 0) node.removeOutput(stack);
     orrery.start();
   }, 0);
 
