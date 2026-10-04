@@ -142,7 +142,9 @@ Nodes under **orrery**:
     film then plays the clip's newest other take, or ends before the clip.
     Under the label of a clip's takes, **the others** deletes every take but
     the one in the film, and **all** every one, the film then ending before
-    the clip; each asks first, and takes made on another path stay (#234). While a clip renders, its box
+    the clip; each asks first, and takes made on another path stay (#234).
+    **play all** plays every take of the clip at once, from the start and in
+    step, to compare their motion; **stop all** stops them (#238). While a clip renders, its box
     shows the sampler's preview and the step it is at: KJNodes' Model Preview
     Override (a picture, or the whole clip as it forms), else ComfyUI's own
     preview when its live preview is on. Under a scene's clips come the frames its

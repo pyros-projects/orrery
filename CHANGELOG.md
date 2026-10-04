@@ -9,6 +9,7 @@ checks) are left out.
 
 ### Added
 
+- A clip's takes play all at once, from the start and in step, to compare their motion: play all, stop all (#227).
 - The template's knobs beside its dials: LoRAs, RefMods, pictures and members, grouped where they hold (all clips,
   then each scene), with strength, start and end to type over and a sweep's values as chips; turned as dials are,
   the template stays as written and Save bakes them in (#227).
