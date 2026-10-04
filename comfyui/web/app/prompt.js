@@ -1,6 +1,6 @@
 // Prompt tab: preset bar, the highlighted editor with completion, dials, and a way into Test.
 import { KEYWORDS, castNames, inlineLibraries, suggest } from "../orrery-complete.js";
-import { chosen, closeMenu, drawMenu, fillMenu, joinChoices } from "./dialmenu.js";
+import { chosen, closeMenu, drawMenu, fillMenu, joinChoices, keptScroll, reveal } from "./dialmenu.js";
 import { esc, highlight } from "./highlight.js";
 import { annotationLines, mergeHints, shownHints } from "./annotate.js";
 import { wireHover } from "./hover.js";
@@ -18,6 +18,7 @@ import { STARTERS } from "./starters.js";
 import { runRolls } from "./test.js";
 import { caretPoint, cellStart, inCell, jumpCell, paintCells, renderCells, wireCells } from "./cells.js";
 import { loadChain } from "./timeline.js";
+import { paintStage, paintStageLive, stageSectionHTML, wireStage } from "./stage.js";
 import { openLibraries, openWrite, writeMenuHTML, writeNow } from "./write.js";
 
 function statsHTML(app) {
@@ -27,7 +28,7 @@ function statsHTML(app) {
   const reel = !st.h3?.reel ? null : !hasGoto(app.text) ? st.h3.reel
     : { ...st.h3.reel, clips: walked ? (walked.ended ? walked.path.length : Infinity) : NaN, goto: true };
   const wired = /^\s*(:\s*.*\b[wh]\d|@size\b)/m.test(app.text) ? [] : app.bridge.frames?.() || [];  // `@size` wins
-  const outs = (app.data.rows || []).filter((r) => r.template === templateHash(app.text)).length;
+  const outs = app.data.gTemplates?.[templateHash(app.text)] || 0;  // the gallery's count, once it was open
   const forever = reel && reel.clips === Infinity, clips = !reel ? "" : forever ? "∞" : Number.isNaN(reel.clips) ? "?" : reel.clips;
   const how = !reel ? "" : `Its clips live in output/${app.bridge.chain?.() || "h3_context"}. Wire the picks into Orrery Continue (and the clip into Orrery Film). Next clip counts up by itself after each run (unless held): `
     + (forever ? "Run (Instant) plays clip after clip until you stop it." : `a Run count of ${clips} plays the whole reel${reel.goto ? " at this seed (its GOTO lines may jump on what rolls)" : ""}; after the last clip nothing downstream runs.`);
@@ -205,12 +206,14 @@ export function renderPrompt(app) {
       ${app.state.newMenu ? `<div class="pop newpop" role="menu">${Object.entries(STARTERS).map(([k, s]) => `<button role="menuitem" data-new="${k}"><b>${esc(s.label)}</b><span class="muted">${esc(s.hint)}</span></button>`).join("")}</div>` : ""}
       ${app.state.writeMenu ? writeMenuHTML(app) : ""}
     </div>
-    ${card?.note ? `<p class="pnote"><b>${esc(card.title)}.</b> ${esc(card.note)}</p>` : '<p class="pnote">Type a template, or open a preset. <b>__</b> lists your libraries, <b>$</b> your bindings.</p>'}
+    ${card?.note ? `<p class="pnote pfold${app.bridge.props.orrery_note_open ? " open" : ""}" data-act="note" title="${app.bridge.props.orrery_note_open ? "Click to fold the description" : "Click for the whole description"}">`
+      + `<b>${esc(card.title)}.</b> ${esc(card.note)}</p>` : '<p class="pnote">Type a template, or open a preset. <b>__</b> lists your libraries, <b>$</b> your bindings.</p>'}
     <div class="edrow" style="--side-w:${sideWidth(app)}px">${cellsView(app)
       ? `<div class="editor cells${app.data.dividers === false ? " nodiv" : ""}"></div>`
       : `<div class="editor${app.data.dividers === false ? " nodiv" : ""}"><pre class="hl" aria-hidden="true"></pre><textarea spellcheck="false" aria-label="Template"></textarea></div>`}
       <div class="side-grip" role="separator" aria-orientation="vertical" tabindex="0" title="Drag to resize the dials" hidden></div>
       <aside class="dials" aria-label="Dials" hidden></aside></div>
+    ${cellsView(app) ? stageSectionHTML(app) : ""}
     <div class="pfoot">${statsHTML(app)}</div>
     ${app.state.pick ? pickerHTML(app) : ""}`;
 
@@ -229,6 +232,9 @@ export function renderPrompt(app) {
   if (cellsView(app)) {
     renderCells(app);
     wireCells(app, { onEdit: afterEdit, onKey: (e) => completionKey(app, e), onFocus: focus, onBlur: blur });
+    wireStage(app, { edited: () => { renderCells(app); afterEdit(null); } });  // the preview (#305); a REMEMBER: line written
+    paintStage(app, true);
+    paintStageLive(app);
   } else {
     const ed = app.view.querySelector(".editor textarea"), pre = app.view.querySelector(".editor pre.hl");
     ed.value = app.text;
@@ -284,7 +290,16 @@ export function renderPrompt(app) {
     if (writer) { app.state.writeMenu = false; renderPrompt(app); return openWrite(app, writer); }
     const starter = e.target.closest("[data-new]")?.dataset.new;
     if (starter) startNew(app, starter);
-    if (act === "outputs") { app.state.gScope = "prompt"; app.go("galaxy"); }
+    if (act === "note") {  // the preset's description: one line until opened (#306), as the node remembers; in place, the editor stays
+      const open = (app.bridge.props.orrery_note_open = !app.bridge.props.orrery_note_open), note = e.target.closest(".pnote");
+      note.classList.toggle("open", open);
+      note.title = open ? "Click to fold the description" : "Click for the whole description";
+      return;
+    }
+    if (act === "outputs") {  // every output of this prompt, wherever the gallery was
+      Object.assign(app.state, { gScope: "prompt", gPlace: { view: "all", day: null, coll: null }, gAlbums: [] });
+      app.go("galaxy");
+    }
     if (act === "writenow") return writeNow(app);
     if (act === "hold") { app.bridge.holdSegment(!app.bridge.segmentHeld()); return refreshFoot(app); }
     if (act === "browse") app.go("presets");
@@ -792,7 +807,9 @@ function wireDials(app) {
 // The dial's menu: drawn in the app (the dials row scrolls and would cut it off), kept in app.dm.
 const menuHost = (app) => app.view.closest(".orrery-app") || app.view;
 
-function openMenu(app, input, at) {
+// `keep`: a redraw after a tick, All or None keeps the list where it was, the choice ticked (`keep.anchor`) where it
+// was on screen (#300); typing and the arrow keys draw it afresh.
+function openMenu(app, input, at, keep = null) {
   const d = dials(app.text).find((x) => x.name === input.dataset.dial);
   if (!d) return;
   const lib = d.lib && (app.data.libFull?.[d.lib] || app.dialLibs?.[d.lib]);
@@ -806,7 +823,11 @@ function openMenu(app, input, at) {
   const filter = app.dm?.input === input ? app.dm.filter || "" : "";
   const refocus = !!app.dm?.box.contains(document.activeElement);  // a redraw while the filter is typed in keeps it there
   const choices = dialChoices(app, d);
+  const old = keep && app.dm?.input === input ? app.dm : null;
+  const itemTop = (dm, value) => { const n = value == null ? -1 : dm.items.indexOf(value); return n < 0 ? null : dm.box.querySelector(`[data-n="${n}"]`)?.offsetTop ?? null; };
+  const before = old && { top: old.box.scrollTop, anchor: itemTop(old, keep.anchor) };
   const state = drawMenu(menuHost(app), input, choices, at, describe, { filter, info });
+  if (before) state.box.scrollTop = keptScroll(before, itemTop(state, keep.anchor));
   app.dm = { ...state, input, filter };
   input.setAttribute("aria-expanded", "true");
   const field = state.box.querySelector(".dm-filter");
@@ -848,13 +869,13 @@ function toggleChoice(app, input, value) {
   const d = dials(app.text).find((x) => x.name === input.dataset.dial), all = (d && dialChoices(app, d)) || [];
   const now = chosen(all, input.value), next = now.includes(value) ? now.filter((c) => c !== value) : [...now, value];
   app.pickChoice(input, joinChoices(all.filter((c) => next.includes(c))));  // in the list's order
-  openMenu(app, input, app.dm ? app.dm.at : -1);
+  openMenu(app, input, app.dm ? app.dm.at : -1, { anchor: value });
 }
 
 // All (the choices the menu shows) or None (the default roll); the menu stays open.
 function pickAll(app, input, items) {
   app.pickChoice(input, joinChoices(items));
-  openMenu(app, input, -1);
+  openMenu(app, input, -1, {});
 }
 
 function pickChoice(app, input, value) {
@@ -992,8 +1013,10 @@ function complete(app, ta) {
 function drawCompletion(app) {
   app.view.querySelector(".ac")?.remove();
   const { items, i, ta } = app.ac, { x, y } = caretPoint(ta), item = items[i] || {};
-  const editor = ta.closest(".editor"), cell = ta.closest(".cell");
-  const dx = cell ? cell.offsetLeft : 0, dy = cell ? cell.offsetTop - editor.scrollTop : 0;
+  // the popup lives in the editor, which scrolls in the cells view: placed where the caret is in its content, while
+  // the room around it is measured on screen (#303)
+  const editor = ta.closest(".editor"), cell = ta.closest(".cell"), scrolled = editor.scrollTop;
+  const dx = cell ? cell.offsetLeft : 0, dy = cell ? cell.offsetTop : 0;
   const box = document.createElement("div");
   box.className = "ac";
   const shown = item.thumbs?.length || item.preview;
@@ -1014,9 +1037,9 @@ function drawCompletion(app) {
   const k = er.width / editor.offsetWidth || 1, line = parseFloat(getComputedStyle(ta).lineHeight) || 20;
   box.style.left = `${Math.max(4, Math.min(x + 8 + dx, editor.clientWidth - box.offsetWidth - 4))}px`;
   const below = y + 4 + dy, above = y - line - box.offsetHeight - 4 + dy;
-  const roomBelow = (rr.bottom - er.top) / k - below, roomAbove = (er.top - rr.top) / k + above;
+  const roomBelow = (rr.bottom - er.top) / k - (below - scrolled), roomAbove = (er.top - rr.top) / k + (above - scrolled);
   box.style.top = `${box.offsetHeight <= roomBelow || roomAbove < 0 ? below : above}px`;
-  box.querySelector(".on")?.scrollIntoView({ block: "nearest" });
+  reveal(box.querySelector("ul"), box.querySelector(".on"));
 }
 
 function closeCompletion(app) {

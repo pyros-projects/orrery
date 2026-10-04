@@ -9,10 +9,10 @@ import { refreshHistory, renderHistory } from "./history.js";
 import { icon, LOGO } from "./icons.js";
 import { renderLibraries } from "./libraries.js";
 import { queueTasks } from "./miniruns.js";
-import { renderPresets } from "./presets.js";
+import { reloadPresets, renderPresets } from "./presets.js";
 import { paintLive } from "./timeline.js";
 import { paintCells } from "./cells.js";
-import { resultBegins, resultEnds, resultMedia } from "./results.js";
+import { capturedMedia, resultBegins, resultEnds, resultMedia } from "./results.js";
 import { refreshReel, renderPrompt } from "./prompt.js";
 import { openSettings, renderSettings } from "./settings.js";
 import { renderTest } from "./test.js";
@@ -44,9 +44,10 @@ export class OrreryApp {
       pFilter: "all", pSearch: "", pOpen: null, pDetail: null, pConfirm: false, pRoll: null,
       lib: null, libSearch: "", libTag: null, libNew: null,
       gScope: "all", gRating: null, gPick: null, gOpen: null,
-      gFolder: null, gSel: new Set(), gAnchor: null, gFold: new Set(), gNew: false, gRen: null, gDrag: null,
+      gPlace: { view: "all", day: null, coll: null }, gAlbums: [], gDays: null,
+      gSel: new Set(), gAnchor: null, gFold: new Set(), gNew: false, gRen: null, gDrag: null,
     };
-    this.data = { presets: [], favorites: new Set(), recent: [], completion: null, libraries: null, rows: null, weights: {}, llm: null };
+    this.data = { presets: [], favorites: new Set(), recent: [], completion: null, libraries: null, weights: {}, llm: null };
     this.base = null;
     this.run = null;  // {segment, prompt}: the reel segment this node is generating right now
     this.uid = Math.random().toString(36).slice(2, 8);  // keeps element ids unique across nodes
@@ -155,7 +156,7 @@ export class OrreryApp {
   }
 
   render() {
-    const n = { presets: this.data.presets.length, libraries: this.data.completion?.libraries.length, galaxy: this.data.gTotal ?? this.data.rows?.length,
+    const n = { presets: this.data.presets.length, libraries: this.data.completion?.libraries.length, galaxy: this.data.gTotal,
       history: this.data.hAll };
     this.$(".tabs").innerHTML = TABS.filter((t) => !t[3]).map(([k, label]) => `<button class="tab" role="tab" aria-selected="${this.state.tab === k}" data-tab="${k}">`
       + `${label}${n[k] ? `<span class="n">${n[k]}</span>` : ""}</button>`).join("");
@@ -168,12 +169,16 @@ export class OrreryApp {
     TABS.find(([k]) => k === this.state.tab)[2](this);
   }
   go(tab) {
-    // Opening Libraries reads the folder again: files added outside the node show up without a reload.
-    if (tab === "libraries" && this.state.tab !== "libraries") {
+    // Opening a tab reads what it shows again (#301): presets, libraries or outputs added outside the node, or by a
+    // run, show up without a reload.
+    const entering = tab !== this.state.tab;
+    if (tab === "libraries" && entering) {
       this.data.libStale = true;
       this.refreshCompletion().catch(() => {});
     }
     if (tab === "history") this.state.hFetched = false;  // the runs since it was last open
+    if (tab === "galaxy" && entering) this.state.gFetched = false;
+    if (tab === "presets" && entering) reloadPresets(this);
     this.state.tab = tab;
     this.state.pick = false;
     this.bridge.props.orrery_tab = tab;
@@ -286,18 +291,16 @@ export class OrreryApp {
     }, { passive: false });
   }
 
-  // Generate without Orrery Log: when a Save node downstream of this node writes files, they go to the
-  // galaxy with this run's picks (the node remembered them under the prompt id).
+  // What a Save node, Orrery Log or a Preview node downstream of this node wrote: a take under the prompt (#211); and,
+  // without Orrery Log, its files go to the galaxy with this run's picks (the node remembered them under the prompt id).
   async capture(detail) {
-    const { outputs, log } = this.bridge.downstream?.() || { outputs: [], log: true };
-    if (log || !outputs.map(String).includes(String(detail.display_node ?? detail.node))) return;
-    const out = detail.output || {};
-    const media = ["images", "gifs", "videos", "audio"].flatMap((k) => out[k] || []).filter((m) => m && m.filename);
-    if (!media.length || !detail.prompt_id) return;
-    if (resultMedia(this, detail)) this.paintResults();  // this node's run: a take under the prompt (#211)
+    const got = capturedMedia(detail, this.bridge.downstream?.() || { outputs: [], log: true });
+    if (!got) return;
+    if (resultMedia(this, detail)) this.paintResults();  // this node's run
+    if (!got.log) return;  // Orrery Log logged them itself
     try {
-      const res = await this.api.captureOutputs({ prompt_id: detail.prompt_id, node: this.bridge.nodeId(), media });
-      if (res.logged) { this.data.rows = null; this.data.gRows = null; if (this.state.tab === "galaxy") this.render(); }
+      const res = await this.api.captureOutputs({ prompt_id: detail.prompt_id, node: this.bridge.nodeId(), media: got.media });
+      if (res.logged) { this.state.gFetched = false; if (this.state.tab === "galaxy") this.render(); }
     } catch { /* an older run or a restarted ComfyUI: nothing to log */ }
   }
 

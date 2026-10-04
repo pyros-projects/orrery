@@ -5,6 +5,7 @@ import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
 import { shape } from "./model.js";
 import { fetchTemplates, useVersion, versionOf, versionText } from "./versions.js";
+import { paintStageLive, showInStage } from "./stage.js";
 
 // The clips the chain holds, fetched again after every run, and the templates its takes were made with (#242).
 export async function loadChain(app) {
@@ -115,7 +116,7 @@ function takesHTML(app, s, scene = "") {
 
 // Sample surfing (#206): the take picked is the one the film, REMEMBER: and the next clip use. A take that rolled
 // anew sets the node's seed to its own, so the clips after it roll the same world.
-async function pickTake(app, segment, folder) {
+export async function pickTake(app, segment, folder) {
   try {
     const got = await app.api.pickTake(app.bridge.chain(), segment, folder);
     followSeed(app, got);
@@ -204,6 +205,7 @@ export function sourceClip(app, source) {
 // whole clip as a video) and the step it is at. The tile is drawn again when the sections change, so this paints
 // over whatever is there; without a live clip it takes the overlay off.
 export function paintLive(app) {
+  paintStageLive(app);  // the preview shows it too (#305)
   const host = app.view?.querySelector(".editor.cells");
   if (!host) return;
   const live = app.live;
@@ -316,15 +318,10 @@ export function wireClips(app, box) {
       return host.insertAdjacentHTML("beforeend", `<span class="ask">${deleteQuestion(app, host)}`
         + `<span class="btn danger" role="button" data-delyes>Delete</span><span class="btn ghost" role="button" data-delno>Keep</span></span>`);
     }
+    // a click shows a take or a clip in the preview (#305); the preview's Put in the film puts a take in the film
     const take = e.target.closest(".take");
-    if (take) { if (!take.classList.contains("on")) pickTake(app, Number(take.dataset.seg), take.dataset.take); return; }
+    if (take) return showInStage(app, { seg: Number(take.dataset.seg), folder: take.dataset.take });
     const clip = e.target.closest(".tl-clip:not(.empty)");
-    if (!clip) return;
-    const s = clip.dataset.seg, made = app.data.chain?.clips.find((c) => String(c.segment) === s);
-    const sheet = app.openSheet(`<div class="panel"><div class="row spread"><h4>Clip ${Number(s) + 1}</h4>`
-      + `<button class="icon-btn" data-close title="Close">${icon("x")}</button></div>`
-      + `<video class="tl-video" controls autoplay loop src="${app.api.chainVideoURL(s, app.bridge.chain(), made?.version)}"></video>`
-      + `<p class="muted flush">${made?.frames ?? "?"} frames, as the reel keeps them (without the pinned frames)</p></div>`, clip, { over: true });
-    sheet.querySelector("[data-close]").onclick = () => app.closeSheet();
+    if (clip) showInStage(app, { seg: Number(clip.dataset.seg) });
   });
 }

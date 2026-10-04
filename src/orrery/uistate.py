@@ -46,6 +46,13 @@ def _save(home: Home, data: dict) -> dict:
     return data
 
 
+def clear_lists(home: Home) -> None:
+    """No favorites and no recents: the presets they named went back to factory (#310)."""
+    data = load_ui(home)
+    if data["favorites"] or data["recent"]:
+        _save(home, {**data, "favorites": [], "recent": []})
+
+
 def set_favorite(home: Home, name: str, on: bool) -> list[str]:
     data = load_ui(home)
     data["favorites"] = [n for n in data["favorites"] if n != name] + ([name] if on else [])

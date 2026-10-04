@@ -35,14 +35,25 @@ function rowHTML(r, open) {
       <span class="tagchip">seed ${esc(String(r.seed))}</span>${r.segment != null ? `<span class="tagchip">clip ${r.segment + 1}</span>` : ""}
       ${r.preset ? `<span class="tagchip">@${esc(r.preset)}${r.edited ? " · edited" : ""}</span>` : ""}
       ${r.issues ? `<span class="warn" title="Lint warnings when it ran">${r.issues} ⚠</span>` : ""}
+      ${r.enhanced?.length ? `<span class="tagchip" title="A > line rewrote the prompt: open the run for what it was before">&gt; enhanced</span>` : ""}
       <span class="htext">${esc(first)}</span></button>
     ${open ? `<div class="hbody">
       ${(r.picks || []).length ? `<div class="hpicks">${r.picks.map((p) => `<span class="tagchip mono"><b>${esc(p.label)}</b> ${esc(p.value)}</span>`).join("")}</div>` : ""}
       ${Object.keys(r.params || {}).length ? `<p class="muted flush">Dials: ${Object.entries(r.params).map(([k, v]) => `<code>$${esc(k)} = ${esc(v)}</code>`).join(" ")}</p>` : ""}
+      ${enhancedHTML(r.enhanced)}
       <pre class="codebox">${esc(r.text || "")}</pre>
       <div class="acts"><button class="btn primary" data-hact="use" title="The template, its dials and this seed (and segment) back in the Prompt tab, control after generate fixed">${icon("undo")}Use template + seed</button>
         <button class="btn" data-hact="copyp">${icon("copy")}Copy prompt</button><button class="btn" data-hact="copys">${icon("copy")}Copy seed</button></div>
     </div>` : ""}</div>`;
+}
+
+// What each `> enhance` line did to the run (#279): its instruction, how the rewrite came about, the passage before it.
+// The prompt below is what it became.
+export function enhancedHTML(enhanced) {
+  if (!enhanced?.length) return "";
+  const how = (x) => (x.kept ? "a rewrite you kept (Use selected)" : x.asked ? "written by its own run first" : "written for this run");
+  return enhanced.map((x) => `<div class="henh"><p class="muted flush"><b>&gt; ${esc(x.instruction)}</b> · ${how(x)}. Before:</p>`
+    + `<pre class="codebox before">${esc(x.before)}</pre></div>`).join("");
 }
 
 export async function renderHistory(app) {
@@ -57,7 +68,7 @@ export async function renderHistory(app) {
   app.view.innerHTML = `<div class="hist">
     <div class="bar"><input class="input" data-hq placeholder="Search prompts, picks, presets, seeds" value="${esc(s.hQuery || "")}" aria-label="Search the history">
       <span class="stat"><b>${app.data.hTotal || 0}</b> run${app.data.hTotal === 1 ? "" : "s"}</span>
-      <button class="icon-btn" data-hact="reload" title="Reload the history">${icon("undo")}</button></div>
+      <button class="icon-btn" data-hact="reload" title="Reload the history">${icon("reload")}</button></div>
     <div class="scroll"><p class="rule">Every run of this orrery home as it resolved: the seed, the picks and the prompt, kept even when the output was not (the last 2000 runs).</p>
       ${runs.map((r) => rowHTML(r, r.id === s.hOpen)).join("") || `<div class="empty">${s.hQuery ? "No run matches." : "No runs yet: queue the prompt, and every run lands here."}</div>`}
       ${more ? `<button class="btn ghost hmore" data-hact="more">Show ${Math.min(PAGE, app.data.hTotal - runs.length)} more</button>` : ""}

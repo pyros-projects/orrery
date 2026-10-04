@@ -6,18 +6,23 @@ from PIL import Image
 
 from orrery.galaxy import (
     FACTORS,
-    add_folder,
+    add_collection,
+    cards,
+    collect,
+    collections,
+    collections_of,
+    day_of,
     delete,
-    delete_folder,
+    delete_collection,
     export,
-    folders,
     media_path,
-    move,
     rate,
     read_rows,
-    rename_folder,
+    rename_collection,
     row_id,
     thumbnail,
+    tree,
+    uncollect,
 )
 from orrery.home import Home
 
@@ -192,78 +197,140 @@ def three(home, tmp_path):
     return [row_id(r) for r in rs]
 
 
-def test_move_sets_and_clears_a_folder_and_keeps_the_folder(home, tmp_path):
+def test_collect_adds_a_collection_and_keeps_the_others(home, tmp_path):
     a, b, c = three(home, tmp_path)
-    assert move(Home(home), [a, b], " portraits / Demons ") == 2
+    assert collect(Home(home), [a, b], " portraits / Demons ") == 2
+    collect(Home(home), [a], "cats")
     got = rows_by_id(home)
-    assert got[a]["folder"] == got[b]["folder"] == "portraits/Demons" and "folder" not in got[c]
-    move(Home(home), [a, b], "")
-    assert "folder" not in rows_by_id(home)[a]
-    assert folders(Home(home)) == [{"path": "portraits", "count": 0}, {"path": "portraits/Demons", "count": 0}]
+    assert got[a]["collections"] == ["portraits/Demons", "cats"] and got[b]["collections"] == ["portraits/Demons"]
+    assert "collections" not in got[c]
+    assert uncollect(Home(home), [a], "cats") == 1
+    assert rows_by_id(home)[a]["collections"] == ["portraits/Demons"]
+    uncollect(Home(home), [a, b], "portraits/Demons")
+    assert "collections" not in rows_by_id(home)[a]
+    assert collections(Home(home)) == [{"path": "cats", "count": 0}, {"path": "portraits", "count": 0},
+                                       {"path": "portraits/Demons", "count": 0}]  # emptied, still there
 
 
-def test_move_rejects_unknown_ids_no_ids_and_bad_folder_names(home, tmp_path):
+def test_collect_rejects_unknown_ids_no_ids_bad_names_and_the_sweeps_folder(home, tmp_path):
     a, _, _ = three(home, tmp_path)
     with pytest.raises(KeyError):
-        move(Home(home), [a, "000000000000"], "x")
+        collect(Home(home), [a, "000000000000"], "x")
     with pytest.raises(ValueError):
-        move(Home(home), [], "x")
-    for bad in ("a//b", "../up", "a/./b", "x" * 61, "tab\there"):
+        collect(Home(home), [], "x")
+    for bad in ("a//b", "../up", "a/./b", "x" * 61, "tab\there", "", "sweeps/mine", "sweeps"):
         with pytest.raises(ValueError):
-            move(Home(home), [a], bad)
-    assert "folder" not in rows_by_id(home)[a]
-
-
-def test_folders_list_saved_and_used_ones_with_parents_and_own_counts(home, tmp_path):
-    a, b, _ = three(home, tmp_path)
-    add_folder(Home(home), "empty")
-    move(Home(home), [a], "x/y/z")
-    move(Home(home), [b], "x")
-    assert folders(Home(home)) == [{"path": "empty", "count": 0}, {"path": "x", "count": 1},
-                                   {"path": "x/y", "count": 0}, {"path": "x/y/z", "count": 1}]
-    with pytest.raises(FileExistsError):
-        add_folder(Home(home), "x/y")
-    with pytest.raises(ValueError):
-        add_folder(Home(home), " / ")
-
-
-def test_renaming_a_folder_moves_its_subfolders_and_outputs(home, tmp_path):
-    a, b, c = three(home, tmp_path)
-    move(Home(home), [a], "a/b")
-    move(Home(home), [b], "a/b/deep")
-    move(Home(home), [c], "a/bb")
-    add_folder(Home(home), "c")
-    rename_folder(Home(home), "a/b", "c/b")
-    got = rows_by_id(home)
-    assert (got[a]["folder"], got[b]["folder"], got[c]["folder"]) == ("c/b", "c/b/deep", "a/bb")
-    assert [f["path"] for f in folders(Home(home))] == ["a", "a/bb", "c", "c/b", "c/b/deep"]
-
-
-def test_a_folder_cannot_move_into_itself_or_onto_another(home, tmp_path):
-    a, b, _ = three(home, tmp_path)
-    move(Home(home), [a], "a")
-    move(Home(home), [b], "b")
-    with pytest.raises(ValueError):
-        rename_folder(Home(home), "a", "a/inside")
-    with pytest.raises(FileExistsError):
-        rename_folder(Home(home), "a", "b")
+            collect(Home(home), [a], bad)
     with pytest.raises(KeyError):
-        rename_folder(Home(home), "nope", "c")
+        uncollect(Home(home), [a], "never")
+    assert "collections" not in rows_by_id(home)[a]
 
 
-def test_deleting_a_folder_moves_its_contents_up_one_level(home, tmp_path):
-    a, b, c = three(home, tmp_path)
-    move(Home(home), [a], "top/mid")
-    move(Home(home), [b], "top/mid/low")
-    move(Home(home), [c], "solo")
-    delete_folder(Home(home), "top/mid")
+def test_collections_list_saved_and_used_ones_with_parents_and_own_counts(home, tmp_path):
+    a, b, _ = three(home, tmp_path)
+    add_collection(Home(home), "empty")
+    collect(Home(home), [a], "x/y/z")
+    collect(Home(home), [a, b], "x")
+    assert collections(Home(home)) == [{"path": "empty", "count": 0}, {"path": "x", "count": 2},
+                                       {"path": "x/y", "count": 0}, {"path": "x/y/z", "count": 1}]
+    with pytest.raises(FileExistsError):
+        add_collection(Home(home), "x/y")
+    with pytest.raises(ValueError):
+        add_collection(Home(home), " / ")
+
+
+def test_a_folder_of_the_time_before_collections_is_a_collection_and_a_sweeps_folder_an_album(home, tmp_path):
+    old, sweep, plain = (row(image(tmp_path, f"{n}.png", (32, 32)), seed=i) for i, n in enumerate("abc", 1))
+    old["folder"], sweep["folder"] = "foxes/snow", "sweeps/$view 2026-10-04 16.28"
+    write_rows(home, [old, sweep, plain])
+    (home / "galaxy_folders.json").write_text(json.dumps(["kept", "sweeps/$s 2026-10-03 07.08"]))
+    a, b, _ = (row_id(r) for r in (old, sweep, plain))
+    assert collections_of(rows_by_id(home)[a]) == ["foxes/snow"] and collections_of(rows_by_id(home)[b]) == []
+    assert [c["path"] for c in collections(Home(home))] == ["foxes", "foxes/snow", "kept"]
+    collect(Home(home), [a, b], "best")  # a row that changes keeps its folder as a collection
     got = rows_by_id(home)
-    assert (got[a]["folder"], got[b]["folder"]) == ("top", "top/low")
-    delete_folder(Home(home), "solo")
-    assert "folder" not in rows_by_id(home)[c]
-    assert [f["path"] for f in folders(Home(home))] == ["top", "top/low"]
+    assert "folder" not in got[a] and got[a]["collections"] == ["foxes/snow", "best"]
+    assert got[b]["folder"] == "sweeps/$view 2026-10-04 16.28" and got[b]["collections"] == ["best"]
+
+
+def test_renaming_a_collection_moves_its_collections_and_outputs(home, tmp_path):
+    a, b, c = three(home, tmp_path)
+    collect(Home(home), [a], "a/b")
+    collect(Home(home), [b], "a/b/deep")
+    collect(Home(home), [c], "a/bb")
+    collect(Home(home), [c], "a/b")
+    add_collection(Home(home), "c")
+    rename_collection(Home(home), "a/b", "c/b")
+    got = rows_by_id(home)
+    assert (got[a]["collections"], got[b]["collections"], got[c]["collections"]) == (["c/b"], ["c/b/deep"], ["a/bb", "c/b"])
+    assert [f["path"] for f in collections(Home(home))] == ["a", "a/bb", "c", "c/b", "c/b/deep"]
+
+
+def test_a_collection_cannot_move_into_itself_or_onto_another(home, tmp_path):
+    a, b, _ = three(home, tmp_path)
+    collect(Home(home), [a], "a")
+    collect(Home(home), [b], "b")
+    with pytest.raises(ValueError):
+        rename_collection(Home(home), "a", "a/inside")
+    with pytest.raises(FileExistsError):
+        rename_collection(Home(home), "a", "b")
     with pytest.raises(KeyError):
-        delete_folder(Home(home), "solo")
+        rename_collection(Home(home), "nope", "c")
+
+
+def test_deleting_a_collection_lets_its_outputs_go_and_moves_its_collections_up(home, tmp_path):
+    a, b, c = three(home, tmp_path)
+    collect(Home(home), [a], "top/mid")
+    collect(Home(home), [b], "top/mid/low")
+    collect(Home(home), [a, c], "solo")
+    assert delete_collection(Home(home), "top/mid") == "top"
+    got = rows_by_id(home)
+    assert (got[a]["collections"], got[b]["collections"]) == (["solo"], ["top/low"])
+    delete_collection(Home(home), "solo")
+    got = rows_by_id(home)
+    assert "collections" not in got[a] and "collections" not in got[c]
+    assert len(got) == 3  # the outputs stay in the gallery
+    assert [f["path"] for f in collections(Home(home))] == ["top", "top/low"]
+    with pytest.raises(KeyError):
+        delete_collection(Home(home), "solo")
+
+
+def test_a_day_is_the_viewers_day():
+    assert day_of("2026-10-04T23:30:00+00:00") == "2026-10-04"
+    assert day_of("2026-10-04T23:30:00+00:00", 120) == "2026-10-05"  # two hours east of UTC: past midnight
+    assert day_of("2026-10-04T00:30:00+00:00", -60) == "2026-10-03"
+    assert day_of(None) == day_of("yesterday") == ""
+
+
+def test_sweeps_and_reels_are_albums_and_a_reels_scenes_albums_inside_it():
+    def r(n, ts, **more):
+        return {"id": n, "ts": f"2026-10-04T10:{ts:02d}:00+00:00", "kind": "image", **more}
+    rows = [r("s1", 50, folder="sweeps/$view 1"), r("s2", 49, folder="sweeps/$view 1"),
+            r("lone", 48), r("c1", 47, chunks=3, segment=1, chain="reels/fox", chunk=0, kind="video"),
+            r("c2", 46, chunks=3, segment=0, chain="reels/fox", chunk=0, kind="video"),
+            r("c3", 45, chunks=3, segment=2, chain="reels/fox", chunk=1, kind="video"),
+            r("one", 44, folder="sweeps/$view 2"),  # a sweep of one: the output itself
+            r("old1", 43, chunks=2, segment=0, preset="pyro/routine", seed="7"), r("old2", 42, chunks=2, segment=1, preset="pyro/routine", seed="7")]
+    top = cards(rows)
+    assert [(c["kind"], c.get("key") or c["id"]) for c in top] == [
+        ("album", "sweep:sweeps/$view 1"), ("row", "lone"), ("album", "reel:reels/fox"), ("row", "one"), ("album", "reel:pyro/routine|7")]
+    sweep, reel = top[0], top[2]
+    assert (sweep["count"], sweep["ids"], sweep["previews"], sweep["videos"]) == (2, ["s1", "s2"], ["s1", "s2"], 0)
+    assert (reel["type"], reel["count"], reel["videos"], reel["ts"]) == ("reel", 3, 3, "2026-10-04T10:47:00+00:00")
+    inside = cards([x for x in rows if x.get("chain") == "reels/fox"], "reel:reels/fox")
+    assert [(c["kind"], c.get("key") or c["id"]) for c in inside] == [("album", "scene:reels/fox|0"), ("row", "c3")]
+    assert [c["id"] for c in cards(rows[:2], "sweep:sweeps/$view 1")] == ["s1", "s2"]  # inside a sweep: the outputs
+    many = [r(f"p{i}", 59 - i, folder="sweeps/big", kind="none" if i == 0 else "image") for i in range(12)]
+    assert cards(many)[0]["previews"] == [f"p{i}" for i in range(1, 9)]  # eight pictures, none without a file
+
+
+def test_the_tree_counts_every_output_its_pictures_its_videos_and_each_day():
+    rows = [{"ts": "2026-10-04T10:00:00+00:00", "kind": "image"}, {"ts": "2026-10-04T11:00:00+00:00", "kind": "video"},
+            {"ts": "2026-10-03T23:30:00+00:00", "kind": "image"}, {"ts": "2026-10-03T09:00:00+00:00", "kind": "none"}]
+    assert tree(rows) == {"total": 4, "images": 2, "videos": 1, "days": [
+        {"day": "2026-10-04", "total": 2, "images": 1, "videos": 1}, {"day": "2026-10-03", "total": 2, "images": 1, "videos": 0}]}
+    assert [d["day"] for d in tree(rows, 60)["days"]] == ["2026-10-04", "2026-10-03"]
+    assert tree(rows, 60)["days"][0]["total"] == 3  # 23:30 UTC is past midnight an hour east
 
 
 def test_delete_drops_rows_moves_files_to_the_trash_and_keeps_weights(home, tmp_path):

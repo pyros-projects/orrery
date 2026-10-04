@@ -9,7 +9,18 @@ import { icon } from "./icons.js";
 const gb = (bytes) => (bytes ? `${(bytes / 1e9).toFixed(1)} GB` : "");
 
 export const SECTIONS = [["home", "Home"], ["llm", "Language model"], ["writers", "Writers"], ["editor", "Editor"],
-  ["clips", "Clips"], ["log", "Log"]];
+  ["clips", "Clips"], ["log", "Log"], ["reset", "Reset"]];
+
+// The resets (#310): what each takes away. What was made by hand goes to the home's trash, where it can be fetched;
+// the logged pictures and videos only when the box says so (they stay in ComfyUI's output otherwise).
+export const RESETS = [
+  ["ratings", "Reset the ratings", "Every love, like, nope and hate is taken back, and the learned weights with them: the dice roll as before your first rating. The gallery stays."],
+  ["history", "Delete the history", "Every run in the History tab. The gallery stays."],
+  ["gallery", "Delete the gallery", "Every output's record, its collections and thumbnails, and the learned weights its ratings made.", true],
+  ["presets", "Reset the presets to factory", "Your own presets go to the trash, with your favorites and recents; the built-in ones stay."],
+  ["libraries", "Reset the libraries to factory", "Your own libraries and their saved versions go to the trash; the built-in ones stay."],
+  ["all", "Reset everything to factory", "A fresh install: the gallery, the ratings, the history, the settings, the API key, the remembered templates, the Refs' anchors and every cache are deleted; your presets, libraries and exports go to the trash. Only the trash stays.", true],
+];
 
 // What the Write menu sends the model: each writer a prompt of its own, with only its own rules.
 const WRITER_TEXTS = { continue: "Continue the reel", story: "Story between frames", describe: "Prompt from image: an image prompt",
@@ -189,6 +200,11 @@ export const SECTION_HTML = {
 
   log: (app) => `<label class="check"><input type="checkbox" data-flag="log_prompts" ${app.data.log_prompts !== false ? "checked" : ""}>
       <span><b>Log each run</b> to ComfyUI's console: its seed, every pick and the resolved prompt (the <b>History</b> tab keeps them either way)</span></label>`,
+
+  reset: () => `<p class="muted flush">Each asks first. What you made by hand goes to the <code>trash</code> folder in your home, where you can still fetch it.</p>`
+    + RESETS.map(([k, title, what, files]) => `<div class="reset-row"><div><b>${esc(title)}</b><p class="muted flush">${esc(what)}</p>`
+      + (files ? `<label class="check"><input type="checkbox" data-rfiles="${k}"><span>and move the pictures and videos it logged to the trash too</span></label>` : "")
+      + `</div><button type="button" class="btn ghost danger" data-reset="${k}">${icon("trash")}${esc(title.split(" ")[0])}</button></div>`).join(""),
 };
 
 // A number field's value, kept within its bounds.
@@ -203,7 +219,8 @@ const WIRE = {
       const wanted = view.querySelector("#oa-home").value.trim();
       try {
         const moved = await app.api.saveHomeFolder(wanted);
-        Object.assign(app.data, { libraries: null, rows: null });
+        Object.assign(app.data, { libraries: null, gCards: null, gTemplates: null });
+        app.state.gFetched = false;
         await Promise.all([app.refreshPresets(), app.refreshCompletion()]);
         st.home = await app.api.homeFolder();
         app.toast(`Home folder: <b>${esc(moved.home)}</b>`);
@@ -279,6 +296,10 @@ const WIRE = {
   },
   log: (app, st, view) => wireFlags(app, view),
 
+  reset: (app, st, view) => {
+    view.querySelectorAll("[data-reset]").forEach((b) => { b.onclick = () => confirmReset(app, b.dataset.reset, !!view.querySelector(`[data-rfiles="${b.dataset.reset}"]`)?.checked); });
+  },
+
   clips: (app, st, view) => {
     const q = (sel) => view.querySelector(sel);
     q("#oa-clipmin").onchange = () => saveUi(app, { clip_min: num(q("#oa-clipmin"), 360) });
@@ -291,6 +312,27 @@ const WIRE = {
     view.querySelectorAll('[name="oa-surf"]').forEach((r) => { r.onchange = () => saveUi(app, { surf_numbered: r.value === "numbered" }); });
   },
 };
+
+// A reset asked first, then done; everything that showed the old state reads it again.
+function confirmReset(app, what, files) {
+  const [, title, text] = RESETS.find(([k]) => k === what);
+  const sheet = app.openSheet(`<form class="panel"><div class="row spread"><h4>${esc(title)}?</h4></div>
+    <p class="muted flush">${esc(text)}${files ? " The pictures and videos it logged go to the trash too." : ""} This cannot be undone here.</p>
+    <div class="acts"><button type="button" class="btn ghost" data-cancel>Cancel</button><button class="btn danger">${icon("trash")}${esc(title)}</button></div></form>`);
+  sheet.querySelector("[data-cancel]").onclick = () => app.closeSheet();
+  sheet.querySelector("form").onsubmit = async (e) => {
+    e.preventDefault();
+    try { await app.api.reset(what, files); } catch (err) { app.closeSheet(); return app.fail(err); }
+    app.closeSheet();
+    Object.assign(app.data, { libraries: null, libFull: {}, gCards: null, gTotal: undefined, gTemplates: null, hRuns: null, weights: {} });
+    Object.assign(app.state, { gFetched: false, hFetched: false, gSel: new Set(), gOpen: null, gAlbums: [], gPlace: { view: "all", day: null, coll: null } });
+    if (what === "all") app.data.settings = null;  // the language model's settings and key are gone too
+    await Promise.all([app.refreshPresets(), app.refreshCompletion()]).catch((err) => app.fail(err));
+    app.toast(`${esc(title)}: done`);
+    app.render();
+  };
+  sheet.querySelector("button.danger").focus();
+}
 
 function wireFlags(app, view) {
   view.querySelectorAll("[data-flag]").forEach((c) => { c.onchange = () => saveUi(app, { [c.dataset.flag]: c.checked }); });

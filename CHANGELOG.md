@@ -9,6 +9,24 @@ checks) are left out.
 
 ### Added
 
+- The Gallery in albums (#290): on the left every output, every picture and every video, then the days (each with its
+  images and videos) and the collections; a sweep's or a grid's runs, a reel's clips and each of its scenes are one
+  album's card with up to eight of its pictures, opened with a click. Collections take the place of folders: they hold
+  outputs without moving them, one output in as many as you like; folders from before are collections now.
+- History says what a `> enhance` line did to a run: the instruction, the prompt before it, and whether the rewrite
+  was kept with Use selected or written for the run (#290).
+- Resets in the Settings (#290): the ratings, the history, the gallery, the presets or the libraries back to factory,
+  or everything at once; what was made by hand goes to the home's trash, the logged files only when asked.
+- The preview (#290): a section of its own under the prompt and the dials, sized by its grip; the live preview while a
+  run samples, then the clip or take clicked, playing with its controls, or a template's result with its takes under
+  it. A click only shows a take: the one that counts (the film's, a single run's output) is golden, and Put in the film
+  or Use this take chooses another. A reel's clip picks frames for a REMEMBER: line of its scene. The preset's
+  description folds to one line.
+- Presets in a tree like the Gallery's (#290): every preset, the image presets, the video presets, the favorites and the
+  recent ones, and the folders as collections, each with its images and videos; filters by name, kind (still, scene,
+  reel), date and a regex over the template text, and in the Gallery by preset, kind, date and a regex over the prompt.
+- Help in pages (#290): a start with the lessons, the language section by section, writing for the models (Krea 2's
+  format and its faces), the keys and the settings.
 - An expression creator for Krea 2 (#291): `krea/15_expression_creator` rolls a character in a close-up, and the
   grid shows it in the eight expressions of a set (basic, subtle, intense, social, inner, playful); each expression
   says what the face does and the muscles that do it, in FACS action units. Render it with Krea 2 Raw and the turbo
@@ -159,6 +177,12 @@ checks) are left out.
   results show the live preview (#314).
 - A text template's `LORA:` line (a Krea prompt) goes on the model that passes through the Orrery Prompt, as in a
   screenplay, instead of landing in the prompt (#311).
+- Ticking a choice in a dial's menu no longer throws its list back to the top (#290).
+- Presets has a reload button, and every tab reads what it shows again when it opens (#290).
+- The results under the prompt show the picture of a run with Orrery Log; the Krea example runs its model through the
+  Orrery Prompt for the live preview (#290).
+- Typing at the bottom of the editor no longer scrolls it up when the completion opens (#290).
+- The Libraries tab is no longer covered by a dark box (a placeholder bar the takes' question overlay spread over it) (#290).
 - Roll runs a grid and a LoRA sweep again: the mini-runs' plan (#171) had taken the place of theirs in the app's
   API client, so Roll queued one run per seed instead of the grid's cells (#288).
 - A template without scenes takes the editor's free height with its text, and its results sit at the bottom, instead

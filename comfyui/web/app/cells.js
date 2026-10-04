@@ -9,8 +9,8 @@ import { highlight } from "./highlight.js";
 import { splitCells } from "./model.js";
 import { annotationLines, mergeHints, shownHints } from "./annotate.js";
 import { fillStrip, hintsFor, openPicker, rememberLines, stripHTML } from "./remember.js";
-import { clipRatio, olderTakes, paintLive, sectionHTML, sourceClip, takeVars, wireClips } from "./timeline.js";
-import { resultsHTML, resultsSig, wireResults } from "./results.js";
+import { clipRatio, olderTakes, paintLive, sectionHTML, sourceClip, wireClips } from "./timeline.js";
+import { paintStage } from "./stage.js";
 
 const box = (app) => app.view.querySelector(".editor.cells");
 const areas = (app) => [...(box(app)?.querySelectorAll("textarea") || [])];
@@ -59,6 +59,7 @@ const painted = new WeakMap();  // a cell → what its highlight was made from
 export function paintCells(app) {
   const host = box(app);
   if (!host) return;
+  const top = host.scrollTop;  // a repaint leaves the cells where they were (#303)
   const cells = splitCells(app.text), chunks = app.chunks() || [], segment = Number(app.bridge.getSegment());
   const remembered = app.remembered(), annotations = app.annotations(), known = app.known(), llm = app.llmActive();
   const cast = castNames(app.text), shared = JSON.stringify([[...known], cast, llm, segment]), acts = app.sceneActs?.();
@@ -75,10 +76,11 @@ export function paintCells(app) {
     painted.set(cell, key);
     cell.querySelector("pre").innerHTML = `${highlight(c.text, known, { llm, chunks: local, segment, cast, hints, sceneActs: acts })}​`;
   });
+  paintStage(app);  // the preview, when what it shows changed (#305)
   const sig = JSON.stringify([chunks.map((c) => [c.first, c.last, c.segs]), (app.data.chain?.clips || []).map((c) => c.version),
     segment, clipRatio(app), app.data.clip_min, app.data.take_min, remembered?.key, remembered?.lines, olderTakes(app),
-    chunks.length ? null : resultsSig(app)]);
-  if (sig === app.cellsSig) return;
+    Object.values(app.data.chain?.takes || {}).flat().filter((t) => t.active).map((t) => t.folder)]);
+  if (sig === app.cellsSig) { if (host.scrollTop !== top) host.scrollTop = top; return; }
   app.cellsSig = sig;
   host.querySelectorAll(".chunkmedia").forEach((m) => {
     const scene = Number(m.dataset.chunk), c = chunks[scene];
@@ -86,12 +88,13 @@ export function paintCells(app) {
     const line = remembered?.lines.find((l) => l.scene === scene);
     const source = line ? sourceClip(app, line.source) : null;
     const body = m.querySelector(".cm-body");
-    // a scene's clips; a template without scenes, its results under its one cell (#211)
-    body.innerHTML = (scene >= 0 ? sectionHTML(app, c) : chunks.length ? "" : resultsHTML(app, takeVars(app))) + stripHTML(app, scene, source?.url);
+    // a scene's clips; a template without scenes shows its results in the preview (#305)
+    body.innerHTML = (scene >= 0 ? sectionHTML(app, c) : "") + stripHTML(app, scene, source?.url);
     fillStrip(body, source?.frames);
   });
   sizeSections(app);
   paintLive(app);  // the clip rendering now keeps its preview through a redraw
+  if (host.scrollTop !== top) host.scrollTop = top;
 }
 
 // Every section's clips at the settings' clip size, as far as the section is wide.
@@ -191,7 +194,6 @@ export function wireCells(app, { onEdit, onKey, onFocus, onBlur }) {
     }
   });
   wireClips(app, host);
-  wireResults(app, host, () => { app.cellsSig = null; paintCells(app); });
   host.addEventListener("click", (e) => {  // a remembered frame clicked: pick another by eye
     const img = e.target.closest(".rm-item img.pick");
     if (!img) return;
