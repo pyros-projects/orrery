@@ -75,10 +75,13 @@ export function openTakes(app, place, near = null) {
     s.error = "";
     draw();
     try {
+      // a slot naming the node's first or last frame (#174): the files of the Load Image nodes behind them
+      const frames = /\bimage\s+(first|last)_frame\b/.test(place.what) ? (await app.bridge.frameFiles?.())?.names || {} : {};
       const got = await app.api.takes({ kind: place.kind, what: place.what, directions: place.directions, template: app.text,
         target: app.bridge.getTarget(), params: app.bridge.getParams(), seed: app.bridge.getSeed(), segment: app.bridge.getSegment?.() ?? 0,
-        chain: app.bridge.chain?.() || "", steer: steer.value, have: s.takes, n: 3 });
+        chain: app.bridge.chain?.() || "", steer: steer.value, have: s.takes, n: 3, frames });
       s.takes.push(...got.takes.filter((t) => !s.takes.includes(t)));
+      s.error = (got.notes || []).join(" ");
     } catch (err) { s.error = err.message; }
     s.busy = false;
     draw();

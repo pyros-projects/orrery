@@ -49,6 +49,16 @@ setting. When the node runs, the model
   Reference to Video: it hands each clip only the images its CAST uses, and
   the prompt renumbers `<Picture N>` to match ([tutorial](orrery-refs.md)).
 
+  A slot can **look at pictures** (#174): `image first_frame` and `image last_frame`
+  (what is wired into the Orrery Prompt), `image 3` (a gallery picture the clip's
+  CAST names) or a gallery name (`image krea/09_character_creator/1283456183`).
+  The model gets them as pictures, after the frames of the clip before, and reads
+  them as Picture 1, 2 …: `--the outfit in image first_frame, one phrase--`. One
+  that is not there is said in the lint, and the slot is written without it.
+  `image output` is the picture the run makes, there only after it: such a slot
+  stands in an `EXPORT:` line and waits there as a slot, for the Gallery to write
+  it; anywhere else the lint says so.
+
   A slot the model leaves out keeps its directions as text (and a warning), so
   a queued chain never breaks on one bad answer. The chain is the reel's own
   folder, which orrery names after it ([comfyui.md](comfyui.md)).

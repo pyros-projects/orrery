@@ -901,6 +901,7 @@ test("a 🎲 stands at the end of a line the language model writes for; Insert a
     [["slot", "a small object", ""], ["library", "sky_kind", "weather words"]]);  // a known library is no place
   assert.deepEqual(llmPlaces("> make it moody", known), [{ kind: "enhance", what: "make it moody" }]);
   assert.deepEqual(llmPlaces("# --not a slot--", known), []);
+  assert.deepEqual(llmPlaces("  sheet = --a character sheet from image output--", known), []);  // the Gallery writes it (#175)
   const text = "@h3 t2va\nSHOT 5s: static\nA __animal__ with --a small object--.";
   assert.doesNotMatch(highlight(text, known), /llm-key/);  // no language model set: no keys
   const html = highlight(text, known, { llm: true, hints: new Map([[2, { text: "→ fox", kind: "note" }]]) });

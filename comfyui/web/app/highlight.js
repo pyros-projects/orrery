@@ -74,7 +74,8 @@ export function llmPlaces(text, known) {
   if (/^\s*#/.test(text)) return [];
   const enhance = /^\s*>\s*(.*\S)\s*$/.exec(text);
   if (enhance) return [{ kind: "enhance", what: enhance[1] }];
-  return [...[...text.matchAll(SLOT)].map((m) => ({ kind: "slot", what: m[1], at: m.index })),
+  return [...[...text.matchAll(SLOT)].filter((m) => !/\bimage\s+output\b/.test(m[1]))  // written from the Gallery (#175)
+    .map((m) => ({ kind: "slot", what: m[1], at: m.index })),
     ...[...text.matchAll(LIBRARY)].filter((m) => !isKnown(m[1], known)).map((m) => ({ kind: "library", what: m[1], dirs: m[2] || "", at: m.index }))]
     .sort((a, b) => a.at - b.at);
 }

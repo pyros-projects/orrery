@@ -923,3 +923,22 @@ def test_takes_at_the_line_ask_the_endpoint_for_one_place_at_the_seed(home, fake
     assert api(home, webapi.llm_takes, kind="slot", what="nothing like it", template=template)[0] == 400  # no such slot
     fake_api.answer = lambda body: "no list here"
     assert api(home, webapi.llm_takes, kind="slot", what="one small object in its paws", template=template)[0] == 502
+
+
+def test_takes_for_a_slot_see_the_pictures_it_names(home, fake_api, tmp_path, monkeypatch):
+    """#174: a slot's takes get the Load Image file behind first_frame as Picture 1; one from image output come
+    from the Gallery, never here."""
+    picture = tmp_path / "fox.png"
+    Image.new("RGB", (64, 48), "orange").save(picture)
+    monkeypatch.setattr(webapi, "_input_picture", lambda name: picture if name else None)
+    Home(home).save_config({"llm": {"source": "api", "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})
+    fake_api.answer = lambda body: json.dumps(["a brass key", "a coin", "a note"])
+    template = "A fox holding --the object in image first_frame--."
+    body = ok(home, webapi.llm_takes, kind="slot", what="the object in image first_frame", template=template,
+              frames={"first_frame": "fox.png"})
+    content = fake_api.requests[-1]["messages"][0]["content"]
+    assert body["notes"] == [] and content[0]["type"] == "image_url" and "the object in Picture 1" in content[-1]["text"]
+    body = ok(home, webapi.llm_takes, kind="slot", what="the object in image first_frame", template=template)
+    assert "nothing is wired" in body["notes"][0]  # written without it, and said
+    status, body = api(home, webapi.llm_takes, kind="slot", what="a sheet from image output", template="A --a sheet from image output--.")
+    assert status == 400 and "Gallery" in body["error"]

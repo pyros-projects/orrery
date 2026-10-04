@@ -8,25 +8,29 @@ outside ComfyUI's queue.
 """
 
 from orrery.llm import InvalidProposal, extract_json
+from orrery.slots import as_pictures
 
 KINDS = ("slot", "library", "enhance")
 MARK = "[this part]"
 
 
 def request(kind: str, what: str, context: str, n: int = 3, steer: str = "", have: list[str] | tuple = (),
-            directions: str = "", frames: int = 0) -> str:
+            directions: str = "", frames: int = 0, pictures: list[str] = ()) -> str:
     """The prompt for N takes. `context`: the prompt as it rolls with the place marked (MARK), or for `enhance`
     the passage the line rewrites; `what`: the slot's directions, the library's name or the rewrite's instruction;
-    `directions`: a library's own, as written after it."""
+    `directions`: a library's own, as written after it; `pictures`: those a slot names, sent after the frames (#174)."""
     parts = ["You write for a text-to-image and text-to-video prompt generator."]
     if frames:
-        parts.append(f"The {frames} images are frames of the previous clip, one a second, the last one where it ends. "
-                     "The prompt below makes the clip that follows it: continue from that last frame, with the same "
-                     "people and place, and move the story on instead of retelling it.")
+        parts.append(f"The {'first ' if pictures else ''}{frames} images are frames of the previous clip, one a second, "
+                     "the last one where it ends. The prompt below makes the clip that follows it: continue from that last "
+                     "frame, with the same people and place, and move the story on instead of retelling it.")
+    if pictures:
+        parts.append(f"The {'images after them' if frames else 'images'} are "
+                     + ", ".join(f"Picture {i}" for i in range(1, len(pictures) + 1)) + ", in that order. Look at them closely.")
     if kind == "slot":
         parts.append(f"The prompt, with the part to write marked {MARK}:\n\n{context.strip()}")
         parts.append(f"Write {n} different takes for {MARK}, each prose that fits where it stands and follows its "
-                     f"directions exactly: {what}")
+                     f"directions exactly: {as_pictures(what, list(pictures))}")
     elif kind == "library":
         parts.append(f"The prompt, with {MARK} where an entry of the wildcard list __{what}__ stands:\n\n{context.strip()}")
         parts.append(f"Write {n} different entries that could stand at {MARK}, each a short phrase that fits the "

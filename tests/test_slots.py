@@ -70,3 +70,18 @@ def test_a_text_that_ends_a_sentence_takes_the_place_of_the_period_after_it():
 def test_labels_in_the_prompt_are_asked_for_in_the_text():
     assert "<Subject N>" in request([], ["what <Subject 1> does"], "--what <Subject 1> does--")
     assert "<Subject N>" not in request([], ["what he does"], "--what he does--")
+
+
+def test_a_slot_names_pictures_and_the_model_reads_them_as_picture_n():
+    """#174: image first_frame, last_frame, N and a gallery name are sent as pictures; image output waits."""
+    from orrery.slots import as_pictures, fill_exports, names_output, pictures_in, request
+
+    directions = ["the outfit in image first_frame, one phrase", "who image 3 and image krea/09_character_creator/12 are",
+                  "a sheet from image output", "the shoes in image first_frame"]
+    assert pictures_in(directions) == ["first_frame", "3", "krea/09_character_creator/12"]  # output never, each once
+    assert names_output(directions[2]) and not names_output(directions[0])
+    assert as_pictures(directions[1], ["first_frame", "3", "krea/09_character_creator/12"]) == "who Picture 2 and Picture 3 are"
+    asked = request([], directions[:1], "A fox in --the outfit in image first_frame, one phrase--.", frames=2, pictures=["first_frame"])
+    assert "The first 2 images are frames" in asked and "The images after them are Picture 1, in that order" in asked
+    assert '"slot 1": the outfit in Picture 1, one phrase' in asked
+    assert fill_exports({"sheet": "--a sheet from image output--", "who": "--a name--"}, {}) == {"sheet": "--a sheet from image output--", "who": "a name"}

@@ -1154,8 +1154,9 @@ def llm_takes(home: Home, args: dict) -> dict:
     directions), a library still to be written (`what`: its name, `directions`: its own) or a `> enhance` line
     (`what`: its instruction), steered by `steer`, new against `have`. Over the API endpoint, outside the queue."""
     from orrery import takes
-    from orrery.comfy import _passages, _previous
+    from orrery.comfy import _images, _passages, _previous, _slot_pictures
     from orrery.loras import long_form
+    from orrery.slots import names_output, pictures_in
 
     kind, what = str(args.get("kind") or ""), " ".join(str(args.get("what") or "").split())
     if kind not in takes.KINDS:
@@ -1188,18 +1189,25 @@ def llm_takes(home: Home, args: dict) -> dict:
         context = takes.marked(result.text, f"--{what}--" if kind == "slot" else f"__{what}__")
     if not context:
         raise ApiError(400, f"The prompt at seed {seed} has no {kind} {what!r} to write for (a branch that did not roll?).")
+    if kind == "slot" and names_output(what):
+        raise ApiError(400, "This slot is written from the picture a run makes (image output): its takes come from the "
+                            "Gallery, for a picture there.")
     frames = _previous(_latent_path(args), segment) if kind == "slot" and screenplay and segment else None
+    said: list[dict] = []  # a picture a slot names that is not there (#174)
+    wired = args.get("frames") if isinstance(args.get("frames"), dict) else {}
+    inputs = {k: _input_picture(wired.get(k)) for k in ("first_frame", "last_frame") if wired.get(k)}
+    named, shown = _slot_pictures(home, pictures_in([what]), result, inputs, said) if kind == "slot" else ([], [])
     n = min(max(_int(args, "n", 3), 1), 6)
     prompt = takes.request(kind, what, context, n, str(args.get("steer") or ""),
                            [str(h) for h in args.get("have") or [] if str(h).strip()][:24],
-                           " ".join(str(args.get("directions") or "").split()), len(frames) if frames else 0)
+                           " ".join(str(args.get("directions") or "").split()), len(frames) if frames is not None else 0, named)
     try:
-        out = takes.parse(api.complete(prompt, images=frames), n)
+        out = takes.parse(api.complete(prompt, images=_images(frames, shown, api)), n)
     except RuntimeError as err:
         raise ApiError(502, str(err)) from None
     if not out:
         raise ApiError(502, "The language model wrote no takes; ask again.")
-    return {"takes": out}
+    return {"takes": out, "notes": [i["message"] for i in said]}
 
 
 def write_libraries(home: Home, args: dict) -> dict:
