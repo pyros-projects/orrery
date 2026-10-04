@@ -1121,3 +1121,19 @@ test("Presets and the Gallery filter by name, kind, date and a regex over the pr
   assert.deepEqual(ids({ grep: "den\\.\\s+rain" }), ["b"]);
   assert.deepEqual(ids({ grep: "fox (" }), []);  // no regex: plain text, which no prompt holds
 });
+
+test("Help is in pages: a start with the lessons, the language section by section, the models, the keys, the settings (#309)", async () => {
+  const { PAGES, renderHelp } = await import("../../comfyui/web/app/help.js");
+  assert.deepEqual(PAGES.map(([k]) => k), ["start", "wildcards", "bindings-and-extras", "h3-screenplays", "cast-and-references", "reels-orrery-continue",
+    "models", "keys", "settings"]);
+  let html = "";
+  const app = { state: {}, bridge: { props: {} }, known: () => new Set(), data: { presets: [{ name: "tutorial/01_first", title: "01 · A first wildcard" }] },
+    view: { set innerHTML(h) { html = h; }, get innerHTML() { return html; } } };
+  renderHelp(app);
+  assert.match(html, /data-hpage="start" aria-current="true"/);
+  assert.match(html, /data-load="tutorial\/01_first"/);  // the lessons on the start page
+  app.state.helpPage = "models";
+  renderHelp(app);
+  assert.match(html, /<h4>Writing for the models<\/h4>/);
+  assert.match(html, /Krea 2 faces/);
+});

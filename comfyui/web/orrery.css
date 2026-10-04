@@ -658,6 +658,8 @@
 .orrery-app.big .help { grid-template-columns: 1fr 1fr; align-items: start; }
 .orrery-app .help section { display: grid; gap: 8px; }
 .orrery-app .help h5 { margin: 0; }
+.orrery-app .help-pages .help { grid-template-columns: minmax(0, 1fr); max-width: 110ch; padding: 0; }
+.orrery-app .help-pages .help > p { line-height: 1.6; }
 .orrery-app .lessons { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 6px; }
 .orrery-app .lesson { display: flex; gap: 8px; align-items: baseline; text-align: left; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; }
 .orrery-app .lesson:hover { border-color: var(--brass); }

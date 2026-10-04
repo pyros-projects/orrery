@@ -25,6 +25,8 @@ checks) are left out.
 - Presets in a tree like the Gallery's (#290): every preset, the image presets, the video presets, the favorites and the
   recent ones, and the folders as collections, each with its images and videos; filters by name, kind (still, scene,
   reel), date and a regex over the template text, and in the Gallery by preset, kind, date and a regex over the prompt.
+- Help in pages (#290): a start with the lessons, the language section by section, writing for the models (Krea 2's
+  format and its faces), the keys and the settings.
 - An expression creator for Krea 2 (#291): `krea/15_expression_creator` rolls a character in a close-up, and the
   grid shows it in the eight expressions of a set (basic, subtle, intense, social, inner, playful); each expression
   says what the face does and the muscles that do it, in FACS action units. Render it with Krea 2 Raw and the turbo

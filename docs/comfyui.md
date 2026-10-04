@@ -280,7 +280,10 @@ Nodes under **orrery**:
     2026-10-02 comes back with `@rng 1` on top: the dice it was made with). Each run is
     also printed to ComfyUI's console (seed, picks, prompt); the gear turns
     that off.
-  - **Help**: the DSL at a glance, the tutorial lessons, writing tips.
+  - **Help**: in pages (#309), a nav on the left as the Settings have: a start
+    with the tutorial lessons, the language section by section (each line with
+    an Insert), writing for the models, the keys in the editor and the
+    settings.
   - **Settings** (the gear, #212; again, and the tab before is back): its
     sections on the left, *Home*, *Language model*, *Writers*, *Editor*,
     *Clips* (clip size, live preview, sample surfing), *Log* and *Reset*, the one

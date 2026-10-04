@@ -106,7 +106,8 @@ const REF = [
 ];
 
 const TIPS = [
-  ["Krea 2", 'Write sentences, not tag lists. Name the medium, or Krea picks one for you. Put words to render in quotes: a sign reading "OPEN".'],
+  ["Krea 2", 'Write sentences, not tag lists. Name the medium and the shot in the first sentence ("A cinematic photograph: a head-and-shoulders portrait of …"), or Krea picks them for you. Describe only what the shot can show: whatever you name pulls the camera to include it. A second subject gets a sentence of its own, with its place. Say what is there, never what is not. Put words to render in quotes: a sign reading "OPEN".'],
+  ["Krea 2 faces", "Expressions want Krea 2 Raw with the turbo LoRA: the Turbo checkpoint gives the same flat face whatever the prompt says."],
   ["H3 cuts", "Start shots 2+ with a noun phrase: the compiler writes “the camera cuts to …” in front of it."],
   ["Any prompt on H3", "A template without SHOT lines (a Krea prompt, say) compiles for h3-base as one 5 s shot. Add a SHOT line when you want to set the duration or the camera."],
   ["H3 length", "All shots together: 4–15 s. Up to four SFX lines. Wire the node's width, height and length into the MiniMax H3 latent node instead of copying them."],
@@ -114,22 +115,44 @@ const TIPS = [
   ["Ref2VA labels", "orrery numbers <Subject N>, <Picture i>, <Video k> and <Audio j> exactly like the Reference to Video node: images and videos by slot, audio after the video soundtracks. In the other modes, cast names expand to their descriptions."],
 ];
 
-export function renderHelp(app) {
+// The Help tab in pages (#309): a page nav on the left, as the Settings have, each page with room for its text.
+const slug = (h) => h.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+export const PAGES = [["start", "Start"], ...REF.map(([h]) => [slug(h), h]), ["models", "Writing for the models"], ["keys", "Keys in the editor"], ["settings", "Settings"]];
+
+function pageHTML(app, page) {
   const known = app.known();
-  const lessons = app.data.presets.filter((p) => p.name.startsWith("tutorial/"));
-  app.view.innerHTML = `<div class="scroll"><div class="help">
-    <section><h5 class="label">Lessons · open one, press Test, change something</h5>
-      <div class="lessons">${lessons.map((p) => {
+  if (page === "start") {
+    const lessons = app.data.presets.filter((p) => p.name.startsWith("tutorial/"));
+    return `<p class="flush">A template rolls words from a seed: libraries (<code>__animal__</code>), choices (<code>{dawn|dusk}</code>) and bindings (<code>$hero = __animal__</code>), and every pick is kept, so a run can be made again, rated and learned from. Write in <b>Prompt</b>, see what it rolls in <b>Test</b> without queueing anything, and <b>Roll</b> in the footer queues it. What comes out lands in the preview under the prompt and in the <b>Gallery</b>, where ratings teach the dice.</p>`
+      + `<p class="muted flush">The lessons go from a first wildcard to a three-shot H3 scene: open one, press Test, change something.</p>`
+      + `<div class="lessons">${lessons.map((p) => {
         const [num, ...rest] = p.title.split(" · ");
         return `<button class="lesson" data-load="${esc(p.name)}"><span class="ln">${esc(rest.length ? num : "")}</span><span>${esc(rest.join(" · ") || p.title)}</span></button>`;
-      }).join("")}</div></section>
-    ${REF.map(([h, rows]) => `<section><h5 class="label">${h}</h5><div class="ref">${rows.map(([code, what, ex]) => `<div class="refrow"><pre class="codebox">${highlight(code, known)}</pre>`
-      + `<span class="muted">${esc(what)}</span>${ex ? `<button class="btn ghost" data-insert="${esc(ex)}" title="Add to the end of your template">${icon("plus")}Insert</button>` : "<span></span>"}</div>`).join("")}</div></section>`).join("")}
-    <section><h5 class="label">Writing for the models</h5><div class="tips">${TIPS.map(([k, t]) => `<p><b>${k}.</b> ${esc(t)}</p>`).join("")}</div></section>
-    <section><h5 class="label">Keys in the editor</h5><p class="muted flush"><code>__</code> libraries, by any part of the name (<code>__hai</code> finds <code>characters/gothic/hair</code>) · <code>__name[</code> tags · <code>__name#</code> properties and their values · <code>$</code> bindings · <code>SHOT 5s:</code> camera words · ↑↓ choose · ↵ or Tab insert · Esc close</p></section>
-    <section><h5 class="label">Settings</h5><p class="muted flush">The gear opens them, the gear again brings the tab back: Home, Language model, Writers, Editor (with where the annotations go: at the line ends, on hover, or none), Clips (clip size, live preview, sample surfing) and Log. A setting is saved the moment it changes; the home folder, an API endpoint (checked first) and a writer's text have buttons of their own.</p></section>
-  </div></div>`;
+      }).join("")}</div>`;
+  }
+  if (page === "models") return `<div class="tips">${TIPS.map(([k, tip]) => `<p><b>${k}.</b> ${esc(tip)}</p>`).join("")}</div>`;
+  if (page === "keys") {
+    return `<p class="muted flush"><code>__</code> libraries, by any part of the name (<code>__hai</code> finds <code>characters/gothic/hair</code>) · <code>__name[</code> tags · <code>__name#</code> properties and their values · <code>$</code> bindings · <code>SHOT 5s:</code> camera words · ↑↓ choose · ↵ or Tab insert · Esc close · Ctrl+Space opens the completion where the caret is</p>`
+      + `<p class="muted flush">In the preview's frame picker: ← → a frame back or on, M marks the frame.</p>`;
+  }
+  if (page === "settings") {
+    return `<p class="muted flush">The gear opens them, the gear again brings the tab back: Home, Language model, Writers, Editor (with where the annotations go: at the line ends, on hover, or none), Clips (clip size, live preview, sample surfing), Log and Reset (ratings, history, gallery, presets, libraries or everything, each asked first). A setting is saved the moment it changes; the home folder, an API endpoint (checked first) and a writer's text have buttons of their own.</p>`;
+  }
+  const [, rows] = REF.find(([h]) => slug(h) === page) || REF[0];
+  return `<div class="ref">${rows.map(([code, what, ex]) => `<div class="refrow"><pre class="codebox">${highlight(code, known)}</pre>`
+    + `<span class="muted">${esc(what)}</span>${ex ? `<button class="btn ghost" data-insert="${esc(ex)}" title="Add to the end of your template">${icon("plus")}Insert</button>` : "<span></span>"}</div>`).join("")}</div>`;
+}
+
+export function renderHelp(app) {
+  const s = app.state;
+  s.helpPage ??= PAGES.some(([k]) => k === app.bridge.props.orrery_help) ? app.bridge.props.orrery_help : "start";
+  const [, title] = PAGES.find(([k]) => k === s.helpPage);
+  app.view.innerHTML = `<div class="settings help-pages"><nav class="set-nav" aria-label="Help">${PAGES.map(([k, label]) =>
+    `<button type="button" class="${k === s.helpPage ? "on" : ""}" data-hpage="${k}" aria-current="${k === s.helpPage}">${esc(label)}</button>`).join("")}</nav>`
+    + `<div class="set-main scroll"><div class="set-head"><h4>${esc(title)}</h4></div><div class="help">${pageHTML(app, s.helpPage)}</div></div></div>`;
   app.view.onclick = (e) => {
+    const page = e.target.closest("[data-hpage]");
+    if (page) { s.helpPage = page.dataset.hpage; app.bridge.props.orrery_help = s.helpPage; return renderHelp(app); }
     const lesson = e.target.closest("[data-load]");
     if (lesson) return app.loadPreset(lesson.dataset.load);
     const ins = e.target.closest("[data-insert]");
