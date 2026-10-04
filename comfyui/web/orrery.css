@@ -158,6 +158,11 @@
 /* a clip's takes (#206): a strip under the scene's clips; the one in the film is marked */
 .orrery-app .cm-takes { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; }
 .orrery-app .cm-takes .muted { margin-right: 4px; }
+/* a clip's takes deleted at once (#234): under its label, beside the takes */
+.orrery-app .cm-takes-head { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; align-self: stretch; margin-right: 4px; }
+.orrery-app .cm-takes-head .btn { padding: 1px 7px; font-size: 10.5px; gap: 4px; cursor: pointer; }
+.orrery-app .cm-takes-head .btn svg { width: 11px; height: 11px; }
+.orrery-app .cm-takes-head .ask { position: static; display: grid; gap: 4px; padding: 6px; border-radius: 6px; max-width: 150px; text-align: left; }
 .orrery-app .take { position: relative; width: var(--take-w, 96px); height: var(--take-h, 54px); padding: 0; border: 1px solid var(--line); border-radius: 4px; overflow: hidden;
   background: #22232e; cursor: pointer; }
 .orrery-app .take img, .orrery-app .take video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }

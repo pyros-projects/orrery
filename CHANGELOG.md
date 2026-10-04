@@ -9,6 +9,8 @@ checks) are left out.
 
 ### Added
 
+- A clip's takes go at once: under their label, **the others** keeps only the one in the film, **all** deletes that
+  one too and the film ends before the clip; each asks first (#234).
 - The Orrery Prompt puts its `LORA:` lines on the model that passes through it, a clip's own and the head's, a
   sweep's run included: no LoRA node needed (#208).
 - A reference needs no CAST: `<Image N>` in the text, as H3's own prompts write it, hands the picture to H3 as

@@ -598,6 +598,16 @@ def chain_delete(home: Home, args: dict) -> dict:
         raise ApiError(400, str(err)) from None
 
 
+def chain_clear(home: Home, args: dict) -> dict:
+    """A clip's takes deleted at once (#234): all but the one in the film (`keep`), or that one too."""
+    from orrery import film
+
+    try:
+        return film.delete_takes(_output_dir(), _latent_path(args), _int(args, "segment", -1), bool(args.get("keep", True)))
+    except film.FilmError as err:
+        raise ApiError(400, str(err)) from None
+
+
 REELS = "reels"  # the reels the app names (#197) live under output/reels/
 
 
@@ -1086,6 +1096,7 @@ ROUTES = [
     ("POST", "/orrery/chain/move", chain_move),
     ("POST", "/orrery/chain/pick", chain_pick),
     ("POST", "/orrery/chain/delete", chain_delete),
+    ("POST", "/orrery/chain/clear", chain_clear),
     ("GET", "/orrery/chain/video", chain_video),
     ("GET", "/orrery/anchor", anchor),
     ("GET", "/orrery/history", history_runs),
@@ -1117,7 +1128,7 @@ ROUTES = [
 
 
 # routes that wait for a language model run in a thread, so ComfyUI's server answers meanwhile
-SLOW = {llm_save, llm_check, write_libraries, write_idea, chain_pick, chain_delete}
+SLOW = {llm_save, llm_check, write_libraries, write_idea, chain_pick, chain_delete, chain_clear}
 
 
 def _handler(fn, method: str, web):
