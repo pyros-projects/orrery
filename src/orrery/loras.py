@@ -1,8 +1,8 @@
-"""LoRAs: the files ComfyUI knows, and `<lora:name:strength>` tags turned into a LORA_STACK.
+"""LoRAs: the files ComfyUI knows, `<lora:name:strength>` tags resolved to them as a stack, and the stack put on
+the model that passes through the Orrery Prompt (#208), so no LoRA node is needed.
 
-A LORA_STACK is a list of (lora_name, model_strength, clip_strength), with lora_name the path
-as ComfyUI's `loras` list spells it: what LoraManager's loaders, Efficiency, Easy-Use and the
-other stack nodes read. Tags name a file the way LoraManager does: its name without extension,
+A stack is a list of (lora_name, model_strength, clip_strength), with lora_name the path
+as ComfyUI's `loras` list spells it (the LORA_STACK of LoraManager and the other stack nodes). Tags name a file the way LoraManager does: its name without extension,
 or its path; case and extension don't matter.
 """
 
@@ -67,3 +67,25 @@ def lora_stack(text: str, files: list[str]) -> tuple[Stack, list[str]]:
             warnings.append(f"LoRA \"{name}\" matches {', '.join(found)}; using {found[0]} (write the folder to choose).")
         stack.append((found[0], *strengths))
     return stack, warnings
+
+
+_LOADED: dict[str, object] = {}  # path → a LoRA's weights, the ones the last clip used (ComfyUI's LoraLoader keeps one)
+
+
+def apply(model, stack: Stack):
+    """The model with the stack's LoRAs on it, as LoraLoaderModelOnly puts one (#208): model strengths only, since
+    MiniMax H3's and Krea 2's LoRAs change the model; a strength of 0 leaves a LoRA out. The weights are shared."""
+    import comfy.sd
+    import comfy.utils
+    import folder_paths
+
+    loaded: dict[str, object] = {}
+    for name, strength, _clip in stack:
+        if not strength:
+            continue
+        path = folder_paths.get_full_path_or_raise("loras", name)
+        loaded[path] = _LOADED.get(path) or loaded.get(path) or comfy.utils.load_torch_file(path, safe_load=True)
+        model, _ = comfy.sd.load_lora_for_models(model, None, loaded[path], strength, 0)
+    _LOADED.clear()
+    _LOADED.update(loaded)
+    return model

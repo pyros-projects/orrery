@@ -1,4 +1,4 @@
-"""`<lora:name:strength>` tags become a LORA_STACK: (path as ComfyUI lists it, model, clip)."""
+"""`<lora:name:strength>` tags become a stack: (path as ComfyUI lists it, model, clip), put on the model."""
 
 from orrery.loras import lora_stack
 
@@ -30,3 +30,30 @@ def test_nothing_to_resolve_against_means_no_stack_and_one_warning():
     assert lora_stack("", []) == ([], [])
     stack, warnings = lora_stack("<lora:Motion_Repair:1>", [])
     assert stack == [] and len(warnings) == 1
+
+
+def test_the_stack_goes_on_the_model_with_model_strengths_only(monkeypatch):
+    """#208: the Orrery Prompt puts its LoRAs on the model passing through it, as LoraLoaderModelOnly does."""
+    import sys
+    import types
+
+    from orrery import loras
+
+    calls, reads = [], []
+    sd = types.SimpleNamespace(load_lora_for_models=lambda model, clip, lora, strength, clip_strength: (
+        calls.append((model, clip, lora, strength, clip_strength)) or (f"{model}+{lora}", None)))
+    utils = types.SimpleNamespace(load_torch_file=lambda path, safe_load=False: reads.append(path) or path.split("/")[-1])
+    paths = types.SimpleNamespace(get_full_path_or_raise=lambda kind, name: f"/loras/{name}")
+    comfy = types.ModuleType("comfy")
+    comfy.sd, comfy.utils = sd, utils
+    for name, mod in (("comfy", comfy), ("comfy.sd", sd), ("comfy.utils", utils), ("folder_paths", paths)):
+        monkeypatch.setitem(sys.modules, name, mod)
+    monkeypatch.setattr(loras, "_LOADED", {})
+
+    stack = [("turbo.safetensors", 0.8, 0.8), ("off.safetensors", 0.0, 1.0), ("style.safetensors", 0.5, 0.2)]
+    assert loras.apply("model", stack) == "model+turbo.safetensors+style.safetensors"
+    assert [(c[1], c[3], c[4]) for c in calls] == [(None, 0.8, 0), (None, 0.5, 0)]  # no CLIP; 0 leaves a LoRA out
+    loras.apply("model", stack[:1])
+    assert reads == ["/loras/turbo.safetensors", "/loras/style.safetensors"]  # read once while the clips use it
+    assert list(loras._LOADED) == ["/loras/turbo.safetensors"]  # the ones the last clip used stay
+

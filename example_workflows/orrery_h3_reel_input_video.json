@@ -160,12 +160,6 @@
           ]
         },
         {
-          "localized_name": "lora_stack",
-          "name": "lora_stack",
-          "type": "LORA_STACK",
-          "links": null
-        },
-        {
           "localized_name": "megapixels",
           "name": "megapixels",
           "type": "FLOAT",
