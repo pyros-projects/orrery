@@ -24,6 +24,7 @@ import re
 from collections.abc import Mapping
 from dataclasses import dataclass, field, replace
 
+from orrery import knobs
 from orrery.cast import (
     MAX_SLOTS,
     MEMBER,
@@ -142,7 +143,7 @@ class Scene:
     refmod_start: float = REFMOD_START
     refmod_end: float = 1.0  # `refmods: … to 80%`: where a RefMod without its own `to` stops
     dials: dict = field(default_factory=dict)  # `SET: image_1(0.5, 35%)`: ("image", 1) or ("refmod", name) → {"strength", "from"}
-    sets: list = field(default_factory=list)  # the SET: items in order, (target, strength, start, end, words): see _apply_sets
+    sets: list = field(default_factory=list)  # the SET: items in order, (target, strength, start, end, words, kind, spec): see _apply_sets
     enhance: str = ""  # a `> instruction` before the first shot: for every shot without its own
 
     @property
@@ -206,8 +207,13 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
             scene.style = m.group(1).strip()
         elif m := _SUMMARY.match(line):
             scene.summary = m.group(1).strip()
-        elif m := _LORA.match(line):
-            scene.loras.append(m.group(1).strip())
+        elif m := _LORA.match(line):  # its LoRAs; a RefMod's, an image's or a member's long form is a SET item (#227)
+            others = [k.group(0) for k in knobs.LONG.finditer(m.group(1)) if k.group(1).lower() != "lora"]
+            loras = knobs.LONG.sub(lambda k: k.group(0) if k.group(1).lower() == "lora" else "", m.group(1)).strip()
+            if loras:
+                scene.loras.append(loras)
+            if others:
+                _set_line(scene, ", ".join(others), lint)
         elif _HANDOFF.match(line):
             lint.append(Issue("warn", "END ON: only works inside a SCENE; it is ignored."))
         elif _AFTER.match(line):
@@ -293,17 +299,24 @@ def _share(text: str) -> float | None:
 
 
 def _set_line(scene: Scene, text: str, lint: list[Issue]) -> None:
-    """`SET: image_1(0.5, 35%), emma_canon(0.3), @JINX(0.6, refmods), refmods(1, 35%)`: the dials of a
-    picture, a RefMod, a member's references (all, or those its words choose) and the RefMod defaults,
-    for every clip in the head, for that clip in a chunk. Kept in order and applied once the CAST is
+    """`SET: image_1(0.5, 35%), emma_canon(0.3), @JINX(0.6, refmods), refmods(1, 35%), turbo(0.8, 0%, 50%)`: the
+    dials of a picture, a RefMod, a member's references (all, or those its words choose), the RefMod defaults
+    and a LoRA (#227), for every clip in the head, for that clip in a chunk. A long form names its kind
+    (`<lora:…>`, `<refmod:…>`, `<image:N:…>`, `<cast:NAME:…>`); a short one is told by its name once the CAST is
     read (_apply_sets): a later SET wins, and SET wins over the CAST."""
-    items = _SET_ITEM.findall(text)
+    long = list(knobs.LONG.finditer(text))
+    items = [(k.group(2).strip() if k.group(1).lower() != "image" else f"image_{k.group(2).strip()}", k.group(3) or "",
+              k.group(1).lower()) for k in long if k.group(1).lower() != "lora"]
+    loras = [k.group(0) for k in long if k.group(1).lower() == "lora"]
+    scene.loras += loras
+    text = knobs.LONG.sub("", text)
+    items += [(target, args, None) for target, args in _SET_ITEM.findall(text)]
     rest = _SET_ITEM.sub("", text).replace(",", "").strip()
-    if not items or rest:
+    if not (items or loras) or rest:
         lint.append(Issue("warn", f"SET: {text[:48]} is not name(strength, start), e.g. SET: image_1(0.5, 35%) or "
                                   "SET: emma_canon(0.3); it is left out."))
         return
-    for target, args in items:
+    for target, args, kind in items:
         values = [v.strip() for v in args.split(",")]
         words = [v for v in values if v[:1].isalpha()]  # `refmods`, `image 1`: which of a member's references
         numbers = [v for v in values if not v[:1].isalpha()]
@@ -315,7 +328,7 @@ def _set_line(scene: Scene, text: str, lint: list[Issue]) -> None:
             lint.append(Issue("warn", f"SET: {target.strip()}({args}) takes numbers: (strength), (strength, start) or "
                                       "(strength, start, end)."))
             continue
-        scene.sets.append((target.strip(), strength, start, end, words))
+        scene.sets.append((target.strip(), strength, start, end, words, kind, args.strip()))
 
 
 _CHOICE = re.compile(r"^(images?|refmods?)$|^image\s+(\d+)$|^refmod\s+([\w./-]+)$", re.IGNORECASE)
@@ -325,8 +338,20 @@ def _apply_sets(scene: Scene, lint: list[Issue]) -> None:
     """The SET: items as dials, in the order written, now that the CAST is known: a member's name turns
     all its pictures and RefMods, or the ones its words choose (`images`, `refmods`, `image 1`, `refmod
     NAME`); `refmods` alone sets the RefMod defaults, as a `refmods:` line does."""
-    for target, strength, start, end, words in scene.sets:
-        member = next((m for m in scene.cast if m.name == target), None)
+    for target, strength, start, end, words, kind, spec in scene.sets:
+        member = next((m for m in scene.cast if m.name == target), None) if kind in (None, "cast") else None
+        if kind == "cast" and member is None:
+            lint.append(Issue("warn", f"SET: <cast:{target}:…>: no member {target} in the CAST, so it changes nothing."))
+            continue
+        if kind is None and member is None and not _SET_IMAGE.match(target) and target.lower() != "refmods":
+            found = knobs.kind_of(target)  # a LoRA's name, or a RefMod's (#227)
+            if found == "lora":
+                scene.loras.append(f"<lora:{target}:{spec}>")
+                continue
+            if found == "both":
+                lint.append(Issue("warn", f"SET: {target}(…) names a LoRA and a RefMod: write <lora:{target}:…> or "
+                                          f"<refmod:{target}:…>. It is left out."))
+                continue
         if member is None and target.lower() == "refmods" and not words:
             for name, value in (("refmod_strength", strength), ("refmod_start", start), ("refmod_end", end)):
                 if value is not None:

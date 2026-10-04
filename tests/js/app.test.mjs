@@ -715,3 +715,12 @@ test("a scene in numbers: where and how often it plays, before and after, what i
   assert.match(html, /<small>a 40 % chance<\/small>/);
   assert.match(html, /<dt>comes after<\/dt><dd>the lamp <b>2×<\/b> · the gate <b>1×<\/b><\/dd>/);
 });
+
+test("a knob's sweep plans its runs, and its long forms are opaque like a LoRA tag (#227)", () => {
+  for (const t of ["SET: image_1(0.3|0.6)", "SET: jinx(1, 0%, 0%-30%;10%)", "LORA: <refmod:jinx:0.6|0.8>", "LORA: <lora:x:0.6|0.8, 20%>", "@x(0.6|0.8)"]) {
+    assert.ok(PLAN_HINT.test(t), t);
+  }
+  for (const t of ["SET: image_1(0.5, 35%)", "SET: x({0.3|0.6})", "<refmod:jinx:0.8, 0%, 10%>"]) assert.ok(!PLAN_HINT.test(t), t);
+  assert.match(highlight("SET: <refmod:jinx_v1:0.8, 0%, 10%>", new Set()), /<span class="t-lora">&lt;refmod:jinx_v1:0\.8, 0%, 10%&gt;<\/span>/);
+  assert.equal(longForm("@image_2(0.6) @style(0.8)"), "<image:2:0.6> <lora:style:0.8>");
+});

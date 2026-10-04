@@ -378,6 +378,11 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         if issue := word_issue(described):
             lint.append({"severity": issue.severity, "message": issue.message})
     lint = [{"severity": "info", "message": n} for n in notes] + lint
+    for old in sweeps.legacy(source):
+        swept = old.split(":", 2)[-1].rstrip(">")
+        lint.append({"severity": "info", "message": f"{old} sweeps with commas, as before: write "
+                     f"{old.replace(swept, swept.replace(',', '|'))}, since commas now separate a knob's strength, "
+                     "start and end (#227)."})
     if (plan or grid) and not sweep:
         what = "LoRA sweep" if not grid else "Grid" if not plan else "LoRA sweep and grid"
         on = " on this clip (the segment holds still)" if getattr(result, "chunks", 0) else ""
@@ -662,7 +667,8 @@ class OrreryPrompt:
             stack, outputs = outputs[6], outputs[:6]  # the LORA: lines go on the model, not out (#208)
             if stack and model is not None:
                 model = loras.apply(model, stack)
-                print(f"[orrery] LoRAs on the model: {', '.join(f'{n} ({s:g})' for n, s, _ in stack if s)}")
+                when = lambda a, b: "" if (a, b) == (0, 1) else f", {a:.0%}–{b:.0%}"  # a timed LoRA's start and end (#227)
+                print(f"[orrery] LoRAs on the model: {', '.join(f'{n} ({s:g}{when(a, b)})' for n, s, _, a, b in stack if s)}")
             elif stack:
                 print("[orrery] warn: the LORA: lines go on the model that passes through this node; wire the model "
                       "loader into its model input and its model output on to the sampler, else they change nothing.")

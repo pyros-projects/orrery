@@ -302,7 +302,7 @@ def test_the_node_writes_the_chunk_its_segment_asks_for(home, monkeypatch):
     assert "wakes" in text and "sleeps" not in text
     assert (data["segment"], data["chunks"]) == (1, 2)
     assert (width, height, length) == (1344, 768, h3_length(4 + 22 / 24))
-    assert stack == [("x/all.safetensors", 1.0, 1.0), ("two.safetensors", 0.5, 0.5)]
+    assert stack == [("x/all.safetensors", 1.0, 1.0, 0.0, 1.0), ("two.safetensors", 0.5, 0.5, 0.0, 1.0)]
     first = run_prompt(REEL, 1, "h3-base", str(home))
     assert first[5] == h3_length(5) and json.loads(first[1])["segment"] == 0
 
@@ -310,7 +310,7 @@ def test_the_node_writes_the_chunk_its_segment_asks_for(home, monkeypatch):
 def test_unresolved_loras_are_left_out_and_reported(home, monkeypatch):
     fake_loras(monkeypatch, ["x/all.safetensors"])
     _, picks, _, _, _, _, stack, *_ = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
-    assert stack == [("x/all.safetensors", 1.0, 1.0)]
+    assert stack == [("x/all.safetensors", 1.0, 1.0, 0.0, 1.0)]
     assert any("two" in i["message"] for i in json.loads(picks)["lint"])
 
 

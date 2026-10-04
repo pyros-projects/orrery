@@ -72,9 +72,11 @@ export function withDice(text, row) {
   return lines.join("\n");
 }
 
-// `@style(0.8)` is `<lora:style:0.8>`, as orrery.loras.long_form writes it (not @include or @h3).
+// `@style(0.8)` is `<lora:style:0.8>` and `@image_1(0.6)` `<image:1:0.6>`, as orrery.loras.long_form writes them (not
+// @include or @h3); a RefMod's name the server tells by its files (#227).
 export const longForm = (text) => text.replace(/(?<![\w@<\\])@([\w./\\-]+)\(([^()<>]*)\)/g,
-  (m, name, spec) => (/^(include|h3)$/i.test(name) ? m : `<lora:${name}:${spec.trim()}>`));
+  (m, name, spec) => (/^(include|h3)$/i.test(name) ? m : /^image[_\s]*\d+$/i.test(name)
+    ? `<image:${name.replace(/\D/g, "")}:${spec.trim()}>` : `<lora:${name}:${spec.trim()}>`));
 
 // A brace's options: split at `|`, but not inside `[...]` (`{__a[x|y]__|b}` has two). Mirrors orrery.dsl.split_options.
 export function splitOptions(inner) {
@@ -550,5 +552,6 @@ export async function queueSweep({ count, seeds, mode, getSeed, setSeed, queue, 
 // What Generate queues is planned by the server (orrery.batch.plan, /orrery/plan): a LoRA sweep's runs
 // times a grid's cells. It is asked only when the template may hold one: a LoRA tag with several
 // strengths, a solo or test tag, or a grid.
-export const PLAN_HINT = /<lora:[^<>]*[,;][^<>]*>|<lora:[^<>]*:(?:solo|test)\b|(?<![\w@<\\])@[\w./\\-]+\([^()<>]*[,;][^()<>]*\)|^\s*(?:@grid|:\s*grid)\b/m;
+// A knob's field that sweeps (#227): `0.6|0.8`, a range `0.2-1;0.2`, in a long form, a short one or a SET: line.
+export const PLAN_HINT = /<lora:[^<>]*[,;|][^<>]*>|<(?:refmod|image|cast):[^<>]*[|;][^<>]*>|<lora:[^<>]*:(?:solo|test)\b|(?<![\w@<\\])@[\w./\\-]+\([^()<>]*[,;|][^()<>]*\)|^\s*SET:.*\([^(){}<>]*[|;][^(){}<>]*\)|^\s*(?:@grid|:\s*grid)\b/m;
 

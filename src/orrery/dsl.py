@@ -850,6 +850,10 @@ class Expander:
         before = len(self.picks)
         parts = [self.expr(p) if r else p for p, r in zip(parts, rolled, strict=True)]
         del self.picks[before:]  # the strength learns as `<lora:style>`, not as a `{0.5|0.7}` every LoRA shares
+        when = ""  # a start and an end after the strength (#227): they stay as written, only the strength rolls
+        if parts and parts[0] and "," in parts[0]:
+            parts[0], when = parts[0].split(",", 1)
+            when = "," + when
         if not m or not any(rolled) and not any(p and _RANGE.fullmatch(p) for p in parts):
             return tag
         label, out, keys = f"<lora:{m.group(1).strip()}>", [], []
@@ -866,7 +870,7 @@ class Expander:
             else:
                 out.append(part.strip())
         self.picks.append(Pick(label, "/".join(out), tuple(keys)))
-        return f"<lora:{m.group(1)}:{':'.join(out)}>"
+        return f"<lora:{m.group(1)}:{out[0]}{when}{''.join(':' + o for o in out[1:])}>"
 
 
 def expand(template: str, seed: int, libraries: Mapping[str, Library],
