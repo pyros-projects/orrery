@@ -38,6 +38,7 @@ export function renderCells(app, at = null) {
   const host = box(app);
   if (!host) return;
   const cells = splitCells(app.text);
+  host.classList.toggle("single", cells.length === 1);  // no scenes: the text takes the room, the results the bottom (#271)
   host.innerHTML = cells.map((c, i) => `<div class="cell" data-cell="${i}" data-chunk="${c.chunk}">`
     + `<pre class="hl" aria-hidden="true"></pre><textarea spellcheck="false" aria-label="${c.chunk < 0 ? "Before the first SCENE" : `SCENE ${c.chunk + 1}`}"></textarea></div>`
     + `<div class="chunkmedia${c.chunk < 0 ? " head" : ""}" data-chunk="${c.chunk}"><div class="cm-body"></div></div>`).join("");
