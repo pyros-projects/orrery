@@ -1,6 +1,6 @@
 ---
 title: "Sci-fi creator"
-note: "A character among the stars for Krea 2: a human or one of forty species beyond them (spacers, clones, androids, robots, insectoids, reptiloids, felinoids, crystalline and energy beings, uplifted apes …), each with its own body, so a robot rolls no hairstyle and no gender. One of thirty roles (captain, pilot, engineer, space marine, xenobiologist, bounty hunter, smuggler, miner …) brings its clothes and its gear, or a spacefarer's outfit instead; a ship's cat in a space suit or a robot now and then, a motif in the signature colour on the clothes. It keeps what the picture cannot show (EXPORT:): the species, the role, the gear, a companion, a mood, a quirk, two skills, a voice. One seed is one character, from four sides by the grid; $backdrop puts it on a ship or a world instead of the studio, $view one side only to try characters faster."
+note: "A character among the stars for Krea 2: a human or one of forty species beyond them (spacers, clones, androids, robots, insectoids, reptiloids, felinoids, crystalline and energy beings, uplifted apes …), each with its own body, so a robot rolls no hairstyle and no gender. One of thirty roles (captain, pilot, engineer, space marine, xenobiologist, bounty hunter, smuggler, miner …) brings its clothes and its gear, or a spacefarer's outfit instead; a ship's cat in a space suit or a robot now and then, a motif in the signature colour on the clothes. It keeps what the picture cannot show (EXPORT:): the species, the role, the gear, a companion, a mood, a quirk, two skills, a voice. One seed is one character, from four sides by the grid: the close views show the head, the shoulders and the clothes, the full-length view the gear and the companion too; $backdrop puts it on a ship or a world instead of the studio, $view one side only to try characters faster."
 tags: [krea, characters, references, scifi]
 ---
 $colour = __characters/creator/colour__
@@ -25,7 +25,8 @@ $backdrop = {studio:3|place}
 # A species takes the parts its body has: a human-like one face, eyes, hair and a mark; beastlike ones their eyes; the others only their own look.
 $folk = {IF $gender is none: $age $species|$age $species $gender}
 $body = {IF $species.like is human: $species.look, $build, $face, $eyes, $hair{IF $beard is not none: , $beard|} and $mark|{IF $species.like is beast: {IF $species.eyes is own: $species.look|$species.look, $eyes}|$species.look}}
-$who = a $folk with $body: $role in $outfit, their clothes marked by $motif, with $gear{IF $companion is not none: , $companion|}
+$person = a $folk with $body: $role in $outfit, their clothes marked by $motif
+$who = $person, with $gear{IF $companion is not none: , $companion|}
 # What the picture carries beyond its prompt (EXPORT:): a screenplay that casts it reads $hero.who, $hero.species, $hero.role …
 EXPORT:
   who = $who
@@ -41,11 +42,14 @@ EXPORT:
   skills = {2$$__characters/creator/skill[genre=spacefarer|all]__}
   voice = __characters/creator/voice__
 # The grid runs every view: one character from four sides. Set $view to one of them to try characters faster.
+# The shot comes first and the picture names only what it can show: the close views the head, the shoulders and the clothes; the full-length view the gear too, and the companion in a sentence of its own.
 $look = {photo:5|animated:2|anime:2|painted}
 $view = {portrait|three-quarter|full-length|profile}
-$opening = {IF $look is photo: A cinematic photograph, as from the set of a space opera,|{IF $look is animated: A 3D character render, in the style of a modern animated feature film,|{IF $look is anime: An anime character design|A painted science-fiction character study, in the style of a vintage paperback cover,}}}
-$frame = {IF $view is portrait: A head-and-shoulders portrait, facing the camera|{IF $view is three-quarter: A head-and-shoulders view turned three-quarters to the left|{IF $view is full-length: A full-length view of the whole body, from the top of the head to the feet, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera|A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible}}}
+$opening = {IF $look is photo: A cinematic photograph, as from the set of a space opera|{IF $look is animated: A 3D character render, in the style of a modern animated feature film|{IF $look is anime: An anime character design|A painted science-fiction character study, in the style of a vintage paperback cover}}}
+$shot = {IF $view is portrait: a head-and-shoulders portrait|{IF $view is three-quarter: a head-and-shoulders view|{IF $view is full-length: a full-length view of the whole body, from the top of the head to the feet,|a strict side profile of the head and shoulders}}}
+$stand = They stand straight with the arms relaxed, facing the camera, with $gear, and floor and space around them are in frame.
+$pose = {IF $view is portrait: They face the camera.|{IF $view is three-quarter: They are turned three-quarters to the left.|{IF $view is full-length: {IF $companion is not none: $stand With them: $companion.|$stand}|The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible.}}}
 $finish = {IF $look is photo: Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.|{IF $look is animated: Stylised proportions, soft subsurface skin.|{IF $look is anime: Clean line art and flat cel shading.|Bold gouache colour and a fine airbrushed glow.}}}
-$opening of $who, with $presence. $frame, against {IF $backdrop is studio: a seamless mid-grey studio backdrop|__characters/scifi/place__}, in soft, even light. $finish
+$opening: $shot of $person, with $presence. $pose Behind them is {IF $backdrop is studio: a seamless mid-grey studio backdrop|__characters/scifi/place__}, in soft, even light. $finish
 @size 832x1216
 @grid $view

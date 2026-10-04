@@ -5,7 +5,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "A cinematic photograph, as from the set of a space opera, of a young cephalopod with a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth: an ambassador's bodyguard in a crimson ceremonial armour of overlapping plates, their clothes marked by crimson patchwork squares of mismatched fabric, with a personal shield emitter, a six-legged alien pup, with a steady, amused half-smile. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "text": "A cinematic photograph, as from the set of a space opera: a head-and-shoulders portrait of a young cephalopod with a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth: an ambassador's bodyguard in a crimson ceremonial armour of overlapping plates, their clothes marked by crimson patchwork squares of mismatched fabric, with a steady, amused half-smile. They face the camera. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -231,7 +231,7 @@
     },
     {
      "cell": 1,
-     "text": "A cinematic photograph, as from the set of a space opera, of a young cephalopod with a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth: an ambassador's bodyguard in a crimson ceremonial armour of overlapping plates, their clothes marked by crimson patchwork squares of mismatched fabric, with a personal shield emitter, a six-legged alien pup, with a steady, amused half-smile. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "text": "A cinematic photograph, as from the set of a space opera: a head-and-shoulders view of a young cephalopod with a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth: an ambassador's bodyguard in a crimson ceremonial armour of overlapping plates, their clothes marked by crimson patchwork squares of mismatched fabric, with a steady, amused half-smile. They are turned three-quarters to the left. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -457,7 +457,7 @@
     },
     {
      "cell": 2,
-     "text": "A cinematic photograph, as from the set of a space opera, of a young cephalopod with a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth: an ambassador's bodyguard in a crimson ceremonial armour of overlapping plates, their clothes marked by crimson patchwork squares of mismatched fabric, with a personal shield emitter, a six-legged alien pup, with a steady, amused half-smile. A full-length view of the whole body, from the top of the head to the feet, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "text": "A cinematic photograph, as from the set of a space opera: a full-length view of the whole body, from the top of the head to the feet, of a young cephalopod with a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth: an ambassador's bodyguard in a crimson ceremonial armour of overlapping plates, their clothes marked by crimson patchwork squares of mismatched fabric, with a steady, amused half-smile. They stand straight with the arms relaxed, facing the camera, with a personal shield emitter, and floor and space around them are in frame. With them: a six-legged alien pup. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -683,7 +683,7 @@
     },
     {
      "cell": 3,
-     "text": "A cinematic photograph, as from the set of a space opera, of a young cephalopod with a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth: an ambassador's bodyguard in a crimson ceremonial armour of overlapping plates, their clothes marked by crimson patchwork squares of mismatched fabric, with a personal shield emitter, a six-legged alien pup, with a steady, amused half-smile. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "text": "A cinematic photograph, as from the set of a space opera: a strict side profile of the head and shoulders of a young cephalopod with a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth: an ambassador's bodyguard in a crimson ceremonial armour of overlapping plates, their clothes marked by crimson patchwork squares of mismatched fabric, with a steady, amused half-smile. The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -913,7 +913,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "A cinematic photograph, as from the set of a space opera, of a young four-armed humanoid woman with grey skin and a second pair of arms below the first, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: a racer in a mustard-yellow racing suit covered in sponsor logos, their clothes marked by Turkish İznik tulips stitched at the neckline, with a helmet with a cracked visor, with a brooding, lowered brow. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "text": "A cinematic photograph, as from the set of a space opera: a head-and-shoulders portrait of a young four-armed humanoid woman with grey skin and a second pair of arms below the first, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: a racer in a mustard-yellow racing suit covered in sponsor logos, their clothes marked by Turkish İznik tulips stitched at the neckline, with a brooding, lowered brow. They face the camera. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -1129,7 +1129,7 @@
     },
     {
      "cell": 1,
-     "text": "A cinematic photograph, as from the set of a space opera, of a young four-armed humanoid woman with grey skin and a second pair of arms below the first, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: a racer in a mustard-yellow racing suit covered in sponsor logos, their clothes marked by Turkish İznik tulips stitched at the neckline, with a helmet with a cracked visor, with a brooding, lowered brow. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "text": "A cinematic photograph, as from the set of a space opera: a head-and-shoulders view of a young four-armed humanoid woman with grey skin and a second pair of arms below the first, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: a racer in a mustard-yellow racing suit covered in sponsor logos, their clothes marked by Turkish İznik tulips stitched at the neckline, with a brooding, lowered brow. They are turned three-quarters to the left. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -1345,7 +1345,7 @@
     },
     {
      "cell": 2,
-     "text": "A cinematic photograph, as from the set of a space opera, of a young four-armed humanoid woman with grey skin and a second pair of arms below the first, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: a racer in a mustard-yellow racing suit covered in sponsor logos, their clothes marked by Turkish İznik tulips stitched at the neckline, with a helmet with a cracked visor, with a brooding, lowered brow. A full-length view of the whole body, from the top of the head to the feet, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "text": "A cinematic photograph, as from the set of a space opera: a full-length view of the whole body, from the top of the head to the feet, of a young four-armed humanoid woman with grey skin and a second pair of arms below the first, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: a racer in a mustard-yellow racing suit covered in sponsor logos, their clothes marked by Turkish İznik tulips stitched at the neckline, with a brooding, lowered brow. They stand straight with the arms relaxed, facing the camera, with a helmet with a cracked visor, and floor and space around them are in frame. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -1561,7 +1561,7 @@
     },
     {
      "cell": 3,
-     "text": "A cinematic photograph, as from the set of a space opera, of a young four-armed humanoid woman with grey skin and a second pair of arms below the first, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: a racer in a mustard-yellow racing suit covered in sponsor logos, their clothes marked by Turkish İznik tulips stitched at the neckline, with a helmet with a cracked visor, with a brooding, lowered brow. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "text": "A cinematic photograph, as from the set of a space opera: a strict side profile of the head and shoulders of a young four-armed humanoid woman with grey skin and a second pair of arms below the first, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: a racer in a mustard-yellow racing suit covered in sponsor logos, their clothes marked by Turkish İznik tulips stitched at the neckline, with a brooding, lowered brow. The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -1781,7 +1781,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "A cinematic photograph, as from the set of a space opera, of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a ship's cat in a tiny space suit, with a sheepish, apologetic look. A head-and-shoulders portrait, facing the camera, against a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "text": "A cinematic photograph, as from the set of a space opera: a head-and-shoulders portrait of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a sheepish, apologetic look. They face the camera. Behind them is a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -2008,7 +2008,7 @@
     },
     {
      "cell": 1,
-     "text": "A cinematic photograph, as from the set of a space opera, of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a ship's cat in a tiny space suit, with a sheepish, apologetic look. A head-and-shoulders view turned three-quarters to the left, against a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "text": "A cinematic photograph, as from the set of a space opera: a head-and-shoulders view of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a sheepish, apologetic look. They are turned three-quarters to the left. Behind them is a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -2235,7 +2235,7 @@
     },
     {
      "cell": 2,
-     "text": "A cinematic photograph, as from the set of a space opera, of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a ship's cat in a tiny space suit, with a sheepish, apologetic look. A full-length view of the whole body, from the top of the head to the feet, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "text": "A cinematic photograph, as from the set of a space opera: a full-length view of the whole body, from the top of the head to the feet, of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a sheepish, apologetic look. They stand straight with the arms relaxed, facing the camera, with a riot helmet, and floor and space around them are in frame. With them: a ship's cat in a tiny space suit. Behind them is a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -2462,7 +2462,7 @@
     },
     {
      "cell": 3,
-     "text": "A cinematic photograph, as from the set of a space opera, of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a ship's cat in a tiny space suit, with a sheepish, apologetic look. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "text": "A cinematic photograph, as from the set of a space opera: a strict side profile of the head and shoulders of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a sheepish, apologetic look. The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible. Behind them is a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
