@@ -55,7 +55,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"),
         ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/discard"),
         ("GET", "/orrery/home"), ("POST", "/orrery/home"),
-        ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("POST", "/orrery/chain/move"), ("POST", "/orrery/chain/pick"), ("POST", "/orrery/chain/delete"),
+        ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("POST", "/orrery/chain/move"), ("POST", "/orrery/chain/pick"), ("POST", "/orrery/chain/delete"), ("POST", "/orrery/chain/clear"),
         ("GET", "/orrery/chain/video"),
         ("GET", "/orrery/anchor"),
         ("GET", "/orrery/history"),
@@ -854,3 +854,6 @@ def test_a_clips_takes_are_listed_served_picked_and_deleted(home, tmp_path, monk
     assert ok(home, webapi.chain_delete, chain="reels/a", segment=1, folder=surf[1].name)["folder"] == surf[2].name
     assert not surf[1].exists()
     assert api(home, webapi.chain_delete, chain="reels/a", segment=1, folder=surf[1].name)[0] == 400
+    assert ok(home, webapi.chain_clear, chain="reels/a", segment=1, keep=True)["deleted"] == 1  # #234: all but the film's
+    assert ok(home, webapi.chain_clear, chain="reels/a", segment=1, keep=False) == {"deleted": 1, "folder": None}
+    assert api(home, webapi.chain_clear, chain="reels/a", segment=1)[0] == 400  # none left
