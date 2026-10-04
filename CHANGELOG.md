@@ -15,6 +15,8 @@ checks) are left out.
   outputs without moving them, one output in as many as you like; folders from before are collections now.
 - History says what a `> enhance` line did to a run: the instruction, the prompt before it, and whether the rewrite
   was kept with Use selected or written for the run (#290).
+- Resets in the Settings (#290): the ratings, the history, the gallery, the presets or the libraries back to factory,
+  or everything at once; what was made by hand goes to the home's trash, the logged files only when asked.
 - An expression creator for Krea 2 (#291): `krea/15_expression_creator` rolls a character in a close-up, and the
   grid shows it in the eight expressions of a set (basic, subtle, intense, social, inner, playful); each expression
   says what the face does and the muscles that do it, in FACS action units. Render it with Krea 2 Raw and the turbo

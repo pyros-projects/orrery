@@ -1113,6 +1113,19 @@ def frequency(home: Home, args: dict) -> dict:
     }
 
 
+# --- resets ---------------------------------------------------------------------------------
+
+def reset(home: Home, args: dict) -> dict:
+    """A reset from the Settings (#310): ratings, history, gallery, presets, libraries or all; `files` takes the
+    logged pictures and videos to the trash too (gallery, all)."""
+    from orrery import resets
+
+    what, files = str(args.get("what") or ""), args.get("files") is True
+    if what not in resets.WHAT:
+        raise ApiError(400, f"'what' is one of {', '.join(resets.WHAT)}.")
+    return {"what": what, "done": resets.reset(home, what, files)}
+
+
 # --- home folder ----------------------------------------------------------------------------
 
 def home_settings(home: Home, args: dict) -> dict:
@@ -1478,6 +1491,7 @@ ROUTES = [
     ("GET", "/orrery/writers", writer_texts),
     ("POST", "/orrery/writers", writer_save),
     ("GET", "/orrery/galaxy/view", galaxy_view),
+    ("POST", "/orrery/reset", reset),
     ("POST", "/orrery/galaxy/delete", galaxy_delete),
     ("POST", "/orrery/galaxy/export", galaxy_export),
     ("POST", "/orrery/galaxy/collect", galaxy_collect),

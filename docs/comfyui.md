@@ -267,8 +267,13 @@ Nodes under **orrery**:
   - **Help**: the DSL at a glance, the tutorial lessons, writing tips.
   - **Settings** (the gear, #212; again, and the tab before is back): its
     sections on the left, *Home*, *Language model*, *Writers*, *Editor*,
-    *Clips* (clip size, live preview, sample surfing) and *Log*, the one
-    chosen on the right, and the tab opens on the one shown last. A setting
+    *Clips* (clip size, live preview, sample surfing), *Log* and *Reset*, the one
+    chosen on the right, and the tab opens on the one shown last. *Reset* (#310)
+    takes back the ratings (and the learned weights), deletes the history or the
+    gallery, puts the presets or the libraries back to factory, or everything at
+    once; each asks first. What you made by hand (presets, libraries, exports)
+    goes to the home's `trash`, and the gallery's pictures and videos only when
+    its box is ticked (they stay in ComfyUI's output otherwise). A setting
     is saved the moment it changes and says so beside the section's title.
     What moves things or asks the outside has a button of its own: **Use
     this folder** for the home folder, **Use this endpoint** for an API

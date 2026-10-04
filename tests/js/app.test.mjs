@@ -862,7 +862,7 @@ test("a template without scenes shows its results under the prompt, its takes ke
 
 test("the settings are a tab of sections, and every setting of the old sheet is in one (#212)", async () => {
   const { SECTIONS, SECTION_HTML } = await import("../../comfyui/web/app/settings.js");
-  assert.deepEqual(SECTIONS.map(([k]) => k), ["home", "llm", "writers", "editor", "clips", "log"]);
+  assert.deepEqual(SECTIONS.map(([k]) => k), ["home", "llm", "writers", "editor", "clips", "log", "reset"]);
   const app = { data: { quickstart: true, dividers: false, timeline: true, log_prompts: true, clip_min: 400, preview_fps: 8, preview_edge: 768, preview_light: false, surf_numbered: true } };
   const st = {
     home: { home: "/h", setting: "/h", source: "setting" },
@@ -1042,4 +1042,11 @@ test("History says what a > line did to a run: the instruction, how it came abou
   assert.match(html, /&gt; make it &lt;moody&gt;<\/b> · a rewrite you kept \(Use selected\)/);
   assert.match(html, /<pre class="codebox before">a fox<\/pre>/);
   assert.match(html, /shorter<\/b> · written for this run/);
+});
+
+test("the Settings offer every reset the server knows, the gallery and everything with the files as a choice (#310)", async () => {
+  const { RESETS, SECTIONS } = await import("../../comfyui/web/app/settings.js");
+  assert.deepEqual(RESETS.map(([k]) => k), ["ratings", "history", "gallery", "presets", "libraries", "all"]);  // resets.WHAT
+  assert.deepEqual(RESETS.filter((r) => r[3]).map(([k]) => k), ["gallery", "all"]);
+  assert.ok(SECTIONS.some(([k]) => k === "reset"));
 });

@@ -127,6 +127,9 @@
 .orrery-app .pnote b { color: var(--ink); font-weight: 500; }
 .orrery-app .pnote.fold { cursor: pointer; }
 .orrery-app .henh { display: grid; gap: 4px; }
+.orrery-app .reset-row { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; padding: 10px 0; border-top: 1px solid var(--line); }
+.orrery-app .reset-row > div { display: grid; gap: 4px; min-width: 0; }
+.orrery-app .reset-row .btn { flex: none; }
 .orrery-app .henh .codebox.before { opacity: .75; max-height: 160px; overflow: auto; }
 .orrery-app .pnote.fold:not(.open) { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: none; }
 .orrery-app .pnote.fold:hover { color: var(--ink); }

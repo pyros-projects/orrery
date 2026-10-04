@@ -59,7 +59,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/library/own"), ("POST", "/orrery/library/delete"), ("POST", "/orrery/library/rename"), ("POST", "/orrery/galaxy/capture"),
         ("GET", "/orrery/galaxy"), ("POST", "/orrery/galaxy/rate"),
         ("GET", "/orrery/galaxy/thumb"), ("GET", "/orrery/galaxy/media"), ("POST", "/orrery/roll"),
-        ("GET", "/orrery/galaxy/view"), ("POST", "/orrery/galaxy/delete"), ("POST", "/orrery/galaxy/export"),
+        ("GET", "/orrery/galaxy/view"), ("POST", "/orrery/reset"), ("POST", "/orrery/galaxy/delete"), ("POST", "/orrery/galaxy/export"),
         ("POST", "/orrery/galaxy/collect"), ("POST", "/orrery/galaxy/uncollect"), ("POST", "/orrery/galaxy/collection/add"),
         ("POST", "/orrery/galaxy/collection/rename"), ("POST", "/orrery/galaxy/collection/delete"),
         ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
