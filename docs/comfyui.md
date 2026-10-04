@@ -121,7 +121,8 @@ Nodes under **orrery**:
     example workflows); without it each take rolls anew, and the one you pick
     gives the node its seed, so the clips after it roll the same world. The
     gear's **Sample surfing** numbers the takes' seeds (seed+1, seed+2 …: the
-    same takes tomorrow) or follows the node's control after generate. A × on
+    same takes tomorrow) or follows the node's control after generate. The grip
+    at the end of a clip's takes sizes them all, in the clip's shape. A × on
     a take, or on the clip in its box, deletes it from disk (it asks first): the
     film then plays the clip's newest other take, or ends before the clip. While a clip renders, its box
     shows the sampler's preview and the step it is at: KJNodes' Model Preview

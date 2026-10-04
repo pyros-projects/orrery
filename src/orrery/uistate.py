@@ -3,7 +3,8 @@ switches: New templates open with their quickstart comments, the editor draws ch
 shows the reel's clips under its scenes, each run prints its prompt and picks to ComfyUI's log, sample
 surfing numbers its takes' seeds, the live preview is light (a few pictures)
 rather than smooth. Every switch is on until turned off. And its sizes: `clip_min`, the shorter side of a clip in
-the clips view, and `preview_fps`, the smooth live preview's pictures a second."""
+the clips view, `take_min`, a take's under it (#215), and `preview_fps`, the smooth live preview's pictures a
+second."""
 
 import json
 
@@ -12,7 +13,8 @@ from orrery.home import Home, write_atomic
 RECENT_MAX = 12
 LISTS = ("favorites", "recent")  # preset names, followed by renames and deletes
 FLAGS = ("quickstart", "dividers", "timeline", "log_prompts", "surf_numbered", "preview_light")  # #206, #205
-SIZES = {"clip_min": (360, 96, 1600), "preview_fps": (12, 1, 24)}  # name → (default, least, most): CSS pixels, pictures a second
+SIZES = {"clip_min": (360, 96, 1600), "take_min": (54, 32, 480),  # name → (default, least, most): CSS pixels,
+         "preview_fps": (12, 1, 24)}  # and pictures a second
 
 
 def _path(home: Home):

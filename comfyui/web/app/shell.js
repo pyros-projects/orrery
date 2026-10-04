@@ -138,6 +138,7 @@ export class OrreryApp {
     this.data.surf_numbered = d.surf_numbered !== false;
     this.data.preview_light = d.preview_light !== false;
     this.data.clip_min = d.clip_min ?? 360;
+    this.data.take_min = d.take_min ?? 54;
     this.data.preview_fps = d.preview_fps ?? 12;
   }
   async refreshCompletion() {

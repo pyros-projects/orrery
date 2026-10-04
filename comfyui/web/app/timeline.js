@@ -68,14 +68,21 @@ function delHTML(folder) {
   return `<span class="del" role="button" data-del="${esc(folder)}" title="Delete this take" aria-label="Delete this take">${icon("x")}</span>`;
 }
 
+// A take's size in the clip's shape (#215): `least`, the shorter side, as the grip at the strip's end sets it.
+function takeVars(app, least = Number(app.data.take_min) || 54) {
+  const ratio = clipRatio(app), w = ratio >= 1 ? least * ratio : least, h = ratio >= 1 ? least : least / ratio;
+  return `--take-w:${Math.round(w)}px;--take-h:${Math.round(h)}px`;
+}
+
 // A clip's takes (#206), where it has more than one: hover plays one, a click puts it in the film.
 function takesHTML(app, s) {
   const takes = app.data.chain?.takes?.[s] || [];
   if (takes.length < 2) return "";
-  return `<div class="cm-takes" data-seg="${s}"><span class="muted">clip ${s + 1} · ${takes.length} takes</span>${takes.map((t, i) =>
+  return `<div class="cm-takes" data-seg="${s}" style="${takeVars(app)}"><span class="muted">clip ${s + 1} · ${takes.length} takes</span>${takes.map((t, i) =>
     `<button type="button" class="take${t.active ? " on" : ""}" data-take="${esc(t.folder)}" data-seg="${s}" title="Take ${i + 1} · seed ${t.seed ?? "?"}`
     + `${t.take ? ` + ${t.take}` : ""}${t.active ? " · in the film" : " · click to put it in the film"}">`
-    + `<img loading="lazy" alt="" src="${app.api.takeThumbURL(app.bridge.chain(), t.folder)}"><span class="n">${i + 1}</span>${delHTML(t.folder)}</button>`).join("")}</div>`;
+    + `<img loading="lazy" alt="" src="${app.api.takeThumbURL(app.bridge.chain(), t.folder)}"><span class="n">${i + 1}</span>${delHTML(t.folder)}</button>`).join("")}`
+    + `<span class="grip" data-grip title="Drag to size the takes"></span></div>`;
 }
 
 // Sample surfing (#206): the take picked is the one the film, REMEMBER: and the next clip use. A take that rolled
@@ -153,8 +160,28 @@ export function paintLive(app) {
   step.style.setProperty("--p", `${Math.round(p * 100)}%`);
 }
 
-// Hover plays a clip in place; a click opens it large.
+// Hover plays a clip in place; a click opens it large. The grip at a takes strip's end sizes every take (#215).
 export function wireClips(app, box) {
+  box.addEventListener("pointerdown", (e) => {
+    const grip = e.target.closest("[data-grip]");
+    if (!grip) return;
+    e.preventDefault();
+    e.stopPropagation();  // not a drag of the node
+    const ratio = clipRatio(app), start = Number(app.data.take_min) || 54, x0 = e.clientX, y0 = e.clientY;
+    let least = start;
+    grip.setPointerCapture(e.pointerId);
+    grip.onpointermove = (m) => {  // along the take's longer move: its shorter side follows the pointer
+      const dx = (m.clientX - x0) / Math.max(ratio, 1), dy = (m.clientY - y0) / Math.max(1 / ratio, 1);
+      least = Math.min(480, Math.max(32, Math.round(start + (Math.abs(dx) > Math.abs(dy) ? dx : dy))));
+      box.querySelectorAll(".cm-takes").forEach((strip) => { strip.style.cssText = takeVars(app, least); });
+    };
+    grip.onpointerup = async () => {
+      grip.onpointermove = grip.onpointerup = null;
+      if (least === start) return;
+      app.data.take_min = least;
+      try { Object.assign(app.data, await app.api.saveUi({ take_min: least })); } catch (err) { app.fail(err); }
+    };
+  });
   box.addEventListener("pointerover", (e) => {
     const take = e.target.closest(".take");
     if (take && !take.querySelector("video")) {

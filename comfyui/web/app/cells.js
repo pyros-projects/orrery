@@ -66,7 +66,7 @@ export function paintCells(app) {
       sceneActs: app.sceneActs?.() })}​`;
   });
   const sig = JSON.stringify([chunks.map((c) => [c.first, c.last, c.segs]), (app.data.chain?.clips || []).map((c) => c.version),
-    segment, clipRatio(app), app.data.clip_min, remembered?.key, remembered?.lines]);
+    segment, clipRatio(app), app.data.clip_min, app.data.take_min, remembered?.key, remembered?.lines]);
   if (sig === app.cellsSig) return;
   app.cellsSig = sig;
   host.querySelectorAll(".chunkmedia").forEach((m) => {
