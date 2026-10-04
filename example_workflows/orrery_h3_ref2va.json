@@ -2,7 +2,7 @@
   "id": "f0a3e2bf-5c55-4c00-a4ac-01a1bb7a24dd",
   "revision": 0,
   "last_node_id": 22,
-  "last_link_id": 32,
+  "last_link_id": 33,
   "nodes": [
     {
       "id": 1,
@@ -19,6 +19,13 @@
       "order": 0,
       "mode": 0,
       "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "shape": 7,
+          "type": "MODEL",
+          "link": 33
+        },
         {
           "localized_name": "template",
           "name": "template",
@@ -151,6 +158,15 @@
           "name": "megapixels",
           "type": "FLOAT",
           "links": null
+        },
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "links": [
+            18,
+            19
+          ]
         }
       ],
       "properties": {
@@ -202,7 +218,7 @@
       "title": "orrery",
       "properties": {},
       "widgets_values": [
-        "## orrery · H3 references\n\nThe CAST names every reference once: `@HERO (image 2): …`. Wire each picture into **Orrery Refs** as `image_N`, N as in the CAST; Orrery Refs hands Reference to Video only the images this clip uses, packed as `ref_1`, `ref_2` … in the order the prompt numbers them (`<Picture 1>` …). `preview` shows them labelled. Wire more `ref_N` when a CAST uses more than four images.\n\nThe **Orrery Prompt** node is the whole of orrery: write in its **Prompt** tab (this workflow opens with a quickstart; **New** has the other modes), roll it in **Test** without queueing, and rate what comes out in **Gallery**: the ratings steer the next rolls. **Roll** in the node queues this graph (next N clips or images: how many runs); what the Save node writes is logged to the gallery with the picks that made it.\n\n- `seed` drives the rolls and the sampler (Random Noise).\n- `LORA:` lines come out on `lora_stack`, for a loader with a `lora_stack` input (LoraManager, Efficiency …), which is not part of this core-nodes workflow.\n\n[orrery on GitHub](https://github.com/pyros-projects/orrery) · [the prompt language](https://github.com/pyros-projects/orrery/blob/main/docs/dsl.md) · [H3 screenplays](https://github.com/pyros-projects/orrery/blob/main/docs/h3.md)"
+        "## orrery · H3 references\n\nThe CAST names every reference once: `@HERO (image 2): …`. Wire each picture into **Orrery Refs** as `image_N`, N as in the CAST; Orrery Refs hands Reference to Video only the images this clip uses, packed as `ref_1`, `ref_2` … in the order the prompt numbers them (`<Picture 1>` …). `preview` shows them labelled. Wire more `ref_N` when a CAST uses more than four images.\n\nThe **Orrery Prompt** node is the whole of orrery: write in its **Prompt** tab (this workflow opens with a quickstart; **New** has the other modes), roll it in **Test** without queueing, and rate what comes out in **Gallery**: the ratings steer the next rolls. **Roll** in the node queues this graph (next N clips or images: how many runs); what the Save node writes is logged to the gallery with the picks that made it.\n\n- `seed` drives the rolls and the sampler (Random Noise).\n- The model runs through the Orrery Prompt (`model` in, `model` out to the scheduler and the guider): its `LORA:` lines go on the model, and the results under the prompt show the live preview while it samples.\n\n[orrery on GitHub](https://github.com/pyros-projects/orrery) · [the prompt language](https://github.com/pyros-projects/orrery/blob/main/docs/dsl.md) · [H3 screenplays](https://github.com/pyros-projects/orrery/blob/main/docs/h3.md)"
       ],
       "widgets_values_named": {
         "text": "## orrery · H3 references\n\nThe CAST names every reference once: `@HERO (image 2): …`. Wire each picture into **Orrery Refs** as `image_N`, N as in the CAST; Orrery Refs hands Reference to Video only the images this clip uses, packed as `ref_1`, `ref_2` … in the order the prompt numbers them (`<Picture 1>` …). `preview` shows them labelled. Wire more `ref_N` when a CAST uses more than four images.\n\nThe **Orrery Prompt** node is the whole of orrery: write in its **Prompt** tab (this workflow opens with a quickstart; **New** has the other modes), roll it in **Test** without queueing, and rate what comes out in **Gallery**: the ratings steer the next rolls. **Roll** in the node queues this graph (next N clips or images: how many runs); what the Save node writes is logged to the gallery with the picks that made it.\n\n- `seed` drives the rolls and the sampler (Random Noise).\n- `LORA:` lines come out on `lora_stack`, for a loader with a `lora_stack` input (LoraManager, Efficiency …), which is not part of this core-nodes workflow.\n\n[orrery on GitHub](https://github.com/pyros-projects/orrery) · [the prompt language](https://github.com/pyros-projects/orrery/blob/main/docs/dsl.md) · [H3 screenplays](https://github.com/pyros-projects/orrery/blob/main/docs/h3.md)"
@@ -303,8 +319,7 @@
           "name": "model",
           "type": "MODEL",
           "links": [
-            18,
-            19
+            33
           ]
         }
       ],
@@ -1691,16 +1706,16 @@
     ],
     [
       18,
-      4,
-      0,
+      1,
+      7,
       16,
       0,
       "MODEL"
     ],
     [
       19,
-      4,
-      0,
+      1,
+      7,
       17,
       0,
       "MODEL"
@@ -1808,6 +1823,14 @@
       22,
       0,
       "VIDEO"
+    ],
+    [
+      33,
+      4,
+      0,
+      1,
+      0,
+      "MODEL"
     ]
   ],
   "groups": [

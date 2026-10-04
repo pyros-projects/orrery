@@ -2,7 +2,7 @@
   "id": "e1dad23a-daf8-46f6-bf89-24217060a22c",
   "revision": 0,
   "last_node_id": 19,
-  "last_link_id": 25,
+  "last_link_id": 26,
   "nodes": [
     {
       "id": 1,
@@ -32,6 +32,13 @@
           "shape": 7,
           "type": "IMAGE",
           "link": 5
+        },
+        {
+          "localized_name": "model",
+          "name": "model",
+          "shape": 7,
+          "type": "MODEL",
+          "link": 26
         },
         {
           "localized_name": "template",
@@ -163,6 +170,15 @@
           "name": "megapixels",
           "type": "FLOAT",
           "links": null
+        },
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "links": [
+            11,
+            12
+          ]
         }
       ],
       "properties": {
@@ -214,7 +230,7 @@
       "title": "orrery",
       "properties": {},
       "widgets_values": [
-        "## orrery · H3 last (the clip ends on an image)\n\nLoad Image → `last_frame` of the H3 node *and* of the Orrery Prompt: the clip settles into it, and the screenplay calls it `<Picture 1>` (`@h3 last`). The clip takes the picture's shape, so H3 does not crop it.\n\nThe **Orrery Prompt** node is the whole of orrery: write in its **Prompt** tab (this workflow opens with a quickstart; **New** has the other modes), roll it in **Test** without queueing, and rate what comes out in **Gallery**: the ratings steer the next rolls. **Roll** in the node queues this graph (next N clips or images: how many runs); what the Save node writes is logged to the gallery with the picks that made it.\n\n- `seed` drives the rolls and the sampler (Random Noise).\n- `LORA:` lines come out on `lora_stack`, for a loader with a `lora_stack` input (LoraManager, Efficiency …), which is not part of this core-nodes workflow.\n\n[orrery on GitHub](https://github.com/pyros-projects/orrery) · [the prompt language](https://github.com/pyros-projects/orrery/blob/main/docs/dsl.md) · [H3 screenplays](https://github.com/pyros-projects/orrery/blob/main/docs/h3.md)"
+        "## orrery · H3 last (the clip ends on an image)\n\nLoad Image → `last_frame` of the H3 node *and* of the Orrery Prompt: the clip settles into it, and the screenplay calls it `<Picture 1>` (`@h3 last`). The clip takes the picture's shape, so H3 does not crop it.\n\nThe **Orrery Prompt** node is the whole of orrery: write in its **Prompt** tab (this workflow opens with a quickstart; **New** has the other modes), roll it in **Test** without queueing, and rate what comes out in **Gallery**: the ratings steer the next rolls. **Roll** in the node queues this graph (next N clips or images: how many runs); what the Save node writes is logged to the gallery with the picks that made it.\n\n- `seed` drives the rolls and the sampler (Random Noise).\n- The model runs through the Orrery Prompt (`model` in, `model` out to the scheduler and the guider): its `LORA:` lines go on the model, and the results under the prompt show the live preview while it samples.\n\n[orrery on GitHub](https://github.com/pyros-projects/orrery) · [the prompt language](https://github.com/pyros-projects/orrery/blob/main/docs/dsl.md) · [H3 screenplays](https://github.com/pyros-projects/orrery/blob/main/docs/h3.md)"
       ],
       "widgets_values_named": {
         "text": "## orrery · H3 last (the clip ends on an image)\n\nLoad Image → `last_frame` of the H3 node *and* of the Orrery Prompt: the clip settles into it, and the screenplay calls it `<Picture 1>` (`@h3 last`). The clip takes the picture's shape, so H3 does not crop it.\n\nThe **Orrery Prompt** node is the whole of orrery: write in its **Prompt** tab (this workflow opens with a quickstart; **New** has the other modes), roll it in **Test** without queueing, and rate what comes out in **Gallery**: the ratings steer the next rolls. **Roll** in the node queues this graph (next N clips or images: how many runs); what the Save node writes is logged to the gallery with the picks that made it.\n\n- `seed` drives the rolls and the sampler (Random Noise).\n- `LORA:` lines come out on `lora_stack`, for a loader with a `lora_stack` input (LoraManager, Efficiency …), which is not part of this core-nodes workflow.\n\n[orrery on GitHub](https://github.com/pyros-projects/orrery) · [the prompt language](https://github.com/pyros-projects/orrery/blob/main/docs/dsl.md) · [H3 screenplays](https://github.com/pyros-projects/orrery/blob/main/docs/h3.md)"
@@ -315,8 +331,7 @@
           "name": "model",
           "type": "MODEL",
           "links": [
-            11,
-            12
+            26
           ]
         }
       ],
@@ -1311,16 +1326,16 @@
     ],
     [
       11,
-      4,
-      0,
+      1,
+      7,
       13,
       0,
       "MODEL"
     ],
     [
       12,
-      4,
-      0,
+      1,
+      7,
       14,
       0,
       "MODEL"
@@ -1428,6 +1443,14 @@
       19,
       0,
       "VIDEO"
+    ],
+    [
+      26,
+      4,
+      0,
+      1,
+      2,
+      "MODEL"
     ]
   ],
   "groups": [

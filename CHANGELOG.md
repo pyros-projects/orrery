@@ -155,6 +155,8 @@ checks) are left out.
 
 ### Fixed
 
+- The H3 example workflows run their model through the Orrery Prompt, so their `LORA:` lines take effect and the
+  results show the live preview (#314).
 - A text template's `LORA:` line (a Krea prompt) goes on the model that passes through the Orrery Prompt, as in a
   screenplay, instead of landing in the prompt (#311).
 - Roll runs a grid and a LoRA sweep again: the mini-runs' plan (#171) had taken the place of theirs in the app's
