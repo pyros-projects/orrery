@@ -724,3 +724,21 @@ test("a knob's sweep plans its runs, and its long forms are opaque like a LoRA t
   assert.match(highlight("SET: <refmod:jinx_v1:0.8, 0%, 10%>", new Set()), /<span class="t-lora">&lt;refmod:jinx_v1:0\.8, 0%, 10%&gt;<\/span>/);
   assert.equal(longForm("@image_2(0.6) @style(0.8)"), "<image:2:0.6> <lora:style:0.8>");
 });
+
+test("the template's knobs, where they hold, written anew and put back (#226)", async () => {
+  const { knobsOf, knobKey, withFields, applyKnobs } = await import("../../comfyui/web/app/model.js");
+  const text = "@h3 ref2va\nLORA: <lora:turbo:0.8> @style(0.5)\nSET: image_1(0.3|0.6), jinx(1, 0%, 10%)\nCAST\n@JINX (image 1): a woman\n"
+    + "SCENE the walk\nSET: turbo(1), @JINX(0.6, refmods), refmods(1, 35%)\nSHOT 5s: static\nx.\n";
+  const knobs = knobsOf(text, { loras: ["minimax/turbo.safetensors"], refmods: ["jinx_Video.safetensors"], cast: ["JINX"] });
+  assert.deepEqual(knobs.map((k) => [k.scope, k.kind, k.name, k.fields.join(" / ")]), [
+    [-1, "lora", "turbo", "0.8"], [-1, "lora", "style", "0.5"], [-1, "image", "image_1", "0.3|0.6"], [-1, "refmod", "jinx", "1 / 0% / 10%"],
+    [0, "lora", "turbo", "1"], [0, "cast", "JINX", "0.6 / refmods"],
+  ]);
+  assert.equal(knobs[4].scene, "the walk");
+  assert.equal(withFields(knobs[0], ["0.6", "0%", "50%"]), "<lora:turbo:0.6, 0%, 50%>");
+  assert.equal(withFields(knobs[3], ["0.8", "", ""]), "jinx(0.8)");
+  assert.equal(withFields(knobs[1], ["0.4"]), "@style(0.4)");
+  const turned = applyKnobs(text, { [knobKey(knobs[4])]: "turbo(0.5)", [knobKey(knobs[0])]: "<lora:turbo:0.6>", "~3|gone(1)": "x(2)" });
+  assert.match(turned, /LORA: <lora:turbo:0\.6> @style\(0\.5\)/);
+  assert.match(turned, /SCENE the walk\nSET: turbo\(0\.5\), @JINX/);
+});

@@ -597,3 +597,13 @@ def test_a_dial_with_several_entries_rolls_among_them_with_what_they_carry():
                     "A street in summer rain; rain drums on a tin roof."}
     one = expand(override(t, {"w": "{summer rain|fog}"}), 1, WEATHER).text  # fog is no entry: an expression
     assert one in ("A street in summer rain; .", "A street in fog; .")
+
+
+def test_the_node_turns_a_knob_in_the_scope_it_holds_in():
+    """#226: `~scope|as written` → the knob written anew, in that scope's SET: or LORA: line, its first place there."""
+    from orrery.dsl import override
+
+    t = "LORA: <lora:turbo:0.8>\nSET: image_1(0.3|0.6)\nSCENE a\nSET: turbo(1)\nSCENE b\nSET: turbo(1)"
+    out = override(t, {"~-1|<lora:turbo:0.8>": "<lora:turbo:0.6, 0%, 50%>", "~1|turbo(1)": "turbo(0.5)", "~0|gone(1)": "x(2)"})
+    assert out == "LORA: <lora:turbo:0.6, 0%, 50%>\nSET: image_1(0.3|0.6)\nSCENE a\nSET: turbo(1)\nSCENE b\nSET: turbo(0.5)"
+    assert override(t, {"~x|turbo(1)": "turbo(2)", "~1|turbo(1)": ""}) == t  # a key without a scope, an empty value

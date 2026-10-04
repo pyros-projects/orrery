@@ -286,6 +286,23 @@
 .orrery-app .dial .dv::placeholder { color: var(--faint); }
 .orrery-app .dial .dv:focus { border-color: #4a4c63; }
 .orrery-app .dial.on .dv { border-color: rgba(240,122,160,.55); background: rgba(240,122,160,.08); }
+/* the template's knobs (#226), under the dials: grouped where they hold, (strength, start, end) in a row */
+.orrery-app .ksec { display: flex; align-items: center; gap: 6px; padding: 8px 6px 2px; font-size: 11.5px; border-top: 1px solid var(--line); margin-top: 4px; }
+.orrery-app .ksec:first-child { border-top: 0; margin-top: 0; }
+.orrery-app .kgroup { display: grid; gap: 2px; }
+.orrery-app .khead { display: flex; align-items: center; gap: 6px; background: none; border: 0; color: var(--muted); font: 11px var(--ui); padding: 4px 6px; cursor: pointer; border-radius: 6px; text-align: left; }
+.orrery-app .khead:hover { background: var(--hover); color: var(--ink); }
+.orrery-app .khead span:nth-of-type(1) { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.orrery-app .kgroup.shut .khead .i { transform: rotate(-90deg); }
+.orrery-app .knext { color: var(--brass); font-size: 10.5px; }
+.orrery-app .knob .kk { font: 600 9.5px var(--ui); text-transform: uppercase; letter-spacing: .04em; padding: 1px 5px; border-radius: 4px; background: var(--card); color: var(--muted); }
+.orrery-app .knob .kk.lora { color: var(--teal); } .orrery-app .knob .kk.refmod { color: var(--violet); }
+.orrery-app .knob .kk.image { color: var(--sky); } .orrery-app .knob .kk.cast { color: var(--brass); }
+.orrery-app .knob .kfields { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
+.orrery-app .knob .kfields .dv { padding: 3px 6px; }
+.orrery-app .kchips { display: flex; flex-wrap: wrap; gap: 3px; }
+.orrery-app .kchip { padding: 1px 7px; border-radius: 10px; border: 1px solid var(--line); background: none; color: var(--faint); font: 11px var(--mono); cursor: pointer; text-decoration: line-through; }
+.orrery-app .kchip.on { color: var(--ink); border-color: rgba(240,122,160,.55); background: rgba(240,122,160,.08); text-decoration: none; }
 .orrery-app .dial .mini { display: none; margin-left: auto; flex: none; }
 .orrery-app .dial.on .mini { display: inline-flex; }
 .orrery-app .dm { position: absolute; z-index: 30; max-width: min(460px, calc(100% - 8px)); max-height: 260px; overflow-y: auto; background: #1f2029; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.5); padding: 3px 0; font: 12px/1.4 var(--mono); }

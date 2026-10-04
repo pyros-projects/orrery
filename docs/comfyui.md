@@ -97,7 +97,13 @@ Nodes under **orrery**:
     the choices, their properties (`genre: noir`) and tags, and **All** (roll
     among every choice it shows) and **None**. Drag the sidebar's edge to widen it, or
     fold it to a strip. Saving bakes the dials in, and a gallery output
-    restores them. **Test** jumps to the Test tab and rolls. **Write** has
+    restores them. Under the dials, the template's **knobs** (#226): its
+    LoRAs, RefMods, pictures and members, grouped where they hold, *All
+    clips* first and then each scene with knobs of its own (the scene of the
+    next clip open; a scene's knob says when it overrides the head's), each
+    with its strength, start and end to type over, and a sweep's values as
+    chips to take out or back in. A knob turned there is the node's, as a
+    dial is: the template stays as written, and saving bakes it in. **Test** jumps to the Test tab and rolls. **Write** has
     the language model write the reel's next scene, the shot between two
     frames or a prompt from a picture, one idea per short run, browsed
     before it goes in ([wildcard-manager.md](wildcard-manager.md)). With an

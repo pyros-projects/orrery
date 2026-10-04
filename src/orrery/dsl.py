@@ -287,7 +287,34 @@ def override(template: str, values: Mapping[str, str]) -> str:
             return line
         return f"{m.group(1)}${m.group(2)}{m.group(3)}{_pinned(m.group(4).strip(), wanted[m.group(2)])}"
 
-    return "\n".join(swap(line) for line in template.split("\n"))
+    return _turned("\n".join(swap(line) for line in template.split("\n")), values)
+
+
+_SCENE_LINE = re.compile(r"^\s*(?:SCENE|CHUNK)\b")
+_KNOB_LINE = re.compile(r"^\s*(?:SET|LORA):")
+
+
+def _turned(template: str, values: Mapping[str, str]) -> str:
+    """The knobs the node turns (#226), `~scope|as written` → the knob written anew: put in their scope's SET: or
+    LORA: line (scope -1 the head, else the scene's index), its first place there. One no longer written is left
+    out. Mirrors the app's applyKnobs."""
+    wanted = []
+    for key, value in values.items():
+        scope, sep, was = key[1:].partition("|") if key.startswith("~") else ("", "", "")
+        if sep and was and value and value.strip() and scope.lstrip("-").isdigit():
+            wanted.append([int(scope), was, value.strip(), False])
+    if not wanted:
+        return template
+    scope, out = -1, []
+    for line in template.split("\n"):
+        if _SCENE_LINE.match(line):
+            scope += 1
+        elif _KNOB_LINE.match(line):
+            for w in wanted:
+                if not w[3] and w[0] == scope and w[1] in line:
+                    line, w[3] = line.replace(w[1], w[2], 1), True
+        out.append(line)
+    return "\n".join(out)
 
 
 def _pinned(expr: str, value: str) -> str:
