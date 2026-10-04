@@ -121,6 +121,8 @@ checks) are left out.
 
 ### Fixed
 
+- A gallery picture's EXPORT list sits in the detail under its prompt again, instead of opening as a blurred overlay
+  over the whole app that hid the close button (#278).
 - A library still to be written no longer shows placeholder characters as its roll in the annotations, and an
   entry's escaped characters show as written (#269).
 - Rating an output while a run logs its own no longer loses the new one: the gallery's log and the learned weights
