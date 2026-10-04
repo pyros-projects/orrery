@@ -67,6 +67,7 @@ export function nthLibrary(line, n) {
   return [...line.matchAll(LIBRARY)][n]?.[1] ?? null;
 }
 
+const SLOT = /--(?=[^\s-])([^\n]*?[^\s-])--/g;
 const inHome = (app, name) => (app.data.completion?.libraries || []).some((l) => l.name === name);  // not a template's @lib
 
 // The library a roll at a line's end stands for (#273): the k-th `__…__` of its line.
@@ -77,15 +78,45 @@ export function placeOfRoll(app, el) {
   return name && inHome(app, name) ? { kind: "entries", what: name, roll: el.textContent, directions: "", line: start + local } : null;
 }
 
-// The library a Ctrl+click in the editor landed on (#273): its takes, or, still to be written, its sheet (#272).
+// What a Ctrl+click in the editor landed on: a library, its takes (#273) or, still to be written, its sheet (#272);
+// else a slot, its takes (#280; one from `image output` is the Gallery's).
 export function placeAt(app, ta) {
   const at = ta.selectionStart, cell = ta.closest(".cell");
-  const m = [...ta.value.matchAll(LIBRARY)].find((x) => x.index <= at && at <= x.index + x[0].length);
-  if (!m) return null;
+  const under = (rx) => [...ta.value.matchAll(rx)].find((x) => x.index <= at && at <= x.index + x[0].length);
+  const m = under(LIBRARY), s = !m && under(SLOT);
+  if (!m && !s) return null;
   const start = cell ? splitCells(app.text)[Number(cell.dataset.cell)]?.line ?? 0 : 0;
-  const line = start + ta.value.slice(0, m.index).split("\n").length - 1;
+  const line = start + ta.value.slice(0, (m || s).index).split("\n").length - 1;
+  if (s) return /\bimage\s+output\b/.test(s[1]) ? null : { kind: "slot", what: s[1], directions: "", line };
   if (app.known().has(m[1]) && !inHome(app, m[1])) return null;
   return { kind: app.known().has(m[1]) ? "entries" : "library", what: m[1], roll: "", directions: m[2] || "", line };
+}
+
+// The top-level nodes of line `i` in a highlighted <pre>: between its i-th newline and the next.
+function lineNodes(pre, i) {
+  const out = [];
+  let at = 0;
+  for (const n of pre.childNodes) {
+    if (n.nodeType === Node.TEXT_NODE) at += (n.textContent.match(/\n/g) || []).length;
+    else if (at === i) out.push(n);
+    if (at > i) break;
+  }
+  return out;
+}
+
+// While the pointer is on a 🎲, the place it stands for is outlined in its line (#280): two slots on one line, two
+// dice at its end, each showing its own.
+export function markPlace(key, on) {
+  const pre = key.closest("pre");
+  if (!pre) return;
+  pre.querySelectorAll(".t-hl").forEach((el) => el.classList.remove("t-hl"));
+  if (!on) return;
+  const { llm: kind, what } = key.dataset;
+  const sel = kind === "slot" ? ".t-slot" : kind === "enhance" ? ".t-enh" : ".t-lib";
+  const lib = new RegExp(`^__${what.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&")}(?![\\w/])`);
+  const fits = (el) => (kind === "slot" ? el.textContent === `--${what}--` : kind === "enhance" || lib.test(el.textContent));
+  lineNodes(pre, Number(key.dataset.line)).flatMap((el) => [...(el.matches(sel) ? [el] : []), ...el.querySelectorAll(sel)])
+    .filter(fits).forEach((el) => el.classList.add("t-hl"));
 }
 
 export function openTakes(app, place, near = null) {

@@ -933,6 +933,13 @@ test("a library's roll at a line's end names the k-th library of its line, and U
   assert.doesNotMatch(highlight("A __animal__ with __hair__.", known, { hints }), /lroll/);  // no language model: plain text
 });
 
+test("a --slot-- is violet in the editor, what is in it coloured as ever (#280)", async () => {
+  const { highlight } = await import("../../comfyui/web/app/highlight.js");
+  const html = highlight("a fox with --one small object-- and --a sheet of $who--.", new Set());
+  assert.match(html, /<span class="t-slot">--one small object--<\/span> and <span class="t-slot">--a sheet of <span class="t-var">\$who<\/span>--<\/span>/);
+  assert.doesNotMatch(highlight("# --not a slot--", new Set()), /t-slot/);
+});
+
 test("a gallery picture's export keeps its slots from image output apart, for a 🎲 that writes them from the picture (#175)", async () => {
   const { pictureSlots } = await import("../../comfyui/web/app/model.js");
   assert.deepEqual(pictureSlots("a heron, --her coat as image output shows it--, waiting"),

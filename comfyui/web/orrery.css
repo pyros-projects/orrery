@@ -99,6 +99,8 @@
 .orrery-app .t-miss { color: var(--danger); text-decoration: underline wavy var(--danger); text-underline-offset: 3px; }
 .orrery-app .t-var { color: var(--rose); }
 .orrery-app .t-lib.t-new { text-decoration: underline dashed var(--violet); text-underline-offset: 3px; }
+.orrery-app .t-slot { color: var(--violet); }  /* a --slot--, in the 🎲's colour (#280) */
+.orrery-app .t-hl { outline: 1px solid var(--violet); outline-offset: 1px; border-radius: 3px; background: color-mix(in srgb, var(--violet) 16%, transparent); }
 .orrery-app .t-lora { color: var(--sky); }
 .orrery-app .t-esc { color: var(--muted); }
 .orrery-app .t-brace { color: var(--violet); }

@@ -52,7 +52,7 @@ function line(text, known, llm, members) {
   // <lora:…> tags and their @name(0.8) short form are opaque (file names may contain __), as orrery's expander treats them
   const lora = (part) => (members && new RegExp(`^${members.source}\\(`).test(part) ? brass(esc(part), members)  // SET: @JINX(0.6)
     : `<span class="t-lora">${esc(part)}</span>`);
-  return out + rest.split(/((?<!\\)<(?:lora|refmod|image|cast):[^<>]*>|(?<![\w@<\\])@[\w./\\-]+\([^()<>]*\))/).map((part, i) => (i % 2 ? lora(part)
+  const words = (s) => s.split(/((?<!\\)<(?:lora|refmod|image|cast):[^<>]*>|(?<![\w@<\\])@[\w./\\-]+\([^()<>]*\))/).map((part, i) => (i % 2 ? lora(part)
     : part.replace(TOKEN, (m, escaped, lib, name, v, multi, brace) => {
       if (escaped) return `<span class="t-esc" title="Written as it is: the backslash keeps it from being syntax">${esc(m)}</span>`;
       if (lib) return isKnown(name, known) ? `<span class="t-lib">${esc(lib)}</span>`
@@ -61,6 +61,8 @@ function line(text, known, llm, members) {
       if (multi || brace) return `<span class="t-brace">${esc(m)}</span>`;
       return brass(esc(m), members);
     }))).join("");
+  // a --slot-- in violet, what is in it coloured as ever (#280)
+  return out + rest.split(/(--(?=[^\s-])[^\n]*?[^\s-]--)/).map((part, i) => (i % 2 ? `<span class="t-slot">${words(part)}</span>` : words(part))).join("");
 }
 
 const SLOT = /--(?=[^\s-])([^\n]*?[^\s-])--/g;

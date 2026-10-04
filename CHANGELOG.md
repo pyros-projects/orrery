@@ -16,7 +16,8 @@ checks) are left out.
   run uses it instead of asking. A library still to be written is written in its sheet (as many entries as a new
   library starts with): pick the good ones and **Keep as the library** writes them straight in; a library that exists
   opens from its roll at the line's end (or Ctrl+click on its name) with its rolls and new entries to **Add to the
-  library**. How many takes each 🎲 asks for is a setting. `__name__(directions)` is deprecated: it still works, and a
+  library**. Slots are violet in the editor, a 🎲 outlines its place while the pointer is on it, and Ctrl+click on a
+  slot opens its takes. How many takes each 🎲 asks for is a setting. `__name__(directions)` is deprecated: it still works, and a
   library keeps its directions itself. A slot sees the pictures it names (`image first_frame`, `image last_frame`,
   `image 3`, a gallery name); one from `image output` waits in `EXPORT:` for the picture the run makes and is written
   from the Gallery, its 🎲 in the picture's sheet, or after every run (the gear's *Picture slots*). `docs/llm.md`
