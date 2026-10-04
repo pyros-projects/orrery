@@ -121,6 +121,8 @@ checks) are left out.
 
 ### Fixed
 
+- The example workflows run as they load: their Orrery Prompt saved its values from before `take`, so `take` got
+  `''` and the prompt failed validation (#277).
 - A library still to be written no longer shows placeholder characters as its roll in the annotations, and an
   entry's escaped characters show as written (#269).
 - Rating an output while a run logs its own no longer loses the new one: the gallery's log and the learned weights
