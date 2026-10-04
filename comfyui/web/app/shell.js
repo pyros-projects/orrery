@@ -10,6 +10,8 @@ import { icon, LOGO } from "./icons.js";
 import { renderLibraries } from "./libraries.js";
 import { renderPresets } from "./presets.js";
 import { paintLive } from "./timeline.js";
+import { paintCells } from "./cells.js";
+import { resultBegins, resultEnds, resultMedia } from "./results.js";
 import { refreshReel, renderPrompt } from "./prompt.js";
 import { openSettings } from "./settings.js";
 import { renderTest } from "./test.js";
@@ -284,6 +286,7 @@ export class OrreryApp {
     const out = detail.output || {};
     const media = ["images", "gifs", "videos", "audio"].flatMap((k) => out[k] || []).filter((m) => m && m.filename);
     if (!media.length || !detail.prompt_id) return;
+    if (resultMedia(this, detail)) this.paintResults();  // this node's run: a take under the prompt (#211)
     try {
       const res = await this.api.captureOutputs({ prompt_id: detail.prompt_id, node: this.bridge.nodeId(), media });
       if (res.logged) { this.data.rows = null; this.data.gRows = null; if (this.state.tab === "galaxy") this.render(); }
@@ -306,6 +309,7 @@ export class OrreryApp {
 
   showRun(d) {
     this.run = d.end ? null : { segment: d.segment, prompt: d.prompt_id };
+    if (d.segment === -1) resultBegins(this, d);  // a template without scenes: its result becomes a take (#211)
     this.endLive();
     if (d.end) this.toast(`Clip <b>${d.segment + 1}</b> is past the end of the reel, so nothing ran. Restart plays it from the beginning.`);
     this.refreshRun();
@@ -317,12 +321,14 @@ export class OrreryApp {
   }
 
   runDone(prompt) {
+    resultEnds(this, prompt);
     if (!this.run || (prompt && this.run.prompt && prompt !== this.run.prompt)) return;
     this.run = null;
     this.endLive();
     this.refreshRun();
   }
   refreshRun() { refreshReel(this); }
+  paintResults() { if (this.state.tab === "prompt") { this.cellsSig = null; paintCells(this); } }
 
   destroy() {
     this.stopListening?.();

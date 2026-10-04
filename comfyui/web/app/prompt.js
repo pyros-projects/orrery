@@ -11,6 +11,7 @@ import { drag, thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
 import { openSceneStats } from "./scenestats.js";
 import { openTree } from "./tree.js";
+import { kept, TAKES, takesOf } from "./results.js";
 import { STARTERS } from "./starters.js";
 import { runRolls } from "./test.js";
 import { caretPoint, cellStart, inCell, jumpCell, paintCells, renderCells, wireCells } from "./cells.js";
@@ -82,9 +83,6 @@ function syncChain(app) {
 // A scene's buttons in its divider (#204): generate its clip and stay on it, go to the next scene, or both. Sample
 // surfing (#206): ×N takes per Generate (for the node), and 📌, kept per scene: the takes keep the rolled prompt
 // and only the sampler's noise changes; without it every take rolls anew.
-const TAKES = [1, 2, 4, 8];
-const takesOf = (app) => (TAKES.includes(Number(app.bridge.props.orrery_takes)) ? Number(app.bridge.props.orrery_takes) : 1);
-const kept = (app, n) => !!app.bridge.props.orrery_keep?.[n];
 
 export function sceneActs(app) {
   const chunks = app.chunks() || [], segment = Number(app.bridge.getSegment()), busy = !!app.state.sweepQueue, takes = takesOf(app);
@@ -164,7 +162,9 @@ const plural = (n, noun) => (n === 1 ? noun : `${noun}s`);
 
 // The cells view: each chunk its own cell with its clips under it (a reel, the timeline on, chosen in the footer).
 // A reel's clips under each scene, the timeline on (the column beside the editor went in #185).
-const cellsView = (app) => app.data.timeline !== false && !!app.chunks();
+// The cells view: a reel's scenes each a cell with its clips under it; a template without scenes one cell with its
+// results under it (#211).
+const cellsView = (app) => app.data.timeline !== false;
 
 // The dials' sidebar (#184): its width, kept in the node, and whether it is folded.
 const SIDE_W = 300, ROOMY = 900;  // a row narrower than ROOMY starts with the sidebar folded

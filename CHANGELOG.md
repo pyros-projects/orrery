@@ -9,6 +9,9 @@ checks) are left out.
 
 ### Added
 
+- A template without scenes, a Krea prompt or an `@h3` scene, has its results under the prompt: the live preview while
+  it samples (an image model's preview sized by its own latent format), then what it made; every run a take under the
+  result, a click shows it, and +, ×N and 📌 make takes as in a reel's scenes (#211).
 - The take tree: every take of a reel keeps its path, and picking it brings back the clips last made after it. **Tree**
   shows them all like a git graph with videos, the film's path lit; a click makes the film the way through a take, ✂
   ends it after one, ▶ Film plays the film as clicked together, a timeline of its clips under it, and a filter hides

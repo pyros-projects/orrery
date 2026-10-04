@@ -119,7 +119,20 @@ Nodes under **orrery**:
     📊 explains them: where and how often the scene plays on the walk at the
     node's seed, drawn clip by clip, how long, what plays before and after it
     (and its lines that steer), what it rolls, and the clips it made.
-    **Jump** beside *Next clip* puts the caret on the scene of the next clip. A reel opens in the **clips view**: the editor cut into one cell
+    **Jump** beside *Next clip* puts the caret on the scene of the next clip.
+    A template without scenes (a Krea prompt, an `@h3` scene) has its
+    **results under the prompt** (#211): under its one cell the live preview
+    while it samples (the model wired through the Orrery Prompt; an image
+    model's tiny VAE or Latent2RGB, sized by its own latent format), then what
+    the run made, a picture, a clip or its sound, as its Save or Preview nodes
+    wrote it. Every run becomes a **take**, lined up under the result: a click
+    shows it (and a take that rolled anew gives the node its seed). Beside the
+    takes, **+** adds takes, **×N** says how many a Generate makes and **📌**
+    keeps the rolled prompt so only the sampler's noise changes, as in a
+    reel's scenes; the gear's *Sample surfing* numbers their seeds or follows
+    the node's control. The takes are kept on the node, per preset, and saved
+    with the workflow; × takes one off the list (**the others** and **all**
+    take more), its files stay where they are. A reel opens in the **clips view**: the editor cut into one cell
     per SCENE, each followed by that scene's clips as Orrery Film (or H3
     Motion Context's Chain Video) keeps them, big: a clip's shorter side is
     the **Clip size** in the gear (360 px unless set otherwise), as far as the

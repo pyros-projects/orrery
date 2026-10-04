@@ -820,3 +820,31 @@ test("the take tree hides the dead ends: the film's, the last clip's and those a
   assert.equal(names(2), "a a1 a1x b c c1 c1x c1y");  // c has one take after it, but c1 has two: the path to it stays whole
   assert.equal(names(3), "a a1 a1x b c c1 c1x c1y");  // the last clip's takes stay, and the takes they came after
 });
+
+test("a template without scenes shows its results under the prompt, its takes kept on the node per preset (#211)", async () => {
+  const R = await import("../../comfyui/web/app/results.js");
+  const props = {};
+  let seed = 10;
+  const app = { preset: "krea/fox", props, state: {}, data: {}, bridge: { props, getSeed: () => seed, getControl: () => "fixed" },
+    api: { viewURL: (m) => `/view?filename=${m.filename}&type=${m.type}` } };
+  assert.equal(R.resultsHTML(app, "").includes("comes in here"), true);  // none yet: where they will come
+  R.resultBegins(app, { prompt_id: "p1", seed: 10, take: 0 });
+  assert.equal(R.resultMedia(app, { prompt_id: "other", output: { images: [{ filename: "x.png", type: "output" }] } }), false);
+  assert.equal(R.resultMedia(app, { prompt_id: "p1", output: { images: [{ filename: "fox_0001.png", subfolder: "", type: "output" }] } }), true);
+  R.resultBegins(app, { prompt_id: "p2", seed: 11, take: 0 });
+  R.resultMedia(app, { prompt_id: "p2", output: { gifs: [{ filename: "fox.mp4", type: "output", format: "video/h264-mp4" }] } });
+  R.resultMedia(app, { prompt_id: "p2", output: { images: [{ filename: "prev.png", type: "temp" }] } });  // a second node of the run
+  assert.deepEqual(R.resultsOf(app).map((t) => [t.prompt, t.seed, t.media.map((m) => m.kind)]), [["p1", 10, ["image"]], ["p2", 11, ["video", "image"]]]);
+  assert.equal(R.shownResult(app).prompt, "p2");  // the newest is shown
+  const html = R.resultsHTML(app, "--take-w:96px");
+  assert.match(html, /class="tl-clip big result" data-seg="-1"[^>]*><video[^>]*src="\/view\?filename=fox\.mp4&amp;type=output#t=0\.05"/);  // a saved file first
+  assert.match(html, /data-result="p1"[^>]*>.*<img loading="lazy" alt="" src="\/view\?filename=fox_0001\.png/);
+  assert.match(html, /<i>takes<\/i><b>2<\/b>.*<i>shown<\/i><b>#2<\/b>.*<i>seed<\/i><b>11<\/b>/);
+  assert.deepEqual(R.resultSeeds(app, 2, false), [2, 3]);  // numbered on from the takes there are: seeds 12, 13
+  assert.deepEqual(R.resultSeeds(app, 2, true), [1, 2]);  // with 📌 take numbers
+  app.preset = "krea/owl";
+  assert.deepEqual(R.resultsOf(app), []);  // another preset, its own takes
+  R.resultBegins(app, { prompt_id: "p3", seed: 12, take: 0 });
+  R.resultEnds(app, "p3");  // nothing written: no take
+  assert.equal(R.resultMedia(app, { prompt_id: "p3", output: { images: [{ filename: "y.png" }] } }), false);
+});
