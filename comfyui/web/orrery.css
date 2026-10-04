@@ -274,7 +274,7 @@
   border-radius: 4px; cursor: pointer; background: color-mix(in srgb, currentColor 10%, transparent); box-shadow: 0 1px 0 rgba(0,0,0,.5); }
 .orrery-app .llm-key .i { width: 11px; height: 11px; }
 .orrery-app .llm-key:hover { background: color-mix(in srgb, currentColor 26%, transparent); }
-.orrery-app .sheet .llm-key { color: var(--violet); margin-left: 4px; vertical-align: -2px; }
+.orrery-app .gdetail .llm-key { color: var(--violet); margin-left: 4px; vertical-align: -2px; }
 .orrery-app .takes-panel .take-list { display: grid; gap: 6px; margin: 0; padding-left: 22px; }
 .orrery-app .takes-panel .take-list li { font-size: 13px; line-height: 1.45; padding: 5px 8px; border: 1px solid transparent; border-radius: 7px; cursor: pointer; }
 .orrery-app .takes-panel .take-list li:hover { background: color-mix(in srgb, var(--violet) 8%, transparent); }
