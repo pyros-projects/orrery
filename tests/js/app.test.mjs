@@ -614,3 +614,31 @@ test("a CAST line's note says nothing the line says itself", async () => {
   const notes = annotationLines("CAST\n@PLACE (image 1): a street\n@HERO (image krea/x/7): a heron", ann);
   assert.deepEqual([...notes.keys()], [2]);
 });
+
+test("a scene is highlighted again only when something it shows changed (#218)", async () => {
+  const { paintCells } = await import("../../comfyui/web/app/cells.js");
+  const text = "@h3 text\n$x = __place__\n\nSCENE one\nSHOT 5s: static\nA room.\n\nSCENE two\nSHOT 5s: static\nA hall.\n";
+  const writes = [];
+  const cells = splitCells(text).map((_, i) => {
+    const pre = { set innerHTML(_html) { writes.push(i); } };
+    return { querySelector: () => pre };
+  });
+  const host = { querySelectorAll: (sel) => (sel === ".cell" ? cells : []) };
+  let libraries = new Set(["place"]);
+  const app = {
+    text, view: { querySelector: () => host }, chunks: () => [], bridge: { getSegment: () => 0 }, remembered: () => null,
+    annotations: () => null, known: () => libraries, llmActive: () => false, api: { thumbURL: () => "" }, data: {},
+  };
+  paintCells(app);
+  assert.deepEqual(writes, [0, 1, 2]);
+  writes.length = 0;
+  paintCells(app);  // nothing changed: nothing is written
+  assert.deepEqual(writes, []);
+  app.text = text.replace("A hall.", "A long hall.");
+  paintCells(app);  // only the scene typed in
+  assert.deepEqual(writes, [2]);
+  writes.length = 0;
+  libraries = new Set(["place", "creature"]);
+  paintCells(app);  // a library more: every scene may show it
+  assert.deepEqual(writes, [0, 1, 2]);
+});
