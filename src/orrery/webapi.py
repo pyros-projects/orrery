@@ -1361,7 +1361,8 @@ def _library_takes(home: Home, args: dict, name: str, src: str, api) -> dict:
 
 def _entry_takes(home: Home, args: dict, name: str, src: str, api, seed: int) -> dict:
     """A library that exists, at the line (#273): entries rolled from it (the one at this seed first, `roll`) and new
-    ones the model writes, not in it, as a top-up asks for them; as many of each as the settings say."""
+    ones the model writes, not in it, as a top-up asks for them; as many of each as the settings say. `rolls: false`
+    (the Libraries tab's Generate, #323): the new ones only."""
     from orrery import takes
     from orrery.llm import InvalidProposal
 
@@ -1369,7 +1370,8 @@ def _entry_takes(home: Home, args: dict, name: str, src: str, api, seed: int) ->
     if lib is None:
         raise ApiError(400, f"__{name}__ is still to be written: its 🎲 writes it.")
     count, have = takes.counts(llm_config(home)), [str(h) for h in args.get("have") or [] if str(h).strip()][:400]
-    rolled = takes.rolled_entries(lib, home.weights(), seed, count["rolled"], have, str(args.get("roll") or ""))
+    rolled = ([] if args.get("rolls") is False
+              else takes.rolled_entries(lib, home.weights(), seed, count["rolled"], have, str(args.get("roll") or "")))
     directions = " ".join(str(args.get("directions") or "").split()) or str(lib.meta.get("directions") or "")
     prompt, need = takes.for_library(src, name, count["new"], directions, str(args.get("steer") or ""), [*lib.values(), *have])
     try:

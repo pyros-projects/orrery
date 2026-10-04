@@ -9,6 +9,9 @@ checks) are left out.
 
 ### Added
 
+- Generate in the Libraries tab (#322): a yellow Generate beside Add opens the 🎲 sheet for a library of yours with new
+  entries the language model writes, as many as the settings' "new for a library", none it has; steer them, ask for
+  more and add the good ones.
 - Surprise me (#149): `loops/surprise_me` casts a character of a Krea creator and a place of the landscape or setting
   creator from your gallery, rolls a genre (thirty, from soap opera to puppet show) and a director's hand told by what
   it does, and goes on for ever: every clip throws the hero into a wild scenario, every fourth the genre has its big

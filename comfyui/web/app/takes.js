@@ -26,7 +26,7 @@ async function librariesChanged(app) {
   app.data.annotations = null;  // the line's annotation rolls it now: ask again for the same template and seed
   app.state.annotateKey = null;
   app.cellsSig = null;
-  if (app.state.tab === "prompt") app.render();
+  if (app.state.tab === "prompt" || app.state.tab === "libraries") app.render();  // the tab's Generate (#323): its new entries
 }
 
 // The template's line `place.line` changed by `edit(line)`; the text as it was when the line is not there.
@@ -124,25 +124,27 @@ export function openTakes(app, place, near = null) {
   const s = { takes: [], pick: null, picked: new Set(), keep: null, busy: false, error: "", note: "" };
   const picture = place.kind === "picture", enhance = place.kind === "enhance";
   const known = place.kind === "entries";  // a library that exists: its rolls and new entries (#273)
+  const tab = place.line == null;  // from the Libraries tab (#323): new entries only, and no line to put one on
   const multi = place.kind === "library" || known;  // a library's entries: several at once (#272)
   const from = [];  // known: where each take came from, "rolled", "new" or "added"
   const token = place.kind === "slot" || picture ? `--${place.what}--` : enhance ? `> ${place.what}` : `__${place.what}__`;
   const useTitle = picture ? "Write the selected take into the picture's exports"
     : enhance ? "Keep the selected rewrite for this roll: a run that rolls this prompt uses it instead of asking the model"
       : `Put the selected take in place of ${esc(token)}: an unsaved edit`;
+  const intro = tab ? ": new entries the language model writes, none it has. Steer them, ask for more, select the good ones: Add to the library writes them in."
+    : `, ${picture ? "written from the picture, the prompt that made it beside it." : `at seed ${esc(String(app.bridge.getSeed()))}.`}`
+      + (enhance ? " A rewrite happens at every run: Use selected keeps the one you pick for this roll, and the run uses it." : "")
+      + (known ? " Its rolls (the one at this seed first) and new entries the language model writes, none it has. Select the new ones worth keeping: Add to the library writes them in."
+        : multi ? " As many entries as a new library starts with, written as a run would. Select the ones worth keeping: Keep as the library writes them as the library, straight in." : " Click a take to select it.");
   const sheet = app.openSheet(`<div class="panel takes-panel"><div class="row spread"><h4>${icon("dice")} Takes</h4>`
     + `<button class="icon-btn" data-close title="Close">${icon("x")}</button></div>`
-    + `<p class="muted flush">For ${SAID[place.kind]} <code>${esc(token)}</code>, ${picture ? "written from the picture, the prompt that made it beside it."
-      : `at seed ${esc(String(app.bridge.getSeed()))}.`}`
-    + `${enhance ? " A rewrite happens at every run: Use selected keeps the one you pick for this roll, and the run uses it." : ""}`
-    + `${known ? " Its rolls (the one at this seed first) and new entries the language model writes, none it has. Select the new ones worth keeping: Add to the library writes them in."
-      : multi ? " As many entries as a new library starts with, written as a run would. Select the ones worth keeping: Keep as the library writes them as the library, straight in." : " Click a take to select it."}</p>`
+    + `<p class="muted flush">For ${SAID[place.kind]} <code>${esc(token)}</code>${intro}</p>`
     + (multi ? `<div class="row take-sel"><button class="btn ghost slim" data-tall>All</button><button class="btn ghost slim" data-tnone>None</button><span class="muted" data-tcount></span></div>` : "")
     + `<ol class="take-list${multi ? " multi" : ""}" role="listbox" aria-label="Takes"${multi ? ' aria-multiselectable="true"' : ""}></ol><p class="muted flush take-state" role="status"></p>`
     + `<div class="row take-steer"><input class="input grow" data-steer placeholder="Steer them: darker, older, as an anime character …" aria-label="Steer the takes">`
     + `<button class="btn" data-tmore>${icon("dice")}More takes</button>`
     + (picture ? "" : `<button class="btn ghost" data-tkeep title="Write the steer into ${esc(SAID[place.kind])}'s directions, so it keeps rolling that way">${icon("pin")}Keep the direction</button>`) + "</div>"
-    + `<div class="row take-use"><span class="grow"></span><button class="btn${multi ? " ghost" : " primary"}" data-tuse title="${useTitle}">${icon("check")}Use selected</button>`
+    + `<div class="row take-use"><span class="grow"></span>${tab ? "" : `<button class="btn${multi ? " ghost" : " primary"}" data-tuse title="${useTitle}">${icon("check")}Use selected</button>`}`
     + (known ? `<button class="btn primary" data-tlib title="Write the selected new entries into __${esc(place.what)}__, straight in">${icon("save")}Add to the library</button>`
       : multi ? `<button class="btn primary" data-tlib title="Write the selected entries as __${esc(place.what)}__, straight into your libraries">${icon("save")}Keep as the library</button>` : "")
     + "</div></div>", near);
@@ -156,7 +158,7 @@ export function openTakes(app, place, near = null) {
     state.textContent = s.busy ? "Writing…" : s.error || s.note;
     state.classList.toggle("warn", !!s.error && !s.busy);
     sheet.querySelector("[data-tmore]").disabled = s.busy;
-    use.disabled = s.busy || chosen() === null || (enhance && !s.keep);
+    if (use) use.disabled = s.busy || chosen() === null || (enhance && !s.keep);
     if (lib) lib.disabled = s.busy || !(known ? [...s.picked].some((i) => from[i] === "new") : s.picked.size);
     if (multi) sheet.querySelector("[data-tcount]").textContent = `${s.picked.size} of ${s.takes.length} selected`;
     if (enhance && !s.keep && s.takes.length) use.title = "This > rewrites several passages of the screenplay, each on its own at the run: there is no one rewrite to keep";
@@ -179,7 +181,7 @@ export function openTakes(app, place, near = null) {
         return;
       }
       const take = { kind: place.kind, what: place.what, directions: place.directions, steer: steer.value,
-        roll: s.takes.length ? "" : place.roll || "" };
+        roll: s.takes.length ? "" : place.roll || "", ...(tab ? { rolls: false } : {}) };
       if (!app.llmApi() && llmLocal(app)) {  // a text encoder: in runs of their own at the queue's front (#178)
         const one = place.kind === "slot" || enhance;  // one take a run, each sampled anew; a library's in one run
         const runs = one ? Number(app.data.llm?.takes?.[enhance ? "enhance" : "slot"]) || 3 : 1;
@@ -267,7 +269,7 @@ export function openTakes(app, place, near = null) {
       } catch (err) { s.error = err.message; draw(); }
     };
   }
-  use.onclick = async () => {
+  if (use) use.onclick = async () => {
     const take = s.takes[chosen()];
     if (take === undefined) return;
     try {

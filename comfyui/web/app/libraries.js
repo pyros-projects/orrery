@@ -4,6 +4,7 @@ import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
 import { entryPage, libraryHead, libraryGroups, LIB_PAGE } from "./model.js";
 import { resizable } from "./parts.js";
+import { openTakes } from "./takes.js";
 
 // The list holds names and counts only (a home can hold a hundred thousand entries); a library's
 // entries come when it is opened and stay in libFull until the folder is read again.
@@ -28,6 +29,15 @@ async function loadFull(app, name) {
 }
 
 // A library as the server returned it after a load or an edit: kept whole, and its line in the list follows.
+// Generate (#323): the language model writes new entries for the library, as many as the settings' "new for a
+// library", in the 🎲 sheet a library's roll opens in the prompt: steer them, ask for more, add the good ones.
+export function genHTML(app) {
+  const n = Number(app.data.llm?.takes?.new) || 0;
+  return app.llmActive()
+    ? `<button class="btn primary" data-lact="gen" title="The language model writes ${n ? `${n} ` : ""}new entries, none the library has: steer them, ask for more, add the good ones">${icon("dice")}Generate</button>`
+    : `<button class="btn primary" disabled title="Generate asks a language model: pick one in the gear (Language model)">${icon("dice")}Generate</button>`;
+}
+
 function setFull(app, lib) {
   (app.data.libFull ??= {})[lib.name] = lib;
   const head = libraryHead(lib), known = app.data.libraries.some((l) => l.name === lib.name);
@@ -148,7 +158,7 @@ export async function renderLibraries(app) {
       <div class="scroll"><table class="entries"><colgroup><col><col class="cw"><col class="cl"><col class="cx"></colgroup><thead><tr><th class="label">Entry <span class="sub">· tags and properties under it</span></th><th class="label" title="Static weight in the file">Weight</th><th class="label" title="Learned from your gallery ratings">Learned</th><th></th></tr></thead><tbody>
       ${rows.map(({ e, i }) => rowHTML(e, i, ro, (L.pending_entries || []).includes(e.value), L.source === "gallery" ? app.api.thumbURL : null)).join("") || '<tr><td colspan="4" class="empty">No entries yet. Add some below.</td></tr>'}
       </tbody></table>${total > rows.length ? `<div class="addrow"><button class="btn ghost wide" data-lact="more">Show ${Math.min(LIB_PAGE, total - rows.length)} more of ${total - rows.length}</button></div>` : ""}</div>
-      ${ro ? "" : `<div class="addrow"><input class="input" id="oa-add" placeholder="Add entries: one per line or comma-separated, then ↵"><button class="btn" data-lact="add">${icon("plus")}Add</button></div>`}
+      ${ro ? "" : `<div class="addrow"><input class="input" id="oa-add" placeholder="Add entries: one per line or comma-separated, then ↵"><button class="btn" data-lact="add">${icon("plus")}Add</button>${genHTML(app)}</div>`}
     </div></div>`;
   app.view.querySelectorAll(".entries textarea").forEach(fit);
   wire(app, L);
@@ -275,6 +285,7 @@ function wire(app, L) {
     if (act === "new") { s.libNew = ""; renderLibraries(app); app.$("#oa-newlib").focus(); }
     if (act === "accept" || act === "discard") return review(app, L, act);
     if (act === "add") addEntries(app, L);
+    if (act === "gen") openTakes(app, { kind: "entries", what: L.name, roll: "", directions: "", line: null }, e.target.closest("[data-lact]"));
   };
   app.view.oninput = (e) => { if (e.target.dataset.ev !== undefined) fit(e.target); };
   app.view.onchange = (e) => {
