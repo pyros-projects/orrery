@@ -7,7 +7,7 @@
 import { castNames } from "../orrery-complete.js";
 import { highlight } from "./highlight.js";
 import { splitCells } from "./model.js";
-import { annotationLines, mergeHints } from "./annotate.js";
+import { annotationLines, mergeHints, shownHints } from "./annotate.js";
 import { fillStrip, hintsFor, openPicker, rememberLines, stripHTML } from "./remember.js";
 import { clipRatio, olderTakes, paintLive, sectionHTML, sourceClip, takeVars, wireClips } from "./timeline.js";
 import { resultsHTML, resultsSig, wireResults } from "./results.js";
@@ -66,7 +66,8 @@ export function paintCells(app) {
     const c = cells[i];
     if (!c) return;
     const local = c.chunk >= 0 && chunks[c.chunk] ? [{ ...chunks[c.chunk], line: 0, index: c.chunk }] : null;
-    const hints = mergeHints(hintsFor(c.text, remembered, before), annotationLines(c.text, annotations, app.api.thumbURL));
+    const hints = shownHints(app.data.annotations_show, mergeHints(hintsFor(c.text, remembered, before),
+      annotationLines(c.text, annotations, app.api.thumbURL, c.line)));
     before += rememberLines(c.text).length;
     const key = JSON.stringify([shared, c.text, local, [...hints], acts && local ? acts(local[0], c.chunk) : ""]);
     if (painted.get(cell) === key) return;

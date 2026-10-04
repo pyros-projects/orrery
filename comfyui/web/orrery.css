@@ -428,6 +428,25 @@
 .orrery-app .vid .i { width: 28px; height: 28px; }
 
 /* libraries tab */
+/* the Settings tab (#212): its sections on the left, the one chosen on the right */
+.orrery-app .settings { display: grid; grid-template-columns: 170px minmax(0, 1fr); flex: 1; min-height: 0; }
+.orrery-app.big .settings { grid-template-columns: 220px minmax(0, 1fr); }
+.orrery-app .set-nav { display: flex; flex-direction: column; gap: 2px; padding: 10px 6px; border-right: 1px solid var(--line); }
+.orrery-app .set-nav button { border-radius: 7px; padding: 7px 10px; text-align: left; font-size: 13px; color: var(--muted); }
+.orrery-app .set-nav button:hover { background: var(--hover); color: var(--ink); }
+.orrery-app .set-nav button.on { background: var(--brass-soft); color: var(--brass); }
+.orrery-app .set-main { display: flex; flex-direction: column; gap: 12px; padding: 14px 18px 24px; max-width: 760px; }
+.orrery-app .set-main > * { flex: none; }
+.orrery-app .set-head { display: flex; align-items: baseline; gap: 12px; }
+.orrery-app .set-head h4 { margin: 0; font: italic 400 21px/1.1 var(--serif); }
+.orrery-app .set-saved { font-size: 12px; color: var(--teal); opacity: 0; transition: opacity .25s; }
+.orrery-app .set-saved.show { opacity: 1; }
+.orrery-app .set-saved.warn { color: var(--danger); }
+.orrery-app .set-main h5.label { margin: 6px 0 0; }
+.orrery-app .gear-btn.on { color: var(--brass); }
+/* annotations on hover (#203): what has one is underlined quietly, as a footnote; its card says the roll first */
+.orrery-app pre .t-has { text-decoration: underline dotted; text-decoration-color: rgba(157,154,179,.55); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.orrery-app .hv .hv-roll { margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid var(--line); color: var(--teal); font: 12px/1.4 var(--mono); }
 .orrery-app .libs { --libw: 190px; display: grid; grid-template-columns: var(--libw) minmax(0, 1fr); flex: 1; min-height: 0; }
 .orrery-app.big .libs:not([style*="--libw"]) { --libw: 250px; }
 .orrery-app .liblist { border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; position: relative; }
@@ -727,6 +746,7 @@
 .orrery-app .newpop .muted { font-size: 11.5px; }
 .orrery-app .newpop button:disabled { opacity: .55; cursor: default; background: none; }
 .orrery-app #oa-wr { flex: 1; width: auto; }
+.orrery-app .set-main textarea.wtext { height: 420px; }
 .orrery-app textarea.wtext { height: 220px; resize: vertical; font: 12px/1.5 var(--mono); white-space: pre-wrap; }
 .orrery-app .ideas .codebox { max-height: 46vh; overflow-y: auto; margin: 0; }
 .orrery-app .ideas .empty { padding: 22px 12px; }

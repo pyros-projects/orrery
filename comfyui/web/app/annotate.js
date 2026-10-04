@@ -1,5 +1,6 @@
 // Annotations at line ends (#163): what a line gives at the node's seed, from /orrery/annotate. A binding
-// shows what it rolled, an EXPORT what it keeps, a grid its cells, a CAST member where its pictures go.
+// shows what it rolled, an EXPORT what it keeps, a grid its cells, a CAST member where its pictures go, and every
+// library in a line its own roll (#202). The setting says where they show (#203): at the line ends, on hover, or not.
 
 const BINDING = /^\s*\$([A-Za-z_]\w*)\s*=\s*(.*)$/;
 const EXPORT = /^\s*EXPORT:\s*(.*)$/;
@@ -8,12 +9,14 @@ const GRID = /^\s*(?:@grid\b|:\s*grid\b)/;
 const MEMBER = /^\s*@?([A-Z][A-Z0-9 _-]*?)\s*(?:\([^)]*\))?\s*:\s*\S/;
 const ENDS_CAST = /^\s*(?:SHOT|SCENE|CHUNK)\b/;
 
-// line index → { text, kind: "note", thumbs }; `thumb(id)` makes a gallery picture's thumbnail URL, so a
-// CAST line with named pictures shows them after it (#137).
-export function annotationLines(text, ann, thumb = null) {
+// line index → { text, kind: "note", thumbs, note, rolls }; `thumb(id)` makes a gallery picture's thumbnail URL,
+// so a CAST line with named pictures shows them after it (#137). `offset`: the first line's index in the template
+// (a cell's), as the server counts the lines of its libraries' rolls: `rolls` [[k, roll]], the line's k-th
+// `__…__` and what it rolled; `note` what the line says besides.
+export function annotationLines(text, ann, thumb = null, offset = 0) {
   const out = new Map();
   if (!ann) return out;
-  const put = (i, value) => { if (value) out.set(i, { text: value, kind: "note" }); };
+  const put = (i, value) => { if (value) out.set(i, { text: value, kind: "note", note: value }); };
   let block = false, cast = false;
   text.split("\n").forEach((line, i) => {
     if (block && EXPORT_LINE.test(line)) {
@@ -43,7 +46,21 @@ export function annotationLines(text, ann, thumb = null) {
       if (thumb && ids.length && out.has(i)) out.get(i).thumbs = ids.slice(0, 4).map(thumb);
     }
   });
+  for (const [at, rolls] of Object.entries(ann.rolls || {})) {  // every library in a line, in its order (#202)
+    const i = Number(at) - offset, lines = text.split("\n").length;
+    if (i < 0 || i >= lines || !rolls.length || BINDING.test(text.split("\n")[i])) continue;
+    const said = `→ ${rolls.map(([, v]) => v).join(" · ")}`, h = out.get(i);
+    out.set(i, h ? { ...h, text: `${h.text}  ${said}`, rolls } : { text: said, kind: "note", note: "", rolls });
+  }
   return out;
+}
+
+// The hints as the setting shows them (#203): `appended` at the line ends, `hover` on what they belong to (the
+// highlighter marks it), `none` not at all.
+export function shownHints(show, hints) {
+  if (show === "none") return new Map();
+  if (show !== "hover") return hints;
+  return new Map([...hints].map(([i, h]) => [i, { ...h, hover: true, note: h.note ?? h.text }]));
 }
 
 // image 6–9, images 2, 5: as the server writes a member's slots (webapi._slots).

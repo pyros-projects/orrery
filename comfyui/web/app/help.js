@@ -127,6 +127,7 @@ export function renderHelp(app) {
       + `<span class="muted">${esc(what)}</span>${ex ? `<button class="btn ghost" data-insert="${esc(ex)}" title="Add to the end of your template">${icon("plus")}Insert</button>` : "<span></span>"}</div>`).join("")}</div></section>`).join("")}
     <section><h5 class="label">Writing for the models</h5><div class="tips">${TIPS.map(([k, t]) => `<p><b>${k}.</b> ${esc(t)}</p>`).join("")}</div></section>
     <section><h5 class="label">Keys in the editor</h5><p class="muted flush"><code>__</code> libraries, by any part of the name (<code>__hai</code> finds <code>characters/gothic/hair</code>) · <code>__name[</code> tags · <code>__name#</code> properties and their values · <code>$</code> bindings · <code>SHOT 5s:</code> camera words · ↑↓ choose · ↵ or Tab insert · Esc close</p></section>
+    <section><h5 class="label">Settings</h5><p class="muted flush">The gear opens them, the gear again brings the tab back: Home, Language model, Writers, Editor (with where the annotations go: at the line ends, on hover, or none), Clips (clip size, live preview, sample surfing) and Log. A setting is saved the moment it changes; the home folder, an API endpoint (checked first) and a writer's text have buttons of their own.</p></section>
   </div></div>`;
   app.view.onclick = (e) => {
     const lesson = e.target.closest("[data-load]");

@@ -848,3 +848,47 @@ test("a template without scenes shows its results under the prompt, its takes ke
   R.resultEnds(app, "p3");  // nothing written: no take
   assert.equal(R.resultMedia(app, { prompt_id: "p3", output: { images: [{ filename: "y.png" }] } }), false);
 });
+
+test("the settings are a tab of sections, and every setting of the old sheet is in one (#212)", async () => {
+  const { SECTIONS, SECTION_HTML } = await import("../../comfyui/web/app/settings.js");
+  assert.deepEqual(SECTIONS.map(([k]) => k), ["home", "llm", "writers", "editor", "clips", "log"]);
+  const app = { data: { quickstart: true, dividers: false, timeline: true, log_prompts: true, clip_min: 400, preview_fps: 8, preview_edge: 768, preview_light: false, surf_numbered: true } };
+  const st = {
+    home: { home: "/h", setting: "/h", source: "setting" },
+    llm: { source: "comfy", file: "qwen3vl_4b.safetensors", entries: 12, max_tokens: 16000, files: [{ name: "qwen3vl_4b.safetensors", size: 8e9, can_write: true }],
+      api: { base_url: "https://api.openai.com/v1", model: "", key: "", key_from: "none", key_env: "OPENAI_API_KEY" } },
+    writers: Object.fromEntries(["continue", "story", "describe", "describe_shot"].map((k) => [k, { text: "t", default: "d", edited: k === "story" }])),
+    wcur: "continue",
+  };
+  const html = Object.fromEntries(SECTIONS.map(([k]) => [k, SECTION_HTML[k](app, st)]));
+  const has = (k, ...bits) => bits.forEach((b) => assert.ok(html[k].includes(b), `${k} lacks ${b}`));
+  has("home", 'id="oa-home"', "data-home", "Use this folder");  // moving the home keeps its own button
+  has("llm", 'name="oa-src"', 'id="oa-llm"', 'id="oa-api-url"', 'id="oa-api-key"', "data-check", "data-useapi", 'id="oa-llm-n"', 'id="oa-llm-t"');
+  has("writers", 'id="oa-wr"', 'id="oa-wt"', "data-wreset", "data-wsave", "Story between frames · edited");
+  has("editor", 'data-flag="quickstart" checked', 'data-flag="dividers" >', 'data-flag="timeline" checked');
+  has("clips", 'value="400"', 'id="oa-pvfps" type="number" min="1" max="24" step="1" value="8"', 'value="768"', 'value="smooth" checked', 'value="numbered" checked');
+  has("log", 'data-flag="log_prompts" checked');
+  assert.doesNotMatch(Object.values(html).join(""), /data-cancel|>Save</);  // no Save at the end of a long page
+});
+
+test("every library in a line says its roll, at the line's end, on hover or not at all (#202, #203)", async () => {
+  const { annotationLines, shownHints } = await import("../../comfyui/web/app/annotate.js");
+  const { highlight, onHover } = await import("../../comfyui/web/app/highlight.js");
+  const text = "$a = __animal__\nSHOT 5s: static\nA __animal__ in an __arcade__ with __hair__ hair.";
+  const ann = { bindings: { a: "fox" }, rolls: { 4: [[0, "heron"], [1, "arcade"], [2, "bob cut"]], 2: [[0, "owl"]] } };
+  const cell = annotationLines(text, ann, null, 2);  // a cell from the template's line 2 on
+  assert.equal(cell.get(2).text, "→ heron · arcade · bob cut");
+  assert.equal(cell.get(0).text, "= fox");  // a binding's line says it as a binding, never its library's roll
+  assert.equal(shownHints("none", cell).size, 0);
+  assert.equal(shownHints("appended", cell), cell);
+  const hover = shownHints("hover", cell);
+  assert.ok(hover.get(2).hover && hover.get(0).note === "= fox");
+  const known = new Set(["animal", "arcade", "hair"]);
+  const html = highlight(text, known, { hints: hover });
+  assert.doesNotMatch(html, /class="hint/);  // nothing at the line ends
+  assert.match(html, /data-roll="at this seed: heron" class="t-has t-lib">__animal__/);
+  assert.match(html, /data-roll="at this seed: bob cut" class="t-has t-lib">__hair__/);
+  assert.match(html, /data-roll="= fox" class="t-has t-var">\$a/);
+  assert.match(onHover('<span class="t-kw">REMEMBER:</span> x', { note: "→ image 3" }), /data-roll="→ image 3" class="t-has t-kw"/);
+  assert.match(highlight(text, known, { hints: cell }), /class="hint note"><span>→ heron · arcade · bob cut/);
+});

@@ -13,7 +13,7 @@ import { paintLive } from "./timeline.js";
 import { paintCells } from "./cells.js";
 import { resultBegins, resultEnds, resultMedia } from "./results.js";
 import { refreshReel, renderPrompt } from "./prompt.js";
-import { openSettings } from "./settings.js";
+import { openSettings, renderSettings } from "./settings.js";
 import { renderTest } from "./test.js";
 
 const TABS = [
@@ -24,6 +24,7 @@ const TABS = [
   ["galaxy", "Gallery", renderGalaxy],
   ["history", "History", renderHistory],
   ["help", "Help", renderHelp],
+  ["settings", "Settings", renderSettings, "gear"],  // the gear is its button, not the tab bar (#212)
 ];
 
 function canScroll(el, dy) {
@@ -50,7 +51,7 @@ export class OrreryApp {
     this.root = document.createElement("div");
     this.root.className = "orrery-app";
     this.root.innerHTML = `<div class="app-head"><div class="brand">${LOGO}orrery</div><nav class="tabs" role="tablist"></nav>`
-      + `<button class="icon-btn gear-btn" title="Settings: home folder, language model">${icon("gear")}</button><button class="icon-btn big-btn"></button></div><section class="view"></section><div class="sheet-host"></div><div class="toast-host"></div>`;
+      + `<button class="icon-btn gear-btn" title="Settings: the home folder, the language model, writers, editor, clips, log">${icon("gear")}</button><button class="icon-btn big-btn"></button></div><section class="view"></section><div class="sheet-host"></div><div class="toast-host"></div>`;
     this.view = this.$(".view");
     this.$(".tabs").addEventListener("click", (e) => { const t = e.target.closest("[data-tab]"); if (t) this.go(t.dataset.tab); });
     this.$(".big-btn").addEventListener("click", () => this.setBig(!this.state.big));
@@ -143,6 +144,7 @@ export class OrreryApp {
     this.data.take_min = d.take_min ?? 54;
     this.data.preview_fps = d.preview_fps ?? 12;
     this.data.preview_edge = d.preview_edge ?? 1024;
+    this.data.annotations_show = d.annotations_show || "appended";
   }
   async refreshCompletion() {
     const [completion, gallery] = await Promise.all([this.api.completions(), this.api.pictures().catch(() => ({ presets: [] }))]);
@@ -152,11 +154,14 @@ export class OrreryApp {
   render() {
     const n = { presets: this.data.presets.length, libraries: this.data.completion?.libraries.length, galaxy: this.data.gTotal ?? this.data.rows?.length,
       history: this.data.hAll };
-    this.$(".tabs").innerHTML = TABS.map(([k, label]) => `<button class="tab" role="tab" aria-selected="${this.state.tab === k}" data-tab="${k}">`
+    this.$(".tabs").innerHTML = TABS.filter((t) => !t[3]).map(([k, label]) => `<button class="tab" role="tab" aria-selected="${this.state.tab === k}" data-tab="${k}">`
       + `${label}${n[k] ? `<span class="n">${n[k]}</span>` : ""}</button>`).join("");
     const big = this.$(".big-btn");
     big.innerHTML = icon(this.state.big ? "shrink" : "expand");
     big.title = this.state.big ? "Back into the node (Esc)" : "Big view";
+    const gear = this.$(".gear-btn");
+    gear.classList.toggle("on", this.state.tab === "settings");
+    gear.setAttribute("aria-pressed", String(this.state.tab === "settings"));
     TABS.find(([k]) => k === this.state.tab)[2](this);
   }
   go(tab) {
