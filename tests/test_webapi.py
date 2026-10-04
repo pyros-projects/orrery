@@ -981,6 +981,9 @@ def test_a_library_that_exists_offers_its_rolls_and_new_entries_from_the_model(h
     body = ok(home, webapi.llm_takes, kind="entries", what="sky_kind", template="", rolls=False, have=["sun dogs"])
     assert (body["rolled"], body["takes"]) == ([], ["virga", "ice fog"])  # the Libraries tab's Generate (#323): new only
     assert '"sun dogs"' in fake_api.requests[-1]["messages"][0]["content"]  # what the sheet shows is not asked again
+    fake_api.answer = lambda body: json.dumps(["fog", "hail"])  # nothing new: the sheet says so
+    status, said = api(home, webapi.llm_takes, kind="entries", what="sky_kind", template="", rolls=False)
+    assert status == 502 and "nothing __sky_kind__ does not have yet" in said["error"]
     assert ok(home, webapi.library_add, name="sky_kind", entries=["graupel", "hail"])["added"] == 1
     assert ok(home, webapi.library_add, name="sky_kind", directions="weather a painter sees")["added"] == 0
     assert Home(home).libraries()["sky_kind"].meta["directions"] == "weather a painter sees"

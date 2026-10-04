@@ -1378,6 +1378,8 @@ def _entry_takes(home: Home, args: dict, name: str, src: str, api, seed: int) ->
         new = takes.library_entries(api.complete(prompt), need)
     except (RuntimeError, InvalidProposal) as err:
         raise ApiError(502, str(err)) from None
+    if not new and not rolled:  # Generate (#323) asks for new ones only: an empty sheet would say nothing
+        raise ApiError(502, f"The language model wrote nothing __{name}__ does not have yet: ask again, or steer it somewhere new.")
     return {"rolled": rolled, "takes": new, "directions": directions}
 
 
