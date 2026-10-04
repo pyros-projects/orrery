@@ -138,6 +138,8 @@ checks) are left out.
   of an empty band under them (#271).
 - A library still to be written no longer shows placeholder characters as its roll in the annotations, and an
   entry's escaped characters show as written (#269).
+- The example workflows run as they load: their Orrery Prompt saved its values from before `take`, so `take` got
+  `''` and the prompt failed validation (#277).
 - Rating an output while a run logs its own no longer loses the new one: the gallery's log and the learned weights
   have one writer at a time, and two writes of one file never share a temp file (#260).
 - History's and the Gallery's restore no longer promise that the next run reproduces a run: it rolls again with today's
