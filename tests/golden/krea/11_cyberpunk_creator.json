@@ -5,7 +5,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "An anime character design of a 28-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose acid green curls on top over a tight fade and laugh lines carved deep around the eyes, with smooth synthetic skin with a visible seam at the jaw, a voice box that glows crimson when they speak; a gang boss in a long crimson duster over armoured trousers, their clothes marked by Kente-cloth stripes woven into the collar, wearing the midnight blue and yellow of the Graveyard Shift with a night-watch badge worn upside down, with a gold-plated pistol, with a steady, amused half-smile. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Clean line art and flat cel shading.",
+     "text": "An anime character design: a head-and-shoulders portrait of a 28-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose acid green curls on top over a tight fade and laugh lines carved deep around the eyes, with a chin of riveted plates; a gang boss in a long crimson duster over armoured trousers, their clothes marked by Kente-cloth stripes woven into the collar, wearing the midnight blue and yellow of the Graveyard Shift, with a night-watch badge worn upside down, with a steady, amused half-smile. They face the camera. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Clean line art and flat cel shading.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -148,11 +148,24 @@
        ]
       ],
       [
-       "__characters/cyberpunk/implant__ ×2",
-       "smooth synthetic skin with a visible seam at the jaw, a voice box that glows $colour when they speak",
+       "$headchrome ← __characters/cyberpunk/implant[where=head]__",
+       "a chin of riveted plates",
        [
-        "__characters/cyberpunk/implant__=smooth synthetic skin with a visible seam at the jaw",
-        "__characters/cyberpunk/implant__=a voice box that glows $colour when they speak"
+        "__characters/cyberpunk/implant__=a chin of riveted plates"
+       ]
+      ],
+      [
+       "{__characters/cyberpunk/implant[where=body]__|none}",
+       "none",
+       [
+        "{__characters/cyberpunk/implant[where=body]__|none}=none"
+       ]
+      ],
+      [
+       "$bodychrome ← __characters/cyberpunk/implant[where=body]__",
+       "a pair of extra small manipulator arms at the ribs",
+       [
+        "__characters/cyberpunk/implant__=a pair of extra small manipulator arms at the ribs"
        ]
       ],
       [
@@ -212,17 +225,17 @@
        ]
       ],
       [
-       "{photo|animated|anime}",
-       "anime",
-       [
-        "{photo|animated|anime}=anime"
-       ]
-      ],
-      [
        "{portrait|three-quarter|full-length|profile}",
        "portrait",
        [
         "{portrait|three-quarter|full-length|profile}=portrait"
+       ]
+      ],
+      [
+       "{photo|animated|anime}",
+       "anime",
+       [
+        "{photo|animated|anime}=anime"
        ]
       ],
       [
@@ -256,7 +269,7 @@
       ]
      ],
      "exports": {
-      "who": "a 28-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose acid green curls on top over a tight fade and laugh lines carved deep around the eyes, with smooth synthetic skin with a visible seam at the jaw, a voice box that glows crimson when they speak; a gang boss in a long crimson duster over armoured trousers, their clothes marked by Kente-cloth stripes woven into the collar, wearing the midnight blue and yellow of the Graveyard Shift with a night-watch badge worn upside down, with a gold-plated pistol",
+      "who": "a 28-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose acid green curls on top over a tight fade and laugh lines carved deep around the eyes, with a chin of riveted plates, a pair of extra small manipulator arms at the ribs; a gang boss in a long crimson duster over armoured trousers, their clothes marked by Kente-cloth stripes woven into the collar, wearing the midnight blue and yellow of the Graveyard Shift with a night-watch badge worn upside down, with a gold-plated pistol",
       "age": "28",
       "gender": "man",
       "role": {
@@ -268,9 +281,10 @@
       "gang": {
        "value": "the Graveyard Shift",
        "colours": "midnight blue and yellow",
-       "sign": "a night-watch badge worn upside down"
+       "sign": "a night-watch badge worn upside down",
+       "where": "head"
       },
-      "augments": "smooth synthetic skin with a visible seam at the jaw, a voice box that glows crimson when they speak",
+      "augments": "a chin of riveted plates, a pair of extra small manipulator arms at the ribs",
       "gear": "a gold-plated pistol",
       "colour": "crimson",
       "mood": "brightly optimistic",
@@ -284,7 +298,7 @@
     },
     {
      "cell": 1,
-     "text": "An anime character design of a 28-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose acid green curls on top over a tight fade and laugh lines carved deep around the eyes, with smooth synthetic skin with a visible seam at the jaw, a voice box that glows crimson when they speak; a gang boss in a long crimson duster over armoured trousers, their clothes marked by Kente-cloth stripes woven into the collar, wearing the midnight blue and yellow of the Graveyard Shift with a night-watch badge worn upside down, with a gold-plated pistol, with a steady, amused half-smile. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Clean line art and flat cel shading.",
+     "text": "An anime character design: a head-and-shoulders view of a 28-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose acid green curls on top over a tight fade and laugh lines carved deep around the eyes, with a chin of riveted plates; a gang boss in a long crimson duster over armoured trousers, their clothes marked by Kente-cloth stripes woven into the collar, wearing the midnight blue and yellow of the Graveyard Shift, with a night-watch badge worn upside down, with a steady, amused half-smile. They are turned three-quarters to the left. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Clean line art and flat cel shading.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -427,11 +441,24 @@
        ]
       ],
       [
-       "__characters/cyberpunk/implant__ ×2",
-       "smooth synthetic skin with a visible seam at the jaw, a voice box that glows $colour when they speak",
+       "$headchrome ← __characters/cyberpunk/implant[where=head]__",
+       "a chin of riveted plates",
        [
-        "__characters/cyberpunk/implant__=smooth synthetic skin with a visible seam at the jaw",
-        "__characters/cyberpunk/implant__=a voice box that glows $colour when they speak"
+        "__characters/cyberpunk/implant__=a chin of riveted plates"
+       ]
+      ],
+      [
+       "{__characters/cyberpunk/implant[where=body]__|none}",
+       "none",
+       [
+        "{__characters/cyberpunk/implant[where=body]__|none}=none"
+       ]
+      ],
+      [
+       "$bodychrome ← __characters/cyberpunk/implant[where=body]__",
+       "a pair of extra small manipulator arms at the ribs",
+       [
+        "__characters/cyberpunk/implant__=a pair of extra small manipulator arms at the ribs"
        ]
       ],
       [
@@ -491,17 +518,17 @@
        ]
       ],
       [
-       "{photo|animated|anime}",
-       "anime",
-       [
-        "{photo|animated|anime}=anime"
-       ]
-      ],
-      [
        "{portrait|three-quarter|full-length|profile}",
        "three-quarter",
        [
         "{portrait|three-quarter|full-length|profile}=three-quarter"
+       ]
+      ],
+      [
+       "{photo|animated|anime}",
+       "anime",
+       [
+        "{photo|animated|anime}=anime"
        ]
       ],
       [
@@ -535,7 +562,7 @@
       ]
      ],
      "exports": {
-      "who": "a 28-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose acid green curls on top over a tight fade and laugh lines carved deep around the eyes, with smooth synthetic skin with a visible seam at the jaw, a voice box that glows crimson when they speak; a gang boss in a long crimson duster over armoured trousers, their clothes marked by Kente-cloth stripes woven into the collar, wearing the midnight blue and yellow of the Graveyard Shift with a night-watch badge worn upside down, with a gold-plated pistol",
+      "who": "a 28-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose acid green curls on top over a tight fade and laugh lines carved deep around the eyes, with a chin of riveted plates, a pair of extra small manipulator arms at the ribs; a gang boss in a long crimson duster over armoured trousers, their clothes marked by Kente-cloth stripes woven into the collar, wearing the midnight blue and yellow of the Graveyard Shift with a night-watch badge worn upside down, with a gold-plated pistol",
       "age": "28",
       "gender": "man",
       "role": {
@@ -547,9 +574,10 @@
       "gang": {
        "value": "the Graveyard Shift",
        "colours": "midnight blue and yellow",
-       "sign": "a night-watch badge worn upside down"
+       "sign": "a night-watch badge worn upside down",
+       "where": "head"
       },
-      "augments": "smooth synthetic skin with a visible seam at the jaw, a voice box that glows crimson when they speak",
+      "augments": "a chin of riveted plates, a pair of extra small manipulator arms at the ribs",
       "gear": "a gold-plated pistol",
       "colour": "crimson",
       "mood": "brightly optimistic",
@@ -563,7 +591,7 @@
     },
     {
      "cell": 2,
-     "text": "An anime character design of a 28-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose acid green curls on top over a tight fade and laugh lines carved deep around the eyes, with smooth synthetic skin with a visible seam at the jaw, a voice box that glows crimson when they speak; a gang boss in a long crimson duster over armoured trousers, their clothes marked by Kente-cloth stripes woven into the collar, wearing the midnight blue and yellow of the Graveyard Shift with a night-watch badge worn upside down, with a gold-plated pistol, with a steady, amused half-smile. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Clean line art and flat cel shading.",
+     "text": "An anime character design: a full-length view of the whole body, from the top of the head to the shoes, of a 28-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose acid green curls on top over a tight fade and laugh lines carved deep around the eyes, with a chin of riveted plates, a pair of extra small manipulator arms at the ribs; a gang boss in a long crimson duster over armoured trousers, their clothes marked by Kente-cloth stripes woven into the collar, wearing the midnight blue and yellow of the Graveyard Shift, with a night-watch badge worn upside down, with a steady, amused half-smile. They stand straight with the arms relaxed, facing the camera, with a gold-plated pistol, and floor and space around them are in frame. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Clean line art and flat cel shading.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -706,11 +734,24 @@
        ]
       ],
       [
-       "__characters/cyberpunk/implant__ ×2",
-       "smooth synthetic skin with a visible seam at the jaw, a voice box that glows $colour when they speak",
+       "$headchrome ← __characters/cyberpunk/implant[where=head]__",
+       "a chin of riveted plates",
        [
-        "__characters/cyberpunk/implant__=smooth synthetic skin with a visible seam at the jaw",
-        "__characters/cyberpunk/implant__=a voice box that glows $colour when they speak"
+        "__characters/cyberpunk/implant__=a chin of riveted plates"
+       ]
+      ],
+      [
+       "{__characters/cyberpunk/implant[where=body]__|none}",
+       "none",
+       [
+        "{__characters/cyberpunk/implant[where=body]__|none}=none"
+       ]
+      ],
+      [
+       "$bodychrome ← __characters/cyberpunk/implant[where=body]__",
+       "a pair of extra small manipulator arms at the ribs",
+       [
+        "__characters/cyberpunk/implant__=a pair of extra small manipulator arms at the ribs"
        ]
       ],
       [
@@ -770,17 +811,17 @@
        ]
       ],
       [
-       "{photo|animated|anime}",
-       "anime",
-       [
-        "{photo|animated|anime}=anime"
-       ]
-      ],
-      [
        "{portrait|three-quarter|full-length|profile}",
        "full-length",
        [
         "{portrait|three-quarter|full-length|profile}=full-length"
+       ]
+      ],
+      [
+       "{photo|animated|anime}",
+       "anime",
+       [
+        "{photo|animated|anime}=anime"
        ]
       ],
       [
@@ -814,7 +855,7 @@
       ]
      ],
      "exports": {
-      "who": "a 28-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose acid green curls on top over a tight fade and laugh lines carved deep around the eyes, with smooth synthetic skin with a visible seam at the jaw, a voice box that glows crimson when they speak; a gang boss in a long crimson duster over armoured trousers, their clothes marked by Kente-cloth stripes woven into the collar, wearing the midnight blue and yellow of the Graveyard Shift with a night-watch badge worn upside down, with a gold-plated pistol",
+      "who": "a 28-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose acid green curls on top over a tight fade and laugh lines carved deep around the eyes, with a chin of riveted plates, a pair of extra small manipulator arms at the ribs; a gang boss in a long crimson duster over armoured trousers, their clothes marked by Kente-cloth stripes woven into the collar, wearing the midnight blue and yellow of the Graveyard Shift with a night-watch badge worn upside down, with a gold-plated pistol",
       "age": "28",
       "gender": "man",
       "role": {
@@ -826,9 +867,10 @@
       "gang": {
        "value": "the Graveyard Shift",
        "colours": "midnight blue and yellow",
-       "sign": "a night-watch badge worn upside down"
+       "sign": "a night-watch badge worn upside down",
+       "where": "head"
       },
-      "augments": "smooth synthetic skin with a visible seam at the jaw, a voice box that glows crimson when they speak",
+      "augments": "a chin of riveted plates, a pair of extra small manipulator arms at the ribs",
       "gear": "a gold-plated pistol",
       "colour": "crimson",
       "mood": "brightly optimistic",
@@ -842,7 +884,7 @@
     },
     {
      "cell": 3,
-     "text": "An anime character design of a 28-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose acid green curls on top over a tight fade and laugh lines carved deep around the eyes, with smooth synthetic skin with a visible seam at the jaw, a voice box that glows crimson when they speak; a gang boss in a long crimson duster over armoured trousers, their clothes marked by Kente-cloth stripes woven into the collar, wearing the midnight blue and yellow of the Graveyard Shift with a night-watch badge worn upside down, with a gold-plated pistol, with a steady, amused half-smile. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Clean line art and flat cel shading.",
+     "text": "An anime character design: a strict side profile of the head and shoulders of a 28-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose acid green curls on top over a tight fade and laugh lines carved deep around the eyes, with a chin of riveted plates; a gang boss in a long crimson duster over armoured trousers, their clothes marked by Kente-cloth stripes woven into the collar, wearing the midnight blue and yellow of the Graveyard Shift, with a night-watch badge worn upside down, with a steady, amused half-smile. The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Clean line art and flat cel shading.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -985,11 +1027,24 @@
        ]
       ],
       [
-       "__characters/cyberpunk/implant__ ×2",
-       "smooth synthetic skin with a visible seam at the jaw, a voice box that glows $colour when they speak",
+       "$headchrome ← __characters/cyberpunk/implant[where=head]__",
+       "a chin of riveted plates",
        [
-        "__characters/cyberpunk/implant__=smooth synthetic skin with a visible seam at the jaw",
-        "__characters/cyberpunk/implant__=a voice box that glows $colour when they speak"
+        "__characters/cyberpunk/implant__=a chin of riveted plates"
+       ]
+      ],
+      [
+       "{__characters/cyberpunk/implant[where=body]__|none}",
+       "none",
+       [
+        "{__characters/cyberpunk/implant[where=body]__|none}=none"
+       ]
+      ],
+      [
+       "$bodychrome ← __characters/cyberpunk/implant[where=body]__",
+       "a pair of extra small manipulator arms at the ribs",
+       [
+        "__characters/cyberpunk/implant__=a pair of extra small manipulator arms at the ribs"
        ]
       ],
       [
@@ -1049,17 +1104,17 @@
        ]
       ],
       [
-       "{photo|animated|anime}",
-       "anime",
-       [
-        "{photo|animated|anime}=anime"
-       ]
-      ],
-      [
        "{portrait|three-quarter|full-length|profile}",
        "profile",
        [
         "{portrait|three-quarter|full-length|profile}=profile"
+       ]
+      ],
+      [
+       "{photo|animated|anime}",
+       "anime",
+       [
+        "{photo|animated|anime}=anime"
        ]
       ],
       [
@@ -1093,7 +1148,7 @@
       ]
      ],
      "exports": {
-      "who": "a 28-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose acid green curls on top over a tight fade and laugh lines carved deep around the eyes, with smooth synthetic skin with a visible seam at the jaw, a voice box that glows crimson when they speak; a gang boss in a long crimson duster over armoured trousers, their clothes marked by Kente-cloth stripes woven into the collar, wearing the midnight blue and yellow of the Graveyard Shift with a night-watch badge worn upside down, with a gold-plated pistol",
+      "who": "a 28-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose acid green curls on top over a tight fade and laugh lines carved deep around the eyes, with a chin of riveted plates, a pair of extra small manipulator arms at the ribs; a gang boss in a long crimson duster over armoured trousers, their clothes marked by Kente-cloth stripes woven into the collar, wearing the midnight blue and yellow of the Graveyard Shift with a night-watch badge worn upside down, with a gold-plated pistol",
       "age": "28",
       "gender": "man",
       "role": {
@@ -1105,9 +1160,10 @@
       "gang": {
        "value": "the Graveyard Shift",
        "colours": "midnight blue and yellow",
-       "sign": "a night-watch badge worn upside down"
+       "sign": "a night-watch badge worn upside down",
+       "where": "head"
       },
-      "augments": "smooth synthetic skin with a visible seam at the jaw, a voice box that glows crimson when they speak",
+      "augments": "a chin of riveted plates, a pair of extra small manipulator arms at the ribs",
       "gear": "a gold-plated pistol",
       "colour": "crimson",
       "mood": "brightly optimistic",
@@ -1125,7 +1181,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "A 3D character render, in the style of a modern animated feature film, of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, with a row of mustard-yellow status lights along the collarbone, a mechanical eye on a small articulated stalk; a bodyguard in a fitted mustard-yellow suit stretched over armour plating, an earpiece in one ear, their clothes marked by Ndebele geometric blocks painted on the sleeves, wearing the navy and white of the Monsoon Boys with raindrops tattooed under one eye, with a ballistic briefcase, with a brooding, lowered brow. A head-and-shoulders portrait, facing the camera, against an elevated train platform in the rain, in soft, even light. Stylised proportions, soft subsurface skin.",
+     "text": "A 3D character render, in the style of a modern animated feature film: a head-and-shoulders portrait of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, with thermal camouflage panels on the shoulders; a bodyguard in a fitted mustard-yellow suit stretched over armour plating, an earpiece in one ear, their clothes marked by Ndebele geometric blocks painted on the sleeves, wearing the navy and white of the Monsoon Boys, with raindrops tattooed under one eye, with a brooding, lowered brow. They face the camera. Behind them is an elevated train platform in the rain, in soft, even light. Stylised proportions, soft subsurface skin.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -1268,11 +1324,24 @@
        ]
       ],
       [
-       "__characters/cyberpunk/implant__ ×2",
-       "a row of $colour status lights along the collarbone, a mechanical eye on a small articulated stalk",
+       "$headchrome ← __characters/cyberpunk/implant[where=head]__",
+       "thermal camouflage panels on the shoulders",
        [
-        "__characters/cyberpunk/implant__=a row of $colour status lights along the collarbone",
-        "__characters/cyberpunk/implant__=a mechanical eye on a small articulated stalk"
+        "__characters/cyberpunk/implant__=thermal camouflage panels on the shoulders"
+       ]
+      ],
+      [
+       "{__characters/cyberpunk/implant[where=body]__|none}",
+       "__characters/cyberpunk/implant[where=body]__",
+       [
+        "{__characters/cyberpunk/implant[where=body]__|none}=__characters/cyberpunk/implant[where=body]__"
+       ]
+      ],
+      [
+       "$bodychrome ← __characters/cyberpunk/implant[where=body]__",
+       "$colour LED tattoos that scroll slowly along the forearm",
+       [
+        "__characters/cyberpunk/implant__=$colour LED tattoos that scroll slowly along the forearm"
        ]
       ],
       [
@@ -1325,17 +1394,17 @@
        ]
       ],
       [
-       "{photo|animated|anime}",
-       "animated",
-       [
-        "{photo|animated|anime}=animated"
-       ]
-      ],
-      [
        "{portrait|three-quarter|full-length|profile}",
        "portrait",
        [
         "{portrait|three-quarter|full-length|profile}=portrait"
+       ]
+      ],
+      [
+       "{photo|animated|anime}",
+       "animated",
+       [
+        "{photo|animated|anime}=animated"
        ]
       ],
       [
@@ -1376,7 +1445,7 @@
       ]
      ],
      "exports": {
-      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, with a row of mustard-yellow status lights along the collarbone, a mechanical eye on a small articulated stalk; a bodyguard in a fitted mustard-yellow suit stretched over armour plating, an earpiece in one ear, their clothes marked by Ndebele geometric blocks painted on the sleeves, wearing the navy and white of the Monsoon Boys with raindrops tattooed under one eye, with a ballistic briefcase",
+      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, with thermal camouflage panels on the shoulders, mustard-yellow LED tattoos that scroll slowly along the forearm; a bodyguard in a fitted mustard-yellow suit stretched over armour plating, an earpiece in one ear, their clothes marked by Ndebele geometric blocks painted on the sleeves, wearing the navy and white of the Monsoon Boys with raindrops tattooed under one eye, with a ballistic briefcase",
       "age": "24",
       "gender": "woman",
       "role": {
@@ -1388,9 +1457,10 @@
       "gang": {
        "value": "the Monsoon Boys",
        "colours": "navy and white",
-       "sign": "raindrops tattooed under one eye"
+       "sign": "raindrops tattooed under one eye",
+       "where": "head"
       },
-      "augments": "a row of mustard-yellow status lights along the collarbone, a mechanical eye on a small articulated stalk",
+      "augments": "thermal camouflage panels on the shoulders, mustard-yellow LED tattoos that scroll slowly along the forearm",
       "gear": "a ballistic briefcase",
       "colour": "mustard-yellow",
       "mood": "mischievously secretive",
@@ -1404,7 +1474,7 @@
     },
     {
      "cell": 1,
-     "text": "A 3D character render, in the style of a modern animated feature film, of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, with a row of mustard-yellow status lights along the collarbone, a mechanical eye on a small articulated stalk; a bodyguard in a fitted mustard-yellow suit stretched over armour plating, an earpiece in one ear, their clothes marked by Ndebele geometric blocks painted on the sleeves, wearing the navy and white of the Monsoon Boys with raindrops tattooed under one eye, with a ballistic briefcase, with a brooding, lowered brow. A head-and-shoulders view turned three-quarters to the left, against an elevated train platform in the rain, in soft, even light. Stylised proportions, soft subsurface skin.",
+     "text": "A 3D character render, in the style of a modern animated feature film: a head-and-shoulders view of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, with thermal camouflage panels on the shoulders; a bodyguard in a fitted mustard-yellow suit stretched over armour plating, an earpiece in one ear, their clothes marked by Ndebele geometric blocks painted on the sleeves, wearing the navy and white of the Monsoon Boys, with raindrops tattooed under one eye, with a brooding, lowered brow. They are turned three-quarters to the left. Behind them is an elevated train platform in the rain, in soft, even light. Stylised proportions, soft subsurface skin.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -1547,11 +1617,24 @@
        ]
       ],
       [
-       "__characters/cyberpunk/implant__ ×2",
-       "a row of $colour status lights along the collarbone, a mechanical eye on a small articulated stalk",
+       "$headchrome ← __characters/cyberpunk/implant[where=head]__",
+       "thermal camouflage panels on the shoulders",
        [
-        "__characters/cyberpunk/implant__=a row of $colour status lights along the collarbone",
-        "__characters/cyberpunk/implant__=a mechanical eye on a small articulated stalk"
+        "__characters/cyberpunk/implant__=thermal camouflage panels on the shoulders"
+       ]
+      ],
+      [
+       "{__characters/cyberpunk/implant[where=body]__|none}",
+       "__characters/cyberpunk/implant[where=body]__",
+       [
+        "{__characters/cyberpunk/implant[where=body]__|none}=__characters/cyberpunk/implant[where=body]__"
+       ]
+      ],
+      [
+       "$bodychrome ← __characters/cyberpunk/implant[where=body]__",
+       "$colour LED tattoos that scroll slowly along the forearm",
+       [
+        "__characters/cyberpunk/implant__=$colour LED tattoos that scroll slowly along the forearm"
        ]
       ],
       [
@@ -1604,17 +1687,17 @@
        ]
       ],
       [
-       "{photo|animated|anime}",
-       "animated",
-       [
-        "{photo|animated|anime}=animated"
-       ]
-      ],
-      [
        "{portrait|three-quarter|full-length|profile}",
        "three-quarter",
        [
         "{portrait|three-quarter|full-length|profile}=three-quarter"
+       ]
+      ],
+      [
+       "{photo|animated|anime}",
+       "animated",
+       [
+        "{photo|animated|anime}=animated"
        ]
       ],
       [
@@ -1655,7 +1738,7 @@
       ]
      ],
      "exports": {
-      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, with a row of mustard-yellow status lights along the collarbone, a mechanical eye on a small articulated stalk; a bodyguard in a fitted mustard-yellow suit stretched over armour plating, an earpiece in one ear, their clothes marked by Ndebele geometric blocks painted on the sleeves, wearing the navy and white of the Monsoon Boys with raindrops tattooed under one eye, with a ballistic briefcase",
+      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, with thermal camouflage panels on the shoulders, mustard-yellow LED tattoos that scroll slowly along the forearm; a bodyguard in a fitted mustard-yellow suit stretched over armour plating, an earpiece in one ear, their clothes marked by Ndebele geometric blocks painted on the sleeves, wearing the navy and white of the Monsoon Boys with raindrops tattooed under one eye, with a ballistic briefcase",
       "age": "24",
       "gender": "woman",
       "role": {
@@ -1667,9 +1750,10 @@
       "gang": {
        "value": "the Monsoon Boys",
        "colours": "navy and white",
-       "sign": "raindrops tattooed under one eye"
+       "sign": "raindrops tattooed under one eye",
+       "where": "head"
       },
-      "augments": "a row of mustard-yellow status lights along the collarbone, a mechanical eye on a small articulated stalk",
+      "augments": "thermal camouflage panels on the shoulders, mustard-yellow LED tattoos that scroll slowly along the forearm",
       "gear": "a ballistic briefcase",
       "colour": "mustard-yellow",
       "mood": "mischievously secretive",
@@ -1683,7 +1767,7 @@
     },
     {
      "cell": 2,
-     "text": "A 3D character render, in the style of a modern animated feature film, of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, with a row of mustard-yellow status lights along the collarbone, a mechanical eye on a small articulated stalk; a bodyguard in a fitted mustard-yellow suit stretched over armour plating, an earpiece in one ear, their clothes marked by Ndebele geometric blocks painted on the sleeves, wearing the navy and white of the Monsoon Boys with raindrops tattooed under one eye, with a ballistic briefcase, with a brooding, lowered brow. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against an elevated train platform in the rain, in soft, even light. Stylised proportions, soft subsurface skin.",
+     "text": "A 3D character render, in the style of a modern animated feature film: a full-length view of the whole body, from the top of the head to the shoes, of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, with thermal camouflage panels on the shoulders, mustard-yellow LED tattoos that scroll slowly along the forearm; a bodyguard in a fitted mustard-yellow suit stretched over armour plating, an earpiece in one ear, their clothes marked by Ndebele geometric blocks painted on the sleeves, wearing the navy and white of the Monsoon Boys, with raindrops tattooed under one eye, with a brooding, lowered brow. They stand straight with the arms relaxed, facing the camera, with a ballistic briefcase, and floor and space around them are in frame. Behind them is an elevated train platform in the rain, in soft, even light. Stylised proportions, soft subsurface skin.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -1826,11 +1910,24 @@
        ]
       ],
       [
-       "__characters/cyberpunk/implant__ ×2",
-       "a row of $colour status lights along the collarbone, a mechanical eye on a small articulated stalk",
+       "$headchrome ← __characters/cyberpunk/implant[where=head]__",
+       "thermal camouflage panels on the shoulders",
        [
-        "__characters/cyberpunk/implant__=a row of $colour status lights along the collarbone",
-        "__characters/cyberpunk/implant__=a mechanical eye on a small articulated stalk"
+        "__characters/cyberpunk/implant__=thermal camouflage panels on the shoulders"
+       ]
+      ],
+      [
+       "{__characters/cyberpunk/implant[where=body]__|none}",
+       "__characters/cyberpunk/implant[where=body]__",
+       [
+        "{__characters/cyberpunk/implant[where=body]__|none}=__characters/cyberpunk/implant[where=body]__"
+       ]
+      ],
+      [
+       "$bodychrome ← __characters/cyberpunk/implant[where=body]__",
+       "$colour LED tattoos that scroll slowly along the forearm",
+       [
+        "__characters/cyberpunk/implant__=$colour LED tattoos that scroll slowly along the forearm"
        ]
       ],
       [
@@ -1883,17 +1980,17 @@
        ]
       ],
       [
-       "{photo|animated|anime}",
-       "animated",
-       [
-        "{photo|animated|anime}=animated"
-       ]
-      ],
-      [
        "{portrait|three-quarter|full-length|profile}",
        "full-length",
        [
         "{portrait|three-quarter|full-length|profile}=full-length"
+       ]
+      ],
+      [
+       "{photo|animated|anime}",
+       "animated",
+       [
+        "{photo|animated|anime}=animated"
        ]
       ],
       [
@@ -1934,7 +2031,7 @@
       ]
      ],
      "exports": {
-      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, with a row of mustard-yellow status lights along the collarbone, a mechanical eye on a small articulated stalk; a bodyguard in a fitted mustard-yellow suit stretched over armour plating, an earpiece in one ear, their clothes marked by Ndebele geometric blocks painted on the sleeves, wearing the navy and white of the Monsoon Boys with raindrops tattooed under one eye, with a ballistic briefcase",
+      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, with thermal camouflage panels on the shoulders, mustard-yellow LED tattoos that scroll slowly along the forearm; a bodyguard in a fitted mustard-yellow suit stretched over armour plating, an earpiece in one ear, their clothes marked by Ndebele geometric blocks painted on the sleeves, wearing the navy and white of the Monsoon Boys with raindrops tattooed under one eye, with a ballistic briefcase",
       "age": "24",
       "gender": "woman",
       "role": {
@@ -1946,9 +2043,10 @@
       "gang": {
        "value": "the Monsoon Boys",
        "colours": "navy and white",
-       "sign": "raindrops tattooed under one eye"
+       "sign": "raindrops tattooed under one eye",
+       "where": "head"
       },
-      "augments": "a row of mustard-yellow status lights along the collarbone, a mechanical eye on a small articulated stalk",
+      "augments": "thermal camouflage panels on the shoulders, mustard-yellow LED tattoos that scroll slowly along the forearm",
       "gear": "a ballistic briefcase",
       "colour": "mustard-yellow",
       "mood": "mischievously secretive",
@@ -1962,7 +2060,7 @@
     },
     {
      "cell": 3,
-     "text": "A 3D character render, in the style of a modern animated feature film, of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, with a row of mustard-yellow status lights along the collarbone, a mechanical eye on a small articulated stalk; a bodyguard in a fitted mustard-yellow suit stretched over armour plating, an earpiece in one ear, their clothes marked by Ndebele geometric blocks painted on the sleeves, wearing the navy and white of the Monsoon Boys with raindrops tattooed under one eye, with a ballistic briefcase, with a brooding, lowered brow. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against an elevated train platform in the rain, in soft, even light. Stylised proportions, soft subsurface skin.",
+     "text": "A 3D character render, in the style of a modern animated feature film: a strict side profile of the head and shoulders of a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, with thermal camouflage panels on the shoulders; a bodyguard in a fitted mustard-yellow suit stretched over armour plating, an earpiece in one ear, their clothes marked by Ndebele geometric blocks painted on the sleeves, wearing the navy and white of the Monsoon Boys, with raindrops tattooed under one eye, with a brooding, lowered brow. The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible. Behind them is an elevated train platform in the rain, in soft, even light. Stylised proportions, soft subsurface skin.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -2105,11 +2203,24 @@
        ]
       ],
       [
-       "__characters/cyberpunk/implant__ ×2",
-       "a row of $colour status lights along the collarbone, a mechanical eye on a small articulated stalk",
+       "$headchrome ← __characters/cyberpunk/implant[where=head]__",
+       "thermal camouflage panels on the shoulders",
        [
-        "__characters/cyberpunk/implant__=a row of $colour status lights along the collarbone",
-        "__characters/cyberpunk/implant__=a mechanical eye on a small articulated stalk"
+        "__characters/cyberpunk/implant__=thermal camouflage panels on the shoulders"
+       ]
+      ],
+      [
+       "{__characters/cyberpunk/implant[where=body]__|none}",
+       "__characters/cyberpunk/implant[where=body]__",
+       [
+        "{__characters/cyberpunk/implant[where=body]__|none}=__characters/cyberpunk/implant[where=body]__"
+       ]
+      ],
+      [
+       "$bodychrome ← __characters/cyberpunk/implant[where=body]__",
+       "$colour LED tattoos that scroll slowly along the forearm",
+       [
+        "__characters/cyberpunk/implant__=$colour LED tattoos that scroll slowly along the forearm"
        ]
       ],
       [
@@ -2162,17 +2273,17 @@
        ]
       ],
       [
-       "{photo|animated|anime}",
-       "animated",
-       [
-        "{photo|animated|anime}=animated"
-       ]
-      ],
-      [
        "{portrait|three-quarter|full-length|profile}",
        "profile",
        [
         "{portrait|three-quarter|full-length|profile}=profile"
+       ]
+      ],
+      [
+       "{photo|animated|anime}",
+       "animated",
+       [
+        "{photo|animated|anime}=animated"
        ]
       ],
       [
@@ -2213,7 +2324,7 @@
       ]
      ],
      "exports": {
-      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, with a row of mustard-yellow status lights along the collarbone, a mechanical eye on a small articulated stalk; a bodyguard in a fitted mustard-yellow suit stretched over armour plating, an earpiece in one ear, their clothes marked by Ndebele geometric blocks painted on the sleeves, wearing the navy and white of the Monsoon Boys with raindrops tattooed under one eye, with a ballistic briefcase",
+      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, with thermal camouflage panels on the shoulders, mustard-yellow LED tattoos that scroll slowly along the forearm; a bodyguard in a fitted mustard-yellow suit stretched over armour plating, an earpiece in one ear, their clothes marked by Ndebele geometric blocks painted on the sleeves, wearing the navy and white of the Monsoon Boys with raindrops tattooed under one eye, with a ballistic briefcase",
       "age": "24",
       "gender": "woman",
       "role": {
@@ -2225,9 +2336,10 @@
       "gang": {
        "value": "the Monsoon Boys",
        "colours": "navy and white",
-       "sign": "raindrops tattooed under one eye"
+       "sign": "raindrops tattooed under one eye",
+       "where": "head"
       },
-      "augments": "a row of mustard-yellow status lights along the collarbone, a mechanical eye on a small articulated stalk",
+      "augments": "thermal camouflage panels on the shoulders, mustard-yellow LED tattoos that scroll slowly along the forearm",
       "gear": "a ballistic briefcase",
       "colour": "mustard-yellow",
       "mood": "mischievously secretive",
@@ -2245,7 +2357,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "A cinematic photograph, as from a neo-noir science-fiction film, of a 28-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length sodium-lamp orange two-strand twists and a split earlobe, healed in two points, with a throat of exposed vocal synth coils; a netrunner in a camel hooded sweatshirt under a tailored overcoat, their clothes marked by wide camel stripes down the sleeves, wearing the black on black of the Blackout Kids with black tape over one ear, with a cyberdeck patched with tape, with a sheepish, apologetic look. A head-and-shoulders portrait, facing the camera, against a bridge of traffic streaming below, in soft, even light. Shot on an 85mm lens at eye level, true colours with a touch of neon in the highlights.",
+     "text": "A cinematic photograph, as from a neo-noir science-fiction film: a head-and-shoulders portrait of a 28-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length sodium-lamp orange two-strand twists and a split earlobe, healed in two points, with a retractable visor that slides down over the eyes; a netrunner in a camel hooded sweatshirt under a tailored overcoat, their clothes marked by wide camel stripes down the sleeves, wearing the black on black of the Blackout Kids, with black tape over one ear, with a sheepish, apologetic look. They face the camera. Behind them is a bridge of traffic streaming below, in soft, even light. Shot on an 85mm lens at eye level, true colours with a touch of neon in the highlights.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -2388,18 +2500,17 @@
        ]
       ],
       [
-       "__characters/cyberpunk/implant__ ×2",
-       "a forearm cannon folded flat along the arm, knuckle ports with retractable spikes",
+       "$headchrome ← __characters/cyberpunk/implant[where=head]__",
+       "a retractable visor that slides down over the eyes",
        [
-        "__characters/cyberpunk/implant__=a forearm cannon folded flat along the arm",
-        "__characters/cyberpunk/implant__=knuckle ports with retractable spikes"
+        "__characters/cyberpunk/implant__=a retractable visor that slides down over the eyes"
        ]
       ],
       [
-       "$chrome ← __characters/cyberpunk/implant__",
-       "a throat of exposed vocal synth coils",
+       "{__characters/cyberpunk/implant[where=body]__|none}",
+       "none",
        [
-        "__characters/cyberpunk/implant__=a throat of exposed vocal synth coils"
+        "{__characters/cyberpunk/implant[where=body]__|none}=none"
        ]
       ],
       [
@@ -2459,17 +2570,17 @@
        ]
       ],
       [
-       "{photo|animated|anime}",
-       "photo",
-       [
-        "{photo|animated|anime}=photo"
-       ]
-      ],
-      [
        "{portrait|three-quarter|full-length|profile}",
        "portrait",
        [
         "{portrait|three-quarter|full-length|profile}=portrait"
+       ]
+      ],
+      [
+       "{photo|animated|anime}",
+       "photo",
+       [
+        "{photo|animated|anime}=photo"
        ]
       ],
       [
@@ -2510,7 +2621,7 @@
       ]
      ],
      "exports": {
-      "who": "a 28-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length sodium-lamp orange two-strand twists and a split earlobe, healed in two points, with a throat of exposed vocal synth coils; a netrunner in a camel hooded sweatshirt under a tailored overcoat, their clothes marked by wide camel stripes down the sleeves, wearing the black on black of the Blackout Kids with black tape over one ear, with a cyberdeck patched with tape",
+      "who": "a 28-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length sodium-lamp orange two-strand twists and a split earlobe, healed in two points, with a retractable visor that slides down over the eyes; a netrunner in a camel hooded sweatshirt under a tailored overcoat, their clothes marked by wide camel stripes down the sleeves, wearing the black on black of the Blackout Kids with black tape over one ear, with a cyberdeck patched with tape",
       "age": "28",
       "gender": "man",
       "role": {
@@ -2522,9 +2633,10 @@
       "gang": {
        "value": "the Blackout Kids",
        "colours": "black on black",
-       "sign": "black tape over one ear"
+       "sign": "black tape over one ear",
+       "where": "head"
       },
-      "augments": "a throat of exposed vocal synth coils",
+      "augments": "a retractable visor that slides down over the eyes",
       "gear": "a cyberdeck patched with tape",
       "colour": "camel",
       "mood": "theatrically dramatic",
@@ -2538,7 +2650,7 @@
     },
     {
      "cell": 1,
-     "text": "A cinematic photograph, as from a neo-noir science-fiction film, of a 28-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length sodium-lamp orange two-strand twists and a split earlobe, healed in two points, with a throat of exposed vocal synth coils; a netrunner in a camel hooded sweatshirt under a tailored overcoat, their clothes marked by wide camel stripes down the sleeves, wearing the black on black of the Blackout Kids with black tape over one ear, with a cyberdeck patched with tape, with a sheepish, apologetic look. A head-and-shoulders view turned three-quarters to the left, against a bridge of traffic streaming below, in soft, even light. Shot on an 85mm lens at eye level, true colours with a touch of neon in the highlights.",
+     "text": "A cinematic photograph, as from a neo-noir science-fiction film: a head-and-shoulders view of a 28-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length sodium-lamp orange two-strand twists and a split earlobe, healed in two points, with a retractable visor that slides down over the eyes; a netrunner in a camel hooded sweatshirt under a tailored overcoat, their clothes marked by wide camel stripes down the sleeves, wearing the black on black of the Blackout Kids, with black tape over one ear, with a sheepish, apologetic look. They are turned three-quarters to the left. Behind them is a bridge of traffic streaming below, in soft, even light. Shot on an 85mm lens at eye level, true colours with a touch of neon in the highlights.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -2681,18 +2793,17 @@
        ]
       ],
       [
-       "__characters/cyberpunk/implant__ ×2",
-       "a forearm cannon folded flat along the arm, knuckle ports with retractable spikes",
+       "$headchrome ← __characters/cyberpunk/implant[where=head]__",
+       "a retractable visor that slides down over the eyes",
        [
-        "__characters/cyberpunk/implant__=a forearm cannon folded flat along the arm",
-        "__characters/cyberpunk/implant__=knuckle ports with retractable spikes"
+        "__characters/cyberpunk/implant__=a retractable visor that slides down over the eyes"
        ]
       ],
       [
-       "$chrome ← __characters/cyberpunk/implant__",
-       "a throat of exposed vocal synth coils",
+       "{__characters/cyberpunk/implant[where=body]__|none}",
+       "none",
        [
-        "__characters/cyberpunk/implant__=a throat of exposed vocal synth coils"
+        "{__characters/cyberpunk/implant[where=body]__|none}=none"
        ]
       ],
       [
@@ -2752,17 +2863,17 @@
        ]
       ],
       [
-       "{photo|animated|anime}",
-       "photo",
-       [
-        "{photo|animated|anime}=photo"
-       ]
-      ],
-      [
        "{portrait|three-quarter|full-length|profile}",
        "three-quarter",
        [
         "{portrait|three-quarter|full-length|profile}=three-quarter"
+       ]
+      ],
+      [
+       "{photo|animated|anime}",
+       "photo",
+       [
+        "{photo|animated|anime}=photo"
        ]
       ],
       [
@@ -2803,7 +2914,7 @@
       ]
      ],
      "exports": {
-      "who": "a 28-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length sodium-lamp orange two-strand twists and a split earlobe, healed in two points, with a throat of exposed vocal synth coils; a netrunner in a camel hooded sweatshirt under a tailored overcoat, their clothes marked by wide camel stripes down the sleeves, wearing the black on black of the Blackout Kids with black tape over one ear, with a cyberdeck patched with tape",
+      "who": "a 28-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length sodium-lamp orange two-strand twists and a split earlobe, healed in two points, with a retractable visor that slides down over the eyes; a netrunner in a camel hooded sweatshirt under a tailored overcoat, their clothes marked by wide camel stripes down the sleeves, wearing the black on black of the Blackout Kids with black tape over one ear, with a cyberdeck patched with tape",
       "age": "28",
       "gender": "man",
       "role": {
@@ -2815,9 +2926,10 @@
       "gang": {
        "value": "the Blackout Kids",
        "colours": "black on black",
-       "sign": "black tape over one ear"
+       "sign": "black tape over one ear",
+       "where": "head"
       },
-      "augments": "a throat of exposed vocal synth coils",
+      "augments": "a retractable visor that slides down over the eyes",
       "gear": "a cyberdeck patched with tape",
       "colour": "camel",
       "mood": "theatrically dramatic",
@@ -2831,7 +2943,7 @@
     },
     {
      "cell": 2,
-     "text": "A cinematic photograph, as from a neo-noir science-fiction film, of a 28-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length sodium-lamp orange two-strand twists and a split earlobe, healed in two points, with a throat of exposed vocal synth coils; a netrunner in a camel hooded sweatshirt under a tailored overcoat, their clothes marked by wide camel stripes down the sleeves, wearing the black on black of the Blackout Kids with black tape over one ear, with a cyberdeck patched with tape, with a sheepish, apologetic look. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a bridge of traffic streaming below, in soft, even light. Shot on an 85mm lens at eye level, true colours with a touch of neon in the highlights.",
+     "text": "A cinematic photograph, as from a neo-noir science-fiction film: a full-length view of the whole body, from the top of the head to the shoes, of a 28-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length sodium-lamp orange two-strand twists and a split earlobe, healed in two points, with a retractable visor that slides down over the eyes; a netrunner in a camel hooded sweatshirt under a tailored overcoat, their clothes marked by wide camel stripes down the sleeves, wearing the black on black of the Blackout Kids, with black tape over one ear, with a sheepish, apologetic look. They stand straight with the arms relaxed, facing the camera, with a cyberdeck patched with tape, and floor and space around them are in frame. Behind them is a bridge of traffic streaming below, in soft, even light. Shot on an 85mm lens at eye level, true colours with a touch of neon in the highlights.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -2974,18 +3086,17 @@
        ]
       ],
       [
-       "__characters/cyberpunk/implant__ ×2",
-       "a forearm cannon folded flat along the arm, knuckle ports with retractable spikes",
+       "$headchrome ← __characters/cyberpunk/implant[where=head]__",
+       "a retractable visor that slides down over the eyes",
        [
-        "__characters/cyberpunk/implant__=a forearm cannon folded flat along the arm",
-        "__characters/cyberpunk/implant__=knuckle ports with retractable spikes"
+        "__characters/cyberpunk/implant__=a retractable visor that slides down over the eyes"
        ]
       ],
       [
-       "$chrome ← __characters/cyberpunk/implant__",
-       "a throat of exposed vocal synth coils",
+       "{__characters/cyberpunk/implant[where=body]__|none}",
+       "none",
        [
-        "__characters/cyberpunk/implant__=a throat of exposed vocal synth coils"
+        "{__characters/cyberpunk/implant[where=body]__|none}=none"
        ]
       ],
       [
@@ -3045,17 +3156,17 @@
        ]
       ],
       [
-       "{photo|animated|anime}",
-       "photo",
-       [
-        "{photo|animated|anime}=photo"
-       ]
-      ],
-      [
        "{portrait|three-quarter|full-length|profile}",
        "full-length",
        [
         "{portrait|three-quarter|full-length|profile}=full-length"
+       ]
+      ],
+      [
+       "{photo|animated|anime}",
+       "photo",
+       [
+        "{photo|animated|anime}=photo"
        ]
       ],
       [
@@ -3096,7 +3207,7 @@
       ]
      ],
      "exports": {
-      "who": "a 28-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length sodium-lamp orange two-strand twists and a split earlobe, healed in two points, with a throat of exposed vocal synth coils; a netrunner in a camel hooded sweatshirt under a tailored overcoat, their clothes marked by wide camel stripes down the sleeves, wearing the black on black of the Blackout Kids with black tape over one ear, with a cyberdeck patched with tape",
+      "who": "a 28-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length sodium-lamp orange two-strand twists and a split earlobe, healed in two points, with a retractable visor that slides down over the eyes; a netrunner in a camel hooded sweatshirt under a tailored overcoat, their clothes marked by wide camel stripes down the sleeves, wearing the black on black of the Blackout Kids with black tape over one ear, with a cyberdeck patched with tape",
       "age": "28",
       "gender": "man",
       "role": {
@@ -3108,9 +3219,10 @@
       "gang": {
        "value": "the Blackout Kids",
        "colours": "black on black",
-       "sign": "black tape over one ear"
+       "sign": "black tape over one ear",
+       "where": "head"
       },
-      "augments": "a throat of exposed vocal synth coils",
+      "augments": "a retractable visor that slides down over the eyes",
       "gear": "a cyberdeck patched with tape",
       "colour": "camel",
       "mood": "theatrically dramatic",
@@ -3124,7 +3236,7 @@
     },
     {
      "cell": 3,
-     "text": "A cinematic photograph, as from a neo-noir science-fiction film, of a 28-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length sodium-lamp orange two-strand twists and a split earlobe, healed in two points, with a throat of exposed vocal synth coils; a netrunner in a camel hooded sweatshirt under a tailored overcoat, their clothes marked by wide camel stripes down the sleeves, wearing the black on black of the Blackout Kids with black tape over one ear, with a cyberdeck patched with tape, with a sheepish, apologetic look. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a bridge of traffic streaming below, in soft, even light. Shot on an 85mm lens at eye level, true colours with a touch of neon in the highlights.",
+     "text": "A cinematic photograph, as from a neo-noir science-fiction film: a strict side profile of the head and shoulders of a 28-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length sodium-lamp orange two-strand twists and a split earlobe, healed in two points, with a retractable visor that slides down over the eyes; a netrunner in a camel hooded sweatshirt under a tailored overcoat, their clothes marked by wide camel stripes down the sleeves, wearing the black on black of the Blackout Kids, with black tape over one ear, with a sheepish, apologetic look. The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible. Behind them is a bridge of traffic streaming below, in soft, even light. Shot on an 85mm lens at eye level, true colours with a touch of neon in the highlights.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -3267,18 +3379,17 @@
        ]
       ],
       [
-       "__characters/cyberpunk/implant__ ×2",
-       "a forearm cannon folded flat along the arm, knuckle ports with retractable spikes",
+       "$headchrome ← __characters/cyberpunk/implant[where=head]__",
+       "a retractable visor that slides down over the eyes",
        [
-        "__characters/cyberpunk/implant__=a forearm cannon folded flat along the arm",
-        "__characters/cyberpunk/implant__=knuckle ports with retractable spikes"
+        "__characters/cyberpunk/implant__=a retractable visor that slides down over the eyes"
        ]
       ],
       [
-       "$chrome ← __characters/cyberpunk/implant__",
-       "a throat of exposed vocal synth coils",
+       "{__characters/cyberpunk/implant[where=body]__|none}",
+       "none",
        [
-        "__characters/cyberpunk/implant__=a throat of exposed vocal synth coils"
+        "{__characters/cyberpunk/implant[where=body]__|none}=none"
        ]
       ],
       [
@@ -3338,17 +3449,17 @@
        ]
       ],
       [
-       "{photo|animated|anime}",
-       "photo",
-       [
-        "{photo|animated|anime}=photo"
-       ]
-      ],
-      [
        "{portrait|three-quarter|full-length|profile}",
        "profile",
        [
         "{portrait|three-quarter|full-length|profile}=profile"
+       ]
+      ],
+      [
+       "{photo|animated|anime}",
+       "photo",
+       [
+        "{photo|animated|anime}=photo"
        ]
       ],
       [
@@ -3389,7 +3500,7 @@
       ]
      ],
      "exports": {
-      "who": "a 28-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length sodium-lamp orange two-strand twists and a split earlobe, healed in two points, with a throat of exposed vocal synth coils; a netrunner in a camel hooded sweatshirt under a tailored overcoat, their clothes marked by wide camel stripes down the sleeves, wearing the black on black of the Blackout Kids with black tape over one ear, with a cyberdeck patched with tape",
+      "who": "a 28-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length sodium-lamp orange two-strand twists and a split earlobe, healed in two points, with a retractable visor that slides down over the eyes; a netrunner in a camel hooded sweatshirt under a tailored overcoat, their clothes marked by wide camel stripes down the sleeves, wearing the black on black of the Blackout Kids with black tape over one ear, with a cyberdeck patched with tape",
       "age": "28",
       "gender": "man",
       "role": {
@@ -3401,9 +3512,10 @@
       "gang": {
        "value": "the Blackout Kids",
        "colours": "black on black",
-       "sign": "black tape over one ear"
+       "sign": "black tape over one ear",
+       "where": "head"
       },
-      "augments": "a throat of exposed vocal synth coils",
+      "augments": "a retractable visor that slides down over the eyes",
       "gear": "a cyberdeck patched with tape",
       "colour": "camel",
       "mood": "theatrically dramatic",

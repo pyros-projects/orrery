@@ -1,89 +1,89 @@
-meta: {source: "orrery cyberpunk creator: visible cybernetics, each something a picture shows; several read the signature $colour", needs: [colour], builtin: true}
+meta: {source: "orrery cyberpunk creator: visible cybernetics, each something a picture shows; `where` says what shows it: head in a head-and-shoulders view (the face, the eyes, the skull, the neck, the shoulders), body only in a full figure; several read the signature $colour", needs: [colour], builtin: true}
 entries:
-  - a chrome left arm with exposed hydraulics
-  - a matte-black right arm with $colour seams
-  - optic implants that glow $colour when focusing
-  - a jaw plate of brushed titanium
-  - fingertips replaced by thin silver data jacks
-  - a row of $colour status lights along the collarbone
-  - a translucent forearm showing the wiring inside
-  - a mirrored lens replacing one eye
-  - a ring of interface ports behind one ear
-  - subdermal $colour circuit lines glowing under the skin of the neck
-  - a skull plate with a socket for a data spike
-  - chrome fingers with knuckles of polished steel
-  - a cheek panel that opens on a speaker grille
-  - a heavy industrial arm with a three-fingered claw
-  - $colour LED tattoos that scroll slowly along the forearm
-  - a pair of long chrome blades folded along the forearms
-  - a breathing filter grafted over the mouth and nose
-  - a spine of articulated steel visible at the neck
-  - a hand split into delicate surgical tools
-  - an eye with a rotating triple lens
-  - a holographic projector set into the palm
-  - a throat of exposed vocal synth coils
-  - a shoulder-mounted targeting laser
-  - legs of carbon fibre ending in sprung feet
-  - a bionic ear shaped like a small $colour fin
-  - scales of chrome armour grafted over the forearms
-  - a glowing $colour cable running from the temple into the collar
-  - an iris that spins like a camera shutter
-  - a chest plate with a $colour reactor glow behind it
-  - teeth replaced by chrome
-  - a sensor strip across the forehead like a visor
-  - a neural crown of thin wires woven into the scalp
-  - a finger that unfolds into a lock pick
-  - a mouth guard of segmented steel
-  - a pair of extra small manipulator arms at the ribs
-  - a face half covered by a porcelain-white prosthetic
-  - a cybernetic eye bleeding $colour light down the cheek
-  - knuckle ports with retractable spikes
-  - a wrist display flickering with $colour code
-  - smooth synthetic skin with a visible seam at the jaw
-  - a cracked chrome cheekbone held together with solder
-  - antennae rising from behind the ears
-  - a nose replaced by a filter grille
-  - a mechanical hand painted $colour
-  - hair of fibre-optic strands glowing $colour at the tips
-  - a hinged jaw of black composite
-  - eyes entirely $colour, with no whites
-  - a recessed battery cell in the side of the neck
-  - a heat sink fin running down the spine
-  - golden filigree inlaid into a chrome arm
-  - a prosthetic leg of skeletal steel
-  - a monocle display fused to the eye socket
-  - a chin of riveted plates
-  - a hand with too many fingers, all chrome
-  - a tracery of $colour light along every vein of the arms
-  - a gyroscopic stabiliser on one shoulder
-  - an exposed brain-case window of thick glass
-  - an ear cuff that is also a comms relay
-  - a forearm cannon folded flat along the arm
-  - a camera lens set into the middle of the forehead
-  - fingers tipped with $colour glowing contacts
-  - a cheap, yellowed plastic prosthetic arm
-  - a scarred socket where an implant was ripped out
-  - a barcode branded on the neck beside a serial port
-  - a heavy tactical visor bolted to the skull
-  - cooling vents along the ribs, glowing $colour
-  - a smart tattoo of a moving $colour koi on the arm
-  - a pair of chrome horns grafted to the skull
-  - eyelids replaced by sliding metal shutters
-  - a voice box that glows $colour when they speak
-  - an arm wrapped in exposed artificial muscle fibre
-  - a tail of segmented steel
-  - a thin steel cable spooled at the wrist
-  - a half-face mask of chrome with one red eye
-  - a glowing $colour ring implanted in each palm
-  - an articulated chrome hand with a gold signet ring
-  - a cable port in the base of the skull with a plug dangling
-  - skin patches of synthetic leather with stitching
-  - a heart monitor shining through a clear chest plate
-  - a retractable visor that slides down over the eyes
-  - an arm of mismatched parts from three different makers
-  - $colour bioluminescent freckles across the cheeks
-  - a mechanical eye on a small articulated stalk
-  - wrist sockets with braided data cables
-  - thermal camouflage panels on the shoulders
-  - a lower jaw of chrome with a speaker in the chin
-  - a robotic arm with corporate warning stickers
+  - {value: "a chrome left arm with exposed hydraulics", props: {where: body}}
+  - {value: "a matte-black right arm with $colour seams", props: {where: body}}
+  - {value: "optic implants that glow $colour when focusing", props: {where: head}}
+  - {value: "a jaw plate of brushed titanium", props: {where: head}}
+  - {value: "fingertips replaced by thin silver data jacks", props: {where: body}}
+  - {value: "a row of $colour status lights along the collarbone", props: {where: head}}
+  - {value: "a translucent forearm showing the wiring inside", props: {where: body}}
+  - {value: "a mirrored lens replacing one eye", props: {where: head}}
+  - {value: "a ring of interface ports behind one ear", props: {where: head}}
+  - {value: "subdermal $colour circuit lines glowing under the skin of the neck", props: {where: head}}
+  - {value: "a skull plate with a socket for a data spike", props: {where: head}}
+  - {value: "chrome fingers with knuckles of polished steel", props: {where: body}}
+  - {value: "a cheek panel that opens on a speaker grille", props: {where: head}}
+  - {value: "a heavy industrial arm with a three-fingered claw", props: {where: body}}
+  - {value: "$colour LED tattoos that scroll slowly along the forearm", props: {where: body}}
+  - {value: "a pair of long chrome blades folded along the forearms", props: {where: body}}
+  - {value: "a breathing filter grafted over the mouth and nose", props: {where: head}}
+  - {value: "a spine of articulated steel visible at the neck", props: {where: head}}
+  - {value: "a hand split into delicate surgical tools", props: {where: body}}
+  - {value: "an eye with a rotating triple lens", props: {where: head}}
+  - {value: "a holographic projector set into the palm", props: {where: body}}
+  - {value: "a throat of exposed vocal synth coils", props: {where: head}}
+  - {value: "a shoulder-mounted targeting laser", props: {where: head}}
+  - {value: "legs of carbon fibre ending in sprung feet", props: {where: body}}
+  - {value: "a bionic ear shaped like a small $colour fin", props: {where: head}}
+  - {value: "scales of chrome armour grafted over the forearms", props: {where: body}}
+  - {value: "a glowing $colour cable running from the temple into the collar", props: {where: head}}
+  - {value: "an iris that spins like a camera shutter", props: {where: head}}
+  - {value: "a chest plate with a $colour reactor glow behind it", props: {where: body}}
+  - {value: "teeth replaced by chrome", props: {where: head}}
+  - {value: "a sensor strip across the forehead like a visor", props: {where: head}}
+  - {value: "a neural crown of thin wires woven into the scalp", props: {where: head}}
+  - {value: "a finger that unfolds into a lock pick", props: {where: body}}
+  - {value: "a mouth guard of segmented steel", props: {where: head}}
+  - {value: "a pair of extra small manipulator arms at the ribs", props: {where: body}}
+  - {value: "a face half covered by a porcelain-white prosthetic", props: {where: head}}
+  - {value: "a cybernetic eye bleeding $colour light down the cheek", props: {where: head}}
+  - {value: "knuckle ports with retractable spikes", props: {where: body}}
+  - {value: "a wrist display flickering with $colour code", props: {where: body}}
+  - {value: "smooth synthetic skin with a visible seam at the jaw", props: {where: head}}
+  - {value: "a cracked chrome cheekbone held together with solder", props: {where: head}}
+  - {value: "antennae rising from behind the ears", props: {where: head}}
+  - {value: "a nose replaced by a filter grille", props: {where: head}}
+  - {value: "a mechanical hand painted $colour", props: {where: body}}
+  - {value: "hair of fibre-optic strands glowing $colour at the tips", props: {where: head}}
+  - {value: "a hinged jaw of black composite", props: {where: head}}
+  - {value: "eyes entirely $colour, with no whites", props: {where: head}}
+  - {value: "a recessed battery cell in the side of the neck", props: {where: head}}
+  - {value: "a heat sink fin running down the spine", props: {where: body}}
+  - {value: "golden filigree inlaid into a chrome arm", props: {where: body}}
+  - {value: "a prosthetic leg of skeletal steel", props: {where: body}}
+  - {value: "a monocle display fused to the eye socket", props: {where: head}}
+  - {value: "a chin of riveted plates", props: {where: head}}
+  - {value: "a hand with too many fingers, all chrome", props: {where: body}}
+  - {value: "a tracery of $colour light along every vein of the arms", props: {where: body}}
+  - {value: "a gyroscopic stabiliser on one shoulder", props: {where: head}}
+  - {value: "an exposed brain-case window of thick glass", props: {where: head}}
+  - {value: "an ear cuff that is also a comms relay", props: {where: head}}
+  - {value: "a forearm cannon folded flat along the arm", props: {where: body}}
+  - {value: "a camera lens set into the middle of the forehead", props: {where: head}}
+  - {value: "fingers tipped with $colour glowing contacts", props: {where: body}}
+  - {value: "a cheap, yellowed plastic prosthetic arm", props: {where: body}}
+  - {value: "a scarred socket at the temple where an implant was ripped out", props: {where: head}}
+  - {value: "a barcode branded on the neck beside a serial port", props: {where: head}}
+  - {value: "a heavy tactical visor bolted to the skull", props: {where: head}}
+  - {value: "cooling vents along the ribs, glowing $colour", props: {where: body}}
+  - {value: "a smart tattoo of a moving $colour koi on the arm", props: {where: body}}
+  - {value: "a pair of chrome horns grafted to the skull", props: {where: head}}
+  - {value: "eyelids replaced by sliding metal shutters", props: {where: head}}
+  - {value: "a voice box that glows $colour when they speak", props: {where: head}}
+  - {value: "an arm wrapped in exposed artificial muscle fibre", props: {where: body}}
+  - {value: "a tail of segmented steel", props: {where: body}}
+  - {value: "a thin steel cable spooled at the wrist", props: {where: body}}
+  - {value: "a half-face mask of chrome with one red eye", props: {where: head}}
+  - {value: "a glowing $colour ring implanted in each palm", props: {where: body}}
+  - {value: "an articulated chrome hand with a gold signet ring", props: {where: body}}
+  - {value: "a cable port in the base of the skull with a plug dangling", props: {where: head}}
+  - {value: "skin patches of synthetic leather stitched across the face", props: {where: head}}
+  - {value: "a heart monitor shining through a clear chest plate", props: {where: body}}
+  - {value: "a retractable visor that slides down over the eyes", props: {where: head}}
+  - {value: "an arm of mismatched parts from three different makers", props: {where: body}}
+  - {value: "$colour bioluminescent freckles across the cheeks", props: {where: head}}
+  - {value: "a mechanical eye on a small articulated stalk", props: {where: head}}
+  - {value: "wrist sockets with braided data cables", props: {where: body}}
+  - {value: "thermal camouflage panels on the shoulders", props: {where: head}}
+  - {value: "a lower jaw of chrome with a speaker in the chin", props: {where: head}}
+  - {value: "a robotic arm with corporate warning stickers", props: {where: body}}

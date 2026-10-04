@@ -1,6 +1,6 @@
 ---
 title: "Cyberpunk creator"
-note: "A character of a neon city for Krea 2: one of thirty roles (netrunner, mercenary, street doctor, courier, fixer, corporate agent, nomad, pop idol, ripperdoc …), each with its working clothes and its gear, or street fashion instead; visible chrome, two pieces for the heavily augmented; hair in a neon dye, a gang's colours and sign now and then, a drone or a cyber-rat beside them. It keeps what the picture cannot show (EXPORT:): the role, the gang, the augments, the gear, a mood, a quirk, two skills, a voice, so a reel that casts it from the gallery reads $hero.role and $hero.gang. One seed is one character, from four sides by the grid; $backdrop puts it in the night city instead of the studio, $view one side only to try characters faster."
+note: "A character of a neon city for Krea 2: one of thirty roles (netrunner, mercenary, street doctor, courier, fixer, corporate agent, nomad, pop idol, ripperdoc …), each with its working clothes and its gear, or street fashion instead; visible chrome, two pieces for the heavily augmented; hair in a neon dye, a gang's colours and sign now and then, a drone or a cyber-rat beside them. It keeps what the picture cannot show (EXPORT:): the role, the gang, the augments, the gear, a mood, a quirk, two skills, a voice, so a reel that casts it from the gallery reads $hero.role and $hero.gang. One seed is one character, from four sides by the grid: the close views show the head, the shoulders, the clothes and the head's chrome, the full-length view the body's chrome, the gear and the companion too; $backdrop puts it in the night city instead of the studio, $view one side only to try characters faster."
 tags: [krea, characters, references, cyberpunk]
 ---
 $colour = __characters/creator/colour__
@@ -17,7 +17,10 @@ $hair = __characters/creator/hair[fit=$fit|all]__
 $beard = {IF $gender is man: {__characters/creator/beard__|none:2}|none}
 $mark = __characters/creator/mark__
 $role = __characters/cyberpunk/role__
-$chrome = {IF $role.chrome is heavy: {2$$__characters/cyberpunk/implant__}|__characters/cyberpunk/implant__}
+# Chrome a head-and-shoulders view can show, and chrome only a full figure shows: a heavy role always has both.
+$headchrome = __characters/cyberpunk/implant[where=head]__
+$bodychrome = {IF $role.chrome is heavy: __characters/cyberpunk/implant[where=body]__|{__characters/cyberpunk/implant[where=body]__|none}}
+$chrome = $headchrome{IF $bodychrome is not none: , $bodychrome|}
 $outfit = {$role.wear:3|__characters/cyberpunk/streetwear[fit=$fit|all]__:2}
 $gear = $role.gear
 $gang = {__characters/cyberpunk/gang__:2|none:3}
@@ -25,6 +28,10 @@ $motif = __characters/creator/motif[genre=cyberpunk|all]__
 $companion = {__characters/creator/companion[genre=cyberpunk]__|none:3}
 $presence = __characters/creator/presence__
 $backdrop = {studio:3|city}
+# The grid runs every view: one character from four sides. Set $view to one of them to try characters faster.
+# The shot comes first and the picture names only what it can show: the close views the head, the shoulders, the clothes, the head's chrome and a sign worn there; the full-length view the body's chrome, the gear and every sign too, and the companion in a sentence of its own.
+$view = {portrait|three-quarter|full-length|profile}
+$person = a $years-year-old $gender of $origin: $build, $face, $eyes, $hair{IF $beard is not none: , $beard|} and $mark, with {IF $view is full-length: $chrome|$headchrome}; $role in $outfit, their clothes marked by $motif{IF $gang is not none: , wearing the $gang.colours of $gang{IF $gang.where is head: , with $gang.sign|{IF $view is full-length: , with $gang.sign|}}|}
 $who = a $years-year-old $gender of $origin: $build, $face, $eyes, $hair{IF $beard is not none: , $beard|} and $mark, with $chrome; $role in $outfit, their clothes marked by $motif{IF $gang is not none: , wearing the $gang.colours of $gang with $gang.sign|}, with $gear{IF $companion is not none: , $companion|}
 # What the picture carries beyond its prompt (EXPORT:): a screenplay that casts it reads $hero.who, $hero.role, $hero.gang …
 EXPORT:
@@ -40,12 +47,12 @@ EXPORT:
   quirk = __characters/creator/quirk__
   skills = {2$$__characters/creator/skill[genre=cyberpunk|all]__}
   voice = __characters/creator/voice__
-# The grid runs every view: one character from four sides. Set $view to one of them to try characters faster.
 $look = {photo:5|animated:2|anime:3}
-$view = {portrait|three-quarter|full-length|profile}
-$opening = {IF $look is photo: A cinematic photograph, as from a neo-noir science-fiction film,|{IF $look is animated: A 3D character render, in the style of a modern animated feature film,|An anime character design}}
-$frame = {IF $view is portrait: A head-and-shoulders portrait, facing the camera|{IF $view is three-quarter: A head-and-shoulders view turned three-quarters to the left|{IF $view is full-length: A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera|A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible}}}
+$opening = {IF $look is photo: A cinematic photograph, as from a neo-noir science-fiction film|{IF $look is animated: A 3D character render, in the style of a modern animated feature film|An anime character design}}
+$shot = {IF $view is portrait: a head-and-shoulders portrait|{IF $view is three-quarter: a head-and-shoulders view|{IF $view is full-length: a full-length view of the whole body, from the top of the head to the shoes,|a strict side profile of the head and shoulders}}}
+$stand = They stand straight with the arms relaxed, facing the camera, with $gear, and floor and space around them are in frame.
+$pose = {IF $view is portrait: They face the camera.|{IF $view is three-quarter: They are turned three-quarters to the left.|{IF $view is full-length: {IF $companion is not none: $stand With them: $companion.|$stand}|The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible.}}}
 $finish = {IF $look is photo: Shot on an 85mm lens at eye level, true colours with a touch of neon in the highlights.|{IF $look is animated: Stylised proportions, soft subsurface skin.|Clean line art and flat cel shading.}}
-$opening of $who, with $presence. $frame, against {IF $backdrop is studio: a seamless mid-grey studio backdrop|__characters/cyberpunk/city__}, in soft, even light. $finish
+$opening: $shot of $person, with $presence. $pose Behind them is {IF $backdrop is studio: a seamless mid-grey studio backdrop|__characters/cyberpunk/city__}, in soft, even light. $finish
 @size 832x1216
 @grid $view

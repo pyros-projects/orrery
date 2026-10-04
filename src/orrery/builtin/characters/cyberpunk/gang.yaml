@@ -1,38 +1,38 @@
-meta: {source: "orrery cyberpunk creator: street gangs, each with its `colours` and its `sign` (how members wear them)", builtin: true}
+meta: {source: "orrery cyberpunk creator: street gangs, each with its `colours` and its `sign` (how members wear them); `where` says what shows the sign: head in a head-and-shoulders view, body only in a full figure", builtin: true}
 entries:
-  - {value: "the Neon Saints", props: {colours: "hot pink and white", sign: "a halo tattooed in hot pink behind one ear"}}
-  - {value: "the Chrome Jackals", props: {colours: "silver and black", sign: "a silver jackal-head pin"}}
-  - {value: "the Static Kings", props: {colours: "electric yellow and grey", sign: "a lightning crown stencilled on the jacket"}}
-  - {value: "the Night Market Tigers", props: {colours: "orange and black", sign: "tiger stripes painted across the cheekbones"}}
-  - {value: "the Drowned Rats", props: {colours: "sea green and rust", sign: "a rat skull hanging from a chain"}}
-  - {value: "the Paper Lanterns", props: {colours: "red and gold", sign: "a small paper lantern charm"}}
-  - {value: "the Blank Masks", props: {colours: "white and pale blue", sign: "a blank white mask hanging at the belt"}}
-  - {value: "the Copper Widows", props: {colours: "copper and black", sign: "a copper spider on the collar"}}
-  - {value: "the Blackout Kids", props: {colours: "black on black", sign: "black tape over one ear"}}
-  - {value: "the Sodium Lights", props: {colours: "amber and brown", sign: "an amber streetlight patch on the shoulder"}}
-  - {value: "the Riot Choir", props: {colours: "purple and white", sign: "a choir collar of purple lace"}}
-  - {value: "the Bone Saws", props: {colours: "bone white and red", sign: "a saw blade earring"}}
-  - {value: "the Glitch Dolls", props: {colours: "bubblegum pink and cyan", sign: "doll-like circles of blush and painted lashes"}}
-  - {value: "the Iron Monks", props: {colours: "grey and saffron", sign: "shaved heads and saffron armbands"}}
-  - {value: "the Overpass Wolves", props: {colours: "concrete grey and blue", sign: "a wolf howling at a highway light, sewn on the back"}}
-  - {value: "the Jade Syndicate", props: {colours: "jade green and gold", sign: "a jade ring on the little finger"}}
-  - {value: "the Rust Belt Riders", props: {colours: "rust orange and denim blue", sign: "a cog-wheel buckle"}}
-  - {value: "the Pixel Crows", props: {colours: "black and acid green", sign: "a pixel-art crow tattooed on the hand"}}
-  - {value: "the Holy Malware", props: {colours: "red and black", sign: "a cross made of circuit traces"}}
-  - {value: "the Velvet Static", props: {colours: "deep violet and silver", sign: "a velvet choker with a silver tag"}}
-  - {value: "the Monsoon Boys", props: {colours: "navy and white", sign: "raindrops tattooed under one eye"}}
-  - {value: "the Sugar Skulls", props: {colours: "white with flower colours", sign: "sugar-skull face paint"}}
-  - {value: "the Vending Machine Cult", props: {colours: "cherry red and chrome", sign: "a bottle-cap necklace"}}
-  - {value: "the Last Signal", props: {colours: "olive and orange", sign: "a radio antenna worn on the shoulder"}}
-  - {value: "the Koi Club", props: {colours: "orange and white", sign: "a koi-scale pattern on the sleeves"}}
-  - {value: "the Static Nuns", props: {colours: "black and white", sign: "a wimple stitched with LEDs"}}
-  - {value: "the Basement Philosophers", props: {colours: "brown and cream", sign: "a book-page patch with a quote"}}
-  - {value: "the Acid Rain", props: {colours: "acid yellow and black", sign: "a gas-mask pendant"}}
-  - {value: "the Mirrorballs", props: {colours: "silver and every colour", sign: "a mirrored mosaic patch"}}
-  - {value: "the Harbour Ghosts", props: {colours: "fog grey and teal", sign: "an anchor with a skull"}}
-  - {value: "the Cherry Bombers", props: {colours: "cherry red and white", sign: "a cherry tattoo on the wrist"}}
-  - {value: "the Wired Shut", props: {colours: "barbed-wire silver and red", sign: "a barbed-wire choker"}}
-  - {value: "the Sky Garden", props: {colours: "leaf green and white", sign: "a living fern pinned to the collar"}}
-  - {value: "the Graveyard Shift", props: {colours: "midnight blue and yellow", sign: "a night-watch badge worn upside down"}}
-  - {value: "the Afterparty", props: {colours: "neon purple and lime", sign: "a wristband from a club that closed years ago"}}
-  - {value: "the Tin Gods", props: {colours: "tin grey and gold", sign: "a crown of soldered tin"}}
+  - {value: "the Neon Saints", props: {colours: "hot pink and white", sign: "a halo tattooed in hot pink behind one ear", where: head}}
+  - {value: "the Chrome Jackals", props: {colours: "silver and black", sign: "a silver jackal-head pin", where: head}}
+  - {value: "the Static Kings", props: {colours: "electric yellow and grey", sign: "a lightning crown stencilled on the jacket", where: head}}
+  - {value: "the Night Market Tigers", props: {colours: "orange and black", sign: "tiger stripes painted across the cheekbones", where: head}}
+  - {value: "the Drowned Rats", props: {colours: "sea green and rust", sign: "a rat skull hanging from a chain", where: head}}
+  - {value: "the Paper Lanterns", props: {colours: "red and gold", sign: "a small paper lantern charm", where: body}}
+  - {value: "the Blank Masks", props: {colours: "white and pale blue", sign: "a blank white mask hanging at the belt", where: body}}
+  - {value: "the Copper Widows", props: {colours: "copper and black", sign: "a copper spider on the collar", where: head}}
+  - {value: "the Blackout Kids", props: {colours: "black on black", sign: "black tape over one ear", where: head}}
+  - {value: "the Sodium Lights", props: {colours: "amber and brown", sign: "an amber streetlight patch on the shoulder", where: head}}
+  - {value: "the Riot Choir", props: {colours: "purple and white", sign: "a choir collar of purple lace", where: head}}
+  - {value: "the Bone Saws", props: {colours: "bone white and red", sign: "a saw blade earring", where: head}}
+  - {value: "the Glitch Dolls", props: {colours: "bubblegum pink and cyan", sign: "doll-like circles of blush and painted lashes", where: head}}
+  - {value: "the Iron Monks", props: {colours: "grey and saffron", sign: "a saffron sash over one shoulder", where: head}}
+  - {value: "the Overpass Wolves", props: {colours: "concrete grey and blue", sign: "a wolf howling at a highway light, sewn on the back", where: body}}
+  - {value: "the Jade Syndicate", props: {colours: "jade green and gold", sign: "a jade ring on the little finger", where: body}}
+  - {value: "the Rust Belt Riders", props: {colours: "rust orange and denim blue", sign: "a cog-wheel buckle", where: body}}
+  - {value: "the Pixel Crows", props: {colours: "black and acid green", sign: "a pixel-art crow tattooed on the hand", where: body}}
+  - {value: "the Holy Malware", props: {colours: "red and black", sign: "a cross made of circuit traces", where: head}}
+  - {value: "the Velvet Static", props: {colours: "deep violet and silver", sign: "a velvet choker with a silver tag", where: head}}
+  - {value: "the Monsoon Boys", props: {colours: "navy and white", sign: "raindrops tattooed under one eye", where: head}}
+  - {value: "the Sugar Skulls", props: {colours: "white with flower colours", sign: "sugar-skull face paint", where: head}}
+  - {value: "the Vending Machine Cult", props: {colours: "cherry red and chrome", sign: "a bottle-cap necklace", where: head}}
+  - {value: "the Last Signal", props: {colours: "olive and orange", sign: "a radio antenna worn on the shoulder", where: head}}
+  - {value: "the Koi Club", props: {colours: "orange and white", sign: "a koi-scale pattern on the sleeves", where: head}}
+  - {value: "the Static Nuns", props: {colours: "black and white", sign: "a wimple stitched with LEDs", where: head}}
+  - {value: "the Basement Philosophers", props: {colours: "brown and cream", sign: "a book-page patch with a quote", where: body}}
+  - {value: "the Acid Rain", props: {colours: "acid yellow and black", sign: "a gas-mask pendant", where: head}}
+  - {value: "the Mirrorballs", props: {colours: "silver and every colour", sign: "a mirrored mosaic patch", where: body}}
+  - {value: "the Harbour Ghosts", props: {colours: "fog grey and teal", sign: "an anchor with a skull", where: body}}
+  - {value: "the Cherry Bombers", props: {colours: "cherry red and white", sign: "a cherry tattoo on the wrist", where: body}}
+  - {value: "the Wired Shut", props: {colours: "barbed-wire silver and red", sign: "a barbed-wire choker", where: head}}
+  - {value: "the Sky Garden", props: {colours: "leaf green and white", sign: "a living fern pinned to the collar", where: head}}
+  - {value: "the Graveyard Shift", props: {colours: "midnight blue and yellow", sign: "a night-watch badge worn upside down", where: head}}
+  - {value: "the Afterparty", props: {colours: "neon purple and lime", sign: "a wristband from a club that closed years ago", where: body}}
+  - {value: "the Tin Gods", props: {colours: "tin grey and gold", sign: "a crown of soldered tin", where: head}}
