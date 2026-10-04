@@ -101,8 +101,9 @@ Nodes under **orrery**:
     LoRAs, RefMods, pictures and members, grouped where they hold, *All
     clips* first and then each scene with knobs of its own (the scene of the
     next clip open; a scene's knob says when it overrides the head's), each
-    with its strength, start and end to type over, and a sweep's values as
-    chips to take out or back in. A knob turned there is the node's, as a
+    with its strength, start and end in number fields whose little buttons
+    step 0.05 (the start and the end a share of sampling, 0 and 1 unless
+    written), and a sweep's values as chips to take out or back in. A knob turned there is the node's, as a
     dial is: the template stays as written, and saving bakes it in. **Test** jumps to the Test tab and rolls. **Write** has
     the language model write the reel's next scene, the shot between two
     frames or a prompt from a picture, one idea per short run, browsed

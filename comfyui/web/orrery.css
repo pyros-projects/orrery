@@ -299,7 +299,8 @@
 .orrery-app .knob .kk.lora { color: var(--teal); } .orrery-app .knob .kk.refmod { color: var(--violet); }
 .orrery-app .knob .kk.image { color: var(--sky); } .orrery-app .knob .kk.cast { color: var(--brass); }
 .orrery-app .knob .kfields { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
-.orrery-app .knob .kfields .dv { padding: 3px 6px; }
+.orrery-app .knob .kfields .dv { padding: 3px 4px 3px 6px; }
+.orrery-app .knob .kfields input[type=number]::-webkit-inner-spin-button { opacity: 1; }  /* the little buttons, always there */
 .orrery-app .kchips { display: flex; flex-wrap: wrap; gap: 3px; }
 .orrery-app .kchip { padding: 1px 7px; border-radius: 10px; border: 1px solid var(--line); background: none; color: var(--faint); font: 11px var(--mono); cursor: pointer; text-decoration: line-through; }
 .orrery-app .kchip.on { color: var(--ink); border-color: rgba(240,122,160,.55); background: rgba(240,122,160,.08); text-decoration: none; }

@@ -11,8 +11,8 @@ checks) are left out.
 
 - A clip's takes play all at once, from the start and in step, to compare their motion: play all, stop all (#227).
 - The template's knobs beside its dials: LoRAs, RefMods, pictures and members, grouped where they hold (all clips,
-  then each scene), with strength, start and end to type over and a sweep's values as chips; turned as dials are,
-  the template stays as written and Save bakes them in (#227).
+  then each scene), with strength, start and end in number fields stepping 0.05 and a sweep's values as chips;
+  turned as dials are, the template stays as written and Save bakes them in (#227).
 - One way to turn the model's knobs: LoRAs, RefMods, pictures and members take (strength, start, end), in `SET:` or
   their own long form (`<lora:…>`, `<refmod:…>`, `<image:N:…>`, `<cast:NAME:…>`); a LoRA comes on at its start and
   goes off at its end, every field sweeps with `|` or a range, and `<` completes the long forms: `<refmod:` lists

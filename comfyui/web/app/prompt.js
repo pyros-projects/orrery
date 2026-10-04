@@ -604,9 +604,12 @@ function knobHTML(app, k, values, head) {
   const key = knobKey(k), now = values[key], own = knobParts(k.fields);
   const turned = now ? knobParts(specOf(now).split(",").map((f) => f.trim())) : null;
   const over = k.scope >= 0 && head.find((h) => h.kind === k.kind && h.name.toLowerCase() === k.name.toLowerCase());
-  const field = (i, label) => `<input class="dv kf" data-knob="${esc(key)}" data-field="${i}" value="${esc(turned ? turned.numbers[i] : "")}"`
-    + ` placeholder="${esc(own.numbers[i] || label)}" title="${label}" aria-label="${esc(k.name)} ${label}" spellcheck="false" autocomplete="off">`;
   const shown = turned || own;
+  // a number field with its little buttons, in steps of 0.05; a sweep's field stays text, its values chips below
+  const field = (i, label) => (shown.numbers[i].includes("|")
+    ? `<input class="dv kf" data-knob="${esc(key)}" data-field="${i}" value="${esc(shown.numbers[i])}" title="${label}" aria-label="${esc(k.name)} ${label}" spellcheck="false" autocomplete="off">`
+    : `<input class="dv kf" type="number" step="0.05"${i ? ' min="0" max="1"' : ""} data-knob="${esc(key)}" data-field="${i}" value="${knobNumber(shown.numbers[i], i)}"`
+      + ` title="${label}${i ? ": a share of sampling, 0 the first step, 1 the last" : ""}" aria-label="${esc(k.name)} ${label}">`);
   const chips = shown.numbers.map((f, i) => (f.includes("|") ? [i, f] : null)).filter(Boolean).map(([i, f]) => {
     const all = (own.numbers[i].includes("|") ? own.numbers[i] : f).split("|").map((v) => v.trim()), on = new Set(f.split("|").map((v) => v.trim()));
     return `<div class="kchips" title="The sweep's values: a click takes one out or back in">${all.map((v) => `<button type="button" class="kchip${on.has(v) ? " on" : ""}"`
@@ -618,13 +621,27 @@ function knobHTML(app, k, values, head) {
     + `<div class="kfields">${field(0, "strength")}${field(1, "start")}${field(2, "end")}</div>${chips}</div>`;
 }
 
-// The knob written anew from its row (#226): the fields typed, else the template's; the words kept.
+// A knob's field as a number for its field: the strength as written (1 unless written), a start or an end as a share
+// of sampling (`20%` is 0.2; 0 and 1 unless written).
+function knobNumber(text, i) {
+  const v = parseFloat(text);
+  if (Number.isNaN(v)) return i === 1 ? 0 : 1;
+  return i && (String(text).trim().endsWith("%") || v > 1) ? Math.round(v * 100) / 10000 : v;
+}
+
+// The knob written anew from its row (#226): a field the same as the template's keeps how it is written, another is
+// written anew (a start or an end with `%`, so a LoRA tag never reads as the commas' sweep of before); words kept.
 function knobFromRow(app, key, chip = null) {
   const k = templateKnobs(app).find((x) => knobKey(x) === key);
   const row = app.view.querySelector(`.dials [data-row="${CSS.escape(key)}"]`);
   if (!k || !row) return null;
-  const own = knobParts(k.fields), typed = [...row.querySelectorAll(".kf")].map((i) => i.value.trim());
-  const numbers = own.numbers.map((n, i) => typed[i] || n);
+  const own = knobParts(k.fields);
+  const numbers = [...row.querySelectorAll(".kf")].map((input, i) => {
+    if (input.type !== "number") return input.value.trim() || own.numbers[i];
+    const v = Number(input.value);
+    if (input.value === "" || Number.isNaN(v) || Math.abs(v - knobNumber(own.numbers[i], i)) < 1e-6) return own.numbers[i];
+    return i ? `${Math.round(v * 10000) / 100}%` : String(Math.round(v * 10000) / 10000);
+  });
   if (chip) {  // a sweep's value taken out or back in, in the order written; one stays
     const all = (own.numbers[chip.field].includes("|") ? own.numbers[chip.field] : numbers[chip.field]).split("|").map((v) => v.trim());
     const on = new Set(numbers[chip.field].split("|").map((v) => v.trim()));
