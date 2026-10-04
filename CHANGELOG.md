@@ -140,6 +140,8 @@ checks) are left out.
 
 ### Fixed
 
+- Roll runs a grid and a LoRA sweep again: the mini-runs' plan (#171) had taken the place of theirs in the app's
+  API client, so Roll queued one run per seed instead of the grid's cells (#288).
 - A template without scenes takes the editor's free height with its text, and its results sit at the bottom, instead
   of an empty band under them (#271).
 - A library still to be written no longer shows placeholder characters as its roll in the annotations, and an

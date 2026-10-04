@@ -15,7 +15,7 @@ export async function queueTasks(app) {
   const b = app.bridge;
   let tasks;
   try {
-    ({ tasks } = await app.api.plan({ template: b.getText(), target: b.getTarget(), params: b.getParams(),
+    ({ tasks } = await app.api.llmPlan({ template: b.getText(), target: b.getTarget(), params: b.getParams(),
       seed: Number(b.getSeed()) || 0, segment: Number(b.getSegment?.() ?? 0) || 0, sweep: b.getSweep?.() || "" }));
   } catch { return 0; }
   for (const t of tasks) await b.ask(t.task, t.what, "", { wait: false });
