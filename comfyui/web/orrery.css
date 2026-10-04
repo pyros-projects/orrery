@@ -600,7 +600,7 @@
 .orrery-app .ss-strip i.next { outline: 1px solid var(--ink); outline-offset: 1px; }
 .orrery-app .ss-lines { margin: 0; padding: 6px 8px; border-radius: 6px; background: #17181f; font: 11.5px/1.5 var(--mono); white-space: pre-wrap; color: var(--muted); }
 /* the take tree (#241): a graph with videos, the film's path lit */
-.orrery-app .sheet .panel.tree-panel { max-width: none; width: calc(100% - 20px); height: calc(100% - 20px); grid-template-rows: auto 1fr auto auto; }
+.orrery-app .sheet .panel.tree-panel { max-width: none; width: calc(100% - 20px); height: calc(100% - 20px); grid-template-rows: auto auto auto 1fr auto; }
 .orrery-app .tree-panel h4 { display: flex; align-items: center; gap: 8px; }
 .orrery-app .tree-panel input[type=range] { width: 120px; accent-color: var(--brass); }
 .orrery-app .tree-scroll { position: relative; overflow: auto; min-height: 0; border-radius: 8px; background: radial-gradient(ellipse at top left, rgba(212,175,95,.06), transparent 60%), #15161d; border: 1px solid var(--line); scrollbar-width: thin; }
@@ -647,18 +647,24 @@
 .orrery-app .vfoot i { margin-right: 3px; }
 .orrery-app .vfoot .muted { margin-left: auto; }
 .orrery-app .tree-hint { font-size: 11.5px; }
-/* the film as clicked together (#243): the player under the tree, a ribbon of its clips, the take playing lit */
-.orrery-app .tree-film { display: flex; gap: 14px; align-items: stretch; padding: 10px; border: 1px solid rgba(226,180,92,.35); border-radius: 8px;
-  background: linear-gradient(90deg, rgba(226,180,92,.08), transparent 55%), #15161d; animation: orrery-fade .15s ease-out; }
-.orrery-app .tree-film[hidden] { display: none; }
-.orrery-app .tree-film video { height: clamp(140px, 24vh, 260px); max-width: 55%; border-radius: 6px; background: #000; }
-.orrery-app .tf-side { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; }
-.orrery-app .tf-now { font: 12px/1.3 var(--mono); color: var(--brass); }
-.orrery-app .tf-ribbon { display: flex; gap: 3px; height: 26px; }
-.orrery-app .tf-ribbon button { min-width: 18px; padding: 0; border: 1px solid #34364a; border-radius: 4px; background: #22232e; color: var(--muted);
-  font: 10.5px/1 var(--mono); cursor: pointer; transition: background .15s, color .15s, border-color .15s; }
-.orrery-app .tf-ribbon button:hover { border-color: var(--muted); color: var(--ink); }
-.orrery-app .tf-ribbon button.on { background: var(--brass); border-color: var(--brass); color: var(--brass-ink); }
+/* the film as clicked together (#243): its own section under the head, sized by the split under it; the timeline
+   of its clips under the video, a playhead on it; the take playing lit in the tree */
+.orrery-app .tree-film { display: grid; justify-items: center; gap: 6px; padding: 10px; border: 1px solid rgba(226,180,92,.35); border-radius: 8px;
+  background: radial-gradient(ellipse at top, rgba(226,180,92,.08), transparent 60%), #15161d; animation: orrery-fade .15s ease-out; }
+.orrery-app .tree-film[hidden], .orrery-app .tree-split[hidden] { display: none; }
+.orrery-app .tree-film video { height: var(--film-h, 240px); width: var(--film-w, auto); max-width: 100%; border-radius: 6px; background: #000; }
+.orrery-app .tf-line { width: var(--film-w, 100%); max-width: 100%; display: grid; gap: 4px; }
+.orrery-app .tf-ribbon { position: relative; display: flex; gap: 2px; height: 22px; cursor: pointer; }
+.orrery-app .tf-ribbon > span[data-tseek] { min-width: 14px; display: grid; place-items: center; border: 1px solid #34364a; border-radius: 4px; background: #22232e;
+  color: var(--muted); font: 10.5px/1 var(--mono); transition: background .15s, color .15s, border-color .15s; }
+.orrery-app .tf-ribbon > span[data-tseek]:hover { border-color: var(--muted); color: var(--ink); }
+.orrery-app .tf-ribbon > span.on { background: var(--brass-soft); border-color: var(--brass); color: var(--brass); }
+.orrery-app .tf-head { position: absolute; top: -3px; bottom: -3px; left: var(--at, 0%); width: 2px; margin-left: -1px; border-radius: 1px;
+  background: var(--brass); box-shadow: 0 0 6px rgba(226,180,92,.8); pointer-events: none; }
+.orrery-app .tf-now { font: 11.5px/1.3 var(--mono); color: var(--brass); text-align: center; }
+.orrery-app .tree-split { height: 10px; margin: -4px 0; cursor: ns-resize; touch-action: none; position: relative; }
+.orrery-app .tree-split::after { content: ""; position: absolute; left: 50%; top: 3px; width: 44px; height: 4px; margin-left: -22px; border-radius: 2px; background: var(--line); }
+.orrery-app .tree-split:hover::after { background: var(--brass); }
 .orrery-app .tnode.playing { border: 2px solid var(--brass); box-shadow: 0 0 0 3px rgba(226,180,92,.35), 0 0 26px rgba(226,180,92,.6); animation: orrery-glow 1.6s ease-in-out infinite; }
 @keyframes orrery-glow { 50% { box-shadow: 0 0 0 5px rgba(226,180,92,.18), 0 0 34px rgba(226,180,92,.75); } }
 .orrery-app .tree-panel [data-tfilm][aria-pressed="true"] { color: var(--brass); border-color: var(--brass); }

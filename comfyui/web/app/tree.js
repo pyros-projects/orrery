@@ -110,31 +110,42 @@ export function openTree(app) {
     + `<button class="btn ghost" data-tfilm aria-pressed="false" title="Play the film as it is clicked together, its takes joined">${icon("play")}Film</button>`
     + `<input type="range" min="48" max="240" step="8" value="${size()}" data-tsize title="The takes' size" aria-label="The takes' size">`
     + `<button class="icon-btn" data-close title="Close">${icon("x")}</button></div>`
+    + `<div class="tree-film" hidden><video controls playsinline preload="auto"></video>`
+    + `<div class="tf-line"><div class="tf-ribbon" title="The film's clips: a click plays the film from there"></div><div class="tf-now"></div></div></div>`
+    + `<div class="tree-split" hidden title="Drag to size the film"></div>`
     + `<div class="tree-scroll"><p class="muted tree-none">Growing the tree…</p></div>`
-    + `<div class="tree-film" hidden><video controls playsinline preload="auto"></video><div class="tf-side"><div class="tf-now"></div><div class="tf-ribbon"></div></div></div>`
     + `<p class="muted flush tree-hint">A click on a take: the film goes the path through it, to it from clip 1 and on as it was last walked. `
     + `✂ ends the film after a take of it. Hover plays a take and shows the way. ✎ marks a take made with another prompt: `
     + `hover shows what changed, ✎ puts that prompt in the editor. Switching takes never changes the editor.</p></div>`);
   const scroll = sheet.querySelector(".tree-scroll"), player = sheet.querySelector(".tree-film"), video = player.querySelector("video");
+  const split = sheet.querySelector(".tree-split"), ribbon = player.querySelector(".tf-ribbon");
   let tree = null, clips = [];
-  // The film's clip at the player's time: lit in the tree and on the ribbon.
+  // The film's height, as the split under it sets it; the timeline under the video as wide as the video.
+  const tall = (h) => {
+    const ratio = clipRatio(app);
+    player.style.setProperty("--film-h", `${h}px`);
+    player.style.setProperty("--film-w", `${Math.round(h * ratio)}px`);
+  };
+  tall(Number(app.bridge.props.orrery_film_h) || 240);
+  // The film's clip at the player's time: lit in the tree and on the timeline, the playhead where it plays.
   const playing = () => {
-    const t = video.currentTime, now = clips.find((c) => t < c.end) ?? clips[clips.length - 1];
+    const t = video.currentTime, now = clips.find((c) => t < c.end) ?? clips[clips.length - 1], total = clips[clips.length - 1]?.end || 1;
     scroll.querySelectorAll("[data-tree]").forEach((n) => n.classList.toggle("playing", !player.hidden && n.dataset.tree === now?.folder));
-    player.querySelectorAll("[data-tseek]").forEach((b) => b.classList.toggle("on", b.dataset.tseek === now?.folder));
-    player.querySelector(".tf-now").textContent = now ? `clip ${now.n} of ${tree.path.length} · ${clock(t)} / ${clock(clips[clips.length - 1].end)}` : "";
+    ribbon.querySelectorAll("[data-tseek]").forEach((b) => b.classList.toggle("on", b.dataset.tseek === now?.folder));
+    ribbon.style.setProperty("--at", `${Math.min(100, (t / total) * 100)}%`);
+    player.querySelector(".tf-now").textContent = now ? `clip ${now.n} of ${tree.path.length} · ${clock(t)} / ${clock(total)}` : "";
   };
   const film = () => {  // the film again, from the start: after a click it is another
     clips = filmClips(tree);
     if (player.hidden) return;
     if (!clips.length) {
-      player.hidden = true;
+      player.hidden = split.hidden = true;
       sheet.querySelector("[data-tfilm]").setAttribute("aria-pressed", "false");
       return app.toast("The film has no clips yet (a test scene's take is left out of it).");
     }
     const total = clips[clips.length - 1].end || 1;
-    player.querySelector(".tf-ribbon").innerHTML = clips.map((c) => `<button type="button" data-tseek="${esc(c.folder)}" style="flex:${(c.end - c.start) / total}" `
-      + `title="Clip ${c.n} · from ${clock(c.start)}">${c.n}</button>`).join("");
+    ribbon.innerHTML = clips.map((c) => `<span data-tseek="${esc(c.folder)}" style="flex:${(c.end - c.start) / total}" `
+      + `title="Clip ${c.n} · from ${clock(c.start)}">${c.n}</span>`).join("") + `<span class="tf-head"></span>`;
     video.src = app.api.filmURL(app.bridge.chain(), Date.now());
     video.play().catch(() => {});
   };
@@ -142,7 +153,7 @@ export function openTree(app) {
     scroll.innerHTML = treeHTML(app, tree, size());
     if (!player.hidden) playing();
     const paths = (tree.takes || []).filter((t) => !(tree.takes || []).some((k) => k.parent === t.folder)).length;
-    sheet.querySelector("[data-tstat]").textContent = `${tree.takes.length} takes · ${paths} path${paths === 1 ? "" : "s"} · the film ${tree.path.length} clips`;
+    sheet.querySelector("[data-tstat]").textContent = `${tree.takes.length} takes · ${paths} path${paths === 1 ? "" : "s"} · the film ${tree.path.length} clip${tree.path.length === 1 ? "" : "s"}`;
   };
   const grow = async () => {
     try {
@@ -166,7 +177,7 @@ export function openTree(app) {
   sheet.querySelector("[data-tfilm]").onclick = (e) => {
     if (!tree) return;
     const on = player.hidden;
-    player.hidden = !on;
+    player.hidden = split.hidden = !on;
     e.currentTarget.setAttribute("aria-pressed", String(on));
     if (on) return film();
     video.pause();
@@ -174,11 +185,25 @@ export function openTree(app) {
     scroll.querySelectorAll(".tnode.playing").forEach((n) => n.classList.remove("playing"));
   };
   video.addEventListener("timeupdate", playing);
-  player.querySelector(".tf-ribbon").addEventListener("click", (e) => {
-    const c = clips.find((x) => x.folder === e.target.closest("[data-tseek]")?.dataset.tseek);
-    if (!c) return;
-    video.currentTime = c.start + 0.01;
+  ribbon.addEventListener("click", (e) => {  // a timeline: the film from where it is clicked
+    const box = ribbon.getBoundingClientRect(), total = clips[clips.length - 1]?.end;
+    if (!total) return;
+    video.currentTime = Math.max(0, Math.min(total - 0.05, ((e.clientX - box.left) / box.width) * total));
     video.play().catch(() => {});
+  });
+  split.addEventListener("pointerdown", (e) => {  // the film's height, dragged; the tree keeps the rest
+    e.preventDefault();
+    const y0 = e.clientY, h0 = video.offsetHeight, scale = sheet.getBoundingClientRect().height / sheet.offsetHeight || 1;  // the canvas scales the node
+    const most = Math.max(140, sheet.querySelector(".tree-panel").clientHeight * 0.7);
+    let h = h0;
+    const move = (m) => { h = Math.round(Math.min(most, Math.max(100, h0 + (m.clientY - y0) / scale))); tall(h); };
+    const up = () => {
+      window.removeEventListener("pointermove", move, true);
+      window.removeEventListener("pointerup", up, true);
+      app.bridge.props.orrery_film_h = h;
+    };
+    window.addEventListener("pointermove", move, true);
+    window.addEventListener("pointerup", up, true);
   });
   sheet.querySelector("[data-tsize]").oninput = (e) => { app.bridge.props.orrery_tree_size = Number(e.target.value); if (tree) draw(); };
   scroll.addEventListener("click", (e) => {
