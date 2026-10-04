@@ -127,14 +127,23 @@ Nodes under **orrery**:
     node's seed, drawn clip by clip, how long, what plays before and after it
     (and its lines that steer), what it rolls, and the clips it made.
     **Jump** beside *Next clip* puts the caret on the scene of the next clip.
+    Under the prompt and the dials, the whole width, sits the **preview** (#305); the grip
+    above it sizes it, and the node keeps its height. While a run samples it shows the
+    live preview, then what is shown: the clip or the take clicked under a reel's scene,
+    playing with its controls, or a template's result. A click only shows: the take that
+    counts, the one in the film or a single run's output, has the golden border, and the
+    preview's **Put in the film** or **Use this take** chooses another (only choosing gives
+    the node a take's seed). For a reel's clip in the film, **Pick frames** steps through it
+    frame by frame (← →, M marks a frame) and **Write REMEMBER:** puts the frames marked
+    into its scene as `REMEMBER: frames 12, 40 as …` (#223).
     A template without scenes (a Krea prompt, an `@h3` scene) has its
-    **results under the prompt** (#211; the text takes the free height, the results sit at the bottom, #271): the live preview
+    **results** in the preview (#211, #305): the live preview
     while it samples (the model wired through the Orrery Prompt; an image
     model's tiny VAE or Latent2RGB, sized by its own latent format; with the model
     input unconnected the empty result says how to wire it), then what
     the run made, a picture, a clip or its sound, as its Save, Preview or Orrery Log
-    nodes wrote it (#302). Every run becomes a **take**, lined up under the result: a click
-    shows it (and a take that rolled anew gives the node its seed). Beside the
+    nodes wrote it (#302). Every run becomes a **take**, lined up under the result like a
+    photo viewer: a click shows it, a fresh run's take is the output. Beside the
     takes, **+** adds takes, **×N** says how many a Generate makes and **📌**
     keeps the rolled prompt so only the sampler's noise changes, as in a
     reel's scenes; the gear's *Sample surfing* numbers their seeds or follows
@@ -144,15 +153,15 @@ Nodes under **orrery**:
     per SCENE, each followed by that scene's clips as Orrery Film (or H3
     Motion Context's Chain Video) keeps them, big: a clip's shorter side is
     the **Clip size** in the gear (360 px unless set otherwise), as far as the
-    editor is wide. Hover plays one, a click opens it; small dashed boxes are
+    editor is wide. Hover plays one, a click shows it in the preview; small dashed boxes are
     clips not rendered yet. A scene's divider has its buttons: +
     **Add takes** of its clip (its first, or one more) and stay on the scene,
     ⏭ go to the **next scene** (Next clip becomes its first clip), and ⏩ go
     there **and add takes** of its clip (the box of the clip rendering shows it
     as it forms: see Orrery Prompt's `model` below). **Sample surfing**: ×1 beside
     + turns to ×2, ×4, ×8, and + renders that many **takes** of the
-    clip. They line up under it; hover plays one, a click puts it in the film
-    (the next clip and `REMEMBER:` then use it too), and the clips last made
+    clip. They line up under it; hover plays one, a click shows it in the preview, whose
+    **Put in the film** puts it in the film (the next clip and `REMEMBER:` then use it too), and the clips last made
     after it come back with it: no path is lost (#213). 📌 in a scene keeps its
     rolled prompt, so the takes change only the sampler's noise (the Orrery
     Prompt's `seed` output carries seed + take into the noise, as in the

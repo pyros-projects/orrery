@@ -18,6 +18,7 @@ import { STARTERS } from "./starters.js";
 import { runRolls } from "./test.js";
 import { caretPoint, cellStart, inCell, jumpCell, paintCells, renderCells, wireCells } from "./cells.js";
 import { loadChain } from "./timeline.js";
+import { paintStage, paintStageLive, stageSectionHTML, wireStage } from "./stage.js";
 import { openLibraries, openWrite, writeMenuHTML, writeNow } from "./write.js";
 
 function statsHTML(app) {
@@ -212,6 +213,7 @@ export function renderPrompt(app) {
       : `<div class="editor${app.data.dividers === false ? " nodiv" : ""}"><pre class="hl" aria-hidden="true"></pre><textarea spellcheck="false" aria-label="Template"></textarea></div>`}
       <div class="side-grip" role="separator" aria-orientation="vertical" tabindex="0" title="Drag to resize the dials" hidden></div>
       <aside class="dials" aria-label="Dials" hidden></aside></div>
+    ${cellsView(app) ? stageSectionHTML(app) : ""}
     <div class="pfoot">${statsHTML(app)}</div>
     ${app.state.pick ? pickerHTML(app) : ""}`;
 
@@ -230,6 +232,9 @@ export function renderPrompt(app) {
   if (cellsView(app)) {
     renderCells(app);
     wireCells(app, { onEdit: afterEdit, onKey: (e) => completionKey(app, e), onFocus: focus, onBlur: blur });
+    wireStage(app, { edited: () => { renderCells(app); afterEdit(null); } });  // the preview (#305); a REMEMBER: line written
+    paintStage(app, true);
+    paintStageLive(app);
   } else {
     const ed = app.view.querySelector(".editor textarea"), pre = app.view.querySelector(".editor pre.hl");
     ed.value = app.text;

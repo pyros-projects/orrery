@@ -1,8 +1,9 @@
-// Results under the prompt in every mode (#211): a template without scenes shows, under its one cell, the live
-// preview while it samples, then what it made; its takes (each run's pictures, clips or sound, as its Save or
-// Preview nodes wrote them) line up under the result, and a click shows one. Generate ×N and 📌 work as in a
-// reel's scenes (#206): the takes' seeds numbered on, or as the node's control after generate says; with 📌 the
-// rolled prompt stays and only the sampler's noise changes. The takes are kept on the node, per preset (saved
+// Results under the prompt in every mode (#211): a template without scenes shows, in the preview (stage.js, #305),
+// the live preview while it samples, then what it made; its takes (each run's pictures, clips or sound, as its
+// Save, Preview or Orrery Log nodes wrote them) line up under the result, and a click shows one. The take that counts,
+// the output, is chosen apart from the one shown (Use this take): browsing never changes it, nor the node's seed.
+// Generate ×N and 📌 work as in a reel's scenes (#206): the takes' seeds numbered on, or as the node's control after
+// generate says; with 📌 the rolled prompt stays and only the sampler's noise changes. The takes are kept on the node, per preset (saved
 // with the workflow); taking one off the list leaves its files where they are.
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
@@ -24,9 +25,22 @@ export const shownResult = (app) => {
 };
 const show = (app, prompt) => { app.bridge.props.orrery_shown = { ...app.bridge.props.orrery_shown, [key(app)]: prompt }; };
 
+// The take that counts: the one chosen, else the newest (a fresh run's is chosen as it comes).
+export const chosenResult = (app) => {
+  const list = resultsOf(app);
+  return list.find((t) => t.prompt === app.bridge.props?.orrery_chosen?.[key(app)]) || list[list.length - 1] || null;
+};
+
+// A take chosen as the output; one that rolled anew gives the node its seed, so the next roll is its world (#206).
+export function chooseResult(app, t) {
+  if (!t) return;
+  app.bridge.props.orrery_chosen = { ...app.bridge.props.orrery_chosen, [key(app)]: t.prompt };
+  if (!t.take && t.seed != null && Number(t.seed) !== Number(app.bridge.getSeed())) app.bridge.setSeed(Number(t.seed));
+}
+
 // What changes the section, for the cells to tell when to draw it again.
 export const resultsSig = (app) => [key(app), resultsOf(app).map((t) => `${t.prompt}:${t.media.length}`), shownResult(app)?.prompt,
-  takesOf(app), kept(app, HEAD)];
+  chosenResult(app)?.prompt, takesOf(app), kept(app, HEAD)];
 
 // A run of this node begins (orrery.segment, segment -1): its take waits for what the run writes.
 export function resultBegins(app, d) {
@@ -62,6 +76,7 @@ export function resultMedia(app, detail) {
   delete take.preset;
   keepResults(app, [...list.filter((t) => t.prompt !== take.prompt), take]);
   show(app, take.prompt);
+  app.bridge.props.orrery_chosen = { ...app.bridge.props.orrery_chosen, [key(app)]: take.prompt };  // made at the node's seed
   return true;
 }
 
@@ -69,10 +84,13 @@ export function resultMedia(app, detail) {
 export function resultEnds(app, prompt) { if (prompt && app.state.pendingResults) delete app.state.pendingResults[prompt]; }
 
 // A take's media to show: a saved file before a preview's.
-const main = (t) => t.media.find((m) => m.type === "output") || t.media[0];
+export const mainMedia = (t) => t.media.find((m) => m.type === "output") || t.media[0];
+const main = mainMedia;
 
-function mediaHTML(app, m, big = false) {
+// `controls`: the preview's, a clip playing with its controls.
+export function mediaHTML(app, m, big = false, controls = false) {
   const src = app.api.viewURL(m);
+  if (m.kind === "video" && controls) return `<video class="st-video" controls autoplay loop playsinline src="${esc(src)}"></video>`;
   if (m.kind === "video") return `<video muted loop playsinline preload="metadata" src="${esc(src)}#t=0.05"></video>`;
   if (m.kind === "audio") return big ? `<audio controls preload="metadata" src="${esc(src)}"></audio>` : `<span class="r-audio">${icon("play")}</span>`;
   return `<img ${big ? "" : 'loading="lazy" '}alt="" src="${esc(src)}">`;
@@ -89,13 +107,9 @@ export function resultSeeds(app, n, keep) {
 }
 
 // Under a template without scenes: the result (the live preview while it samples), the takes beside their column.
+// The takes under the preview, like a photo viewer: the one shown outlined, the one that counts golden.
 export function resultsHTML(app, takeVars) {
-  const list = resultsOf(app), shown = shownResult(app), n = list.indexOf(shown) + 1, takes = takesOf(app), keep = kept(app, HEAD);
-  const tile = shown
-    ? `<button type="button" class="tl-clip big result" data-seg="-1" title="Take ${n} · seed ${shown.seed ?? "?"}${shown.take ? ` + ${shown.take}` : ""} · click to open">`
-      + `${mediaHTML(app, main(shown), true)}<span class="n">${n}</span></button>`
-    : `<div class="tl-clip big result empty" data-seg="-1"><span class="muted">What a run makes comes in here: the live preview while it samples, then the picture or the clip.`
-      + `${app.bridge.modelWired?.() === false ? " For the live preview, run the model through this node: the loader into its <b>model</b> input, its <b>model</b> output on to the sampler." : ""}</span></div>`;
+  const list = resultsOf(app), shown = shownResult(app), chosen = chosenResult(app), n = list.indexOf(shown) + 1, takes = takesOf(app), keep = kept(app, HEAD);
   const button = (act, inner, title, extra = "") => `<span class="btn ghost" role="button" data-ract="${act}" title="${esc(title)}" ${extra}>${inner}</span>`;
   const head = `<span class="cm-takes-head"><span class="th-top">`
     + button("gen", `${icon("plus")}${takes > 1 ? `${takes} takes` : "take"}`, `Add ${takes > 1 ? `${takes} takes` : "a take"}: Generate, as ×N and 📌 say`)
@@ -104,52 +118,41 @@ export function resultsHTML(app, takeVars) {
       : "Each take rolls anew. Click to keep the rolled prompt and change only the sampler's noise", `aria-pressed="${keep}"`)
     + `</span><span class="th-mid"><span class="th-clip">results</span><span class="th-stats">`
     + `<span><i>takes</i><b>${list.length}</b></span>${shown ? `<span><i>shown</i><b>#${n}</b></span><span><i>seed</i><b>${shown.seed ?? "?"}${shown.take ? ` + ${shown.take}` : ""}</b></span>` : ""}</span></span>`
-    + (list.length > 1 ? `<span class="th-low">${button("others", `${icon("trash")}the others`, "Take every take off the list but the one shown (the files stay)")}`
+    + (list.length > 1 ? `<span class="th-low">${button("others", `${icon("trash")}the others`, "Take every take off the list but the output, the golden one (the files stay)")}`
       + `${button("all", `${icon("trash")}all`, "Take every take off the list (the files stay)", 'data-danger="1"')}</span>` : "") + "</span>";
   const strip = list.length ? `<div class="cm-takes results" data-seg="-1" style="${takeVars}">${head}<div class="cm-takes-list">${list.map((t, i) =>
-    `<button type="button" class="take${t === shown ? " on" : ""}" data-result="${esc(t.prompt)}" title="Take ${i + 1} · seed ${t.seed ?? "?"}${t.take ? ` + ${t.take}` : ""}${t === shown ? " · shown" : " · click to show it"}">`
+    `<button type="button" class="take${t === chosen ? " on" : ""}${t === shown ? " shown" : ""}" data-result="${esc(t.prompt)}" title="Take ${i + 1} · seed ${t.seed ?? "?"}${t.take ? ` + ${t.take}` : ""}${t === chosen ? " · the output" : ""}${t === shown ? " · shown" : " · click to show it"}">`
     + `${mediaHTML(app, main(t))}<span class="n">${i + 1}</span><span class="del" role="button" data-rdel="${esc(t.prompt)}" title="Take it off the list (the file stays)">${icon("x")}</span></button>`).join("")}</div></div>`
     : `<div class="cm-takes results" data-seg="-1">${head}</div>`;
-  return `<div class="cm-clips">${tile}</div>${strip}`;
+  return strip;
 }
 
 // Clicks in the results: show a take, take one or more off the list (Undo brings them back), ×N, 📌, Generate.
 export function wireResults(app, box, repaint) {
   box.addEventListener("click", (e) => {
     const act = e.target.closest("[data-ract]")?.dataset.ract, del = e.target.closest("[data-rdel]"), pick = e.target.closest("[data-result]");
-    const tile = e.target.closest(".tl-clip.result:not(.empty)");
-    if (!act && !del && !pick && !tile) return;
+    if (!act && !del && !pick) return;
     e.stopPropagation();
-    const list = resultsOf(app), before = list.slice(), shown = shownResult(app);
+    const list = resultsOf(app), before = list.slice(), chosen = chosenResult(app);
     const undo = (said) => app.toast(said, { label: "Undo", run: () => { keepResults(app, before); repaint(); } });
     if (act === "takes") app.bridge.props.orrery_takes = TAKES[(TAKES.indexOf(takesOf(app)) + 1) % TAKES.length];
     else if (act === "keep") app.bridge.props.orrery_keep = { ...app.bridge.props.orrery_keep, [HEAD]: !kept(app, HEAD) };
     else if (act === "gen") return generate(app);
-    else if (act === "others") { keepResults(app, shown ? [shown] : []); undo(`${list.length - 1} takes off the list; the files stay`); }
+    else if (act === "others") { keepResults(app, chosen ? [chosen] : []); undo(`${list.length - 1} takes off the list; the files stay`); }
     else if (act === "all") { keepResults(app, []); undo(`${list.length} takes off the list; the files stay`); }
     else if (del) { keepResults(app, list.filter((t) => t.prompt !== del.dataset.rdel)); undo("A take off the list; its file stays"); }
-    else if (pick) {
+    else if (pick) {  // shown only: Use this take in the preview chooses it
       const t = list.find((x) => x.prompt === pick.dataset.result);
       if (!t) return;
-      show(app, t.prompt);  // a take that rolled anew gives the node its seed, so the next roll is its world (#206)
-      if (!t.take && t.seed != null && Number(t.seed) !== Number(app.bridge.getSeed())) app.bridge.setSeed(Number(t.seed));
-    } else if (tile && shown) return open(app, shown, tile);
+      show(app, t.prompt);
+    }
     repaint();
   });
-  box.addEventListener("pointerover", (e) => e.target.closest(".take[data-result], .tl-clip.result")?.querySelector("video")?.play().catch(() => {}));
+  box.addEventListener("pointerover", (e) => e.target.closest(".take[data-result]")?.querySelector("video")?.play().catch(() => {}));
   box.addEventListener("pointerout", (e) => {
-    const t = e.target.closest(".take[data-result], .tl-clip.result");
+    const t = e.target.closest(".take[data-result]");
     if (t && !t.contains(e.relatedTarget)) t.querySelector("video")?.pause();
   });
-}
-
-function open(app, t, near) {
-  const m = main(t), n = resultsOf(app).indexOf(t) + 1, src = app.api.viewURL(m);
-  const body = m.kind === "video" ? `<video class="tl-video" controls autoplay loop src="${esc(src)}"></video>`
-    : m.kind === "audio" ? `<audio controls autoplay src="${esc(src)}"></audio>` : `<img class="tl-video" alt="" src="${esc(src)}">`;
-  const sheet = app.openSheet(`<div class="panel"><div class="row spread"><h4>Take ${n}</h4><button class="icon-btn" data-close title="Close">${icon("x")}</button></div>`
-    + `${body}<p class="muted flush">seed ${t.seed ?? "?"}${t.take ? ` + ${t.take}` : ""} · ${esc(m.filename)}${t.media.length > 1 ? ` · and ${t.media.length - 1} more` : ""}</p></div>`, near, { over: true });
-  sheet.querySelector("[data-close]").onclick = () => app.closeSheet();
 }
 
 // Generate ×N: each take queued with its seed (or take number, with 📌), the node's seed and take back after.

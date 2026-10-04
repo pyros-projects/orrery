@@ -836,9 +836,9 @@ test("a template without scenes shows its results under the prompt, its takes ke
   const R = await import("../../comfyui/web/app/results.js");
   const props = {};
   let seed = 10;
-  const app = { preset: "krea/fox", props, state: {}, data: {}, bridge: { props, getSeed: () => seed, getControl: () => "fixed" },
+  const app = { preset: "krea/fox", props, state: {}, data: {}, bridge: { props, getSeed: () => seed, setSeed: (s) => { seed = s; }, getControl: () => "fixed" },
     api: { viewURL: (m) => `/view?filename=${m.filename}&type=${m.type}` } };
-  assert.equal(R.resultsHTML(app, "").includes("comes in here"), true);  // none yet: where they will come
+  assert.equal(R.resultsHTML(app, "").includes("data-result"), false);  // no takes yet: the strip's head only
   R.resultBegins(app, { prompt_id: "p1", seed: 10, take: 0 });
   assert.equal(R.resultMedia(app, { prompt_id: "other", output: { images: [{ filename: "x.png", type: "output" }] } }), false);
   assert.equal(R.resultMedia(app, { prompt_id: "p1", output: { images: [{ filename: "fox_0001.png", subfolder: "", type: "output" }] } }), true);
@@ -848,11 +848,19 @@ test("a template without scenes shows its results under the prompt, its takes ke
   assert.deepEqual(R.resultsOf(app).map((t) => [t.prompt, t.seed, t.media.map((m) => m.kind)]), [["p1", 10, ["image"]], ["p2", 11, ["video", "image"]]]);
   assert.equal(R.shownResult(app).prompt, "p2");  // the newest is shown
   const html = R.resultsHTML(app, "--take-w:96px");
-  assert.match(html, /class="tl-clip big result" data-seg="-1"[^>]*><video[^>]*src="\/view\?filename=fox\.mp4&amp;type=output#t=0\.05"/);  // a saved file first
+  assert.match(html, /class="take on shown" data-result="p2"[^>]*><video[^>]*src="\/view\?filename=fox\.mp4&amp;type=output#t=0\.05"/);  // a saved file first; the newest shown and the output
   assert.match(html, /data-result="p1"[^>]*>.*<img loading="lazy" alt="" src="\/view\?filename=fox_0001\.png/);
   assert.match(html, /<i>takes<\/i><b>2<\/b>.*<i>shown<\/i><b>#2<\/b>.*<i>seed<\/i><b>11<\/b>/);
   assert.deepEqual(R.resultSeeds(app, 2, false), [2, 3]);  // numbered on from the takes there are: seeds 12, 13
   assert.deepEqual(R.resultSeeds(app, 2, true), [1, 2]);  // with 📌 take numbers
+  props.orrery_shown = { "krea/fox": "p1" };  // a click shows a take: the output and the node's seed stay (#305)
+  assert.equal(R.shownResult(app).prompt, "p1");
+  assert.equal(R.chosenResult(app).prompt, "p2");
+  assert.match(R.resultsHTML(app, ""), /class="take shown" data-result="p1".*class="take on" data-result="p2"/);
+  seed = 99;
+  R.chooseResult(app, R.shownResult(app));  // Use this take: the output now, and a take that rolled anew gives its seed
+  assert.equal(R.chosenResult(app).prompt, "p1");
+  assert.equal(seed, 10);
   app.preset = "krea/owl";
   assert.deepEqual(R.resultsOf(app), []);  // another preset, its own takes
   R.resultBegins(app, { prompt_id: "p3", seed: 12, take: 0 });
@@ -1049,4 +1057,28 @@ test("the Settings offer every reset the server knows, the gallery and everythin
   assert.deepEqual(RESETS.map(([k]) => k), ["ratings", "history", "gallery", "presets", "libraries", "all"]);  // resets.WHAT
   assert.deepEqual(RESETS.filter((r) => r[3]).map(([k]) => k), ["gallery", "all"]);
   assert.ok(SECTIONS.some(([k]) => k === "reset"));
+});
+
+test("the preview shows the clip or take clicked, else the newest clip; the film's take counts (#305)", async () => {
+  const { reelShown } = await import("../../comfyui/web/app/stage.js");
+  const takes = [{ folder: "seg_0002_aaaaaaaa", active: false, seed: 1 }, { folder: "seg_0002_bbbbbbbb", active: true, seed: 2 }];
+  const app = { state: {}, data: { chain: { clips: [{ segment: 0, version: "x" }, { segment: 2, version: "seg_0002_bbbbbbbb" }], takes: { 2: takes } } } };
+  assert.deepEqual([reelShown(app).seg, reelShown(app).take.folder, reelShown(app).film], [2, "seg_0002_bbbbbbbb", true]);  // the newest, its film take
+  app.state.stage = { seg: 2, folder: "seg_0002_aaaaaaaa" };
+  assert.deepEqual([reelShown(app).take.seed, reelShown(app).film], [1, false]);  // a take only shown: not the film's
+  app.state.stage = { seg: 0 };
+  assert.deepEqual([reelShown(app).seg, reelShown(app).take], [0, null]);
+  app.state.stage = { seg: 7 };  // a clip gone: the newest again
+  assert.equal(reelShown(app).seg, 2);
+  assert.equal(reelShown({ state: {}, data: {} }), null);
+});
+
+test("frames picked in the preview become a REMEMBER: line at the end of their scene (#223)", async () => {
+  const { rememberLine, withRemember } = await import("../../comfyui/web/app/stage.js");
+  assert.equal(rememberLine([50, 12, 50], " @GIRL "), "REMEMBER: frames 12, 50 as @GIRL");
+  assert.equal(rememberLine([7], "image 3"), "REMEMBER: frame 7 as image 3");
+  const text = "@h3 text\nSCENE one\nSHOT 5s: static\nA room.\n\nSCENE two\nSHOT 5s: static\nA hall.";
+  assert.equal(withRemember(text, 0, "REMEMBER: frame 7 as image 3"),
+    "@h3 text\nSCENE one\nSHOT 5s: static\nA room.\nREMEMBER: frame 7 as image 3\n\nSCENE two\nSHOT 5s: static\nA hall.");  // the blank line stays
+  assert.equal(withRemember(text, 1, "REMEMBER: frame 1 as @GIRL").split("\n").at(-1), "REMEMBER: frame 1 as @GIRL");
 });

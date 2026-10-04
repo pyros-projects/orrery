@@ -17,6 +17,11 @@ checks) are left out.
   was kept with Use selected or written for the run (#290).
 - Resets in the Settings (#290): the ratings, the history, the gallery, the presets or the libraries back to factory,
   or everything at once; what was made by hand goes to the home's trash, the logged files only when asked.
+- The preview (#290): a section of its own under the prompt and the dials, sized by its grip; the live preview while a
+  run samples, then the clip or take clicked, playing with its controls, or a template's result with its takes under
+  it. A click only shows a take: the one that counts (the film's, a single run's output) is golden, and Put in the film
+  or Use this take chooses another. A reel's clip picks frames for a REMEMBER: line of its scene. The preset's
+  description folds to one line.
 - An expression creator for Krea 2 (#291): `krea/15_expression_creator` rolls a character in a close-up, and the
   grid shows it in the eight expressions of a set (basic, subtle, intense, social, inner, playful); each expression
   says what the face does and the muscles that do it, in FACS action units. Render it with Krea 2 Raw and the turbo

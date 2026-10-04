@@ -194,7 +194,9 @@
 .orrery-app .take video { z-index: 1; }
 .orrery-app .take .n { position: absolute; left: 3px; bottom: 2px; z-index: 2; font: 500 9.5px/1 var(--mono); color: #fff; text-shadow: 0 0 3px #000; }
 .orrery-app .take:hover { border-color: var(--muted); }
-.orrery-app .take.on { border: 2px solid var(--brass); cursor: default; }
+/* the take that counts (the film's, a single run's output) is golden; the one only shown, outlined (#305) */
+.orrery-app .take.on { border: 2px solid var(--brass); box-shadow: 0 0 0 1px var(--brass), 0 0 14px rgba(226,180,92,.55); }
+.orrery-app .take.shown { outline: 2px solid var(--ink); outline-offset: 2px; }
 .orrery-app .cm-takes .grip { align-self: flex-end; width: 12px; height: 12px; cursor: nwse-resize; touch-action: none; opacity: .7;
   background: linear-gradient(135deg, transparent 45%, var(--faint) 45% 55%, transparent 55% 70%, var(--faint) 70% 80%, transparent 80%); }
 .orrery-app .cm-takes .grip:hover { opacity: 1; }
@@ -808,3 +810,27 @@
 .orrery-app .ideas .empty { padding: 22px 12px; }
 .orrery-app .ideas .icon-btn { font-size: 18px; line-height: 1; }
 .orrery-app .btn small.sweep { font-weight: 400; opacity: .75; margin-left: 2px; }
+
+/* The preview (#305): under the prompt and the dials, the whole width; the grip above it sizes it. */
+.orrery-app .stage-grip { flex: none; height: 10px; margin: 0 12px; cursor: ns-resize; position: relative; touch-action: none; }
+.orrery-app .stage-grip::after { content: ""; position: absolute; left: 50%; top: 4px; width: 44px; height: 3px; margin-left: -22px; border-radius: 2px; background: var(--line); }
+.orrery-app .stage-grip:hover::after { background: var(--brass); }
+.orrery-app .stage { flex: none; height: var(--stage-h, 320px); min-height: 140px; margin: 0 12px; display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  border: 1px solid var(--line); border-radius: 8px; background: var(--well); overflow: hidden; }
+.orrery-app .stage > .st-live, .orrery-app .stage > .st-body { grid-area: 1 / 1; min-height: 0; }
+.orrery-app .stage .st-body { display: flex; flex-direction: column; }
+.orrery-app .stage .st-live { display: none; }
+.orrery-app .stage.live .st-live { display: grid; place-items: center; position: relative; z-index: 2; background: var(--well); }
+.orrery-app .stage .st-live-pic { max-width: 100%; max-height: 100%; object-fit: contain; }
+.orrery-app .stage .st-head { display: flex; align-items: center; gap: 8px; padding: 6px 10px 2px; flex: none; font-size: 12px; }
+.orrery-app .stage .st-chosen { display: inline-flex; align-items: center; gap: 4px; color: var(--brass); font-size: 12px; }
+.orrery-app .stage .st-chosen .i { width: 13px; height: 13px; }
+.orrery-app .stage .st-media { flex: 1; min-height: 0; display: grid; place-items: center; padding: 6px; }
+.orrery-app .stage .st-media > img, .orrery-app .stage .st-media > video { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; border: 2px solid transparent; }
+.orrery-app .stage .st-media.chosen > img, .orrery-app .stage .st-media.chosen > video { border-color: var(--brass); box-shadow: 0 0 18px rgba(226,180,92,.4); }
+.orrery-app .stage .st-empty { margin: auto; padding: 16px; text-align: center; max-width: 64ch; }
+.orrery-app .stage .cm-takes.results { flex: none; margin: 0 6px 6px; }
+.orrery-app .stage .st-picker { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 6px 10px; flex: none; border-top: 1px solid var(--line); }
+.orrery-app .stage .st-frame { min-width: 64px; text-align: center; font-size: 12px; }
+.orrery-app .stage .st-marks { display: flex; flex-wrap: wrap; gap: 4px; }
+.orrery-app .stage .st-as { width: 230px; }
