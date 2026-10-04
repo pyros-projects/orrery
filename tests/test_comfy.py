@@ -978,9 +978,16 @@ def test_the_picks_carry_picture_strengths(home):
 def test_a_slot_sees_the_pictures_it_names_and_one_from_image_output_waits(home, monkeypatch):
     """#174: the picture wired into first_frame goes to the model as Picture 1; an EXPORT slot from image output
     stays a slot (the Gallery writes it, #175); one outside EXPORT: says so."""
+    import importlib.util
+    import sys
+    import types
+
     import numpy as np
 
     from orrery import comfy
+
+    if importlib.util.find_spec("torch") is None:  # CI has no torch: the batch stays numpy, its shape is what counts
+        monkeypatch.setitem(sys.modules, "torch", types.SimpleNamespace(from_numpy=lambda a: a))
 
     class Seen:
         def __init__(self):
