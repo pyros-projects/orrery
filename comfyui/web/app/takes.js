@@ -94,7 +94,7 @@ export function openTakes(app, place, near = null) {
   const known = place.kind === "entries";  // a library that exists: its rolls and new entries (#273)
   const multi = place.kind === "library" || known;  // a library's entries: several at once (#272)
   const from = [];  // known: where each take came from, "rolled", "new" or "added"
-  const token = place.kind === "slot" || picture ? `--${place.what}--` : place.kind === "library" ? `__${place.what}__` : `> ${place.what}`;
+  const token = place.kind === "slot" || picture ? `--${place.what}--` : enhance ? `> ${place.what}` : `__${place.what}__`;
   const useTitle = picture ? "Write the selected take into the picture's exports"
     : enhance ? "Keep the selected rewrite for this roll: a run that rolls this prompt uses it instead of asking the model"
       : `Put the selected take in place of ${esc(token)}: an unsaved edit`;
