@@ -55,3 +55,15 @@ def test_the_beards_are_many_and_take_the_hair_colour():
     entries = BUILTIN["characters/creator/beard"].entries
     assert len(entries) >= 60 and len({e.value for e in entries}) == len(entries)
     assert all("$haircolour" in e.value for e in entries)  # the beard in the hair's colour
+
+
+def test_the_expressions_come_in_sets_of_eight():
+    """#292: the expression creator's grid runs one set, and eight pictures make a sheet."""
+    entries = BUILTIN["characters/creator/expression"].entries
+    sets = {}
+    for e in entries:
+        sets.setdefault(e.prop("set"), []).append(e.value)
+    assert sorted(sets) == ["basic", "inner", "intense", "playful", "social", "subtle"]
+    assert all(len(v) == 8 for v in sets.values()), sets
+    assert all(e.prop("face") and e.prop("units") for e in entries)
+    assert len({e.value for e in entries}) == len(entries)
