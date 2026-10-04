@@ -149,7 +149,6 @@ export async function renderLibraries(app) {
       ${rows.map(({ e, i }) => rowHTML(e, i, ro, (L.pending_entries || []).includes(e.value), L.source === "gallery" ? app.api.thumbURL : null)).join("") || '<tr><td colspan="4" class="empty">No entries yet. Add some below.</td></tr>'}
       </tbody></table>${total > rows.length ? `<div class="addrow"><button class="btn ghost wide" data-lact="more">Show ${Math.min(LIB_PAGE, total - rows.length)} more of ${total - rows.length}</button></div>` : ""}</div>
       ${ro ? "" : `<div class="addrow"><input class="input" id="oa-add" placeholder="Add entries: one per line or comma-separated, then ↵"><button class="btn" data-lact="add">${icon("plus")}Add</button></div>`}
-      <div class="ask">${icon("spark")}<span>Ask the LLM, e.g. “remove all cats and make them a new list feline”: coming in stage 5. It runs in the ComfyUI queue and shows a diff before anything changes.</span></div>
     </div></div>`;
   app.view.querySelectorAll(".entries textarea").forEach(fit);
   wire(app, L);

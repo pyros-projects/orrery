@@ -164,6 +164,7 @@ checks) are left out.
 - The results under the prompt show the picture of a run with Orrery Log; the Krea example runs its model through the
   Orrery Prompt for the live preview (#290).
 - Typing at the bottom of the editor no longer scrolls it up when the completion opens (#290).
+- The Libraries tab is no longer covered by a dark box (a placeholder bar the takes' question overlay spread over it) (#290).
 - Roll runs a grid and a LoRA sweep again: the mini-runs' plan (#171) had taken the place of theirs in the app's
   API client, so Roll queued one run per seed instead of the grid's cells (#288).
 - A template without scenes takes the editor's free height with its text, and its results sit at the bottom, instead

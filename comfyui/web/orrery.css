@@ -526,8 +526,6 @@
 .orrery-app .learn.up { color: var(--teal); }
 .orrery-app .learn.dn { color: var(--nope); }
 .orrery-app .addrow { display: flex; gap: 6px; padding: 10px 12px; border-top: 1px solid var(--line); flex: none; }
-.orrery-app .ask { margin: 0 12px 12px; display: flex; gap: 8px; align-items: center; border: 1px dashed #3d3f58; border-radius: 8px; padding: 7px 10px; color: var(--faint); font-size: 12px; flex: none; }
-.orrery-app .ask .i { color: var(--violet); }
 .orrery-app .libpics { display: inline-flex; gap: 4px; margin-right: 4px; }
 .orrery-app .libpics img { width: 44px; height: 56px; object-fit: cover; border-radius: 4px; background: #14151b; }
 .orrery-app .tagadd:focus { width: 18ch; }
