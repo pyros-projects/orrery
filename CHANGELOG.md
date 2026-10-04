@@ -9,6 +9,9 @@ checks) are left out.
 
 ### Added
 
+- A reference needs no CAST: `<Image N>` in the text, as H3's own prompts write it, hands the picture to H3 as
+  `[image N]` does; `SET: image_N(…)` dials it, and `SET:` with a RefMod's name brings that RefMod in, with
+  strength, start and end. Tutorial 19 shows it (#224).
 - The language model can be an API endpoint (OpenAI, or a server that speaks its protocol), set in the gear
   with a key kept in the home's `.env`: a run's libraries, slots and `> enhance`, the Write menu and
   `orrery lib` go through it, beside ComfyUI (no VRAM, no queue). The Write menu answers while a render
