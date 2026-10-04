@@ -348,6 +348,41 @@ function loraItems(before, line, data) {
   };
 }
 
+// The knobs' long forms (#227): `<` offers their kinds, and after `<lora:`, `<refmod:`, `<image:` or `<cast:` the
+// names of that kind, which no short form could list: your LoRA files, your RefMods, the reference images,
+// the CAST's members. `<Image N>` beside them names a picture in the text (it hands it to H3).
+const KNOB_KINDS = [
+  ["<lora:", "a LoRA: <lora:name:strength, start, end>"], ["<refmod:", "a RefMod: <refmod:name:strength, start, end>"],
+  ["<image:", "a reference picture's dials: <image:N:strength, start, end>"], ["<cast:", "a member's references: <cast:NAME:strength, start, end>"],
+  ["<Image ", "a picture named in the text: <Image 1> hands it to H3"],
+];
+
+function knobItems(before, text, data, screenplay) {
+  const m = /<([A-Za-z]*)(?::([^<>:\s]*))?$/.exec(before);
+  if (!m || (!m[1] && m[2] === undefined && !before.endsWith("<"))) return null;
+  if (m[2] === undefined) {  // `<`, `<re`: the kinds
+    const kinds = KNOB_KINDS.filter(([k]) => (screenplay || k === "<lora:") && k.slice(1).toLowerCase().startsWith(m[1].toLowerCase()));
+    return kinds.length ? { kind: "knob", items: kinds.map(([k, d]) => ({ insert: k, label: k, detail: d, preview: d })),
+      replaceFrom: before.length - m[0].length } : null;
+  }
+  const kind = m[1].toLowerCase(), query = m[2].toLowerCase();
+  const names = kind === "lora" ? (data.loras || []).map((l) => l.name) : !screenplay ? null
+    : kind === "refmod" ? data.refmods || [] : kind === "image" ? ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    : kind === "cast" ? castNames(text) : null;
+  if (!names) return null;
+  const hits = names.filter((n) => n.toLowerCase().includes(query));
+  const ranked = [...hits.filter((n) => n.toLowerCase().startsWith(query)), ...hits.filter((n) => !n.toLowerCase().startsWith(query))];
+  const folder = (n) => (data.loras || []).find((l) => l.name === n)?.folder;
+  return {
+    kind: "knob",
+    items: ranked.slice(0, LORA_CAP).map((n) => ({
+      insert: `<${kind}:${n}:${kind === "lora" ? "1.00" : "1"}>`, label: n,
+      detail: kind === "lora" ? folder(n) || "lora" : kind === "image" ? "reference image" : kind, preview: `<${kind}:${n}:strength, start, end>`,
+    })),
+    replaceFrom: before.length - m[0].length,
+  };
+}
+
 const uncommented = (text) => text.split("\n").filter((l) => !/^\s*#/.test(l)).join("\n");  // `# …` lines
 
 // Whether the caret's line is a member line of a CAST block (castNames' reading of the lines above).
@@ -533,7 +568,7 @@ export function suggest(text, caret, data) {
   if (directive) directive.replaceFrom += before.length;
   const cast = screenplay ? atCastItems(before, line, text) : null;
   if (directive && cast) directive.items = [...cast.items, ...directive.items];  // `@` at a line's start: both
-  const found = mode ?? directive ?? cast ?? (screenplay ? loraItems(before, line, data) : null)
+  const found = mode ?? directive ?? cast ?? knobItems(before, text, data, screenplay) ?? (screenplay ? loraItems(before, line, data) : null)
     ?? libraryItems(before, data)
     ?? fieldItems(before, text, data)
     ?? bindingItems(before, text)

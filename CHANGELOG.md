@@ -9,6 +9,20 @@ checks) are left out.
 
 ### Added
 
+- A clip's takes play all at once, from the start and in step, to compare their motion: play all, stop all (#227).
+- The template's knobs beside its dials: LoRAs, RefMods, pictures and members, grouped where they hold (all clips,
+  then each scene), with strength, start and end in number fields stepping 0.05 and a sweep's values as chips;
+  turned as dials are, the template stays as written and Save bakes them in (#227).
+- One way to turn the model's knobs: LoRAs, RefMods, pictures and members take (strength, start, end), in `SET:` or
+  their own long form (`<lora:…>`, `<refmod:…>`, `<image:N:…>`, `<cast:NAME:…>`); a LoRA comes on at its start and
+  goes off at its end, every field sweeps with `|` or a range, and `<` completes the long forms: `<refmod:` lists
+  your RefMods, `<lora:` your LoRAs, `<cast:` the members (#227).
+- The Orrery Prompt puts its `LORA:` lines on the model that passes through it, a clip's own and the head's, a
+  sweep's run included: no LoRA stack node needed. Wired, `lora_stack` leaves them to its loader (#208).
+- A reference needs no CAST: `<Image N>` in the text, as H3's own prompts write it, hands the picture to H3 as
+  `[image N]` does; `SET: image_N(…)` dials it, and `SET:` with a RefMod's name brings that RefMod in, with
+  strength, start and end. Tutorial 19 shows it (#224).
+  sweep's run included: no LoRA node needed (#208).
 - A clip's takes go at once: under their label, **the others** keeps only the one in the film, **all** deletes that
   one too and the film ends before the clip; each asks first (#234).
 - The Orrery Prompt puts its `LORA:` lines on the model that passes through it, a clip's own and the head's, a
@@ -62,6 +76,8 @@ checks) are left out.
 
 ### Changed
 
+- A sweep's values are separated by `|` (`<lora:x:0.5|1.0>`), since commas separate a knob's fields now; the
+  comma lists of before still sweep as they did, and the log suggests `|` (#227).
 - The `lora_stack` output is gone, since a LoRA stack needed a third-party node: the LoRAs go on the model through
   the node. A workflow saved with it loses it when it opens, and its other outputs keep their links (#208).
 - A reel keeps its clips in a folder named after it, `output/reels/<preset>` or `reels/untitled/<date time>`, which

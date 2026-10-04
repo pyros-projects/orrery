@@ -22,10 +22,10 @@ def tutorial(home):
     return list_presets(Home(home), folder="tutorial")
 
 
-LESSONS = 19
+LESSONS = 20
 
 
-def test_nineteen_tutorial_presets_ship_in_order(home):
+def test_twenty_tutorial_presets_ship_in_order(home):
     names = tutorial(home)
     assert len(names) == LESSONS
     assert names == sorted(names)

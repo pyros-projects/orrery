@@ -1,12 +1,12 @@
 // Prompt tab: preset bar, the highlighted editor with completion, dials, and a way into Test.
-import { KEYWORDS, inlineLibraries, suggest } from "../orrery-complete.js";
+import { KEYWORDS, castNames, inlineLibraries, suggest } from "../orrery-complete.js";
 import { chosen, closeMenu, drawMenu, fillMenu, joinChoices } from "./dialmenu.js";
 import { esc, highlight } from "./highlight.js";
 import { annotationLines, mergeHints } from "./annotate.js";
 import { wireHover } from "./hover.js";
 import { hintsFor } from "./remember.js";
 import { icon } from "./icons.js";
-import { applyDials, chunkInfo, dials, hasGoto, nextSceneClip, plays, folderColor, pickerGroups, sceneTarget, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
+import { applyDials, chunkInfo, dials, hasGoto, knobKey, knobsOf, withFields, nextSceneClip, plays, folderColor, pickerGroups, sceneTarget, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
 import { drag, thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
 import { openSceneStats } from "./scenestats.js";
@@ -508,7 +508,7 @@ function fixReelSeed(app) {
 
 /* dials: every binding can be turned without editing the template; empty = its default roll */
 
-const dialKey = (text) => dials(text).map((d) => `${d.name}=${d.expr}`).join("\n");
+const dialKey = (text) => [...dials(text).map((d) => `${d.name}=${d.expr}`), ...knobsOf(text).map(knobKey)].join("\n");
 const setDials = (app) => Object.keys(app.bridge.getParams()).length;
 
 
@@ -535,36 +535,126 @@ function renderDials(app) {
   const box = app.view.querySelector(".dials");
   if (!box) return;
   if (app.dm) shutMenu(app);
-  const list = dials(app.text), values = app.bridge.getParams();
-  const kept = Object.fromEntries(Object.entries(values).filter(([k]) => list.some((d) => d.name === k)));
+  const list = dials(app.text), values = app.bridge.getParams(), knobs = templateKnobs(app), keys = new Set(knobs.map(knobKey));
+  const kept = Object.fromEntries(Object.entries(values).filter(([k]) => list.some((d) => d.name === k) || keys.has(k)));
   if (Object.keys(kept).length !== Object.keys(values).length) app.bridge.setParams(kept);
   app.state.dialKey = dialKey(app.text);
   const chosen = app.bridge.props.orrery_side, set = Object.keys(kept).length;
   const folded = chosen === "folded" || (chosen !== "open" && (app.view.querySelector(".edrow")?.clientWidth || ROOMY) < ROOMY);
-  box.hidden = !list.length;
+  const any = list.length + knobs.length;
+  box.hidden = !any;
   box.classList.toggle("folded", folded);
-  app.view.querySelector(".side-grip").hidden = !list.length || folded;
-  if (!list.length) return void (box.innerHTML = "");
+  app.view.querySelector(".side-grip").hidden = !any || folded;
+  if (!any) return void (box.innerHTML = "");
   if (folded) {
-    box.innerHTML = `<button class="side-strip" data-dfold title="Show the dials">${icon("chev")}<span>Dials · ${list.length}${set ? ` · ${set} dialed` : ""}</span></button>`;
+    const what = [list.length ? `Dials · ${list.length}` : "", knobs.length ? `Knobs · ${knobs.length}` : ""].filter(Boolean).join(" · ");
+    box.innerHTML = `<button class="side-strip" data-dfold title="Show the dials and knobs">${icon("chev")}<span>${what}${set ? ` · ${set} turned` : ""}</span></button>`;
     return;
   }
-  box.innerHTML = `<div class="side-head">${sideHead(list.length, set)}</div><div class="dlist">${list.map((d) => {
+  box.innerHTML = `<div class="side-head">${sideHead(list.length, set, knobs.length)}</div><div class="dlist">${list.map((d) => {
       const v = kept[d.name] || "", id = `oa-${app.uid}-dl-${d.name}`;
       return `<div class="dial${v ? " on" : ""}" title="$${esc(d.name)} = ${esc(d.expr)}"><div class="dtop"><label class="dn" for="${id}">$${esc(d.name)}</label>`
         + `<span class="droll" data-roll="${esc(d.name)}"></span>`
         + `<button type="button" class="mini" data-dreset="${esc(d.name)}" aria-label="Back to the default roll">${icon("x")}</button></div>`
         + `<input class="dv" id="${id}" data-dial="${esc(d.name)}" value="${esc(v)}" placeholder="${esc(d.expr)}" spellcheck="false" autocomplete="off" role="combobox" aria-expanded="false"></div>`;
-    }).join("")}</div>`;
+    }).join("")}${knobs.length ? knobsHTML(app, knobs, kept) : ""}</div>`;
   paintRolls(app);
 }
 
-function sideHead(n, set) {
-  return `<span class="label" title="Turn a binding without editing the template. Empty means its default roll; saving bakes the dials in.">Dials</span>`
-    + `<span class="muted">${n}${set ? ` · <b>${set}</b> dialed` : ""}</span><span class="grow"></span>`
+function sideHead(n, set, knobs = 0) {
+  const label = n ? "Dials" : "Knobs";
+  return `<span class="label" title="Turn a binding or a knob without editing the template. Empty means the template's own; saving bakes them in.">${label}</span>`
+    + `<span class="muted">${n || knobs}${set ? ` · <b>${set}</b> turned` : ""}</span><span class="grow"></span>`
     + (set ? '<button type="button" class="btn ghost" data-dclear title="Every dial back to its default roll">Clear</button>' : "")
     + `<button type="button" class="icon-btn" data-dfold aria-label="Fold the dials">${icon("chev")}</button>`;
 }
+
+// The template's knobs (#226): its LoRAs, RefMods, pictures and members, grouped where they hold, "All clips" first,
+// then each scene with knobs of its own, the scene of the next clip open. A value set here is the node's, as a
+// dial's: the template stays as written, and Save writes it in. A sweep's values are chips to take out or back in.
+const KNOB_KIND = { lora: "LoRA", refmod: "RefMod", image: "image", cast: "member" };
+
+function templateKnobs(app) {
+  const done = app.data.completion || {};
+  return knobsOf(app.text, { loras: (done.loras || []).map((l) => (l.folder ? `${l.folder}/${l.name}` : l.name)),
+    refmods: done.refmods || [], cast: castNames(app.text) });
+}
+
+// A knob's (strength, start, end) and its words (a member's `refmods`), as written or as the node turns it.
+function knobParts(fields) {
+  const numbers = fields.filter((f) => !/^[A-Za-z]/.test(f)), words = fields.filter((f) => /^[A-Za-z]/.test(f));
+  return { numbers: [0, 1, 2].map((i) => numbers[i] ?? ""), words };
+}
+
+function knobsHTML(app, knobs, values) {
+  const chunks = app.chunks() || [], segment = Number(app.bridge.getSegment());
+  const next = chunks.findIndex((c) => plays(c, segment)), head = knobs.filter((k) => k.scope === -1);
+  const groups = [...new Set(knobs.map((k) => k.scope))];
+  const open = app.state.knobOpen ??= new Set([-1, next]);
+  return `<div class="ksec"><span class="label">Knobs</span><span class="muted">${knobs.length}</span></div>` + groups.map((scope) => {
+    const ks = knobs.filter((k) => k.scope === scope), shut = !open.has(scope);
+    return `<div class="kgroup${shut ? " shut" : ""}"><button type="button" class="khead" data-kgroup="${scope}">${icon("chev")}`
+      + `<span>${scope < 0 ? "All clips" : `SCENE ${esc(ks[0].scene || String(scope + 1))}`}</span>`
+      + `${scope >= 0 && scope === next ? '<span class="knext">▶ next</span>' : ""}<span class="muted">${ks.length}</span></button>`
+      + (shut ? "" : ks.map((k) => knobHTML(app, k, values, head)).join("")) + "</div>";
+  }).join("");
+}
+
+function knobHTML(app, k, values, head) {
+  const key = knobKey(k), now = values[key], own = knobParts(k.fields);
+  const turned = now ? knobParts(specOf(now).split(",").map((f) => f.trim())) : null;
+  const over = k.scope >= 0 && head.find((h) => h.kind === k.kind && h.name.toLowerCase() === k.name.toLowerCase());
+  const shown = turned || own;
+  // a number field with its little buttons, in steps of 0.05; a sweep's field stays text, its values chips below
+  const field = (i, label) => (shown.numbers[i].includes("|")
+    ? `<input class="dv kf" data-knob="${esc(key)}" data-field="${i}" value="${esc(shown.numbers[i])}" title="${label}" aria-label="${esc(k.name)} ${label}" spellcheck="false" autocomplete="off">`
+    : `<input class="dv kf" type="number" step="0.05"${i ? ' min="0" max="1"' : ""} data-knob="${esc(key)}" data-field="${i}" value="${knobNumber(shown.numbers[i], i)}"`
+      + ` title="${label}${i ? ": a share of sampling, 0 the first step, 1 the last" : ""}" aria-label="${esc(k.name)} ${label}">`);
+  const chips = shown.numbers.map((f, i) => (f.includes("|") ? [i, f] : null)).filter(Boolean).map(([i, f]) => {
+    const all = (own.numbers[i].includes("|") ? own.numbers[i] : f).split("|").map((v) => v.trim()), on = new Set(f.split("|").map((v) => v.trim()));
+    return `<div class="kchips" title="The sweep's values: a click takes one out or back in">${all.map((v) => `<button type="button" class="kchip${on.has(v) ? " on" : ""}"`
+      + ` data-knob="${esc(key)}" data-chip="${i}" data-value="${esc(v)}">${esc(v)}</button>`).join("")}</div>`;
+  }).join("");
+  return `<div class="dial knob${now ? " on" : ""}" data-row="${esc(key)}" title="${esc(k.text)}"><div class="dtop"><span class="kk ${k.kind}">${KNOB_KIND[k.kind]}</span>`
+    + `<span class="dn">${esc(k.name)}</span><span class="droll">${over ? `overrides ${esc(over.fields.filter(Boolean).join(", "))} here` : ""}</span>`
+    + `<button type="button" class="mini" data-kreset="${esc(key)}" aria-label="Back to the template's">${icon("x")}</button></div>`
+    + `<div class="kfields">${field(0, "strength")}${field(1, "start")}${field(2, "end")}</div>${chips}</div>`;
+}
+
+// A knob's field as a number for its field: the strength as written (1 unless written), a start or an end as a share
+// of sampling (`20%` is 0.2; 0 and 1 unless written).
+function knobNumber(text, i) {
+  const v = parseFloat(text);
+  if (Number.isNaN(v)) return i === 1 ? 0 : 1;
+  return i && (String(text).trim().endsWith("%") || v > 1) ? Math.round(v * 100) / 10000 : v;
+}
+
+// The knob written anew from its row (#226): a field the same as the template's keeps how it is written, another is
+// written anew (a start or an end with `%`, so a LoRA tag never reads as the commas' sweep of before); words kept.
+function knobFromRow(app, key, chip = null) {
+  const k = templateKnobs(app).find((x) => knobKey(x) === key);
+  const row = app.view.querySelector(`.dials [data-row="${CSS.escape(key)}"]`);
+  if (!k || !row) return null;
+  const own = knobParts(k.fields);
+  const numbers = [...row.querySelectorAll(".kf")].map((input, i) => {
+    if (input.type !== "number") return input.value.trim() || own.numbers[i];
+    const v = Number(input.value);
+    if (input.value === "" || Number.isNaN(v) || Math.abs(v - knobNumber(own.numbers[i], i)) < 1e-6) return own.numbers[i];
+    return i ? `${Math.round(v * 10000) / 100}%` : String(Math.round(v * 10000) / 10000);
+  });
+  if (chip) {  // a sweep's value taken out or back in, in the order written; one stays
+    const all = (own.numbers[chip.field].includes("|") ? own.numbers[chip.field] : numbers[chip.field]).split("|").map((v) => v.trim());
+    const on = new Set(numbers[chip.field].split("|").map((v) => v.trim()));
+    if (on.has(chip.value) && on.size > 1) on.delete(chip.value); else on.add(chip.value);
+    numbers[chip.field] = all.filter((v) => on.has(v)).join("|");
+  }
+  while (numbers.length && !numbers[numbers.length - 1]) numbers.pop();  // a member's words follow its last number
+  const text = withFields(k, [...numbers, ...own.words]);
+  return text === k.text ? "" : text;
+}
+
+// The fields of a knob as written: `name(…)`, `@name(…)`, or a long form `<kind:name:…>` (a LoRA's `:clip` after them).
+const specOf = (text) => (/\(([^()]*)\)$/.exec(text) || /^<\w+:[^<>:]+?:([^<>:]*)(?::[^<>]*)?>$/.exec(text) || [0, ""])[1];
 
 // What each dial rolls at the node's seed, from the annotations (#163): the binding's value, else nothing yet.
 function paintRolls(app) {
@@ -605,7 +695,15 @@ function wireDials(app) {
     if (head) head.innerHTML = sideHead(box.querySelectorAll(".dial").length, Object.keys(values).length);
     refreshBar(app);
   };
+  const turn = (key, text) => {  // a knob (#226): its key among the params, its row marked
+    const values = app.bridge.getParams();
+    if (text) values[key] = text; else delete values[key];
+    app.bridge.setParams(values);
+    box.querySelector(`[data-row="${CSS.escape(key)}"]`)?.classList.toggle("on", !!text);
+    refreshBar(app);
+  };
   box.addEventListener("input", (e) => {
+    if (e.target.dataset.knob) return turn(e.target.dataset.knob, knobFromRow(app, e.target.dataset.knob));
     if (!e.target.dataset.dial) return;
     put(e.target.dataset.dial, e.target.value);
     openMenu(app, e.target, -1);
@@ -644,6 +742,22 @@ function wireDials(app) {
       app.bridge.setParams({});
       renderDials(app);
       return refreshBar(app);
+    }
+    const group = e.target.closest("[data-kgroup]");
+    if (group) {
+      const scope = Number(group.dataset.kgroup), open = app.state.knobOpen;
+      if (open.has(scope)) open.delete(scope); else open.add(scope);
+      return renderDials(app);
+    }
+    const chip = e.target.closest("[data-chip]");
+    if (chip) {
+      turn(chip.dataset.knob, knobFromRow(app, chip.dataset.knob, { field: Number(chip.dataset.chip), value: chip.dataset.value }));
+      return renderDials(app);
+    }
+    const kr = e.target.closest("[data-kreset]");
+    if (kr) {
+      turn(kr.dataset.kreset, "");
+      return renderDials(app);
     }
     const r = e.target.closest("[data-dreset]");
     if (!r) return;

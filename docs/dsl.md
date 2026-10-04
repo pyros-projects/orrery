@@ -15,7 +15,8 @@ Every construct of orrery's template language, where libraries live, how Dynamic
 | `{1-2$$__style__}` | pick 1–2 distinct values, joined with `, `; `{2$$ and $$a\|b\|c}` joins them with ` and ` (Dynamic Prompts' form) |
 | `{0.4-0.9}`, `{2-6}` | a number in between (both included), at the decimals written; recorded as a pick that learns per value, or per tenth of a finer range (`0.40–0.44`) |
 | `<lora:style:0.4-0.9>` | a LoRA strength rolled per run, recorded as the pick `<lora:style>` (`:0.2-0.5` after it for CLIP); with a step (`0-1;0.1`) or a list it is a sweep instead ([wildcard-manager.md](wildcard-manager.md)) |
-| `@style(0.8)` | short for `<lora:style:0.8>`, with every strength form: `@style(0.4-0.9)`, `@style(0.5,0.7)`, `@style(1.0:0.5)` |
+| `@style(0.8)` | short for `<lora:style:0.8>`, with every strength form: `@style(0.4-0.9)`, `@style(0.5\|0.7)`, `@style(1.0:0.5)`. A RefMod's name is short for `<refmod:name:…>`, `@image_1(0.6)` for `<image:1:0.6>`: one shape for the model's knobs, see below |
+| `<lora:x:0.8, 20%, 90%>`, `<refmod:x:…>`, `<image:1:…>`, `<cast:NAME:…>` | the model's knobs (#227), each kind's long form: (strength, start, end), the start and the end a share of sampling; the short form `@name(…)` is told by its name, the long form never collides. A field sweeps with `\|` or a range (`0.6\|0.8`, `0%-30%;10%`) |
 | `<lora:style:{0.5\|0.7}>`, `<lora:style:$s>` | a strength is a value like any other: a choice, a binding, a grid axis (`@grid {0.5\|0.7}` is a LoRA sweep in grid form). It is recorded as the pick `<lora:style>`; the name stays as written |
 | `$hero = __animal__` | bind once, reuse everywhere |
 | `@lib crowd` + indented lines | a library of this template's own, `__crowd__`: each indented line an entry (a template itself; `- ` before it allowed). It shadows a library of the same name, travels with the preset, and the language model never writes it |

@@ -97,7 +97,14 @@ Nodes under **orrery**:
     the choices, their properties (`genre: noir`) and tags, and **All** (roll
     among every choice it shows) and **None**. Drag the sidebar's edge to widen it, or
     fold it to a strip. Saving bakes the dials in, and a gallery output
-    restores them. **Test** jumps to the Test tab and rolls. **Write** has
+    restores them. Under the dials, the template's **knobs** (#226): its
+    LoRAs, RefMods, pictures and members, grouped where they hold, *All
+    clips* first and then each scene with knobs of its own (the scene of the
+    next clip open; a scene's knob says when it overrides the head's), each
+    with its strength, start and end in number fields whose little buttons
+    step 0.05 (the start and the end a share of sampling, 0 and 1 unless
+    written), and a sweep's values as chips to take out or back in. A knob turned there is the node's, as a
+    dial is: the template stays as written, and saving bakes it in. **Test** jumps to the Test tab and rolls. **Write** has
     the language model write the reel's next scene, the shot between two
     frames or a prompt from a picture, one idea per short run, browsed
     before it goes in ([wildcard-manager.md](wildcard-manager.md)). With an
@@ -136,7 +143,9 @@ Nodes under **orrery**:
     film then plays the clip's newest other take, or ends before the clip.
     Under the label of a clip's takes, **the others** deletes every take but
     the one in the film, and **all** every one, the film then ending before
-    the clip; each asks first, and takes made on another path stay (#234). While a clip renders, its box
+    the clip; each asks first, and takes made on another path stay (#234).
+    **play all** plays every take of the clip at once, from the start and in
+    step, to compare their motion; **stop all** stops them (#238). While a clip renders, its box
     shows the sampler's preview and the step it is at: KJNodes' Model Preview
     Override (a picture, or the whole clip as it forms), else ComfyUI's own
     preview when its live preview is on. Under a scene's clips come the frames its

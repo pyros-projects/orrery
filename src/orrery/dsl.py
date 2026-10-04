@@ -287,7 +287,34 @@ def override(template: str, values: Mapping[str, str]) -> str:
             return line
         return f"{m.group(1)}${m.group(2)}{m.group(3)}{_pinned(m.group(4).strip(), wanted[m.group(2)])}"
 
-    return "\n".join(swap(line) for line in template.split("\n"))
+    return _turned("\n".join(swap(line) for line in template.split("\n")), values)
+
+
+_SCENE_LINE = re.compile(r"^\s*(?:SCENE|CHUNK)\b")
+_KNOB_LINE = re.compile(r"^\s*(?:SET|LORA):")
+
+
+def _turned(template: str, values: Mapping[str, str]) -> str:
+    """The knobs the node turns (#226), `~scope|as written` → the knob written anew: put in their scope's SET: or
+    LORA: line (scope -1 the head, else the scene's index), its first place there. One no longer written is left
+    out. Mirrors the app's applyKnobs."""
+    wanted = []
+    for key, value in values.items():
+        scope, sep, was = key[1:].partition("|") if key.startswith("~") else ("", "", "")
+        if sep and was and value and value.strip() and scope.lstrip("-").isdigit():
+            wanted.append([int(scope), was, value.strip(), False])
+    if not wanted:
+        return template
+    scope, out = -1, []
+    for line in template.split("\n"):
+        if _SCENE_LINE.match(line):
+            scope += 1
+        elif _KNOB_LINE.match(line):
+            for w in wanted:
+                if not w[3] and w[0] == scope and w[1] in line:
+                    line, w[3] = line.replace(w[1], w[2], 1), True
+        out.append(line)
+    return "\n".join(out)
 
 
 def _pinned(expr: str, value: str) -> str:
@@ -850,6 +877,10 @@ class Expander:
         before = len(self.picks)
         parts = [self.expr(p) if r else p for p, r in zip(parts, rolled, strict=True)]
         del self.picks[before:]  # the strength learns as `<lora:style>`, not as a `{0.5|0.7}` every LoRA shares
+        when = ""  # a start and an end after the strength (#227): they stay as written, only the strength rolls
+        if parts and parts[0] and "," in parts[0]:
+            parts[0], when = parts[0].split(",", 1)
+            when = "," + when
         if not m or not any(rolled) and not any(p and _RANGE.fullmatch(p) for p in parts):
             return tag
         label, out, keys = f"<lora:{m.group(1).strip()}>", [], []
@@ -866,7 +897,7 @@ class Expander:
             else:
                 out.append(part.strip())
         self.picks.append(Pick(label, "/".join(out), tuple(keys)))
-        return f"<lora:{m.group(1)}:{':'.join(out)}>"
+        return f"<lora:{m.group(1)}:{out[0]}{when}{''.join(':' + o for o in out[1:])}>"
 
 
 def expand(template: str, seed: int, libraries: Mapping[str, Library],

@@ -80,7 +80,8 @@ function takesHTML(app, s) {
   if (takes.length < 2) return "";
   return `<div class="cm-takes" data-seg="${s}" style="${takeVars(app)}"><span class="cm-takes-head"><span class="muted">clip ${s + 1} · ${takes.length} takes</span>`
     + `<span class="btn ghost" role="button" data-clear="others" title="Delete every take of clip ${s + 1} but the one in the film">${icon("trash")}the others</span>`
-    + `<span class="btn ghost danger" role="button" data-clear="all" title="Delete every take of clip ${s + 1}, the one in the film too: the film then ends before it">${icon("trash")}all</span></span>${takes.map((t, i) =>
+    + `<span class="btn ghost danger" role="button" data-clear="all" title="Delete every take of clip ${s + 1}, the one in the film too: the film then ends before it">${icon("trash")}all</span>`
+    + `<span class="btn ghost" role="button" data-playall title="Play every take of clip ${s + 1} at once, from the start, to compare them">${icon("play")}play all</span></span>${takes.map((t, i) =>
     `<button type="button" class="take${t.active ? " on" : ""}" data-take="${esc(t.folder)}" data-seg="${s}" title="Take ${i + 1} · seed ${t.seed ?? "?"}`
     + `${t.take ? ` + ${t.take}` : ""}${t.active ? " · in the film" : " · click to put it in the film"}">`
     + `<img loading="lazy" alt="" src="${app.api.takeThumbURL(app.bridge.chain(), t.folder)}"><span class="n">${i + 1}</span>${delHTML(t.folder)}</button>`).join("")}`
@@ -101,6 +102,30 @@ async function pickTake(app, segment, folder) {
 
 function followSeed(app, got) {
   if (!got.take && got.seed != null && Number(got.seed) !== Number(app.bridge.getSeed())) app.bridge.setSeed(Number(got.seed));
+}
+
+// Every take of a clip at once (#238): from the start and in step, muted and looping, to compare their motion;
+// again, and the stills are back.
+function playAll(app, strip, button) {
+  const on = !strip.classList.contains("playing");
+  strip.classList.toggle("playing", on);
+  button.innerHTML = on ? `${icon("stop")}stop all` : `${icon("play")}play all`;
+  const takes = [...strip.querySelectorAll(".take")];
+  if (!on) return takes.forEach((t) => t.querySelector("video")?.remove());
+  const videos = takes.map((t) => {
+    let v = t.querySelector("video");
+    if (!v) {
+      v = Object.assign(document.createElement("video"), { muted: true, loop: true, playsInline: true, preload: "auto" });
+      v.src = app.api.takeVideoURL(app.bridge.chain(), t.dataset.take);
+      t.prepend(v);
+    }
+    v.pause();
+    return v;
+  });
+  Promise.all(videos.map((v) => (v.readyState >= 3 ? null : new Promise((ok) => v.addEventListener("canplay", ok, { once: true }))))).then(() => {
+    if (!strip.classList.contains("playing")) return;
+    videos.forEach((v) => { v.currentTime = 0; v.play().catch(() => {}); });
+  });
 }
 
 // A clip's takes deleted at once (#234), asked in place: all but the one in the film, or that one too, and then
@@ -229,7 +254,7 @@ export function wireClips(app, box) {
   });
   box.addEventListener("pointerout", (e) => {
     const take = e.target.closest(".take");
-    if (take && !take.contains(e.relatedTarget)) take.querySelector("video")?.remove();
+    if (take && !take.contains(e.relatedTarget) && !take.closest(".cm-takes.playing")) take.querySelector("video")?.remove();
     const clip = e.target.closest(".tl-clip");
     if (!clip || clip.contains(e.relatedTarget)) return;
     if (clip.classList.contains("big")) clip.querySelector("video")?.pause();
@@ -239,6 +264,8 @@ export function wireClips(app, box) {
     const head = e.target.closest(".cm-takes-head");
     if (head) {
       const strip = head.closest(".cm-takes"), s = Number(strip.dataset.seg), count = strip.querySelectorAll(".take").length;
+      const play = e.target.closest("[data-playall]");
+      if (play) return playAll(app, strip, play);
       if (e.target.closest("[data-clearno]")) return head.querySelector(".ask")?.remove();
       const yes = e.target.closest("[data-clearyes]");
       if (yes) return clearTakes(app, s, yes.dataset.clearyes === "others");
