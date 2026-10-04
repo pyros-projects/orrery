@@ -130,7 +130,10 @@ Nodes under **orrery**:
     same takes tomorrow) or follows the node's control after generate. The grip
     at the end of a clip's takes sizes them all, in the clip's shape. A × on
     a take, or on the clip in its box, deletes it from disk (it asks first): the
-    film then plays the clip's newest other take, or ends before the clip. While a clip renders, its box
+    film then plays the clip's newest other take, or ends before the clip.
+    Under the label of a clip's takes, **the others** deletes every take but
+    the one in the film, and **all** every one, the film then ending before
+    the clip; each asks first, and takes made on another path stay (#234). While a clip renders, its box
     shows the sampler's preview and the step it is at: KJNodes' Model Preview
     Override (a picture, or the whole clip as it forms), else ComfyUI's own
     preview when its live preview is on. Under a scene's clips come the frames its

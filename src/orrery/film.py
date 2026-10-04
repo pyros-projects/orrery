@@ -293,6 +293,24 @@ def delete_take(output: Path | str, latent_path: str, segment: int, folder: str)
     return got
 
 
+def delete_takes(output: Path | str, latent_path: str, segment: int, keep_film: bool = True) -> dict:
+    """Delete the takes of `segment` its strip shows, the ones that fit the clip before (#234): every one but the
+    take in the film (`keep_film`), or that one too, and the film then ends before the clip. Takes made on another
+    take of the clip before stay: they belong to another path. Returns how many went and the take in the film."""
+    run, state = _active(_root(output, latent_path))
+    clips = state.get("clips", [])
+    shown = [t["folder"] for t in takes(output, latent_path).get(segment, [])]
+    if run is None or not shown:
+        raise FilmError(f"clip {segment + 1} has no takes in the reel {latent_path!r}.")
+    film = clips[segment]["folder"] if segment < len(clips) else None
+    gone = [f for f in shown if not (keep_film and f == film)]
+    if film in gone:
+        _keep(run, state, clips[:segment])
+    for folder in gone:
+        shutil.rmtree(run / folder)
+    return {"deleted": len(gone), "folder": film if film not in gone else None}
+
+
 def film_file(take: Path) -> Path:
     """The film the take belongs to; the take itself while the film has only test takes."""
     film = take.parent / "film.mp4"

@@ -93,6 +93,7 @@ export function client(home) {
     moveChain: (from, to) => call("chain/move", { body: { from, to } }),
     pickTake: (chain, segment, folder) => call("chain/pick", { body: { chain, segment, folder } }),
     deleteTake: (chain, segment, folder) => call("chain/delete", { body: { chain, segment, folder } }),
+    clearTakes: (chain, segment, keep) => call("chain/clear", { body: { chain, segment, keep } }),
     takeThumbURL: (chain, take) => url("chain/thumb", { take, ...(chain ? { chain } : {}) }),
     takeVideoURL: (chain, take) => url("chain/video", { take, ...(chain ? { chain } : {}) }),
     anchorURL: (image, v) => url("anchor", { image, v: v ?? "" }),

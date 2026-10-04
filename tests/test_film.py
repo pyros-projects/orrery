@@ -273,3 +273,19 @@ def test_deleting_a_clips_last_take_ends_the_film_before_it(tmp_path):
     assert again.parent == only.parent
     with pytest.raises(film.FilmError):
         film.delete_take(tmp_path, "h3_context", 0, only.name)
+
+
+def test_a_clips_takes_go_at_once_the_others_or_all_and_another_paths_stay(tmp_path):
+    """#234: the takes a clip's strip shows, all but the one in the film, or that one too."""
+    first = take(tmp_path, 0)
+    other = take(tmp_path, 0, n=26)  # the second take of clip 1, in the film now
+    on_other = take(tmp_path, 1)  # clip 2 made on it
+    film.pick_take(tmp_path, "h3_context", 0, first.name)  # back to the first: clip 2 leaves the film, its take stays
+    a, b = take(tmp_path, 1, n=28), take(tmp_path, 1, n=30)  # two takes of clip 2 on the first
+    assert film.delete_takes(tmp_path, "h3_context", 1) == {"deleted": 1, "folder": b.name}
+    assert b.is_dir() and not a.exists() and on_other.is_dir()  # another path's take stays
+    assert [c["frames"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [24, 30]
+    assert film.delete_takes(tmp_path, "h3_context", 0, keep_film=False) == {"deleted": 2, "folder": None}
+    assert not first.exists() and not other.exists() and chain.listing(tmp_path, "h3_context")["clips"] == []
+    with pytest.raises(film.FilmError, match="no takes"):
+        film.delete_takes(tmp_path, "h3_context", 0)

@@ -9,6 +9,8 @@ checks) are left out.
 
 ### Added
 
+- A clip's takes go at once: under their label, **the others** keeps only the one in the film, **all** deletes that
+  one too and the film ends before the clip; each asks first (#234).
 - A reference needs no CAST: `<Image N>` in the text, as H3's own prompts write it, hands the picture to H3 as
   `[image N]` does; `SET: image_N(…)` dials it, and `SET:` with a RefMod's name brings that RefMod in, with
   strength, start and end. Tutorial 19 shows it (#224).

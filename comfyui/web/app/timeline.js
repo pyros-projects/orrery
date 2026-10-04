@@ -78,7 +78,9 @@ function takeVars(app, least = Number(app.data.take_min) || 54) {
 function takesHTML(app, s) {
   const takes = app.data.chain?.takes?.[s] || [];
   if (takes.length < 2) return "";
-  return `<div class="cm-takes" data-seg="${s}" style="${takeVars(app)}"><span class="muted">clip ${s + 1} · ${takes.length} takes</span>${takes.map((t, i) =>
+  return `<div class="cm-takes" data-seg="${s}" style="${takeVars(app)}"><span class="cm-takes-head"><span class="muted">clip ${s + 1} · ${takes.length} takes</span>`
+    + `<span class="btn ghost" role="button" data-clear="others" title="Delete every take of clip ${s + 1} but the one in the film">${icon("trash")}the others</span>`
+    + `<span class="btn ghost danger" role="button" data-clear="all" title="Delete every take of clip ${s + 1}, the one in the film too: the film then ends before it">${icon("trash")}all</span></span>${takes.map((t, i) =>
     `<button type="button" class="take${t.active ? " on" : ""}" data-take="${esc(t.folder)}" data-seg="${s}" title="Take ${i + 1} · seed ${t.seed ?? "?"}`
     + `${t.take ? ` + ${t.take}` : ""}${t.active ? " · in the film" : " · click to put it in the film"}">`
     + `<img loading="lazy" alt="" src="${app.api.takeThumbURL(app.bridge.chain(), t.folder)}"><span class="n">${i + 1}</span>${delHTML(t.folder)}</button>`).join("")}`
@@ -99,6 +101,20 @@ async function pickTake(app, segment, folder) {
 
 function followSeed(app, got) {
   if (!got.take && got.seed != null && Number(got.seed) !== Number(app.bridge.getSeed())) app.bridge.setSeed(Number(got.seed));
+}
+
+// A clip's takes deleted at once (#234), asked in place: all but the one in the film, or that one too, and then
+// the film ends before the clip, and the next clip is that one.
+async function clearTakes(app, segment, keep) {
+  try {
+    const got = await app.api.clearTakes(app.bridge.chain(), segment, keep);
+    const ended = !keep && Number(app.bridge.getSegment()) > segment;
+    if (ended) app.bridge.setSegment(segment);
+    await loadChain(app);
+    app.refreshRun?.();
+    app.toast(keep ? `${got.deleted} takes of clip ${segment + 1} deleted; the one in the film stays`
+      : `Clip ${segment + 1} deleted with its ${got.deleted} takes: the film ends before it${ended ? `, and the next clip is ${segment + 1}` : ""}`);
+  } catch (err) { app.fail(err); }
 }
 
 // What deleting a take does, asked in place (#214): the clip plays another take, or the film ends before it.
@@ -220,6 +236,20 @@ export function wireClips(app, box) {
     else clip.querySelector("video")?.remove();
   });
   box.addEventListener("click", (e) => {
+    const head = e.target.closest(".cm-takes-head");
+    if (head) {
+      const strip = head.closest(".cm-takes"), s = Number(strip.dataset.seg), count = strip.querySelectorAll(".take").length;
+      if (e.target.closest("[data-clearno]")) return head.querySelector(".ask")?.remove();
+      const yes = e.target.closest("[data-clearyes]");
+      if (yes) return clearTakes(app, s, yes.dataset.clearyes === "others");
+      const ask = e.target.closest("[data-clear]");
+      if (!ask) return;
+      head.querySelector(".ask")?.remove();
+      const others = ask.dataset.clear === "others";
+      return head.insertAdjacentHTML("beforeend", `<span class="ask">${others ? `Delete ${count - 1} takes? The one in the film stays.`
+        : `Delete all ${count} takes? The film ends before clip ${s + 1}.`}<span class="btn danger" role="button" data-clearyes="${ask.dataset.clear}">Delete</span>`
+        + `<span class="btn ghost" role="button" data-clearno>Keep</span></span>`);
+    }
     const host = e.target.closest(".take, .tl-clip");
     if (e.target.closest("[data-delno]")) return host.querySelector(".ask")?.remove();
     if (e.target.closest("[data-delyes]")) return deleteTake(app, Number(host.dataset.seg), host.querySelector("[data-del]").dataset.del);
