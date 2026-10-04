@@ -40,7 +40,9 @@ export function sceneStats(app, n) {
     const b = /^\$([A-Za-z_]\w*)\s*=\s*(.+)$/.exec(l);
     if (!b) return [];
     const lib = /__([\w/-]+?)(?:[#:].*?)?__/.exec(b[2])?.[1], choice = /^\{([^{}]*)\}$/.exec(b[2].trim());
-    return [{ name: b[1], what: b[2], count: lib ? libs.get(lib) ?? null : choice ? choice[1].split("|").length : null, lib: !!lib }];
+    const chance = choice && !choice[1].includes("|") ? /^\s*(\d+(?:\.\d+)?)\s*%/.exec(choice[1])?.[1] : null;  // {40% contact}
+    return [{ name: b[1], what: b[2], count: lib ? libs.get(lib) ?? null : choice && !chance ? choice[1].split("|").length : null, lib: !!lib,
+      chance: chance ? Number(chance) : null }];
   });
   const made = (app.data.chain?.clips || []).filter((x) => plays.includes(x.segment)).map((x) => x.segment);
   return {
@@ -72,10 +74,11 @@ export function sceneStatsHTML(app, n) {
     + `${s.start !== null && s.first !== null ? `; it first plays at <b>${clock(s.start)}</b> (clip ${s.first + 1})` : ""}.`
     + `${s.plays.length ? ` On the clips walked it fills ${clock(filled)} of ${clock(film)}.` : ""}</p></section>`
     + `<section><h5 class="label">Before and after</h5><p class="muted flush">What plays just before its clips and just after them on this walk; the lines `
-    + `of the scene that steer the reel decide it.</p><dl><dt>after</dt><dd>${list(s.before)}</dd><dt>leads to</dt><dd>${list(s.after)}</dd></dl>`
+    + `of the scene that steer the reel decide it.</p><dl><dt>comes after</dt><dd>${list(s.before)}</dd><dt>leads to</dt><dd>${list(s.after)}</dd></dl>`
     + `${s.steers.length ? `<pre class="ss-lines">${esc(s.steers.join("\n"))}</pre>` : ""}</section>`
     + `<section><h5 class="label">What it rolls</h5>${s.rolls.length ? `<dl>${s.rolls.map((r) => `<dt>$${esc(r.name)}</dt><dd>${esc(r.what)}`
-      + `${r.count != null ? `<small>${r.count} ${r.lib ? "entries" : "choices"}</small>` : ""}</dd>`).join("")}</dl>`
+      + `${r.count != null ? `<small>${r.count} ${r.lib ? (r.count === 1 ? "entry" : "entries") : r.count === 1 ? "choice" : "choices"}</small>`
+        : r.chance != null ? `<small>a ${r.chance} % chance</small>` : ""}</dd>`).join("")}</dl>`
       : `<p class="muted flush">No bindings of its own: it rolls what the lines above it roll.</p>`}</section>`
     + `<section><h5 class="label">Made</h5><p class="flush">${s.made.length ? `${s.made.length} of its clips are made: `
       + s.made.map((m) => `clip ${m.clip}${m.takes > 1 ? ` (${m.takes} takes)` : ""}`).join(", ") : "None of its clips is made yet."}</p></section></div>`;

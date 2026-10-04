@@ -694,7 +694,7 @@ test("deleting a take asks what it does: another take plays, or the film ends be
 test("a scene in numbers: where and how often it plays, before and after, what it rolls, what it made (#219)", async () => {
   const { sceneStats, sceneStatsHTML } = await import("../../comfyui/web/app/scenestats.js");
   const text = "@h3 text\nSCENE the gate\nSHOT 5s: static\nA gate.\nCUT TO: the stairs\n\nSCENE the stairs\n$step = __place__\n$mood = {calm|grim}\n"
-    + "SHOT 4s: static\nStairs.\nIF $mood is grim: CUT TO: the lamp\nCUT TO: the lamp\n\nSCENE the lamp\nSHOT 6s: static\nA lamp.\nCUT TO: the stairs\n";
+    + "$luck = {40% lucky}\nSHOT 4s: static\nStairs.\nIF $mood is grim: CUT TO: the lamp\nCUT TO: the lamp\n\nSCENE the lamp\nSHOT 6s: static\nA lamp.\nCUT TO: the stairs\n";
   const walked = { path: [0, 1, 2, 1, 2, 1, 2], ended: true };
   const app = {
     text, chunks: () => chunkInfo(text, walked), reelPath: () => walked, bridge: { getSegment: () => 3, getSeed: () => 7 },
@@ -706,10 +706,12 @@ test("a scene in numbers: where and how often it plays, before and after, what i
   assert.deepEqual(s.before, [["the lamp", 2], ["the gate", 1]]);
   assert.deepEqual(s.after, [["the lamp", 3]]);
   assert.deepEqual(s.steers, ["IF $mood is grim: CUT TO: the lamp", "CUT TO: the lamp"]);
-  assert.deepEqual(s.rolls.map((r) => [r.name, r.count, r.lib]), [["step", 12, true], ["mood", 2, false]]);
+  assert.deepEqual(s.rolls.map((r) => [r.name, r.count, r.lib, r.chance]), [["step", 12, true, null], ["mood", 2, false, null], ["luck", null, false, 40]]);
   assert.deepEqual(s.made, [{ clip: 2, takes: 3 }, { clip: 4, takes: 1 }]);
   const html = sceneStatsHTML(app, 1);
   assert.match(html, /It plays <b>3<\/b> of the <b>7<\/b> clips of the film/);
   assert.equal((html.match(/<i class="on/g) || []).length, 3);
   assert.match(html, /<i class="on next" title="clip 4: the stairs">/);
+  assert.match(html, /<small>a 40 % chance<\/small>/);
+  assert.match(html, /<dt>comes after<\/dt><dd>the lamp <b>2×<\/b> · the gate <b>1×<\/b><\/dd>/);
 });
