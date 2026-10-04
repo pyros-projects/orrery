@@ -1,0 +1,34 @@
+meta: {source: "orrery cyberpunk creator: what a character does in the city, with its article; `wear` its working clothes (reading the signature $colour), `gear` what it carries (one of several), `chrome` how much of the body is replaced (light, heavy)", needs: [colour], builtin: true}
+entries:
+  - {value: "a netrunner", props: {chrome: light, wear: "a $colour oversized hoodie over a cooling vest, trode cables at the temples", gear: "{a cyberdeck patched with tape|a pair of trode gloves|a bundle of data shards on a lanyard}"}}
+  - {value: "a mercenary", props: {chrome: heavy, wear: "a scuffed $colour armoured jacket with ballistic plates and a tactical harness", gear: "{an assault rifle slung low|a heavy pistol in a thigh holster|a smart shotgun}"}}
+  - {value: "a street doctor", props: {chrome: light, wear: "a blood-flecked $colour surgical apron over a mesh shirt, loupes on the brow", gear: "{a med-scanner|a roll of surgical tools|a cooler box marked with a red cross}"}}
+  - {value: "a courier", props: {chrome: light, wear: "a reflective $colour cycling jacket and padded shorts", gear: "{a sealed parcel on a shoulder strap|a folded e-board|a GPS cuff blinking $colour}"}}
+  - {value: "a fixer", props: {chrome: light, wear: "a sharp $colour suit with no tie and a gold chain", gear: "{a burner phone and a credit chip|a small pistol in an ankle holster|a cigar and a holo-ledger}"}}
+  - {value: "a corporate agent", props: {chrome: light, wear: "an immaculate charcoal suit with a $colour pocket square and a corporate pin", gear: "{a briefcase cuffed to the wrist|a sleek smart pistol|a tablet with a non-disclosure agreement}"}}
+  - {value: "a nomad", props: {chrome: light, wear: "a dusty $colour duster over clan-patched leathers and a breathing mask", gear: "{a lever-action rifle|a coil of tow cable|a jerry can and a wrench}"}}
+  - {value: "a pop idol", props: {chrome: light, wear: "a glittering $colour stage outfit with holographic panels", gear: "{a headset microphone|a bouquet from a fan|a holographic autograph pen}"}}
+  - {value: "a street samurai", props: {chrome: heavy, wear: "a $colour armoured kimono jacket over a black bodysuit", gear: "{a monomolecular katana|a pair of tanto blades|a wakizashi with a glowing edge}"}}
+  - {value: "a tech", props: {chrome: heavy, wear: "grease-stained $colour coveralls with a tool vest", gear: "{a plasma welding torch|a disassembled drone|a belt of hacked-together gadgets}"}}
+  - {value: "a cop", props: {chrome: heavy, wear: "a $colour riot vest over a city-issue uniform", gear: "{a shock baton|a heavy service pistol|a riot shield with a cracked visor}"}}
+  - {value: "a drone pilot", props: {chrome: light, wear: "a $colour flight jacket with a neural link at the nape", gear: "{a drone controller with twin joysticks|a folded quadcopter|VR goggles on the brow}"}}
+  - {value: "a smuggler", props: {chrome: light, wear: "a long $colour coat with hidden pockets", gear: "{a lead-lined case|a forged ID chip|a stun gun}"}}
+  - {value: "a bartender", props: {chrome: light, wear: "a $colour vest over a rolled-sleeve shirt", gear: "{a cocktail shaker|a shotgun under the bar|a bottle of synth-gin}"}}
+  - {value: "a data thief", props: {chrome: light, wear: "a $colour thermoptic hoodie and a face mask", gear: "{a signal jammer|a skeleton keycard|a stolen memory core}"}}
+  - {value: "a journalist", props: {chrome: light, wear: "a rumpled $colour raincoat over a press vest", gear: "{a camera drone on one shoulder|a recorder with a cracked screen|a press badge on a lanyard}"}}
+  - {value: "a gang boss", props: {chrome: heavy, wear: "a fur-collared $colour coat over a bare, tattooed chest", gear: "{a gold-plated pistol|a cane with a chrome skull|a fat roll of credits}"}}
+  - {value: "a bodyguard", props: {chrome: heavy, wear: "a fitted $colour suit stretched over armour plating, an earpiece in one ear", gear: "{a compact submachine gun|a ballistic briefcase|a shock knuckle-duster}"}}
+  - {value: "a street preacher", props: {chrome: light, wear: "a $colour robe over a scavenged circuit-board breastplate", gear: "{a megaphone|a holy book with a screen inside|a crown of dead LEDs}"}}
+  - {value: "a street racer", props: {chrome: light, wear: "a $colour racing jacket covered in sponsor patches", gear: "{a helmet under one arm|a key fob for a souped-up bike|a pair of driving gloves}"}}
+  - {value: "a DJ", props: {chrome: light, wear: "a cropped $colour jacket with glowing seams and big headphones", gear: "{a portable mixing deck|a record crate|a glowing turntable stylus}"}}
+  - {value: "a ripperdoc", props: {chrome: heavy, wear: "a stained $colour lab coat with cybernetic surgical arms folded at the back", gear: "{a bone saw|a tray of cybernetic eyes|an injector of neural stabiliser}"}}
+  - {value: "a hacker activist", props: {chrome: light, wear: "a $colour anti-surveillance poncho printed with dazzle camo", gear: "{a spray can and a stencil|a USB spike|a homemade signal antenna}"}}
+  - {value: "a cyber-psycho hunter", props: {chrome: heavy, wear: "a $colour armoured trench coat with a rebreather", gear: "{a net launcher|an EMP grenade belt|a heavy revolver}"}}
+  - {value: "a salvager", props: {chrome: heavy, wear: "patched $colour work overalls and a welder's apron", gear: "{a magnetic crane hook|a crowbar|a sack of scavenged chips}"}}
+  - {value: "a noodle-bar cook", props: {chrome: light, wear: "a $colour headband and a white apron over a tank top", gear: "{a cleaver|a steaming ladle|a bowl of ramen}"}}
+  - {value: "a club bouncer", props: {chrome: heavy, wear: "a tight black tee with a $colour security band on one arm", gear: "{a clipboard and a scanner|a stun baton|a velvet rope}"}}
+  - {value: "a corporate heir", props: {chrome: light, wear: "a tailored $colour designer jacket with smart-fabric that shimmers", gear: "{a champagne flute|a pet drone on a jewelled leash|a black credit card}"}}
+  - {value: "a mech pilot", props: {chrome: heavy, wear: "a $colour pilot suit with neural ports along the spine", gear: "{a helmet with a cracked visor|a flight log chip|a nav-key}"}}
+  - {value: "a pawnbroker", props: {chrome: light, wear: "a $colour cardigan over a shirt hung with loupes and chains", gear: "{a tray of second-hand eyes|a ledger of debts|a jeweller's scope}"}}
+  - {value: "a sniper", props: {chrome: heavy, wear: "a $colour ghillie poncho of shredded cables", gear: "{a long rifle with a smart scope|a range-finder|a spotting drone}"}}
+  - {value: "an info broker", props: {chrome: light, wear: "a high-collared $colour coat with a scarf of fibre optics", gear: "{a deck of data cards|an earpiece and a mic|a sealed envelope}"}}
