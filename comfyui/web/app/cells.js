@@ -49,21 +49,28 @@ export function renderCells(app, at = null) {
   if (at !== null) placeCaret(app, at);
 }
 
-// Highlights with the chunk dividers, and the sections when what they show changed.
+const painted = new WeakMap();  // a cell → what its highlight was made from
+
+// Highlights with the chunk dividers, and the sections when what they show changed. A cell is highlighted
+// again only when something it shows changed (#218): its text, its divider, its hints, the libraries known,
+// the CAST, the segment; what every cell reads is worked out once.
 export function paintCells(app) {
   const host = box(app);
   if (!host) return;
   const cells = splitCells(app.text), chunks = app.chunks() || [], segment = Number(app.bridge.getSegment());
-  const remembered = app.remembered();
+  const remembered = app.remembered(), annotations = app.annotations(), known = app.known(), llm = app.llmActive();
+  const cast = castNames(app.text), shared = JSON.stringify([[...known], cast, llm, segment]), acts = app.sceneActs?.();
   let before = 0;  // the REMEMBER: lines in the cells above: the hints count them through the whole text
   host.querySelectorAll(".cell").forEach((cell, i) => {
     const c = cells[i];
     if (!c) return;
     const local = c.chunk >= 0 && chunks[c.chunk] ? [{ ...chunks[c.chunk], line: 0, index: c.chunk }] : null;
-    const hints = mergeHints(hintsFor(c.text, remembered, before), annotationLines(c.text, app.annotations(), app.api.thumbURL));
+    const hints = mergeHints(hintsFor(c.text, remembered, before), annotationLines(c.text, annotations, app.api.thumbURL));
     before += rememberLines(c.text).length;
-    cell.querySelector("pre").innerHTML = `${highlight(c.text, app.known(), { llm: app.llmActive(), chunks: local, segment, cast: castNames(app.text), hints,
-      sceneActs: app.sceneActs?.() })}​`;
+    const key = JSON.stringify([shared, c.text, local, [...hints], acts && local ? acts(local[0], c.chunk) : ""]);
+    if (painted.get(cell) === key) return;
+    painted.set(cell, key);
+    cell.querySelector("pre").innerHTML = `${highlight(c.text, known, { llm, chunks: local, segment, cast, hints, sceneActs: acts })}​`;
   });
   const sig = JSON.stringify([chunks.map((c) => [c.first, c.last, c.segs]), (app.data.chain?.clips || []).map((c) => c.version),
     segment, clipRatio(app), app.data.clip_min, app.data.take_min, remembered?.key, remembered?.lines]);

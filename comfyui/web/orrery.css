@@ -539,12 +539,14 @@
 .orrery-app .tips b { color: var(--ink); font-weight: 500; }
 
 /* sheet, toast */
-.orrery-app .sheet { position: absolute; inset: 0; z-index: 40; background: rgba(12,12,17,.55); display: flex; align-items: flex-end; justify-content: center; backdrop-filter: blur(2px); }
-.orrery-app .sheet .panel { width: 100%; max-width: 560px; background: #1f2029; border: 1px solid var(--line); border-bottom: 0; border-radius: 14px 14px 0 0; padding: 14px 14px 12px; display: grid; gap: 11px;
-  box-shadow: 0 -10px 40px rgba(0,0,0,.5); animation: orrery-up .18s ease-out; max-height: 100%; overflow-y: auto; }
+/* a sheet drops from the app's top, where the buttons that open it are, however tall the node (#220) */
+.orrery-app .sheet { position: absolute; inset: 0; z-index: 40; background: rgba(12,12,17,.55); display: flex; align-items: flex-start; justify-content: center; backdrop-filter: blur(2px); }
+.orrery-app .sheet .panel { width: 100%; max-width: 560px; background: #1f2029; border: 1px solid var(--line); border-top: 0; border-radius: 0 0 14px 14px; padding: 14px 14px 12px; display: grid; gap: 11px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.5); animation: orrery-down .18s ease-out; max-height: 100%; overflow-y: auto; }
 .orrery-app.big .sheet { align-items: center; }
-.orrery-app.big .sheet .panel { border-radius: 14px; border-bottom: 1px solid var(--line); }
+.orrery-app.big .sheet .panel { border-radius: 14px; border-top: 1px solid var(--line); }
 @keyframes orrery-up { from { transform: translateY(24px); opacity: 0; } }
+@keyframes orrery-down { from { transform: translateY(-24px); opacity: 0; } }
 .orrery-app .panel h4 { margin: 0; font: italic 400 21px/1.1 var(--serif); }
 .orrery-app .field { display: grid; gap: 5px; }
 .orrery-app .llm-src { display: grid; gap: 11px; }  /* the gear's language-model choice: its fields, spaced as the panel's */

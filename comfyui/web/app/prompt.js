@@ -344,15 +344,23 @@ function generateSweep(app, cancelled = 0) {
   sheet.querySelector("button.primary").focus();
 }
 
+const painted = new WeakMap();  // the editor's highlight → what it was made from
+
 // The highlight with the reel's chunk dividers and the next segment's chunk marked; the dials say what they roll.
+// It is made again only when something it shows changed (#218).
 function paintEditor(app) {
   paintRolls(app);
   if (app.view.querySelector(".editor.cells")) return paintCells(app);
   const pre = app.view.querySelector(".editor pre.hl");
   if (!pre) return;
-  const chunks = app.chunks();
-  pre.innerHTML = `${highlight(app.text, app.known(), { llm: app.llmActive(), chunks, segment: chunks && Number(app.bridge.getSegment()), sceneActs: chunks && sceneActs(app),
-    hints: mergeHints(hintsFor(app.text, app.remembered()), annotationLines(app.text, app.annotations(), app.api.thumbURL)) })}\n`;
+  const chunks = app.chunks(), known = app.known(), llm = app.llmActive(), segment = chunks && Number(app.bridge.getSegment());
+  const acts = chunks && sceneActs(app);
+  const hints = mergeHints(hintsFor(app.text, app.remembered()), annotationLines(app.text, app.annotations(), app.api.thumbURL));
+  const key = JSON.stringify([app.text, [...known], llm, chunks, segment, [...hints], acts ? chunks.map((c, n) => acts(c, c.index ?? n)) : ""]);
+  if (painted.get(pre) !== key) {
+    painted.set(pre, key);
+    pre.innerHTML = `${highlight(app.text, known, { llm, chunks, segment, sceneActs: acts, hints })}\n`;
+  }
   if (chunks && app.data.timeline !== false && app.data.chain === undefined) {  // a reel typed or pasted in
     app.data.chain = null;
     loadChain(app).then(() => paintEditor(app));
@@ -558,8 +566,9 @@ function sideHead(n, set) {
 function paintRolls(app) {
   const rolled = app.annotations?.()?.bindings || {};
   app.view.querySelectorAll(".dials [data-roll]").forEach((el) => {
-    const v = rolled[el.dataset.roll];
-    el.textContent = v ? `= ${v}` : "";
+    const v = rolled[el.dataset.roll], text = v ? `= ${v}` : "";
+    if (el.textContent === text) return;  // #218: unchanged, untouched
+    el.textContent = text;
     el.title = v ? `At this seed: ${v}` : "";
   });
 }
