@@ -53,7 +53,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/galaxy/folder/delete"),
         ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
         ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"), ("POST", "/orrery/llm/takes"), ("POST", "/orrery/llm/keep"), ("POST", "/orrery/galaxy/takes"), ("POST", "/orrery/galaxy/write"),
-        ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/discard"),
+        ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/add"), ("POST", "/orrery/library/discard"),
         ("GET", "/orrery/home"), ("POST", "/orrery/home"),
         ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("POST", "/orrery/chain/move"), ("POST", "/orrery/chain/pick"), ("POST", "/orrery/chain/delete"), ("POST", "/orrery/chain/clear"), ("GET", "/orrery/chain/tree"), ("POST", "/orrery/chain/walk"), ("POST", "/orrery/chain/end"),
         ("GET", "/orrery/chain/video"),
@@ -912,10 +912,11 @@ def test_takes_at_the_line_ask_the_endpoint_for_one_place_at_the_seed(home, fake
     prompt = prompt if isinstance(prompt, str) else prompt[-1]["text"]
     assert "[this part]" in prompt and "--one small object" not in prompt and "__sky_kind__" in prompt  # rolled, the place marked
     assert "Steer them: older, worn." in prompt and "- a red ball" in prompt and fake_api.requests[-1]["temperature"] == 0.8
-    ok(home, webapi.llm_takes, kind="library", what="sky_kind", template=template, seed=4, directions="weather words")
+    body = ok(home, webapi.llm_takes, kind="library", what="sky_kind", template=template, seed=4, directions="weather words")
     prompt = fake_api.requests[-1]["messages"][0]["content"]
     prompt = prompt if isinstance(prompt, str) else prompt[-1]["text"]
-    assert "under a [this part]" in prompt and "__sky_kind__" in prompt and "weather words" in prompt
+    assert "__sky_kind__: 12 entries." in prompt and "Directions: weather words" in prompt  # the library, as a run asks (#272)
+    assert len(body["takes"]) == 4
     ok(home, webapi.llm_takes, kind="enhance", what="make it moody", template=template, seed=4)
     prompt = fake_api.requests[-1]["messages"][0]["content"]
     prompt = prompt if isinstance(prompt, str) else prompt[-1]["text"]
@@ -928,6 +929,17 @@ def test_takes_at_the_line_ask_the_endpoint_for_one_place_at_the_seed(home, fake
     assert api(home, webapi.llm_takes, kind="slot", what="nothing like it", template=template)[0] == 400  # no such slot
     fake_api.answer = lambda body: "no list here"
     assert api(home, webapi.llm_takes, kind="slot", what="one small object in its paws", template=template)[0] == 502
+
+
+def test_keep_as_the_library_writes_the_picked_entries_straight_in(home):
+    """#272: a new library made of the entries picked in the sheet, not To review, its directions kept; picked again,
+    only the new ones are added; `orrery lib undo` has a snapshot."""
+    body = ok(home, webapi.library_add, name="sky_kind", entries=["fog", "low cloud", "fog"], directions="weather words")
+    assert body["added"] == 2 and [e["value"] for e in body["library"]["entries"]] == ["fog", "low cloud"]
+    lib = Home(home).libraries()["sky_kind"]
+    assert lib.meta["directions"] == "weather words" and not lib.meta.get("pending")
+    assert ok(home, webapi.library_add, name="sky_kind", entries=["Fog", "hail"])["added"] == 1
+    assert api(home, webapi.library_add, name="sky_kind", entries=[])[0] == 400
 
 
 def test_how_many_takes_each_sheet_asks_for_is_a_setting(home, fake_api):

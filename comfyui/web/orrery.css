@@ -275,6 +275,9 @@
 .orrery-app .takes-panel .take-list li.on { border: 2px solid var(--violet); padding: 4px 7px; background: color-mix(in srgb, var(--violet) 12%, transparent); }
 .orrery-app .takes-panel .take-list li:focus-visible { outline: 1px solid var(--violet); }
 .orrery-app .takes-panel .take-steer { gap: 6px; }
+.orrery-app .takes-panel .take-sel { gap: 6px; align-items: center; }
+.orrery-app .takes-panel .take-list.multi { max-height: 46vh; overflow-y: auto; }
+.orrery-app .takes-panel .take-use { gap: 6px; }
 .orrery-app .takes-n { flex-wrap: wrap; gap: 6px 18px; }
 .orrery-app .takes-n label { gap: 6px; align-items: center; }
 .orrery-app .editor .hint .hint-pic { height: 1.45em; width: auto; border-radius: 3px; margin-right: 3px; vertical-align: top; opacity: 1; }

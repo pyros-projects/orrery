@@ -1180,6 +1180,8 @@ def llm_takes(home: Home, args: dict) -> dict:
     text, target = _template_for(home, args)
     seed, segment, libs = _int(args, "seed", 0), max(_int(args, "segment", 0), 0), home.libraries()
     src, screenplay = long_form(strip_comments(text)), target != "text" and long_form(strip_comments(text)).lstrip().startswith("@h3")
+    if kind == "library":
+        return _library_takes(home, args, what, src, api)
     result = None
     for _ in range(8):  # a library still to be written stands in as its name, as the annotations do
         try:
@@ -1198,7 +1200,7 @@ def llm_takes(home: Home, args: dict) -> dict:
                   if " ".join(instruction.split()) == what]
         context, keep = "\n".join(rolled), takes.rewrite_key(what, rolled[0]) if len(rolled) == 1 else None
     else:
-        context = takes.marked(result.text, f"--{what}--" if kind == "slot" else f"__{what}__")
+        context = takes.marked(result.text, f"--{what}--")
     if not context:
         raise ApiError(400, f"The prompt at seed {seed} has no {kind} {what!r} to write for (a branch that did not roll?).")
     if kind == "slot" and names_output(what):
@@ -1214,7 +1216,7 @@ def llm_takes(home: Home, args: dict) -> dict:
     n = min(max(_int(args, "n", takes.counts(llm_config(home))[{"slot": "slot", "enhance": "enhance"}.get(kind, "new")]), 1), 12)
     prompt = takes.request(kind, what, context, n, str(args.get("steer") or ""),
                            [str(h) for h in args.get("have") or [] if str(h).strip()][:60],
-                           " ".join(str(args.get("directions") or "").split()), len(frames) if frames is not None else 0, named)
+                           frames=len(frames) if frames is not None else 0, pictures=named)
     try:
         out = takes.parse(api.complete(prompt, images=_images(frames, shown, api)), n)
     except RuntimeError as err:
@@ -1222,6 +1224,46 @@ def llm_takes(home: Home, args: dict) -> dict:
     if not out:
         raise ApiError(502, "The language model wrote no takes; ask again.")
     return {"takes": out, **({"keep": keep} if kind == "enhance" else {})}
+
+
+def _library_takes(home: Home, args: dict, name: str, src: str, api) -> dict:
+    """A library still to be written, written in the sheet (#272): as many entries as a new library starts with
+    (or `__name:N__`'s N), as a run would ask for them."""
+    from orrery import takes
+    from orrery.dsl import wanted_libraries
+    from orrery.llm import InvalidProposal
+
+    if name in home.libraries():
+        raise ApiError(400, f"__{name}__ is written already.")
+    minimum = wanted_libraries(src).get(name)
+    if minimum is None:
+        raise ApiError(400, f"The template does not use __{name}__.")
+    n = min(max(_int(args, "n", max(minimum, int(llm_config(home)["entries"]))), 1), 200)
+    have = [str(h) for h in args.get("have") or [] if str(h).strip()][:400]
+    prompt, need = takes.for_library(src, name, n, str(args.get("directions") or ""), str(args.get("steer") or ""), have)
+    try:
+        out = takes.library_entries(api.complete(prompt), need)
+    except (RuntimeError, InvalidProposal) as err:
+        raise ApiError(502, str(err)) from None
+    if not out:
+        raise ApiError(502, "The language model wrote no new entries; ask again.")
+    return {"takes": out}
+
+
+def library_add(home: Home, args: dict) -> dict:
+    """Keep as the library, Add to the library (#272, #273): the entries picked in a takes sheet, straight in."""
+    from orrery import takes
+
+    name = _library_name(args.get("name"))
+    values = [str(v) for v in args.get("entries") or [] if str(v).strip()]
+    if not values:
+        raise ApiError(400, "'entries' are the picked entries: none were sent.")
+    cfg = endpoint.config(home)
+    added = takes.add_to_library(home, name, values, str(args.get("directions") or ""), cfg["model"] if cfg["source"] == "api" else "")
+    lib = home.libraries().get(name)
+    if lib is None:
+        raise ApiError(400, f"Nothing was written into __{name}__.")
+    return {"added": added, "library": _library_json(home, name, lib, home.weights())}
 
 
 def llm_keep(home: Home, args: dict) -> dict:
@@ -1357,6 +1399,7 @@ ROUTES = [
     ("POST", "/orrery/galaxy/takes", galaxy_takes),
     ("POST", "/orrery/galaxy/write", galaxy_write),
     ("POST", "/orrery/library/accept", library_accept),
+    ("POST", "/orrery/library/add", library_add),
     ("POST", "/orrery/library/discard", library_discard),
 ]
 

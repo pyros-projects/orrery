@@ -101,6 +101,7 @@ export function client(home) {
     takeVideoURL: (chain, take) => url("chain/video", { take, ...(chain ? { chain } : {}) }),
     takes: (body) => call("llm/takes", { body }),
     keepRewrite: (body) => call("llm/keep", { body }),
+    addToLibrary: (body) => call("library/add", { body }),
     galaxyTakes: (body) => call("galaxy/takes", { body }),
     galaxyWrite: (body) => call("galaxy/write", { body }),
     viewURL: (m) => api.apiURL(`/view?${new URLSearchParams({ filename: m.filename, subfolder: m.subfolder || "", type: m.type || "output" })}`),

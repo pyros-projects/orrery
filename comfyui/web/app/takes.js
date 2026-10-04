@@ -13,6 +13,16 @@ import { splitCells } from "./model.js";
 const LIB = (name) => new RegExp(`__${name.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&")}(?:\\[[^\\]\\n]*\\])?(?:#[\\w-]+:\\$?[\\w.-]+)*(?::\\d+)?__(?:\\(([^()]*)\\))?`);
 const SAID = { slot: "the slot", library: "the library still to be written", enhance: "what the line rewrites", picture: "the picture's slot" };
 
+// After a library was written from a sheet: the editor knows it now, its 🎲 goes, its rolls show.
+async function librariesChanged(app) {
+  try { app.data.libraries = (await app.api.libraries()).libraries; } catch { /* the next run reads them */ }
+  app.data.libFull = {};
+  app.dialLibs = {};
+  await app.refreshCompletion().catch(() => {});
+  app.cellsSig = null;
+  if (app.state.tab === "prompt") app.render();
+}
+
 // The template's line `place.line` changed by `edit(line)`; the text as it was when the line is not there.
 function onLine(text, place, edit) {
   const lines = text.split("\n");
@@ -55,8 +65,9 @@ export function placeOf(app, key) {
 }
 
 export function openTakes(app, place, near = null) {
-  const s = { takes: [], pick: null, keep: null, busy: false, error: "" };
+  const s = { takes: [], pick: null, picked: new Set(), keep: null, busy: false, error: "", note: "" };
   const picture = place.kind === "picture", enhance = place.kind === "enhance";
+  const multi = place.kind === "library";  // a library's entries: several at once, kept as the library (#272)
   const token = place.kind === "slot" || picture ? `--${place.what}--` : place.kind === "library" ? `__${place.what}__` : `> ${place.what}`;
   const useTitle = picture ? "Write the selected take into the picture's exports"
     : enhance ? "Keep the selected rewrite for this roll: a run that rolls this prompt uses it instead of asking the model"
@@ -65,20 +76,28 @@ export function openTakes(app, place, near = null) {
     + `<button class="icon-btn" data-close title="Close">${icon("x")}</button></div>`
     + `<p class="muted flush">For ${SAID[place.kind]} <code>${esc(token)}</code>, ${picture ? "written from the picture, the prompt that made it beside it."
       : `at seed ${esc(String(app.bridge.getSeed()))}.`}`
-    + `${enhance ? " A rewrite happens at every run: Use selected keeps the one you pick for this roll, and the run uses it." : ""} Click a take to select it.</p>`
-    + `<ol class="take-list" role="listbox" aria-label="Takes"></ol><p class="muted flush take-state" role="status"></p>`
+    + `${enhance ? " A rewrite happens at every run: Use selected keeps the one you pick for this roll, and the run uses it." : ""}`
+    + `${multi ? " As many entries as a new library starts with, written as a run would. Select the ones worth keeping: Keep as the library writes them as the library, straight in." : " Click a take to select it."}</p>`
+    + (multi ? `<div class="row take-sel"><button class="btn ghost slim" data-tall>All</button><button class="btn ghost slim" data-tnone>None</button><span class="muted" data-tcount></span></div>` : "")
+    + `<ol class="take-list${multi ? " multi" : ""}" role="listbox" aria-label="Takes"${multi ? ' aria-multiselectable="true"' : ""}></ol><p class="muted flush take-state" role="status"></p>`
     + `<div class="row take-steer"><input class="input grow" data-steer placeholder="Steer them: darker, older, as an anime character …" aria-label="Steer the takes">`
     + `<button class="btn" data-tmore>${icon("dice")}More takes</button>`
     + (picture ? "" : `<button class="btn ghost" data-tkeep title="Write the steer into ${esc(SAID[place.kind])}'s directions, so it keeps rolling that way">${icon("pin")}Keep the direction</button>`) + "</div>"
-    + `<div class="row take-use"><span class="grow"></span><button class="btn primary" data-tuse title="${useTitle}">${icon("check")}Use selected</button></div></div>`, near);
+    + `<div class="row take-use"><span class="grow"></span><button class="btn${multi ? " ghost" : " primary"}" data-tuse title="${useTitle}">${icon("check")}Use selected</button>`
+    + (multi ? `<button class="btn primary" data-tlib title="Write the selected entries as __${esc(place.what)}__, straight into your libraries">${icon("save")}Keep as the library</button>` : "")
+    + "</div></div>", near);
   const list = sheet.querySelector(".take-list"), state = sheet.querySelector(".take-state"), steer = sheet.querySelector("[data-steer]");
-  const use = sheet.querySelector("[data-tuse]");
+  const use = sheet.querySelector("[data-tuse]"), lib = sheet.querySelector("[data-tlib]");
+  const on = (i) => (multi ? s.picked.has(i) : s.pick === i);
+  const chosen = () => (multi ? (s.picked.size === 1 ? [...s.picked][0] : null) : s.pick);
   const draw = () => {
-    list.innerHTML = s.takes.map((t, i) => `<li class="${s.pick === i ? "on" : ""}" data-tpick="${i}" tabindex="0" role="option" aria-selected="${s.pick === i}">${esc(t)}</li>`).join("");
-    state.textContent = s.busy ? "Writing…" : s.error;
+    list.innerHTML = s.takes.map((t, i) => `<li class="${on(i) ? "on" : ""}" data-tpick="${i}" tabindex="0" role="option" aria-selected="${on(i)}">${esc(t)}</li>`).join("");
+    state.textContent = s.busy ? "Writing…" : s.error || s.note;
     state.classList.toggle("warn", !!s.error && !s.busy);
     sheet.querySelector("[data-tmore]").disabled = s.busy;
-    use.disabled = s.busy || s.pick === null || (enhance && !s.keep);
+    use.disabled = s.busy || chosen() === null || (enhance && !s.keep);
+    if (lib) lib.disabled = s.busy || !s.picked.size;
+    if (multi) sheet.querySelector("[data-tcount]").textContent = `${s.picked.size} of ${s.takes.length} selected`;
     if (enhance && !s.keep && s.takes.length) use.title = "This > rewrites several passages of the screenplay, each on its own at the run: there is no one rewrite to keep";
   };
   const ask = async () => {
@@ -116,6 +135,12 @@ export function openTakes(app, place, near = null) {
   steer.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); ask(); } });
   if (!picture) sheet.querySelector("[data-tkeep]").onclick = () => {
     if (!steer.value.trim()) return steer.focus();
+    if (multi) {  // a library still to be written keeps its directions itself, once it is kept (#272, #275)
+      place.directions = place.directions ? `${place.directions}, ${steer.value.trim()}` : steer.value.trim();
+      s.note = `Kept: __${place.what}__ gets the directions “${place.directions}” when you keep it, and More asks with them.`;
+      steer.value = "";
+      return draw();
+    }
     const text = keepDirection(app.text, place, steer.value), moved = text !== app.text;
     changed(text, `Your steer is in ${esc(SAID[place.kind])}'s directions · an unsaved edit`);
     if (!moved) return;
@@ -127,14 +152,31 @@ export function openTakes(app, place, near = null) {
   };
   const select = (li) => {
     if (!li) return;
-    s.pick = Number(li.dataset.tpick);
+    const i = Number(li.dataset.tpick);
+    if (!multi) s.pick = i;
+    else if (s.picked.has(i)) s.picked.delete(i);
+    else s.picked.add(i);
     draw();
     list.querySelector(`[data-tpick="${s.pick}"]`)?.focus();
   };
   list.addEventListener("click", (e) => select(e.target.closest("[data-tpick]")));
   list.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(e.target.closest("[data-tpick]")); } });
+  if (multi) {
+    sheet.querySelector("[data-tall]").onclick = () => { s.takes.forEach((_, i) => s.picked.add(i)); draw(); };
+    sheet.querySelector("[data-tnone]").onclick = () => { s.picked.clear(); draw(); };
+    lib.onclick = async () => {
+      const entries = [...s.picked].sort((a, b) => a - b).map((i) => s.takes[i]);
+      try {
+        const d = await app.api.addToLibrary({ name: place.what, entries, directions: place.directions || "" });
+        app.closeSheet();
+        app.toast(`<b>__${esc(place.what)}__</b> is written: ${d.added} entries, in your libraries`,
+          { label: "Open", run: () => { app.state.lib = place.what; app.go("libraries"); } });
+        await librariesChanged(app);
+      } catch (err) { s.error = err.message; draw(); }
+    };
+  }
   use.onclick = async () => {
-    const take = s.takes[s.pick];
+    const take = s.takes[chosen()];
     if (take === undefined) return;
     try {
       if (picture) {

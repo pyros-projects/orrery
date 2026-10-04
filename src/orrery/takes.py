@@ -31,15 +31,16 @@ def counts(llm: dict) -> dict[str, int]:
             out[kind] = default
     return out
 
+
 KINDS = ("slot", "library", "enhance")  # in the editor; "picture": an export slot of a gallery picture (#175)
 MARK = "[this part]"
 
 
 def request(kind: str, what: str, context: str, n: int = 3, steer: str = "", have: list[str] | tuple = (),
-            directions: str = "", frames: int = 0, pictures: list[str] = ()) -> str:
-    """The prompt for N takes. `context`: the prompt as it rolls with the place marked (MARK), or for `enhance`
-    the passage the line rewrites; `what`: the slot's directions, the library's name or the rewrite's instruction;
-    `directions`: a library's own, as written after it; `pictures`: those a slot names, sent after the frames (#174)."""
+            frames: int = 0, pictures: list[str] = ()) -> str:
+    """The prompt for N takes of a slot, a gallery picture's slot or a `> enhance` line (a library's: `for_library`).
+    `context`: the prompt as it rolls with the place marked (MARK), or for `enhance` the passage the line rewrites;
+    `what`: the slot's directions or the rewrite's instruction; `pictures`: those a slot names, after the frames (#174)."""
     parts = ["You write for a text-to-image and text-to-video prompt generator."]
     if frames:
         parts.append(f"The {'first ' if pictures else ''}{frames} images are frames of the previous clip, one a second, "
@@ -56,10 +57,6 @@ def request(kind: str, what: str, context: str, n: int = 3, steer: str = "", hav
         parts.append(f"The prompt, with the part to write marked {MARK}:\n\n{context.strip()}")
         parts.append(f"Write {n} different takes for {MARK}, each prose that fits where it stands and follows its "
                      f"directions exactly: {as_pictures(what, list(pictures))}")
-    elif kind == "library":
-        parts.append(f"The prompt, with {MARK} where an entry of the wildcard list __{what}__ stands:\n\n{context.strip()}")
-        parts.append(f"Write {n} different entries that could stand at {MARK}, each a short phrase that fits the "
-                     "sentence around it" + (f", following these directions: {directions}" if directions else "") + ".")
     else:
         parts.append(f"Rewrite this passage {n} different ways, each following the instruction: {what}. Keep every "
                      "UPPERCASE name and every <label> exactly as written, keep the same events in the same order, and "
@@ -124,6 +121,53 @@ def write_pictures(home, rows: list[dict]) -> list[str]:
         except (RuntimeError, KeyError, OSError, ValueError) as err:
             notes.append(f"--{what}--: {err}")
     return notes
+
+
+def for_library(template: str, name: str, n: int, directions: str = "", steer: str = "", have=()):
+    """(prompt, need) for a library still to be written, in the sheet (#272): N entries, asked as a run asks for it
+    (the lines that use it, its directions), the steer beside them; the entries the sheet has are not written again."""
+    from orrery.autolib import Need, _context, prompt_for
+
+    need = Need(name, n, _context(template, name), " ".join(directions.split()), list(have), " ".join(steer.split()))
+    return prompt_for([need]), need
+
+
+def library_entries(reply: str, need) -> list[str]:
+    """The entries a `for_library` reply holds, new against those the sheet has, at most N."""
+    from orrery.autolib import lists_in
+
+    known = {v.lower() for v in need.existing}
+    out = [v for v in lists_in(extract_json(reply), [need]).get(need.name, []) if v.lower() not in known]
+    return list(dict.fromkeys(out))[:need.count]
+
+
+def add_to_library(home, name: str, values: list[str], directions: str = "", by: str = "") -> int:
+    """Entries picked in a takes sheet, straight into the library, not To review (#272, #273): a new library is
+    made of them, an existing one gets the new ones (a built-in one becomes yours). `directions` are kept with it
+    for later top-ups. `orrery lib undo` takes it back. Returns how many entries were added."""
+    from datetime import UTC, datetime
+
+    from orrery.library import Entry, Library
+    from orrery.manager import _snapshot
+
+    lib, path = home.libraries().get(name), home.library_path(name)
+    known = {e.value.lower() for e in lib.entries} if lib else set()
+    fresh = [v for v in dict.fromkeys(" ".join(str(v).split()) for v in values) if v and v.lower() not in known]
+    if not fresh:
+        return 0
+    directions = " ".join(directions.split())
+    if lib is None:
+        _snapshot(home, [path], f"gen {name}")
+        meta = {"generated_by": by or "the takes sheet", "created": datetime.now(UTC).date().isoformat(),
+                **({"directions": directions} if directions else {})}
+        home.write_library(Library(name, [Entry(v) for v in fresh], meta))
+    else:
+        _snapshot(home, [path, path.with_suffix(".txt")], f"add {name}")
+        meta = {k: v for k, v in lib.meta.items() if k != "builtin"}
+        if directions:
+            meta["directions"] = directions
+        home.write_library(Library(name, [*lib.entries, *(Entry(v) for v in fresh)], meta))
+    return len(fresh)
 
 
 def rewrite_key(instruction: str, passage: str) -> str:
