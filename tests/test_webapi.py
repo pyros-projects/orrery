@@ -895,3 +895,12 @@ def test_every_library_in_a_line_says_what_it_rolled_where_it_is_written(home):
     out = ok(home, webapi.annotate, template=screenplay, seed=4, target="h3-base")
     assert [k for k, _ in out["rolls"]["3"]] == [0, 1, 2] and [k for k, _ in out["rolls"]["4"]] == [0]
     assert "1" not in out["rolls"] and out["bindings"]["x"] in ("linocut", "gouache")
+
+
+def test_a_library_still_to_be_written_says_no_roll_and_escapes_show_as_written(home):
+    """#269: a stand-in for a missing library showed its escape placeholders as its roll."""
+    (home / "library" / "brace.txt").write_text("a \\{curly\\} thing\n")
+    out = ok(home, webapi.annotate, template="A __animal__ under a __sky_kind__ sky, with __brace__.", seed=1, target="text")
+    rolls = out["rolls"]["0"]
+    assert [k for k, _ in rolls] == [0, 2] and rolls[1][1] == "a {curly} thing"  # __sky_kind__ (k 1) says nothing
+    assert not any("" in v or "" in v for _, v in rolls)

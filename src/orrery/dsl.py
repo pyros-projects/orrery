@@ -680,8 +680,9 @@ class Expander:
 
         def library(m: re.Match) -> str:
             value = _mid_line(self._library(m.group(1), m.group(2), label_prefix, m.group(3), _fixed(m.group(5))), m)
-            if at is not None and (k := place.get(at[m.start()])) is not None:
-                self._trace.append({"line": traced[0], "rest": traced[1], "k": k, "value": value})
+            if at is not None and (k := place.get(at[m.start()])) is not None:  # escaped characters as written (#269)
+                shown = _ESCAPED.sub(lambda e: self._escaped[int(e.group(1))], value)
+                self._trace.append({"line": traced[0], "rest": traced[1], "k": k, "value": shown, "library": m.group(1)})
             return value
 
         text = _LIB.sub(library, text)
