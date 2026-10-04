@@ -11,7 +11,8 @@ checks) are left out.
 
 - The take tree: every take of a reel keeps its path, and picking it brings back the clips last made after it. **Tree**
   shows them all like a git graph with videos, the film's path lit; a click makes the film the way through a take, ✂
-  ends it after one, and ▶ Film plays the film as clicked together, a timeline of its clips under it. Switching takes
+  ends it after one, ▶ Film plays the film as clicked together, a timeline of its clips under it, and a filter hides
+  the dead ends (the takes fewer than N takes were made on). Switching takes
   never changes the editor; a take made with another prompt carries ✎, its hover shows what changed and a click puts
   that prompt back in the editor, with Undo. Beside a clip's takes, a column: play all, the clip in numbers, the
   others and all (#213).

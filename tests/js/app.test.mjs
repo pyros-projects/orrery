@@ -808,3 +808,15 @@ test("a clip's takes have a head that reads as content: play on top, the clip in
   assert.match(html, /<i>takes<\/i><b>2<\/b>.*<i>in the film<\/i><b>#2<\/b>.*<i>seed<\/i><b>7 \+ 2<\/b>.*<i>newest<\/i><b>05:09<\/b>/);
   assert.doesNotMatch(html, /other prompt/);  // none made with another prompt
 });
+
+test("the take tree hides the dead ends: the film's, the last clip's and those a shown take came after stay (#246)", async () => {
+  const { shownTakes } = await import("../../comfyui/web/app/tree.js");
+  const t = (folder, segment, parent = null) => ({ folder, segment, parent });
+  const takes = [t("a", 0), t("b", 0), t("c", 0), t("d", 0), t("a1", 1, "a"), t("a2", 1, "a"), t("c1", 1, "c"), t("a1x", 2, "a1"), t("c1x", 2, "c1"), t("c1y", 2, "c1")];
+  const tree = { takes, path: ["b"] };
+  const names = (least) => shownTakes(tree, least).map((x) => x.folder).sort().join(" ");
+  assert.equal(names(0), takes.map((x) => x.folder).sort().join(" "));  // 0: all of them
+  assert.equal(names(1), "a a1 a1x b c c1 c1x c1y");  // d goes; a2 too (no take after it, not the last clip); b is the film
+  assert.equal(names(2), "a a1 a1x b c c1 c1x c1y");  // c has one take after it, but c1 has two: the path to it stays whole
+  assert.equal(names(3), "a a1 a1x b c c1 c1x c1y");  // the last clip's takes stay, and the takes they came after
+});

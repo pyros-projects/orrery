@@ -165,7 +165,11 @@ Nodes under **orrery**:
     **▶ Film** in the tree's head plays the film as it is clicked together
     (#243), in a section of its own above the tree that the split under it
     sizes: under the video a timeline of its clips with a playhead (a click
-    plays the film from there), and the take playing glows in the tree. While a clip renders, its box
+    plays the film from there), and the take playing glows in the tree.
+    **hide < N after** in its head hides the dead ends (#246): the takes fewer
+    than N takes were made on. The film's takes, the last clip's (nothing can
+    come after them yet) and every take a shown take came after stay, so every
+    path shown is whole; the head counts the hidden ones, 0 shows all. While a clip renders, its box
     shows the sampler's preview and the step it is at: KJNodes' Model Preview
     Override (a picture, or the whole clip as it forms), else ComfyUI's own
     preview when its live preview is on. Under a scene's clips come the frames its

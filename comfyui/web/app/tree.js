@@ -53,8 +53,24 @@ export function filmClips(tree) {
   return out;
 }
 
-export function treeHTML(app, tree, size = SIZE) {
-  const takes = tree.takes || [];
+// The takes the tree shows (#246): one with fewer than `least` takes made on it is hidden, unless it is in the film,
+// in the last clip (nothing can come after it yet), or a shown take came after it, so every path shown is whole.
+export function shownTakes(tree, least = 0) {
+  const all = tree.takes || [];
+  if (!least) return all;
+  const kids = new Map(), film = new Set(tree.path), last = Math.max(...all.map((t) => t.segment)), seen = new Map();
+  for (const t of all) if (t.parent) (kids.get(t.parent) ?? kids.set(t.parent, []).get(t.parent)).push(t);
+  const shown = (t) => {
+    if (!seen.has(t.folder)) {
+      const ks = kids.get(t.folder) || [];
+      seen.set(t.folder, film.has(t.folder) || t.segment === last || ks.length >= least || ks.some(shown));
+    }
+    return seen.get(t.folder);
+  };
+  return all.filter(shown);
+}
+
+export function treeHTML(app, tree, size = SIZE, takes = tree.takes || []) {
   if (!takes.length) return `<p class="muted tree-none">No takes yet: render a clip, and the tree starts growing.</p>`;
   const rows = layoutTree(takes), by = new Map(takes.map((t) => [t.folder, t])), film = new Set(tree.path);
   const ratio = clipRatio(app), w = Math.round(ratio >= 1 ? size * ratio : size), h = Math.round(ratio >= 1 ? size : size / ratio);
@@ -63,8 +79,8 @@ export function treeHTML(app, tree, size = SIZE) {
   const segs = Math.max(...takes.map((t) => t.segment)) + 1, height = top + Math.max(...rows.values(), 0) * rowH + h + 30;
   const chunks = app.chunks?.() || [];
   const nth = new Map();  // a take's number in its clip, in the order they were made
-  for (let s = 0; s < segs; s++) {
-    takes.filter((t) => t.segment === s).sort((a, b) => String(a.created || "").localeCompare(String(b.created || "")))
+  for (let s = 0; s < segs; s++) {  // counted among all of the clip's takes, the hidden ones too
+    tree.takes.filter((t) => t.segment === s).sort((a, b) => String(a.created || "").localeCompare(String(b.created || "")))
       .forEach((t, i) => nth.set(t.folder, i + 1));
   }
   const heads = Array.from({ length: segs }, (_, s) => {
@@ -105,9 +121,12 @@ function placeCard(card, node, scroll) {
 
 export function openTree(app) {
   const size = () => Number(app.bridge.props.orrery_tree_size) || SIZE;
+  const least = () => Number(app.bridge.props.orrery_tree_least) || 0;
   const sheet = app.openSheet(`<div class="panel tree-panel"><div class="row spread"><h4>${icon("tree")} The take tree</h4>`
     + `<span class="muted" data-tstat></span><span class="grow"></span>`
     + `<button class="btn ghost" data-tfilm aria-pressed="false" title="Play the film as it is clicked together, its takes joined">${icon("play")}Film</button>`
+    + `<label class="tfilter" title="Hide the takes fewer than this many takes were made on: the film's, the last clip's and those a shown take came after stay. 0 shows all">`
+    + `hide &lt;<input type="number" min="0" max="20" step="1" value="${least()}" data-tleast aria-label="Hide the takes with fewer takes made on them than">after</label>`
     + `<input type="range" min="48" max="240" step="8" value="${size()}" data-tsize title="The takes' size" aria-label="The takes' size">`
     + `<button class="icon-btn" data-close title="Close">${icon("x")}</button></div>`
     + `<div class="tree-film" hidden><video controls playsinline preload="auto"></video>`
@@ -150,10 +169,12 @@ export function openTree(app) {
     video.play().catch(() => {});
   };
   const draw = () => {
-    scroll.innerHTML = treeHTML(app, tree, size());
+    const shown = shownTakes(tree, least()), hidden = tree.takes.length - shown.length;
+    scroll.innerHTML = treeHTML(app, tree, size(), shown);
     if (!player.hidden) playing();
     const paths = (tree.takes || []).filter((t) => !(tree.takes || []).some((k) => k.parent === t.folder)).length;
-    sheet.querySelector("[data-tstat]").textContent = `${tree.takes.length} takes · ${paths} path${paths === 1 ? "" : "s"} · the film ${tree.path.length} clip${tree.path.length === 1 ? "" : "s"}`;
+    sheet.querySelector("[data-tstat]").textContent = `${tree.takes.length} takes · ${paths} path${paths === 1 ? "" : "s"} · the film ${tree.path.length} clip${tree.path.length === 1 ? "" : "s"}`
+      + (hidden ? ` · ${hidden} hidden` : "");
   };
   const grow = async () => {
     try {
@@ -205,6 +226,10 @@ export function openTree(app) {
     window.addEventListener("pointermove", move, true);
     window.addEventListener("pointerup", up, true);
   });
+  sheet.querySelector("[data-tleast]").oninput = (e) => {
+    app.bridge.props.orrery_tree_least = Math.max(0, Math.round(Number(e.target.value) || 0));
+    if (tree) draw();
+  };
   sheet.querySelector("[data-tsize]").oninput = (e) => { app.bridge.props.orrery_tree_size = Number(e.target.value); if (tree) draw(); };
   scroll.addEventListener("click", (e) => {
     const ver = e.target.closest("[data-ver]"), v = ver && versionOf(app, tree.takes.find((t) => t.folder === ver.dataset.ver));
