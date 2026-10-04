@@ -512,7 +512,7 @@ async function onClick(app, e, open, rows) {
       app.bridge.setParams(open.params || {});
     } catch (err) { return app.fail(err); }
     app.go("prompt");
-    app.toast(`Template and seed ${open.seed} restored · control after generate set to <b>fixed</b>, so the next run reproduces it`
+    app.toast(`Template and seed ${open.seed} restored · control after generate set to <b>fixed</b>: the next run rolls it again with today's libraries and learned weights (they may have changed since; the prompt it made is a copy away)`
       + (kept ? " · replayed as it was made: <b>@rng 1</b> or <b>full</b> added (the dice and the format of back then)" : ""));
   }
   if (act === "save") {

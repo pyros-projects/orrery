@@ -118,6 +118,8 @@ checks) are left out.
 
 ### Fixed
 
+- History's and the Gallery's restore no longer promise that the next run reproduces a run: it rolls again with today's
+  libraries and learned weights, and says so (#259).
 - Taking ratings back gives an entry's weight back: many outputs with one pick, rated and cleared, no longer leave it
   off (twenty hates and their clearing left it a hundredfold), and the same ratings in any order give the same weight
   (#257).

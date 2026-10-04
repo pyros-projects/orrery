@@ -109,7 +109,7 @@ async function onClick(app, e) {
       if (r.segment != null) app.bridge.setSegment(r.segment);
     } catch (err) { return app.fail(err); }
     app.go("prompt");
-    app.toast(`Template and seed ${r.seed}${r.segment != null ? `, clip ${r.segment + 1}` : ""} restored · control after generate set to <b>fixed</b>, so the next run reproduces it`
+    app.toast(`Template and seed ${r.seed}${r.segment != null ? `, clip ${r.segment + 1}` : ""} restored · control after generate set to <b>fixed</b>: the next run rolls it again with today's libraries and learned weights (they may have changed since; the prompt it made is a copy away)`
       + (kept ? " · replayed as it was made: <b>@rng 1</b> or <b>full</b> added (the dice and the format of back then)" : ""));
   }
 }
