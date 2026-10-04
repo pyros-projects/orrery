@@ -64,7 +64,7 @@ export async function renderGalaxy(app) {
     <div class="bar">${seg("all", "All outputs")}${seg("prompt", "This prompt")}${seg("preset", "This preset")}<span class="sep"></span>`
     + `${rch("love", `${icon("heart")}Loved`)}${rch("like", `${icon("up")}Liked`)}${rch("unrated", "Unrated")}`
     + `${s.gPick ? `<span class="chip mono" aria-pressed="true">${esc(s.gPick)}<button class="mini" data-gp="" aria-label="Clear pick filter">${icon("x")}</button></span>` : ""}
-      <span class="grow"></span><button class="icon-btn" data-gact="reload" title="Reload the gallery">${icon("undo")}</button></div>
+      <span class="grow"></span><button class="icon-btn" data-gact="reload" title="Reload the gallery">${icon("reload")}</button></div>
     ${s.gSel.size ? selBarHTML(s.gSel.size, rows.length) : ""}
     <div class="split ${open ? "has-detail" : ""}">
       <div class="scroll"><p class="rule">Ratings teach the dice: every pick in a <b class="love">loved</b> output weighs ×1.5, <b class="like">liked</b> ×1.2, <b class="nope">nope</b> ×0.8, <b class="hate">hate</b> ×0.5. Click an image for its picks; drag it onto a folder to sort it. Shift-click selects a range, Ctrl-click one more.</p>

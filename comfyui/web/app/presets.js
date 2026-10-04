@@ -11,7 +11,7 @@ export function renderPresets(app) {
   const list = filterPresets(app.data.presets, { filter: s.pFilter, search: s.pSearch, favorites: app.data.favorites, recent: app.data.recent });
   const chip = (k, label, pre = "") => `<button class="chip" aria-pressed="${s.pFilter === k}" data-pf="${k}">${pre}${esc(label)}</button>`;
   app.view.innerHTML = `
-    <div class="bar"><label class="search">${icon("search")}<input class="input" id="oa-ps" placeholder="Search titles, notes, tags and template text…" value="${esc(s.pSearch)}"></label></div>
+    <div class="bar"><label class="search">${icon("search")}<input class="input" id="oa-ps" placeholder="Search titles, notes, tags and template text…" value="${esc(s.pSearch)}"></label><button class="icon-btn" data-pact="reload" title="Reload the presets">${icon("reload")}</button></div>
     <div class="bar flat">${chip("all", "All")}${chip("fav", "Favorites", icon("star"))}${chip("recent", "Recent", icon("clock"))}<span class="sep"></span>`
     + `${folders.map((f) => chip(`f:${f}`, f, `<span class="sw" style="background:${folderColor(f === "mine" ? "" : f)}"></span>`)).join("")}</div>
     <div class="split ${s.pOpen ? "has-detail" : ""}">
@@ -65,6 +65,15 @@ function detailHTML(app) {
     </div></div></aside>`;
 }
 
+// The presets as the home holds them now (#301): opening the tab and its reload button read them again, and an
+// open preset's detail with them.
+export async function reloadPresets(app) {
+  try { await app.refreshPresets(); } catch (e) { return app.fail(e); }
+  if (app.state.pOpen && app.card(app.state.pOpen)) return open(app, app.state.pOpen);
+  app.state.pOpen = null;
+  if (app.state.tab === "presets") app.render();
+}
+
 async function open(app, name) {
   const s = app.state;
   s.pOpen = name;
@@ -97,6 +106,7 @@ async function onClick(app, e) {
   const d = s.pDetail;
   if (!act) return;
   if (act === "close") { s.pOpen = null; return renderPresets(app); }
+  if (act === "reload") return reloadPresets(app);
   if (!d) return;
   if (act === "load") return app.loadPreset(d.name);
   if (act === "roll") {

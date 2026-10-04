@@ -57,7 +57,7 @@ export async function renderHistory(app) {
   app.view.innerHTML = `<div class="hist">
     <div class="bar"><input class="input" data-hq placeholder="Search prompts, picks, presets, seeds" value="${esc(s.hQuery || "")}" aria-label="Search the history">
       <span class="stat"><b>${app.data.hTotal || 0}</b> run${app.data.hTotal === 1 ? "" : "s"}</span>
-      <button class="icon-btn" data-hact="reload" title="Reload the history">${icon("undo")}</button></div>
+      <button class="icon-btn" data-hact="reload" title="Reload the history">${icon("reload")}</button></div>
     <div class="scroll"><p class="rule">Every run of this orrery home as it resolved: the seed, the picks and the prompt, kept even when the output was not (the last 2000 runs).</p>
       ${runs.map((r) => rowHTML(r, r.id === s.hOpen)).join("") || `<div class="empty">${s.hQuery ? "No run matches." : "No runs yet: queue the prompt, and every run lands here."}</div>`}
       ${more ? `<button class="btn ghost hmore" data-hact="more">Show ${Math.min(PAGE, app.data.hTotal - runs.length)} more</button>` : ""}

@@ -489,6 +489,8 @@
 .orrery-app .libgrip { position: absolute; top: 0; right: -4px; width: 8px; height: 100%; cursor: col-resize; z-index: 2; touch-action: none; }
 .orrery-app .libgrip:hover, .orrery-app .libgrip:focus-visible { background: linear-gradient(90deg, transparent 3px, var(--brass) 3px, var(--brass) 5px, transparent 5px); outline: none; }
 .orrery-app .liblist .search { margin: 10px; flex: none; }
+.orrery-app .liblist .libfind { margin: 10px; flex: none; }
+.orrery-app .liblist .libfind .search { margin: 0; flex: 1; }
 .orrery-app .liblist ul { list-style: none; margin: 0; padding: 0 6px; }
 .orrery-app .liblist li button { width: 100%; border-radius: 7px; padding: 6px 8px; display: flex; align-items: center; gap: 6px; text-align: left; }
 .orrery-app .liblist li button:hover { background: var(--hover); }

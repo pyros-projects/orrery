@@ -987,3 +987,21 @@ test("a gallery picture's export keeps its slots from image output apart, for a 
   assert.deepEqual(pictureSlots("a coat, --as image 2 shows it--"), [{ text: "a coat, --as image 2 shows it--" }]);  // written in the run
   assert.deepEqual(pictureSlots(""), []);
 });
+
+test("the presets and the libraries are read again on request (#301): an open preset's detail with them", async () => {
+  const { reloadPresets } = await import("../../comfyui/web/app/presets.js");
+  const { reloadLibraries } = await import("../../comfyui/web/app/libraries.js");
+  const calls = [];
+  const app = { state: { tab: "prompt", pOpen: "mine/gone" }, data: {}, refreshPresets: async () => calls.push("presets"),
+    refreshCompletion: async () => calls.push("completion"), card: () => null, render: () => calls.push("render"), fail: (e) => { throw e; } };
+  await reloadPresets(app);
+  assert.deepEqual(calls, ["presets"]);  // read again; another tab is not drawn
+  assert.equal(app.state.pOpen, null);  // the preset open in the detail is gone from the home: the detail closes
+  app.state.tab = "presets";
+  await reloadPresets(app);
+  assert.deepEqual(calls, ["presets", "presets", "render"]);
+  app.state.tab = "prompt";
+  reloadLibraries(app);
+  assert.equal(app.data.libStale, true);  // the folder is read when the tab draws, the open library with it
+  assert.equal(calls.at(-1), "completion");
+});

@@ -9,7 +9,7 @@ import { refreshHistory, renderHistory } from "./history.js";
 import { icon, LOGO } from "./icons.js";
 import { renderLibraries } from "./libraries.js";
 import { queueTasks } from "./miniruns.js";
-import { renderPresets } from "./presets.js";
+import { reloadPresets, renderPresets } from "./presets.js";
 import { paintLive } from "./timeline.js";
 import { paintCells } from "./cells.js";
 import { resultBegins, resultEnds, resultMedia } from "./results.js";
@@ -168,12 +168,16 @@ export class OrreryApp {
     TABS.find(([k]) => k === this.state.tab)[2](this);
   }
   go(tab) {
-    // Opening Libraries reads the folder again: files added outside the node show up without a reload.
-    if (tab === "libraries" && this.state.tab !== "libraries") {
+    // Opening a tab reads what it shows again (#301): presets, libraries or outputs added outside the node, or by a
+    // run, show up without a reload.
+    const entering = tab !== this.state.tab;
+    if (tab === "libraries" && entering) {
       this.data.libStale = true;
       this.refreshCompletion().catch(() => {});
     }
     if (tab === "history") this.state.hFetched = false;  // the runs since it was last open
+    if (tab === "galaxy" && entering) this.state.gFetched = false;
+    if (tab === "presets" && entering) reloadPresets(this);
     this.state.tab = tab;
     this.state.pick = false;
     this.bridge.props.orrery_tab = tab;
