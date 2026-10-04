@@ -14,7 +14,7 @@
    "takes": [
     {
      "clip": 0,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The camera operator walks slowly forward through an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. The camera pushes in at slow speed. The place is completely empty and goes on in every direction. The shot ends as the camera crawls into a dark vent at floor level.\n\noverall_soundscape: The loud, even buzz of fluorescent lights and the soft squelch of damp carpet and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The camera operator walks slowly forward through an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. The camera pushes in at slow speed. The place is completely empty and goes on in every direction. The shot ends as the camera lies down on the carpet and sinks into it as if it were water.\n\noverall_soundscape: The loud, even buzz of fluorescent lights and the soft squelch of damp carpet and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels#start:yes__",
@@ -25,9 +25,9 @@
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera crawls into a dark vent at floor level",
+       "the camera lies down on the carpet and sinks into it as if it were water",
        [
-        "__backrooms/exits__=the camera crawls into a dark vent at floor level"
+        "__backrooms/exits__=the camera lies down on the carpet and sinks into it as if it were water"
        ]
       ],
       [
@@ -41,20 +41,20 @@
     },
     {
      "clip": 1,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera crawls into a dark vent at floor level. The camera pushes in at slow speed. The camera crawls out of a vent at floor level, into a huge, dim hall of carpet and square support pillars with no walls in sight. The camera operator walks slowly on. The place is completely empty and goes on in every direction. The shot ends as the lights go out panel by panel toward the camera until the frame is black.\n\noverall_soundscape: A very low hum and an almost total silence and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera lies down on the carpet and sinks into it as if it were water. The camera pushes in at slow speed. The camera surfaces out of the carpet, into a showroom of television sets all tuned to the same empty room, the room the camera is standing in. The camera operator walks slowly on. The place is completely empty and goes on in every direction. The shot ends as the camera presses the button of a lift with no numbers and the doors close on the dark.\n\noverall_soundscape: A dozen speakers playing the camera's own breathing back a moment late and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a huge, dim hall of carpet and square support pillars with no walls in sight",
+       "a showroom of television sets all tuned to the same empty room, the room the camera is standing in",
        [
-        "__backrooms/levels__=a huge, dim hall of carpet and square support pillars with no walls in sight"
+        "__backrooms/levels__=a showroom of television sets all tuned to the same empty room, the room the camera is standing in"
        ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the lights go out panel by panel toward the camera until the frame is black",
+       "the camera presses the button of a lift with no numbers and the doors close on the dark",
        [
-        "__backrooms/exits__=the lights go out panel by panel toward the camera until the frame is black"
+        "__backrooms/exits__=the camera presses the button of a lift with no numbers and the doors close on the dark"
        ]
       ],
       [
@@ -68,20 +68,20 @@
     },
     {
      "clip": 2,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the lights go out panel by panel toward the camera until the frame is black. The camera pushes in at slow speed. The lights stutter back on, panel by panel, into a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone. The shot ends as the lights go out panel by panel toward the camera until the frame is black.\n\noverall_soundscape: A clock ticking loudly and a floor polisher somewhere far away and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera presses the button of a lift with no numbers and the doors close on the dark. The camera pushes in at slow speed. A lift bell dings and its doors open, into a car wash tunnel that never ends, still brushes hanging and soap-streaked walls lit by red and green lamps. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone. The shot ends as the camera leans out of a window, loses its grip, and falls.\n\noverall_soundscape: Water spraying in bursts and brushes starting to turn and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs",
+       "a car wash tunnel that never ends, still brushes hanging and soap-streaked walls lit by red and green lamps",
        [
-        "__backrooms/levels__=a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+        "__backrooms/levels__=a car wash tunnel that never ends, still brushes hanging and soap-streaked walls lit by red and green lamps"
        ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the lights go out panel by panel toward the camera until the frame is black",
+       "the camera leans out of a window, loses its grip, and falls",
        [
-        "__backrooms/exits__=the lights go out panel by panel toward the camera until the frame is black"
+        "__backrooms/exits__=the camera leans out of a window, loses its grip, and falls"
        ]
       ],
       [
@@ -95,20 +95,20 @@
     },
     {
      "clip": 3,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the lights go out panel by panel toward the camera until the frame is black. The camera pushes in at slow speed. The lights stutter back on, panel by panel, into an airport gate lounge at night, rows of empty seats and departure boards showing nothing. The camera operator walks slowly on. The place is completely empty and goes on in every direction. The shot ends as the camera steps into an elevator and its doors slide shut.\n\noverall_soundscape: An announcement chime with no announcement and an empty baggage belt turning and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera leans out of a window, loses its grip, and falls. The camera pushes in at slow speed. The camera lands hard on a carpet, the window gone, into a post office sorting hall of pigeonholes from floor to ceiling, letters addressed to no one. The camera operator walks slowly on. The place is completely empty and goes on in every direction. The shot ends as the camera steps onto a moving walkway that speeds up until the walls blur.\n\noverall_soundscape: A franking machine thumping and paper rustling and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing",
+       "a post office sorting hall of pigeonholes from floor to ceiling, letters addressed to no one",
        [
-        "__backrooms/levels__=an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+        "__backrooms/levels__=a post office sorting hall of pigeonholes from floor to ceiling, letters addressed to no one"
        ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into an elevator and its doors slide shut",
+       "the camera steps onto a moving walkway that speeds up until the walls blur",
        [
-        "__backrooms/exits__=the camera steps into an elevator and its doors slide shut"
+        "__backrooms/exits__=the camera steps onto a moving walkway that speeds up until the walls blur"
        ]
       ],
       [
@@ -122,20 +122,20 @@
     },
     {
      "clip": 4,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera steps into an elevator and its doors slide shut. The camera pushes in at slow speed. The elevator doors slide open, into a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and far away an office chair rolls slowly across the room on its own. The shot ends as the camera pushes open a plain door at the end of the room onto total darkness.\n\noverall_soundscape: A clock ticking loudly and a floor polisher somewhere far away and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera steps onto a moving walkway that speeds up until the walls blur. The camera pushes in at slow speed. The walkway slows and spills the camera onto a carpet, into a dim library with shelves to the ceiling, every book spine blank, reading lamps glowing green on long tables. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and far away an office chair rolls slowly across the room on its own. The shot ends as the floor tilts slowly and the camera slides down it into a gap that opens along the wall.\n\noverall_soundscape: Pages turning somewhere out of sight and a clock ticking and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs",
+       "a dim library with shelves to the ceiling, every book spine blank, reading lamps glowing green on long tables",
        [
-        "__backrooms/levels__=a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+        "__backrooms/levels__=a dim library with shelves to the ceiling, every book spine blank, reading lamps glowing green on long tables"
        ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera pushes open a plain door at the end of the room onto total darkness",
+       "the floor tilts slowly and the camera slides down it into a gap that opens along the wall",
        [
-        "__backrooms/exits__=the camera pushes open a plain door at the end of the room onto total darkness"
+        "__backrooms/exits__=the floor tilts slowly and the camera slides down it into a gap that opens along the wall"
        ]
       ],
       [
@@ -149,20 +149,20 @@
     },
     {
      "clip": 5,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera pushes open a plain door at the end of the room onto total darkness. The camera pushes in at slow speed. The door clicks shut behind the camera, into an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and far away an office chair rolls slowly across the room on its own. The shot ends as the camera steps into still water that is far deeper than it looked and sinks.\n\noverall_soundscape: Soft background music from ceiling speakers and a distant escalator running and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the floor tilts slowly and the camera slides down it into a gap that opens along the wall. The camera pushes in at slow speed. The camera slides out onto a level floor, into an indoor water park with empty slides, green-tinted water and palm trees under a dark glass dome. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and far away an office chair rolls slowly across the room on its own. The shot ends as the picture freezes, the date stamp jumps forward by an hour, and the tape goes on somewhere else.\n\noverall_soundscape: A wave machine sloshing and a slide's water still running and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights",
+       "an indoor water park with empty slides, green-tinted water and palm trees under a dark glass dome",
        [
-        "__backrooms/levels__=an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+        "__backrooms/levels__=an indoor water park with empty slides, green-tinted water and palm trees under a dark glass dome"
        ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into still water that is far deeper than it looked and sinks",
+       "the picture freezes, the date stamp jumps forward by an hour, and the tape goes on somewhere else",
        [
-        "__backrooms/exits__=the camera steps into still water that is far deeper than it looked and sinks"
+        "__backrooms/exits__=the picture freezes, the date stamp jumps forward by an hour, and the tape goes on somewhere else"
        ]
       ],
       [
@@ -189,7 +189,7 @@
    "takes": [
     {
      "clip": 0,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The camera operator walks slowly forward through an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. The camera pushes in at slow speed. The place is completely empty and goes on in every direction. The shot ends as the camera steps into still water that is far deeper than it looked and sinks.\n\noverall_soundscape: The loud, even buzz of fluorescent lights and the soft squelch of damp carpet and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The camera operator walks slowly forward through an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. The camera pushes in at slow speed. The place is completely empty and goes on in every direction. The shot ends as the camera opens the door of a running washing machine and climbs into the spinning water.\n\noverall_soundscape: The loud, even buzz of fluorescent lights and the soft squelch of damp carpet and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels#start:yes__",
@@ -200,9 +200,9 @@
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into still water that is far deeper than it looked and sinks",
+       "the camera opens the door of a running washing machine and climbs into the spinning water",
        [
-        "__backrooms/exits__=the camera steps into still water that is far deeper than it looked and sinks"
+        "__backrooms/exits__=the camera opens the door of a running washing machine and climbs into the spinning water"
        ]
       ],
       [
@@ -216,20 +216,20 @@
     },
     {
      "clip": 1,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera steps into still water that is far deeper than it looked and sinks. The camera pushes in at slow speed. The camera rises dripping out of shallow water, into an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone. The shot ends as the camera walks straight into a wall and sinks through it, the picture tearing into glitches.\n\noverall_soundscape: The loud, even buzz of fluorescent lights and the soft squelch of damp carpet and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera opens the door of a running washing machine and climbs into the spinning water. The camera pushes in at slow speed. The camera spills out of a washing machine door onto wet tiles, into a hotel corridor that runs on for ever, patterned red carpet, identical numbered doors and wall lamps at even intervals. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone. The shot ends as the damp carpet gives way under the camera and it drops through the floor into darkness.\n\noverall_soundscape: A television muffled behind one of the doors and an ice machine humming and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       "a hotel corridor that runs on for ever, patterned red carpet, identical numbered doors and wall lamps at even intervals",
        [
-        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+        "__backrooms/levels__=a hotel corridor that runs on for ever, patterned red carpet, identical numbered doors and wall lamps at even intervals"
        ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches",
+       "the damp carpet gives way under the camera and it drops through the floor into darkness",
        [
-        "__backrooms/exits__=the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
        ]
       ],
       [
@@ -243,20 +243,20 @@
     },
     {
      "clip": 2,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera walks straight into a wall and sinks through it, the picture tearing into glitches. The camera pushes in at slow speed. The camera stumbles out of a wall, into a concrete stairwell that goes down floor after floor, the same number painted on every landing. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and at the far end a door closes softly by itself. The shot ends as the damp carpet gives way under the camera and it drops through the floor into darkness.\n\noverall_soundscape: Footsteps echoing from far below and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the damp carpet gives way under the camera and it drops through the floor into darkness. The camera pushes in at slow speed. The camera drops out of a ceiling tile and lands with a jolt, into a dentist's waiting room with pastel chairs, an aquarium with no fish and magazines from 1993. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and at the far end a door closes softly by itself. The shot ends as the camera steps into an elevator and its doors slide shut.\n\noverall_soundscape: An aquarium pump bubbling and a drill whining behind a door and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a concrete stairwell that goes down floor after floor, the same number painted on every landing",
+       "a dentist's waiting room with pastel chairs, an aquarium with no fish and magazines from 1993",
        [
-        "__backrooms/levels__=a concrete stairwell that goes down floor after floor, the same number painted on every landing"
+        "__backrooms/levels__=a dentist's waiting room with pastel chairs, an aquarium with no fish and magazines from 1993"
        ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       "the camera steps into an elevator and its doors slide shut",
        [
-        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+        "__backrooms/exits__=the camera steps into an elevator and its doors slide shut"
        ]
       ],
       [
@@ -270,20 +270,20 @@
     },
     {
      "clip": 3,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the damp carpet gives way under the camera and it drops through the floor into darkness. The camera pushes in at slow speed. The camera drops out of a ceiling tile and lands with a jolt, into a 24-hour laundromat where every machine is turning and no one is there. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and a fluorescent panel just ahead flickers, buzzes loudly and dies. The shot ends as the camera walks straight into a wall and sinks through it, the picture tearing into glitches.\n\noverall_soundscape: Dryers tumbling and a fluorescent tube ticking and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera steps into an elevator and its doors slide shut. The camera pushes in at slow speed. The elevator doors slide open, into a sauna corridor of pine doors with small windows, every room full of hot, white steam. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and a fluorescent panel just ahead flickers, buzzes loudly and dies. The shot ends as the camera pushes open a plain door at the end of the room onto total darkness.\n\noverall_soundscape: Steam hissing over hot stones and wood ticking in the heat and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there",
+       "a sauna corridor of pine doors with small windows, every room full of hot, white steam",
        [
-        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+        "__backrooms/levels__=a sauna corridor of pine doors with small windows, every room full of hot, white steam"
        ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches",
+       "the camera pushes open a plain door at the end of the room onto total darkness",
        [
-        "__backrooms/exits__=the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+        "__backrooms/exits__=the camera pushes open a plain door at the end of the room onto total darkness"
        ]
       ],
       [
@@ -297,20 +297,20 @@
     },
     {
      "clip": 4,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera walks straight into a wall and sinks through it, the picture tearing into glitches. The camera pushes in at slow speed. The camera stumbles out of a wall, into a 24-hour laundromat where every machine is turning and no one is there. The camera operator walks slowly on. The place is completely empty and goes on in every direction. The shot ends as the camera walks straight into a wall and sinks through it, the picture tearing into glitches.\n\noverall_soundscape: Dryers tumbling and a fluorescent tube ticking and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera pushes open a plain door at the end of the room onto total darkness. The camera pushes in at slow speed. The door clicks shut behind the camera, into a pitch-black corridor lit only by the camera's own light, carpet and doors appearing a metre ahead and vanishing behind. The camera operator walks slowly on. The place is completely empty and goes on in every direction. The shot ends as the lights go out panel by panel toward the camera until the frame is black.\n\noverall_soundscape: Nothing but the camera motor and the operator's breath and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there",
+       "a pitch-black corridor lit only by the camera's own light, carpet and doors appearing a metre ahead and vanishing behind",
        [
-        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+        "__backrooms/levels__=a pitch-black corridor lit only by the camera's own light, carpet and doors appearing a metre ahead and vanishing behind"
        ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches",
+       "the lights go out panel by panel toward the camera until the frame is black",
        [
-        "__backrooms/exits__=the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+        "__backrooms/exits__=the lights go out panel by panel toward the camera until the frame is black"
        ]
       ],
       [
@@ -324,20 +324,20 @@
     },
     {
      "clip": 5,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera walks straight into a wall and sinks through it, the picture tearing into glitches. The camera pushes in at slow speed. The camera stumbles out of a wall, into a 24-hour laundromat where every machine is turning and no one is there. The camera operator walks slowly on. The place is completely empty and goes on in every direction. The shot ends as the damp carpet gives way under the camera and it drops through the floor into darkness.\n\noverall_soundscape: Dryers tumbling and a fluorescent tube ticking and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the lights go out panel by panel toward the camera until the frame is black. The camera pushes in at slow speed. The lights stutter back on, panel by panel, into an ice rink in a dim hall, the zamboni parked in the middle and the ice freshly smooth. The camera operator walks slowly on. The place is completely empty and goes on in every direction. The shot ends as the camera steps into still water that is far deeper than it looked and sinks.\n\noverall_soundscape: Ice creaking and a refrigeration plant humming and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there",
+       "an ice rink in a dim hall, the zamboni parked in the middle and the ice freshly smooth",
        [
-        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+        "__backrooms/levels__=an ice rink in a dim hall, the zamboni parked in the middle and the ice freshly smooth"
        ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       "the camera steps into still water that is far deeper than it looked and sinks",
        [
-        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+        "__backrooms/exits__=the camera steps into still water that is far deeper than it looked and sinks"
        ]
       ],
       [
@@ -364,7 +364,7 @@
    "takes": [
     {
      "clip": 0,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The camera operator walks slowly forward through an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. The camera pushes in at slow speed. The place is completely empty and goes on in every direction. The shot ends as the camera walks straight into a wall and sinks through it, the picture tearing into glitches.\n\noverall_soundscape: The loud, even buzz of fluorescent lights and the soft squelch of damp carpet and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The camera operator walks slowly forward through an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. The camera pushes in at slow speed. The place is completely empty and goes on in every direction. The shot ends as the lights go out panel by panel toward the camera until the frame is black.\n\noverall_soundscape: The loud, even buzz of fluorescent lights and the soft squelch of damp carpet and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels#start:yes__",
@@ -375,9 +375,9 @@
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches",
+       "the lights go out panel by panel toward the camera until the frame is black",
        [
-        "__backrooms/exits__=the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+        "__backrooms/exits__=the lights go out panel by panel toward the camera until the frame is black"
        ]
       ],
       [
@@ -391,20 +391,20 @@
     },
     {
      "clip": 1,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera walks straight into a wall and sinks through it, the picture tearing into glitches. The camera pushes in at slow speed. The camera stumbles out of a wall, into a 24-hour laundromat where every machine is turning and no one is there. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and far away an office chair rolls slowly across the room on its own. The shot ends as the lights go out panel by panel toward the camera until the frame is black.\n\noverall_soundscape: Dryers tumbling and a fluorescent tube ticking and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the lights go out panel by panel toward the camera until the frame is black. The camera pushes in at slow speed. The lights stutter back on, panel by panel, into a model railway room the size of a city, tiny houses and tracks stretching to every wall. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and far away an office chair rolls slowly across the room on its own. The shot ends as the camera presses the button of a lift with no numbers and the doors close on the dark.\n\noverall_soundscape: A little train rattling along the tracks somewhere out of sight and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there",
+       "a model railway room the size of a city, tiny houses and tracks stretching to every wall",
        [
-        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+        "__backrooms/levels__=a model railway room the size of a city, tiny houses and tracks stretching to every wall"
        ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the lights go out panel by panel toward the camera until the frame is black",
+       "the camera presses the button of a lift with no numbers and the doors close on the dark",
        [
-        "__backrooms/exits__=the lights go out panel by panel toward the camera until the frame is black"
+        "__backrooms/exits__=the camera presses the button of a lift with no numbers and the doors close on the dark"
        ]
       ],
       [
@@ -418,20 +418,20 @@
     },
     {
      "clip": 2,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the lights go out panel by panel toward the camera until the frame is black. The camera pushes in at slow speed. The lights stutter back on, panel by panel, into an airport gate lounge at night, rows of empty seats and departure boards showing nothing. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone. The shot ends as the damp carpet gives way under the camera and it drops through the floor into darkness.\n\noverall_soundscape: An announcement chime with no announcement and an empty baggage belt turning and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera presses the button of a lift with no numbers and the doors close on the dark. The camera pushes in at slow speed. A lift bell dings and its doors open, into an indoor golf course of fake green turf, windmills and plaster animals under black lights. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone. The shot ends as the floor tilts slowly and the camera slides down it into a gap that opens along the wall.\n\noverall_soundscape: A golf ball rolling into a hole and a windmill turning and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing",
+       "an indoor golf course of fake green turf, windmills and plaster animals under black lights",
        [
-        "__backrooms/levels__=an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+        "__backrooms/levels__=an indoor golf course of fake green turf, windmills and plaster animals under black lights"
        ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       "the floor tilts slowly and the camera slides down it into a gap that opens along the wall",
        [
-        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+        "__backrooms/exits__=the floor tilts slowly and the camera slides down it into a gap that opens along the wall"
        ]
       ],
       [
@@ -445,20 +445,20 @@
     },
     {
      "clip": 3,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the damp carpet gives way under the camera and it drops through the floor into darkness. The camera pushes in at slow speed. The camera drops out of a ceiling tile and lands with a jolt, into a 24-hour laundromat where every machine is turning and no one is there. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and a fluorescent panel just ahead flickers, buzzes loudly and dies. The shot ends as the camera steps into an elevator and its doors slide shut.\n\noverall_soundscape: Dryers tumbling and a fluorescent tube ticking and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the floor tilts slowly and the camera slides down it into a gap that opens along the wall. The camera pushes in at slow speed. The camera slides out onto a level floor, into a pitch-black corridor lit only by the camera's own light, carpet and doors appearing a metre ahead and vanishing behind. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and a fluorescent panel just ahead flickers, buzzes loudly and dies. The shot ends as the camera steps onto a moving walkway that speeds up until the walls blur.\n\noverall_soundscape: Nothing but the camera motor and the operator's breath and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there",
+       "a pitch-black corridor lit only by the camera's own light, carpet and doors appearing a metre ahead and vanishing behind",
        [
-        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+        "__backrooms/levels__=a pitch-black corridor lit only by the camera's own light, carpet and doors appearing a metre ahead and vanishing behind"
        ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into an elevator and its doors slide shut",
+       "the camera steps onto a moving walkway that speeds up until the walls blur",
        [
-        "__backrooms/exits__=the camera steps into an elevator and its doors slide shut"
+        "__backrooms/exits__=the camera steps onto a moving walkway that speeds up until the walls blur"
        ]
       ],
       [
@@ -472,20 +472,20 @@
     },
     {
      "clip": 4,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera steps into an elevator and its doors slide shut. The camera pushes in at slow speed. The elevator doors slide open, into endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere. The camera operator walks slowly on. The place is completely empty and goes on in every direction. The shot ends as the camera steps into an elevator and its doors slide shut.\n\noverall_soundscape: Water lapping gently and a long, hollow echo and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera steps onto a moving walkway that speeds up until the walls blur. The camera pushes in at slow speed. The walkway slows and spills the camera onto a carpet, into a concrete stairwell that goes down floor after floor, the same number painted on every landing. The camera operator walks slowly on. The place is completely empty and goes on in every direction. The shot ends as every light goes out at once and the camera keeps walking in the dark.\n\noverall_soundscape: Footsteps echoing from far below and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere",
+       "a concrete stairwell that goes down floor after floor, the same number painted on every landing",
        [
-        "__backrooms/levels__=endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+        "__backrooms/levels__=a concrete stairwell that goes down floor after floor, the same number painted on every landing"
        ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into an elevator and its doors slide shut",
+       "every light goes out at once and the camera keeps walking in the dark",
        [
-        "__backrooms/exits__=the camera steps into an elevator and its doors slide shut"
+        "__backrooms/exits__=every light goes out at once and the camera keeps walking in the dark"
        ]
       ],
       [
@@ -499,20 +499,20 @@
     },
     {
      "clip": 5,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as the camera steps into an elevator and its doors slide shut. The camera pushes in at slow speed. The elevator doors slide open, into an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and at the far end a door closes softly by itself. The shot ends as the damp carpet gives way under the camera and it drops through the floor into darkness.\n\noverall_soundscape: Soft background music from ceiling speakers and a distant escalator running and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp \"JUN 14 1996 3:12 AM\" in the lower corner, handheld at chest height and swaying gently with each step. The shot opens as every light goes out at once and the camera keeps walking in the dark. The camera pushes in at slow speed. The lights come on all at once, into a children's bedroom that repeats through every doorway, the same bunk bed, the same night light, the same toys lined up on the shelf. The camera operator walks slowly on. The place is completely empty and goes on in every direction, and at the far end a door closes softly by itself. The shot ends as the camera opens a cupboard door and steps into the dark shelves behind it.\n\noverall_soundscape: A music box winding down and a ceiling fan ticking and the camera operator's breathing and footsteps close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights",
+       "a children's bedroom that repeats through every doorway, the same bunk bed, the same night light, the same toys lined up on the shelf",
        [
-        "__backrooms/levels__=an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+        "__backrooms/levels__=a children's bedroom that repeats through every doorway, the same bunk bed, the same night light, the same toys lined up on the shelf"
        ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       "the camera opens a cupboard door and steps into the dark shelves behind it",
        [
-        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+        "__backrooms/exits__=the camera opens a cupboard door and steps into the dark shelves behind it"
        ]
       ],
       [

@@ -46,7 +46,7 @@
     },
     {
      "clip": 2,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: A clock ticking loudly and a floor polisher somewhere far away and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into a car wash tunnel that never ends, still brushes hanging and soap-streaked walls lit by red and green lamps, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Water spraying in bursts and brushes starting to turn and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -57,16 +57,16 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs",
+       "a car wash tunnel that never ends, still brushes hanging and soap-streaked walls lit by red and green lamps",
        [
-        "__backrooms/levels__=a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+        "__backrooms/levels__=a car wash tunnel that never ends, still brushes hanging and soap-streaked walls lit by red and green lamps"
        ]
       ]
      ]
     },
     {
      "clip": 3,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into an airport gate lounge at night, rows of empty seats and departure boards showing nothing, which looks nothing like a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: An announcement chime with no announcement and an empty baggage belt turning and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into a post office sorting hall of pigeonholes from floor to ceiling, letters addressed to no one, which looks nothing like a car wash tunnel that never ends, still brushes hanging and soap-streaked walls lit by red and green lamps. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: A franking machine thumping and paper rustling and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -77,9 +77,9 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing",
+       "a post office sorting hall of pigeonholes from floor to ceiling, letters addressed to no one",
        [
-        "__backrooms/levels__=an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+        "__backrooms/levels__=a post office sorting hall of pigeonholes from floor to ceiling, letters addressed to no one"
        ]
       ]
      ]
@@ -145,7 +145,7 @@
     },
     {
      "clip": 2,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into a concrete stairwell that goes down floor after floor, the same number painted on every landing, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Footsteps echoing from far below and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into a dentist's waiting room with pastel chairs, an aquarium with no fish and magazines from 1993, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: An aquarium pump bubbling and a drill whining behind a door and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -156,16 +156,16 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "a concrete stairwell that goes down floor after floor, the same number painted on every landing",
+       "a dentist's waiting room with pastel chairs, an aquarium with no fish and magazines from 1993",
        [
-        "__backrooms/levels__=a concrete stairwell that goes down floor after floor, the same number painted on every landing"
+        "__backrooms/levels__=a dentist's waiting room with pastel chairs, an aquarium with no fish and magazines from 1993"
        ]
       ]
      ]
     },
     {
      "clip": 3,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into a 24-hour laundromat where every machine is turning and no one is there, which looks nothing like a concrete stairwell that goes down floor after floor, the same number painted on every landing. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Dryers tumbling and a fluorescent tube ticking and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into a sauna corridor of pine doors with small windows, every room full of hot, white steam, which looks nothing like a dentist's waiting room with pastel chairs, an aquarium with no fish and magazines from 1993. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Steam hissing over hot stones and wood ticking in the heat and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -176,9 +176,9 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there",
+       "a sauna corridor of pine doors with small windows, every room full of hot, white steam",
        [
-        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+        "__backrooms/levels__=a sauna corridor of pine doors with small windows, every room full of hot, white steam"
        ]
       ]
      ]
@@ -198,7 +198,7 @@
     },
     {
      "clip": 5,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the operator throws themselves through the nearest doorway. The camera pushes in at slow speed. The operator steps through into a 24-hour laundromat where every machine is turning and no one is there, which looks nothing like a 24-hour laundromat where every machine is turning and no one is there. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Dryers tumbling and a fluorescent tube ticking and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the operator throws themselves through the nearest doorway. The camera pushes in at slow speed. The operator steps through into an ice rink in a dim hall, the zamboni parked in the middle and the ice freshly smooth, which looks nothing like an ice rink in a dim hall, the zamboni parked in the middle and the ice freshly smooth. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Ice creaking and a refrigeration plant humming and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -209,9 +209,9 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there",
+       "an ice rink in a dim hall, the zamboni parked in the middle and the ice freshly smooth",
        [
-        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+        "__backrooms/levels__=an ice rink in a dim hall, the zamboni parked in the middle and the ice freshly smooth"
        ]
       ]
      ]
@@ -263,7 +263,7 @@
     },
     {
      "clip": 2,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Soft background music from ceiling speakers and a distant escalator running and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into a bowling alley after hours, glossy lanes stretching into the dark, pins standing in perfect triangles, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: A pinsetter resetting with a clatter and a jukebox playing too slowly and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -274,16 +274,16 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights",
+       "a bowling alley after hours, glossy lanes stretching into the dark, pins standing in perfect triangles",
        [
-        "__backrooms/levels__=an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+        "__backrooms/levels__=a bowling alley after hours, glossy lanes stretching into the dark, pins standing in perfect triangles"
        ]
       ]
      ]
     },
     {
      "clip": 3,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere, which looks nothing like an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Water lapping gently and a long, hollow echo and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into narrow maintenance tunnels lined with dripping pipes, valves and dim caged bulbs, which looks nothing like a bowling alley after hours, glossy lanes stretching into the dark, pins standing in perfect triangles. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Pipes clanking and steam hissing and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -294,9 +294,9 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere",
+       "narrow maintenance tunnels lined with dripping pipes, valves and dim caged bulbs",
        [
-        "__backrooms/levels__=endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+        "__backrooms/levels__=narrow maintenance tunnels lined with dripping pipes, valves and dim caged bulbs"
        ]
       ]
      ]
@@ -362,7 +362,7 @@
     },
     {
      "clip": 2,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Water lapping gently and a long, hollow echo and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into a concrete stairwell that goes down floor after floor, the same number painted on every landing, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Footsteps echoing from far below and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -373,16 +373,16 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere",
+       "a concrete stairwell that goes down floor after floor, the same number painted on every landing",
        [
-        "__backrooms/levels__=endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+        "__backrooms/levels__=a concrete stairwell that goes down floor after floor, the same number painted on every landing"
        ]
       ]
      ]
     },
     {
      "clip": 3,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into an empty indoor play area of coloured ball pits and plastic tubes, half the lights switched off, which looks nothing like endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: A buzzing arcade machine and a single ball rolling somewhere and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into a hotel ballroom set for a wedding, round tables with white cloths and wilted flowers, no guests, which looks nothing like a concrete stairwell that goes down floor after floor, the same number painted on every landing. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: A string quartet tuning up behind a partition and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -393,9 +393,9 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "an empty indoor play area of coloured ball pits and plastic tubes, half the lights switched off",
+       "a hotel ballroom set for a wedding, round tables with white cloths and wilted flowers, no guests",
        [
-        "__backrooms/levels__=an empty indoor play area of coloured ball pits and plastic tubes, half the lights switched off"
+        "__backrooms/levels__=a hotel ballroom set for a wedding, round tables with white cloths and wilted flowers, no guests"
        ]
       ]
      ]
@@ -415,7 +415,7 @@
     },
     {
      "clip": 5,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the operator throws themselves through the nearest doorway. The camera pushes in at slow speed. The operator steps through into endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere, which looks nothing like endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Water lapping gently and a long, hollow echo and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the operator throws themselves through the nearest doorway. The camera pushes in at slow speed. The operator steps through into a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs, which looks nothing like a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: A clock ticking loudly and a floor polisher somewhere far away and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -426,9 +426,9 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere",
+       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs",
        [
-        "__backrooms/levels__=endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+        "__backrooms/levels__=a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
        ]
       ]
      ]
@@ -481,7 +481,7 @@
     },
     {
      "clip": 2,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into narrow maintenance tunnels lined with dripping pipes, valves and dim caged bulbs, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Pipes clanking and steam hissing and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into a quiet airport moving walkway that runs on through a long white tunnel, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: The walkway's soft rumble and a recorded voice saying mind your step and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -492,16 +492,16 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "narrow maintenance tunnels lined with dripping pipes, valves and dim caged bulbs",
+       "a quiet airport moving walkway that runs on through a long white tunnel",
        [
-        "__backrooms/levels__=narrow maintenance tunnels lined with dripping pipes, valves and dim caged bulbs"
+        "__backrooms/levels__=a quiet airport moving walkway that runs on through a long white tunnel"
        ]
       ]
      ]
     },
     {
      "clip": 3,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into an airport gate lounge at night, rows of empty seats and departure boards showing nothing, which looks nothing like narrow maintenance tunnels lined with dripping pipes, valves and dim caged bulbs. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: An announcement chime with no announcement and an empty baggage belt turning and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into a subway platform where the train doors stand open on an empty lit carriage that never leaves, which looks nothing like a quiet airport moving walkway that runs on through a long white tunnel. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: The door chime repeating and the carriage's motor idling and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -512,9 +512,9 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing",
+       "a subway platform where the train doors stand open on an empty lit carriage that never leaves",
        [
-        "__backrooms/levels__=an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+        "__backrooms/levels__=a subway platform where the train doors stand open on an empty lit carriage that never leaves"
        ]
       ]
      ]
@@ -534,7 +534,7 @@
     },
     {
      "clip": 5,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the operator throws themselves through the nearest doorway. The camera pushes in at slow speed. The operator steps through into a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs, which looks nothing like a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: A clock ticking loudly and a floor polisher somewhere far away and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the operator throws themselves through the nearest doorway. The camera pushes in at slow speed. The operator steps through into a narrow servants' corridor behind the walls of a big house, wallpaper peeling, a bell board with a hundred little bells, which looks nothing like a narrow servants' corridor behind the walls of a big house, wallpaper peeling, a bell board with a hundred little bells. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: One of the little bells ringing by itself and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -545,9 +545,9 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs",
+       "a narrow servants' corridor behind the walls of a big house, wallpaper peeling, a bell board with a hundred little bells",
        [
-        "__backrooms/levels__=a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+        "__backrooms/levels__=a narrow servants' corridor behind the walls of a big house, wallpaper peeling, a bell board with a hundred little bells"
        ]
       ]
      ]
@@ -600,7 +600,7 @@
     },
     {
      "clip": 2,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into a vast open-plan office of grey cubicles, old monitors glowing green on every desk, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: The high whine of old monitors and a photocopier running by itself and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into a server hall of tall black cabinets in a cold blue light, cable trays running overhead into the dark, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Fans roaring evenly and hard drives clicking and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -611,16 +611,16 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "a vast open-plan office of grey cubicles, old monitors glowing green on every desk",
+       "a server hall of tall black cabinets in a cold blue light, cable trays running overhead into the dark",
        [
-        "__backrooms/levels__=a vast open-plan office of grey cubicles, old monitors glowing green on every desk"
+        "__backrooms/levels__=a server hall of tall black cabinets in a cold blue light, cable trays running overhead into the dark"
        ]
       ]
      ]
     },
     {
      "clip": 3,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into a concrete stairwell that goes down floor after floor, the same number painted on every landing, which looks nothing like a vast open-plan office of grey cubicles, old monitors glowing green on every desk. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Footsteps echoing from far below and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into a dentist's waiting room with pastel chairs, an aquarium with no fish and magazines from 1993, which looks nothing like a server hall of tall black cabinets in a cold blue light, cable trays running overhead into the dark. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: An aquarium pump bubbling and a drill whining behind a door and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -631,9 +631,9 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "a concrete stairwell that goes down floor after floor, the same number painted on every landing",
+       "a dentist's waiting room with pastel chairs, an aquarium with no fish and magazines from 1993",
        [
-        "__backrooms/levels__=a concrete stairwell that goes down floor after floor, the same number painted on every landing"
+        "__backrooms/levels__=a dentist's waiting room with pastel chairs, an aquarium with no fish and magazines from 1993"
        ]
       ]
      ]
@@ -653,7 +653,7 @@
     },
     {
      "clip": 5,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the operator throws themselves through the nearest doorway. The camera pushes in at slow speed. The operator steps through into endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere, which looks nothing like endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Water lapping gently and a long, hollow echo and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the operator throws themselves through the nearest doorway. The camera pushes in at slow speed. The operator steps through into a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs, which looks nothing like a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: A clock ticking loudly and a floor polisher somewhere far away and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -664,9 +664,9 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere",
+       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs",
        [
-        "__backrooms/levels__=endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+        "__backrooms/levels__=a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
        ]
       ]
      ]
@@ -718,7 +718,7 @@
     },
     {
      "clip": 2,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into a huge, dim hall of carpet and square support pillars with no walls in sight, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: A very low hum and an almost total silence and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into a public swimming bath changing area of tiled cubicles and wet benches, steam hanging under the lights, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: A shower dripping and a locker door creaking and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -729,16 +729,16 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "a huge, dim hall of carpet and square support pillars with no walls in sight",
+       "a public swimming bath changing area of tiled cubicles and wet benches, steam hanging under the lights",
        [
-        "__backrooms/levels__=a huge, dim hall of carpet and square support pillars with no walls in sight"
+        "__backrooms/levels__=a public swimming bath changing area of tiled cubicles and wet benches, steam hanging under the lights"
        ]
       ]
      ]
     },
     {
      "clip": 3,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights, which looks nothing like a huge, dim hall of carpet and square support pillars with no walls in sight. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Soft background music from ceiling speakers and a distant escalator running and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into a conference centre of endless beige function rooms, stacked chairs and folding tables, name badges still on the table, which looks nothing like a public swimming bath changing area of tiled cubicles and wet benches, steam hanging under the lights. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: A microphone feedback hum and air conditioning ticking and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -749,9 +749,9 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights",
+       "a conference centre of endless beige function rooms, stacked chairs and folding tables, name badges still on the table",
        [
-        "__backrooms/levels__=an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+        "__backrooms/levels__=a conference centre of endless beige function rooms, stacked chairs and folding tables, name badges still on the table"
        ]
       ]
      ]
@@ -816,7 +816,7 @@
     },
     {
      "clip": 2,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into an airport gate lounge at night, rows of empty seats and departure boards showing nothing, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: An announcement chime with no announcement and an empty baggage belt turning and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as the camera reaches a doorway at the end of the room, dark on the other side. The camera pushes in at slow speed. The operator steps through into an indoor golf course of fake green turf, windmills and plaster animals under black lights, which looks nothing like an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: A golf ball rolling into a hole and a windmill turning and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -827,16 +827,16 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing",
+       "an indoor golf course of fake green turf, windmills and plaster animals under black lights",
        [
-        "__backrooms/levels__=an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+        "__backrooms/levels__=an indoor golf course of fake green turf, windmills and plaster animals under black lights"
        ]
       ]
      ]
     },
     {
      "clip": 3,
-     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into a 24-hour laundromat where every machine is turning and no one is there, which looks nothing like an airport gate lounge at night, rows of empty seats and departure boards showing nothing. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Dryers tumbling and a fluorescent tube ticking and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
+     "text": "integrated_multimodal_description: [Shot 1] Found footage from a 1990s VHS camcorder, one continuous unbroken shot: soft smeared colour, faint tracking lines, handheld at chest height. The shot opens as something moves at the edge of the light. The camera pushes in at slow speed. The operator steps through into a pitch-black corridor lit only by the camera's own light, carpet and doors appearing a metre ahead and vanishing behind, which looks nothing like an indoor golf course of fake green turf, windmills and plaster animals under black lights. They walk on, slower now, the camera sweeping every corner. The shot ends as something moves at the edge of the light.\n\noverall_soundscape: Nothing but the camera motor and the operator's breath and footsteps and breath close to the microphone.\n\nnon_diegetic_music: N/A",
      "picks": [
       [
        "$scp ← __scp/entities__",
@@ -847,9 +847,9 @@
       ],
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there",
+       "a pitch-black corridor lit only by the camera's own light, carpet and doors appearing a metre ahead and vanishing behind",
        [
-        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+        "__backrooms/levels__=a pitch-black corridor lit only by the camera's own light, carpet and doors appearing a metre ahead and vanishing behind"
        ]
       ]
      ]

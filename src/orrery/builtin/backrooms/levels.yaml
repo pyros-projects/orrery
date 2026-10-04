@@ -13,3 +13,48 @@ entries:
   - {value: "an empty indoor play area of coloured ball pits and plastic tubes, half the lights switched off", props: {sfx: "a buzzing arcade machine and a single ball rolling somewhere"}}
   - {value: "an airport gate lounge at night, rows of empty seats and departure boards showing nothing", props: {sfx: "an announcement chime with no announcement and an empty baggage belt turning"}}
   - {value: "a 24-hour laundromat where every machine is turning and no one is there", props: {sfx: "dryers tumbling and a fluorescent tube ticking"}}
+  - {value: "a hospital ward at night, empty beds with crisp sheets in two long rows, curtains half drawn, a nurses' station lit by one desk lamp", props: {sfx: "a heart monitor beeping steadily in an empty room and a trolley wheel squeaking"}}
+  - {value: "an endless cinema foyer with sticky red carpet, a dark popcorn counter and poster frames that show only blank white sheets", props: {sfx: "muffled film dialogue through a closed auditorium door and a popcorn machine popping"}}
+  - {value: "rows of identical suburban kitchens in a line, each opening into the next, the same kettle and the same calendar on every counter", props: {sfx: "a fridge humming and a kettle starting to whistle in the next kitchen"}}
+  - {value: "a flooded basement corridor, ankle-deep dark water reflecting a line of bare bulbs", props: {wet: "yes", sfx: "water sloshing around boots and a slow drip echoing"}}
+  - {value: "an empty supermarket at closing, aisles of unlabelled white boxes under rows of humming strip lights", props: {sfx: "a freezer cabinet droning and a till drawer sliding open by itself"}}
+  - {value: "a children's bedroom that repeats through every doorway, the same bunk bed, the same night light, the same toys lined up on the shelf", props: {sfx: "a music box winding down and a ceiling fan ticking"}}
+  - {value: "a bowling alley after hours, glossy lanes stretching into the dark, pins standing in perfect triangles", props: {sfx: "a pinsetter resetting with a clatter and a jukebox playing too slowly"}}
+  - {value: "a conference centre of endless beige function rooms, stacked chairs and folding tables, name badges still on the table", props: {sfx: "a microphone feedback hum and air conditioning ticking"}}
+  - {value: "an indoor water park with empty slides, green-tinted water and palm trees under a dark glass dome", props: {wet: "yes", sfx: "a wave machine sloshing and a slide's water still running"}}
+  - {value: "a carpeted church hall with plastic chairs in rows, a stage with a drawn curtain and a hymn board with no numbers", props: {sfx: "an organ holding one low note somewhere behind the curtain"}}
+  - {value: "a train station underpass of cream tiles and dead advertising boards, the tunnel curving out of sight both ways", props: {sfx: "a train passing far above and a buzzing tube light"}}
+  - {value: "a motel walkway at night, a row of doors under orange lamps, a drained swimming pool below the railing", props: {sfx: "an ice machine dropping cubes and a neon sign crackling"}}
+  - {value: "a furniture showroom of fake living rooms, sofas and lamps arranged for nobody, arrows on the floor leading on and on", props: {sfx: "soft store music and a lamp clicking on by itself"}}
+  - {value: "a server hall of tall black cabinets in a cold blue light, cable trays running overhead into the dark", props: {sfx: "fans roaring evenly and hard drives clicking"}}
+  - {value: "an empty classroom repeated without end, chairs upturned on the desks, the same sum half wiped off every blackboard", props: {sfx: "chalk squeaking in a room nearby and a bell that never stops"}}
+  - {value: "a dim library with shelves to the ceiling, every book spine blank, reading lamps glowing green on long tables", props: {sfx: "pages turning somewhere out of sight and a clock ticking"}}
+  - {value: "a sports hall at night, polished wooden floor and painted court lines, the climbing ropes swaying slightly", props: {sfx: "a basketball bouncing slowly in the dark at the far end"}}
+  - {value: "a narrow servants' corridor behind the walls of a big house, wallpaper peeling, a bell board with a hundred little bells", props: {sfx: "one of the little bells ringing by itself"}}
+  - {value: "a car wash tunnel that never ends, still brushes hanging and soap-streaked walls lit by red and green lamps", props: {wet: "yes", sfx: "water spraying in bursts and brushes starting to turn"}}
+  - {value: "a vast laundromat of a hotel's basement, linen carts piled with white sheets under low ceilings", props: {sfx: "huge washing machines thudding and steam venting"}}
+  - {value: "a dentist's waiting room with pastel chairs, an aquarium with no fish and magazines from 1993", props: {sfx: "an aquarium pump bubbling and a drill whining behind a door"}}
+  - {value: "a greenhouse of endless glass aisles, plastic plants in pots and condensation running down the panes at night", props: {wet: "yes", sfx: "sprinklers hissing and rain on the glass roof"}}
+  - {value: "a dark arcade of dead cabinets, one machine still showing its attract screen", props: {sfx: "an arcade jingle looping and a coin dropping somewhere"}}
+  - {value: "an office stairwell of grey linoleum where the exit door on every landing opens onto the same landing", props: {sfx: "a door closing on a landing far above"}}
+  - {value: "a quiet airport moving walkway that runs on through a long white tunnel", props: {sfx: "the walkway's soft rumble and a recorded voice saying mind your step"}}
+  - {value: "a skating rink after closing, scuffed wooden floor under a slowly turning mirror ball", props: {sfx: "a disco track playing at half speed and skates rolling somewhere"}}
+  - {value: "a hospital basement of white corridors, gurneys parked along the wall, a lift whose numbers only go down", props: {sfx: "a lift chime and a gurney rolling by itself"}}
+  - {value: "a showroom of television sets all tuned to the same empty room, the room the camera is standing in", props: {sfx: "a dozen speakers playing the camera's own breathing back a moment late"}}
+  - {value: "a public swimming bath changing area of tiled cubicles and wet benches, steam hanging under the lights", props: {wet: "yes", sfx: "a shower dripping and a locker door creaking"}}
+  - {value: "a dim warehouse of tall shelving racks full of identical brown boxes, a forklift parked mid-aisle", props: {sfx: "a forklift beeping as it reverses somewhere unseen"}}
+  - {value: "a terraced street of identical houses, all lights on behind closed curtains, the sky a flat dark grey", props: {sfx: "a dog barking very far away and a streetlight buzzing"}}
+  - {value: "an empty food court with the shutters half up, plastic trays stacked and every menu board blank", props: {sfx: "a grill sizzling behind a shutter and a tray sliding off a table"}}
+  - {value: "an attic that goes on under a sloping roof for ever, boards and insulation, a single bulb on a long cord", props: {sfx: "rain on the roof and boards creaking under someone else's weight"}}
+  - {value: "a hotel ballroom set for a wedding, round tables with white cloths and wilted flowers, no guests", props: {sfx: "a string quartet tuning up behind a partition"}}
+  - {value: "a narrow ship's corridor of riveted steel, round portholes showing only black water", props: {wet: "yes", sfx: "the hull groaning and water pressing against the steel"}}
+  - {value: "a dim nursery of rows of empty cots under a mobile turning slowly", props: {sfx: "a lullaby playing from a mobile and a baby monitor hissing"}}
+  - {value: "a subway platform where the train doors stand open on an empty lit carriage that never leaves", props: {sfx: "the door chime repeating and the carriage's motor idling"}}
+  - {value: "an indoor golf course of fake green turf, windmills and plaster animals under black lights", props: {sfx: "a golf ball rolling into a hole and a windmill turning"}}
+  - {value: "a print shop of copiers in long rows, every machine feeding out blank pages onto the floor", props: {sfx: "dozens of copiers running and paper sliding"}}
+  - {value: "a post office sorting hall of pigeonholes from floor to ceiling, letters addressed to no one", props: {sfx: "a franking machine thumping and paper rustling"}}
+  - {value: "an empty theatre stage behind the curtain, ropes and sandbags, painted flats of rooms that look exactly like this one", props: {sfx: "a stagehand's whistle and a rope running through a pulley"}}
+  - {value: "a sauna corridor of pine doors with small windows, every room full of hot, white steam", props: {wet: "yes", sfx: "steam hissing over hot stones and wood ticking in the heat"}}
+  - {value: "an ice rink in a dim hall, the zamboni parked in the middle and the ice freshly smooth", props: {sfx: "ice creaking and a refrigeration plant humming"}}
+  - {value: "a model railway room the size of a city, tiny houses and tracks stretching to every wall", props: {sfx: "a little train rattling along the tracks somewhere out of sight"}}
+  - {value: "a pitch-black corridor lit only by the camera's own light, carpet and doors appearing a metre ahead and vanishing behind", props: {dark: "yes", sfx: "nothing but the camera motor and the operator's breath"}}
