@@ -89,6 +89,8 @@ export async function openSettings(app) {
       <label class="check"><input type="radio" name="oa-pv" value="smooth" ${app.data.preview_light === false ? "checked" : ""}><span><b>Smooth</b>:
         <input class="input narrow" id="oa-pvfps" type="number" min="1" max="24" step="1" value="${app.data.preview_fps ?? 12}" aria-label="Pictures a second">
         pictures a second, as far as the clip gives them (taeh3 and Latent2RGB: one a latent frame, about 7 a second for H3)</span></label></div>
+    <div class="field"><label class="label" for="oa-pvedge">Preview size</label>
+      <div class="row"><input class="input narrow" id="oa-pvedge" type="number" min="0" max="4096" step="64" value="${app.data.preview_edge ?? 1024}"><span class="muted">px on the long side; 0 for the size it is sampled at. Bigger is sharper and takes longer each step</span></div></div>
     <div class="row spread"><h5 class="label">Sample surfing</h5></div>
     <p class="muted flush">A scene's <b>×N</b> renders N takes of its clip; you pick the best under it (📌 in the scene keeps its rolled prompt, so only the noise changes).
       The takes differ only if their seeds do.</p>
@@ -147,6 +149,8 @@ export async function openSettings(app) {
       if (clipMin !== (app.data.clip_min ?? 360)) { Object.assign(app.data, await app.api.saveUi({ clip_min: clipMin })); app.cellsSig = null; }
       const fps = Number(sheet.querySelector("#oa-pvfps").value) || 12;
       if (fps !== (app.data.preview_fps ?? 12)) Object.assign(app.data, await app.api.saveUi({ preview_fps: fps }));
+      const edge = Math.max(0, Math.round(Number(sheet.querySelector("#oa-pvedge").value) || 0));
+      if (edge !== (app.data.preview_edge ?? 1024)) Object.assign(app.data, await app.api.saveUi({ preview_edge: edge }));
       drafts[wcur] = wtext.value;
       const edits = Object.keys(drafts).filter((k) => drafts[k] !== wr[k].text);
       for (const k of edits) await app.api.saveWriter(k, drafts[k]);

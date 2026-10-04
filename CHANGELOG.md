@@ -11,6 +11,9 @@ checks) are left out.
 
 - The Orrery Prompt puts its `LORA:` lines on the model that passes through it, a clip's own and the head's, a
   sweep's run included: no LoRA node needed (#208).
+- A reference needs no CAST: `<Image N>` in the text, as H3's own prompts write it, hands the picture to H3 as
+  `[image N]` does; `SET: image_N(…)` dials it, and `SET:` with a RefMod's name brings that RefMod in, with
+  strength, start and end. Tutorial 19 shows it (#224).
 - The language model can be an API endpoint (OpenAI, or a server that speaks its protocol), set in the gear
   with a key kept in the home's `.env`: a run's libraries, slots and `> enhance`, the Write menu and
   `orrery lib` go through it, beside ComfyUI (no VRAM, no queue). The Write menu answers while a render
@@ -73,7 +76,7 @@ checks) are left out.
   sound starts a new run (#197).
 - The Orrery Prompt takes the model through it: the clip being sampled then plays in orrery's clip box as it
   forms, in real time (the tiny VAE taeh3, else Latent2RGB), light or smooth at the pictures a second the gear's
-  Live preview sets. Without it, ComfyUI's own preview reaches the clip box in every open tab (#197).
+  Live preview sets, at the size it sets (1024 px on the long side unless set, 0 as sampled). Without it, ComfyUI's own preview reaches the clip box in every open tab (#197).
 - The dials are a list in a sidebar beside the editor, one a row with what it rolls at this seed, to widen,
   fold or clear; a dial's menu filters by a regex over text, properties and tags, with All and None; a reel's
   clips show only under its scenes, and the column beside the editor is gone; the node's segment widget is

@@ -31,9 +31,13 @@ def test_the_tiny_vae_decodes_a_smaller_latent():
             t, h, w = x.shape[2], x.shape[3] * 16, x.shape[4] * 16
             return torch.rand(1, t * 4, h, w, 3)
 
-    pictures = preview.frames(("tae", Tiny()), torch.zeros(1, 4, 40, 60, 40))  # 960×640 at full size
+    pictures = preview.frames(("tae", Tiny()), torch.zeros(1, 4, 40, 60, 40), edge=384)  # 960×640 at full size
     assert seen["shape"][2] == preview.MAX_LATENT_FRAMES and max(seen["shape"][3:]) == 24  # 384 / 16
-    assert len(pictures) == preview.MAX_LATENT_FRAMES * 4 and max(pictures[0].size) <= preview.MAX_EDGE
+    assert len(pictures) == preview.MAX_LATENT_FRAMES * 4 and max(pictures[0].size) <= 384
+    full = preview.frames(("tae", Tiny()), torch.zeros(1, 4, 40, 60, 40), edge=0)  # as sampled
+    assert max(seen["shape"][3:]) == 60 and full[0].size == (640, 960)
+    preview.frames(("tae", Tiny()), torch.zeros(1, 4, 40, 60, 40))  # KJNodes' default: 1024, so 960 stays
+    assert max(seen["shape"][3:]) == 60
 
 
 def test_a_flat_tiny_decoder_is_built_from_its_checkpoint():
@@ -102,8 +106,10 @@ def test_the_wrapper_reads_the_smooth_preview_from_the_home_as_it_samples(monkey
     wrapper = preview._Wrapper("24", home)
     set_flag(home, "preview_light", False)
     set_size(home, "preview_fps", 4)
+    set_size(home, "preview_edge", 6)
     _, clip = sampled(monkeypatch, wrapper, latent_frames=30)  # 4.25 s
     assert clip.n_frames == 17 and clip.info["duration"] == 250
+    assert max(clip.size) == 6  # the gear's preview size: the 12-wide clip at 6
 
 
 def test_the_patched_model_is_a_clone_with_the_wrapper(monkeypatch):

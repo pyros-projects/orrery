@@ -1,0 +1,16 @@
+---
+title: "19 · A reference in the text, no CAST (H3)"
+lesson: "With MiniMax H3 you can skip the CAST and name a picture in the text, as H3's own prompts do: <Image 1> (or [image 1]) hands your ref image 1 to Reference to Video, and H3 reads <Picture 1>. SET: image_1(strength, start, end) dials how firmly it holds and when: here 0.9 from the first step to 80%, so the prompt has the last say. A RefMod comes in the same way, without a member: SET: its_name(0.8, 0%, 10%) lays a character out and then lets the prompt take over (see the comment below). Wire your picture into Orrery Refs' image 1."
+tags: [tutorial, h3, references]
+---
+@h3 references 16:9
+style: live-action, cinematic, natural light
+$place = {a rooftop garden at dusk|a quiet library with tall windows|a rain-soaked night market}
+$move = {turns toward the camera and smiles|walks slowly past the camera, glancing at it|sits down on a bench and looks up}
+SET: image_1(0.9, 0%, 80%)
+# a RefMod without a CAST: SET: minimaxh3_jinx_v1_refmod(0.8, 0%, 10%)
+
+SHOT 6s: push in, slow
+A woman who looks like <Image 1> stands in $place, framed from the waist up. She $move. Her face and her hair stay as in <Image 1>; her clothes and everything around her belong to the scene.
+SFX: the soft ambience of $place; her footsteps
+MUSIC: N/A

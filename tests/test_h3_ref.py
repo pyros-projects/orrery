@@ -524,3 +524,20 @@ EMMA waves.
     res = h3(src)
     assert "red coat" in res.text and "blue coat" not in res.text
     assert any("EMMA is in the CAST twice" in i.message for i in res.lint)
+
+
+def test_references_without_a_cast_image_in_the_text_and_set_for_images_and_refmods():
+    """#224: <Image N> in the text hands slot N to H3 as [image N] does, SET: image_N(…) dials it, and
+    SET: NAME(…) brings a RefMod in, all without a CAST."""
+    src = ("@h3 ref2va 16:9\nstyle: live-action\nSET: image_2(0.6, 20%, 80%)\nSET: minimaxh3_jinx_v1_refmod(0.8, 0%, 10%)\n"
+           "SHOT 5s: static\na woman looking like <Image 2> dances beside [image 3] and <image 2>.\n")
+    r = compile_scene(src, 1, {}, {}, target="h3-base", packed=True)
+    assert r.refs == [2, 3]  # Orrery Refs hands on slots 2 and 3; H3 counts them 1, 2
+    assert "A woman looking like <Picture 1> dances beside <Picture 2> and <Picture 1>." in r.text
+    assert r.images == [{"ref": 1, "image": 2, "member": None, "strength": 0.6, "from": 0.2, "to": 0.8}]
+    assert r.refmods == [{"name": "minimaxh3_jinx_v1_refmod", "member": None, "strength": 0.8, "from": 0.0, "to": 0.1}]
+    assert not [i for i in r.lint if i.severity != "info"]
+    unpacked = compile_scene(src, 1, {}, {}, target="h3-base")
+    assert "like <Picture 2> dances beside <Picture 3>" in unpacked.text
+    nothing = compile_scene(src.replace("SET: image_2", "SET: image_5"), 1, {}, {}, target="h3-base", packed=True)
+    assert any("SET: image_5: the clip hands no image 5 to H3" in i.message for i in nothing.lint)
