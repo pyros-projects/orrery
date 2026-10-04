@@ -1339,7 +1339,7 @@ ROUTES = [
 
 
 # routes that wait for a language model run in a thread, so ComfyUI's server answers meanwhile
-SLOW = {llm_save, llm_check, write_libraries, write_idea, llm_takes, galaxy_takes, chain_pick, chain_delete, chain_clear, chain_walk, chain_end}
+SLOW = {llm_save, llm_check, write_libraries, write_idea, llm_takes, galaxy_takes, galaxy_capture, chain_pick, chain_delete, chain_clear, chain_walk, chain_end}
 
 
 def _handler(fn, method: str, web):

@@ -971,6 +971,7 @@ def test_a_gallery_picture_writes_its_slots_from_image_output(home, fake_api, tm
     assert row["exports"]["sheet"] == "weathered hands, a pole" and row["exports"]["who"] == "a ferryman"
     assert api(home, webapi.galaxy_takes, id=rid, what=what)[0] == 400  # written: no slot left
     ok(home, webapi.ui_save, picture_slots="every run")  # the setting: after every run
+    assert webapi.galaxy_capture in webapi.SLOW  # it waits for the endpoint then: in a thread, so ComfyUI answers
     fake_api.answer = lambda body: json.dumps(["a red scarf"])
     log_outputs(Home(home), json.dumps(data), [str(picture)])
     assert read_rows(Home(home))[0]["exports"]["sheet"] == "a red scarf"
