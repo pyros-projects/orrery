@@ -1,9 +1,8 @@
-"""LoRAs: the files ComfyUI knows, `<lora:name:strength>` tags turned into a LORA_STACK, and the stack put on
-the model that passes through the Orrery Prompt (#208), so no stack node is needed.
+"""LoRAs: the files ComfyUI knows, `<lora:name:strength>` tags resolved to them as a stack, and the stack put on
+the model that passes through the Orrery Prompt (#208), so no LoRA node is needed.
 
-A LORA_STACK is a list of (lora_name, model_strength, clip_strength), with lora_name the path
-as ComfyUI's `loras` list spells it: what LoraManager's loaders, Efficiency, Easy-Use and the
-other stack nodes read. Tags name a file the way LoraManager does: its name without extension,
+A stack is a list of (lora_name, model_strength, clip_strength), with lora_name the path
+as ComfyUI's `loras` list spells it (the LORA_STACK of LoraManager and the other stack nodes). Tags name a file the way LoraManager does: its name without extension,
 or its path; case and extension don't matter.
 """
 

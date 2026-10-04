@@ -10,7 +10,7 @@ checks) are left out.
 ### Added
 
 - The Orrery Prompt puts its `LORA:` lines on the model that passes through it, a clip's own and the head's, a
-  sweep's run included: no LoRA stack node needed. Wired, `lora_stack` leaves them to its loader (#208).
+  sweep's run included: no LoRA node needed (#208).
 - The language model can be an API endpoint (OpenAI, or a server that speaks its protocol), set in the gear
   with a key kept in the home's `.env`: a run's libraries, slots and `> enhance`, the Write menu and
   `orrery lib` go through it, beside ComfyUI (no VRAM, no queue). The Write menu answers while a render
@@ -57,6 +57,8 @@ checks) are left out.
 
 ### Changed
 
+- The `lora_stack` output is gone, since a LoRA stack needed a third-party node: the LoRAs go on the model through
+  the node. A workflow saved with it loses it when it opens, and its other outputs keep their links (#208).
 - A reel keeps its clips in a folder named after it, `output/reels/<preset>` or `reels/untitled/<date time>`, which
   moves with Save as; two reels no longer write into one `h3_context`. The Orrery Prompt's `latent_path` input
   is gone (#197).
