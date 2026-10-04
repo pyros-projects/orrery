@@ -205,7 +205,8 @@ export function renderPrompt(app) {
       ${app.state.newMenu ? `<div class="pop newpop" role="menu">${Object.entries(STARTERS).map(([k, s]) => `<button role="menuitem" data-new="${k}"><b>${esc(s.label)}</b><span class="muted">${esc(s.hint)}</span></button>`).join("")}</div>` : ""}
       ${app.state.writeMenu ? writeMenuHTML(app) : ""}
     </div>
-    ${card?.note ? `<p class="pnote"><b>${esc(card.title)}.</b> ${esc(card.note)}</p>` : '<p class="pnote">Type a template, or open a preset. <b>__</b> lists your libraries, <b>$</b> your bindings.</p>'}
+    ${card?.note ? `<p class="pnote fold${app.bridge.props.orrery_note_open ? " open" : ""}" data-act="note" title="${app.bridge.props.orrery_note_open ? "Click to fold the description" : "Click for the whole description"}">`
+      + `<b>${esc(card.title)}.</b> ${esc(card.note)}</p>` : '<p class="pnote">Type a template, or open a preset. <b>__</b> lists your libraries, <b>$</b> your bindings.</p>'}
     <div class="edrow" style="--side-w:${sideWidth(app)}px">${cellsView(app)
       ? `<div class="editor cells${app.data.dividers === false ? " nodiv" : ""}"></div>`
       : `<div class="editor${app.data.dividers === false ? " nodiv" : ""}"><pre class="hl" aria-hidden="true"></pre><textarea spellcheck="false" aria-label="Template"></textarea></div>`}
@@ -284,6 +285,12 @@ export function renderPrompt(app) {
     if (writer) { app.state.writeMenu = false; renderPrompt(app); return openWrite(app, writer); }
     const starter = e.target.closest("[data-new]")?.dataset.new;
     if (starter) startNew(app, starter);
+    if (act === "note") {  // the preset's description: one line until opened (#306), as the node remembers; in place, the editor stays
+      const open = (app.bridge.props.orrery_note_open = !app.bridge.props.orrery_note_open), note = e.target.closest(".pnote");
+      note.classList.toggle("open", open);
+      note.title = open ? "Click to fold the description" : "Click for the whole description";
+      return;
+    }
     if (act === "outputs") {  // every output of this prompt, wherever the gallery was
       Object.assign(app.state, { gScope: "prompt", gPlace: { view: "all", day: null, coll: null }, gAlbums: [] });
       app.go("galaxy");
