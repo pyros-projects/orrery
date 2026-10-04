@@ -8,23 +8,38 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a tiled changing room at a public swimming pool"
+       "a tiled changing room at a public swimming pool",
+       [
+        "__bh_room__=a tiled changing room at a public swimming pool"
+       ]
       ],
       [
        "{down the side of the neck|across the forehead|along the inside of the forearm}",
-       "along the inside of the forearm"
+       "along the inside of the forearm",
+       [
+        "{down the side of the neck|across the forehead|along the inside of the forearm}=along the inside of the forearm"
+       ]
       ],
       [
        "{four|seven|a dozen}",
-       "four"
+       "four",
+       [
+        "{four|seven|a dozen}=four"
+       ]
       ],
       [
        "{all the eyes blink together once, perfectly in time for the first time|every eye turns at once to look straight into the camera|the newest eye opens last and it is a different colour from all the others}",
-       "the newest eye opens last and it is a different colour from all the others"
+       "the newest eye opens last and it is a different colour from all the others",
+       [
+        "{all the eyes blink together once, perfectly in time for the first time|every eye turns at once to look straight into the camera|the newest eye opens last and it is a different colour from all the others}=the newest eye opens last and it is a different colour from all the others"
+       ]
       ]
      ]
     }
@@ -37,23 +52,38 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the young man"
+       "the young man",
+       [
+        "__bh_host__=the young man"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a dim apartment sitting room"
+       "a dim apartment sitting room",
+       [
+        "__bh_room__=a dim apartment sitting room"
+       ]
       ],
       [
        "{down the side of the neck|across the forehead|along the inside of the forearm}",
-       "across the forehead"
+       "across the forehead",
+       [
+        "{down the side of the neck|across the forehead|along the inside of the forearm}=across the forehead"
+       ]
       ],
       [
        "{four|seven|a dozen}",
-       "four"
+       "four",
+       [
+        "{four|seven|a dozen}=four"
+       ]
       ],
       [
        "{all the eyes blink together once, perfectly in time for the first time|every eye turns at once to look straight into the camera|the newest eye opens last and it is a different colour from all the others}",
-       "the newest eye opens last and it is a different colour from all the others"
+       "the newest eye opens last and it is a different colour from all the others",
+       [
+        "{all the eyes blink together once, perfectly in time for the first time|every eye turns at once to look straight into the camera|the newest eye opens last and it is a different colour from all the others}=the newest eye opens last and it is a different colour from all the others"
+       ]
       ]
      ]
     }
@@ -66,23 +96,38 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a narrow hotel corridor"
+       "a narrow hotel corridor",
+       [
+        "__bh_room__=a narrow hotel corridor"
+       ]
       ],
       [
        "{down the side of the neck|across the forehead|along the inside of the forearm}",
-       "along the inside of the forearm"
+       "along the inside of the forearm",
+       [
+        "{down the side of the neck|across the forehead|along the inside of the forearm}=along the inside of the forearm"
+       ]
       ],
       [
        "{four|seven|a dozen}",
-       "seven"
+       "seven",
+       [
+        "{four|seven|a dozen}=seven"
+       ]
       ],
       [
        "{all the eyes blink together once, perfectly in time for the first time|every eye turns at once to look straight into the camera|the newest eye opens last and it is a different colour from all the others}",
-       "all the eyes blink together once, perfectly in time for the first time"
+       "all the eyes blink together once, perfectly in time for the first time",
+       [
+        "{all the eyes blink together once, perfectly in time for the first time|every eye turns at once to look straight into the camera|the newest eye opens last and it is a different colour from all the others}=all the eyes blink together once, perfectly in time for the first time"
+       ]
       ]
      ]
     }

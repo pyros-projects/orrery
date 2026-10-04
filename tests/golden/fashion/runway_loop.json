@@ -18,27 +18,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a brutalist parking garage"
+       "a brutalist parking garage",
+       [
+        "__couture_venue__=a brutalist parking garage"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "a freckled model with a slicked-back red ponytail"
+       "a freckled model with a slicked-back red ponytail",
+       [
+        "__couture_model__=a freckled model with a slicked-back red ponytail"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "sleeves that forget where the arm ends"
+       "sleeves that forget where the arm ends",
+       [
+        "__couture_form__=sleeves that forget where the arm ends"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "moss velvet"
+       "moss velvet",
+       [
+        "__couture_material__=moss velvet"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "couture-adjacent, archival"
+       "couture-adjacent, archival",
+       [
+        "__couture_adjective__=couture-adjacent",
+        "__couture_adjective__=archival"
+       ]
       ]
      ]
     },
@@ -48,27 +67,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a brutalist parking garage"
+       "a brutalist parking garage",
+       [
+        "__couture_venue__=a brutalist parking garage"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "a pale model with bleached eyelashes and no brows"
+       "a pale model with bleached eyelashes and no brows",
+       [
+        "__couture_model__=a pale model with bleached eyelashes and no brows"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "a silhouette borrowed from a grand piano"
+       "a silhouette borrowed from a grand piano",
+       [
+        "__couture_form__=a silhouette borrowed from a grand piano"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "mirrored sequins"
+       "mirrored sequins",
+       [
+        "__couture_material__=mirrored sequins"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "aggressively understated, couture-adjacent"
+       "aggressively understated, couture-adjacent",
+       [
+        "__couture_adjective__=aggressively understated",
+        "__couture_adjective__=couture-adjacent"
+       ]
       ]
      ]
     },
@@ -78,27 +116,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a brutalist parking garage"
+       "a brutalist parking garage",
+       [
+        "__couture_venue__=a brutalist parking garage"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "a stern silver-haired model"
+       "a stern silver-haired model",
+       [
+        "__couture_model__=a stern silver-haired model"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "trousers that apologize at the ankle"
+       "trousers that apologize at the ankle",
+       [
+        "__couture_form__=trousers that apologize at the ankle"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "boiled wool"
+       "boiled wool",
+       [
+        "__couture_material__=boiled wool"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "pre-apocalyptic, unapologetically beige"
+       "pre-apocalyptic, unapologetically beige",
+       [
+        "__couture_adjective__=pre-apocalyptic",
+        "__couture_adjective__=unapologetically beige"
+       ]
       ]
      ]
     },
@@ -108,27 +165,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a brutalist parking garage"
+       "a brutalist parking garage",
+       [
+        "__couture_venue__=a brutalist parking garage"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "an androgynous model with bleached eyebrows"
+       "an androgynous model with bleached eyebrows",
+       [
+        "__couture_model__=an androgynous model with bleached eyebrows"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "a single sleeve that continues into the floor"
+       "a single sleeve that continues into the floor",
+       [
+        "__couture_form__=a single sleeve that continues into the floor"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "liquid latex"
+       "liquid latex",
+       [
+        "__couture_material__=liquid latex"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "semi-sentient, pre-apocalyptic"
+       "semi-sentient, pre-apocalyptic",
+       [
+        "__couture_adjective__=semi-sentient",
+        "__couture_adjective__=pre-apocalyptic"
+       ]
       ]
      ]
     },
@@ -138,27 +214,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a brutalist parking garage"
+       "a brutalist parking garage",
+       [
+        "__couture_venue__=a brutalist parking garage"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "a stern silver-haired model"
+       "a stern silver-haired model",
+       [
+        "__couture_model__=a stern silver-haired model"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "a coat inflated into a soft architectural cloud"
+       "a coat inflated into a soft architectural cloud",
+       [
+        "__couture_form__=a coat inflated into a soft architectural cloud"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "mirrored sequins"
+       "mirrored sequins",
+       [
+        "__couture_material__=mirrored sequins"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "museum-grade, emotionally load-bearing"
+       "museum-grade, emotionally load-bearing",
+       [
+        "__couture_adjective__=museum-grade",
+        "__couture_adjective__=emotionally load-bearing"
+       ]
       ]
      ]
     },
@@ -168,27 +263,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a brutalist parking garage"
+       "a brutalist parking garage",
+       [
+        "__couture_venue__=a brutalist parking garage"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "a pale model with bleached eyelashes and no brows"
+       "a pale model with bleached eyelashes and no brows",
+       [
+        "__couture_model__=a pale model with bleached eyelashes and no brows"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "lapels that fold back into themselves"
+       "lapels that fold back into themselves",
+       [
+        "__couture_form__=lapels that fold back into themselves"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "boiled wool"
+       "boiled wool",
+       [
+        "__couture_material__=boiled wool"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "hauntological, emotionally load-bearing"
+       "hauntological, emotionally load-bearing",
+       [
+        "__couture_adjective__=hauntological",
+        "__couture_adjective__=emotionally load-bearing"
+       ]
       ]
      ]
     }
@@ -211,27 +325,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Studio Kessler-Mourne"
+       "Studio Kessler-Mourne",
+       [
+        "__couture_house__=Studio Kessler-Mourne"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a runway of wet black sand"
+       "a runway of wet black sand",
+       [
+        "__couture_venue__=a runway of wet black sand"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "a very tall model with a severe black bob"
+       "a very tall model with a severe black bob",
+       [
+        "__couture_model__=a very tall model with a severe black bob"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "lapels that fold back into themselves"
+       "lapels that fold back into themselves",
+       [
+        "__couture_form__=lapels that fold back into themselves"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "boiled wool"
+       "boiled wool",
+       [
+        "__couture_material__=boiled wool"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "post-luxury, deconstructed"
+       "post-luxury, deconstructed",
+       [
+        "__couture_adjective__=post-luxury",
+        "__couture_adjective__=deconstructed"
+       ]
       ]
      ]
     },
@@ -241,27 +374,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Studio Kessler-Mourne"
+       "Studio Kessler-Mourne",
+       [
+        "__couture_house__=Studio Kessler-Mourne"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a runway of wet black sand"
+       "a runway of wet black sand",
+       [
+        "__couture_venue__=a runway of wet black sand"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "a very tall model with a severe black bob"
+       "a very tall model with a severe black bob",
+       [
+        "__couture_model__=a very tall model with a severe black bob"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "trousers that apologize at the ankle"
+       "trousers that apologize at the ankle",
+       [
+        "__couture_form__=trousers that apologize at the ankle"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "undyed muslin"
+       "undyed muslin",
+       [
+        "__couture_material__=undyed muslin"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "unapologetically beige, radically tailored"
+       "unapologetically beige, radically tailored",
+       [
+        "__couture_adjective__=unapologetically beige",
+        "__couture_adjective__=radically tailored"
+       ]
       ]
      ]
     },
@@ -271,27 +423,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Studio Kessler-Mourne"
+       "Studio Kessler-Mourne",
+       [
+        "__couture_house__=Studio Kessler-Mourne"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a runway of wet black sand"
+       "a runway of wet black sand",
+       [
+        "__couture_venue__=a runway of wet black sand"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "a freckled model with a slicked-back red ponytail"
+       "a freckled model with a slicked-back red ponytail",
+       [
+        "__couture_model__=a freckled model with a slicked-back red ponytail"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "a collar that keeps rising like a tide"
+       "a collar that keeps rising like a tide",
+       [
+        "__couture_form__=a collar that keeps rising like a tide"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "deadstock tweed"
+       "deadstock tweed",
+       [
+        "__couture_material__=deadstock tweed"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "pre-apocalyptic, ontologically draped"
+       "pre-apocalyptic, ontologically draped",
+       [
+        "__couture_adjective__=pre-apocalyptic",
+        "__couture_adjective__=ontologically draped"
+       ]
       ]
      ]
     },
@@ -301,27 +472,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Studio Kessler-Mourne"
+       "Studio Kessler-Mourne",
+       [
+        "__couture_house__=Studio Kessler-Mourne"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a runway of wet black sand"
+       "a runway of wet black sand",
+       [
+        "__couture_venue__=a runway of wet black sand"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "a freckled model with a slicked-back red ponytail"
+       "a freckled model with a slicked-back red ponytail",
+       [
+        "__couture_model__=a freckled model with a slicked-back red ponytail"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "a dress built from forty overlapping umbrellas"
+       "a dress built from forty overlapping umbrellas",
+       [
+        "__couture_form__=a dress built from forty overlapping umbrellas"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "deadstock tweed"
+       "deadstock tweed",
+       [
+        "__couture_material__=deadstock tweed"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "archival, radically tailored"
+       "archival, radically tailored",
+       [
+        "__couture_adjective__=archival",
+        "__couture_adjective__=radically tailored"
+       ]
       ]
      ]
     },
@@ -331,27 +521,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Studio Kessler-Mourne"
+       "Studio Kessler-Mourne",
+       [
+        "__couture_house__=Studio Kessler-Mourne"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a runway of wet black sand"
+       "a runway of wet black sand",
+       [
+        "__couture_venue__=a runway of wet black sand"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "a broad-shouldered model with a shaved beard line"
+       "a broad-shouldered model with a shaved beard line",
+       [
+        "__couture_model__=a broad-shouldered model with a shaved beard line"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "a collar that keeps rising like a tide"
+       "a collar that keeps rising like a tide",
+       [
+        "__couture_form__=a collar that keeps rising like a tide"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "boiled wool"
+       "boiled wool",
+       [
+        "__couture_material__=boiled wool"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "quietly unwearable, violently elegant"
+       "quietly unwearable, violently elegant",
+       [
+        "__couture_adjective__=quietly unwearable",
+        "__couture_adjective__=violently elegant"
+       ]
       ]
      ]
     },
@@ -361,27 +570,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Studio Kessler-Mourne"
+       "Studio Kessler-Mourne",
+       [
+        "__couture_house__=Studio Kessler-Mourne"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a runway of wet black sand"
+       "a runway of wet black sand",
+       [
+        "__couture_venue__=a runway of wet black sand"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "a willowy model with platinum cropped hair"
+       "a willowy model with platinum cropped hair",
+       [
+        "__couture_model__=a willowy model with platinum cropped hair"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "a coat inflated into a soft architectural cloud"
+       "a coat inflated into a soft architectural cloud",
+       [
+        "__couture_form__=a coat inflated into a soft architectural cloud"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "embroidered burlap"
+       "embroidered burlap",
+       [
+        "__couture_material__=embroidered burlap"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "violently elegant, melancholic baroque"
+       "violently elegant, melancholic baroque",
+       [
+        "__couture_adjective__=violently elegant",
+        "__couture_adjective__=melancholic baroque"
+       ]
       ]
      ]
     }
@@ -404,27 +632,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a brutalist parking garage"
+       "a brutalist parking garage",
+       [
+        "__couture_venue__=a brutalist parking garage"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "a stern silver-haired model"
+       "a stern silver-haired model",
+       [
+        "__couture_model__=a stern silver-haired model"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "a single sleeve that continues into the floor"
+       "a single sleeve that continues into the floor",
+       [
+        "__couture_form__=a single sleeve that continues into the floor"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "mirrored sequins"
+       "mirrored sequins",
+       [
+        "__couture_material__=mirrored sequins"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "aggressively understated, melancholic baroque"
+       "aggressively understated, melancholic baroque",
+       [
+        "__couture_adjective__=aggressively understated",
+        "__couture_adjective__=melancholic baroque"
+       ]
       ]
      ]
     },
@@ -434,27 +681,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a brutalist parking garage"
+       "a brutalist parking garage",
+       [
+        "__couture_venue__=a brutalist parking garage"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "a very tall model with a severe black bob"
+       "a very tall model with a severe black bob",
+       [
+        "__couture_model__=a very tall model with a severe black bob"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "a hem that orbits the wearer at knee height"
+       "a hem that orbits the wearer at knee height",
+       [
+        "__couture_form__=a hem that orbits the wearer at knee height"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "undyed muslin"
+       "undyed muslin",
+       [
+        "__couture_material__=undyed muslin"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "anti-gravitational, neo-ecclesiastical"
+       "anti-gravitational, neo-ecclesiastical",
+       [
+        "__couture_adjective__=anti-gravitational",
+        "__couture_adjective__=neo-ecclesiastical"
+       ]
       ]
      ]
     },
@@ -464,27 +730,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a brutalist parking garage"
+       "a brutalist parking garage",
+       [
+        "__couture_venue__=a brutalist parking garage"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "a pale model with bleached eyelashes and no brows"
+       "a pale model with bleached eyelashes and no brows",
+       [
+        "__couture_model__=a pale model with bleached eyelashes and no brows"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "a dress built from forty overlapping umbrellas"
+       "a dress built from forty overlapping umbrellas",
+       [
+        "__couture_form__=a dress built from forty overlapping umbrellas"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "embroidered burlap"
+       "embroidered burlap",
+       [
+        "__couture_material__=embroidered burlap"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "museum-grade, violently elegant"
+       "museum-grade, violently elegant",
+       [
+        "__couture_adjective__=museum-grade",
+        "__couture_adjective__=violently elegant"
+       ]
       ]
      ]
     },
@@ -494,27 +779,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a brutalist parking garage"
+       "a brutalist parking garage",
+       [
+        "__couture_venue__=a brutalist parking garage"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "a stern silver-haired model"
+       "a stern silver-haired model",
+       [
+        "__couture_model__=a stern silver-haired model"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "a skirt that is mostly an argument"
+       "a skirt that is mostly an argument",
+       [
+        "__couture_form__=a skirt that is mostly an argument"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "horsehair canvas"
+       "horsehair canvas",
+       [
+        "__couture_material__=horsehair canvas"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "deconstructed, post-luxury"
+       "deconstructed, post-luxury",
+       [
+        "__couture_adjective__=deconstructed",
+        "__couture_adjective__=post-luxury"
+       ]
       ]
      ]
     },
@@ -524,27 +828,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a brutalist parking garage"
+       "a brutalist parking garage",
+       [
+        "__couture_venue__=a brutalist parking garage"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "a gaunt model with a shaved head"
+       "a gaunt model with a shaved head",
+       [
+        "__couture_model__=a gaunt model with a shaved head"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "a hem that orbits the wearer at knee height"
+       "a hem that orbits the wearer at knee height",
+       [
+        "__couture_form__=a hem that orbits the wearer at knee height"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "deadstock tweed"
+       "deadstock tweed",
+       [
+        "__couture_material__=deadstock tweed"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "radically tailored, semi-sentient"
+       "radically tailored, semi-sentient",
+       [
+        "__couture_adjective__=radically tailored",
+        "__couture_adjective__=semi-sentient"
+       ]
       ]
      ]
     },
@@ -554,27 +877,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "$venue ← __couture_venue__",
-       "a brutalist parking garage"
+       "a brutalist parking garage",
+       [
+        "__couture_venue__=a brutalist parking garage"
+       ]
       ],
       [
        "$model ← __couture_model__",
-       "a willowy model with platinum cropped hair"
+       "a willowy model with platinum cropped hair",
+       [
+        "__couture_model__=a willowy model with platinum cropped hair"
+       ]
       ],
       [
        "$look ← __couture_form__",
-       "a silhouette borrowed from a grand piano"
+       "a silhouette borrowed from a grand piano",
+       [
+        "__couture_form__=a silhouette borrowed from a grand piano"
+       ]
       ],
       [
        "$look ← __couture_material__",
-       "undyed muslin"
+       "undyed muslin",
+       [
+        "__couture_material__=undyed muslin"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "museum-grade, quietly unwearable"
+       "museum-grade, quietly unwearable",
+       [
+        "__couture_adjective__=museum-grade",
+        "__couture_adjective__=quietly unwearable"
+       ]
       ]
      ]
     }

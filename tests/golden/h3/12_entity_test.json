@@ -8,15 +8,24 @@
      "picks": [
       [
        "$entity ← __scp/entities__",
-       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back",
+       [
+        "__scp/entities__=a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+       ]
       ],
       [
        "{no|yes}",
-       "yes"
+       "yes",
+       [
+        "{no|yes}=yes"
+       ]
       ],
       [
        "{cinematic|cctv}",
-       "cinematic"
+       "cinematic",
+       [
+        "{cinematic|cctv}=cinematic"
+       ]
       ]
      ]
     }
@@ -29,15 +38,24 @@
      "picks": [
       [
        "$entity ← __scp/entities__",
-       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it",
+       [
+        "__scp/entities__=a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       ]
       ],
       [
        "{no|yes}",
-       "yes"
+       "yes",
+       [
+        "{no|yes}=yes"
+       ]
       ],
       [
        "{cinematic|cctv}",
-       "cinematic"
+       "cinematic",
+       [
+        "{cinematic|cctv}=cinematic"
+       ]
       ]
      ]
     }
@@ -50,15 +68,24 @@
      "picks": [
       [
        "$entity ← __scp/entities__",
-       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it",
+       [
+        "__scp/entities__=a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       ]
       ],
       [
        "{no|yes}",
-       "no"
+       "no",
+       [
+        "{no|yes}=no"
+       ]
       ],
       [
        "{cinematic|cctv}",
-       "cinematic"
+       "cinematic",
+       [
+        "{cinematic|cctv}=cinematic"
+       ]
       ]
      ]
     }

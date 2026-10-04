@@ -18,15 +18,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying",
+       [
+        "__tour/architecture__=an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "a gallery of empty picture frames, one of them showing a moving landscape"
+       "a gallery of empty picture frames, one of them showing a moving landscape",
+       [
+        "__tour/rooms__=a gallery of empty picture frames, one of them showing a moving landscape"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "closed brass elevator doors with a floor dial above them"
+       "closed brass elevator doors with a floor dial above them",
+       [
+        "__tour/thresholds__=closed brass elevator doors with a floor dial above them"
+       ]
       ]
      ]
     },
@@ -36,15 +45,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying",
+       [
+        "__tour/architecture__=an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "a private cinema of red velvet seats, a film flickering on the screen"
+       "a private cinema of red velvet seats, a film flickering on the screen",
+       [
+        "__tour/rooms__=a private cinema of red velvet seats, a film flickering on the screen"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "a sliding paper screen glowing with warm light from the other side"
+       "a sliding paper screen glowing with warm light from the other side",
+       [
+        "__tour/thresholds__=a sliding paper screen glowing with warm light from the other side"
+       ]
       ]
      ]
     },
@@ -54,15 +72,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying",
+       [
+        "__tour/architecture__=an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "a vaulted wine cellar lit by candles between oak barrels"
+       "a vaulted wine cellar lit by candles between oak barrels",
+       [
+        "__tour/rooms__=a vaulted wine cellar lit by candles between oak barrels"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "a narrow gap between two bookcases with a sliver of light beyond"
+       "a narrow gap between two bookcases with a sliver of light beyond",
+       [
+        "__tour/thresholds__=a narrow gap between two bookcases with a sliver of light beyond"
+       ]
       ]
      ]
     },
@@ -72,15 +99,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying",
+       [
+        "__tour/architecture__=an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "a music room where a grand piano plays itself"
+       "a music room where a grand piano plays itself",
+       [
+        "__tour/rooms__=a music room where a grand piano plays itself"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "the edge of a balcony railing over a large hall below"
+       "the edge of a balcony railing over a large hall below",
+       [
+        "__tour/thresholds__=the edge of a balcony railing over a large hall below"
+       ]
       ]
      ]
     },
@@ -90,15 +126,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying",
+       [
+        "__tour/architecture__=an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "a kitchen of copper pots and steam where cooks move in a quick choreography"
+       "a kitchen of copper pots and steam where cooks move in a quick choreography",
+       [
+        "__tour/rooms__=a kitchen of copper pots and steam where cooks move in a quick choreography"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "a narrow gap between two bookcases with a sliver of light beyond"
+       "a narrow gap between two bookcases with a sliver of light beyond",
+       [
+        "__tour/thresholds__=a narrow gap between two bookcases with a sliver of light beyond"
+       ]
       ]
      ]
     },
@@ -108,15 +153,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+       "an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying",
+       [
+        "__tour/architecture__=an art deco ocean liner: lacquered wood, chrome rails, etched glass and warm sconces, the floor gently swaying"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "a winter garden of palms and orchids around a stone fountain"
+       "a winter garden of palms and orchids around a stone fountain",
+       [
+        "__tour/rooms__=a winter garden of palms and orchids around a stone fountain"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "an archway hung with strings of glass beads"
+       "an archway hung with strings of glass beads",
+       [
+        "__tour/thresholds__=an archway hung with strings of glass beads"
+       ]
       ]
      ]
     }
@@ -139,15 +193,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light",
+       [
+        "__tour/architecture__=an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "a private cinema of red velvet seats, a film flickering on the screen"
+       "a private cinema of red velvet seats, a film flickering on the screen",
+       [
+        "__tour/rooms__=a private cinema of red velvet seats, a film flickering on the screen"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "an archway hung with strings of glass beads"
+       "an archway hung with strings of glass beads",
+       [
+        "__tour/thresholds__=an archway hung with strings of glass beads"
+       ]
       ]
      ]
     },
@@ -157,15 +220,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light",
+       [
+        "__tour/architecture__=an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "a flooded ground floor where furniture floats in knee-deep water"
+       "a flooded ground floor where furniture floats in knee-deep water",
+       [
+        "__tour/rooms__=a flooded ground floor where furniture floats in knee-deep water"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "a dark doorway with a single lit candle standing on the floor before it"
+       "a dark doorway with a single lit candle standing on the floor before it",
+       [
+        "__tour/thresholds__=a dark doorway with a single lit candle standing on the floor before it"
+       ]
       ]
      ]
     },
@@ -175,15 +247,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light",
+       [
+        "__tour/architecture__=an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "a flooded ground floor where furniture floats in knee-deep water"
+       "a flooded ground floor where furniture floats in knee-deep water",
+       [
+        "__tour/rooms__=a flooded ground floor where furniture floats in knee-deep water"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "a pair of closed velvet curtains six metres ahead, centred in the frame"
+       "a pair of closed velvet curtains six metres ahead, centred in the frame",
+       [
+        "__tour/thresholds__=a pair of closed velvet curtains six metres ahead, centred in the frame"
+       ]
       ]
      ]
     },
@@ -193,15 +274,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light",
+       [
+        "__tour/architecture__=an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "a ballroom with a sprung wooden floor and couples turning slowly"
+       "a ballroom with a sprung wooden floor and couples turning slowly",
+       [
+        "__tour/rooms__=a ballroom with a sprung wooden floor and couples turning slowly"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera"
+       "two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera",
+       [
+        "__tour/thresholds__=two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera"
+       ]
       ]
      ]
     },
@@ -211,15 +301,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light",
+       [
+        "__tour/architecture__=an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "an observatory dome opening onto a night full of stars"
+       "an observatory dome opening onto a night full of stars",
+       [
+        "__tour/rooms__=an observatory dome opening onto a night full of stars"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "a round steel vault door standing slightly ajar"
+       "a round steel vault door standing slightly ajar",
+       [
+        "__tour/thresholds__=a round steel vault door standing slightly ajar"
+       ]
       ]
      ]
     },
@@ -229,15 +328,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+       "an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light",
+       [
+        "__tour/architecture__=an abandoned Soviet sanatorium: peeling pastel paint, mosaic murals, dust in shafts of light"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "a bar of backlit bottles where a bartender pours in slow ritual"
+       "a bar of backlit bottles where a bartender pours in slow ritual",
+       [
+        "__tour/rooms__=a bar of backlit bottles where a bartender pours in slow ritual"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "the bottom three steps of a wide staircase filling the lower foreground"
+       "the bottom three steps of a wide staircase filling the lower foreground",
+       [
+        "__tour/thresholds__=the bottom three steps of a wide staircase filling the lower foreground"
+       ]
       ]
      ]
     }
@@ -260,15 +368,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues",
+       [
+        "__tour/architecture__=an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "a music room where a grand piano plays itself"
+       "a music room where a grand piano plays itself",
+       [
+        "__tour/rooms__=a music room where a grand piano plays itself"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "a narrow gap between two bookcases with a sliver of light beyond"
+       "a narrow gap between two bookcases with a sliver of light beyond",
+       [
+        "__tour/thresholds__=a narrow gap between two bookcases with a sliver of light beyond"
+       ]
       ]
      ]
     },
@@ -278,15 +395,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues",
+       [
+        "__tour/architecture__=an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "a spiral stairwell winding up a tall tower around an empty core"
+       "a spiral stairwell winding up a tall tower around an empty core",
+       [
+        "__tour/rooms__=a spiral stairwell winding up a tall tower around an empty core"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera"
+       "two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera",
+       [
+        "__tour/thresholds__=two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera"
+       ]
       ]
      ]
     },
@@ -296,15 +422,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues",
+       [
+        "__tour/architecture__=an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "a vaulted wine cellar lit by candles between oak barrels"
+       "a vaulted wine cellar lit by candles between oak barrels",
+       [
+        "__tour/rooms__=a vaulted wine cellar lit by candles between oak barrels"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "a dark doorway with a single lit candle standing on the floor before it"
+       "a dark doorway with a single lit candle standing on the floor before it",
+       [
+        "__tour/thresholds__=a dark doorway with a single lit candle standing on the floor before it"
+       ]
       ]
      ]
     },
@@ -314,15 +449,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues",
+       [
+        "__tour/architecture__=an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "a long hall of mirrors where every candle multiplies into infinity"
+       "a long hall of mirrors where every candle multiplies into infinity",
+       [
+        "__tour/rooms__=a long hall of mirrors where every candle multiplies into infinity"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "a sliding paper screen glowing with warm light from the other side"
+       "a sliding paper screen glowing with warm light from the other side",
+       [
+        "__tour/thresholds__=a sliding paper screen glowing with warm light from the other side"
+       ]
       ]
      ]
     },
@@ -332,15 +476,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues",
+       [
+        "__tour/architecture__=an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "a spiral stairwell winding up a tall tower around an empty core"
+       "a spiral stairwell winding up a tall tower around an empty core",
+       [
+        "__tour/rooms__=a spiral stairwell winding up a tall tower around an empty core"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera"
+       "two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera",
+       [
+        "__tour/thresholds__=two tall mirrored doors meeting at the centre of the frame, reflecting the room behind the camera"
+       ]
       ]
      ]
     },
@@ -350,15 +503,24 @@
      "picks": [
       [
        "$house ← __tour/architecture__",
-       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+       "an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues",
+       [
+        "__tour/architecture__=an overgrown greenhouse palace: iron and glass, palms breaking the roof, moss on marble statues"
+       ]
       ],
       [
        "$room ← __tour/rooms__",
-       "a kitchen of copper pots and steam where cooks move in a quick choreography"
+       "a kitchen of copper pots and steam where cooks move in a quick choreography",
+       [
+        "__tour/rooms__=a kitchen of copper pots and steam where cooks move in a quick choreography"
+       ]
       ],
       [
        "$thr ← __tour/thresholds__",
-       "a dark doorway with a single lit candle standing on the floor before it"
+       "a dark doorway with a single lit candle standing on the floor before it",
+       [
+        "__tour/thresholds__=a dark doorway with a single lit candle standing on the floor before it"
+       ]
       ]
      ]
     }

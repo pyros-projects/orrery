@@ -590,16 +590,17 @@ def test_a_reel_tells_the_app_which_segment_runs(home, monkeypatch):
     monkeypatch.setitem(sys.modules, "server", server)
     reel = "@h3 t2va\nCHUNK a\nSHOT 5s\nA fox.\nCHUNK b repeat 2\nSHOT 5s\nThe fox again."
     OrreryPrompt().run(reel, 1, "h3-base", home=str(home), segment=2, unique_id="427")
-    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": 2, "end": False})]
+    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": 2, "end": False, "seed": 1, "take": 0})]
     sent.clear()
-    OrreryPrompt().run("@h3 t2va\nSHOT 5s\nA fox.", 1, "h3-base", home=str(home), unique_id="427")
-    assert sent == []  # not a reel: nothing to count
+    OrreryPrompt().run("@h3 t2va\nSHOT 5s\nA fox.", 1, "h3-base", home=str(home), unique_id="427", take=3)
+    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": -1, "end": False, "seed": 1, "take": 3})]
+    sent.clear()  # not a reel: segment -1, its result a take under the prompt (#211)
     blocker = types.ModuleType("comfy_execution.graph_utils")
     blocker.ExecutionBlocker = lambda v: v
     monkeypatch.setitem(sys.modules, "comfy_execution", types.ModuleType("comfy_execution"))
     monkeypatch.setitem(sys.modules, "comfy_execution.graph_utils", blocker)
     OrreryPrompt().run(reel, 1, "h3-base", home=str(home), segment=3, unique_id="427")
-    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": 3, "end": True})]
+    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": 3, "end": True, "seed": None, "take": 0})]
 
 
 def test_comments_neither_roll_nor_ask_for_libraries(home):

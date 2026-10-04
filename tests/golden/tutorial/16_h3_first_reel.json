@@ -18,7 +18,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "a gallery of empty picture frames, one of them showing a moving landscape"
+       "a gallery of empty picture frames, one of them showing a moving landscape",
+       [
+        "__tour/rooms__=a gallery of empty picture frames, one of them showing a moving landscape"
+       ]
       ]
      ]
     },
@@ -28,7 +31,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "a private cinema of red velvet seats, a film flickering on the screen"
+       "a private cinema of red velvet seats, a film flickering on the screen",
+       [
+        "__tour/rooms__=a private cinema of red velvet seats, a film flickering on the screen"
+       ]
       ]
      ]
     },
@@ -38,7 +44,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "a vaulted wine cellar lit by candles between oak barrels"
+       "a vaulted wine cellar lit by candles between oak barrels",
+       [
+        "__tour/rooms__=a vaulted wine cellar lit by candles between oak barrels"
+       ]
       ]
      ]
     },
@@ -48,7 +57,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "a music room where a grand piano plays itself"
+       "a music room where a grand piano plays itself",
+       [
+        "__tour/rooms__=a music room where a grand piano plays itself"
+       ]
       ]
      ]
     },
@@ -58,7 +70,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "a kitchen of copper pots and steam where cooks move in a quick choreography"
+       "a kitchen of copper pots and steam where cooks move in a quick choreography",
+       [
+        "__tour/rooms__=a kitchen of copper pots and steam where cooks move in a quick choreography"
+       ]
       ]
      ]
     },
@@ -68,7 +83,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "a winter garden of palms and orchids around a stone fountain"
+       "a winter garden of palms and orchids around a stone fountain",
+       [
+        "__tour/rooms__=a winter garden of palms and orchids around a stone fountain"
+       ]
       ]
      ]
     }
@@ -91,7 +109,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "a private cinema of red velvet seats, a film flickering on the screen"
+       "a private cinema of red velvet seats, a film flickering on the screen",
+       [
+        "__tour/rooms__=a private cinema of red velvet seats, a film flickering on the screen"
+       ]
       ]
      ]
     },
@@ -101,7 +122,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "a flooded ground floor where furniture floats in knee-deep water"
+       "a flooded ground floor where furniture floats in knee-deep water",
+       [
+        "__tour/rooms__=a flooded ground floor where furniture floats in knee-deep water"
+       ]
       ]
      ]
     },
@@ -111,7 +135,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "a flooded ground floor where furniture floats in knee-deep water"
+       "a flooded ground floor where furniture floats in knee-deep water",
+       [
+        "__tour/rooms__=a flooded ground floor where furniture floats in knee-deep water"
+       ]
       ]
      ]
     },
@@ -121,7 +148,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "a ballroom with a sprung wooden floor and couples turning slowly"
+       "a ballroom with a sprung wooden floor and couples turning slowly",
+       [
+        "__tour/rooms__=a ballroom with a sprung wooden floor and couples turning slowly"
+       ]
       ]
      ]
     },
@@ -131,7 +161,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "an observatory dome opening onto a night full of stars"
+       "an observatory dome opening onto a night full of stars",
+       [
+        "__tour/rooms__=an observatory dome opening onto a night full of stars"
+       ]
       ]
      ]
     },
@@ -141,7 +174,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "a bar of backlit bottles where a bartender pours in slow ritual"
+       "a bar of backlit bottles where a bartender pours in slow ritual",
+       [
+        "__tour/rooms__=a bar of backlit bottles where a bartender pours in slow ritual"
+       ]
       ]
      ]
     }
@@ -164,7 +200,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "a music room where a grand piano plays itself"
+       "a music room where a grand piano plays itself",
+       [
+        "__tour/rooms__=a music room where a grand piano plays itself"
+       ]
       ]
      ]
     },
@@ -174,7 +213,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "a spiral stairwell winding up a tall tower around an empty core"
+       "a spiral stairwell winding up a tall tower around an empty core",
+       [
+        "__tour/rooms__=a spiral stairwell winding up a tall tower around an empty core"
+       ]
       ]
      ]
     },
@@ -184,7 +226,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "a vaulted wine cellar lit by candles between oak barrels"
+       "a vaulted wine cellar lit by candles between oak barrels",
+       [
+        "__tour/rooms__=a vaulted wine cellar lit by candles between oak barrels"
+       ]
       ]
      ]
     },
@@ -194,7 +239,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "a long hall of mirrors where every candle multiplies into infinity"
+       "a long hall of mirrors where every candle multiplies into infinity",
+       [
+        "__tour/rooms__=a long hall of mirrors where every candle multiplies into infinity"
+       ]
       ]
      ]
     },
@@ -204,7 +252,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "a spiral stairwell winding up a tall tower around an empty core"
+       "a spiral stairwell winding up a tall tower around an empty core",
+       [
+        "__tour/rooms__=a spiral stairwell winding up a tall tower around an empty core"
+       ]
       ]
      ]
     },
@@ -214,7 +265,10 @@
      "picks": [
       [
        "$room ← __tour/rooms__",
-       "a kitchen of copper pots and steam where cooks move in a quick choreography"
+       "a kitchen of copper pots and steam where cooks move in a quick choreography",
+       [
+        "__tour/rooms__=a kitchen of copper pots and steam where cooks move in a quick choreography"
+       ]
       ]
      ]
     }

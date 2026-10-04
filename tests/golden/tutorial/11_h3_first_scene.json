@@ -8,23 +8,38 @@
      "picks": [
       [
        "$hero ← __creature__",
-       "selkie"
+       "selkie",
+       [
+        "__creature__=selkie"
+       ]
       ],
       [
        "__h3style__",
-       "vintage film"
+       "vintage film",
+       [
+        "__h3style__=vintage film"
+       ]
       ],
       [
        "__place__",
-       "a laundromat at 3 a.m."
+       "a laundromat at 3 a.m.",
+       [
+        "__place__=a laundromat at 3 a.m."
+       ]
       ],
       [
        "__weather__",
-       "a glittering sun shower"
+       "a glittering sun shower",
+       [
+        "__weather__=a glittering sun shower"
+       ]
       ],
       [
        "__instrument__",
-       "acoustic guitar"
+       "acoustic guitar",
+       [
+        "__instrument__=acoustic guitar"
+       ]
       ]
      ]
     }
@@ -37,23 +52,38 @@
      "picks": [
       [
        "$hero ← __creature__",
-       "red panda"
+       "red panda",
+       [
+        "__creature__=red panda"
+       ]
       ],
       [
        "__h3style__",
-       "live-action, cinematic"
+       "live-action, cinematic",
+       [
+        "__h3style__=live-action, cinematic"
+       ]
       ],
       [
        "__place__",
-       "a snowed-in train station"
+       "a snowed-in train station",
+       [
+        "__place__=a snowed-in train station"
+       ]
       ],
       [
        "__weather__",
-       "a gathering thunderstorm"
+       "a gathering thunderstorm",
+       [
+        "__weather__=a gathering thunderstorm"
+       ]
       ],
       [
        "__instrument__",
-       "acoustic guitar"
+       "acoustic guitar",
+       [
+        "__instrument__=acoustic guitar"
+       ]
       ]
      ]
     }
@@ -66,23 +96,38 @@
      "picks": [
       [
        "$hero ← __creature__",
-       "selkie"
+       "selkie",
+       [
+        "__creature__=selkie"
+       ]
       ],
       [
        "__h3style__",
-       "live-action, cinematic"
+       "live-action, cinematic",
+       [
+        "__h3style__=live-action, cinematic"
+       ]
       ],
       [
        "__place__",
-       "a greenhouse on the moon"
+       "a greenhouse on the moon",
+       [
+        "__place__=a greenhouse on the moon"
+       ]
       ],
       [
        "__weather__",
-       "a gathering thunderstorm"
+       "a gathering thunderstorm",
+       [
+        "__weather__=a gathering thunderstorm"
+       ]
       ],
       [
        "__instrument__",
-       "upright bass"
+       "upright bass",
+       [
+        "__instrument__=upright bass"
+       ]
       ]
      ]
     }

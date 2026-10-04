@@ -18,23 +18,38 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ hair slicked straight back"
+       "__characters/looks/hair_color__ hair slicked straight back",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ hair slicked straight back"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a puffy black winter jacket zipped to the chin"
+       "a puffy black winter jacket zipped to the chin",
+       [
+        "__characters/average_joes/outfit__=a puffy black winter jacket zipped to the chin"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "wok"
+       "wok",
+       [
+        "{grill|pastry|wok}=wok"
+       ]
       ]
      ]
     },
@@ -44,31 +59,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ hair slicked straight back"
+       "__characters/looks/hair_color__ hair slicked straight back",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ hair slicked straight back"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a puffy black winter jacket zipped to the chin"
+       "a puffy black winter jacket zipped to the chin",
+       [
+        "__characters/average_joes/outfit__=a puffy black winter jacket zipped to the chin"
+       ]
       ],
       [
        "$dish ← __kitchen_wok__",
-       "fried rice thrown high and caught again in the wok"
+       "fried rice thrown high and caught again in the wok",
+       [
+        "__kitchen_wok__=fried rice thrown high and caught again in the wok"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -78,31 +114,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ hair slicked straight back"
+       "__characters/looks/hair_color__ hair slicked straight back",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ hair slicked straight back"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a puffy black winter jacket zipped to the chin"
+       "a puffy black winter jacket zipped to the chin",
+       [
+        "__characters/average_joes/outfit__=a puffy black winter jacket zipped to the chin"
+       ]
       ],
       [
        "$dish ← __kitchen_grill__",
-       "a thick steak seared on a roaring grill"
+       "a thick steak seared on a roaring grill",
+       [
+        "__kitchen_grill__=a thick steak seared on a roaring grill"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "wok"
+       "wok",
+       [
+        "{grill|pastry|wok}=wok"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -112,31 +169,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ hair slicked straight back"
+       "__characters/looks/hair_color__ hair slicked straight back",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ hair slicked straight back"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a puffy black winter jacket zipped to the chin"
+       "a puffy black winter jacket zipped to the chin",
+       [
+        "__characters/average_joes/outfit__=a puffy black winter jacket zipped to the chin"
+       ]
       ],
       [
        "$dish ← __kitchen_wok__",
-       "prawns flung into a smoking wok with chilli and garlic"
+       "prawns flung into a smoking wok with chilli and garlic",
+       [
+        "__kitchen_wok__=prawns flung into a smoking wok with chilli and garlic"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "wok"
+       "wok",
+       [
+        "{grill|pastry|wok}=wok"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -146,31 +224,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ hair slicked straight back"
+       "__characters/looks/hair_color__ hair slicked straight back",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ hair slicked straight back"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a puffy black winter jacket zipped to the chin"
+       "a puffy black winter jacket zipped to the chin",
+       [
+        "__characters/average_joes/outfit__=a puffy black winter jacket zipped to the chin"
+       ]
       ],
       [
        "$dish ← __kitchen_wok__",
-       "noodles tossed through a burst of flame in a wok"
+       "noodles tossed through a burst of flame in a wok",
+       [
+        "__kitchen_wok__=noodles tossed through a burst of flame in a wok"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "pastry"
+       "pastry",
+       [
+        "{grill|pastry|wok}=pastry"
+       ]
       ],
       [
        "{10% fire}",
-       "fire"
+       "fire",
+       [
+        "{10% fire}=fire"
+       ]
       ]
      ]
     },
@@ -180,23 +279,38 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ hair slicked straight back"
+       "__characters/looks/hair_color__ hair slicked straight back",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ hair slicked straight back"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a puffy black winter jacket zipped to the chin"
+       "a puffy black winter jacket zipped to the chin",
+       [
+        "__characters/average_joes/outfit__=a puffy black winter jacket zipped to the chin"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ]
      ]
     }
@@ -219,23 +333,38 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a long __characters/looks/hair_color__ braid over one shoulder"
+       "a long __characters/looks/hair_color__ braid over one shoulder",
+       [
+        "__characters/looks/hair__=a long __characters/looks/hair_color__ braid over one shoulder"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "honey-blonde"
+       "honey-blonde",
+       [
+        "__characters/looks/hair_color__=honey-blonde"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a red-and-black flannel shirt"
+       "a red-and-black flannel shirt",
+       [
+        "__characters/average_joes/outfit__=a red-and-black flannel shirt"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "wok"
+       "wok",
+       [
+        "{grill|pastry|wok}=wok"
+       ]
       ]
      ]
     },
@@ -245,31 +374,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a long __characters/looks/hair_color__ braid over one shoulder"
+       "a long __characters/looks/hair_color__ braid over one shoulder",
+       [
+        "__characters/looks/hair__=a long __characters/looks/hair_color__ braid over one shoulder"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "honey-blonde"
+       "honey-blonde",
+       [
+        "__characters/looks/hair_color__=honey-blonde"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a red-and-black flannel shirt"
+       "a red-and-black flannel shirt",
+       [
+        "__characters/average_joes/outfit__=a red-and-black flannel shirt"
+       ]
       ],
       [
        "$dish ← __kitchen_wok__",
-       "prawns flung into a smoking wok with chilli and garlic"
+       "prawns flung into a smoking wok with chilli and garlic",
+       [
+        "__kitchen_wok__=prawns flung into a smoking wok with chilli and garlic"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "pastry"
+       "pastry",
+       [
+        "{grill|pastry|wok}=pastry"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -279,31 +429,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a long __characters/looks/hair_color__ braid over one shoulder"
+       "a long __characters/looks/hair_color__ braid over one shoulder",
+       [
+        "__characters/looks/hair__=a long __characters/looks/hair_color__ braid over one shoulder"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "honey-blonde"
+       "honey-blonde",
+       [
+        "__characters/looks/hair_color__=honey-blonde"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a red-and-black flannel shirt"
+       "a red-and-black flannel shirt",
+       [
+        "__characters/average_joes/outfit__=a red-and-black flannel shirt"
+       ]
       ],
       [
        "$dish ← __kitchen_dessert__",
-       "a tower of choux buns glazed with caramel"
+       "a tower of choux buns glazed with caramel",
+       [
+        "__kitchen_dessert__=a tower of choux buns glazed with caramel"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "pastry"
+       "pastry",
+       [
+        "{grill|pastry|wok}=pastry"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -313,31 +484,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a long __characters/looks/hair_color__ braid over one shoulder"
+       "a long __characters/looks/hair_color__ braid over one shoulder",
+       [
+        "__characters/looks/hair__=a long __characters/looks/hair_color__ braid over one shoulder"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "honey-blonde"
+       "honey-blonde",
+       [
+        "__characters/looks/hair_color__=honey-blonde"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a red-and-black flannel shirt"
+       "a red-and-black flannel shirt",
+       [
+        "__characters/average_joes/outfit__=a red-and-black flannel shirt"
+       ]
       ],
       [
        "$dish ← __kitchen_dessert__",
-       "a lemon tart torched until its top blisters"
+       "a lemon tart torched until its top blisters",
+       [
+        "__kitchen_dessert__=a lemon tart torched until its top blisters"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "pastry"
+       "pastry",
+       [
+        "{grill|pastry|wok}=pastry"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -347,31 +539,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a long __characters/looks/hair_color__ braid over one shoulder"
+       "a long __characters/looks/hair_color__ braid over one shoulder",
+       [
+        "__characters/looks/hair__=a long __characters/looks/hair_color__ braid over one shoulder"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "honey-blonde"
+       "honey-blonde",
+       [
+        "__characters/looks/hair_color__=honey-blonde"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a red-and-black flannel shirt"
+       "a red-and-black flannel shirt",
+       [
+        "__characters/average_joes/outfit__=a red-and-black flannel shirt"
+       ]
       ],
       [
        "$dish ← __kitchen_dessert__",
-       "a chocolate fondant turned out onto a white plate"
+       "a chocolate fondant turned out onto a white plate",
+       [
+        "__kitchen_dessert__=a chocolate fondant turned out onto a white plate"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -381,31 +594,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a long __characters/looks/hair_color__ braid over one shoulder"
+       "a long __characters/looks/hair_color__ braid over one shoulder",
+       [
+        "__characters/looks/hair__=a long __characters/looks/hair_color__ braid over one shoulder"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "honey-blonde"
+       "honey-blonde",
+       [
+        "__characters/looks/hair_color__=honey-blonde"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a red-and-black flannel shirt"
+       "a red-and-black flannel shirt",
+       [
+        "__characters/average_joes/outfit__=a red-and-black flannel shirt"
+       ]
       ],
       [
        "$dish ← __kitchen_grill__",
-       "a whole fish crisping skin-side down"
+       "a whole fish crisping skin-side down",
+       [
+        "__kitchen_grill__=a whole fish crisping skin-side down"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "pastry"
+       "pastry",
+       [
+        "{grill|pastry|wok}=pastry"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     }
@@ -428,19 +662,31 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__"
+       "a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a shaved head"
+       "a shaved head",
+       [
+        "__characters/looks/hair__=a shaved head"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a faded denim jacket over a grey hoodie"
+       "a faded denim jacket over a grey hoodie",
+       [
+        "__characters/average_joes/outfit__=a faded denim jacket over a grey hoodie"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "wok"
+       "wok",
+       [
+        "{grill|pastry|wok}=wok"
+       ]
       ]
      ]
     },
@@ -450,27 +696,45 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__"
+       "a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a shaved head"
+       "a shaved head",
+       [
+        "__characters/looks/hair__=a shaved head"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a faded denim jacket over a grey hoodie"
+       "a faded denim jacket over a grey hoodie",
+       [
+        "__characters/average_joes/outfit__=a faded denim jacket over a grey hoodie"
+       ]
       ],
       [
        "$dish ← __kitchen_wok__",
-       "noodles tossed through a burst of flame in a wok"
+       "noodles tossed through a burst of flame in a wok",
+       [
+        "__kitchen_wok__=noodles tossed through a burst of flame in a wok"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "wok"
+       "wok",
+       [
+        "{grill|pastry|wok}=wok"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -480,27 +744,45 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__"
+       "a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a shaved head"
+       "a shaved head",
+       [
+        "__characters/looks/hair__=a shaved head"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a faded denim jacket over a grey hoodie"
+       "a faded denim jacket over a grey hoodie",
+       [
+        "__characters/average_joes/outfit__=a faded denim jacket over a grey hoodie"
+       ]
       ],
       [
        "$dish ← __kitchen_wok__",
-       "prawns flung into a smoking wok with chilli and garlic"
+       "prawns flung into a smoking wok with chilli and garlic",
+       [
+        "__kitchen_wok__=prawns flung into a smoking wok with chilli and garlic"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "pastry"
+       "pastry",
+       [
+        "{grill|pastry|wok}=pastry"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -510,27 +792,45 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__"
+       "a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a shaved head"
+       "a shaved head",
+       [
+        "__characters/looks/hair__=a shaved head"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a faded denim jacket over a grey hoodie"
+       "a faded denim jacket over a grey hoodie",
+       [
+        "__characters/average_joes/outfit__=a faded denim jacket over a grey hoodie"
+       ]
       ],
       [
        "$dish ← __kitchen_dessert__",
-       "a tower of choux buns glazed with caramel"
+       "a tower of choux buns glazed with caramel",
+       [
+        "__kitchen_dessert__=a tower of choux buns glazed with caramel"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "wok"
+       "wok",
+       [
+        "{grill|pastry|wok}=wok"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -540,27 +840,45 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__"
+       "a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a shaved head"
+       "a shaved head",
+       [
+        "__characters/looks/hair__=a shaved head"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a faded denim jacket over a grey hoodie"
+       "a faded denim jacket over a grey hoodie",
+       [
+        "__characters/average_joes/outfit__=a faded denim jacket over a grey hoodie"
+       ]
       ],
       [
        "$dish ← __kitchen_wok__",
-       "prawns flung into a smoking wok with chilli and garlic"
+       "prawns flung into a smoking wok with chilli and garlic",
+       [
+        "__kitchen_wok__=prawns flung into a smoking wok with chilli and garlic"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "pastry"
+       "pastry",
+       [
+        "{grill|pastry|wok}=pastry"
+       ]
       ],
       [
        "{10% fire}",
-       "fire"
+       "fire",
+       [
+        "{10% fire}=fire"
+       ]
       ]
      ]
     },
@@ -570,19 +888,31 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__"
+       "a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a tax accountant in his forties, soft around the middle, with __characters/looks/hair__, reading glasses pushed up on the forehead and a permanent faint frown, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a shaved head"
+       "a shaved head",
+       [
+        "__characters/looks/hair__=a shaved head"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a faded denim jacket over a grey hoodie"
+       "a faded denim jacket over a grey hoodie",
+       [
+        "__characters/average_joes/outfit__=a faded denim jacket over a grey hoodie"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ]
      ]
     }
@@ -605,19 +935,31 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a shaved head"
+       "a shaved head",
+       [
+        "__characters/looks/hair__=a shaved head"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a hi-vis vest over a hoodie"
+       "a hi-vis vest over a hoodie",
+       [
+        "__characters/average_joes/outfit__=a hi-vis vest over a hoodie"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "wok"
+       "wok",
+       [
+        "{grill|pastry|wok}=wok"
+       ]
       ]
      ]
     },
@@ -627,27 +969,45 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a shaved head"
+       "a shaved head",
+       [
+        "__characters/looks/hair__=a shaved head"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a hi-vis vest over a hoodie"
+       "a hi-vis vest over a hoodie",
+       [
+        "__characters/average_joes/outfit__=a hi-vis vest over a hoodie"
+       ]
       ],
       [
        "$dish ← __kitchen_wok__",
-       "prawns flung into a smoking wok with chilli and garlic"
+       "prawns flung into a smoking wok with chilli and garlic",
+       [
+        "__kitchen_wok__=prawns flung into a smoking wok with chilli and garlic"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "pastry"
+       "pastry",
+       [
+        "{grill|pastry|wok}=pastry"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -657,27 +1017,45 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a shaved head"
+       "a shaved head",
+       [
+        "__characters/looks/hair__=a shaved head"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a hi-vis vest over a hoodie"
+       "a hi-vis vest over a hoodie",
+       [
+        "__characters/average_joes/outfit__=a hi-vis vest over a hoodie"
+       ]
       ],
       [
        "$dish ← __kitchen_dessert__",
-       "a lemon tart torched until its top blisters"
+       "a lemon tart torched until its top blisters",
+       [
+        "__kitchen_dessert__=a lemon tart torched until its top blisters"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -687,27 +1065,45 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a shaved head"
+       "a shaved head",
+       [
+        "__characters/looks/hair__=a shaved head"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a hi-vis vest over a hoodie"
+       "a hi-vis vest over a hoodie",
+       [
+        "__characters/average_joes/outfit__=a hi-vis vest over a hoodie"
+       ]
       ],
       [
        "$dish ← __kitchen_grill__",
-       "a whole fish crisping skin-side down"
+       "a whole fish crisping skin-side down",
+       [
+        "__kitchen_grill__=a whole fish crisping skin-side down"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "pastry"
+       "pastry",
+       [
+        "{grill|pastry|wok}=pastry"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -717,27 +1113,45 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a shaved head"
+       "a shaved head",
+       [
+        "__characters/looks/hair__=a shaved head"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a hi-vis vest over a hoodie"
+       "a hi-vis vest over a hoodie",
+       [
+        "__characters/average_joes/outfit__=a hi-vis vest over a hoodie"
+       ]
       ],
       [
        "$dish ← __kitchen_dessert__",
-       "a tower of choux buns glazed with caramel"
+       "a tower of choux buns glazed with caramel",
+       [
+        "__kitchen_dessert__=a tower of choux buns glazed with caramel"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -747,27 +1161,45 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a shaved head"
+       "a shaved head",
+       [
+        "__characters/looks/hair__=a shaved head"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a hi-vis vest over a hoodie"
+       "a hi-vis vest over a hoodie",
+       [
+        "__characters/average_joes/outfit__=a hi-vis vest over a hoodie"
+       ]
       ],
       [
        "$dish ← __kitchen_grill__",
-       "a whole fish crisping skin-side down"
+       "a whole fish crisping skin-side down",
+       [
+        "__kitchen_grill__=a whole fish crisping skin-side down"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     }
@@ -790,23 +1222,38 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+       "long __characters/looks/hair_color__ hair tied in a low ponytail",
+       [
+        "__characters/looks/hair__=long __characters/looks/hair_color__ hair tied in a low ponytail"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a tracksuit in two slightly different blues"
+       "a tracksuit in two slightly different blues",
+       [
+        "__characters/average_joes/outfit__=a tracksuit in two slightly different blues"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "pastry"
+       "pastry",
+       [
+        "{grill|pastry|wok}=pastry"
+       ]
       ]
      ]
     },
@@ -816,31 +1263,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+       "long __characters/looks/hair_color__ hair tied in a low ponytail",
+       [
+        "__characters/looks/hair__=long __characters/looks/hair_color__ hair tied in a low ponytail"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a tracksuit in two slightly different blues"
+       "a tracksuit in two slightly different blues",
+       [
+        "__characters/average_joes/outfit__=a tracksuit in two slightly different blues"
+       ]
       ],
       [
        "$dish ← __kitchen_dessert__",
-       "a chocolate fondant turned out onto a white plate"
+       "a chocolate fondant turned out onto a white plate",
+       [
+        "__kitchen_dessert__=a chocolate fondant turned out onto a white plate"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "pastry"
+       "pastry",
+       [
+        "{grill|pastry|wok}=pastry"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -850,31 +1318,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+       "long __characters/looks/hair_color__ hair tied in a low ponytail",
+       [
+        "__characters/looks/hair__=long __characters/looks/hair_color__ hair tied in a low ponytail"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a tracksuit in two slightly different blues"
+       "a tracksuit in two slightly different blues",
+       [
+        "__characters/average_joes/outfit__=a tracksuit in two slightly different blues"
+       ]
       ],
       [
        "$dish ← __kitchen_dessert__",
-       "a tower of choux buns glazed with caramel"
+       "a tower of choux buns glazed with caramel",
+       [
+        "__kitchen_dessert__=a tower of choux buns glazed with caramel"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -884,31 +1373,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+       "long __characters/looks/hair_color__ hair tied in a low ponytail",
+       [
+        "__characters/looks/hair__=long __characters/looks/hair_color__ hair tied in a low ponytail"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a tracksuit in two slightly different blues"
+       "a tracksuit in two slightly different blues",
+       [
+        "__characters/average_joes/outfit__=a tracksuit in two slightly different blues"
+       ]
       ],
       [
        "$dish ← __kitchen_grill__",
-       "skewers of vegetables charring over the coals"
+       "skewers of vegetables charring over the coals",
+       [
+        "__kitchen_grill__=skewers of vegetables charring over the coals"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "pastry"
+       "pastry",
+       [
+        "{grill|pastry|wok}=pastry"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -918,31 +1428,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+       "long __characters/looks/hair_color__ hair tied in a low ponytail",
+       [
+        "__characters/looks/hair__=long __characters/looks/hair_color__ hair tied in a low ponytail"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a tracksuit in two slightly different blues"
+       "a tracksuit in two slightly different blues",
+       [
+        "__characters/average_joes/outfit__=a tracksuit in two slightly different blues"
+       ]
       ],
       [
        "$dish ← __kitchen_dessert__",
-       "a tower of choux buns glazed with caramel"
+       "a tower of choux buns glazed with caramel",
+       [
+        "__kitchen_dessert__=a tower of choux buns glazed with caramel"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -952,31 +1483,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+       "long __characters/looks/hair_color__ hair tied in a low ponytail",
+       [
+        "__characters/looks/hair__=long __characters/looks/hair_color__ hair tied in a low ponytail"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a tracksuit in two slightly different blues"
+       "a tracksuit in two slightly different blues",
+       [
+        "__characters/average_joes/outfit__=a tracksuit in two slightly different blues"
+       ]
       ],
       [
        "$dish ← __kitchen_grill__",
-       "a thick steak seared on a roaring grill"
+       "a thick steak seared on a roaring grill",
+       [
+        "__kitchen_grill__=a thick steak seared on a roaring grill"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     }
@@ -999,23 +1551,38 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a __characters/looks/hair_color__ mullet"
+       "a __characters/looks/hair_color__ mullet",
+       [
+        "__characters/looks/hair__=a __characters/looks/hair_color__ mullet"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "__characters/looks/hair_color__=salt-and-pepper"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a cheap grey suit that almost fits"
+       "a cheap grey suit that almost fits",
+       [
+        "__characters/average_joes/outfit__=a cheap grey suit that almost fits"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ]
      ]
     },
@@ -1025,31 +1592,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a __characters/looks/hair_color__ mullet"
+       "a __characters/looks/hair_color__ mullet",
+       [
+        "__characters/looks/hair__=a __characters/looks/hair_color__ mullet"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "__characters/looks/hair_color__=salt-and-pepper"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a cheap grey suit that almost fits"
+       "a cheap grey suit that almost fits",
+       [
+        "__characters/average_joes/outfit__=a cheap grey suit that almost fits"
+       ]
       ],
       [
        "$dish ← __kitchen_grill__",
-       "a whole fish crisping skin-side down"
+       "a whole fish crisping skin-side down",
+       [
+        "__kitchen_grill__=a whole fish crisping skin-side down"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -1059,31 +1647,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a __characters/looks/hair_color__ mullet"
+       "a __characters/looks/hair_color__ mullet",
+       [
+        "__characters/looks/hair__=a __characters/looks/hair_color__ mullet"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "__characters/looks/hair_color__=salt-and-pepper"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a cheap grey suit that almost fits"
+       "a cheap grey suit that almost fits",
+       [
+        "__characters/average_joes/outfit__=a cheap grey suit that almost fits"
+       ]
       ],
       [
        "$dish ← __kitchen_grill__",
-       "a thick steak seared on a roaring grill"
+       "a thick steak seared on a roaring grill",
+       [
+        "__kitchen_grill__=a thick steak seared on a roaring grill"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "wok"
+       "wok",
+       [
+        "{grill|pastry|wok}=wok"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -1093,31 +1702,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a __characters/looks/hair_color__ mullet"
+       "a __characters/looks/hair_color__ mullet",
+       [
+        "__characters/looks/hair__=a __characters/looks/hair_color__ mullet"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "__characters/looks/hair_color__=salt-and-pepper"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a cheap grey suit that almost fits"
+       "a cheap grey suit that almost fits",
+       [
+        "__characters/average_joes/outfit__=a cheap grey suit that almost fits"
+       ]
       ],
       [
        "$dish ← __kitchen_wok__",
-       "fried rice thrown high and caught again in the wok"
+       "fried rice thrown high and caught again in the wok",
+       [
+        "__kitchen_wok__=fried rice thrown high and caught again in the wok"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -1127,31 +1757,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a __characters/looks/hair_color__ mullet"
+       "a __characters/looks/hair_color__ mullet",
+       [
+        "__characters/looks/hair__=a __characters/looks/hair_color__ mullet"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "__characters/looks/hair_color__=salt-and-pepper"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a cheap grey suit that almost fits"
+       "a cheap grey suit that almost fits",
+       [
+        "__characters/average_joes/outfit__=a cheap grey suit that almost fits"
+       ]
       ],
       [
        "$dish ← __kitchen_grill__",
-       "a thick steak seared on a roaring grill"
+       "a thick steak seared on a roaring grill",
+       [
+        "__kitchen_grill__=a thick steak seared on a roaring grill"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -1161,31 +1812,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "a __characters/looks/hair_color__ mullet"
+       "a __characters/looks/hair_color__ mullet",
+       [
+        "__characters/looks/hair__=a __characters/looks/hair_color__ mullet"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "__characters/looks/hair_color__=salt-and-pepper"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a cheap grey suit that almost fits"
+       "a cheap grey suit that almost fits",
+       [
+        "__characters/average_joes/outfit__=a cheap grey suit that almost fits"
+       ]
       ],
       [
        "$dish ← __kitchen_grill__",
-       "a thick steak seared on a roaring grill"
+       "a thick steak seared on a roaring grill",
+       [
+        "__kitchen_grill__=a thick steak seared on a roaring grill"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "pastry"
+       "pastry",
+       [
+        "{grill|pastry|wok}=pastry"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     }
@@ -1208,23 +1880,38 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "short __characters/looks/hair_color__ hair in a messy crop"
+       "short __characters/looks/hair_color__ hair in a messy crop",
+       [
+        "__characters/looks/hair__=short __characters/looks/hair_color__ hair in a messy crop"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "sandy-brown"
+       "sandy-brown",
+       [
+        "__characters/looks/hair_color__=sandy-brown"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a cheap grey suit that almost fits"
+       "a cheap grey suit that almost fits",
+       [
+        "__characters/average_joes/outfit__=a cheap grey suit that almost fits"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "wok"
+       "wok",
+       [
+        "{grill|pastry|wok}=wok"
+       ]
       ]
      ]
     },
@@ -1234,31 +1921,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "short __characters/looks/hair_color__ hair in a messy crop"
+       "short __characters/looks/hair_color__ hair in a messy crop",
+       [
+        "__characters/looks/hair__=short __characters/looks/hair_color__ hair in a messy crop"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "sandy-brown"
+       "sandy-brown",
+       [
+        "__characters/looks/hair_color__=sandy-brown"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a cheap grey suit that almost fits"
+       "a cheap grey suit that almost fits",
+       [
+        "__characters/average_joes/outfit__=a cheap grey suit that almost fits"
+       ]
       ],
       [
        "$dish ← __kitchen_wok__",
-       "noodles tossed through a burst of flame in a wok"
+       "noodles tossed through a burst of flame in a wok",
+       [
+        "__kitchen_wok__=noodles tossed through a burst of flame in a wok"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "pastry"
+       "pastry",
+       [
+        "{grill|pastry|wok}=pastry"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -1268,31 +1976,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "short __characters/looks/hair_color__ hair in a messy crop"
+       "short __characters/looks/hair_color__ hair in a messy crop",
+       [
+        "__characters/looks/hair__=short __characters/looks/hair_color__ hair in a messy crop"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "sandy-brown"
+       "sandy-brown",
+       [
+        "__characters/looks/hair_color__=sandy-brown"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a cheap grey suit that almost fits"
+       "a cheap grey suit that almost fits",
+       [
+        "__characters/average_joes/outfit__=a cheap grey suit that almost fits"
+       ]
       ],
       [
        "$dish ← __kitchen_dessert__",
-       "a tower of choux buns glazed with caramel"
+       "a tower of choux buns glazed with caramel",
+       [
+        "__kitchen_dessert__=a tower of choux buns glazed with caramel"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -1302,31 +2031,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "short __characters/looks/hair_color__ hair in a messy crop"
+       "short __characters/looks/hair_color__ hair in a messy crop",
+       [
+        "__characters/looks/hair__=short __characters/looks/hair_color__ hair in a messy crop"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "sandy-brown"
+       "sandy-brown",
+       [
+        "__characters/looks/hair_color__=sandy-brown"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a cheap grey suit that almost fits"
+       "a cheap grey suit that almost fits",
+       [
+        "__characters/average_joes/outfit__=a cheap grey suit that almost fits"
+       ]
       ],
       [
        "$dish ← __kitchen_grill__",
-       "skewers of vegetables charring over the coals"
+       "skewers of vegetables charring over the coals",
+       [
+        "__kitchen_grill__=skewers of vegetables charring over the coals"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "pastry"
+       "pastry",
+       [
+        "{grill|pastry|wok}=pastry"
+       ]
       ],
       [
        "{10% fire}",
-       "fire"
+       "fire",
+       [
+        "{10% fire}=fire"
+       ]
       ]
      ]
     },
@@ -1336,23 +2086,38 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "short __characters/looks/hair_color__ hair in a messy crop"
+       "short __characters/looks/hair_color__ hair in a messy crop",
+       [
+        "__characters/looks/hair__=short __characters/looks/hair_color__ hair in a messy crop"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "sandy-brown"
+       "sandy-brown",
+       [
+        "__characters/looks/hair_color__=sandy-brown"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a cheap grey suit that almost fits"
+       "a cheap grey suit that almost fits",
+       [
+        "__characters/average_joes/outfit__=a cheap grey suit that almost fits"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ]
      ]
     },
@@ -1362,31 +2127,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "short __characters/looks/hair_color__ hair in a messy crop"
+       "short __characters/looks/hair_color__ hair in a messy crop",
+       [
+        "__characters/looks/hair__=short __characters/looks/hair_color__ hair in a messy crop"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "sandy-brown"
+       "sandy-brown",
+       [
+        "__characters/looks/hair_color__=sandy-brown"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a cheap grey suit that almost fits"
+       "a cheap grey suit that almost fits",
+       [
+        "__characters/average_joes/outfit__=a cheap grey suit that almost fits"
+       ]
       ],
       [
        "$dish ← __kitchen_grill__",
-       "skewers of vegetables charring over the coals"
+       "skewers of vegetables charring over the coals",
+       [
+        "__kitchen_grill__=skewers of vegetables charring over the coals"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "wok"
+       "wok",
+       [
+        "{grill|pastry|wok}=wok"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     }
@@ -1409,23 +2195,38 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "thick __characters/looks/hair_color__ curls pinned up loosely"
+       "thick __characters/looks/hair_color__ curls pinned up loosely",
+       [
+        "__characters/looks/hair__=thick __characters/looks/hair_color__ curls pinned up loosely"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "auburn"
+       "auburn",
+       [
+        "__characters/looks/hair_color__=auburn"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a rain-spotted beige trench coat"
+       "a rain-spotted beige trench coat",
+       [
+        "__characters/average_joes/outfit__=a rain-spotted beige trench coat"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "wok"
+       "wok",
+       [
+        "{grill|pastry|wok}=wok"
+       ]
       ]
      ]
     },
@@ -1435,31 +2236,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "thick __characters/looks/hair_color__ curls pinned up loosely"
+       "thick __characters/looks/hair_color__ curls pinned up loosely",
+       [
+        "__characters/looks/hair__=thick __characters/looks/hair_color__ curls pinned up loosely"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "auburn"
+       "auburn",
+       [
+        "__characters/looks/hair_color__=auburn"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a rain-spotted beige trench coat"
+       "a rain-spotted beige trench coat",
+       [
+        "__characters/average_joes/outfit__=a rain-spotted beige trench coat"
+       ]
       ],
       [
        "$dish ← __kitchen_wok__",
-       "noodles tossed through a burst of flame in a wok"
+       "noodles tossed through a burst of flame in a wok",
+       [
+        "__kitchen_wok__=noodles tossed through a burst of flame in a wok"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "pastry"
+       "pastry",
+       [
+        "{grill|pastry|wok}=pastry"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -1469,31 +2291,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "thick __characters/looks/hair_color__ curls pinned up loosely"
+       "thick __characters/looks/hair_color__ curls pinned up loosely",
+       [
+        "__characters/looks/hair__=thick __characters/looks/hair_color__ curls pinned up loosely"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "auburn"
+       "auburn",
+       [
+        "__characters/looks/hair_color__=auburn"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a rain-spotted beige trench coat"
+       "a rain-spotted beige trench coat",
+       [
+        "__characters/average_joes/outfit__=a rain-spotted beige trench coat"
+       ]
       ],
       [
        "$dish ← __kitchen_dessert__",
-       "a lemon tart torched until its top blisters"
+       "a lemon tart torched until its top blisters",
+       [
+        "__kitchen_dessert__=a lemon tart torched until its top blisters"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "pastry"
+       "pastry",
+       [
+        "{grill|pastry|wok}=pastry"
+       ]
       ],
       [
        "{10% fire}",
-       "fire"
+       "fire",
+       [
+        "{10% fire}=fire"
+       ]
       ]
      ]
     },
@@ -1503,23 +2346,38 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "thick __characters/looks/hair_color__ curls pinned up loosely"
+       "thick __characters/looks/hair_color__ curls pinned up loosely",
+       [
+        "__characters/looks/hair__=thick __characters/looks/hair_color__ curls pinned up loosely"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "auburn"
+       "auburn",
+       [
+        "__characters/looks/hair_color__=auburn"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a rain-spotted beige trench coat"
+       "a rain-spotted beige trench coat",
+       [
+        "__characters/average_joes/outfit__=a rain-spotted beige trench coat"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ]
      ]
     },
@@ -1529,31 +2387,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "thick __characters/looks/hair_color__ curls pinned up loosely"
+       "thick __characters/looks/hair_color__ curls pinned up loosely",
+       [
+        "__characters/looks/hair__=thick __characters/looks/hair_color__ curls pinned up loosely"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "auburn"
+       "auburn",
+       [
+        "__characters/looks/hair_color__=auburn"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a rain-spotted beige trench coat"
+       "a rain-spotted beige trench coat",
+       [
+        "__characters/average_joes/outfit__=a rain-spotted beige trench coat"
+       ]
       ],
       [
        "$dish ← __kitchen_grill__",
-       "a whole fish crisping skin-side down"
+       "a whole fish crisping skin-side down",
+       [
+        "__kitchen_grill__=a whole fish crisping skin-side down"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     },
@@ -1563,31 +2442,52 @@
      "picks": [
       [
        "$chef ← __characters/average_joes__",
-       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair__",
-       "thick __characters/looks/hair_color__ curls pinned up loosely"
+       "thick __characters/looks/hair_color__ curls pinned up loosely",
+       [
+        "__characters/looks/hair__=thick __characters/looks/hair_color__ curls pinned up loosely"
+       ]
       ],
       [
        "$chef ← __characters/looks/hair_color__",
-       "auburn"
+       "auburn",
+       [
+        "__characters/looks/hair_color__=auburn"
+       ]
       ],
       [
        "$chef ← __characters/average_joes/outfit__",
-       "a rain-spotted beige trench coat"
+       "a rain-spotted beige trench coat",
+       [
+        "__characters/average_joes/outfit__=a rain-spotted beige trench coat"
+       ]
       ],
       [
        "$dish ← __kitchen_grill__",
-       "a whole fish crisping skin-side down"
+       "a whole fish crisping skin-side down",
+       [
+        "__kitchen_grill__=a whole fish crisping skin-side down"
+       ]
       ],
       [
        "{grill|pastry|wok}",
-       "grill"
+       "grill",
+       [
+        "{grill|pastry|wok}=grill"
+       ]
       ],
       [
        "{10% fire}",
-       ""
+       "",
+       [
+        "{10% fire}="
+       ]
       ]
      ]
     }

@@ -16,11 +16,17 @@
      "picks": [
       [
        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
-       "wet snow driving sideways"
+       "wet snow driving sideways",
+       [
+        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}=wet snow driving sideways"
+       ]
       ],
       [
        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
-       "a crooked Victorian house on a hill"
+       "a crooked Victorian house on a hill",
+       [
+        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}=a crooked Victorian house on a hill"
+       ]
       ]
      ]
     },
@@ -30,11 +36,17 @@
      "picks": [
       [
        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
-       "wet snow driving sideways"
+       "wet snow driving sideways",
+       [
+        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}=wet snow driving sideways"
+       ]
       ],
       [
        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
-       "a crooked Victorian house on a hill"
+       "a crooked Victorian house on a hill",
+       [
+        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}=a crooked Victorian house on a hill"
+       ]
       ]
      ]
     },
@@ -44,11 +56,17 @@
      "picks": [
       [
        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
-       "wet snow driving sideways"
+       "wet snow driving sideways",
+       [
+        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}=wet snow driving sideways"
+       ]
       ],
       [
        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
-       "a crooked Victorian house on a hill"
+       "a crooked Victorian house on a hill",
+       [
+        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}=a crooked Victorian house on a hill"
+       ]
       ]
      ]
     },
@@ -58,11 +76,17 @@
      "picks": [
       [
        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
-       "wet snow driving sideways"
+       "wet snow driving sideways",
+       [
+        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}=wet snow driving sideways"
+       ]
       ],
       [
        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
-       "a crooked Victorian house on a hill"
+       "a crooked Victorian house on a hill",
+       [
+        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}=a crooked Victorian house on a hill"
+       ]
       ]
      ]
     }
@@ -83,11 +107,17 @@
      "picks": [
       [
        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
-       "wet snow driving sideways"
+       "wet snow driving sideways",
+       [
+        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}=wet snow driving sideways"
+       ]
       ],
       [
        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
-       "a crooked Victorian house on a hill"
+       "a crooked Victorian house on a hill",
+       [
+        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}=a crooked Victorian house on a hill"
+       ]
       ]
      ]
     },
@@ -97,11 +127,17 @@
      "picks": [
       [
        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
-       "wet snow driving sideways"
+       "wet snow driving sideways",
+       [
+        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}=wet snow driving sideways"
+       ]
       ],
       [
        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
-       "a crooked Victorian house on a hill"
+       "a crooked Victorian house on a hill",
+       [
+        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}=a crooked Victorian house on a hill"
+       ]
       ]
      ]
     },
@@ -111,11 +147,17 @@
      "picks": [
       [
        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
-       "wet snow driving sideways"
+       "wet snow driving sideways",
+       [
+        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}=wet snow driving sideways"
+       ]
       ],
       [
        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
-       "a crooked Victorian house on a hill"
+       "a crooked Victorian house on a hill",
+       [
+        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}=a crooked Victorian house on a hill"
+       ]
       ]
      ]
     },
@@ -125,11 +167,17 @@
      "picks": [
       [
        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
-       "wet snow driving sideways"
+       "wet snow driving sideways",
+       [
+        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}=wet snow driving sideways"
+       ]
       ],
       [
        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
-       "a crooked Victorian house on a hill"
+       "a crooked Victorian house on a hill",
+       [
+        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}=a crooked Victorian house on a hill"
+       ]
       ]
      ]
     }
@@ -150,11 +198,17 @@
      "picks": [
       [
        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
-       "a howling gale"
+       "a howling gale",
+       [
+        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}=a howling gale"
+       ]
       ],
       [
        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
-       "a crooked Victorian house on a hill"
+       "a crooked Victorian house on a hill",
+       [
+        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}=a crooked Victorian house on a hill"
+       ]
       ]
      ]
     },
@@ -164,11 +218,17 @@
      "picks": [
       [
        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
-       "a howling gale"
+       "a howling gale",
+       [
+        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}=a howling gale"
+       ]
       ],
       [
        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
-       "a crooked Victorian house on a hill"
+       "a crooked Victorian house on a hill",
+       [
+        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}=a crooked Victorian house on a hill"
+       ]
       ]
      ]
     },
@@ -178,11 +238,17 @@
      "picks": [
       [
        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
-       "a howling gale"
+       "a howling gale",
+       [
+        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}=a howling gale"
+       ]
       ],
       [
        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
-       "a crooked Victorian house on a hill"
+       "a crooked Victorian house on a hill",
+       [
+        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}=a crooked Victorian house on a hill"
+       ]
       ]
      ]
     },
@@ -192,11 +258,17 @@
      "picks": [
       [
        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}",
-       "a howling gale"
+       "a howling gale",
+       [
+        "{a howling gale|a downpour lit by lightning|wet snow driving sideways}=a howling gale"
+       ]
       ],
       [
        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}",
-       "a crooked Victorian house on a hill"
+       "a crooked Victorian house on a hill",
+       [
+        "{a crooked Victorian house on a hill|a lighthouse keeper's cottage on a cliff|a farmhouse at the end of a mud track}=a crooked Victorian house on a hill"
+       ]
       ]
      ]
     }
