@@ -13,7 +13,7 @@ import re
 from datetime import UTC, datetime
 from pathlib import Path
 
-from orrery import anchors, endpoint, history, preview, runs, uistate
+from orrery import anchors, endpoint, history, loras, preview, runs, uistate
 from orrery import batch as batches
 from orrery import sweep as sweeps
 from orrery.autolib import needs, write_apart
@@ -558,15 +558,13 @@ def save_png(image, path: Path | str, picks_json: str) -> None:
 class OrreryPrompt:
     CATEGORY = "orrery"
     FUNCTION = "run"
-    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "LORA_STACK", "FLOAT", "MODEL")
-    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "lora_stack", "megapixels", "model")
+    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "FLOAT", "MODEL")
+    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "megapixels", "model")
     OUTPUT_TOOLTIPS = ("", "", "", "From `: w…` in the template, else the @h3 ratio, else 1024.",
                        "From `: h…` in the template, else the @h3 ratio, else 1024.",
                        ("Frames at 24 fps for the MiniMax H3 nodes' length input: the sum of the SHOT "
                         "durations (in a reel: the scene's, plus the pinned context from the second "
                         "clip on), snapped up to H3's 17k+5 grid (124 without SHOTs)."),
-                       ("The LORA: lines (the head's, plus the scene's in a reel) as a LORA_STACK for any "
-                        "loader with a lora_stack input (LoraManager, Efficiency, Easy-Use …)."),
                        ("The canvas area: `0.6MP` from the @h3 line, else width × height, for resolution and "
                         "scale nodes that take megapixels."))
     DESCRIPTION = ("Expands an orrery template (text) or compiles a screenplay (h3-base, flat) "
@@ -603,7 +601,8 @@ class OrreryPrompt:
                     "Optional: the model, through orrery to the sampler (#209). The clip being sampled then plays in "
                     "orrery's clip box as it forms, in real time, decoded with the tiny VAE (taeh3 in models/vae_approx); "
                     "the gear's Live preview makes it light or smooth. "
-                    "The model output is this model with that preview; nothing loads again.")}),
+                    "The model output is this model with that preview and the template's LORA: lines on it (#208), "
+                    "so no LoRA node is needed; nothing loads again.")}),
                 "video": ("VIDEO", {"tooltip": (
                     "Optional: a video of your own that the reel starts from (a Load Video). The template's head is "
                     "its scene: REMEMBER: there keeps its frames, END ON: there says how it ends, and a scene with "
@@ -660,6 +659,13 @@ class OrreryPrompt:
                 runs.remember(prompt_id, unique_id, outputs[1])  # for Generate: Save nodes log to the galaxy
             if "segments" in data:  # a reel
                 _announce(unique_id, data["segment"])
+            stack, outputs = outputs[6], outputs[:6]  # the LORA: lines go on the model, not out (#208)
+            if stack and model is not None:
+                model = loras.apply(model, stack)
+                print(f"[orrery] LoRAs on the model: {', '.join(f'{n} ({s:g})' for n, s, _ in stack if s)}")
+            elif stack:
+                print("[orrery] warn: the LORA: lines go on the model that passes through this node; wire the model "
+                      "loader into its model input and its model output on to the sampler, else they change nothing.")
             return (*outputs, data["megapixels"], preview.patched(model, unique_id, h) if model is not None else None)
         except ReelEnd as end:
             try:
