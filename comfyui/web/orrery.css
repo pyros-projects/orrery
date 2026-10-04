@@ -260,6 +260,19 @@
 .orrery-app .editor .hint > span { margin-left: 1.5ch; color: var(--teal); opacity: .75; font-style: italic; }
 .orrery-app .editor .hint.replaced > span { color: var(--faint); text-decoration: line-through; }
 .orrery-app .editor .hint.note > span { color: var(--muted); opacity: .55; }
+/* takes at the line (#173): a 🎲 at the end of a line the language model writes for, above the textarea, clickable */
+.orrery-app .editor .hint > span.llm-keys { display: inline-flex; gap: 3px; margin-left: 1ch; opacity: 1; font-style: normal; color: var(--violet);
+  pointer-events: auto; position: relative; z-index: 2; vertical-align: top; }
+.orrery-app .editor .hint.with-keys > span:not(.llm-keys) { margin-left: 1ch; }
+.orrery-app .llm-key { display: inline-grid; place-items: center; width: 17px; height: 15px; border: 1px solid color-mix(in srgb, currentColor 40%, transparent);
+  border-radius: 4px; cursor: pointer; background: color-mix(in srgb, currentColor 10%, transparent); box-shadow: 0 1px 0 rgba(0,0,0,.5); }
+.orrery-app .llm-key .i { width: 11px; height: 11px; }
+.orrery-app .llm-key:hover { background: color-mix(in srgb, currentColor 26%, transparent); }
+.orrery-app .takes-panel .take-list { display: grid; gap: 6px; margin: 0; padding-left: 22px; }
+.orrery-app .takes-panel .take-list li { display: flex; align-items: flex-start; gap: 10px; }
+.orrery-app .takes-panel .take-list li > span { flex: 1; font-size: 13px; line-height: 1.45; }
+.orrery-app .takes-panel .take-list li .btn { flex: none; padding: 2px 10px; }
+.orrery-app .takes-panel .take-steer { gap: 6px; }
 .orrery-app .editor .hint .hint-pic { height: 1.45em; width: auto; border-radius: 3px; margin-right: 3px; vertical-align: top; opacity: 1; }
 .orrery-app .editor .hint.note > span:has(.hint-pic) { opacity: .8; }
 .orrery-app .hv { position: absolute; z-index: 25; pointer-events: none; width: max-content; max-width: min(440px, calc(100% - 8px)); background: #1f2029; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.5); padding: 8px 10px; font-size: 12px; line-height: 1.45; display: grid; gap: 4px; }

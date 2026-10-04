@@ -1,6 +1,7 @@
 // Syntax colouring for orrery templates. Pure: returns HTML for a <pre> under the editor.
 
 import { castNames } from "../orrery-complete.js";
+import { icon } from "./icons.js";
 import { chunkShort } from "./model.js";
 
 export const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -62,6 +63,22 @@ function line(text, known, llm, members) {
     }))).join("");
 }
 
+const SLOT = /--(?=[^\s-])([^\n]*?[^\s-])--/g;
+const LIBRARY = /(?<!\\)__([\w]+(?:\/[\w]+)*)(?:\[[^\[\]\n]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\(([^()]*)\))?/g;
+const ASK = { slot: "Takes for this slot: three, then more, steered, and Insert one", library: "Takes for this library still to be written: "
+  + "entries that could stand here; Insert one, or keep a direction for the list", enhance: "Takes for this rewrite: what it does at this seed, steered" };
+
+// The places on a line the language model writes for (#173): a `>` line's rewrite, its slots, its libraries still
+// to be written; each with what names it (`what`) and a library's own directions (`dirs`).
+export function llmPlaces(text, known) {
+  if (/^\s*#/.test(text)) return [];
+  const enhance = /^\s*>\s*(.*\S)\s*$/.exec(text);
+  if (enhance) return [{ kind: "enhance", what: enhance[1] }];
+  return [...[...text.matchAll(SLOT)].map((m) => ({ kind: "slot", what: m[1], at: m.index })),
+    ...[...text.matchAll(LIBRARY)].filter((m) => !isKnown(m[1], known)).map((m) => ({ kind: "library", what: m[1], dirs: m[2] || "", at: m.index }))]
+    .sort((a, b) => a.at - b.at);
+}
+
 // The divider on a SCENE line: absolutely placed, so the text keeps its place under the textarea's caret;
 // first in the line, so its static top is the line's top.
 function chunkLine(html, c, segment, acts = "") {
@@ -92,9 +109,20 @@ export function onHover(html, h) {
 export function highlight(src, known, { llm = false, chunks = null, segment = null, cast = null, hints = null, sceneActs = null } = {}) {
   const at = new Map((chunks || []).map((c, i) => [c.line, { ...c, index: c.index ?? i }]));
   const members = memberPattern(cast ?? castNames(src));
-  const hint = (i) => (hints?.has(i) && !hints.get(i).hover ? `<span class="hint${hints.get(i).replaced ? " replaced" : ""}${hints.get(i).kind ? ` ${hints.get(i).kind}` : ""}"><span>`
-    + `${(hints.get(i).thumbs || []).map((u) => `<img class="hint-pic" src="${esc(u)}" alt="">`).join("")}${esc(hints.get(i).text)}</span></span>` : "");
+  const said = (i) => {  // a line's hint drawn after it: its class and what it says
+    const h = hints?.get(i);
+    return h && !h.hover ? { cls: `${h.replaced ? " replaced" : ""}${h.kind ? ` ${h.kind}` : ""}`,
+      inner: `<span>${(h.thumbs || []).map((u) => `<img class="hint-pic" src="${esc(u)}" alt="">`).join("")}${esc(h.text)}</span>` } : null;
+  };
+  const hint = (i) => (said(i) ? `<span class="hint${said(i).cls}">${said(i).inner}</span>` : "");
   const words = (l, i) => (hints?.get(i)?.hover ? onHover(line(l, known, llm, members), hints.get(i)) : line(l, known, llm, members));
+  // with a language model set, a 🎲 at the end of a line with a place it writes for (#173), before the line's hint
+  const tail = (l, i) => {
+    const keys = llm ? llmPlaces(l, known).map((p) => `<span class="llm-key" role="button" data-llm="${p.kind}" data-what="${esc(p.what)}" `
+      + `data-dirs="${esc(p.dirs || "")}" data-line="${i}" title="${esc(ASK[p.kind])}">${icon("dice")}</span>`).join("") : "";
+    if (!keys) return hint(i);
+    return `<span class="hint${said(i)?.cls || ""} with-keys"><span class="llm-keys">${keys}</span>${said(i)?.inner || ""}</span>`;
+  };
   return src.split("\n").map((l, i) => (at.has(i) ? chunkLine(words(l, i), at.get(i), segment, sceneActs ? sceneActs(at.get(i), at.get(i).index) : "")
-    : words(l, i)) + hint(i)).join("\n");
+    : words(l, i)) + tail(l, i)).join("\n");
 }

@@ -892,3 +892,28 @@ test("every library in a line says its roll, at the line's end, on hover or not 
   assert.match(onHover('<span class="t-kw">REMEMBER:</span> x', { note: "→ image 3" }), /data-roll="→ image 3" class="t-has t-kw"/);
   assert.match(highlight(text, known, { hints: cell }), /class="hint note"><span>→ heron · arcade · bob cut/);
 });
+
+test("a 🎲 stands at the end of a line the language model writes for; Insert and Keep the direction edit its place (#173)", async () => {
+  const { highlight, llmPlaces } = await import("../../comfyui/web/app/highlight.js");
+  const { insertTake, keepDirection } = await import("../../comfyui/web/app/takes.js");
+  const known = new Set(["animal"]);
+  assert.deepEqual(llmPlaces("A __animal__ with --a small object--, under a __sky_kind__(weather words).", known).map((p) => [p.kind, p.what, p.dirs ?? ""]),
+    [["slot", "a small object", ""], ["library", "sky_kind", "weather words"]]);  // a known library is no place
+  assert.deepEqual(llmPlaces("> make it moody", known), [{ kind: "enhance", what: "make it moody" }]);
+  assert.deepEqual(llmPlaces("# --not a slot--", known), []);
+  const text = "@h3 t2va\nSHOT 5s: static\nA __animal__ with --a small object--.";
+  assert.doesNotMatch(highlight(text, known), /llm-key/);  // no language model set: no keys
+  const html = highlight(text, known, { llm: true, hints: new Map([[2, { text: "→ fox", kind: "note" }]]) });
+  assert.match(html, /<span class="hint note with-keys"><span class="llm-keys"><span class="llm-key" role="button" data-llm="slot" data-what="a small object" data-dirs="" data-line="2"/);
+  assert.match(html, /<\/span><\/span><span>→ fox<\/span><\/span>/);  // the line's hint after the keys
+  const slot = { kind: "slot", what: "a small object", line: 2 };
+  assert.equal(insertTake(text, slot, "a brass key").split("\n")[2], "A __animal__ with a brass key.");
+  assert.equal(keepDirection(text, slot, " older ").split("\n")[2], "A __animal__ with --a small object, older--.");
+  assert.equal(insertTake(text, { ...slot, line: 1 }, "x"), text);  // not on its line: nothing changes
+  const lib = "A fox under a __sky_kind__ and a __sky_kind__(grey).";
+  assert.equal(insertTake(lib, { kind: "library", what: "sky_kind", line: 0 }, "low fog"), "A fox under a low fog and a __sky_kind__(grey).");
+  assert.equal(keepDirection(lib, { kind: "library", what: "sky_kind", line: 0 }, "stormy"), "A fox under a __sky_kind__(stormy) and a __sky_kind__(grey).");
+  assert.equal(keepDirection("__sky_kind__(grey) sky", { kind: "library", what: "sky_kind", line: 0 }, "stormy"), "__sky_kind__(grey, stormy) sky");
+  assert.equal(keepDirection("A fox.\n> make it moody", { kind: "enhance", what: "make it moody", line: 1 }, "darker"), "A fox.\n> make it moody, darker");
+  assert.equal(insertTake("> make it moody", { kind: "enhance", what: "make it moody", line: 0 }, "x"), "> make it moody");
+});

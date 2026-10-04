@@ -1149,6 +1149,59 @@ def write_idea(home: Home, args: dict) -> dict:
                                   args.get("params") or "", lambda: endpoint.backend(home, temperature), pictures_)
 
 
+def llm_takes(home: Home, args: dict) -> dict:
+    """Takes at the line (#173): N takes for one place of the template at the node's seed, a slot (`what`: its
+    directions), a library still to be written (`what`: its name, `directions`: its own) or a `> enhance` line
+    (`what`: its instruction), steered by `steer`, new against `have`. Over the API endpoint, outside the queue."""
+    from orrery import takes
+    from orrery.comfy import _passages, _previous
+    from orrery.loras import long_form
+
+    kind, what = str(args.get("kind") or ""), " ".join(str(args.get("what") or "").split())
+    if kind not in takes.KINDS:
+        raise ApiError(400, f"'kind' must be one of {', '.join(takes.KINDS)}.")
+    if not what:
+        raise ApiError(400, "'what' names the place: a slot's directions, a library's name or an instruction.")
+    api = endpoint.backend(home, float(llm_config(home)["writer_temperature"]))
+    if api is None:
+        raise ApiError(400, "Takes at the line ask an API endpoint for now (the gear: Language model); with a text "
+                            "encoder in ComfyUI they come as mini-runs (#171).")
+    text, target = _template_for(home, args)
+    seed, segment, libs = _int(args, "seed", 0), max(_int(args, "segment", 0), 0), home.libraries()
+    src, screenplay = long_form(strip_comments(text)), target != "text" and long_form(strip_comments(text)).lstrip().startswith("@h3")
+    result = None
+    for _ in range(8):  # a library still to be written stands in as its name, as the annotations do
+        try:
+            result = (compile_scene(src, seed, libs, home.weights(), target=target, segment=segment) if screenplay
+                      else expand(src, seed, libs, home.weights()))
+            break
+        except MissingLibrary as err:
+            libs = {**libs, err.name: Library(err.name, [Entry(f"\\__{err.name}\\__")])}
+        except ValueError as err:
+            raise ApiError(400, str(err)) from None
+    if result is None:
+        raise ApiError(400, "Too many libraries are still to be written to roll the prompt.")
+    if kind == "enhance":
+        context = "\n".join(passage for instruction, passage, _ in _passages(result, target if screenplay else "text")
+                            if " ".join(instruction.split()) == what)
+    else:
+        context = takes.marked(result.text, f"--{what}--" if kind == "slot" else f"__{what}__")
+    if not context:
+        raise ApiError(400, f"The prompt at seed {seed} has no {kind} {what!r} to write for (a branch that did not roll?).")
+    frames = _previous(_latent_path(args), segment) if kind == "slot" and screenplay and segment else None
+    n = min(max(_int(args, "n", 3), 1), 6)
+    prompt = takes.request(kind, what, context, n, str(args.get("steer") or ""),
+                           [str(h) for h in args.get("have") or [] if str(h).strip()][:24],
+                           " ".join(str(args.get("directions") or "").split()), len(frames) if frames else 0)
+    try:
+        out = takes.parse(api.complete(prompt, images=frames), n)
+    except RuntimeError as err:
+        raise ApiError(502, str(err)) from None
+    if not out:
+        raise ApiError(502, "The language model wrote no takes; ask again.")
+    return {"takes": out}
+
+
 def write_libraries(home: Home, args: dict) -> dict:
     """Write now (#168): every library the template still needs, one request each, all at once."""
     from orrery.loras import long_form
@@ -1224,13 +1277,14 @@ ROUTES = [
     ("POST", "/orrery/llm/check", llm_check),
     ("POST", "/orrery/llm/libraries", write_libraries),
     ("POST", "/orrery/write", write_idea),
+    ("POST", "/orrery/llm/takes", llm_takes),
     ("POST", "/orrery/library/accept", library_accept),
     ("POST", "/orrery/library/discard", library_discard),
 ]
 
 
 # routes that wait for a language model run in a thread, so ComfyUI's server answers meanwhile
-SLOW = {llm_save, llm_check, write_libraries, write_idea, chain_pick, chain_delete, chain_clear, chain_walk, chain_end}
+SLOW = {llm_save, llm_check, write_libraries, write_idea, llm_takes, chain_pick, chain_delete, chain_clear, chain_walk, chain_end}
 
 
 def _handler(fn, method: str, web):

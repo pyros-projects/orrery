@@ -52,7 +52,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/galaxy/folder/add"), ("POST", "/orrery/galaxy/folder/rename"),
         ("POST", "/orrery/galaxy/folder/delete"),
         ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
-        ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"),
+        ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"), ("POST", "/orrery/llm/takes"),
         ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/discard"),
         ("GET", "/orrery/home"), ("POST", "/orrery/home"),
         ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("POST", "/orrery/chain/move"), ("POST", "/orrery/chain/pick"), ("POST", "/orrery/chain/delete"), ("POST", "/orrery/chain/clear"), ("GET", "/orrery/chain/tree"), ("POST", "/orrery/chain/walk"), ("POST", "/orrery/chain/end"),
@@ -895,3 +895,31 @@ def test_every_library_in_a_line_says_what_it_rolled_where_it_is_written(home):
     out = ok(home, webapi.annotate, template=screenplay, seed=4, target="h3-base")
     assert [k for k, _ in out["rolls"]["3"]] == [0, 1, 2] and [k for k, _ in out["rolls"]["4"]] == [0]
     assert "1" not in out["rolls"] and out["bindings"]["x"] in ("linocut", "gouache")
+
+
+def test_takes_at_the_line_ask_the_endpoint_for_one_place_at_the_seed(home, fake_api):
+    """#173: a slot, a library still to be written and a > enhance line, each its place marked in the prompt as it
+    rolls; a steer and the takes written before go with the next ones."""
+    template = "A __animal__ with --one small object in its paws--, under a __sky_kind__.\n> make it moody"
+    status, body = api(home, webapi.llm_takes, kind="slot", what="one small object in its paws", template=template)
+    assert status == 400 and "API endpoint" in body["error"]
+    Home(home).save_config({"llm": {"source": "api", "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})
+    fake_api.answer = lambda body: json.dumps(["a brass key", "a cracked marble", "a folded note", "a fourth"])
+    body = ok(home, webapi.llm_takes, kind="slot", what="one small object in its paws", template=template, seed=4,
+              steer="older, worn", have=["a red ball"])
+    assert body["takes"] == ["a brass key", "a cracked marble", "a folded note"]  # three, as asked
+    prompt = fake_api.requests[-1]["messages"][0]["content"]
+    prompt = prompt if isinstance(prompt, str) else prompt[-1]["text"]
+    assert "[this part]" in prompt and "--one small object" not in prompt and "__sky_kind__" in prompt  # rolled, the place marked
+    assert "Steer them: older, worn." in prompt and "- a red ball" in prompt and fake_api.requests[-1]["temperature"] == 0.8
+    ok(home, webapi.llm_takes, kind="library", what="sky_kind", template=template, seed=4, directions="weather words")
+    prompt = fake_api.requests[-1]["messages"][0]["content"]
+    prompt = prompt if isinstance(prompt, str) else prompt[-1]["text"]
+    assert "under a [this part]" in prompt and "__sky_kind__" in prompt and "weather words" in prompt
+    ok(home, webapi.llm_takes, kind="enhance", what="make it moody", template=template, seed=4)
+    prompt = fake_api.requests[-1]["messages"][0]["content"]
+    prompt = prompt if isinstance(prompt, str) else prompt[-1]["text"]
+    assert "instruction: make it moody" in prompt and "The passage:\nA " in prompt
+    assert api(home, webapi.llm_takes, kind="slot", what="nothing like it", template=template)[0] == 400  # no such slot
+    fake_api.answer = lambda body: "no list here"
+    assert api(home, webapi.llm_takes, kind="slot", what="one small object in its paws", template=template)[0] == 502
