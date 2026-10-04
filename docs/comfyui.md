@@ -149,7 +149,7 @@ Nodes under **orrery**:
     step, to compare their motion; **stop all** stops them (#238). **Tree**
     beside *Jump* opens the **take tree** (#213): every take of the reel's run,
     a column per clip, a line from each take to the takes made on it, and the
-    film's path lit in brass along the top. Hover plays a take and shows the
+    film's path lit in brass; the rows stay where they are, only the light moves. Hover plays a take and shows the
     way the film would go through it; a click makes the film that way (to the
     take from clip 1, then on as it was last walked), and ✂ on a take of the
     film ends the film after it, so a film is clicked together along the tree.

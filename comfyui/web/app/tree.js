@@ -1,6 +1,6 @@
 // The take tree (#241): every take of the reel's run as a graph with videos, like a git graph. A column per clip,
 // a node per take in the clip's shape (hover plays it), curves from each take to the takes made on it, and the
-// film's path lit in brass along the top. A click makes the film the path through a take (to it from clip 1,
+// film's path lit in brass where it runs. A click makes the film the path through a take (to it from clip 1,
 // then on as it was last walked); ✂ ends the film after it. Hovering a take shows the way the film would go. A take
 // made with another version of its scene carries ✎ (#242): hovering it shows what changed, ✎ brings that prompt back.
 // ▶ Film plays the film clicked together (#243), the take playing lit in the tree.
@@ -10,14 +10,13 @@ import { clock } from "./model.js";
 import { clipRatio, loadChain } from "./timeline.js";
 import { fetchTemplates, useVersion, versionHTML, versionOf } from "./versions.js";
 
-// The takes' rows, as a tidy tree: a take sits on the row of its first child, so a path runs straight; the film's
-// path comes first, so it is the top line, the rest in the order they were made. A take whose parent is not
-// known starts a row of its own.
-export function layoutTree(takes, path = []) {
-  const by = new Map(takes.map((t) => [t.folder, t])), kids = new Map(), film = new Set(path);
+// The takes' rows, as a tidy tree: a take sits on the row of its first child, so a path runs straight; the takes in
+// the order they were made, so a row stays where it is whatever the film is (only the light moves). A take whose
+// parent is not known starts a row of its own.
+export function layoutTree(takes) {
+  const by = new Map(takes.map((t) => [t.folder, t])), kids = new Map();
   for (const t of takes) if (t.parent && by.has(t.parent)) (kids.get(t.parent) ?? kids.set(t.parent, []).get(t.parent)).push(t);
-  const order = (list) => [...list].sort((a, b) => (film.has(b.folder) - film.has(a.folder)) || a.segment - b.segment
-    || String(a.created || "").localeCompare(String(b.created || "")));
+  const order = (list) => [...list].sort((a, b) => a.segment - b.segment || String(a.created || "").localeCompare(String(b.created || "")));
   const rows = new Map();
   let next = 0;
   const place = (t) => {
@@ -57,7 +56,7 @@ export function filmClips(tree) {
 export function treeHTML(app, tree, size = SIZE) {
   const takes = tree.takes || [];
   if (!takes.length) return `<p class="muted tree-none">No takes yet: render a clip, and the tree starts growing.</p>`;
-  const rows = layoutTree(takes, tree.path), by = new Map(takes.map((t) => [t.folder, t])), film = new Set(tree.path);
+  const rows = layoutTree(takes), by = new Map(takes.map((t) => [t.folder, t])), film = new Set(tree.path);
   const ratio = clipRatio(app), w = Math.round(ratio >= 1 ? size * ratio : size), h = Math.round(ratio >= 1 ? size : size / ratio);
   const colW = w + Math.max(48, w * 0.45), rowH = h + 34, left = 18, top = 44;
   const x = (s) => left + s * colW, y = (r) => top + r * rowH;

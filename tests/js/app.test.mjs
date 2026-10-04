@@ -743,16 +743,14 @@ test("the template's knobs, where they hold, written anew and put back (#226)", 
   assert.match(turned, /SCENE the walk\nSET: turbo\(0\.5\), @JINX/);
 });
 
-test("the take tree lays its takes out as a tidy tree, the film's path on top, and shows the way through a take (#241)", async () => {
+test("the take tree lays its takes out as a tidy tree, rows where they were made, and shows the way through a take (#241)", async () => {
   const { layoutTree, wayThrough } = await import("../../comfyui/web/app/tree.js");
   const t = (folder, segment, parent, created) => ({ folder, segment, parent, created });
   const takes = [t("a", 0, null, "1"), t("a1", 1, "a", "2"), t("a1x", 2, "a1", "3"), t("b", 0, null, "4"), t("b1", 1, "b", "5"), t("a2", 1, "a", "6")];
-  const rows = layoutTree(takes, ["b", "b1"]);
-  assert.equal(rows.get("b"), 0);  // the film's path on top
-  assert.equal(rows.get("b1"), 0);  // straight on
-  assert.equal(rows.get("a"), rows.get("a1"));  // a parent on its first child's row
-  assert.equal(rows.get("a1"), rows.get("a1x"));
-  assert.ok(rows.get("a2") > rows.get("a1"));  // a branch below
+  const rows = layoutTree(takes);
+  assert.deepEqual(["a", "a1", "a1x"].map((f) => rows.get(f)), [0, 0, 0]);  // a parent on its first child's row: a path runs straight
+  assert.equal(rows.get("a2"), 1);  // a branch below
+  assert.deepEqual([rows.get("b"), rows.get("b1")], [2, 2]);  // a later take of clip 1 below: whatever the film, no row moves
   assert.deepEqual(wayThrough({ takes, last: { a: "a1", a1: "a1x" } }, "a"), ["a", "a1", "a1x"]);
   assert.deepEqual(wayThrough({ takes, last: {} }, "a1x"), ["a", "a1", "a1x"]);
 });
