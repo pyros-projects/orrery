@@ -38,6 +38,8 @@ def test_the_tiny_vae_decodes_a_smaller_latent():
     assert max(seen["shape"][3:]) == 60 and full[0].size == (640, 960)
     preview.frames(("tae", Tiny()), torch.zeros(1, 4, 40, 60, 40))  # KJNodes' default: 1024, so 960 stays
     assert max(seen["shape"][3:]) == 60
+    preview.frames(("tae", Tiny()), torch.zeros(1, 4, 1, 128, 96), edge=512, spatial=8)  # an image model's (#211): 1024×768
+    assert max(seen["shape"][3:]) == 64  # 512 / 8, where H3's 16 would have made it 32
 
 
 def test_a_flat_tiny_decoder_is_built_from_its_checkpoint():

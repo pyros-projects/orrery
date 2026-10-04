@@ -9,6 +9,9 @@ checks) are left out.
 
 ### Added
 
+- A template without scenes, a Krea prompt or an `@h3` scene, has its results under the prompt: the live preview while
+  it samples (an image model's preview sized by its own latent format), then what it made; every run a take under the
+  result, a click shows it, and +, ×N and 📌 make takes as in a reel's scenes (#211).
 - Every library in a line says what it rolled at the line's end, in order (`→ arcade · bob cut · tracksuit`), one in
   a branch that did not roll nothing; and the settings' *Annotations* puts them all at the line ends, on hover (what
   has one underlined quietly, its roll shown on hover) or nowhere (#201).
