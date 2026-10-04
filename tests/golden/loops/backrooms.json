@@ -18,15 +18,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera crawls into a dark vent at floor level"
+       "the camera crawls into a dark vent at floor level",
+       [
+        "__backrooms/exits__=the camera crawls into a dark vent at floor level"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ""
+       "",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}="
+       ]
       ]
      ]
     },
@@ -36,15 +45,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a huge, dim hall of carpet and square support pillars with no walls in sight"
+       "a huge, dim hall of carpet and square support pillars with no walls in sight",
+       [
+        "__backrooms/levels__=a huge, dim hall of carpet and square support pillars with no walls in sight"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the lights go out panel by panel toward the camera until the frame is black"
+       "the lights go out panel by panel toward the camera until the frame is black",
+       [
+        "__backrooms/exits__=the lights go out panel by panel toward the camera until the frame is black"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ""
+       "",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}="
+       ]
       ]
      ]
     },
@@ -54,15 +72,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs",
+       [
+        "__backrooms/levels__=a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the lights go out panel by panel toward the camera until the frame is black"
+       "the lights go out panel by panel toward the camera until the frame is black",
+       [
+        "__backrooms/exits__=the lights go out panel by panel toward the camera until the frame is black"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ", and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone"
+       ", and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}=, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone"
+       ]
       ]
      ]
     },
@@ -72,15 +99,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing",
+       [
+        "__backrooms/levels__=an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into an elevator and its doors slide shut"
+       "the camera steps into an elevator and its doors slide shut",
+       [
+        "__backrooms/exits__=the camera steps into an elevator and its doors slide shut"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ""
+       "",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}="
+       ]
       ]
      ]
     },
@@ -90,15 +126,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs",
+       [
+        "__backrooms/levels__=a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera pushes open a plain door at the end of the room onto total darkness"
+       "the camera pushes open a plain door at the end of the room onto total darkness",
+       [
+        "__backrooms/exits__=the camera pushes open a plain door at the end of the room onto total darkness"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ", and far away an office chair rolls slowly across the room on its own"
+       ", and far away an office chair rolls slowly across the room on its own",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}=, and far away an office chair rolls slowly across the room on its own"
+       ]
       ]
      ]
     },
@@ -108,15 +153,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights",
+       [
+        "__backrooms/levels__=an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into still water that is far deeper than it looked and sinks"
+       "the camera steps into still water that is far deeper than it looked and sinks",
+       [
+        "__backrooms/exits__=the camera steps into still water that is far deeper than it looked and sinks"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ", and far away an office chair rolls slowly across the room on its own"
+       ", and far away an office chair rolls slowly across the room on its own",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}=, and far away an office chair rolls slowly across the room on its own"
+       ]
       ]
      ]
     }
@@ -139,15 +193,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into still water that is far deeper than it looked and sinks"
+       "the camera steps into still water that is far deeper than it looked and sinks",
+       [
+        "__backrooms/exits__=the camera steps into still water that is far deeper than it looked and sinks"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ""
+       "",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}="
+       ]
       ]
      ]
     },
@@ -157,15 +220,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches",
+       [
+        "__backrooms/exits__=the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ", and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone"
+       ", and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}=, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone"
+       ]
       ]
      ]
     },
@@ -175,15 +247,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a concrete stairwell that goes down floor after floor, the same number painted on every landing"
+       "a concrete stairwell that goes down floor after floor, the same number painted on every landing",
+       [
+        "__backrooms/levels__=a concrete stairwell that goes down floor after floor, the same number painted on every landing"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness"
+       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       [
+        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ", and at the far end a door closes softly by itself"
+       ", and at the far end a door closes softly by itself",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}=, and at the far end a door closes softly by itself"
+       ]
       ]
      ]
     },
@@ -193,15 +274,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there"
+       "a 24-hour laundromat where every machine is turning and no one is there",
+       [
+        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches",
+       [
+        "__backrooms/exits__=the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ", and a fluorescent panel just ahead flickers, buzzes loudly and dies"
+       ", and a fluorescent panel just ahead flickers, buzzes loudly and dies",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}=, and a fluorescent panel just ahead flickers, buzzes loudly and dies"
+       ]
       ]
      ]
     },
@@ -211,15 +301,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there"
+       "a 24-hour laundromat where every machine is turning and no one is there",
+       [
+        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches",
+       [
+        "__backrooms/exits__=the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ""
+       "",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}="
+       ]
       ]
      ]
     },
@@ -229,15 +328,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there"
+       "a 24-hour laundromat where every machine is turning and no one is there",
+       [
+        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness"
+       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       [
+        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ""
+       "",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}="
+       ]
       ]
      ]
     }
@@ -260,15 +368,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches",
+       [
+        "__backrooms/exits__=the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ""
+       "",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}="
+       ]
       ]
      ]
     },
@@ -278,15 +395,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there"
+       "a 24-hour laundromat where every machine is turning and no one is there",
+       [
+        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the lights go out panel by panel toward the camera until the frame is black"
+       "the lights go out panel by panel toward the camera until the frame is black",
+       [
+        "__backrooms/exits__=the lights go out panel by panel toward the camera until the frame is black"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ", and far away an office chair rolls slowly across the room on its own"
+       ", and far away an office chair rolls slowly across the room on its own",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}=, and far away an office chair rolls slowly across the room on its own"
+       ]
       ]
      ]
     },
@@ -296,15 +422,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing",
+       [
+        "__backrooms/levels__=an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness"
+       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       [
+        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ", and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone"
+       ", and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}=, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone"
+       ]
       ]
      ]
     },
@@ -314,15 +449,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there"
+       "a 24-hour laundromat where every machine is turning and no one is there",
+       [
+        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into an elevator and its doors slide shut"
+       "the camera steps into an elevator and its doors slide shut",
+       [
+        "__backrooms/exits__=the camera steps into an elevator and its doors slide shut"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ", and a fluorescent panel just ahead flickers, buzzes loudly and dies"
+       ", and a fluorescent panel just ahead flickers, buzzes loudly and dies",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}=, and a fluorescent panel just ahead flickers, buzzes loudly and dies"
+       ]
       ]
      ]
     },
@@ -332,15 +476,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere",
+       [
+        "__backrooms/levels__=endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into an elevator and its doors slide shut"
+       "the camera steps into an elevator and its doors slide shut",
+       [
+        "__backrooms/exits__=the camera steps into an elevator and its doors slide shut"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ""
+       "",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}="
+       ]
       ]
      ]
     },
@@ -350,15 +503,24 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights",
+       [
+        "__backrooms/levels__=an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness"
+       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       [
+        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+       ]
       ],
       [
        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}",
-       ", and at the far end a door closes softly by itself"
+       ", and at the far end a door closes softly by itself",
+       [
+        "{|, and far away an office chair rolls slowly across the room on its own|, and at the far end a door closes softly by itself|, and for a moment a tall, thin silhouette stands at the end of the room, then the lights flicker and it is gone|, and a fluorescent panel just ahead flickers, buzzes loudly and dies}=, and at the far end a door closes softly by itself"
+       ]
       ]
      ]
     }

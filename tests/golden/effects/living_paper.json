@@ -8,19 +8,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a tiled changing room at a public swimming pool"
+       "a tiled changing room at a public swimming pool",
+       [
+        "__bh_room__=a tiled changing room at a public swimming pool"
+       ]
       ],
       [
        "{down the centre of the torso from the sternum to the navel|diagonally from one shoulder to the opposite hip|across the chest from one armpit to the other}",
-       "diagonally from one shoulder to the opposite hip"
+       "diagonally from one shoulder to the opposite hip",
+       [
+        "{down the centre of the torso from the sternum to the navel|diagonally from one shoulder to the opposite hip|across the chest from one armpit to the other}=diagonally from one shoulder to the opposite hip"
+       ]
       ],
       [
        "{HOST presses one imperfect crease in the chest with the flattened hand until it becomes perfectly straight, and studies the corrected body with calm satisfaction|HOST folds the flattened forearm neatly against itself like a closed card and holds it up to the light|HOST turns sideways, and in profile the folded body is only a few centimetres thick}",
-       "HOST turns sideways, and in profile the folded body is only a few centimetres thick"
+       "HOST turns sideways, and in profile the folded body is only a few centimetres thick",
+       [
+        "{HOST presses one imperfect crease in the chest with the flattened hand until it becomes perfectly straight, and studies the corrected body with calm satisfaction|HOST folds the flattened forearm neatly against itself like a closed card and holds it up to the light|HOST turns sideways, and in profile the folded body is only a few centimetres thick}=HOST turns sideways, and in profile the folded body is only a few centimetres thick"
+       ]
       ]
      ]
     }
@@ -33,19 +45,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the young man"
+       "the young man",
+       [
+        "__bh_host__=the young man"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a dim apartment sitting room"
+       "a dim apartment sitting room",
+       [
+        "__bh_room__=a dim apartment sitting room"
+       ]
       ],
       [
        "{down the centre of the torso from the sternum to the navel|diagonally from one shoulder to the opposite hip|across the chest from one armpit to the other}",
-       "down the centre of the torso from the sternum to the navel"
+       "down the centre of the torso from the sternum to the navel",
+       [
+        "{down the centre of the torso from the sternum to the navel|diagonally from one shoulder to the opposite hip|across the chest from one armpit to the other}=down the centre of the torso from the sternum to the navel"
+       ]
       ],
       [
        "{HOST presses one imperfect crease in the chest with the flattened hand until it becomes perfectly straight, and studies the corrected body with calm satisfaction|HOST folds the flattened forearm neatly against itself like a closed card and holds it up to the light|HOST turns sideways, and in profile the folded body is only a few centimetres thick}",
-       "HOST turns sideways, and in profile the folded body is only a few centimetres thick"
+       "HOST turns sideways, and in profile the folded body is only a few centimetres thick",
+       [
+        "{HOST presses one imperfect crease in the chest with the flattened hand until it becomes perfectly straight, and studies the corrected body with calm satisfaction|HOST folds the flattened forearm neatly against itself like a closed card and holds it up to the light|HOST turns sideways, and in profile the folded body is only a few centimetres thick}=HOST turns sideways, and in profile the folded body is only a few centimetres thick"
+       ]
       ]
      ]
     }
@@ -58,19 +82,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a narrow hotel corridor"
+       "a narrow hotel corridor",
+       [
+        "__bh_room__=a narrow hotel corridor"
+       ]
       ],
       [
        "{down the centre of the torso from the sternum to the navel|diagonally from one shoulder to the opposite hip|across the chest from one armpit to the other}",
-       "across the chest from one armpit to the other"
+       "across the chest from one armpit to the other",
+       [
+        "{down the centre of the torso from the sternum to the navel|diagonally from one shoulder to the opposite hip|across the chest from one armpit to the other}=across the chest from one armpit to the other"
+       ]
       ],
       [
        "{HOST presses one imperfect crease in the chest with the flattened hand until it becomes perfectly straight, and studies the corrected body with calm satisfaction|HOST folds the flattened forearm neatly against itself like a closed card and holds it up to the light|HOST turns sideways, and in profile the folded body is only a few centimetres thick}",
-       "HOST presses one imperfect crease in the chest with the flattened hand until it becomes perfectly straight, and studies the corrected body with calm satisfaction"
+       "HOST presses one imperfect crease in the chest with the flattened hand until it becomes perfectly straight, and studies the corrected body with calm satisfaction",
+       [
+        "{HOST presses one imperfect crease in the chest with the flattened hand until it becomes perfectly straight, and studies the corrected body with calm satisfaction|HOST folds the flattened forearm neatly against itself like a closed card and holds it up to the light|HOST turns sideways, and in profile the folded body is only a few centimetres thick}=HOST presses one imperfect crease in the chest with the flattened hand until it becomes perfectly straight, and studies the corrected body with calm satisfaction"
+       ]
       ]
      ]
     }

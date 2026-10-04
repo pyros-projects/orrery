@@ -8,15 +8,24 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "red panda"
+       "red panda",
+       [
+        "__creature__=red panda"
+       ]
       ],
       [
        "{riding a bicycle|reading a newspaper on a park bench|carrying an umbrella through a crowd|piloting a paper boat across a puddle}",
-       "reading a newspaper on a park bench"
+       "reading a newspaper on a park bench",
+       [
+        "{riding a bicycle|reading a newspaper on a park bench|carrying an umbrella through a crowd|piloting a paper boat across a puddle}=reading a newspaper on a park bench"
+       ]
       ],
       [
        "{retro cartoon illustration|dreamy cinematic still|extremely grainy lo-fi VHS still|risograph print in two inks|ukiyo-e woodblock print|claymation set under studio lights|childish crayon drawing|35mm film photograph|oil painting with thick impasto|flat 2D vector illustration}",
-       "flat 2D vector illustration"
+       "flat 2D vector illustration",
+       [
+        "{retro cartoon illustration|dreamy cinematic still|extremely grainy lo-fi VHS still|risograph print in two inks|ukiyo-e woodblock print|claymation set under studio lights|childish crayon drawing|35mm film photograph|oil painting with thick impasto|flat 2D vector illustration}=flat 2D vector illustration"
+       ]
       ]
      ]
     }
@@ -29,15 +38,24 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "axolotl"
+       "axolotl",
+       [
+        "__creature__=axolotl"
+       ]
       ],
       [
        "{riding a bicycle|reading a newspaper on a park bench|carrying an umbrella through a crowd|piloting a paper boat across a puddle}",
-       "piloting a paper boat across a puddle"
+       "piloting a paper boat across a puddle",
+       [
+        "{riding a bicycle|reading a newspaper on a park bench|carrying an umbrella through a crowd|piloting a paper boat across a puddle}=piloting a paper boat across a puddle"
+       ]
       ],
       [
        "{retro cartoon illustration|dreamy cinematic still|extremely grainy lo-fi VHS still|risograph print in two inks|ukiyo-e woodblock print|claymation set under studio lights|childish crayon drawing|35mm film photograph|oil painting with thick impasto|flat 2D vector illustration}",
-       "risograph print in two inks"
+       "risograph print in two inks",
+       [
+        "{retro cartoon illustration|dreamy cinematic still|extremely grainy lo-fi VHS still|risograph print in two inks|ukiyo-e woodblock print|claymation set under studio lights|childish crayon drawing|35mm film photograph|oil painting with thick impasto|flat 2D vector illustration}=risograph print in two inks"
+       ]
       ]
      ]
     }
@@ -50,15 +68,24 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "giant isopod"
+       "giant isopod",
+       [
+        "__creature__=giant isopod"
+       ]
       ],
       [
        "{riding a bicycle|reading a newspaper on a park bench|carrying an umbrella through a crowd|piloting a paper boat across a puddle}",
-       "carrying an umbrella through a crowd"
+       "carrying an umbrella through a crowd",
+       [
+        "{riding a bicycle|reading a newspaper on a park bench|carrying an umbrella through a crowd|piloting a paper boat across a puddle}=carrying an umbrella through a crowd"
+       ]
       ],
       [
        "{retro cartoon illustration|dreamy cinematic still|extremely grainy lo-fi VHS still|risograph print in two inks|ukiyo-e woodblock print|claymation set under studio lights|childish crayon drawing|35mm film photograph|oil painting with thick impasto|flat 2D vector illustration}",
-       "retro cartoon illustration"
+       "retro cartoon illustration",
+       [
+        "{retro cartoon illustration|dreamy cinematic still|extremely grainy lo-fi VHS still|risograph print in two inks|ukiyo-e woodblock print|claymation set under studio lights|childish crayon drawing|35mm film photograph|oil painting with thick impasto|flat 2D vector illustration}=retro cartoon illustration"
+       ]
       ]
      ]
     }

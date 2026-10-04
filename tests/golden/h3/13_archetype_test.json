@@ -8,11 +8,17 @@
      "picks": [
       [
        "$entity ← __scp/archetype_test__",
-       "a small grey tabby cat that ends just behind its ribcage in a flat, perfectly black cut face, as if it had been sliced clean through, with no back half, no fur, no blood and nothing inside showing, which walks with its body held perfectly level as if unseen hind legs carried it"
+       "a small grey tabby cat that ends just behind its ribcage in a flat, perfectly black cut face, as if it had been sliced clean through, with no back half, no fur, no blood and nothing inside showing, which walks with its body held perfectly level as if unseen hind legs carried it",
+       [
+        "__scp/archetype_test__=a small grey tabby cat that ends just behind its ribcage in a flat, perfectly black cut face, as if it had been sliced clean through, with no back half, no fur, no blood and nothing inside showing, which walks with its body held perfectly level as if unseen hind legs carried it"
+       ]
       ],
       [
        "{counter|naive}",
-       "naive"
+       "naive",
+       [
+        "{counter|naive}=naive"
+       ]
       ]
      ]
     }
@@ -25,11 +31,17 @@
      "picks": [
       [
        "$entity ← __scp/archetype_test__",
-       "a silver spray-painted cardboard box with HERE BE DRAGONS written on its lid in black marker, holding hundreds of palm-sized dragons folded from sheets of coloured paper, every body made of crisp creases and flat facets, paper wings the lamp light shines through, pleated paper tails, and no scales or skin anywhere, only folded paper"
+       "a silver spray-painted cardboard box with HERE BE DRAGONS written on its lid in black marker, holding hundreds of palm-sized dragons folded from sheets of coloured paper, every body made of crisp creases and flat facets, paper wings the lamp light shines through, pleated paper tails, and no scales or skin anywhere, only folded paper",
+       [
+        "__scp/archetype_test__=a silver spray-painted cardboard box with HERE BE DRAGONS written on its lid in black marker, holding hundreds of palm-sized dragons folded from sheets of coloured paper, every body made of crisp creases and flat facets, paper wings the lamp light shines through, pleated paper tails, and no scales or skin anywhere, only folded paper"
+       ]
       ],
       [
        "{counter|naive}",
-       "naive"
+       "naive",
+       [
+        "{counter|naive}=naive"
+       ]
       ]
      ]
     }
@@ -42,11 +54,17 @@
      "picks": [
       [
        "$entity ← __scp/archetype_test__",
-       "a small grey tabby cat that ends just behind its ribcage in a flat, perfectly black cut face, as if it had been sliced clean through, with no back half, no fur, no blood and nothing inside showing, which walks with its body held perfectly level as if unseen hind legs carried it"
+       "a small grey tabby cat that ends just behind its ribcage in a flat, perfectly black cut face, as if it had been sliced clean through, with no back half, no fur, no blood and nothing inside showing, which walks with its body held perfectly level as if unseen hind legs carried it",
+       [
+        "__scp/archetype_test__=a small grey tabby cat that ends just behind its ribcage in a flat, perfectly black cut face, as if it had been sliced clean through, with no back half, no fur, no blood and nothing inside showing, which walks with its body held perfectly level as if unseen hind legs carried it"
+       ]
       ],
       [
        "{counter|naive}",
-       "naive"
+       "naive",
+       [
+        "{counter|naive}=naive"
+       ]
       ]
      ]
     }

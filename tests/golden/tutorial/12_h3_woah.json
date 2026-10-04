@@ -8,15 +8,24 @@
      "picks": [
       [
        "$keeper ← __creature__",
-       "axolotl"
+       "axolotl",
+       [
+        "__creature__=axolotl"
+       ]
       ],
       [
        "__weather__",
-       "a glittering sun shower"
+       "a glittering sun shower",
+       [
+        "__weather__=a glittering sun shower"
+       ]
       ],
       [
        "__camera__",
-       "pull out, small, slow"
+       "pull out, small, slow",
+       [
+        "__camera__=pull out, small, slow"
+       ]
       ]
      ]
     }
@@ -29,15 +38,24 @@
      "picks": [
       [
        "$keeper ← __creature__",
-       "vampire squid"
+       "vampire squid",
+       [
+        "__creature__=vampire squid"
+       ]
       ],
       [
        "__weather__",
-       "a gathering thunderstorm"
+       "a gathering thunderstorm",
+       [
+        "__weather__=a gathering thunderstorm"
+       ]
       ],
       [
        "__camera__",
-       "arc, slow"
+       "arc, slow",
+       [
+        "__camera__=arc, slow"
+       ]
       ]
      ]
     }
@@ -50,15 +68,24 @@
      "picks": [
       [
        "$keeper ← __creature__",
-       "giant isopod"
+       "giant isopod",
+       [
+        "__creature__=giant isopod"
+       ]
       ],
       [
        "__weather__",
-       "a gathering thunderstorm"
+       "a gathering thunderstorm",
+       [
+        "__weather__=a gathering thunderstorm"
+       ]
       ],
       [
        "__camera__",
-       "push in, small, slow"
+       "push in, small, slow",
+       [
+        "__camera__=push in, small, slow"
+       ]
       ]
      ]
     }

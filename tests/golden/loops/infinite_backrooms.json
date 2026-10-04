@@ -18,11 +18,17 @@
      "picks": [
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera crawls into a dark vent at floor level"
+       "the camera crawls into a dark vent at floor level",
+       [
+        "__backrooms/exits__=the camera crawls into a dark vent at floor level"
+       ]
       ]
      ]
     },
@@ -32,19 +38,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a huge, dim hall of carpet and square support pillars with no walls in sight"
+       "a huge, dim hall of carpet and square support pillars with no walls in sight",
+       [
+        "__backrooms/levels__=a huge, dim hall of carpet and square support pillars with no walls in sight"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the lights go out panel by panel toward the camera until the frame is black"
+       "the lights go out panel by panel toward the camera until the frame is black",
+       [
+        "__backrooms/exits__=the lights go out panel by panel toward the camera until the frame is black"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -54,19 +72,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs",
+       [
+        "__backrooms/levels__=a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the lights go out panel by panel toward the camera until the frame is black"
+       "the lights go out panel by panel toward the camera until the frame is black",
+       [
+        "__backrooms/exits__=the lights go out panel by panel toward the camera until the frame is black"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -76,19 +106,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing",
+       [
+        "__backrooms/levels__=an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into an elevator and its doors slide shut"
+       "the camera steps into an elevator and its doors slide shut",
+       [
+        "__backrooms/exits__=the camera steps into an elevator and its doors slide shut"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ", and far away a door closes softly by itself"
+       ", and far away a door closes softly by itself",
+       [
+        "{30% , and far away a door closes softly by itself}=, and far away a door closes softly by itself"
+       ]
       ]
      ]
     },
@@ -98,19 +140,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs",
+       [
+        "__backrooms/levels__=a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera pushes open a plain door at the end of the room onto total darkness"
+       "the camera pushes open a plain door at the end of the room onto total darkness",
+       [
+        "__backrooms/exits__=the camera pushes open a plain door at the end of the room onto total darkness"
+       ]
       ],
       [
        "{40% contact}",
-       "contact"
+       "contact",
+       [
+        "{40% contact}=contact"
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ", and far away a door closes softly by itself"
+       ", and far away a door closes softly by itself",
+       [
+        "{30% , and far away a door closes softly by itself}=, and far away a door closes softly by itself"
+       ]
       ]
      ]
     },
@@ -120,19 +174,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights",
+       [
+        "__backrooms/levels__=an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into still water that is far deeper than it looked and sinks"
+       "the camera steps into still water that is far deeper than it looked and sinks",
+       [
+        "__backrooms/exits__=the camera steps into still water that is far deeper than it looked and sinks"
+       ]
       ],
       [
        "{40% contact}",
-       "contact"
+       "contact",
+       [
+        "{40% contact}=contact"
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ", and far away a door closes softly by itself"
+       ", and far away a door closes softly by itself",
+       [
+        "{30% , and far away a door closes softly by itself}=, and far away a door closes softly by itself"
+       ]
       ]
      ]
     }
@@ -155,11 +221,17 @@
      "picks": [
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into still water that is far deeper than it looked and sinks"
+       "the camera steps into still water that is far deeper than it looked and sinks",
+       [
+        "__backrooms/exits__=the camera steps into still water that is far deeper than it looked and sinks"
+       ]
       ]
      ]
     },
@@ -169,19 +241,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches",
+       [
+        "__backrooms/exits__=the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -191,19 +275,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a concrete stairwell that goes down floor after floor, the same number painted on every landing"
+       "a concrete stairwell that goes down floor after floor, the same number painted on every landing",
+       [
+        "__backrooms/levels__=a concrete stairwell that goes down floor after floor, the same number painted on every landing"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness"
+       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       [
+        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+       ]
       ],
       [
        "{40% contact}",
-       "contact"
+       "contact",
+       [
+        "{40% contact}=contact"
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -213,19 +309,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there"
+       "a 24-hour laundromat where every machine is turning and no one is there",
+       [
+        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches",
+       [
+        "__backrooms/exits__=the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -235,19 +343,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there"
+       "a 24-hour laundromat where every machine is turning and no one is there",
+       [
+        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches",
+       [
+        "__backrooms/exits__=the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       ]
       ],
       [
        "{40% contact}",
-       "contact"
+       "contact",
+       [
+        "{40% contact}=contact"
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -257,19 +377,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there"
+       "a 24-hour laundromat where every machine is turning and no one is there",
+       [
+        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness"
+       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       [
+        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     }
@@ -292,11 +424,17 @@
      "picks": [
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera pushes open a plain door at the end of the room onto total darkness"
+       "the camera pushes open a plain door at the end of the room onto total darkness",
+       [
+        "__backrooms/exits__=the camera pushes open a plain door at the end of the room onto total darkness"
+       ]
       ]
      ]
     },
@@ -306,19 +444,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights",
+       [
+        "__backrooms/levels__=an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the lights go out panel by panel toward the camera until the frame is black"
+       "the lights go out panel by panel toward the camera until the frame is black",
+       [
+        "__backrooms/exits__=the lights go out panel by panel toward the camera until the frame is black"
+       ]
       ],
       [
        "{40% contact}",
-       "contact"
+       "contact",
+       [
+        "{40% contact}=contact"
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ", and far away a door closes softly by itself"
+       ", and far away a door closes softly by itself",
+       [
+        "{30% , and far away a door closes softly by itself}=, and far away a door closes softly by itself"
+       ]
       ]
      ]
     },
@@ -328,19 +478,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights",
+       [
+        "__backrooms/levels__=an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness"
+       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       [
+        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+       ]
       ],
       [
        "{40% contact}",
-       "contact"
+       "contact",
+       [
+        "{40% contact}=contact"
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ", and far away a door closes softly by itself"
+       ", and far away a door closes softly by itself",
+       [
+        "{30% , and far away a door closes softly by itself}=, and far away a door closes softly by itself"
+       ]
       ]
      ]
     },
@@ -350,19 +512,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere",
+       [
+        "__backrooms/levels__=endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the lights go out panel by panel toward the camera until the frame is black"
+       "the lights go out panel by panel toward the camera until the frame is black",
+       [
+        "__backrooms/exits__=the lights go out panel by panel toward the camera until the frame is black"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -372,19 +546,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs",
+       [
+        "__backrooms/levels__=a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into still water that is far deeper than it looked and sinks"
+       "the camera steps into still water that is far deeper than it looked and sinks",
+       [
+        "__backrooms/exits__=the camera steps into still water that is far deeper than it looked and sinks"
+       ]
       ],
       [
        "{40% contact}",
-       "contact"
+       "contact",
+       [
+        "{40% contact}=contact"
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ", and far away a door closes softly by itself"
+       ", and far away a door closes softly by itself",
+       [
+        "{30% , and far away a door closes softly by itself}=, and far away a door closes softly by itself"
+       ]
       ]
      ]
     },
@@ -394,19 +580,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there"
+       "a 24-hour laundromat where every machine is turning and no one is there",
+       [
+        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera pushes open a plain door at the end of the room onto total darkness"
+       "the camera pushes open a plain door at the end of the room onto total darkness",
+       [
+        "__backrooms/exits__=the camera pushes open a plain door at the end of the room onto total darkness"
+       ]
       ],
       [
        "{40% contact}",
-       "contact"
+       "contact",
+       [
+        "{40% contact}=contact"
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     }
@@ -429,11 +627,17 @@
      "picks": [
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into an elevator and its doors slide shut"
+       "the camera steps into an elevator and its doors slide shut",
+       [
+        "__backrooms/exits__=the camera steps into an elevator and its doors slide shut"
+       ]
       ]
      ]
     },
@@ -443,19 +647,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs",
+       [
+        "__backrooms/levels__=a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the tape rolls and the picture dissolves into VHS static"
+       "the tape rolls and the picture dissolves into VHS static",
+       [
+        "__backrooms/exits__=the tape rolls and the picture dissolves into VHS static"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -465,19 +681,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere",
+       [
+        "__backrooms/levels__=endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into an elevator and its doors slide shut"
+       "the camera steps into an elevator and its doors slide shut",
+       [
+        "__backrooms/exits__=the camera steps into an elevator and its doors slide shut"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -487,19 +715,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an empty indoor play area of coloured ball pits and plastic tubes, half the lights switched off"
+       "an empty indoor play area of coloured ball pits and plastic tubes, half the lights switched off",
+       [
+        "__backrooms/levels__=an empty indoor play area of coloured ball pits and plastic tubes, half the lights switched off"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the lights go out panel by panel toward the camera until the frame is black"
+       "the lights go out panel by panel toward the camera until the frame is black",
+       [
+        "__backrooms/exits__=the lights go out panel by panel toward the camera until the frame is black"
+       ]
       ],
       [
        "{40% contact}",
-       "contact"
+       "contact",
+       [
+        "{40% contact}=contact"
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -509,15 +749,24 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back",
+       [
+        "__scp/entities__=a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "an empty indoor play area of coloured ball pits and plastic tubes, half the lights switched off"
+       "an empty indoor play area of coloured ball pits and plastic tubes, half the lights switched off",
+       [
+        "__backrooms/levels__=an empty indoor play area of coloured ball pits and plastic tubes, half the lights switched off"
+       ]
       ],
       [
        "__backrooms_approach__",
-       "crawls out of a dark doorway on all fours"
+       "crawls out of a dark doorway on all fours",
+       [
+        "__backrooms_approach__=crawls out of a dark doorway on all fours"
+       ]
       ]
      ]
     },
@@ -527,7 +776,10 @@
      "picks": [
       [
        "$exit ← __backrooms/exits__",
-       "the camera pushes open a plain door at the end of the room onto total darkness"
+       "the camera pushes open a plain door at the end of the room onto total darkness",
+       [
+        "__backrooms/exits__=the camera pushes open a plain door at the end of the room onto total darkness"
+       ]
       ]
      ]
     }
@@ -550,11 +802,17 @@
      "picks": [
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera pushes open a plain door at the end of the room onto total darkness"
+       "the camera pushes open a plain door at the end of the room onto total darkness",
+       [
+        "__backrooms/exits__=the camera pushes open a plain door at the end of the room onto total darkness"
+       ]
       ]
      ]
     },
@@ -564,19 +822,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a concrete stairwell that goes down floor after floor, the same number painted on every landing"
+       "a concrete stairwell that goes down floor after floor, the same number painted on every landing",
+       [
+        "__backrooms/levels__=a concrete stairwell that goes down floor after floor, the same number painted on every landing"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness"
+       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       [
+        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+       ]
       ],
       [
        "{40% contact}",
-       "contact"
+       "contact",
+       [
+        "{40% contact}=contact"
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ", and far away a door closes softly by itself"
+       ", and far away a door closes softly by itself",
+       [
+        "{30% , and far away a door closes softly by itself}=, and far away a door closes softly by itself"
+       ]
       ]
      ]
     },
@@ -586,19 +856,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "narrow maintenance tunnels lined with dripping pipes, valves and dim caged bulbs"
+       "narrow maintenance tunnels lined with dripping pipes, valves and dim caged bulbs",
+       [
+        "__backrooms/levels__=narrow maintenance tunnels lined with dripping pipes, valves and dim caged bulbs"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches",
+       [
+        "__backrooms/exits__=the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       ]
       ],
       [
        "{40% contact}",
-       "contact"
+       "contact",
+       [
+        "{40% contact}=contact"
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -608,19 +890,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing",
+       [
+        "__backrooms/levels__=an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness"
+       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       [
+        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+       ]
       ],
       [
        "{40% contact}",
-       "contact"
+       "contact",
+       [
+        "{40% contact}=contact"
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -630,15 +924,24 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it",
+       [
+        "__scp/entities__=a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights",
+       [
+        "__backrooms/levels__=an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       ]
       ],
       [
        "__backrooms_approach__",
-       "steps out from behind a pillar a few metres ahead"
+       "steps out from behind a pillar a few metres ahead",
+       [
+        "__backrooms_approach__=steps out from behind a pillar a few metres ahead"
+       ]
       ]
      ]
     },
@@ -648,7 +951,10 @@
      "picks": [
       [
        "$exit ← __backrooms/exits__",
-       "the lights go out panel by panel toward the camera until the frame is black"
+       "the lights go out panel by panel toward the camera until the frame is black",
+       [
+        "__backrooms/exits__=the lights go out panel by panel toward the camera until the frame is black"
+       ]
       ]
      ]
     }
@@ -671,11 +977,17 @@
      "picks": [
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness"
+       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       [
+        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+       ]
       ]
      ]
     },
@@ -685,19 +997,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there"
+       "a 24-hour laundromat where every machine is turning and no one is there",
+       [
+        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into still water that is far deeper than it looked and sinks"
+       "the camera steps into still water that is far deeper than it looked and sinks",
+       [
+        "__backrooms/exits__=the camera steps into still water that is far deeper than it looked and sinks"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -707,19 +1031,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a vast open-plan office of grey cubicles, old monitors glowing green on every desk"
+       "a vast open-plan office of grey cubicles, old monitors glowing green on every desk",
+       [
+        "__backrooms/levels__=a vast open-plan office of grey cubicles, old monitors glowing green on every desk"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness"
+       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       [
+        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -729,19 +1065,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a concrete stairwell that goes down floor after floor, the same number painted on every landing"
+       "a concrete stairwell that goes down floor after floor, the same number painted on every landing",
+       [
+        "__backrooms/levels__=a concrete stairwell that goes down floor after floor, the same number painted on every landing"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches",
+       [
+        "__backrooms/exits__=the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -751,19 +1099,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a vast open-plan office of grey cubicles, old monitors glowing green on every desk"
+       "a vast open-plan office of grey cubicles, old monitors glowing green on every desk",
+       [
+        "__backrooms/levels__=a vast open-plan office of grey cubicles, old monitors glowing green on every desk"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera crawls into a dark vent at floor level"
+       "the camera crawls into a dark vent at floor level",
+       [
+        "__backrooms/exits__=the camera crawls into a dark vent at floor level"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -773,19 +1133,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere",
+       [
+        "__backrooms/levels__=endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness"
+       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       [
+        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     }
@@ -808,11 +1180,17 @@
      "picks": [
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness"
+       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       [
+        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+       ]
       ]
      ]
     },
@@ -822,19 +1200,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs",
+       [
+        "__backrooms/levels__=a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness"
+       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       [
+        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -844,19 +1234,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a huge, dim hall of carpet and square support pillars with no walls in sight"
+       "a huge, dim hall of carpet and square support pillars with no walls in sight",
+       [
+        "__backrooms/levels__=a huge, dim hall of carpet and square support pillars with no walls in sight"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches",
+       [
+        "__backrooms/exits__=the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -866,19 +1268,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights",
+       [
+        "__backrooms/levels__=an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into still water that is far deeper than it looked and sinks"
+       "the camera steps into still water that is far deeper than it looked and sinks",
+       [
+        "__backrooms/exits__=the camera steps into still water that is far deeper than it looked and sinks"
+       ]
       ],
       [
        "{40% contact}",
-       "contact"
+       "contact",
+       [
+        "{40% contact}=contact"
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -888,15 +1302,24 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees",
+       [
+        "__scp/entities__=a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights",
+       [
+        "__backrooms/levels__=an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       ]
       ],
       [
        "__backrooms_approach__",
-       "steps out from behind a pillar a few metres ahead"
+       "steps out from behind a pillar a few metres ahead",
+       [
+        "__backrooms_approach__=steps out from behind a pillar a few metres ahead"
+       ]
       ]
      ]
     },
@@ -906,7 +1329,10 @@
      "picks": [
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into an elevator and its doors slide shut"
+       "the camera steps into an elevator and its doors slide shut",
+       [
+        "__backrooms/exits__=the camera steps into an elevator and its doors slide shut"
+       ]
       ]
      ]
     }
@@ -929,11 +1355,17 @@
      "picks": [
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       "the camera walks straight into a wall and sinks through it, the picture tearing into glitches",
+       [
+        "__backrooms/exits__=the camera walks straight into a wall and sinks through it, the picture tearing into glitches"
+       ]
       ]
      ]
     },
@@ -943,19 +1375,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there"
+       "a 24-hour laundromat where every machine is turning and no one is there",
+       [
+        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the lights go out panel by panel toward the camera until the frame is black"
+       "the lights go out panel by panel toward the camera until the frame is black",
+       [
+        "__backrooms/exits__=the lights go out panel by panel toward the camera until the frame is black"
+       ]
       ],
       [
        "{40% contact}",
-       "contact"
+       "contact",
+       [
+        "{40% contact}=contact"
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -965,19 +1409,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing",
+       [
+        "__backrooms/levels__=an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness"
+       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       [
+        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ", and far away a door closes softly by itself"
+       ", and far away a door closes softly by itself",
+       [
+        "{30% , and far away a door closes softly by itself}=, and far away a door closes softly by itself"
+       ]
       ]
      ]
     },
@@ -987,19 +1443,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there"
+       "a 24-hour laundromat where every machine is turning and no one is there",
+       [
+        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into an elevator and its doors slide shut"
+       "the camera steps into an elevator and its doors slide shut",
+       [
+        "__backrooms/exits__=the camera steps into an elevator and its doors slide shut"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -1009,19 +1477,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere",
+       [
+        "__backrooms/levels__=endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the camera steps into an elevator and its doors slide shut"
+       "the camera steps into an elevator and its doors slide shut",
+       [
+        "__backrooms/exits__=the camera steps into an elevator and its doors slide shut"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ""
+       "",
+       [
+        "{30% , and far away a door closes softly by itself}="
+       ]
       ]
      ]
     },
@@ -1031,19 +1511,31 @@
      "picks": [
       [
        "$level ← __backrooms/levels__",
-       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights",
+       [
+        "__backrooms/levels__=an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       ]
       ],
       [
        "$exit ← __backrooms/exits__",
-       "the damp carpet gives way under the camera and it drops through the floor into darkness"
+       "the damp carpet gives way under the camera and it drops through the floor into darkness",
+       [
+        "__backrooms/exits__=the damp carpet gives way under the camera and it drops through the floor into darkness"
+       ]
       ],
       [
        "{40% contact}",
-       ""
+       "",
+       [
+        "{40% contact}="
+       ]
       ],
       [
        "{30% , and far away a door closes softly by itself}",
-       ", and far away a door closes softly by itself"
+       ", and far away a door closes softly by itself",
+       [
+        "{30% , and far away a door closes softly by itself}=, and far away a door closes softly by itself"
+       ]
       ]
      ]
     }

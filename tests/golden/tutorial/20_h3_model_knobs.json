@@ -8,7 +8,10 @@
      "picks": [
       [
        "{a windswept beach|a quiet train platform at dawn|an empty theatre stage}",
-       "a windswept beach"
+       "a windswept beach",
+       [
+        "{a windswept beach|a quiet train platform at dawn|an empty theatre stage}=a windswept beach"
+       ]
       ]
      ]
     }
@@ -21,7 +24,10 @@
      "picks": [
       [
        "{a windswept beach|a quiet train platform at dawn|an empty theatre stage}",
-       "an empty theatre stage"
+       "an empty theatre stage",
+       [
+        "{a windswept beach|a quiet train platform at dawn|an empty theatre stage}=an empty theatre stage"
+       ]
       ]
      ]
     }
@@ -34,7 +40,10 @@
      "picks": [
       [
        "{a windswept beach|a quiet train platform at dawn|an empty theatre stage}",
-       "a windswept beach"
+       "a windswept beach",
+       [
+        "{a windswept beach|a quiet train platform at dawn|an empty theatre stage}=a windswept beach"
+       ]
       ]
      ]
     }

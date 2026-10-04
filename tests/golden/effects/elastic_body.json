@@ -8,19 +8,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "{a heavy vertical metal pole|an iron stair railing|a steel door handle}",
-       "an iron stair railing"
+       "an iron stair railing",
+       [
+        "{a heavy vertical metal pole|an iron stair railing|a steel door handle}=an iron stair railing"
+       ]
       ],
       [
        "{a large dim warehouse|a long empty office corridor|an empty dance studio}",
-       "an empty dance studio"
+       "an empty dance studio",
+       [
+        "{a large dim warehouse|a long empty office corridor|an empty dance studio}=an empty dance studio"
+       ]
       ],
       [
        "{HOST reaches toward the camera for balance, and the arm lengthens straight at the lens until the hand fills the foreground while the body stays several metres away|HOST lets go, and the long arm snaps back across the room, overshoots into a short thick stump beside the shoulder, then stretches out again|HOST takes one step toward the camera, and the leading leg stretches far ahead while the torso stays behind, the whole body drawn out across the room}",
-       "HOST takes one step toward the camera, and the leading leg stretches far ahead while the torso stays behind, the whole body drawn out across the room"
+       "HOST takes one step toward the camera, and the leading leg stretches far ahead while the torso stays behind, the whole body drawn out across the room",
+       [
+        "{HOST reaches toward the camera for balance, and the arm lengthens straight at the lens until the hand fills the foreground while the body stays several metres away|HOST lets go, and the long arm snaps back across the room, overshoots into a short thick stump beside the shoulder, then stretches out again|HOST takes one step toward the camera, and the leading leg stretches far ahead while the torso stays behind, the whole body drawn out across the room}=HOST takes one step toward the camera, and the leading leg stretches far ahead while the torso stays behind, the whole body drawn out across the room"
+       ]
       ]
      ]
     }
@@ -33,19 +45,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the young man"
+       "the young man",
+       [
+        "__bh_host__=the young man"
+       ]
       ],
       [
        "{a heavy vertical metal pole|an iron stair railing|a steel door handle}",
-       "a steel door handle"
+       "a steel door handle",
+       [
+        "{a heavy vertical metal pole|an iron stair railing|a steel door handle}=a steel door handle"
+       ]
       ],
       [
        "{a large dim warehouse|a long empty office corridor|an empty dance studio}",
-       "a long empty office corridor"
+       "a long empty office corridor",
+       [
+        "{a large dim warehouse|a long empty office corridor|an empty dance studio}=a long empty office corridor"
+       ]
       ],
       [
        "{HOST reaches toward the camera for balance, and the arm lengthens straight at the lens until the hand fills the foreground while the body stays several metres away|HOST lets go, and the long arm snaps back across the room, overshoots into a short thick stump beside the shoulder, then stretches out again|HOST takes one step toward the camera, and the leading leg stretches far ahead while the torso stays behind, the whole body drawn out across the room}",
-       "HOST reaches toward the camera for balance, and the arm lengthens straight at the lens until the hand fills the foreground while the body stays several metres away"
+       "HOST reaches toward the camera for balance, and the arm lengthens straight at the lens until the hand fills the foreground while the body stays several metres away",
+       [
+        "{HOST reaches toward the camera for balance, and the arm lengthens straight at the lens until the hand fills the foreground while the body stays several metres away|HOST lets go, and the long arm snaps back across the room, overshoots into a short thick stump beside the shoulder, then stretches out again|HOST takes one step toward the camera, and the leading leg stretches far ahead while the torso stays behind, the whole body drawn out across the room}=HOST reaches toward the camera for balance, and the arm lengthens straight at the lens until the hand fills the foreground while the body stays several metres away"
+       ]
       ]
      ]
     }
@@ -58,19 +82,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "{a heavy vertical metal pole|an iron stair railing|a steel door handle}",
-       "a steel door handle"
+       "a steel door handle",
+       [
+        "{a heavy vertical metal pole|an iron stair railing|a steel door handle}=a steel door handle"
+       ]
       ],
       [
        "{a large dim warehouse|a long empty office corridor|an empty dance studio}",
-       "a large dim warehouse"
+       "a large dim warehouse",
+       [
+        "{a large dim warehouse|a long empty office corridor|an empty dance studio}=a large dim warehouse"
+       ]
       ],
       [
        "{HOST reaches toward the camera for balance, and the arm lengthens straight at the lens until the hand fills the foreground while the body stays several metres away|HOST lets go, and the long arm snaps back across the room, overshoots into a short thick stump beside the shoulder, then stretches out again|HOST takes one step toward the camera, and the leading leg stretches far ahead while the torso stays behind, the whole body drawn out across the room}",
-       "HOST lets go, and the long arm snaps back across the room, overshoots into a short thick stump beside the shoulder, then stretches out again"
+       "HOST lets go, and the long arm snaps back across the room, overshoots into a short thick stump beside the shoulder, then stretches out again",
+       [
+        "{HOST reaches toward the camera for balance, and the arm lengthens straight at the lens until the hand fills the foreground while the body stays several metres away|HOST lets go, and the long arm snaps back across the room, overshoots into a short thick stump beside the shoulder, then stretches out again|HOST takes one step toward the camera, and the leading leg stretches far ahead while the torso stays behind, the whole body drawn out across the room}=HOST lets go, and the long arm snaps back across the room, overshoots into a short thick stump beside the shoulder, then stretches out again"
+       ]
       ]
      ]
     }

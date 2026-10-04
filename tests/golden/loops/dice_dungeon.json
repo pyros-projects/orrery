@@ -16,27 +16,45 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ box braids gathered at the nape"
+       "__characters/looks/hair_color__ box braids gathered at the nape",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ box braids gathered at the nape"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "silver freckles that shimmer in moonlight"
+       "silver freckles that shimmer in moonlight",
+       [
+        "__characters/fantasy/mark__=silver freckles that shimmer in moonlight"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a feathered cloak clasped with a bone pin"
+       "a feathered cloak clasped with a bone pin",
+       [
+        "__characters/fantasy/attire__=a feathered cloak clasped with a bone pin"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a long vaulted corridor lined with guttering torches"
+       "a long vaulted corridor lined with guttering torches",
+       [
+        "__dungeon_rooms__=a long vaulted corridor lined with guttering torches"
+       ]
       ]
      ]
     },
@@ -46,35 +64,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ box braids gathered at the nape"
+       "__characters/looks/hair_color__ box braids gathered at the nape",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ box braids gathered at the nape"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "silver freckles that shimmer in moonlight"
+       "silver freckles that shimmer in moonlight",
+       [
+        "__characters/fantasy/mark__=silver freckles that shimmer in moonlight"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a feathered cloak clasped with a bone pin"
+       "a feathered cloak clasped with a bone pin",
+       [
+        "__characters/fantasy/attire__=a feathered cloak clasped with a bone pin"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a chamber of empty iron cages swaying on chains"
+       "a chamber of empty iron cages swaying on chains",
+       [
+        "__dungeon_rooms__=a chamber of empty iron cages swaying on chains"
+       ]
       ],
       [
        "{30% a foe}",
-       ""
+       "",
+       [
+        "{30% a foe}="
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -84,35 +126,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ box braids gathered at the nape"
+       "__characters/looks/hair_color__ box braids gathered at the nape",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ box braids gathered at the nape"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "silver freckles that shimmer in moonlight"
+       "silver freckles that shimmer in moonlight",
+       [
+        "__characters/fantasy/mark__=silver freckles that shimmer in moonlight"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a feathered cloak clasped with a bone pin"
+       "a feathered cloak clasped with a bone pin",
+       [
+        "__characters/fantasy/attire__=a feathered cloak clasped with a bone pin"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a chamber of empty iron cages swaying on chains"
+       "a chamber of empty iron cages swaying on chains",
+       [
+        "__dungeon_rooms__=a chamber of empty iron cages swaying on chains"
+       ]
       ],
       [
        "{30% a foe}",
-       ""
+       "",
+       [
+        "{30% a foe}="
+       ]
       ],
       [
        "{8% the relic}",
-       "the relic"
+       "the relic",
+       [
+        "{8% the relic}=the relic"
+       ]
       ]
      ]
     },
@@ -122,27 +188,45 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ box braids gathered at the nape"
+       "__characters/looks/hair_color__ box braids gathered at the nape",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ box braids gathered at the nape"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "silver freckles that shimmer in moonlight"
+       "silver freckles that shimmer in moonlight",
+       [
+        "__characters/fantasy/mark__=silver freckles that shimmer in moonlight"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a feathered cloak clasped with a bone pin"
+       "a feathered cloak clasped with a bone pin",
+       [
+        "__characters/fantasy/attire__=a feathered cloak clasped with a bone pin"
+       ]
       ],
       [
        "$relic ← __dungeon_relics__",
-       "a golden crown that hums with light"
+       "a golden crown that hums with light",
+       [
+        "__dungeon_relics__=a golden crown that hums with light"
+       ]
       ]
      ]
     }
@@ -165,27 +249,45 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe",
+       [
+        "__characters/looks/hair__=long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "chestnut"
+       "chestnut",
+       [
+        "__characters/looks/hair_color__=chestnut"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "veins that glow faintly amber when angry"
+       "veins that glow faintly amber when angry",
+       [
+        "__characters/fantasy/mark__=veins that glow faintly amber when angry"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a hooded cloak of moss-green wool"
+       "a hooded cloak of moss-green wool",
+       [
+        "__characters/fantasy/attire__=a hooded cloak of moss-green wool"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a hall of collapsed pillars choked with pale roots"
+       "a hall of collapsed pillars choked with pale roots",
+       [
+        "__dungeon_rooms__=a hall of collapsed pillars choked with pale roots"
+       ]
       ]
      ]
     },
@@ -195,35 +297,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe",
+       [
+        "__characters/looks/hair__=long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "chestnut"
+       "chestnut",
+       [
+        "__characters/looks/hair_color__=chestnut"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "veins that glow faintly amber when angry"
+       "veins that glow faintly amber when angry",
+       [
+        "__characters/fantasy/mark__=veins that glow faintly amber when angry"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a hooded cloak of moss-green wool"
+       "a hooded cloak of moss-green wool",
+       [
+        "__characters/fantasy/attire__=a hooded cloak of moss-green wool"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a hall of collapsed pillars choked with pale roots"
+       "a hall of collapsed pillars choked with pale roots",
+       [
+        "__dungeon_rooms__=a hall of collapsed pillars choked with pale roots"
+       ]
       ],
       [
        "{30% a foe}",
-       "a foe"
+       "a foe",
+       [
+        "{30% a foe}=a foe"
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -233,31 +359,52 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe",
+       [
+        "__characters/looks/hair__=long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "chestnut"
+       "chestnut",
+       [
+        "__characters/looks/hair_color__=chestnut"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "veins that glow faintly amber when angry"
+       "veins that glow faintly amber when angry",
+       [
+        "__characters/fantasy/mark__=veins that glow faintly amber when angry"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a hooded cloak of moss-green wool"
+       "a hooded cloak of moss-green wool",
+       [
+        "__characters/fantasy/attire__=a hooded cloak of moss-green wool"
+       ]
       ],
       [
        "$foe ← __dungeon_foes__",
-       "a hulking troll swinging a club made from a tree trunk"
+       "a hulking troll swinging a club made from a tree trunk",
+       [
+        "__dungeon_foes__=a hulking troll swinging a club made from a tree trunk"
+       ]
       ],
       [
        "{80% victory|defeat}",
-       "80% victory"
+       "80% victory",
+       [
+        "{80% victory|defeat}=80% victory"
+       ]
       ]
      ]
     },
@@ -267,35 +414,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe",
+       [
+        "__characters/looks/hair__=long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "chestnut"
+       "chestnut",
+       [
+        "__characters/looks/hair_color__=chestnut"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "veins that glow faintly amber when angry"
+       "veins that glow faintly amber when angry",
+       [
+        "__characters/fantasy/mark__=veins that glow faintly amber when angry"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a hooded cloak of moss-green wool"
+       "a hooded cloak of moss-green wool",
+       [
+        "__characters/fantasy/attire__=a hooded cloak of moss-green wool"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a long vaulted corridor lined with guttering torches"
+       "a long vaulted corridor lined with guttering torches",
+       [
+        "__dungeon_rooms__=a long vaulted corridor lined with guttering torches"
+       ]
       ],
       [
        "{30% a foe}",
-       ""
+       "",
+       [
+        "{30% a foe}="
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -305,35 +476,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe",
+       [
+        "__characters/looks/hair__=long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "chestnut"
+       "chestnut",
+       [
+        "__characters/looks/hair_color__=chestnut"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "veins that glow faintly amber when angry"
+       "veins that glow faintly amber when angry",
+       [
+        "__characters/fantasy/mark__=veins that glow faintly amber when angry"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a hooded cloak of moss-green wool"
+       "a hooded cloak of moss-green wool",
+       [
+        "__characters/fantasy/attire__=a hooded cloak of moss-green wool"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a chamber of empty iron cages swaying on chains"
+       "a chamber of empty iron cages swaying on chains",
+       [
+        "__dungeon_rooms__=a chamber of empty iron cages swaying on chains"
+       ]
       ],
       [
        "{30% a foe}",
-       ""
+       "",
+       [
+        "{30% a foe}="
+       ]
       ],
       [
        "{8% the relic}",
-       "the relic"
+       "the relic",
+       [
+        "{8% the relic}=the relic"
+       ]
       ]
      ]
     },
@@ -343,27 +538,45 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=a plague doctor in their forties, beaked mask pushed up on the head, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe",
+       [
+        "__characters/looks/hair__=long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "chestnut"
+       "chestnut",
+       [
+        "__characters/looks/hair_color__=chestnut"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "veins that glow faintly amber when angry"
+       "veins that glow faintly amber when angry",
+       [
+        "__characters/fantasy/mark__=veins that glow faintly amber when angry"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a hooded cloak of moss-green wool"
+       "a hooded cloak of moss-green wool",
+       [
+        "__characters/fantasy/attire__=a hooded cloak of moss-green wool"
+       ]
       ],
       [
        "$relic ← __dungeon_relics__",
-       "a golden crown that hums with light"
+       "a golden crown that hums with light",
+       [
+        "__dungeon_relics__=a golden crown that hums with light"
+       ]
       ]
      ]
     }
@@ -386,27 +599,45 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe",
+       [
+        "__characters/looks/hair__=long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "warm caramel"
+       "warm caramel",
+       [
+        "__characters/looks/hair_color__=warm caramel"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "eyes of two different colours"
+       "eyes of two different colours",
+       [
+        "__characters/fantasy/mark__=eyes of two different colours"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "robes embroidered with silver constellations"
+       "robes embroidered with silver constellations",
+       [
+        "__characters/fantasy/attire__=robes embroidered with silver constellations"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a flooded crypt where the black water reaches the knees"
+       "a flooded crypt where the black water reaches the knees",
+       [
+        "__dungeon_rooms__=a flooded crypt where the black water reaches the knees"
+       ]
       ]
      ]
     },
@@ -416,35 +647,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe",
+       [
+        "__characters/looks/hair__=long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "warm caramel"
+       "warm caramel",
+       [
+        "__characters/looks/hair_color__=warm caramel"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "eyes of two different colours"
+       "eyes of two different colours",
+       [
+        "__characters/fantasy/mark__=eyes of two different colours"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "robes embroidered with silver constellations"
+       "robes embroidered with silver constellations",
+       [
+        "__characters/fantasy/attire__=robes embroidered with silver constellations"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a hall of collapsed pillars choked with pale roots"
+       "a hall of collapsed pillars choked with pale roots",
+       [
+        "__dungeon_rooms__=a hall of collapsed pillars choked with pale roots"
+       ]
       ],
       [
        "{30% a foe}",
-       ""
+       "",
+       [
+        "{30% a foe}="
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -454,35 +709,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe",
+       [
+        "__characters/looks/hair__=long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "warm caramel"
+       "warm caramel",
+       [
+        "__characters/looks/hair_color__=warm caramel"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "eyes of two different colours"
+       "eyes of two different colours",
+       [
+        "__characters/fantasy/mark__=eyes of two different colours"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "robes embroidered with silver constellations"
+       "robes embroidered with silver constellations",
+       [
+        "__characters/fantasy/attire__=robes embroidered with silver constellations"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a library of rotting books with a ladder that ends in the dark"
+       "a library of rotting books with a ladder that ends in the dark",
+       [
+        "__dungeon_rooms__=a library of rotting books with a ladder that ends in the dark"
+       ]
       ],
       [
        "{30% a foe}",
-       ""
+       "",
+       [
+        "{30% a foe}="
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -492,35 +771,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe",
+       [
+        "__characters/looks/hair__=long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "warm caramel"
+       "warm caramel",
+       [
+        "__characters/looks/hair_color__=warm caramel"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "eyes of two different colours"
+       "eyes of two different colours",
+       [
+        "__characters/fantasy/mark__=eyes of two different colours"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "robes embroidered with silver constellations"
+       "robes embroidered with silver constellations",
+       [
+        "__characters/fantasy/attire__=robes embroidered with silver constellations"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a library of rotting books with a ladder that ends in the dark"
+       "a library of rotting books with a ladder that ends in the dark",
+       [
+        "__dungeon_rooms__=a library of rotting books with a ladder that ends in the dark"
+       ]
       ],
       [
        "{30% a foe}",
-       "a foe"
+       "a foe",
+       [
+        "{30% a foe}=a foe"
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -530,31 +833,52 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe",
+       [
+        "__characters/looks/hair__=long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "warm caramel"
+       "warm caramel",
+       [
+        "__characters/looks/hair_color__=warm caramel"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "eyes of two different colours"
+       "eyes of two different colours",
+       [
+        "__characters/fantasy/mark__=eyes of two different colours"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "robes embroidered with silver constellations"
+       "robes embroidered with silver constellations",
+       [
+        "__characters/fantasy/attire__=robes embroidered with silver constellations"
+       ]
       ],
       [
        "$foe ← __dungeon_foes__",
-       "a skeleton knight in rusted plate, dragging a notched sword"
+       "a skeleton knight in rusted plate, dragging a notched sword",
+       [
+        "__dungeon_foes__=a skeleton knight in rusted plate, dragging a notched sword"
+       ]
       ],
       [
        "{80% victory|defeat}",
-       "80% victory"
+       "80% victory",
+       [
+        "{80% victory|defeat}=80% victory"
+       ]
       ]
      ]
     },
@@ -564,35 +888,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe",
+       [
+        "__characters/looks/hair__=long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "warm caramel"
+       "warm caramel",
+       [
+        "__characters/looks/hair_color__=warm caramel"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "eyes of two different colours"
+       "eyes of two different colours",
+       [
+        "__characters/fantasy/mark__=eyes of two different colours"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "robes embroidered with silver constellations"
+       "robes embroidered with silver constellations",
+       [
+        "__characters/fantasy/attire__=robes embroidered with silver constellations"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a flooded crypt where the black water reaches the knees"
+       "a flooded crypt where the black water reaches the knees",
+       [
+        "__dungeon_rooms__=a flooded crypt where the black water reaches the knees"
+       ]
       ],
       [
        "{30% a foe}",
-       "a foe"
+       "a foe",
+       [
+        "{30% a foe}=a foe"
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     }
@@ -615,27 +963,45 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+       "long __characters/looks/hair_color__ hair tied in a low ponytail",
+       [
+        "__characters/looks/hair__=long __characters/looks/hair_color__ hair tied in a low ponytail"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "copper-red"
+       "copper-red",
+       [
+        "__characters/looks/hair_color__=copper-red"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "a missing ear replaced by carved wood"
+       "a missing ear replaced by carved wood",
+       [
+        "__characters/fantasy/mark__=a missing ear replaced by carved wood"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a ceremonial gown of layered autumn leaves"
+       "a ceremonial gown of layered autumn leaves",
+       [
+        "__characters/fantasy/attire__=a ceremonial gown of layered autumn leaves"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a chamber of empty iron cages swaying on chains"
+       "a chamber of empty iron cages swaying on chains",
+       [
+        "__dungeon_rooms__=a chamber of empty iron cages swaying on chains"
+       ]
       ]
      ]
     },
@@ -645,35 +1011,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+       "long __characters/looks/hair_color__ hair tied in a low ponytail",
+       [
+        "__characters/looks/hair__=long __characters/looks/hair_color__ hair tied in a low ponytail"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "copper-red"
+       "copper-red",
+       [
+        "__characters/looks/hair_color__=copper-red"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "a missing ear replaced by carved wood"
+       "a missing ear replaced by carved wood",
+       [
+        "__characters/fantasy/mark__=a missing ear replaced by carved wood"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a ceremonial gown of layered autumn leaves"
+       "a ceremonial gown of layered autumn leaves",
+       [
+        "__characters/fantasy/attire__=a ceremonial gown of layered autumn leaves"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a long vaulted corridor lined with guttering torches"
+       "a long vaulted corridor lined with guttering torches",
+       [
+        "__dungeon_rooms__=a long vaulted corridor lined with guttering torches"
+       ]
       ],
       [
        "{30% a foe}",
-       ""
+       "",
+       [
+        "{30% a foe}="
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -683,35 +1073,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+       "long __characters/looks/hair_color__ hair tied in a low ponytail",
+       [
+        "__characters/looks/hair__=long __characters/looks/hair_color__ hair tied in a low ponytail"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "copper-red"
+       "copper-red",
+       [
+        "__characters/looks/hair_color__=copper-red"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "a missing ear replaced by carved wood"
+       "a missing ear replaced by carved wood",
+       [
+        "__characters/fantasy/mark__=a missing ear replaced by carved wood"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a ceremonial gown of layered autumn leaves"
+       "a ceremonial gown of layered autumn leaves",
+       [
+        "__characters/fantasy/attire__=a ceremonial gown of layered autumn leaves"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a library of rotting books with a ladder that ends in the dark"
+       "a library of rotting books with a ladder that ends in the dark",
+       [
+        "__dungeon_rooms__=a library of rotting books with a ladder that ends in the dark"
+       ]
       ],
       [
        "{30% a foe}",
-       ""
+       "",
+       [
+        "{30% a foe}="
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -721,35 +1135,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+       "long __characters/looks/hair_color__ hair tied in a low ponytail",
+       [
+        "__characters/looks/hair__=long __characters/looks/hair_color__ hair tied in a low ponytail"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "copper-red"
+       "copper-red",
+       [
+        "__characters/looks/hair_color__=copper-red"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "a missing ear replaced by carved wood"
+       "a missing ear replaced by carved wood",
+       [
+        "__characters/fantasy/mark__=a missing ear replaced by carved wood"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a ceremonial gown of layered autumn leaves"
+       "a ceremonial gown of layered autumn leaves",
+       [
+        "__characters/fantasy/attire__=a ceremonial gown of layered autumn leaves"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a library of rotting books with a ladder that ends in the dark"
+       "a library of rotting books with a ladder that ends in the dark",
+       [
+        "__dungeon_rooms__=a library of rotting books with a ladder that ends in the dark"
+       ]
       ],
       [
        "{30% a foe}",
-       ""
+       "",
+       [
+        "{30% a foe}="
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -759,35 +1197,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+       "long __characters/looks/hair_color__ hair tied in a low ponytail",
+       [
+        "__characters/looks/hair__=long __characters/looks/hair_color__ hair tied in a low ponytail"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "copper-red"
+       "copper-red",
+       [
+        "__characters/looks/hair_color__=copper-red"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "a missing ear replaced by carved wood"
+       "a missing ear replaced by carved wood",
+       [
+        "__characters/fantasy/mark__=a missing ear replaced by carved wood"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a ceremonial gown of layered autumn leaves"
+       "a ceremonial gown of layered autumn leaves",
+       [
+        "__characters/fantasy/attire__=a ceremonial gown of layered autumn leaves"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a library of rotting books with a ladder that ends in the dark"
+       "a library of rotting books with a ladder that ends in the dark",
+       [
+        "__dungeon_rooms__=a library of rotting books with a ladder that ends in the dark"
+       ]
       ],
       [
        "{30% a foe}",
-       ""
+       "",
+       [
+        "{30% a foe}="
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -797,35 +1259,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+       "long __characters/looks/hair_color__ hair tied in a low ponytail",
+       [
+        "__characters/looks/hair__=long __characters/looks/hair_color__ hair tied in a low ponytail"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "copper-red"
+       "copper-red",
+       [
+        "__characters/looks/hair_color__=copper-red"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "a missing ear replaced by carved wood"
+       "a missing ear replaced by carved wood",
+       [
+        "__characters/fantasy/mark__=a missing ear replaced by carved wood"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a ceremonial gown of layered autumn leaves"
+       "a ceremonial gown of layered autumn leaves",
+       [
+        "__characters/fantasy/attire__=a ceremonial gown of layered autumn leaves"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a long vaulted corridor lined with guttering torches"
+       "a long vaulted corridor lined with guttering torches",
+       [
+        "__dungeon_rooms__=a long vaulted corridor lined with guttering torches"
+       ]
       ],
       [
        "{30% a foe}",
-       ""
+       "",
+       [
+        "{30% a foe}="
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     }
@@ -848,27 +1334,45 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a high __characters/looks/hair_color__ bun"
+       "a high __characters/looks/hair_color__ bun",
+       [
+        "__characters/looks/hair__=a high __characters/looks/hair_color__ bun"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "__characters/looks/hair_color__=salt-and-pepper"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "eyes of two different colours"
+       "eyes of two different colours",
+       [
+        "__characters/fantasy/mark__=eyes of two different colours"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a hooded cloak of moss-green wool"
+       "a hooded cloak of moss-green wool",
+       [
+        "__characters/fantasy/attire__=a hooded cloak of moss-green wool"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a long vaulted corridor lined with guttering torches"
+       "a long vaulted corridor lined with guttering torches",
+       [
+        "__dungeon_rooms__=a long vaulted corridor lined with guttering torches"
+       ]
       ]
      ]
     },
@@ -878,35 +1382,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a high __characters/looks/hair_color__ bun"
+       "a high __characters/looks/hair_color__ bun",
+       [
+        "__characters/looks/hair__=a high __characters/looks/hair_color__ bun"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "__characters/looks/hair_color__=salt-and-pepper"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "eyes of two different colours"
+       "eyes of two different colours",
+       [
+        "__characters/fantasy/mark__=eyes of two different colours"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a hooded cloak of moss-green wool"
+       "a hooded cloak of moss-green wool",
+       [
+        "__characters/fantasy/attire__=a hooded cloak of moss-green wool"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a flooded crypt where the black water reaches the knees"
+       "a flooded crypt where the black water reaches the knees",
+       [
+        "__dungeon_rooms__=a flooded crypt where the black water reaches the knees"
+       ]
       ],
       [
        "{30% a foe}",
-       ""
+       "",
+       [
+        "{30% a foe}="
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -916,35 +1444,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a high __characters/looks/hair_color__ bun"
+       "a high __characters/looks/hair_color__ bun",
+       [
+        "__characters/looks/hair__=a high __characters/looks/hair_color__ bun"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "__characters/looks/hair_color__=salt-and-pepper"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "eyes of two different colours"
+       "eyes of two different colours",
+       [
+        "__characters/fantasy/mark__=eyes of two different colours"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a hooded cloak of moss-green wool"
+       "a hooded cloak of moss-green wool",
+       [
+        "__characters/fantasy/attire__=a hooded cloak of moss-green wool"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a hall of collapsed pillars choked with pale roots"
+       "a hall of collapsed pillars choked with pale roots",
+       [
+        "__dungeon_rooms__=a hall of collapsed pillars choked with pale roots"
+       ]
       ],
       [
        "{30% a foe}",
-       "a foe"
+       "a foe",
+       [
+        "{30% a foe}=a foe"
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -954,31 +1506,52 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a high __characters/looks/hair_color__ bun"
+       "a high __characters/looks/hair_color__ bun",
+       [
+        "__characters/looks/hair__=a high __characters/looks/hair_color__ bun"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "__characters/looks/hair_color__=salt-and-pepper"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "eyes of two different colours"
+       "eyes of two different colours",
+       [
+        "__characters/fantasy/mark__=eyes of two different colours"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a hooded cloak of moss-green wool"
+       "a hooded cloak of moss-green wool",
+       [
+        "__characters/fantasy/attire__=a hooded cloak of moss-green wool"
+       ]
       ],
       [
        "$foe ← __dungeon_foes__",
-       "a swarm of shrieking bats pouring out of a crack in the wall"
+       "a swarm of shrieking bats pouring out of a crack in the wall",
+       [
+        "__dungeon_foes__=a swarm of shrieking bats pouring out of a crack in the wall"
+       ]
       ],
       [
        "{80% victory|defeat}",
-       "defeat"
+       "defeat",
+       [
+        "{80% victory|defeat}=defeat"
+       ]
       ]
      ]
     },
@@ -988,23 +1561,38 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a high __characters/looks/hair_color__ bun"
+       "a high __characters/looks/hair_color__ bun",
+       [
+        "__characters/looks/hair__=a high __characters/looks/hair_color__ bun"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "__characters/looks/hair_color__=salt-and-pepper"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "eyes of two different colours"
+       "eyes of two different colours",
+       [
+        "__characters/fantasy/mark__=eyes of two different colours"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a hooded cloak of moss-green wool"
+       "a hooded cloak of moss-green wool",
+       [
+        "__characters/fantasy/attire__=a hooded cloak of moss-green wool"
+       ]
       ]
      ]
     },
@@ -1014,27 +1602,45 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a high __characters/looks/hair_color__ bun"
+       "a high __characters/looks/hair_color__ bun",
+       [
+        "__characters/looks/hair__=a high __characters/looks/hair_color__ bun"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "__characters/looks/hair_color__=salt-and-pepper"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "eyes of two different colours"
+       "eyes of two different colours",
+       [
+        "__characters/fantasy/mark__=eyes of two different colours"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a hooded cloak of moss-green wool"
+       "a hooded cloak of moss-green wool",
+       [
+        "__characters/fantasy/attire__=a hooded cloak of moss-green wool"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a narrow stone bridge over a bottomless chasm"
+       "a narrow stone bridge over a bottomless chasm",
+       [
+        "__dungeon_rooms__=a narrow stone bridge over a bottomless chasm"
+       ]
       ]
      ]
     }
@@ -1057,27 +1663,45 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a chin-length __characters/looks/hair_color__ bob"
+       "a chin-length __characters/looks/hair_color__ bob",
+       [
+        "__characters/looks/hair__=a chin-length __characters/looks/hair_color__ bob"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "ash-blonde"
+       "ash-blonde",
+       [
+        "__characters/looks/hair_color__=ash-blonde"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "a crown of small antlers"
+       "a crown of small antlers",
+       [
+        "__characters/fantasy/mark__=a crown of small antlers"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a feathered cloak clasped with a bone pin"
+       "a feathered cloak clasped with a bone pin",
+       [
+        "__characters/fantasy/attire__=a feathered cloak clasped with a bone pin"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a chamber of empty iron cages swaying on chains"
+       "a chamber of empty iron cages swaying on chains",
+       [
+        "__dungeon_rooms__=a chamber of empty iron cages swaying on chains"
+       ]
       ]
      ]
     },
@@ -1087,35 +1711,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a chin-length __characters/looks/hair_color__ bob"
+       "a chin-length __characters/looks/hair_color__ bob",
+       [
+        "__characters/looks/hair__=a chin-length __characters/looks/hair_color__ bob"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "ash-blonde"
+       "ash-blonde",
+       [
+        "__characters/looks/hair_color__=ash-blonde"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "a crown of small antlers"
+       "a crown of small antlers",
+       [
+        "__characters/fantasy/mark__=a crown of small antlers"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a feathered cloak clasped with a bone pin"
+       "a feathered cloak clasped with a bone pin",
+       [
+        "__characters/fantasy/attire__=a feathered cloak clasped with a bone pin"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a hall of collapsed pillars choked with pale roots"
+       "a hall of collapsed pillars choked with pale roots",
+       [
+        "__dungeon_rooms__=a hall of collapsed pillars choked with pale roots"
+       ]
       ],
       [
        "{30% a foe}",
-       ""
+       "",
+       [
+        "{30% a foe}="
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -1125,35 +1773,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a chin-length __characters/looks/hair_color__ bob"
+       "a chin-length __characters/looks/hair_color__ bob",
+       [
+        "__characters/looks/hair__=a chin-length __characters/looks/hair_color__ bob"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "ash-blonde"
+       "ash-blonde",
+       [
+        "__characters/looks/hair_color__=ash-blonde"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "a crown of small antlers"
+       "a crown of small antlers",
+       [
+        "__characters/fantasy/mark__=a crown of small antlers"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a feathered cloak clasped with a bone pin"
+       "a feathered cloak clasped with a bone pin",
+       [
+        "__characters/fantasy/attire__=a feathered cloak clasped with a bone pin"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a hall of collapsed pillars choked with pale roots"
+       "a hall of collapsed pillars choked with pale roots",
+       [
+        "__dungeon_rooms__=a hall of collapsed pillars choked with pale roots"
+       ]
       ],
       [
        "{30% a foe}",
-       "a foe"
+       "a foe",
+       [
+        "{30% a foe}=a foe"
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -1163,31 +1835,52 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a chin-length __characters/looks/hair_color__ bob"
+       "a chin-length __characters/looks/hair_color__ bob",
+       [
+        "__characters/looks/hair__=a chin-length __characters/looks/hair_color__ bob"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "ash-blonde"
+       "ash-blonde",
+       [
+        "__characters/looks/hair_color__=ash-blonde"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "a crown of small antlers"
+       "a crown of small antlers",
+       [
+        "__characters/fantasy/mark__=a crown of small antlers"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a feathered cloak clasped with a bone pin"
+       "a feathered cloak clasped with a bone pin",
+       [
+        "__characters/fantasy/attire__=a feathered cloak clasped with a bone pin"
+       ]
       ],
       [
        "$foe ← __dungeon_foes__",
-       "a skeleton knight in rusted plate, dragging a notched sword"
+       "a skeleton knight in rusted plate, dragging a notched sword",
+       [
+        "__dungeon_foes__=a skeleton knight in rusted plate, dragging a notched sword"
+       ]
       ],
       [
        "{80% victory|defeat}",
-       "defeat"
+       "defeat",
+       [
+        "{80% victory|defeat}=defeat"
+       ]
       ]
      ]
     },
@@ -1197,23 +1890,38 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a chin-length __characters/looks/hair_color__ bob"
+       "a chin-length __characters/looks/hair_color__ bob",
+       [
+        "__characters/looks/hair__=a chin-length __characters/looks/hair_color__ bob"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "ash-blonde"
+       "ash-blonde",
+       [
+        "__characters/looks/hair_color__=ash-blonde"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "a crown of small antlers"
+       "a crown of small antlers",
+       [
+        "__characters/fantasy/mark__=a crown of small antlers"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a feathered cloak clasped with a bone pin"
+       "a feathered cloak clasped with a bone pin",
+       [
+        "__characters/fantasy/attire__=a feathered cloak clasped with a bone pin"
+       ]
       ]
      ]
     },
@@ -1223,27 +1931,45 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an elven cartographer in his thirties by appearance, long-limbed and far-sighted, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a chin-length __characters/looks/hair_color__ bob"
+       "a chin-length __characters/looks/hair_color__ bob",
+       [
+        "__characters/looks/hair__=a chin-length __characters/looks/hair_color__ bob"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "ash-blonde"
+       "ash-blonde",
+       [
+        "__characters/looks/hair_color__=ash-blonde"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "a crown of small antlers"
+       "a crown of small antlers",
+       [
+        "__characters/fantasy/mark__=a crown of small antlers"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "a feathered cloak clasped with a bone pin"
+       "a feathered cloak clasped with a bone pin",
+       [
+        "__characters/fantasy/attire__=a feathered cloak clasped with a bone pin"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a chamber of empty iron cages swaying on chains"
+       "a chamber of empty iron cages swaying on chains",
+       [
+        "__dungeon_rooms__=a chamber of empty iron cages swaying on chains"
+       ]
       ]
      ]
     }
@@ -1266,27 +1992,45 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a __characters/looks/hair_color__ mullet"
+       "a __characters/looks/hair_color__ mullet",
+       [
+        "__characters/looks/hair__=a __characters/looks/hair_color__ mullet"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "black streaked with grey"
+       "black streaked with grey",
+       [
+        "__characters/looks/hair_color__=black streaked with grey"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "silver freckles that shimmer in moonlight"
+       "silver freckles that shimmer in moonlight",
+       [
+        "__characters/fantasy/mark__=silver freckles that shimmer in moonlight"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "chain mail under a fur mantle"
+       "chain mail under a fur mantle",
+       [
+        "__characters/fantasy/attire__=chain mail under a fur mantle"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a narrow stone bridge over a bottomless chasm"
+       "a narrow stone bridge over a bottomless chasm",
+       [
+        "__dungeon_rooms__=a narrow stone bridge over a bottomless chasm"
+       ]
       ]
      ]
     },
@@ -1296,35 +2040,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a __characters/looks/hair_color__ mullet"
+       "a __characters/looks/hair_color__ mullet",
+       [
+        "__characters/looks/hair__=a __characters/looks/hair_color__ mullet"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "black streaked with grey"
+       "black streaked with grey",
+       [
+        "__characters/looks/hair_color__=black streaked with grey"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "silver freckles that shimmer in moonlight"
+       "silver freckles that shimmer in moonlight",
+       [
+        "__characters/fantasy/mark__=silver freckles that shimmer in moonlight"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "chain mail under a fur mantle"
+       "chain mail under a fur mantle",
+       [
+        "__characters/fantasy/attire__=chain mail under a fur mantle"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a chamber of empty iron cages swaying on chains"
+       "a chamber of empty iron cages swaying on chains",
+       [
+        "__dungeon_rooms__=a chamber of empty iron cages swaying on chains"
+       ]
       ],
       [
        "{30% a foe}",
-       ""
+       "",
+       [
+        "{30% a foe}="
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -1334,35 +2102,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a __characters/looks/hair_color__ mullet"
+       "a __characters/looks/hair_color__ mullet",
+       [
+        "__characters/looks/hair__=a __characters/looks/hair_color__ mullet"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "black streaked with grey"
+       "black streaked with grey",
+       [
+        "__characters/looks/hair_color__=black streaked with grey"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "silver freckles that shimmer in moonlight"
+       "silver freckles that shimmer in moonlight",
+       [
+        "__characters/fantasy/mark__=silver freckles that shimmer in moonlight"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "chain mail under a fur mantle"
+       "chain mail under a fur mantle",
+       [
+        "__characters/fantasy/attire__=chain mail under a fur mantle"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a hall of collapsed pillars choked with pale roots"
+       "a hall of collapsed pillars choked with pale roots",
+       [
+        "__dungeon_rooms__=a hall of collapsed pillars choked with pale roots"
+       ]
       ],
       [
        "{30% a foe}",
-       ""
+       "",
+       [
+        "{30% a foe}="
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -1372,35 +2164,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a __characters/looks/hair_color__ mullet"
+       "a __characters/looks/hair_color__ mullet",
+       [
+        "__characters/looks/hair__=a __characters/looks/hair_color__ mullet"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "black streaked with grey"
+       "black streaked with grey",
+       [
+        "__characters/looks/hair_color__=black streaked with grey"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "silver freckles that shimmer in moonlight"
+       "silver freckles that shimmer in moonlight",
+       [
+        "__characters/fantasy/mark__=silver freckles that shimmer in moonlight"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "chain mail under a fur mantle"
+       "chain mail under a fur mantle",
+       [
+        "__characters/fantasy/attire__=chain mail under a fur mantle"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a library of rotting books with a ladder that ends in the dark"
+       "a library of rotting books with a ladder that ends in the dark",
+       [
+        "__dungeon_rooms__=a library of rotting books with a ladder that ends in the dark"
+       ]
       ],
       [
        "{30% a foe}",
-       ""
+       "",
+       [
+        "{30% a foe}="
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -1410,35 +2226,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a __characters/looks/hair_color__ mullet"
+       "a __characters/looks/hair_color__ mullet",
+       [
+        "__characters/looks/hair__=a __characters/looks/hair_color__ mullet"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "black streaked with grey"
+       "black streaked with grey",
+       [
+        "__characters/looks/hair_color__=black streaked with grey"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "silver freckles that shimmer in moonlight"
+       "silver freckles that shimmer in moonlight",
+       [
+        "__characters/fantasy/mark__=silver freckles that shimmer in moonlight"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "chain mail under a fur mantle"
+       "chain mail under a fur mantle",
+       [
+        "__characters/fantasy/attire__=chain mail under a fur mantle"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a hall of collapsed pillars choked with pale roots"
+       "a hall of collapsed pillars choked with pale roots",
+       [
+        "__dungeon_rooms__=a hall of collapsed pillars choked with pale roots"
+       ]
       ],
       [
        "{30% a foe}",
-       "a foe"
+       "a foe",
+       [
+        "{30% a foe}=a foe"
+       ]
       ],
       [
        "{8% the relic}",
-       ""
+       "",
+       [
+        "{8% the relic}="
+       ]
       ]
      ]
     },
@@ -1448,31 +2288,52 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=an orc bard in his thirties, tusked and soft-voiced, a lute strung with gut, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "a __characters/looks/hair_color__ mullet"
+       "a __characters/looks/hair_color__ mullet",
+       [
+        "__characters/looks/hair__=a __characters/looks/hair_color__ mullet"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "black streaked with grey"
+       "black streaked with grey",
+       [
+        "__characters/looks/hair_color__=black streaked with grey"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "silver freckles that shimmer in moonlight"
+       "silver freckles that shimmer in moonlight",
+       [
+        "__characters/fantasy/mark__=silver freckles that shimmer in moonlight"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "chain mail under a fur mantle"
+       "chain mail under a fur mantle",
+       [
+        "__characters/fantasy/attire__=chain mail under a fur mantle"
+       ]
       ],
       [
        "$foe ← __dungeon_foes__",
-       "a hulking troll swinging a club made from a tree trunk"
+       "a hulking troll swinging a club made from a tree trunk",
+       [
+        "__dungeon_foes__=a hulking troll swinging a club made from a tree trunk"
+       ]
       ],
       [
        "{80% victory|defeat}",
-       "defeat"
+       "defeat",
+       [
+        "{80% victory|defeat}=defeat"
+       ]
       ]
      ]
     }
@@ -1492,27 +2353,45 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "shoulder-length __characters/looks/hair_color__ waves"
+       "shoulder-length __characters/looks/hair_color__ waves",
+       [
+        "__characters/looks/hair__=shoulder-length __characters/looks/hair_color__ waves"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "black streaked with grey"
+       "black streaked with grey",
+       [
+        "__characters/looks/hair_color__=black streaked with grey"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "veins that glow faintly amber when angry"
+       "veins that glow faintly amber when angry",
+       [
+        "__characters/fantasy/mark__=veins that glow faintly amber when angry"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "dented plate armour under a travel-stained tabard"
+       "dented plate armour under a travel-stained tabard",
+       [
+        "__characters/fantasy/attire__=dented plate armour under a travel-stained tabard"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a chamber of empty iron cages swaying on chains"
+       "a chamber of empty iron cages swaying on chains",
+       [
+        "__dungeon_rooms__=a chamber of empty iron cages swaying on chains"
+       ]
       ]
      ]
     },
@@ -1522,35 +2401,59 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "shoulder-length __characters/looks/hair_color__ waves"
+       "shoulder-length __characters/looks/hair_color__ waves",
+       [
+        "__characters/looks/hair__=shoulder-length __characters/looks/hair_color__ waves"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "black streaked with grey"
+       "black streaked with grey",
+       [
+        "__characters/looks/hair_color__=black streaked with grey"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "veins that glow faintly amber when angry"
+       "veins that glow faintly amber when angry",
+       [
+        "__characters/fantasy/mark__=veins that glow faintly amber when angry"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "dented plate armour under a travel-stained tabard"
+       "dented plate armour under a travel-stained tabard",
+       [
+        "__characters/fantasy/attire__=dented plate armour under a travel-stained tabard"
+       ]
       ],
       [
        "$room ← __dungeon_rooms__",
-       "a flooded crypt where the black water reaches the knees"
+       "a flooded crypt where the black water reaches the knees",
+       [
+        "__dungeon_rooms__=a flooded crypt where the black water reaches the knees"
+       ]
       ],
       [
        "{30% a foe}",
-       ""
+       "",
+       [
+        "{30% a foe}="
+       ]
       ],
       [
        "{8% the relic}",
-       "the relic"
+       "the relic",
+       [
+        "{8% the relic}=the relic"
+       ]
       ]
      ]
     },
@@ -1560,27 +2463,45 @@
      "picks": [
       [
        "$hero ← __characters/fantasy__",
-       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       "a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__",
+       [
+        "__characters/fantasy__=a ranger in her thirties, weathered and silent, bow across her back, with __characters/looks/hair__, __characters/fantasy/mark__, wearing __characters/fantasy/attire__"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair__",
-       "shoulder-length __characters/looks/hair_color__ waves"
+       "shoulder-length __characters/looks/hair_color__ waves",
+       [
+        "__characters/looks/hair__=shoulder-length __characters/looks/hair_color__ waves"
+       ]
       ],
       [
        "$hero ← __characters/looks/hair_color__",
-       "black streaked with grey"
+       "black streaked with grey",
+       [
+        "__characters/looks/hair_color__=black streaked with grey"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/mark__",
-       "veins that glow faintly amber when angry"
+       "veins that glow faintly amber when angry",
+       [
+        "__characters/fantasy/mark__=veins that glow faintly amber when angry"
+       ]
       ],
       [
        "$hero ← __characters/fantasy/attire__",
-       "dented plate armour under a travel-stained tabard"
+       "dented plate armour under a travel-stained tabard",
+       [
+        "__characters/fantasy/attire__=dented plate armour under a travel-stained tabard"
+       ]
       ],
       [
        "$relic ← __dungeon_relics__",
-       "a golden crown that hums with light"
+       "a golden crown that hums with light",
+       [
+        "__dungeon_relics__=a golden crown that hums with light"
+       ]
       ]
      ]
     }

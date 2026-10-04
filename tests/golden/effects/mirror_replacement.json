@@ -8,15 +8,24 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "{a dim apartment bathroom at night|a narrow hotel corridor with a full-length mirror|an empty dance studio lined with mirrors}",
-       "an empty dance studio lined with mirrors"
+       "an empty dance studio lined with mirrors",
+       [
+        "{a dim apartment bathroom at night|a narrow hotel corridor with a full-length mirror|an empty dance studio lined with mirrors}=an empty dance studio lined with mirrors"
+       ]
       ],
       [
        "{the reflection in the mirror is now the original, hammering silently on the inside of the glass|the mirror behind them now shows an empty room|the new reflection lags a full second behind every movement}",
-       "the new reflection lags a full second behind every movement"
+       "the new reflection lags a full second behind every movement",
+       [
+        "{the reflection in the mirror is now the original, hammering silently on the inside of the glass|the mirror behind them now shows an empty room|the new reflection lags a full second behind every movement}=the new reflection lags a full second behind every movement"
+       ]
       ]
      ]
     }
@@ -29,15 +38,24 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the young man"
+       "the young man",
+       [
+        "__bh_host__=the young man"
+       ]
       ],
       [
        "{a dim apartment bathroom at night|a narrow hotel corridor with a full-length mirror|an empty dance studio lined with mirrors}",
-       "an empty dance studio lined with mirrors"
+       "an empty dance studio lined with mirrors",
+       [
+        "{a dim apartment bathroom at night|a narrow hotel corridor with a full-length mirror|an empty dance studio lined with mirrors}=an empty dance studio lined with mirrors"
+       ]
       ],
       [
        "{the reflection in the mirror is now the original, hammering silently on the inside of the glass|the mirror behind them now shows an empty room|the new reflection lags a full second behind every movement}",
-       "the new reflection lags a full second behind every movement"
+       "the new reflection lags a full second behind every movement",
+       [
+        "{the reflection in the mirror is now the original, hammering silently on the inside of the glass|the mirror behind them now shows an empty room|the new reflection lags a full second behind every movement}=the new reflection lags a full second behind every movement"
+       ]
       ]
      ]
     }
@@ -50,15 +68,24 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "{a dim apartment bathroom at night|a narrow hotel corridor with a full-length mirror|an empty dance studio lined with mirrors}",
-       "an empty dance studio lined with mirrors"
+       "an empty dance studio lined with mirrors",
+       [
+        "{a dim apartment bathroom at night|a narrow hotel corridor with a full-length mirror|an empty dance studio lined with mirrors}=an empty dance studio lined with mirrors"
+       ]
       ],
       [
        "{the reflection in the mirror is now the original, hammering silently on the inside of the glass|the mirror behind them now shows an empty room|the new reflection lags a full second behind every movement}",
-       "the mirror behind them now shows an empty room"
+       "the mirror behind them now shows an empty room",
+       [
+        "{the reflection in the mirror is now the original, hammering silently on the inside of the glass|the mirror behind them now shows an empty room|the new reflection lags a full second behind every movement}=the mirror behind them now shows an empty room"
+       ]
       ]
      ]
     }

@@ -8,31 +8,53 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{bone-white|charcoal|acid-green|dusty pink}",
-       "acid-green"
+       "acid-green",
+       [
+        "{bone-white|charcoal|acid-green|dusty pink}=acid-green"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "ontologically draped, melancholic baroque"
+       "ontologically draped, melancholic baroque",
+       [
+        "__couture_adjective__=ontologically draped",
+        "__couture_adjective__=melancholic baroque"
+       ]
       ],
       [
        "{absurdly small sunglasses|a single enormous glove|shoes carved from pale wood|a veil of fishing line|a handbag shaped like a brick}",
-       "shoes carved from pale wood"
+       "shoes carved from pale wood",
+       [
+        "{absurdly small sunglasses|a single enormous glove|shoes carved from pale wood|a veil of fishing line|a handbag shaped like a brick}=shoes carved from pale wood"
+       ]
       ],
       [
        "__couture_model__",
-       "a gaunt model with a shaved head"
+       "a gaunt model with a shaved head",
+       [
+        "__couture_model__=a gaunt model with a shaved head"
+       ]
       ],
       [
        "__couture_form__",
-       "sleeves that forget where the arm ends"
+       "sleeves that forget where the arm ends",
+       [
+        "__couture_form__=sleeves that forget where the arm ends"
+       ]
       ],
       [
        "__couture_material__",
-       "moss velvet"
+       "moss velvet",
+       [
+        "__couture_material__=moss velvet"
+       ]
       ]
      ]
     }
@@ -45,31 +67,53 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Studio Kessler-Mourne"
+       "Studio Kessler-Mourne",
+       [
+        "__couture_house__=Studio Kessler-Mourne"
+       ]
       ],
       [
        "{bone-white|charcoal|acid-green|dusty pink}",
-       "acid-green"
+       "acid-green",
+       [
+        "{bone-white|charcoal|acid-green|dusty pink}=acid-green"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "post-luxury, sartorially agnostic"
+       "post-luxury, sartorially agnostic",
+       [
+        "__couture_adjective__=post-luxury",
+        "__couture_adjective__=sartorially agnostic"
+       ]
       ],
       [
        "{absurdly small sunglasses|a single enormous glove|shoes carved from pale wood|a veil of fishing line|a handbag shaped like a brick}",
-       "absurdly small sunglasses"
+       "absurdly small sunglasses",
+       [
+        "{absurdly small sunglasses|a single enormous glove|shoes carved from pale wood|a veil of fishing line|a handbag shaped like a brick}=absurdly small sunglasses"
+       ]
       ],
       [
        "__couture_model__",
-       "a stern silver-haired model"
+       "a stern silver-haired model",
+       [
+        "__couture_model__=a stern silver-haired model"
+       ]
       ],
       [
        "__couture_form__",
-       "lapels that fold back into themselves"
+       "lapels that fold back into themselves",
+       [
+        "__couture_form__=lapels that fold back into themselves"
+       ]
       ],
       [
        "__couture_material__",
-       "boiled wool"
+       "boiled wool",
+       [
+        "__couture_material__=boiled wool"
+       ]
       ]
      ]
     }
@@ -82,31 +126,53 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "{bone-white|charcoal|acid-green|dusty pink}",
-       "acid-green"
+       "acid-green",
+       [
+        "{bone-white|charcoal|acid-green|dusty pink}=acid-green"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "quietly unwearable, deconstructed"
+       "quietly unwearable, deconstructed",
+       [
+        "__couture_adjective__=quietly unwearable",
+        "__couture_adjective__=deconstructed"
+       ]
       ],
       [
        "{absurdly small sunglasses|a single enormous glove|shoes carved from pale wood|a veil of fishing line|a handbag shaped like a brick}",
-       "a handbag shaped like a brick"
+       "a handbag shaped like a brick",
+       [
+        "{absurdly small sunglasses|a single enormous glove|shoes carved from pale wood|a veil of fishing line|a handbag shaped like a brick}=a handbag shaped like a brick"
+       ]
       ],
       [
        "__couture_model__",
-       "a pale model with bleached eyelashes and no brows"
+       "a pale model with bleached eyelashes and no brows",
+       [
+        "__couture_model__=a pale model with bleached eyelashes and no brows"
+       ]
       ],
       [
        "__couture_form__",
-       "pockets placed exactly where regret lives"
+       "pockets placed exactly where regret lives",
+       [
+        "__couture_form__=pockets placed exactly where regret lives"
+       ]
       ],
       [
        "__couture_material__",
-       "crushed silver lamé"
+       "crushed silver lamé",
+       [
+        "__couture_material__=crushed silver lamé"
+       ]
       ]
      ]
     }

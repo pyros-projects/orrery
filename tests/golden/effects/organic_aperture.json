@@ -8,23 +8,38 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a tiled changing room at a public swimming pool"
+       "a tiled changing room at a public swimming pool",
+       [
+        "__bh_room__=a tiled changing room at a public swimming pool"
+       ]
       ],
       [
        "{the centre of the palm|the middle of the forehead|the sternum}",
-       "the middle of the forehead"
+       "the middle of the forehead",
+       [
+        "{the centre of the palm|the middle of the forehead|the sternum}=the middle of the forehead"
+       ]
       ],
       [
        "{a smooth dark cavity far deeper than the body could hold|soft concentric pale layers folding inward like the inside of a flower|a small darkness scattered with faint points of light}",
-       "a smooth dark cavity far deeper than the body could hold"
+       "a smooth dark cavity far deeper than the body could hold",
+       [
+        "{a smooth dark cavity far deeper than the body could hold|soft concentric pale layers folding inward like the inside of a flower|a small darkness scattered with faint points of light}=a smooth dark cavity far deeper than the body could hold"
+       ]
       ],
       [
        "{the aperture closes again, leaving only a small spiral scar|something inside the opening blinks|HOST raises it to the camera and looks through it as through a spyglass}",
-       "the aperture closes again, leaving only a small spiral scar"
+       "the aperture closes again, leaving only a small spiral scar",
+       [
+        "{the aperture closes again, leaving only a small spiral scar|something inside the opening blinks|HOST raises it to the camera and looks through it as through a spyglass}=the aperture closes again, leaving only a small spiral scar"
+       ]
       ]
      ]
     }
@@ -37,23 +52,38 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the young man"
+       "the young man",
+       [
+        "__bh_host__=the young man"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a dim apartment sitting room"
+       "a dim apartment sitting room",
+       [
+        "__bh_room__=a dim apartment sitting room"
+       ]
       ],
       [
        "{the centre of the palm|the middle of the forehead|the sternum}",
-       "the centre of the palm"
+       "the centre of the palm",
+       [
+        "{the centre of the palm|the middle of the forehead|the sternum}=the centre of the palm"
+       ]
       ],
       [
        "{a smooth dark cavity far deeper than the body could hold|soft concentric pale layers folding inward like the inside of a flower|a small darkness scattered with faint points of light}",
-       "a smooth dark cavity far deeper than the body could hold"
+       "a smooth dark cavity far deeper than the body could hold",
+       [
+        "{a smooth dark cavity far deeper than the body could hold|soft concentric pale layers folding inward like the inside of a flower|a small darkness scattered with faint points of light}=a smooth dark cavity far deeper than the body could hold"
+       ]
       ],
       [
        "{the aperture closes again, leaving only a small spiral scar|something inside the opening blinks|HOST raises it to the camera and looks through it as through a spyglass}",
-       "the aperture closes again, leaving only a small spiral scar"
+       "the aperture closes again, leaving only a small spiral scar",
+       [
+        "{the aperture closes again, leaving only a small spiral scar|something inside the opening blinks|HOST raises it to the camera and looks through it as through a spyglass}=the aperture closes again, leaving only a small spiral scar"
+       ]
       ]
      ]
     }
@@ -66,23 +96,38 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a narrow hotel corridor"
+       "a narrow hotel corridor",
+       [
+        "__bh_room__=a narrow hotel corridor"
+       ]
       ],
       [
        "{the centre of the palm|the middle of the forehead|the sternum}",
-       "the sternum"
+       "the sternum",
+       [
+        "{the centre of the palm|the middle of the forehead|the sternum}=the sternum"
+       ]
       ],
       [
        "{a smooth dark cavity far deeper than the body could hold|soft concentric pale layers folding inward like the inside of a flower|a small darkness scattered with faint points of light}",
-       "a small darkness scattered with faint points of light"
+       "a small darkness scattered with faint points of light",
+       [
+        "{a smooth dark cavity far deeper than the body could hold|soft concentric pale layers folding inward like the inside of a flower|a small darkness scattered with faint points of light}=a small darkness scattered with faint points of light"
+       ]
       ],
       [
        "{the aperture closes again, leaving only a small spiral scar|something inside the opening blinks|HOST raises it to the camera and looks through it as through a spyglass}",
-       "HOST raises it to the camera and looks through it as through a spyglass"
+       "HOST raises it to the camera and looks through it as through a spyglass",
+       [
+        "{the aperture closes again, leaving only a small spiral scar|something inside the opening blinks|HOST raises it to the camera and looks through it as through a spyglass}=HOST raises it to the camera and looks through it as through a spyglass"
+       ]
       ]
      ]
     }

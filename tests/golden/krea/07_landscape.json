@@ -8,27 +8,45 @@
      "picks": [
       [
        "$land ← __world/landscapes__",
-       "an iceberg-strewn bay where humpback whales surface between the ice"
+       "an iceberg-strewn bay where humpback whales surface between the ice",
+       [
+        "__world/landscapes__=an iceberg-strewn bay where humpback whales surface between the ice"
+       ]
       ],
       [
        "$sky ← __world/weather__",
-       "a thunderstorm rolling in, lightning flickering inside black cloud"
+       "a thunderstorm rolling in, lightning flickering inside black cloud",
+       [
+        "__world/weather__=a thunderstorm rolling in, lightning flickering inside black cloud"
+       ]
       ],
       [
        "{seen from a high ridge|seen from the air, looking straight down|at eye level from the valley floor|from water level|from far across a valley}",
-       "seen from the air, looking straight down"
+       "seen from the air, looking straight down",
+       [
+        "{seen from a high ridge|seen from the air, looking straight down|at eye level from the valley floor|from water level|from far across a valley}=seen from the air, looking straight down"
+       ]
       ],
       [
        "{|, one small figure in a red coat standing on it for scale|, a lone cabin with a single lit window|, a line of power pylons marching into the distance|, a small boat leaving a long wake|, a road winding through it with one car on it|, a flock of birds lifting off together}",
-       ""
+       "",
+       [
+        "{|, one small figure in a red coat standing on it for scale|, a lone cabin with a single lit window|, a line of power pylons marching into the distance|, a small boat leaving a long wake|, a road winding through it with one car on it|, a flock of birds lifting off together}="
+       ]
       ],
       [
        "{a large-format colour transparency, sharp from the nearest stone to the far ridge, calm true colour|a slide-film photograph with saturated greens and deep blue shadows|an infrared colour photograph where every leaf and blade of grass turns red and pink against a dark sky|a black-and-white fine-art print with deep blacks, glowing whites and a full range of silver greys between|a platinum print on soft cotton paper, warm brown-grey tones and gentle highlights|a cyanotype in deep Prussian blue with brushed white edges|a nineteenth-century romantic oil painting, the land glowing in golden haze and tiny figures dwarfed by it|a Japanese woodblock print with flat colour, fine carved outlines and a sky graded from indigo to white|an ink-and-wash landscape scroll, the land rising out of empty mist|a brushy gouache matte painting for an old adventure film}",
-       "a large-format colour transparency, sharp from the nearest stone to the far ridge, calm true colour"
+       "a large-format colour transparency, sharp from the nearest stone to the far ridge, calm true colour",
+       [
+        "{a large-format colour transparency, sharp from the nearest stone to the far ridge, calm true colour|a slide-film photograph with saturated greens and deep blue shadows|an infrared colour photograph where every leaf and blade of grass turns red and pink against a dark sky|a black-and-white fine-art print with deep blacks, glowing whites and a full range of silver greys between|a platinum print on soft cotton paper, warm brown-grey tones and gentle highlights|a cyanotype in deep Prussian blue with brushed white edges|a nineteenth-century romantic oil painting, the land glowing in golden haze and tiny figures dwarfed by it|a Japanese woodblock print with flat colour, fine carved outlines and a sky graded from indigo to white|an ink-and-wash landscape scroll, the land rising out of empty mist|a brushy gouache matte painting for an old adventure film}=a large-format colour transparency, sharp from the nearest stone to the far ridge, calm true colour"
+       ]
       ],
       [
        "{$land, $vantage, in $sky$scale. The picture is $medium.|The picture is $medium: $land, $vantage, in $sky$scale.}",
-       "The picture is $medium: $land, $vantage, in $sky$scale."
+       "The picture is $medium: $land, $vantage, in $sky$scale.",
+       [
+        "{$land, $vantage, in $sky$scale. The picture is $medium.|The picture is $medium: $land, $vantage, in $sky$scale.}=The picture is $medium: $land, $vantage, in $sky$scale."
+       ]
       ]
      ]
     }
@@ -41,27 +59,45 @@
      "picks": [
       [
        "$land ← __world/landscapes__",
-       "a savanna with one acacia tree and a herd of elephants crossing it"
+       "a savanna with one acacia tree and a herd of elephants crossing it",
+       [
+        "__world/landscapes__=a savanna with one acacia tree and a herd of elephants crossing it"
+       ]
       ],
       [
        "$sky ← __world/weather__",
-       "a thunderstorm rolling in, lightning flickering inside black cloud"
+       "a thunderstorm rolling in, lightning flickering inside black cloud",
+       [
+        "__world/weather__=a thunderstorm rolling in, lightning flickering inside black cloud"
+       ]
       ],
       [
        "{seen from a high ridge|seen from the air, looking straight down|at eye level from the valley floor|from water level|from far across a valley}",
-       "at eye level from the valley floor"
+       "at eye level from the valley floor",
+       [
+        "{seen from a high ridge|seen from the air, looking straight down|at eye level from the valley floor|from water level|from far across a valley}=at eye level from the valley floor"
+       ]
       ],
       [
        "{|, one small figure in a red coat standing on it for scale|, a lone cabin with a single lit window|, a line of power pylons marching into the distance|, a small boat leaving a long wake|, a road winding through it with one car on it|, a flock of birds lifting off together}",
-       ", a lone cabin with a single lit window"
+       ", a lone cabin with a single lit window",
+       [
+        "{|, one small figure in a red coat standing on it for scale|, a lone cabin with a single lit window|, a line of power pylons marching into the distance|, a small boat leaving a long wake|, a road winding through it with one car on it|, a flock of birds lifting off together}=, a lone cabin with a single lit window"
+       ]
       ],
       [
        "{a large-format colour transparency, sharp from the nearest stone to the far ridge, calm true colour|a slide-film photograph with saturated greens and deep blue shadows|an infrared colour photograph where every leaf and blade of grass turns red and pink against a dark sky|a black-and-white fine-art print with deep blacks, glowing whites and a full range of silver greys between|a platinum print on soft cotton paper, warm brown-grey tones and gentle highlights|a cyanotype in deep Prussian blue with brushed white edges|a nineteenth-century romantic oil painting, the land glowing in golden haze and tiny figures dwarfed by it|a Japanese woodblock print with flat colour, fine carved outlines and a sky graded from indigo to white|an ink-and-wash landscape scroll, the land rising out of empty mist|a brushy gouache matte painting for an old adventure film}",
-       "a black-and-white fine-art print with deep blacks, glowing whites and a full range of silver greys between"
+       "a black-and-white fine-art print with deep blacks, glowing whites and a full range of silver greys between",
+       [
+        "{a large-format colour transparency, sharp from the nearest stone to the far ridge, calm true colour|a slide-film photograph with saturated greens and deep blue shadows|an infrared colour photograph where every leaf and blade of grass turns red and pink against a dark sky|a black-and-white fine-art print with deep blacks, glowing whites and a full range of silver greys between|a platinum print on soft cotton paper, warm brown-grey tones and gentle highlights|a cyanotype in deep Prussian blue with brushed white edges|a nineteenth-century romantic oil painting, the land glowing in golden haze and tiny figures dwarfed by it|a Japanese woodblock print with flat colour, fine carved outlines and a sky graded from indigo to white|an ink-and-wash landscape scroll, the land rising out of empty mist|a brushy gouache matte painting for an old adventure film}=a black-and-white fine-art print with deep blacks, glowing whites and a full range of silver greys between"
+       ]
       ],
       [
        "{$land, $vantage, in $sky$scale. The picture is $medium.|The picture is $medium: $land, $vantage, in $sky$scale.}",
-       "The picture is $medium: $land, $vantage, in $sky$scale."
+       "The picture is $medium: $land, $vantage, in $sky$scale.",
+       [
+        "{$land, $vantage, in $sky$scale. The picture is $medium.|The picture is $medium: $land, $vantage, in $sky$scale.}=The picture is $medium: $land, $vantage, in $sky$scale."
+       ]
       ]
      ]
     }
@@ -74,27 +110,45 @@
      "picks": [
       [
        "$land ← __world/landscapes__",
-       "a lighthouse on a lone rock in a storm-whipped sea"
+       "a lighthouse on a lone rock in a storm-whipped sea",
+       [
+        "__world/landscapes__=a lighthouse on a lone rock in a storm-whipped sea"
+       ]
       ],
       [
        "$sky ← __world/weather__",
-       "high noon under a fierce white sun and heat shimmer"
+       "high noon under a fierce white sun and heat shimmer",
+       [
+        "__world/weather__=high noon under a fierce white sun and heat shimmer"
+       ]
       ],
       [
        "{seen from a high ridge|seen from the air, looking straight down|at eye level from the valley floor|from water level|from far across a valley}",
-       "seen from a high ridge"
+       "seen from a high ridge",
+       [
+        "{seen from a high ridge|seen from the air, looking straight down|at eye level from the valley floor|from water level|from far across a valley}=seen from a high ridge"
+       ]
       ],
       [
        "{|, one small figure in a red coat standing on it for scale|, a lone cabin with a single lit window|, a line of power pylons marching into the distance|, a small boat leaving a long wake|, a road winding through it with one car on it|, a flock of birds lifting off together}",
-       ", a flock of birds lifting off together"
+       ", a flock of birds lifting off together",
+       [
+        "{|, one small figure in a red coat standing on it for scale|, a lone cabin with a single lit window|, a line of power pylons marching into the distance|, a small boat leaving a long wake|, a road winding through it with one car on it|, a flock of birds lifting off together}=, a flock of birds lifting off together"
+       ]
       ],
       [
        "{a large-format colour transparency, sharp from the nearest stone to the far ridge, calm true colour|a slide-film photograph with saturated greens and deep blue shadows|an infrared colour photograph where every leaf and blade of grass turns red and pink against a dark sky|a black-and-white fine-art print with deep blacks, glowing whites and a full range of silver greys between|a platinum print on soft cotton paper, warm brown-grey tones and gentle highlights|a cyanotype in deep Prussian blue with brushed white edges|a nineteenth-century romantic oil painting, the land glowing in golden haze and tiny figures dwarfed by it|a Japanese woodblock print with flat colour, fine carved outlines and a sky graded from indigo to white|an ink-and-wash landscape scroll, the land rising out of empty mist|a brushy gouache matte painting for an old adventure film}",
-       "a black-and-white fine-art print with deep blacks, glowing whites and a full range of silver greys between"
+       "a black-and-white fine-art print with deep blacks, glowing whites and a full range of silver greys between",
+       [
+        "{a large-format colour transparency, sharp from the nearest stone to the far ridge, calm true colour|a slide-film photograph with saturated greens and deep blue shadows|an infrared colour photograph where every leaf and blade of grass turns red and pink against a dark sky|a black-and-white fine-art print with deep blacks, glowing whites and a full range of silver greys between|a platinum print on soft cotton paper, warm brown-grey tones and gentle highlights|a cyanotype in deep Prussian blue with brushed white edges|a nineteenth-century romantic oil painting, the land glowing in golden haze and tiny figures dwarfed by it|a Japanese woodblock print with flat colour, fine carved outlines and a sky graded from indigo to white|an ink-and-wash landscape scroll, the land rising out of empty mist|a brushy gouache matte painting for an old adventure film}=a black-and-white fine-art print with deep blacks, glowing whites and a full range of silver greys between"
+       ]
       ],
       [
        "{$land, $vantage, in $sky$scale. The picture is $medium.|The picture is $medium: $land, $vantage, in $sky$scale.}",
-       "$land, $vantage, in $sky$scale. The picture is $medium."
+       "$land, $vantage, in $sky$scale. The picture is $medium.",
+       [
+        "{$land, $vantage, in $sky$scale. The picture is $medium.|The picture is $medium: $land, $vantage, in $sky$scale.}=$land, $vantage, in $sky$scale. The picture is $medium."
+       ]
       ]
      ]
     }
