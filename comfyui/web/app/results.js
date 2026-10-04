@@ -122,7 +122,8 @@ export function resultsHTML(app, takeVars) {
       + `${button("all", `${icon("trash")}all`, "Take every take off the list (the files stay)", 'data-danger="1"')}</span>` : "") + "</span>";
   const strip = list.length ? `<div class="cm-takes results" data-seg="-1" style="${takeVars}">${head}<div class="cm-takes-list">${list.map((t, i) =>
     `<button type="button" class="take${t === chosen ? " on" : ""}${t === shown ? " shown" : ""}" data-result="${esc(t.prompt)}" title="Take ${i + 1} · seed ${t.seed ?? "?"}${t.take ? ` + ${t.take}` : ""}${t === chosen ? " · the output" : ""}${t === shown ? " · shown" : " · click to show it"}">`
-    + `${mediaHTML(app, main(t))}<span class="n">${i + 1}</span><span class="del" role="button" data-rdel="${esc(t.prompt)}" title="Take it off the list (the file stays)">${icon("x")}</span></button>`).join("")}</div></div>`
+    + `${mediaHTML(app, main(t))}<span class="n">${i + 1}</span><span class="del" role="button" data-rdel="${esc(t.prompt)}" title="Take it off the list (the file stays)">${icon("x")}</span></button>`).join("")}`
+    + `<span class="grip" data-grip title="Drag to size the takes"></span></div></div>`
     : `<div class="cm-takes results" data-seg="-1">${head}</div>`;
   return strip;
 }

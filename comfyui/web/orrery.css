@@ -830,6 +830,8 @@
 .orrery-app .stage .st-media.chosen > img, .orrery-app .stage .st-media.chosen > video { border-color: var(--brass); box-shadow: 0 0 18px rgba(226,180,92,.4); }
 .orrery-app .stage .st-empty { margin: auto; padding: 16px; text-align: center; max-width: 64ch; }
 .orrery-app .stage .cm-takes.results { flex: none; margin: 0 6px 6px; }
+.orrery-app .stage .cm-takes.results .cm-takes-list { flex-wrap: nowrap; overflow-x: auto; padding: 4px 2px; scrollbar-width: thin; }
+.orrery-app .stage .cm-takes.results .take { flex: none; }
 .orrery-app .stage .st-picker { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 6px 10px; flex: none; border-top: 1px solid var(--line); }
 .orrery-app .stage .st-frame { min-width: 64px; text-align: center; font-size: 12px; }
 .orrery-app .stage .st-marks { display: flex; flex-wrap: wrap; gap: 4px; }

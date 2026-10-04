@@ -12,6 +12,8 @@ import { pickTake, takeVars } from "./timeline.js";
 
 const FPS = 24;  // the frames REMEMBER: counts, as the reel keeps a clip
 export const STAGE_H = 320;
+export const RESULT_TAKE = 56;  // the takes under a result: small, one row like a carousel; their grip sizes them
+const resultTake = (app) => Number(app.bridge.props.orrery_result_take) || RESULT_TAKE;
 
 const box = (app) => { const el = app.view?.querySelector(".stage"); return el?.classList?.contains("stage") ? el : null; };
 
@@ -53,14 +55,14 @@ function singleHTML(app) {
   if (!shown) {
     return `<div class="st-empty muted">What a run makes comes in here: the live preview while it samples, then the picture or the clip, its takes under it.`
       + `${app.bridge.modelWired?.() === false ? " For the live preview, run the model through this node: the loader into its <b>model</b> input, its <b>model</b> output on to the sampler." : ""}</div>`
-      + resultsHTML(app, takeVars(app));
+      + resultsHTML(app, takeVars(app, resultTake(app)));
   }
   const m = mainMedia(shown), counts = shown === chosen;
   return `<div class="st-head"><b>Take ${n}</b><span class="muted">seed ${shown.seed ?? "?"}${shown.take ? ` + ${shown.take}` : ""} · ${esc(m.filename)}</span>`
     + `<span class="grow"></span>${counts ? `<span class="st-chosen">${icon("check")}the output</span>`
       : `<button type="button" class="btn slim" data-stact="choose" title="This take is the output: the golden one; a take that rolled anew gives the node its seed">${icon("check")}Use this take</button>`}</div>`
     + `<div class="st-media${counts ? " chosen" : ""}">${mediaHTML(app, m, true, true)}</div>`
-    + resultsHTML(app, takeVars(app));
+    + resultsHTML(app, takeVars(app, resultTake(app)));
 }
 
 function reelHTML(app) {
@@ -108,6 +110,24 @@ export function wireStage(app, { edited }) {
   const host = box(app);
   if (!host) return;
   wireResults(app, host, () => paintStage(app, true));
+  host.addEventListener("pointerdown", (e) => {  // the takes' grip: their size, kept on the node, apart from a reel's
+    if (!e.target.closest("[data-grip]")) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const start = resultTake(app), x0 = e.clientX;
+    let least = start;
+    const move = (m) => {
+      least = Math.min(320, Math.max(32, Math.round(start + (m.clientX - x0) / 2)));
+      host.querySelectorAll(".cm-takes.results").forEach((strip) => { strip.style.cssText = takeVars(app, least); });
+    };
+    const up = () => {
+      window.removeEventListener("pointermove", move, true);
+      window.removeEventListener("pointerup", up, true);
+      app.bridge.props.orrery_result_take = least;
+    };
+    window.addEventListener("pointermove", move, true);
+    window.addEventListener("pointerup", up, true);
+  });
   const grip = app.view.querySelector(".stage-grip");
   grip?.addEventListener("pointerdown", (e) => {  // the preview's height, kept on the node
     e.preventDefault();
