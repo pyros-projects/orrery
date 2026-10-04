@@ -88,8 +88,8 @@ export function versionHTML(v) {
   const near = lines.map((_, i) => lines.slice(Math.max(0, i - 1), i + 2).some(([k]) => k !== " "));
   let body = "";
   html.forEach(([k, line], i) => {
-    if (near[i]) body += `<span class="${k === "+" ? "add" : k === "-" ? "cut" : "same"}"><i>${k === "-" ? "−" : k}</i>${line || " "}</span>`;
-    else if (i === 0 || near[i - 1]) body += `<span class="fold"><i></i>⋯</span>`;
+    if (near[i]) body += `<span class="${k === "+" ? "add" : k === "-" ? "cut" : "same"}"><i>${k === "-" ? "−" : k}</i><span>${line || " "}</span></span>`;
+    else if (i === 0 || near[i - 1]) body += `<span class="fold"><i></i><span>⋯</span></span>`;
   });
   const head = esc(v.then.split("\n")[0].trim());
   return `<div class="vcard"><div class="vhead"><b>✎ Made with another prompt</b><span>${head}</span></div>`

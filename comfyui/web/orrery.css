@@ -616,7 +616,7 @@
 .orrery-app .vhead b { color: var(--violet); font-weight: 600; font-size: 12px; }
 .orrery-app .vhead span { color: var(--muted); font: 11px/1.3 var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .orrery-app .vcard pre { margin: 0; padding: 4px 0; border-radius: 6px; background: rgba(0,0,0,.25); font: 11px/1.5 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; color: var(--faint); }
-.orrery-app .vcard pre span { display: grid; grid-template-columns: 18px 1fr; padding-right: 8px; }
+.orrery-app .vcard pre > span { display: grid; grid-template-columns: 18px 1fr; padding-right: 8px; }
 .orrery-app .vcard i { font-style: normal; text-align: center; opacity: .8; }
 .orrery-app .vcard .cut { color: #f3a5bf; background: rgba(240,122,160,.09); }
 .orrery-app .vcard .add { color: #8fe0db; background: rgba(92,200,194,.09); }

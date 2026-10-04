@@ -777,8 +777,8 @@ test("a take made with another version of its scene is told, its change shown, a
   assert.deepEqual([v.scene, v.at, v.then.split("\n").pop(), v.now.split("\n").pop()], [0, 1, "a red door opens.", "a blue door opens."]);
   assert.deepEqual(lineDiff("a\nb\nc", "a\nx\nc"), [[" ", "a"], ["-", "b"], ["+", "x"], [" ", "c"]]);
   const card = versionHTML(v);
-  assert.match(card, /class="cut"><i>−<\/i>a <mark>blue<\/mark> door opens\./);  // the changed word marked
-  assert.match(card, /class="add"><i>\+<\/i>a <mark>red<\/mark> door opens\./);
+  assert.match(card, /class="cut"><i>−<\/i><span>a <mark>blue<\/mark> door opens\.<\/span>/);  // the changed word marked
+  assert.match(card, /class="add"><i>\+<\/i><span>a <mark>red<\/mark> door opens\.<\/span>/);
   assert.match(card, /SCENE the door/);
   assert.deepEqual(wordMarks("walks slowly on", "walks on"), ["walks <mark>slowly</mark> on", "walks on"]);
   useVersion(app, v);
