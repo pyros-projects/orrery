@@ -1,0 +1,32 @@
+meta: {source: "orrery film: a director's hand, described by what it does and never by a name (H3 follows a description better than a name, and the pack borrows no names); `shot` its camera, in H3's vocabulary", builtin: true}
+entries:
+  - {value: "chapter title cards, a low shot looking up from inside a car boot and dialogue that runs long past its point", props: {shot: "static"}}
+  - {value: "perfectly symmetrical frontal framing, pastel sets like dollhouses, deadpan faces and sudden whip pans", props: {shot: "static"}}
+  - {value: "long, slow takes, wind moving through grass, water dripping and a camera that drifts as if thinking", props: {shot: "push in, slow"}}
+  - {value: "a shaky handheld camera, crash zooms and sweaty close-ups under pressure", props: {shot: "shake strongly"}}
+  - {value: "low hero angles, lens flares, slow motion and an explosion behind everyone", props: {shot: "arc, fast"}}
+  - {value: "deep focus, ceilings in the frame and hard, high-contrast shadows", props: {shot: "static"}}
+  - {value: "one-point perspective down long corridors, cold symmetry and a slow zoom that keeps going", props: {shot: "zoom in, slow"}}
+  - {value: "neon light smeared by stuttering slow motion, cigarette smoke and lovesick music", props: {shot: "tracking, slow"}}
+  - {value: "one unbroken take that weaves through the action from start to end", props: {shot: "tracking"}}
+  - {value: "tilted dutch angles, rain on every surface and faces half in shadow", props: {shot: "roll clockwise, small"}}
+  - {value: "huge wide landscapes with a tiny figure and a silence that lasts", props: {shot: "pull out, slow"}}
+  - {value: "fast montage, split screens and freeze frames with a narrator's comments", props: {shot: "push in, fast"}}
+  - {value: "warm, nostalgic light, a sense of wonder and a slow look up at the sky", props: {shot: "tilt up, slow"}}
+  - {value: "a camera circling the hero as the tension rises", props: {shot: "arc"}}
+  - {value: "a hand-cranked, sped-up look, iris-in openings and intertitle cards", props: {shot: "static"}}
+  - {value: "a camera watching from far away like a surveillance feed, unblinking", props: {shot: "static"}}
+  - {value: "extreme close-ups of eyes cut against the widest possible shot", props: {shot: "zoom in, fast"}}
+  - {value: "the hero's own eyes as the camera, their hands reaching into the frame", props: {shot: "pov"}}
+  - {value: "saturated candy colours and a song breaking out of nowhere, sung straight to the lens", props: {shot: "truck right"}}
+  - {value: "a cold blue-grey palette, an ominous drone and a slow push toward a closed door", props: {shot: "push in, slow"}}
+  - {value: "a wandering, curious camera that follows small details and lets the story come to it", props: {shot: "truck left, slow"}}
+  - {value: "documentary realism: natural light, overlapping voices and everything looking unstaged", props: {shot: "shake slightly"}}
+  - {value: "theatrical tableaux, everyone facing the camera as if on a stage, painted backdrops", props: {shot: "static"}}
+  - {value: "a snap zoom on every surprise and a lingering hold on every awkward face", props: {shot: "zoom in, fast"}}
+  - {value: "dream logic: rooms that change between cuts, slow motion and a red velvet curtain", props: {shot: "pedestal down, slow"}}
+  - {value: "a gliding camera through crowded rooms and a cut on every drumbeat", props: {shot: "tracking, fast"}}
+  - {value: "a camera low to the ground, racing along at the hero's feet", props: {shot: "tracking, fast"}}
+  - {value: "a tilt from the sky down to the hero at the start of every scene", props: {shot: "tilt down, slow"}}
+  - {value: "framing through doorways and windows, as if spying on the hero", props: {shot: "truck left, small"}}
+  - {value: "stark black-and-white contrast, a single spotlight and long silences", props: {shot: "static"}}

@@ -1,0 +1,17 @@
+# The refbias bench (#146): a subject from a Krea creator stands in a place from the landscape or setting creator, both CAST pictures by name, and Roll sweeps their strengths, three each, so one seed is nine clips: where does the subject hold, where does the place take over, and does that change with the kind of subject?
+# $type picks the subject: people (Character creator), peoples beyond humans (Fantasy creator, any people but human), creatures (Creature creator), objects (a specimen cabinet from the Cabinet of curiosities). Keep the seed fixed and dial $type, so the four kinds meet the same place.
+# Workflow: orrery_h3_reel_refmod_turbo at 0.6MP, 5 s. It needs pictures of those creators in the gallery, and of the landscape or setting creator (cast = backdrop).
+@h3 references 16:9 0.6MP
+style: live-action, natural light, photorealistic, one continuous shot
+$type = {people|peoples|creatures|objects}
+$hero = {IF $type is people: __pictures/krea/09_character_creator__|{IF $type is peoples: __pictures/krea/10_fantasy_creator[people!=human]__|{IF $type is creatures: __pictures/krea/13_creature_creator__|__pictures/krea/08_cabinet_of_curiosities__}}}
+$set = __pictures/krea/*_creator[cast=backdrop]__
+
+CAST
+@HERO (image $hero): {IF $type is objects: a tall glass-fronted cabinet holding a pinned specimen|$hero.who}
+@PLACE (image $set): $set.where
+SET: @HERO(0.2|0.5|1), @PLACE(0.2|0.5|1)
+
+SHOT 5s: static
+{IF $type is objects: In @PLACE, @HERO stands in the open foreground, catching the light.|In @PLACE, @HERO walks into the open foreground, stops and looks around.}
+SFX: $set.sfx

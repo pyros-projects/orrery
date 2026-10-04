@@ -1,4 +1,5 @@
 import pytest
+from test_golden import gallery  # the pictures a preset casts by name (#149)
 
 from orrery.dsl import expand, strip_comments, with_inline
 from orrery.h3 import compile_scene
@@ -27,7 +28,7 @@ def test_every_showcase_preset_has_title_note_and_folder_tag(home, name):
 
 @pytest.mark.parametrize("name", SHOWCASE)
 def test_every_showcase_preset_runs_clean_across_seeds(home, name):
-    h = Home(home)
+    h = gallery(Home(home))
     text = load_preset(h, name)
     screenplay = text.lstrip().startswith("@h3")
     assert screenplay == (name.split("/")[0] in ("h3", "effects", "loops") or "h3" in preset_meta(h, name)["tags"])

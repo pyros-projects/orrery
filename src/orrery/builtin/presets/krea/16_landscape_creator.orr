@@ -1,0 +1,34 @@
+---
+title: "Landscape creator"
+note: "A place for Krea 2, from four distances: one of eighty-one lands (glacier ranges, salt flats, mangroves, fjords, karst towers, cenotes, tundra, rice terraces …) in a season of its own climate, a sky that fits the season, an hour the sky allows (the Milky Way only under a clear one), and one sign of life that belongs there, never a person: a heron where there is water, reindeer in the north, a stilt house in the tropics. The grid runs establishing, wide, medium and detail, so one seed is one place, from high above to the ground at your feet, where the sign of life left its trace. Empty of people, it is a backdrop to put characters into (a CAST picture), and it keeps its sounds (EXPORT:): a reel that casts it reads $place.where and $place.sfx, and `cast = backdrop` tells it from a character (Surprise me rolls places with [cast=backdrop]). Set $view to one distance to try places faster."
+tags: [krea, landscape, places, references]
+---
+$land = __places/terrain__
+$season = __places/season[climate=$land.climate]__
+$sky = __places/weather[cold=$season.cold|any]__
+$hour = __places/hour[clear=$sky.clear|any, climate=$land.climate|any]__
+# A boat, a heron or a jetty only where there is water: life needs no water (any), the land's own (sea, lake or stream), or any water (yes).
+$water = {IF $land.wet is no: no|yes}
+$life = __places/life[climate=$land.climate|any, water=any|$land.wet|$water]__
+# What the picture carries beyond its prompt (EXPORT:): a screenplay that casts it reads $place.where, $place.sfx …
+EXPORT:
+  where = $land, in $season
+  sfx = $land.sfx, $sky.sfx
+  cast = backdrop
+  $land
+  $season
+  $sky
+  $hour
+  $life
+# The grid runs every distance: one place from high above to the ground. The detail shows only the ground, in the
+# same weather and light, with the trace the sign of life left there.
+$look = {photo:5|painted:2|animated:2|anime:2}
+$view = {establishing|wide|medium|detail}
+$opening = {IF $look is photo: A landscape photograph|{IF $look is painted: A landscape oil painting|{IF $look is animated: A 3D environment render, in the style of a modern animated feature film|A hand-painted anime film background}}}
+$shot = {IF $view is establishing: an establishing shot from high above, the land laid out below all the way to the horizon,|{IF $view is wide: a wide shot at eye level, from the near ground to the far horizon,|a medium shot at eye level, close in on one stretch}}
+$where = {IF $view is establishing: Far below, tiny in the land|{IF $view is wide: In the middle distance|A few dozen metres away}}
+$scene = {IF $view is detail: a close-up of the ground: $land.detail, $sky.near. Beside it: $life.trace. Everything lies in $hour.light.|$shot of $land, in $season. $where: $life. It is $hour, with $sky.}
+$finish = {IF $look is photo: {IF $view is detail: Shot on a macro lens with a shallow depth of field|Shot on a large-format camera, sharp from the nearest stone to the far horizon}, true natural colours.|{IF $look is painted: Rich oil paint with visible brushwork and a luminous atmosphere.|{IF $look is animated: Stylised shapes, soft global illumination and rich, saturated colour.|Painterly detail, clean shapes and soft, luminous colour.}}}
+$opening: $scene $finish
+@size 1344x768
+@grid $view

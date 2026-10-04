@@ -1,0 +1,26 @@
+meta: {source: "orrery landscape creator: the time of year, for the land's climate (`climate`: cold, temperate, hot, tropical); `cold` says which weather it can have (yes: snow and frost, no: heat, mild: neither)", builtin: true}
+entries:
+  - {value: "early spring, the first pale green buds just opening", props: {climate: temperate, cold: mild}}
+  - {value: "late spring, everything fresh green and in flower", props: {climate: temperate, cold: mild}}
+  - {value: "early summer, lush and deep green", props: {climate: temperate, cold: "no"}}
+  - {value: "high summer, everything grown full and dark green", props: {climate: temperate, cold: "no"}}
+  - {value: "late summer, the green turning gold", props: {climate: temperate, cold: "no"}}
+  - {value: "early autumn, the first green turning yellow", props: {climate: temperate, cold: mild}}
+  - {value: "full autumn, the colours turned to red, orange and gold", props: {climate: temperate, cold: mild}}
+  - {value: "late autumn, the plants bare and the colours gone brown", props: {climate: temperate, cold: mild}}
+  - {value: "the first snow of winter, a thin white dusting over everything", props: {climate: temperate, cold: "yes"}}
+  - {value: "deep winter, snow lying thick", props: {climate: temperate, cold: "yes"}}
+  - {value: "the short arctic summer, green and bright", props: {climate: cold, cold: mild}}
+  - {value: "arctic autumn, the low plants turned red and gold", props: {climate: cold, cold: mild}}
+  - {value: "the spring thaw, snow melting away in patches", props: {climate: cold, cold: mild}}
+  - {value: "polar winter, everything buried under snow and ice", props: {climate: cold, cold: "yes"}}
+  - {value: "deep midwinter, snowbound and silent", props: {climate: cold, cold: "yes"}}
+  - {value: "the dry season, the grass burnt gold and the earth cracked", props: {climate: hot, cold: "no"}}
+  - {value: "the height of summer, baking in the heat", props: {climate: hot, cold: "no"}}
+  - {value: "just after the rains, a flush of fresh green over everything", props: {climate: hot, cold: mild}}
+  - {value: "the cool months, the air clear and crisp", props: {climate: hot, cold: mild}}
+  - {value: "a brief spring, wildflowers carpeting the ground", props: {climate: hot, cold: mild}}
+  - {value: "the wet season, everything dripping and lush", props: {climate: tropical, cold: mild}}
+  - {value: "the dry season, the green faded and dusty", props: {climate: tropical, cold: "no"}}
+  - {value: "the steaming height of the hot season", props: {climate: tropical, cold: "no"}}
+  - {value: "the weeks after the monsoon, everything a vivid green", props: {climate: tropical, cold: mild}}

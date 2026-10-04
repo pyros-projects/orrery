@@ -1,0 +1,1121 @@
+{
+ "preset": "krea/16_landscape_creator",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A landscape photograph: an establishing shot from high above, the land laid out below all the way to the horizon, of a deep forested valley seen from above its rim, in full autumn, the colours turned to red, orange and gold. Far below, tiny in the land: a stone farmhouse with smoke rising from its chimney. It is the blue hour, everything in deep blue twilight, with fast low clouds racing over and sudden bursts of sun. Shot on a large-format camera, sharp from the nearest stone to the far horizon, true natural colours.",
+     "picks": [
+      [
+       "$land ← __places/terrain__",
+       "a deep forested valley seen from above its rim",
+       [
+        "__places/terrain__=a deep forested valley seen from above its rim"
+       ]
+      ],
+      [
+       "$season ← __places/season[climate=$land.climate]__",
+       "full autumn, the colours turned to red, orange and gold",
+       [
+        "__places/season__=full autumn, the colours turned to red, orange and gold"
+       ]
+      ],
+      [
+       "$sky ← __places/weather[cold=$season.cold|any]__",
+       "fast low clouds racing over and sudden bursts of sun",
+       [
+        "__places/weather__=fast low clouds racing over and sudden bursts of sun"
+       ]
+      ],
+      [
+       "$hour ← __places/hour[clear=$sky.clear|any, climate=$land.climate|any]__",
+       "the blue hour, everything in deep blue twilight",
+       [
+        "__places/hour__=the blue hour, everything in deep blue twilight"
+       ]
+      ],
+      [
+       "$life ← __places/life[climate=$land.climate|any, water=any|$land.wet|$water]__",
+       "a stone farmhouse with smoke rising from its chimney",
+       [
+        "__places/life__=a stone farmhouse with smoke rising from its chimney"
+       ]
+      ],
+      [
+       "{photo|painted|animated|anime}",
+       "photo",
+       [
+        "{photo|painted|animated|anime}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "establishing",
+       [
+        "{establishing|wide|medium|detail}=establishing"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": "a deep forested valley seen from above its rim, in full autumn, the colours turned to red, orange and gold",
+      "sfx": "a muffled quiet and a crow, a gusting wind",
+      "cast": "backdrop",
+      "land": {
+       "value": "a deep forested valley seen from above its rim",
+       "climate": "temperate",
+       "detail": "a fern unfurling on the forest floor",
+       "kind": "forest",
+       "sfx": "a muffled quiet and a crow",
+       "wet": "no"
+      },
+      "season": {
+       "value": "full autumn, the colours turned to red, orange and gold",
+       "climate": "temperate",
+       "cold": "mild"
+      },
+      "sky": {
+       "value": "fast low clouds racing over and sudden bursts of sun",
+       "clear": "no",
+       "cold": "any",
+       "near": "flickering between sun and shadow",
+       "sfx": "a gusting wind"
+      },
+      "hour": {
+       "value": "the blue hour, everything in deep blue twilight",
+       "clear": "any",
+       "climate": "any",
+       "light": "cool blue twilight"
+      },
+      "life": {
+       "value": "a stone farmhouse with smoke rising from its chimney",
+       "climate": "temperate",
+       "trace": "a cracked roof slate",
+       "water": "any"
+      }
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A landscape photograph: a wide shot at eye level, from the near ground to the far horizon, of a deep forested valley seen from above its rim, in full autumn, the colours turned to red, orange and gold. In the middle distance: a stone farmhouse with smoke rising from its chimney. It is the blue hour, everything in deep blue twilight, with fast low clouds racing over and sudden bursts of sun. Shot on a large-format camera, sharp from the nearest stone to the far horizon, true natural colours.",
+     "picks": [
+      [
+       "$land ← __places/terrain__",
+       "a deep forested valley seen from above its rim",
+       [
+        "__places/terrain__=a deep forested valley seen from above its rim"
+       ]
+      ],
+      [
+       "$season ← __places/season[climate=$land.climate]__",
+       "full autumn, the colours turned to red, orange and gold",
+       [
+        "__places/season__=full autumn, the colours turned to red, orange and gold"
+       ]
+      ],
+      [
+       "$sky ← __places/weather[cold=$season.cold|any]__",
+       "fast low clouds racing over and sudden bursts of sun",
+       [
+        "__places/weather__=fast low clouds racing over and sudden bursts of sun"
+       ]
+      ],
+      [
+       "$hour ← __places/hour[clear=$sky.clear|any, climate=$land.climate|any]__",
+       "the blue hour, everything in deep blue twilight",
+       [
+        "__places/hour__=the blue hour, everything in deep blue twilight"
+       ]
+      ],
+      [
+       "$life ← __places/life[climate=$land.climate|any, water=any|$land.wet|$water]__",
+       "a stone farmhouse with smoke rising from its chimney",
+       [
+        "__places/life__=a stone farmhouse with smoke rising from its chimney"
+       ]
+      ],
+      [
+       "{photo|painted|animated|anime}",
+       "photo",
+       [
+        "{photo|painted|animated|anime}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "wide",
+       [
+        "{establishing|wide|medium|detail}=wide"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": "a deep forested valley seen from above its rim, in full autumn, the colours turned to red, orange and gold",
+      "sfx": "a muffled quiet and a crow, a gusting wind",
+      "cast": "backdrop",
+      "land": {
+       "value": "a deep forested valley seen from above its rim",
+       "climate": "temperate",
+       "detail": "a fern unfurling on the forest floor",
+       "kind": "forest",
+       "sfx": "a muffled quiet and a crow",
+       "wet": "no"
+      },
+      "season": {
+       "value": "full autumn, the colours turned to red, orange and gold",
+       "climate": "temperate",
+       "cold": "mild"
+      },
+      "sky": {
+       "value": "fast low clouds racing over and sudden bursts of sun",
+       "clear": "no",
+       "cold": "any",
+       "near": "flickering between sun and shadow",
+       "sfx": "a gusting wind"
+      },
+      "hour": {
+       "value": "the blue hour, everything in deep blue twilight",
+       "clear": "any",
+       "climate": "any",
+       "light": "cool blue twilight"
+      },
+      "life": {
+       "value": "a stone farmhouse with smoke rising from its chimney",
+       "climate": "temperate",
+       "trace": "a cracked roof slate",
+       "water": "any"
+      }
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A landscape photograph: a medium shot at eye level, close in on one stretch of a deep forested valley seen from above its rim, in full autumn, the colours turned to red, orange and gold. A few dozen metres away: a stone farmhouse with smoke rising from its chimney. It is the blue hour, everything in deep blue twilight, with fast low clouds racing over and sudden bursts of sun. Shot on a large-format camera, sharp from the nearest stone to the far horizon, true natural colours.",
+     "picks": [
+      [
+       "$land ← __places/terrain__",
+       "a deep forested valley seen from above its rim",
+       [
+        "__places/terrain__=a deep forested valley seen from above its rim"
+       ]
+      ],
+      [
+       "$season ← __places/season[climate=$land.climate]__",
+       "full autumn, the colours turned to red, orange and gold",
+       [
+        "__places/season__=full autumn, the colours turned to red, orange and gold"
+       ]
+      ],
+      [
+       "$sky ← __places/weather[cold=$season.cold|any]__",
+       "fast low clouds racing over and sudden bursts of sun",
+       [
+        "__places/weather__=fast low clouds racing over and sudden bursts of sun"
+       ]
+      ],
+      [
+       "$hour ← __places/hour[clear=$sky.clear|any, climate=$land.climate|any]__",
+       "the blue hour, everything in deep blue twilight",
+       [
+        "__places/hour__=the blue hour, everything in deep blue twilight"
+       ]
+      ],
+      [
+       "$life ← __places/life[climate=$land.climate|any, water=any|$land.wet|$water]__",
+       "a stone farmhouse with smoke rising from its chimney",
+       [
+        "__places/life__=a stone farmhouse with smoke rising from its chimney"
+       ]
+      ],
+      [
+       "{photo|painted|animated|anime}",
+       "photo",
+       [
+        "{photo|painted|animated|anime}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "medium",
+       [
+        "{establishing|wide|medium|detail}=medium"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": "a deep forested valley seen from above its rim, in full autumn, the colours turned to red, orange and gold",
+      "sfx": "a muffled quiet and a crow, a gusting wind",
+      "cast": "backdrop",
+      "land": {
+       "value": "a deep forested valley seen from above its rim",
+       "climate": "temperate",
+       "detail": "a fern unfurling on the forest floor",
+       "kind": "forest",
+       "sfx": "a muffled quiet and a crow",
+       "wet": "no"
+      },
+      "season": {
+       "value": "full autumn, the colours turned to red, orange and gold",
+       "climate": "temperate",
+       "cold": "mild"
+      },
+      "sky": {
+       "value": "fast low clouds racing over and sudden bursts of sun",
+       "clear": "no",
+       "cold": "any",
+       "near": "flickering between sun and shadow",
+       "sfx": "a gusting wind"
+      },
+      "hour": {
+       "value": "the blue hour, everything in deep blue twilight",
+       "clear": "any",
+       "climate": "any",
+       "light": "cool blue twilight"
+      },
+      "life": {
+       "value": "a stone farmhouse with smoke rising from its chimney",
+       "climate": "temperate",
+       "trace": "a cracked roof slate",
+       "water": "any"
+      }
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A landscape photograph: a close-up of the ground: a fern unfurling on the forest floor, flickering between sun and shadow. Beside it: a cracked roof slate. Everything lies in cool blue twilight. Shot on a macro lens with a shallow depth of field, true natural colours.",
+     "picks": [
+      [
+       "$land ← __places/terrain__",
+       "a deep forested valley seen from above its rim",
+       [
+        "__places/terrain__=a deep forested valley seen from above its rim"
+       ]
+      ],
+      [
+       "$season ← __places/season[climate=$land.climate]__",
+       "full autumn, the colours turned to red, orange and gold",
+       [
+        "__places/season__=full autumn, the colours turned to red, orange and gold"
+       ]
+      ],
+      [
+       "$sky ← __places/weather[cold=$season.cold|any]__",
+       "fast low clouds racing over and sudden bursts of sun",
+       [
+        "__places/weather__=fast low clouds racing over and sudden bursts of sun"
+       ]
+      ],
+      [
+       "$hour ← __places/hour[clear=$sky.clear|any, climate=$land.climate|any]__",
+       "the blue hour, everything in deep blue twilight",
+       [
+        "__places/hour__=the blue hour, everything in deep blue twilight"
+       ]
+      ],
+      [
+       "$life ← __places/life[climate=$land.climate|any, water=any|$land.wet|$water]__",
+       "a stone farmhouse with smoke rising from its chimney",
+       [
+        "__places/life__=a stone farmhouse with smoke rising from its chimney"
+       ]
+      ],
+      [
+       "{photo|painted|animated|anime}",
+       "photo",
+       [
+        "{photo|painted|animated|anime}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "detail",
+       [
+        "{establishing|wide|medium|detail}=detail"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": "a deep forested valley seen from above its rim, in full autumn, the colours turned to red, orange and gold",
+      "sfx": "a muffled quiet and a crow, a gusting wind",
+      "cast": "backdrop",
+      "land": {
+       "value": "a deep forested valley seen from above its rim",
+       "climate": "temperate",
+       "detail": "a fern unfurling on the forest floor",
+       "kind": "forest",
+       "sfx": "a muffled quiet and a crow",
+       "wet": "no"
+      },
+      "season": {
+       "value": "full autumn, the colours turned to red, orange and gold",
+       "climate": "temperate",
+       "cold": "mild"
+      },
+      "sky": {
+       "value": "fast low clouds racing over and sudden bursts of sun",
+       "clear": "no",
+       "cold": "any",
+       "near": "flickering between sun and shadow",
+       "sfx": "a gusting wind"
+      },
+      "hour": {
+       "value": "the blue hour, everything in deep blue twilight",
+       "clear": "any",
+       "climate": "any",
+       "light": "cool blue twilight"
+      },
+      "life": {
+       "value": "a stone farmhouse with smoke rising from its chimney",
+       "climate": "temperate",
+       "trace": "a cracked roof slate",
+       "water": "any"
+      }
+     }
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A landscape oil painting: an establishing shot from high above, the land laid out below all the way to the horizon, of a vast steppe of short grass and scattered stones, in early summer, lush and deep green. Far below, tiny in the land: a lone horse grazing. It is the blue hour, everything in deep blue twilight, with heavy dew and still, clear air. Rich oil paint with visible brushwork and a luminous atmosphere.",
+     "picks": [
+      [
+       "$land ← __places/terrain__",
+       "a vast steppe of short grass and scattered stones",
+       [
+        "__places/terrain__=a vast steppe of short grass and scattered stones"
+       ]
+      ],
+      [
+       "$season ← __places/season[climate=$land.climate]__",
+       "early summer, lush and deep green",
+       [
+        "__places/season__=early summer, lush and deep green"
+       ]
+      ],
+      [
+       "$sky ← __places/weather[cold=$season.cold|any]__",
+       "heavy dew and still, clear air",
+       [
+        "__places/weather__=heavy dew and still, clear air"
+       ]
+      ],
+      [
+       "$hour ← __places/hour[clear=$sky.clear|any, climate=$land.climate|any]__",
+       "the blue hour, everything in deep blue twilight",
+       [
+        "__places/hour__=the blue hour, everything in deep blue twilight"
+       ]
+      ],
+      [
+       "$life ← __places/life[climate=$land.climate|any, water=any|$land.wet|$water]__",
+       "a lone horse grazing",
+       [
+        "__places/life__=a lone horse grazing"
+       ]
+      ],
+      [
+       "{photo|painted|animated|anime}",
+       "painted",
+       [
+        "{photo|painted|animated|anime}=painted"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "establishing",
+       [
+        "{establishing|wide|medium|detail}=establishing"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": "a vast steppe of short grass and scattered stones, in early summer, lush and deep green",
+      "sfx": "an empty wind and a distant horse, a few drops falling",
+      "cast": "backdrop",
+      "land": {
+       "value": "a vast steppe of short grass and scattered stones",
+       "climate": "temperate",
+       "detail": "a stone half buried in short dry grass",
+       "kind": "steppe",
+       "sfx": "an empty wind and a distant horse",
+       "wet": "no"
+      },
+      "season": {
+       "value": "early summer, lush and deep green",
+       "climate": "temperate",
+       "cold": "no"
+      },
+      "sky": {
+       "value": "heavy dew and still, clear air",
+       "clear": "yes",
+       "cold": "any",
+       "near": "beaded with dew",
+       "sfx": "a few drops falling"
+      },
+      "hour": {
+       "value": "the blue hour, everything in deep blue twilight",
+       "clear": "any",
+       "climate": "any",
+       "light": "cool blue twilight"
+      },
+      "life": {
+       "value": "a lone horse grazing",
+       "climate": "temperate",
+       "trace": "a hoofprint pressed into the earth",
+       "water": "any"
+      }
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A landscape oil painting: a wide shot at eye level, from the near ground to the far horizon, of a vast steppe of short grass and scattered stones, in early summer, lush and deep green. In the middle distance: a lone horse grazing. It is the blue hour, everything in deep blue twilight, with heavy dew and still, clear air. Rich oil paint with visible brushwork and a luminous atmosphere.",
+     "picks": [
+      [
+       "$land ← __places/terrain__",
+       "a vast steppe of short grass and scattered stones",
+       [
+        "__places/terrain__=a vast steppe of short grass and scattered stones"
+       ]
+      ],
+      [
+       "$season ← __places/season[climate=$land.climate]__",
+       "early summer, lush and deep green",
+       [
+        "__places/season__=early summer, lush and deep green"
+       ]
+      ],
+      [
+       "$sky ← __places/weather[cold=$season.cold|any]__",
+       "heavy dew and still, clear air",
+       [
+        "__places/weather__=heavy dew and still, clear air"
+       ]
+      ],
+      [
+       "$hour ← __places/hour[clear=$sky.clear|any, climate=$land.climate|any]__",
+       "the blue hour, everything in deep blue twilight",
+       [
+        "__places/hour__=the blue hour, everything in deep blue twilight"
+       ]
+      ],
+      [
+       "$life ← __places/life[climate=$land.climate|any, water=any|$land.wet|$water]__",
+       "a lone horse grazing",
+       [
+        "__places/life__=a lone horse grazing"
+       ]
+      ],
+      [
+       "{photo|painted|animated|anime}",
+       "painted",
+       [
+        "{photo|painted|animated|anime}=painted"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "wide",
+       [
+        "{establishing|wide|medium|detail}=wide"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": "a vast steppe of short grass and scattered stones, in early summer, lush and deep green",
+      "sfx": "an empty wind and a distant horse, a few drops falling",
+      "cast": "backdrop",
+      "land": {
+       "value": "a vast steppe of short grass and scattered stones",
+       "climate": "temperate",
+       "detail": "a stone half buried in short dry grass",
+       "kind": "steppe",
+       "sfx": "an empty wind and a distant horse",
+       "wet": "no"
+      },
+      "season": {
+       "value": "early summer, lush and deep green",
+       "climate": "temperate",
+       "cold": "no"
+      },
+      "sky": {
+       "value": "heavy dew and still, clear air",
+       "clear": "yes",
+       "cold": "any",
+       "near": "beaded with dew",
+       "sfx": "a few drops falling"
+      },
+      "hour": {
+       "value": "the blue hour, everything in deep blue twilight",
+       "clear": "any",
+       "climate": "any",
+       "light": "cool blue twilight"
+      },
+      "life": {
+       "value": "a lone horse grazing",
+       "climate": "temperate",
+       "trace": "a hoofprint pressed into the earth",
+       "water": "any"
+      }
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A landscape oil painting: a medium shot at eye level, close in on one stretch of a vast steppe of short grass and scattered stones, in early summer, lush and deep green. A few dozen metres away: a lone horse grazing. It is the blue hour, everything in deep blue twilight, with heavy dew and still, clear air. Rich oil paint with visible brushwork and a luminous atmosphere.",
+     "picks": [
+      [
+       "$land ← __places/terrain__",
+       "a vast steppe of short grass and scattered stones",
+       [
+        "__places/terrain__=a vast steppe of short grass and scattered stones"
+       ]
+      ],
+      [
+       "$season ← __places/season[climate=$land.climate]__",
+       "early summer, lush and deep green",
+       [
+        "__places/season__=early summer, lush and deep green"
+       ]
+      ],
+      [
+       "$sky ← __places/weather[cold=$season.cold|any]__",
+       "heavy dew and still, clear air",
+       [
+        "__places/weather__=heavy dew and still, clear air"
+       ]
+      ],
+      [
+       "$hour ← __places/hour[clear=$sky.clear|any, climate=$land.climate|any]__",
+       "the blue hour, everything in deep blue twilight",
+       [
+        "__places/hour__=the blue hour, everything in deep blue twilight"
+       ]
+      ],
+      [
+       "$life ← __places/life[climate=$land.climate|any, water=any|$land.wet|$water]__",
+       "a lone horse grazing",
+       [
+        "__places/life__=a lone horse grazing"
+       ]
+      ],
+      [
+       "{photo|painted|animated|anime}",
+       "painted",
+       [
+        "{photo|painted|animated|anime}=painted"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "medium",
+       [
+        "{establishing|wide|medium|detail}=medium"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": "a vast steppe of short grass and scattered stones, in early summer, lush and deep green",
+      "sfx": "an empty wind and a distant horse, a few drops falling",
+      "cast": "backdrop",
+      "land": {
+       "value": "a vast steppe of short grass and scattered stones",
+       "climate": "temperate",
+       "detail": "a stone half buried in short dry grass",
+       "kind": "steppe",
+       "sfx": "an empty wind and a distant horse",
+       "wet": "no"
+      },
+      "season": {
+       "value": "early summer, lush and deep green",
+       "climate": "temperate",
+       "cold": "no"
+      },
+      "sky": {
+       "value": "heavy dew and still, clear air",
+       "clear": "yes",
+       "cold": "any",
+       "near": "beaded with dew",
+       "sfx": "a few drops falling"
+      },
+      "hour": {
+       "value": "the blue hour, everything in deep blue twilight",
+       "clear": "any",
+       "climate": "any",
+       "light": "cool blue twilight"
+      },
+      "life": {
+       "value": "a lone horse grazing",
+       "climate": "temperate",
+       "trace": "a hoofprint pressed into the earth",
+       "water": "any"
+      }
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A landscape oil painting: a close-up of the ground: a stone half buried in short dry grass, beaded with dew. Beside it: a hoofprint pressed into the earth. Everything lies in cool blue twilight. Rich oil paint with visible brushwork and a luminous atmosphere.",
+     "picks": [
+      [
+       "$land ← __places/terrain__",
+       "a vast steppe of short grass and scattered stones",
+       [
+        "__places/terrain__=a vast steppe of short grass and scattered stones"
+       ]
+      ],
+      [
+       "$season ← __places/season[climate=$land.climate]__",
+       "early summer, lush and deep green",
+       [
+        "__places/season__=early summer, lush and deep green"
+       ]
+      ],
+      [
+       "$sky ← __places/weather[cold=$season.cold|any]__",
+       "heavy dew and still, clear air",
+       [
+        "__places/weather__=heavy dew and still, clear air"
+       ]
+      ],
+      [
+       "$hour ← __places/hour[clear=$sky.clear|any, climate=$land.climate|any]__",
+       "the blue hour, everything in deep blue twilight",
+       [
+        "__places/hour__=the blue hour, everything in deep blue twilight"
+       ]
+      ],
+      [
+       "$life ← __places/life[climate=$land.climate|any, water=any|$land.wet|$water]__",
+       "a lone horse grazing",
+       [
+        "__places/life__=a lone horse grazing"
+       ]
+      ],
+      [
+       "{photo|painted|animated|anime}",
+       "painted",
+       [
+        "{photo|painted|animated|anime}=painted"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "detail",
+       [
+        "{establishing|wide|medium|detail}=detail"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": "a vast steppe of short grass and scattered stones, in early summer, lush and deep green",
+      "sfx": "an empty wind and a distant horse, a few drops falling",
+      "cast": "backdrop",
+      "land": {
+       "value": "a vast steppe of short grass and scattered stones",
+       "climate": "temperate",
+       "detail": "a stone half buried in short dry grass",
+       "kind": "steppe",
+       "sfx": "an empty wind and a distant horse",
+       "wet": "no"
+      },
+      "season": {
+       "value": "early summer, lush and deep green",
+       "climate": "temperate",
+       "cold": "no"
+      },
+      "sky": {
+       "value": "heavy dew and still, clear air",
+       "clear": "yes",
+       "cold": "any",
+       "near": "beaded with dew",
+       "sfx": "a few drops falling"
+      },
+      "hour": {
+       "value": "the blue hour, everything in deep blue twilight",
+       "clear": "any",
+       "climate": "any",
+       "light": "cool blue twilight"
+      },
+      "life": {
+       "value": "a lone horse grazing",
+       "climate": "temperate",
+       "trace": "a hoofprint pressed into the earth",
+       "water": "any"
+      }
+     }
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A landscape photograph: an establishing shot from high above, the land laid out below all the way to the horizon, of a rocky arctic coast of ice floes and dark water, in arctic autumn, the low plants turned red and gold. Far below, tiny in the land: a musk ox standing in the wind. It is a dark night, the land lit only by a faint glow in the sky, with low mist lying in the hollows. Shot on a large-format camera, sharp from the nearest stone to the far horizon, true natural colours.",
+     "picks": [
+      [
+       "$land ← __places/terrain__",
+       "a rocky arctic coast of ice floes and dark water",
+       [
+        "__places/terrain__=a rocky arctic coast of ice floes and dark water"
+       ]
+      ],
+      [
+       "$season ← __places/season[climate=$land.climate]__",
+       "arctic autumn, the low plants turned red and gold",
+       [
+        "__places/season__=arctic autumn, the low plants turned red and gold"
+       ]
+      ],
+      [
+       "$sky ← __places/weather[cold=$season.cold|any]__",
+       "low mist lying in the hollows",
+       [
+        "__places/weather__=low mist lying in the hollows"
+       ]
+      ],
+      [
+       "$hour ← __places/hour[clear=$sky.clear|any, climate=$land.climate|any]__",
+       "a dark night, the land lit only by a faint glow in the sky",
+       [
+        "__places/hour__=a dark night, the land lit only by a faint glow in the sky"
+       ]
+      ],
+      [
+       "$life ← __places/life[climate=$land.climate|any, water=any|$land.wet|$water]__",
+       "a musk ox standing in the wind",
+       [
+        "__places/life__=a musk ox standing in the wind"
+       ]
+      ],
+      [
+       "{photo|painted|animated|anime}",
+       "photo",
+       [
+        "{photo|painted|animated|anime}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "establishing",
+       [
+        "{establishing|wide|medium|detail}=establishing"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": "a rocky arctic coast of ice floes and dark water, in arctic autumn, the low plants turned red and gold",
+      "sfx": "ice knocking and a far-off seal, a damp quiet and a far-off bird",
+      "cast": "backdrop",
+      "land": {
+       "value": "a rocky arctic coast of ice floes and dark water",
+       "climate": "cold",
+       "detail": "a chunk of blue ice in black water",
+       "kind": "ice",
+       "sfx": "ice knocking and a far-off seal",
+       "wet": "sea"
+      },
+      "season": {
+       "value": "arctic autumn, the low plants turned red and gold",
+       "climate": "cold",
+       "cold": "mild"
+      },
+      "sky": {
+       "value": "low mist lying in the hollows",
+       "clear": "no",
+       "cold": "any",
+       "near": "damp with mist",
+       "sfx": "a damp quiet and a far-off bird"
+      },
+      "hour": {
+       "value": "a dark night, the land lit only by a faint glow in the sky",
+       "clear": "any",
+       "climate": "any",
+       "light": "the dim glow of night"
+      },
+      "life": {
+       "value": "a musk ox standing in the wind",
+       "climate": "cold",
+       "trace": "a tuft of brown wool snagged on a twig",
+       "water": "any"
+      }
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A landscape photograph: a wide shot at eye level, from the near ground to the far horizon, of a rocky arctic coast of ice floes and dark water, in arctic autumn, the low plants turned red and gold. In the middle distance: a musk ox standing in the wind. It is a dark night, the land lit only by a faint glow in the sky, with low mist lying in the hollows. Shot on a large-format camera, sharp from the nearest stone to the far horizon, true natural colours.",
+     "picks": [
+      [
+       "$land ← __places/terrain__",
+       "a rocky arctic coast of ice floes and dark water",
+       [
+        "__places/terrain__=a rocky arctic coast of ice floes and dark water"
+       ]
+      ],
+      [
+       "$season ← __places/season[climate=$land.climate]__",
+       "arctic autumn, the low plants turned red and gold",
+       [
+        "__places/season__=arctic autumn, the low plants turned red and gold"
+       ]
+      ],
+      [
+       "$sky ← __places/weather[cold=$season.cold|any]__",
+       "low mist lying in the hollows",
+       [
+        "__places/weather__=low mist lying in the hollows"
+       ]
+      ],
+      [
+       "$hour ← __places/hour[clear=$sky.clear|any, climate=$land.climate|any]__",
+       "a dark night, the land lit only by a faint glow in the sky",
+       [
+        "__places/hour__=a dark night, the land lit only by a faint glow in the sky"
+       ]
+      ],
+      [
+       "$life ← __places/life[climate=$land.climate|any, water=any|$land.wet|$water]__",
+       "a musk ox standing in the wind",
+       [
+        "__places/life__=a musk ox standing in the wind"
+       ]
+      ],
+      [
+       "{photo|painted|animated|anime}",
+       "photo",
+       [
+        "{photo|painted|animated|anime}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "wide",
+       [
+        "{establishing|wide|medium|detail}=wide"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": "a rocky arctic coast of ice floes and dark water, in arctic autumn, the low plants turned red and gold",
+      "sfx": "ice knocking and a far-off seal, a damp quiet and a far-off bird",
+      "cast": "backdrop",
+      "land": {
+       "value": "a rocky arctic coast of ice floes and dark water",
+       "climate": "cold",
+       "detail": "a chunk of blue ice in black water",
+       "kind": "ice",
+       "sfx": "ice knocking and a far-off seal",
+       "wet": "sea"
+      },
+      "season": {
+       "value": "arctic autumn, the low plants turned red and gold",
+       "climate": "cold",
+       "cold": "mild"
+      },
+      "sky": {
+       "value": "low mist lying in the hollows",
+       "clear": "no",
+       "cold": "any",
+       "near": "damp with mist",
+       "sfx": "a damp quiet and a far-off bird"
+      },
+      "hour": {
+       "value": "a dark night, the land lit only by a faint glow in the sky",
+       "clear": "any",
+       "climate": "any",
+       "light": "the dim glow of night"
+      },
+      "life": {
+       "value": "a musk ox standing in the wind",
+       "climate": "cold",
+       "trace": "a tuft of brown wool snagged on a twig",
+       "water": "any"
+      }
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A landscape photograph: a medium shot at eye level, close in on one stretch of a rocky arctic coast of ice floes and dark water, in arctic autumn, the low plants turned red and gold. A few dozen metres away: a musk ox standing in the wind. It is a dark night, the land lit only by a faint glow in the sky, with low mist lying in the hollows. Shot on a large-format camera, sharp from the nearest stone to the far horizon, true natural colours.",
+     "picks": [
+      [
+       "$land ← __places/terrain__",
+       "a rocky arctic coast of ice floes and dark water",
+       [
+        "__places/terrain__=a rocky arctic coast of ice floes and dark water"
+       ]
+      ],
+      [
+       "$season ← __places/season[climate=$land.climate]__",
+       "arctic autumn, the low plants turned red and gold",
+       [
+        "__places/season__=arctic autumn, the low plants turned red and gold"
+       ]
+      ],
+      [
+       "$sky ← __places/weather[cold=$season.cold|any]__",
+       "low mist lying in the hollows",
+       [
+        "__places/weather__=low mist lying in the hollows"
+       ]
+      ],
+      [
+       "$hour ← __places/hour[clear=$sky.clear|any, climate=$land.climate|any]__",
+       "a dark night, the land lit only by a faint glow in the sky",
+       [
+        "__places/hour__=a dark night, the land lit only by a faint glow in the sky"
+       ]
+      ],
+      [
+       "$life ← __places/life[climate=$land.climate|any, water=any|$land.wet|$water]__",
+       "a musk ox standing in the wind",
+       [
+        "__places/life__=a musk ox standing in the wind"
+       ]
+      ],
+      [
+       "{photo|painted|animated|anime}",
+       "photo",
+       [
+        "{photo|painted|animated|anime}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "medium",
+       [
+        "{establishing|wide|medium|detail}=medium"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": "a rocky arctic coast of ice floes and dark water, in arctic autumn, the low plants turned red and gold",
+      "sfx": "ice knocking and a far-off seal, a damp quiet and a far-off bird",
+      "cast": "backdrop",
+      "land": {
+       "value": "a rocky arctic coast of ice floes and dark water",
+       "climate": "cold",
+       "detail": "a chunk of blue ice in black water",
+       "kind": "ice",
+       "sfx": "ice knocking and a far-off seal",
+       "wet": "sea"
+      },
+      "season": {
+       "value": "arctic autumn, the low plants turned red and gold",
+       "climate": "cold",
+       "cold": "mild"
+      },
+      "sky": {
+       "value": "low mist lying in the hollows",
+       "clear": "no",
+       "cold": "any",
+       "near": "damp with mist",
+       "sfx": "a damp quiet and a far-off bird"
+      },
+      "hour": {
+       "value": "a dark night, the land lit only by a faint glow in the sky",
+       "clear": "any",
+       "climate": "any",
+       "light": "the dim glow of night"
+      },
+      "life": {
+       "value": "a musk ox standing in the wind",
+       "climate": "cold",
+       "trace": "a tuft of brown wool snagged on a twig",
+       "water": "any"
+      }
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A landscape photograph: a close-up of the ground: a chunk of blue ice in black water, damp with mist. Beside it: a tuft of brown wool snagged on a twig. Everything lies in the dim glow of night. Shot on a macro lens with a shallow depth of field, true natural colours.",
+     "picks": [
+      [
+       "$land ← __places/terrain__",
+       "a rocky arctic coast of ice floes and dark water",
+       [
+        "__places/terrain__=a rocky arctic coast of ice floes and dark water"
+       ]
+      ],
+      [
+       "$season ← __places/season[climate=$land.climate]__",
+       "arctic autumn, the low plants turned red and gold",
+       [
+        "__places/season__=arctic autumn, the low plants turned red and gold"
+       ]
+      ],
+      [
+       "$sky ← __places/weather[cold=$season.cold|any]__",
+       "low mist lying in the hollows",
+       [
+        "__places/weather__=low mist lying in the hollows"
+       ]
+      ],
+      [
+       "$hour ← __places/hour[clear=$sky.clear|any, climate=$land.climate|any]__",
+       "a dark night, the land lit only by a faint glow in the sky",
+       [
+        "__places/hour__=a dark night, the land lit only by a faint glow in the sky"
+       ]
+      ],
+      [
+       "$life ← __places/life[climate=$land.climate|any, water=any|$land.wet|$water]__",
+       "a musk ox standing in the wind",
+       [
+        "__places/life__=a musk ox standing in the wind"
+       ]
+      ],
+      [
+       "{photo|painted|animated|anime}",
+       "photo",
+       [
+        "{photo|painted|animated|anime}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "detail",
+       [
+        "{establishing|wide|medium|detail}=detail"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": "a rocky arctic coast of ice floes and dark water, in arctic autumn, the low plants turned red and gold",
+      "sfx": "ice knocking and a far-off seal, a damp quiet and a far-off bird",
+      "cast": "backdrop",
+      "land": {
+       "value": "a rocky arctic coast of ice floes and dark water",
+       "climate": "cold",
+       "detail": "a chunk of blue ice in black water",
+       "kind": "ice",
+       "sfx": "ice knocking and a far-off seal",
+       "wet": "sea"
+      },
+      "season": {
+       "value": "arctic autumn, the low plants turned red and gold",
+       "climate": "cold",
+       "cold": "mild"
+      },
+      "sky": {
+       "value": "low mist lying in the hollows",
+       "clear": "no",
+       "cold": "any",
+       "near": "damp with mist",
+       "sfx": "a damp quiet and a far-off bird"
+      },
+      "hour": {
+       "value": "a dark night, the land lit only by a faint glow in the sky",
+       "clear": "any",
+       "climate": "any",
+       "light": "the dim glow of night"
+      },
+      "life": {
+       "value": "a musk ox standing in the wind",
+       "climate": "cold",
+       "trace": "a tuft of brown wool snagged on a twig",
+       "water": "any"
+      }
+     }
+    }
+   ]
+  }
+ }
+}

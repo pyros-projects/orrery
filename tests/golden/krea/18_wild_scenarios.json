@@ -1,0 +1,116 @@
+{
+ "preset": "krea/18_wild_scenarios",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "The picture is a 1950s pulp magazine cover painted in lurid colour with dramatic lighting and a worn, creased paper texture, seen through a rain-streaked window: a cyclist riding through the city in the rain.",
+     "picks": [
+      [
+       "{tame|odd|wild|abstract}",
+       "tame",
+       [
+        "{tame|odd|wild|abstract}=tame"
+       ]
+      ],
+      [
+       "$scenario ← __scenarios/*[wild=$wild]__",
+       "a cyclist riding through the city in the rain",
+       [
+        "__scenarios/everyday__=a cyclist riding through the city in the rain"
+       ]
+      ],
+      [
+       "$look ← __looks/still__",
+       "a 1950s pulp magazine cover painted in lurid colour with dramatic lighting and a worn, creased paper texture",
+       [
+        "__looks/still__=a 1950s pulp magazine cover painted in lurid colour with dramatic lighting and a worn, creased paper texture"
+       ]
+      ],
+      [
+       "$frame ← __frame/compositions__",
+       "seen through a rain-streaked window",
+       [
+        "__frame/compositions__=seen through a rain-streaked window"
+       ]
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "The picture is a cubist painting that breaks the subject into overlapping planes seen from several angles at once, in ochre and grey, framed by a doorway in darkness: two suns dancing around each other over a field of metal flowers.",
+     "picks": [
+      [
+       "{tame|odd|wild|abstract}",
+       "wild",
+       [
+        "{tame|odd|wild|abstract}=wild"
+       ]
+      ],
+      [
+       "$scenario ← __scenarios/*[wild=$wild]__",
+       "two suns dancing around each other over a field of metal flowers",
+       [
+        "__scenarios/scifi__=two suns dancing around each other over a field of metal flowers"
+       ]
+      ],
+      [
+       "$look ← __looks/still__",
+       "a cubist painting that breaks the subject into overlapping planes seen from several angles at once, in ochre and grey",
+       [
+        "__looks/still__=a cubist painting that breaks the subject into overlapping planes seen from several angles at once, in ochre and grey"
+       ]
+      ],
+      [
+       "$frame ← __frame/compositions__",
+       "framed by a doorway in darkness",
+       [
+        "__frame/compositions__=framed by a doorway in darkness"
+       ]
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "The picture is a colour infrared photograph on false-colour film: foliage turned candy pink and red, skies deep blue, skin pale and waxy, seen through a rain-streaked window: a shadow lying alone in the sun.",
+     "picks": [
+      [
+       "{tame|odd|wild|abstract}",
+       "odd",
+       [
+        "{tame|odd|wild|abstract}=odd"
+       ]
+      ],
+      [
+       "$scenario ← __scenarios/*[wild=$wild]__",
+       "a shadow lying alone in the sun",
+       [
+        "__scenarios/abstract__=a shadow lying alone in the sun"
+       ]
+      ],
+      [
+       "$look ← __looks/still__",
+       "a colour infrared photograph on false-colour film: foliage turned candy pink and red, skies deep blue, skin pale and waxy",
+       [
+        "__looks/still__=a colour infrared photograph on false-colour film: foliage turned candy pink and red, skies deep blue, skin pale and waxy"
+       ]
+      ],
+      [
+       "$frame ← __frame/compositions__",
+       "seen through a rain-streaked window",
+       [
+        "__frame/compositions__=seen through a rain-streaked window"
+       ]
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

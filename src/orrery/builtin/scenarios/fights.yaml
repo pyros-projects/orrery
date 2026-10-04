@@ -1,0 +1,62 @@
+meta: {source: "orrery scenarios: duels, brawls, bouts and battles, a situation the model gets to picture, from tame (plausible) through odd and wild to abstract (it barely makes sense); `wild` says which. Ideas after the builder wildcards Pyro kept (#150), every line written new", builtin: true}
+entries:
+  - {value: "two boxers trading punches in a smoky ring", props: {wild: tame}}
+  - {value: "a kung fu master fending off students in a courtyard", props: {wild: tame}}
+  - {value: "two samurai facing each other in a field of tall grass", props: {wild: tame}}
+  - {value: "a bar brawl spilling out into the street", props: {wild: tame}}
+  - {value: "a sword duel on a castle staircase", props: {wild: tame}}
+  - {value: "two martial artists sparring on a rooftop at dawn", props: {wild: tame}}
+  - {value: "a wrestling match in a packed arena", props: {wild: tame}}
+  - {value: "a fencing bout under bright lights", props: {wild: tame}}
+  - {value: "a street fight in the rain under a neon sign", props: {wild: tame}}
+  - {value: "a knight fighting off bandits on a forest road", props: {wild: tame}}
+  - {value: "a fighter pounding a heavy bag in an old gym", props: {wild: tame}}
+  - {value: "two warriors clashing spears on a beach", props: {wild: tame}}
+  - {value: "a pillow fight in a dormitory", props: {wild: tame}}
+  - {value: "a showdown at noon on a dusty main street", props: {wild: tame}}
+  - {value: "two sumo wrestlers crashing together at the start of a bout", props: {wild: tame}}
+  - {value: "two chefs fighting with kitchen utensils in a restaurant kitchen", props: {wild: odd}}
+  - {value: "two grandmothers fighting a martial-arts duel in a park", props: {wild: odd}}
+  - {value: "a fight between two people in giant inflatable costumes", props: {wild: odd}}
+  - {value: "a duel fought with umbrellas in a rainstorm", props: {wild: odd}}
+  - {value: "a boxer sparring with a kangaroo in a circus ring", props: {wild: odd}}
+  - {value: "two robots slap-fighting in a junkyard", props: {wild: odd}}
+  - {value: "a snowball war between two streets", props: {wild: odd}}
+  - {value: "a food fight at a wedding reception", props: {wild: odd}}
+  - {value: "two office workers fencing with rolled-up papers", props: {wild: odd}}
+  - {value: "a kung fu fight in a supermarket aisle", props: {wild: odd}}
+  - {value: "ninjas fighting in the middle of a ballet", props: {wild: odd}}
+  - {value: "a samurai fighting a swarm of bees", props: {wild: odd}}
+  - {value: "a duel at dawn with water pistols", props: {wild: odd}}
+  - {value: "two mimes fighting with invisible swords", props: {wild: odd}}
+  - {value: "a karate class for dogs", props: {wild: odd}}
+  - {value: "a fighter battling their own shadow, which fights back", props: {wild: wild}}
+  - {value: "two giants wrestling across a mountain range", props: {wild: wild}}
+  - {value: "a duel in which every strike splashes paint across the sky", props: {wild: wild}}
+  - {value: "a sword fight on the wings of a flying plane", props: {wild: wild}}
+  - {value: "a fight in zero gravity among floating debris", props: {wild: wild}}
+  - {value: "a boxer whose punches crack the air like glass", props: {wild: wild}}
+  - {value: "two martial artists fighting on the surface of a lake", props: {wild: wild}}
+  - {value: "a battle between a storm and a lighthouse", props: {wild: wild}}
+  - {value: "two dragons made of smoke fighting over a city", props: {wild: wild}}
+  - {value: "a fight frozen in time, the fighters walking around their frozen selves", props: {wild: wild}}
+  - {value: "a kung fu battle on the tops of bamboo stalks above the clouds", props: {wild: wild}}
+  - {value: "two chess pieces the size of towers fighting on a real battlefield", props: {wild: wild}}
+  - {value: "a fighter catching a punch made of fire", props: {wild: wild}}
+  - {value: "a duel between two orchestras whose music hits like fists", props: {wild: wild}}
+  - {value: "an army of paper birds storming a castle", props: {wild: wild}}
+  - {value: "a fight between yes and no", props: {wild: abstract}}
+  - {value: "the moment before the first blow", props: {wild: abstract}}
+  - {value: "anger and patience circling each other", props: {wild: abstract}}
+  - {value: "the echo of a punch", props: {wild: abstract}}
+  - {value: "a duel between two memories of the same day", props: {wild: abstract}}
+  - {value: "the bruise a word leaves", props: {wild: abstract}}
+  - {value: "a battle fought entirely in the eyes", props: {wild: abstract}}
+  - {value: "the stillness of a winner", props: {wild: abstract}}
+  - {value: "rage, slowly cooling", props: {wild: abstract}}
+  - {value: "the last breath before surrender", props: {wild: abstract}}
+  - {value: "a fight whose beginning everyone forgot", props: {wild: abstract}}
+  - {value: "two shadows fencing on a wall at noon", props: {wild: abstract}}
+  - {value: "victory, tasting of iron", props: {wild: abstract}}
+  - {value: "the space between two fists", props: {wild: abstract}}
+  - {value: "the quarrel of the wind and the mountain", props: {wild: abstract}}

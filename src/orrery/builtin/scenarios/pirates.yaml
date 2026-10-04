@@ -1,0 +1,62 @@
+meta: {source: "orrery scenarios: ships, treasure, sea battles and ports, a situation the model gets to picture, from tame (plausible) through odd and wild to abstract (it barely makes sense); `wild` says which. Ideas after the builder wildcards Pyro kept (#150), every line written new", builtin: true}
+entries:
+  - {value: "a pirate ship under full sail chasing a merchant ship", props: {wild: tame}}
+  - {value: "a crew hauling a treasure chest onto a sandy beach", props: {wild: tame}}
+  - {value: "a captain studying a map by lantern light in her cabin", props: {wild: tame}}
+  - {value: "a sailor climbing the rigging in a storm", props: {wild: tame}}
+  - {value: "pirates celebrating in a rowdy harbour tavern", props: {wild: tame}}
+  - {value: "a lookout in the crow's nest sighting land", props: {wild: tame}}
+  - {value: "a sea battle of cannon smoke between two galleons", props: {wild: tame}}
+  - {value: "a pirate burying treasure under a palm tree at sunset", props: {wild: tame}}
+  - {value: "a ship's cook stirring a huge pot in the galley", props: {wild: tame}}
+  - {value: "a crew rowing a longboat toward a mysterious island", props: {wild: tame}}
+  - {value: "a pirate walking the plank over shark-filled water", props: {wild: tame}}
+  - {value: "a crew scraping a ship's hull on a beach at low tide", props: {wild: tame}}
+  - {value: "a parrot perched on a captain's shoulder as she steers the ship", props: {wild: tame}}
+  - {value: "a swordfight on the deck of a burning ship", props: {wild: tame}}
+  - {value: "a pirate ship slipping into a foggy harbour at night", props: {wild: tame}}
+  - {value: "a pirate crew holding a polite tea party on deck", props: {wild: odd}}
+  - {value: "a parrot captain giving orders to a crew of humans", props: {wild: odd}}
+  - {value: "pirates arguing over how to fold a treasure map", props: {wild: odd}}
+  - {value: "a pirate ship stranded on a sandbar barely bigger than the ship", props: {wild: odd}}
+  - {value: "a pirate trying to bury treasure in a city park", props: {wild: odd}}
+  - {value: "a ghost pirate haunting a modern ferry", props: {wild: odd}}
+  - {value: "a crew of children commanding a bathtub pirate ship", props: {wild: odd}}
+  - {value: "a pirate with a hook for a hand trying to knit", props: {wild: odd}}
+  - {value: "a sea monster politely asking to come aboard", props: {wild: odd}}
+  - {value: "a pirate ship anchored in a fancy hotel's swimming pool", props: {wild: odd}}
+  - {value: "pirates opening a treasure chest full of socks", props: {wild: odd}}
+  - {value: "a pirate captain getting a haircut from a nervous barber on deck", props: {wild: odd}}
+  - {value: "a crew of cats sailing a pirate ship", props: {wild: odd}}
+  - {value: "pirates reading a map that keeps redrawing itself", props: {wild: odd}}
+  - {value: "a pirate ship queueing at a drive-through", props: {wild: odd}}
+  - {value: "a pirate ship sailing across a sea of clouds", props: {wild: wild}}
+  - {value: "a galleon with sails stitched together from old maps", props: {wild: wild}}
+  - {value: "a whale carrying a pirate town on its back", props: {wild: wild}}
+  - {value: "a treasure chest that opens onto a night sky", props: {wild: wild}}
+  - {value: "a pirate ship sailing inside a giant glass bottle", props: {wild: wild}}
+  - {value: "a kraken made of ink rising out of an old map", props: {wild: wild}}
+  - {value: "a crew fishing for stars over the side of the ship", props: {wild: wild}}
+  - {value: "a ship's figurehead coming alive and taking the wheel", props: {wild: wild}}
+  - {value: "an island that turns out to be a sleeping turtle the size of a mountain", props: {wild: wild}}
+  - {value: "a ship ploughing through a sea of gold coins", props: {wild: wild}}
+  - {value: "a pirate ship sailing upside down along the reflection of the sea", props: {wild: wild}}
+  - {value: "cannons firing flowers in a sea battle", props: {wild: wild}}
+  - {value: "a lighthouse walking along the shore looking for ships", props: {wild: wild}}
+  - {value: "a compass needle pointing at a sailor's heart", props: {wild: wild}}
+  - {value: "a ghost ship made of fog sailing down a city street", props: {wild: wild}}
+  - {value: "the horizon just beyond a sailor's reach", props: {wild: abstract}}
+  - {value: "a treasure everyone forgot they were looking for", props: {wild: abstract}}
+  - {value: "the salt in a pirate's last song", props: {wild: abstract}}
+  - {value: "a mutiny of the tides", props: {wild: abstract}}
+  - {value: "the map of a longing", props: {wild: abstract}}
+  - {value: "the weight of an anchor, dreamed by the sea", props: {wild: abstract}}
+  - {value: "the flag of a country of one, flying over the open sea", props: {wild: abstract}}
+  - {value: "the moment the sea keeps a secret", props: {wild: abstract}}
+  - {value: "a promise made at the edge of the world", props: {wild: abstract}}
+  - {value: "the ghost of a wind", props: {wild: abstract}}
+  - {value: "a cannon's echo, lost at sea for a hundred years", props: {wild: abstract}}
+  - {value: "the shape of the sea's patience", props: {wild: abstract}}
+  - {value: "a port that exists only at low tide", props: {wild: abstract}}
+  - {value: "gold, remembering being sunlight", props: {wild: abstract}}
+  - {value: "the last pirate's last laugh", props: {wild: abstract}}

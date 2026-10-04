@@ -1,0 +1,15 @@
+---
+title: "Wild scenarios"
+note: "Something happening, for MiniMax H3, and the model decides what it looks like: a scenario from one of eight worlds (fantasy, sci-fi, pirates, fights, festive, everyday, dreamlike, abstract) in one of fifty-odd video looks, each with its own camera and music. $wild goes from tame (two boxers trading punches in a smoky ring) through odd (a duel at dawn with water pistols) and wild (fireworks that burst into flocks of birds) to abstract (the moment before first contact), where even the idea has to move; write a world's name for the * in $scenario to stay in it."
+tags: [h3, scenarios, wild]
+---
+@h3 text 16:9
+$wild = {tame:3|odd:3|wild:2|abstract:2}
+$scenario = __scenarios/*[wild=$wild]__
+$look = __looks/video__
+style: $look
+
+SHOT 10s: $look.shot
+The scene is $scenario. It happens in front of the camera from its first moment to its last, every part of it moving and changing as it goes.
+SFX: the sounds of the scene itself, close and clear
+MUSIC: $look.music

@@ -1,0 +1,62 @@
+meta: {source: "orrery scenarios: the logic of dreams, from the gently strange to the half remembered, a situation the model gets to picture, from tame (plausible) through odd and wild to abstract (it barely makes sense); `wild` says which. Ideas after the builder wildcards Pyro kept (#150), every line written new", builtin: true}
+entries:
+  - {value: "walking through a childhood home with its rooms in the wrong order", props: {wild: tame}}
+  - {value: "an exam in a classroom on the edge of the sea", props: {wild: tame}}
+  - {value: "a train stopping at the house you grew up in", props: {wild: tame}}
+  - {value: "a garden at night where the flowers glow softly", props: {wild: tame}}
+  - {value: "a familiar street where every house has your front door", props: {wild: tame}}
+  - {value: "a staircase that keeps going one more floor", props: {wild: tame}}
+  - {value: "a swim through warm water that turns into flying", props: {wild: tame}}
+  - {value: "a long hallway whose far door keeps moving away", props: {wild: tame}}
+  - {value: "a field of tall grass under two moons", props: {wild: tame}}
+  - {value: "an old friend waiting at a bus stop in the rain", props: {wild: tame}}
+  - {value: "a lighthouse lit by candles on a calm sea", props: {wild: tame}}
+  - {value: "a forest where the trees are lamp posts", props: {wild: tame}}
+  - {value: "a piano playing itself in an empty concert hall", props: {wild: tame}}
+  - {value: "a beach at night where the waves are made of light", props: {wild: tame}}
+  - {value: "a bedroom floating in the clouds", props: {wild: tame}}
+  - {value: "fish swimming through the air of a quiet city", props: {wild: odd}}
+  - {value: "a dinner where every plate holds a tiny landscape", props: {wild: odd}}
+  - {value: "a library where every book is the same book", props: {wild: odd}}
+  - {value: "a clock running backwards, its hands growing like vines", props: {wild: odd}}
+  - {value: "a whale drifting over the rooftops at dusk", props: {wild: odd}}
+  - {value: "a door standing alone in a field, slightly open", props: {wild: odd}}
+  - {value: "a ladder leaning against the moon", props: {wild: odd}}
+  - {value: "a teacup the size of a lake with boats on it", props: {wild: odd}}
+  - {value: "a city made of sleeping cats", props: {wild: odd}}
+  - {value: "a mirror showing a different season from the room", props: {wild: odd}}
+  - {value: "a forest of giant keys", props: {wild: odd}}
+  - {value: "an ocean in a goldfish bowl in the desert", props: {wild: odd}}
+  - {value: "a train made of clouds pulling into a station", props: {wild: odd}}
+  - {value: "a bed in the middle of a desert road", props: {wild: odd}}
+  - {value: "a staircase leading down into the sky", props: {wild: odd}}
+  - {value: "a person unzipping the sky to look behind it", props: {wild: wild}}
+  - {value: "a house walking slowly over the hills on long thin legs", props: {wild: wild}}
+  - {value: "a river of clocks flowing into a sea of keys", props: {wild: wild}}
+  - {value: "rain falling as letters that spell half-remembered words", props: {wild: wild}}
+  - {value: "a giant hand gently rearranging a city", props: {wild: wild}}
+  - {value: "the moon switched off like a lamp", props: {wild: wild}}
+  - {value: "people with windows for faces, each showing a room", props: {wild: wild}}
+  - {value: "a staircase spiralling around a waterfall that falls upward", props: {wild: wild}}
+  - {value: "a garden growing out of an open book", props: {wild: wild}}
+  - {value: "a sky full of floating doors", props: {wild: wild}}
+  - {value: "a girl walking a cloud on a string", props: {wild: wild}}
+  - {value: "a city reflected in a single tear", props: {wild: wild}}
+  - {value: "a ship sailing through a field of wheat", props: {wild: wild}}
+  - {value: "the sea folding itself like a blanket", props: {wild: wild}}
+  - {value: "a tree whose leaves are tiny birds that all fly off at once", props: {wild: wild}}
+  - {value: "the feeling of falling just before sleep", props: {wild: abstract}}
+  - {value: "a name you almost remember", props: {wild: abstract}}
+  - {value: "the colour of a voice in a dream", props: {wild: abstract}}
+  - {value: "a room seen only in dreams", props: {wild: abstract}}
+  - {value: "d\u00e9j\u00e0 vu, as a landscape", props: {wild: abstract}}
+  - {value: "the moment of waking, stretched to a whole day", props: {wild: abstract}}
+  - {value: "a memory dissolving at its edges", props: {wild: abstract}}
+  - {value: "the silence inside a dream", props: {wild: abstract}}
+  - {value: "a dream inside a dream inside a dream", props: {wild: abstract}}
+  - {value: "the shape of a lost word", props: {wild: abstract}}
+  - {value: "the weight of sleep", props: {wild: abstract}}
+  - {value: "a door to yesterday", props: {wild: abstract}}
+  - {value: "warmth coming from everywhere at once", props: {wild: abstract}}
+  - {value: "the dream that keeps coming back", props: {wild: abstract}}
+  - {value: "the last image before waking", props: {wild: abstract}}

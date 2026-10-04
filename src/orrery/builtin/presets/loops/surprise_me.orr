@@ -1,0 +1,40 @@
+---
+title: "Surprise me"
+note: "A film that writes itself from your gallery, for ever: a character from one of the Krea creators and a place from the landscape or setting creator (pictures by name, so make some first), a genre (soap opera, spaghetti western, heist, telenovela, nature documentary …) and a director's hand told by what it does (chapter title cards and a shot from inside a car boot; symmetrical pastel frames and whip pans), both kept for the whole film. Every clip throws the hero into a scenario from __scenarios__, and every fourth the genre has its big moment. $wild dials the scenarios from tame to abstract; pin $hero or $set to a picture's name to choose them, or a library's filter ([cast!=backdrop, genre=noir]) to narrow them."
+tags: [loops, h3, reel, cast, goto, motion_context]
+---
+@h3 references 16:9 lite
+context: 22
+# The pictures by name: characters carry `who`, the place creators `cast = backdrop`, `where` and `sfx`.
+$hero = __pictures/krea/*_creator[cast!=backdrop]__
+$set = __pictures/krea/*_creator[cast=backdrop]__
+$genre = __film/genres__
+$hand = __film/directing__
+$wild = {tame:2|odd:3|wild:3|abstract}
+style: $genre, directed with $hand
+MUSIC: $genre.music
+
+CAST
+@HERO (image $hero): $hero.who
+@PLACE (image $set): $set.where
+
+SCENE the opening
+SHOT 10s: $hand.shot
+@HERO arrives in @PLACE and looks around, and the film begins as $genre does: $genre.manner.
+SFX: $set.sfx; $genre.sfx
+END ON: @HERO stops, sensing that something is about to happen
+
+SCENE the story ×3
+$what = __scenarios/*[wild=$wild]__
+SHOT 10s: $hand.shot
+In @PLACE, @HERO is suddenly in the middle of $what, and plays it as $genre would: $genre.manner.
+SFX: $set.sfx; $genre.sfx
+END ON: @HERO turns toward whatever comes next
+CUT TO: the big moment
+
+SCENE the big moment
+SHOT 10s: $hand.shot
+In @PLACE, the genre has its big moment: $genre.peak, with @HERO at its centre.
+SFX: $genre.sfx, loud and close
+END ON: @HERO catches their breath as the moment passes
+CUT TO: the story

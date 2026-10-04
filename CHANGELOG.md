@@ -9,6 +9,23 @@ checks) are left out.
 
 ### Added
 
+- Surprise me (#149): `loops/surprise_me` casts a character of a Krea creator and a place of the landscape or setting
+  creator from your gallery, rolls a genre (thirty, from soap opera to puppet show) and a director's hand told by what
+  it does, and goes on for ever: every clip throws the hero into a wild scenario, every fourth the genre has its big
+  moment. The landscape and setting creators export `cast = backdrop` and their sound, so a reel tells a place from a
+  character.
+- Wild scenarios (#150): eight libraries of situations under `scenarios/` (fantasy, sci-fi, pirates, fights, festive,
+  everyday, dreamlike, abstract), sixty each, from tame through odd and wild to abstract, and two presets that roll
+  one and let the model picture it: `krea/18_wild_scenarios` in a still look and `h3/16_wild_scenarios` in a video
+  look. `$wild` dials how far from plausible it goes.
+- A setting creator for Krea 2 (#145): `krea/17_setting_creator` rolls one of a hundred and fifty places people are
+  in (rooms, halls, shops, streets, vehicles, ruins) in five worlds (everyday, fantasy, cyberpunk, sci-fi, noir), with
+  what fills it, its light and its sound, empty; the grid shows it in four shots: the outside, the whole of it, one part
+  with open floor in front for a character, and one thing in it up close.
+- A landscape creator for Krea 2 (#144): `krea/16_landscape_creator` rolls one of eighty lands in a season of its
+  climate, a sky the season allows, an hour the sky allows and one sign of life that belongs there, never a person,
+  and the grid shows the place from four distances: establishing, wide, medium and the ground up close, with the trace
+  the sign of life left. It exports the land, the sky and their sounds for a reel that casts it.
 - The Gallery in albums (#290): on the left every output, every picture and every video, then the days (each with its
   images and videos) and the collections; a sweep's or a grid's runs, a reel's clips and each of its scenes are one
   album's card with up to eight of its pictures, opened with a click. Collections take the place of folders: they hold
