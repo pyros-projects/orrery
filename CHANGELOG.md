@@ -108,6 +108,9 @@ checks) are left out.
 
 ### Fixed
 
+- Taking ratings back gives an entry's weight back: many outputs with one pick, rated and cleared, no longer leave it
+  off (twenty hates and their clearing left it a hundredfold), and the same ratings in any order give the same weight
+  (#257).
 - Typing in a long reel no longer lags: the editor highlights a scene again only when something it shows
   changed, and works out once what every scene reads, instead of every scene on every keystroke (#218).
 - Save as, the gear and the app's other sheets open at the top of the app, where their buttons are, not at the

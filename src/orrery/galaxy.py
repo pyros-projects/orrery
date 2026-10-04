@@ -78,7 +78,9 @@ def rate(home: Home, rid: str, rating: str | None) -> tuple[dict, dict[str, floa
     keys = list(dict.fromkeys(k for p in row.get("picks") or [] for k in p.get("keys") or []))
     weights = home.weights()
     for key in keys:
-        w = round(weights.get(key, 1.0) * factor, 4)
+        # significant digits, not decimal places (#257): a weight never sits on a rounding floor, so taking
+        # ratings back gives it back, and the same ratings in any order give the same weight
+        w = float(f"{weights.get(key, 1.0) * factor:.12g}")
         if abs(w - 1.0) < 1e-9:
             weights.pop(key, None)
         else:
