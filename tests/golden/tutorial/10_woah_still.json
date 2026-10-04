@@ -8,35 +8,59 @@
      "picks": [
       [
        "$beast ← __creature[myth]__",
-       "basilisk"
+       "basilisk",
+       [
+        "__creature__=basilisk"
+       ]
       ],
       [
        "$made_of ← __material__",
-       "candle wax"
+       "candle wax",
+       [
+        "__material__=candle wax"
+       ]
       ],
       [
        "{museum|cathedral|train station}",
-       "train station"
+       "train station",
+       [
+        "{museum|cathedral|train station}=train station"
+       ]
       ],
       [
        "{clock tower|bell tower|departure board}",
-       "departure board"
+       "departure board",
+       [
+        "{clock tower|bell tower|departure board}=departure board"
+       ]
       ],
       [
        "{Victorian|1970s|far-future}",
-       "1970s"
+       "1970s",
+       [
+        "{Victorian|1970s|far-future}=1970s"
+       ]
       ],
       [
        "{an aurora overhead|__light__}",
-       "__light__"
+       "__light__",
+       [
+        "{an aurora overhead|__light__}=__light__"
+       ]
       ],
       [
        "__light__",
-       "aurora light"
+       "aurora light",
+       [
+        "__light__=aurora light"
+       ]
       ],
       [
        "__lens__",
-       "anamorphic lens with blue flares"
+       "anamorphic lens with blue flares",
+       [
+        "__lens__=anamorphic lens with blue flares"
+       ]
       ]
      ]
     }
@@ -49,31 +73,52 @@
      "picks": [
       [
        "$beast ← __creature[myth]__",
-       "jackalope"
+       "jackalope",
+       [
+        "__creature__=jackalope"
+       ]
       ],
       [
        "$made_of ← __material__",
-       "polished obsidian"
+       "polished obsidian",
+       [
+        "__material__=polished obsidian"
+       ]
       ],
       [
        "{museum|cathedral|train station}",
-       "train station"
+       "train station",
+       [
+        "{museum|cathedral|train station}=train station"
+       ]
       ],
       [
        "{clock tower|bell tower|departure board}",
-       "departure board"
+       "departure board",
+       [
+        "{clock tower|bell tower|departure board}=departure board"
+       ]
       ],
       [
        "{Victorian|1970s|far-future}",
-       "1970s"
+       "1970s",
+       [
+        "{Victorian|1970s|far-future}=1970s"
+       ]
       ],
       [
        "{an aurora overhead|__light__}",
-       "an aurora overhead"
+       "an aurora overhead",
+       [
+        "{an aurora overhead|__light__}=an aurora overhead"
+       ]
       ],
       [
        "__lens__",
-       "fisheye lens"
+       "fisheye lens",
+       [
+        "__lens__=fisheye lens"
+       ]
       ]
      ]
     }
@@ -86,35 +131,59 @@
      "picks": [
       [
        "$beast ← __creature[myth]__",
-       "griffin"
+       "griffin",
+       [
+        "__creature__=griffin"
+       ]
       ],
       [
        "$made_of ← __material__",
-       "gold leaf"
+       "gold leaf",
+       [
+        "__material__=gold leaf"
+       ]
       ],
       [
        "{museum|cathedral|train station}",
-       "train station"
+       "train station",
+       [
+        "{museum|cathedral|train station}=train station"
+       ]
       ],
       [
        "{clock tower|bell tower|departure board}",
-       "clock tower"
+       "clock tower",
+       [
+        "{clock tower|bell tower|departure board}=clock tower"
+       ]
       ],
       [
        "{Victorian|1970s|far-future}",
-       "Victorian"
+       "Victorian",
+       [
+        "{Victorian|1970s|far-future}=Victorian"
+       ]
       ],
       [
        "{an aurora overhead|__light__}",
-       "__light__"
+       "__light__",
+       [
+        "{an aurora overhead|__light__}=__light__"
+       ]
       ],
       [
        "__light__",
-       "soft overcast north light"
+       "soft overcast north light",
+       [
+        "__light__=soft overcast north light"
+       ]
       ],
       [
        "__lens__",
-       "400mm telephoto compression"
+       "400mm telephoto compression",
+       [
+        "__lens__=400mm telephoto compression"
+       ]
       ]
      ]
     }

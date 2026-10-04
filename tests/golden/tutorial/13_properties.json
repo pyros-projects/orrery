@@ -8,23 +8,38 @@
      "picks": [
       [
        "$w ← __weather__",
-       "a glittering sun shower"
+       "a glittering sun shower",
+       [
+        "__weather__=a glittering sun shower"
+       ]
       ],
       [
        "$lead ← __characters/noir#gender:female__",
-       "a switchboard operator in her forties who listens in on every call, with __characters/looks/hair__, wearing __characters/noir/attire__ and a headset around her neck"
+       "a switchboard operator in her forties who listens in on every call, with __characters/looks/hair__, wearing __characters/noir/attire__ and a headset around her neck",
+       [
+        "__characters/noir__=a switchboard operator in her forties who listens in on every call, with __characters/looks/hair__, wearing __characters/noir/attire__ and a headset around her neck"
+       ]
       ],
       [
        "$lead ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ hair slicked straight back"
+       "__characters/looks/hair_color__ hair slicked straight back",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ hair slicked straight back"
+       ]
       ],
       [
        "$lead ← __characters/looks/hair_color__",
-       "jet-black"
+       "jet-black",
+       [
+        "__characters/looks/hair_color__=jet-black"
+       ]
       ],
       [
        "$lead ← __characters/noir/attire__",
-       "a rumpled shirt with braces and rolled sleeves"
+       "a rumpled shirt with braces and rolled sleeves",
+       [
+        "__characters/noir/attire__=a rumpled shirt with braces and rolled sleeves"
+       ]
       ]
      ]
     }
@@ -37,23 +52,38 @@
      "picks": [
       [
        "$w ← __weather__",
-       "first snow"
+       "first snow",
+       [
+        "__weather__=first snow"
+       ]
       ],
       [
        "$lead ← __characters/noir#gender:female__",
-       "a wealthy widow in her sixties, composed and dangerous, pearls at the throat and a small pistol in her purse, with __characters/looks/hair__, wearing __characters/noir/attire__"
+       "a wealthy widow in her sixties, composed and dangerous, pearls at the throat and a small pistol in her purse, with __characters/looks/hair__, wearing __characters/noir/attire__",
+       [
+        "__characters/noir__=a wealthy widow in her sixties, composed and dangerous, pearls at the throat and a small pistol in her purse, with __characters/looks/hair__, wearing __characters/noir/attire__"
+       ]
       ],
       [
        "$lead ← __characters/looks/hair__",
-       "a __characters/looks/hair_color__ mullet"
+       "a __characters/looks/hair_color__ mullet",
+       [
+        "__characters/looks/hair__=a __characters/looks/hair_color__ mullet"
+       ]
       ],
       [
        "$lead ← __characters/looks/hair_color__",
-       "copper-red"
+       "copper-red",
+       [
+        "__characters/looks/hair_color__=copper-red"
+       ]
       ],
       [
        "$lead ← __characters/noir/attire__",
-       "a sequinned cocktail dress and long satin gloves"
+       "a sequinned cocktail dress and long satin gloves",
+       [
+        "__characters/noir/attire__=a sequinned cocktail dress and long satin gloves"
+       ]
       ]
      ]
     }
@@ -66,23 +96,38 @@
      "picks": [
       [
        "$w ← __weather__",
-       "thick fog"
+       "thick fog",
+       [
+        "__weather__=thick fog"
+       ]
       ],
       [
        "$lead ← __characters/noir#gender:female__",
-       "a switchboard operator in her forties who listens in on every call, with __characters/looks/hair__, wearing __characters/noir/attire__ and a headset around her neck"
+       "a switchboard operator in her forties who listens in on every call, with __characters/looks/hair__, wearing __characters/noir/attire__ and a headset around her neck",
+       [
+        "__characters/noir__=a switchboard operator in her forties who listens in on every call, with __characters/looks/hair__, wearing __characters/noir/attire__ and a headset around her neck"
+       ]
       ],
       [
        "$lead ← __characters/looks/hair__",
-       "a close-cropped __characters/looks/hair_color__ buzz cut"
+       "a close-cropped __characters/looks/hair_color__ buzz cut",
+       [
+        "__characters/looks/hair__=a close-cropped __characters/looks/hair_color__ buzz cut"
+       ]
       ],
       [
        "$lead ← __characters/looks/hair_color__",
-       "sandy-brown"
+       "sandy-brown",
+       [
+        "__characters/looks/hair_color__=sandy-brown"
+       ]
       ],
       [
        "$lead ← __characters/noir/attire__",
-       "a double-breasted chalk-stripe suit and a loosened tie"
+       "a double-breasted chalk-stripe suit and a loosened tie",
+       [
+        "__characters/noir/attire__=a double-breasted chalk-stripe suit and a loosened tie"
+       ]
       ]
      ]
     }

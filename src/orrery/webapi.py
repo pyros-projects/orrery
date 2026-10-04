@@ -167,6 +167,7 @@ def presets(home: Home, args: dict) -> dict:
         "recent": [n for n in ui["recent"] if n in known],
         **{flag: ui[flag] for flag in uistate.FLAGS},
         **{name: ui[name] for name in uistate.SIZES},
+        **{name: ui[name] for name in uistate.CHOICES},
     }
 
 
@@ -235,8 +236,15 @@ def ui_save(home: Home, args: dict) -> dict:
     for name in uistate.SIZES:
         if name in args:
             uistate.set_size(home, name, args[name])
+    for name in uistate.CHOICES:  # `annotations_show`: appended, hover or none (#203)
+        if name in args:
+            try:
+                uistate.set_choice(home, name, str(args[name]))
+            except ValueError as err:
+                raise ApiError(400, str(err)) from None
     ui = uistate.load_ui(home)
-    return {**{flag: ui[flag] for flag in uistate.FLAGS}, **{name: ui[name] for name in uistate.SIZES}}
+    return {**{flag: ui[flag] for flag in uistate.FLAGS}, **{name: ui[name] for name in uistate.SIZES},
+            **{name: ui[name] for name in uistate.CHOICES}}
 
 
 def _preset_by_hash(home: Home) -> dict[str, str]:
@@ -859,17 +867,55 @@ def _slots(numbers: list[int]) -> str:
     return f"image{'s' if len(numbers) > 1 else ''} {', '.join(map(str, numbers))}"
 
 
+def _rolls(text: str, sites: list[dict]) -> dict[str, list]:
+    """The trace's rolls (dsl.traced) on the lines of the template as the editor has it: {line index: [[k, roll]]},
+    `k` the library's place among the `__…__` of its line (#202). A line is found by its text, from the last one
+    found on; one the trace cannot find (its LoRA tag written short, say) says nothing."""
+    from orrery.dsl import _LIB
+
+    def norm(s: str) -> str:
+        return " ".join(s.split())
+
+    lines, out, cursor, joined, last, line = [norm(raw) for raw in text.split("\n")], {}, 0, None, None, None
+    for site in sites:
+        if "lines" in site:
+            joined = site["lines"]
+            continue
+        rest, k = site["rest"], site["k"]
+        token = next((m for i, m in enumerate(_LIB.finditer(rest)) if i == k), None)
+        if token is None:
+            continue
+        part, at = site["line"], token.start() + max(site["line"].rfind(rest), 0)
+        if joined and site["line"] == " ".join(joined):  # a text template's lines, one expression
+            for held in joined:
+                if at <= len(held):
+                    part = held
+                    break
+                at -= len(held) + 1
+        piece = norm(part)
+        if (part, site["line"]) != last:  # a new expression: its line is found from the one after the last
+            last = (part, site["line"])
+            line = next((i for i in [*range(cursor, len(lines)), *range(cursor)] if piece and piece in lines[i]), None)
+            cursor = cursor if line is None else line + 1
+        if line is None:
+            continue
+        before = len(list(_LIB.finditer(lines[line][:lines[line].find(piece)]))) + len(list(_LIB.finditer(norm(part[:at]))))
+        out.setdefault(str(line), []).append([before, _short(site["value"], 60)])
+    return out
+
+
 def annotate(home: Home, args: dict) -> dict:
     """What lines of a template give at a seed, for the editor to show at their ends (#163): each binding
     as it rolled, each export, a grid's cells, and in a screenplay where each CAST member's pictures go
     (a named picture with its name). Errors leave a part empty: the editor shows what it can."""
-    from orrery.dsl import parse, with_inline
+    from orrery.dsl import parse, traced, with_inline
     from orrery.loras import long_form
 
     text, target = _template_for(home, args)
     seed, libs = _int(args, "seed", 0), home.libraries()
     src = long_form(strip_comments(text))
-    out: dict = {"bindings": {}, "fields": {}, "exports": {}, "grid": "", "cast": {}, "members": {}}
+    out: dict = {"bindings": {}, "fields": {}, "exports": {}, "grid": "", "cast": {}, "members": {}, "rolls": {}}
+    screenplay = target != "text" and src.lstrip().startswith("@h3")
     grid = None
     try:
         if parse(src).params.grid is not None:
@@ -882,7 +928,10 @@ def annotate(home: Home, args: dict) -> dict:
     try:
         for _ in range(8):  # a library still to be written stands in as its name, so the rest still shows
             try:
-                x = expand(src, seed, libs, home.weights(), cell=0 if grid else None)
+                with traced() as sites:
+                    x = expand(src, seed, libs, home.weights(), cell=0 if grid else None)
+                if not screenplay:  # a text template rolls as one: its libraries' rolls (#202)
+                    out["rolls"] = _rolls(text, sites)
                 break
             except MissingLibrary as err:
                 libs = {**libs, err.name: Library(err.name, [Entry(f"\\__{err.name}\\__")])}  # escaped: shown, not rolled
@@ -897,9 +946,11 @@ def annotate(home: Home, args: dict) -> dict:
         out["exports"] = {k: _short(_shown(v)) for k, v in x.exports.items()}
     except (ValueError, KeyError, MissingLibrary):
         pass
-    if target != "text" and src.lstrip().startswith("@h3"):
+    if screenplay:
         try:
-            c = compile_scene(src, seed, libs, home.weights(), segment=_int(args, "segment", 0), cell=0 if grid else None)
+            with traced() as sites:
+                c = compile_scene(src, seed, libs, home.weights(), segment=_int(args, "segment", 0), cell=0 if grid else None)
+            out["rolls"] = _rolls(text, sites)  # a screenplay's lines roll one by one, the clip's scene among them
             for m in c.scene.cast:
                 images = sorted({s.index for s in m.sources if s.kind == "image"})
                 named = list(dict.fromkeys(c.pictures[n]["name"] for n in images if n in c.pictures))
@@ -1025,15 +1076,18 @@ def llm_save(home: Home, args: dict) -> dict:
     if file and not can_write(file):
         raise ApiError(400, f"{file} is a truncated text encoder (MiniMax H3's): it loads but cannot write. "
                             "Pick a Qwen3-VL build such as Krea 2's qwen3vl_4b.")
-    source = str(args.get("source") or endpoint.config(home)["source"])
+    before = endpoint.config(home)
+    source = str(args.get("source") or before["source"])
     if source not in ("comfy", "api"):
         raise ApiError(400, "'source' must be comfy or api.")
     config = home.config()
     api = {**((config.get("llm") or {}).get("api") or {})}
     api.update({k: str(args[k]).strip() for k in ("base_url", "model") if args.get(k) is not None})
     typed = str(args.get("key") or "").strip()
-    if source == "api":  # the endpoint has to answer before it writes for orrery
-        cfg = {**endpoint.config(home), **api}
+    cfg = {**before, **api}
+    # the endpoint has to answer before it writes for orrery: when it is new, or its address, model or key changed
+    # (a setting saved on its own, such as the entries a library starts with, asks it nothing, #212)
+    if source == "api" and (typed or before["source"] != "api" or any(cfg[k] != before[k] for k in ("base_url", "model"))):
         checked = endpoint.check(cfg["base_url"], typed or endpoint.key(home, cfg)[0], cfg["model"])
         if not checked["ok"]:
             raise ApiError(400, checked["error"])

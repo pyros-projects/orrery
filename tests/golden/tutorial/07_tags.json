@@ -8,11 +8,17 @@
      "picks": [
       [
        "$deep ← __creature[deep_sea]__",
-       "vampire squid"
+       "vampire squid",
+       [
+        "__creature__=vampire squid"
+       ]
       ],
       [
        "$myth ← __creature[myth]__",
-       "jackalope"
+       "jackalope",
+       [
+        "__creature__=jackalope"
+       ]
       ]
      ]
     }
@@ -25,11 +31,17 @@
      "picks": [
       [
        "$deep ← __creature[deep_sea]__",
-       "giant isopod"
+       "giant isopod",
+       [
+        "__creature__=giant isopod"
+       ]
       ],
       [
        "$myth ← __creature[myth]__",
-       "kitsune"
+       "kitsune",
+       [
+        "__creature__=kitsune"
+       ]
       ]
      ]
     }
@@ -42,11 +54,17 @@
      "picks": [
       [
        "$deep ← __creature[deep_sea]__",
-       "giant isopod"
+       "giant isopod",
+       [
+        "__creature__=giant isopod"
+       ]
       ],
       [
        "$myth ← __creature[myth]__",
-       "kitsune"
+       "kitsune",
+       [
+        "__creature__=kitsune"
+       ]
       ]
      ]
     }

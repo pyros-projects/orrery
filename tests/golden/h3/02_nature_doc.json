@@ -8,7 +8,10 @@
      "picks": [
       [
        "$beast ← __creature[deep_sea]__",
-       "siphonophore"
+       "siphonophore",
+       [
+        "__creature__=siphonophore"
+       ]
       ]
      ]
     }
@@ -21,7 +24,10 @@
      "picks": [
       [
        "$beast ← __creature[deep_sea]__",
-       "anglerfish"
+       "anglerfish",
+       [
+        "__creature__=anglerfish"
+       ]
       ]
      ]
     }
@@ -34,7 +40,10 @@
      "picks": [
       [
        "$beast ← __creature[deep_sea]__",
-       "vampire squid"
+       "vampire squid",
+       [
+        "__creature__=vampire squid"
+       ]
       ]
      ]
     }

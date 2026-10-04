@@ -18,7 +18,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "everything begins to move in slow motion except one small dog"
+       "everything begins to move in slow motion except one small dog",
+       [
+        "__and_then__=everything begins to move in slow motion except one small dog"
+       ]
       ]
      ]
     },
@@ -28,7 +31,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "it starts to snow, softly, indoors as much as out"
+       "it starts to snow, softly, indoors as much as out",
+       [
+        "__and_then__=it starts to snow, softly, indoors as much as out"
+       ]
       ]
      ]
     },
@@ -38,7 +44,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "it starts to snow, softly, indoors as much as out"
+       "it starts to snow, softly, indoors as much as out",
+       [
+        "__and_then__=it starts to snow, softly, indoors as much as out"
+       ]
       ]
      ]
     },
@@ -48,7 +57,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "gravity tips sideways, and everyone leans into it calmly"
+       "gravity tips sideways, and everyone leans into it calmly",
+       [
+        "__and_then__=gravity tips sideways, and everyone leans into it calmly"
+       ]
       ]
      ]
     },
@@ -58,7 +70,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "a brass band marches straight through the middle of the scene and out the other side"
+       "a brass band marches straight through the middle of the scene and out the other side",
+       [
+        "__and_then__=a brass band marches straight through the middle of the scene and out the other side"
+       ]
       ]
      ]
     },
@@ -68,7 +83,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "every loose object lifts a few centimetres off the ground and hangs there"
+       "every loose object lifts a few centimetres off the ground and hangs there",
+       [
+        "__and_then__=every loose object lifts a few centimetres off the ground and hangs there"
+       ]
       ]
      ]
     }
@@ -91,7 +109,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "a single red balloon drifts slowly through the frame"
+       "a single red balloon drifts slowly through the frame",
+       [
+        "__and_then__=a single red balloon drifts slowly through the frame"
+       ]
       ]
      ]
     },
@@ -101,7 +122,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "a single red balloon drifts slowly through the frame"
+       "a single red balloon drifts slowly through the frame",
+       [
+        "__and_then__=a single red balloon drifts slowly through the frame"
+       ]
       ]
      ]
     },
@@ -111,7 +135,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "the walls fold away like stage flats, and behind them is a beach at noon"
+       "the walls fold away like stage flats, and behind them is a beach at noon",
+       [
+        "__and_then__=the walls fold away like stage flats, and behind them is a beach at noon"
+       ]
       ]
      ]
     },
@@ -121,7 +148,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "gravity tips sideways, and everyone leans into it calmly"
+       "gravity tips sideways, and everyone leans into it calmly",
+       [
+        "__and_then__=gravity tips sideways, and everyone leans into it calmly"
+       ]
       ]
      ]
     },
@@ -131,7 +161,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "a whale glides past in the sky, close enough to touch"
+       "a whale glides past in the sky, close enough to touch",
+       [
+        "__and_then__=a whale glides past in the sky, close enough to touch"
+       ]
       ]
      ]
     },
@@ -141,7 +174,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "a whale glides past in the sky, close enough to touch"
+       "a whale glides past in the sky, close enough to touch",
+       [
+        "__and_then__=a whale glides past in the sky, close enough to touch"
+       ]
       ]
      ]
     }
@@ -164,7 +200,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "the camera's own reflection appears in the air, waving"
+       "the camera's own reflection appears in the air, waving",
+       [
+        "__and_then__=the camera's own reflection appears in the air, waving"
+       ]
       ]
      ]
     },
@@ -174,7 +213,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "a second, identical version of the scene slides in from the left and overlaps the first"
+       "a second, identical version of the scene slides in from the left and overlaps the first",
+       [
+        "__and_then__=a second, identical version of the scene slides in from the left and overlaps the first"
+       ]
       ]
      ]
     },
@@ -184,7 +226,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "gravity tips sideways, and everyone leans into it calmly"
+       "gravity tips sideways, and everyone leans into it calmly",
+       [
+        "__and_then__=gravity tips sideways, and everyone leans into it calmly"
+       ]
       ]
      ]
     },
@@ -194,7 +239,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "every loose object lifts a few centimetres off the ground and hangs there"
+       "every loose object lifts a few centimetres off the ground and hangs there",
+       [
+        "__and_then__=every loose object lifts a few centimetres off the ground and hangs there"
+       ]
       ]
      ]
     },
@@ -204,7 +252,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "gravity tips sideways, and everyone leans into it calmly"
+       "gravity tips sideways, and everyone leans into it calmly",
+       [
+        "__and_then__=gravity tips sideways, and everyone leans into it calmly"
+       ]
       ]
      ]
     },
@@ -214,7 +265,10 @@
      "picks": [
       [
        "$event ← __and_then__",
-       "the light turns to a deep golden sunset in a matter of seconds"
+       "the light turns to a deep golden sunset in a matter of seconds",
+       [
+        "__and_then__=the light turns to a deep golden sunset in a matter of seconds"
+       ]
       ]
      ]
     }

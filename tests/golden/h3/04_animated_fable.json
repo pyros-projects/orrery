@@ -8,15 +8,24 @@
      "picks": [
       [
        "$small ← __creature[insect]__",
-       "praying mantis"
+       "praying mantis",
+       [
+        "__creature__=praying mantis"
+       ]
       ],
       [
        "$big ← __creature[bird]__",
-       "shoebill stork"
+       "shoebill stork",
+       [
+        "__creature__=shoebill stork"
+       ]
       ],
       [
        "{claymation|2D-animated|3D CG}",
-       "claymation"
+       "claymation",
+       [
+        "{claymation|2D-animated|3D CG}=claymation"
+       ]
       ]
      ]
     }
@@ -29,15 +38,24 @@
      "picks": [
       [
        "$small ← __creature[insect]__",
-       "atlas moth"
+       "atlas moth",
+       [
+        "__creature__=atlas moth"
+       ]
       ],
       [
        "$big ← __creature[bird]__",
-       "barn owl"
+       "barn owl",
+       [
+        "__creature__=barn owl"
+       ]
       ],
       [
        "{claymation|2D-animated|3D CG}",
-       "claymation"
+       "claymation",
+       [
+        "{claymation|2D-animated|3D CG}=claymation"
+       ]
       ]
      ]
     }
@@ -50,15 +68,24 @@
      "picks": [
       [
        "$small ← __creature[insect]__",
-       "atlas moth"
+       "atlas moth",
+       [
+        "__creature__=atlas moth"
+       ]
       ],
       [
        "$big ← __creature[bird]__",
-       "raven"
+       "raven",
+       [
+        "__creature__=raven"
+       ]
       ],
       [
        "{claymation|2D-animated|3D CG}",
-       "claymation"
+       "claymation",
+       [
+        "{claymation|2D-animated|3D CG}=claymation"
+       ]
       ]
      ]
     }

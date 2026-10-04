@@ -168,11 +168,11 @@ def _spread(count: int, wanted: int):
     return torch.linspace(0, count - 1, min(count, wanted)).round().long()
 
 
-def frames(decoder, video, fps: int | None = None, edge: int = EDGE):
+def frames(decoder, video, fps: int | None = None, edge: int = EDGE, spatial: int = SPATIAL):
     """The clip's frames as PIL pictures from its latent [batch, channels, time, height, width], their long edge
     `edge` at most (0: as sampled): light (`fps` None), MAX_LATENT_FRAMES of its latent frames spread over the
     clip; smooth, `fps` pictures a second of it, as far as its latent frames give them (a flat tiny VAE or
-    Latent2RGB: one each)."""
+    Latent2RGB: one each). `spatial`: picture pixels per latent pixel, as the model's latent format says (#211)."""
     import numpy as np
     import torch
     from PIL import Image
@@ -186,7 +186,7 @@ def frames(decoder, video, fps: int | None = None, edge: int = EDGE):
     kind, it = decoder
     with torch.no_grad():
         if kind in ("tae", "tae2d"):
-            scale = min(1.0, edge / (SPATIAL * max(x.shape[-2:]))) if edge else 1.0
+            scale = min(1.0, edge / (spatial * max(x.shape[-2:]))) if edge else 1.0
             if scale < 1:  # a smaller latent decodes faster and is all a preview needs
                 x = torch.nn.functional.interpolate(x, scale_factor=(1, scale, scale), mode="trilinear")
             if kind == "tae":
@@ -277,6 +277,8 @@ class _Wrapper:
             return executor(noise, latent_image, sampler, sigmas, denoise_mask, callback, disable_pbar, seed,
                             latent_shapes=latent_shapes)
         sender, prompt_id, (fps, edge) = _Sender(), runs.current_prompt(), self._settings()
+        latent_format = getattr(getattr(executor.class_obj.model_patcher, "model", None), "latent_format", None)
+        spatial = getattr(latent_format, "spacial_downscale_ratio", None) or SPATIAL  # an image model's, H3's 16 (#211)
 
         def previewing(step, x0, x, total_steps):
             if callback is not None:
@@ -286,7 +288,7 @@ class _Wrapper:
                 if latent_shapes and len(latent_shapes) > 1:  # video and sound packed together (MiniMax H3): the video
                     import comfy.utils
                     video = comfy.utils.unpack_latents(x0, latent_shapes)[0]
-                pictures = frames(decoder, video, fps, edge)
+                pictures = frames(decoder, video, fps, edge, spatial)
                 sender.put(pictures, {"step": step + 1, "total": total_steps, "prompt_id": prompt_id, "node": self.node_id},
                            max(20, round(1000 * seconds(video) / len(pictures))))  # in real time
             except Exception as err:  # noqa: BLE001 - a preview never stops a run

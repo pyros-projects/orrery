@@ -8,19 +8,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a tiled changing room at a public swimming pool"
+       "a tiled changing room at a public swimming pool",
+       [
+        "__bh_room__=a tiled changing room at a public swimming pool"
+       ]
       ],
       [
        "{a deep hollow resonance like a ceramic vessel|a low tone like wind across the mouth of a bottle|a booming echo like a stone dropped into a cistern}",
-       "a low tone like wind across the mouth of a bottle"
+       "a low tone like wind across the mouth of a bottle",
+       [
+        "{a deep hollow resonance like a ceramic vessel|a low tone like wind across the mouth of a bottle|a booming echo like a stone dropped into a cistern}=a low tone like wind across the mouth of a bottle"
+       ]
       ],
       [
        "{HOST exhales slowly through the open mouth for an impossibly long time, the tone rising from far below the body|HOST speaks one quiet word, and it echoes back from inside the chest a moment later|HOST drops a small pebble into the open mouth, and it falls for three full seconds before a faint distant splash}",
-       "HOST exhales slowly through the open mouth for an impossibly long time, the tone rising from far below the body"
+       "HOST exhales slowly through the open mouth for an impossibly long time, the tone rising from far below the body",
+       [
+        "{HOST exhales slowly through the open mouth for an impossibly long time, the tone rising from far below the body|HOST speaks one quiet word, and it echoes back from inside the chest a moment later|HOST drops a small pebble into the open mouth, and it falls for three full seconds before a faint distant splash}=HOST exhales slowly through the open mouth for an impossibly long time, the tone rising from far below the body"
+       ]
       ]
      ]
     }
@@ -33,19 +45,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the young man"
+       "the young man",
+       [
+        "__bh_host__=the young man"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a dim apartment sitting room"
+       "a dim apartment sitting room",
+       [
+        "__bh_room__=a dim apartment sitting room"
+       ]
       ],
       [
        "{a deep hollow resonance like a ceramic vessel|a low tone like wind across the mouth of a bottle|a booming echo like a stone dropped into a cistern}",
-       "a deep hollow resonance like a ceramic vessel"
+       "a deep hollow resonance like a ceramic vessel",
+       [
+        "{a deep hollow resonance like a ceramic vessel|a low tone like wind across the mouth of a bottle|a booming echo like a stone dropped into a cistern}=a deep hollow resonance like a ceramic vessel"
+       ]
       ],
       [
        "{HOST exhales slowly through the open mouth for an impossibly long time, the tone rising from far below the body|HOST speaks one quiet word, and it echoes back from inside the chest a moment later|HOST drops a small pebble into the open mouth, and it falls for three full seconds before a faint distant splash}",
-       "HOST drops a small pebble into the open mouth, and it falls for three full seconds before a faint distant splash"
+       "HOST drops a small pebble into the open mouth, and it falls for three full seconds before a faint distant splash",
+       [
+        "{HOST exhales slowly through the open mouth for an impossibly long time, the tone rising from far below the body|HOST speaks one quiet word, and it echoes back from inside the chest a moment later|HOST drops a small pebble into the open mouth, and it falls for three full seconds before a faint distant splash}=HOST drops a small pebble into the open mouth, and it falls for three full seconds before a faint distant splash"
+       ]
       ]
      ]
     }
@@ -58,19 +82,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a narrow hotel corridor"
+       "a narrow hotel corridor",
+       [
+        "__bh_room__=a narrow hotel corridor"
+       ]
       ],
       [
        "{a deep hollow resonance like a ceramic vessel|a low tone like wind across the mouth of a bottle|a booming echo like a stone dropped into a cistern}",
-       "a booming echo like a stone dropped into a cistern"
+       "a booming echo like a stone dropped into a cistern",
+       [
+        "{a deep hollow resonance like a ceramic vessel|a low tone like wind across the mouth of a bottle|a booming echo like a stone dropped into a cistern}=a booming echo like a stone dropped into a cistern"
+       ]
       ],
       [
        "{HOST exhales slowly through the open mouth for an impossibly long time, the tone rising from far below the body|HOST speaks one quiet word, and it echoes back from inside the chest a moment later|HOST drops a small pebble into the open mouth, and it falls for three full seconds before a faint distant splash}",
-       "HOST exhales slowly through the open mouth for an impossibly long time, the tone rising from far below the body"
+       "HOST exhales slowly through the open mouth for an impossibly long time, the tone rising from far below the body",
+       [
+        "{HOST exhales slowly through the open mouth for an impossibly long time, the tone rising from far below the body|HOST speaks one quiet word, and it echoes back from inside the chest a moment later|HOST drops a small pebble into the open mouth, and it falls for three full seconds before a faint distant splash}=HOST exhales slowly through the open mouth for an impossibly long time, the tone rising from far below the body"
+       ]
       ]
      ]
     }

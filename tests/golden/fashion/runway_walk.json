@@ -8,27 +8,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "ontologically draped, melancholic baroque"
+       "ontologically draped, melancholic baroque",
+       [
+        "__couture_adjective__=ontologically draped",
+        "__couture_adjective__=melancholic baroque"
+       ]
       ],
       [
        "__couture_model__",
-       "a gaunt model with a shaved head"
+       "a gaunt model with a shaved head",
+       [
+        "__couture_model__=a gaunt model with a shaved head"
+       ]
       ],
       [
        "__couture_venue__",
-       "the ballroom of a crumbling palace"
+       "the ballroom of a crumbling palace",
+       [
+        "__couture_venue__=the ballroom of a crumbling palace"
+       ]
       ],
       [
        "__couture_form__",
-       "sleeves that forget where the arm ends"
+       "sleeves that forget where the arm ends",
+       [
+        "__couture_form__=sleeves that forget where the arm ends"
+       ]
       ],
       [
        "__couture_material__",
-       "moss velvet"
+       "moss velvet",
+       [
+        "__couture_material__=moss velvet"
+       ]
       ]
      ]
     }
@@ -41,27 +60,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Studio Kessler-Mourne"
+       "Studio Kessler-Mourne",
+       [
+        "__couture_house__=Studio Kessler-Mourne"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "post-luxury, sartorially agnostic"
+       "post-luxury, sartorially agnostic",
+       [
+        "__couture_adjective__=post-luxury",
+        "__couture_adjective__=sartorially agnostic"
+       ]
       ],
       [
        "__couture_model__",
-       "a stern silver-haired model"
+       "a stern silver-haired model",
+       [
+        "__couture_model__=a stern silver-haired model"
+       ]
       ],
       [
        "__couture_venue__",
-       "a runway of wet black sand"
+       "a runway of wet black sand",
+       [
+        "__couture_venue__=a runway of wet black sand"
+       ]
       ],
       [
        "__couture_form__",
-       "lapels that fold back into themselves"
+       "lapels that fold back into themselves",
+       [
+        "__couture_form__=lapels that fold back into themselves"
+       ]
       ],
       [
        "__couture_material__",
-       "boiled wool"
+       "boiled wool",
+       [
+        "__couture_material__=boiled wool"
+       ]
       ]
      ]
     }
@@ -74,27 +112,46 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "__couture_adjective__ ×2",
-       "quietly unwearable, deconstructed"
+       "quietly unwearable, deconstructed",
+       [
+        "__couture_adjective__=quietly unwearable",
+        "__couture_adjective__=deconstructed"
+       ]
       ],
       [
        "__couture_model__",
-       "a pale model with bleached eyelashes and no brows"
+       "a pale model with bleached eyelashes and no brows",
+       [
+        "__couture_model__=a pale model with bleached eyelashes and no brows"
+       ]
       ],
       [
        "__couture_venue__",
-       "a greenhouse full of dead orchids"
+       "a greenhouse full of dead orchids",
+       [
+        "__couture_venue__=a greenhouse full of dead orchids"
+       ]
       ],
       [
        "__couture_form__",
-       "pockets placed exactly where regret lives"
+       "pockets placed exactly where regret lives",
+       [
+        "__couture_form__=pockets placed exactly where regret lives"
+       ]
       ],
       [
        "__couture_material__",
-       "crushed silver lamé"
+       "crushed silver lamé",
+       [
+        "__couture_material__=crushed silver lamé"
+       ]
       ]
      ]
     }

@@ -8,15 +8,24 @@
      "picks": [
       [
        "$animal ← __subjects/animals__",
-       "a giant tortoise"
+       "a giant tortoise",
+       [
+        "__subjects/animals__=a giant tortoise"
+       ]
       ],
       [
        "$home ← __world/habitats#habitat:$animal.habitat__",
-       "a volcanic island shore of black rock"
+       "a volcanic island shore of black rock",
+       [
+        "__world/habitats__=a volcanic island shore of black rock"
+       ]
       ],
       [
        "{|golden |misty }",
-       ""
+       "",
+       [
+        "{|golden |misty }="
+       ]
       ]
      ]
     }
@@ -29,15 +38,24 @@
      "picks": [
       [
        "$animal ← __subjects/animals__",
-       "a humpback whale"
+       "a humpback whale",
+       [
+        "__subjects/animals__=a humpback whale"
+       ]
       ],
       [
        "$home ← __world/habitats#habitat:$animal.habitat__",
-       "a coral reef crowded with small fish"
+       "a coral reef crowded with small fish",
+       [
+        "__world/habitats__=a coral reef crowded with small fish"
+       ]
       ],
       [
        "{|golden |misty }",
-       "misty "
+       "misty ",
+       [
+        "{|golden |misty }=misty "
+       ]
       ]
      ]
     }
@@ -50,15 +68,24 @@
      "picks": [
       [
        "$animal ← __subjects/animals__",
-       "a giant tortoise"
+       "a giant tortoise",
+       [
+        "__subjects/animals__=a giant tortoise"
+       ]
       ],
       [
        "$home ← __world/habitats#habitat:$animal.habitat__",
-       "a volcanic island shore of black rock"
+       "a volcanic island shore of black rock",
+       [
+        "__world/habitats__=a volcanic island shore of black rock"
+       ]
       ],
       [
        "{|golden |misty }",
-       "golden "
+       "golden ",
+       [
+        "{|golden |misty }=golden "
+       ]
       ]
      ]
     }

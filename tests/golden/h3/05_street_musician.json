@@ -8,15 +8,24 @@
      "picks": [
       [
        "{cello|upright piano|koto|accordion|trumpet|theremin}",
-       "trumpet"
+       "trumpet",
+       [
+        "{cello|upright piano|koto|accordion|trumpet|theremin}=trumpet"
+       ]
       ],
       [
        "{snow|rain|fog}",
-       "fog"
+       "fog",
+       [
+        "{snow|rain|fog}=fog"
+       ]
       ],
       [
        "__place__",
-       "a laundromat at 3 a.m."
+       "a laundromat at 3 a.m.",
+       [
+        "__place__=a laundromat at 3 a.m."
+       ]
       ]
      ]
     }
@@ -29,15 +38,24 @@
      "picks": [
       [
        "{cello|upright piano|koto|accordion|trumpet|theremin}",
-       "koto"
+       "koto",
+       [
+        "{cello|upright piano|koto|accordion|trumpet|theremin}=koto"
+       ]
       ],
       [
        "{snow|rain|fog}",
-       "fog"
+       "fog",
+       [
+        "{snow|rain|fog}=fog"
+       ]
       ],
       [
        "__place__",
-       "a snowed-in train station"
+       "a snowed-in train station",
+       [
+        "__place__=a snowed-in train station"
+       ]
       ]
      ]
     }
@@ -50,15 +68,24 @@
      "picks": [
       [
        "{cello|upright piano|koto|accordion|trumpet|theremin}",
-       "trumpet"
+       "trumpet",
+       [
+        "{cello|upright piano|koto|accordion|trumpet|theremin}=trumpet"
+       ]
       ],
       [
        "{snow|rain|fog}",
-       "snow"
+       "snow",
+       [
+        "{snow|rain|fog}=snow"
+       ]
       ],
       [
        "__place__",
-       "a greenhouse on the moon"
+       "a greenhouse on the moon",
+       [
+        "__place__=a greenhouse on the moon"
+       ]
       ]
      ]
     }

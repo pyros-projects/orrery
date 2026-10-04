@@ -97,7 +97,7 @@ export function olderTakes(app) {
 }
 
 // A take's size in the clip's shape (#215): `least`, the shorter side, as the grip at the strip's end sets it.
-function takeVars(app, least = Number(app.data.take_min) || 54) {
+export function takeVars(app, least = Number(app.data.take_min) || 54) {
   const ratio = clipRatio(app), w = ratio >= 1 ? least * ratio : least, h = ratio >= 1 ? least : least / ratio;
   return `--take-w:${Math.round(w)}px;--take-h:${Math.round(h)}px;--take-r:${(w / h).toFixed(4)}`;
 }
@@ -261,15 +261,15 @@ export function wireClips(app, box) {
     window.addEventListener("pointermove", move, true);
     window.addEventListener("pointerup", up, true);
   });
-  box.addEventListener("pointerover", (e) => {
-    const take = e.target.closest(".take");
+  box.addEventListener("pointerover", (e) => {  // a reel's takes and clips; the results under the prompt are results.js's
+    const take = e.target.closest(".take[data-take]");
     if (take && !take.querySelector("video")) {
       const v = Object.assign(document.createElement("video"), { muted: true, loop: true, autoplay: true, playsInline: true });
       v.src = app.api.takeVideoURL(app.bridge.chain(), take.dataset.take);
       take.prepend(v);
       return;
     }
-    const clip = e.target.closest(".tl-clip:not(.empty)");
+    const clip = e.target.closest(".tl-clip:not(.empty):not(.result)");
     if (clip?.classList.contains("big")) { clip.querySelector("video")?.play().catch(() => {}); return; }
     if (!clip || clip.querySelector("video")) return;
     const v = document.createElement("video");
@@ -278,14 +278,15 @@ export function wireClips(app, box) {
     clip.prepend(v);
   });
   box.addEventListener("pointerout", (e) => {
-    const take = e.target.closest(".take");
+    const take = e.target.closest(".take[data-take]");
     if (take && !take.contains(e.relatedTarget) && !take.closest(".cm-takes.playing")) take.querySelector("video")?.remove();
-    const clip = e.target.closest(".tl-clip");
+    const clip = e.target.closest(".tl-clip:not(.result)");
     if (!clip || clip.contains(e.relatedTarget)) return;
     if (clip.classList.contains("big")) clip.querySelector("video")?.pause();
     else clip.querySelector("video")?.remove();
   });
   box.addEventListener("click", (e) => {
+    if (e.target.closest(".cm-takes.results, .tl-clip.result")) return;
     const head = e.target.closest(".cm-takes-head");
     if (head) {
       const strip = head.closest(".cm-takes"), s = Number(strip.dataset.seg), count = strip.querySelectorAll(".take").length;

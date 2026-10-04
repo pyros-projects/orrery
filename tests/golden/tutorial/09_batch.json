@@ -8,15 +8,24 @@
      "picks": [
       [
        "$subject ← __creature__",
-       "kitsune"
+       "kitsune",
+       [
+        "__creature__=kitsune"
+       ]
       ],
       [
        "{a passport photo|a Renaissance court portrait|a 1980s school yearbook|a collectible trading card}",
-       "a passport photo"
+       "a passport photo",
+       [
+        "{a passport photo|a Renaissance court portrait|a 1980s school yearbook|a collectible trading card}=a passport photo"
+       ]
       ],
       [
        "__light__",
-       "aurora light"
+       "aurora light",
+       [
+        "__light__=aurora light"
+       ]
       ]
      ]
     }
@@ -29,15 +38,24 @@
      "picks": [
       [
        "$subject ← __creature__",
-       "anglerfish"
+       "anglerfish",
+       [
+        "__creature__=anglerfish"
+       ]
       ],
       [
        "{a passport photo|a Renaissance court portrait|a 1980s school yearbook|a collectible trading card}",
-       "a passport photo"
+       "a passport photo",
+       [
+        "{a passport photo|a Renaissance court portrait|a 1980s school yearbook|a collectible trading card}=a passport photo"
+       ]
       ],
       [
        "__light__",
-       "neon reflections on wet asphalt"
+       "neon reflections on wet asphalt",
+       [
+        "__light__=neon reflections on wet asphalt"
+       ]
       ]
      ]
     }
@@ -50,15 +68,24 @@
      "picks": [
       [
        "$subject ← __creature__",
-       "griffin"
+       "griffin",
+       [
+        "__creature__=griffin"
+       ]
       ],
       [
        "{a passport photo|a Renaissance court portrait|a 1980s school yearbook|a collectible trading card}",
-       "a Renaissance court portrait"
+       "a Renaissance court portrait",
+       [
+        "{a passport photo|a Renaissance court portrait|a 1980s school yearbook|a collectible trading card}=a Renaissance court portrait"
+       ]
       ],
       [
        "__light__",
-       "soft overcast north light"
+       "soft overcast north light",
+       [
+        "__light__=soft overcast north light"
+       ]
       ]
      ]
     }

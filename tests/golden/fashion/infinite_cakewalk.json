@@ -18,19 +18,31 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "summer"
+       "summer",
+       [
+        "{spring|summer|autumn|winter}=summer"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a runway on a beach of pale sand beside the surf"
+       "a runway on a beach of pale sand beside the surf",
+       [
+        "__cakewalk_outdoor__=a runway on a beach of pale sand beside the surf"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -40,27 +52,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "summer"
+       "summer",
+       [
+        "{spring|summer|autumn|winter}=summer"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a runway on a beach of pale sand beside the surf"
+       "a runway on a beach of pale sand beside the surf",
+       [
+        "__cakewalk_outdoor__=a runway on a beach of pale sand beside the surf"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a model with waist-long braids gathered into a crown"
+       "a model with waist-long braids gathered into a crown",
+       [
+        "__cakewalk_women__=a model with waist-long braids gathered into a crown"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a sheer organza dress over a boxy grey tailored jacket"
+       "a sheer organza dress over a boxy grey tailored jacket",
+       [
+        "__cakewalk_womenswear__=a sheer organza dress over a boxy grey tailored jacket"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -70,27 +100,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "summer"
+       "summer",
+       [
+        "{spring|summer|autumn|winter}=summer"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a runway on a beach of pale sand beside the surf"
+       "a runway on a beach of pale sand beside the surf",
+       [
+        "__cakewalk_outdoor__=a runway on a beach of pale sand beside the surf"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a towering model with a severe black bob and razor cheekbones"
+       "a towering model with a severe black bob and razor cheekbones",
+       [
+        "__cakewalk_women__=a towering model with a severe black bob and razor cheekbones"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a sheer organza dress over a boxy grey tailored jacket"
+       "a sheer organza dress over a boxy grey tailored jacket",
+       [
+        "__cakewalk_womenswear__=a sheer organza dress over a boxy grey tailored jacket"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     },
@@ -100,27 +148,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "summer"
+       "summer",
+       [
+        "{spring|summer|autumn|winter}=summer"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a runway on a beach of pale sand beside the surf"
+       "a runway on a beach of pale sand beside the surf",
+       [
+        "__cakewalk_outdoor__=a runway on a beach of pale sand beside the surf"
+       ]
       ],
       [
        "$model ← __cakewalk_men__",
-       "a tall model with a slicked-back undercut"
+       "a tall model with a slicked-back undercut",
+       [
+        "__cakewalk_men__=a tall model with a slicked-back undercut"
+       ]
       ],
       [
        "$look ← __cakewalk_menswear__",
-       "an oversized trench coat cinched with a leather harness"
+       "an oversized trench coat cinched with a leather harness",
+       [
+        "__cakewalk_menswear__=an oversized trench coat cinched with a leather harness"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     },
@@ -130,27 +196,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "summer"
+       "summer",
+       [
+        "{spring|summer|autumn|winter}=summer"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a runway on a beach of pale sand beside the surf"
+       "a runway on a beach of pale sand beside the surf",
+       [
+        "__cakewalk_outdoor__=a runway on a beach of pale sand beside the surf"
+       ]
       ],
       [
        "$model ← __cakewalk_men__",
-       "a lean model with a shaved head and a long jaw"
+       "a lean model with a shaved head and a long jaw",
+       [
+        "__cakewalk_men__=a lean model with a shaved head and a long jaw"
+       ]
       ],
       [
        "$look ← __cakewalk_menswear__",
-       "an oversized trench coat cinched with a leather harness"
+       "an oversized trench coat cinched with a leather harness",
+       [
+        "__cakewalk_menswear__=an oversized trench coat cinched with a leather harness"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -160,27 +244,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "summer"
+       "summer",
+       [
+        "{spring|summer|autumn|winter}=summer"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a runway on a beach of pale sand beside the surf"
+       "a runway on a beach of pale sand beside the surf",
+       [
+        "__cakewalk_outdoor__=a runway on a beach of pale sand beside the surf"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a freckled model with a slicked-back copper ponytail"
+       "a freckled model with a slicked-back copper ponytail",
+       [
+        "__cakewalk_women__=a freckled model with a slicked-back copper ponytail"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a sheer organza dress over a boxy grey tailored jacket"
+       "a sheer organza dress over a boxy grey tailored jacket",
+       [
+        "__cakewalk_womenswear__=a sheer organza dress over a boxy grey tailored jacket"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     }
@@ -203,19 +305,31 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Studio Kessler-Mourne"
+       "Studio Kessler-Mourne",
+       [
+        "__couture_house__=Studio Kessler-Mourne"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "winter"
+       "winter",
+       [
+        "{spring|summer|autumn|winter}=winter"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a brutalist concrete hall with one hard spotlight"
+       "a brutalist concrete hall with one hard spotlight",
+       [
+        "__cakewalk_indoor__=a brutalist concrete hall with one hard spotlight"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     },
@@ -225,27 +339,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Studio Kessler-Mourne"
+       "Studio Kessler-Mourne",
+       [
+        "__couture_house__=Studio Kessler-Mourne"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "winter"
+       "winter",
+       [
+        "{spring|summer|autumn|winter}=winter"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a brutalist concrete hall with one hard spotlight"
+       "a brutalist concrete hall with one hard spotlight",
+       [
+        "__cakewalk_indoor__=a brutalist concrete hall with one hard spotlight"
+       ]
       ],
       [
        "$model ← __cakewalk_men__",
-       "a lean model with a shaved head and a long jaw"
+       "a lean model with a shaved head and a long jaw",
+       [
+        "__cakewalk_men__=a lean model with a shaved head and a long jaw"
+       ]
       ],
       [
        "$look ← __cakewalk_menswear__",
-       "a razor-sharp double-breasted suit with wide peaked lapels"
+       "a razor-sharp double-breasted suit with wide peaked lapels",
+       [
+        "__cakewalk_menswear__=a razor-sharp double-breasted suit with wide peaked lapels"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -255,27 +387,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Studio Kessler-Mourne"
+       "Studio Kessler-Mourne",
+       [
+        "__couture_house__=Studio Kessler-Mourne"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "winter"
+       "winter",
+       [
+        "{spring|summer|autumn|winter}=winter"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a brutalist concrete hall with one hard spotlight"
+       "a brutalist concrete hall with one hard spotlight",
+       [
+        "__cakewalk_indoor__=a brutalist concrete hall with one hard spotlight"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a towering model with a severe black bob and razor cheekbones"
+       "a towering model with a severe black bob and razor cheekbones",
+       [
+        "__cakewalk_women__=a towering model with a severe black bob and razor cheekbones"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a floor-length coat of liquid silver sequins"
+       "a floor-length coat of liquid silver sequins",
+       [
+        "__cakewalk_womenswear__=a floor-length coat of liquid silver sequins"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -285,27 +435,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Studio Kessler-Mourne"
+       "Studio Kessler-Mourne",
+       [
+        "__couture_house__=Studio Kessler-Mourne"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "winter"
+       "winter",
+       [
+        "{spring|summer|autumn|winter}=winter"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a brutalist concrete hall with one hard spotlight"
+       "a brutalist concrete hall with one hard spotlight",
+       [
+        "__cakewalk_indoor__=a brutalist concrete hall with one hard spotlight"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a towering model with a severe black bob and razor cheekbones"
+       "a towering model with a severe black bob and razor cheekbones",
+       [
+        "__cakewalk_women__=a towering model with a severe black bob and razor cheekbones"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a corset gown pieced together from vintage denim"
+       "a corset gown pieced together from vintage denim",
+       [
+        "__cakewalk_womenswear__=a corset gown pieced together from vintage denim"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -315,27 +483,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Studio Kessler-Mourne"
+       "Studio Kessler-Mourne",
+       [
+        "__couture_house__=Studio Kessler-Mourne"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "winter"
+       "winter",
+       [
+        "{spring|summer|autumn|winter}=winter"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a brutalist concrete hall with one hard spotlight"
+       "a brutalist concrete hall with one hard spotlight",
+       [
+        "__cakewalk_indoor__=a brutalist concrete hall with one hard spotlight"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a towering model with a severe black bob and razor cheekbones"
+       "a towering model with a severe black bob and razor cheekbones",
+       [
+        "__cakewalk_women__=a towering model with a severe black bob and razor cheekbones"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a sheer organza dress over a boxy grey tailored jacket"
+       "a sheer organza dress over a boxy grey tailored jacket",
+       [
+        "__cakewalk_womenswear__=a sheer organza dress over a boxy grey tailored jacket"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -345,27 +531,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Studio Kessler-Mourne"
+       "Studio Kessler-Mourne",
+       [
+        "__couture_house__=Studio Kessler-Mourne"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "winter"
+       "winter",
+       [
+        "{spring|summer|autumn|winter}=winter"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a brutalist concrete hall with one hard spotlight"
+       "a brutalist concrete hall with one hard spotlight",
+       [
+        "__cakewalk_indoor__=a brutalist concrete hall with one hard spotlight"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a model with waist-long braids gathered into a crown"
+       "a model with waist-long braids gathered into a crown",
+       [
+        "__cakewalk_women__=a model with waist-long braids gathered into a crown"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a crimson latex column dress with opera gloves"
+       "a crimson latex column dress with opera gloves",
+       [
+        "__cakewalk_womenswear__=a crimson latex column dress with opera gloves"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     }
@@ -388,19 +592,31 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "spring"
+       "spring",
+       [
+        "{spring|summer|autumn|winter}=spring"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a rooftop runway above the city under an open sky"
+       "a rooftop runway above the city under an open sky",
+       [
+        "__cakewalk_outdoor__=a rooftop runway above the city under an open sky"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -410,27 +626,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "spring"
+       "spring",
+       [
+        "{spring|summer|autumn|winter}=spring"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a rooftop runway above the city under an open sky"
+       "a rooftop runway above the city under an open sky",
+       [
+        "__cakewalk_outdoor__=a rooftop runway above the city under an open sky"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a freckled model with a slicked-back copper ponytail"
+       "a freckled model with a slicked-back copper ponytail",
+       [
+        "__cakewalk_women__=a freckled model with a slicked-back copper ponytail"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a sculptural ivory gown with a collar like a folded fan"
+       "a sculptural ivory gown with a collar like a folded fan",
+       [
+        "__cakewalk_womenswear__=a sculptural ivory gown with a collar like a folded fan"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -440,27 +674,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "spring"
+       "spring",
+       [
+        "{spring|summer|autumn|winter}=spring"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a rooftop runway above the city under an open sky"
+       "a rooftop runway above the city under an open sky",
+       [
+        "__cakewalk_outdoor__=a rooftop runway above the city under an open sky"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "an older model with a sharp silver pixie cut"
+       "an older model with a sharp silver pixie cut",
+       [
+        "__cakewalk_women__=an older model with a sharp silver pixie cut"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a crimson latex column dress with opera gloves"
+       "a crimson latex column dress with opera gloves",
+       [
+        "__cakewalk_womenswear__=a crimson latex column dress with opera gloves"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -470,27 +722,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "spring"
+       "spring",
+       [
+        "{spring|summer|autumn|winter}=spring"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a rooftop runway above the city under an open sky"
+       "a rooftop runway above the city under an open sky",
+       [
+        "__cakewalk_outdoor__=a rooftop runway above the city under an open sky"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a model with close-cropped platinum hair and dark brows"
+       "a model with close-cropped platinum hair and dark brows",
+       [
+        "__cakewalk_women__=a model with close-cropped platinum hair and dark brows"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a corset gown pieced together from vintage denim"
+       "a corset gown pieced together from vintage denim",
+       [
+        "__cakewalk_womenswear__=a corset gown pieced together from vintage denim"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -500,27 +770,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "spring"
+       "spring",
+       [
+        "{spring|summer|autumn|winter}=spring"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a rooftop runway above the city under an open sky"
+       "a rooftop runway above the city under an open sky",
+       [
+        "__cakewalk_outdoor__=a rooftop runway above the city under an open sky"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a model with waist-long braids gathered into a crown"
+       "a model with waist-long braids gathered into a crown",
+       [
+        "__cakewalk_women__=a model with waist-long braids gathered into a crown"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a floor-length coat of liquid silver sequins"
+       "a floor-length coat of liquid silver sequins",
+       [
+        "__cakewalk_womenswear__=a floor-length coat of liquid silver sequins"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     },
@@ -530,27 +818,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "spring"
+       "spring",
+       [
+        "{spring|summer|autumn|winter}=spring"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a rooftop runway above the city under an open sky"
+       "a rooftop runway above the city under an open sky",
+       [
+        "__cakewalk_outdoor__=a rooftop runway above the city under an open sky"
+       ]
       ],
       [
        "$model ← __cakewalk_men__",
-       "a silver-haired older model with a weathered face"
+       "a silver-haired older model with a weathered face",
+       [
+        "__cakewalk_men__=a silver-haired older model with a weathered face"
+       ]
       ],
       [
        "$look ← __cakewalk_menswear__",
-       "a razor-sharp double-breasted suit with wide peaked lapels"
+       "a razor-sharp double-breasted suit with wide peaked lapels",
+       [
+        "__cakewalk_menswear__=a razor-sharp double-breasted suit with wide peaked lapels"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     }
@@ -573,19 +879,31 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Vérité"
+       "Maison Vérité",
+       [
+        "__couture_house__=Maison Vérité"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a disused railway hall strung with warm bulbs"
+       "a disused railway hall strung with warm bulbs",
+       [
+        "__cakewalk_indoor__=a disused railway hall strung with warm bulbs"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     },
@@ -595,27 +913,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Vérité"
+       "Maison Vérité",
+       [
+        "__couture_house__=Maison Vérité"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a disused railway hall strung with warm bulbs"
+       "a disused railway hall strung with warm bulbs",
+       [
+        "__cakewalk_indoor__=a disused railway hall strung with warm bulbs"
+       ]
       ],
       [
        "$model ← __cakewalk_men__",
-       "a model with bleached curls and a single gold earring"
+       "a model with bleached curls and a single gold earring",
+       [
+        "__cakewalk_men__=a model with bleached curls and a single gold earring"
+       ]
       ],
       [
        "$look ← __cakewalk_menswear__",
-       "a cropped tuxedo jacket over wide pleated trousers"
+       "a cropped tuxedo jacket over wide pleated trousers",
+       [
+        "__cakewalk_menswear__=a cropped tuxedo jacket over wide pleated trousers"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -625,27 +961,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Vérité"
+       "Maison Vérité",
+       [
+        "__couture_house__=Maison Vérité"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a disused railway hall strung with warm bulbs"
+       "a disused railway hall strung with warm bulbs",
+       [
+        "__cakewalk_indoor__=a disused railway hall strung with warm bulbs"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a model with waist-long braids gathered into a crown"
+       "a model with waist-long braids gathered into a crown",
+       [
+        "__cakewalk_women__=a model with waist-long braids gathered into a crown"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a floor-length coat of liquid silver sequins"
+       "a floor-length coat of liquid silver sequins",
+       [
+        "__cakewalk_womenswear__=a floor-length coat of liquid silver sequins"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -655,27 +1009,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Vérité"
+       "Maison Vérité",
+       [
+        "__couture_house__=Maison Vérité"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a disused railway hall strung with warm bulbs"
+       "a disused railway hall strung with warm bulbs",
+       [
+        "__cakewalk_indoor__=a disused railway hall strung with warm bulbs"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a towering model with a severe black bob and razor cheekbones"
+       "a towering model with a severe black bob and razor cheekbones",
+       [
+        "__cakewalk_women__=a towering model with a severe black bob and razor cheekbones"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a crimson latex column dress with opera gloves"
+       "a crimson latex column dress with opera gloves",
+       [
+        "__cakewalk_womenswear__=a crimson latex column dress with opera gloves"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -685,27 +1057,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Vérité"
+       "Maison Vérité",
+       [
+        "__couture_house__=Maison Vérité"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a disused railway hall strung with warm bulbs"
+       "a disused railway hall strung with warm bulbs",
+       [
+        "__cakewalk_indoor__=a disused railway hall strung with warm bulbs"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a freckled model with a slicked-back copper ponytail"
+       "a freckled model with a slicked-back copper ponytail",
+       [
+        "__cakewalk_women__=a freckled model with a slicked-back copper ponytail"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a sheer organza dress over a boxy grey tailored jacket"
+       "a sheer organza dress over a boxy grey tailored jacket",
+       [
+        "__cakewalk_womenswear__=a sheer organza dress over a boxy grey tailored jacket"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     },
@@ -715,27 +1105,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Vérité"
+       "Maison Vérité",
+       [
+        "__couture_house__=Maison Vérité"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a disused railway hall strung with warm bulbs"
+       "a disused railway hall strung with warm bulbs",
+       [
+        "__cakewalk_indoor__=a disused railway hall strung with warm bulbs"
+       ]
       ],
       [
        "$model ← __cakewalk_men__",
-       "a tall model with a slicked-back undercut"
+       "a tall model with a slicked-back undercut",
+       [
+        "__cakewalk_men__=a tall model with a slicked-back undercut"
+       ]
       ],
       [
        "$look ← __cakewalk_menswear__",
-       "a razor-sharp double-breasted suit with wide peaked lapels"
+       "a razor-sharp double-breasted suit with wide peaked lapels",
+       [
+        "__cakewalk_menswear__=a razor-sharp double-breasted suit with wide peaked lapels"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     }
@@ -758,19 +1166,31 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Haus Grauzone"
+       "Haus Grauzone",
+       [
+        "__couture_house__=Haus Grauzone"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "summer"
+       "summer",
+       [
+        "{spring|summer|autumn|winter}=summer"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a long runway of white planks laid across a flowering meadow"
+       "a long runway of white planks laid across a flowering meadow",
+       [
+        "__cakewalk_outdoor__=a long runway of white planks laid across a flowering meadow"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     },
@@ -780,27 +1200,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Haus Grauzone"
+       "Haus Grauzone",
+       [
+        "__couture_house__=Haus Grauzone"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "summer"
+       "summer",
+       [
+        "{spring|summer|autumn|winter}=summer"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a long runway of white planks laid across a flowering meadow"
+       "a long runway of white planks laid across a flowering meadow",
+       [
+        "__cakewalk_outdoor__=a long runway of white planks laid across a flowering meadow"
+       ]
       ],
       [
        "$model ← __cakewalk_men__",
-       "a lean model with a shaved head and a long jaw"
+       "a lean model with a shaved head and a long jaw",
+       [
+        "__cakewalk_men__=a lean model with a shaved head and a long jaw"
+       ]
       ],
       [
        "$look ← __cakewalk_menswear__",
-       "a boiler suit in raw white canvas with exaggerated shoulders"
+       "a boiler suit in raw white canvas with exaggerated shoulders",
+       [
+        "__cakewalk_menswear__=a boiler suit in raw white canvas with exaggerated shoulders"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -810,27 +1248,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Haus Grauzone"
+       "Haus Grauzone",
+       [
+        "__couture_house__=Haus Grauzone"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "summer"
+       "summer",
+       [
+        "{spring|summer|autumn|winter}=summer"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a long runway of white planks laid across a flowering meadow"
+       "a long runway of white planks laid across a flowering meadow",
+       [
+        "__cakewalk_outdoor__=a long runway of white planks laid across a flowering meadow"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a model with waist-long braids gathered into a crown"
+       "a model with waist-long braids gathered into a crown",
+       [
+        "__cakewalk_women__=a model with waist-long braids gathered into a crown"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a corset gown pieced together from vintage denim"
+       "a corset gown pieced together from vintage denim",
+       [
+        "__cakewalk_womenswear__=a corset gown pieced together from vintage denim"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     },
@@ -840,27 +1296,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Haus Grauzone"
+       "Haus Grauzone",
+       [
+        "__couture_house__=Haus Grauzone"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "summer"
+       "summer",
+       [
+        "{spring|summer|autumn|winter}=summer"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a long runway of white planks laid across a flowering meadow"
+       "a long runway of white planks laid across a flowering meadow",
+       [
+        "__cakewalk_outdoor__=a long runway of white planks laid across a flowering meadow"
+       ]
       ],
       [
        "$model ← __cakewalk_men__",
-       "a lean model with a shaved head and a long jaw"
+       "a lean model with a shaved head and a long jaw",
+       [
+        "__cakewalk_men__=a lean model with a shaved head and a long jaw"
+       ]
       ],
       [
        "$look ← __cakewalk_menswear__",
-       "a long cape of black feathers over a bare chest and tailored trousers"
+       "a long cape of black feathers over a bare chest and tailored trousers",
+       [
+        "__cakewalk_menswear__=a long cape of black feathers over a bare chest and tailored trousers"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -870,27 +1344,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Haus Grauzone"
+       "Haus Grauzone",
+       [
+        "__couture_house__=Haus Grauzone"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "summer"
+       "summer",
+       [
+        "{spring|summer|autumn|winter}=summer"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a long runway of white planks laid across a flowering meadow"
+       "a long runway of white planks laid across a flowering meadow",
+       [
+        "__cakewalk_outdoor__=a long runway of white planks laid across a flowering meadow"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a towering model with a severe black bob and razor cheekbones"
+       "a towering model with a severe black bob and razor cheekbones",
+       [
+        "__cakewalk_women__=a towering model with a severe black bob and razor cheekbones"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a crimson latex column dress with opera gloves"
+       "a crimson latex column dress with opera gloves",
+       [
+        "__cakewalk_womenswear__=a crimson latex column dress with opera gloves"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -900,27 +1392,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Haus Grauzone"
+       "Haus Grauzone",
+       [
+        "__couture_house__=Haus Grauzone"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "summer"
+       "summer",
+       [
+        "{spring|summer|autumn|winter}=summer"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a long runway of white planks laid across a flowering meadow"
+       "a long runway of white planks laid across a flowering meadow",
+       [
+        "__cakewalk_outdoor__=a long runway of white planks laid across a flowering meadow"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a model with close-cropped platinum hair and dark brows"
+       "a model with close-cropped platinum hair and dark brows",
+       [
+        "__cakewalk_women__=a model with close-cropped platinum hair and dark brows"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a sculptural ivory gown with a collar like a folded fan"
+       "a sculptural ivory gown with a collar like a folded fan",
+       [
+        "__cakewalk_womenswear__=a sculptural ivory gown with a collar like a folded fan"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     }
@@ -943,19 +1453,31 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a glasshouse fogged from inside, its iron frame glowing"
+       "a glasshouse fogged from inside, its iron frame glowing",
+       [
+        "__cakewalk_indoor__=a glasshouse fogged from inside, its iron frame glowing"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -965,27 +1487,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a glasshouse fogged from inside, its iron frame glowing"
+       "a glasshouse fogged from inside, its iron frame glowing",
+       [
+        "__cakewalk_indoor__=a glasshouse fogged from inside, its iron frame glowing"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a freckled model with a slicked-back copper ponytail"
+       "a freckled model with a slicked-back copper ponytail",
+       [
+        "__cakewalk_women__=a freckled model with a slicked-back copper ponytail"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a corset gown pieced together from vintage denim"
+       "a corset gown pieced together from vintage denim",
+       [
+        "__cakewalk_womenswear__=a corset gown pieced together from vintage denim"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     },
@@ -995,27 +1535,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a glasshouse fogged from inside, its iron frame glowing"
+       "a glasshouse fogged from inside, its iron frame glowing",
+       [
+        "__cakewalk_indoor__=a glasshouse fogged from inside, its iron frame glowing"
+       ]
       ],
       [
        "$model ← __cakewalk_men__",
-       "a tall model with a slicked-back undercut"
+       "a tall model with a slicked-back undercut",
+       [
+        "__cakewalk_men__=a tall model with a slicked-back undercut"
+       ]
       ],
       [
        "$look ← __cakewalk_menswear__",
-       "a boiler suit in raw white canvas with exaggerated shoulders"
+       "a boiler suit in raw white canvas with exaggerated shoulders",
+       [
+        "__cakewalk_menswear__=a boiler suit in raw white canvas with exaggerated shoulders"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -1025,27 +1583,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a glasshouse fogged from inside, its iron frame glowing"
+       "a glasshouse fogged from inside, its iron frame glowing",
+       [
+        "__cakewalk_indoor__=a glasshouse fogged from inside, its iron frame glowing"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a towering model with a severe black bob and razor cheekbones"
+       "a towering model with a severe black bob and razor cheekbones",
+       [
+        "__cakewalk_women__=a towering model with a severe black bob and razor cheekbones"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a sculptural ivory gown with a collar like a folded fan"
+       "a sculptural ivory gown with a collar like a folded fan",
+       [
+        "__cakewalk_womenswear__=a sculptural ivory gown with a collar like a folded fan"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     },
@@ -1055,27 +1631,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a glasshouse fogged from inside, its iron frame glowing"
+       "a glasshouse fogged from inside, its iron frame glowing",
+       [
+        "__cakewalk_indoor__=a glasshouse fogged from inside, its iron frame glowing"
+       ]
       ],
       [
        "$model ← __cakewalk_men__",
-       "a lean model with a shaved head and a long jaw"
+       "a lean model with a shaved head and a long jaw",
+       [
+        "__cakewalk_men__=a lean model with a shaved head and a long jaw"
+       ]
       ],
       [
        "$look ← __cakewalk_menswear__",
-       "a boiler suit in raw white canvas with exaggerated shoulders"
+       "a boiler suit in raw white canvas with exaggerated shoulders",
+       [
+        "__cakewalk_menswear__=a boiler suit in raw white canvas with exaggerated shoulders"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     },
@@ -1085,27 +1679,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a glasshouse fogged from inside, its iron frame glowing"
+       "a glasshouse fogged from inside, its iron frame glowing",
+       [
+        "__cakewalk_indoor__=a glasshouse fogged from inside, its iron frame glowing"
+       ]
       ],
       [
        "$model ← __cakewalk_men__",
-       "a tall model with a slicked-back undercut"
+       "a tall model with a slicked-back undercut",
+       [
+        "__cakewalk_men__=a tall model with a slicked-back undercut"
+       ]
       ],
       [
        "$look ← __cakewalk_menswear__",
-       "a razor-sharp double-breasted suit with wide peaked lapels"
+       "a razor-sharp double-breasted suit with wide peaked lapels",
+       [
+        "__cakewalk_menswear__=a razor-sharp double-breasted suit with wide peaked lapels"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     }
@@ -1128,19 +1740,31 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a brutalist concrete hall with one hard spotlight"
+       "a brutalist concrete hall with one hard spotlight",
+       [
+        "__cakewalk_indoor__=a brutalist concrete hall with one hard spotlight"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     },
@@ -1150,27 +1774,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a brutalist concrete hall with one hard spotlight"
+       "a brutalist concrete hall with one hard spotlight",
+       [
+        "__cakewalk_indoor__=a brutalist concrete hall with one hard spotlight"
+       ]
       ],
       [
        "$model ← __cakewalk_men__",
-       "a silver-haired older model with a weathered face"
+       "a silver-haired older model with a weathered face",
+       [
+        "__cakewalk_men__=a silver-haired older model with a weathered face"
+       ]
       ],
       [
        "$look ← __cakewalk_menswear__",
-       "a boiler suit in raw white canvas with exaggerated shoulders"
+       "a boiler suit in raw white canvas with exaggerated shoulders",
+       [
+        "__cakewalk_menswear__=a boiler suit in raw white canvas with exaggerated shoulders"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -1180,27 +1822,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a brutalist concrete hall with one hard spotlight"
+       "a brutalist concrete hall with one hard spotlight",
+       [
+        "__cakewalk_indoor__=a brutalist concrete hall with one hard spotlight"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "an older model with a sharp silver pixie cut"
+       "an older model with a sharp silver pixie cut",
+       [
+        "__cakewalk_women__=an older model with a sharp silver pixie cut"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a corset gown pieced together from vintage denim"
+       "a corset gown pieced together from vintage denim",
+       [
+        "__cakewalk_womenswear__=a corset gown pieced together from vintage denim"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -1210,27 +1870,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a brutalist concrete hall with one hard spotlight"
+       "a brutalist concrete hall with one hard spotlight",
+       [
+        "__cakewalk_indoor__=a brutalist concrete hall with one hard spotlight"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a model with waist-long braids gathered into a crown"
+       "a model with waist-long braids gathered into a crown",
+       [
+        "__cakewalk_women__=a model with waist-long braids gathered into a crown"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a corset gown pieced together from vintage denim"
+       "a corset gown pieced together from vintage denim",
+       [
+        "__cakewalk_womenswear__=a corset gown pieced together from vintage denim"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -1240,27 +1918,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a brutalist concrete hall with one hard spotlight"
+       "a brutalist concrete hall with one hard spotlight",
+       [
+        "__cakewalk_indoor__=a brutalist concrete hall with one hard spotlight"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "an older model with a sharp silver pixie cut"
+       "an older model with a sharp silver pixie cut",
+       [
+        "__cakewalk_women__=an older model with a sharp silver pixie cut"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a sheer organza dress over a boxy grey tailored jacket"
+       "a sheer organza dress over a boxy grey tailored jacket",
+       [
+        "__cakewalk_womenswear__=a sheer organza dress over a boxy grey tailored jacket"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -1270,27 +1966,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "autumn"
+       "autumn",
+       [
+        "{spring|summer|autumn|winter}=autumn"
+       ]
       ],
       [
        "$venue ← __cakewalk_indoor__",
-       "a brutalist concrete hall with one hard spotlight"
+       "a brutalist concrete hall with one hard spotlight",
+       [
+        "__cakewalk_indoor__=a brutalist concrete hall with one hard spotlight"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a towering model with a severe black bob and razor cheekbones"
+       "a towering model with a severe black bob and razor cheekbones",
+       [
+        "__cakewalk_women__=a towering model with a severe black bob and razor cheekbones"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a corset gown pieced together from vintage denim"
+       "a corset gown pieced together from vintage denim",
+       [
+        "__cakewalk_womenswear__=a corset gown pieced together from vintage denim"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     }
@@ -1313,19 +2027,31 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "spring"
+       "spring",
+       [
+        "{spring|summer|autumn|winter}=spring"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a long runway of white planks laid across a flowering meadow"
+       "a long runway of white planks laid across a flowering meadow",
+       [
+        "__cakewalk_outdoor__=a long runway of white planks laid across a flowering meadow"
+       ]
       ],
       [
        "{woman|man}",
-       "woman"
+       "woman",
+       [
+        "{woman|man}=woman"
+       ]
       ]
      ]
     },
@@ -1335,27 +2061,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "spring"
+       "spring",
+       [
+        "{spring|summer|autumn|winter}=spring"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a long runway of white planks laid across a flowering meadow"
+       "a long runway of white planks laid across a flowering meadow",
+       [
+        "__cakewalk_outdoor__=a long runway of white planks laid across a flowering meadow"
+       ]
       ],
       [
        "$model ← __cakewalk_women__",
-       "a freckled model with a slicked-back copper ponytail"
+       "a freckled model with a slicked-back copper ponytail",
+       [
+        "__cakewalk_women__=a freckled model with a slicked-back copper ponytail"
+       ]
       ],
       [
        "$look ← __cakewalk_womenswear__",
-       "a sculptural ivory gown with a collar like a folded fan"
+       "a sculptural ivory gown with a collar like a folded fan",
+       [
+        "__cakewalk_womenswear__=a sculptural ivory gown with a collar like a folded fan"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     },
@@ -1365,27 +2109,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "spring"
+       "spring",
+       [
+        "{spring|summer|autumn|winter}=spring"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a long runway of white planks laid across a flowering meadow"
+       "a long runway of white planks laid across a flowering meadow",
+       [
+        "__cakewalk_outdoor__=a long runway of white planks laid across a flowering meadow"
+       ]
       ],
       [
        "$model ← __cakewalk_men__",
-       "a model with bleached curls and a single gold earring"
+       "a model with bleached curls and a single gold earring",
+       [
+        "__cakewalk_men__=a model with bleached curls and a single gold earring"
+       ]
       ],
       [
        "$look ← __cakewalk_menswear__",
-       "a long cape of black feathers over a bare chest and tailored trousers"
+       "a long cape of black feathers over a bare chest and tailored trousers",
+       [
+        "__cakewalk_menswear__=a long cape of black feathers over a bare chest and tailored trousers"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     },
@@ -1395,27 +2157,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "spring"
+       "spring",
+       [
+        "{spring|summer|autumn|winter}=spring"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a long runway of white planks laid across a flowering meadow"
+       "a long runway of white planks laid across a flowering meadow",
+       [
+        "__cakewalk_outdoor__=a long runway of white planks laid across a flowering meadow"
+       ]
       ],
       [
        "$model ← __cakewalk_men__",
-       "a model with bleached curls and a single gold earring"
+       "a model with bleached curls and a single gold earring",
+       [
+        "__cakewalk_men__=a model with bleached curls and a single gold earring"
+       ]
       ],
       [
        "$look ← __cakewalk_menswear__",
-       "a long cape of black feathers over a bare chest and tailored trousers"
+       "a long cape of black feathers over a bare chest and tailored trousers",
+       [
+        "__cakewalk_menswear__=a long cape of black feathers over a bare chest and tailored trousers"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     },
@@ -1425,27 +2205,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "spring"
+       "spring",
+       [
+        "{spring|summer|autumn|winter}=spring"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a long runway of white planks laid across a flowering meadow"
+       "a long runway of white planks laid across a flowering meadow",
+       [
+        "__cakewalk_outdoor__=a long runway of white planks laid across a flowering meadow"
+       ]
       ],
       [
        "$model ← __cakewalk_men__",
-       "a silver-haired older model with a weathered face"
+       "a silver-haired older model with a weathered face",
+       [
+        "__cakewalk_men__=a silver-haired older model with a weathered face"
+       ]
       ],
       [
        "$look ← __cakewalk_menswear__",
-       "a boiler suit in raw white canvas with exaggerated shoulders"
+       "a boiler suit in raw white canvas with exaggerated shoulders",
+       [
+        "__cakewalk_menswear__=a boiler suit in raw white canvas with exaggerated shoulders"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     },
@@ -1455,27 +2253,45 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "{spring|summer|autumn|winter}",
-       "spring"
+       "spring",
+       [
+        "{spring|summer|autumn|winter}=spring"
+       ]
       ],
       [
        "$venue ← __cakewalk_outdoor__",
-       "a long runway of white planks laid across a flowering meadow"
+       "a long runway of white planks laid across a flowering meadow",
+       [
+        "__cakewalk_outdoor__=a long runway of white planks laid across a flowering meadow"
+       ]
       ],
       [
        "$model ← __cakewalk_men__",
-       "a silver-haired older model with a weathered face"
+       "a silver-haired older model with a weathered face",
+       [
+        "__cakewalk_men__=a silver-haired older model with a weathered face"
+       ]
       ],
       [
        "$look ← __cakewalk_menswear__",
-       "an oversized trench coat cinched with a leather harness"
+       "an oversized trench coat cinched with a leather harness",
+       [
+        "__cakewalk_menswear__=an oversized trench coat cinched with a leather harness"
+       ]
       ],
       [
        "{woman|man}",
-       "man"
+       "man",
+       [
+        "{woman|man}=man"
+       ]
       ]
      ]
     }

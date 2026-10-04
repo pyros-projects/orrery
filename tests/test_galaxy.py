@@ -72,6 +72,31 @@ def test_rerating_replaces_the_old_factor_and_clearing_restores(home, tmp_path):
     assert weights["__animal__=fox"] == pytest.approx(2.0)
 
 
+def test_ratings_taken_back_leave_the_weight_as_it_was_whatever_their_number_and_order(home, tmp_path):
+    """#257: twenty outputs with one pick, hated and cleared, left it at 104.86 when each step rounded to four places."""
+    rows = [row(image(tmp_path, f"{i}.png", size=(8, 8)), seed=i) for i in range(20)]
+    write_rows(home, rows)
+    Home(home).save_weights({"__animal__=fox": 2.0})
+    for r in rows:
+        rate(Home(home), row_id(r), "hate")
+    assert Home(home).weights()["__animal__=fox"] == pytest.approx(2.0 * 0.5 ** 20)  # no floor
+    for r in rows:
+        rate(Home(home), row_id(r), None)
+    assert Home(home).weights() == {"__animal__=fox": 2.0}
+    order = ["love", "hate", "like", "nope", "love", "hate", "like", "nope"] * 2
+    for r, rating in zip(rows, order, strict=False):
+        rate(Home(home), row_id(r), rating)
+    forward = Home(home).weights()["__animal__=fox"]
+    for r in rows:
+        rate(Home(home), row_id(r), None)
+    for r, rating in reversed(list(zip(rows, order, strict=False))):
+        rate(Home(home), row_id(r), rating)
+    assert Home(home).weights()["__animal__=fox"] == forward  # the same ratings, the other way round
+    for r in rows:
+        rate(Home(home), row_id(r), None)
+    assert Home(home).weights() == {"__animal__=fox": 2.0}
+
+
 def test_a_weight_back_at_one_leaves_the_file(home, tmp_path):
     r = row(image(tmp_path, "a.png"))
     write_rows(home, [r])

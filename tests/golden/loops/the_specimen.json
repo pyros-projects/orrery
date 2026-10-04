@@ -17,7 +17,10 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it",
+       [
+        "__scp/entities__=a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       ]
       ]
      ]
     },
@@ -27,11 +30,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it",
+       [
+        "__scp/entities__=a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       ]
       ],
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ]
      ]
     },
@@ -41,11 +50,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it",
+       [
+        "__scp/entities__=a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs",
+       [
+        "__backrooms/levels__=a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       ]
       ]
      ]
     },
@@ -55,11 +70,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it",
+       [
+        "__scp/entities__=a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing",
+       [
+        "__backrooms/levels__=an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+       ]
       ]
      ]
     },
@@ -69,7 +90,10 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it",
+       [
+        "__scp/entities__=a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       ]
       ]
      ]
     }
@@ -92,7 +116,10 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions",
+       [
+        "__scp/entities__=a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       ]
       ]
      ]
     },
@@ -102,11 +129,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions",
+       [
+        "__scp/entities__=a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       ]
       ],
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ]
      ]
     },
@@ -116,11 +149,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions",
+       [
+        "__scp/entities__=a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "a concrete stairwell that goes down floor after floor, the same number painted on every landing"
+       "a concrete stairwell that goes down floor after floor, the same number painted on every landing",
+       [
+        "__backrooms/levels__=a concrete stairwell that goes down floor after floor, the same number painted on every landing"
+       ]
       ]
      ]
     },
@@ -130,11 +169,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions",
+       [
+        "__scp/entities__=a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there"
+       "a 24-hour laundromat where every machine is turning and no one is there",
+       [
+        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+       ]
       ]
      ]
     },
@@ -144,7 +189,10 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions",
+       [
+        "__scp/entities__=a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       ]
       ]
      ]
     },
@@ -154,11 +202,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions",
+       [
+        "__scp/entities__=a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there"
+       "a 24-hour laundromat where every machine is turning and no one is there",
+       [
+        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+       ]
       ]
      ]
     }
@@ -180,7 +234,10 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it",
+       [
+        "__scp/entities__=a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       ]
       ]
      ]
     },
@@ -190,11 +247,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it",
+       [
+        "__scp/entities__=a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       ]
       ],
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ]
      ]
     },
@@ -204,11 +267,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it",
+       [
+        "__scp/entities__=a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights",
+       [
+        "__backrooms/levels__=an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       ]
       ]
      ]
     },
@@ -218,11 +287,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it",
+       [
+        "__scp/entities__=a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere",
+       [
+        "__backrooms/levels__=endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       ]
       ]
      ]
     },
@@ -232,7 +307,10 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       "a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it",
+       [
+        "__scp/entities__=a large, round blob of translucent orange slime about two metres wide, a thin shiny membrane around a thick jelly that glows where the light passes through it"
+       ]
       ]
      ]
     }
@@ -255,7 +333,10 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees",
+       [
+        "__scp/entities__=a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       ]
       ]
      ]
     },
@@ -265,11 +346,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees",
+       [
+        "__scp/entities__=a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       ]
       ],
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ]
      ]
     },
@@ -279,11 +366,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees",
+       [
+        "__scp/entities__=a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere",
+       [
+        "__backrooms/levels__=endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       ]
       ]
      ]
     },
@@ -293,11 +386,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees",
+       [
+        "__scp/entities__=a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "an empty indoor play area of coloured ball pits and plastic tubes, half the lights switched off"
+       "an empty indoor play area of coloured ball pits and plastic tubes, half the lights switched off",
+       [
+        "__backrooms/levels__=an empty indoor play area of coloured ball pits and plastic tubes, half the lights switched off"
+       ]
       ]
      ]
     },
@@ -307,7 +406,10 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees",
+       [
+        "__scp/entities__=a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       ]
       ]
      ]
     },
@@ -317,11 +419,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees",
+       [
+        "__scp/entities__=a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere",
+       [
+        "__backrooms/levels__=endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       ]
       ]
      ]
     }
@@ -344,7 +452,10 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back",
+       [
+        "__scp/entities__=a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+       ]
       ]
      ]
     },
@@ -354,11 +465,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back",
+       [
+        "__scp/entities__=a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+       ]
       ],
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ]
      ]
     },
@@ -368,11 +485,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back",
+       [
+        "__scp/entities__=a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "narrow maintenance tunnels lined with dripping pipes, valves and dim caged bulbs"
+       "narrow maintenance tunnels lined with dripping pipes, valves and dim caged bulbs",
+       [
+        "__backrooms/levels__=narrow maintenance tunnels lined with dripping pipes, valves and dim caged bulbs"
+       ]
       ]
      ]
     },
@@ -382,11 +505,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back",
+       [
+        "__scp/entities__=a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing",
+       [
+        "__backrooms/levels__=an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+       ]
       ]
      ]
     },
@@ -396,7 +525,10 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back",
+       [
+        "__scp/entities__=a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+       ]
       ]
      ]
     },
@@ -406,11 +538,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+       "a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back",
+       [
+        "__scp/entities__=a pack predator the size of a bear, with translucent red, wet-looking skin, a long head with no eyes or eye sockets at all, jaws lined with long, faintly glowing red fangs and a ridge of spines running down its back"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       "a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs",
+       [
+        "__backrooms/levels__=a school corridor at night, rows of lockers, waxed floor tiles reflecting the green exit signs"
+       ]
       ]
      ]
     }
@@ -433,7 +571,10 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions",
+       [
+        "__scp/entities__=a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       ]
       ]
      ]
     },
@@ -443,11 +584,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions",
+       [
+        "__scp/entities__=a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       ]
       ],
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ]
      ]
     },
@@ -457,11 +604,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions",
+       [
+        "__scp/entities__=a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "a vast open-plan office of grey cubicles, old monitors glowing green on every desk"
+       "a vast open-plan office of grey cubicles, old monitors glowing green on every desk",
+       [
+        "__backrooms/levels__=a vast open-plan office of grey cubicles, old monitors glowing green on every desk"
+       ]
       ]
      ]
     },
@@ -471,11 +624,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions",
+       [
+        "__scp/entities__=a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "a concrete stairwell that goes down floor after floor, the same number painted on every landing"
+       "a concrete stairwell that goes down floor after floor, the same number painted on every landing",
+       [
+        "__backrooms/levels__=a concrete stairwell that goes down floor after floor, the same number painted on every landing"
+       ]
       ]
      ]
     },
@@ -485,7 +644,10 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions",
+       [
+        "__scp/entities__=a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       ]
       ]
      ]
     },
@@ -495,11 +657,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       "a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions",
+       [
+        "__scp/entities__=a colossal moray eel, its head alone wider than a truck, its body as thick as a building and so long that it disappears into the dark in both directions"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       "endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere",
+       [
+        "__backrooms/levels__=endless white-tiled pool halls, shallow basins of still turquoise water, tiled columns and archways, bright even light that comes from nowhere"
+       ]
       ]
      ]
     }
@@ -521,7 +689,10 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees",
+       [
+        "__scp/entities__=a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       ]
       ]
      ]
     },
@@ -531,11 +702,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees",
+       [
+        "__scp/entities__=a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       ]
       ],
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ]
      ]
     },
@@ -545,11 +722,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees",
+       [
+        "__scp/entities__=a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "a huge, dim hall of carpet and square support pillars with no walls in sight"
+       "a huge, dim hall of carpet and square support pillars with no walls in sight",
+       [
+        "__backrooms/levels__=a huge, dim hall of carpet and square support pillars with no walls in sight"
+       ]
       ]
      ]
     },
@@ -559,11 +742,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees",
+       [
+        "__scp/entities__=a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       "an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights",
+       [
+        "__backrooms/levels__=an empty 1990s shopping mall after closing, shutters down, plastic plants, a dry fountain and black skylights"
+       ]
       ]
      ]
     },
@@ -573,7 +762,10 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       "a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees",
+       [
+        "__scp/entities__=a very tall, emaciated humanoid creature, about two and a half metres tall, with chalk-white hairless skin stretched over its bones, pale pigmentless eyes and arms far too long for its body that hang down past its knees"
+       ]
       ]
      ]
     }
@@ -595,7 +787,10 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils"
+       "a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils",
+       [
+        "__scp/entities__=a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils"
+       ]
       ]
      ]
     },
@@ -605,11 +800,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils"
+       "a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils",
+       [
+        "__scp/entities__=a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils"
+       ]
       ],
       [
        "$level ← __backrooms/levels#start:yes__",
-       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       "an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it",
+       [
+        "__backrooms/levels__=an endless maze of empty office rooms with mono-yellow wallpaper, damp beige carpet and buzzing fluorescent panels, doorways opening onto more rooms exactly like it"
+       ]
       ]
      ]
     },
@@ -619,11 +820,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils"
+       "a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils",
+       [
+        "__scp/entities__=a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+       "an airport gate lounge at night, rows of empty seats and departure boards showing nothing",
+       [
+        "__backrooms/levels__=an airport gate lounge at night, rows of empty seats and departure boards showing nothing"
+       ]
       ]
      ]
     },
@@ -633,11 +840,17 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils"
+       "a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils",
+       [
+        "__scp/entities__=a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils"
+       ]
       ],
       [
        "$level ← __backrooms/levels__",
-       "a 24-hour laundromat where every machine is turning and no one is there"
+       "a 24-hour laundromat where every machine is turning and no one is there",
+       [
+        "__backrooms/levels__=a 24-hour laundromat where every machine is turning and no one is there"
+       ]
       ]
      ]
     },
@@ -647,7 +860,10 @@
      "picks": [
       [
        "$scp ← __scp/entities__",
-       "a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils"
+       "a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils",
+       [
+        "__scp/entities__=a huge, vaguely reptilian creature of no known species, its hide half dissolved and raw, gills flaring inside its nostrils"
+       ]
       ]
      ]
     }
