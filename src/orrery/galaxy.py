@@ -4,9 +4,13 @@ A rating multiplies the learned weight of every pick key in the output. Re-ratin
 applies new/old, so ratings replace each other instead of stacking, and clearing
 a rating restores the weights it changed.
 
-Folders exist only here: a row's `folder` is a path such as `portraits/demons`, and
-`galaxy_folders.json` keeps folders that hold nothing yet. Files stay where ComfyUI
-wrote them until they are deleted (into the home's trash) or exported (copied).
+The Gallery shows the outputs by day, and what belongs together as an album (#290): a sweep's or a grid's
+runs (their `folder`, `sweeps/…`), a reel's clips (its `chain`) and in it each scene's (its `chunk`).
+Collections hold outputs without moving them, one output in as many as you like: a row's `collections` are
+paths such as `portraits/demons`, and `galaxy_folders.json` keeps the ones that hold nothing yet. A folder of
+the time before collections (a row's `folder` that is no sweep's) counts as a collection, and becomes one when
+the row next changes. Files stay where ComfyUI wrote them until they are deleted (into the home's trash) or
+exported (copied).
 """
 
 import hashlib
@@ -15,6 +19,7 @@ import os
 import re
 import shutil
 from collections import Counter
+from datetime import datetime, timedelta
 from pathlib import Path
 
 from orrery.home import Home, locked, write_atomic
@@ -176,25 +181,27 @@ def thumb_file(src: Path, out: Path) -> Path:
     return out
 
 
-# --- folders, delete, export ----------------------------------------------------------------
+# --- collections, days, albums ---------------------------------------------------------------
 
 FOLDER_PART_MAX = 60
+SWEEPS = "sweeps/"  # the folder Roll gives a sweep's or a grid's runs: an album, never a collection
+PREVIEWS = 8  # an album's card shows so many of its pictures: more get too small
 _EXPORT_NAME = re.compile(r"[\w .-]{1,80}")
 
 
 def clean_folder(path) -> str:
-    """A folder path as stored: trimmed parts joined by '/'; '' is the top level (unsorted)."""
+    """A collection's path (or a sweep's folder) as stored: trimmed parts joined by '/'; '' is none."""
     if path is None:
         return ""
     if not isinstance(path, str):
-        raise TypeError("a folder is a path such as portraits/demons")
+        raise TypeError("a collection is a path such as portraits/demons")
     trimmed = path.strip().strip("/")
     if not trimmed:
         return ""
     parts = [p.strip() for p in trimmed.split("/")]
     for p in parts:
         if not p or p in (".", "..") or len(p) > FOLDER_PART_MAX or any(ord(ch) < 32 for ch in p):
-            raise ValueError(f"{path!r} is no folder: parts of 1 to {FOLDER_PART_MAX} characters, joined by /")
+            raise ValueError(f"{path!r} is no collection: parts of 1 to {FOLDER_PART_MAX} characters, joined by /")
     return "/".join(parts)
 
 
@@ -208,23 +215,50 @@ def _inside(path: str, folder: str) -> bool:
     return path == folder or path.startswith(folder + "/")
 
 
+def sweep_of(row: dict) -> str | None:
+    """The sweep (or grid) a row was one run of: its folder `sweeps/…`."""
+    folder = row.get("folder") or ""
+    return folder if folder.startswith(SWEEPS) else None
+
+
+def collections_of(row: dict) -> list[str]:
+    """The collections a row is in: its own, and a folder of the time before collections."""
+    out = [c for c in row.get("collections") or [] if isinstance(c, str) and c]
+    folder = row.get("folder") or ""
+    if folder and not folder.startswith(SWEEPS) and folder not in out:
+        out.append(folder)
+    return out
+
+
+def _with_collections(row: dict, paths) -> dict:
+    """The row in these collections; a folder of the time before collections goes into them."""
+    if row.get("folder") and not sweep_of(row):
+        row.pop("folder")
+    paths = list(dict.fromkeys(p for p in paths if p))
+    if paths:
+        row["collections"] = paths
+    else:
+        row.pop("collections", None)
+    return row
+
+
 def _saved_folders(home: Home) -> list[str]:
     path = home.galaxy_folders_path
     try:
         data = json.loads(path.read_text(encoding="utf-8")) if path.exists() else []
     except ValueError:
         return []
-    return [f for f in data if isinstance(f, str) and f] if isinstance(data, list) else []
+    return [f for f in data if isinstance(f, str) and f and not f.startswith(SWEEPS)] if isinstance(data, list) else []
 
 
 def _save_folders(home: Home, folders: list[str]) -> None:
     write_atomic(home.galaxy_folders_path, json.dumps(sorted({f for f in folders if f}), ensure_ascii=False, indent=1))
 
 
-def folders(home: Home, rows: list[dict] | None = None) -> list[dict]:
-    """Every folder, saved or named by a row, with its parents, sorted, each with its own outputs' count."""
+def collections(home: Home, rows: list[dict] | None = None) -> list[dict]:
+    """Every collection, saved or named by a row, with its parents, sorted, each with its own outputs' count."""
     rows = read_rows(home) if rows is None else rows
-    counts = Counter(r.get("folder") or "" for r in rows)
+    counts = Counter(c for r in rows for c in collections_of(r))
     names = {p for f in [*_saved_folders(home), *counts] if f for p in _parents(f)}
     return [{"path": f, "count": counts.get(f, 0)} for f in sorted(names, key=str.lower)]
 
@@ -259,75 +293,142 @@ def _check_ids(home: Home, ids) -> set[str]:
     return wanted
 
 
-def _refolder(row: dict, folder: str) -> dict:
-    if folder:
-        row["folder"] = folder
-    else:
-        row.pop("folder", None)
-    return row
+def _named(path) -> str:
+    path = clean_folder(path)
+    if not path:
+        raise ValueError("name the collection")
+    if path.startswith(SWEEPS) or path == SWEEPS.rstrip("/"):
+        raise ValueError("sweeps/ holds the sweeps' albums; name the collection otherwise")
+    return path
 
 
-def move(home: Home, ids, folder) -> int:
-    """Put outputs into a folder ('' for unsorted); the folder stays listed after they leave."""
-    folder = clean_folder(folder)
-    wanted = _check_ids(home, ids)
-    _edit_rows(home, lambda r: _refolder(r, folder) if row_id(r) in wanted else r)
-    if folder:
-        _save_folders(home, [*_saved_folders(home), folder])
+def collect(home: Home, ids, path) -> int:
+    """Put outputs into a collection as well: they keep their other collections, their day and their album."""
+    path, wanted = _named(path), _check_ids(home, ids)
+    _edit_rows(home, lambda r: _with_collections(r, [*collections_of(r), path]) if row_id(r) in wanted else r)
+    _save_folders(home, [*_saved_folders(home), path])
+    return len(wanted)
+
+
+def uncollect(home: Home, ids, path) -> int:
+    """Take outputs out of a collection; they stay in the gallery, and in their other collections."""
+    path, wanted = _known(home, path), _check_ids(home, ids)
+    _edit_rows(home, lambda r: _with_collections(r, [c for c in collections_of(r) if c != path])
+               if row_id(r) in wanted and path in collections_of(r) else r)
     return len(wanted)
 
 
 def _known(home: Home, path) -> str:
     path = clean_folder(path)
-    if not path or path not in {f["path"] for f in folders(home)}:
-        raise KeyError(f"no gallery folder {path or '(none)'}")
+    if not path or path not in {f["path"] for f in collections(home)}:
+        raise KeyError(f"no gallery collection {path or '(none)'}")
     return path
 
 
-def add_folder(home: Home, path) -> str:
-    path = clean_folder(path)
-    if not path:
-        raise ValueError("name the folder")
-    if path in {f["path"] for f in folders(home)}:
-        raise FileExistsError(f"the folder {path} already exists")
+def add_collection(home: Home, path) -> str:
+    path = _named(path)
+    if path in {f["path"] for f in collections(home)}:
+        raise FileExistsError(f"the collection {path} already exists")
     _save_folders(home, [*_saved_folders(home), path])
     return path
 
 
-def rename_folder(home: Home, path, to) -> str:
-    """Rename a folder or move it into another (a/b to c/b); its subfolders and outputs go along."""
-    path, to = _known(home, path), clean_folder(to)
-    if not to:
-        raise ValueError("name the folder")
+def rename_collection(home: Home, path, to) -> str:
+    """Rename a collection or move it into another (a/b to c/b); its own collections and outputs go along."""
+    path, to = _known(home, path), _named(to)
     if to == path:
         return to
     if _inside(to, path):
         raise ValueError(f"{path} cannot move into itself")
-    if to in {f["path"] for f in folders(home)}:
-        raise FileExistsError(f"the folder {to} already exists")
+    if to in {f["path"] for f in collections(home)}:
+        raise FileExistsError(f"the collection {to} already exists")
 
     def moved(f: str) -> str:
         return to + f[len(path):] if _inside(f, path) else f
 
-    _edit_rows(home, lambda r: _refolder(r, moved(r["folder"])) if r.get("folder") else r)
+    _edit_rows(home, lambda r: _with_collections(r, [moved(c) for c in collections_of(r)])
+               if any(_inside(c, path) for c in collections_of(r)) else r)
     _save_folders(home, [*map(moved, _saved_folders(home)), to])
     return to
 
 
-def delete_folder(home: Home, path) -> str:
-    """Remove a folder; its outputs and subfolders move up one level. Returns that level."""
+def delete_collection(home: Home, path) -> str:
+    """Remove a collection: its outputs leave it (they stay in the gallery), the collections in it move up one
+    level. Returns that level."""
     path = _known(home, path)
     parent = path.rpartition("/")[0]
 
     def up(f: str) -> str:
-        if not _inside(f, path):
-            return f
-        rest = f[len(path) + 1:]
-        return "/".join(p for p in (parent, rest) if p)
+        return "/".join(p for p in (parent, f[len(path) + 1:]) if p) if _inside(f, path) and f != path else f
 
-    _edit_rows(home, lambda r: _refolder(r, up(r["folder"])) if r.get("folder") else r)
-    _save_folders(home, [*(up(f) for f in _saved_folders(home) if f != path), parent])
+    _edit_rows(home, lambda r: _with_collections(r, [up(c) for c in collections_of(r) if c != path])
+               if any(_inside(c, path) for c in collections_of(r)) else r)
+    _save_folders(home, [up(f) for f in _saved_folders(home) if f != path])
     return parent
+
+
+def day_of(ts, tz: int = 0) -> str:
+    """The day a row was made, `YYYY-MM-DD`, in the time zone `tz` minutes east of UTC (the viewer's)."""
+    try:
+        when = datetime.fromisoformat(str(ts))
+    except ValueError:
+        return ""
+    return (when + timedelta(minutes=tz)).date().isoformat()
+
+
+def album_of(row: dict) -> str | None:
+    """The album a row belongs to: `sweep:<its folder>`, `reel:<its chain>` (a reel's clips logged before the
+    chain was, by preset or template and seed); None for an output on its own."""
+    if sweep := sweep_of(row):
+        return f"sweep:{sweep}"
+    if row.get("chunks"):
+        reel = row.get("chain") or "{}|{}".format(row.get("preset") or row.get("template"), row.get("seed"))
+        return f"reel:{reel}"
+    return None
+
+
+def scene_of(row: dict) -> str | None:
+    """The album of a reel's scene a clip plays: `scene:<its reel>|<the scene's index>`."""
+    album = album_of(row)
+    if album and album.startswith("reel:") and isinstance(row.get("chunk"), int):
+        return f"scene:{album[5:]}|{row['chunk']}"
+    return None
+
+
+def in_album(row: dict, key: str) -> bool:
+    return (scene_of(row) if key.startswith("scene:") else album_of(row)) == key
+
+
+def cards(rows: list[dict], album: str | None = None) -> list[dict]:
+    """What the overview shows of these rows, newest first (#297, #298): an output on its own, or an album of two
+    or more, a sweep's or a reel's; inside a reel, its scenes are albums; inside a sweep or a scene, the outputs.
+    An album's card carries its ids, newest first, and the first PREVIEWS with a picture to show."""
+    group = album_of if album is None else scene_of if album.startswith("reel:") else None
+    groups: dict[str, list[dict]] = {}
+    for r in rows:
+        key = group(r) if group else None
+        groups.setdefault(key or f"row:{r['id']}", []).append(r)
+    out = []
+    for key, members in groups.items():
+        if key.startswith("row:") or len(members) == 1:
+            out.extend({"kind": "row", "id": r["id"], "ts": r.get("ts") or ""} for r in members)
+            continue
+        out.append({"kind": "album", "type": key.partition(":")[0], "key": key, "count": len(members),
+                    "ids": [r["id"] for r in members], "ts": max(r.get("ts") or "" for r in members),
+                    "previews": [r["id"] for r in members if r["kind"] in ("image", "video")][:PREVIEWS],
+                    "videos": sum(r["kind"] == "video" for r in members)})
+    return sorted(out, key=lambda c: c["ts"], reverse=True)
+
+
+def tree(rows: list[dict], tz: int = 0) -> dict:
+    """The Gallery's tree (#296): every output, its pictures and its videos, and each day with its own, newest first."""
+    kinds = Counter(r["kind"] for r in rows)
+    days: dict[str, Counter] = {}
+    for r in rows:
+        days.setdefault(day_of(r.get("ts"), tz), Counter())[r["kind"]] += 1
+    return {"total": len(rows), "images": kinds["image"], "videos": kinds["video"],
+            "days": [{"day": d, "total": sum(c.values()), "images": c["image"], "videos": c["video"]}
+                     for d, c in sorted(days.items(), reverse=True) if d]}
 
 
 def _free(folder: Path, stem: str, suffix: str, *also: str) -> Path:

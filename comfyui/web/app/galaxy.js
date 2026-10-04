@@ -1,6 +1,8 @@
-// Galaxy tab: every logged output; ratings move the learned weights of its picks. Folders on the
-// left sort outputs without moving their files; a selection can be exported as training pairs or
-// deleted into the home's trash.
+// Galaxy tab: every logged output; ratings move the learned weights of its picks. On the left (#290): every
+// output, its pictures, its videos, then the days (each with its images and videos) and the collections, which
+// hold outputs without moving them (one output in as many as you like). What belongs together is one album's card
+// (a sweep's runs, a reel's clips, and in a reel each scene's), opened with a click. A selection can be put into
+// a collection by dragging, exported as training pairs or deleted into the home's trash.
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
 import { applyDials, exportRows, FACTORS, filterRows, folderDropPath, folderTree, markPicks, pictureSlots, rangeIds, templateHash, withDice } from "./model.js";
@@ -14,25 +16,24 @@ const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
 const parentOf = (path) => (path.includes("/") ? path.slice(0, path.lastIndexOf("/")) : "");
 const inside = (path, folder) => path === folder || path.startsWith(`${folder}/`);
 
-function setFolders(app, d) {
-  app.data.folders = d.folders;
-  app.data.gTotal = d.total;
-  app.data.gUnsorted = d.unsorted;
-}
+const TZ = () => -new Date().getTimezoneOffset();  // the days are the viewer's
+const filtering = (s) => s.gScope !== "all" || !!s.gRating || !!s.gPick;  // a filter shows the outputs themselves
+const TYPE = { sweep: ["Sweep", "chart"], reel: ["Reel", "film"], scene: ["Scene", "play"] };
 
-// The view shows one folder (gFolder: null for every output, "" for the unsorted ones); the server
-// filters, so the row limit applies per folder.
+// What the place in the tree (gPlace: a view of every day or of one, or a collection) or the album open in it shows.
+// The server groups and limits; the cards come newest first.
 async function refresh(app) {
-  const s = app.state;
+  const s = app.state, album = s.gAlbums.at(-1), p = s.gPlace;
+  const query = { limit: 400, tz: TZ(), ...(filtering(s) ? { flat: 1 } : {}),
+    ...(album ? { album: album.key } : { view: p.view, ...(p.day ? { day: p.day } : {}), ...(p.coll ? { collection: p.coll } : {}) }) };
   try {
-    const d = await app.api.galaxy({ limit: 400, ...(s.gFolder === null ? {} : { folder: s.gFolder }) });
-    app.data.gRows = d.rows;
-    if (s.gFolder === null) app.data.rows = d.rows;
-    setFolders(app, d);
+    const d = await app.api.galaxyView(query);
+    Object.assign(app.data, { gCards: d.cards, gRows: d.rows, gTree: d.tree, gTotal: d.tree.total, gTemplates: d.tree.templates });
+    s.gDays ??= new Set(d.tree.days.slice(0, 1).map((x) => x.day));  // the newest day open
     app.data.weights = { ...app.data.weights, ...d.weights };
     const shown = new Set(d.rows.map((r) => r.id));
     s.gSel = new Set([...s.gSel].filter((id) => shown.has(id)));
-  } catch (e) { app.data.gRows = app.data.gRows || []; app.fail(e); }
+  } catch (e) { app.data.gRows ??= []; app.data.gCards ??= []; app.fail(e); }
 }
 
 // Chrome blurs a focused input while innerHTML replaces it; the rename and new-folder fields must not
@@ -40,7 +41,7 @@ async function refresh(app) {
 let painting = false;
 
 export async function renderGalaxy(app) {
-  if (!app.data.gRows || !app.state.gFetched) {
+  if (!app.data.gCards || !app.state.gFetched) {
     app.state.gFetched = true;
     if (!app.data.gRows) app.view.innerHTML = '<div class="empty">Loading the gallery…</div>';
     await refresh(app);
@@ -49,15 +50,20 @@ export async function renderGalaxy(app) {
     return;
   }
   const s = app.state;
+  const here = placeKey(s);
   const old = app.view.querySelectorAll(".gal .scroll");  // re-rendering keeps the lists where they were
-  if (old.length) s.gScroll = { folder: s.gFolder, tops: [...old].map((el) => el.scrollTop) };
-  const rows = filterRows(app.data.gRows, { scope: s.gScope, hash: templateHash(app.text), preset: app.preset, rating: s.gRating, pick: s.gPick });
+  if (old.length) s.gScroll = { here, tops: [...old].map((el) => el.scrollTop) };
+  const byId = new Map(app.data.gRows.map((r) => [r.id, r]));
+  const cards = filtering(s)
+    ? filterRows(app.data.gRows, { scope: s.gScope, hash: templateHash(app.text), preset: app.preset, rating: s.gRating, pick: s.gPick }).map((r) => ({ kind: "row", id: r.id }))
+    : app.data.gCards.filter((c) => c.kind === "album" || byId.has(c.id));
+  const rows = cards.filter((c) => c.kind === "row").map((c) => byId.get(c.id));  // the outputs shown, in order
   const open = s.gOpen && app.data.gRows.find((r) => r.id === s.gOpen);
   const seg = (k, label) => `<button class="chip" aria-pressed="${s.gScope === k}" data-gs="${k}">${label}</button>`;
   const rch = (k, label) => `<button class="chip" aria-pressed="${s.gRating === k}" data-gr="${k}">${label}</button>`;
   const width = Number(app.bridge.props.galWidth) || 0;
-  const empty = s.gFolder
-    ? "Nothing in this folder yet. Drag outputs onto it in the list on the left."
+  const empty = s.gPlace.coll && !s.gAlbums.length
+    ? "Nothing in this collection yet. Drag outputs or albums onto it in the list on the left."
     : `No outputs here yet.${s.gScope !== "all" ? " Queue this prompt, or switch to All outputs." : " Wire Orrery Log after your decoder and queue something."}`;
   painting = true;
   app.view.innerHTML = `<div class="gal${s.gSel.size ? " selecting" : ""}"${width ? ` style="--galw:${width}px"` : ""}>${treeHTML(app)}<div class="gmain">
@@ -65,18 +71,18 @@ export async function renderGalaxy(app) {
     + `${rch("love", `${icon("heart")}Loved`)}${rch("like", `${icon("up")}Liked`)}${rch("unrated", "Unrated")}`
     + `${s.gPick ? `<span class="chip mono" aria-pressed="true">${esc(s.gPick)}<button class="mini" data-gp="" aria-label="Clear pick filter">${icon("x")}</button></span>` : ""}
       <span class="grow"></span><button class="icon-btn" data-gact="reload" title="Reload the gallery">${icon("reload")}</button></div>
-    ${s.gSel.size ? selBarHTML(s.gSel.size, rows.length) : ""}
+    ${crumbsHTML(app)}${s.gSel.size ? selBarHTML(s.gSel.size, rows.length, s.gPlace.coll && !s.gAlbums.length ? s.gPlace.coll : null) : ""}
     <div class="split ${open ? "has-detail" : ""}">
-      <div class="scroll"><p class="rule">Ratings teach the dice: every pick in a <b class="love">loved</b> output weighs ×1.5, <b class="like">liked</b> ×1.2, <b class="nope">nope</b> ×0.8, <b class="hate">hate</b> ×0.5. Click an image for its picks; drag it onto a folder to sort it. Shift-click selects a range, Ctrl-click one more.</p>
-      <div class="grid">${rows.map((r) => cardHTML(app, r)).join("") || `<div class="empty">${empty}</div>`}</div></div>
+      <div class="scroll"><p class="rule">Ratings teach the dice: every pick in a <b class="love">loved</b> output weighs ×1.5, <b class="like">liked</b> ×1.2, <b class="nope">nope</b> ×0.8, <b class="hate">hate</b> ×0.5. Click an image for its picks, an album to open it; drag either onto a collection to keep it there too. Shift-click selects a range, Ctrl-click one more.</p>
+      <div class="grid">${cards.map((c) => (c.kind === "album" ? albumHTML(app, c) : cardHTML(app, byId.get(c.id)))).join("") || `<div class="empty">${empty}</div>`}</div></div>
       ${open ? detailHTML(app, open) : ""}
     </div></div></div>`;
   painting = false;
-  if (s.gScroll?.folder === s.gFolder) app.view.querySelectorAll(".gal .scroll").forEach((el, i) => { el.scrollTop = s.gScroll.tops[i] ?? 0; });
+  if (s.gScroll?.here === here) app.view.querySelectorAll(".gal .scroll").forEach((el, i) => { el.scrollTop = s.gScroll.tops[i] ?? 0; });
   const gal = app.view.querySelector(".gal");
   app.view.onclick = (e) => onClick(app, e, open, rows);
   app.view.ondblclick = (e) => {
-    const path = e.target.closest(".gf.sub")?.dataset.gf;
+    const path = e.target.closest(".gf.coll")?.dataset.gc;
     if (!path || e.target.closest("button, input")) return;
     s.gRen = path;
     s.gRenText = null;
@@ -89,33 +95,85 @@ export async function renderGalaxy(app) {
   hoverPlay(app.view);
 }
 
+// Where the view is: the place in the tree, and the albums opened in it.
+const placeKey = (s) => JSON.stringify([s.gPlace, s.gAlbums.map((a) => a.key)]);
+
+function placeLabel(s) {
+  const p = s.gPlace;
+  if (p.coll) return p.coll;
+  const view = { all: "All outputs", images: "All images", videos: "All videos" }[p.view];
+  return p.day ? `${p.day}${p.view === "all" ? "" : ` · ${p.view}`}` : view;
+}
+
 function treeHTML(app) {
-  const s = app.state, d = app.data;
-  const top = (key, label, count) => `<li><div class="gf top${s.gFolder === key ? " on" : ""}" tabindex="0" data-gf="${key === null ? "*" : ""}" data-drop="">`
-    + `${icon(key === null ? "star" : "image")}<span class="ln">${label}</span><span class="lc">${count}</span></div></li>`;
+  const s = app.state, t = app.data.gTree || { total: 0, images: 0, videos: 0, days: [], collections: [] }, p = s.gPlace;
+  const at = (view, day, coll) => !s.gAlbums.length && p.view === view && p.day === day && p.coll === coll ? " on" : "";
+  const top = (view, label, n, ico) => `<li><div class="gf top${at(view, null, null)}" tabindex="0" data-gv="${view}">`
+    + `${icon(ico)}<span class="ln">${label}</span><span class="lc">${n}</span></div></li>`;
+  const kind = (d, k, n) => (n ? `<li><div class="gf sub${at(k, d.day, null)}" tabindex="0" data-gday="${d.day}" data-gk="${k}" style="padding-left:24px">`
+    + `${icon(k === "images" ? "image" : "film")}<span class="ln">${k}</span><span class="lc">${n}</span></div></li>` : "");
+  const day = (d) => {
+    const open = s.gDays?.has(d.day);
+    return `<li><div class="gf sub${at("all", d.day, null)}" tabindex="0" data-gday="${d.day}" title="${d.day}: everything made that day">`
+      + `<button class="mini tw" data-gdfold="${d.day}" tabindex="-1" aria-label="${open ? "Close" : "Open"} ${d.day}">${icon("chev", open ? "" : "rot")}</button>`
+      + `${icon("clock")}<span class="ln">${d.day}</span><span class="lc">${d.total}</span></div>`
+      + `${open ? `<ul>${kind(d, "images", d.images)}${kind(d, "videos", d.videos)}</ul>` : ""}</li>`;
+  };
   const node = (n, depth) => {
     const kids = n.children.length > 0, shut = s.gFold.has(n.path), editing = s.gRen === n.path;
     const name = editing
       ? `<input class="input mono gren" value="${esc(s.gRenText ?? n.name)}" aria-label="New name for ${esc(n.path)}" spellcheck="false" autocomplete="off">`
       : `<span class="ln">${esc(n.name)}</span>`;
-    return `<li><div class="gf sub${s.gFolder === n.path ? " on" : ""}" tabindex="0" draggable="${!editing}" data-gf="${esc(n.path)}" data-drop="${esc(n.path)}" style="padding-left:${4 + depth * 14}px" title="${esc(n.path)} · double-click to rename">`
+    return `<li><div class="gf sub coll${at("all", null, n.path)}" tabindex="0" draggable="${!editing}" data-gc="${esc(n.path)}" data-drop="${esc(n.path)}" style="padding-left:${4 + depth * 14}px" title="${esc(n.path)} · double-click to rename">`
       + `<button class="mini tw${kids ? "" : " leaf"}" data-gfold="${esc(n.path)}" tabindex="-1" aria-label="${shut ? "Open" : "Close"} ${esc(n.name)}">${icon("chev", shut ? "rot" : "")}</button>`
       + `${icon("folder")}${name}<span class="lc">${n.count || ""}</span>`
-      + `<button class="mini gfx" data-gfdel="${esc(n.path)}" aria-label="Delete folder ${esc(n.path)}" title="Delete the folder; what is in it moves up">${icon("trash")}</button></div>`
+      + `<button class="mini gfx" data-gfdel="${esc(n.path)}" aria-label="Delete collection ${esc(n.path)}" title="Remove the collection: what is in it stays in the gallery, the collections in it move up">${icon("trash")}</button></div>`
       + `${kids && !shut ? `<ul>${n.children.map((c) => node(c, depth + 1)).join("")}</ul>` : ""}</li>`;
   };
   const add = s.gNew
-    ? `<input class="input mono" id="oa-gnew" value="${esc(s.gNewText ?? "")}" placeholder="${s.gFolder ? `in ${esc(s.gFolder)}/…` : "name, or parent/name"}" aria-label="New folder" spellcheck="false" autocomplete="off">`
-    : `<button class="btn wide" data-gact="newf">${icon("plus")}New folder</button>`;
-  return `<div class="gtree"><div class="libgrip ggrip" role="separator" aria-orientation="vertical" aria-label="Folder list width" tabindex="0" title="Drag to resize (or ← →)"></div>
-    <div class="scroll"><ul>${top(null, "All outputs", d.gTotal ?? 0)}${top("", "Unsorted", d.gUnsorted ?? 0)}</ul>
-    <ul class="gfolders">${folderTree(d.folders || []).map((n) => node(n, 0)).join("")}</ul></div>
+    ? `<input class="input mono" id="oa-gnew" value="${esc(s.gNewText ?? "")}" placeholder="${p.coll ? `in ${esc(p.coll)}/…` : "name, or parent/name"}" aria-label="New collection" spellcheck="false" autocomplete="off">`
+    : `<button class="btn wide" data-gact="newf">${icon("plus")}New collection</button>`;
+  return `<div class="gtree"><div class="libgrip ggrip" role="separator" aria-orientation="vertical" aria-label="Gallery list width" tabindex="0" title="Drag to resize (or ← →)"></div>
+    <div class="scroll"><ul>${top("all", "All outputs", t.total, "star")}${top("images", "All images", t.images, "image")}${top("videos", "All videos", t.videos, "film")}</ul>
+    ${t.days.length ? `<div class="glabel">Days</div><ul class="gdays">${t.days.map(day).join("")}</ul>` : ""}
+    <div class="glabel" data-drop="" title="Drop a collection here to move it to the top">Collections</div>
+    <ul class="gfolders">${folderTree(t.collections || []).map((n) => node(n, 0)).join("")}</ul></div>
     <div class="addrow">${add}</div></div>`;
 }
 
-function selBarHTML(n, visible) {
+// Inside an album: the way back, place by place.
+function crumbsHTML(app) {
+  const s = app.state;
+  if (!s.gAlbums.length) return "";
+  return `<div class="bar crumbs"><button class="btn slim ghost" data-gcrumb="-1">${icon("back")}${esc(placeLabel(s))}</button>`
+    + s.gAlbums.map((a, i) => `<span class="muted">›</span>${i === s.gAlbums.length - 1 ? `<b>${esc(a.title)}</b>`
+      : `<button class="btn slim ghost" data-gcrumb="${i}">${esc(a.title)}</button>`}`).join("") + "</div>";
+}
+
+// An album's name: its preset's title and what it is (a sweep's dial and time, a reel, a scene's title).
+function albumNames(app, c) {
+  const preset = c.preset ? app.card(c.preset)?.title || c.preset : "";
+  if (c.type === "scene") return { title: c.title, sub: `scene ${c.chunk + 1}` };
+  if (c.type === "reel") return { title: preset || c.title, sub: preset ? c.title : "reel" };
+  return { title: preset || "Sweep", sub: c.title };
+}
+
+// An album's card: up to eight of its pictures in a grid, what it is, how many it holds.
+function albumHTML(app, c) {
+  const { title, sub } = albumNames(app, c), [label, ico] = TYPE[c.type];
+  const n = c.previews.length, cols = n <= 1 ? 1 : n <= 4 ? 2 : n <= 6 ? 3 : 4;
+  const pics = c.previews.map((id) => `<img loading="lazy" draggable="false" src="${esc(app.api.thumbURL(id))}" alt="">`).join("");
+  const what = c.type === "sweep" ? `${c.count} runs` : c.type === "reel" ? `${c.count} clips` : `${c.count} takes`;
+  return `<div class="gcard album" draggable="true" data-galbum="${esc(c.key)}" tabindex="0" role="button" title="${esc(`${title} · ${sub} · ${what} · click to open`)}">`
+    + `<div class="agrid" style="--cols:${cols}">${pics || `<span class="aempty">${icon(ico)}</span>`}</div>`
+    + `<span class="abadge">${icon(ico)}${label} · ${c.count}</span>`
+    + `<div class="gfoot"><span>${esc(title)}</span><span>${esc(sub)}</span></div></div>`;
+}
+
+function selBarHTML(n, visible, coll) {
   return `<div class="bar selbar"><b>${n} selected</b><button class="btn slim ghost" data-gact="selall">Select all ${visible}</button>`
     + `<button class="btn slim ghost" data-gact="selnone">Clear</button><span class="grow"></span>`
+    + (coll ? `<button class="btn slim ghost" data-gact="uncollect" title="They leave ${esc(coll)}; they stay in the gallery">${icon("x")}Out of the collection</button>` : "")
     + `<button class="btn slim" data-gact="export" title="Copy the files with their prompts as .txt into export/ in your orrery home">${icon("save")}Export pairs</button>`
     + `<button class="btn slim ghost danger" data-gact="delete">${icon("trash")}Delete</button></div>`;
 }
@@ -179,7 +237,7 @@ function detailHTML(app, r) {
       <div><span class="label">Picks · click one to see every output that shares it</span><div class="picklist">
         ${r.picks.map((p) => p.keys.map((k) => `<button class="pick" data-gpick="${esc(k)}"><span>${esc(k.split("=").slice(1).join("="))}<small>${esc(p.label)}</small></span>`
           + `<span class="wv ${w(k) > 1.001 ? "up" : w(k) < 0.999 ? "dn" : ""}">×${w(k).toFixed(2)}</span></button>`).join("")).join("")}</div></div>
-      <div class="stat">template #${esc(r.template)}${r.preset ? ` · @${esc(r.preset)}` : ""}${r.folder ? ` · in ${esc(r.folder)}` : ""}${Object.entries(r.params || {}).map(([k, v]) => ` · $${esc(k)} = ${esc(v)}`).join("")} · ${esc((r.ts || "").replace("T", " ").slice(0, 16))} · ${esc(r.target || "")}</div>
+      <div class="stat">template #${esc(r.template)}${r.preset ? ` · @${esc(r.preset)}` : ""}${r.collections?.length ? ` · in ${r.collections.map(esc).join(", ")}` : ""}${Object.entries(r.params || {}).map(([k, v]) => ` · $${esc(k)} = ${esc(v)}`).join("")} · ${esc((r.ts || "").replace("T", " ").slice(0, 16))} · ${esc(r.target || "")}</div>
     </div></div></aside>`;
 }
 
@@ -237,7 +295,6 @@ function confirmDelete(app) {
     let d;
     try { d = await app.api.deleteOutputs(ids); } catch (err) { app.closeSheet(); return app.fail(err); }
     app.closeSheet();
-    setFolders(app, d);
     s.gSel.clear();
     s.gAnchor = null;
     if (ids.includes(s.gOpen)) s.gOpen = null;
@@ -250,7 +307,8 @@ function confirmDelete(app) {
 
 function openExport(app) {
   const s = app.state, ids = [...s.gSel], n = ids.length;
-  const name = (s.gFolder ? s.gFolder.split("/").pop() : `selection-${new Date().toISOString().slice(0, 10)}`).replace(/[^\w .-]/g, "_");
+  const where = s.gAlbums.at(-1)?.title || s.gPlace.coll?.split("/").pop() || s.gPlace.day;  // the album, the collection, the day
+  const name = (where || `selection-${new Date().toISOString().slice(0, 10)}`).replace(/[^\w .-]/g, "_").slice(0, 80);
   const sheet = app.openSheet(`<form class="panel"><div class="row spread"><h4>Export ${plural(n, "pair")}</h4></div>
     <div class="field"><label class="label" for="oa-exp">Folder in export/ · an existing one is added to</label>
       <input class="input mono" id="oa-exp" value="${esc(name)}" spellcheck="false" autocomplete="off"><span class="warn bad" hidden></span></div>
@@ -273,12 +331,13 @@ function openExport(app) {
   input.select();
 }
 
-// --- folders -----------------------------------------------------------------------------------
+// --- places and collections --------------------------------------------------------------------
 
-async function showFolder(app, folder) {
+// A place in the tree: a view (all, images, videos) of every day or of one, or a collection. Albums close.
+async function showPlace(app, place) {
   const s = app.state;
-  if (s.gFolder === folder) return;
-  s.gFolder = folder;
+  s.gPlace = { view: "all", day: null, coll: null, ...place };
+  s.gAlbums = [];
   s.gSel.clear();
   s.gAnchor = null;
   s.gOpen = null;
@@ -286,67 +345,93 @@ async function showFolder(app, folder) {
   renderGalaxy(app);
 }
 
-async function moveOutputs(app, ids, folder) {
-  let d;
-  try { d = await app.api.moveOutputs(ids, folder); } catch (e) { return app.fail(e); }
-  setFolders(app, d);
+// An album opened (it stacks: a reel, then one of its scenes), or back to one of them (-1: the place itself).
+async function showAlbum(app, album, back = null) {
+  const s = app.state;
+  s.gAlbums = back === null ? [...s.gAlbums, album] : s.gAlbums.slice(0, back + 1);
+  s.gSel.clear();
+  s.gAnchor = null;
+  s.gOpen = null;
   await refresh(app);
   renderGalaxy(app);
-  app.toast(`Moved ${plural(ids.length, "output")} to <b>${esc(folder || "Unsorted")}</b>`);
 }
 
-async function moveFolder(app, path, to) {
+function setCollections(app, d) {
+  if (app.data.gTree) app.data.gTree.collections = d.collections;
+}
+
+async function collectOutputs(app, ids, path) {
+  let d;
+  try { d = await app.api.collect(ids, path); } catch (e) { return app.fail(e); }
+  setCollections(app, d);
+  if (app.state.gPlace.coll) await refresh(app);
+  renderGalaxy(app);
+  app.toast(`${plural(ids.length, "output")} in <b>${esc(path)}</b> now, and still where they were`);
+}
+
+async function uncollectOutputs(app, ids, path) {
+  let d;
+  try { d = await app.api.uncollect(ids, path); } catch (e) { return app.fail(e); }
+  setCollections(app, d);
+  app.state.gSel.clear();
+  await refresh(app);
+  renderGalaxy(app);
+  app.toast(`${plural(ids.length, "output")} out of <b>${esc(path)}</b>; they stay in the gallery`,
+    { label: "Undo", run: () => collectOutputs(app, ids, path) });
+}
+
+async function moveCollection(app, path, to) {
   const s = app.state;
   const moved = (f) => (inside(f, path) ? to + f.slice(path.length) : f);
-  try { setFolders(app, await app.api.renameFolder(path, to)); } catch (e) { app.fail(e); return renderGalaxy(app); }
-  if (s.gFolder) s.gFolder = moved(s.gFolder);
+  try { setCollections(app, await app.api.renameCollection(path, to)); } catch (e) { app.fail(e); return renderGalaxy(app); }
+  if (s.gPlace.coll) s.gPlace = { ...s.gPlace, coll: moved(s.gPlace.coll) };
   s.gFold = new Set([...s.gFold].map(moved));
   await refresh(app);
   renderGalaxy(app);
-  app.toast(`Folder <b>${esc(path)}</b> is now <b>${esc(to)}</b>`);
+  app.toast(`Collection <b>${esc(path)}</b> is now <b>${esc(to)}</b>`);
 }
 
-async function addFolder(app, value) {
+async function addCollection(app, value) {
   const s = app.state;
   const name = value.trim().replace(/^\/+|\/+$/g, "");
   s.gNew = false;
   s.gNewText = null;
   if (!name) return renderGalaxy(app);
-  try { setFolders(app, await app.api.addFolder(s.gFolder ? `${s.gFolder}/${name}` : name)); } catch (e) { app.fail(e); }
-  if (s.gFolder) s.gFold.delete(s.gFolder);
+  try { setCollections(app, await app.api.addCollection(s.gPlace.coll ? `${s.gPlace.coll}/${name}` : name)); } catch (e) { app.fail(e); }
+  if (s.gPlace.coll) s.gFold.delete(s.gPlace.coll);
   renderGalaxy(app);
 }
 
-function renameFolder(app, path, value) {
+function renameCollection(app, path, value) {
   const s = app.state;
   s.gRen = null;
   s.gRenText = null;
   const name = value.trim().replace(/^\/+|\/+$/g, "");
   const to = name ? [parentOf(path), name].filter(Boolean).join("/") : path;
-  return to === path ? renderGalaxy(app) : moveFolder(app, path, to);
+  return to === path ? renderGalaxy(app) : moveCollection(app, path, to);
 }
 
-// Removing a folder deletes nothing: what is in it moves up a level. With something inside, ask first.
-function deleteFolder(app, path) {
+// Removing a collection deletes nothing: its outputs leave it and stay in the gallery, the collections in it
+// move up a level. With something inside, ask first.
+function deleteCollection(app, path) {
   const s = app.state, parent = parentOf(path);
-  const within = (app.data.folders || []).filter((f) => inside(f.path, path));
-  const n = within.reduce((a, f) => a + f.count, 0), subs = within.length - 1;
-  const where = parent ? `<b>${esc(parent)}</b>` : "the top level";
+  const within = (app.data.gTree?.collections || []).filter((f) => inside(f.path, path));
+  const n = within.find((f) => f.path === path)?.count || 0, subs = within.length - 1;
   const run = async () => {
     let d;
-    try { d = await app.api.deleteFolder(path); } catch (e) { app.closeSheet(); return app.fail(e); }
+    try { d = await app.api.deleteCollection(path); } catch (e) { app.closeSheet(); return app.fail(e); }
     app.closeSheet();
-    setFolders(app, d);
-    if (s.gFolder && inside(s.gFolder, path)) s.gFolder = [parent, s.gFolder.slice(path.length + 1)].filter(Boolean).join("/");
+    setCollections(app, d);
+    if (s.gPlace.coll && inside(s.gPlace.coll, path)) s.gPlace = { view: "all", day: null, coll: null };
     await refresh(app);
     renderGalaxy(app);
-    app.toast(`Folder <b>${esc(path)}</b> removed${n || subs ? ` · what was in it moved up to ${where}` : ""}`);
+    app.toast(`Collection <b>${esc(path)}</b> removed${n ? " · its outputs stay in the gallery" : ""}${subs ? ` · ${plural(subs, "collection")} moved up` : ""}`);
   };
   if (!n && !subs) return run();
-  const what = [n ? plural(n, "output") : "", subs ? plural(subs, "subfolder") : ""].filter(Boolean).join(" and ");
-  const sheet = app.openSheet(`<form class="panel"><div class="row spread"><h4>Remove the folder ${esc(path)}?</h4></div>
-    <p class="muted flush">Its ${what} move up to ${where}. Nothing is deleted.</p>
-    <div class="acts"><button type="button" class="btn ghost" data-cancel>Cancel</button><button class="btn primary">${icon("trash")}Remove folder</button></div></form>`);
+  const what = [n ? `its ${plural(n, "output")} leave it and stay in the gallery` : "", subs ? `its ${plural(subs, "collection")} move up to ${parent ? `<b>${esc(parent)}</b>` : "the top"}` : ""].filter(Boolean).join("; ");
+  const sheet = app.openSheet(`<form class="panel"><div class="row spread"><h4>Remove the collection ${esc(path)}?</h4></div>
+    <p class="muted flush">${what}. Nothing is deleted.</p>
+    <div class="acts"><button type="button" class="btn ghost" data-cancel>Cancel</button><button class="btn primary">${icon("trash")}Remove collection</button></div></form>`);
   sheet.querySelector("[data-cancel]").onclick = () => app.closeSheet();
   sheet.querySelector("form").onsubmit = (e) => { e.preventDefault(); run(); };
   sheet.querySelector("button.primary").focus();
@@ -359,7 +444,7 @@ function wireInputs(app) {
     const path = s.gRen;
     ren.addEventListener("input", () => { s.gRenText = ren.value; });
     ren.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") { e.preventDefault(); renameFolder(app, path, ren.value); }
+      if (e.key === "Enter") { e.preventDefault(); renameCollection(app, path, ren.value); }
       if (e.key === "Escape") { e.preventDefault(); s.gRen = null; renderGalaxy(app); }
     });
     ren.addEventListener("blur", () => { if (!painting && s.gRen === path) { s.gRen = null; renderGalaxy(app); } });
@@ -369,29 +454,32 @@ function wireInputs(app) {
   if (add) {
     add.addEventListener("input", () => { s.gNewText = add.value; });
     add.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") { e.preventDefault(); addFolder(app, add.value); }
+      if (e.key === "Enter") { e.preventDefault(); addCollection(app, add.value); }
       if (e.key === "Escape") { e.preventDefault(); s.gNew = false; renderGalaxy(app); }
     });
     add.addEventListener("blur", () => { if (!painting && s.gNew && !add.value.trim()) { s.gNew = false; renderGalaxy(app); } });
     if (document.activeElement !== add) add.focus();
   }
-  app.view.querySelectorAll(".gf").forEach((el) => el.addEventListener("keydown", (e) => {
+  app.view.querySelectorAll(".gf, .gcard.album").forEach((el) => el.addEventListener("keydown", (e) => {
     if ((e.key === "Enter" || e.key === " ") && e.target === el) { e.preventDefault(); el.click(); }
   }));
 }
 
-// Cards (with the selection, when the card is part of it) and folders drag onto folders. Every
-// drag event is kept inside the app, so ComfyUI never takes a drop for a workflow to load.
+// Cards (with the selection, when the card is part of it) and albums drag onto collections, which take them in as
+// well; collections drag onto collections, or onto the header to the top. Every drag event is kept inside the app,
+// so ComfyUI never takes a drop for a workflow to load.
 function wireDrag(app, gal) {
   const s = app.state;
   const clear = () => gal.querySelectorAll(".dropping").forEach((el) => el.classList.remove("dropping"));
   const target = (e) => {
     const el = e.target.closest?.("[data-drop]");
     if (!el || !s.gDrag) return null;
-    return s.gDrag.folder !== undefined && folderDropPath(s.gDrag.folder, el.dataset.drop) === null ? null : el;
+    if (s.gDrag.ids) return el.dataset.drop ? el : null;  // outputs go into a collection, never onto the header
+    return folderDropPath(s.gDrag.folder, el.dataset.drop) === null ? null : el;
   };
   gal.addEventListener("dragstart", (e) => {
-    const card = e.target.closest?.("[data-gcard]"), folder = e.target.closest?.(".gf.sub"), big = e.target.closest?.("[data-gmedia]");
+    const card = e.target.closest?.("[data-gcard]"), album = e.target.closest?.("[data-galbum]"), folder = e.target.closest?.(".gf.coll");
+    const big = e.target.closest?.("[data-gmedia]");
     if (big) {
       const row = app.data.gRows.find((r) => r.id === big.dataset.gmedia);
       if (row?.media_name) e.dataTransfer.setData(MEDIA, JSON.stringify({ url: app.api.mediaURL(row.id), name: row.media_name }));
@@ -400,8 +488,10 @@ function wireDrag(app, gal) {
     if (card) {
       const id = card.dataset.gcard;
       s.gDrag = { ids: s.gSel.has(id) ? [...s.gSel] : [id] };
+    } else if (album) {
+      s.gDrag = { ids: app.data.gCards.find((c) => c.key === album.dataset.galbum)?.ids || [] };
     } else if (folder && folder.getAttribute("draggable") === "true") {
-      s.gDrag = { folder: folder.dataset.gf };
+      s.gDrag = { folder: folder.dataset.gc };
     } else return;
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("application/x-orrery-galaxy", s.gDrag.folder ?? s.gDrag.ids.join(","));
@@ -428,8 +518,8 @@ function wireDrag(app, gal) {
     gal.classList.remove("dragging");
     if (!el) return;
     const to = el.dataset.drop;
-    if (drag.ids) moveOutputs(app, drag.ids, to);
-    else moveFolder(app, drag.folder, folderDropPath(drag.folder, to));
+    if (drag.ids) collectOutputs(app, drag.ids, to);
+    else moveCollection(app, drag.folder, folderDropPath(drag.folder, to));
   });
 }
 
@@ -480,17 +570,36 @@ async function onClick(app, e, open, rows) {
     return renderGalaxy(app);
   }
   const fdel = e.target.closest("[data-gfdel]");
-  if (fdel) return deleteFolder(app, fdel.dataset.gfdel);
-  const gf = e.target.closest("[data-gf]");
-  if (gf) return e.target.closest("input") ? undefined : showFolder(app, gf.dataset.gf === "*" ? null : gf.dataset.gf);
+  if (fdel) return deleteCollection(app, fdel.dataset.gfdel);
+  const dfold = e.target.closest("[data-gdfold]");
+  if (dfold) {
+    const d = dfold.dataset.gdfold;
+    if (s.gDays.has(d)) s.gDays.delete(d); else s.gDays.add(d);
+    return renderGalaxy(app);
+  }
+  const gv = e.target.closest("[data-gv]");
+  if (gv) return showPlace(app, { view: gv.dataset.gv });
+  const gday = e.target.closest("[data-gday]");
+  if (gday) return showPlace(app, { view: gday.dataset.gk || "all", day: gday.dataset.gday });
+  const gc = e.target.closest("[data-gc]");
+  if (gc) return e.target.closest("input") ? undefined : showPlace(app, { coll: gc.dataset.gc });
+  const crumb = e.target.closest("[data-gcrumb]");
+  if (crumb) return showAlbum(app, null, Number(crumb.dataset.gcrumb));
+  const alb = e.target.closest("[data-galbum]");
+  if (alb) {
+    const c = app.data.gCards.find((x) => x.key === alb.dataset.galbum);
+    return c && showAlbum(app, { key: c.key, title: albumNames(app, c).title + (c.type === "sweep" ? ` · ${c.title}` : "") });
+  }
   const gs = e.target.closest("[data-gs]");
-  if (gs) { s.gScope = gs.dataset.gs; return renderGalaxy(app); }
+  // a filter shows the outputs themselves, every album opened: the cards come again
+  const refilter = async () => { await refresh(app); renderGalaxy(app); };
+  if (gs) { s.gScope = gs.dataset.gs; return refilter(); }
   const gr = e.target.closest("[data-gr]");
-  if (gr) { s.gRating = s.gRating === gr.dataset.gr ? null : gr.dataset.gr; return renderGalaxy(app); }
+  if (gr) { s.gRating = s.gRating === gr.dataset.gr ? null : gr.dataset.gr; return refilter(); }
   const gp = e.target.closest("[data-gp]");
-  if (gp) { s.gPick = null; return renderGalaxy(app); }
+  if (gp) { s.gPick = null; return refilter(); }
   const pick = e.target.closest("[data-gpick]");
-  if (pick) { s.gPick = pick.dataset.gpick; s.gOpen = null; return renderGalaxy(app); }
+  if (pick) { s.gPick = pick.dataset.gpick; s.gOpen = null; return refilter(); }
   const go = e.target.closest("[data-gopen]");
   // While something is selected, and with Ctrl, Cmd or Shift, a click on a card selects it.
   if (go && (s.gSel.size || e.ctrlKey || e.metaKey || e.shiftKey)) return select(app, go.dataset.gopen, e, rows);
@@ -500,6 +609,7 @@ async function onClick(app, e, open, rows) {
   if (act === "close") { s.gOpen = null; return renderGalaxy(app); }
   if (act === "newf") { s.gNew = true; s.gNewText = null; return renderGalaxy(app); }
   if (act === "selall") { rows.forEach((r) => s.gSel.add(r.id)); return renderGalaxy(app); }
+  if (act === "uncollect" && s.gPlace.coll) return uncollectOutputs(app, [...s.gSel], s.gPlace.coll);
   if (act === "selnone") { s.gSel.clear(); s.gAnchor = null; return renderGalaxy(app); }
   if (act === "delete") return confirmDelete(app);
   if (act === "export") return openExport(app);

@@ -82,6 +82,17 @@ def test_log_appends_one_galaxy_line_per_output(home):
     assert row["picks"][0]["label"] == "__animal__" and "ts" in row
 
 
+def test_a_reels_clip_is_logged_with_its_reel_and_its_scene(home):
+    """#298: the Gallery's albums of a reel and of each of its scenes."""
+    reel = "@h3 t2va\nSCENE the den\nA __animal__ sleeps.\nSCENE the hunt\nA __animal__ runs."
+    _, picks, *_ = run_prompt(reel, 2, "h3-base", str(home), segment=1, chain="reels/fox")
+    [row] = log_outputs(Home(home), picks, ["out/clip.mp4"])
+    assert (row["segment"], row["chunks"], row["chain"], row["chunk"]) == (1, 2, "reels/fox", 1)
+    _, picks, *_ = run_prompt("a __animal__", 2, "text", str(home))
+    [row] = log_outputs(Home(home), picks, ["out/a.png"])
+    assert not {"segment", "chain", "chunk"} & set(row)
+
+
 def test_log_without_media_still_records_the_picks(home):
     _, picks, *_ = run_prompt("a __animal__", 2, "text", str(home))
     [row] = log_outputs(Home(home), picks, [])

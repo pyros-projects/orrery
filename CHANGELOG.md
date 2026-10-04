@@ -9,6 +9,10 @@ checks) are left out.
 
 ### Added
 
+- The Gallery in albums (#290): on the left every output, every picture and every video, then the days (each with its
+  images and videos) and the collections; a sweep's or a grid's runs, a reel's clips and each of its scenes are one
+  album's card with up to eight of its pictures, opened with a click. Collections take the place of folders: they hold
+  outputs without moving them, one output in as many as you like; folders from before are collections now.
 - An expression creator for Krea 2 (#291): `krea/15_expression_creator` rolls a character in a close-up, and the
   grid shows it in the eight expressions of a set (basic, subtle, intense, social, inner, playful); each expression
   says what the face does and the muscles that do it, in FACS action units. Render it with Krea 2 Raw and the turbo
@@ -155,6 +159,11 @@ checks) are left out.
 
 ### Fixed
 
+- Ticking a choice in a dial's menu no longer throws its list back to the top (#290).
+- Presets has a reload button, and every tab reads what it shows again when it opens (#290).
+- The results under the prompt show the picture of a run with Orrery Log; the Krea example runs its model through the
+  Orrery Prompt for the live preview (#290).
+- Typing at the bottom of the editor no longer scrolls it up when the completion opens (#290).
 - Roll runs a grid and a LoRA sweep again: the mini-runs' plan (#171) had taken the place of theirs in the app's
   API client, so Roll queued one run per seed instead of the grid's cells (#288).
 - A template without scenes takes the editor's free height with its text, and its results sit at the bottom, instead

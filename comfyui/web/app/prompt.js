@@ -27,7 +27,7 @@ function statsHTML(app) {
   const reel = !st.h3?.reel ? null : !hasGoto(app.text) ? st.h3.reel
     : { ...st.h3.reel, clips: walked ? (walked.ended ? walked.path.length : Infinity) : NaN, goto: true };
   const wired = /^\s*(:\s*.*\b[wh]\d|@size\b)/m.test(app.text) ? [] : app.bridge.frames?.() || [];  // `@size` wins
-  const outs = (app.data.rows || []).filter((r) => r.template === templateHash(app.text)).length;
+  const outs = app.data.gTemplates?.[templateHash(app.text)] || 0;  // the gallery's count, once it was open
   const forever = reel && reel.clips === Infinity, clips = !reel ? "" : forever ? "∞" : Number.isNaN(reel.clips) ? "?" : reel.clips;
   const how = !reel ? "" : `Its clips live in output/${app.bridge.chain?.() || "h3_context"}. Wire the picks into Orrery Continue (and the clip into Orrery Film). Next clip counts up by itself after each run (unless held): `
     + (forever ? "Run (Instant) plays clip after clip until you stop it." : `a Run count of ${clips} plays the whole reel${reel.goto ? " at this seed (its GOTO lines may jump on what rolls)" : ""}; after the last clip nothing downstream runs.`);
@@ -284,7 +284,10 @@ export function renderPrompt(app) {
     if (writer) { app.state.writeMenu = false; renderPrompt(app); return openWrite(app, writer); }
     const starter = e.target.closest("[data-new]")?.dataset.new;
     if (starter) startNew(app, starter);
-    if (act === "outputs") { app.state.gScope = "prompt"; app.go("galaxy"); }
+    if (act === "outputs") {  // every output of this prompt, wherever the gallery was
+      Object.assign(app.state, { gScope: "prompt", gPlace: { view: "all", day: null, coll: null }, gAlbums: [] });
+      app.go("galaxy");
+    }
     if (act === "writenow") return writeNow(app);
     if (act === "hold") { app.bridge.holdSegment(!app.bridge.segmentHeld()); return refreshFoot(app); }
     if (act === "browse") app.go("presets");

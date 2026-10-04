@@ -44,9 +44,10 @@ export class OrreryApp {
       pFilter: "all", pSearch: "", pOpen: null, pDetail: null, pConfirm: false, pRoll: null,
       lib: null, libSearch: "", libTag: null, libNew: null,
       gScope: "all", gRating: null, gPick: null, gOpen: null,
-      gFolder: null, gSel: new Set(), gAnchor: null, gFold: new Set(), gNew: false, gRen: null, gDrag: null,
+      gPlace: { view: "all", day: null, coll: null }, gAlbums: [], gDays: null,
+      gSel: new Set(), gAnchor: null, gFold: new Set(), gNew: false, gRen: null, gDrag: null,
     };
-    this.data = { presets: [], favorites: new Set(), recent: [], completion: null, libraries: null, rows: null, weights: {}, llm: null };
+    this.data = { presets: [], favorites: new Set(), recent: [], completion: null, libraries: null, weights: {}, llm: null };
     this.base = null;
     this.run = null;  // {segment, prompt}: the reel segment this node is generating right now
     this.uid = Math.random().toString(36).slice(2, 8);  // keeps element ids unique across nodes
@@ -155,7 +156,7 @@ export class OrreryApp {
   }
 
   render() {
-    const n = { presets: this.data.presets.length, libraries: this.data.completion?.libraries.length, galaxy: this.data.gTotal ?? this.data.rows?.length,
+    const n = { presets: this.data.presets.length, libraries: this.data.completion?.libraries.length, galaxy: this.data.gTotal,
       history: this.data.hAll };
     this.$(".tabs").innerHTML = TABS.filter((t) => !t[3]).map(([k, label]) => `<button class="tab" role="tab" aria-selected="${this.state.tab === k}" data-tab="${k}">`
       + `${label}${n[k] ? `<span class="n">${n[k]}</span>` : ""}</button>`).join("");
@@ -299,7 +300,7 @@ export class OrreryApp {
     if (!got.log) return;  // Orrery Log logged them itself
     try {
       const res = await this.api.captureOutputs({ prompt_id: detail.prompt_id, node: this.bridge.nodeId(), media: got.media });
-      if (res.logged) { this.data.rows = null; this.data.gRows = null; if (this.state.tab === "galaxy") this.render(); }
+      if (res.logged) { this.state.gFetched = false; if (this.state.tab === "galaxy") this.render(); }
     } catch { /* an older run or a restarted ComfyUI: nothing to log */ }
   }
 

@@ -65,7 +65,8 @@ Nodes under **orrery**:
   the reel's first: the node keeps it at 24 fps beside the clips, a head
   `REMEMBER:` keeps its frames, and a scene with `AFTER: the input video`
   continues it ([h3.md](h3.md) 1d, *The input video*). The node is the whole of orrery, in seven tabs and its settings (⤢ opens the
-  same app over the canvas, Esc brings it back):
+  same app over the canvas, Esc brings it back). Opening a tab reads what it shows
+  again, and Presets, Libraries, Gallery and History have a ⟳ that does it any time (#301):
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `__creature#` properties and their
     values, `$` bindings, the CAST after `@` (`@KEEPER`; at a line's start also
@@ -129,9 +130,10 @@ Nodes under **orrery**:
     A template without scenes (a Krea prompt, an `@h3` scene) has its
     **results under the prompt** (#211; the text takes the free height, the results sit at the bottom, #271): the live preview
     while it samples (the model wired through the Orrery Prompt; an image
-    model's tiny VAE or Latent2RGB, sized by its own latent format), then what
-    the run made, a picture, a clip or its sound, as its Save or Preview nodes
-    wrote it. Every run becomes a **take**, lined up under the result: a click
+    model's tiny VAE or Latent2RGB, sized by its own latent format; with the model
+    input unconnected the empty result says how to wire it), then what
+    the run made, a picture, a clip or its sound, as its Save, Preview or Orrery Log
+    nodes wrote it (#302). Every run becomes a **take**, lined up under the result: a click
     shows it (and a take that rolled anew gives the node its seed). Beside the
     takes, **+** adds takes, **×N** says how many a Generate makes and **📌**
     keeps the rolled prompt so only the sampler's noise changes, as in a
@@ -226,10 +228,21 @@ Nodes under **orrery**:
     and sets the seed to fixed; the next run rolls them with today's libraries
     and learned weights (#259). An output whose template EXPORTed data shows it as a sheet
     under its prompt (**JSON** copies it). A slot there still to be written from the picture
-    (`image output`, #175) has a 🎲: takes written from the picture, **Use selected** keeps one. Folders on the left sort outputs without moving their files:
-    drag cards onto a folder (a selected card brings the whole selection),
-    drag a folder onto another to nest it, double-click to rename. Removing
-    a folder moves what is in it up a level. Select with the checkbox,
+    (`image output`, #175) has a 🎲: takes written from the picture, **Use selected** keeps one.
+    On the left (#290): **All outputs**, **All images**, **All videos**, then the
+    days, newest first, each with its `images` and `videos`, then the
+    collections. What belongs together is one card, an album with up to eight
+    of its pictures: a sweep's or a grid's runs, a reel's clips, and inside a
+    reel each scene's takes, named by its `SCENE` line; a click opens it, the
+    bar above leads back. A filter (This prompt, a rating, a pick) shows the
+    outputs themselves. Collections hold outputs without moving them, one
+    output in as many as you like (folders from before are collections now):
+    drag cards or albums onto one (a selected card brings the whole
+    selection), drag a collection onto another to nest it (onto the
+    *Collections* heading: to the top), double-click to rename; **Out of the
+    collection** takes a selection out again. Removing a collection deletes
+    nothing: its outputs stay in the gallery, the collections in it move up a
+    level. Select with the checkbox,
     Shift-click for a range, Ctrl/Cmd-click for one more; then **Export
     pairs** copies each picture or video into `~/.orrery/export/<name>/`
     with a `.txt` of the prompt that made it (training pairs), and
