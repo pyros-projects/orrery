@@ -542,6 +542,21 @@ export function exportRows(exports) {
   });
 }
 
+// An export's text in pieces: the slots still to be written from the picture (`--a caption of image output--`, #175)
+// apart from the rest.
+export function pictureSlots(text) {
+  const parts = [];
+  let at = 0;
+  for (const m of String(text).matchAll(/--(?=[^\s-])([^\n]*?[^\s-])--/g)) {
+    if (!/\bimage\s+output\b/.test(m[1])) continue;
+    if (m.index > at) parts.push({ text: text.slice(at, m.index) });
+    parts.push({ slot: m[1] });
+    at = m.index + m[0].length;
+  }
+  if (at < String(text).length) parts.push({ text: String(text).slice(at) });
+  return parts;
+}
+
 // A library's line in the list, from the library with its entries (what the server sends after an edit).
 export function libraryHead(lib) {
   return { name: lib.name, source: lib.source, count: lib.entries.length, tags: lib.tags || [], pending: !!lib.pending,

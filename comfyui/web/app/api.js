@@ -100,6 +100,8 @@ export function client(home) {
     takeThumbURL: (chain, take) => url("chain/thumb", { take, ...(chain ? { chain } : {}) }),
     takeVideoURL: (chain, take) => url("chain/video", { take, ...(chain ? { chain } : {}) }),
     takes: (body) => call("llm/takes", { body }),
+    galaxyTakes: (body) => call("galaxy/takes", { body }),
+    galaxyWrite: (body) => call("galaxy/write", { body }),
     viewURL: (m) => api.apiURL(`/view?${new URLSearchParams({ filename: m.filename, subfolder: m.subfolder || "", type: m.type || "output" })}`),
     filmURL: (chain, v) => url("chain/video", { film: 1, v: v ?? "", ...(chain ? { chain } : {}) }),
     anchorURL: (image, v) => url("anchor", { image, v: v ?? "" }),

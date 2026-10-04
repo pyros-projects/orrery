@@ -57,7 +57,8 @@ setting. When the node runs, the model
   that is not there is said in the lint, and the slot is written without it.
   `image output` is the picture the run makes, there only after it: such a slot
   stands in an `EXPORT:` line and waits there as a slot, for the Gallery to write
-  it; anywhere else the lint says so.
+  it (its 🎲 in the picture's sheet, or after every run: the gear's Picture slots);
+  anywhere else the lint says so.
 
   A slot the model leaves out keeps its directions as text (and a warning), so
   a queued chain never breaks on one bad answer. The chain is the reel's own

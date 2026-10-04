@@ -52,7 +52,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/galaxy/folder/add"), ("POST", "/orrery/galaxy/folder/rename"),
         ("POST", "/orrery/galaxy/folder/delete"),
         ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
-        ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"), ("POST", "/orrery/llm/takes"),
+        ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"), ("POST", "/orrery/llm/takes"), ("POST", "/orrery/galaxy/takes"), ("POST", "/orrery/galaxy/write"),
         ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/discard"),
         ("GET", "/orrery/home"), ("POST", "/orrery/home"),
         ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("POST", "/orrery/chain/move"), ("POST", "/orrery/chain/pick"), ("POST", "/orrery/chain/delete"), ("POST", "/orrery/chain/clear"), ("GET", "/orrery/chain/tree"), ("POST", "/orrery/chain/walk"), ("POST", "/orrery/chain/end"),
@@ -131,7 +131,7 @@ def test_register_attaches_every_route_through_one_adapter(home, tmp_path):
     assert (kind, status) == ("json", 200) and body["favorites"] == [] and body["quickstart"] is True
     assert hit("POST", "/orrery/ui", query=q, body={"quickstart": False}) == \
         ("json", 200, {"quickstart": False, "dividers": True, "timeline": True, "log_prompts": True, "surf_numbered": True, "preview_light": True, "clip_min": 360, "take_min": 54, "preview_fps": 12, "preview_edge": 1024,
-                     "annotations_show": "appended"})
+                     "annotations_show": "appended", "picture_slots": "gallery"})
     assert hit("GET", "/orrery/presets", query=q)[2]["quickstart"] is False
     assert hit("GET", "/orrery/preset", query={**q, "name": "nope"})[1] == 404
     assert hit("POST", "/orrery/recent", query=q, broken=True)[1] == 400
@@ -763,7 +763,7 @@ def test_the_editor_switches_travel_with_the_presets_and_are_saved(home):
     assert ok(home, webapi.presets)["dividers"] is True and ok(home, webapi.presets)["timeline"] is True
     assert ok(home, webapi.ui_save, timeline=False) == {"quickstart": True, "dividers": True, "timeline": False, "log_prompts": True,
                                                          "surf_numbered": True, "preview_light": True, "clip_min": 360, "take_min": 54, "preview_fps": 12, "preview_edge": 1024,
-                                                         "annotations_show": "appended"}
+                                                         "annotations_show": "appended", "picture_slots": "gallery"}
     assert ok(home, webapi.ui_save, clip_min=480)["clip_min"] == 480 and ok(home, webapi.presets)["clip_min"] == 480
     assert ok(home, webapi.presets)["timeline"] is False
     assert ok(home, webapi.ui_save, annotations_show="hover")["annotations_show"] == "hover"  # #203
@@ -942,3 +942,32 @@ def test_takes_for_a_slot_see_the_pictures_it_names(home, fake_api, tmp_path, mo
     assert "nothing is wired" in body["notes"][0]  # written without it, and said
     status, body = api(home, webapi.llm_takes, kind="slot", what="a sheet from image output", template="A --a sheet from image output--.")
     assert status == 400 and "Gallery" in body["error"]
+
+
+def test_a_gallery_picture_writes_its_slots_from_image_output(home, fake_api, tmp_path):
+    """#175: the Gallery's takes for an export slot see the picture as Picture 1; Write puts one into the row; the
+    setting writes them after every run instead."""
+    from orrery.comfy import log_outputs
+    from orrery.galaxy import read_rows
+
+    picture = tmp_path / "hero.png"
+    Image.new("RGB", (64, 48), "teal").save(picture)
+    data = {"seed": 3, "text": "A character sheet of a ferryman.", "picks": [],
+            "exports": {"who": "a ferryman", "sheet": "--a full character sheet, as image output shows them--"}}
+    log_outputs(Home(home), json.dumps(data), [str(picture)])
+    rid = read_rows(Home(home))[0]["id"]
+    what = "a full character sheet, as image output shows them"
+    assert api(home, webapi.galaxy_takes, id=rid, what=what)[0] == 400  # no endpoint yet
+    Home(home).save_config({"llm": {"source": "api", "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})
+    fake_api.answer = lambda body: json.dumps(["tall, grey coat, a lantern", "weathered hands, a pole", "a hood, calm eyes"])
+    body = ok(home, webapi.galaxy_takes, id=rid, what=what)
+    content = fake_api.requests[-1]["messages"][0]["content"]
+    assert body["takes"][0] == "tall, grey coat, a lantern" and content[0]["type"] == "image_url"
+    assert "a full character sheet, as Picture 1 shows them" in content[-1]["text"] and "A character sheet of a ferryman." in content[-1]["text"]
+    row = ok(home, webapi.galaxy_write, id=rid, what=what, text="weathered hands, a pole")["row"]
+    assert row["exports"]["sheet"] == "weathered hands, a pole" and row["exports"]["who"] == "a ferryman"
+    assert api(home, webapi.galaxy_takes, id=rid, what=what)[0] == 400  # written: no slot left
+    ok(home, webapi.ui_save, picture_slots="every run")  # the setting: after every run
+    fake_api.answer = lambda body: json.dumps(["a red scarf"])
+    log_outputs(Home(home), json.dumps(data), [str(picture)])
+    assert read_rows(Home(home))[0]["exports"]["sheet"] == "a red scarf"

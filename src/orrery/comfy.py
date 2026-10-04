@@ -633,6 +633,11 @@ def log_outputs(home: Home, picks_json: str, media: list[str]) -> list[dict]:
     with STATE, home.galaxy_path.open("a", encoding="utf-8") as f:  # never while a rating rewrites the log (#260)
         for row in rows:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
+    if uistate.load_ui(home)["picture_slots"] == "every run":  # its picture slots written now (#175)
+        from orrery.takes import write_pictures
+
+        for note in write_pictures(home, [r for r in rows if r.get("media")]):
+            print(f"[orrery] warn: {note}")
     return rows
 
 

@@ -3,9 +3,10 @@
 // deleted into the home's trash.
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
-import { applyDials, exportRows, FACTORS, filterRows, folderDropPath, folderTree, markPicks, rangeIds, templateHash, withDice } from "./model.js";
+import { applyDials, exportRows, FACTORS, filterRows, folderDropPath, folderTree, markPicks, pictureSlots, rangeIds, templateHash, withDice } from "./model.js";
 import { copyText, resizable } from "./parts.js";
 import { openSave } from "./save.js";
+import { openTakes } from "./takes.js";
 
 const RATE_ICON = { love: "heart", like: "up", nope: "down", hate: "ban" };
 const MEDIA = "application/x-orrery-media";
@@ -182,14 +183,18 @@ function detailHTML(app, r) {
     </div></div></aside>`;
 }
 
+// An export's text; a slot still to be written from the picture gets a 🎲 that opens its takes (#175).
+const slotted = (v) => pictureSlots(v).map((p) => (p.slot === undefined ? esc(p.text) : `<code>--${esc(p.slot)}--</code>`
+  + `<button class="llm-key" data-gwrite="${esc(p.slot)}" title="Takes for this slot, written from the picture: three, then more, steered, and Insert one">${icon("dice")}</button>`)).join("");
+
 // What the picture carries beyond its prompt (EXPORT:): a reel reads it as $hero.mood, other systems from the gallery.
 function sheetHTML(r) {
   const rows = exportRows(r.exports);
   if (!rows.length) return "";
   return `<div class="sheet"><div class="row spread"><span class="label">What it carries · EXPORT:</span>`
     + `<button class="btn ghost" data-gact="copyx">${icon("copy")}JSON</button></div><dl>`
-    + rows.map((x) => `<dt>${esc(x.name)}</dt><dd>${x.items.length ? x.items.map((i) => `<span class="tagchip">${esc(i)}</span>`).join(" ") : esc(x.value)}`
-      + x.fields.map(([k, v]) => `<small><b>${esc(k)}</b> ${esc(v)}</small>`).join("") + "</dd>").join("")
+    + rows.map((x) => `<dt>${esc(x.name)}</dt><dd>${x.items.length ? x.items.map((i) => `<span class="tagchip">${slotted(i)}</span>`).join(" ") : slotted(x.value)}`
+      + x.fields.map(([k, v]) => `<small><b>${esc(k)}</b> ${slotted(v)}</small>`).join("") + "</dd>").join("")
     + "</dl></div>";
 }
 
@@ -499,6 +504,11 @@ async function onClick(app, e, open, rows) {
   if (act === "delete") return confirmDelete(app);
   if (act === "export") return openExport(app);
   if (!open) return;
+  const gw = e.target.closest("[data-gwrite]");
+  if (gw) {
+    return openTakes(app, { kind: "picture", id: open.id, what: gw.dataset.gwrite,
+      written: (row) => { Object.assign(open, row); if (app.state.tab === "galaxy") renderGalaxy(app); } }, gw);
+  }
   if (act === "use" && !app.busy()) {
     let kept = false;
     try {

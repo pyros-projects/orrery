@@ -145,6 +145,7 @@ export class OrreryApp {
     this.data.preview_fps = d.preview_fps ?? 12;
     this.data.preview_edge = d.preview_edge ?? 1024;
     this.data.annotations_show = d.annotations_show || "appended";
+    this.data.picture_slots = d.picture_slots || "gallery";
   }
   async refreshCompletion() {
     const [completion, gallery] = await Promise.all([this.api.completions(), this.api.pictures().catch(() => ({ presets: [] }))]);

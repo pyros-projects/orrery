@@ -2,13 +2,15 @@
 // line opens a sheet with three takes for that place, written at the node's seed. More asks for three more, new
 // against those there are; a steering line goes with them. Insert puts a take in place of the slot (or the library)
 // as an unsaved edit, Keep the direction writes the steer into the slot's (the library's, the line's) directions;
-// both with Undo. With an API endpoint the server asks it directly, outside ComfyUI's queue.
+// both with Undo. With an API endpoint the server asks it directly, outside ComfyUI's queue. A gallery picture's slot
+// from `image output` (#175) opens the same sheet: its takes are written from the picture, Insert writes one into its
+// exports.
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
 import { splitCells } from "./model.js";
 
 const LIB = (name) => new RegExp(`__${name.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&")}(?:\\[[^\\]\\n]*\\])?(?:#[\\w-]+:\\$?[\\w.-]+)*(?::\\d+)?__(?:\\(([^()]*)\\))?`);
-const SAID = { slot: "the slot", library: "the library still to be written", enhance: "what the line rewrites" };
+const SAID = { slot: "the slot", library: "the library still to be written", enhance: "what the line rewrites", picture: "the picture's slot" };
 
 // The template's line `place.line` changed by `edit(line)`; the text as it was when the line is not there.
 function onLine(text, place, edit) {
@@ -53,19 +55,21 @@ export function placeOf(app, key) {
 
 export function openTakes(app, place, near = null) {
   const s = { takes: [], busy: false, error: "" };
-  const token = place.kind === "slot" ? `--${place.what}--` : place.kind === "library" ? `__${place.what}__` : `> ${place.what}`;
+  const picture = place.kind === "picture";
+  const token = place.kind === "slot" || picture ? `--${place.what}--` : place.kind === "library" ? `__${place.what}__` : `> ${place.what}`;
   const sheet = app.openSheet(`<div class="panel takes-panel"><div class="row spread"><h4>${icon("dice")} Takes</h4>`
     + `<button class="icon-btn" data-close title="Close">${icon("x")}</button></div>`
-    + `<p class="muted flush">For ${SAID[place.kind]} <code>${esc(token)}</code>, at seed ${esc(String(app.bridge.getSeed()))}.`
+    + `<p class="muted flush">For ${SAID[place.kind]} <code>${esc(token)}</code>, ${picture ? "written from the picture, the prompt that made it beside it."
+      : `at seed ${esc(String(app.bridge.getSeed()))}.`}`
     + `${place.kind === "enhance" ? " A rewrite happens at every run: these show what it does, and Keep the direction puts your steer into it." : ""}</p>`
     + `<ol class="take-list"></ol><p class="muted flush take-state" role="status"></p>`
     + `<div class="row take-steer"><input class="input grow" data-steer placeholder="Steer them: darker, older, as an anime character …" aria-label="Steer the takes">`
     + `<button class="btn" data-tmore>${icon("dice")}More takes</button>`
-    + `<button class="btn ghost" data-tkeep title="Write the steer into ${esc(SAID[place.kind])}'s directions, so it keeps rolling that way">${icon("pin")}Keep the direction</button></div></div>`, near);
+    + (picture ? "" : `<button class="btn ghost" data-tkeep title="Write the steer into ${esc(SAID[place.kind])}'s directions, so it keeps rolling that way">${icon("pin")}Keep the direction</button>`) + "</div></div>", near);
   const list = sheet.querySelector(".take-list"), state = sheet.querySelector(".take-state"), steer = sheet.querySelector("[data-steer]");
   const draw = () => {
     list.innerHTML = s.takes.map((t, i) => `<li><span>${esc(t)}</span>${place.kind === "enhance" ? ""
-      : `<button class="btn primary" data-tins="${i}" title="Put it in place of ${esc(token)}: an unsaved edit">Insert</button>`}</li>`).join("");
+      : `<button class="btn primary" data-tins="${i}" title="${picture ? "Write it into the picture's exports" : `Put it in place of ${esc(token)}: an unsaved edit`}">Insert</button>`}</li>`).join("");
     state.textContent = s.busy ? "Writing…" : s.error;
     state.classList.toggle("warn", !!s.error && !s.busy);
     sheet.querySelector("[data-tmore]").disabled = s.busy;
@@ -75,6 +79,11 @@ export function openTakes(app, place, near = null) {
     s.error = "";
     draw();
     try {
+      if (picture) {
+        const got = await app.api.galaxyTakes({ id: place.id, what: place.what, steer: steer.value, have: s.takes, n: 3 });
+        s.takes.push(...got.takes.filter((t) => !s.takes.includes(t)));
+        return;
+      }
       // a slot naming the node's first or last frame (#174): the files of the Load Image nodes behind them
       const frames = /\bimage\s+(first|last)_frame\b/.test(place.what) ? (await app.bridge.frameFiles?.())?.names || {} : {};
       const got = await app.api.takes({ kind: place.kind, what: place.what, directions: place.directions, template: app.text,
@@ -82,9 +91,10 @@ export function openTakes(app, place, near = null) {
         chain: app.bridge.chain?.() || "", steer: steer.value, have: s.takes, n: 3, frames });
       s.takes.push(...got.takes.filter((t) => !s.takes.includes(t)));
       s.error = (got.notes || []).join(" ");
-    } catch (err) { s.error = err.message; }
-    s.busy = false;
-    draw();
+    } catch (err) { s.error = err.message; } finally {
+      s.busy = false;
+      draw();
+    }
   };
   const changed = (text, said) => {
     const before = app.text;
@@ -97,7 +107,7 @@ export function openTakes(app, place, near = null) {
   sheet.querySelector("[data-close]").onclick = () => app.closeSheet();
   sheet.querySelector("[data-tmore]").onclick = () => ask();
   steer.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); ask(); } });
-  sheet.querySelector("[data-tkeep]").onclick = () => {
+  if (!picture) sheet.querySelector("[data-tkeep]").onclick = () => {
     if (!steer.value.trim()) return steer.focus();
     const text = keepDirection(app.text, place, steer.value), moved = text !== app.text;
     changed(text, `Your steer is in ${esc(SAID[place.kind])}'s directions · an unsaved edit`);
@@ -107,9 +117,18 @@ export function openTakes(app, place, near = null) {
     else place.directions = place.directions ? `${place.directions}, ${steer.value.trim()}` : steer.value.trim();
     steer.value = "";
   };
-  list.addEventListener("click", (e) => {
+  list.addEventListener("click", async (e) => {
     const ins = e.target.closest("[data-tins]");
     if (!ins) return;
+    if (picture) {
+      try {
+        const d = await app.api.galaxyWrite({ id: place.id, what: place.what, text: s.takes[Number(ins.dataset.tins)] });
+        app.closeSheet();
+        place.written?.(d.row);
+        app.toast("The take is in the picture's exports");
+      } catch (err) { s.error = err.message; draw(); }
+      return;
+    }
     app.closeSheet();
     changed(insertTake(app.text, place, s.takes[Number(ins.dataset.tins)]), "The take is in the editor · an unsaved edit");
   });

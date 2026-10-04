@@ -10,7 +10,7 @@ outside ComfyUI's queue.
 from orrery.llm import InvalidProposal, extract_json
 from orrery.slots import as_pictures
 
-KINDS = ("slot", "library", "enhance")
+KINDS = ("slot", "library", "enhance")  # in the editor; "picture": an export slot of a gallery picture (#175)
 MARK = "[this part]"
 
 
@@ -27,7 +27,10 @@ def request(kind: str, what: str, context: str, n: int = 3, steer: str = "", hav
     if pictures:
         parts.append(f"The {'images after them' if frames else 'images'} are "
                      + ", ".join(f"Picture {i}" for i in range(1, len(pictures) + 1)) + ", in that order. Look at them closely.")
-    if kind == "slot":
+    if kind == "picture":
+        parts.append(context.strip())
+        parts.append(f"Write {n} different takes for {MARK}, each following its directions exactly: {as_pictures(what, list(pictures))}")
+    elif kind == "slot":
         parts.append(f"The prompt, with the part to write marked {MARK}:\n\n{context.strip()}")
         parts.append(f"Write {n} different takes for {MARK}, each prose that fits where it stands and follows its "
                      f"directions exactly: {as_pictures(what, list(pictures))}")
@@ -61,6 +64,44 @@ def parse(reply: str, n: int) -> list[str]:
         return []
     out = [" ".join(t.split()) for t in data if isinstance(t, str) and t.strip()]
     return list(dict.fromkeys(out))[:n]
+
+
+def for_picture(row: dict, what: str, n: int = 3, steer: str = "", have: list[str] | tuple = ()) -> str | None:
+    """The prompt for N takes of a gallery picture's export slot `--what--` (#175): the picture is Picture 1, sent
+    with it; the model reads the prompt that made it and what it keeps, the slot marked. None: no such slot."""
+    import json
+
+    shown = marked(json.dumps(row.get("exports") or {}, ensure_ascii=False, indent=1), f"--{what}--")
+    if shown is None:
+        return None
+    context = (f"The picture, Picture 1, was made from this prompt:\n\n{row.get('text') or ''}\n\nBeside the prompt it "
+               f"keeps these exports (JSON), the part to write marked {MARK}:\n{shown}")
+    return request("picture", what, context, n, steer, have, pictures=["output"])
+
+
+def write_pictures(home, rows: list[dict]) -> list[str]:
+    """After a run (the setting's `every run`, #175): every export slot from `image output` of its rows written over
+    the API endpoint, one take each, into the gallery. Says what it could not write."""
+    from orrery import endpoint, galaxy
+    from orrery.comfy_llm import llm_config
+    from orrery.slots import export_slots, names_output
+
+    wanted = [(row, d) for row in rows for d in export_slots(row.get("exports") or {}) if names_output(d)]
+    if not wanted:
+        return []
+    api = endpoint.backend(home, float(llm_config(home)["writer_temperature"]))
+    if api is None:
+        return ["Picture slots are written after a run over an API endpoint; the Gallery writes them on demand."]
+    notes = []
+    for row, what in wanted:
+        try:
+            out = parse(api.complete(for_picture(row, what, 1), images=[galaxy.picture_of(row)]), 1)
+            if not out:
+                raise RuntimeError("the language model wrote nothing")
+            galaxy.write_export(home, galaxy.row_id(row), what, out[0])
+        except (RuntimeError, KeyError, OSError, ValueError) as err:
+            notes.append(f"--{what}--: {err}")
+    return notes
 
 
 def marked(text: str, find: str, nth: int = 0) -> str | None:

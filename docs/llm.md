@@ -36,7 +36,8 @@ The footer of the Prompt tab names the active model: `LLM qwen3vl_8b…`, or `LL
 | **A CAST description from a named picture** | `@MIRA (image krea/09_character_creator/…): --who she is, one sentence--` | The model is told the prompt that made the picture, so it needs no vision for this. |
 | **A slot in an export** | `EXPORT:` block, `backstory = --two sentences of backstory for $who--` | It is written with the run and kept with the picture, never in the prompt. A screenplay that casts the picture reads it as `$hero.backstory`. |
 | **Pictures in a slot** (#174) | `--the outfit in image first_frame, one phrase--` | The model gets the pictures a slot names, after the frames of the clip before, and reads them as Picture 1, 2 …: `image first_frame` and `image last_frame` (wired into the Orrery Prompt), `image 3` (a gallery picture the CAST names), a gallery name. One that is not there is said; the slot is written without it. The takes at the line see them too. |
-| **A slot from the picture the run makes** (#174) | `EXPORT:` `sheet = --a full character sheet from $who, as image output shows them--` | `image output` exists only after the run, so the run leaves the slot as it is, kept with the picture for the Gallery to write; outside `EXPORT:` the lint says so. |
+| **A slot from the picture the run makes** (#174) | `EXPORT:` `sheet = --a full character sheet from $who, as image output shows them--` | `image output` exists only after the run, so the run leaves the slot as it is, kept with the picture; outside `EXPORT:` the lint says so. |
+| **Written from the Gallery** (API, #175) | a picture whose exports keep such a slot | The picture's sheet in the Gallery shows the slot with a 🎲: three takes written from the picture, with the prompt that made it beside it; **More takes** and a steer as at the line; **Insert** writes one into the picture's exports, where a screenplay that casts it reads it. The gear's **Picture slots: After every run** writes each such slot right after its run instead, one take each. |
 | **`> enhance`** | `> make it moody and cinematic` | It rewrites the rolled prompt as asked. In a screenplay, a `>` before the first SHOT covers every shot's prose, and one inside a SHOT only that shot; dialogue is never touched. |
 | **Write menu: Continue the reel** | a reel (SCENE lines) | The next SCENE, from every scene as it rolls at the node's seed, with an `END ON:`. It is appended. |
 | **Write menu: Story between frames** | `@h3 fl2va`, both frames wired | The shot that gets from the first frame to the last. |
@@ -89,13 +90,12 @@ With an **API endpoint** (the gear → An API endpoint, then Check and Save):
 - [ ] A `> enhance` line's 🎲: three rewrites of the prompt as it rolls.
 - [ ] A Krea or i2va template with a picture in `first_frame` (a Load Image) and `--the outfit in image first_frame, one phrase--`: Run writes it from the picture; its 🎲's takes do too. Unwire it: the lint says so.
 - [ ] The creator with `sheet = --a full character sheet from $who, as image output shows them--` in its EXPORT: the run leaves it a slot.
+- [ ] That picture in the Gallery: its sheet shows the slot with a 🎲; the takes describe the picture; **Insert** writes one into the sheet.
+- [ ] The gear → Picture slots: **After every run**, then run the creator: the sheet shows the slot written.
 - [ ] Back to the text encoder in the gear: everything goes through the queue again.
 
 ## Planned
 
-- 🎲 **The language model at the line** (#170): the takes at the line are built (above, #173). Still to come:
-  - Slots see pictures (built, #174, above).
-  - A slot with `image output` is written after the picture exists, on demand from the Gallery's export sheet, for the characters worth it.
 - 🏠 **Local language models, one task per run** (#171). A text encoder can answer only once per
   run, so orrery queues mini-runs, one task each: Write now with a text encoder, a run's libraries
   and slots each in a request of its own, and the line sheet's takes. Small models do better with

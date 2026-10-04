@@ -918,3 +918,12 @@ test("a 🎲 stands at the end of a line the language model writes for; Insert a
   assert.equal(keepDirection("A fox.\n> make it moody", { kind: "enhance", what: "make it moody", line: 1 }, "darker"), "A fox.\n> make it moody, darker");
   assert.equal(insertTake("> make it moody", { kind: "enhance", what: "make it moody", line: 0 }, "x"), "> make it moody");
 });
+
+test("a gallery picture's export keeps its slots from image output apart, for a 🎲 that writes them from the picture (#175)", async () => {
+  const { pictureSlots } = await import("../../comfyui/web/app/model.js");
+  assert.deepEqual(pictureSlots("a heron, --her coat as image output shows it--, waiting"),
+    [{ text: "a heron, " }, { slot: "her coat as image output shows it" }, { text: ", waiting" }]);
+  assert.deepEqual(pictureSlots("--a caption of image output--"), [{ slot: "a caption of image output" }]);
+  assert.deepEqual(pictureSlots("a coat, --as image 2 shows it--"), [{ text: "a coat, --as image 2 shows it--" }]);  // written in the run
+  assert.deepEqual(pictureSlots(""), []);
+});

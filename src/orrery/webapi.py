@@ -1210,6 +1210,45 @@ def llm_takes(home: Home, args: dict) -> dict:
     return {"takes": out, "notes": [i["message"] for i in said]}
 
 
+def galaxy_takes(home: Home, args: dict) -> dict:
+    """Takes for a gallery picture's export slot from `image output` (#175): the picture is Picture 1, the prompt that
+    made it the context; over the API endpoint."""
+    from orrery import takes
+    from orrery.slots import export_slots
+
+    rid, what = str(args.get("id") or ""), " ".join(str(args.get("what") or "").split())
+    try:
+        row = gx._find(home, rid)
+        picture = gx.picture_of(row)
+    except KeyError as err:
+        raise ApiError(404, err.args[0]) from None
+    if what not in export_slots(row.get("exports") or {}):
+        raise ApiError(400, f"gallery output {rid} has no slot --{what}-- left to write.")
+    api = endpoint.backend(home, float(llm_config(home)["writer_temperature"]))
+    if api is None:
+        raise ApiError(400, "Writing from a picture asks an API endpoint for now (the gear: Language model).")
+    n = min(max(_int(args, "n", 3), 1), 6)
+    prompt = takes.for_picture(row, what, n, str(args.get("steer") or ""), [str(h) for h in args.get("have") or [] if str(h).strip()][:24])
+    try:
+        out = takes.parse(api.complete(prompt, images=[picture]), n)
+    except RuntimeError as err:
+        raise ApiError(502, str(err)) from None
+    if not out:
+        raise ApiError(502, "The language model wrote no takes; ask again.")
+    return {"takes": out}
+
+
+def galaxy_write(home: Home, args: dict) -> dict:
+    """A take written into a gallery picture's export slot (#175)."""
+    try:
+        row = gx.write_export(home, str(args.get("id") or ""), " ".join(str(args.get("what") or "").split()), str(args.get("text") or ""))
+    except KeyError as err:
+        raise ApiError(404, err.args[0]) from None
+    except ValueError as err:
+        raise ApiError(400, str(err)) from None
+    return {"row": _row_json(row, _preset_by_hash(home), set(ps.list_presets(home)))}
+
+
 def write_libraries(home: Home, args: dict) -> dict:
     """Write now (#168): every library the template still needs, one request each, all at once."""
     from orrery.loras import long_form
@@ -1286,13 +1325,15 @@ ROUTES = [
     ("POST", "/orrery/llm/libraries", write_libraries),
     ("POST", "/orrery/write", write_idea),
     ("POST", "/orrery/llm/takes", llm_takes),
+    ("POST", "/orrery/galaxy/takes", galaxy_takes),
+    ("POST", "/orrery/galaxy/write", galaxy_write),
     ("POST", "/orrery/library/accept", library_accept),
     ("POST", "/orrery/library/discard", library_discard),
 ]
 
 
 # routes that wait for a language model run in a thread, so ComfyUI's server answers meanwhile
-SLOW = {llm_save, llm_check, write_libraries, write_idea, llm_takes, chain_pick, chain_delete, chain_clear, chain_walk, chain_end}
+SLOW = {llm_save, llm_check, write_libraries, write_idea, llm_takes, galaxy_takes, chain_pick, chain_delete, chain_clear, chain_walk, chain_end}
 
 
 def _handler(fn, method: str, web):
