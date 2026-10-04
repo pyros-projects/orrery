@@ -206,7 +206,7 @@ export function renderPrompt(app) {
       ${app.state.newMenu ? `<div class="pop newpop" role="menu">${Object.entries(STARTERS).map(([k, s]) => `<button role="menuitem" data-new="${k}"><b>${esc(s.label)}</b><span class="muted">${esc(s.hint)}</span></button>`).join("")}</div>` : ""}
       ${app.state.writeMenu ? writeMenuHTML(app) : ""}
     </div>
-    ${card?.note ? `<p class="pnote fold${app.bridge.props.orrery_note_open ? " open" : ""}" data-act="note" title="${app.bridge.props.orrery_note_open ? "Click to fold the description" : "Click for the whole description"}">`
+    ${card?.note ? `<p class="pnote pfold${app.bridge.props.orrery_note_open ? " open" : ""}" data-act="note" title="${app.bridge.props.orrery_note_open ? "Click to fold the description" : "Click for the whole description"}">`
       + `<b>${esc(card.title)}.</b> ${esc(card.note)}</p>` : '<p class="pnote">Type a template, or open a preset. <b>__</b> lists your libraries, <b>$</b> your bindings.</p>'}
     <div class="edrow" style="--side-w:${sideWidth(app)}px">${cellsView(app)
       ? `<div class="editor cells${app.data.dividers === false ? " nodiv" : ""}"></div>`
