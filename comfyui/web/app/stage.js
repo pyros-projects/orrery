@@ -48,13 +48,14 @@ export function paintStage(app, force = false) {
   host.dataset.sig = sig;
   host.querySelector(".st-body").innerHTML = app.chunks() ? reelHTML(app) : singleHTML(app);
   host.querySelector(".st-video")?.play?.().catch(() => {});
+  paintStageLive(app);  // a run sampling keeps its live preview through the redraw
 }
 
 function singleHTML(app) {
   const shown = shownResult(app), chosen = chosenResult(app), list = resultsOf(app), n = list.indexOf(shown) + 1;
   if (!shown) {
-    return `<div class="st-empty muted">What a run makes comes in here: the live preview while it samples, then the picture or the clip, its takes under it.`
-      + `${app.bridge.modelWired?.() === false ? " For the live preview, run the model through this node: the loader into its <b>model</b> input, its <b>model</b> output on to the sampler." : ""}</div>`
+    return `<div class="st-media"><div class="st-empty muted">What a run makes comes in here: the live preview while it samples, then the picture or the clip, its takes under it.`
+      + `${app.bridge.modelWired?.() === false ? " For the live preview, run the model through this node: the loader into its <b>model</b> input, its <b>model</b> output on to the sampler." : ""}</div></div>`
       + resultsHTML(app, takeVars(app, resultTake(app)));
   }
   const m = mainMedia(shown), counts = shown === chosen;
@@ -67,7 +68,7 @@ function singleHTML(app) {
 
 function reelHTML(app) {
   const r = reelShown(app);
-  if (!r) return '<div class="st-empty muted">The clips come in under their scenes; a click on one, or on one of its takes, shows it here.</div>';
+  if (!r) return '<div class="st-media"><div class="st-empty muted">The clips come in under their scenes; a click on one, or on one of its takes, shows it here.</div></div>';
   const path = app.bridge.chain(), i = r.take ? r.takes.indexOf(r.take) + 1 : 0;
   const src = r.take && r.takes.length > 1 ? app.api.takeVideoURL(path, r.take.folder) : app.api.chainVideoURL(r.seg, path, r.clip?.version);
   const picker = app.state.picker;
@@ -191,13 +192,15 @@ export function wireStage(app, { edited }) {
   });
 }
 
-// The live preview of the run sampling now, over what the preview shows (timeline.js paintLive keeps it fresh).
+// The live preview of the run sampling now, in the picture's place between the head and the takes, which stay in
+// view (timeline.js paintLive keeps it fresh).
 export function paintStageLive(app) {
-  const host = box(app);
-  if (!host) return;
-  const live = app.live, view = host.querySelector(".st-live");
-  host.classList.toggle("live", !!live);
-  if (!live) { view.innerHTML = ""; return; }
+  const host = box(app), media = host?.querySelector(".st-media");
+  if (!media) return;
+  const live = app.live;
+  let view = media.querySelector(".st-live");
+  if (!live) { view?.remove(); return; }
+  if (!view) view = media.appendChild(Object.assign(document.createElement("div"), { className: "st-live" }));
   let pic = view.querySelector(".st-live-pic");
   if (live.url && (!pic || (pic.tagName === "VIDEO") !== live.video)) {
     pic?.remove();
@@ -216,4 +219,4 @@ export function paintStageLive(app) {
 
 export const stageSectionHTML = (app) => `<div class="stage-grip" role="separator" aria-orientation="horizontal" title="Drag to size the preview"></div>`
   + `<section class="stage" tabindex="-1" aria-label="Preview" style="--stage-h:${Number(app.bridge.props.orrery_stage_h) || STAGE_H}px">`
-  + `<div class="st-live"></div><div class="st-body"></div></section>`;
+  + `<div class="st-body"></div></section>`;
