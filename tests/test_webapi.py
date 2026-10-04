@@ -130,7 +130,8 @@ def test_register_attaches_every_route_through_one_adapter(home, tmp_path):
     kind, status, body = hit("GET", "/orrery/presets", query=q)
     assert (kind, status) == ("json", 200) and body["favorites"] == [] and body["quickstart"] is True
     assert hit("POST", "/orrery/ui", query=q, body={"quickstart": False}) == \
-        ("json", 200, {"quickstart": False, "dividers": True, "timeline": True, "log_prompts": True, "surf_numbered": True, "preview_light": True, "clip_min": 360, "take_min": 54, "preview_fps": 12, "preview_edge": 1024})
+        ("json", 200, {"quickstart": False, "dividers": True, "timeline": True, "log_prompts": True, "surf_numbered": True, "preview_light": True, "clip_min": 360, "take_min": 54, "preview_fps": 12, "preview_edge": 1024,
+                     "annotations_show": "appended"})
     assert hit("GET", "/orrery/presets", query=q)[2]["quickstart"] is False
     assert hit("GET", "/orrery/preset", query={**q, "name": "nope"})[1] == 404
     assert hit("POST", "/orrery/recent", query=q, broken=True)[1] == 400
@@ -761,9 +762,13 @@ def test_an_anchor_is_served_by_image_number(home):
 def test_the_editor_switches_travel_with_the_presets_and_are_saved(home):
     assert ok(home, webapi.presets)["dividers"] is True and ok(home, webapi.presets)["timeline"] is True
     assert ok(home, webapi.ui_save, timeline=False) == {"quickstart": True, "dividers": True, "timeline": False, "log_prompts": True,
-                                                         "surf_numbered": True, "preview_light": True, "clip_min": 360, "take_min": 54, "preview_fps": 12, "preview_edge": 1024}
+                                                         "surf_numbered": True, "preview_light": True, "clip_min": 360, "take_min": 54, "preview_fps": 12, "preview_edge": 1024,
+                                                         "annotations_show": "appended"}
     assert ok(home, webapi.ui_save, clip_min=480)["clip_min"] == 480 and ok(home, webapi.presets)["clip_min"] == 480
     assert ok(home, webapi.presets)["timeline"] is False
+    assert ok(home, webapi.ui_save, annotations_show="hover")["annotations_show"] == "hover"  # #203
+    assert ok(home, webapi.presets)["annotations_show"] == "hover"
+    assert api(home, webapi.ui_save, annotations_show="sideways")[0] == 400
 
 
 def test_the_history_lists_runs_newest_first_and_searches(home):
@@ -866,3 +871,27 @@ def test_a_clips_takes_are_listed_served_picked_and_deleted(home, tmp_path, monk
     assert ok(home, webapi.chain_video, chain="reels/a", film=1).name == "film.mp4"  # #243: the film to watch
     assert api(home, webapi.chain_video, chain="reels/none", film=1)[0] == 404
     assert api(home, webapi.chain_walk, chain="reels/a", folder="seg_0009_nothere1")[0] == 400
+
+
+def test_every_library_in_a_line_says_what_it_rolled_where_it_is_written(home):
+    """#202: each library of a line its own roll, by its place among the line's libraries; one in a branch that
+    did not roll says nothing, one used twice says it twice. A text template and a screenplay alike."""
+    from orrery.dsl import expand
+    from orrery.home import Home
+
+    libs = Home(home).libraries()
+    text = "# a comment\n$a = __animal__\nA __animal__ in __style__,\n{__style__ ink|plain} beside __animal__."
+    for seed in range(12):
+        out = ok(home, webapi.annotate, template=text, seed=seed, target="text")
+        x = expand(text, seed, libs)
+        first, second = out["rolls"]["2"], out["rolls"]["3"]
+        assert [k for k, _ in first] == [0, 1] and first[0][1] in ("fox", "heron", "owl") and first[1][1] in ("linocut", "gouache")
+        assert first[0][1] in x.text and first[1][1] in x.text
+        branch = "ink" in x.text  # the brace rolled its library, or the plain branch
+        assert [k for k, _ in second] == ([0, 1] if branch else [1])  # k counts the line's __…__: the second is __animal__
+        assert second[-1][1] in ("fox", "heron", "owl") and second[-1][1] in x.text.split("beside")[-1]
+    assert "1" not in out["rolls"]  # the binding's line says it as a binding
+    screenplay = "@h3 t2va\n$x = __style__\nSHOT 5s: static\nA __animal__ and an __animal__ in __style__.\nSFX: __animal__ calls"
+    out = ok(home, webapi.annotate, template=screenplay, seed=4, target="h3-base")
+    assert [k for k, _ in out["rolls"]["3"]] == [0, 1, 2] and [k for k, _ in out["rolls"]["4"]] == [0]
+    assert "1" not in out["rolls"] and out["bindings"]["x"] in ("linocut", "gouache")

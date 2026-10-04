@@ -9,6 +9,9 @@ checks) are left out.
 
 ### Added
 
+- Every library in a line says what it rolled at the line's end, in order (`→ arcade · bob cut · tracksuit`), one in
+  a branch that did not roll nothing; and the settings' *Annotations* puts them all at the line ends, on hover (what
+  has one underlined quietly, its roll shown on hover) or nowhere (#201).
 - The take tree: every take of a reel keeps its path, and picking it brings back the clips last made after it. **Tree**
   shows them all like a git graph with videos, the film's path lit; a click makes the film the way through a take, ✂
   ends it after one, ▶ Film plays the film as clicked together, a timeline of its clips under it, and a filter hides

@@ -151,7 +151,13 @@ export const SECTION_HTML = {
     <label class="check"><input type="checkbox" data-flag="dividers" ${app.data.dividers !== false ? "checked" : ""}>
       <span><b>Scene dividers</b>: a reel's SCENE lines name the next clip they play (hover: all of them, when, how much film is left; 📊: the scene in numbers); the scene of the next clip is marked</span></label>
     <label class="check"><input type="checkbox" data-flag="timeline" ${app.data.timeline !== false ? "checked" : ""}>
-      <span><b>Timeline</b>: a reel's clips as the reel keeps them (Orrery Film or Chain Video), under each scene, and the frames its <code>REMEMBER:</code> lines take</span></label>`,
+      <span><b>Timeline</b>: a reel's clips as the reel keeps them (Orrery Film or Chain Video), under each scene, and the frames its <code>REMEMBER:</code> lines take</span></label>
+    <h5 class="label">Annotations</h5>
+    <p class="muted flush">What a line gives at the node's seed: a binding's roll, every library's, an <code>EXPORT</code>, a grid's runs, where a CAST member's pictures and a <code>REMEMBER:</code> line's frames go.</p>
+    <div class="llm-pick" role="radiogroup" aria-label="Where the annotations show">${[["appended", "<b>Appended</b>: at the line's end (a line of libraries lists their rolls in order: → arcade · bob cut · tracksuit)"],
+      ["hover", "<b>Hover</b>: on what they belong to, quietly underlined; hovering it shows the roll"],
+      ["none", "<b>None</b>: no annotations; hovering a keyword or a library still explains it"]].map(([v, label]) =>
+      `<label class="check"><input type="radio" name="oa-ann" value="${v}" ${(app.data.annotations_show || "appended") === v ? "checked" : ""}><span>${label}</span></label>`).join("")}</div>`,
 
   clips: (app) => `<div class="field"><label class="label" for="oa-clipmin">Clip size</label>
       <div class="row"><input class="input narrow" id="oa-clipmin" type="number" min="96" max="1600" step="8" value="${app.data.clip_min ?? 360}"><span class="muted">px: a clip's shorter side under its scene, as far as the editor is wide</span></div></div>
@@ -255,7 +261,10 @@ const WIRE = {
     };
   },
 
-  editor: (app, st, view) => wireFlags(app, view),
+  editor: (app, st, view) => {
+    wireFlags(app, view);
+    view.querySelectorAll('[name="oa-ann"]').forEach((r) => { r.onchange = () => saveUi(app, { annotations_show: r.value }); });
+  },
   log: (app, st, view) => wireFlags(app, view),
 
   clips: (app, st, view) => {

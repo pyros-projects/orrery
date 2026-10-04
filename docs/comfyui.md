@@ -79,9 +79,15 @@ Nodes under **orrery**:
     keyword and every form of it (`REME` → `REMEMBER: frames 0, 50 as @NAME` …),
     `EXPORT:` and `IF` in text templates too; Ctrl+Space opens the completion where
     the caret is. Each line shows at its end what it gives at the node's seed: a
-    binding what it rolled, an EXPORT what it keeps, a grid its cells, a CAST
+    binding what it rolled, every library in a line its own roll, in order
+    (`→ arcade · bob cut · tracksuit`; one in a `{…|…}` branch that did not
+    roll says nothing, #202), an EXPORT what it keeps, a grid its cells, a CAST
     member where its pictures go (gallery pictures as thumbnails), a REMEMBER:
-    line where its frames go. Hovering a keyword shows what it does and its
+    line where its frames go. *Annotations* in the settings' *Editor* says where
+    they go (#203): **Appended** (at the line's end, the default), **Hover**
+    (nothing at the line ends: what has one is underlined quietly, a dotted line
+    as for a footnote, and hovering it shows the roll first) or **None**. A
+    screenplay's lines say what they roll for the scene of the next clip. Hovering a keyword shows what it does and its
     forms; a CAST member who it is in this clip (description, pictures and their
     strengths, RefMods, voice); a library its size and entries; a binding what it
     rolled. **New** starts a fresh
