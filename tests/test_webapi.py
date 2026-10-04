@@ -1,5 +1,6 @@
 import asyncio
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -11,7 +12,7 @@ from orrery.home import Home
 from orrery.presets import load_preset, preset_meta, remember_template, save_preset, template_hash
 from orrery.webapi import ROUTES, ApiError, call, register
 
-CARD = {"name", "folder", "title", "note", "tags", "builtin", "hash", "outputs", "thumb"}
+CARD = {"name", "folder", "title", "note", "tags", "builtin", "hash", "outputs", "thumb", "kind", "sub", "modified"}
 
 
 def api(home, fn, **args):
@@ -59,7 +60,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/library/own"), ("POST", "/orrery/library/delete"), ("POST", "/orrery/library/rename"), ("POST", "/orrery/galaxy/capture"),
         ("GET", "/orrery/galaxy"), ("POST", "/orrery/galaxy/rate"),
         ("GET", "/orrery/galaxy/thumb"), ("GET", "/orrery/galaxy/media"), ("POST", "/orrery/roll"),
-        ("GET", "/orrery/galaxy/view"), ("POST", "/orrery/reset"), ("POST", "/orrery/galaxy/delete"), ("POST", "/orrery/galaxy/export"),
+        ("GET", "/orrery/galaxy/view"), ("GET", "/orrery/presets/grep"), ("POST", "/orrery/reset"), ("POST", "/orrery/galaxy/delete"), ("POST", "/orrery/galaxy/export"),
         ("POST", "/orrery/galaxy/collect"), ("POST", "/orrery/galaxy/uncollect"), ("POST", "/orrery/galaxy/collection/add"),
         ("POST", "/orrery/galaxy/collection/rename"), ("POST", "/orrery/galaxy/collection/delete"),
         ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
@@ -1072,3 +1073,18 @@ def test_a_library_still_to_be_written_says_no_roll_and_escapes_show_as_written(
     rolls = out["rolls"]["0"]
     assert [k for k, _ in rolls] == [0, 2] and rolls[1][1] == "a {curly} thing"  # __sky_kind__ (k 1) says nothing
     assert not any("" in v or "" in v for _, v in rolls)
+
+
+def test_a_preset_card_says_what_it_makes_and_when_it_changed_and_the_text_can_be_searched(home):
+    """#307, #308: image or video, still, scene or reel, the file's date; a regex over the template text."""
+    save_preset(Home(home), "mine/still", "a __animal__ at dusk")
+    save_preset(Home(home), "mine/scene", "@h3 t2va\nSHOT 5s: static\nA den.")
+    save_preset(Home(home), "mine/reel", "@h3 t2va\nSCENE one\nSHOT 5s: static\nA den.\nSCENE two\nSHOT 5s: static\nRain.")
+    cards = {c["name"]: c for c in ok(home, webapi.presets)["presets"]}
+    assert [(cards[n]["kind"], cards[n]["sub"]) for n in ("mine/still", "mine/scene", "mine/reel")] == [
+        ("image", "still"), ("video", "scene"), ("video", "reel")]
+    assert re.fullmatch(r"\d{4}-\d{2}-\d{2}", cards["mine/still"]["modified"])
+    mine = lambda names: [n for n in names if n.startswith("mine/")]
+    assert mine(ok(home, webapi.presets_grep, pattern="a den\\.")["names"]) == ["mine/reel", "mine/scene"]
+    assert mine(ok(home, webapi.presets_grep, pattern="DUSK")["names"]) == ["mine/still"]
+    assert mine(ok(home, webapi.presets_grep, pattern="den.(")["names"]) == []  # no regex: plain text

@@ -1082,3 +1082,42 @@ test("frames picked in the preview become a REMEMBER: line at the end of their s
     "@h3 text\nSCENE one\nSHOT 5s: static\nA room.\nREMEMBER: frame 7 as image 3\n\nSCENE two\nSHOT 5s: static\nA hall.");  // the blank line stays
   assert.equal(withRemember(text, 1, "REMEMBER: frame 1 as @GIRL").split("\n").at(-1), "REMEMBER: frame 1 as @GIRL");
 });
+
+test("the Presets tree: every preset, images, videos, favorites, recent, and collections with their images and videos (#307)", async () => {
+  const { presetsAt, presetFolders } = await import("../../comfyui/web/app/model.js");
+  const cards = [
+    { name: "krea/fox", folder: "krea", kind: "image", sub: "still" }, { name: "h3/den", folder: "h3", kind: "video", sub: "scene" },
+    { name: "loops/walk", folder: "loops", kind: "video", sub: "reel" }, { name: "loops/deep/stair", folder: "loops/deep", kind: "video", sub: "reel" },
+    { name: "mine", folder: "", kind: "image", sub: "still" }];
+  const names = (place, more) => presetsAt(cards, { view: "all", folder: null, kind: null, ...place }, more).map((c) => c.name);
+  assert.deepEqual(names({ view: "image" }), ["krea/fox", "mine"]);
+  assert.deepEqual(names({ view: "video" }), ["h3/den", "loops/walk", "loops/deep/stair"]);
+  assert.deepEqual(names({ view: "fav" }, { favorites: new Set(["h3/den"]) }), ["h3/den"]);
+  assert.deepEqual(names({ view: "recent" }, { recent: ["mine", "krea/fox"] }), ["mine", "krea/fox"]);
+  assert.deepEqual(names({ folder: "loops" }), ["loops/walk", "loops/deep/stair"]);  // a collection holds the ones in it
+  assert.deepEqual(names({ folder: "mine", kind: "image" }), ["mine"]);
+  assert.deepEqual(presetFolders(cards), [{ path: "h3", count: 1, image: 0, video: 1 }, { path: "krea", count: 1, image: 1, video: 0 },
+    { path: "loops", count: 2, image: 0, video: 2 }, { path: "loops/deep", count: 1, image: 0, video: 1 }, { path: "mine", count: 1, image: 1, video: 0 }]);
+});
+
+test("Presets and the Gallery filter by name, kind, date and a regex over the prompt (#308)", async () => {
+  const { filterCards, filterRows } = await import("../../comfyui/web/app/model.js");
+  const today = new Date(2026, 9, 4, 12);
+  const cards = [{ name: "krea/fox", title: "Fox", tags: [], note: "", sub: "still", modified: "2026-10-04" },
+    { name: "h3/den", title: "The den", tags: ["moody"], note: "", sub: "scene", modified: "2026-09-20" }];
+  const names = (f) => filterCards(cards, { today, ...f }).map((c) => c.name);
+  assert.deepEqual(names({ name: "MOODY" }), ["h3/den"]);
+  assert.deepEqual(names({ sub: "still" }), ["krea/fox"]);
+  assert.deepEqual(names({ since: 1 }), ["krea/fox"]);
+  assert.deepEqual(names({ since: 30 }), ["krea/fox", "h3/den"]);
+  assert.deepEqual(names({ grep: new Set(["h3/den"]) }), ["h3/den"]);  // the names the server's regex matched
+  const rows = [{ id: "a", preset: "krea/fox", kind: "image", album: "", ts: "2026-10-04T08:00:00Z", text: "a fox in snow", picks: [] },
+    { id: "b", preset: "h3/den", kind: "video", album: "reel:reels/den", ts: "2026-09-01T08:00:00Z", text: "A den. Rain.", picks: [] }];
+  const ids = (f) => filterRows(rows, { today, title: (n) => ({ "krea/fox": "Fox" })[n], ...f }).map((r) => r.id);
+  assert.deepEqual(ids({ name: "fox" }), ["a"]);
+  assert.deepEqual(ids({ sub: "reel" }), ["b"]);
+  assert.deepEqual(ids({ sub: "image" }), ["a"]);
+  assert.deepEqual(ids({ since: 7 }), ["a"]);
+  assert.deepEqual(ids({ grep: "den\\.\\s+rain" }), ["b"]);
+  assert.deepEqual(ids({ grep: "fox (" }), []);  // no regex: plain text, which no prompt holds
+});

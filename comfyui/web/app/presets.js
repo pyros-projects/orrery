@@ -1,37 +1,98 @@
-// Presets tab: gallery with galaxy thumbnails, filters, and a detail pane.
+// Presets tab: a tree on the left like the Gallery's (#307): every preset, the image presets, the video presets, the
+// favorites and the recent ones, then the collections (the folders, "mine" the presets at the top), each with its
+// images and its videos. Above the cards the filters (#308): a name, a kind (still, scene, reel), how recent, and a
+// regex over the template text. A card opens its detail.
 import { esc, highlight } from "./highlight.js";
 import { icon } from "./icons.js";
-import { filterPresets, folderColor, glyph, markPicks } from "./model.js";
-import { copyText, thumbHTML } from "./parts.js";
+import { filterCards, folderColor, folderTree, glyph, markPicks, presetFolders, presetsAt } from "./model.js";
+import { copyText, resizable, thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
 
+const SUBS = [["", "Every kind"], ["still", "Stills"], ["scene", "Scenes"], ["reel", "Reels"]];
+const SINCE = [[0, "Any time"], [1, "Today"], [7, "Last 7 days"], [30, "Last 30 days"]];
+
+function presetState(s) {
+  s.pPlace ??= { view: "all", folder: null, kind: null };
+  s.pFilt ??= { name: s.pSearch || "", sub: "", since: 0, grep: "" };
+  s.pFold ??= new Set();
+  return s;
+}
+
 export function renderPresets(app) {
-  const s = app.state;
-  const folders = [...new Set(app.data.presets.map((p) => p.folder || "mine"))];
-  const list = filterPresets(app.data.presets, { filter: s.pFilter, search: s.pSearch, favorites: app.data.favorites, recent: app.data.recent });
-  const chip = (k, label, pre = "") => `<button class="chip" aria-pressed="${s.pFilter === k}" data-pf="${k}">${pre}${esc(label)}</button>`;
-  app.view.innerHTML = `
-    <div class="bar"><label class="search">${icon("search")}<input class="input" id="oa-ps" placeholder="Search titles, notes, tags and template text…" value="${esc(s.pSearch)}"></label><button class="icon-btn" data-pact="reload" title="Reload the presets">${icon("reload")}</button></div>
-    <div class="bar flat">${chip("all", "All")}${chip("fav", "Favorites", icon("star"))}${chip("recent", "Recent", icon("clock"))}<span class="sep"></span>`
-    + `${folders.map((f) => chip(`f:${f}`, f, `<span class="sw" style="background:${folderColor(f === "mine" ? "" : f)}"></span>`)).join("")}</div>
+  const s = presetState(app.state), f = s.pFilt, d = app.data;
+  const grep = f.grep.trim() && s.pGrep?.pattern === f.grep.trim() ? s.pGrep.names : null;
+  const list = filterCards(presetsAt(d.presets, s.pPlace, { favorites: d.favorites, recent: d.recent }), { ...f, grep });
+  const width = Number(app.bridge.props.presWidth) || 0;
+  const select = (id, options, value, label) => `<select class="input" id="${id}" aria-label="${label}">${options.map(([v, l]) =>
+    `<option value="${v}" ${String(v) === String(value) ? "selected" : ""}>${l}</option>`).join("")}</select>`;
+  app.view.innerHTML = `<div class="gal pres"${width ? ` style="--galw:${width}px"` : ""}>${treeHTML(app)}<div class="gmain">
+    <div class="bar pfilters"><label class="search">${icon("search")}<input class="input" id="oa-ps" placeholder="Name, title, tag or note" value="${esc(f.name)}"></label>`
+    + `${select("oa-psub", SUBS, f.sub, "Kind")}${select("oa-psince", SINCE, f.since, "Changed")}`
+    + `<label class="search">${icon("search")}<input class="input mono" id="oa-pgrep" placeholder="Prompt text · a regex" value="${esc(f.grep)}" spellcheck="false"></label>`
+    + `<button class="icon-btn" data-pact="reload" title="Reload the presets">${icon("reload")}</button></div>
     <div class="split ${s.pOpen ? "has-detail" : ""}">
-      <div class="scroll"><div class="grid">${list.map((c) => cardHTML(app, c)).join("") || '<div class="empty">Nothing matches. Clear the search or pick another folder.</div>'}</div></div>
+      <div class="scroll"><div class="grid">${list.map((c) => cardHTML(app, c)).join("") || '<div class="empty">Nothing matches. Clear a filter or pick another place on the left.</div>'}</div></div>
       ${s.pOpen ? detailHTML(app) : ""}
-    </div>`;
-  const ps = app.$("#oa-ps");
-  ps.addEventListener("input", () => {
-    const pos = ps.selectionEnd;
-    s.pSearch = ps.value;
-    renderPresets(app);
-    const n = app.$("#oa-ps");
-    n.focus();
-    n.setSelectionRange(pos, pos);
-  });
+    </div></div></div>`;
+  const keep = (id, set) => {  // a field keeps its focus and caret through the redraw it causes
+    const el = app.$(id);
+    el.addEventListener("input", () => {
+      const pos = el.selectionEnd;
+      set(el.value);
+      renderPresets(app);
+      const again = app.$(id);
+      again.focus();
+      again.setSelectionRange(pos, pos);
+    });
+  };
+  keep("#oa-ps", (v) => { f.name = v; s.pSearch = v; });
+  keep("#oa-pgrep", (v) => { f.grep = v; grepSoon(app); });
+  app.$("#oa-psub").onchange = (e) => { f.sub = e.target.value; renderPresets(app); };
+  app.$("#oa-psince").onchange = (e) => { f.since = Number(e.target.value); renderPresets(app); };
+  const gal = app.view.querySelector(".gal");
+  resizable(app, { box: gal, grip: gal.querySelector(".ggrip"), list: gal.querySelector(".gtree"), cssVar: "--galw", prop: "presWidth" });
   app.view.onclick = (e) => onClick(app, e);
   app.view.onkeydown = (e) => {
-    const card = e.target.closest("[data-open]");
-    if (card && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); card.click(); }
+    const card = e.target.closest("[data-open], .gf");
+    if (card && (e.key === "Enter" || e.key === " ") && e.target === card) { e.preventDefault(); card.click(); }
   };
+}
+
+// The prompt regex asks the server, which reads every template, a moment after typing stops.
+let grepTimer = null;
+function grepSoon(app) {
+  clearTimeout(grepTimer);
+  const pattern = app.state.pFilt.grep.trim();
+  if (!pattern) return;
+  grepTimer = setTimeout(async () => {
+    try {
+      const got = await app.api.presetsGrep(pattern);
+      if (app.state.pFilt.grep.trim() !== pattern) return;
+      app.state.pGrep = { pattern, names: new Set(got.names) };
+    } catch (e) { return app.fail(e); }
+    if (app.state.tab === "presets") renderPresets(app);
+  }, 300);
+}
+
+function treeHTML(app) {
+  const s = app.state, d = app.data, p = s.pPlace, cards = d.presets;
+  const at = (view, folder, kind) => (p.view === view && p.folder === folder && p.kind === kind ? " on" : "");
+  const count = (view) => presetsAt(cards, { view, folder: null, kind: null }, { favorites: d.favorites, recent: d.recent }).length;
+  const top = (view, label, ico) => `<li><div class="gf top${at(view, null, null)}" tabindex="0" data-pv="${view}">${icon(ico)}<span class="ln">${label}</span><span class="lc">${count(view)}</span></div></li>`;
+  const folders = new Map(presetFolders(cards).map((f) => [f.path, f]));
+  const node = (n, depth) => {
+    const f = folders.get(n.path), shut = !s.pFold.has(n.path), pad = 4 + depth * 14;
+    const kind = (k, label, ico) => (f[k] ? `<li><div class="gf sub${at("all", n.path, k)}" tabindex="0" data-pc="${esc(n.path)}" data-pk="${k}" style="padding-left:${pad + 20}px">`
+      + `${icon(ico)}<span class="ln">${label}</span><span class="lc">${f[k]}</span></div></li>` : "");
+    return `<li><div class="gf sub${at("all", n.path, null)}" tabindex="0" data-pc="${esc(n.path)}" style="padding-left:${pad}px" title="${esc(n.path)}">`
+      + `<button class="mini tw" data-pfold="${esc(n.path)}" tabindex="-1" aria-label="${shut ? "Open" : "Close"} ${esc(n.name)}">${icon("chev", shut ? "rot" : "")}</button>`
+      + `<span class="sw" style="background:${folderColor(n.path === "mine" ? "" : n.path.split("/")[0])}"></span><span class="ln">${esc(n.name)}</span><span class="lc">${f.count}</span></div>`
+      + `${shut ? "" : `<ul>${kind("image", "image", "image")}${kind("video", "video", "film")}${n.children.map((c) => node(c, depth + 1)).join("")}</ul>`}</li>`;
+  };
+  return `<div class="gtree"><div class="libgrip ggrip" role="separator" aria-orientation="vertical" aria-label="Presets list width" tabindex="0" title="Drag to resize (or ← →)"></div>
+    <div class="scroll"><ul>${top("all", "All presets", "star")}${top("image", "All image presets", "image")}${top("video", "All video presets", "film")}`
+    + `${top("fav", "Favorites", "heart")}${top("recent", "Recent", "clock")}</ul>
+    <div class="glabel">Collections</div><ul class="gfolders">${folderTree([...folders.values()]).map((n) => node(n, 0)).join("")}</ul></div></div>`;
 }
 
 function cardHTML(app, c) {
@@ -98,8 +159,16 @@ async function onClick(app, e) {
     try { app.data.favorites = new Set((await app.api.favorite(name, on)).favorites); } catch (err) { return app.fail(err); }
     return renderPresets(app);
   }
-  const pf = e.target.closest("[data-pf]");
-  if (pf) { s.pFilter = pf.dataset.pf; return renderPresets(app); }
+  const fold = e.target.closest("[data-pfold]");
+  if (fold) {
+    const path = fold.dataset.pfold;
+    if (s.pFold.has(path)) s.pFold.delete(path); else s.pFold.add(path);
+    return renderPresets(app);
+  }
+  const pv = e.target.closest("[data-pv]");
+  if (pv) { s.pPlace = { view: pv.dataset.pv, folder: null, kind: null }; return renderPresets(app); }
+  const pc = e.target.closest("[data-pc]");
+  if (pc) { s.pPlace = { view: "all", folder: pc.dataset.pc, kind: pc.dataset.pk || null }; return renderPresets(app); }
   const card = e.target.closest("[data-open]");
   if (card) return open(app, card.dataset.open);
   const act = e.target.closest("[data-pact]")?.dataset.pact;

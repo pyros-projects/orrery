@@ -8,6 +8,7 @@ UI can show. The contract lives in docs/plan-node-app.md.
 import asyncio
 import hashlib
 import re
+import time
 import traceback
 from collections import Counter
 from pathlib import Path
@@ -149,10 +150,37 @@ def _card(home: Home, name: str, outputs: dict, with_text: bool = False) -> dict
         "hash": digest,
         "outputs": len(ids),
         "thumb": ids[0] if ids else None,
+        **_kind(text),
+        "modified": time.strftime("%Y-%m-%d", time.localtime(ps.preset_file(home, name).stat().st_mtime)),
     }
     if with_text:
         card["text"] = text
     return card
+
+
+def _kind(text: str) -> dict:
+    """What a preset makes (#307): a video (an @h3 screenplay: a scene, or a reel with SCENE lines) or an image (a still)."""
+    body = strip_comments(text).lstrip()
+    if not body.startswith("@h3"):
+        return {"kind": "image", "sub": "still"}
+    try:
+        reel = split_reel(body)
+    except ValueError:
+        reel = None
+    return {"kind": "video", "sub": "reel" if reel else "scene"}
+
+
+def presets_grep(home: Home, args: dict) -> dict:
+    """The presets whose template text matches `pattern` (#308): a regex, case-insensitive; one that is no regex is
+    plain text."""
+    pattern = str(args.get("pattern") or "")
+    if not pattern.strip():
+        return {"names": ps.list_presets(home)}
+    try:
+        rx = re.compile(pattern, re.IGNORECASE)
+    except re.error:
+        rx = re.compile(re.escape(pattern), re.IGNORECASE)
+    return {"names": [n for n in ps.list_presets(home) if rx.search(ps.load_preset(home, n))]}
 
 
 def _full(home: Home, name: str) -> dict:
@@ -1491,6 +1519,7 @@ ROUTES = [
     ("GET", "/orrery/writers", writer_texts),
     ("POST", "/orrery/writers", writer_save),
     ("GET", "/orrery/galaxy/view", galaxy_view),
+    ("GET", "/orrery/presets/grep", presets_grep),
     ("POST", "/orrery/reset", reset),
     ("POST", "/orrery/galaxy/delete", galaxy_delete),
     ("POST", "/orrery/galaxy/export", galaxy_export),

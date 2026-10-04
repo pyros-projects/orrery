@@ -72,6 +72,11 @@ def _source(home: Home, name: str) -> Path:
     raise KeyError(f"preset '{name}' does not exist (see: orrery preset list)")
 
 
+def preset_file(home: Home, name: str) -> Path:
+    """The file a preset is read from: the user's, else the built-in one (its date is the Presets tab's, #308)."""
+    return _source(home, name)
+
+
 def preset_exists(home: Home, name: str) -> bool:
     try:
         _source(home, name)

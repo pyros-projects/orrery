@@ -220,8 +220,13 @@ Nodes under **orrery**:
     forever loop). **Frequencies** rolls it 50, 200 or 500 times, across seeds
     or across a reel's clips, and shows how often every value comes up, plus
     how often each lint warning fires.
-  - **Presets**: every preset with your newest output as its preview; search,
-    folders, favorites, recents, a sample roll and the template per preset.
+  - **Presets**: every preset with your newest output as its preview. On the
+    left (#307) **All presets**, **All image presets**, **All video presets**,
+    the favorites and the recent ones, then the collections (the folders,
+    `mine` the presets at the top), each with its `image` and `video`. Above
+    the cards the filters (#308): a name (title, tag or note), a kind (still,
+    scene, reel), how recently it changed, and a regex over the template text.
+    A card opens a sample roll and the template.
   - **Libraries**: edit wildcard lists by hand: entries, their tags and
     properties (on a line under each entry), weights, and the weight each
     entry learned from your ratings. Libraries that share a name prefix sit in
@@ -251,7 +256,9 @@ Nodes under **orrery**:
     *Collections* heading: to the top), double-click to rename; **Out of the
     collection** takes a selection out again. Removing a collection deletes
     nothing: its outputs stay in the gallery, the collections in it move up a
-    level. Select with the checkbox,
+    level. The filters (#308) find outputs by their preset's name or title, a
+    kind (images, videos, a reel's clips, a sweep's runs), how recently they were
+    made and a regex over the prompt. Select with the checkbox,
     Shift-click for a range, Ctrl/Cmd-click for one more; then **Export
     pairs** copies each picture or video into `~/.orrery/export/<name>/`
     with a `.txt` of the prompt that made it (training pairs), and

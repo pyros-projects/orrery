@@ -17,7 +17,11 @@ const parentOf = (path) => (path.includes("/") ? path.slice(0, path.lastIndexOf(
 const inside = (path, folder) => path === folder || path.startsWith(`${folder}/`);
 
 const TZ = () => -new Date().getTimezoneOffset();  // the days are the viewer's
-const filtering = (s) => s.gScope !== "all" || !!s.gRating || !!s.gPick;  // a filter shows the outputs themselves
+const gfilt = (s) => (s.gFilt ??= { name: "", sub: "", since: 0, grep: "" });
+const filtering = (s) => s.gScope !== "all" || !!s.gRating || !!s.gPick  // a filter shows the outputs themselves
+  || !!(gfilt(s).name.trim() || gfilt(s).sub || gfilt(s).since || gfilt(s).grep.trim());
+const SUBS = [["", "Every kind"], ["image", "Images"], ["video", "Videos"], ["reel", "Reels' clips"], ["sweep", "Sweeps' runs"]];
+const SINCE = [[0, "Any time"], [1, "Today"], [7, "Last 7 days"], [30, "Last 30 days"]];
 const TYPE = { sweep: ["Sweep", "chart"], reel: ["Reel", "film"], scene: ["Scene", "play"] };
 
 // What the place in the tree (gPlace: a view of every day or of one, or a collection) or the album open in it shows.
@@ -55,7 +59,8 @@ export async function renderGalaxy(app) {
   if (old.length) s.gScroll = { here, tops: [...old].map((el) => el.scrollTop) };
   const byId = new Map(app.data.gRows.map((r) => [r.id, r]));
   const cards = filtering(s)
-    ? filterRows(app.data.gRows, { scope: s.gScope, hash: templateHash(app.text), preset: app.preset, rating: s.gRating, pick: s.gPick }).map((r) => ({ kind: "row", id: r.id }))
+    ? filterRows(app.data.gRows, { scope: s.gScope, hash: templateHash(app.text), preset: app.preset, rating: s.gRating, pick: s.gPick,
+      ...gfilt(s), title: (n) => app.card(n)?.title }).map((r) => ({ kind: "row", id: r.id }))
     : app.data.gCards.filter((c) => c.kind === "album" || byId.has(c.id));
   const rows = cards.filter((c) => c.kind === "row").map((c) => byId.get(c.id));  // the outputs shown, in order
   const open = s.gOpen && app.data.gRows.find((r) => r.id === s.gOpen);
@@ -71,6 +76,7 @@ export async function renderGalaxy(app) {
     + `${rch("love", `${icon("heart")}Loved`)}${rch("like", `${icon("up")}Liked`)}${rch("unrated", "Unrated")}`
     + `${s.gPick ? `<span class="chip mono" aria-pressed="true">${esc(s.gPick)}<button class="mini" data-gp="" aria-label="Clear pick filter">${icon("x")}</button></span>` : ""}
       <span class="grow"></span><button class="icon-btn" data-gact="reload" title="Reload the gallery">${icon("reload")}</button></div>
+    ${filtersHTML(s)}
     ${crumbsHTML(app)}${s.gSel.size ? selBarHTML(s.gSel.size, rows.length, s.gPlace.coll && !s.gAlbums.length ? s.gPlace.coll : null) : ""}
     <div class="split ${open ? "has-detail" : ""}">
       <div class="scroll"><p class="rule">Ratings teach the dice: every pick in a <b class="love">loved</b> output weighs ×1.5, <b class="like">liked</b> ×1.2, <b class="nope">nope</b> ×0.8, <b class="hate">hate</b> ×0.5. Click an image for its picks, an album to open it; drag either onto a collection to keep it there too. Shift-click selects a range, Ctrl-click one more.</p>
@@ -88,11 +94,39 @@ export async function renderGalaxy(app) {
     s.gRenText = null;
     renderGalaxy(app);
   };
+  wireFilters(app);
   hookMediaDrop();
   resizable(app, { box: gal, grip: gal.querySelector(".ggrip"), list: gal.querySelector(".gtree"), cssVar: "--galw", prop: "galWidth" });
   wireDrag(app, gal);
   wireInputs(app);
   hoverPlay(app.view);
+}
+
+// The filters (#308): a preset's name or title, a kind, how recent, a regex over the prompt.
+function filtersHTML(s) {
+  const f = gfilt(s), select = (id, options, value, label) => `<select class="input" id="${id}" aria-label="${label}">${options.map(([v, l]) =>
+    `<option value="${v}" ${String(v) === String(value) ? "selected" : ""}>${l}</option>`).join("")}</select>`;
+  return `<div class="bar flat gfilters"><label class="search">${icon("search")}<input class="input" id="oa-gname" placeholder="Preset name or title" value="${esc(f.name)}"></label>`
+    + `${select("oa-gsub", SUBS, f.sub, "Kind")}${select("oa-gsince", SINCE, f.since, "Made")}`
+    + `<label class="search">${icon("search")}<input class="input mono" id="oa-ggrep" placeholder="Prompt text · a regex" value="${esc(f.grep)}" spellcheck="false"></label></div>`;
+}
+
+// A filter changed: the outputs themselves come when the first is set and the albums when the last goes; else the
+// rows there are are filtered again. A text field keeps its focus and caret.
+function wireFilters(app) {
+  const s = app.state, f = gfilt(s);
+  const changed = async (set, id) => {
+    const was = filtering(s);
+    set();
+    if (filtering(s) !== was) await refresh(app);
+    const pos = id && app.$(id)?.selectionEnd;
+    renderGalaxy(app);
+    if (id) { const again = app.$(id); again?.focus(); again?.setSelectionRange(pos, pos); }
+  };
+  app.$("#oa-gname").oninput = (e) => changed(() => { f.name = e.target.value; }, "#oa-gname");
+  app.$("#oa-ggrep").oninput = (e) => changed(() => { f.grep = e.target.value; }, "#oa-ggrep");
+  app.$("#oa-gsub").onchange = (e) => changed(() => { f.sub = e.target.value; });
+  app.$("#oa-gsince").onchange = (e) => changed(() => { f.since = Number(e.target.value); });
 }
 
 // Where the view is: the place in the tree, and the albums opened in it.

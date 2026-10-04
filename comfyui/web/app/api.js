@@ -29,6 +29,7 @@ export function client(home) {
   return {
     completions: () => call("completions"),
     presets: () => call("presets"),
+    presetsGrep: (pattern) => call("presets/grep", { query: { pattern } }),
     preset: (name) => call("preset", { query: { name } }),
     savePreset: (body) => call("preset/save", { body }),
     deletePreset: (name) => call("preset/delete", { body: { name } }),

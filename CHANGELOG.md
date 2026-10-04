@@ -22,6 +22,9 @@ checks) are left out.
   it. A click only shows a take: the one that counts (the film's, a single run's output) is golden, and Put in the film
   or Use this take chooses another. A reel's clip picks frames for a REMEMBER: line of its scene. The preset's
   description folds to one line.
+- Presets in a tree like the Gallery's (#290): every preset, the image presets, the video presets, the favorites and the
+  recent ones, and the folders as collections, each with its images and videos; filters by name, kind (still, scene,
+  reel), date and a regex over the template text, and in the Gallery by preset, kind, date and a regex over the prompt.
 - An expression creator for Krea 2 (#291): `krea/15_expression_creator` rolls a character in a close-up, and the
   grid shows it in the eight expressions of a set (basic, subtle, intense, social, inner, playful); each expression
   says what the face does and the muscles that do it, in FACS action units. Render it with Krea 2 Raw and the turbo

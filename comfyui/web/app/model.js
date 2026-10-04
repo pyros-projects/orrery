@@ -171,6 +171,38 @@ export function filterPresets(cards, { filter = "all", search = "", favorites = 
   return q ? list.filter((c) => haystack(c).includes(q)) : list;
 }
 
+// The presets a place of the Presets tree holds (#307): every one, the images, the videos, the favorites, the recent
+// ones, or a collection (a folder and the ones in it; "mine" the presets at the top) with its images or its videos.
+export function presetsAt(cards, place, { favorites = new Set(), recent = [] } = {}) {
+  let list = place.view === "fav" ? cards.filter((c) => favorites.has(c.name))
+    : place.view === "recent" ? recent.map((n) => cards.find((c) => c.name === n)).filter(Boolean) : cards;
+  if (place.view === "image" || place.view === "video") list = list.filter((c) => c.kind === place.view);
+  if (place.folder) list = list.filter((c) => inFolder(c, place.folder));
+  return place.kind ? list.filter((c) => c.kind === place.kind) : list;
+}
+
+const inFolder = (c, folder) => { const f = c.folder || "mine"; return f === folder || f.startsWith(`${folder}/`); };
+
+// The Presets tree's collections: each folder with its presets, its images and its videos, counting the folders in it.
+export function presetFolders(cards) {
+  const paths = new Set(cards.flatMap((c) => { const parts = (c.folder || "mine").split("/"); return parts.map((_, i) => parts.slice(0, i + 1).join("/")); }));
+  return [...paths].sort().map((path) => {
+    const own = cards.filter((c) => inFolder(c, path));
+    return { path, count: own.length, image: own.filter((c) => c.kind === "image").length, video: own.filter((c) => c.kind === "video").length };
+  });
+}
+
+// A day as the viewer has it, YYYY-MM-DD.
+export const localDay = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+// The filters over a list of presets (#308): a name (its title, name, tags and note), a kind (still, scene, reel), how
+// many days back it was changed (1: today), and the names whose template text the prompt regex matched (null: no regex).
+export function filterCards(cards, { name = "", sub = "", since = 0, grep = null, today = new Date() } = {}) {
+  const q = name.trim().toLowerCase(), from = since ? localDay(new Date(today.getTime() - (since - 1) * 864e5)) : "";
+  return cards.filter((c) => (!q || haystack(c).includes(q)) && (!sub || c.sub === sub) && (!from || (c.modified || "") >= from)
+    && (!grep || grep.has(c.name)));
+}
+
 export function pickerGroups(cards, { query, favorites, recent }) {
   const q = query.trim().toLowerCase();
   const groups = [];
@@ -183,13 +215,28 @@ export function pickerGroups(cards, { query, favorites, recent }) {
   return groups.filter((g) => g[1].length);
 }
 
-export function filterRows(rows, { scope = "all", hash, preset, rating, pick }) {
+// The Gallery's filters: this prompt or preset, a rating, a pick; and (#308) a name (the preset's, or its title through
+// `title`), a kind (image, video, reel, sweep), how many days back it was made (1: today) and a regex over the prompt.
+export function filterRows(rows, { scope = "all", hash, preset, rating, pick, name = "", sub = "", since = 0, grep = "", title = null, today = new Date() }) {
   let out = rows;
   if (scope === "prompt") out = out.filter((r) => r.template === hash);
   if (scope === "preset") out = out.filter((r) => preset && r.preset === preset);
   if (rating === "unrated") out = out.filter((r) => !r.rating);
   else if (rating) out = out.filter((r) => r.rating === rating);
   if (pick) out = out.filter((r) => r.picks.some((p) => p.keys.includes(pick)));
+  const q = name.trim().toLowerCase();
+  if (q) out = out.filter((r) => `${r.preset || ""} ${(r.preset && title?.(r.preset)) || ""}`.toLowerCase().includes(q));
+  if (sub === "image" || sub === "video") out = out.filter((r) => r.kind === sub);
+  else if (sub) out = out.filter((r) => (r.album || "").startsWith(`${sub}:`));
+  if (since) {
+    const from = localDay(new Date(today.getTime() - (since - 1) * 864e5));
+    out = out.filter((r) => r.ts && localDay(new Date(r.ts)) >= from);
+  }
+  if (grep.trim()) {
+    let rx;
+    try { rx = new RegExp(grep.trim(), "i"); } catch { const low = grep.trim().toLowerCase(); rx = { test: (s) => s.toLowerCase().includes(low) }; }
+    out = out.filter((r) => rx.test(r.text || ""));
+  }
   return out;
 }
 
