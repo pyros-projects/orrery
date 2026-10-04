@@ -9,43 +9,73 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "red panda"
+       "red panda",
+       [
+        "__creature__=red panda"
+       ]
       ],
       [
        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
-       "raking daylight from a tall window"
+       "raking daylight from a tall window",
+       [
+        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}=raking daylight from a tall window"
+       ]
       ],
       [
        "{|tiny |giant }",
-       ""
+       "",
+       [
+        "{|tiny |giant }="
+       ]
       ],
       [
        "{2-4}",
-       "2"
+       "2",
+       [
+        "{2-4}=2"
+       ]
       ],
       [
        "{2-8}",
-       "8"
+       "8",
+       [
+        "{2-8}=8"
+       ]
       ],
       [
        "{100-999}",
-       "478"
+       "478",
+       [
+        "{100-999}=460–549"
+       ]
       ],
       [
        "{1850-1925}",
-       "1899"
+       "1899",
+       [
+        "{1850-1925}=1895–1902"
+       ]
       ],
       [
        "{30% a brass magnifying glass leaning against the glass,}",
-       ""
+       "",
+       [
+        "{30% a brass magnifying glass leaning against the glass,}="
+       ]
       ],
       [
        "__subjects/twists__",
-       "made entirely of folded paper"
+       "made entirely of folded paper",
+       [
+        "__subjects/twists__=made entirely of folded paper"
+       ]
       ],
       [
        "__frame/*__",
-       "a split composition, half in shadow and half in light"
+       "a split composition, half in shadow and half in light",
+       [
+        "__frame/compositions__=a split composition, half in shadow and half in light"
+       ]
       ]
      ]
     },
@@ -55,43 +85,73 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "red panda"
+       "red panda",
+       [
+        "__creature__=red panda"
+       ]
       ],
       [
        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
-       "the warm glow of a single candle"
+       "the warm glow of a single candle",
+       [
+        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}=the warm glow of a single candle"
+       ]
       ],
       [
        "{|tiny |giant }",
-       ""
+       "",
+       [
+        "{|tiny |giant }="
+       ]
       ],
       [
        "{2-4}",
-       "2"
+       "2",
+       [
+        "{2-4}=2"
+       ]
       ],
       [
        "{2-8}",
-       "8"
+       "8",
+       [
+        "{2-8}=8"
+       ]
       ],
       [
        "{100-999}",
-       "478"
+       "478",
+       [
+        "{100-999}=460–549"
+       ]
       ],
       [
        "{1850-1925}",
-       "1899"
+       "1899",
+       [
+        "{1850-1925}=1895–1902"
+       ]
       ],
       [
        "{30% a brass magnifying glass leaning against the glass,}",
-       ""
+       "",
+       [
+        "{30% a brass magnifying glass leaning against the glass,}="
+       ]
       ],
       [
        "__subjects/twists__",
-       "made entirely of folded paper"
+       "made entirely of folded paper",
+       [
+        "__subjects/twists__=made entirely of folded paper"
+       ]
       ],
       [
        "__frame/*__",
-       "a split composition, half in shadow and half in light"
+       "a split composition, half in shadow and half in light",
+       [
+        "__frame/compositions__=a split composition, half in shadow and half in light"
+       ]
       ]
      ]
     },
@@ -101,43 +161,73 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "red panda"
+       "red panda",
+       [
+        "__creature__=red panda"
+       ]
       ],
       [
        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
-       "the hard white burst of a flashbulb"
+       "the hard white burst of a flashbulb",
+       [
+        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}=the hard white burst of a flashbulb"
+       ]
       ],
       [
        "{|tiny |giant }",
-       ""
+       "",
+       [
+        "{|tiny |giant }="
+       ]
       ],
       [
        "{2-4}",
-       "2"
+       "2",
+       [
+        "{2-4}=2"
+       ]
       ],
       [
        "{2-8}",
-       "8"
+       "8",
+       [
+        "{2-8}=8"
+       ]
       ],
       [
        "{100-999}",
-       "478"
+       "478",
+       [
+        "{100-999}=460–549"
+       ]
       ],
       [
        "{1850-1925}",
-       "1899"
+       "1899",
+       [
+        "{1850-1925}=1895–1902"
+       ]
       ],
       [
        "{30% a brass magnifying glass leaning against the glass,}",
-       ""
+       "",
+       [
+        "{30% a brass magnifying glass leaning against the glass,}="
+       ]
       ],
       [
        "__subjects/twists__",
-       "made entirely of folded paper"
+       "made entirely of folded paper",
+       [
+        "__subjects/twists__=made entirely of folded paper"
+       ]
       ],
       [
        "__frame/*__",
-       "a split composition, half in shadow and half in light"
+       "a split composition, half in shadow and half in light",
+       [
+        "__frame/compositions__=a split composition, half in shadow and half in light"
+       ]
       ]
      ]
     }
@@ -151,43 +241,73 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "vampire squid"
+       "vampire squid",
+       [
+        "__creature__=vampire squid"
+       ]
       ],
       [
        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
-       "raking daylight from a tall window"
+       "raking daylight from a tall window",
+       [
+        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}=raking daylight from a tall window"
+       ]
       ],
       [
        "{|tiny |giant }",
-       "tiny "
+       "tiny ",
+       [
+        "{|tiny |giant }=tiny "
+       ]
       ],
       [
        "{2-4}",
-       "2"
+       "2",
+       [
+        "{2-4}=2"
+       ]
       ],
       [
        "{2-8}",
-       "5"
+       "5",
+       [
+        "{2-8}=5"
+       ]
       ],
       [
        "{100-999}",
-       "907"
+       "907",
+       [
+        "{100-999}=820–909"
+       ]
       ],
       [
        "{1850-1925}",
-       "1893"
+       "1893",
+       [
+        "{1850-1925}=1888–1894"
+       ]
       ],
       [
        "{30% a brass magnifying glass leaning against the glass,}",
-       ""
+       "",
+       [
+        "{30% a brass magnifying glass leaning against the glass,}="
+       ]
       ],
       [
        "__subjects/twists__",
-       "tangled in a web of red thread"
+       "tangled in a web of red thread",
+       [
+        "__subjects/twists__=tangled in a web of red thread"
+       ]
       ],
       [
        "__frame/*__",
-       "a tilt-shift blur at the top and bottom of the frame, so the whole scene looks like a miniature model"
+       "a tilt-shift blur at the top and bottom of the frame, so the whole scene looks like a miniature model",
+       [
+        "__frame/optics__=a tilt-shift blur at the top and bottom of the frame, so the whole scene looks like a miniature model"
+       ]
       ]
      ]
     },
@@ -197,43 +317,73 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "vampire squid"
+       "vampire squid",
+       [
+        "__creature__=vampire squid"
+       ]
       ],
       [
        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
-       "the warm glow of a single candle"
+       "the warm glow of a single candle",
+       [
+        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}=the warm glow of a single candle"
+       ]
       ],
       [
        "{|tiny |giant }",
-       "tiny "
+       "tiny ",
+       [
+        "{|tiny |giant }=tiny "
+       ]
       ],
       [
        "{2-4}",
-       "2"
+       "2",
+       [
+        "{2-4}=2"
+       ]
       ],
       [
        "{2-8}",
-       "5"
+       "5",
+       [
+        "{2-8}=5"
+       ]
       ],
       [
        "{100-999}",
-       "907"
+       "907",
+       [
+        "{100-999}=820–909"
+       ]
       ],
       [
        "{1850-1925}",
-       "1893"
+       "1893",
+       [
+        "{1850-1925}=1888–1894"
+       ]
       ],
       [
        "{30% a brass magnifying glass leaning against the glass,}",
-       ""
+       "",
+       [
+        "{30% a brass magnifying glass leaning against the glass,}="
+       ]
       ],
       [
        "__subjects/twists__",
-       "tangled in a web of red thread"
+       "tangled in a web of red thread",
+       [
+        "__subjects/twists__=tangled in a web of red thread"
+       ]
       ],
       [
        "__frame/*__",
-       "a tilt-shift blur at the top and bottom of the frame, so the whole scene looks like a miniature model"
+       "a tilt-shift blur at the top and bottom of the frame, so the whole scene looks like a miniature model",
+       [
+        "__frame/optics__=a tilt-shift blur at the top and bottom of the frame, so the whole scene looks like a miniature model"
+       ]
       ]
      ]
     },
@@ -243,43 +393,73 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "vampire squid"
+       "vampire squid",
+       [
+        "__creature__=vampire squid"
+       ]
       ],
       [
        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
-       "the hard white burst of a flashbulb"
+       "the hard white burst of a flashbulb",
+       [
+        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}=the hard white burst of a flashbulb"
+       ]
       ],
       [
        "{|tiny |giant }",
-       "tiny "
+       "tiny ",
+       [
+        "{|tiny |giant }=tiny "
+       ]
       ],
       [
        "{2-4}",
-       "2"
+       "2",
+       [
+        "{2-4}=2"
+       ]
       ],
       [
        "{2-8}",
-       "5"
+       "5",
+       [
+        "{2-8}=5"
+       ]
       ],
       [
        "{100-999}",
-       "907"
+       "907",
+       [
+        "{100-999}=820–909"
+       ]
       ],
       [
        "{1850-1925}",
-       "1893"
+       "1893",
+       [
+        "{1850-1925}=1888–1894"
+       ]
       ],
       [
        "{30% a brass magnifying glass leaning against the glass,}",
-       ""
+       "",
+       [
+        "{30% a brass magnifying glass leaning against the glass,}="
+       ]
       ],
       [
        "__subjects/twists__",
-       "tangled in a web of red thread"
+       "tangled in a web of red thread",
+       [
+        "__subjects/twists__=tangled in a web of red thread"
+       ]
       ],
       [
        "__frame/*__",
-       "a tilt-shift blur at the top and bottom of the frame, so the whole scene looks like a miniature model"
+       "a tilt-shift blur at the top and bottom of the frame, so the whole scene looks like a miniature model",
+       [
+        "__frame/optics__=a tilt-shift blur at the top and bottom of the frame, so the whole scene looks like a miniature model"
+       ]
       ]
      ]
     }
@@ -293,43 +473,73 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "raven"
+       "raven",
+       [
+        "__creature__=raven"
+       ]
       ],
       [
        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
-       "raking daylight from a tall window"
+       "raking daylight from a tall window",
+       [
+        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}=raking daylight from a tall window"
+       ]
       ],
       [
        "{|tiny |giant }",
-       "giant "
+       "giant ",
+       [
+        "{|tiny |giant }=giant "
+       ]
       ],
       [
        "{2-4}",
-       "3"
+       "3",
+       [
+        "{2-4}=3"
+       ]
       ],
       [
        "{2-8}",
-       "3"
+       "3",
+       [
+        "{2-8}=3"
+       ]
       ],
       [
        "{100-999}",
-       "753"
+       "753",
+       [
+        "{100-999}=730–819"
+       ]
       ],
       [
        "{1850-1925}",
-       "1890"
+       "1890",
+       [
+        "{1850-1925}=1888–1894"
+       ]
       ],
       [
        "{30% a brass magnifying glass leaning against the glass,}",
-       ""
+       "",
+       [
+        "{30% a brass magnifying glass leaning against the glass,}="
+       ]
       ],
       [
        "__subjects/twists__",
-       "cast in liquid chrome that ripples as it moves"
+       "cast in liquid chrome that ripples as it moves",
+       [
+        "__subjects/twists__=cast in liquid chrome that ripples as it moves"
+       ]
       ],
       [
        "__frame/*__",
-       "a symmetrical composition with the subject dead centre"
+       "a symmetrical composition with the subject dead centre",
+       [
+        "__frame/compositions__=a symmetrical composition with the subject dead centre"
+       ]
       ]
      ]
     },
@@ -339,43 +549,73 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "raven"
+       "raven",
+       [
+        "__creature__=raven"
+       ]
       ],
       [
        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
-       "the warm glow of a single candle"
+       "the warm glow of a single candle",
+       [
+        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}=the warm glow of a single candle"
+       ]
       ],
       [
        "{|tiny |giant }",
-       "giant "
+       "giant ",
+       [
+        "{|tiny |giant }=giant "
+       ]
       ],
       [
        "{2-4}",
-       "3"
+       "3",
+       [
+        "{2-4}=3"
+       ]
       ],
       [
        "{2-8}",
-       "3"
+       "3",
+       [
+        "{2-8}=3"
+       ]
       ],
       [
        "{100-999}",
-       "753"
+       "753",
+       [
+        "{100-999}=730–819"
+       ]
       ],
       [
        "{1850-1925}",
-       "1890"
+       "1890",
+       [
+        "{1850-1925}=1888–1894"
+       ]
       ],
       [
        "{30% a brass magnifying glass leaning against the glass,}",
-       ""
+       "",
+       [
+        "{30% a brass magnifying glass leaning against the glass,}="
+       ]
       ],
       [
        "__subjects/twists__",
-       "cast in liquid chrome that ripples as it moves"
+       "cast in liquid chrome that ripples as it moves",
+       [
+        "__subjects/twists__=cast in liquid chrome that ripples as it moves"
+       ]
       ],
       [
        "__frame/*__",
-       "a symmetrical composition with the subject dead centre"
+       "a symmetrical composition with the subject dead centre",
+       [
+        "__frame/compositions__=a symmetrical composition with the subject dead centre"
+       ]
       ]
      ]
     },
@@ -385,43 +625,73 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "raven"
+       "raven",
+       [
+        "__creature__=raven"
+       ]
       ],
       [
        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}",
-       "the hard white burst of a flashbulb"
+       "the hard white burst of a flashbulb",
+       [
+        "{raking daylight from a tall window|the warm glow of a single candle|the hard white burst of a flashbulb}=the hard white burst of a flashbulb"
+       ]
       ],
       [
        "{|tiny |giant }",
-       "giant "
+       "giant ",
+       [
+        "{|tiny |giant }=giant "
+       ]
       ],
       [
        "{2-4}",
-       "3"
+       "3",
+       [
+        "{2-4}=3"
+       ]
       ],
       [
        "{2-8}",
-       "3"
+       "3",
+       [
+        "{2-8}=3"
+       ]
       ],
       [
        "{100-999}",
-       "753"
+       "753",
+       [
+        "{100-999}=730–819"
+       ]
       ],
       [
        "{1850-1925}",
-       "1890"
+       "1890",
+       [
+        "{1850-1925}=1888–1894"
+       ]
       ],
       [
        "{30% a brass magnifying glass leaning against the glass,}",
-       ""
+       "",
+       [
+        "{30% a brass magnifying glass leaning against the glass,}="
+       ]
       ],
       [
        "__subjects/twists__",
-       "cast in liquid chrome that ripples as it moves"
+       "cast in liquid chrome that ripples as it moves",
+       [
+        "__subjects/twists__=cast in liquid chrome that ripples as it moves"
+       ]
       ],
       [
        "__frame/*__",
-       "a symmetrical composition with the subject dead centre"
+       "a symmetrical composition with the subject dead centre",
+       [
+        "__frame/compositions__=a symmetrical composition with the subject dead centre"
+       ]
       ]
      ]
     }

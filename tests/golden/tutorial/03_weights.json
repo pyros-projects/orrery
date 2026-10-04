@@ -8,11 +8,17 @@
      "picks": [
       [
        "{an ordinary street market|a street market on the back of a sleeping whale}",
-       "an ordinary street market"
+       "an ordinary street market",
+       [
+        "{an ordinary street market|a street market on the back of a sleeping whale}=an ordinary street market"
+       ]
       ],
       [
        "__light__",
-       "aurora light"
+       "aurora light",
+       [
+        "__light__=aurora light"
+       ]
       ]
      ]
     }
@@ -25,11 +31,17 @@
      "picks": [
       [
        "{an ordinary street market|a street market on the back of a sleeping whale}",
-       "a street market on the back of a sleeping whale"
+       "a street market on the back of a sleeping whale",
+       [
+        "{an ordinary street market|a street market on the back of a sleeping whale}=a street market on the back of a sleeping whale"
+       ]
       ],
       [
        "__light__",
-       "neon reflections on wet asphalt"
+       "neon reflections on wet asphalt",
+       [
+        "__light__=neon reflections on wet asphalt"
+       ]
       ]
      ]
     }
@@ -42,11 +54,17 @@
      "picks": [
       [
        "{an ordinary street market|a street market on the back of a sleeping whale}",
-       "an ordinary street market"
+       "an ordinary street market",
+       [
+        "{an ordinary street market|a street market on the back of a sleeping whale}=an ordinary street market"
+       ]
       ],
       [
        "__light__",
-       "soft overcast north light"
+       "soft overcast north light",
+       [
+        "__light__=soft overcast north light"
+       ]
       ]
      ]
     }

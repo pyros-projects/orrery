@@ -8,11 +8,17 @@
      "picks": [
       [
        "$pet ← __creature[mammal]__",
-       "red panda"
+       "red panda",
+       [
+        "__creature__=red panda"
+       ]
       ],
       [
        "{Nein, das ist der Chef.|Der wohnt hier.|Welches Tier?}",
-       "Der wohnt hier."
+       "Der wohnt hier.",
+       [
+        "{Nein, das ist der Chef.|Der wohnt hier.|Welches Tier?}=Der wohnt hier."
+       ]
       ]
      ]
     }
@@ -25,11 +31,17 @@
      "picks": [
       [
        "$pet ← __creature[mammal]__",
-       "red panda"
+       "red panda",
+       [
+        "__creature__=red panda"
+       ]
       ],
       [
        "{Nein, das ist der Chef.|Der wohnt hier.|Welches Tier?}",
-       "Nein, das ist der Chef."
+       "Nein, das ist der Chef.",
+       [
+        "{Nein, das ist der Chef.|Der wohnt hier.|Welches Tier?}=Nein, das ist der Chef."
+       ]
       ]
      ]
     }
@@ -42,11 +54,17 @@
      "picks": [
       [
        "$pet ← __creature[mammal]__",
-       "snow leopard"
+       "snow leopard",
+       [
+        "__creature__=snow leopard"
+       ]
       ],
       [
        "{Nein, das ist der Chef.|Der wohnt hier.|Welches Tier?}",
-       "Welches Tier?"
+       "Welches Tier?",
+       [
+        "{Nein, das ist der Chef.|Der wohnt hier.|Welches Tier?}=Welches Tier?"
+       ]
       ]
      ]
     }

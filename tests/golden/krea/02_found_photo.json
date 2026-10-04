@@ -8,23 +8,38 @@
      "picks": [
       [
        "{a disposable camera snapshot|an overexposed early 2000s digital camera photo|a cheap 35mm point-and-shoot photo|a grainy VHS camcorder still}",
-       "a grainy VHS camcorder still"
+       "a grainy VHS camcorder still",
+       [
+        "{a disposable camera snapshot|an overexposed early 2000s digital camera photo|a cheap 35mm point-and-shoot photo|a grainy VHS camcorder still}=a grainy VHS camcorder still"
+       ]
       ],
       [
        "{birthday party in a living room|school gym dance|family road trip rest stop|backyard barbecue}",
-       "school gym dance"
+       "school gym dance",
+       [
+        "{birthday party in a living room|school gym dance|family road trip rest stop|backyard barbecue}=school gym dance"
+       ]
       ],
       [
        "{1990s|early 2000s}",
-       "1990s"
+       "1990s",
+       [
+        "{1990s|early 2000s}=1990s"
+       ]
       ],
       [
        "{06 21 '98|12 31 '99|08 14 '03}",
-       "12 31 '99"
+       "12 31 '99",
+       [
+        "{06 21 '98|12 31 '99|08 14 '03}=12 31 '99"
+       ]
       ],
       [
        "__creature[mammal]__",
-       "snow leopard"
+       "snow leopard",
+       [
+        "__creature__=snow leopard"
+       ]
       ]
      ]
     }
@@ -37,23 +52,38 @@
      "picks": [
       [
        "{a disposable camera snapshot|an overexposed early 2000s digital camera photo|a cheap 35mm point-and-shoot photo|a grainy VHS camcorder still}",
-       "a disposable camera snapshot"
+       "a disposable camera snapshot",
+       [
+        "{a disposable camera snapshot|an overexposed early 2000s digital camera photo|a cheap 35mm point-and-shoot photo|a grainy VHS camcorder still}=a disposable camera snapshot"
+       ]
       ],
       [
        "{birthday party in a living room|school gym dance|family road trip rest stop|backyard barbecue}",
-       "backyard barbecue"
+       "backyard barbecue",
+       [
+        "{birthday party in a living room|school gym dance|family road trip rest stop|backyard barbecue}=backyard barbecue"
+       ]
       ],
       [
        "{1990s|early 2000s}",
-       "early 2000s"
+       "early 2000s",
+       [
+        "{1990s|early 2000s}=early 2000s"
+       ]
       ],
       [
        "{06 21 '98|12 31 '99|08 14 '03}",
-       "06 21 '98"
+       "06 21 '98",
+       [
+        "{06 21 '98|12 31 '99|08 14 '03}=06 21 '98"
+       ]
       ],
       [
        "__creature[mammal]__",
-       "caracal"
+       "caracal",
+       [
+        "__creature__=caracal"
+       ]
       ]
      ]
     }
@@ -66,23 +96,38 @@
      "picks": [
       [
        "{a disposable camera snapshot|an overexposed early 2000s digital camera photo|a cheap 35mm point-and-shoot photo|a grainy VHS camcorder still}",
-       "an overexposed early 2000s digital camera photo"
+       "an overexposed early 2000s digital camera photo",
+       [
+        "{a disposable camera snapshot|an overexposed early 2000s digital camera photo|a cheap 35mm point-and-shoot photo|a grainy VHS camcorder still}=an overexposed early 2000s digital camera photo"
+       ]
       ],
       [
        "{birthday party in a living room|school gym dance|family road trip rest stop|backyard barbecue}",
-       "school gym dance"
+       "school gym dance",
+       [
+        "{birthday party in a living room|school gym dance|family road trip rest stop|backyard barbecue}=school gym dance"
+       ]
       ],
       [
        "{1990s|early 2000s}",
-       "1990s"
+       "1990s",
+       [
+        "{1990s|early 2000s}=1990s"
+       ]
       ],
       [
        "{06 21 '98|12 31 '99|08 14 '03}",
-       "12 31 '99"
+       "12 31 '99",
+       [
+        "{06 21 '98|12 31 '99|08 14 '03}=12 31 '99"
+       ]
       ],
       [
        "__creature[mammal]__",
-       "black panther"
+       "black panther",
+       [
+        "__creature__=black panther"
+       ]
       ]
      ]
     }

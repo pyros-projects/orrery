@@ -8,11 +8,18 @@
      "picks": [
       [
        "__material__ ×2",
-       "polished obsidian, stained glass"
+       "polished obsidian, stained glass",
+       [
+        "__material__=polished obsidian",
+        "__material__=stained glass"
+       ]
       ],
       [
        "__material__",
-       "frosted glass"
+       "frosted glass",
+       [
+        "__material__=frosted glass"
+       ]
       ]
      ]
     }
@@ -25,11 +32,18 @@
      "picks": [
       [
        "__material__ ×2",
-       "polished obsidian, rusted iron"
+       "polished obsidian, rusted iron",
+       [
+        "__material__=polished obsidian",
+        "__material__=rusted iron"
+       ]
       ],
       [
        "__material__",
-       "rusted iron"
+       "rusted iron",
+       [
+        "__material__=rusted iron"
+       ]
       ]
      ]
     }
@@ -42,11 +56,18 @@
      "picks": [
       [
        "__material__ ×2",
-       "polished obsidian, cracked marble"
+       "polished obsidian, cracked marble",
+       [
+        "__material__=polished obsidian",
+        "__material__=cracked marble"
+       ]
       ],
       [
        "__material__",
-       "folded paper"
+       "folded paper",
+       [
+        "__material__=folded paper"
+       ]
       ]
      ]
     }

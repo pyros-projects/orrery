@@ -8,27 +8,45 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "red panda"
+       "red panda",
+       [
+        "__creature__=red panda"
+       ]
       ],
       [
        "{NIGHT MARKET|THE DEEP|MOTH SEASON|GLASS HARBOR|OBSERVATORY}",
-       "THE DEEP"
+       "THE DEEP",
+       [
+        "{NIGHT MARKET|THE DEEP|MOTH SEASON|GLASS HARBOR|OBSERVATORY}=THE DEEP"
+       ]
       ],
       [
        "{Swiss International Style|Bauhaus|1970s psychedelic|Soviet constructivist|1990s rave flyer|Japanese Showa-era}",
-       "Swiss International Style"
+       "Swiss International Style",
+       [
+        "{Swiss International Style|Bauhaus|1970s psychedelic|Soviet constructivist|1990s rave flyer|Japanese Showa-era}=Swiss International Style"
+       ]
       ],
       [
        "{two flat colors|halftone dots|overlapping geometric shapes}",
-       "overlapping geometric shapes"
+       "overlapping geometric shapes",
+       [
+        "{two flat colors|halftone dots|overlapping geometric shapes}=overlapping geometric shapes"
+       ]
       ],
       [
        "{ONE NIGHT ONLY|DOORS AT NINE|LIVE AT THE OBSERVATORY}",
-       "DOORS AT NINE"
+       "DOORS AT NINE",
+       [
+        "{ONE NIGHT ONLY|DOORS AT NINE|LIVE AT THE OBSERVATORY}=DOORS AT NINE"
+       ]
       ],
       [
        "{off-white paper with visible grain|screen-printed ink with slight misregistration}",
-       "screen-printed ink with slight misregistration"
+       "screen-printed ink with slight misregistration",
+       [
+        "{off-white paper with visible grain|screen-printed ink with slight misregistration}=screen-printed ink with slight misregistration"
+       ]
       ]
      ]
     }
@@ -41,27 +59,45 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "axolotl"
+       "axolotl",
+       [
+        "__creature__=axolotl"
+       ]
       ],
       [
        "{NIGHT MARKET|THE DEEP|MOTH SEASON|GLASS HARBOR|OBSERVATORY}",
-       "GLASS HARBOR"
+       "GLASS HARBOR",
+       [
+        "{NIGHT MARKET|THE DEEP|MOTH SEASON|GLASS HARBOR|OBSERVATORY}=GLASS HARBOR"
+       ]
       ],
       [
        "{Swiss International Style|Bauhaus|1970s psychedelic|Soviet constructivist|1990s rave flyer|Japanese Showa-era}",
-       "1990s rave flyer"
+       "1990s rave flyer",
+       [
+        "{Swiss International Style|Bauhaus|1970s psychedelic|Soviet constructivist|1990s rave flyer|Japanese Showa-era}=1990s rave flyer"
+       ]
       ],
       [
        "{two flat colors|halftone dots|overlapping geometric shapes}",
-       "halftone dots"
+       "halftone dots",
+       [
+        "{two flat colors|halftone dots|overlapping geometric shapes}=halftone dots"
+       ]
       ],
       [
        "{ONE NIGHT ONLY|DOORS AT NINE|LIVE AT THE OBSERVATORY}",
-       "DOORS AT NINE"
+       "DOORS AT NINE",
+       [
+        "{ONE NIGHT ONLY|DOORS AT NINE|LIVE AT THE OBSERVATORY}=DOORS AT NINE"
+       ]
       ],
       [
        "{off-white paper with visible grain|screen-printed ink with slight misregistration}",
-       "off-white paper with visible grain"
+       "off-white paper with visible grain",
+       [
+        "{off-white paper with visible grain|screen-printed ink with slight misregistration}=off-white paper with visible grain"
+       ]
       ]
      ]
     }
@@ -74,27 +110,45 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "giant isopod"
+       "giant isopod",
+       [
+        "__creature__=giant isopod"
+       ]
       ],
       [
        "{NIGHT MARKET|THE DEEP|MOTH SEASON|GLASS HARBOR|OBSERVATORY}",
-       "NIGHT MARKET"
+       "NIGHT MARKET",
+       [
+        "{NIGHT MARKET|THE DEEP|MOTH SEASON|GLASS HARBOR|OBSERVATORY}=NIGHT MARKET"
+       ]
       ],
       [
        "{Swiss International Style|Bauhaus|1970s psychedelic|Soviet constructivist|1990s rave flyer|Japanese Showa-era}",
-       "Soviet constructivist"
+       "Soviet constructivist",
+       [
+        "{Swiss International Style|Bauhaus|1970s psychedelic|Soviet constructivist|1990s rave flyer|Japanese Showa-era}=Soviet constructivist"
+       ]
       ],
       [
        "{two flat colors|halftone dots|overlapping geometric shapes}",
-       "two flat colors"
+       "two flat colors",
+       [
+        "{two flat colors|halftone dots|overlapping geometric shapes}=two flat colors"
+       ]
       ],
       [
        "{ONE NIGHT ONLY|DOORS AT NINE|LIVE AT THE OBSERVATORY}",
-       "ONE NIGHT ONLY"
+       "ONE NIGHT ONLY",
+       [
+        "{ONE NIGHT ONLY|DOORS AT NINE|LIVE AT THE OBSERVATORY}=ONE NIGHT ONLY"
+       ]
       ],
       [
        "{off-white paper with visible grain|screen-printed ink with slight misregistration}",
-       "off-white paper with visible grain"
+       "off-white paper with visible grain",
+       [
+        "{off-white paper with visible grain|screen-printed ink with slight misregistration}=off-white paper with visible grain"
+       ]
       ]
      ]
     }

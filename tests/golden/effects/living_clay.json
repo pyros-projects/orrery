@@ -8,19 +8,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a tiled changing room at a public swimming pool"
+       "a tiled changing room at a public swimming pool",
+       [
+        "__bh_room__=a tiled changing room at a public swimming pool"
+       ]
       ],
       [
        "{one shoulder|the upper arm|one side of the chest}",
-       "one side of the chest"
+       "one side of the chest",
+       [
+        "{one shoulder|the upper arm|one side of the chest}=one side of the chest"
+       ]
       ],
       [
        "{HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains|HOST compresses the face between both palms and lets go, leaving a narrower, newly sculpted face that still blinks|HOST pinches the chin and draws it slowly downward into a long soft point, then looks calmly into the camera}",
-       "HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains"
+       "HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains",
+       [
+        "{HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains|HOST compresses the face between both palms and lets go, leaving a narrower, newly sculpted face that still blinks|HOST pinches the chin and draws it slowly downward into a long soft point, then looks calmly into the camera}=HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains"
+       ]
       ]
      ]
     }
@@ -33,19 +45,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the young man"
+       "the young man",
+       [
+        "__bh_host__=the young man"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a dim apartment sitting room"
+       "a dim apartment sitting room",
+       [
+        "__bh_room__=a dim apartment sitting room"
+       ]
       ],
       [
        "{one shoulder|the upper arm|one side of the chest}",
-       "the upper arm"
+       "the upper arm",
+       [
+        "{one shoulder|the upper arm|one side of the chest}=the upper arm"
+       ]
       ],
       [
        "{HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains|HOST compresses the face between both palms and lets go, leaving a narrower, newly sculpted face that still blinks|HOST pinches the chin and draws it slowly downward into a long soft point, then looks calmly into the camera}",
-       "HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains"
+       "HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains",
+       [
+        "{HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains|HOST compresses the face between both palms and lets go, leaving a narrower, newly sculpted face that still blinks|HOST pinches the chin and draws it slowly downward into a long soft point, then looks calmly into the camera}=HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains"
+       ]
       ]
      ]
     }
@@ -58,19 +82,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a narrow hotel corridor"
+       "a narrow hotel corridor",
+       [
+        "__bh_room__=a narrow hotel corridor"
+       ]
       ],
       [
        "{one shoulder|the upper arm|one side of the chest}",
-       "one shoulder"
+       "one shoulder",
+       [
+        "{one shoulder|the upper arm|one side of the chest}=one shoulder"
+       ]
       ],
       [
        "{HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains|HOST compresses the face between both palms and lets go, leaving a narrower, newly sculpted face that still blinks|HOST pinches the chin and draws it slowly downward into a long soft point, then looks calmly into the camera}",
-       "HOST pinches the chin and draws it slowly downward into a long soft point, then looks calmly into the camera"
+       "HOST pinches the chin and draws it slowly downward into a long soft point, then looks calmly into the camera",
+       [
+        "{HOST presses a thumb slowly into the centre of the forehead, and a deep perfect indentation remains|HOST compresses the face between both palms and lets go, leaving a narrower, newly sculpted face that still blinks|HOST pinches the chin and draws it slowly downward into a long soft point, then looks calmly into the camera}=HOST pinches the chin and draws it slowly downward into a long soft point, then looks calmly into the camera"
+       ]
       ]
      ]
     }

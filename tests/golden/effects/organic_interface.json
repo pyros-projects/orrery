@@ -8,15 +8,24 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$thing ← __bh_interface__",
-       "the iron rail of a staircase"
+       "the iron rail of a staircase",
+       [
+        "__bh_interface__=the iron rail of a staircase"
+       ]
       ],
       [
        "{HOST pulls hard, and the object comes along with the hand as a single piece|the change climbs past the elbow, the arm now the same material to the shoulder|HOST lets go with the other hand, and the fingers of the fused hand move under the surface of the object}",
-       "HOST lets go with the other hand, and the fingers of the fused hand move under the surface of the object"
+       "HOST lets go with the other hand, and the fingers of the fused hand move under the surface of the object",
+       [
+        "{HOST pulls hard, and the object comes along with the hand as a single piece|the change climbs past the elbow, the arm now the same material to the shoulder|HOST lets go with the other hand, and the fingers of the fused hand move under the surface of the object}=HOST lets go with the other hand, and the fingers of the fused hand move under the surface of the object"
+       ]
       ]
      ]
     }
@@ -29,15 +38,24 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the young man"
+       "the young man",
+       [
+        "__bh_host__=the young man"
+       ]
       ],
       [
        "$thing ← __bh_interface__",
-       "the iron rail of a staircase"
+       "the iron rail of a staircase",
+       [
+        "__bh_interface__=the iron rail of a staircase"
+       ]
       ],
       [
        "{HOST pulls hard, and the object comes along with the hand as a single piece|the change climbs past the elbow, the arm now the same material to the shoulder|HOST lets go with the other hand, and the fingers of the fused hand move under the surface of the object}",
-       "the change climbs past the elbow, the arm now the same material to the shoulder"
+       "the change climbs past the elbow, the arm now the same material to the shoulder",
+       [
+        "{HOST pulls hard, and the object comes along with the hand as a single piece|the change climbs past the elbow, the arm now the same material to the shoulder|HOST lets go with the other hand, and the fingers of the fused hand move under the surface of the object}=the change climbs past the elbow, the arm now the same material to the shoulder"
+       ]
       ]
      ]
     }
@@ -50,15 +68,24 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$thing ← __bh_interface__",
-       "the edge of a marble tabletop"
+       "the edge of a marble tabletop",
+       [
+        "__bh_interface__=the edge of a marble tabletop"
+       ]
       ],
       [
        "{HOST pulls hard, and the object comes along with the hand as a single piece|the change climbs past the elbow, the arm now the same material to the shoulder|HOST lets go with the other hand, and the fingers of the fused hand move under the surface of the object}",
-       "HOST lets go with the other hand, and the fingers of the fused hand move under the surface of the object"
+       "HOST lets go with the other hand, and the fingers of the fused hand move under the surface of the object",
+       [
+        "{HOST pulls hard, and the object comes along with the hand as a single piece|the change climbs past the elbow, the arm now the same material to the shoulder|HOST lets go with the other hand, and the fingers of the fused hand move under the surface of the object}=HOST lets go with the other hand, and the fingers of the fused hand move under the surface of the object"
+       ]
       ]
      ]
     }

@@ -8,27 +8,45 @@
      "picks": [
       [
        "$subject ← __creature__",
-       "kitsune"
+       "kitsune",
+       [
+        "__creature__=kitsune"
+       ]
       ],
       [
        "{editorial|documentary|fine-art}",
-       "fine-art"
+       "fine-art",
+       [
+        "{editorial|documentary|fine-art}=fine-art"
+       ]
       ],
       [
        "{Kodak Portra 400|Ilford HP5 black and white|Fuji Velvia slide film}",
-       "Fuji Velvia slide film"
+       "Fuji Velvia slide film",
+       [
+        "{Kodak Portra 400|Ilford HP5 black and white|Fuji Velvia slide film}=Fuji Velvia slide film"
+       ]
       ],
       [
        "__place__",
-       "a laundromat at 3 a.m."
+       "a laundromat at 3 a.m.",
+       [
+        "__place__=a laundromat at 3 a.m."
+       ]
       ],
       [
        "__lens__",
-       "anamorphic lens with blue flares"
+       "anamorphic lens with blue flares",
+       [
+        "__lens__=anamorphic lens with blue flares"
+       ]
       ],
       [
        "__light__",
-       "aurora light"
+       "aurora light",
+       [
+        "__light__=aurora light"
+       ]
       ]
      ]
     }
@@ -41,27 +59,45 @@
      "picks": [
       [
        "$subject ← __creature__",
-       "anglerfish"
+       "anglerfish",
+       [
+        "__creature__=anglerfish"
+       ]
       ],
       [
        "{editorial|documentary|fine-art}",
-       "fine-art"
+       "fine-art",
+       [
+        "{editorial|documentary|fine-art}=fine-art"
+       ]
       ],
       [
        "{Kodak Portra 400|Ilford HP5 black and white|Fuji Velvia slide film}",
-       "Fuji Velvia slide film"
+       "Fuji Velvia slide film",
+       [
+        "{Kodak Portra 400|Ilford HP5 black and white|Fuji Velvia slide film}=Fuji Velvia slide film"
+       ]
       ],
       [
        "__place__",
-       "a snowed-in train station"
+       "a snowed-in train station",
+       [
+        "__place__=a snowed-in train station"
+       ]
       ],
       [
        "__lens__",
-       "fisheye lens"
+       "fisheye lens",
+       [
+        "__lens__=fisheye lens"
+       ]
       ],
       [
        "__light__",
-       "neon reflections on wet asphalt"
+       "neon reflections on wet asphalt",
+       [
+        "__light__=neon reflections on wet asphalt"
+       ]
       ]
      ]
     }
@@ -74,27 +110,45 @@
      "picks": [
       [
        "$subject ← __creature__",
-       "griffin"
+       "griffin",
+       [
+        "__creature__=griffin"
+       ]
       ],
       [
        "{editorial|documentary|fine-art}",
-       "fine-art"
+       "fine-art",
+       [
+        "{editorial|documentary|fine-art}=fine-art"
+       ]
       ],
       [
        "{Kodak Portra 400|Ilford HP5 black and white|Fuji Velvia slide film}",
-       "Fuji Velvia slide film"
+       "Fuji Velvia slide film",
+       [
+        "{Kodak Portra 400|Ilford HP5 black and white|Fuji Velvia slide film}=Fuji Velvia slide film"
+       ]
       ],
       [
        "__place__",
-       "a greenhouse on the moon"
+       "a greenhouse on the moon",
+       [
+        "__place__=a greenhouse on the moon"
+       ]
       ],
       [
        "__lens__",
-       "400mm telephoto compression"
+       "400mm telephoto compression",
+       [
+        "__lens__=400mm telephoto compression"
+       ]
       ],
       [
        "__light__",
-       "soft overcast north light"
+       "soft overcast north light",
+       [
+        "__light__=soft overcast north light"
+       ]
       ]
      ]
     }

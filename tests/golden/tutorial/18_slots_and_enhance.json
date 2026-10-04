@@ -8,23 +8,36 @@
      "picks": [
       [
        "$who ← __characters/average_joes__",
-       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$who ← __characters/looks/hair__",
-       "wind-blown __characters/looks/hair_color__ hair down to the collar"
+       "wind-blown __characters/looks/hair_color__ hair down to the collar",
+       [
+        "__characters/looks/hair__=wind-blown __characters/looks/hair_color__ hair down to the collar"
+       ]
       ],
       [
        "$who ← __characters/looks/hair_color__",
-       "warm caramel"
+       "warm caramel",
+       [
+        "__characters/looks/hair_color__=warm caramel"
+       ]
       ],
       [
        "$who ← __characters/average_joes/outfit__",
-       "a corduroy blazer with elbow patches"
+       "a corduroy blazer with elbow patches",
+       [
+        "__characters/average_joes/outfit__=a corduroy blazer with elbow patches"
+       ]
       ],
       [
        "> enhance",
-       "rewrite it as one flowing sentence a photographer would say, keeping every detail"
+       "rewrite it as one flowing sentence a photographer would say, keeping every detail",
+       []
       ]
      ]
     }
@@ -37,23 +50,36 @@
      "picks": [
       [
        "$who ← __characters/average_joes__",
-       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$who ← __characters/looks/hair__",
-       "a chin-length __characters/looks/hair_color__ bob"
+       "a chin-length __characters/looks/hair_color__ bob",
+       [
+        "__characters/looks/hair__=a chin-length __characters/looks/hair_color__ bob"
+       ]
       ],
       [
        "$who ← __characters/looks/hair_color__",
-       "ash-blonde"
+       "ash-blonde",
+       [
+        "__characters/looks/hair_color__=ash-blonde"
+       ]
       ],
       [
        "$who ← __characters/average_joes/outfit__",
-       "a faded denim jacket over a grey hoodie"
+       "a faded denim jacket over a grey hoodie",
+       [
+        "__characters/average_joes/outfit__=a faded denim jacket over a grey hoodie"
+       ]
       ],
       [
        "> enhance",
-       "rewrite it as one flowing sentence a photographer would say, keeping every detail"
+       "rewrite it as one flowing sentence a photographer would say, keeping every detail",
+       []
       ]
      ]
     }
@@ -66,23 +92,36 @@
      "picks": [
       [
        "$who ← __characters/average_joes__",
-       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$who ← __characters/looks/hair__",
-       "wind-blown __characters/looks/hair_color__ hair down to the collar"
+       "wind-blown __characters/looks/hair_color__ hair down to the collar",
+       [
+        "__characters/looks/hair__=wind-blown __characters/looks/hair_color__ hair down to the collar"
+       ]
       ],
       [
        "$who ← __characters/looks/hair_color__",
-       "mousy brown"
+       "mousy brown",
+       [
+        "__characters/looks/hair_color__=mousy brown"
+       ]
       ],
       [
        "$who ← __characters/average_joes/outfit__",
-       "paint-flecked work overalls"
+       "paint-flecked work overalls",
+       [
+        "__characters/average_joes/outfit__=paint-flecked work overalls"
+       ]
       ],
       [
        "> enhance",
-       "rewrite it as one flowing sentence a photographer would say, keeping every detail"
+       "rewrite it as one flowing sentence a photographer would say, keeping every detail",
+       []
       ]
      ]
     }

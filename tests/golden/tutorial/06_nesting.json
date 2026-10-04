@@ -8,23 +8,38 @@
      "picks": [
       [
        "{tiny|colossal}",
-       "tiny"
+       "tiny",
+       [
+        "{tiny|colossal}=tiny"
+       ]
       ],
       [
        "{clockwork|origami|glass}",
-       "origami"
+       "origami",
+       [
+        "{clockwork|origami|glass}=origami"
+       ]
       ],
       [
        "{fox|heron|octopus}",
-       "fox"
+       "fox",
+       [
+        "{fox|heron|octopus}=fox"
+       ]
       ],
       [
        "{tiny origami fox|lone astronaut in a paper spacesuit}",
-       "lone astronaut in a paper spacesuit"
+       "lone astronaut in a paper spacesuit",
+       [
+        "{tiny origami fox|lone astronaut in a paper spacesuit}=lone astronaut in a paper spacesuit"
+       ]
       ],
       [
        "__place__",
-       "a laundromat at 3 a.m."
+       "a laundromat at 3 a.m.",
+       [
+        "__place__=a laundromat at 3 a.m."
+       ]
       ]
      ]
     }
@@ -37,23 +52,38 @@
      "picks": [
       [
        "{tiny|colossal}",
-       "tiny"
+       "tiny",
+       [
+        "{tiny|colossal}=tiny"
+       ]
       ],
       [
        "{clockwork|origami|glass}",
-       "clockwork"
+       "clockwork",
+       [
+        "{clockwork|origami|glass}=clockwork"
+       ]
       ],
       [
        "{fox|heron|octopus}",
-       "fox"
+       "fox",
+       [
+        "{fox|heron|octopus}=fox"
+       ]
       ],
       [
        "{tiny clockwork fox|lone astronaut in a paper spacesuit}",
-       "tiny clockwork fox"
+       "tiny clockwork fox",
+       [
+        "{tiny clockwork fox|lone astronaut in a paper spacesuit}=tiny clockwork fox"
+       ]
       ],
       [
        "__place__",
-       "a snowed-in train station"
+       "a snowed-in train station",
+       [
+        "__place__=a snowed-in train station"
+       ]
       ]
      ]
     }
@@ -66,23 +96,38 @@
      "picks": [
       [
        "{tiny|colossal}",
-       "tiny"
+       "tiny",
+       [
+        "{tiny|colossal}=tiny"
+       ]
       ],
       [
        "{clockwork|origami|glass}",
-       "origami"
+       "origami",
+       [
+        "{clockwork|origami|glass}=origami"
+       ]
       ],
       [
        "{fox|heron|octopus}",
-       "octopus"
+       "octopus",
+       [
+        "{fox|heron|octopus}=octopus"
+       ]
       ],
       [
        "{tiny origami octopus|lone astronaut in a paper spacesuit}",
-       "tiny origami octopus"
+       "tiny origami octopus",
+       [
+        "{tiny origami octopus|lone astronaut in a paper spacesuit}=tiny origami octopus"
+       ]
       ],
       [
        "__place__",
-       "a greenhouse on the moon"
+       "a greenhouse on the moon",
+       [
+        "__place__=a greenhouse on the moon"
+       ]
       ]
      ]
     }

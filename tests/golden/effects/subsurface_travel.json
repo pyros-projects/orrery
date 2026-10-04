@@ -8,27 +8,45 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$entity ← __bh_entity__",
-       "a gaunt second person, curled tight like a folded umbrella"
+       "a gaunt second person, curled tight like a folded umbrella",
+       [
+        "__bh_entity__=a gaunt second person, curled tight like a folded umbrella"
+       ]
       ],
       [
        "$route ← __bh_route__",
-       "from the thigh up through the hip and across the belly"
+       "from the thigh up through the hip and across the belly",
+       [
+        "__bh_route__=from the thigh up through the hip and across the belly"
+       ]
       ],
       [
        "$surface ← __bh_surface__",
-       "perfectly smooth skin, the shape beneath visible only in the way the light falls across it"
+       "perfectly smooth skin, the shape beneath visible only in the way the light falls across it",
+       [
+        "__bh_surface__=perfectly smooth skin, the shape beneath visible only in the way the light falls across it"
+       ]
       ],
       [
        "$motion ← __bh_motion__",
-       "patient, advancing a little with every breath the host takes"
+       "patient, advancing a little with every breath the host takes",
+       [
+        "__bh_motion__=patient, advancing a little with every breath the host takes"
+       ]
       ],
       [
        "$reveal ← __bh_reveal__",
-       "presses its face outward until the stretched skin shows its features in sharp relief, staring into the camera"
+       "presses its face outward until the stretched skin shows its features in sharp relief, staring into the camera",
+       [
+        "__bh_reveal__=presses its face outward until the stretched skin shows its features in sharp relief, staring into the camera"
+       ]
       ]
      ]
     }
@@ -41,27 +59,45 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the young man"
+       "the young man",
+       [
+        "__bh_host__=the young man"
+       ]
       ],
       [
        "$entity ← __bh_entity__",
-       "a long-limbed insectile creature, with jointed legs folded against its body"
+       "a long-limbed insectile creature, with jointed legs folded against its body",
+       [
+        "__bh_entity__=a long-limbed insectile creature, with jointed legs folded against its body"
+       ]
       ],
       [
        "$route ← __bh_route__",
-       "from one wrist up the inside of the forearm, across the shoulder and into the chest"
+       "from one wrist up the inside of the forearm, across the shoulder and into the chest",
+       [
+        "__bh_route__=from one wrist up the inside of the forearm, across the shoulder and into the chest"
+       ]
       ],
       [
        "$surface ← __bh_surface__",
-       "normal opaque skin with its natural color and texture, never breaking"
+       "normal opaque skin with its natural color and texture, never breaking",
+       [
+        "__bh_surface__=normal opaque skin with its natural color and texture, never breaking"
+       ]
       ],
       [
        "$motion ← __bh_motion__",
-       "slow, continuous and deliberate"
+       "slow, continuous and deliberate",
+       [
+        "__bh_motion__=slow, continuous and deliberate"
+       ]
       ],
       [
        "$reveal ← __bh_reveal__",
-       "splits into two smaller shapes that slide apart in opposite directions"
+       "splits into two smaller shapes that slide apart in opposite directions",
+       [
+        "__bh_reveal__=splits into two smaller shapes that slide apart in opposite directions"
+       ]
       ]
      ]
     }
@@ -74,27 +110,45 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$entity ← __bh_entity__",
-       "a long-limbed insectile creature, with jointed legs folded against its body"
+       "a long-limbed insectile creature, with jointed legs folded against its body",
+       [
+        "__bh_entity__=a long-limbed insectile creature, with jointed legs folded against its body"
+       ]
       ],
       [
        "$route ← __bh_route__",
-       "from one wrist up the inside of the forearm, across the shoulder and into the chest"
+       "from one wrist up the inside of the forearm, across the shoulder and into the chest",
+       [
+        "__bh_route__=from one wrist up the inside of the forearm, across the shoulder and into the chest"
+       ]
       ],
       [
        "$surface ← __bh_surface__",
-       "skin that ripples in slow waves like fabric over moving water"
+       "skin that ripples in slow waves like fabric over moving water",
+       [
+        "__bh_surface__=skin that ripples in slow waves like fabric over moving water"
+       ]
       ],
       [
        "$motion ← __bh_motion__",
-       "slow, continuous and deliberate"
+       "slow, continuous and deliberate",
+       [
+        "__bh_motion__=slow, continuous and deliberate"
+       ]
       ],
       [
        "$reveal ← __bh_reveal__",
-       "pushes one long hand outward until every finger shows through the skin"
+       "pushes one long hand outward until every finger shows through the skin",
+       [
+        "__bh_reveal__=pushes one long hand outward until every finger shows through the skin"
+       ]
       ]
      ]
     }
