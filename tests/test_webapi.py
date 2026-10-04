@@ -971,3 +971,12 @@ def test_a_gallery_picture_writes_its_slots_from_image_output(home, fake_api, tm
     fake_api.answer = lambda body: json.dumps(["a red scarf"])
     log_outputs(Home(home), json.dumps(data), [str(picture)])
     assert read_rows(Home(home))[0]["exports"]["sheet"] == "a red scarf"
+
+
+def test_a_library_still_to_be_written_says_no_roll_and_escapes_show_as_written(home):
+    """#269: a stand-in for a missing library showed its escape placeholders as its roll."""
+    (home / "library" / "brace.txt").write_text("a \\{curly\\} thing\n")
+    out = ok(home, webapi.annotate, template="A __animal__ under a __sky_kind__ sky, with __brace__.", seed=1, target="text")
+    rolls = out["rolls"]["0"]
+    assert [k for k, _ in rolls] == [0, 2] and rolls[1][1] == "a {curly} thing"  # __sky_kind__ (k 1) says nothing
+    assert not any("" in v or "" in v for _, v in rolls)

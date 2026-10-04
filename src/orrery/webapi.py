@@ -876,7 +876,7 @@ def _slots(numbers: list[int]) -> str:
     return f"image{'s' if len(numbers) > 1 else ''} {', '.join(map(str, numbers))}"
 
 
-def _rolls(text: str, sites: list[dict]) -> dict[str, list]:
+def _rolls(text: str, sites: list[dict], missing: set[str] = frozenset()) -> dict[str, list]:
     """The trace's rolls (dsl.traced) on the lines of the template as the editor has it: {line index: [[k, roll]]},
     `k` the library's place among the `__…__` of its line (#202). A line is found by its text, from the last one
     found on; one the trace cannot find (its LoRA tag written short, say) says nothing."""
@@ -889,6 +889,8 @@ def _rolls(text: str, sites: list[dict]) -> dict[str, list]:
     for site in sites:
         if "lines" in site:
             joined = site["lines"]
+            continue
+        if site.get("library") in missing:  # still to be written: it rolled nothing yet (#269)
             continue
         rest, k = site["rest"], site["k"]
         token = next((m for i, m in enumerate(_LIB.finditer(rest)) if i == k), None)
@@ -924,6 +926,7 @@ def annotate(home: Home, args: dict) -> dict:
     seed, libs = _int(args, "seed", 0), home.libraries()
     src = long_form(strip_comments(text))
     out: dict = {"bindings": {}, "fields": {}, "exports": {}, "grid": "", "cast": {}, "members": {}, "rolls": {}}
+    missing: set[str] = set()  # libraries still to be written, stood in by their names
     screenplay = target != "text" and src.lstrip().startswith("@h3")
     grid = None
     try:
@@ -940,10 +943,11 @@ def annotate(home: Home, args: dict) -> dict:
                 with traced() as sites:
                     x = expand(src, seed, libs, home.weights(), cell=0 if grid else None)
                 if not screenplay:  # a text template rolls as one: its libraries' rolls (#202)
-                    out["rolls"] = _rolls(text, sites)
+                    out["rolls"] = _rolls(text, sites, missing)
                 break
             except MissingLibrary as err:
                 libs = {**libs, err.name: Library(err.name, [Entry(f"\\__{err.name}\\__")])}  # escaped: shown, not rolled
+                missing.add(err.name)
         else:
             raise ValueError("too many libraries still to be written")
         out["bindings"] = {k: _short(v) for k, v in x.bound.items()}
@@ -959,7 +963,7 @@ def annotate(home: Home, args: dict) -> dict:
         try:
             with traced() as sites:
                 c = compile_scene(src, seed, libs, home.weights(), segment=_int(args, "segment", 0), cell=0 if grid else None)
-            out["rolls"] = _rolls(text, sites)  # a screenplay's lines roll one by one, the clip's scene among them
+            out["rolls"] = _rolls(text, sites, missing)  # a screenplay's lines roll one by one, the clip's scene among them
             for m in c.scene.cast:
                 images = sorted({s.index for s in m.sources if s.kind == "image"})
                 named = list(dict.fromkeys(c.pictures[n]["name"] for n in images if n in c.pictures))
