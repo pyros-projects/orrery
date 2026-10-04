@@ -101,6 +101,7 @@ export function client(home) {
     takeVideoURL: (chain, take) => url("chain/video", { take, ...(chain ? { chain } : {}) }),
     takes: (body) => call("llm/takes", { body }),
     keepRewrite: (body) => call("llm/keep", { body }),
+    plan: (body) => call("llm/plan", { body }),
     addToLibrary: (body) => call("library/add", { body }),
     galaxyTakes: (body) => call("galaxy/takes", { body }),
     galaxyWrite: (body) => call("galaxy/write", { body }),

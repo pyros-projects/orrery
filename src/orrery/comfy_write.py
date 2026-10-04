@@ -117,3 +117,65 @@ def write_idea(h, task: str, template: str, seed: int, idea: int, params, backen
     if result.get("text"):
         print(result["text"])
     return result
+
+
+class OrreryAsk:
+    """One task of the language model in a run of its own (#171): a text encoder answers once per run, so the app
+    queues one of these per task. Queued by the app; you do not need to add it yourself."""
+
+    CATEGORY = "orrery/internal"
+    FUNCTION = "ask"
+    OUTPUT_NODE = True
+    RETURN_TYPES = ()
+    DESCRIPTION = ("Used by the Orrery Prompt with a text encoder: one task of the language model (a library, a "
+                   "run's rewrites, a slot, a take at the line) in a run of its own, before the run that renders.")
+    TASKS = ("library", "rewrites", "slot", "takes")
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {"task": (list(cls.TASKS),), "what": ("STRING", {"default": ""}),
+                             "template": ("STRING", {"multiline": True}),
+                             "seed": ("INT", {"default": 0, "min": 0, "max": 0xFFFFFFFF})},
+                # the Orrery Prompt's values as the render run gets them; `graph`: that run's prompt (JSON) and `node`
+                # its Orrery Prompt there, so the task reads its wiring as the render run does; `args`: a take's (JSON)
+                "optional": {"target": ("STRING", {"default": "text"}), "args": ("STRING", {"default": ""}),
+                             "preset": ("STRING", {"default": ""}), "home": ("STRING", {"default": ""}),
+                             "params": ("STRING", {"default": ""}), "segment": ("INT", {"default": 0, "min": 0, "max": 99999}),
+                             "sweep": ("STRING", {"default": ""}), "chain": ("STRING", {"default": ""}),
+                             "graph": ("STRING", {"default": ""}), "node": ("STRING", {"default": ""}),
+                             "clip": ("CLIP",), "first_frame": ("IMAGE",), "last_frame": ("IMAGE",)}}
+
+    @classmethod
+    def IS_CHANGED(cls, **_):
+        return float("NaN")  # every task is asked anew
+
+    def ask(self, task, what, template, seed, target="text", args="", preset="", home="", params="", segment=0,
+            sweep="", chain="", graph="", node="", clip=None, first_frame=None, last_frame=None):
+        from orrery import comfy, webapi
+
+        h = resolve_home(home or None)
+        frames = {"first_frame": first_frame, "last_frame": last_frame}
+        try:
+            if task == "takes":  # a sheet's take (#178): sampled anew for each take it already has
+                given = json.loads(args or "{}")
+                model = comfy.llm_for(h, clip, seed=(seed + len(given.get("have") or [])) % 2**32,
+                                      temperature=float(llm_config(h)["writer_temperature"]))
+                if model is None:
+                    raise ValueError("Takes need a language model: pick one in orrery's settings (the gear in the node).")
+                result = webapi.takes_with(h, {**given, "template": template, "target": target, "seed": seed,
+                                               "segment": segment, "chain": chain,
+                                               "params": json.loads(params) if params else {}},
+                                           model, {k: v for k, v in frames.items() if v is not None})
+            else:
+                prompt = json.loads(graph) if graph else None
+                packed, wired, keep, standing = comfy.wiring(prompt, node) if prompt else (False, None, False, frozenset())
+                chain = chain or comfy.DEFAULT_CHAIN
+                result = comfy.run_prompt(template, seed, target, home, preset or comfy.NO_PRESET, None, params, segment,
+                                          clip, comfy._previous(chain, segment), packed, wired, chain, keep, sweep,
+                                          comfy.continued(prompt, node), (comfy._size(first_frame), comfy._size(last_frame)),
+                                          comfy.reads_picks(prompt, node, "OrreryRefMods"), standing, frames,
+                                          ask={"task": task, "what": what})
+        except (webapi.ApiError, ValueError, RuntimeError) as err:
+            result = {"task": task, "what": what, "error": str(err)}
+        print(f"[orrery] ask · {task}{f' · {what[:60]}' if what else ''}: {result.get('error') or 'answered'}")
+        return {"ui": {"orrery_ask": [json.dumps(result, ensure_ascii=False)]}}

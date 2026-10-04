@@ -10,6 +10,7 @@
 // from the picture, Use selected writes one into its exports.
 import { esc, LIBRARY } from "./highlight.js";
 import { icon } from "./icons.js";
+import { llmLocal } from "./miniruns.js";
 import { splitCells } from "./model.js";
 
 const LIB = (name) => new RegExp(`__${name.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&")}(?:\\[[^\\]\\n]*\\])?(?:#[\\w-]+:\\$?[\\w.-]+)*(?::\\d+)?__(?:\\(([^()]*)\\))?`);
@@ -160,6 +161,13 @@ export function openTakes(app, place, near = null) {
     if (multi) sheet.querySelector("[data-tcount]").textContent = `${s.picked.size} of ${s.takes.length} selected`;
     if (enhance && !s.keep && s.takes.length) use.title = "This > rewrites several passages of the screenplay, each on its own at the run: there is no one rewrite to keep";
   };
+  const add = (got) => {  // what a request answered: the rolls of a library first, then the model's takes
+    for (const [list, kind] of [[got.rolled || [], "rolled"], [got.takes || [], "new"]]) {
+      for (const t of list.filter((x) => !s.takes.includes(x))) { s.takes.push(t); from.push(kind); }
+    }
+    if (known && !place.directions) place.directions = got.directions || "";
+    if (enhance && got.keep !== undefined) s.keep = got.keep || null;
+  };
   const ask = async () => {
     s.busy = true;
     s.error = "";
@@ -170,16 +178,24 @@ export function openTakes(app, place, near = null) {
         s.takes.push(...got.takes.filter((t) => !s.takes.includes(t)));
         return;
       }
+      const take = { kind: place.kind, what: place.what, directions: place.directions, steer: steer.value,
+        roll: s.takes.length ? "" : place.roll || "" };
+      if (!app.llmApi() && llmLocal(app)) {  // a text encoder: in runs of their own at the queue's front (#178)
+        const one = place.kind === "slot" || enhance;  // one take a run, each sampled anew; a library's in one run
+        const runs = one ? Number(app.data.llm?.takes?.[enhance ? "enhance" : "slot"]) || 3 : 1;
+        for (let i = 0; i < runs; i++) {
+          const got = await app.bridge.ask("takes", "", JSON.stringify({ ...take, have: s.takes, ...(one ? { n: 1 } : {}) }), { front: true });
+          if (got.error) throw new Error(got.error);
+          add(got);
+          draw();
+        }
+        return;
+      }
       // a slot naming the node's first or last frame (#174): the files of the Load Image nodes behind them
       const frames = /\bimage\s+(first|last)_frame\b/.test(place.what) ? (await app.bridge.frameFiles?.())?.names || {} : {};
-      const got = await app.api.takes({ kind: place.kind, what: place.what, directions: place.directions, template: app.text,
-        target: app.bridge.getTarget(), params: app.bridge.getParams(), seed: app.bridge.getSeed(), segment: app.bridge.getSegment?.() ?? 0,
-        chain: app.bridge.chain?.() || "", steer: steer.value, have: s.takes, frames, roll: s.takes.length ? "" : place.roll || "" });  // as many as the settings say (#274)
-      for (const [list, kind] of [[got.rolled || [], "rolled"], [got.takes, "new"]]) {
-        for (const t of list.filter((x) => !s.takes.includes(x))) { s.takes.push(t); from.push(kind); }
-      }
-      if (known && !place.directions) place.directions = got.directions || "";
-      if (enhance) s.keep = got.keep || null;
+      add(await app.api.takes({ ...take, template: app.text, target: app.bridge.getTarget(), params: app.bridge.getParams(),
+        seed: app.bridge.getSeed(), segment: app.bridge.getSegment?.() ?? 0, chain: app.bridge.chain?.() || "",
+        have: s.takes, frames }));  // as many as the settings say (#274)
     } catch (err) { s.error = err.message; } finally {
       s.busy = false;
       draw();

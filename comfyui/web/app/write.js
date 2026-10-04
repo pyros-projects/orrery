@@ -35,6 +35,18 @@ export async function writeNow(app) {
   app.state.writingNow = open.length;
   if (app.state.tab === "prompt") app.render();
   try {
+    if (!app.llmApi()) {  // a text encoder: a run of its own per library, at the queue's front (#176)
+      const notes = [];
+      for (const name of open) {
+        const got = await app.bridge.ask("library", name, "", { front: true });
+        notes.push(...(got.error ? [`__${name}__: ${got.error}`] : got.notes || []));
+        app.state.writingNow = Math.max(1, app.state.writingNow - 1);
+        if (app.state.tab === "prompt") app.render();
+      }
+      await app.refreshCompletion();
+      return app.toast(notes.length ? notes.map(esc).join("<br>") : "Nothing left to write: the libraries are there.",
+        { label: "Review", run: () => app.go("libraries") });
+    }
     const got = await app.api.writeLibraries({ template: app.text, params: app.bridge.getParams() });
     await app.refreshCompletion();
     app.toast(got.notes.length ? got.notes.map(esc).join("<br>") : "Nothing left to write: the libraries are there.",

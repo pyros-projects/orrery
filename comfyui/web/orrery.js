@@ -68,7 +68,7 @@ function mount(node) {
     w.callback?.(value);
     node.setDirtyCanvas?.(true, true);
   };
-  const batch = { id: 0, done: null };  // the Generate loop that is queueing right now
+  const batch = { id: 0, done: null, asks: 0 };  // the Generate loop that is queueing right now
   const sweep = { on: false };  // a LoRA sweep is being queued: the template and the dials hold still
   const bridge = {
     props: node.properties,
@@ -95,7 +95,10 @@ function mount(node) {
       const id = ++batch.id;
       batch.done = (async () => {
         let queued = 0;
-        for (; queued < runs && id === batch.id; queued++) await app.queuePrompt(0, 1, { queueNodeIds: outputs.map(String) });
+        for (; queued < runs && id === batch.id; queued++) {
+          await bridge.beforeRun?.();
+          await app.queuePrompt(0, 1, { queueNodeIds: outputs.map(String) });
+        }
         return queued;
       })();
       return batch.done;  // how many runs went into the queue
@@ -119,7 +122,7 @@ function mount(node) {
           queued = await queueSweep({
             count, seeds, mode: was[0], progress,
             getSeed: () => find("seed")?.value, setSeed: (seed) => set("seed", seed),
-            queue: async (i) => { set("sweep", `${i}|${folder}`); await app.queuePrompt(0, 1, { queueNodeIds: outputs.map(String) }); },
+            queue: async (i) => { set("sweep", `${i}|${folder}`); await bridge.beforeRun?.(); await app.queuePrompt(0, 1, { queueNodeIds: outputs.map(String) }); },
             live: () => id === batch.id,
           });
         } finally {
@@ -133,10 +136,10 @@ function mount(node) {
       return batch.done;
     },
     stopGenerate: async () => { batch.id++; await batch.done?.catch(() => {}); },
-    // The Write menu: a run of its own with Orrery Write and only what the language model needs (the frames
-    // and a text encoder wired into this node), so it ends when the model has written and no video model
-    // loads. Resolves with the idea, as Orrery Write hands it back; idea n samples the model at seed + n.
-    write: async (task, idea, template) => {
+    // A run of its own (#171, the Write menu): the node `kind` and only what the language model needs (the frames
+    // and a text encoder wired into this node), so it ends when the model has written and no video model loads.
+    // `front`: ahead of the waiting runs; `wait`: resolves with what the node hands back, else once it is queued.
+    mini: async (kind, inputs, { front = false, wait = true, wire = [], graph = false } = {}) => {
       const { output } = await app.graphToPrompt();
       const key = Object.keys(output).find((k) => output[k]?.class_type === "OrreryPrompt" && (k === String(node.id) || k.endsWith(`:${node.id}`)));
       const me = key && output[key];
@@ -148,36 +151,50 @@ function mount(node) {
         Object.values(output[id].inputs || {}).forEach((v) => { if (Array.isArray(v)) visit(String(v[0])); });
       };
       // as this node has them, a value or a link (a seed or a home may come from another node)
-      const passed = ["seed", "home", "params", "clip", "first_frame", "last_frame"].filter((k) => me.inputs[k] !== undefined);
+      const passed = wire.filter((k) => me.inputs[k] !== undefined);
       passed.forEach((k) => { if (Array.isArray(me.inputs[k])) visit(String(me.inputs[k][0])); });
-      const prompt = { ...keep, orrery_write: { class_type: "OrreryWrite", inputs: {
-        task, template, idea, ...Object.fromEntries(passed.map((k) => [k, me.inputs[k]])) } } };
+      const id = kind === "OrreryWrite" ? "orrery_write" : `orrery_ask_${++batch.asks}`;
+      const prompt = { ...keep, [id]: { class_type: kind, inputs: {
+        ...inputs, ...Object.fromEntries(passed.map((k) => [k, me.inputs[k]])),
+        ...(graph ? { graph: JSON.stringify(output), node: key } : {}) } } };
       // listening before it is queued: a quick run (or one that fails at once) can end before the POST answers
       const seen = [];
       let settle = () => {};
-      const on = Object.fromEntries(["executed", "execution_error", "execution_interrupted"].map((kind) =>
-        [kind, ({ detail }) => { seen.push([kind, detail]); settle(); }]));
-      Object.entries(on).forEach(([kind, f]) => api.addEventListener(kind, f));
+      const on = Object.fromEntries(["executed", "execution_error", "execution_interrupted"].map((ev) =>
+        [ev, ({ detail }) => { seen.push([ev, detail]); settle(); }]));
+      if (wait) Object.entries(on).forEach(([ev, f]) => api.addEventListener(ev, f));
       try {
         const res = await api.fetchApi("/prompt", { method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt, client_id: api.clientId ?? api.initialClientId }) });
+          body: JSON.stringify({ prompt, client_id: api.clientId ?? api.initialClientId, ...(front ? { front: true } : {}) }) });
         const queued = await res.json();
-        if (!res.ok || !queued.prompt_id) throw new Error(queued.error?.message || "ComfyUI did not take the write run.");
+        if (!res.ok || !queued.prompt_id) throw new Error(queued.error?.message || "ComfyUI did not take the run.");
+        if (!wait) return queued.prompt_id;
+        const out = kind === "OrreryWrite" ? "orrery_write" : "orrery_ask";
         return await new Promise((resolve, reject) => {
           settle = () => {
-            for (const [kind, d] of seen.splice(0)) {
+            for (const [ev, d] of seen.splice(0)) {
               if (d?.prompt_id !== queued.prompt_id) continue;
-              if (kind === "executed" && d.node === "orrery_write") return resolve(JSON.parse(d.output?.orrery_write?.[0] || "{}"));
-              if (kind === "execution_error") return reject(new Error(`${d.node_type ? `${d.node_type}: ` : ""}${d.exception_message || "the write run failed"}`));
-              if (kind === "execution_interrupted") return reject(new Error("The write run was stopped."));
+              if (ev === "executed" && d.node === id) return resolve(JSON.parse(d.output?.[out]?.[0] || "{}"));
+              if (ev === "execution_error") return reject(new Error(`${d.node_type ? `${d.node_type}: ` : ""}${d.exception_message || "the run failed"}`));
+              if (ev === "execution_interrupted") return reject(new Error("The run was stopped."));
             }
           };
           settle();
         });
       } finally {
-        Object.entries(on).forEach(([kind, f]) => api.removeEventListener(kind, f));
+        if (wait) Object.entries(on).forEach(([ev, f]) => api.removeEventListener(ev, f));
       }
     },
+    // The Write menu: an idea in a run of its own (Orrery Write); idea n samples the model at seed + n.
+    write: (task, idea, template) => bridge.mini("OrreryWrite", { task, template, idea },
+      { wire: ["seed", "home", "params", "clip", "first_frame", "last_frame"] }),
+    // One task of the language model in a run of its own (Orrery Ask, #171): with a text encoder, a library, a run's
+    // rewrites, a slot, a take at the line. It reads the node's values and wiring as the run that renders does.
+    ask: (task, what = "", args = "", options = {}) => bridge.mini("OrreryAsk", { task, what, args }, { ...options, graph: true,
+      wire: ["template", "seed", "target", "preset", "home", "params", "segment", "sweep", "chain", "clip", "first_frame", "last_frame"] }),
+    // Before each run Generate queues: the app's mini-runs for it (#171), set by the app.
+    beforeRun: null,
+    getSweep: () => find("sweep")?.value || "",
     // The folder the reel's clips live in (#197): the hidden chain widget, which the app names after the reel
     // (reels/<preset>, reels/untitled/<date time>); empty is the server's default, h3_context.
     chain: () => find("chain")?.value || "",

@@ -13,7 +13,7 @@ import re
 from datetime import UTC, datetime
 from pathlib import Path
 
-from orrery import anchors, endpoint, history, loras, preview, runs, uistate
+from orrery import anchors, endpoint, history, loras, miniruns, preview, runs, uistate
 from orrery import batch as batches
 from orrery import sweep as sweeps
 from orrery.autolib import needs, write_apart
@@ -21,7 +21,7 @@ from orrery.chain import DEFAULT_CHAIN, load, previous_clip
 from orrery.comfy_film import OrreryContinue, OrreryFilm
 from orrery.comfy_llm import ComfyBackend, can_write, llm_config
 from orrery.comfy_refmods import OrreryRefMods
-from orrery.comfy_write import OrreryWrite
+from orrery.comfy_write import OrreryAsk, OrreryWrite
 from orrery.continuum.grid import CONTEXT
 from orrery.dsl import (
     RNG,
@@ -315,40 +315,25 @@ def _passages(result, target: str) -> list[tuple[str, str, object]]:
     return out
 
 
-def run_prompt(template: str, seed: int, target: str, home: str = "",
-               preset: str = NO_PRESET, linked: str | None = None,
-               params: str = "", segment: int = 0, clip=None,
-               frames=None, packed: bool = False,
-               wired: int | None = None, chain: str = DEFAULT_CHAIN,
-               keep: bool = False, sweep: str = "",
-               continued: bool = False, sizes: tuple[Size, Size] = (None, None),
-               refmodded: bool = True, standing: frozenset[int] = frozenset(),
-               pictures: dict | None = None) -> tuple[str, str, int, int, int, int, list, int, int]:
-    """`frames`: the previous clip's stills, which the model sees when it writes `--…--` slots.
-    `pictures`: the IMAGEs wired into first_frame and last_frame, for a slot that names them (#174).
-    `packed`: Orrery Refs routes the images per clip; `wired`: the reference images Reference to
-    Video has (both from the graph, see `wiring`). `chain`: the Motion Context chain SEND: reads;
-    `keep`: Orrery Refs' keep_sent, so sent images with a stored anchor are held from segment 0.
-    `sweep`: "run|galaxy folder", set by Generate for each run of a LoRA sweep (orrery.sweep) or a
-    `: grid` (orrery.batch); the LoRA runs are the outer loop, the grid's cells the inner one.
-    `continued`: an Orrery Continue reads the picks, which pins 22 frames whatever `context:` says.
-    `sizes`: (width, height) of the frames wired into first_frame and last_frame, or None.
-    `refmodded`: an Orrery RefMods reads the picks, which applies the clip's RefMods."""
-    h = resolve_home(home or None)
-    if preset and preset != NO_PRESET:
-        template, linked = load_preset(h, preset), preset
-    if linked and not preset_exists(h, linked):
-        linked = None
+def _dials(template: str, params) -> dict[str, str]:
+    """The dials (JSON or a dict) of the template's own bindings."""
     known = {name for name, _ in bindings(template)}
-    dials = {k: v for k, v in dial_values(params).items() if k in known}
-    source = long_form(strip_comments(resolve_includes(h, override(template, dials))))  # the hash keeps the comments
-    if target == "text" or split_reel(source) is None:  # no SCENE: one clip on its own, never a reel's next (#190)
-        segment, frames = 0, None
+    return {k: v for k, v in dial_values(params if isinstance(params, str) else json.dumps(params or {})).items() if k in known}
+
+
+def dialed(h, template: str, params) -> str:
+    """The template as a run reads it: its dials applied, @include resolved, comments gone, the short forms long."""
+    return long_form(strip_comments(resolve_includes(h, override(template, _dials(template, params)))))  # the hash keeps the comments
+
+
+def _sweep_run(h, source: str, sweep: str):
+    """A LoRA sweep's or a grid's run of this queue item (the first, from ComfyUI's own Run): the template as that
+    run reads it, its grid cell, and what the run records of it."""
     plan, sweep_picks, sweep_data, folder, cell = sweeps.runs(source), [], None, "", None
     grid = batches.axes(*with_inline(source, h.libraries())) if parse(source).params.grid is not None else []
     cells = batches.cells(grid) if grid else 1
     planned = sweep_formula(source, grid)
-    if plan or grid:  # a LoRA sweep or a grid: this queue item is one of its runs (the first, from ComfyUI's own Run)
+    if plan or grid:
         index, _, folder = (sweep or "").partition("|")
         i = int(index) if index.strip().isdigit() else 0
         total = max(len(plan), 1) * cells
@@ -360,6 +345,104 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
             source = sweeps.apply(source, plan[lora_run])
         cell = cell if grid else None
         sweep_data = {"run": i, "runs": total}
+    return source, cell, plan, grid, cells, planned, sweep_picks, sweep_data, folder
+
+
+def swept(h, source: str, sweep: str) -> tuple[str, int | None]:
+    """The template and the grid cell a sweep's run reads (#171's plan asks the same as its render run)."""
+    return _sweep_run(h, source, sweep)[:2]
+
+
+def _ask_library(one, h, backend) -> dict:
+    """A mini-run's library (#171): written as a run writes it, for review."""
+    from orrery.autolib import lists_in, prompt_for, write_lists
+    from orrery.llm import extract_json
+
+    if not one:
+        return {"task": "library", "error": "nothing to write: the library is there, or no language model is set"}
+    try:
+        notes = write_lists(h, one, lists_in(extract_json(backend.complete(prompt_for(one))), one), backend)
+    except (InvalidProposal, RuntimeError) as err:
+        return {"task": "library", "what": one[0].name, "error": str(err)}
+    return {"task": "library", "what": one[0].name, "notes": notes}
+
+
+def _ask_rewrites(h, passages, result, target: str, packed: bool, backend) -> dict:
+    """A mini-run's rewrites (#171): every `>` passage of the run in one request, as the run asks them, each into
+    the cache by its instruction and passage."""
+    if backend is None:
+        return {"task": "rewrites", "error": "> enhance needs a language model"}
+    if not passages:
+        return {"task": "rewrites", "written": 0, "of": 0}
+    marked = [keep_marks(passage) for _, passage, _ in passages]
+    prompt = request([], [], result.text, 0, [(i, t) for (i, _, _), (t, _) in zip(passages, marked, strict=True)],
+                     made=_made(result, packed) if target != "text" else [])
+    try:
+        reply = backend.complete(prompt)
+        written = 0
+        for (instruction, before, _), (_, kept), new in zip(passages, marked, rewrites_in(reply, len(marked)), strict=False):
+            after = put_back(new, kept) if new else None
+            if after:
+                miniruns.put(h, miniruns.rewrite_cache_key(rewrite_key(instruction, before)), after)
+                written += 1
+    except (InvalidProposal, RuntimeError) as err:
+        return {"task": "rewrites", "error": str(err)}
+    return {"task": "rewrites", "written": written, "of": len(passages)}
+
+
+def _ask_slot(h, directions: str, todo: list[str], result, target: str, packed: bool, frames, pictures, backend, key) -> dict:
+    """A mini-run's slot (#171): one slot, seeing what the run's request would show it (the prompt as it rolls, the
+    clip before, the pictures it names), into the cache under `key`."""
+    if directions not in todo:
+        return {"task": "slot", "what": directions, "error": "this roll has no such slot"}
+    if backend is None:
+        return {"task": "slot", "what": directions, "error": "--…-- slots are written by a language model"}
+    said: list[dict] = []
+    named, shown = _slot_pictures(h, pictures_in([directions]), result, pictures, said)
+    prompt = request([], [directions], result.text, _count(frames), [],
+                     made=_made(result, packed) if target != "text" else [], pictures=named)
+    try:
+        got, _ = write(h, [], [directions], backend.complete(prompt, images=_images(frames, shown, backend)), backend)
+    except (InvalidProposal, RuntimeError) as err:
+        return {"task": "slot", "what": directions, "error": str(err)}
+    if directions not in got:
+        return {"task": "slot", "what": directions, "error": "the language model wrote nothing for it"}
+    miniruns.put(h, key, got[directions])
+    return {"task": "slot", "what": directions, "text": got[directions], "notes": [i["message"] for i in said]}
+
+
+def run_prompt(template: str, seed: int, target: str, home: str = "",
+               preset: str = NO_PRESET, linked: str | None = None,
+               params: str = "", segment: int = 0, clip=None,
+               frames=None, packed: bool = False,
+               wired: int | None = None, chain: str = DEFAULT_CHAIN,
+               keep: bool = False, sweep: str = "",
+               continued: bool = False, sizes: tuple[Size, Size] = (None, None),
+               refmodded: bool = True, standing: frozenset[int] = frozenset(),
+               pictures: dict | None = None, ask: dict | None = None):
+    """`frames`: the previous clip's stills, which the model sees when it writes `--…--` slots.
+    `pictures`: the IMAGEs wired into first_frame and last_frame, for a slot that names them (#174).
+    `packed`: Orrery Refs routes the images per clip; `wired`: the reference images Reference to
+    Video has (both from the graph, see `wiring`). `chain`: the Motion Context chain SEND: reads;
+    `keep`: Orrery Refs' keep_sent, so sent images with a stored anchor are held from segment 0.
+    `sweep`: "run|galaxy folder", set by Generate for each run of a LoRA sweep (orrery.sweep) or a
+    `: grid` (orrery.batch); the LoRA runs are the outer loop, the grid's cells the inner one.
+    `continued`: an Orrery Continue reads the picks, which pins 22 frames whatever `context:` says.
+    `sizes`: (width, height) of the frames wired into first_frame and last_frame, or None.
+    `refmodded`: an Orrery RefMods reads the picks, which applies the clip's RefMods.
+    `ask`: one task of a mini-run (#171), {"task": "library"|"rewrites"|"slot", "what": …}: the run goes as far as
+    the task needs, answers it with one request, puts the answer where the render run finds it, and returns what it
+    did (a dict) instead of the run's outputs. Without it, the run takes what its mini-runs wrote and asks the model
+    only for the rest."""
+    h = resolve_home(home or None)
+    if preset and preset != NO_PRESET:
+        template, linked = load_preset(h, preset), preset
+    if linked and not preset_exists(h, linked):
+        linked = None
+    dials, source = _dials(template, params), dialed(h, template, params)
+    if target == "text" or split_reel(source) is None:  # no SCENE: one clip on its own, never a reel's next (#190)
+        segment, frames = 0, None
+    source, cell, plan, grid, cells, planned, sweep_picks, sweep_data, folder = _sweep_run(h, source, sweep)
 
     # One request per run (ComfyUI cannot safely generate twice): libraries still missing and the
     # slots go together, the slots then seeing the template; otherwise the slots see the compiled prompt.
@@ -372,6 +455,10 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     notes: list[str] = []
     missed: dict[str, str] = {}  # marker → directions of the slots the combined answer left out
     wanted = needs(h, source, int(llm_config(h)["entries"])) if missing and backend is not None else []
+    if ask and ask.get("task") == "library":
+        return _ask_library([n for n in wanted if n.name == ask.get("what")], h, backend)
+    if ask and wanted:
+        return {**ask, "error": "the libraries this template needs are still to be written"}
     if wanted and isinstance(backend, OpenAIBackend):  # an endpoint writes each library apart, at once, and can be
         notes, wanted = write_apart(h, wanted, backend), []  # asked again: the slots then see the compiled prompt
     if wanted:
@@ -400,15 +487,22 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                          "and it is created when the node runs") from err
     passages = _passages(result, target)
     enhanced: list[dict] = []
-    if passages:  # a rewrite kept for this roll (Use selected, #276) stands in for the model's, before the slots
-        kept = kept_rewrites(h)
-        for instruction, before, place in [p for p in passages if rewrite_key(p[0], p[1]) in kept]:
-            place(kept[rewrite_key(instruction, before)]["text"])
-            enhanced.append({"instruction": instruction, "before": before,
-                             "after": kept[rewrite_key(instruction, before)]["text"], "kept": True})
-        passages = [p for p in passages if rewrite_key(p[0], p[1]) not in kept]
+    if passages:  # a rewrite kept for this roll (Use selected, #276) or written by its mini-run (#171) stands in
+        kept = kept_rewrites(h)  # for the model's, before the slots
+        asked = {} if ask and ask.get("task") == "rewrites" else miniruns.cached(h)
+        ready = {}
+        for instruction, before, place in passages:
+            key = rewrite_key(instruction, before)
+            if key in kept or miniruns.rewrite_cache_key(key) in asked:
+                ready[key] = kept[key]["text"] if key in kept else asked[miniruns.rewrite_cache_key(key)]
+                place(ready[key])
+                enhanced.append({"instruction": instruction, "before": before, "after": ready[key],
+                                 **({"kept": True} if key in kept else {"asked": True})})
+        passages = [p for p in passages if rewrite_key(p[0], p[1]) not in ready]
         if enhanced and target != "text":
             result.text = render_scene(result.scene, target, [])
+    if ask and ask.get("task") == "rewrites":
+        return _ask_rewrites(h, passages, result, target, packed, backend or llm_for(h, clip, seed=seed))
     todo = slots(result.text)
     todo += [d for d in export_slots(getattr(result, "exports", {})) if d not in todo]  # EXPORT: lines write too
     later = [d for d in todo if names_output(d)]  # from the picture the run makes: once it exists (#174, #175)
@@ -417,6 +511,14 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     lint += [{"severity": "warn", "message": f"--{d}-- names image output, the picture this run makes, which exists only "
                                              "after it: such a slot stands in an EXPORT: line, and the Gallery writes it."}
              for d in later if d not in exported]
+    if ask and ask.get("task") == "slot":
+        return _ask_slot(h, ask.get("what", ""), todo, result, target, packed, frames, pictures, backend,
+                         miniruns.slot_key(source, seed, segment, cell, ask.get("what", "")))
+    asked_slots = {}
+    if todo and not wanted:  # what the run's mini-runs wrote (#171)
+        asked = miniruns.cached(h)
+        asked_slots = {d: asked[k] for d in todo if (k := miniruns.slot_key(source, seed, segment, cell, d)) in asked}
+        todo = [d for d in todo if d not in asked_slots]
     named, shown = _slot_pictures(h, pictures_in(todo), result, pictures, lint) if todo else ([], [])
     if passages and wanted:
         lint.append({"severity": "info", "message": "The > enhance instructions run on the next run; this one "
@@ -447,6 +549,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                 result.text = render_scene(result.scene, target, [])
         except InvalidProposal as err:
             lint.append({"severity": "warn", "message": f"The language model wrote no slots or rewrites ({err})."})
+    texts = {**asked_slots, **texts}
     unanswered = [missed[k] for k in todo if k in missed] if wanted else [d for d in todo if d not in texts]
     lint += [{"severity": "warn", "message": f"--{d}-- got no text from the language model; its directions stand in."}
              for d in unanswered]
@@ -1077,7 +1180,7 @@ class OrreryRefs:
 
 NODE_CLASS_MAPPINGS = {"OrreryPrompt": OrreryPrompt, "OrreryLog": OrreryLog, "OrreryRefs": OrreryRefs,
                        "OrreryContinue": OrreryContinue, "OrreryFilm": OrreryFilm, "OrreryWrite": OrreryWrite,
-                       "OrreryRefMods": OrreryRefMods}
+                       "OrreryRefMods": OrreryRefMods, "OrreryAsk": OrreryAsk}
 NODE_DISPLAY_NAME_MAPPINGS = {"OrreryPrompt": "Orrery Prompt", "OrreryLog": "Orrery Log", "OrreryRefs": "Orrery Refs",
                               "OrreryContinue": "Orrery Continue", "OrreryFilm": "Orrery Film",
-                              "OrreryWrite": "Orrery Write", "OrreryRefMods": "Orrery RefMods"}
+                              "OrreryWrite": "Orrery Write", "OrreryRefMods": "Orrery RefMods", "OrreryAsk": "Orrery Ask"}

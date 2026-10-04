@@ -940,6 +940,25 @@ test("a --slot-- is violet in the editor, what is in it coloured as ever (#280)"
   assert.doesNotMatch(highlight("# --not a slot--", new Set()), /t-slot/);
 });
 
+test("with a text encoder, a run's language-model tasks go in mini-runs before it, in the plan's order (#171)", async () => {
+  const { llmLocal, queueTasks } = await import("../../comfyui/web/app/miniruns.js");
+  const app = (kind, clip = false) => ({ llmApi: () => kind === "api", data: { llm: { active: kind ? { kind } : null } },
+    bridge: { wired: (name) => name === "clip" && clip } });
+  assert.equal(llmLocal(app("comfy")), true);
+  assert.equal(llmLocal(app(null, true)), true);  // a text encoder wired into clip
+  assert.equal(llmLocal(app("api", true)), false);  // an endpoint wins
+  assert.equal(llmLocal(app(null)), false);
+  const asked = [], planned = [];
+  const local = { ...app("comfy"), api: { plan: async (body) => { planned.push(body); return { tasks: [{ task: "library", what: "sky" }, { task: "slot", what: "a key" }] }; } } };
+  Object.assign(local.bridge, { getText: () => "t", getTarget: () => "text", getParams: () => ({}), getSeed: () => 7, getSegment: () => 2,
+    getSweep: () => "", ask: async (...a) => { asked.push(a); } });
+  assert.equal(await queueTasks(local), 2);
+  assert.equal(planned[0].seed, 7);
+  assert.equal(planned[0].segment, 2);
+  assert.deepEqual(asked, [["library", "sky", "", { wait: false }], ["slot", "a key", "", { wait: false }]]);
+  assert.equal(await queueTasks({ ...app("api"), bridge: {} }), 0);  // an endpoint: the run asks it, as before
+});
+
 test("a gallery picture's export keeps its slots from image output apart, for a 🎲 that writes them from the picture (#175)", async () => {
   const { pictureSlots } = await import("../../comfyui/web/app/model.js");
   assert.deepEqual(pictureSlots("a heron, --her coat as image output shows it--, waiting"),

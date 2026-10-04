@@ -9,6 +9,10 @@ checks) are left out.
 
 ### Added
 
+- Local language models, one task per run (#171): with a text encoder, Roll queues a run of its own (Orrery Ask) for
+  each of a run's language-model tasks ahead of it (each library, the rewrites, each slot), and the run takes their
+  answers; Write now and the takes at the line work with a text encoder too, in runs of their own at the front of the
+  queue.
 - The language model at the line (#170): with an API endpoint, a 🎲 at the end of a slot's line, of a library still to
   be written and of a `> enhance` line opens three takes for that place at the node's seed; **More takes** asks for
   three more, a steer goes with them; a click selects a take, **Use selected** puts it in place and **Keep the

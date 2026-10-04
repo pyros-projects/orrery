@@ -49,13 +49,28 @@ The footer of the Prompt tab names the active model: `LLM qwen3vl_8b…`, or `LL
 | **Takes at the line** (API, #173) | a 🎲 at the end of a slot's line, of a library still to be written, of a `> enhance` line | The slots are violet in the editor; hovering a 🎲 outlines the place it stands for, so two slots on one line tell their dice apart, and Ctrl+click on a slot opens its takes too (#280). Three takes for that place (or as many as the gear's *Takes a 🎲 asks for* says, #274), written at the node's seed with the prompt as it rolls around it. **More takes** asks for as many more (new against those there), the steering line goes with them ("darker", "as an anime character"). A click selects a take (a violet border), a click on another moves the selection, and **Use selected** puts it in place of the slot or the library (#276); **Keep the direction** writes your steer into its directions (`--…, darker--`, `__name__(darker)`, `> …, darker`); both are unsaved edits with Undo. A `> enhance` line's takes show what the rewrite does at this seed; **Use selected** keeps the one you pick for exactly this roll (the instruction and the prompt as it rolled), and a run that rolls it uses it instead of asking the model; another roll is rewritten as before. A `>` over several passages of a screenplay keeps none, since the run rewrites each apart. With a text encoder the takes come with #171. |
 | **A library at the line** (API, #272) | the 🎲 of a library still to be written (`__bus_smells__`) | The sheet writes the library itself: as many entries as a new library starts with (the gear, *A library it creates starts with*; `__name:30__` asks for at least 30), from the lines that use it, as a run would write it. Steer them, **More takes** for as many more; click the entries worth keeping (**All**, **None**), and **Keep as the library** writes them as the library, straight in, not To review (`orrery lib undo` takes it back). **Keep the direction** keeps your steer as the library's directions, for later top-ups. One entry selected, **Use selected** puts it into the line instead. |
 | **A library that exists, at the line** (API, #273) | a library's roll at the line's end (`→ arcade · bob cut`), or Ctrl+click on its name | Its takes: entries rolled from it (the one at this seed first, then as its weights and your ratings roll them) and new ones the language model writes, none it has, as many of each as the gear says. Select several; **Add to the library** writes the new ones you picked straight in (the sheet stays: More, then add more), **Use selected** puts one entry into the line. **Keep the direction** saves your steer as the library's directions. With the annotations on Hover or None, Ctrl+click on a library's name opens it (on one still to be written, its sheet from #272). |
-| **Write now** (API only, #168) | a template with libraries still to write | A button in the footer writes them all at once, one request each, before any run. They wait in To review. |
+| **Write now** (#168, #176) | a template with libraries still to write | A button in the footer writes them before any run, one request each: with an API endpoint all at once beside ComfyUI, with a text encoder each in a run of its own at the front of the queue. They wait in To review. |
 | **`orrery lib`** (CLI) | `gen`, `more`, `edit`, `undo` | Libraries in plain language: `orrery lib edit animal 'make a feline list from the cats'`. Nothing is kept until you confirm it. |
 
 The Write menu shows its ideas in a sheet: ‹ › pages through them, **Another idea** asks again, and
 **Insert** puts one into the editor as an unsaved edit, with Undo. With an API endpoint the server
 asks the model directly, so an idea comes while a render runs. A frame that something other than a
 Load Image computes still takes a run of its own.
+
+### What changes with a text encoder: one task per run (#171)
+
+A text encoder in ComfyUI answers once per run, and a small model does better with one task at a time. So
+orrery queues **mini-runs** (the node Orrery Ask, with only the text encoder and the frames): each answers one
+task, and none loads the video model.
+
+- **Roll** asks, before each run it queues, what that run needs from the model, and queues a mini-run for each
+  ahead of it: each library still to be written, then the run's rewrites, then each slot (so a slot sees the
+  prose rewritten). In a reel, the next clip's mini-runs come after the clip before, so its slots see that clip.
+  Each answer is kept for that exact roll (the home's `asked.json`), and the run takes it instead of asking.
+  ComfyUI's own Run queues no mini-runs: the run asks for everything at once, as before.
+- **Write now** (#176) queues a run of its own per library, at the front of the queue.
+- **The takes at the line** (#178) come from runs of their own at the front of the queue: one take per run for
+  a slot or a `>` line, each sampled anew; a library's sheet in one run.
 
 ### What changes with an API endpoint
 
@@ -76,6 +91,9 @@ With a **text encoder** (the gear → A text encoder in ComfyUI):
 
 - [ ] Tutorial 17: Run writes `__runway_shoes__` and `__unusual_runway_venue__`. They appear under To review; accept one, discard one.
 - [ ] Tutorial 18: Run writes the slot, and the `>` line rewrites the prompt.
+- [ ] Tutorial 18 with `__bus_smells__` added, **Roll**: the queue shows three runs of Orrery Ask (the library, the rewrites, the slot) before the render; the render's log asks the model nothing, and the prompt holds all three.
+- [ ] Tutorial 17 with fresh library names: **Write now** queues a run per library at the front of the queue; they wait in To review.
+- [ ] A slot's 🎲: three takes arrive one after another, each from a run of its own; a library's 🎲 writes its entries in one.
 - [ ] A reel with a slot from the second clip on: the text continues the clip before.
 - [ ] A CAST member with `image krea/09_character_creator/…` and `--who she is--`: the sentence fits the picture's prompt.
 - [ ] The creator with `backstory = --…--` in EXPORT: the Gallery's sheet shows it.
@@ -103,10 +121,6 @@ With an **API endpoint** (the gear → An API endpoint, then Check and Save):
 
 ## Planned
 
-- 🏠 **Local language models, one task per run** (#171). A text encoder can answer only once per
-  run, so orrery queues mini-runs, one task each: Write now with a text encoder, a run's libraries
-  and slots each in a request of its own, and the line sheet's takes. Small models do better with
-  one task at a time.
 - 🧠 **The model watches the input video** (#82). It goes on with the video's story, writes the
   head's `END ON:` and draws CAST descriptions from what the video shows.
 

@@ -52,7 +52,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/galaxy/folder/add"), ("POST", "/orrery/galaxy/folder/rename"),
         ("POST", "/orrery/galaxy/folder/delete"),
         ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
-        ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"), ("POST", "/orrery/llm/takes"), ("POST", "/orrery/llm/keep"), ("POST", "/orrery/galaxy/takes"), ("POST", "/orrery/galaxy/write"),
+        ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"), ("POST", "/orrery/llm/takes"), ("POST", "/orrery/llm/keep"), ("POST", "/orrery/llm/plan"), ("POST", "/orrery/galaxy/takes"), ("POST", "/orrery/galaxy/write"),
         ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/add"), ("POST", "/orrery/library/discard"),
         ("GET", "/orrery/home"), ("POST", "/orrery/home"),
         ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("POST", "/orrery/chain/move"), ("POST", "/orrery/chain/pick"), ("POST", "/orrery/chain/delete"), ("POST", "/orrery/chain/clear"), ("GET", "/orrery/chain/tree"), ("POST", "/orrery/chain/walk"), ("POST", "/orrery/chain/end"),
@@ -957,6 +957,14 @@ def test_keep_as_the_library_writes_the_picked_entries_straight_in(home):
     assert lib.meta["directions"] == "weather words" and not lib.meta.get("pending")
     assert ok(home, webapi.library_add, name="sky_kind", entries=["Fog", "hail"])["added"] == 1
     assert api(home, webapi.library_add, name="sky_kind", entries=[])[0] == 400
+
+
+def test_the_plan_of_a_run_lists_its_language_model_tasks_in_order(home):
+    """#171: what Roll queues mini-runs for before a run: libraries, the rewrites, each slot (none from image output)."""
+    template = "a fox under a __sky_mood__ sky, --one small object--\n> moody\nEXPORT: sheet = --a sheet from image output--"
+    assert ok(home, webapi.llm_plan, template=template, seed=2)["tasks"] == [
+        {"task": "library", "what": "sky_mood"}, {"task": "rewrites", "what": ""}, {"task": "slot", "what": "one small object"}]
+    assert ok(home, webapi.llm_plan, template="a fox", seed=2)["tasks"] == []
 
 
 def test_how_many_takes_each_sheet_asks_for_is_a_setting(home, fake_api):
