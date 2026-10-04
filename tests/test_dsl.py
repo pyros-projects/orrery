@@ -607,3 +607,12 @@ def test_the_node_turns_a_knob_in_the_scope_it_holds_in():
     out = override(t, {"~-1|<lora:turbo:0.8>": "<lora:turbo:0.6, 0%, 50%>", "~1|turbo(1)": "turbo(0.5)", "~0|gone(1)": "x(2)"})
     assert out == "LORA: <lora:turbo:0.6, 0%, 50%>\nSET: image_1(0.3|0.6)\nSCENE a\nSET: turbo(1)\nSCENE b\nSET: turbo(0.5)"
     assert override(t, {"~x|turbo(1)": "turbo(2)", "~1|turbo(1)": ""}) == t  # a key without a scope, an empty value
+
+
+def test_a_lora_line_rolls_on_its_own_and_stays_out_of_the_text():
+    """#311: the model's, as in a screenplay; what it rolls is a pick like any other."""
+    libs = LIBS | {"sets": Library("sets", [Entry("<lora:ink:0.8>")])}
+    got = expand("LORA: __sets__ <lora:grain:0.4>\nA __animal__.\nLORA:", 1, libs)
+    assert got.loras == "<lora:ink:0.8> <lora:grain:0.4>" and got.text.startswith("A ") and "LORA" not in got.text
+    assert any(p.label == "__sets__" for p in got.picks)
+    assert expand("A __animal__.", 1, libs).loras == ""

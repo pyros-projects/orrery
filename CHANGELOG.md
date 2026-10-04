@@ -168,6 +168,8 @@ checks) are left out.
 
 ### Fixed
 
+- A text template's `LORA:` line (a Krea prompt) goes on the model that passes through the Orrery Prompt, as in a
+  screenplay, instead of landing in the prompt (#311).
 - Ticking a choice in a dial's menu no longer throws its list back to the top (#290).
 - Presets has a reload button, and every tab reads what it shows again when it opens (#290).
 - The results under the prompt show the picture of a run with Orrery Log; the Krea example runs its model through the
