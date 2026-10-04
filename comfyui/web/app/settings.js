@@ -114,13 +114,12 @@ export const SECTION_HTML = {
       <label class="check"><input type="radio" name="oa-src" value="api" ${s.source === "api" ? "checked" : ""}><span>An API endpoint: OpenAI, or a server that speaks its protocol</span></label></div>
     <div class="llm-src src-comfy">
     <p class="muted flush">A text encoder that is a whole language model can write: Krea 2's <code>qwen3vl_4b</code> or a Qwen3-VL 8B build.
-      MiniMax H3's encoder is cut short and cannot. The model loads when the node runs and writes once; ComfyUI moves it out when the video model needs the room.
-      A text encoder wired into the node's <b>clip</b> input wins over this choice.</p>
+      MiniMax H3's encoder is cut short and cannot. It writes in runs of its own, one task each, ahead of the run that renders; ComfyUI moves it out when the video model needs the room.</p>
     <div class="field"><label class="label" for="oa-llm">Model</label><select class="input" id="oa-llm">${options}</select>
       ${s.files.length ? "" : '<span class="warn">No text encoders found (is this running inside ComfyUI?).</span>'}</div></div>
     <div class="llm-src src-api">
     <p class="muted flush">Every language-model task goes to the endpoint: the libraries, <code>--slots--</code> and <code>&gt; enhance</code> of a run, the <b>Write</b> menu, <code>orrery lib</code>.
-      It runs beside ComfyUI: no VRAM, no text encoder pushing the video model out, no waiting behind a render. It wins over a text encoder wired into <b>clip</b>.
+      It runs beside ComfyUI: no VRAM, no text encoder pushing the video model out, no waiting behind a render. 
       <b>Use this endpoint</b> checks it first: the key, and one short answer from the model.</p>
     <div class="field"><label class="label" for="oa-api-url">Endpoint</label>
       <input class="input mono" id="oa-api-url" value="${esc(s.api.base_url)}" spellcheck="false"></div>

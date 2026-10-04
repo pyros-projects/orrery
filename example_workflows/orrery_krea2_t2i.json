@@ -20,13 +20,6 @@
       "mode": 0,
       "inputs": [
         {
-          "localized_name": "clip",
-          "name": "clip",
-          "shape": 7,
-          "type": "CLIP",
-          "link": 4
-        },
-        {
           "localized_name": "template",
           "name": "template",
           "type": "STRING",
@@ -370,8 +363,7 @@
           "name": "CLIP",
           "type": "CLIP",
           "links": [
-            3,
-            4
+            3
           ]
         }
       ],
@@ -854,14 +846,6 @@
       5,
       0,
       8,
-      0,
-      "CLIP"
-    ],
-    [
-      4,
-      5,
-      0,
-      1,
       0,
       "CLIP"
     ],

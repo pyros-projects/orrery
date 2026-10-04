@@ -427,7 +427,7 @@ test("the Write menu offers a writer only where it can write", () => {
   });
   const reel = "@h3 t2va\nCHUNK a\nSHOT 5s\nA.\nCHUNK b\nSHOT 5s\nB.", fl2va = "@h3 fl2va 16:9\nSHOT 5s\nA.";
   assert.match(writerBlock(app(reel, { llm: false }), "continue"), /language model/);
-  assert.equal(writerBlock(app(reel, { llm: false, clip: true }), "continue"), "");
+  assert.match(writerBlock(app(reel, { llm: false, clip: true }), "continue"), /language model/);  // a wired clip counts no more (#282)
   assert.match(writerBlock(app("@h3 t2va\nCHUNK a repeat forever\nSHOT 5s\nA."), "continue"), /forever/);
   assert.match(writerBlock(app(fl2va), "continue"), /Needs a reel/);
   assert.match(writerBlock(app(reel, { frames: ["first_frame", "last_frame"] }), "story"), /not for a reel/);
@@ -938,6 +938,25 @@ test("a --slot-- is violet in the editor, what is in it coloured as ever (#280)"
   const html = highlight("a fox with --one small object-- and --a sheet of $who--.", new Set());
   assert.match(html, /<span class="t-slot">--one small object--<\/span> and <span class="t-slot">--a sheet of <span class="t-var">\$who<\/span>--<\/span>/);
   assert.doesNotMatch(highlight("# --not a slot--", new Set()), /t-slot/);
+});
+
+test("with a text encoder, a run's language-model tasks go in mini-runs before it, in the plan's order (#171)", async () => {
+  const { llmLocal, queueTasks } = await import("../../comfyui/web/app/miniruns.js");
+  const app = (kind, clip = false) => ({ llmApi: () => kind === "api", data: { llm: { active: kind ? { kind } : null } },
+    bridge: { wired: (name) => name === "clip" && clip } });
+  assert.equal(llmLocal(app("comfy")), true);
+  assert.equal(llmLocal(app(null, true)), false);  // nothing wired counts: the gear's model writes (#282)
+  assert.equal(llmLocal(app("api")), false);
+  assert.equal(llmLocal(app(null)), false);
+  const asked = [], planned = [];
+  const local = { ...app("comfy"), api: { plan: async (body) => { planned.push(body); return { tasks: [{ task: "library", what: "sky" }, { task: "slot", what: "a key" }] }; } } };
+  Object.assign(local.bridge, { getText: () => "t", getTarget: () => "text", getParams: () => ({}), getSeed: () => 7, getSegment: () => 2,
+    getSweep: () => "", ask: async (...a) => { asked.push(a); } });
+  assert.equal(await queueTasks(local), 2);
+  assert.equal(planned[0].seed, 7);
+  assert.equal(planned[0].segment, 2);
+  assert.deepEqual(asked, [["library", "sky", "", { wait: false }], ["slot", "a key", "", { wait: false }]]);
+  assert.equal(await queueTasks({ ...app("api"), bridge: {} }), 0);  // an endpoint: the run asks it, as before
 });
 
 test("a gallery picture's export keeps its slots from image output apart, for a 🎲 that writes them from the picture (#175)", async () => {

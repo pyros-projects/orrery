@@ -21,8 +21,8 @@ entries.
 In the node, the gear picks orrery's language model: a text encoder from
 ComfyUI's `text_encoders` folder that is a whole LLM, such as Krea 2's
 `qwen3vl_4b` or a Qwen3-VL 8B build (MiniMax H3's encoder is cut short and
-cannot write). A text encoder wired into the node's `clip` input wins over the
-setting. When the node runs, the model
+cannot write). It is the only one: the Orrery Prompt has no `clip` input (#282).
+When the node runs, the model
 
 - creates a library the template names but you don't have (`__runway_shoes__`),
   with the number of entries set in the gear, using the lines around it as
@@ -177,8 +177,7 @@ From then on every language-model task goes to the endpoint: a run's
 libraries, slots and `> enhance` (the frames a slot watches go as pictures),
 the Write menu, and `orrery lib`, when `orrery.yaml` names no
 `models.library`. It runs beside ComfyUI: no VRAM, no text encoder pushing
-the video model out, no waiting behind a render. It wins over a text encoder
-wired into `clip`. Models that want `max_completion_tokens` or refuse a
+the video model out, no waiting behind a render. Models that want `max_completion_tokens` or refuse a
 temperature (the newer OpenAI ones) are asked again the way they accept, and
 a busy endpoint twice more before the run fails with its own words.
 

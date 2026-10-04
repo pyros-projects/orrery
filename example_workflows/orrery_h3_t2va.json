@@ -20,13 +20,6 @@
       "mode": 0,
       "inputs": [
         {
-          "localized_name": "clip",
-          "name": "clip",
-          "shape": 7,
-          "type": "CLIP",
-          "link": null
-        },
-        {
           "localized_name": "template",
           "name": "template",
           "type": "STRING",

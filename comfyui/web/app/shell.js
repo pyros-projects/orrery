@@ -8,6 +8,7 @@ import { esc } from "./highlight.js";
 import { refreshHistory, renderHistory } from "./history.js";
 import { icon, LOGO } from "./icons.js";
 import { renderLibraries } from "./libraries.js";
+import { queueTasks } from "./miniruns.js";
 import { renderPresets } from "./presets.js";
 import { paintLive } from "./timeline.js";
 import { paintCells } from "./cells.js";
@@ -35,6 +36,7 @@ function canScroll(el, dy) {
 export class OrreryApp {
   constructor(bridge) {
     this.bridge = bridge;
+    bridge.beforeRun = () => queueTasks(this);  // with a text encoder, a run's tasks in mini-runs before it (#171)
     this.api = client(() => bridge.home());
     this.state = {
       tab: bridge.props.orrery_tab || "prompt", big: false,
