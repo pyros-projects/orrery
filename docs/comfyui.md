@@ -37,7 +37,9 @@ Nodes under **orrery**:
   (`taeh3` in `models/vae_approx` for MiniMax H3, else Latent2RGB). The gear's
   **Live preview** makes it light (a few pictures spread over the clip) or
   smooth (so many pictures a second as you set, as far as the clip gives them:
-  taeh3 and Latent2RGB have one a latent frame, about 7 a second); the model
+  taeh3 and Latent2RGB have one a latent frame, about 7 a second), and its
+  **Preview size** sets the long edge, 1024 px as KJNodes' (0: as sampled;
+  bigger is sharper and takes longer each step); the model
   output is the same model with that preview, nothing loads again. Without it
   the box shows ComfyUI's own preview, which orrery passes to every open tab. A picture wired into `first_frame` (else
   `last_frame`), the same one the H3 node gets, gives `width`/`height` its shape

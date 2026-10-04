@@ -22,7 +22,8 @@ import threading
 log = logging.getLogger("orrery.preview")
 
 EVENT = "orrery.preview"
-MAX_EDGE = 384  # the long edge of a preview: the clip's box is no bigger
+MAX_EDGE = 384  # the long edge of ComfyUI's own preview as passed on: a still
+EDGE = 1024  # the whole clip's long edge unless the gear's Live preview says otherwise (0: as sampled), as KJNodes' default
 MAX_LATENT_FRAMES = 12  # the light preview: latent frames decoded per step, spread over the clip
 SPATIAL = 16  # MiniMax H3's VAE: one latent pixel is 16×16 video pixels
 FRAMES_PER_LATENT = 17 / 5  # and 17 video frames are 5 latent frames
@@ -167,10 +168,11 @@ def _spread(count: int, wanted: int):
     return torch.linspace(0, count - 1, min(count, wanted)).round().long()
 
 
-def frames(decoder, video, fps: int | None = None):
-    """The clip's frames as PIL pictures from its latent [batch, channels, time, height, width], scaled to about
-    MAX_EDGE: light (`fps` None), MAX_LATENT_FRAMES of its latent frames spread over the clip; smooth, `fps`
-    pictures a second of it, as far as its latent frames give them (a flat tiny VAE or Latent2RGB: one each)."""
+def frames(decoder, video, fps: int | None = None, edge: int = EDGE):
+    """The clip's frames as PIL pictures from its latent [batch, channels, time, height, width], their long edge
+    `edge` at most (0: as sampled): light (`fps` None), MAX_LATENT_FRAMES of its latent frames spread over the
+    clip; smooth, `fps` pictures a second of it, as far as its latent frames give them (a flat tiny VAE or
+    Latent2RGB: one each)."""
     import numpy as np
     import torch
     from PIL import Image
@@ -184,7 +186,7 @@ def frames(decoder, video, fps: int | None = None):
     kind, it = decoder
     with torch.no_grad():
         if kind in ("tae", "tae2d"):
-            scale = min(1.0, MAX_EDGE / (SPATIAL * max(x.shape[-2:])))
+            scale = min(1.0, edge / (SPATIAL * max(x.shape[-2:]))) if edge else 1.0
             if scale < 1:  # a smaller latent decodes faster and is all a preview needs
                 x = torch.nn.functional.interpolate(x, scale_factor=(1, scale, scale), mode="trilinear")
             if kind == "tae":
@@ -202,8 +204,8 @@ def frames(decoder, video, fps: int | None = None):
         out = out[_spread(out.shape[0], wanted).to(out.device)]
     array = (out.clamp(0, 1) * 255).round().to(torch.uint8).cpu().numpy()
     pictures = [Image.fromarray(np.ascontiguousarray(f)) for f in array]
-    for picture in pictures:
-        picture.thumbnail((MAX_EDGE, MAX_EDGE))
+    for picture in pictures if edge else ():
+        picture.thumbnail((edge, edge))
     return pictures
 
 
@@ -252,14 +254,15 @@ class _Wrapper:
     def __init__(self, node_id: str | None, home=None):
         self.node_id, self.home = node_id, home
 
-    def _fps(self) -> int | None:
+    def _settings(self) -> tuple[int | None, int]:
+        """The gear's Live preview: smooth at so many pictures a second (None: light), and the long edge."""
         from orrery import uistate
 
         try:
             ui = uistate.load_ui(self.home)
-        except Exception:  # noqa: BLE001 - no home: the light preview
-            return None
-        return None if ui["preview_light"] else ui["preview_fps"]
+        except Exception:  # noqa: BLE001 - no home: light, at the default size
+            return None, EDGE
+        return (None if ui["preview_light"] else ui["preview_fps"]), ui["preview_edge"]
 
     def __call__(self, executor, noise, latent_image, sampler, sigmas, denoise_mask=None, callback=None,
                  disable_pbar=False, seed=None, latent_shapes=None):
@@ -273,7 +276,7 @@ class _Wrapper:
         if decoder is None:
             return executor(noise, latent_image, sampler, sigmas, denoise_mask, callback, disable_pbar, seed,
                             latent_shapes=latent_shapes)
-        sender, prompt_id, fps = _Sender(), runs.current_prompt(), self._fps()
+        sender, prompt_id, (fps, edge) = _Sender(), runs.current_prompt(), self._settings()
 
         def previewing(step, x0, x, total_steps):
             if callback is not None:
@@ -283,7 +286,7 @@ class _Wrapper:
                 if latent_shapes and len(latent_shapes) > 1:  # video and sound packed together (MiniMax H3): the video
                     import comfy.utils
                     video = comfy.utils.unpack_latents(x0, latent_shapes)[0]
-                pictures = frames(decoder, video, fps)
+                pictures = frames(decoder, video, fps, edge)
                 sender.put(pictures, {"step": step + 1, "total": total_steps, "prompt_id": prompt_id, "node": self.node_id},
                            max(20, round(1000 * seconds(video) / len(pictures))))  # in real time
             except Exception as err:  # noqa: BLE001 - a preview never stops a run

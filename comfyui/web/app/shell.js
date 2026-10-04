@@ -140,6 +140,7 @@ export class OrreryApp {
     this.data.clip_min = d.clip_min ?? 360;
     this.data.take_min = d.take_min ?? 54;
     this.data.preview_fps = d.preview_fps ?? 12;
+    this.data.preview_edge = d.preview_edge ?? 1024;
   }
   async refreshCompletion() {
     const [completion, gallery] = await Promise.all([this.api.completions(), this.api.pictures().catch(() => ({ presets: [] }))]);

@@ -228,7 +228,7 @@ def ui_save(home: Home, args: dict) -> dict:
     """App switches kept in the home: `quickstart` (New templates open with their comments),
     `dividers` (chunk dividers in the editor), `timeline` (the reel's clips under its scenes), sample surfing's
     `surf_numbered` (#206), the live preview's `preview_light` (#205), and its sizes
-    (`clip_min`: a clip's shorter side in the clips view; `take_min`: a take's, under it; `preview_fps`: the smooth live preview's pictures a second)."""
+    (`clip_min`: a clip's shorter side in the clips view; `take_min`: a take's, under it; `preview_fps`: the smooth live preview's pictures a second; `preview_edge`: its long edge)."""
     for flag in uistate.FLAGS:
         if flag in args:
             uistate.set_flag(home, flag, bool(args[flag]))
