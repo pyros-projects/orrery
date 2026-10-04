@@ -195,7 +195,7 @@ function albumNames(app, c) {
 // An album's card: up to eight of its pictures in a grid, what it is, how many it holds.
 function albumHTML(app, c) {
   const { title, sub } = albumNames(app, c), [label, ico] = TYPE[c.type];
-  const n = c.previews.length, cols = n <= 1 ? 1 : n <= 4 ? 2 : n <= 6 ? 3 : 4;
+  const n = c.previews.length, cols = n <= 1 ? 1 : n <= 4 ? 2 : 3;  // the pictures fill the card, row by row
   const pics = c.previews.map((id) => `<img loading="lazy" draggable="false" src="${esc(app.api.thumbURL(id))}" alt="">`).join("");
   const what = c.type === "sweep" ? `${c.count} runs` : c.type === "reel" ? `${c.count} clips` : `${c.count} takes`;
   return `<div class="gcard album" draggable="true" data-galbum="${esc(c.key)}" tabindex="0" role="button" title="${esc(`${title} · ${sub} · ${what} · click to open`)}">`
