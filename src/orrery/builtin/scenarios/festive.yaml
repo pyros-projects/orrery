@@ -1,0 +1,62 @@
+meta: {source: "orrery scenarios: feasts, festivals, parties and holidays, a situation the model gets to picture, from tame (plausible) through odd and wild to abstract (it barely makes sense); `wild` says which. Ideas after the builder wildcards Pyro kept (#150), every line written new", builtin: true}
+entries:
+  - {value: "a family gathered around the table at a winter feast", props: {wild: tame}}
+  - {value: "a lantern festival lighting up a river at night", props: {wild: tame}}
+  - {value: "fireworks over a harbour at midnight", props: {wild: tame}}
+  - {value: "a street parade of drums, costumes and confetti", props: {wild: tame}}
+  - {value: "children hanging lights on a tree", props: {wild: tame}}
+  - {value: "a village dancing around a bonfire on midsummer night", props: {wild: tame}}
+  - {value: "a wedding party dancing under string lights in a garden", props: {wild: tame}}
+  - {value: "a birthday cake with lit candles being carried into a dark room", props: {wild: tame}}
+  - {value: "a carnival of masks and feathered costumes", props: {wild: tame}}
+  - {value: "a harvest market of pumpkins, lanterns and cider", props: {wild: tame}}
+  - {value: "a crowded city square counting down to the new year", props: {wild: tame}}
+  - {value: "a family making dumplings together for a holiday", props: {wild: tame}}
+  - {value: "a lantern-lit night market during a festival", props: {wild: tame}}
+  - {value: "a choir singing carols in the snow", props: {wild: tame}}
+  - {value: "a dragon dance winding through a festive street", props: {wild: tame}}
+  - {value: "a snowman hosting a dinner party for snowmen", props: {wild: odd}}
+  - {value: "a reindeer stuck in a chimney while everyone pulls", props: {wild: odd}}
+  - {value: "a birthday party for a very old tortoise", props: {wild: odd}}
+  - {value: "a parade of floats that are all giant vegetables", props: {wild: odd}}
+  - {value: "a wedding where every guest is a dog in a tiny suit", props: {wild: odd}}
+  - {value: "pumpkins carving faces into the people", props: {wild: odd}}
+  - {value: "a sleepy dragon lighting the candles on a cake", props: {wild: odd}}
+  - {value: "a new year's party on a tiny raft in the middle of the sea", props: {wild: odd}}
+  - {value: "a costume party where everyone came dressed as the host", props: {wild: odd}}
+  - {value: "an office party in a lift that got stuck", props: {wild: odd}}
+  - {value: "a family feast at a table a hundred metres long in a field", props: {wild: odd}}
+  - {value: "a firework landing softly in someone's soup", props: {wild: odd}}
+  - {value: "a parade marching through a shopping mall", props: {wild: odd}}
+  - {value: "a Christmas tree decorated entirely with lost keys", props: {wild: odd}}
+  - {value: "a ghost trying to join a Halloween party", props: {wild: odd}}
+  - {value: "fireworks that burst into flocks of birds", props: {wild: wild}}
+  - {value: "a city where every window is a lantern on festival night", props: {wild: wild}}
+  - {value: "a feast table floating down a river", props: {wild: wild}}
+  - {value: "a festival held on the back of a walking giant", props: {wild: wild}}
+  - {value: "snowflakes that are tiny dancing people", props: {wild: wild}}
+  - {value: "a cake as tall as a tower being cut by a crane", props: {wild: wild}}
+  - {value: "a carnival on the surface of the moon", props: {wild: wild}}
+  - {value: "a parade of glowing jellyfish floating through the streets", props: {wild: wild}}
+  - {value: "a ballroom where the dancers are made of candle flames", props: {wild: wild}}
+  - {value: "a gift box that opens onto a summer meadow in the middle of winter", props: {wild: wild}}
+  - {value: "a lantern festival where the lanterns are small suns", props: {wild: wild}}
+  - {value: "confetti falling upwards into the sky", props: {wild: wild}}
+  - {value: "a costume party where the costumes come alive", props: {wild: wild}}
+  - {value: "a Christmas market inside a snow globe", props: {wild: wild}}
+  - {value: "a dragon made of fireworks winding over a city", props: {wild: wild}}
+  - {value: "the night before a holiday, waiting", props: {wild: abstract}}
+  - {value: "joy, wrapped in paper", props: {wild: abstract}}
+  - {value: "the last song of the party", props: {wild: abstract}}
+  - {value: "a wish blown out with the candles", props: {wild: abstract}}
+  - {value: "the warmth of a crowded kitchen", props: {wild: abstract}}
+  - {value: "a tradition remembering where it came from", props: {wild: abstract}}
+  - {value: "the glitter left the morning after", props: {wild: abstract}}
+  - {value: "the moment midnight arrives", props: {wild: abstract}}
+  - {value: "a toast raised to an empty chair", props: {wild: abstract}}
+  - {value: "the colour of a festival heard from far away", props: {wild: abstract}}
+  - {value: "an unexpected gift", props: {wild: abstract}}
+  - {value: "the gap between two celebrations", props: {wild: abstract}}
+  - {value: "a lantern's journey after it leaves the hand", props: {wild: abstract}}
+  - {value: "a feast for the ghosts of summer", props: {wild: abstract}}
+  - {value: "the happiness of a whole town at once", props: {wild: abstract}}

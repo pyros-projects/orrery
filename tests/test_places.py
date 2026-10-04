@@ -56,3 +56,14 @@ def test_every_world_has_thirty_settings_and_every_kind_of_them():
         assert {e.prop("kind") for e in mine} == set(KINDS), world
     assert all(e.prop("inside") in ("yes", "no") for e in settings)
     assert all(e.prop("outside") and e.prop("detail") and e.prop("light") and e.prop("sfx") for e in settings)
+
+
+def test_every_world_of_scenarios_goes_from_tame_to_abstract():
+    """#150: eight worlds of scenarios at the creators' size, fifteen of each level, so `[wild=…]` never runs dry."""
+    worlds = sorted(n.split("/")[1] for n in BUILTIN if n.startswith("scenarios/"))
+    assert worlds == ["abstract", "dreamlike", "everyday", "fantasy", "festive", "fights", "pirates", "scifi"]
+    for world in worlds:
+        scenarios = BUILTIN[f"scenarios/{world}"].entries
+        assert len({e.value for e in scenarios}) == len(scenarios) >= 60, world
+        for level in ("tame", "odd", "wild", "abstract"):
+            assert len([e for e in scenarios if e.prop("wild") == level]) >= 15, (world, level)

@@ -1,0 +1,62 @@
+meta: {source: "orrery scenarios: ordinary days, streets, homes and jobs, a situation the model gets to picture, from tame (plausible) through odd and wild to abstract (it barely makes sense); `wild` says which. Ideas after the builder wildcards Pyro kept (#150), every line written new", builtin: true}
+entries:
+  - {value: "a commuter waiting for a train on a rainy morning", props: {wild: tame}}
+  - {value: "a family eating breakfast in a busy kitchen", props: {wild: tame}}
+  - {value: "a barista making coffee in a small caf\u00e9", props: {wild: tame}}
+  - {value: "kids playing football in a park after school", props: {wild: tame}}
+  - {value: "a grandmother feeding pigeons from a bench", props: {wild: tame}}
+  - {value: "a cyclist riding through the city in the rain", props: {wild: tame}}
+  - {value: "a student asleep over books in a library", props: {wild: tame}}
+  - {value: "a couple carrying a sofa up a narrow staircase", props: {wild: tame}}
+  - {value: "a dog walker tangled in leashes in a park", props: {wild: tame}}
+  - {value: "a shopkeeper rolling up the shutters of a corner shop", props: {wild: tame}}
+  - {value: "friends sharing a pizza on a rooftop", props: {wild: tame}}
+  - {value: "a nurse taking a break at the end of a long night shift", props: {wild: tame}}
+  - {value: "a gardener planting tomatoes in a community garden", props: {wild: tame}}
+  - {value: "a busker playing guitar in a subway station", props: {wild: tame}}
+  - {value: "a father teaching a child to ride a bike", props: {wild: tame}}
+  - {value: "a man ironing his shirt in the middle of a busy street", props: {wild: odd}}
+  - {value: "a dog driving a lawnmower across a garden", props: {wild: odd}}
+  - {value: "a business meeting held in a children's ball pit", props: {wild: odd}}
+  - {value: "a woman walking a goose on a leash through the city", props: {wild: odd}}
+  - {value: "a queue of people at a bus stop in the middle of a field", props: {wild: odd}}
+  - {value: "a cat at a laptop as if working from home", props: {wild: odd}}
+  - {value: "a grandmother skateboarding to the shops", props: {wild: odd}}
+  - {value: "a family picnicking in the middle of a car park", props: {wild: odd}}
+  - {value: "an office worker bathing in a fountain at lunch", props: {wild: odd}}
+  - {value: "a courier delivering a pizza to a tree house", props: {wild: odd}}
+  - {value: "a man pushing a piano down a steep street", props: {wild: odd}}
+  - {value: "a wedding photographed in a laundromat", props: {wild: odd}}
+  - {value: "a pigeon riding to work on a commuter's shoulder", props: {wild: odd}}
+  - {value: "a supermarket where every item is the same yellow tin", props: {wild: odd}}
+  - {value: "a man fishing in a city puddle", props: {wild: odd}}
+  - {value: "a city street where the rain falls upward", props: {wild: wild}}
+  - {value: "a commuter train full of sleeping animals in suits", props: {wild: wild}}
+  - {value: "a kitchen where the steam gathers into clouds and starts to rain", props: {wild: wild}}
+  - {value: "a house whose rooms rearrange themselves every morning", props: {wild: wild}}
+  - {value: "an office staircase leading into a forest", props: {wild: wild}}
+  - {value: "a man walking his own shadow on a leash", props: {wild: wild}}
+  - {value: "a library where the books whisper to their readers", props: {wild: wild}}
+  - {value: "a bus driving across the bottom of a lake", props: {wild: wild}}
+  - {value: "an umbrella raining onto the person holding it", props: {wild: wild}}
+  - {value: "a laundromat where the washing machines show the sea", props: {wild: wild}}
+  - {value: "a park where the benches walk around at night", props: {wild: wild}}
+  - {value: "a supermarket aisle stretching to the horizon", props: {wild: wild}}
+  - {value: "a woman pulling the sunset down like a blind", props: {wild: wild}}
+  - {value: "a city where every door opens onto a beach", props: {wild: wild}}
+  - {value: "a phone ringing in the middle of a desert, and a man running to answer it", props: {wild: wild}}
+  - {value: "the boredom of a Sunday afternoon", props: {wild: abstract}}
+  - {value: "a Monday morning, given a body", props: {wild: abstract}}
+  - {value: "the last minute before the alarm", props: {wild: abstract}}
+  - {value: "the sound of a fridge at night", props: {wild: abstract}}
+  - {value: "a long queue of thoughts", props: {wild: abstract}}
+  - {value: "the smell of rain on a city street, as a shape", props: {wild: abstract}}
+  - {value: "a forgotten umbrella on a train", props: {wild: abstract}}
+  - {value: "a commuter's tiredness, as weather", props: {wild: abstract}}
+  - {value: "the light in a kitchen at six in the morning", props: {wild: abstract}}
+  - {value: "a to-do list growing like ivy", props: {wild: abstract}}
+  - {value: "the quiet after the children leave", props: {wild: abstract}}
+  - {value: "an ordinary day, seen from very far away", props: {wild: abstract}}
+  - {value: "the weight of a shopping bag", props: {wild: abstract}}
+  - {value: "the moment a habit begins", props: {wild: abstract}}
+  - {value: "a waiting room for nothing in particular", props: {wild: abstract}}

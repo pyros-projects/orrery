@@ -40,7 +40,8 @@ units; the landscape creator rolls a place to put them in, a land in a season of
 an hour and one sign of life that belongs there (never a person), from four distances: establishing,
 wide, medium and the ground up close; the setting creator rolls a place people are in, a room, hall,
 shop, street, vehicle or ruin of one of five worlds, empty, as a film shows it: the outside, the whole,
-one part with open floor in front and one thing in it up close), and `h3/` holds MiniMax H3 scenes (dialogue in German
+one part with open floor in front and one thing in it up close; wild scenarios rolls something happening
+in one of eight worlds, from tame to abstract, and lets the model picture it), and `h3/` holds MiniMax H3 scenes (dialogue in German
 and Cantonese, a voiceover, fast cuts, an animated fable, on-screen music, and
 an I2VA starter for your own stills, a three-clip reel for H3 Motion
 Context, a drone flight, an impossible camera move that dives into a dewdrop
@@ -48,7 +49,8 @@ and comes out elsewhere, and a world swap inside one take, an entity test that s
 renders five non-human SCP entities, with a dial for naming them, an
 archetype test that checks where H3 pulls an unfamiliar design, three endings (one setup, and a
 sitcom, a horror film and a romance that each continue the same clip with `AFTER:`) and between two
-frames, where any first and last picture are joined in one take by a visible action). `effects/` holds Ito-style body-horror operators in the lite format,
+frames, where any first and last picture are joined in one take by a visible action, and wild scenarios, the
+Krea preset's scenarios as a clip in one of the video looks). `effects/` holds Ito-style body-horror operators in the lite format,
 from Codie's H3 tests: subsurface travel, body suit, mirror replacement, living
 paper, glass body, living clay, elastic body, hollow vessel, filament, human
 drawer and zipper spine, plus his operators surface press, feature migration,
@@ -89,7 +91,8 @@ habitats), `looks/` (fifty-odd video looks with their own camera, sound and
 music, still looks by family), `moments/`, `subjects/`, `frame/`, `drone/`,
 `tour/`, `transitions/`, `scale/`, `time/`, `backrooms/` and `places/` (the landscape creator's lands, seasons,
 weather, hours and signs of life, filtered by climate and water, and the setting creator's places in
-five worlds). One library is
+five worlds), `scenarios/` (eight worlds of situations, fantasy, sci-fi, pirates, fights, festive, everyday,
+dreamlike and abstract, each from `wild: tame` through odd and wild to abstract). One library is
 licensed differently: the `scp/` libraries are adapted from the SCP Wiki and
 are CC BY-SA 3.0, each entry carrying its article's citation in `cite`. Videos
 made from it are adaptations as well: credit the cite and share them under

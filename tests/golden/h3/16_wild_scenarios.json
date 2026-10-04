@@ -1,0 +1,95 @@
+{
+ "preset": "h3/16_wild_scenarios",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Vintage film, 1960s Kodachrome home movie: saturated reds and deep blues, crisp grain, bright daylight, and the gentle gate weave and flicker of a small-gauge reel. The scene is a cyclist riding through the city in the rain. The camera pans left with small amplitude at slow speed. It happens in front of the camera from its first moment to its last, every part of it moving and changing as it goes.\n\noverall_soundscape: The sounds of the scene itself, close and clear.\n\nnon_diegetic_music: A light ukulele strum at a moderate tempo with brushed percussion.",
+     "picks": [
+      [
+       "{tame|odd|wild|abstract}",
+       "tame",
+       [
+        "{tame|odd|wild|abstract}=tame"
+       ]
+      ],
+      [
+       "$scenario ← __scenarios/*[wild=$wild]__",
+       "a cyclist riding through the city in the rain",
+       [
+        "__scenarios/everyday__=a cyclist riding through the city in the rain"
+       ]
+      ],
+      [
+       "$look ← __looks/video__",
+       "Vintage film, 1960s Kodachrome home movie: saturated reds and deep blues, crisp grain, bright daylight, and the gentle gate weave and flicker of a small-gauge reel",
+       [
+        "__looks/video__=Vintage film, 1960s Kodachrome home movie: saturated reds and deep blues, crisp grain, bright daylight, and the gentle gate weave and flicker of a small-gauge reel"
+       ]
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Sand animation on a light table: pictures drawn in dark sand against a warm glowing backlight, a hand sweeping one picture into the next, grains trickling at the edges. The scene is two suns dancing around each other over a field of metal flowers. The camera holds a static shot. It happens in front of the camera from its first moment to its last, every part of it moving and changing as it goes.\n\noverall_soundscape: The sounds of the scene itself, close and clear.\n\nnon_diegetic_music: A solo cello at a slow tempo.",
+     "picks": [
+      [
+       "{tame|odd|wild|abstract}",
+       "wild",
+       [
+        "{tame|odd|wild|abstract}=wild"
+       ]
+      ],
+      [
+       "$scenario ← __scenarios/*[wild=$wild]__",
+       "two suns dancing around each other over a field of metal flowers",
+       [
+        "__scenarios/scifi__=two suns dancing around each other over a field of metal flowers"
+       ]
+      ],
+      [
+       "$look ← __looks/video__",
+       "Sand animation on a light table: pictures drawn in dark sand against a warm glowing backlight, a hand sweeping one picture into the next, grains trickling at the edges",
+       [
+        "__looks/video__=Sand animation on a light table: pictures drawn in dark sand against a warm glowing backlight, a hand sweeping one picture into the next, grains trickling at the edges"
+       ]
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, shot on bleach-bypass film: colour drained almost to silver, dense inky shadows, hard metallic sheen on wet skin and steel, and fine grain crawling across the frame. The scene is a shadow lying alone in the sun. The camera tracks the moving subject at fast speed. It happens in front of the camera from its first moment to its last, every part of it moving and changing as it goes.\n\noverall_soundscape: The sounds of the scene itself, close and clear.\n\nnon_diegetic_music: Low sustained strings over a slow, heavy drum pulse that builds and cuts off abruptly.",
+     "picks": [
+      [
+       "{tame|odd|wild|abstract}",
+       "odd",
+       [
+        "{tame|odd|wild|abstract}=odd"
+       ]
+      ],
+      [
+       "$scenario ← __scenarios/*[wild=$wild]__",
+       "a shadow lying alone in the sun",
+       [
+        "__scenarios/abstract__=a shadow lying alone in the sun"
+       ]
+      ],
+      [
+       "$look ← __looks/video__",
+       "Live-action, cinematic, shot on bleach-bypass film: colour drained almost to silver, dense inky shadows, hard metallic sheen on wet skin and steel, and fine grain crawling across the frame",
+       [
+        "__looks/video__=Live-action, cinematic, shot on bleach-bypass film: colour drained almost to silver, dense inky shadows, hard metallic sheen on wet skin and steel, and fine grain crawling across the frame"
+       ]
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

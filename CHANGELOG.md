@@ -9,6 +9,10 @@ checks) are left out.
 
 ### Added
 
+- Wild scenarios (#150): eight libraries of situations under `scenarios/` (fantasy, sci-fi, pirates, fights, festive,
+  everyday, dreamlike, abstract), sixty each, from tame through odd and wild to abstract, and two presets that roll
+  one and let the model picture it: `krea/18_wild_scenarios` in a still look and `h3/16_wild_scenarios` in a video
+  look. `$wild` dials how far from plausible it goes.
 - A setting creator for Krea 2 (#145): `krea/17_setting_creator` rolls one of a hundred and fifty places people are
   in (rooms, halls, shops, streets, vehicles, ruins) in five worlds (everyday, fantasy, cyberpunk, sci-fi, noir), with
   what fills it, its light and its sound, empty; the grid shows it in four shots: the outside, the whole of it, one part

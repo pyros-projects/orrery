@@ -1,0 +1,10 @@
+---
+title: "Wild scenarios"
+note: "Something happening, for Krea 2, and the model decides what it looks like: a scenario from one of eight worlds (fantasy, sci-fi, pirates, fights, festive, everyday, dreamlike, abstract), in one of thirty-eight looks and a composition. $wild goes from tame (a knight sharpening a sword by a campfire) through odd (a skeleton army taking a tea break) and wild (a castle walking across the plains) to abstract (a spell halfway through being cast, hanging in the air); write a world's name for the * in $scenario to stay in it."
+tags: [krea, scenarios, wild]
+---
+$wild = {tame:3|odd:3|wild:2|abstract:2}
+$scenario = __scenarios/*[wild=$wild]__
+$look = __looks/still__
+$frame = __frame/compositions__
+The picture is $look, $frame: $scenario.

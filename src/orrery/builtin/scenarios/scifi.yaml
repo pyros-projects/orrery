@@ -1,0 +1,62 @@
+meta: {source: "orrery scenarios: starships, stations, robots and other worlds, a situation the model gets to picture, from tame (plausible) through odd and wild to abstract (it barely makes sense); `wild` says which. Ideas after the builder wildcards Pyro kept (#150), every line written new", builtin: true}
+entries:
+  - {value: "an astronaut repairing a satellite above a blue planet", props: {wild: tame}}
+  - {value: "a crew on a starship bridge as a nebula fills the viewport", props: {wild: tame}}
+  - {value: "a rover crawling across a red, dusty plain", props: {wild: tame}}
+  - {value: "a colonist tending crops in a hydroponic dome", props: {wild: tame}}
+  - {value: "a pilot climbing into a fighter in a busy hangar", props: {wild: tame}}
+  - {value: "a scientist examining an alien plant in a lab", props: {wild: tame}}
+  - {value: "a cargo freighter docking at an orbital station", props: {wild: tame}}
+  - {value: "engineers fixing a reactor while warning lights flash", props: {wild: tame}}
+  - {value: "a robot sweeping the floor of a quiet station corridor", props: {wild: tame}}
+  - {value: "a shuttle lifting off from a desert spaceport", props: {wild: tame}}
+  - {value: "a crowd watching a ship launch from a viewing deck", props: {wild: tame}}
+  - {value: "a spacewalker tethered to a ship, a planet rising behind them", props: {wild: tame}}
+  - {value: "a trader haggling at an alien bazaar under two suns", props: {wild: tame}}
+  - {value: "a crew waking from cryosleep in frosted pods", props: {wild: tame}}
+  - {value: "a probe touching down on an icy moon", props: {wild: tame}}
+  - {value: "an alien tourist taking photos of an ordinary car park", props: {wild: odd}}
+  - {value: "a robot learning to cook breakfast and getting it wrong", props: {wild: odd}}
+  - {value: "an astronaut watering a single flower on the Moon", props: {wild: odd}}
+  - {value: "a starship stuck in a traffic jam of starships", props: {wild: odd}}
+  - {value: "an alien trying on human hats in a shop", props: {wild: odd}}
+  - {value: "a space station throwing a birthday party for its oldest robot", props: {wild: odd}}
+  - {value: "a pilot asking an alien for directions at a crossroads in space", props: {wild: odd}}
+  - {value: "a cat floating calmly through a zero-gravity kitchen", props: {wild: odd}}
+  - {value: "a giant robot doing yoga on a hillside", props: {wild: odd}}
+  - {value: "a time traveller arriving in the middle of a family dinner", props: {wild: odd}}
+  - {value: "an alien ambassador nervously rehearsing a speech in a mirror", props: {wild: odd}}
+  - {value: "a cleaning drone chasing a runaway alien pet through a ship", props: {wild: odd}}
+  - {value: "an astronaut playing chess against a computer that keeps cheating", props: {wild: odd}}
+  - {value: "a vending machine on a deserted asteroid, glowing invitingly", props: {wild: odd}}
+  - {value: "a crew of robots holding a funeral for a broken toaster", props: {wild: odd}}
+  - {value: "a planet made of glass where every step rings like a bell", props: {wild: wild}}
+  - {value: "a city floating inside a giant soap bubble in orbit", props: {wild: wild}}
+  - {value: "a starship growing like a tree out of an asteroid", props: {wild: wild}}
+  - {value: "an astronaut swimming through a sea of stars as if it were water", props: {wild: wild}}
+  - {value: "two suns dancing around each other over a field of metal flowers", props: {wild: wild}}
+  - {value: "a space elevator climbing into a sky full of whales", props: {wild: wild}}
+  - {value: "an alien made of light reading a book made of shadow", props: {wild: wild}}
+  - {value: "a black hole being fed spoonfuls of stars", props: {wild: wild}}
+  - {value: "a robot's dream projected onto the clouds", props: {wild: wild}}
+  - {value: "a moon cracked open like an egg with a city inside", props: {wild: wild}}
+  - {value: "a wormhole opening in a living room onto a distant galaxy", props: {wild: wild}}
+  - {value: "the gravity of a whole city switching off at once", props: {wild: wild}}
+  - {value: "a spaceship folded from paper drifting through a nebula", props: {wild: wild}}
+  - {value: "a forest of radio telescopes listening to a star sing", props: {wild: wild}}
+  - {value: "an astronaut shaking hands with an older version of themselves", props: {wild: wild}}
+  - {value: "the last signal of a lost probe, still travelling", props: {wild: abstract}}
+  - {value: "a thought moving faster than light", props: {wild: abstract}}
+  - {value: "the shape of a new physics being born", props: {wild: abstract}}
+  - {value: "an uploaded memory slowly forgetting itself", props: {wild: abstract}}
+  - {value: "distance, folded in half", props: {wild: abstract}}
+  - {value: "the hum of an empty universe", props: {wild: abstract}}
+  - {value: "a message from the future, still being written", props: {wild: abstract}}
+  - {value: "the loneliness of a single satellite", props: {wild: abstract}}
+  - {value: "time pooling in a crater", props: {wild: abstract}}
+  - {value: "a machine's first feeling", props: {wild: abstract}}
+  - {value: "the moment before first contact", props: {wild: abstract}}
+  - {value: "a star's long goodbye", props: {wild: abstract}}
+  - {value: "an equation that blooms", props: {wild: abstract}}
+  - {value: "the edge of the map of everything", props: {wild: abstract}}
+  - {value: "a signal that tastes of blue", props: {wild: abstract}}

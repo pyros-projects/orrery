@@ -1,0 +1,62 @@
+meta: {source: "orrery scenarios: swords, spells, dragons and the folk of old tales, a situation the model gets to picture, from tame (plausible) through odd and wild to abstract (it barely makes sense); `wild` says which. Ideas after the builder wildcards Pyro kept (#150), every line written new", builtin: true}
+entries:
+  - {value: "a knight sharpening a sword by a campfire on the night before a battle", props: {wild: tame}}
+  - {value: "a wizard's apprentice sweeping a tower room full of floating books", props: {wild: tame}}
+  - {value: "a dragon asleep around its hoard while a thief tiptoes past", props: {wild: tame}}
+  - {value: "elves loading a boat with lanterns at a misty river landing", props: {wild: tame}}
+  - {value: "a dwarf blacksmith hammering a glowing axe head", props: {wild: tame}}
+  - {value: "a caravan of merchants crossing a mountain pass in the snow", props: {wild: tame}}
+  - {value: "a healer tending a wounded soldier in a tent", props: {wild: tame}}
+  - {value: "a royal procession winding through a cheering market town", props: {wild: tame}}
+  - {value: "a ranger tracking footprints through a dark forest", props: {wild: tame}}
+  - {value: "two wizards duelling across a ruined courtyard", props: {wild: tame}}
+  - {value: "a bard playing a lute to a crowded tavern", props: {wild: tame}}
+  - {value: "a princess training with a sword in the castle yard", props: {wild: tame}}
+  - {value: "a goblin market haggling over shiny trinkets", props: {wild: tame}}
+  - {value: "villagers raising a maypole on a summer festival day", props: {wild: tame}}
+  - {value: "a lone traveller reaching the gates of a walled city at dusk", props: {wild: tame}}
+  - {value: "a dragon trying to squeeze through a castle door to attend a ball", props: {wild: odd}}
+  - {value: "a knight teaching a troll how to read", props: {wild: odd}}
+  - {value: "a wizard queueing patiently at a busy potion shop", props: {wild: odd}}
+  - {value: "an orc chef proudly serving a fancy cake to an unimpressed king", props: {wild: odd}}
+  - {value: "a unicorn stuck in a muddy farmyard among pigs", props: {wild: odd}}
+  - {value: "a skeleton army taking a tea break", props: {wild: odd}}
+  - {value: "a mermaid working as a lifeguard at a lake", props: {wild: odd}}
+  - {value: "a giant using a castle tower as a stool", props: {wild: odd}}
+  - {value: "a witch arguing with a broom that refuses to fly", props: {wild: odd}}
+  - {value: "a dwarf on stilts trying to look tall at a royal audience", props: {wild: odd}}
+  - {value: "a goblin running a tiny bank out of a hollow tree", props: {wild: odd}}
+  - {value: "a griffin delivering the post to a busy village", props: {wild: odd}}
+  - {value: "a fairy court holding a trial for a confused frog", props: {wild: odd}}
+  - {value: "a ghost knight polishing his see-through armour", props: {wild: odd}}
+  - {value: "a dragon babysitting a crowd of village children", props: {wild: odd}}
+  - {value: "a castle walking across the plains on enormous stone legs", props: {wild: wild}}
+  - {value: "a forest where every tree is a sleeping giant, and one is waking up", props: {wild: wild}}
+  - {value: "a wizard pouring a whole sunset into a glass bottle", props: {wild: wild}}
+  - {value: "a city built on the back of a slow, swimming whale", props: {wild: wild}}
+  - {value: "a knight jousting with his own reflection", props: {wild: wild}}
+  - {value: "a library whose books migrate south for the winter in flocks", props: {wild: wild}}
+  - {value: "a dragon made entirely of autumn leaves taking flight", props: {wild: wild}}
+  - {value: "a kingdom where it rains small golden keys", props: {wild: wild}}
+  - {value: "a staircase spiralling up to the moon with a queue of travellers on it", props: {wild: wild}}
+  - {value: "a sword in a stone, gently snoring", props: {wild: wild}}
+  - {value: "a tavern inside a giant's pocket", props: {wild: wild}}
+  - {value: "a market where people trade their shadows", props: {wild: wild}}
+  - {value: "a lake mirroring a castle that stands only in the reflection", props: {wild: wild}}
+  - {value: "a crown growing like a plant on a sleeping queen's head", props: {wild: wild}}
+  - {value: "an army of paper knights marching across a map that has turned into real land", props: {wild: wild}}
+  - {value: "the oath a knight forgot, still waiting in a tower", props: {wild: abstract}}
+  - {value: "a spell halfway through being cast, hanging in the air", props: {wild: abstract}}
+  - {value: "the colour of a dragon's dream", props: {wild: abstract}}
+  - {value: "the last day of a kingdom, folded into a single room", props: {wild: abstract}}
+  - {value: "a prophecy arguing with itself", props: {wild: abstract}}
+  - {value: "magic leaking out of an old story", props: {wild: abstract}}
+  - {value: "the sound of a sword before it was forged", props: {wild: abstract}}
+  - {value: "a map of a place still deciding where to be", props: {wild: abstract}}
+  - {value: "the moment a wish comes true, seen from the wish's side", props: {wild: abstract}}
+  - {value: "a quest walking on alone after its hero", props: {wild: abstract}}
+  - {value: "the weight of a crown, given a shape", props: {wild: abstract}}
+  - {value: "an enchantment wearing off at dawn", props: {wild: abstract}}
+  - {value: "the memory of a castle, half built from fog", props: {wild: abstract}}
+  - {value: "an unanswerable riddle sitting on a throne", props: {wild: abstract}}
+  - {value: "the silence after the last dragon", props: {wild: abstract}}

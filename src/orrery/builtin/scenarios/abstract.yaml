@@ -1,0 +1,62 @@
+meta: {source: "orrery scenarios: shapes, colours and ideas, from abstract art to pure concept, a situation the model gets to picture, from tame (plausible) through odd and wild to abstract (it barely makes sense); `wild` says which. Ideas after the builder wildcards Pyro kept (#150), every line written new", builtin: true}
+entries:
+  - {value: "a red circle balanced on a blue triangle on a white floor", props: {wild: tame}}
+  - {value: "ribbons of colour flowing through a dark space", props: {wild: tame}}
+  - {value: "a single line of light crossing a black void", props: {wild: tame}}
+  - {value: "stacked geometric shapes in soft pastel colours", props: {wild: tame}}
+  - {value: "ink spreading slowly through water", props: {wild: tame}}
+  - {value: "a grid of squares in every shade of green", props: {wild: tame}}
+  - {value: "a sphere of liquid mercury hovering over sand", props: {wild: tame}}
+  - {value: "overlapping translucent panes of coloured glass", props: {wild: tame}}
+  - {value: "a spiral of paper strips curling into its centre", props: {wild: tame}}
+  - {value: "sand raked into perfect waves", props: {wild: tame}}
+  - {value: "a field of tiny cubes rising and falling like the sea", props: {wild: tame}}
+  - {value: "smoke curling into shapes in a beam of light", props: {wild: tame}}
+  - {value: "a mosaic of broken mirrors reflecting a sunset", props: {wild: tame}}
+  - {value: "threads of coloured wool stretched across an empty room", props: {wild: tame}}
+  - {value: "a drop falling into a pool of paint", props: {wild: tame}}
+  - {value: "a cube trying to become a sphere", props: {wild: odd}}
+  - {value: "a staircase made of musical notes", props: {wild: odd}}
+  - {value: "a cloud of numbers raining on a desert", props: {wild: odd}}
+  - {value: "a lake of liquid gold under a grey sky", props: {wild: odd}}
+  - {value: "a tree of glass rods with light flowing through it", props: {wild: odd}}
+  - {value: "a balloon filled with darkness", props: {wild: odd}}
+  - {value: "a chair made of water", props: {wild: odd}}
+  - {value: "a shadow lying alone in the sun", props: {wild: odd}}
+  - {value: "a knot of light tying itself", props: {wild: odd}}
+  - {value: "a room of hanging spheres, each a different time of day", props: {wild: odd}}
+  - {value: "a wall of drawers, each holding a colour", props: {wild: odd}}
+  - {value: "a ladder of light rising into fog", props: {wild: odd}}
+  - {value: "a fractal coastline glowing in the dark", props: {wild: odd}}
+  - {value: "a wave caught mid-crash, made of glass", props: {wild: odd}}
+  - {value: "a cloud shaped like a perfect cube", props: {wild: odd}}
+  - {value: "the colour blue arguing with orange", props: {wild: wild}}
+  - {value: "geometry melting in the heat", props: {wild: wild}}
+  - {value: "a landscape made of the sound of a cello", props: {wild: wild}}
+  - {value: "infinity folded into a small box", props: {wild: wild}}
+  - {value: "a storm of letters forming and unforming words", props: {wild: wild}}
+  - {value: "gravity pouring like honey", props: {wild: wild}}
+  - {value: "a sculpture of silence", props: {wild: wild}}
+  - {value: "a sunrise made of shattered porcelain", props: {wild: wild}}
+  - {value: "a forest of light beams with roots of shadow", props: {wild: wild}}
+  - {value: "the inside of a heartbeat, enlarged to a cathedral", props: {wild: wild}}
+  - {value: "a sea of fabric rippling under a wind of colour", props: {wild: wild}}
+  - {value: "time drawn as a tangled red thread across a white room", props: {wild: wild}}
+  - {value: "a mirror reflecting the inside of itself forever", props: {wild: wild}}
+  - {value: "a swarm of glowing dots forming a face and drifting apart", props: {wild: wild}}
+  - {value: "the horizon tied in a knot", props: {wild: wild}}
+  - {value: "the weight of the colour yellow", props: {wild: abstract}}
+  - {value: "the sound of a straight line", props: {wild: abstract}}
+  - {value: "emptiness, in great detail", props: {wild: abstract}}
+  - {value: "a Tuesday, as an object", props: {wild: abstract}}
+  - {value: "a thought before it has words", props: {wild: abstract}}
+  - {value: "the distance between two notes", props: {wild: abstract}}
+  - {value: "a feeling with too many corners", props: {wild: abstract}}
+  - {value: "the shape of a pause", props: {wild: abstract}}
+  - {value: "warmth, as architecture", props: {wild: abstract}}
+  - {value: "the texture of a long wait", props: {wild: abstract}}
+  - {value: "the taste of a circle", props: {wild: abstract}}
+  - {value: "a question folding into itself", props: {wild: abstract}}
+  - {value: "the speed of stillness", props: {wild: abstract}}
+  - {value: "the memory of an unseen colour", props: {wild: abstract}}
+  - {value: "the edge of meaning", props: {wild: abstract}}
