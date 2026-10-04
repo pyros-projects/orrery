@@ -29,7 +29,12 @@ character from parts the way designers build one (a silhouette, a signature colo
 clothes and accents, one detail you remember, a face, hair that fits the age, a genre), every part a
 dial, and shows it from four sides: portrait, three-quarter, full figure and profile, on a grey
 studio backdrop, ready as references for H3 or a RefMod; set `$view` to one of them to try
-characters faster), and `h3/` holds MiniMax H3 scenes (dialogue in German
+characters faster; beside it a shelf of creators per world on the same parts (#138): fantasy
+(sixty peoples beyond humans, each with its own body, classes with their gear, familiars),
+cyberpunk (roles, chrome, street fashion, gangs), sci-fi (forty species, roles aboard and beyond),
+creatures (seventy kinds with their coverings, features and habitats) and noir (a 1940s city,
+black and white with one colour); each exports what the picture cannot show, for a reel that casts
+it), and `h3/` holds MiniMax H3 scenes (dialogue in German
 and Cantonese, a voiceover, fast cuts, an animated fable, on-screen music, and
 an I2VA starter for your own stills, a three-clip reel for H3 Motion
 Context, a drone flight, an impossible camera move that dives into a dewdrop
@@ -98,3 +103,37 @@ tags: [moody, winter]
 
 The ComfyUI node records every template it uses under its hash, so each
 gallery line can be traced back to, and re-run from, its exact template.
+
+## Writing a Krea 2 preset
+
+Krea 2 reads its prompt with a language model (Qwen3-VL) and was trained mostly on long, dense captions,
+so a Krea preset writes one paragraph of plain sentences, never a list of tags or weights. What matters is
+the order and what the picture can show. The creators follow it (#138, from the Krea 2 prompting sweep of
+4 October 2026: Krea's own prompting guide and samples, and what practitioners report):
+
+1. **The medium and the shot first.** The first sentence names the medium, then the shot, then the
+   subject: `A cinematic photograph, as from the set of a fantasy film: a head-and-shoulders portrait of
+   …`. Name a style or a medium outright instead of only describing it.
+2. **Only what the shot can show.** Whatever the prompt describes pulls the camera to include it: a
+   portrait that mentions a lance, a cape and a familiar comes out waist-up, and a chrome arm in a
+   head-and-shoulders view goes missing. With `@grid $view`, bind what every view shows as `$person`
+   (the head, the shoulders, the clothes, what sits at the head) and add the gear, the companion and
+   whatever is on the arms, the hands, the legs or the back in the full-length view only. A library
+   whose entries sit in different places says where with a property (`where: head|body`, as the
+   cyberpunk implants and gang signs do). In the fantasy creator's A/B this took the close views from
+   0 to 11 of 12 at head-and-shoulders, and brought out a neck tattoo that had gone missing before.
+3. **A second subject gets a sentence of its own**, after the pose, with its place: `With them: a crow
+   perched on one shoulder.`
+4. **Say what is there.** A negation (`no rider`, `without a hat`) doesn't hold. Bind an unusual body
+   into one phrase: a centaur is "a human upper body rising from a horse's body where its neck and head
+   would be", not a woman "on" a horse.
+5. **The order of a creator's prompt:** the medium and the shot, the subject, the presence, the pose
+   (`They face the camera.`, `They stand straight … with $gear, and floor and space around them are in
+   frame.`), the backdrop (`Behind them is …`), the light, and the finish (lens, colour, rendering) last.
+   Text to render goes in quotes.
+6. **Whitespace:** an `{IF …}` branch is trimmed at both ends, so a sentence that comes and goes carries
+   its neighbour inside the branch (`{IF $familiar is not none: $stand With them: $familiar.|$stand}`) or
+   joins with a comma (`$hair{IF $beard is not none: , $beard|}`); give every view a pose sentence rather
+   than an empty one.
+7. **The checkpoint matters as much as the words.** Krea 2 Turbo renders the same flat face whatever the
+   expression; Krea 2 Raw with the turbo LoRA renders them. Judge expressions, moods and faces on Raw.

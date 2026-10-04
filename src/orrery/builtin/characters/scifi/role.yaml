@@ -1,0 +1,32 @@
+meta: {source: "orrery sci-fi creator: a character's work aboard and beyond, with its article; `wear` its clothes (reading the signature $colour), `gear` what it carries (one of several)", needs: [colour], builtin: true}
+entries:
+  - {value: "a starship captain", props: {wear: "a fitted $colour command coat with a high collar and rank pips", gear: "{a captain's datapad|a holstered sidearm|a cup of coffee and a star chart}"}}
+  - {value: "a fighter pilot", props: {wear: "a $colour flight suit with a G-harness and mission patches", gear: "{a helmet under one arm|a flight log chip|a pair of mirrored visor goggles}"}}
+  - {value: "a ship's engineer", props: {wear: "grease-streaked $colour coveralls with a tool harness", gear: "{a plasma spanner|a diagnostic tablet|a coil of power cable}"}}
+  - {value: "a space marine", props: {wear: "scratched $colour power armour with the helmet off", gear: "{a pulse rifle|a heavy shield|a flamethrower}"}}
+  - {value: "a xenobiologist", props: {wear: "a $colour field suit with sample pouches and a magnifier visor", gear: "{a specimen jar holding something alive|a bio-scanner|a sketchbook of alien plants}"}}
+  - {value: "a bounty hunter", props: {wear: "a battered $colour armoured coat with a cape over one shoulder", gear: "{a long blaster rifle|binders and a tracking fob|a jetpack strapped on the back}"}}
+  - {value: "a smuggler", props: {wear: "a $colour vest over a loose shirt and a low-slung holster", gear: "{a blaster pistol|a stolen cargo manifest|a pair of lucky dice}"}}
+  - {value: "a ship's medic", props: {wear: "a clean $colour medical tunic with a white armband", gear: "{a medical scanner|a hypo-spray|a med-kit case}"}}
+  - {value: "a diplomat", props: {wear: "flowing $colour robes of an embassy with a translator collar", gear: "{a sealed treaty scroll|a ceremonial staff|a translation earpiece}"}}
+  - {value: "an asteroid miner", props: {wear: "a patched $colour EVA suit with a cracked helmet hooked at the belt", gear: "{a laser drill|an ore sample|a mining charge}"}}
+  - {value: "a navigator", props: {wear: "a $colour officer's uniform with a holographic star map projected over one wrist", gear: "{a sextant of light|a nav chart crystal|a stylus and a tablet}"}}
+  - {value: "a comms officer", props: {wear: "a $colour uniform with a headset and signal-flag patches", gear: "{a handheld transmitter|a decoding tablet|a coil of antenna}"}}
+  - {value: "a scientist", props: {wear: "a $colour lab coat over a jumpsuit, safety goggles on the brow", gear: "{a glowing sample vial|a holographic model of a molecule|a cracked data slate}"}}
+  - {value: "a terraformer", props: {wear: "a sun-faded $colour expedition suit with seed pouches", gear: "{a sapling in a sealed dome|a soil probe|a weather drone}"}}
+  - {value: "a salvager", props: {wear: "a heavy $colour vacuum suit with magnetic boots", gear: "{a plasma cutter|a salvage claim beacon|a grapple gun}"}}
+  - {value: "a station security officer", props: {wear: "a $colour security vest with a station badge", gear: "{a stun baton|a riot helmet|a scanner wand}"}}
+  - {value: "a mercenary", props: {wear: "mismatched $colour armour plates from several wars", gear: "{a heavy repeating blaster|a vibro-blade|a grenade bandolier}"}}
+  - {value: "a cargo hauler", props: {wear: "a $colour hi-vis vest over a thermal jumpsuit", gear: "{a cargo scanner|a crate on a hover dolly|a wrench}"}}
+  - {value: "a ship's cook", props: {wear: "a $colour apron over a crew jumpsuit and a paper hat", gear: "{a pot of alien stew|a ladle|a tray of protein bars}"}}
+  - {value: "a chaplain", props: {wear: "$colour vestments over a crew uniform", gear: "{a holy book on a datapad|a censer floating on a tether|a prayer cord}"}}
+  - {value: "an archaeologist", props: {wear: "a dusty $colour field jacket over an environment suit", gear: "{an alien relic|a brush and a trowel|a rubbing of alien script}"}}
+  - {value: "an android butler", props: {wear: "an immaculate $colour tailcoat over a synthetic body", gear: "{a silver tray|a folded towel|a tea set}"}}
+  - {value: "a racer", props: {wear: "a $colour racing suit covered in sponsor logos", gear: "{a helmet with a cracked visor|a trophy|a hover-bike key}"}}
+  - {value: "a cartographer of space", props: {wear: "a $colour long coat with star maps lining the inside", gear: "{a star globe|a pen of light|a rolled-up nebula chart}"}}
+  - {value: "a test subject", props: {wear: "a numbered $colour hospital gown and a wristband", gear: "{a broken restraint|an IV stand|a keycard stolen from a guard}"}}
+  - {value: "a colony governor", props: {wear: "a formal $colour suit with a sash of office", gear: "{a colony charter|a gavel|a speech on a datapad}"}}
+  - {value: "a gunslinger of the outer rim", props: {wear: "a $colour duster and a wide hat with a breather mask", gear: "{a pair of revolvers with blaster barrels|a lasso of charged cable|a wanted poster}"}}
+  - {value: "an exo-suit pilot", props: {wear: "a $colour pilot harness with neural jacks at the spine", gear: "{an exo-suit control glove|a power cell|a pilot's helmet}"}}
+  - {value: "a stowaway", props: {wear: "an oversized stolen $colour crew jacket", gear: "{a ration bar|a homemade knife|a vent grille key}"}}
+  - {value: "an ambassador's bodyguard", props: {wear: "a $colour ceremonial armour of overlapping plates", gear: "{an energy halberd|a personal shield emitter|a sealed message}"}}

@@ -1,0 +1,116 @@
+meta: {source: "orrery character creator: a companion and where it is, to follow 'with'; `genre` says where it belongs (all fits anywhere); a fantasy one is a familiar; never a person, who would be a second subject in a reference picture; several read the creator's $colour", needs: [colour], builtin: true}
+entries:
+  - {value: "a ginger cat draped over one shoulder", props: {genre: all}}
+  - {value: "a scruffy terrier sitting at their feet", props: {genre: all}}
+  - {value: "a crow perched on one shoulder", props: {genre: all}}
+  - {value: "a white rabbit tucked in the crook of an arm", props: {genre: all}}
+  - {value: "a sleepy pug in their arms", props: {genre: all}}
+  - {value: "a tortoise at their feet", props: {genre: all}}
+  - {value: "a hooded falcon on a gloved fist", props: {genre: all}}
+  - {value: "a small owl perched on one hand", props: {genre: all}}
+  - {value: "a lanky greyhound leaning against their legs", props: {genre: all}}
+  - {value: "a parrot with $colour feathers on one shoulder", props: {genre: all}}
+  - {value: "a ferret curled around their neck like a scarf", props: {genre: all}}
+  - {value: "a black cat winding between their ankles", props: {genre: all}}
+  - {value: "a big shaggy dog sitting beside them", props: {genre: all}}
+  - {value: "a hedgehog in one cupped palm", props: {genre: all}}
+  - {value: "a goose under one arm, unimpressed", props: {genre: all}}
+  - {value: "a golden retriever puppy chewing a shoelace", props: {genre: everyday}}
+  - {value: "a tabby kitten peeking out of a tote bag", props: {genre: everyday}}
+  - {value: "a dachshund in a $colour knitted jumper", props: {genre: everyday}}
+  - {value: "a goldfish in a plastic bag of water", props: {genre: everyday}}
+  - {value: "a pet rat on one shoulder", props: {genre: everyday}}
+  - {value: "a toddler-sized teddy bear under one arm", props: {genre: everyday}}
+  - {value: "a pigeon that seems to have adopted them", props: {genre: everyday}}
+  - {value: "a corgi in a $colour harness", props: {genre: everyday}}
+  - {value: "a budgie on one finger", props: {genre: everyday}}
+  - {value: "an old beagle with a grey muzzle", props: {genre: everyday}}
+  - {value: "a capuchin monkey on one shoulder", props: {genre: adventure}}
+  - {value: "a pack mule with saddlebags", props: {genre: adventure}}
+  - {value: "a husky with ice in its fur", props: {genre: adventure}}
+  - {value: "a tame fennec fox peeking from a satchel", props: {genre: adventure}}
+  - {value: "a macaw with a ruffled crest", props: {genre: adventure}}
+  - {value: "a mongoose on one shoulder", props: {genre: adventure}}
+  - {value: "a camel looming behind them", props: {genre: adventure}}
+  - {value: "a small green lizard on their hat", props: {genre: adventure}}
+  - {value: "a tiny dragon curled around their neck", props: {genre: fantasy}}
+  - {value: "a raven with eyes that glow $colour", props: {genre: fantasy}}
+  - {value: "a will-o'-the-wisp drifting at their shoulder", props: {genre: fantasy}}
+  - {value: "a toad wearing a tiny crown", props: {genre: fantasy}}
+  - {value: "a silver fox with three tails", props: {genre: fantasy}}
+  - {value: "an owl with feathers the colour of $colour", props: {genre: fantasy}}
+  - {value: "a pixie sitting on their shoulder", props: {genre: fantasy}}
+  - {value: "a stone gargoyle the size of a cat", props: {genre: fantasy}}
+  - {value: "a snake of living flame coiled around one arm", props: {genre: fantasy}}
+  - {value: "a direwolf pup at their heel", props: {genre: fantasy}}
+  - {value: "a floating book that flutters its pages like wings", props: {genre: fantasy}}
+  - {value: "a glowing $colour moth the size of a hand", props: {genre: fantasy}}
+  - {value: "a griffin chick nipping at their sleeve", props: {genre: fantasy}}
+  - {value: "a skeletal cat with ember eyes", props: {genre: fantasy}}
+  - {value: "a hare with antlers", props: {genre: fantasy}}
+  - {value: "a tiny clockwork owl that ticks", props: {genre: fantasy}}
+  - {value: "a mossy turtle with a garden on its shell", props: {genre: fantasy}}
+  - {value: "a mimic chest with its tongue out, following them", props: {genre: fantasy}}
+  - {value: "a phoenix chick smoking gently in their palm", props: {genre: fantasy}}
+  - {value: "an imp grinning on their shoulder", props: {genre: fantasy}}
+  - {value: "a snowy hare made of frost", props: {genre: fantasy}}
+  - {value: "a crow with a silver key in its beak", props: {genre: fantasy}}
+  - {value: "a cloud of tiny $colour fairies", props: {genre: fantasy}}
+  - {value: "a pseudodragon with bat wings", props: {genre: fantasy}}
+  - {value: "a giant beetle with a jewelled shell", props: {genre: fantasy}}
+  - {value: "a shadow that moves on its own beside them", props: {genre: fantasy}}
+  - {value: "a small fire elemental hovering over one palm", props: {genre: fantasy}}
+  - {value: "a white stag standing behind them", props: {genre: fantasy}}
+  - {value: "a bat hanging from their collar", props: {genre: fantasy}}
+  - {value: "a wolf made of mist", props: {genre: fantasy}}
+  - {value: "a hovering camera drone with a $colour light", props: {genre: cyberpunk}}
+  - {value: "a robot dog with exposed hydraulics", props: {genre: cyberpunk}}
+  - {value: "a holographic koi swimming around them", props: {genre: cyberpunk}}
+  - {value: "a cyber-rat with a glowing $colour eye", props: {genre: cyberpunk}}
+  - {value: "a tiny delivery drone landing on one hand", props: {genre: cyberpunk}}
+  - {value: "a stray cat with a chrome leg", props: {genre: cyberpunk}}
+  - {value: "a crow fitted with a camera implant", props: {genre: cyberpunk}}
+  - {value: "a hologram AI shaped like a $colour fox", props: {genre: cyberpunk}}
+  - {value: "a spider-legged maintenance bot on one shoulder", props: {genre: cyberpunk}}
+  - {value: "a pit bull in a $colour LED collar", props: {genre: cyberpunk}}
+  - {value: "a floating orb drone that scans everything", props: {genre: cyberpunk}}
+  - {value: "a clone of a pet that died years ago", props: {genre: cyberpunk}}
+  - {value: "a mechanical snake coiled around one arm", props: {genre: cyberpunk}}
+  - {value: "a security drone with a cracked lens", props: {genre: cyberpunk}}
+  - {value: "a pigeon with a tiny antenna", props: {genre: cyberpunk}}
+  - {value: "a pocket-sized combat bot", props: {genre: cyberpunk}}
+  - {value: "a gecko with circuit lines under its skin", props: {genre: cyberpunk}}
+  - {value: "a holographic $colour butterfly on one finger", props: {genre: cyberpunk}}
+  - {value: "a scruffy cat sitting on a stack of server racks", props: {genre: cyberpunk}}
+  - {value: "a bloodhound sniffing at their coat", props: {genre: noir}}
+  - {value: "a black cat on the windowsill behind them", props: {genre: noir}}
+  - {value: "a canary in a brass cage", props: {genre: noir}}
+  - {value: "a bulldog with a spiked collar", props: {genre: noir}}
+  - {value: "a pigeon on the ledge, watching", props: {genre: noir}}
+  - {value: "a Doberman at their side", props: {genre: noir}}
+  - {value: "a lapdog in a jewelled collar", props: {genre: noir}}
+  - {value: "a stray mutt following at a distance", props: {genre: noir}}
+  - {value: "a raven on a gravestone behind them", props: {genre: gothic}}
+  - {value: "a pale bat clinging to their shoulder", props: {genre: gothic}}
+  - {value: "a black cat with mismatched eyes", props: {genre: gothic}}
+  - {value: "a ghostly hound, half transparent", props: {genre: gothic}}
+  - {value: "a moth as big as a sparrow", props: {genre: gothic}}
+  - {value: "a wolfhound with a $colour ribbon", props: {genre: gothic}}
+  - {value: "a porcelain doll that seems to have moved", props: {genre: gothic}}
+  - {value: "a swarm of black moths around their hands", props: {genre: gothic}}
+  - {value: "a skeletal raven", props: {genre: gothic}}
+  - {value: "a white peacock trailing its tail", props: {genre: gothic}}
+  - {value: "a small maintenance robot with one $colour eye", props: {genre: spacefarer}}
+  - {value: "a six-legged alien pup", props: {genre: spacefarer}}
+  - {value: "a floating jellyfish-like creature glowing $colour", props: {genre: spacefarer}}
+  - {value: "a ship's cat in a tiny space suit", props: {genre: spacefarer}}
+  - {value: "a hovering spherical drone with one antenna", props: {genre: spacefarer}}
+  - {value: "an alien lizard with feathered frills", props: {genre: spacefarer}}
+  - {value: "a furry creature with too many eyes", props: {genre: spacefarer}}
+  - {value: "a crystalline being that chimes when it moves", props: {genre: spacefarer}}
+  - {value: "a space monkey in a $colour jumpsuit", props: {genre: spacefarer}}
+  - {value: "a bioluminescent alien moth", props: {genre: spacefarer}}
+  - {value: "a sleek robot hound with a $colour stripe", props: {genre: spacefarer}}
+  - {value: "a tiny tentacled creature in a water bubble", props: {genre: spacefarer}}
+  - {value: "a battered mining bot with a dented hull", props: {genre: spacefarer}}
+  - {value: "an alien bird with mirror-bright feathers", props: {genre: spacefarer}}

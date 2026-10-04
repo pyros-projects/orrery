@@ -1,0 +1,57 @@
+meta: {source: "orrery creature creator: what covers a creature, for the kinds of that `skin`; each carries the signature $colour", needs: [colour], builtin: true}
+entries:
+  - {value: "overlapping $colour scales that shine like wet enamel", props: {skin: scales}}
+  - {value: "dull $colour scales edged in black", props: {skin: scales}}
+  - {value: "iridescent scales that shift from $colour to green", props: {skin: scales}}
+  - {value: "rough, plated $colour scales scarred by old battles", props: {skin: scales}}
+  - {value: "tiny $colour scales fine as sequins, banded with cream", props: {skin: scales}}
+  - {value: "$colour scales flaking at the edges like old paint", props: {skin: scales}}
+  - {value: "jewel-bright $colour scales speckled with gold", props: {skin: scales}}
+  - {value: "dark scales with $colour stripes along the spine", props: {skin: scales}}
+  - {value: "glossy $colour feathers with white tips", props: {skin: feathers}}
+  - {value: "barred $colour and brown feathers like a hawk's", props: {skin: feathers}}
+  - {value: "ragged $colour plumage, moulting in patches", props: {skin: feathers}}
+  - {value: "long $colour feathers that ripple like flame", props: {skin: feathers}}
+  - {value: "downy $colour feathers fluffed out against the cold", props: {skin: feathers}}
+  - {value: "dark feathers with a $colour sheen in the light", props: {skin: feathers}}
+  - {value: "speckled $colour feathers like a quail's", props: {skin: feathers}}
+  - {value: "thick $colour fur with darker stripes", props: {skin: fur}}
+  - {value: "shaggy, matted $colour fur full of burrs", props: {skin: fur}}
+  - {value: "sleek $colour fur that gleams like velvet", props: {skin: fur}}
+  - {value: "spotted $colour fur like a leopard's", props: {skin: fur}}
+  - {value: "a thick $colour winter coat tipped with frost", props: {skin: fur}}
+  - {value: "patchy $colour fur over scarred skin", props: {skin: fur}}
+  - {value: "long, flowing $colour fur that moves in the wind", props: {skin: fur}}
+  - {value: "soft $colour fur with a pale belly", props: {skin: fur}}
+  - {value: "glistening $colour slime over translucent skin", props: {skin: slime}}
+  - {value: "mottled $colour skin slick with mucus", props: {skin: slime}}
+  - {value: "translucent $colour flesh with organs faintly visible", props: {skin: slime}}
+  - {value: "rubbery $colour skin dotted with bioluminescent spots", props: {skin: slime}}
+  - {value: "pale skin with $colour veins showing through", props: {skin: slime}}
+  - {value: "smooth $colour skin that ripples like water", props: {skin: slime}}
+  - {value: "a lacquered $colour shell with black seams", props: {skin: chitin}}
+  - {value: "a matte black carapace with $colour markings", props: {skin: chitin}}
+  - {value: "a $colour exoskeleton dusted with fine hairs", props: {skin: chitin}}
+  - {value: "a cracked $colour carapace patched with mud", props: {skin: chitin}}
+  - {value: "an oil-slick shell that flashes $colour", props: {skin: chitin}}
+  - {value: "a ridged $colour shell with pale joints", props: {skin: chitin}}
+  - {value: "thick, wrinkled $colour hide like an elephant's", props: {skin: hide}}
+  - {value: "leathery $colour hide stretched over bone", props: {skin: hide}}
+  - {value: "grey hide painted with $colour tribal markings", props: {skin: hide}}
+  - {value: "warty $colour hide crusted with lichen", props: {skin: hide}}
+  - {value: "pale, hairless $colour skin covered in scars", props: {skin: hide}}
+  - {value: "a $colour hide with darker blotches", props: {skin: hide}}
+  - {value: "weathered stone with $colour moss in every crack", props: {skin: stone}}
+  - {value: "polished black stone veined with $colour", props: {skin: stone}}
+  - {value: "rough granite with $colour crystals growing from it", props: {skin: stone}}
+  - {value: "bleached bone with $colour runes etched in", props: {skin: stone}}
+  - {value: "cracked sandstone glowing $colour from within", props: {skin: stone}}
+  - {value: "gnarled bark with $colour lichen", props: {skin: bark}}
+  - {value: "smooth birch bark with $colour leaves sprouting", props: {skin: bark}}
+  - {value: "mossy bark hung with $colour flowers", props: {skin: bark}}
+  - {value: "dark, rotting bark with $colour fungus", props: {skin: bark}}
+  - {value: "living $colour vines wound tightly together", props: {skin: bark}}
+  - {value: "living shadow with $colour light flickering inside", props: {skin: shadow}}
+  - {value: "smoke that coils into a shape, lit $colour from within", props: {skin: shadow}}
+  - {value: "a body of dark mist with $colour embers drifting through it", props: {skin: shadow}}
+  - {value: "inky darkness edged with a $colour glow", props: {skin: shadow}}

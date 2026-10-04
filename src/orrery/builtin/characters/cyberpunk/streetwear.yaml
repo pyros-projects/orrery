@@ -1,0 +1,102 @@
+meta: {source: "orrery cyberpunk creator: street fashion of a neon city, for whom (`fit`: women, men or all); each reads the signature $colour", needs: [colour], builtin: true}
+entries:
+  - {value: "a rain-slick translucent $colour vinyl coat over a black bodysuit", props: {fit: all}}
+  - {value: "a cropped $colour hoodie and cargo pants with too many buckles", props: {fit: all}}
+  - {value: "a high-collared techwear coat with glowing $colour seams", props: {fit: all}}
+  - {value: "a battered bomber jacket patched with corporate logos and a $colour lining", props: {fit: all}}
+  - {value: "an oversized $colour puffer jacket over a mesh top", props: {fit: all}}
+  - {value: "a $colour kimono jacket over a tactical vest", props: {fit: all}}
+  - {value: "a long black trench coat with $colour LED piping", props: {fit: all}}
+  - {value: "a $colour tracksuit with reflective stripes", props: {fit: all}}
+  - {value: "a sleeveless $colour hoodie and fingerless gloves", props: {fit: all}}
+  - {value: "a holographic $colour raincoat that shifts colour as they move", props: {fit: all}}
+  - {value: "a patched-together $colour jacket of scavenged airbag fabric", props: {fit: all}}
+  - {value: "a $colour harness of straps over a black turtleneck", props: {fit: all}}
+  - {value: "a $colour poncho printed with glitch art", props: {fit: all}}
+  - {value: "a quilted $colour flight jacket with a fur-trimmed hood", props: {fit: all}}
+  - {value: "a $colour mesh shirt under an open leather jacket", props: {fit: all}}
+  - {value: "a $colour jumpsuit with the sleeves tied at the waist", props: {fit: all}}
+  - {value: "a $colour parka with a smart-fabric collar that hides the face", props: {fit: all}}
+  - {value: "a $colour armoured gilet over a long-sleeved thermal", props: {fit: all}}
+  - {value: "a hooded $colour cloak of reflective ripstop", props: {fit: all}}
+  - {value: "a varsity jacket for a team that no longer exists, $colour and chrome", props: {fit: all}}
+  - {value: "a $colour boiler suit unzipped to the waist over a tank top", props: {fit: all}}
+  - {value: "a $colour track jacket over a black hoodie, hood up", props: {fit: all}}
+  - {value: "a $colour vest covered in pin badges over a striped shirt", props: {fit: all}}
+  - {value: "a $colour modular jacket with detachable sleeves", props: {fit: all}}
+  - {value: "a $colour shell jacket with a built-in respirator collar", props: {fit: all}}
+  - {value: "a $colour denim jacket with the sleeves cut off and painted", props: {fit: all}}
+  - {value: "a long $colour duster over armoured trousers", props: {fit: all}}
+  - {value: "a $colour fishnet top under a cropped leather jacket", props: {fit: all}}
+  - {value: "a stained $colour lab coat over street clothes", props: {fit: all}}
+  - {value: "a $colour rain cape and knee-high waterproof boots", props: {fit: all}}
+  - {value: "a $colour latex jacket with an exaggerated collar", props: {fit: all}}
+  - {value: "a $colour hazard-orange-style coverall with taped seams", props: {fit: all}}
+  - {value: "a $colour satin souvenir jacket embroidered with a dragon", props: {fit: all}}
+  - {value: "an asymmetric $colour coat with one long tail", props: {fit: all}}
+  - {value: "a $colour hoodie printed with scrolling e-ink text", props: {fit: all}}
+  - {value: "a $colour cargo vest over bare arms and taped wrists", props: {fit: all}}
+  - {value: "a $colour military surplus jacket with the patches torn off", props: {fit: all}}
+  - {value: "a $colour quilted kimono over black jeans", props: {fit: all}}
+  - {value: "a $colour raincoat with a hood cinched tight around a face mask", props: {fit: all}}
+  - {value: "a $colour mechanic's jacket with a name patch that isn't theirs", props: {fit: all}}
+  - {value: "a $colour latex bodysuit under a cropped puffer jacket", props: {fit: women}}
+  - {value: "a $colour vinyl mini dress over fishnet tights", props: {fit: women}}
+  - {value: "a $colour corset of armoured plates over a mesh shirt", props: {fit: women}}
+  - {value: "a pleated $colour plastic skirt and a cropped techwear jacket", props: {fit: women}}
+  - {value: "a $colour bodycon dress with glowing seams", props: {fit: women}}
+  - {value: "a $colour bustier over a sheer high-necked top", props: {fit: women}}
+  - {value: "a holographic $colour crop top and wide cargo trousers", props: {fit: women}}
+  - {value: "a $colour qipao cut short, worn over leggings", props: {fit: women}}
+  - {value: "a $colour bomber jacket over a slip dress", props: {fit: women}}
+  - {value: "a $colour catsuit with armoured knee plates", props: {fit: women}}
+  - {value: "a $colour tulle skirt over combat trousers", props: {fit: women}}
+  - {value: "a cropped $colour moto jacket and a high-waisted vinyl skirt", props: {fit: women}}
+  - {value: "a $colour sailor-collar top and a pleated tech skirt", props: {fit: women}}
+  - {value: "a backless $colour halter top and pinstriped trousers", props: {fit: women}}
+  - {value: "a $colour translucent raincoat over a beaded dress", props: {fit: women}}
+  - {value: "a $colour bolero jacket over a bandeau and tactical trousers", props: {fit: women}}
+  - {value: "a $colour hooded dress of reflective fabric", props: {fit: women}}
+  - {value: "a $colour harness dress over a turtleneck", props: {fit: women}}
+  - {value: "an oversized $colour shirt worn as a dress, belted with a utility belt", props: {fit: women}}
+  - {value: "a $colour kimono-sleeved jumpsuit with a corset belt", props: {fit: women}}
+  - {value: "a $colour sleeveless bodysuit with cable-knit leg warmers", props: {fit: women}}
+  - {value: "a $colour puffer dress with a high collar", props: {fit: women}}
+  - {value: "a $colour mesh top under a pinafore of armoured plates", props: {fit: women}}
+  - {value: "a $colour tailored jacket with exaggerated shoulders and a pencil skirt", props: {fit: women}}
+  - {value: "a $colour cheongsam-collared jacket over shorts and thigh-high boots", props: {fit: women}}
+  - {value: "a sheer $colour poncho over a black swimsuit", props: {fit: women}}
+  - {value: "a $colour quilted crop jacket and a long slit skirt", props: {fit: women}}
+  - {value: "a $colour dress of overlapping plastic scales", props: {fit: women}}
+  - {value: "a $colour tank top, suspenders and cut-off cargo shorts", props: {fit: women}}
+  - {value: "a $colour off-shoulder knit over a vinyl bodysuit", props: {fit: women}}
+  - {value: "a sleeveless $colour hoodie and baggy trousers tucked into boots", props: {fit: men}}
+  - {value: "a sharp $colour double-breasted suit with a glowing lapel", props: {fit: men}}
+  - {value: "a $colour tank top under an open armoured vest", props: {fit: men}}
+  - {value: "a $colour bowling shirt with a pattern of tiny drones", props: {fit: men}}
+  - {value: "a $colour biker jacket over a bare, tattooed chest", props: {fit: men}}
+  - {value: "a $colour coat with a high mandarin collar and frog clasps", props: {fit: men}}
+  - {value: "a $colour hooded sweatshirt under a tailored overcoat", props: {fit: men}}
+  - {value: "a $colour tactical shirt with rolled sleeves and a holster", props: {fit: men}}
+  - {value: "a $colour suit jacket over a hoodie, hood up", props: {fit: men}}
+  - {value: "a $colour work shirt open over a ribbed vest", props: {fit: men}}
+  - {value: "a $colour long-line tee and drop-crotch trousers", props: {fit: men}}
+  - {value: "a $colour quilted haori over a black shirt", props: {fit: men}}
+  - {value: "a $colour leather vest covered in studs and patches", props: {fit: men}}
+  - {value: "a $colour hazard jacket with the reflective strips peeled", props: {fit: men}}
+  - {value: "a $colour short-sleeved mesh shirt and pleated trousers", props: {fit: men}}
+  - {value: "a $colour coach jacket over a hoodie and a chain", props: {fit: men}}
+  - {value: "a $colour bomber with a fur collar and nothing underneath", props: {fit: men}}
+  - {value: "a $colour track top zipped to the chin under a trench coat", props: {fit: men}}
+  - {value: "a $colour cardigan over an armoured shirt", props: {fit: men}}
+  - {value: "a $colour work jacket with a hood and a respirator", props: {fit: men}}
+  - {value: "a $colour satin shirt open at the collar under a leather blazer", props: {fit: men}}
+  - {value: "a $colour vest of ammunition pouches over a thermal shirt", props: {fit: men}}
+  - {value: "a $colour oversized blazer with the sleeves pushed up", props: {fit: men}}
+  - {value: "a $colour sleeveless kimono and wide hakama trousers", props: {fit: men}}
+  - {value: "a $colour cable-knit sweater with a chrome collar ring", props: {fit: men}}
+  - {value: "a $colour boiler suit with the arms torn off", props: {fit: men}}
+  - {value: "a $colour hooded poncho over combat trousers", props: {fit: men}}
+  - {value: "a $colour shirt under a waistcoat of armour plates", props: {fit: men}}
+  - {value: "a $colour racer jacket with shoulder armour", props: {fit: men}}
+  - {value: "a $colour suit with the trousers tucked into combat boots", props: {fit: men}}

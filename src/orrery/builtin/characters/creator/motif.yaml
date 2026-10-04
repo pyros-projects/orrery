@@ -1,0 +1,153 @@
+meta: {source: "orrery character creator: an ornament or a culture's style on the clothes, to follow 'with'; `genre` says where it belongs (all fits anywhere); several read the creator's $colour", needs: [colour], builtin: true}
+entries:
+  - {value: "$colour Celtic knotwork stitched along every hem", props: {genre: all}}
+  - {value: "Ukrainian cross-stitch in red and $colour at the cuffs", props: {genre: all}}
+  - {value: "a Japanese seigaiha wave pattern printed in $colour", props: {genre: all}}
+  - {value: "Kente-cloth stripes woven into the collar", props: {genre: all}}
+  - {value: "Mexican Otomi birds embroidered across the chest", props: {genre: all}}
+  - {value: "Norwegian star knit across the shoulders", props: {genre: all}}
+  - {value: "Persian paisley in $colour and gold", props: {genre: all}}
+  - {value: "Andean geometric bands in $colour", props: {genre: all}}
+  - {value: "Hungarian Matyó roses stitched down the front", props: {genre: all}}
+  - {value: "Indonesian batik swirls in $colour", props: {genre: all}}
+  - {value: "Moroccan zellige stars printed on the lining", props: {genre: all}}
+  - {value: "Maori koru spirals carved into a bone toggle", props: {genre: all}}
+  - {value: "Fair Isle bands in $colour and cream", props: {genre: all}}
+  - {value: "Chinese cloud collars embroidered in $colour silk", props: {genre: all}}
+  - {value: "Greek key borders running along the sleeves", props: {genre: all}}
+  - {value: "Sámi woven ribbons in red, yellow and $colour", props: {genre: all}}
+  - {value: "Indian block-printed florals in $colour", props: {genre: all}}
+  - {value: "Ndebele geometric blocks painted on the sleeves", props: {genre: all}}
+  - {value: "Scottish tartan in $colour lining the coat", props: {genre: all}}
+  - {value: "Turkish İznik tulips stitched at the neckline", props: {genre: all}}
+  - {value: "Korean saekdong rainbow stripes on the sleeves", props: {genre: all}}
+  - {value: "Polish wycinanki cut-paper flowers appliquéd at the hem", props: {genre: all}}
+  - {value: "Navajo-inspired stepped diamonds woven in $colour", props: {genre: all}}
+  - {value: "Ethiopian tibeb borders woven at the hem", props: {genre: all}}
+  - {value: "Japanese sashiko stitching in white thread over $colour", props: {genre: all}}
+  - {value: "Guatemalan huipil brocade across the chest", props: {genre: all}}
+  - {value: "Uzbek ikat blurred into $colour bands", props: {genre: all}}
+  - {value: "Hawaiian hibiscus printed in $colour", props: {genre: all}}
+  - {value: "Swedish Dala horses stitched along the yoke", props: {genre: all}}
+  - {value: "Bavarian edelweiss embroidered on the lapels", props: {genre: all}}
+  - {value: "Filipino inabel weave in $colour checks", props: {genre: all}}
+  - {value: "Senegalese wax-print circles in $colour and orange", props: {genre: all}}
+  - {value: "Thai temple flame motifs picked out in gold thread", props: {genre: all}}
+  - {value: "Irish Aran cables knit thick down the front", props: {genre: all}}
+  - {value: "Palestinian tatreez cross-stitch in $colour", props: {genre: all}}
+  - {value: "Peruvian pom-pom trim in $colour", props: {genre: all}}
+  - {value: "Art Nouveau lilies in $colour around the hem", props: {genre: all}}
+  - {value: "Art Deco sunbursts in gold on $colour", props: {genre: all}}
+  - {value: "William Morris willow leaves in $colour", props: {genre: all}}
+  - {value: "polka dots in $colour", props: {genre: all}}
+  - {value: "pinstripes in $colour", props: {genre: all}}
+  - {value: "houndstooth in black and $colour", props: {genre: all}}
+  - {value: "a large $colour checkerboard pattern", props: {genre: all}}
+  - {value: "$colour piping along every seam", props: {genre: all}}
+  - {value: "a ring of small $colour embroidered stars at the collar", props: {genre: all}}
+  - {value: "a $colour floral appliqué over one shoulder", props: {genre: all}}
+  - {value: "a scatter of $colour hand-painted dots", props: {genre: all}}
+  - {value: "wide $colour stripes down the sleeves", props: {genre: all}}
+  - {value: "$colour patchwork squares of mismatched fabric", props: {genre: all}}
+  - {value: "$colour fringing swinging at the hem", props: {genre: all}}
+  - {value: "tiny mirrors sewn in rows, Rajasthani style", props: {genre: all}}
+  - {value: "$colour beadwork in zigzags across the yoke", props: {genre: all}}
+  - {value: "an embroidered $colour koi climbing one sleeve", props: {genre: all}}
+  - {value: "a cherry-blossom branch embroidered across the back", props: {genre: all}}
+  - {value: "a $colour tiger embroidered on the back, souvenir-jacket style", props: {genre: all}}
+  - {value: "leopard spots in $colour", props: {genre: all}}
+  - {value: "a hand-painted $colour sun on the back", props: {genre: all}}
+  - {value: "$colour quilting in diamond rows", props: {genre: all}}
+  - {value: "rows of brass buttons in a military line", props: {genre: all}}
+  - {value: "$colour lace trim at the collar and cuffs", props: {genre: all}}
+  - {value: "elven leaf filigree stitched in $colour thread", props: {genre: fantasy}}
+  - {value: "dwarven runes hammered into every buckle", props: {genre: fantasy}}
+  - {value: "a dragon coiled in $colour embroidery up the back", props: {genre: fantasy}}
+  - {value: "a heraldic $colour lion on the chest", props: {genre: fantasy}}
+  - {value: "moons and stars stitched in silver on $colour", props: {genre: fantasy}}
+  - {value: "oak leaves and acorns embroidered in $colour", props: {genre: fantasy}}
+  - {value: "a quartered $colour and white heraldic field", props: {genre: fantasy}}
+  - {value: "glowing $colour sigils traced along the seams", props: {genre: fantasy}}
+  - {value: "a pattern of tiny $colour scales, like a wyrm's hide", props: {genre: fantasy}}
+  - {value: "woven knots that tell a clan's story", props: {genre: fantasy}}
+  - {value: "a $colour phoenix rising across the shoulders", props: {genre: fantasy}}
+  - {value: "a border of ivy that seems to move when no one looks", props: {genre: fantasy}}
+  - {value: "a guild crest in $colour on the left breast", props: {genre: fantasy}}
+  - {value: "feathers sewn in overlapping rows", props: {genre: fantasy}}
+  - {value: "a wolf's head badge in tarnished silver", props: {genre: fantasy}}
+  - {value: "alchemical symbols stamped in $colour", props: {genre: fantasy}}
+  - {value: "a pattern of thorns climbing the sleeves", props: {genre: fantasy}}
+  - {value: "a tapestry hunting scene woven into the cloak", props: {genre: fantasy}}
+  - {value: "a mosaic of tiny $colour gemstones at the collar", props: {genre: fantasy}}
+  - {value: "a stitched map of a coastline along the hem", props: {genre: fantasy}}
+  - {value: "a $colour circuit-board pattern printed on the sleeves", props: {genre: cyberpunk}}
+  - {value: "kanji tags airbrushed in $colour", props: {genre: cyberpunk}}
+  - {value: "a glitch pattern of $colour pixels", props: {genre: cyberpunk}}
+  - {value: "a megacorp logo crossed out with $colour spray paint", props: {genre: cyberpunk}}
+  - {value: "$colour reflective tape striping every seam", props: {genre: cyberpunk}}
+  - {value: "a QR code printed huge on the back", props: {genre: cyberpunk}}
+  - {value: "a holographic patch that shifts from $colour to silver", props: {genre: cyberpunk}}
+  - {value: "a hazard-stripe band in $colour and black", props: {genre: cyberpunk}}
+  - {value: "$colour LED piping that glows along the hood", props: {genre: cyberpunk}}
+  - {value: "a stencilled $colour skull with a barcode jaw", props: {genre: cyberpunk}}
+  - {value: "a camo pattern of $colour polygons", props: {genre: cyberpunk}}
+  - {value: "a gang's crest welded from scrap and pinned at the chest", props: {genre: cyberpunk}}
+  - {value: "a koi made of $colour neon on the back", props: {genre: cyberpunk}}
+  - {value: "scrolling $colour text on an e-ink panel", props: {genre: cyberpunk}}
+  - {value: "patches from dead corporations stitched all over", props: {genre: cyberpunk}}
+  - {value: "a $colour oni mask printed over one shoulder", props: {genre: cyberpunk}}
+  - {value: "a mesh of $colour fibre-optic threads", props: {genre: cyberpunk}}
+  - {value: "a pattern of tiny $colour warning glyphs", props: {genre: cyberpunk}}
+  - {value: "graffiti tags layered in $colour and white", props: {genre: cyberpunk}}
+  - {value: "a cracked chrome finish with $colour underneath", props: {genre: cyberpunk}}
+  - {value: "a $colour mission patch on the shoulder", props: {genre: spacefarer}}
+  - {value: "a star chart printed in $colour along the sleeve", props: {genre: spacefarer}}
+  - {value: "$colour hazard chevrons on the knees and elbows", props: {genre: spacefarer}}
+  - {value: "a ship's registry number stencilled in $colour", props: {genre: spacefarer}}
+  - {value: "a constellation of $colour stitched stars", props: {genre: spacefarer}}
+  - {value: "a faded flag patch from a colony that no longer exists", props: {genre: spacefarer}}
+  - {value: "$colour rank stripes on the cuffs", props: {genre: spacefarer}}
+  - {value: "orbital rings embroidered in $colour", props: {genre: spacefarer}}
+  - {value: "a planet with its moons printed on the back", props: {genre: spacefarer}}
+  - {value: "a $colour stripe running down each leg", props: {genre: spacefarer}}
+  - {value: "a pattern of tiny $colour hexagons", props: {genre: spacefarer}}
+  - {value: "a cartoon mascot patch from a mining crew", props: {genre: spacefarer}}
+  - {value: "alien script embroidered in $colour", props: {genre: spacefarer}}
+  - {value: "pressure-seal rings anodised in $colour", props: {genre: spacefarer}}
+  - {value: "a scuffed $colour checkerboard band around the chest", props: {genre: spacefarer}}
+  - {value: "a $colour comet streaking across the back", props: {genre: spacefarer}}
+  - {value: "a thin $colour chalk stripe", props: {genre: noir}}
+  - {value: "a $colour silk pocket square", props: {genre: noir}}
+  - {value: "a $colour flower pinned to the lapel", props: {genre: noir}}
+  - {value: "a narrow $colour tie with a gold bar", props: {genre: noir}}
+  - {value: "faint $colour herringbone", props: {genre: noir}}
+  - {value: "a $colour satin lining glimpsed under the coat", props: {genre: noir}}
+  - {value: "a glen check in grey and $colour", props: {genre: noir}}
+  - {value: "a $colour band around the hat", props: {genre: noir}}
+  - {value: "a beaded $colour fringe", props: {genre: noir}}
+  - {value: "a pattern of tiny $colour diamonds", props: {genre: noir}}
+  - {value: "a monogram stitched in $colour on the cuff", props: {genre: noir}}
+  - {value: "$colour seams on black stockings", props: {genre: noir}}
+  - {value: "a velvet $colour collar", props: {genre: noir}}
+  - {value: "a $colour bow at the throat", props: {genre: noir}}
+  - {value: "a dark tartan with a thin $colour line", props: {genre: noir}}
+  - {value: "$colour embroidered bats along the hem", props: {genre: gothic}}
+  - {value: "a cameo of a pale face pinned at the throat", props: {genre: gothic}}
+  - {value: "$colour lace in a cobweb pattern", props: {genre: gothic}}
+  - {value: "a pattern of tiny $colour skulls", props: {genre: gothic}}
+  - {value: "a jet-bead mourning brooch", props: {genre: gothic}}
+  - {value: "$colour roses wilting in brocade", props: {genre: gothic}}
+  - {value: "a crescent moon embroidered in $colour", props: {genre: gothic}}
+  - {value: "a ribbon of $colour velvet laced through the cuffs", props: {genre: gothic}}
+  - {value: "moths stitched in $colour across the shoulders", props: {genre: gothic}}
+  - {value: "a damask of $colour on black", props: {genre: gothic}}
+  - {value: "a reliquary locket on a $colour cord", props: {genre: gothic}}
+  - {value: "a stained-glass pattern printed in $colour", props: {genre: gothic}}
+  - {value: "a stitched compass rose on the back", props: {genre: adventure}}
+  - {value: "a scatter of travel patches from distant ports", props: {genre: adventure}}
+  - {value: "$colour expedition badges sewn on the pockets", props: {genre: adventure}}
+  - {value: "a map grid printed faintly in $colour", props: {genre: adventure}}
+  - {value: "a $colour bandolier pattern of stitched loops", props: {genre: adventure}}
+  - {value: "a climbing-rope braid along the seams", props: {genre: adventure}}
+  - {value: "a sun-faded $colour flag patch", props: {genre: adventure}}
+  - {value: "leather patches stamped with a $colour mountain", props: {genre: adventure}}

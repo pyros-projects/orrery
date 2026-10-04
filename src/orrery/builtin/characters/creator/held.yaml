@@ -1,0 +1,192 @@
+meta: {source: "orrery character creator: a thing in hand (or on them), to follow 'with'; `genre` says where it belongs (all fits anywhere); several read the creator's $colour", needs: [colour], builtin: true}
+entries:
+  - {value: "a steaming paper cup of coffee", props: {genre: all}}
+  - {value: "a battered paperback with a cracked spine", props: {genre: all}}
+  - {value: "a folded letter", props: {genre: all}}
+  - {value: "a single long-stemmed flower", props: {genre: all}}
+  - {value: "an apple with one bite taken out", props: {genre: all}}
+  - {value: "a $colour umbrella, closed", props: {genre: all}}
+  - {value: "a small wrapped gift with a $colour ribbon", props: {genre: all}}
+  - {value: "a ring of old keys", props: {genre: all}}
+  - {value: "a worn leather notebook and a pencil", props: {genre: all}}
+  - {value: "a lit candle in a brass holder", props: {genre: all}}
+  - {value: "a pocket watch on a chain", props: {genre: all}}
+  - {value: "a rolled-up map", props: {genre: all}}
+  - {value: "a cracked teacup", props: {genre: all}}
+  - {value: "a glass jar of fireflies", props: {genre: all}}
+  - {value: "a pair of dice", props: {genre: all}}
+  - {value: "a hand mirror turned face down", props: {genre: all}}
+  - {value: "a bundle of dried herbs tied with string", props: {genre: all}}
+  - {value: "a deck of cards fanned out", props: {genre: all}}
+  - {value: "a small $colour paper lantern", props: {genre: all}}
+  - {value: "a compass with a trembling needle", props: {genre: all}}
+  - {value: "a smartphone with a cracked screen", props: {genre: everyday}}
+  - {value: "a takeaway box of noodles and chopsticks", props: {genre: everyday}}
+  - {value: "a skateboard tucked under one arm", props: {genre: everyday}}
+  - {value: "a camera with a $colour strap", props: {genre: everyday}}
+  - {value: "a grocery bag with a baguette sticking out", props: {genre: everyday}}
+  - {value: "a watering can", props: {genre: everyday}}
+  - {value: "a vinyl record in its sleeve", props: {genre: everyday}}
+  - {value: "a sketchbook and a stick of charcoal", props: {genre: everyday}}
+  - {value: "an acoustic guitar by the neck", props: {genre: everyday}}
+  - {value: "a bicycle helmet", props: {genre: everyday}}
+  - {value: "a potted cactus", props: {genre: everyday}}
+  - {value: "a stack of library books", props: {genre: everyday}}
+  - {value: "a dripping ice-cream cone", props: {genre: everyday}}
+  - {value: "a tennis racket", props: {genre: everyday}}
+  - {value: "a pair of headphones", props: {genre: everyday}}
+  - {value: "a bouquet wrapped in brown paper", props: {genre: everyday}}
+  - {value: "a set of car keys on a $colour lanyard", props: {genre: everyday}}
+  - {value: "a paintbrush loaded with $colour paint", props: {genre: everyday}}
+  - {value: "a basketball", props: {genre: everyday}}
+  - {value: "a dog lead with no dog on it", props: {genre: everyday}}
+  - {value: "a thermos flask", props: {genre: everyday}}
+  - {value: "a disposable camera", props: {genre: everyday}}
+  - {value: "a half-eaten sandwich", props: {genre: everyday}}
+  - {value: "a toolbox", props: {genre: everyday}}
+  - {value: "a jar of homemade jam", props: {genre: everyday}}
+  - {value: "a coiled climbing rope", props: {genre: adventure}}
+  - {value: "a machete with a taped grip", props: {genre: adventure}}
+  - {value: "a brass spyglass", props: {genre: adventure}}
+  - {value: "a hurricane lantern", props: {genre: adventure}}
+  - {value: "an ice axe", props: {genre: adventure}}
+  - {value: "a canteen on a canvas strap", props: {genre: adventure}}
+  - {value: "a golden idol wrapped in cloth", props: {genre: adventure}}
+  - {value: "a bullwhip coiled at the hip", props: {genre: adventure}}
+  - {value: "a field journal stuffed with pressed leaves", props: {genre: adventure}}
+  - {value: "a flare, not yet lit", props: {genre: adventure}}
+  - {value: "a pair of binoculars", props: {genre: adventure}}
+  - {value: "a fishing spear", props: {genre: adventure}}
+  - {value: "a torn treasure map", props: {genre: adventure}}
+  - {value: "a pith helmet in one hand", props: {genre: adventure}}
+  - {value: "a sextant", props: {genre: adventure}}
+  - {value: "a bundle of torches", props: {genre: adventure}}
+  - {value: "a carved stone tablet", props: {genre: adventure}}
+  - {value: "a paddle from a dugout canoe", props: {genre: adventure}}
+  - {value: "a shovel caked with red earth", props: {genre: adventure}}
+  - {value: "a hunting knife in a beaded sheath", props: {genre: adventure}}
+  - {value: "a crossbow over the shoulder", props: {genre: fantasy}}
+  - {value: "a gnarled staff topped with a $colour crystal", props: {genre: fantasy}}
+  - {value: "a spellbook bound in cracked leather", props: {genre: fantasy}}
+  - {value: "a longsword resting on the shoulder", props: {genre: fantasy}}
+  - {value: "a round shield painted $colour", props: {genre: fantasy}}
+  - {value: "a lute with one broken string", props: {genre: fantasy}}
+  - {value: "a potion bottle glowing $colour", props: {genre: fantasy}}
+  - {value: "a scroll sealed with $colour wax", props: {genre: fantasy}}
+  - {value: "a war hammer", props: {genre: fantasy}}
+  - {value: "a hooded falcon on a gloved fist", props: {genre: fantasy}}
+  - {value: "a skull with a candle burning on top", props: {genre: fantasy}}
+  - {value: "a recurve bow", props: {genre: fantasy}}
+  - {value: "a pair of curved daggers", props: {genre: fantasy}}
+  - {value: "a wand of twisted rowan wood", props: {genre: fantasy}}
+  - {value: "an hourglass full of $colour sand", props: {genre: fantasy}}
+  - {value: "a lantern with a trapped will-o'-the-wisp", props: {genre: fantasy}}
+  - {value: "a dragon egg cradled in both arms", props: {genre: fantasy}}
+  - {value: "a holy symbol on a chain", props: {genre: fantasy}}
+  - {value: "a halberd planted beside them", props: {genre: fantasy}}
+  - {value: "a crystal ball", props: {genre: fantasy}}
+  - {value: "a quill and an inkpot", props: {genre: fantasy}}
+  - {value: "a mortar and pestle", props: {genre: fantasy}}
+  - {value: "a heavy iron key as long as a forearm", props: {genre: fantasy}}
+  - {value: "a bundle of rune stones in a pouch", props: {genre: fantasy}}
+  - {value: "a goblet of dark wine", props: {genre: fantasy}}
+  - {value: "a bone flute", props: {genre: fantasy}}
+  - {value: "a sickle and a sprig of mistletoe", props: {genre: fantasy}}
+  - {value: "a mace with a flanged head", props: {genre: fantasy}}
+  - {value: "a jar holding a tiny storm cloud", props: {genre: fantasy}}
+  - {value: "a sealed reliquary box", props: {genre: fantasy}}
+  - {value: "a cracked data chip between two fingers", props: {genre: cyberpunk}}
+  - {value: "a holo-tablet flickering $colour", props: {genre: cyberpunk}}
+  - {value: "a monofilament whip coiled in one hand", props: {genre: cyberpunk}}
+  - {value: "a smart pistol with a $colour grip", props: {genre: cyberpunk}}
+  - {value: "a katana with a glowing $colour edge", props: {genre: cyberpunk}}
+  - {value: "a bowl of instant ramen", props: {genre: cyberpunk}}
+  - {value: "a cyberdeck with dangling cables", props: {genre: cyberpunk}}
+  - {value: "a canister of synth-coffee", props: {genre: cyberpunk}}
+  - {value: "a stack of credit chips", props: {genre: cyberpunk}}
+  - {value: "a neon $colour vape pen", props: {genre: cyberpunk}}
+  - {value: "a drone controller", props: {genre: cyberpunk}}
+  - {value: "a spray-paint can, $colour", props: {genre: cyberpunk}}
+  - {value: "an injector pen of something illegal", props: {genre: cyberpunk}}
+  - {value: "a disassembled robotic hand", props: {genre: cyberpunk}}
+  - {value: "a shotgun with a taped stock", props: {genre: cyberpunk}}
+  - {value: "a portable soldering iron", props: {genre: cyberpunk}}
+  - {value: "a burner phone", props: {genre: cyberpunk}}
+  - {value: "a briefcase cuffed to the wrist", props: {genre: cyberpunk}}
+  - {value: "a glowing $colour shard of memory crystal", props: {genre: cyberpunk}}
+  - {value: "a tangle of fibre-optic cable", props: {genre: cyberpunk}}
+  - {value: "a cracked VR visor", props: {genre: cyberpunk}}
+  - {value: "a takeaway bag of street dumplings", props: {genre: cyberpunk}}
+  - {value: "a pair of knuckle-dusters with $colour LEDs", props: {genre: cyberpunk}}
+  - {value: "a medkit with a red cross half scratched off", props: {genre: cyberpunk}}
+  - {value: "an old analogue Polaroid", props: {genre: cyberpunk}}
+  - {value: "a lit cigarette between two fingers", props: {genre: noir}}
+  - {value: "a snub-nosed revolver", props: {genre: noir}}
+  - {value: "a glass of whisky with one ice cube", props: {genre: noir}}
+  - {value: "a manila folder stamped CONFIDENTIAL", props: {genre: noir}}
+  - {value: "a telephone receiver on a coiled cord", props: {genre: noir}}
+  - {value: "a fedora held against the chest", props: {genre: noir}}
+  - {value: "a matchbook from a nightclub", props: {genre: noir}}
+  - {value: "a photograph with one face circled", props: {genre: noir}}
+  - {value: "a cigarette holder", props: {genre: noir}}
+  - {value: "a pair of handcuffs", props: {genre: noir}}
+  - {value: "a newspaper folded to the crime page", props: {genre: noir}}
+  - {value: "a small $colour clutch purse", props: {genre: noir}}
+  - {value: "a torn ticket stub", props: {genre: noir}}
+  - {value: "a silver lighter", props: {genre: noir}}
+  - {value: "a stack of banknotes held by a rubber band", props: {genre: noir}}
+  - {value: "a typewritten note", props: {genre: noir}}
+  - {value: "a hotel room key on a brass tag", props: {genre: noir}}
+  - {value: "a martini glass", props: {genre: noir}}
+  - {value: "a pocket notebook and a stubby pencil", props: {genre: noir}}
+  - {value: "a pearl necklace, its clasp broken", props: {genre: noir}}
+  - {value: "a lit match cupped against the wind", props: {genre: noir}}
+  - {value: "a briefcase with a broken lock", props: {genre: noir}}
+  - {value: "a pistol wrapped in a handkerchief", props: {genre: noir}}
+  - {value: "a dented flask", props: {genre: noir}}
+  - {value: "a wilted $colour carnation", props: {genre: noir}}
+  - {value: "a candelabra with three guttering candles", props: {genre: gothic}}
+  - {value: "a black rose", props: {genre: gothic}}
+  - {value: "a silver dagger with a $colour jewel", props: {genre: gothic}}
+  - {value: "a cracked porcelain doll", props: {genre: gothic}}
+  - {value: "a leather-bound diary with a lock", props: {genre: gothic}}
+  - {value: "a goblet of something red", props: {genre: gothic}}
+  - {value: "a raven's skull", props: {genre: gothic}}
+  - {value: "a wooden stake", props: {genre: gothic}}
+  - {value: "a lace fan, half open", props: {genre: gothic}}
+  - {value: "a music box playing itself", props: {genre: gothic}}
+  - {value: "an oil lamp with smoked glass", props: {genre: gothic}}
+  - {value: "a rosary of black beads", props: {genre: gothic}}
+  - {value: "a funeral wreath", props: {genre: gothic}}
+  - {value: "a quill dripping $colour ink", props: {genre: gothic}}
+  - {value: "a pressed bouquet of dead lilies", props: {genre: gothic}}
+  - {value: "an antique pistol with an ivory grip", props: {genre: gothic}}
+  - {value: "a jar holding a beating heart", props: {genre: gothic}}
+  - {value: "a mourning veil gathered in one hand", props: {genre: gothic}}
+  - {value: "a silver bell", props: {genre: gothic}}
+  - {value: "a cracked mirror in a gilt frame", props: {genre: gothic}}
+  - {value: "a helmet under one arm with a $colour visor", props: {genre: spacefarer}}
+  - {value: "a plasma cutter", props: {genre: spacefarer}}
+  - {value: "a scanner beeping softly", props: {genre: spacefarer}}
+  - {value: "a sealed sample canister glowing $colour", props: {genre: spacefarer}}
+  - {value: "a blaster pistol", props: {genre: spacefarer}}
+  - {value: "a pouch of dehydrated rations", props: {genre: spacefarer}}
+  - {value: "a star map projected from the palm", props: {genre: spacefarer}}
+  - {value: "a rifle with a long scope", props: {genre: spacefarer}}
+  - {value: "a torque wrench as long as an arm", props: {genre: spacefarer}}
+  - {value: "a cup of coffee in zero-g, held by a straw", props: {genre: spacefarer}}
+  - {value: "an alien artefact that hums", props: {genre: spacefarer}}
+  - {value: "a datapad covered in stickers", props: {genre: spacefarer}}
+  - {value: "a tether hook on a coiled line", props: {genre: spacefarer}}
+  - {value: "an oxygen canister", props: {genre: spacefarer}}
+  - {value: "a cracked $colour visor", props: {genre: spacefarer}}
+  - {value: "a small potted plant in a sealed dome", props: {genre: spacefarer}}
+  - {value: "a laser drill", props: {genre: spacefarer}}
+  - {value: "a captain's log recorder", props: {genre: spacefarer}}
+  - {value: "a medi-gel injector", props: {genre: spacefarer}}
+  - {value: "a hand of alien playing cards", props: {genre: spacefarer}}
+  - {value: "a battered thermos stencilled with a ship's name", props: {genre: spacefarer}}
+  - {value: "a grav-boot with a broken strap", props: {genre: spacefarer}}
+  - {value: "a glowing $colour power cell", props: {genre: spacefarer}}
+  - {value: "a stun baton", props: {genre: spacefarer}}
+  - {value: "a holographic chess piece", props: {genre: spacefarer}}

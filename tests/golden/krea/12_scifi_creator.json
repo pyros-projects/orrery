@@ -1,0 +1,2693 @@
+{
+ "preset": "krea/12_scifi_creator",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A cinematic photograph, as from the set of a space opera: a head-and-shoulders portrait of a young cephalopod with a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth: an ambassador's bodyguard in a crimson ceremonial armour of overlapping plates, their clothes marked by crimson patchwork squares of mismatched fabric, with a steady, amused half-smile. They face the camera. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "$species ← __characters/scifi/species__",
+       "cephalopod",
+       [
+        "__characters/scifi/species__=cephalopod"
+       ]
+      ],
+      [
+       "{red|$colour|purple}",
+       "purple",
+       [
+        "{red|$colour|purple}=purple"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "man",
+       [
+        "{woman|man|person}=man"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|veteran}",
+       "young",
+       [
+        "{young|seasoned|grizzled|veteran}=young"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a sprinter's strong legs",
+       [
+        "__characters/creator/build__=athletic, with a sprinter's strong legs"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed|silver|white}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed|silver|white}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "blue-black",
+       [
+        "__characters/creator/haircolour__=blue-black"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "short $haircolour hair cut close around a deep widow's peak",
+       [
+        "__characters/creator/hair__=short $haircolour hair cut close around a deep widow's peak"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "$role ← __characters/scifi/role__",
+       "an ambassador's bodyguard",
+       [
+        "__characters/scifi/role__=an ambassador's bodyguard"
+       ]
+      ],
+      [
+       "{an energy halberd|a personal shield emitter|a sealed message}",
+       "a personal shield emitter",
+       [
+        "{an energy halberd|a personal shield emitter|a sealed message}=a personal shield emitter"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=spacefarer|all]__",
+       "$colour patchwork squares of mismatched fabric",
+       [
+        "__characters/creator/motif__=$colour patchwork squares of mismatched fabric"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=spacefarer]__|none}",
+       "__characters/creator/companion[genre=spacefarer]__",
+       [
+        "{__characters/creator/companion[genre=spacefarer]__|none}=__characters/creator/companion[genre=spacefarer]__"
+       ]
+      ],
+      [
+       "$companion ← __characters/creator/companion[genre=spacefarer]__",
+       "a six-legged alien pup",
+       [
+        "__characters/creator/companion__=a six-legged alien pup"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a steady, amused half-smile",
+       [
+        "__characters/creator/presence__=a steady, amused half-smile"
+       ]
+      ],
+      [
+       "{studio|place}",
+       "studio",
+       [
+        "{studio|place}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "portrait",
+       [
+        "{portrait|three-quarter|full-length|profile}=portrait"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "brightly optimistic",
+       [
+        "__characters/creator/mood__=brightly optimistic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "brushes invisible dust off their clothes",
+       [
+        "__characters/creator/quirk__=brushes invisible dust off their clothes"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "sketching faces quickly, cooking with scraps",
+       [
+        "__characters/creator/skill__=sketching faces quickly",
+        "__characters/creator/skill__=cooking with scraps"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a fast, breathless voice that runs sentences together",
+       [
+        "__characters/creator/voice__=a fast, breathless voice that runs sentences together"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a young cephalopod with a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth: an ambassador's bodyguard in a crimson ceremonial armour of overlapping plates, their clothes marked by crimson patchwork squares of mismatched fabric, with a personal shield emitter, a six-legged alien pup",
+      "species": {
+       "value": "cephalopod",
+       "beard": "no",
+       "gender": "no",
+       "like": "other",
+       "look": "a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth"
+      },
+      "gender": "none",
+      "age": "young",
+      "role": {
+       "value": "an ambassador's bodyguard",
+       "gear": "a personal shield emitter",
+       "wear": "a crimson ceremonial armour of overlapping plates"
+      },
+      "gear": "a personal shield emitter",
+      "companion": {
+       "value": "a six-legged alien pup",
+       "genre": "spacefarer"
+      },
+      "colour": "crimson",
+      "mood": "brightly optimistic",
+      "quirk": "brushes invisible dust off their clothes",
+      "skills": [
+       "sketching faces quickly",
+       "cooking with scraps"
+      ],
+      "voice": "a fast, breathless voice that runs sentences together"
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A cinematic photograph, as from the set of a space opera: a head-and-shoulders view of a young cephalopod with a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth: an ambassador's bodyguard in a crimson ceremonial armour of overlapping plates, their clothes marked by crimson patchwork squares of mismatched fabric, with a steady, amused half-smile. They are turned three-quarters to the left. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "$species ← __characters/scifi/species__",
+       "cephalopod",
+       [
+        "__characters/scifi/species__=cephalopod"
+       ]
+      ],
+      [
+       "{red|$colour|purple}",
+       "purple",
+       [
+        "{red|$colour|purple}=purple"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "man",
+       [
+        "{woman|man|person}=man"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|veteran}",
+       "young",
+       [
+        "{young|seasoned|grizzled|veteran}=young"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a sprinter's strong legs",
+       [
+        "__characters/creator/build__=athletic, with a sprinter's strong legs"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed|silver|white}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed|silver|white}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "blue-black",
+       [
+        "__characters/creator/haircolour__=blue-black"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "short $haircolour hair cut close around a deep widow's peak",
+       [
+        "__characters/creator/hair__=short $haircolour hair cut close around a deep widow's peak"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "$role ← __characters/scifi/role__",
+       "an ambassador's bodyguard",
+       [
+        "__characters/scifi/role__=an ambassador's bodyguard"
+       ]
+      ],
+      [
+       "{an energy halberd|a personal shield emitter|a sealed message}",
+       "a personal shield emitter",
+       [
+        "{an energy halberd|a personal shield emitter|a sealed message}=a personal shield emitter"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=spacefarer|all]__",
+       "$colour patchwork squares of mismatched fabric",
+       [
+        "__characters/creator/motif__=$colour patchwork squares of mismatched fabric"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=spacefarer]__|none}",
+       "__characters/creator/companion[genre=spacefarer]__",
+       [
+        "{__characters/creator/companion[genre=spacefarer]__|none}=__characters/creator/companion[genre=spacefarer]__"
+       ]
+      ],
+      [
+       "$companion ← __characters/creator/companion[genre=spacefarer]__",
+       "a six-legged alien pup",
+       [
+        "__characters/creator/companion__=a six-legged alien pup"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a steady, amused half-smile",
+       [
+        "__characters/creator/presence__=a steady, amused half-smile"
+       ]
+      ],
+      [
+       "{studio|place}",
+       "studio",
+       [
+        "{studio|place}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "three-quarter",
+       [
+        "{portrait|three-quarter|full-length|profile}=three-quarter"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "brightly optimistic",
+       [
+        "__characters/creator/mood__=brightly optimistic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "brushes invisible dust off their clothes",
+       [
+        "__characters/creator/quirk__=brushes invisible dust off their clothes"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "sketching faces quickly, cooking with scraps",
+       [
+        "__characters/creator/skill__=sketching faces quickly",
+        "__characters/creator/skill__=cooking with scraps"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a fast, breathless voice that runs sentences together",
+       [
+        "__characters/creator/voice__=a fast, breathless voice that runs sentences together"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a young cephalopod with a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth: an ambassador's bodyguard in a crimson ceremonial armour of overlapping plates, their clothes marked by crimson patchwork squares of mismatched fabric, with a personal shield emitter, a six-legged alien pup",
+      "species": {
+       "value": "cephalopod",
+       "beard": "no",
+       "gender": "no",
+       "like": "other",
+       "look": "a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth"
+      },
+      "gender": "none",
+      "age": "young",
+      "role": {
+       "value": "an ambassador's bodyguard",
+       "gear": "a personal shield emitter",
+       "wear": "a crimson ceremonial armour of overlapping plates"
+      },
+      "gear": "a personal shield emitter",
+      "companion": {
+       "value": "a six-legged alien pup",
+       "genre": "spacefarer"
+      },
+      "colour": "crimson",
+      "mood": "brightly optimistic",
+      "quirk": "brushes invisible dust off their clothes",
+      "skills": [
+       "sketching faces quickly",
+       "cooking with scraps"
+      ],
+      "voice": "a fast, breathless voice that runs sentences together"
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A cinematic photograph, as from the set of a space opera: a full-length view of the whole body, from the top of the head to the feet, of a young cephalopod with a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth: an ambassador's bodyguard in a crimson ceremonial armour of overlapping plates, their clothes marked by crimson patchwork squares of mismatched fabric, with a steady, amused half-smile. They stand straight with the arms relaxed, facing the camera, with a personal shield emitter, and floor and space around them are in frame. With them: a six-legged alien pup. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "$species ← __characters/scifi/species__",
+       "cephalopod",
+       [
+        "__characters/scifi/species__=cephalopod"
+       ]
+      ],
+      [
+       "{red|$colour|purple}",
+       "purple",
+       [
+        "{red|$colour|purple}=purple"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "man",
+       [
+        "{woman|man|person}=man"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|veteran}",
+       "young",
+       [
+        "{young|seasoned|grizzled|veteran}=young"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a sprinter's strong legs",
+       [
+        "__characters/creator/build__=athletic, with a sprinter's strong legs"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed|silver|white}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed|silver|white}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "blue-black",
+       [
+        "__characters/creator/haircolour__=blue-black"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "short $haircolour hair cut close around a deep widow's peak",
+       [
+        "__characters/creator/hair__=short $haircolour hair cut close around a deep widow's peak"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "$role ← __characters/scifi/role__",
+       "an ambassador's bodyguard",
+       [
+        "__characters/scifi/role__=an ambassador's bodyguard"
+       ]
+      ],
+      [
+       "{an energy halberd|a personal shield emitter|a sealed message}",
+       "a personal shield emitter",
+       [
+        "{an energy halberd|a personal shield emitter|a sealed message}=a personal shield emitter"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=spacefarer|all]__",
+       "$colour patchwork squares of mismatched fabric",
+       [
+        "__characters/creator/motif__=$colour patchwork squares of mismatched fabric"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=spacefarer]__|none}",
+       "__characters/creator/companion[genre=spacefarer]__",
+       [
+        "{__characters/creator/companion[genre=spacefarer]__|none}=__characters/creator/companion[genre=spacefarer]__"
+       ]
+      ],
+      [
+       "$companion ← __characters/creator/companion[genre=spacefarer]__",
+       "a six-legged alien pup",
+       [
+        "__characters/creator/companion__=a six-legged alien pup"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a steady, amused half-smile",
+       [
+        "__characters/creator/presence__=a steady, amused half-smile"
+       ]
+      ],
+      [
+       "{studio|place}",
+       "studio",
+       [
+        "{studio|place}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "full-length",
+       [
+        "{portrait|three-quarter|full-length|profile}=full-length"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "brightly optimistic",
+       [
+        "__characters/creator/mood__=brightly optimistic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "brushes invisible dust off their clothes",
+       [
+        "__characters/creator/quirk__=brushes invisible dust off their clothes"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "sketching faces quickly, cooking with scraps",
+       [
+        "__characters/creator/skill__=sketching faces quickly",
+        "__characters/creator/skill__=cooking with scraps"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a fast, breathless voice that runs sentences together",
+       [
+        "__characters/creator/voice__=a fast, breathless voice that runs sentences together"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a young cephalopod with a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth: an ambassador's bodyguard in a crimson ceremonial armour of overlapping plates, their clothes marked by crimson patchwork squares of mismatched fabric, with a personal shield emitter, a six-legged alien pup",
+      "species": {
+       "value": "cephalopod",
+       "beard": "no",
+       "gender": "no",
+       "like": "other",
+       "look": "a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth"
+      },
+      "gender": "none",
+      "age": "young",
+      "role": {
+       "value": "an ambassador's bodyguard",
+       "gear": "a personal shield emitter",
+       "wear": "a crimson ceremonial armour of overlapping plates"
+      },
+      "gear": "a personal shield emitter",
+      "companion": {
+       "value": "a six-legged alien pup",
+       "genre": "spacefarer"
+      },
+      "colour": "crimson",
+      "mood": "brightly optimistic",
+      "quirk": "brushes invisible dust off their clothes",
+      "skills": [
+       "sketching faces quickly",
+       "cooking with scraps"
+      ],
+      "voice": "a fast, breathless voice that runs sentences together"
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A cinematic photograph, as from the set of a space opera: a strict side profile of the head and shoulders of a young cephalopod with a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth: an ambassador's bodyguard in a crimson ceremonial armour of overlapping plates, their clothes marked by crimson patchwork squares of mismatched fabric, with a steady, amused half-smile. The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "$species ← __characters/scifi/species__",
+       "cephalopod",
+       [
+        "__characters/scifi/species__=cephalopod"
+       ]
+      ],
+      [
+       "{red|$colour|purple}",
+       "purple",
+       [
+        "{red|$colour|purple}=purple"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "man",
+       [
+        "{woman|man|person}=man"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|veteran}",
+       "young",
+       [
+        "{young|seasoned|grizzled|veteran}=young"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a sprinter's strong legs",
+       [
+        "__characters/creator/build__=athletic, with a sprinter's strong legs"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed|silver|white}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed|silver|white}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "blue-black",
+       [
+        "__characters/creator/haircolour__=blue-black"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "short $haircolour hair cut close around a deep widow's peak",
+       [
+        "__characters/creator/hair__=short $haircolour hair cut close around a deep widow's peak"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "$role ← __characters/scifi/role__",
+       "an ambassador's bodyguard",
+       [
+        "__characters/scifi/role__=an ambassador's bodyguard"
+       ]
+      ],
+      [
+       "{an energy halberd|a personal shield emitter|a sealed message}",
+       "a personal shield emitter",
+       [
+        "{an energy halberd|a personal shield emitter|a sealed message}=a personal shield emitter"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=spacefarer|all]__",
+       "$colour patchwork squares of mismatched fabric",
+       [
+        "__characters/creator/motif__=$colour patchwork squares of mismatched fabric"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=spacefarer]__|none}",
+       "__characters/creator/companion[genre=spacefarer]__",
+       [
+        "{__characters/creator/companion[genre=spacefarer]__|none}=__characters/creator/companion[genre=spacefarer]__"
+       ]
+      ],
+      [
+       "$companion ← __characters/creator/companion[genre=spacefarer]__",
+       "a six-legged alien pup",
+       [
+        "__characters/creator/companion__=a six-legged alien pup"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a steady, amused half-smile",
+       [
+        "__characters/creator/presence__=a steady, amused half-smile"
+       ]
+      ],
+      [
+       "{studio|place}",
+       "studio",
+       [
+        "{studio|place}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "profile",
+       [
+        "{portrait|three-quarter|full-length|profile}=profile"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "brightly optimistic",
+       [
+        "__characters/creator/mood__=brightly optimistic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "brushes invisible dust off their clothes",
+       [
+        "__characters/creator/quirk__=brushes invisible dust off their clothes"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "sketching faces quickly, cooking with scraps",
+       [
+        "__characters/creator/skill__=sketching faces quickly",
+        "__characters/creator/skill__=cooking with scraps"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a fast, breathless voice that runs sentences together",
+       [
+        "__characters/creator/voice__=a fast, breathless voice that runs sentences together"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a young cephalopod with a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth: an ambassador's bodyguard in a crimson ceremonial armour of overlapping plates, their clothes marked by crimson patchwork squares of mismatched fabric, with a personal shield emitter, a six-legged alien pup",
+      "species": {
+       "value": "cephalopod",
+       "beard": "no",
+       "gender": "no",
+       "like": "other",
+       "look": "a soft mantle of a head, colour-shifting purple skin and a fringe of tentacles at the mouth"
+      },
+      "gender": "none",
+      "age": "young",
+      "role": {
+       "value": "an ambassador's bodyguard",
+       "gear": "a personal shield emitter",
+       "wear": "a crimson ceremonial armour of overlapping plates"
+      },
+      "gear": "a personal shield emitter",
+      "companion": {
+       "value": "a six-legged alien pup",
+       "genre": "spacefarer"
+      },
+      "colour": "crimson",
+      "mood": "brightly optimistic",
+      "quirk": "brushes invisible dust off their clothes",
+      "skills": [
+       "sketching faces quickly",
+       "cooking with scraps"
+      ],
+      "voice": "a fast, breathless voice that runs sentences together"
+     }
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A cinematic photograph, as from the set of a space opera: a head-and-shoulders portrait of a young four-armed humanoid woman with grey skin and a second pair of arms below the first, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: a racer in a mustard-yellow racing suit covered in sponsor logos, their clothes marked by Turkish İznik tulips stitched at the neckline, with a brooding, lowered brow. They face the camera. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "$species ← __characters/scifi/species__",
+       "four-armed humanoid",
+       [
+        "__characters/scifi/species__=four-armed humanoid"
+       ]
+      ],
+      [
+       "{green|red-brown|grey}",
+       "grey",
+       [
+        "{green|red-brown|grey}=grey"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "woman",
+       [
+        "{woman|man|person}=woman"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|veteran}",
+       "young",
+       [
+        "{young|seasoned|grizzled|veteran}=young"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "short and broad, with a wrestler's build",
+       [
+        "__characters/creator/build__=short and broad, with a wrestler's build"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed|silver|white}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed|silver|white}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "$role ← __characters/scifi/role__",
+       "a racer",
+       [
+        "__characters/scifi/role__=a racer"
+       ]
+      ],
+      [
+       "{a helmet with a cracked visor|a trophy|a hover-bike key}",
+       "a helmet with a cracked visor",
+       [
+        "{a helmet with a cracked visor|a trophy|a hover-bike key}=a helmet with a cracked visor"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=spacefarer|all]__",
+       "Turkish İznik tulips stitched at the neckline",
+       [
+        "__characters/creator/motif__=Turkish İznik tulips stitched at the neckline"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=spacefarer]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=spacefarer]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a brooding, lowered brow",
+       [
+        "__characters/creator/presence__=a brooding, lowered brow"
+       ]
+      ],
+      [
+       "{studio|place}",
+       "studio",
+       [
+        "{studio|place}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "portrait",
+       [
+        "{portrait|three-quarter|full-length|profile}=portrait"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "mischievously secretive",
+       [
+        "__characters/creator/mood__=mischievously secretive"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "points with the whole hand, never a finger",
+       [
+        "__characters/creator/quirk__=points with the whole hand, never a finger"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "tending hydroponic gardens, sketching faces quickly",
+       [
+        "__characters/creator/skill__=tending hydroponic gardens",
+        "__characters/creator/skill__=sketching faces quickly"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a heavy, tired voice that trails off mid-sentence",
+       [
+        "__characters/creator/voice__=a heavy, tired voice that trails off mid-sentence"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a young four-armed humanoid woman with grey skin and a second pair of arms below the first, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: a racer in a mustard-yellow racing suit covered in sponsor logos, their clothes marked by Turkish İznik tulips stitched at the neckline, with a helmet with a cracked visor",
+      "species": {
+       "value": "four-armed humanoid",
+       "beard": "yes",
+       "gender": "yes",
+       "like": "human",
+       "look": "grey skin and a second pair of arms below the first"
+      },
+      "gender": "woman",
+      "age": "young",
+      "role": {
+       "value": "a racer",
+       "gear": "a helmet with a cracked visor",
+       "wear": "a mustard-yellow racing suit covered in sponsor logos"
+      },
+      "gear": "a helmet with a cracked visor",
+      "companion": "none",
+      "colour": "mustard-yellow",
+      "mood": "mischievously secretive",
+      "quirk": "points with the whole hand, never a finger",
+      "skills": [
+       "tending hydroponic gardens",
+       "sketching faces quickly"
+      ],
+      "voice": "a heavy, tired voice that trails off mid-sentence"
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A cinematic photograph, as from the set of a space opera: a head-and-shoulders view of a young four-armed humanoid woman with grey skin and a second pair of arms below the first, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: a racer in a mustard-yellow racing suit covered in sponsor logos, their clothes marked by Turkish İznik tulips stitched at the neckline, with a brooding, lowered brow. They are turned three-quarters to the left. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "$species ← __characters/scifi/species__",
+       "four-armed humanoid",
+       [
+        "__characters/scifi/species__=four-armed humanoid"
+       ]
+      ],
+      [
+       "{green|red-brown|grey}",
+       "grey",
+       [
+        "{green|red-brown|grey}=grey"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "woman",
+       [
+        "{woman|man|person}=woman"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|veteran}",
+       "young",
+       [
+        "{young|seasoned|grizzled|veteran}=young"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "short and broad, with a wrestler's build",
+       [
+        "__characters/creator/build__=short and broad, with a wrestler's build"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed|silver|white}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed|silver|white}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "$role ← __characters/scifi/role__",
+       "a racer",
+       [
+        "__characters/scifi/role__=a racer"
+       ]
+      ],
+      [
+       "{a helmet with a cracked visor|a trophy|a hover-bike key}",
+       "a helmet with a cracked visor",
+       [
+        "{a helmet with a cracked visor|a trophy|a hover-bike key}=a helmet with a cracked visor"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=spacefarer|all]__",
+       "Turkish İznik tulips stitched at the neckline",
+       [
+        "__characters/creator/motif__=Turkish İznik tulips stitched at the neckline"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=spacefarer]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=spacefarer]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a brooding, lowered brow",
+       [
+        "__characters/creator/presence__=a brooding, lowered brow"
+       ]
+      ],
+      [
+       "{studio|place}",
+       "studio",
+       [
+        "{studio|place}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "three-quarter",
+       [
+        "{portrait|three-quarter|full-length|profile}=three-quarter"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "mischievously secretive",
+       [
+        "__characters/creator/mood__=mischievously secretive"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "points with the whole hand, never a finger",
+       [
+        "__characters/creator/quirk__=points with the whole hand, never a finger"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "tending hydroponic gardens, sketching faces quickly",
+       [
+        "__characters/creator/skill__=tending hydroponic gardens",
+        "__characters/creator/skill__=sketching faces quickly"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a heavy, tired voice that trails off mid-sentence",
+       [
+        "__characters/creator/voice__=a heavy, tired voice that trails off mid-sentence"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a young four-armed humanoid woman with grey skin and a second pair of arms below the first, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: a racer in a mustard-yellow racing suit covered in sponsor logos, their clothes marked by Turkish İznik tulips stitched at the neckline, with a helmet with a cracked visor",
+      "species": {
+       "value": "four-armed humanoid",
+       "beard": "yes",
+       "gender": "yes",
+       "like": "human",
+       "look": "grey skin and a second pair of arms below the first"
+      },
+      "gender": "woman",
+      "age": "young",
+      "role": {
+       "value": "a racer",
+       "gear": "a helmet with a cracked visor",
+       "wear": "a mustard-yellow racing suit covered in sponsor logos"
+      },
+      "gear": "a helmet with a cracked visor",
+      "companion": "none",
+      "colour": "mustard-yellow",
+      "mood": "mischievously secretive",
+      "quirk": "points with the whole hand, never a finger",
+      "skills": [
+       "tending hydroponic gardens",
+       "sketching faces quickly"
+      ],
+      "voice": "a heavy, tired voice that trails off mid-sentence"
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A cinematic photograph, as from the set of a space opera: a full-length view of the whole body, from the top of the head to the feet, of a young four-armed humanoid woman with grey skin and a second pair of arms below the first, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: a racer in a mustard-yellow racing suit covered in sponsor logos, their clothes marked by Turkish İznik tulips stitched at the neckline, with a brooding, lowered brow. They stand straight with the arms relaxed, facing the camera, with a helmet with a cracked visor, and floor and space around them are in frame. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "$species ← __characters/scifi/species__",
+       "four-armed humanoid",
+       [
+        "__characters/scifi/species__=four-armed humanoid"
+       ]
+      ],
+      [
+       "{green|red-brown|grey}",
+       "grey",
+       [
+        "{green|red-brown|grey}=grey"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "woman",
+       [
+        "{woman|man|person}=woman"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|veteran}",
+       "young",
+       [
+        "{young|seasoned|grizzled|veteran}=young"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "short and broad, with a wrestler's build",
+       [
+        "__characters/creator/build__=short and broad, with a wrestler's build"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed|silver|white}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed|silver|white}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "$role ← __characters/scifi/role__",
+       "a racer",
+       [
+        "__characters/scifi/role__=a racer"
+       ]
+      ],
+      [
+       "{a helmet with a cracked visor|a trophy|a hover-bike key}",
+       "a helmet with a cracked visor",
+       [
+        "{a helmet with a cracked visor|a trophy|a hover-bike key}=a helmet with a cracked visor"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=spacefarer|all]__",
+       "Turkish İznik tulips stitched at the neckline",
+       [
+        "__characters/creator/motif__=Turkish İznik tulips stitched at the neckline"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=spacefarer]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=spacefarer]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a brooding, lowered brow",
+       [
+        "__characters/creator/presence__=a brooding, lowered brow"
+       ]
+      ],
+      [
+       "{studio|place}",
+       "studio",
+       [
+        "{studio|place}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "full-length",
+       [
+        "{portrait|three-quarter|full-length|profile}=full-length"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "mischievously secretive",
+       [
+        "__characters/creator/mood__=mischievously secretive"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "points with the whole hand, never a finger",
+       [
+        "__characters/creator/quirk__=points with the whole hand, never a finger"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "tending hydroponic gardens, sketching faces quickly",
+       [
+        "__characters/creator/skill__=tending hydroponic gardens",
+        "__characters/creator/skill__=sketching faces quickly"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a heavy, tired voice that trails off mid-sentence",
+       [
+        "__characters/creator/voice__=a heavy, tired voice that trails off mid-sentence"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a young four-armed humanoid woman with grey skin and a second pair of arms below the first, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: a racer in a mustard-yellow racing suit covered in sponsor logos, their clothes marked by Turkish İznik tulips stitched at the neckline, with a helmet with a cracked visor",
+      "species": {
+       "value": "four-armed humanoid",
+       "beard": "yes",
+       "gender": "yes",
+       "like": "human",
+       "look": "grey skin and a second pair of arms below the first"
+      },
+      "gender": "woman",
+      "age": "young",
+      "role": {
+       "value": "a racer",
+       "gear": "a helmet with a cracked visor",
+       "wear": "a mustard-yellow racing suit covered in sponsor logos"
+      },
+      "gear": "a helmet with a cracked visor",
+      "companion": "none",
+      "colour": "mustard-yellow",
+      "mood": "mischievously secretive",
+      "quirk": "points with the whole hand, never a finger",
+      "skills": [
+       "tending hydroponic gardens",
+       "sketching faces quickly"
+      ],
+      "voice": "a heavy, tired voice that trails off mid-sentence"
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A cinematic photograph, as from the set of a space opera: a strict side profile of the head and shoulders of a young four-armed humanoid woman with grey skin and a second pair of arms below the first, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: a racer in a mustard-yellow racing suit covered in sponsor logos, their clothes marked by Turkish İznik tulips stitched at the neckline, with a brooding, lowered brow. The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "$species ← __characters/scifi/species__",
+       "four-armed humanoid",
+       [
+        "__characters/scifi/species__=four-armed humanoid"
+       ]
+      ],
+      [
+       "{green|red-brown|grey}",
+       "grey",
+       [
+        "{green|red-brown|grey}=grey"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "woman",
+       [
+        "{woman|man|person}=woman"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|veteran}",
+       "young",
+       [
+        "{young|seasoned|grizzled|veteran}=young"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "short and broad, with a wrestler's build",
+       [
+        "__characters/creator/build__=short and broad, with a wrestler's build"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed|silver|white}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed|silver|white}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "$role ← __characters/scifi/role__",
+       "a racer",
+       [
+        "__characters/scifi/role__=a racer"
+       ]
+      ],
+      [
+       "{a helmet with a cracked visor|a trophy|a hover-bike key}",
+       "a helmet with a cracked visor",
+       [
+        "{a helmet with a cracked visor|a trophy|a hover-bike key}=a helmet with a cracked visor"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=spacefarer|all]__",
+       "Turkish İznik tulips stitched at the neckline",
+       [
+        "__characters/creator/motif__=Turkish İznik tulips stitched at the neckline"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=spacefarer]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=spacefarer]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a brooding, lowered brow",
+       [
+        "__characters/creator/presence__=a brooding, lowered brow"
+       ]
+      ],
+      [
+       "{studio|place}",
+       "studio",
+       [
+        "{studio|place}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "profile",
+       [
+        "{portrait|three-quarter|full-length|profile}=profile"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "mischievously secretive",
+       [
+        "__characters/creator/mood__=mischievously secretive"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "points with the whole hand, never a finger",
+       [
+        "__characters/creator/quirk__=points with the whole hand, never a finger"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "tending hydroponic gardens, sketching faces quickly",
+       [
+        "__characters/creator/skill__=tending hydroponic gardens",
+        "__characters/creator/skill__=sketching faces quickly"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a heavy, tired voice that trails off mid-sentence",
+       [
+        "__characters/creator/voice__=a heavy, tired voice that trails off mid-sentence"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a young four-armed humanoid woman with grey skin and a second pair of arms below the first, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: a racer in a mustard-yellow racing suit covered in sponsor logos, their clothes marked by Turkish İznik tulips stitched at the neckline, with a helmet with a cracked visor",
+      "species": {
+       "value": "four-armed humanoid",
+       "beard": "yes",
+       "gender": "yes",
+       "like": "human",
+       "look": "grey skin and a second pair of arms below the first"
+      },
+      "gender": "woman",
+      "age": "young",
+      "role": {
+       "value": "a racer",
+       "gear": "a helmet with a cracked visor",
+       "wear": "a mustard-yellow racing suit covered in sponsor logos"
+      },
+      "gear": "a helmet with a cracked visor",
+      "companion": "none",
+      "colour": "mustard-yellow",
+      "mood": "mischievously secretive",
+      "quirk": "points with the whole hand, never a finger",
+      "skills": [
+       "tending hydroponic gardens",
+       "sketching faces quickly"
+      ],
+      "voice": "a heavy, tired voice that trails off mid-sentence"
+     }
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A cinematic photograph, as from the set of a space opera: a head-and-shoulders portrait of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a sheepish, apologetic look. They face the camera. Behind them is a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "$species ← __characters/scifi/species__",
+       "uplifted ape",
+       [
+        "__characters/scifi/species__=uplifted ape"
+       ]
+      ],
+      [
+       "{silver-backed|dark}",
+       "silver-backed",
+       [
+        "{silver-backed|dark}=silver-backed"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "woman",
+       [
+        "{woman|man|person}=woman"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|veteran}",
+       "seasoned",
+       [
+        "{young|seasoned|grizzled|veteran}=seasoned"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "trim and neatly proportioned",
+       [
+        "__characters/creator/build__=trim and neatly proportioned"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed|silver|white}",
+       "$colour-dyed",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed|silver|white}=$colour-dyed"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "a single $haircolour afro puff at the crown",
+       [
+        "__characters/creator/hair__=a single $haircolour afro puff at the crown"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "$role ← __characters/scifi/role__",
+       "a station security officer",
+       [
+        "__characters/scifi/role__=a station security officer"
+       ]
+      ],
+      [
+       "{a stun baton|a riot helmet|a scanner wand}",
+       "a riot helmet",
+       [
+        "{a stun baton|a riot helmet|a scanner wand}=a riot helmet"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=spacefarer|all]__",
+       "Thai temple flame motifs picked out in gold thread",
+       [
+        "__characters/creator/motif__=Thai temple flame motifs picked out in gold thread"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=spacefarer]__|none}",
+       "__characters/creator/companion[genre=spacefarer]__",
+       [
+        "{__characters/creator/companion[genre=spacefarer]__|none}=__characters/creator/companion[genre=spacefarer]__"
+       ]
+      ],
+      [
+       "$companion ← __characters/creator/companion[genre=spacefarer]__",
+       "a ship's cat in a tiny space suit",
+       [
+        "__characters/creator/companion__=a ship's cat in a tiny space suit"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a sheepish, apologetic look",
+       [
+        "__characters/creator/presence__=a sheepish, apologetic look"
+       ]
+      ],
+      [
+       "{studio|place}",
+       "place",
+       [
+        "{studio|place}=place"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "portrait",
+       [
+        "{portrait|three-quarter|full-length|profile}=portrait"
+       ]
+      ],
+      [
+       "__characters/scifi/place__",
+       "a spaceport crowd under towering cranes",
+       [
+        "__characters/scifi/place__=a spaceport crowd under towering cranes"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "theatrically dramatic",
+       [
+        "__characters/creator/mood__=theatrically dramatic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "stands a little too close when talking",
+       [
+        "__characters/creator/quirk__=stands a little too close when talking"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "patching a hull breach, playing a battered fiddle",
+       [
+        "__characters/creator/skill__=patching a hull breach",
+        "__characters/creator/skill__=playing a battered fiddle"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a scratchy, high voice like an old record",
+       [
+        "__characters/creator/voice__=a scratchy, high voice like an old record"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a ship's cat in a tiny space suit",
+      "species": {
+       "value": "uplifted ape",
+       "beard": "no",
+       "eyes": "own",
+       "gender": "yes",
+       "like": "beast",
+       "look": "a gorilla's frame and face with a silver-backed coat and thoughtful eyes"
+      },
+      "gender": "woman",
+      "age": "seasoned",
+      "role": {
+       "value": "a station security officer",
+       "gear": "a riot helmet",
+       "wear": "a camel security vest with a station badge"
+      },
+      "gear": "a riot helmet",
+      "companion": {
+       "value": "a ship's cat in a tiny space suit",
+       "genre": "spacefarer"
+      },
+      "colour": "camel",
+      "mood": "theatrically dramatic",
+      "quirk": "stands a little too close when talking",
+      "skills": [
+       "patching a hull breach",
+       "playing a battered fiddle"
+      ],
+      "voice": "a scratchy, high voice like an old record"
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A cinematic photograph, as from the set of a space opera: a head-and-shoulders view of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a sheepish, apologetic look. They are turned three-quarters to the left. Behind them is a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "$species ← __characters/scifi/species__",
+       "uplifted ape",
+       [
+        "__characters/scifi/species__=uplifted ape"
+       ]
+      ],
+      [
+       "{silver-backed|dark}",
+       "silver-backed",
+       [
+        "{silver-backed|dark}=silver-backed"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "woman",
+       [
+        "{woman|man|person}=woman"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|veteran}",
+       "seasoned",
+       [
+        "{young|seasoned|grizzled|veteran}=seasoned"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "trim and neatly proportioned",
+       [
+        "__characters/creator/build__=trim and neatly proportioned"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed|silver|white}",
+       "$colour-dyed",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed|silver|white}=$colour-dyed"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "a single $haircolour afro puff at the crown",
+       [
+        "__characters/creator/hair__=a single $haircolour afro puff at the crown"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "$role ← __characters/scifi/role__",
+       "a station security officer",
+       [
+        "__characters/scifi/role__=a station security officer"
+       ]
+      ],
+      [
+       "{a stun baton|a riot helmet|a scanner wand}",
+       "a riot helmet",
+       [
+        "{a stun baton|a riot helmet|a scanner wand}=a riot helmet"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=spacefarer|all]__",
+       "Thai temple flame motifs picked out in gold thread",
+       [
+        "__characters/creator/motif__=Thai temple flame motifs picked out in gold thread"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=spacefarer]__|none}",
+       "__characters/creator/companion[genre=spacefarer]__",
+       [
+        "{__characters/creator/companion[genre=spacefarer]__|none}=__characters/creator/companion[genre=spacefarer]__"
+       ]
+      ],
+      [
+       "$companion ← __characters/creator/companion[genre=spacefarer]__",
+       "a ship's cat in a tiny space suit",
+       [
+        "__characters/creator/companion__=a ship's cat in a tiny space suit"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a sheepish, apologetic look",
+       [
+        "__characters/creator/presence__=a sheepish, apologetic look"
+       ]
+      ],
+      [
+       "{studio|place}",
+       "place",
+       [
+        "{studio|place}=place"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "three-quarter",
+       [
+        "{portrait|three-quarter|full-length|profile}=three-quarter"
+       ]
+      ],
+      [
+       "__characters/scifi/place__",
+       "a spaceport crowd under towering cranes",
+       [
+        "__characters/scifi/place__=a spaceport crowd under towering cranes"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "theatrically dramatic",
+       [
+        "__characters/creator/mood__=theatrically dramatic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "stands a little too close when talking",
+       [
+        "__characters/creator/quirk__=stands a little too close when talking"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "patching a hull breach, playing a battered fiddle",
+       [
+        "__characters/creator/skill__=patching a hull breach",
+        "__characters/creator/skill__=playing a battered fiddle"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a scratchy, high voice like an old record",
+       [
+        "__characters/creator/voice__=a scratchy, high voice like an old record"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a ship's cat in a tiny space suit",
+      "species": {
+       "value": "uplifted ape",
+       "beard": "no",
+       "eyes": "own",
+       "gender": "yes",
+       "like": "beast",
+       "look": "a gorilla's frame and face with a silver-backed coat and thoughtful eyes"
+      },
+      "gender": "woman",
+      "age": "seasoned",
+      "role": {
+       "value": "a station security officer",
+       "gear": "a riot helmet",
+       "wear": "a camel security vest with a station badge"
+      },
+      "gear": "a riot helmet",
+      "companion": {
+       "value": "a ship's cat in a tiny space suit",
+       "genre": "spacefarer"
+      },
+      "colour": "camel",
+      "mood": "theatrically dramatic",
+      "quirk": "stands a little too close when talking",
+      "skills": [
+       "patching a hull breach",
+       "playing a battered fiddle"
+      ],
+      "voice": "a scratchy, high voice like an old record"
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A cinematic photograph, as from the set of a space opera: a full-length view of the whole body, from the top of the head to the feet, of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a sheepish, apologetic look. They stand straight with the arms relaxed, facing the camera, with a riot helmet, and floor and space around them are in frame. With them: a ship's cat in a tiny space suit. Behind them is a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "$species ← __characters/scifi/species__",
+       "uplifted ape",
+       [
+        "__characters/scifi/species__=uplifted ape"
+       ]
+      ],
+      [
+       "{silver-backed|dark}",
+       "silver-backed",
+       [
+        "{silver-backed|dark}=silver-backed"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "woman",
+       [
+        "{woman|man|person}=woman"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|veteran}",
+       "seasoned",
+       [
+        "{young|seasoned|grizzled|veteran}=seasoned"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "trim and neatly proportioned",
+       [
+        "__characters/creator/build__=trim and neatly proportioned"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed|silver|white}",
+       "$colour-dyed",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed|silver|white}=$colour-dyed"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "a single $haircolour afro puff at the crown",
+       [
+        "__characters/creator/hair__=a single $haircolour afro puff at the crown"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "$role ← __characters/scifi/role__",
+       "a station security officer",
+       [
+        "__characters/scifi/role__=a station security officer"
+       ]
+      ],
+      [
+       "{a stun baton|a riot helmet|a scanner wand}",
+       "a riot helmet",
+       [
+        "{a stun baton|a riot helmet|a scanner wand}=a riot helmet"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=spacefarer|all]__",
+       "Thai temple flame motifs picked out in gold thread",
+       [
+        "__characters/creator/motif__=Thai temple flame motifs picked out in gold thread"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=spacefarer]__|none}",
+       "__characters/creator/companion[genre=spacefarer]__",
+       [
+        "{__characters/creator/companion[genre=spacefarer]__|none}=__characters/creator/companion[genre=spacefarer]__"
+       ]
+      ],
+      [
+       "$companion ← __characters/creator/companion[genre=spacefarer]__",
+       "a ship's cat in a tiny space suit",
+       [
+        "__characters/creator/companion__=a ship's cat in a tiny space suit"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a sheepish, apologetic look",
+       [
+        "__characters/creator/presence__=a sheepish, apologetic look"
+       ]
+      ],
+      [
+       "{studio|place}",
+       "place",
+       [
+        "{studio|place}=place"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "full-length",
+       [
+        "{portrait|three-quarter|full-length|profile}=full-length"
+       ]
+      ],
+      [
+       "__characters/scifi/place__",
+       "a spaceport crowd under towering cranes",
+       [
+        "__characters/scifi/place__=a spaceport crowd under towering cranes"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "theatrically dramatic",
+       [
+        "__characters/creator/mood__=theatrically dramatic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "stands a little too close when talking",
+       [
+        "__characters/creator/quirk__=stands a little too close when talking"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "patching a hull breach, playing a battered fiddle",
+       [
+        "__characters/creator/skill__=patching a hull breach",
+        "__characters/creator/skill__=playing a battered fiddle"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a scratchy, high voice like an old record",
+       [
+        "__characters/creator/voice__=a scratchy, high voice like an old record"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a ship's cat in a tiny space suit",
+      "species": {
+       "value": "uplifted ape",
+       "beard": "no",
+       "eyes": "own",
+       "gender": "yes",
+       "like": "beast",
+       "look": "a gorilla's frame and face with a silver-backed coat and thoughtful eyes"
+      },
+      "gender": "woman",
+      "age": "seasoned",
+      "role": {
+       "value": "a station security officer",
+       "gear": "a riot helmet",
+       "wear": "a camel security vest with a station badge"
+      },
+      "gear": "a riot helmet",
+      "companion": {
+       "value": "a ship's cat in a tiny space suit",
+       "genre": "spacefarer"
+      },
+      "colour": "camel",
+      "mood": "theatrically dramatic",
+      "quirk": "stands a little too close when talking",
+      "skills": [
+       "patching a hull breach",
+       "playing a battered fiddle"
+      ],
+      "voice": "a scratchy, high voice like an old record"
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A cinematic photograph, as from the set of a space opera: a strict side profile of the head and shoulders of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a sheepish, apologetic look. The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible. Behind them is a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "$species ← __characters/scifi/species__",
+       "uplifted ape",
+       [
+        "__characters/scifi/species__=uplifted ape"
+       ]
+      ],
+      [
+       "{silver-backed|dark}",
+       "silver-backed",
+       [
+        "{silver-backed|dark}=silver-backed"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "woman",
+       [
+        "{woman|man|person}=woman"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|veteran}",
+       "seasoned",
+       [
+        "{young|seasoned|grizzled|veteran}=seasoned"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "trim and neatly proportioned",
+       [
+        "__characters/creator/build__=trim and neatly proportioned"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed|silver|white}",
+       "$colour-dyed",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed|silver|white}=$colour-dyed"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "a single $haircolour afro puff at the crown",
+       [
+        "__characters/creator/hair__=a single $haircolour afro puff at the crown"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "$role ← __characters/scifi/role__",
+       "a station security officer",
+       [
+        "__characters/scifi/role__=a station security officer"
+       ]
+      ],
+      [
+       "{a stun baton|a riot helmet|a scanner wand}",
+       "a riot helmet",
+       [
+        "{a stun baton|a riot helmet|a scanner wand}=a riot helmet"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=spacefarer, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=spacefarer|all]__",
+       "Thai temple flame motifs picked out in gold thread",
+       [
+        "__characters/creator/motif__=Thai temple flame motifs picked out in gold thread"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=spacefarer]__|none}",
+       "__characters/creator/companion[genre=spacefarer]__",
+       [
+        "{__characters/creator/companion[genre=spacefarer]__|none}=__characters/creator/companion[genre=spacefarer]__"
+       ]
+      ],
+      [
+       "$companion ← __characters/creator/companion[genre=spacefarer]__",
+       "a ship's cat in a tiny space suit",
+       [
+        "__characters/creator/companion__=a ship's cat in a tiny space suit"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a sheepish, apologetic look",
+       [
+        "__characters/creator/presence__=a sheepish, apologetic look"
+       ]
+      ],
+      [
+       "{studio|place}",
+       "place",
+       [
+        "{studio|place}=place"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "profile",
+       [
+        "{portrait|three-quarter|full-length|profile}=profile"
+       ]
+      ],
+      [
+       "__characters/scifi/place__",
+       "a spaceport crowd under towering cranes",
+       [
+        "__characters/scifi/place__=a spaceport crowd under towering cranes"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "theatrically dramatic",
+       [
+        "__characters/creator/mood__=theatrically dramatic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "stands a little too close when talking",
+       [
+        "__characters/creator/quirk__=stands a little too close when talking"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "patching a hull breach, playing a battered fiddle",
+       [
+        "__characters/creator/skill__=patching a hull breach",
+        "__characters/creator/skill__=playing a battered fiddle"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a scratchy, high voice like an old record",
+       [
+        "__characters/creator/voice__=a scratchy, high voice like an old record"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a ship's cat in a tiny space suit",
+      "species": {
+       "value": "uplifted ape",
+       "beard": "no",
+       "eyes": "own",
+       "gender": "yes",
+       "like": "beast",
+       "look": "a gorilla's frame and face with a silver-backed coat and thoughtful eyes"
+      },
+      "gender": "woman",
+      "age": "seasoned",
+      "role": {
+       "value": "a station security officer",
+       "gear": "a riot helmet",
+       "wear": "a camel security vest with a station badge"
+      },
+      "gear": "a riot helmet",
+      "companion": {
+       "value": "a ship's cat in a tiny space suit",
+       "genre": "spacefarer"
+      },
+      "colour": "camel",
+      "mood": "theatrically dramatic",
+      "quirk": "stands a little too close when talking",
+      "skills": [
+       "patching a hull breach",
+       "playing a battered fiddle"
+      ],
+      "voice": "a scratchy, high voice like an old record"
+     }
+    }
+   ]
+  }
+ }
+}

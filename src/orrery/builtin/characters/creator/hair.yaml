@@ -1,4 +1,4 @@
-meta: {source: "orrery character creator: hairstyles; each reads the creator's $haircolour (natural, greying with age, or dyed in the signature colour); `fit`: women, men or all", needs: [haircolour], builtin: true}
+meta: {source: "orrery character creator: hairstyles; each reads the creator's $haircolour (natural, greying with age, or dyed in the signature colour); `modern` for a style after the 1950s (a period creator leaves it out), `fit`: women, men or all", needs: [haircolour], builtin: true}
 entries:
   - {value: "short $haircolour hair in a messy crop", props: {fit: all}}
   - {value: "a chin-length $haircolour bob", props: {fit: women}}
@@ -16,28 +16,28 @@ entries:
   - {value: "a full $haircolour afro", props: {fit: all}}
   - {value: "$haircolour box braids gathered at the nape", props: {fit: all}}
   - {value: "a shaved head", props: {fit: all}, weight: 0.5}
-  - {value: "a $haircolour mullet", props: {fit: all}}
+  - {value: "a $haircolour mullet", props: {modern: "yes", fit: all}}
   - {value: "a loose $haircolour top knot", props: {fit: all}}
-  - {value: "an undercut with long $haircolour hair swept to one side", props: {fit: all}}
-  - {value: "two $haircolour space buns", props: {fit: women}}
+  - {value: "an undercut with long $haircolour hair swept to one side", props: {modern: "yes", fit: all}}
+  - {value: "two $haircolour space buns", props: {modern: "yes", fit: women}}
   - {value: "a clean-shaven scalp with a faint stubble shadow", props: {fit: all}, weight: 0.5}
-  - {value: "a $haircolour flat-top with squared edges", props: {fit: men}}
+  - {value: "a $haircolour flat-top with squared edges", props: {modern: "yes", fit: men}}
   - {value: "a short $haircolour crop with a straight fringe brushed forward", props: {fit: all}}
   - {value: "a $haircolour bowl cut", props: {fit: all}}
   - {value: "a glossy $haircolour 1950s pompadour", props: {fit: men}}
-  - {value: "spiky $haircolour hair stiffened with gel", props: {fit: all}}
-  - {value: "a $haircolour crop with a hard part shaved in at one side", props: {fit: men}}
-  - {value: "a $haircolour high-top fade", props: {fit: men}}
-  - {value: "a narrow $haircolour mohawk over shaved sides", props: {fit: all}}
+  - {value: "spiky $haircolour hair stiffened with gel", props: {modern: "yes", fit: all}}
+  - {value: "a $haircolour crop with a hard part shaved in at one side", props: {modern: "yes", fit: men}}
+  - {value: "a $haircolour high-top fade", props: {modern: "yes", fit: men}}
+  - {value: "a narrow $haircolour mohawk over shaved sides", props: {modern: "yes", fit: all}}
   - {value: "short tight $haircolour coils", props: {fit: all}}
-  - {value: "loose $haircolour curls on top over a tight fade", props: {fit: all}}
+  - {value: "loose $haircolour curls on top over a tight fade", props: {modern: "yes", fit: all}}
   - {value: "short $haircolour hair cut close around a deep widow's peak", props: {fit: all}}
-  - {value: "a sharp asymmetric $haircolour bob that is longer on one side", props: {fit: women}}
-  - {value: "a $haircolour shag with feathered layers", props: {fit: all}}
-  - {value: "a choppy $haircolour wolf cut with a ragged fringe", props: {fit: all}}
-  - {value: "1990s-style centre-parted $haircolour curtains falling to the cheekbones", props: {fit: all}}
+  - {value: "a sharp asymmetric $haircolour bob that is longer on one side", props: {modern: "yes", fit: women}}
+  - {value: "a $haircolour shag with feathered layers", props: {modern: "yes", fit: all}}
+  - {value: "a choppy $haircolour wolf cut with a ragged fringe", props: {modern: "yes", fit: all}}
+  - {value: "1990s-style centre-parted $haircolour curtains falling to the cheekbones", props: {modern: "yes", fit: all}}
   - {value: "1920s-style $haircolour finger waves pressed close to the head", props: {fit: women}}
-  - {value: "a big $haircolour 1980s perm", props: {fit: all}}
+  - {value: "a big $haircolour 1980s perm", props: {modern: "yes", fit: all}}
   - {value: "jaw-length $haircolour hair with a heavy side-swept fringe over one eye", props: {fit: all}}
   - {value: "waist-length straight $haircolour hair worn loose", props: {fit: all}}
   - {value: "long $haircolour ringlets", props: {fit: women}}
@@ -48,7 +48,7 @@ entries:
   - {value: "a $haircolour French twist", props: {fit: women}}
   - {value: "a $haircolour crown braid wrapped around the head", props: {fit: women}}
   - {value: "1940s-style $haircolour victory rolls pinned high", props: {fit: women}}
-  - {value: "a towering $haircolour 1960s beehive", props: {fit: women}}
+  - {value: "a towering $haircolour 1960s beehive", props: {modern: "yes", fit: women}}
   - {value: "$haircolour cornrows running straight back to the nape", props: {fit: all}}
   - {value: "long $haircolour locs falling past the shoulders", props: {fit: all}}
   - {value: "short freeform $haircolour locs standing out in every direction", props: {fit: all}}
@@ -58,15 +58,15 @@ entries:
   - {value: "a single $haircolour afro puff at the crown", props: {fit: women}}
   - {value: "thin $haircolour micro braids falling past the shoulders", props: {fit: all}}
   - {value: "two tight $haircolour boxer braids along the scalp", props: {fit: women}}
-  - {value: "short $haircolour hair brushed into tight 360 waves", props: {fit: men}}
+  - {value: "short $haircolour hair brushed into tight 360 waves", props: {modern: "yes", fit: men}}
   - {value: "a full, soft Edwardian $haircolour updo swept high", props: {fit: women}}
   - {value: "collar-length wavy $haircolour hair swept back off the forehead", props: {fit: all}}
   - {value: "a short, rounded $haircolour afro with a crisp line-up", props: {fit: all}}
-  - {value: "a big, bouncy $haircolour blow-dry", props: {fit: women}}
+  - {value: "a big, bouncy $haircolour blow-dry", props: {modern: "yes", fit: women}}
   - {value: "a shaggy mop of loose $haircolour curls", props: {fit: all}}
   - {value: "straight shoulder-length $haircolour hair parted in the middle", props: {fit: all}}
   - {value: "a $haircolour high-and-tight military cut", props: {fit: men}}
-  - {value: "a $haircolour 1960s flip with the ends curled outward at the shoulders", props: {fit: women}}
-  - {value: "long $haircolour hair crimped into tight zigzags", props: {fit: women}}
+  - {value: "a $haircolour 1960s flip with the ends curled outward at the shoulders", props: {modern: "yes", fit: women}}
+  - {value: "long $haircolour hair crimped into tight zigzags", props: {modern: "yes", fit: women}}
   - {value: "$haircolour hair rolled at the sides and tied back at the nape in 18th-century style", props: {fit: all}}
   - {value: "$haircolour Fulani braids with a braid looping past each cheek", props: {fit: women}}

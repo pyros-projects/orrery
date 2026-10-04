@@ -1,0 +1,2981 @@
+{
+ "preset": "krea/14_noir_creator",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A black-and-white film-noir still, high contrast: a head-and-shoulders portrait of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a steady, amused half-smile. They face the camera. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Deep shadows and silver highlights, black and white except for the crimson accents.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{21-26}",
+       "25",
+       [
+        "{21-26}=25"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "58",
+       [
+        "{40-58}=57–58"
+       ]
+      ],
+      [
+       "{59-75}",
+       "65",
+       [
+        "{59-75}=65–66"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Indian descent, with {warm brown|light brown|deep brown} skin",
+       [
+        "__characters/creator/origin__=Indian descent, with {warm brown|light brown|deep brown} skin"
+       ]
+      ],
+      [
+       "{warm brown|light brown|deep brown}",
+       "light brown",
+       [
+        "{warm brown|light brown|deep brown}=light brown"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a sprinter's strong legs",
+       [
+        "__characters/creator/build__=athletic, with a sprinter's strong legs"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{silver|white|iron-grey}",
+       "silver",
+       [
+        "{silver|white|iron-grey}=silver"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "blue-black",
+       [
+        "__characters/creator/haircolour__=blue-black"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all, !modern=yes]__",
+       "$haircolour cornrows running straight back to the nape",
+       [
+        "__characters/creator/hair__=$haircolour cornrows running straight back to the nape"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "$role ← __characters/noir/role[fit=$fit|all]__",
+       "a washed-up boxer",
+       [
+        "__characters/noir/role__=a washed-up boxer"
+       ]
+      ],
+      [
+       "{a pair of laced gloves|a cold steak for a black eye|a fight poster}",
+       "a cold steak for a black eye",
+       [
+        "{a pair of laced gloves|a cold steak for a black eye|a fight poster}=a cold steak for a black eye"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=noir|all]__",
+       "a monogram stitched in $colour on the cuff",
+       [
+        "__characters/creator/motif__=a monogram stitched in $colour on the cuff"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=noir]__|none}",
+       "__characters/creator/companion[genre=noir]__",
+       [
+        "{__characters/creator/companion[genre=noir]__|none}=__characters/creator/companion[genre=noir]__"
+       ]
+      ],
+      [
+       "$companion ← __characters/creator/companion[genre=noir]__",
+       "a canary in a brass cage",
+       [
+        "__characters/creator/companion__=a canary in a brass cage"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a steady, amused half-smile",
+       [
+        "__characters/creator/presence__=a steady, amused half-smile"
+       ]
+      ],
+      [
+       "{studio|street}",
+       "studio",
+       [
+        "{studio|street}=studio"
+       ]
+      ],
+      [
+       "{monochrome|colour|comic|painted}",
+       "monochrome",
+       [
+        "{monochrome|colour|comic|painted}=monochrome"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "portrait",
+       [
+        "{portrait|three-quarter|full-length|profile}=portrait"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "brightly optimistic",
+       [
+        "__characters/creator/mood__=brightly optimistic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "brushes invisible dust off their clothes",
+       [
+        "__characters/creator/quirk__=brushes invisible dust off their clothes"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "sketching faces quickly, telling tall tales",
+       [
+        "__characters/creator/skill__=sketching faces quickly",
+        "__characters/creator/skill__=telling tall tales"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a fast, breathless voice that runs sentences together",
+       [
+        "__characters/creator/voice__=a fast, breathless voice that runs sentences together"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a canary in a brass cage",
+      "age": "58",
+      "gender": "man",
+      "role": {
+       "value": "a washed-up boxer",
+       "fit": "all",
+       "gear": "a cold steak for a black eye",
+       "wear": "a crimson robe over taped hands"
+      },
+      "gear": "a cold steak for a black eye",
+      "companion": {
+       "value": "a canary in a brass cage",
+       "genre": "noir"
+      },
+      "colour": "crimson",
+      "mood": "brightly optimistic",
+      "quirk": "brushes invisible dust off their clothes",
+      "skills": [
+       "sketching faces quickly",
+       "telling tall tales"
+      ],
+      "voice": "a fast, breathless voice that runs sentences together"
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A black-and-white film-noir still, high contrast: a head-and-shoulders view of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a steady, amused half-smile. They are turned three-quarters to the left. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Deep shadows and silver highlights, black and white except for the crimson accents.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{21-26}",
+       "25",
+       [
+        "{21-26}=25"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "58",
+       [
+        "{40-58}=57–58"
+       ]
+      ],
+      [
+       "{59-75}",
+       "65",
+       [
+        "{59-75}=65–66"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Indian descent, with {warm brown|light brown|deep brown} skin",
+       [
+        "__characters/creator/origin__=Indian descent, with {warm brown|light brown|deep brown} skin"
+       ]
+      ],
+      [
+       "{warm brown|light brown|deep brown}",
+       "light brown",
+       [
+        "{warm brown|light brown|deep brown}=light brown"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a sprinter's strong legs",
+       [
+        "__characters/creator/build__=athletic, with a sprinter's strong legs"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{silver|white|iron-grey}",
+       "silver",
+       [
+        "{silver|white|iron-grey}=silver"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "blue-black",
+       [
+        "__characters/creator/haircolour__=blue-black"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all, !modern=yes]__",
+       "$haircolour cornrows running straight back to the nape",
+       [
+        "__characters/creator/hair__=$haircolour cornrows running straight back to the nape"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "$role ← __characters/noir/role[fit=$fit|all]__",
+       "a washed-up boxer",
+       [
+        "__characters/noir/role__=a washed-up boxer"
+       ]
+      ],
+      [
+       "{a pair of laced gloves|a cold steak for a black eye|a fight poster}",
+       "a cold steak for a black eye",
+       [
+        "{a pair of laced gloves|a cold steak for a black eye|a fight poster}=a cold steak for a black eye"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=noir|all]__",
+       "a monogram stitched in $colour on the cuff",
+       [
+        "__characters/creator/motif__=a monogram stitched in $colour on the cuff"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=noir]__|none}",
+       "__characters/creator/companion[genre=noir]__",
+       [
+        "{__characters/creator/companion[genre=noir]__|none}=__characters/creator/companion[genre=noir]__"
+       ]
+      ],
+      [
+       "$companion ← __characters/creator/companion[genre=noir]__",
+       "a canary in a brass cage",
+       [
+        "__characters/creator/companion__=a canary in a brass cage"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a steady, amused half-smile",
+       [
+        "__characters/creator/presence__=a steady, amused half-smile"
+       ]
+      ],
+      [
+       "{studio|street}",
+       "studio",
+       [
+        "{studio|street}=studio"
+       ]
+      ],
+      [
+       "{monochrome|colour|comic|painted}",
+       "monochrome",
+       [
+        "{monochrome|colour|comic|painted}=monochrome"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "three-quarter",
+       [
+        "{portrait|three-quarter|full-length|profile}=three-quarter"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "brightly optimistic",
+       [
+        "__characters/creator/mood__=brightly optimistic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "brushes invisible dust off their clothes",
+       [
+        "__characters/creator/quirk__=brushes invisible dust off their clothes"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "sketching faces quickly, telling tall tales",
+       [
+        "__characters/creator/skill__=sketching faces quickly",
+        "__characters/creator/skill__=telling tall tales"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a fast, breathless voice that runs sentences together",
+       [
+        "__characters/creator/voice__=a fast, breathless voice that runs sentences together"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a canary in a brass cage",
+      "age": "58",
+      "gender": "man",
+      "role": {
+       "value": "a washed-up boxer",
+       "fit": "all",
+       "gear": "a cold steak for a black eye",
+       "wear": "a crimson robe over taped hands"
+      },
+      "gear": "a cold steak for a black eye",
+      "companion": {
+       "value": "a canary in a brass cage",
+       "genre": "noir"
+      },
+      "colour": "crimson",
+      "mood": "brightly optimistic",
+      "quirk": "brushes invisible dust off their clothes",
+      "skills": [
+       "sketching faces quickly",
+       "telling tall tales"
+      ],
+      "voice": "a fast, breathless voice that runs sentences together"
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A black-and-white film-noir still, high contrast: a full-length view of the whole body, from the top of the head to the shoes, of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a steady, amused half-smile. They stand straight with the arms relaxed, facing the camera, with a cold steak for a black eye, and floor and space around them are in frame. With them: a canary in a brass cage. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Deep shadows and silver highlights, black and white except for the crimson accents.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{21-26}",
+       "25",
+       [
+        "{21-26}=25"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "58",
+       [
+        "{40-58}=57–58"
+       ]
+      ],
+      [
+       "{59-75}",
+       "65",
+       [
+        "{59-75}=65–66"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Indian descent, with {warm brown|light brown|deep brown} skin",
+       [
+        "__characters/creator/origin__=Indian descent, with {warm brown|light brown|deep brown} skin"
+       ]
+      ],
+      [
+       "{warm brown|light brown|deep brown}",
+       "light brown",
+       [
+        "{warm brown|light brown|deep brown}=light brown"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a sprinter's strong legs",
+       [
+        "__characters/creator/build__=athletic, with a sprinter's strong legs"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{silver|white|iron-grey}",
+       "silver",
+       [
+        "{silver|white|iron-grey}=silver"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "blue-black",
+       [
+        "__characters/creator/haircolour__=blue-black"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all, !modern=yes]__",
+       "$haircolour cornrows running straight back to the nape",
+       [
+        "__characters/creator/hair__=$haircolour cornrows running straight back to the nape"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "$role ← __characters/noir/role[fit=$fit|all]__",
+       "a washed-up boxer",
+       [
+        "__characters/noir/role__=a washed-up boxer"
+       ]
+      ],
+      [
+       "{a pair of laced gloves|a cold steak for a black eye|a fight poster}",
+       "a cold steak for a black eye",
+       [
+        "{a pair of laced gloves|a cold steak for a black eye|a fight poster}=a cold steak for a black eye"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=noir|all]__",
+       "a monogram stitched in $colour on the cuff",
+       [
+        "__characters/creator/motif__=a monogram stitched in $colour on the cuff"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=noir]__|none}",
+       "__characters/creator/companion[genre=noir]__",
+       [
+        "{__characters/creator/companion[genre=noir]__|none}=__characters/creator/companion[genre=noir]__"
+       ]
+      ],
+      [
+       "$companion ← __characters/creator/companion[genre=noir]__",
+       "a canary in a brass cage",
+       [
+        "__characters/creator/companion__=a canary in a brass cage"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a steady, amused half-smile",
+       [
+        "__characters/creator/presence__=a steady, amused half-smile"
+       ]
+      ],
+      [
+       "{studio|street}",
+       "studio",
+       [
+        "{studio|street}=studio"
+       ]
+      ],
+      [
+       "{monochrome|colour|comic|painted}",
+       "monochrome",
+       [
+        "{monochrome|colour|comic|painted}=monochrome"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "full-length",
+       [
+        "{portrait|three-quarter|full-length|profile}=full-length"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "brightly optimistic",
+       [
+        "__characters/creator/mood__=brightly optimistic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "brushes invisible dust off their clothes",
+       [
+        "__characters/creator/quirk__=brushes invisible dust off their clothes"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "sketching faces quickly, telling tall tales",
+       [
+        "__characters/creator/skill__=sketching faces quickly",
+        "__characters/creator/skill__=telling tall tales"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a fast, breathless voice that runs sentences together",
+       [
+        "__characters/creator/voice__=a fast, breathless voice that runs sentences together"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a canary in a brass cage",
+      "age": "58",
+      "gender": "man",
+      "role": {
+       "value": "a washed-up boxer",
+       "fit": "all",
+       "gear": "a cold steak for a black eye",
+       "wear": "a crimson robe over taped hands"
+      },
+      "gear": "a cold steak for a black eye",
+      "companion": {
+       "value": "a canary in a brass cage",
+       "genre": "noir"
+      },
+      "colour": "crimson",
+      "mood": "brightly optimistic",
+      "quirk": "brushes invisible dust off their clothes",
+      "skills": [
+       "sketching faces quickly",
+       "telling tall tales"
+      ],
+      "voice": "a fast, breathless voice that runs sentences together"
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A black-and-white film-noir still, high contrast: a strict side profile of the head and shoulders of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a steady, amused half-smile. The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Deep shadows and silver highlights, black and white except for the crimson accents.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{21-26}",
+       "25",
+       [
+        "{21-26}=25"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "58",
+       [
+        "{40-58}=57–58"
+       ]
+      ],
+      [
+       "{59-75}",
+       "65",
+       [
+        "{59-75}=65–66"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Indian descent, with {warm brown|light brown|deep brown} skin",
+       [
+        "__characters/creator/origin__=Indian descent, with {warm brown|light brown|deep brown} skin"
+       ]
+      ],
+      [
+       "{warm brown|light brown|deep brown}",
+       "light brown",
+       [
+        "{warm brown|light brown|deep brown}=light brown"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a sprinter's strong legs",
+       [
+        "__characters/creator/build__=athletic, with a sprinter's strong legs"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{silver|white|iron-grey}",
+       "silver",
+       [
+        "{silver|white|iron-grey}=silver"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "blue-black",
+       [
+        "__characters/creator/haircolour__=blue-black"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all, !modern=yes]__",
+       "$haircolour cornrows running straight back to the nape",
+       [
+        "__characters/creator/hair__=$haircolour cornrows running straight back to the nape"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "$role ← __characters/noir/role[fit=$fit|all]__",
+       "a washed-up boxer",
+       [
+        "__characters/noir/role__=a washed-up boxer"
+       ]
+      ],
+      [
+       "{a pair of laced gloves|a cold steak for a black eye|a fight poster}",
+       "a cold steak for a black eye",
+       [
+        "{a pair of laced gloves|a cold steak for a black eye|a fight poster}=a cold steak for a black eye"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=noir|all]__",
+       "a monogram stitched in $colour on the cuff",
+       [
+        "__characters/creator/motif__=a monogram stitched in $colour on the cuff"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=noir]__|none}",
+       "__characters/creator/companion[genre=noir]__",
+       [
+        "{__characters/creator/companion[genre=noir]__|none}=__characters/creator/companion[genre=noir]__"
+       ]
+      ],
+      [
+       "$companion ← __characters/creator/companion[genre=noir]__",
+       "a canary in a brass cage",
+       [
+        "__characters/creator/companion__=a canary in a brass cage"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a steady, amused half-smile",
+       [
+        "__characters/creator/presence__=a steady, amused half-smile"
+       ]
+      ],
+      [
+       "{studio|street}",
+       "studio",
+       [
+        "{studio|street}=studio"
+       ]
+      ],
+      [
+       "{monochrome|colour|comic|painted}",
+       "monochrome",
+       [
+        "{monochrome|colour|comic|painted}=monochrome"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "profile",
+       [
+        "{portrait|three-quarter|full-length|profile}=profile"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "brightly optimistic",
+       [
+        "__characters/creator/mood__=brightly optimistic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "brushes invisible dust off their clothes",
+       [
+        "__characters/creator/quirk__=brushes invisible dust off their clothes"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "sketching faces quickly, telling tall tales",
+       [
+        "__characters/creator/skill__=sketching faces quickly",
+        "__characters/creator/skill__=telling tall tales"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a fast, breathless voice that runs sentences together",
+       [
+        "__characters/creator/voice__=a fast, breathless voice that runs sentences together"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a canary in a brass cage",
+      "age": "58",
+      "gender": "man",
+      "role": {
+       "value": "a washed-up boxer",
+       "fit": "all",
+       "gear": "a cold steak for a black eye",
+       "wear": "a crimson robe over taped hands"
+      },
+      "gear": "a cold steak for a black eye",
+      "companion": {
+       "value": "a canary in a brass cage",
+       "genre": "noir"
+      },
+      "colour": "crimson",
+      "mood": "brightly optimistic",
+      "quirk": "brushes invisible dust off their clothes",
+      "skills": [
+       "sketching faces quickly",
+       "telling tall tales"
+      ],
+      "voice": "a fast, breathless voice that runs sentences together"
+     }
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A black-and-white film-noir still, high contrast: a head-and-shoulders portrait of a 23-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, a short dark ash-brown crop with a straight fringe brushed forward and a tiny heart tattooed on one earlobe; a defence lawyer in a navy wool peacoat with horn buttons and a knitted mustard-yellow watch cap, their clothes marked by Senegalese wax-print circles in mustard-yellow and orange, with a brooding, lowered brow. They face the camera. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Deep shadows and silver highlights, black and white except for the mustard-yellow accents.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman",
+       [
+        "{woman|man|nonbinary person}=woman"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young",
+       [
+        "{young|prime|middle-aged|old}=young"
+       ]
+      ],
+      [
+       "{21-26}",
+       "23",
+       [
+        "{21-26}=23"
+       ]
+      ],
+      [
+       "{27-39}",
+       "33",
+       [
+        "{27-39}=33"
+       ]
+      ],
+      [
+       "{40-58}",
+       "56",
+       [
+        "{40-58}=55–56"
+       ]
+      ],
+      [
+       "{59-75}",
+       "61",
+       [
+        "{59-75}=60–61"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tibetan descent, with {weathered tan|light brown} skin",
+       [
+        "__characters/creator/origin__=Tibetan descent, with {weathered tan|light brown} skin"
+       ]
+      ],
+      [
+       "{weathered tan|light brown}",
+       "weathered tan",
+       [
+        "{weathered tan|light brown}=weathered tan"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "short and broad, with a wrestler's build",
+       [
+        "__characters/creator/build__=short and broad, with a wrestler's build"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{silver|white|iron-grey}",
+       "silver",
+       [
+        "{silver|white|iron-grey}=silver"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all, !modern=yes]__",
+       "a short $haircolour crop with a straight fringe brushed forward",
+       [
+        "__characters/creator/hair__=a short $haircolour crop with a straight fringe brushed forward"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "$role ← __characters/noir/role[fit=$fit|all]__",
+       "a defence lawyer",
+       [
+        "__characters/noir/role__=a defence lawyer"
+       ]
+      ],
+      [
+       "{a briefcase of affidavits|a law book|a pocket watch}",
+       "a law book",
+       [
+        "{a briefcase of affidavits|a law book|a pocket watch}=a law book"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}",
+       "__characters/creator/outfit[genre=noir, fit=$fit|all]__",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}=__characters/creator/outfit[genre=noir, fit=$fit|all]__"
+       ]
+      ],
+      [
+       "$outfit ← __characters/creator/outfit[genre=noir, fit=$fit|all]__",
+       "a navy wool peacoat with horn buttons and a knitted $colour watch cap",
+       [
+        "__characters/creator/outfit__=a navy wool peacoat with horn buttons and a knitted $colour watch cap"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=noir|all]__",
+       "Senegalese wax-print circles in $colour and orange",
+       [
+        "__characters/creator/motif__=Senegalese wax-print circles in $colour and orange"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=noir]__|none}",
+       "__characters/creator/companion[genre=noir]__",
+       [
+        "{__characters/creator/companion[genre=noir]__|none}=__characters/creator/companion[genre=noir]__"
+       ]
+      ],
+      [
+       "$companion ← __characters/creator/companion[genre=noir]__",
+       "a canary in a brass cage",
+       [
+        "__characters/creator/companion__=a canary in a brass cage"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a brooding, lowered brow",
+       [
+        "__characters/creator/presence__=a brooding, lowered brow"
+       ]
+      ],
+      [
+       "{studio|street}",
+       "studio",
+       [
+        "{studio|street}=studio"
+       ]
+      ],
+      [
+       "{monochrome|colour|comic|painted}",
+       "monochrome",
+       [
+        "{monochrome|colour|comic|painted}=monochrome"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "portrait",
+       [
+        "{portrait|three-quarter|full-length|profile}=portrait"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "mischievously secretive",
+       [
+        "__characters/creator/mood__=mischievously secretive"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "points with the whole hand, never a finger",
+       [
+        "__characters/creator/quirk__=points with the whole hand, never a finger"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "coaxing out a confession, tying sailor's knots",
+       [
+        "__characters/creator/skill__=coaxing out a confession",
+        "__characters/creator/skill__=tying sailor's knots"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a heavy, tired voice that trails off mid-sentence",
+       [
+        "__characters/creator/voice__=a heavy, tired voice that trails off mid-sentence"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 23-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, a short dark ash-brown crop with a straight fringe brushed forward and a tiny heart tattooed on one earlobe; a defence lawyer in a navy wool peacoat with horn buttons and a knitted mustard-yellow watch cap, their clothes marked by Senegalese wax-print circles in mustard-yellow and orange, with a law book, a canary in a brass cage",
+      "age": "23",
+      "gender": "woman",
+      "role": {
+       "value": "a defence lawyer",
+       "fit": "all",
+       "gear": "a law book",
+       "wear": "a double-breasted suit with a mustard-yellow tie pin"
+      },
+      "gear": "a law book",
+      "companion": {
+       "value": "a canary in a brass cage",
+       "genre": "noir"
+      },
+      "colour": "mustard-yellow",
+      "mood": "mischievously secretive",
+      "quirk": "points with the whole hand, never a finger",
+      "skills": [
+       "coaxing out a confession",
+       "tying sailor's knots"
+      ],
+      "voice": "a heavy, tired voice that trails off mid-sentence"
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A black-and-white film-noir still, high contrast: a head-and-shoulders view of a 23-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, a short dark ash-brown crop with a straight fringe brushed forward and a tiny heart tattooed on one earlobe; a defence lawyer in a navy wool peacoat with horn buttons and a knitted mustard-yellow watch cap, their clothes marked by Senegalese wax-print circles in mustard-yellow and orange, with a brooding, lowered brow. They are turned three-quarters to the left. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Deep shadows and silver highlights, black and white except for the mustard-yellow accents.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman",
+       [
+        "{woman|man|nonbinary person}=woman"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young",
+       [
+        "{young|prime|middle-aged|old}=young"
+       ]
+      ],
+      [
+       "{21-26}",
+       "23",
+       [
+        "{21-26}=23"
+       ]
+      ],
+      [
+       "{27-39}",
+       "33",
+       [
+        "{27-39}=33"
+       ]
+      ],
+      [
+       "{40-58}",
+       "56",
+       [
+        "{40-58}=55–56"
+       ]
+      ],
+      [
+       "{59-75}",
+       "61",
+       [
+        "{59-75}=60–61"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tibetan descent, with {weathered tan|light brown} skin",
+       [
+        "__characters/creator/origin__=Tibetan descent, with {weathered tan|light brown} skin"
+       ]
+      ],
+      [
+       "{weathered tan|light brown}",
+       "weathered tan",
+       [
+        "{weathered tan|light brown}=weathered tan"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "short and broad, with a wrestler's build",
+       [
+        "__characters/creator/build__=short and broad, with a wrestler's build"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{silver|white|iron-grey}",
+       "silver",
+       [
+        "{silver|white|iron-grey}=silver"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all, !modern=yes]__",
+       "a short $haircolour crop with a straight fringe brushed forward",
+       [
+        "__characters/creator/hair__=a short $haircolour crop with a straight fringe brushed forward"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "$role ← __characters/noir/role[fit=$fit|all]__",
+       "a defence lawyer",
+       [
+        "__characters/noir/role__=a defence lawyer"
+       ]
+      ],
+      [
+       "{a briefcase of affidavits|a law book|a pocket watch}",
+       "a law book",
+       [
+        "{a briefcase of affidavits|a law book|a pocket watch}=a law book"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}",
+       "__characters/creator/outfit[genre=noir, fit=$fit|all]__",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}=__characters/creator/outfit[genre=noir, fit=$fit|all]__"
+       ]
+      ],
+      [
+       "$outfit ← __characters/creator/outfit[genre=noir, fit=$fit|all]__",
+       "a navy wool peacoat with horn buttons and a knitted $colour watch cap",
+       [
+        "__characters/creator/outfit__=a navy wool peacoat with horn buttons and a knitted $colour watch cap"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=noir|all]__",
+       "Senegalese wax-print circles in $colour and orange",
+       [
+        "__characters/creator/motif__=Senegalese wax-print circles in $colour and orange"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=noir]__|none}",
+       "__characters/creator/companion[genre=noir]__",
+       [
+        "{__characters/creator/companion[genre=noir]__|none}=__characters/creator/companion[genre=noir]__"
+       ]
+      ],
+      [
+       "$companion ← __characters/creator/companion[genre=noir]__",
+       "a canary in a brass cage",
+       [
+        "__characters/creator/companion__=a canary in a brass cage"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a brooding, lowered brow",
+       [
+        "__characters/creator/presence__=a brooding, lowered brow"
+       ]
+      ],
+      [
+       "{studio|street}",
+       "studio",
+       [
+        "{studio|street}=studio"
+       ]
+      ],
+      [
+       "{monochrome|colour|comic|painted}",
+       "monochrome",
+       [
+        "{monochrome|colour|comic|painted}=monochrome"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "three-quarter",
+       [
+        "{portrait|three-quarter|full-length|profile}=three-quarter"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "mischievously secretive",
+       [
+        "__characters/creator/mood__=mischievously secretive"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "points with the whole hand, never a finger",
+       [
+        "__characters/creator/quirk__=points with the whole hand, never a finger"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "coaxing out a confession, tying sailor's knots",
+       [
+        "__characters/creator/skill__=coaxing out a confession",
+        "__characters/creator/skill__=tying sailor's knots"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a heavy, tired voice that trails off mid-sentence",
+       [
+        "__characters/creator/voice__=a heavy, tired voice that trails off mid-sentence"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 23-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, a short dark ash-brown crop with a straight fringe brushed forward and a tiny heart tattooed on one earlobe; a defence lawyer in a navy wool peacoat with horn buttons and a knitted mustard-yellow watch cap, their clothes marked by Senegalese wax-print circles in mustard-yellow and orange, with a law book, a canary in a brass cage",
+      "age": "23",
+      "gender": "woman",
+      "role": {
+       "value": "a defence lawyer",
+       "fit": "all",
+       "gear": "a law book",
+       "wear": "a double-breasted suit with a mustard-yellow tie pin"
+      },
+      "gear": "a law book",
+      "companion": {
+       "value": "a canary in a brass cage",
+       "genre": "noir"
+      },
+      "colour": "mustard-yellow",
+      "mood": "mischievously secretive",
+      "quirk": "points with the whole hand, never a finger",
+      "skills": [
+       "coaxing out a confession",
+       "tying sailor's knots"
+      ],
+      "voice": "a heavy, tired voice that trails off mid-sentence"
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A black-and-white film-noir still, high contrast: a full-length view of the whole body, from the top of the head to the shoes, of a 23-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, a short dark ash-brown crop with a straight fringe brushed forward and a tiny heart tattooed on one earlobe; a defence lawyer in a navy wool peacoat with horn buttons and a knitted mustard-yellow watch cap, their clothes marked by Senegalese wax-print circles in mustard-yellow and orange, with a brooding, lowered brow. They stand straight with the arms relaxed, facing the camera, with a law book, and floor and space around them are in frame. With them: a canary in a brass cage. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Deep shadows and silver highlights, black and white except for the mustard-yellow accents.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman",
+       [
+        "{woman|man|nonbinary person}=woman"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young",
+       [
+        "{young|prime|middle-aged|old}=young"
+       ]
+      ],
+      [
+       "{21-26}",
+       "23",
+       [
+        "{21-26}=23"
+       ]
+      ],
+      [
+       "{27-39}",
+       "33",
+       [
+        "{27-39}=33"
+       ]
+      ],
+      [
+       "{40-58}",
+       "56",
+       [
+        "{40-58}=55–56"
+       ]
+      ],
+      [
+       "{59-75}",
+       "61",
+       [
+        "{59-75}=60–61"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tibetan descent, with {weathered tan|light brown} skin",
+       [
+        "__characters/creator/origin__=Tibetan descent, with {weathered tan|light brown} skin"
+       ]
+      ],
+      [
+       "{weathered tan|light brown}",
+       "weathered tan",
+       [
+        "{weathered tan|light brown}=weathered tan"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "short and broad, with a wrestler's build",
+       [
+        "__characters/creator/build__=short and broad, with a wrestler's build"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{silver|white|iron-grey}",
+       "silver",
+       [
+        "{silver|white|iron-grey}=silver"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all, !modern=yes]__",
+       "a short $haircolour crop with a straight fringe brushed forward",
+       [
+        "__characters/creator/hair__=a short $haircolour crop with a straight fringe brushed forward"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "$role ← __characters/noir/role[fit=$fit|all]__",
+       "a defence lawyer",
+       [
+        "__characters/noir/role__=a defence lawyer"
+       ]
+      ],
+      [
+       "{a briefcase of affidavits|a law book|a pocket watch}",
+       "a law book",
+       [
+        "{a briefcase of affidavits|a law book|a pocket watch}=a law book"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}",
+       "__characters/creator/outfit[genre=noir, fit=$fit|all]__",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}=__characters/creator/outfit[genre=noir, fit=$fit|all]__"
+       ]
+      ],
+      [
+       "$outfit ← __characters/creator/outfit[genre=noir, fit=$fit|all]__",
+       "a navy wool peacoat with horn buttons and a knitted $colour watch cap",
+       [
+        "__characters/creator/outfit__=a navy wool peacoat with horn buttons and a knitted $colour watch cap"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=noir|all]__",
+       "Senegalese wax-print circles in $colour and orange",
+       [
+        "__characters/creator/motif__=Senegalese wax-print circles in $colour and orange"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=noir]__|none}",
+       "__characters/creator/companion[genre=noir]__",
+       [
+        "{__characters/creator/companion[genre=noir]__|none}=__characters/creator/companion[genre=noir]__"
+       ]
+      ],
+      [
+       "$companion ← __characters/creator/companion[genre=noir]__",
+       "a canary in a brass cage",
+       [
+        "__characters/creator/companion__=a canary in a brass cage"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a brooding, lowered brow",
+       [
+        "__characters/creator/presence__=a brooding, lowered brow"
+       ]
+      ],
+      [
+       "{studio|street}",
+       "studio",
+       [
+        "{studio|street}=studio"
+       ]
+      ],
+      [
+       "{monochrome|colour|comic|painted}",
+       "monochrome",
+       [
+        "{monochrome|colour|comic|painted}=monochrome"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "full-length",
+       [
+        "{portrait|three-quarter|full-length|profile}=full-length"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "mischievously secretive",
+       [
+        "__characters/creator/mood__=mischievously secretive"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "points with the whole hand, never a finger",
+       [
+        "__characters/creator/quirk__=points with the whole hand, never a finger"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "coaxing out a confession, tying sailor's knots",
+       [
+        "__characters/creator/skill__=coaxing out a confession",
+        "__characters/creator/skill__=tying sailor's knots"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a heavy, tired voice that trails off mid-sentence",
+       [
+        "__characters/creator/voice__=a heavy, tired voice that trails off mid-sentence"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 23-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, a short dark ash-brown crop with a straight fringe brushed forward and a tiny heart tattooed on one earlobe; a defence lawyer in a navy wool peacoat with horn buttons and a knitted mustard-yellow watch cap, their clothes marked by Senegalese wax-print circles in mustard-yellow and orange, with a law book, a canary in a brass cage",
+      "age": "23",
+      "gender": "woman",
+      "role": {
+       "value": "a defence lawyer",
+       "fit": "all",
+       "gear": "a law book",
+       "wear": "a double-breasted suit with a mustard-yellow tie pin"
+      },
+      "gear": "a law book",
+      "companion": {
+       "value": "a canary in a brass cage",
+       "genre": "noir"
+      },
+      "colour": "mustard-yellow",
+      "mood": "mischievously secretive",
+      "quirk": "points with the whole hand, never a finger",
+      "skills": [
+       "coaxing out a confession",
+       "tying sailor's knots"
+      ],
+      "voice": "a heavy, tired voice that trails off mid-sentence"
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A black-and-white film-noir still, high contrast: a strict side profile of the head and shoulders of a 23-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, a short dark ash-brown crop with a straight fringe brushed forward and a tiny heart tattooed on one earlobe; a defence lawyer in a navy wool peacoat with horn buttons and a knitted mustard-yellow watch cap, their clothes marked by Senegalese wax-print circles in mustard-yellow and orange, with a brooding, lowered brow. The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Deep shadows and silver highlights, black and white except for the mustard-yellow accents.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman",
+       [
+        "{woman|man|nonbinary person}=woman"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young",
+       [
+        "{young|prime|middle-aged|old}=young"
+       ]
+      ],
+      [
+       "{21-26}",
+       "23",
+       [
+        "{21-26}=23"
+       ]
+      ],
+      [
+       "{27-39}",
+       "33",
+       [
+        "{27-39}=33"
+       ]
+      ],
+      [
+       "{40-58}",
+       "56",
+       [
+        "{40-58}=55–56"
+       ]
+      ],
+      [
+       "{59-75}",
+       "61",
+       [
+        "{59-75}=60–61"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tibetan descent, with {weathered tan|light brown} skin",
+       [
+        "__characters/creator/origin__=Tibetan descent, with {weathered tan|light brown} skin"
+       ]
+      ],
+      [
+       "{weathered tan|light brown}",
+       "weathered tan",
+       [
+        "{weathered tan|light brown}=weathered tan"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "short and broad, with a wrestler's build",
+       [
+        "__characters/creator/build__=short and broad, with a wrestler's build"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{silver|white|iron-grey}",
+       "silver",
+       [
+        "{silver|white|iron-grey}=silver"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all, !modern=yes]__",
+       "a short $haircolour crop with a straight fringe brushed forward",
+       [
+        "__characters/creator/hair__=a short $haircolour crop with a straight fringe brushed forward"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "$role ← __characters/noir/role[fit=$fit|all]__",
+       "a defence lawyer",
+       [
+        "__characters/noir/role__=a defence lawyer"
+       ]
+      ],
+      [
+       "{a briefcase of affidavits|a law book|a pocket watch}",
+       "a law book",
+       [
+        "{a briefcase of affidavits|a law book|a pocket watch}=a law book"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}",
+       "__characters/creator/outfit[genre=noir, fit=$fit|all]__",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}=__characters/creator/outfit[genre=noir, fit=$fit|all]__"
+       ]
+      ],
+      [
+       "$outfit ← __characters/creator/outfit[genre=noir, fit=$fit|all]__",
+       "a navy wool peacoat with horn buttons and a knitted $colour watch cap",
+       [
+        "__characters/creator/outfit__=a navy wool peacoat with horn buttons and a knitted $colour watch cap"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=noir|all]__",
+       "Senegalese wax-print circles in $colour and orange",
+       [
+        "__characters/creator/motif__=Senegalese wax-print circles in $colour and orange"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=noir]__|none}",
+       "__characters/creator/companion[genre=noir]__",
+       [
+        "{__characters/creator/companion[genre=noir]__|none}=__characters/creator/companion[genre=noir]__"
+       ]
+      ],
+      [
+       "$companion ← __characters/creator/companion[genre=noir]__",
+       "a canary in a brass cage",
+       [
+        "__characters/creator/companion__=a canary in a brass cage"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a brooding, lowered brow",
+       [
+        "__characters/creator/presence__=a brooding, lowered brow"
+       ]
+      ],
+      [
+       "{studio|street}",
+       "studio",
+       [
+        "{studio|street}=studio"
+       ]
+      ],
+      [
+       "{monochrome|colour|comic|painted}",
+       "monochrome",
+       [
+        "{monochrome|colour|comic|painted}=monochrome"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "profile",
+       [
+        "{portrait|three-quarter|full-length|profile}=profile"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "mischievously secretive",
+       [
+        "__characters/creator/mood__=mischievously secretive"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "points with the whole hand, never a finger",
+       [
+        "__characters/creator/quirk__=points with the whole hand, never a finger"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "coaxing out a confession, tying sailor's knots",
+       [
+        "__characters/creator/skill__=coaxing out a confession",
+        "__characters/creator/skill__=tying sailor's knots"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a heavy, tired voice that trails off mid-sentence",
+       [
+        "__characters/creator/voice__=a heavy, tired voice that trails off mid-sentence"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 23-year-old woman of Tibetan descent, with weathered tan skin: short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, a short dark ash-brown crop with a straight fringe brushed forward and a tiny heart tattooed on one earlobe; a defence lawyer in a navy wool peacoat with horn buttons and a knitted mustard-yellow watch cap, their clothes marked by Senegalese wax-print circles in mustard-yellow and orange, with a law book, a canary in a brass cage",
+      "age": "23",
+      "gender": "woman",
+      "role": {
+       "value": "a defence lawyer",
+       "fit": "all",
+       "gear": "a law book",
+       "wear": "a double-breasted suit with a mustard-yellow tie pin"
+      },
+      "gear": "a law book",
+      "companion": {
+       "value": "a canary in a brass cage",
+       "genre": "noir"
+      },
+      "colour": "mustard-yellow",
+      "mood": "mischievously secretive",
+      "quirk": "points with the whole hand, never a finger",
+      "skills": [
+       "coaxing out a confession",
+       "tying sailor's knots"
+      ],
+      "voice": "a heavy, tired voice that trails off mid-sentence"
+     }
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A pulp comic panel in heavy black ink: a head-and-shoulders portrait of a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, long chestnut hair in a half-up knot at the crown and a split earlobe, healed in two points; a switchboard operator in a headset over a neat camel blouse, their clothes marked by Persian paisley in camel and gold, with a sheepish, apologetic look. They face the camera. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Flat spot colour, camel on black and white.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{21-26}",
+       "24",
+       [
+        "{21-26}=24"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "50",
+       [
+        "{40-58}=49–50"
+       ]
+      ],
+      [
+       "{59-75}",
+       "70",
+       [
+        "{59-75}=70–71"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin",
+       [
+        "__characters/creator/origin__=Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       ]
+      ],
+      [
+       "{light brown|copper-brown|dark brown}",
+       "copper-brown",
+       [
+        "{light brown|copper-brown|dark brown}=copper-brown"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "trim and neatly proportioned",
+       [
+        "__characters/creator/build__=trim and neatly proportioned"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{silver|white|iron-grey}",
+       "iron-grey",
+       [
+        "{silver|white|iron-grey}=iron-grey"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "chestnut",
+       [
+        "__characters/creator/haircolour__=chestnut"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all, !modern=yes]__",
+       "long $haircolour hair in a half-up knot at the crown",
+       [
+        "__characters/creator/hair__=long $haircolour hair in a half-up knot at the crown"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "$role ← __characters/noir/role[fit=$fit|all]__",
+       "a switchboard operator",
+       [
+        "__characters/noir/role__=a switchboard operator"
+       ]
+      ],
+      [
+       "{a switchboard plug|a notepad of overheard numbers|a lipstick}",
+       "a switchboard plug",
+       [
+        "{a switchboard plug|a notepad of overheard numbers|a lipstick}=a switchboard plug"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=noir|all]__",
+       "Persian paisley in $colour and gold",
+       [
+        "__characters/creator/motif__=Persian paisley in $colour and gold"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=noir]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=noir]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a sheepish, apologetic look",
+       [
+        "__characters/creator/presence__=a sheepish, apologetic look"
+       ]
+      ],
+      [
+       "{studio|street}",
+       "studio",
+       [
+        "{studio|street}=studio"
+       ]
+      ],
+      [
+       "{monochrome|colour|comic|painted}",
+       "comic",
+       [
+        "{monochrome|colour|comic|painted}=comic"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "portrait",
+       [
+        "{portrait|three-quarter|full-length|profile}=portrait"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "theatrically dramatic",
+       [
+        "__characters/creator/mood__=theatrically dramatic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "stands a little too close when talking",
+       [
+        "__characters/creator/quirk__=stands a little too close when talking"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "tailing someone unseen, playing a battered fiddle",
+       [
+        "__characters/creator/skill__=tailing someone unseen",
+        "__characters/creator/skill__=playing a battered fiddle"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a scratchy, high voice like an old record",
+       [
+        "__characters/creator/voice__=a scratchy, high voice like an old record"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, long chestnut hair in a half-up knot at the crown and a split earlobe, healed in two points; a switchboard operator in a headset over a neat camel blouse, their clothes marked by Persian paisley in camel and gold, with a switchboard plug",
+      "age": "50",
+      "gender": "man",
+      "role": {
+       "value": "a switchboard operator",
+       "fit": "all",
+       "gear": "a switchboard plug",
+       "wear": "a headset over a neat camel blouse"
+      },
+      "gear": "a switchboard plug",
+      "companion": "none",
+      "colour": "camel",
+      "mood": "theatrically dramatic",
+      "quirk": "stands a little too close when talking",
+      "skills": [
+       "tailing someone unseen",
+       "playing a battered fiddle"
+      ],
+      "voice": "a scratchy, high voice like an old record"
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A pulp comic panel in heavy black ink: a head-and-shoulders view of a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, long chestnut hair in a half-up knot at the crown and a split earlobe, healed in two points; a switchboard operator in a headset over a neat camel blouse, their clothes marked by Persian paisley in camel and gold, with a sheepish, apologetic look. They are turned three-quarters to the left. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Flat spot colour, camel on black and white.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{21-26}",
+       "24",
+       [
+        "{21-26}=24"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "50",
+       [
+        "{40-58}=49–50"
+       ]
+      ],
+      [
+       "{59-75}",
+       "70",
+       [
+        "{59-75}=70–71"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin",
+       [
+        "__characters/creator/origin__=Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       ]
+      ],
+      [
+       "{light brown|copper-brown|dark brown}",
+       "copper-brown",
+       [
+        "{light brown|copper-brown|dark brown}=copper-brown"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "trim and neatly proportioned",
+       [
+        "__characters/creator/build__=trim and neatly proportioned"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{silver|white|iron-grey}",
+       "iron-grey",
+       [
+        "{silver|white|iron-grey}=iron-grey"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "chestnut",
+       [
+        "__characters/creator/haircolour__=chestnut"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all, !modern=yes]__",
+       "long $haircolour hair in a half-up knot at the crown",
+       [
+        "__characters/creator/hair__=long $haircolour hair in a half-up knot at the crown"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "$role ← __characters/noir/role[fit=$fit|all]__",
+       "a switchboard operator",
+       [
+        "__characters/noir/role__=a switchboard operator"
+       ]
+      ],
+      [
+       "{a switchboard plug|a notepad of overheard numbers|a lipstick}",
+       "a switchboard plug",
+       [
+        "{a switchboard plug|a notepad of overheard numbers|a lipstick}=a switchboard plug"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=noir|all]__",
+       "Persian paisley in $colour and gold",
+       [
+        "__characters/creator/motif__=Persian paisley in $colour and gold"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=noir]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=noir]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a sheepish, apologetic look",
+       [
+        "__characters/creator/presence__=a sheepish, apologetic look"
+       ]
+      ],
+      [
+       "{studio|street}",
+       "studio",
+       [
+        "{studio|street}=studio"
+       ]
+      ],
+      [
+       "{monochrome|colour|comic|painted}",
+       "comic",
+       [
+        "{monochrome|colour|comic|painted}=comic"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "three-quarter",
+       [
+        "{portrait|three-quarter|full-length|profile}=three-quarter"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "theatrically dramatic",
+       [
+        "__characters/creator/mood__=theatrically dramatic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "stands a little too close when talking",
+       [
+        "__characters/creator/quirk__=stands a little too close when talking"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "tailing someone unseen, playing a battered fiddle",
+       [
+        "__characters/creator/skill__=tailing someone unseen",
+        "__characters/creator/skill__=playing a battered fiddle"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a scratchy, high voice like an old record",
+       [
+        "__characters/creator/voice__=a scratchy, high voice like an old record"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, long chestnut hair in a half-up knot at the crown and a split earlobe, healed in two points; a switchboard operator in a headset over a neat camel blouse, their clothes marked by Persian paisley in camel and gold, with a switchboard plug",
+      "age": "50",
+      "gender": "man",
+      "role": {
+       "value": "a switchboard operator",
+       "fit": "all",
+       "gear": "a switchboard plug",
+       "wear": "a headset over a neat camel blouse"
+      },
+      "gear": "a switchboard plug",
+      "companion": "none",
+      "colour": "camel",
+      "mood": "theatrically dramatic",
+      "quirk": "stands a little too close when talking",
+      "skills": [
+       "tailing someone unseen",
+       "playing a battered fiddle"
+      ],
+      "voice": "a scratchy, high voice like an old record"
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A pulp comic panel in heavy black ink: a full-length view of the whole body, from the top of the head to the shoes, of a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, long chestnut hair in a half-up knot at the crown and a split earlobe, healed in two points; a switchboard operator in a headset over a neat camel blouse, their clothes marked by Persian paisley in camel and gold, with a sheepish, apologetic look. They stand straight with the arms relaxed, facing the camera, with a switchboard plug, and floor and space around them are in frame. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Flat spot colour, camel on black and white.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{21-26}",
+       "24",
+       [
+        "{21-26}=24"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "50",
+       [
+        "{40-58}=49–50"
+       ]
+      ],
+      [
+       "{59-75}",
+       "70",
+       [
+        "{59-75}=70–71"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin",
+       [
+        "__characters/creator/origin__=Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       ]
+      ],
+      [
+       "{light brown|copper-brown|dark brown}",
+       "copper-brown",
+       [
+        "{light brown|copper-brown|dark brown}=copper-brown"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "trim and neatly proportioned",
+       [
+        "__characters/creator/build__=trim and neatly proportioned"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{silver|white|iron-grey}",
+       "iron-grey",
+       [
+        "{silver|white|iron-grey}=iron-grey"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "chestnut",
+       [
+        "__characters/creator/haircolour__=chestnut"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all, !modern=yes]__",
+       "long $haircolour hair in a half-up knot at the crown",
+       [
+        "__characters/creator/hair__=long $haircolour hair in a half-up knot at the crown"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "$role ← __characters/noir/role[fit=$fit|all]__",
+       "a switchboard operator",
+       [
+        "__characters/noir/role__=a switchboard operator"
+       ]
+      ],
+      [
+       "{a switchboard plug|a notepad of overheard numbers|a lipstick}",
+       "a switchboard plug",
+       [
+        "{a switchboard plug|a notepad of overheard numbers|a lipstick}=a switchboard plug"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=noir|all]__",
+       "Persian paisley in $colour and gold",
+       [
+        "__characters/creator/motif__=Persian paisley in $colour and gold"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=noir]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=noir]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a sheepish, apologetic look",
+       [
+        "__characters/creator/presence__=a sheepish, apologetic look"
+       ]
+      ],
+      [
+       "{studio|street}",
+       "studio",
+       [
+        "{studio|street}=studio"
+       ]
+      ],
+      [
+       "{monochrome|colour|comic|painted}",
+       "comic",
+       [
+        "{monochrome|colour|comic|painted}=comic"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "full-length",
+       [
+        "{portrait|three-quarter|full-length|profile}=full-length"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "theatrically dramatic",
+       [
+        "__characters/creator/mood__=theatrically dramatic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "stands a little too close when talking",
+       [
+        "__characters/creator/quirk__=stands a little too close when talking"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "tailing someone unseen, playing a battered fiddle",
+       [
+        "__characters/creator/skill__=tailing someone unseen",
+        "__characters/creator/skill__=playing a battered fiddle"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a scratchy, high voice like an old record",
+       [
+        "__characters/creator/voice__=a scratchy, high voice like an old record"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, long chestnut hair in a half-up knot at the crown and a split earlobe, healed in two points; a switchboard operator in a headset over a neat camel blouse, their clothes marked by Persian paisley in camel and gold, with a switchboard plug",
+      "age": "50",
+      "gender": "man",
+      "role": {
+       "value": "a switchboard operator",
+       "fit": "all",
+       "gear": "a switchboard plug",
+       "wear": "a headset over a neat camel blouse"
+      },
+      "gear": "a switchboard plug",
+      "companion": "none",
+      "colour": "camel",
+      "mood": "theatrically dramatic",
+      "quirk": "stands a little too close when talking",
+      "skills": [
+       "tailing someone unseen",
+       "playing a battered fiddle"
+      ],
+      "voice": "a scratchy, high voice like an old record"
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A pulp comic panel in heavy black ink: a strict side profile of the head and shoulders of a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, long chestnut hair in a half-up knot at the crown and a split earlobe, healed in two points; a switchboard operator in a headset over a neat camel blouse, their clothes marked by Persian paisley in camel and gold, with a sheepish, apologetic look. The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Flat spot colour, camel on black and white.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{21-26}",
+       "24",
+       [
+        "{21-26}=24"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "50",
+       [
+        "{40-58}=49–50"
+       ]
+      ],
+      [
+       "{59-75}",
+       "70",
+       [
+        "{59-75}=70–71"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin",
+       [
+        "__characters/creator/origin__=Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       ]
+      ],
+      [
+       "{light brown|copper-brown|dark brown}",
+       "copper-brown",
+       [
+        "{light brown|copper-brown|dark brown}=copper-brown"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "trim and neatly proportioned",
+       [
+        "__characters/creator/build__=trim and neatly proportioned"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{silver|white|iron-grey}",
+       "iron-grey",
+       [
+        "{silver|white|iron-grey}=iron-grey"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "chestnut",
+       [
+        "__characters/creator/haircolour__=chestnut"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all, !modern=yes]__",
+       "long $haircolour hair in a half-up knot at the crown",
+       [
+        "__characters/creator/hair__=long $haircolour hair in a half-up knot at the crown"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "$role ← __characters/noir/role[fit=$fit|all]__",
+       "a switchboard operator",
+       [
+        "__characters/noir/role__=a switchboard operator"
+       ]
+      ],
+      [
+       "{a switchboard plug|a notepad of overheard numbers|a lipstick}",
+       "a switchboard plug",
+       [
+        "{a switchboard plug|a notepad of overheard numbers|a lipstick}=a switchboard plug"
+       ]
+      ],
+      [
+       "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}",
+       "$role.wear",
+       [
+        "{$role.wear|__characters/creator/outfit[genre=noir, fit=$fit|all]__}=$role.wear"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=noir|all]__",
+       "Persian paisley in $colour and gold",
+       [
+        "__characters/creator/motif__=Persian paisley in $colour and gold"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=noir]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=noir]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a sheepish, apologetic look",
+       [
+        "__characters/creator/presence__=a sheepish, apologetic look"
+       ]
+      ],
+      [
+       "{studio|street}",
+       "studio",
+       [
+        "{studio|street}=studio"
+       ]
+      ],
+      [
+       "{monochrome|colour|comic|painted}",
+       "comic",
+       [
+        "{monochrome|colour|comic|painted}=comic"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "profile",
+       [
+        "{portrait|three-quarter|full-length|profile}=profile"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "theatrically dramatic",
+       [
+        "__characters/creator/mood__=theatrically dramatic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "stands a little too close when talking",
+       [
+        "__characters/creator/quirk__=stands a little too close when talking"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "tailing someone unseen, playing a battered fiddle",
+       [
+        "__characters/creator/skill__=tailing someone unseen",
+        "__characters/creator/skill__=playing a battered fiddle"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a scratchy, high voice like an old record",
+       [
+        "__characters/creator/voice__=a scratchy, high voice like an old record"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 50-year-old man of Tuareg descent, with copper-brown skin: trim and neatly proportioned, wide, flat cheekbones and a gently curved nose, near-black eyes, long chestnut hair in a half-up knot at the crown and a split earlobe, healed in two points; a switchboard operator in a headset over a neat camel blouse, their clothes marked by Persian paisley in camel and gold, with a switchboard plug",
+      "age": "50",
+      "gender": "man",
+      "role": {
+       "value": "a switchboard operator",
+       "fit": "all",
+       "gear": "a switchboard plug",
+       "wear": "a headset over a neat camel blouse"
+      },
+      "gear": "a switchboard plug",
+      "companion": "none",
+      "colour": "camel",
+      "mood": "theatrically dramatic",
+      "quirk": "stands a little too close when talking",
+      "skills": [
+       "tailing someone unseen",
+       "playing a battered fiddle"
+      ],
+      "voice": "a scratchy, high voice like an old record"
+     }
+    }
+   ]
+  }
+ }
+}

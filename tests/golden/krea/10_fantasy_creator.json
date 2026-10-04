@@ -1,0 +1,2677 @@
+{
+ "preset": "krea/10_fantasy_creator",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A cinematic photograph, as from the set of a fantasy film: a head-and-shoulders portrait of a young half-orc man with tan skin and small tusks at the corners of the mouth, athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose blue-black curls on top over a tight fade, a blue-black beard knotted with tiny bones and feathers and laugh lines carved deep around the eyes: a cleric in a crimson tabard over chainmail with a holy sun on the chest, their clothes marked by Japanese sashiko stitching in white thread over crimson, with a steady, amused half-smile. They face the camera. Behind them is a market street of a walled city, banners overhead, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and makeup.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "$people ← __characters/fantasy/people__",
+       "half-orc",
+       [
+        "__characters/fantasy/people__=half-orc"
+       ]
+      ],
+      [
+       "{greyish olive|sallow green|tan}",
+       "tan",
+       [
+        "{greyish olive|sallow green|tan}=tan"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "man",
+       [
+        "{woman|man|person}=man"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|venerable|timeworn}",
+       "young",
+       [
+        "{young|seasoned|grizzled|venerable|timeworn}=young"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a sprinter's strong legs",
+       [
+        "__characters/creator/build__=athletic, with a sprinter's strong legs"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "blue-black",
+       [
+        "__characters/creator/haircolour__=blue-black"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "loose $haircolour curls on top over a tight fade",
+       [
+        "__characters/creator/hair__=loose $haircolour curls on top over a tight fade"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "__characters/creator/beard__",
+       [
+        "{__characters/creator/beard__|none}=__characters/creator/beard__"
+       ]
+      ],
+      [
+       "$beard ← __characters/creator/beard__",
+       "a $haircolour beard knotted with tiny bones and feathers",
+       [
+        "__characters/creator/beard__=a $haircolour beard knotted with tiny bones and feathers"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "$class ← __characters/fantasy/class__",
+       "a cleric",
+       [
+        "__characters/fantasy/class__=a cleric"
+       ]
+      ],
+      [
+       "{a flanged mace and a holy symbol|a censer trailing incense smoke|a tall shield painted with a saint}",
+       "a tall shield painted with a saint",
+       [
+        "{a flanged mace and a holy symbol|a censer trailing incense smoke|a tall shield painted with a saint}=a tall shield painted with a saint"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=fantasy|all]__",
+       "Japanese sashiko stitching in white thread over $colour",
+       [
+        "__characters/creator/motif__=Japanese sashiko stitching in white thread over $colour"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a steady, amused half-smile",
+       [
+        "__characters/creator/presence__=a steady, amused half-smile"
+       ]
+      ],
+      [
+       "{studio|world}",
+       "world",
+       [
+        "{studio|world}=world"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "portrait",
+       [
+        "{portrait|three-quarter|full-length|profile}=portrait"
+       ]
+      ],
+      [
+       "__characters/fantasy/realm__",
+       "a market street of a walled city, banners overhead",
+       [
+        "__characters/fantasy/realm__=a market street of a walled city, banners overhead"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "brightly optimistic",
+       [
+        "__characters/creator/mood__=brightly optimistic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "brushes invisible dust off their clothes",
+       [
+        "__characters/creator/quirk__=brushes invisible dust off their clothes"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "sketching faces quickly, telling tall tales",
+       [
+        "__characters/creator/skill__=sketching faces quickly",
+        "__characters/creator/skill__=telling tall tales"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a fast, breathless voice that runs sentences together",
+       [
+        "__characters/creator/voice__=a fast, breathless voice that runs sentences together"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a young half-orc man with tan skin and small tusks at the corners of the mouth, athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose blue-black curls on top over a tight fade, a blue-black beard knotted with tiny bones and feathers and laugh lines carved deep around the eyes: a cleric in a crimson tabard over chainmail with a holy sun on the chest, their clothes marked by Japanese sashiko stitching in white thread over crimson, with a tall shield painted with a saint",
+      "people": {
+       "value": "half-orc",
+       "beard": "yes",
+       "gender": "yes",
+       "like": "human",
+       "look": "tan skin and small tusks at the corners of the mouth"
+      },
+      "gender": "man",
+      "age": "young",
+      "class": {
+       "value": "a cleric",
+       "familiar": "rare",
+       "gear": "a tall shield painted with a saint",
+       "wear": "a crimson tabard over chainmail with a holy sun on the chest"
+      },
+      "gear": "a tall shield painted with a saint",
+      "familiar": "none",
+      "colour": "crimson",
+      "mood": "brightly optimistic",
+      "quirk": "brushes invisible dust off their clothes",
+      "skills": [
+       "sketching faces quickly",
+       "telling tall tales"
+      ],
+      "voice": "a fast, breathless voice that runs sentences together"
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A cinematic photograph, as from the set of a fantasy film: a head-and-shoulders view of a young half-orc man with tan skin and small tusks at the corners of the mouth, athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose blue-black curls on top over a tight fade, a blue-black beard knotted with tiny bones and feathers and laugh lines carved deep around the eyes: a cleric in a crimson tabard over chainmail with a holy sun on the chest, their clothes marked by Japanese sashiko stitching in white thread over crimson, with a steady, amused half-smile. They are turned three-quarters to the left. Behind them is a market street of a walled city, banners overhead, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and makeup.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "$people ← __characters/fantasy/people__",
+       "half-orc",
+       [
+        "__characters/fantasy/people__=half-orc"
+       ]
+      ],
+      [
+       "{greyish olive|sallow green|tan}",
+       "tan",
+       [
+        "{greyish olive|sallow green|tan}=tan"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "man",
+       [
+        "{woman|man|person}=man"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|venerable|timeworn}",
+       "young",
+       [
+        "{young|seasoned|grizzled|venerable|timeworn}=young"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a sprinter's strong legs",
+       [
+        "__characters/creator/build__=athletic, with a sprinter's strong legs"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "blue-black",
+       [
+        "__characters/creator/haircolour__=blue-black"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "loose $haircolour curls on top over a tight fade",
+       [
+        "__characters/creator/hair__=loose $haircolour curls on top over a tight fade"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "__characters/creator/beard__",
+       [
+        "{__characters/creator/beard__|none}=__characters/creator/beard__"
+       ]
+      ],
+      [
+       "$beard ← __characters/creator/beard__",
+       "a $haircolour beard knotted with tiny bones and feathers",
+       [
+        "__characters/creator/beard__=a $haircolour beard knotted with tiny bones and feathers"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "$class ← __characters/fantasy/class__",
+       "a cleric",
+       [
+        "__characters/fantasy/class__=a cleric"
+       ]
+      ],
+      [
+       "{a flanged mace and a holy symbol|a censer trailing incense smoke|a tall shield painted with a saint}",
+       "a tall shield painted with a saint",
+       [
+        "{a flanged mace and a holy symbol|a censer trailing incense smoke|a tall shield painted with a saint}=a tall shield painted with a saint"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=fantasy|all]__",
+       "Japanese sashiko stitching in white thread over $colour",
+       [
+        "__characters/creator/motif__=Japanese sashiko stitching in white thread over $colour"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a steady, amused half-smile",
+       [
+        "__characters/creator/presence__=a steady, amused half-smile"
+       ]
+      ],
+      [
+       "{studio|world}",
+       "world",
+       [
+        "{studio|world}=world"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "three-quarter",
+       [
+        "{portrait|three-quarter|full-length|profile}=three-quarter"
+       ]
+      ],
+      [
+       "__characters/fantasy/realm__",
+       "a market street of a walled city, banners overhead",
+       [
+        "__characters/fantasy/realm__=a market street of a walled city, banners overhead"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "brightly optimistic",
+       [
+        "__characters/creator/mood__=brightly optimistic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "brushes invisible dust off their clothes",
+       [
+        "__characters/creator/quirk__=brushes invisible dust off their clothes"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "sketching faces quickly, telling tall tales",
+       [
+        "__characters/creator/skill__=sketching faces quickly",
+        "__characters/creator/skill__=telling tall tales"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a fast, breathless voice that runs sentences together",
+       [
+        "__characters/creator/voice__=a fast, breathless voice that runs sentences together"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a young half-orc man with tan skin and small tusks at the corners of the mouth, athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose blue-black curls on top over a tight fade, a blue-black beard knotted with tiny bones and feathers and laugh lines carved deep around the eyes: a cleric in a crimson tabard over chainmail with a holy sun on the chest, their clothes marked by Japanese sashiko stitching in white thread over crimson, with a tall shield painted with a saint",
+      "people": {
+       "value": "half-orc",
+       "beard": "yes",
+       "gender": "yes",
+       "like": "human",
+       "look": "tan skin and small tusks at the corners of the mouth"
+      },
+      "gender": "man",
+      "age": "young",
+      "class": {
+       "value": "a cleric",
+       "familiar": "rare",
+       "gear": "a tall shield painted with a saint",
+       "wear": "a crimson tabard over chainmail with a holy sun on the chest"
+      },
+      "gear": "a tall shield painted with a saint",
+      "familiar": "none",
+      "colour": "crimson",
+      "mood": "brightly optimistic",
+      "quirk": "brushes invisible dust off their clothes",
+      "skills": [
+       "sketching faces quickly",
+       "telling tall tales"
+      ],
+      "voice": "a fast, breathless voice that runs sentences together"
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A cinematic photograph, as from the set of a fantasy film: a full-length view of the whole body, from the top of the head to the feet, of a young half-orc man with tan skin and small tusks at the corners of the mouth, athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose blue-black curls on top over a tight fade, a blue-black beard knotted with tiny bones and feathers and laugh lines carved deep around the eyes: a cleric in a crimson tabard over chainmail with a holy sun on the chest, their clothes marked by Japanese sashiko stitching in white thread over crimson, with a steady, amused half-smile. They stand straight with the arms relaxed, facing the camera, with a tall shield painted with a saint, and floor and space around them are in frame. Behind them is a market street of a walled city, banners overhead, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and makeup.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "$people ← __characters/fantasy/people__",
+       "half-orc",
+       [
+        "__characters/fantasy/people__=half-orc"
+       ]
+      ],
+      [
+       "{greyish olive|sallow green|tan}",
+       "tan",
+       [
+        "{greyish olive|sallow green|tan}=tan"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "man",
+       [
+        "{woman|man|person}=man"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|venerable|timeworn}",
+       "young",
+       [
+        "{young|seasoned|grizzled|venerable|timeworn}=young"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a sprinter's strong legs",
+       [
+        "__characters/creator/build__=athletic, with a sprinter's strong legs"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "blue-black",
+       [
+        "__characters/creator/haircolour__=blue-black"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "loose $haircolour curls on top over a tight fade",
+       [
+        "__characters/creator/hair__=loose $haircolour curls on top over a tight fade"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "__characters/creator/beard__",
+       [
+        "{__characters/creator/beard__|none}=__characters/creator/beard__"
+       ]
+      ],
+      [
+       "$beard ← __characters/creator/beard__",
+       "a $haircolour beard knotted with tiny bones and feathers",
+       [
+        "__characters/creator/beard__=a $haircolour beard knotted with tiny bones and feathers"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "$class ← __characters/fantasy/class__",
+       "a cleric",
+       [
+        "__characters/fantasy/class__=a cleric"
+       ]
+      ],
+      [
+       "{a flanged mace and a holy symbol|a censer trailing incense smoke|a tall shield painted with a saint}",
+       "a tall shield painted with a saint",
+       [
+        "{a flanged mace and a holy symbol|a censer trailing incense smoke|a tall shield painted with a saint}=a tall shield painted with a saint"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=fantasy|all]__",
+       "Japanese sashiko stitching in white thread over $colour",
+       [
+        "__characters/creator/motif__=Japanese sashiko stitching in white thread over $colour"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a steady, amused half-smile",
+       [
+        "__characters/creator/presence__=a steady, amused half-smile"
+       ]
+      ],
+      [
+       "{studio|world}",
+       "world",
+       [
+        "{studio|world}=world"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "full-length",
+       [
+        "{portrait|three-quarter|full-length|profile}=full-length"
+       ]
+      ],
+      [
+       "__characters/fantasy/realm__",
+       "a market street of a walled city, banners overhead",
+       [
+        "__characters/fantasy/realm__=a market street of a walled city, banners overhead"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "brightly optimistic",
+       [
+        "__characters/creator/mood__=brightly optimistic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "brushes invisible dust off their clothes",
+       [
+        "__characters/creator/quirk__=brushes invisible dust off their clothes"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "sketching faces quickly, telling tall tales",
+       [
+        "__characters/creator/skill__=sketching faces quickly",
+        "__characters/creator/skill__=telling tall tales"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a fast, breathless voice that runs sentences together",
+       [
+        "__characters/creator/voice__=a fast, breathless voice that runs sentences together"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a young half-orc man with tan skin and small tusks at the corners of the mouth, athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose blue-black curls on top over a tight fade, a blue-black beard knotted with tiny bones and feathers and laugh lines carved deep around the eyes: a cleric in a crimson tabard over chainmail with a holy sun on the chest, their clothes marked by Japanese sashiko stitching in white thread over crimson, with a tall shield painted with a saint",
+      "people": {
+       "value": "half-orc",
+       "beard": "yes",
+       "gender": "yes",
+       "like": "human",
+       "look": "tan skin and small tusks at the corners of the mouth"
+      },
+      "gender": "man",
+      "age": "young",
+      "class": {
+       "value": "a cleric",
+       "familiar": "rare",
+       "gear": "a tall shield painted with a saint",
+       "wear": "a crimson tabard over chainmail with a holy sun on the chest"
+      },
+      "gear": "a tall shield painted with a saint",
+      "familiar": "none",
+      "colour": "crimson",
+      "mood": "brightly optimistic",
+      "quirk": "brushes invisible dust off their clothes",
+      "skills": [
+       "sketching faces quickly",
+       "telling tall tales"
+      ],
+      "voice": "a fast, breathless voice that runs sentences together"
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A cinematic photograph, as from the set of a fantasy film: a strict side profile of the head and shoulders of a young half-orc man with tan skin and small tusks at the corners of the mouth, athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose blue-black curls on top over a tight fade, a blue-black beard knotted with tiny bones and feathers and laugh lines carved deep around the eyes: a cleric in a crimson tabard over chainmail with a holy sun on the chest, their clothes marked by Japanese sashiko stitching in white thread over crimson, with a steady, amused half-smile. The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible. Behind them is a market street of a walled city, banners overhead, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and makeup.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "$people ← __characters/fantasy/people__",
+       "half-orc",
+       [
+        "__characters/fantasy/people__=half-orc"
+       ]
+      ],
+      [
+       "{greyish olive|sallow green|tan}",
+       "tan",
+       [
+        "{greyish olive|sallow green|tan}=tan"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "man",
+       [
+        "{woman|man|person}=man"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|venerable|timeworn}",
+       "young",
+       [
+        "{young|seasoned|grizzled|venerable|timeworn}=young"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "athletic, with a sprinter's strong legs",
+       [
+        "__characters/creator/build__=athletic, with a sprinter's strong legs"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "blue-black",
+       [
+        "__characters/creator/haircolour__=blue-black"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "loose $haircolour curls on top over a tight fade",
+       [
+        "__characters/creator/hair__=loose $haircolour curls on top over a tight fade"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "__characters/creator/beard__",
+       [
+        "{__characters/creator/beard__|none}=__characters/creator/beard__"
+       ]
+      ],
+      [
+       "$beard ← __characters/creator/beard__",
+       "a $haircolour beard knotted with tiny bones and feathers",
+       [
+        "__characters/creator/beard__=a $haircolour beard knotted with tiny bones and feathers"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "$class ← __characters/fantasy/class__",
+       "a cleric",
+       [
+        "__characters/fantasy/class__=a cleric"
+       ]
+      ],
+      [
+       "{a flanged mace and a holy symbol|a censer trailing incense smoke|a tall shield painted with a saint}",
+       "a tall shield painted with a saint",
+       [
+        "{a flanged mace and a holy symbol|a censer trailing incense smoke|a tall shield painted with a saint}=a tall shield painted with a saint"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=fantasy|all]__",
+       "Japanese sashiko stitching in white thread over $colour",
+       [
+        "__characters/creator/motif__=Japanese sashiko stitching in white thread over $colour"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a steady, amused half-smile",
+       [
+        "__characters/creator/presence__=a steady, amused half-smile"
+       ]
+      ],
+      [
+       "{studio|world}",
+       "world",
+       [
+        "{studio|world}=world"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "profile",
+       [
+        "{portrait|three-quarter|full-length|profile}=profile"
+       ]
+      ],
+      [
+       "__characters/fantasy/realm__",
+       "a market street of a walled city, banners overhead",
+       [
+        "__characters/fantasy/realm__=a market street of a walled city, banners overhead"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "brightly optimistic",
+       [
+        "__characters/creator/mood__=brightly optimistic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "brushes invisible dust off their clothes",
+       [
+        "__characters/creator/quirk__=brushes invisible dust off their clothes"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "sketching faces quickly, telling tall tales",
+       [
+        "__characters/creator/skill__=sketching faces quickly",
+        "__characters/creator/skill__=telling tall tales"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a fast, breathless voice that runs sentences together",
+       [
+        "__characters/creator/voice__=a fast, breathless voice that runs sentences together"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a young half-orc man with tan skin and small tusks at the corners of the mouth, athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, loose blue-black curls on top over a tight fade, a blue-black beard knotted with tiny bones and feathers and laugh lines carved deep around the eyes: a cleric in a crimson tabard over chainmail with a holy sun on the chest, their clothes marked by Japanese sashiko stitching in white thread over crimson, with a tall shield painted with a saint",
+      "people": {
+       "value": "half-orc",
+       "beard": "yes",
+       "gender": "yes",
+       "like": "human",
+       "look": "tan skin and small tusks at the corners of the mouth"
+      },
+      "gender": "man",
+      "age": "young",
+      "class": {
+       "value": "a cleric",
+       "familiar": "rare",
+       "gear": "a tall shield painted with a saint",
+       "wear": "a crimson tabard over chainmail with a holy sun on the chest"
+      },
+      "gear": "a tall shield painted with a saint",
+      "familiar": "none",
+      "colour": "crimson",
+      "mood": "brightly optimistic",
+      "quirk": "brushes invisible dust off their clothes",
+      "skills": [
+       "sketching faces quickly",
+       "telling tall tales"
+      ],
+      "voice": "a fast, breathless voice that runs sentences together"
+     }
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A 3D character render, in the style of a modern animated feature film: a head-and-shoulders portrait of a seasoned wood elf woman with olive skin with faint leaf-like freckles and long pointed ears, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: an oracle in flowing mustard-yellow robes and a blindfold embroidered with an eye, their clothes marked by Moroccan zellige stars printed on the lining, with a brooding, lowered brow. They face the camera. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Stylised proportions, soft subsurface skin.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "$people ← __characters/fantasy/people__",
+       "wood elf",
+       [
+        "__characters/fantasy/people__=wood elf"
+       ]
+      ],
+      [
+       "{sun-browned|olive|copper}",
+       "olive",
+       [
+        "{sun-browned|olive|copper}=olive"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "woman",
+       [
+        "{woman|man|person}=woman"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|venerable|timeworn}",
+       "seasoned",
+       [
+        "{young|seasoned|grizzled|venerable|timeworn}=seasoned"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "short and broad, with a wrestler's build",
+       [
+        "__characters/creator/build__=short and broad, with a wrestler's build"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "$class ← __characters/fantasy/class__",
+       "an oracle",
+       [
+        "__characters/fantasy/class__=an oracle"
+       ]
+      ],
+      [
+       "{a bowl of still water|a staff hung with tiny bells|a deck of painted fate cards}",
+       "a staff hung with tiny bells",
+       [
+        "{a bowl of still water|a staff hung with tiny bells|a deck of painted fate cards}=a staff hung with tiny bells"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=fantasy|all]__",
+       "Moroccan zellige stars printed on the lining",
+       [
+        "__characters/creator/motif__=Moroccan zellige stars printed on the lining"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a brooding, lowered brow",
+       [
+        "__characters/creator/presence__=a brooding, lowered brow"
+       ]
+      ],
+      [
+       "{studio|world}",
+       "studio",
+       [
+        "{studio|world}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "animated",
+       [
+        "{photo|animated|anime|painted}=animated"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "portrait",
+       [
+        "{portrait|three-quarter|full-length|profile}=portrait"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "mischievously secretive",
+       [
+        "__characters/creator/mood__=mischievously secretive"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "points with the whole hand, never a finger",
+       [
+        "__characters/creator/quirk__=points with the whole hand, never a finger"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "fencing with a rapier, tying sailor's knots",
+       [
+        "__characters/creator/skill__=fencing with a rapier",
+        "__characters/creator/skill__=tying sailor's knots"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a heavy, tired voice that trails off mid-sentence",
+       [
+        "__characters/creator/voice__=a heavy, tired voice that trails off mid-sentence"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a seasoned wood elf woman with olive skin with faint leaf-like freckles and long pointed ears, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: an oracle in flowing mustard-yellow robes and a blindfold embroidered with an eye, their clothes marked by Moroccan zellige stars printed on the lining, with a staff hung with tiny bells",
+      "people": {
+       "value": "wood elf",
+       "beard": "no",
+       "gender": "yes",
+       "like": "human",
+       "look": "olive skin with faint leaf-like freckles and long pointed ears"
+      },
+      "gender": "woman",
+      "age": "seasoned",
+      "class": {
+       "value": "an oracle",
+       "familiar": "often",
+       "gear": "a staff hung with tiny bells",
+       "wear": "flowing mustard-yellow robes and a blindfold embroidered with an eye"
+      },
+      "gear": "a staff hung with tiny bells",
+      "familiar": "none",
+      "colour": "mustard-yellow",
+      "mood": "mischievously secretive",
+      "quirk": "points with the whole hand, never a finger",
+      "skills": [
+       "fencing with a rapier",
+       "tying sailor's knots"
+      ],
+      "voice": "a heavy, tired voice that trails off mid-sentence"
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A 3D character render, in the style of a modern animated feature film: a head-and-shoulders view of a seasoned wood elf woman with olive skin with faint leaf-like freckles and long pointed ears, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: an oracle in flowing mustard-yellow robes and a blindfold embroidered with an eye, their clothes marked by Moroccan zellige stars printed on the lining, with a brooding, lowered brow. They are turned three-quarters to the left. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Stylised proportions, soft subsurface skin.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "$people ← __characters/fantasy/people__",
+       "wood elf",
+       [
+        "__characters/fantasy/people__=wood elf"
+       ]
+      ],
+      [
+       "{sun-browned|olive|copper}",
+       "olive",
+       [
+        "{sun-browned|olive|copper}=olive"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "woman",
+       [
+        "{woman|man|person}=woman"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|venerable|timeworn}",
+       "seasoned",
+       [
+        "{young|seasoned|grizzled|venerable|timeworn}=seasoned"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "short and broad, with a wrestler's build",
+       [
+        "__characters/creator/build__=short and broad, with a wrestler's build"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "$class ← __characters/fantasy/class__",
+       "an oracle",
+       [
+        "__characters/fantasy/class__=an oracle"
+       ]
+      ],
+      [
+       "{a bowl of still water|a staff hung with tiny bells|a deck of painted fate cards}",
+       "a staff hung with tiny bells",
+       [
+        "{a bowl of still water|a staff hung with tiny bells|a deck of painted fate cards}=a staff hung with tiny bells"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=fantasy|all]__",
+       "Moroccan zellige stars printed on the lining",
+       [
+        "__characters/creator/motif__=Moroccan zellige stars printed on the lining"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a brooding, lowered brow",
+       [
+        "__characters/creator/presence__=a brooding, lowered brow"
+       ]
+      ],
+      [
+       "{studio|world}",
+       "studio",
+       [
+        "{studio|world}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "animated",
+       [
+        "{photo|animated|anime|painted}=animated"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "three-quarter",
+       [
+        "{portrait|three-quarter|full-length|profile}=three-quarter"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "mischievously secretive",
+       [
+        "__characters/creator/mood__=mischievously secretive"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "points with the whole hand, never a finger",
+       [
+        "__characters/creator/quirk__=points with the whole hand, never a finger"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "fencing with a rapier, tying sailor's knots",
+       [
+        "__characters/creator/skill__=fencing with a rapier",
+        "__characters/creator/skill__=tying sailor's knots"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a heavy, tired voice that trails off mid-sentence",
+       [
+        "__characters/creator/voice__=a heavy, tired voice that trails off mid-sentence"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a seasoned wood elf woman with olive skin with faint leaf-like freckles and long pointed ears, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: an oracle in flowing mustard-yellow robes and a blindfold embroidered with an eye, their clothes marked by Moroccan zellige stars printed on the lining, with a staff hung with tiny bells",
+      "people": {
+       "value": "wood elf",
+       "beard": "no",
+       "gender": "yes",
+       "like": "human",
+       "look": "olive skin with faint leaf-like freckles and long pointed ears"
+      },
+      "gender": "woman",
+      "age": "seasoned",
+      "class": {
+       "value": "an oracle",
+       "familiar": "often",
+       "gear": "a staff hung with tiny bells",
+       "wear": "flowing mustard-yellow robes and a blindfold embroidered with an eye"
+      },
+      "gear": "a staff hung with tiny bells",
+      "familiar": "none",
+      "colour": "mustard-yellow",
+      "mood": "mischievously secretive",
+      "quirk": "points with the whole hand, never a finger",
+      "skills": [
+       "fencing with a rapier",
+       "tying sailor's knots"
+      ],
+      "voice": "a heavy, tired voice that trails off mid-sentence"
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A 3D character render, in the style of a modern animated feature film: a full-length view of the whole body, from the top of the head to the feet, of a seasoned wood elf woman with olive skin with faint leaf-like freckles and long pointed ears, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: an oracle in flowing mustard-yellow robes and a blindfold embroidered with an eye, their clothes marked by Moroccan zellige stars printed on the lining, with a brooding, lowered brow. They stand straight with the arms relaxed, facing the camera, with a staff hung with tiny bells, and floor and space around them are in frame. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Stylised proportions, soft subsurface skin.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "$people ← __characters/fantasy/people__",
+       "wood elf",
+       [
+        "__characters/fantasy/people__=wood elf"
+       ]
+      ],
+      [
+       "{sun-browned|olive|copper}",
+       "olive",
+       [
+        "{sun-browned|olive|copper}=olive"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "woman",
+       [
+        "{woman|man|person}=woman"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|venerable|timeworn}",
+       "seasoned",
+       [
+        "{young|seasoned|grizzled|venerable|timeworn}=seasoned"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "short and broad, with a wrestler's build",
+       [
+        "__characters/creator/build__=short and broad, with a wrestler's build"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "$class ← __characters/fantasy/class__",
+       "an oracle",
+       [
+        "__characters/fantasy/class__=an oracle"
+       ]
+      ],
+      [
+       "{a bowl of still water|a staff hung with tiny bells|a deck of painted fate cards}",
+       "a staff hung with tiny bells",
+       [
+        "{a bowl of still water|a staff hung with tiny bells|a deck of painted fate cards}=a staff hung with tiny bells"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=fantasy|all]__",
+       "Moroccan zellige stars printed on the lining",
+       [
+        "__characters/creator/motif__=Moroccan zellige stars printed on the lining"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a brooding, lowered brow",
+       [
+        "__characters/creator/presence__=a brooding, lowered brow"
+       ]
+      ],
+      [
+       "{studio|world}",
+       "studio",
+       [
+        "{studio|world}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "animated",
+       [
+        "{photo|animated|anime|painted}=animated"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "full-length",
+       [
+        "{portrait|three-quarter|full-length|profile}=full-length"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "mischievously secretive",
+       [
+        "__characters/creator/mood__=mischievously secretive"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "points with the whole hand, never a finger",
+       [
+        "__characters/creator/quirk__=points with the whole hand, never a finger"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "fencing with a rapier, tying sailor's knots",
+       [
+        "__characters/creator/skill__=fencing with a rapier",
+        "__characters/creator/skill__=tying sailor's knots"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a heavy, tired voice that trails off mid-sentence",
+       [
+        "__characters/creator/voice__=a heavy, tired voice that trails off mid-sentence"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a seasoned wood elf woman with olive skin with faint leaf-like freckles and long pointed ears, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: an oracle in flowing mustard-yellow robes and a blindfold embroidered with an eye, their clothes marked by Moroccan zellige stars printed on the lining, with a staff hung with tiny bells",
+      "people": {
+       "value": "wood elf",
+       "beard": "no",
+       "gender": "yes",
+       "like": "human",
+       "look": "olive skin with faint leaf-like freckles and long pointed ears"
+      },
+      "gender": "woman",
+      "age": "seasoned",
+      "class": {
+       "value": "an oracle",
+       "familiar": "often",
+       "gear": "a staff hung with tiny bells",
+       "wear": "flowing mustard-yellow robes and a blindfold embroidered with an eye"
+      },
+      "gear": "a staff hung with tiny bells",
+      "familiar": "none",
+      "colour": "mustard-yellow",
+      "mood": "mischievously secretive",
+      "quirk": "points with the whole hand, never a finger",
+      "skills": [
+       "fencing with a rapier",
+       "tying sailor's knots"
+      ],
+      "voice": "a heavy, tired voice that trails off mid-sentence"
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A 3D character render, in the style of a modern animated feature film: a strict side profile of the head and shoulders of a seasoned wood elf woman with olive skin with faint leaf-like freckles and long pointed ears, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: an oracle in flowing mustard-yellow robes and a blindfold embroidered with an eye, their clothes marked by Moroccan zellige stars printed on the lining, with a brooding, lowered brow. The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Stylised proportions, soft subsurface skin.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "$people ← __characters/fantasy/people__",
+       "wood elf",
+       [
+        "__characters/fantasy/people__=wood elf"
+       ]
+      ],
+      [
+       "{sun-browned|olive|copper}",
+       "olive",
+       [
+        "{sun-browned|olive|copper}=olive"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "woman",
+       [
+        "{woman|man|person}=woman"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|venerable|timeworn}",
+       "seasoned",
+       [
+        "{young|seasoned|grizzled|venerable|timeworn}=seasoned"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "short and broad, with a wrestler's build",
+       [
+        "__characters/creator/build__=short and broad, with a wrestler's build"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "$class ← __characters/fantasy/class__",
+       "an oracle",
+       [
+        "__characters/fantasy/class__=an oracle"
+       ]
+      ],
+      [
+       "{a bowl of still water|a staff hung with tiny bells|a deck of painted fate cards}",
+       "a staff hung with tiny bells",
+       [
+        "{a bowl of still water|a staff hung with tiny bells|a deck of painted fate cards}=a staff hung with tiny bells"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=fantasy|all]__",
+       "Moroccan zellige stars printed on the lining",
+       [
+        "__characters/creator/motif__=Moroccan zellige stars printed on the lining"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a brooding, lowered brow",
+       [
+        "__characters/creator/presence__=a brooding, lowered brow"
+       ]
+      ],
+      [
+       "{studio|world}",
+       "studio",
+       [
+        "{studio|world}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "animated",
+       [
+        "{photo|animated|anime|painted}=animated"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "profile",
+       [
+        "{portrait|three-quarter|full-length|profile}=profile"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "mischievously secretive",
+       [
+        "__characters/creator/mood__=mischievously secretive"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "points with the whole hand, never a finger",
+       [
+        "__characters/creator/quirk__=points with the whole hand, never a finger"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "fencing with a rapier, tying sailor's knots",
+       [
+        "__characters/creator/skill__=fencing with a rapier",
+        "__characters/creator/skill__=tying sailor's knots"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a heavy, tired voice that trails off mid-sentence",
+       [
+        "__characters/creator/voice__=a heavy, tired voice that trails off mid-sentence"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a seasoned wood elf woman with olive skin with faint leaf-like freckles and long pointed ears, short and broad, with a wrestler's build, a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe: an oracle in flowing mustard-yellow robes and a blindfold embroidered with an eye, their clothes marked by Moroccan zellige stars printed on the lining, with a staff hung with tiny bells",
+      "people": {
+       "value": "wood elf",
+       "beard": "no",
+       "gender": "yes",
+       "like": "human",
+       "look": "olive skin with faint leaf-like freckles and long pointed ears"
+      },
+      "gender": "woman",
+      "age": "seasoned",
+      "class": {
+       "value": "an oracle",
+       "familiar": "often",
+       "gear": "a staff hung with tiny bells",
+       "wear": "flowing mustard-yellow robes and a blindfold embroidered with an eye"
+      },
+      "gear": "a staff hung with tiny bells",
+      "familiar": "none",
+      "colour": "mustard-yellow",
+      "mood": "mischievously secretive",
+      "quirk": "points with the whole hand, never a finger",
+      "skills": [
+       "fencing with a rapier",
+       "tying sailor's knots"
+      ],
+      "voice": "a heavy, tired voice that trails off mid-sentence"
+     }
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A cinematic photograph, as from the set of a fantasy film: a head-and-shoulders portrait of a seasoned dragonkin woman with a draconic head with swept-back horns and camel scales, near-black eyes: a bard in a slashed camel doublet with puffed sleeves and a feathered cap, their clothes marked by Art Nouveau lilies in camel around the hem, with a sheepish, apologetic look. They face the camera. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and makeup.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "$people ← __characters/fantasy/people__",
+       "dragonkin",
+       [
+        "__characters/fantasy/people__=dragonkin"
+       ]
+      ],
+      [
+       "{bronze|$colour|ruby-red|black}",
+       "$colour",
+       [
+        "{bronze|$colour|ruby-red|black}=$colour"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "woman",
+       [
+        "{woman|man|person}=woman"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|venerable|timeworn}",
+       "seasoned",
+       [
+        "{young|seasoned|grizzled|venerable|timeworn}=seasoned"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "trim and neatly proportioned",
+       [
+        "__characters/creator/build__=trim and neatly proportioned"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "chestnut",
+       [
+        "__characters/creator/haircolour__=chestnut"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "a single $haircolour afro puff at the crown",
+       [
+        "__characters/creator/hair__=a single $haircolour afro puff at the crown"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "$class ← __characters/fantasy/class__",
+       "a bard",
+       [
+        "__characters/fantasy/class__=a bard"
+       ]
+      ],
+      [
+       "{a lute painted with flowers|a silver flute|a hand drum and a satchel of songbooks}",
+       "a silver flute",
+       [
+        "{a lute painted with flowers|a silver flute|a hand drum and a satchel of songbooks}=a silver flute"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=fantasy|all]__",
+       "Art Nouveau lilies in $colour around the hem",
+       [
+        "__characters/creator/motif__=Art Nouveau lilies in $colour around the hem"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "__characters/creator/companion[genre=fantasy]__",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=__characters/creator/companion[genre=fantasy]__"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a sheepish, apologetic look",
+       [
+        "__characters/creator/presence__=a sheepish, apologetic look"
+       ]
+      ],
+      [
+       "{studio|world}",
+       "studio",
+       [
+        "{studio|world}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "portrait",
+       [
+        "{portrait|three-quarter|full-length|profile}=portrait"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "theatrically dramatic",
+       [
+        "__characters/creator/mood__=theatrically dramatic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "stands a little too close when talking",
+       [
+        "__characters/creator/quirk__=stands a little too close when talking"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "brewing bitter remedies, playing a battered fiddle",
+       [
+        "__characters/creator/skill__=brewing bitter remedies",
+        "__characters/creator/skill__=playing a battered fiddle"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a scratchy, high voice like an old record",
+       [
+        "__characters/creator/voice__=a scratchy, high voice like an old record"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a seasoned dragonkin woman with a draconic head with swept-back horns and camel scales, near-black eyes: a bard in a slashed camel doublet with puffed sleeves and a feathered cap, their clothes marked by Art Nouveau lilies in camel around the hem, with a silver flute",
+      "people": {
+       "value": "dragonkin",
+       "beard": "no",
+       "gender": "yes",
+       "like": "beast",
+       "look": "a draconic head with swept-back horns and camel scales"
+      },
+      "gender": "woman",
+      "age": "seasoned",
+      "class": {
+       "value": "a bard",
+       "familiar": "rare",
+       "gear": "a silver flute",
+       "wear": "a slashed camel doublet with puffed sleeves and a feathered cap"
+      },
+      "gear": "a silver flute",
+      "familiar": "none",
+      "colour": "camel",
+      "mood": "theatrically dramatic",
+      "quirk": "stands a little too close when talking",
+      "skills": [
+       "brewing bitter remedies",
+       "playing a battered fiddle"
+      ],
+      "voice": "a scratchy, high voice like an old record"
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A cinematic photograph, as from the set of a fantasy film: a head-and-shoulders view of a seasoned dragonkin woman with a draconic head with swept-back horns and camel scales, near-black eyes: a bard in a slashed camel doublet with puffed sleeves and a feathered cap, their clothes marked by Art Nouveau lilies in camel around the hem, with a sheepish, apologetic look. They are turned three-quarters to the left. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and makeup.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "$people ← __characters/fantasy/people__",
+       "dragonkin",
+       [
+        "__characters/fantasy/people__=dragonkin"
+       ]
+      ],
+      [
+       "{bronze|$colour|ruby-red|black}",
+       "$colour",
+       [
+        "{bronze|$colour|ruby-red|black}=$colour"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "woman",
+       [
+        "{woman|man|person}=woman"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|venerable|timeworn}",
+       "seasoned",
+       [
+        "{young|seasoned|grizzled|venerable|timeworn}=seasoned"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "trim and neatly proportioned",
+       [
+        "__characters/creator/build__=trim and neatly proportioned"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "chestnut",
+       [
+        "__characters/creator/haircolour__=chestnut"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "a single $haircolour afro puff at the crown",
+       [
+        "__characters/creator/hair__=a single $haircolour afro puff at the crown"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "$class ← __characters/fantasy/class__",
+       "a bard",
+       [
+        "__characters/fantasy/class__=a bard"
+       ]
+      ],
+      [
+       "{a lute painted with flowers|a silver flute|a hand drum and a satchel of songbooks}",
+       "a silver flute",
+       [
+        "{a lute painted with flowers|a silver flute|a hand drum and a satchel of songbooks}=a silver flute"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=fantasy|all]__",
+       "Art Nouveau lilies in $colour around the hem",
+       [
+        "__characters/creator/motif__=Art Nouveau lilies in $colour around the hem"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "__characters/creator/companion[genre=fantasy]__",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=__characters/creator/companion[genre=fantasy]__"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a sheepish, apologetic look",
+       [
+        "__characters/creator/presence__=a sheepish, apologetic look"
+       ]
+      ],
+      [
+       "{studio|world}",
+       "studio",
+       [
+        "{studio|world}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "three-quarter",
+       [
+        "{portrait|three-quarter|full-length|profile}=three-quarter"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "theatrically dramatic",
+       [
+        "__characters/creator/mood__=theatrically dramatic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "stands a little too close when talking",
+       [
+        "__characters/creator/quirk__=stands a little too close when talking"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "brewing bitter remedies, playing a battered fiddle",
+       [
+        "__characters/creator/skill__=brewing bitter remedies",
+        "__characters/creator/skill__=playing a battered fiddle"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a scratchy, high voice like an old record",
+       [
+        "__characters/creator/voice__=a scratchy, high voice like an old record"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a seasoned dragonkin woman with a draconic head with swept-back horns and camel scales, near-black eyes: a bard in a slashed camel doublet with puffed sleeves and a feathered cap, their clothes marked by Art Nouveau lilies in camel around the hem, with a silver flute",
+      "people": {
+       "value": "dragonkin",
+       "beard": "no",
+       "gender": "yes",
+       "like": "beast",
+       "look": "a draconic head with swept-back horns and camel scales"
+      },
+      "gender": "woman",
+      "age": "seasoned",
+      "class": {
+       "value": "a bard",
+       "familiar": "rare",
+       "gear": "a silver flute",
+       "wear": "a slashed camel doublet with puffed sleeves and a feathered cap"
+      },
+      "gear": "a silver flute",
+      "familiar": "none",
+      "colour": "camel",
+      "mood": "theatrically dramatic",
+      "quirk": "stands a little too close when talking",
+      "skills": [
+       "brewing bitter remedies",
+       "playing a battered fiddle"
+      ],
+      "voice": "a scratchy, high voice like an old record"
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A cinematic photograph, as from the set of a fantasy film: a full-length view of the whole body, from the top of the head to the feet, of a seasoned dragonkin woman with a draconic head with swept-back horns and camel scales, near-black eyes: a bard in a slashed camel doublet with puffed sleeves and a feathered cap, their clothes marked by Art Nouveau lilies in camel around the hem, with a sheepish, apologetic look. They stand straight with the arms relaxed, facing the camera, with a silver flute, and floor and space around them are in frame. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and makeup.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "$people ← __characters/fantasy/people__",
+       "dragonkin",
+       [
+        "__characters/fantasy/people__=dragonkin"
+       ]
+      ],
+      [
+       "{bronze|$colour|ruby-red|black}",
+       "$colour",
+       [
+        "{bronze|$colour|ruby-red|black}=$colour"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "woman",
+       [
+        "{woman|man|person}=woman"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|venerable|timeworn}",
+       "seasoned",
+       [
+        "{young|seasoned|grizzled|venerable|timeworn}=seasoned"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "trim and neatly proportioned",
+       [
+        "__characters/creator/build__=trim and neatly proportioned"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "chestnut",
+       [
+        "__characters/creator/haircolour__=chestnut"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "a single $haircolour afro puff at the crown",
+       [
+        "__characters/creator/hair__=a single $haircolour afro puff at the crown"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "$class ← __characters/fantasy/class__",
+       "a bard",
+       [
+        "__characters/fantasy/class__=a bard"
+       ]
+      ],
+      [
+       "{a lute painted with flowers|a silver flute|a hand drum and a satchel of songbooks}",
+       "a silver flute",
+       [
+        "{a lute painted with flowers|a silver flute|a hand drum and a satchel of songbooks}=a silver flute"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=fantasy|all]__",
+       "Art Nouveau lilies in $colour around the hem",
+       [
+        "__characters/creator/motif__=Art Nouveau lilies in $colour around the hem"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "__characters/creator/companion[genre=fantasy]__",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=__characters/creator/companion[genre=fantasy]__"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a sheepish, apologetic look",
+       [
+        "__characters/creator/presence__=a sheepish, apologetic look"
+       ]
+      ],
+      [
+       "{studio|world}",
+       "studio",
+       [
+        "{studio|world}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "full-length",
+       [
+        "{portrait|three-quarter|full-length|profile}=full-length"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "theatrically dramatic",
+       [
+        "__characters/creator/mood__=theatrically dramatic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "stands a little too close when talking",
+       [
+        "__characters/creator/quirk__=stands a little too close when talking"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "brewing bitter remedies, playing a battered fiddle",
+       [
+        "__characters/creator/skill__=brewing bitter remedies",
+        "__characters/creator/skill__=playing a battered fiddle"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a scratchy, high voice like an old record",
+       [
+        "__characters/creator/voice__=a scratchy, high voice like an old record"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a seasoned dragonkin woman with a draconic head with swept-back horns and camel scales, near-black eyes: a bard in a slashed camel doublet with puffed sleeves and a feathered cap, their clothes marked by Art Nouveau lilies in camel around the hem, with a silver flute",
+      "people": {
+       "value": "dragonkin",
+       "beard": "no",
+       "gender": "yes",
+       "like": "beast",
+       "look": "a draconic head with swept-back horns and camel scales"
+      },
+      "gender": "woman",
+      "age": "seasoned",
+      "class": {
+       "value": "a bard",
+       "familiar": "rare",
+       "gear": "a silver flute",
+       "wear": "a slashed camel doublet with puffed sleeves and a feathered cap"
+      },
+      "gear": "a silver flute",
+      "familiar": "none",
+      "colour": "camel",
+      "mood": "theatrically dramatic",
+      "quirk": "stands a little too close when talking",
+      "skills": [
+       "brewing bitter remedies",
+       "playing a battered fiddle"
+      ],
+      "voice": "a scratchy, high voice like an old record"
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A cinematic photograph, as from the set of a fantasy film: a strict side profile of the head and shoulders of a seasoned dragonkin woman with a draconic head with swept-back horns and camel scales, near-black eyes: a bard in a slashed camel doublet with puffed sleeves and a feathered cap, their clothes marked by Art Nouveau lilies in camel around the hem, with a sheepish, apologetic look. The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and makeup.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "$people ← __characters/fantasy/people__",
+       "dragonkin",
+       [
+        "__characters/fantasy/people__=dragonkin"
+       ]
+      ],
+      [
+       "{bronze|$colour|ruby-red|black}",
+       "$colour",
+       [
+        "{bronze|$colour|ruby-red|black}=$colour"
+       ]
+      ],
+      [
+       "{woman|man|person}",
+       "woman",
+       [
+        "{woman|man|person}=woman"
+       ]
+      ],
+      [
+       "{young|seasoned|grizzled|venerable|timeworn}",
+       "seasoned",
+       [
+        "{young|seasoned|grizzled|venerable|timeworn}=seasoned"
+       ]
+      ],
+      [
+       "$build ← __characters/creator/build__",
+       "trim and neatly proportioned",
+       [
+        "__characters/creator/build__=trim and neatly proportioned"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|silver-white|$colour-dyed|ash-grey}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "chestnut",
+       [
+        "__characters/creator/haircolour__=chestnut"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "a single $haircolour afro puff at the crown",
+       [
+        "__characters/creator/hair__=a single $haircolour afro puff at the crown"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "$class ← __characters/fantasy/class__",
+       "a bard",
+       [
+        "__characters/fantasy/class__=a bard"
+       ]
+      ],
+      [
+       "{a lute painted with flowers|a silver flute|a hand drum and a satchel of songbooks}",
+       "a silver flute",
+       [
+        "{a lute painted with flowers|a silver flute|a hand drum and a satchel of songbooks}=a silver flute"
+       ]
+      ],
+      [
+       "$motif ← __characters/creator/motif[genre=fantasy|all]__",
+       "Art Nouveau lilies in $colour around the hem",
+       [
+        "__characters/creator/motif__=Art Nouveau lilies in $colour around the hem"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "__characters/creator/companion[genre=fantasy]__",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=__characters/creator/companion[genre=fantasy]__"
+       ]
+      ],
+      [
+       "{__characters/creator/companion[genre=fantasy]__|none}",
+       "none",
+       [
+        "{__characters/creator/companion[genre=fantasy]__|none}=none"
+       ]
+      ],
+      [
+       "$presence ← __characters/creator/presence__",
+       "a sheepish, apologetic look",
+       [
+        "__characters/creator/presence__=a sheepish, apologetic look"
+       ]
+      ],
+      [
+       "{studio|world}",
+       "studio",
+       [
+        "{studio|world}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|three-quarter|full-length|profile}",
+       "profile",
+       [
+        "{portrait|three-quarter|full-length|profile}=profile"
+       ]
+      ],
+      [
+       "EXPORT mood ← __characters/creator/mood__",
+       "theatrically dramatic",
+       [
+        "__characters/creator/mood__=theatrically dramatic"
+       ]
+      ],
+      [
+       "EXPORT quirk ← __characters/creator/quirk__",
+       "stands a little too close when talking",
+       [
+        "__characters/creator/quirk__=stands a little too close when talking"
+       ]
+      ],
+      [
+       "__characters/creator/skill__ ×2",
+       "brewing bitter remedies, playing a battered fiddle",
+       [
+        "__characters/creator/skill__=brewing bitter remedies",
+        "__characters/creator/skill__=playing a battered fiddle"
+       ]
+      ],
+      [
+       "EXPORT voice ← __characters/creator/voice__",
+       "a scratchy, high voice like an old record",
+       [
+        "__characters/creator/voice__=a scratchy, high voice like an old record"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a seasoned dragonkin woman with a draconic head with swept-back horns and camel scales, near-black eyes: a bard in a slashed camel doublet with puffed sleeves and a feathered cap, their clothes marked by Art Nouveau lilies in camel around the hem, with a silver flute",
+      "people": {
+       "value": "dragonkin",
+       "beard": "no",
+       "gender": "yes",
+       "like": "beast",
+       "look": "a draconic head with swept-back horns and camel scales"
+      },
+      "gender": "woman",
+      "age": "seasoned",
+      "class": {
+       "value": "a bard",
+       "familiar": "rare",
+       "gear": "a silver flute",
+       "wear": "a slashed camel doublet with puffed sleeves and a feathered cap"
+      },
+      "gear": "a silver flute",
+      "familiar": "none",
+      "colour": "camel",
+      "mood": "theatrically dramatic",
+      "quirk": "stands a little too close when talking",
+      "skills": [
+       "brewing bitter remedies",
+       "playing a battered fiddle"
+      ],
+      "voice": "a scratchy, high voice like an old record"
+     }
+    }
+   ]
+  }
+ }
+}

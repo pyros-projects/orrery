@@ -1,0 +1,58 @@
+meta: {source: "orrery creature creator: what a creature is like, for a screenplay that casts it: its temperament (`aspect: temper`), what it eats (`aspect: diet`) and the sound it makes (`aspect: call`), read as __characters/creatures/nature[aspect=…]__", builtin: true}
+entries:
+  - {value: "shy, fleeing at the first sound", props: {aspect: temper}}
+  - {value: "fiercely territorial", props: {aspect: temper}}
+  - {value: "curious and playful, like a young dog", props: {aspect: temper}}
+  - {value: "ancient and patient, slow to anger", props: {aspect: temper}}
+  - {value: "cunning, setting traps for its prey", props: {aspect: temper}}
+  - {value: "gentle with children, savage with hunters", props: {aspect: temper}}
+  - {value: "lazy, sleeping in the sun for days", props: {aspect: temper}}
+  - {value: "vain, admiring its reflection", props: {aspect: temper}}
+  - {value: "proud and easily insulted", props: {aspect: temper}}
+  - {value: "lonely, following travellers at a distance", props: {aspect: temper}}
+  - {value: "greedy, hoarding shiny things", props: {aspect: temper}}
+  - {value: "mischievous, stealing boots and hats", props: {aspect: temper}}
+  - {value: "protective of its young above all", props: {aspect: temper}}
+  - {value: "nervous, startled by its own shadow", props: {aspect: temper}}
+  - {value: "a patient ambush hunter", props: {aspect: temper}}
+  - {value: "loyal once it has been fed", props: {aspect: temper}}
+  - {value: "sorrowful, as if it remembers something", props: {aspect: temper}}
+  - {value: "calm, almost serene", props: {aspect: temper}}
+  - {value: "restless, always pacing", props: {aspect: temper}}
+  - {value: "wise, and it seems to understand speech", props: {aspect: temper}}
+  - {value: "berries and fallen fruit", props: {aspect: diet}}
+  - {value: "lightning, drunk from storm clouds", props: {aspect: diet}}
+  - {value: "deep-sea fish and the occasional ship", props: {aspect: diet}}
+  - {value: "metal, gnawed from old armour", props: {aspect: diet}}
+  - {value: "moonlight, nothing else", props: {aspect: diet}}
+  - {value: "nightmares, eaten while people sleep", props: {aspect: diet}}
+  - {value: "travellers who stray off the road", props: {aspect: diet}}
+  - {value: "moss and lichen scraped from rocks", props: {aspect: diet}}
+  - {value: "honey, stolen from wild hives", props: {aspect: diet}}
+  - {value: "embers and hot coals", props: {aspect: diet}}
+  - {value: "insects caught with its tongue", props: {aspect: diet}}
+  - {value: "gold coins, swallowed whole", props: {aspect: diet}}
+  - {value: "songs, heard from far away", props: {aspect: diet}}
+  - {value: "deer and wild boar", props: {aspect: diet}}
+  - {value: "ice, crunched like sugar", props: {aspect: diet}}
+  - {value: "mushrooms that glow in the dark", props: {aspect: diet}}
+  - {value: "a low, rumbling purr you feel in the chest", props: {aspect: call}}
+  - {value: "a shrieking whistle like a kettle", props: {aspect: call}}
+  - {value: "a deep, mournful whale-song", props: {aspect: call}}
+  - {value: "a clicking chatter like rattling beads", props: {aspect: call}}
+  - {value: "a thunderous roar that shakes loose stones", props: {aspect: call}}
+  - {value: "a soft, bell-like chime", props: {aspect: call}}
+  - {value: "a wet, gurgling croak", props: {aspect: call}}
+  - {value: "a hiss like steam from a vent", props: {aspect: call}}
+  - {value: "a laugh that sounds almost human", props: {aspect: call}}
+  - {value: "a crackling buzz like a live wire", props: {aspect: call}}
+  - {value: "a haunting, wavering howl", props: {aspect: call}}
+  - {value: "a trumpeting bellow", props: {aspect: call}}
+  - {value: "a dry rattle of bones", props: {aspect: call}}
+  - {value: "a low drone like a cello string", props: {aspect: call}}
+  - {value: "a chirping trill like a songbird", props: {aspect: call}}
+  - {value: "a grinding of stone on stone", props: {aspect: call}}
+  - {value: "a crashing like waves on rocks", props: {aspect: call}}
+  - {value: "a whisper that seems to say your name", props: {aspect: call}}
+  - {value: "a deep, slow heartbeat you can hear from afar", props: {aspect: call}}
+  - {value: "a creaking like an old ship's timbers", props: {aspect: call}}

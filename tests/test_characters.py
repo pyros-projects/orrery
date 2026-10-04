@@ -36,3 +36,22 @@ def test_the_curators_live_among_the_horror_characters(home):
     names = {expand("__characters/horror#role:curator__", s, libs).text.split(",")[0] for s in range(20)}
     assert names == {"Katamori Shizuka", "Katamori Reiji"}
     assert "curator" not in libs
+
+
+GENRES = ("everyday", "adventure", "fantasy", "cyberpunk", "noir", "gothic", "spacefarer")
+
+
+@pytest.mark.parametrize("name", ["motif", "held", "companion"])
+def test_the_shared_parts_hold_a_batch_of_twenty_in_every_world(name):
+    """#139: a creator rolls each part filtered to its world (`[genre=…|all]`); twenty characters in a row need not
+    repeat one."""
+    entries = BUILTIN[f"characters/creator/{name}"].entries
+    for genre in GENRES:
+        assert len([e for e in entries if e.prop("genre") in (genre, "all")]) >= 20, (name, genre)
+    assert len({e.value for e in entries}) == len(entries)
+
+
+def test_the_beards_are_many_and_take_the_hair_colour():
+    entries = BUILTIN["characters/creator/beard"].entries
+    assert len(entries) >= 60 and len({e.value for e in entries}) == len(entries)
+    assert all("$haircolour" in e.value for e in entries)  # the beard in the hair's colour

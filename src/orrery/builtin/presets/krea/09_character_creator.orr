@@ -22,10 +22,12 @@ $accessory = __characters/creator/accessory[fit=$fit|all]__
 $presence = __characters/creator/presence__
 $backdrop = a seamless mid-grey studio backdrop
 # The grid runs every view: one character from four sides. Set $view to one of them to try characters faster.
+# The shot comes first, before the character, and the view's sentence after it.
 $look = {photo:6|animated:2|anime:2|painted}
 $view = {portrait|three-quarter|full-length|profile}
-$opening = {IF $look is photo: A studio photograph|{IF $look is animated: A 3D character render, in the style of a modern animated feature film,|{IF $look is anime: An anime character design|A gouache character study}}}
-$frame = {IF $view is portrait: A head-and-shoulders portrait, facing the camera|{IF $view is three-quarter: A head-and-shoulders view turned three-quarters to the left|{IF $view is full-length: A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera|A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible}}}
+$opening = {IF $look is photo: A studio photograph|{IF $look is animated: A 3D character render, in the style of a modern animated feature film|{IF $look is anime: An anime character design|A gouache character study}}}
+$shot = {IF $view is portrait: a head-and-shoulders portrait|{IF $view is three-quarter: a head-and-shoulders view|{IF $view is full-length: a full-length view of the whole body, from the top of the head to the shoes,|a strict side profile of the head and shoulders}}}
+$pose = {IF $view is portrait: They face the camera.|{IF $view is three-quarter: They are turned three-quarters to the left.|{IF $view is full-length: They stand straight with the arms relaxed, facing the camera, with floor and space around them in frame.|The face is seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible.}}}
 $finish = {IF $look is photo: Shot on an 85mm lens at eye level, true colours.|{IF $look is animated: Stylised proportions, soft subsurface skin.|{IF $look is anime: Clean line art and flat cel shading.|Visible brush strokes on warm paper.}}}
 $who = a $years-year-old $gender of $origin: $build, $face, $eyes, $hair and $mark, dressed in $outfit{IF $accessorize is yes: , wearing $accessory|}, with $presence
 # What the picture carries beyond its prompt (EXPORT:): a screenplay that casts it reads $hero.who, $hero.mood …
@@ -39,6 +41,6 @@ EXPORT:
   quirk = __characters/creator/quirk__
   skills = {2$$__characters/creator/skill[genre=$genre|all]__}
   voice = __characters/creator/voice__
-$opening of $who. $frame, against $backdrop, in soft, even light. $finish
+$opening: $shot of $who. $pose Behind them is $backdrop, in soft, even light. $finish
 @size 832x1216
 @grid $view
