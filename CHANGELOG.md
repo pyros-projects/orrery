@@ -67,6 +67,8 @@ checks) are left out.
 
 ### Fixed
 
+- Typing in a long reel no longer lags: the editor highlights a scene again only when something it shows
+  changed, and works out once what every scene reads, instead of every scene on every keystroke (#218).
 - The editor's annotations follow a seed or target changed in the node, not only an edit or a run (#187).
 - A new Orrery Prompt starts 1300 px wide, so the footer of a prompt or an H3 scene fits on one line (#181).
 - The gear saves again when `max_tokens` in `orrery.yaml` is not a multiple of 500 (the browser refused the
