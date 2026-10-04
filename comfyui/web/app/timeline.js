@@ -169,18 +169,21 @@ export function wireClips(app, box) {
     e.stopPropagation();  // not a drag of the node
     const ratio = clipRatio(app), start = Number(app.data.take_min) || 54, x0 = e.clientX, y0 = e.clientY;
     let least = start;
-    grip.setPointerCapture(e.pointerId);
-    grip.onpointermove = (m) => {  // along the take's longer move: its shorter side follows the pointer
+    // the window's events, not the grip's: the grip moves away under the pointer as the takes resize and wrap
+    const move = (m) => {  // along the take's longer move: its shorter side follows the pointer
       const dx = (m.clientX - x0) / Math.max(ratio, 1), dy = (m.clientY - y0) / Math.max(1 / ratio, 1);
       least = Math.min(480, Math.max(32, Math.round(start + (Math.abs(dx) > Math.abs(dy) ? dx : dy))));
       box.querySelectorAll(".cm-takes").forEach((strip) => { strip.style.cssText = takeVars(app, least); });
     };
-    grip.onpointerup = async () => {
-      grip.onpointermove = grip.onpointerup = null;
+    const up = async () => {
+      window.removeEventListener("pointermove", move, true);
+      window.removeEventListener("pointerup", up, true);
       if (least === start) return;
       app.data.take_min = least;
       try { Object.assign(app.data, await app.api.saveUi({ take_min: least })); } catch (err) { app.fail(err); }
     };
+    window.addEventListener("pointermove", move, true);
+    window.addEventListener("pointerup", up, true);
   });
   box.addEventListener("pointerover", (e) => {
     const take = e.target.closest(".take");
