@@ -108,6 +108,8 @@ checks) are left out.
 
 ### Fixed
 
+- Rating an output while a run logs its own no longer loses the new one: the gallery's log and the learned weights
+  have one writer at a time, and two writes of one file never share a temp file (#260).
 - Typing in a long reel no longer lags: the editor highlights a scene again only when something it shows
   changed, and works out once what every scene reads, instead of every scene on every keystroke (#218).
 - Save as, the gear and the app's other sheets open at the top of the app, where their buttons are, not at the

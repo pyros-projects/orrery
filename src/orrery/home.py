@@ -4,8 +4,11 @@ Resolution order: explicit path, then `$ORRERY_HOME`, then `~/.orrery`.
 The CLI and the ComfyUI nodes share it.
 """
 
+import functools
 import json
 import os
+import tempfile
+import threading
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -17,11 +20,32 @@ BUILTIN_DIR = Path(__file__).parent / "builtin"
 
 
 def write_atomic(path: Path, text: str) -> None:
-    """Write via a temp file and rename, so readers never see half a file."""
+    """Write via a temp file and rename, so readers never see half a file; each write its own temp file, so two
+    writers never write into one (#260)."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_name(path.name + ".tmp")
-    tmp.write_text(text, encoding="utf-8")
-    os.replace(tmp, path)
+    fd, tmp = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.", suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            f.write(text)
+        os.replace(tmp, path)
+    except BaseException:
+        Path(tmp).unlink(missing_ok=True)
+        raise
+
+
+# The gallery's log and the learned weights change together and from two threads: a rating or a library's
+# rename from the app, the outputs a run logs from ComfyUI's worker. One writer at a time (#260): ComfyUI is
+# one process, so a lock in orrery covers it; reentrant, as a rating saves the weights inside it.
+STATE = threading.RLock()
+
+
+def locked(fn):
+    """`fn` holds STATE while it reads and writes the gallery's log or the learned weights."""
+    @functools.wraps(fn)
+    def run(*args, **kwargs):
+        with STATE:
+            return fn(*args, **kwargs)
+    return run
 
 
 @dataclass(frozen=True)

@@ -36,7 +36,7 @@ from orrery.dsl import (
 )
 from orrery.h3 import DEFAULT_CONTEXT, compile_scene, image_slots, render_scene
 from orrery.h3_ref import word_issue
-from orrery.home import Home, resolve_home
+from orrery.home import STATE, Home, resolve_home
 from orrery.library import library_files
 from orrery.llm import Backend, InvalidProposal, OpenAIBackend
 from orrery.loras import long_form, lora_files, lora_stack
@@ -543,7 +543,7 @@ def log_outputs(home: Home, picks_json: str, media: list[str]) -> list[dict]:
         "rating": None,
     } for m in (media or [None])]
     home.root.mkdir(parents=True, exist_ok=True)
-    with home.galaxy_path.open("a", encoding="utf-8") as f:
+    with STATE, home.galaxy_path.open("a", encoding="utf-8") as f:  # never while a rating rewrites the log (#260)
         for row in rows:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
     return rows

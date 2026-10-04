@@ -21,7 +21,15 @@ from orrery.comfy_llm import can_write, llm_config, text_encoders
 from orrery.completion import completion_data
 from orrery.dsl import MissingLibrary, expand, override, strip_comments
 from orrery.h3 import compile_scene
-from orrery.home import BUILTIN_DIR, Home, home_setting, home_source, resolve_home, set_home_setting
+from orrery.home import (
+    BUILTIN_DIR,
+    Home,
+    home_setting,
+    home_source,
+    locked,
+    resolve_home,
+    set_home_setting,
+)
 from orrery.library import NAME, Entry, Library, load_library
 from orrery.loras import lora_files, lora_stack
 from orrery.manager import list_name
@@ -342,6 +350,7 @@ def library(home: Home, args: dict) -> dict:
     return _library_json(home, name, lib, home.weights())
 
 
+@locked  # renamed entries take their learned weights along (#260)
 def library_save(home: Home, args: dict) -> dict:
     name = _library_name(args.get("name"))
     path = home.library_file(name)

@@ -17,7 +17,7 @@ import shutil
 from collections import Counter
 from pathlib import Path
 
-from orrery.home import Home, write_atomic
+from orrery.home import Home, locked, write_atomic
 
 FACTORS = {"love": 1.5, "like": 1.2, "nope": 0.8, "hate": 0.5}
 THUMB_SIZE = 384
@@ -64,6 +64,7 @@ def _find(home: Home, rid: str) -> dict:
     raise KeyError(f"no gallery output {rid}")
 
 
+@locked
 def rate(home: Home, rid: str, rating: str | None) -> tuple[dict, dict[str, float]]:
     if rating is not None and rating not in FACTORS:
         raise ValueError(f"rating must be one of {', '.join(FACTORS)} or null")
@@ -199,6 +200,7 @@ def folders(home: Home, rows: list[dict] | None = None) -> list[dict]:
     return [{"path": f, "count": counts.get(f, 0)} for f in sorted(names, key=str.lower)]
 
 
+@locked
 def _edit_rows(home: Home, edit) -> list[dict]:
     """Rewrite galaxy.jsonl: edit(row) gives the row to keep (changed or not) or None to drop it. Lines
     that are no rows stay as they are. Returns the rows it changed or dropped, as they were."""
