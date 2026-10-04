@@ -22,6 +22,8 @@ async function librariesChanged(app) {
   app.data.libFull = {};
   app.dialLibs = {};
   await app.refreshCompletion().catch(() => {});
+  app.data.annotations = null;  // the line's annotation rolls it now: ask again for the same template and seed
+  app.state.annotateKey = null;
   app.cellsSig = null;
   if (app.state.tab === "prompt") app.render();
 }
