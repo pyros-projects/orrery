@@ -1201,6 +1201,8 @@ def llm_takes(home: Home, args: dict) -> dict:
     wired = args.get("frames") if isinstance(args.get("frames"), dict) else {}
     inputs = {k: _input_picture(wired.get(k)) for k in ("first_frame", "last_frame") if wired.get(k)}
     named, shown = _slot_pictures(home, pictures_in([what]), result, inputs, said) if kind == "slot" else ([], [])
+    if said:  # a run writes on without it; takes without the picture would only repeat the directions
+        raise ApiError(400, " ".join(i["message"].removesuffix(" it is written without it.") + " its takes need it." for i in said))
     n = min(max(_int(args, "n", 3), 1), 6)
     prompt = takes.request(kind, what, context, n, str(args.get("steer") or ""),
                            [str(h) for h in args.get("have") or [] if str(h).strip()][:24],
@@ -1211,7 +1213,7 @@ def llm_takes(home: Home, args: dict) -> dict:
         raise ApiError(502, str(err)) from None
     if not out:
         raise ApiError(502, "The language model wrote no takes; ask again.")
-    return {"takes": out, "notes": [i["message"] for i in said]}
+    return {"takes": out}
 
 
 def galaxy_takes(home: Home, args: dict) -> dict:

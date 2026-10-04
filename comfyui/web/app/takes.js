@@ -90,7 +90,6 @@ export function openTakes(app, place, near = null) {
         target: app.bridge.getTarget(), params: app.bridge.getParams(), seed: app.bridge.getSeed(), segment: app.bridge.getSegment?.() ?? 0,
         chain: app.bridge.chain?.() || "", steer: steer.value, have: s.takes, n: 3, frames });
       s.takes.push(...got.takes.filter((t) => !s.takes.includes(t)));
-      s.error = (got.notes || []).join(" ");
     } catch (err) { s.error = err.message; } finally {
       s.busy = false;
       draw();

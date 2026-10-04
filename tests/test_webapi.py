@@ -926,8 +926,8 @@ def test_takes_at_the_line_ask_the_endpoint_for_one_place_at_the_seed(home, fake
 
 
 def test_takes_for_a_slot_see_the_pictures_it_names(home, fake_api, tmp_path, monkeypatch):
-    """#174: a slot's takes get the Load Image file behind first_frame as Picture 1; one from image output come
-    from the Gallery, never here."""
+    """#174: a slot's takes get the Load Image file behind first_frame as Picture 1; without it they ask nothing
+    and say what is missing; one from image output come from the Gallery, never here."""
     picture = tmp_path / "fox.png"
     Image.new("RGB", (64, 48), "orange").save(picture)
     monkeypatch.setattr(webapi, "_input_picture", lambda name: picture if name else None)
@@ -937,9 +937,11 @@ def test_takes_for_a_slot_see_the_pictures_it_names(home, fake_api, tmp_path, mo
     body = ok(home, webapi.llm_takes, kind="slot", what="the object in image first_frame", template=template,
               frames={"first_frame": "fox.png"})
     content = fake_api.requests[-1]["messages"][0]["content"]
-    assert body["notes"] == [] and content[0]["type"] == "image_url" and "the object in Picture 1" in content[-1]["text"]
-    body = ok(home, webapi.llm_takes, kind="slot", what="the object in image first_frame", template=template)
-    assert "nothing is wired" in body["notes"][0]  # written without it, and said
+    assert content[0]["type"] == "image_url" and "the object in Picture 1" in content[-1]["text"]
+    asked = len(fake_api.requests)
+    status, body = api(home, webapi.llm_takes, kind="slot", what="the object in image first_frame", template=template)
+    assert status == 400 and "nothing is wired into the Orrery Prompt's first_frame: its takes need it." in body["error"]
+    assert len(fake_api.requests) == asked  # the model is not asked
     status, body = api(home, webapi.llm_takes, kind="slot", what="a sheet from image output", template="A --a sheet from image output--.")
     assert status == 400 and "Gallery" in body["error"]
 
