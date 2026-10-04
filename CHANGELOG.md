@@ -77,6 +77,10 @@ checks) are left out.
 
 ### Changed
 
+- The settings are a tab of their own, behind the gear: their sections on the left (Home, Language model, Writers,
+  Editor, Clips, Log), the one chosen on the right. A setting is saved the moment it changes, no Save at the end of a
+  long page; the home folder, an API endpoint and a writer's text keep buttons of their own, and a setting changed on
+  its own no longer asks the endpoint (#212).
 - A sweep's values are separated by `|` (`<lora:x:0.5|1.0>`), since commas separate a knob's fields now; the
   comma lists of before still sweep as they did, and the log suggests `|` (#227).
 - The `lora_stack` output is gone, since a LoRA stack needed a third-party node: the LoRAs go on the model through

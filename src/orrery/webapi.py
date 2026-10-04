@@ -1025,15 +1025,18 @@ def llm_save(home: Home, args: dict) -> dict:
     if file and not can_write(file):
         raise ApiError(400, f"{file} is a truncated text encoder (MiniMax H3's): it loads but cannot write. "
                             "Pick a Qwen3-VL build such as Krea 2's qwen3vl_4b.")
-    source = str(args.get("source") or endpoint.config(home)["source"])
+    before = endpoint.config(home)
+    source = str(args.get("source") or before["source"])
     if source not in ("comfy", "api"):
         raise ApiError(400, "'source' must be comfy or api.")
     config = home.config()
     api = {**((config.get("llm") or {}).get("api") or {})}
     api.update({k: str(args[k]).strip() for k in ("base_url", "model") if args.get(k) is not None})
     typed = str(args.get("key") or "").strip()
-    if source == "api":  # the endpoint has to answer before it writes for orrery
-        cfg = {**endpoint.config(home), **api}
+    cfg = {**before, **api}
+    # the endpoint has to answer before it writes for orrery: when it is new, or its address, model or key changed
+    # (a setting saved on its own, such as the entries a library starts with, asks it nothing, #212)
+    if source == "api" and (typed or before["source"] != "api" or any(cfg[k] != before[k] for k in ("base_url", "model"))):
         checked = endpoint.check(cfg["base_url"], typed or endpoint.key(home, cfg)[0], cfg["model"])
         if not checked["ok"]:
             raise ApiError(400, checked["error"])
