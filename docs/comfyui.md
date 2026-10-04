@@ -142,11 +142,14 @@ Nodes under **orrery**:
     at the end of a clip's takes sizes them all, in the clip's shape. A × on
     a take, or on the clip in its box, deletes it from disk (it asks first): the
     film then plays the clip's newest other take, or ends before the clip.
-    Under the label of a clip's takes, **the others** deletes every take but
-    the one in the film, and **all** every one, the film then ending before
-    the clip; each asks first, and takes made on another path stay (#234).
-    **play all** plays every take of the clip at once, from the start and in
-    step, to compare their motion; **stop all** stops them (#238). **Tree**
+    Beside a clip's takes stands a column that stays with them as you scroll
+    (#245): **play all** on top plays every take of the clip at once, from the
+    start and in step, to compare their motion (**stop all** stops them, #238);
+    in the middle the clip and its scene in numbers (its takes, the one in the
+    film, its seed, the newest, how many were made with another prompt); at the
+    bottom **the others** deletes every take but the one in the film, and
+    **all** every one, the film then ending before the clip; each asks first,
+    and takes made on another path stay (#234). **Tree**
     beside *Jump* opens the **take tree** (#213): every take of the reel's run,
     a column per clip, a line from each take to the takes made on it, and the
     film's path lit in brass; the rows stay where they are, only the light moves. Hover plays a take and shows the
@@ -158,7 +161,11 @@ Nodes under **orrery**:
     text on the film's path. A take made with another version of its scene
     carries ✎, in the tree and under its clip: hovering it shows what changed,
     and a click on ✎ (**Use this prompt**) puts that version of the scene in
-    the editor, with Undo. While a clip renders, its box
+    the editor, with Undo; the editor shows that scene, lit for a moment.
+    **▶ Film** in the tree's head plays the film as it is clicked together
+    (#243), in a section of its own above the tree that the split under it
+    sizes: under the video a timeline of its clips with a playhead (a click
+    plays the film from there), and the take playing glows in the tree. While a clip renders, its box
     shows the sampler's preview and the step it is at: KJNodes' Model Preview
     Override (a picture, or the whole clip as it forms), else ComfyUI's own
     preview when its live preview is on. Under a scene's clips come the frames its
