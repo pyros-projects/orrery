@@ -610,6 +610,17 @@ test("the dial menu's filter reads a choice's text, properties and tags, as a re
   assert.equal(matchedBy("a corset gown", rx, info), null);
 });
 
+test("a tick in a dial's menu keeps the list where it was, the choice ticked where it was on screen (#300)", async () => {
+  const { keptScroll } = await import("../../comfyui/web/app/dialmenu.js");
+  // scrolled 400 down, the ticked choice 520 into the list: 120 below the box's top edge
+  assert.equal(keptScroll({ top: 400, anchor: 520 }, 520), 400);  // nothing moved: the same place
+  assert.equal(keptScroll({ top: 400, anchor: 520 }, 546), 426);  // the "2 chosen" note came in above: down with it
+  assert.equal(keptScroll({ top: 400, anchor: 546 }, 520), 374);  // and went again
+  assert.equal(keptScroll({ top: 400, anchor: null }, 520), 400);  // All or None: no choice to follow, the old position
+  assert.equal(keptScroll({ top: 400, anchor: 520 }, null), 400);  // the choice left the list
+  assert.equal(keptScroll({ top: 10, anchor: 40 }, 0), 0);  // never above the top
+});
+
 test("annotations sit at the ends of the lines they belong to (#163)", async () => {
   const { annotationLines, mergeHints } = await import("../../comfyui/web/app/annotate.js");
   const text = ["$colour = __colours__", "$backdrop = a grey wall", "EXPORT:", "  mood = __moods__", "  $who", "EXPORT: $a, $b",

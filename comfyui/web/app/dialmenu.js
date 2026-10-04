@@ -113,6 +113,14 @@ function itemHTML(choice, more) {
     + `<span class="dm-text"><span>${esc(more.sub || choice)}</span>${more.sub ? `<small>${esc(choice)}</small>` : ""}</span>`;
 }
 
+// Where a redrawn menu scrolls (#300): a tick redraws it, and the choice ticked stays where it was on screen
+// (the "N chosen" note above the list may come or go); without that choice in the new list, the old position.
+// `before`: { top, anchor } (the box's scrollTop, the ticked item's offsetTop then, or null); `anchor`: its offsetTop now.
+export function keptScroll(before, anchor) {
+  if (before.anchor == null || anchor == null) return before.top;
+  return Math.max(0, before.top + anchor - before.anchor);
+}
+
 export function closeMenu(host) {
   host.querySelector(".dm")?.remove();
 }

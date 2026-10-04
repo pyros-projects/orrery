@@ -1,6 +1,6 @@
 // Prompt tab: preset bar, the highlighted editor with completion, dials, and a way into Test.
 import { KEYWORDS, castNames, inlineLibraries, suggest } from "../orrery-complete.js";
-import { chosen, closeMenu, drawMenu, fillMenu, joinChoices } from "./dialmenu.js";
+import { chosen, closeMenu, drawMenu, fillMenu, joinChoices, keptScroll } from "./dialmenu.js";
 import { esc, highlight } from "./highlight.js";
 import { annotationLines, mergeHints, shownHints } from "./annotate.js";
 import { wireHover } from "./hover.js";
@@ -792,7 +792,9 @@ function wireDials(app) {
 // The dial's menu: drawn in the app (the dials row scrolls and would cut it off), kept in app.dm.
 const menuHost = (app) => app.view.closest(".orrery-app") || app.view;
 
-function openMenu(app, input, at) {
+// `keep`: a redraw after a tick, All or None keeps the list where it was, the choice ticked (`keep.anchor`) where it
+// was on screen (#300); typing and the arrow keys draw it afresh.
+function openMenu(app, input, at, keep = null) {
   const d = dials(app.text).find((x) => x.name === input.dataset.dial);
   if (!d) return;
   const lib = d.lib && (app.data.libFull?.[d.lib] || app.dialLibs?.[d.lib]);
@@ -806,7 +808,11 @@ function openMenu(app, input, at) {
   const filter = app.dm?.input === input ? app.dm.filter || "" : "";
   const refocus = !!app.dm?.box.contains(document.activeElement);  // a redraw while the filter is typed in keeps it there
   const choices = dialChoices(app, d);
+  const old = keep && app.dm?.input === input ? app.dm : null;
+  const itemTop = (dm, value) => { const n = value == null ? -1 : dm.items.indexOf(value); return n < 0 ? null : dm.box.querySelector(`[data-n="${n}"]`)?.offsetTop ?? null; };
+  const before = old && { top: old.box.scrollTop, anchor: itemTop(old, keep.anchor) };
   const state = drawMenu(menuHost(app), input, choices, at, describe, { filter, info });
+  if (before) state.box.scrollTop = keptScroll(before, itemTop(state, keep.anchor));
   app.dm = { ...state, input, filter };
   input.setAttribute("aria-expanded", "true");
   const field = state.box.querySelector(".dm-filter");
@@ -848,13 +854,13 @@ function toggleChoice(app, input, value) {
   const d = dials(app.text).find((x) => x.name === input.dataset.dial), all = (d && dialChoices(app, d)) || [];
   const now = chosen(all, input.value), next = now.includes(value) ? now.filter((c) => c !== value) : [...now, value];
   app.pickChoice(input, joinChoices(all.filter((c) => next.includes(c))));  // in the list's order
-  openMenu(app, input, app.dm ? app.dm.at : -1);
+  openMenu(app, input, app.dm ? app.dm.at : -1, { anchor: value });
 }
 
 // All (the choices the menu shows) or None (the default roll); the menu stays open.
 function pickAll(app, input, items) {
   app.pickChoice(input, joinChoices(items));
-  openMenu(app, input, -1);
+  openMenu(app, input, -1, {});
 }
 
 function pickChoice(app, input, value) {
