@@ -9,6 +9,10 @@ checks) are left out.
 
 ### Added
 
+- The take tree: every take of a reel keeps its path, and picking it brings back the clips last made after it. **Tree**
+  shows them all like a git graph with videos, the film's path lit; a click makes the film the way through a take, ✂
+  ends it after one. Switching takes never changes the editor; a take made with another prompt carries ✎, its hover
+  shows what changed and a click puts that prompt back in the editor, with Undo (#213).
 - A clip's takes play all at once, from the start and in step, to compare their motion: play all, stop all (#227).
 - The template's knobs beside its dials: LoRAs, RefMods, pictures and members, grouped where they hold (all clips,
   then each scene), with strength, start and end in number fields stepping 0.05 and a sweep's values as chips;
