@@ -205,6 +205,10 @@
 /* the cells view: one cell per CHUNK, each with its clips in a section under it */
 .orrery-app .editor.cells { overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: var(--line) transparent; padding: 6px 0 24px; }
 .orrery-app .editor.cells .cell { position: relative; }
+/* a scene "Use this prompt" (#242) just changed, or Undo changed back: lit for a moment */
+.orrery-app .editor.cells .cell.vflash::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-left: 3px solid var(--violet);
+  background: rgba(180,148,245,.16); animation: orrery-vflash 2.2s ease-out forwards; }
+@keyframes orrery-vflash { 0%, 35% { opacity: 1; } to { opacity: 0; } }
 .orrery-app .editor.cells .cell pre { position: relative; inset: auto; height: auto; overflow: visible; padding: 2px 12px; scrollbar-gutter: auto; min-height: 1.65em; }
 .orrery-app .editor.cells .cell textarea { position: absolute; inset: 0; height: 100%; overflow: hidden; padding: 2px 12px; scrollbar-gutter: auto; }
 .orrery-app .chunkmedia { position: relative; margin: 2px 0 6px; background: color-mix(in srgb, var(--surface) 70%, var(--well)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }

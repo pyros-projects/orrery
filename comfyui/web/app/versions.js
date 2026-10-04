@@ -103,14 +103,44 @@ export function versionText(v) {
   return lines.filter(([k]) => k !== " ").map(([k, line]) => `${k} ${line}`).join("\n");
 }
 
-// The take's scene into the editor, in place of the scene now, or at the end when the editor has fewer scenes.
+// The take's scene into the editor, in place of the scene now, or at the end when the editor has fewer scenes;
+// the editor shows that scene, lit for a moment, and so does Undo.
 export function useVersion(app, v) {
   const prev = app.text, cells = splitCells(prev), k = cells.findIndex((c) => c.chunk === v.at);
   if (v.at !== null && k >= 0) cells[k] = { ...cells[k], text: v.then + cells[k].text.match(/\n*$/)[0] };
   app.text = k >= 0 ? cells.map((c) => c.text).join("\n") : `${prev.replace(/\s+$/, "")}\n\n${v.then}`;
-  app.cellsSig = null;
-  if (app.state.tab === "prompt") app.render();
+  const scene = k >= 0 ? v.at : splitCells(app.text).filter((c) => c.chunk >= 0).length - 1;
+  const show = () => {
+    app.cellsSig = null;
+    if (app.state.tab === "prompt") app.render();
+    showScene(app, scene);
+  };
+  show();
   app.toast(`The take's prompt for scene ${v.scene + 1} is in the editor · an unsaved edit`, {
-    label: "Undo", run: () => { app.text = prev; app.cellsSig = null; if (app.state.tab === "prompt") app.render(); },
+    label: "Undo", run: () => { app.text = prev; show(); },
   });
+}
+
+// A scene of the cells view scrolled to the top of the editor and lit for a moment. The clips above it are drawn
+// again once the reel's walk is back, and move it down: the editor follows it a few seconds, until the reader scrolls.
+function showScene(app, scene) {
+  const find = () => app.view?.querySelector(`.editor.cells .cell[data-chunk="${scene}"]`);
+  const cell = find();
+  if (!cell) return;
+  const host = cell.parentElement;
+  host.scrollTo({ top: Math.max(0, cell.offsetTop - 12), behavior: "smooth" });
+  cell.classList.remove("vflash");
+  void cell.offsetWidth;  // lit again when it was a moment ago
+  cell.classList.add("vflash");
+  let at = cell.offsetTop, quit = false;
+  const stop = () => { quit = true; };
+  for (const kind of ["wheel", "pointerdown", "touchstart", "keydown"]) host.addEventListener(kind, stop, { once: true, passive: true });
+  const until = performance.now() + 4000;
+  const follow = () => {
+    const c = find();
+    if (quit || !c || performance.now() > until) return;
+    if (c.offsetTop !== at) { at = c.offsetTop; c.parentElement.scrollTop = Math.max(0, at - 12); }
+    requestAnimationFrame(follow);
+  };
+  requestAnimationFrame(follow);
 }
