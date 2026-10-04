@@ -9,6 +9,7 @@ import { icon } from "./icons.js";
 import { applyDials, chunkInfo, dials, hasGoto, nextSceneClip, plays, folderColor, pickerGroups, sceneTarget, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
 import { drag, thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
+import { openSceneStats } from "./scenestats.js";
 import { STARTERS } from "./starters.js";
 import { runRolls } from "./test.js";
 import { caretPoint, cellStart, inCell, jumpCell, paintCells, renderCells, wireCells } from "./cells.js";
@@ -100,7 +101,9 @@ export function sceneActs(app) {
         : "Each take rolls anew. Click to keep the rolled prompt and change only the sampler's noise", false, n, `aria-pressed="${kept(app, n)}"`)
       + button("jump", "skip", next === null ? none : `To the next scene: Next clip becomes ${next + 1}`, next === null || busy, n)
       + button("jumpgen", "ffwd", next === null ? none : `To the next scene, and add ${takes > 1 ? `${takes} takes` : "a take"} of its clip ${next + 1}`,
-        next === null || busy, n) + "</span>";
+        next === null || busy, n)
+      + button("stats", "chart", "This scene in numbers: where and how often it plays, what leads to it, what it rolls, what it made", false, n)
+      + "</span>";
   };
 }
 
@@ -117,6 +120,7 @@ export function surfSeeds(app, to, n, keep) {
 }
 
 async function sceneAct(app, act, n) {
+  if (act === "stats") return openSceneStats(app, n);  // #219, also while a sweep runs
   const chunks = app.chunks() || [], c = chunks[n];
   if (!c || app.state.sweepQueue) return;
   if (act === "takes") { app.bridge.props.orrery_takes = TAKES[(TAKES.indexOf(takesOf(app)) + 1) % TAKES.length]; return paintEditor(app); }

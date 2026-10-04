@@ -99,16 +99,20 @@ Nodes under **orrery**:
     API endpoint as the language model (the gear), it asks the endpoint
     directly, beside ComfyUI's queue, and **Write now** in the footer writes
     the libraries the template still needs, all at once.
-    In a reel, every `SCENE` line carries a divider that says which clips
-    it plays (counted from 1), when and how much film is left (`clips 2–5 · 4 × 5 s · 0:05 →
-    0:25 · 1:35 left`); the scene that plays the next clip is
-    marked (`▶ next`), and **Jump** beside *Next clip* puts the caret
-    there. A reel opens in the **clips view**: the editor cut into one cell
+    In a reel, every `SCENE` line carries a divider that names one clip of
+    the film (counted from 1): the next clip where the scene plays it
+    (`▶ next: clip 3 · 5 s`), else the clip it comes next as (`comes next as
+    clip 41 · 10 s`). Its hover says every clip it plays, when and how much
+    film is left (`clips 2–5 · 4 × 5 s · 0:05 → 0:25 · 1:35 left`), and its
+    📊 explains them: where and how often the scene plays on the walk at the
+    node's seed, drawn clip by clip, how long, what plays before and after it
+    (and its lines that steer), what it rolls, and the clips it made.
+    **Jump** beside *Next clip* puts the caret on the scene of the next clip. A reel opens in the **clips view**: the editor cut into one cell
     per SCENE, each followed by that scene's clips as Orrery Film (or H3
     Motion Context's Chain Video) keeps them, big: a clip's shorter side is
     the **Clip size** in the gear (360 px unless set otherwise), as far as the
     editor is wide. Hover plays one, a click opens it; small dashed boxes are
-    clips not rendered yet. A scene's divider has three buttons: +
+    clips not rendered yet. A scene's divider has its buttons: +
     **Add takes** of its clip (its first, or one more) and stay on the scene,
     ⏭ go to the **next scene** (Next clip becomes its first clip), and ⏩ go
     there **and add takes** of its clip (the box of the clip rendering shows it

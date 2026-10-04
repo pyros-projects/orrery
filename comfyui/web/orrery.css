@@ -545,6 +545,14 @@
   box-shadow: 0 10px 40px rgba(0,0,0,.5); animation: orrery-down .18s ease-out; max-height: 100%; overflow-y: auto; }
 .orrery-app.big .sheet { align-items: center; }
 .orrery-app.big .sheet .panel { border-radius: 14px; border-top: 1px solid var(--line); }
+/* a scene in numbers (#219) */
+.orrery-app .scene-stats section { display: grid; gap: 6px; }
+.orrery-app .scene-stats h4 { display: flex; align-items: center; gap: 8px; }
+.orrery-app .ss-strip { display: flex; flex-wrap: wrap; gap: 2px; }
+.orrery-app .ss-strip i { width: 7px; height: 14px; border-radius: 2px; background: #2e3040; }
+.orrery-app .ss-strip i.on { background: var(--brass); }
+.orrery-app .ss-strip i.next { outline: 1px solid var(--ink); outline-offset: 1px; }
+.orrery-app .ss-lines { margin: 0; padding: 6px 8px; border-radius: 6px; background: #17181f; font: 11.5px/1.5 var(--mono); white-space: pre-wrap; color: var(--muted); }
 @keyframes orrery-up { from { transform: translateY(24px); opacity: 0; } }
 @keyframes orrery-down { from { transform: translateY(-24px); opacity: 0; } }
 .orrery-app .panel h4 { margin: 0; font: italic 400 21px/1.1 var(--serif); }

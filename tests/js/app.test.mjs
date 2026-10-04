@@ -405,8 +405,9 @@ test("CHUNK lines get a divider with their label, and the next segment's chunk i
   const info = chunkInfo(REEL_TEXT);
   const html = highlight(REEL_TEXT, new Set(), { chunks: info, segment: 2 });
   assert.equal(html.split("\n").length, REEL_TEXT.split("\n").length);  // no extra lines: the caret stays put
-  assert.match(html, /<span class="chunkline"><span class="chunkinfo"><span>clip 1 · 0:00 → 0:05 · 0:30 left<\/span><\/span><span class="t-kw">CHUNK<\/span> the opening<\/span>/);
-  assert.match(html, /<span class="chunkline now"><span class="chunkinfo"><span>▶ next 2\/4 · clips 2–5 [^<]*<\/span><\/span><span class="t-kw">CHUNK<\/span> the walk repeat 4/);
+  // the divider names one clip (#219); its whole label is its hover
+  assert.match(html, /<span class="chunkline"><span class="chunkinfo"><span title="clip 1 · 0:00 → 0:05 · 0:30 left">played as clip 1 · 5 s<\/span><\/span><span class="t-kw">CHUNK<\/span> the opening<\/span>/);
+  assert.match(html, /<span class="chunkline now"><span class="chunkinfo"><span title="next 2\/4 · clips 2–5 [^"]*">▶ next: clip 3 · 5 s<\/span><\/span><span class="t-kw">CHUNK<\/span> the walk repeat 4/);
   assert.doesNotMatch(highlight(REEL_TEXT, new Set()), /chunkinfo/);
 });
 
@@ -551,7 +552,9 @@ test("with GOTO lines the chunks follow the path the server walked", () => {
   assert.ok(plays(walked[2], 4) && !plays(walked[2], 3) && plays(chunkInfo("CHUNK a\nSHOT 5s\nA.")[0], 0));
   const endless = chunkInfo(text, { path: [0, 1, 2, 1, 2], ended: false });
   assert.match(endless[2].label, /^clips 3, 5, … · 2\+ × 6 s/);
-  assert.match(highlight(text, known, { chunks: walked, segment: 3 }), /▶ next 2\/3/);
+  const html = highlight(text, known, { chunks: walked, segment: 3 });
+  assert.match(html, /title="next 2\/3 · clips 2, 4, 6 [^"]*">▶ next: clip 4 · 4 s</);
+  assert.match(html, />comes next as clip 5 · 6 s</);
 });
 
 test("a dial's menu lists every choice while the box holds one of them, and filters what is typed (#155)", async () => {
@@ -686,4 +689,27 @@ test("deleting a take asks what it does: another take plays, or the film ends be
   assert.equal(deleteQuestion(app, host("a")), "Delete take 1?");
   assert.equal(deleteQuestion(app, host("c")), "Delete this take? Clip 2 then plays take 2.");
   assert.equal(deleteQuestion({ data: { chain: { takes: {} } } }, host("c")), "Delete clip 2? The film ends before it.");
+});
+
+test("a scene in numbers: where and how often it plays, before and after, what it rolls, what it made (#219)", async () => {
+  const { sceneStats, sceneStatsHTML } = await import("../../comfyui/web/app/scenestats.js");
+  const text = "@h3 text\nSCENE the gate\nSHOT 5s: static\nA gate.\nCUT TO: the stairs\n\nSCENE the stairs\n$step = __place__\n$mood = {calm|grim}\n"
+    + "SHOT 4s: static\nStairs.\nIF $mood is grim: CUT TO: the lamp\nCUT TO: the lamp\n\nSCENE the lamp\nSHOT 6s: static\nA lamp.\nCUT TO: the stairs\n";
+  const walked = { path: [0, 1, 2, 1, 2, 1, 2], ended: true };
+  const app = {
+    text, chunks: () => chunkInfo(text, walked), reelPath: () => walked, bridge: { getSegment: () => 3, getSeed: () => 7 },
+    data: { completion: { libraries: [{ name: "place", count: 12 }] }, chain: { clips: [{ segment: 1 }, { segment: 3 }], takes: { 1: [{}, {}, {}] } } },
+  };
+  const s = sceneStats(app, 1);
+  assert.deepEqual(s.plays, [1, 3, 5]);
+  assert.equal(s.times, "3");
+  assert.deepEqual(s.before, [["the lamp", 2], ["the gate", 1]]);
+  assert.deepEqual(s.after, [["the lamp", 3]]);
+  assert.deepEqual(s.steers, ["IF $mood is grim: CUT TO: the lamp", "CUT TO: the lamp"]);
+  assert.deepEqual(s.rolls.map((r) => [r.name, r.count, r.lib]), [["step", 12, true], ["mood", 2, false]]);
+  assert.deepEqual(s.made, [{ clip: 2, takes: 3 }, { clip: 4, takes: 1 }]);
+  const html = sceneStatsHTML(app, 1);
+  assert.match(html, /It plays <b>3<\/b> of the <b>7<\/b> clips of the film/);
+  assert.equal((html.match(/<i class="on/g) || []).length, 3);
+  assert.match(html, /<i class="on next" title="clip 4: the stairs">/);
 });

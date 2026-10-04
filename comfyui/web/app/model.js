@@ -362,11 +362,11 @@ export function splitCells(text) {
   return cells;
 }
 
-const clock = (secs) => {
+export const clock = (secs) => {
   const s = Math.round(secs * 10) / 10, m = Math.floor(s / 60), r = Math.round((s - m * 60) * 10) / 10;
   return `${m}:${Number.isInteger(r) ? String(r).padStart(2, "0") : r.toFixed(1).padStart(4, "0")}`;
 };
-const span = (secs) => `${Math.round(secs * 100) / 100} s`;
+export const span = (secs) => `${Math.round(secs * 100) / 100} s`;
 
 // `clip 5 · 0:20 → 0:25 · 1:35 left`, `clips 2–5 · 4 × 5 s · …`, `clip 8 → ∞ · 6 s each · from 0:35`:
 // clips count from 1, the segments behind them from 0.
@@ -382,6 +382,17 @@ export function chunkLabel(c) {
   const segs = c.repeat > 1 ? `clips ${c.first + 1}–${c.last + 1} · ${c.repeat} × ${span(c.secs)}` : `clip ${c.first + 1}`;
   const left = c.left === null ? "" : c.left > 0 ? ` · ${clock(c.left)} left` : " · the end";
   return `${segs} · ${clock(c.start)} → ${clock(c.end)}${left}`;
+}
+
+// A scene's divider names one clip (#219): the next one where the scene plays it, else the clip it comes next as;
+// its full label (every clip, the times) is the divider's hover, and its 📊 explains it.
+export function chunkShort(c, segment) {
+  if (c.segs ? !c.segs.length : c.first === null) return c.label;
+  const each = span(c.secs), at = segment ?? -1;
+  if (plays(c, at)) return `▶ next: clip ${at + 1} · ${each}`;
+  const ahead = c.segs ? c.segs.find((s) => s > at) : at < c.first ? c.first : null;
+  if (ahead != null) return `comes next as clip ${ahead + 1} · ${each}`;
+  return `played as clip ${(c.segs ? c.segs[c.segs.length - 1] : c.last) + 1} · ${each}`;
 }
 
 function h3Length(seconds) {

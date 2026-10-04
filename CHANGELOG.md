@@ -58,6 +58,8 @@ checks) are left out.
 - A reel keeps its clips in a folder named after it, `output/reels/<preset>` or `reels/untitled/<date time>`, which
   moves with Save as; two reels no longer write into one `h3_context`. The Orrery Prompt's `latent_path` input
   is gone (#197).
+- A scene's divider names the next clip it plays (its hover all of them), and its 📊 shows the scene in numbers: where
+  and how often it plays on the walk, how long, what plays before and after it, what it rolls, what it made (#197).
 - A scene's divider adds takes of its clip (+) and stays on it, goes to the next scene, or both; the clip rendering now
   shows the sampler's preview and its step under its scene (KJNodes' Model Preview Override, or ComfyUI's own) (#197).
 - Sample surfing: a scene's + adds ×1, ×2, ×4 or ×8 takes of its clip, you pick the best under it, and the

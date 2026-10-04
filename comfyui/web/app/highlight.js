@@ -1,6 +1,7 @@
 // Syntax colouring for orrery templates. Pure: returns HTML for a <pre> under the editor.
 
 import { castNames } from "../orrery-complete.js";
+import { chunkShort } from "./model.js";
 
 export const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
@@ -67,8 +68,8 @@ function chunkLine(html, c, segment, acts = "") {
   const now = segment !== null && (c.segs ? c.segs.includes(segment) : c.first !== null && segment >= c.first && segment <= c.last);
   const turn = !now ? "" : c.segs ? (c.segs.length > 1 ? ` ${c.segs.indexOf(segment) + 1}/${c.segs.length}${c.endless ? "+" : ""}` : "")
     : c.repeat > 1 ? ` ${segment - c.first + 1}/${c.repeat === Infinity ? "∞" : c.repeat}` : "";
-  const label = `${now ? `▶ next${turn} · ` : ""}${c.label}`;
-  return `<span class="chunkline${now ? " now" : ""}"><span class="chunkinfo"><span>${esc(label)}</span>${acts}</span>${html}</span>`;
+  const title = `${now ? `next${turn} · ` : ""}${c.label}`;  // the whole story on hover; the divider names one clip (#219)
+  return `<span class="chunkline${now ? " now" : ""}"><span class="chunkinfo"><span title="${esc(title)}">${esc(chunkShort(c, segment))}</span>${acts}</span>${html}</span>`;
 }
 
 // options.llm: a language model is set, so unknown libraries are to be made, not missing.

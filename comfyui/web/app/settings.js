@@ -77,7 +77,7 @@ export async function openSettings(app) {
     <label class="check"><input type="checkbox" id="oa-qs" ${app.data.quickstart !== false ? "checked" : ""}>
       <span><b>New</b> templates open with a quickstart: the essentials as <code># …</code> comments above the template</span></label>
     <label class="check"><input type="checkbox" id="oa-div" ${app.data.dividers !== false ? "checked" : ""}>
-      <span><b>Scene dividers</b>: a reel's SCENE lines say which clips they play, when, and how much film is left; the scene of the next clip is marked</span></label>
+      <span><b>Scene dividers</b>: a reel's SCENE lines name the next clip they play (hover: all of them, when, how much film is left; 📊: the scene in numbers); the scene of the next clip is marked</span></label>
     <label class="check"><input type="checkbox" id="oa-tl" ${app.data.timeline !== false ? "checked" : ""}>
       <span><b>Timeline</b>: a reel's clips as the reel keeps them (Orrery Film or Chain Video), under each scene, and the frames its <code>REMEMBER:</code> lines take</span></label>
     <div class="field"><label class="label" for="oa-clipmin">Clip size</label>
