@@ -1,0 +1,50 @@
+---
+title: "Fantasy creator"
+note: "A fantasy character for Krea 2: a human or one of sixty peoples beyond them (elves, dwarves, orcs, tieflings, cat-, raven- and lizardfolk, minotaurs, centaurs, harpies, ghosts, elementals, golems, treefolk …), each with its own body, so a golem rolls no hairstyle and a ghost no gender. A class brings its clothes and its gear, a wizard or a witch often a familiar; a motif in the signature colour sits on the clothes. It keeps what the picture cannot show (EXPORT:): the people, the class, the gear, the familiar, a mood, a quirk, two skills, a voice, so a reel that casts it from the gallery reads $hero.people, $hero.gear and $hero.voice. One seed is one character, from four sides by the grid; $backdrop puts it in its world instead of the studio, $view one side only to try characters faster."
+tags: [krea, characters, references, fantasy]
+---
+$colour = __characters/creator/colour__
+$people = __characters/fantasy/people__
+$gender = {IF $people.gender is no: none|{woman:4|man:4|person}}
+$fit = {IF $gender is woman: women|{IF $gender is man: men|all}}
+$age = {young:3|seasoned:3|grizzled:2|venerable|timeworn}
+$build = __characters/creator/build__
+$face = __characters/creator/face__
+$eyes = __characters/creator/eyes__
+$haircolour = {__characters/creator/haircolour__:5|silver-white|$colour-dyed|ash-grey}
+$hair = __characters/creator/hair[fit=$fit|all]__
+$beard = {IF $people.beard is yes: {IF $gender is man: {__characters/creator/beard__:3|none:2}|none}|none}
+$mark = __characters/creator/mark__
+$class = __characters/fantasy/class__
+$gear = $class.gear
+$motif = __characters/creator/motif[genre=fantasy|all]__
+$familiar = {IF $class.familiar is often: {__characters/creator/companion[genre=fantasy]__:2|none}|{__characters/creator/companion[genre=fantasy]__|none:4}}
+$presence = __characters/creator/presence__
+$backdrop = {studio:3|world}
+# A people takes the parts its body has: a human-like one face, eyes, hair and a mark; beastfolk their eyes; spirits and constructs only their own look.
+$folk = {IF $gender is none: $age $people|$age $people $gender}
+$body = {IF $people.like is human: $people.look, $build, $face, $eyes, $hair{IF $beard is not none: , $beard|} and $mark|{IF $people.like is beast: $people.look, $eyes|$people.look}}
+$who = a $folk with $body: $class in $class.wear, their clothes marked by $motif, with $gear{IF $familiar is not none: , $familiar|}
+# What the picture carries beyond its prompt (EXPORT:): a screenplay that casts it reads $hero.who, $hero.people, $hero.gear …
+EXPORT:
+  who = $who
+  $people
+  $gender
+  age = $age
+  $class
+  gear = $gear
+  familiar = $familiar
+  $colour
+  mood = __characters/creator/mood__
+  quirk = __characters/creator/quirk__
+  skills = {2$$__characters/creator/skill[genre=fantasy|all]__}
+  voice = __characters/creator/voice__
+# The grid runs every view: one character from four sides. Set $view to one of them to try characters faster.
+$look = {photo:4|animated:2|anime:2|painted:2}
+$view = {portrait|three-quarter|full-length|profile}
+$opening = {IF $look is photo: A cinematic photograph, as from the set of a fantasy film,|{IF $look is animated: A 3D character render, in the style of a modern animated feature film,|{IF $look is anime: An anime character design|A gouache fantasy character study}}}
+$frame = {IF $view is portrait: A head-and-shoulders portrait, facing the camera|{IF $view is three-quarter: A head-and-shoulders view turned three-quarters to the left|{IF $view is full-length: A full-length view of the whole body, from the top of the head to the feet, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera|A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible}}}
+$finish = {IF $look is photo: Shot on an 85mm lens at eye level, true colours, practical costume and makeup.|{IF $look is animated: Stylised proportions, soft subsurface skin.|{IF $look is anime: Clean line art and flat cel shading.|Visible brush strokes on warm paper.}}}
+$opening of $who, with $presence. $frame, against {IF $backdrop is studio: a seamless mid-grey studio backdrop|__characters/fantasy/realm__}, in soft, even light. $finish
+@size 832x1216
+@grid $view

@@ -1,0 +1,63 @@
+meta: {source: "orrery fantasy creator: humans and the peoples beyond them; `look` is a people's own body (skin, ears, horns, fur, scales …), `like` says which of the creator's parts it takes (human: face, eyes, hair, marks; beast: eyes; spirit, construct: none), `gender` whether it is a woman or a man, `beard` whether its men may grow one; some read the signature $colour", needs: [colour], builtin: true}
+entries:
+  - {value: "human", props: {like: human, gender: "yes", beard: "yes", look: "{pale|fair|olive|tan|bronze|brown|deep brown|ebony} skin"}}
+  - {value: "high elf", props: {like: human, gender: "yes", beard: "no", look: "{porcelain|pale gold|moon-pale} skin, long tapering ears and fine, ageless features"}}
+  - {value: "wood elf", props: {like: human, gender: "yes", beard: "no", look: "{sun-browned|olive|copper} skin with faint leaf-like freckles and long pointed ears"}}
+  - {value: "dark elf", props: {like: human, gender: "yes", beard: "no", look: "{slate-grey|obsidian-black|deep violet} skin, white brows and long pointed ears"}}
+  - {value: "half-elf", props: {like: human, gender: "yes", beard: "yes", look: "{fair|olive|brown} skin and softly pointed ears"}}
+  - {value: "dwarf", props: {like: human, gender: "yes", beard: "yes", look: "a short, barrel-chested frame, {ruddy|weathered tan|deep brown} skin and hands like shovels"}}
+  - {value: "halfling", props: {like: human, gender: "yes", beard: "no", look: "a small frame half a human's height, {rosy|tan|brown} cheeks and bare, hairy feet"}}
+  - {value: "gnome", props: {like: human, gender: "yes", beard: "yes", look: "a tiny frame, a large nose, {pink|tan|nut-brown} skin and bright, curious eyes"}}
+  - {value: "orc", props: {like: human, gender: "yes", beard: "yes", look: "{grey-green|olive-green|ash-grey} skin, a heavy jaw and two tusks jutting from the lower lip"}}
+  - {value: "half-orc", props: {like: human, gender: "yes", beard: "yes", look: "{greyish olive|sallow green|tan} skin and small tusks at the corners of the mouth"}}
+  - {value: "goblin", props: {like: human, gender: "yes", beard: "no", look: "a wiry, child-sized frame, {mottled green|yellow-green|grey} skin and huge bat-like ears"}}
+  - {value: "hobgoblin", props: {like: human, gender: "yes", beard: "no", look: "{burnt orange|rust-red|dusky grey} skin, a flat nose and short pointed ears"}}
+  - {value: "tiefling", props: {like: human, gender: "yes", beard: "yes", look: "{deep red|lavender|ash-grey|crimson} skin, curling horns and a slender tail"}}
+  - {value: "aasimar", props: {like: human, gender: "yes", beard: "yes", look: "{luminous bronze|pearl-white|warm gold} skin with a faint inner glow and silver irises"}}
+  - {value: "vampire", props: {like: human, gender: "yes", beard: "yes", look: "deathly pale skin, faint blue veins at the temples and the tips of fangs"}}
+  - {value: "fae", props: {like: human, gender: "yes", beard: "no", look: "{lilac|pale green|silvery} skin, translucent dragonfly wings and ears like curled leaves"}}
+  - {value: "satyr", props: {like: human, gender: "yes", beard: "yes", look: "small ram's horns, furred goat legs ending in hooves and {tan|olive|brown} skin"}}
+  - {value: "frost giant", props: {like: human, gender: "yes", beard: "yes", look: "a towering frame twice a human's height and {ice-blue|pale grey|frost-white} skin rimed with hoarfrost"}}
+  - {value: "oni", props: {like: human, gender: "yes", beard: "yes", look: "{crimson|cobalt-blue|ochre} skin, a single horn on the brow and tusk-like fangs"}}
+  - {value: "dryad", props: {like: human, gender: "yes", beard: "no", look: "skin like smooth {birch|willow|cherry} bark with leaves growing among the hair"}}
+  - {value: "changeling", props: {like: human, gender: "yes", beard: "no", look: "colourless, pearl-grey skin and pale eyes without pupils"}}
+  - {value: "half-giant", props: {like: human, gender: "yes", beard: "yes", look: "a hulking frame a head above any doorway and {ruddy|tan|grey-brown} skin"}}
+  - {value: "merfolk", props: {like: human, gender: "yes", beard: "yes", look: "{sea-green|pearly blue|sand-gold} skin dusted with scales, webbed fingers and gill slits on the neck"}}
+  - {value: "catfolk", props: {like: beast, gender: "yes", beard: "no", look: "a lean feline body covered in {tawny|silver tabby|black|calico|spotted} fur, cat ears and a long tail"}}
+  - {value: "wolf-folk", props: {like: beast, gender: "yes", beard: "no", look: "a wolf's head and shaggy {grey|black|russet|white} fur on a tall, rangy body"}}
+  - {value: "foxfolk", props: {like: beast, gender: "yes", beard: "no", look: "a narrow fox face, {rust-red|arctic white|silver} fur and a thick brush of a tail"}}
+  - {value: "ratfolk", props: {like: beast, gender: "yes", beard: "no", look: "a twitching rat's snout, {brown|grey|piebald} fur and a long bare tail"}}
+  - {value: "ravenfolk", props: {like: beast, gender: "yes", beard: "no", look: "a raven's head with a black beak and glossy blue-black feathers down to the shoulders"}}
+  - {value: "owlfolk", props: {like: beast, gender: "yes", beard: "no", look: "a round owl's face, {barred brown|snowy white|tawny} feathers and tufted ears"}}
+  - {value: "lizardfolk", props: {like: beast, gender: "yes", beard: "no", look: "{emerald|olive-brown|dun} scales, a reptile's snout and a heavy tail"}}
+  - {value: "dragonkin", props: {like: beast, gender: "yes", beard: "no", look: "a draconic head with swept-back horns and {bronze|$colour|ruby-red|black} scales"}}
+  - {value: "tortle", props: {like: beast, gender: "yes", beard: "no", look: "a turtle's beaked face, {mossy green|sand-brown} leathery skin and a great domed shell"}}
+  - {value: "frogfolk", props: {like: beast, gender: "yes", beard: "no", look: "{bright green|speckled brown|poison-dart blue} glistening skin and a wide frog's mouth"}}
+  - {value: "minotaur", props: {like: beast, gender: "yes", beard: "no", look: "a bull's head with great curving horns and {black|brown|white} hide over a massive frame"}}
+  - {value: "centaur", props: {like: beast, gender: "yes", beard: "yes", look: "a human torso on the body of a {chestnut|dapple-grey|black|palomino} horse"}}
+  - {value: "harpy", props: {like: beast, gender: "yes", beard: "no", look: "great {brown|grey|black} feathered wings for arms and taloned bird's feet"}}
+  - {value: "naga", props: {like: beast, gender: "yes", beard: "no", look: "a human torso flowing into a long serpent's tail of {jade|gold-banded|black} scales"}}
+  - {value: "kobold", props: {like: beast, gender: "yes", beard: "no", look: "a small dog-like reptile body with {rust|ochre|grey} scales and stubby horns"}}
+  - {value: "bearfolk", props: {like: beast, gender: "yes", beard: "no", look: "a bear's broad head and thick {brown|black|cinnamon} fur over a towering frame"}}
+  - {value: "mothfolk", props: {like: beast, gender: "yes", beard: "no", look: "fuzzy {ivory|dusty grey|$colour} fur, feathered antennae and soft patterned wings"}}
+  - {value: "harefolk", props: {like: beast, gender: "yes", beard: "no", look: "long upright ears, {brown|white|grey} fur and powerful hind legs"}}
+  - {value: "goatfolk", props: {like: beast, gender: "yes", beard: "no", look: "a goat's head with slotted eyes, ridged horns and {white|black|brown} shaggy hair"}}
+  - {value: "ghost", props: {like: spirit, gender: "yes", beard: "no", look: "a translucent, pale blue-white form whose edges fray into mist"}}
+  - {value: "banshee", props: {like: spirit, gender: "no", beard: "no", look: "a gaunt, translucent wailing figure with long hair drifting as if under water"}}
+  - {value: "fire elemental", props: {like: spirit, gender: "no", beard: "no", look: "a body of living flame burning $colour at its heart, with eyes like coals"}}
+  - {value: "water elemental", props: {like: spirit, gender: "no", beard: "no", look: "a body of clear, rippling water holding a swirl of $colour light"}}
+  - {value: "storm elemental", props: {like: spirit, gender: "no", beard: "no", look: "a body of churning cloud crackling with $colour lightning"}}
+  - {value: "djinn", props: {like: spirit, gender: "yes", beard: "yes", look: "{sapphire-blue|smoke-grey|gold} skin and a lower body that trails into smoke"}}
+  - {value: "shade", props: {like: spirit, gender: "no", beard: "no", look: "a figure of living shadow with two pale points of light for eyes"}}
+  - {value: "skeleton", props: {like: spirit, gender: "no", beard: "no", look: "bare yellowed bones held together by $colour witchfire in the joints"}}
+  - {value: "lich", props: {like: spirit, gender: "yes", beard: "no", look: "dried skin stretched over a skull, and $colour lights burning in empty sockets"}}
+  - {value: "mummy", props: {like: spirit, gender: "no", beard: "no", look: "a body wrapped in brittle, yellowed linen with a glimpse of dried skin beneath"}}
+  - {value: "revenant", props: {like: spirit, gender: "yes", beard: "no", look: "grey, half-healed skin, a slack jaw and eyes glazed white"}}
+  - {value: "stone golem", props: {like: construct, gender: "no", beard: "no", look: "a body of fitted grey stone blocks with moss in the seams and two ember eyes"}}
+  - {value: "iron golem", props: {like: construct, gender: "no", beard: "no", look: "a riveted body of black iron, steam leaking from the joints"}}
+  - {value: "clockwork automaton", props: {like: construct, gender: "no", beard: "no", look: "a brass body of gears and pistons with a porcelain mask for a face"}}
+  - {value: "treefolk", props: {like: construct, gender: "no", beard: "no", look: "a body of gnarled bark and roots, branches for arms and a face in the knots of the wood"}}
+  - {value: "living armour", props: {like: construct, gender: "no", beard: "no", look: "an empty suit of dented plate with a $colour glow behind the visor slits"}}
+  - {value: "scarecrow", props: {like: construct, gender: "no", beard: "no", look: "a sackcloth face with stitched eyes and straw sticking from every seam"}}
+  - {value: "crystal golem", props: {like: construct, gender: "no", beard: "no", look: "a faceted body of $colour crystal that splits the light into rainbows"}}
+  - {value: "myconid", props: {like: construct, gender: "no", beard: "no", look: "a stout fungal body with a broad {red-spotted|ochre|violet} cap for a head"}}
