@@ -756,3 +756,36 @@ test("the take tree lays its takes out as a tidy tree, the film's path on top, a
   assert.deepEqual(wayThrough({ takes, last: { a: "a1", a1: "a1x" } }, "a"), ["a", "a1", "a1x"]);
   assert.deepEqual(wayThrough({ takes, last: {} }, "a1x"), ["a", "a1", "a1x"]);
 });
+
+test("a take made with another version of its scene is told, its change shown, and Use this prompt brings it back (#242)", async () => {
+  const { fetchTemplates, lineDiff, sceneIn, useVersion, versionHTML, versionOf } = await import("../../comfyui/web/app/versions.js");
+  const old = "@h3 base 16:9\n\nSCENE the door\nSHOT 5s: static\na red door opens.\n\nSCENE the hall\nSHOT 5s: dolly in\na long hall.\n";
+  const now = "@h3 base 16:9\n\nSCENE the hall\nSHOT 5s: dolly in\na long hall.\n\nSCENE the door\nSHOT 5s: static\n# a note\na blue door opens.\n";
+  const asked = [];
+  let toast = null, rendered = 0;
+  const app = {
+    text: now, data: {}, state: { tab: "prompt" }, render: () => { rendered++; }, toast: (html, action) => { toast = { html, action }; },
+    api: { template: async (h) => { asked.push(h); if (h === "gone") throw new Error("404"); return { text: old }; } },
+  };
+  await fetchTemplates(app, [{ template: "old" }, { template: "old" }, { template: "gone" }, {}]);
+  await fetchTemplates(app, [{ template: "old" }]);
+  assert.deepEqual(asked.sort(), ["gone", "old"]);  // each hash once
+  assert.equal(sceneIn(now, 0, "SCENE the door").text.split("\n")[0], "SCENE the door");  // by its heading, moved
+  assert.equal(versionOf(app, { template: "old", scene: 1 }), null);  // the hall: the same text, moved and all
+  assert.equal(versionOf(app, { template: "gone", scene: 0 }), null);  // a template the home has lost: no mark
+  const v = versionOf(app, { template: "old", scene: 0 });
+  assert.deepEqual([v.scene, v.at, v.then.split("\n").pop(), v.now.split("\n").pop()], [0, 1, "a red door opens.", "a blue door opens."]);
+  assert.deepEqual(lineDiff("a\nb\nc", "a\nx\nc"), [[" ", "a"], ["-", "b"], ["+", "x"], [" ", "c"]]);
+  const card = versionHTML(v);
+  assert.match(card, /class="cut">- a blue door opens\./);
+  assert.match(card, /class="add">\+ a red door opens\./);
+  useVersion(app, v);
+  assert.ok(app.text.startsWith("@h3 base 16:9\n\nSCENE the hall\nSHOT 5s: dolly in\na long hall.\n\nSCENE the door\nSHOT 5s: static\na red door opens."));
+  assert.equal(versionOf(app, { template: "old", scene: 0 }), null);
+  assert.ok(rendered === 1 && toast.action.label === "Undo");
+  toast.action.run();
+  assert.equal(app.text, now);
+  app.text = "@h3 base 16:9\n\nSCENE the door\nSHOT 5s: static\na red door opens.\n";  // the hall gone: it comes back at the end
+  useVersion(app, versionOf(app, { template: "old", scene: 1 }));
+  assert.equal(app.text, "@h3 base 16:9\n\nSCENE the door\nSHOT 5s: static\na red door opens.\n\nSCENE the hall\nSHOT 5s: dolly in\na long hall.");
+});

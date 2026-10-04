@@ -184,6 +184,10 @@
 .orrery-app .ask .btn { padding: 1px 7px; font-size: 10.5px; cursor: pointer; }
 .orrery-app .take .ask { font-size: 9.5px; gap: 2px 4px; }
 .orrery-app .take .ask .btn { padding: 0 4px; font-size: 9.5px; }
+/* a take made with another prompt (#242): ✎, always shown; a click brings that prompt back */
+.orrery-app .ver { position: absolute; top: 3px; left: 3px; z-index: 3; display: grid; place-items: center; width: 18px; height: 18px;
+  border-radius: 50%; background: rgba(0,0,0,.65); color: var(--violet); font-size: 11px; line-height: 1; cursor: pointer; }
+.orrery-app .ver:hover { background: var(--violet); color: #15161d; }
 /* the dials' sidebar (#184): beside the editor, as wide as its grip sets (--side-w), one dial a row */
 .orrery-app .side-grip { width: 8px; flex: none; cursor: col-resize; border-radius: 4px; touch-action: none; }
 .orrery-app .side-grip:hover, .orrery-app .side-grip:focus-visible { background: var(--line); outline: none; }
@@ -601,6 +605,18 @@
 .orrery-app .tnode .tend { position: absolute; top: 3px; right: 3px; z-index: 3; display: none; width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,.65); color: #fff; font-size: 12px; line-height: 20px; text-align: center; }
 .orrery-app .tnode:hover .tend { display: block; }
 .orrery-app .tnode .tend:hover { background: var(--danger); }
+.orrery-app .tnode.older:not(.on) { border-color: rgba(180,148,245,.55); }
+.orrery-app .tnode .ver { width: 20px; height: 20px; font-size: 12px; }
+.orrery-app .tree-diff { position: absolute; z-index: 5; max-width: 440px; pointer-events: none; }
+.orrery-app .tree-diff[hidden] { display: none; }
+.orrery-app .vcard { display: grid; gap: 4px; padding: 8px 10px; border: 1px solid rgba(180,148,245,.45); border-radius: 8px;
+  background: rgba(21,22,29,.96); box-shadow: 0 8px 24px rgba(0,0,0,.45); font-size: 11.5px; }
+.orrery-app .vcard b { color: var(--violet); font-weight: 600; }
+.orrery-app .vcard pre { margin: 2px 0 0; font: 11px/1.45 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; color: var(--faint); }
+.orrery-app .vcard pre span { display: block; }
+.orrery-app .vcard pre .add { color: var(--teal); background: rgba(92,200,194,.08); }
+.orrery-app .vcard pre .cut { color: var(--rose); background: rgba(240,122,160,.08); text-decoration: line-through; text-decoration-color: rgba(240,122,160,.5); }
+.orrery-app .vcard pre .fold { color: var(--faint); }
 .orrery-app .tree-hint { font-size: 11.5px; }
 @keyframes orrery-up { from { transform: translateY(24px); opacity: 0; } }
 @keyframes orrery-down { from { transform: translateY(-24px); opacity: 0; } }

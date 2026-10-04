@@ -1,10 +1,12 @@
 // The take tree (#241): every take of the reel's run as a graph with videos, like a git graph. A column per clip,
 // a node per take in the clip's shape (hover plays it), curves from each take to the takes made on it, and the
 // film's path lit in brass along the top. A click makes the film the path through a take (to it from clip 1,
-// then on as it was last walked); ✂ ends the film after it. Hovering a take shows the way the film would go.
+// then on as it was last walked); ✂ ends the film after it. Hovering a take shows the way the film would go. A take
+// made with another version of its scene carries ✎ (#242): hovering it shows what changed, ✎ brings that prompt back.
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
 import { clipRatio, loadChain } from "./timeline.js";
+import { fetchTemplates, useVersion, versionHTML, versionOf } from "./versions.js";
 
 // The takes' rows, as a tidy tree: a take sits on the row of its first child, so a path runs straight; the film's
 // path comes first, so it is the top line, the rest in the order they were made. A take whose parent is not
@@ -59,15 +61,16 @@ export function treeHTML(app, tree, size = SIZE) {
     return `<path class="tedge${on ? " on" : ""}" data-edge="${esc(t.folder)}" d="M${x1} ${y1} C${mid} ${y1}, ${mid} ${y2}, ${x2} ${y2}"/>`;
   }).join("");
   const nodes = takes.map((t) => {
-    const r = rows.get(t.folder), on = film.has(t.folder);
+    const r = rows.get(t.folder), on = film.has(t.folder), older = !!versionOf(app, t);
     const title = `Clip ${t.segment + 1}, take ${nth.get(t.folder)} · seed ${t.seed ?? "?"}${t.take ? ` + ${t.take}` : ""}${on ? " · in the film" : ""}`
-      + " · click: the film goes through it";
-    return `<button type="button" class="tnode${on ? " on" : ""}${t.test ? " test" : ""}" data-tree="${esc(t.folder)}" style="left:${x(t.segment)}px;top:${y(r)}px;width:${w}px;height:${h}px" title="${esc(title)}">`
+      + `${older ? " · made with another prompt" : ""} · click: the film goes through it`;
+    return `<button type="button" class="tnode${on ? " on" : ""}${t.test ? " test" : ""}${older ? " older" : ""}" data-tree="${esc(t.folder)}" style="left:${x(t.segment)}px;top:${y(r)}px;width:${w}px;height:${h}px" title="${esc(title)}">`
       + `<img loading="lazy" alt="" src="${app.api.takeThumbURL(app.bridge.chain(), t.folder)}"><span class="n">${nth.get(t.folder)}</span>`
+      + (older ? `<span class="ver" role="button" data-ver="${esc(t.folder)}" title="Use this prompt: the scene as this take was made with it, into the editor">✎</span>` : "")
       + (on ? `<span class="tend" role="button" data-tend="${t.segment}" title="End the film after this take">✂</span>` : "") + "</button>";
   }).join("");
   return `<div class="tree-canvas" style="width:${x(segs - 1) + w + left}px;height:${height}px">`
-    + `<svg class="tree-lines" width="${x(segs - 1) + w + left}" height="${height}">${edges}</svg>${heads}${nodes}</div>`;
+    + `<svg class="tree-lines" width="${x(segs - 1) + w + left}" height="${height}">${edges}</svg>${heads}${nodes}<div class="tree-diff" hidden></div></div>`;
 }
 
 export function openTree(app) {
@@ -78,7 +81,8 @@ export function openTree(app) {
     + `<button class="icon-btn" data-close title="Close">${icon("x")}</button></div>`
     + `<div class="tree-scroll"><p class="muted tree-none">Growing the tree…</p></div>`
     + `<p class="muted flush tree-hint">A click on a take: the film goes the path through it, to it from clip 1 and on as it was last walked. `
-    + `✂ ends the film after a take of it. Hover plays a take and shows the way.</p></div>`);
+    + `✂ ends the film after a take of it. Hover plays a take and shows the way. ✎ marks a take made with another prompt: `
+    + `hover shows what changed, ✎ puts that prompt in the editor. Switching takes never changes the editor.</p></div>`);
   const scroll = sheet.querySelector(".tree-scroll");
   let tree = null;
   const draw = () => {
@@ -89,6 +93,7 @@ export function openTree(app) {
   const grow = async () => {
     try {
       tree = await app.api.chainTree(app.bridge.chain());
+      await fetchTemplates(app, tree.takes || []);
       draw();
     } catch (err) { app.fail(err); }
   };
@@ -105,6 +110,12 @@ export function openTree(app) {
   sheet.querySelector("[data-close]").onclick = () => app.closeSheet();
   sheet.querySelector("[data-tsize]").oninput = (e) => { app.bridge.props.orrery_tree_size = Number(e.target.value); if (tree) draw(); };
   scroll.addEventListener("click", (e) => {
+    const ver = e.target.closest("[data-ver]"), v = ver && versionOf(app, tree.takes.find((t) => t.folder === ver.dataset.ver));
+    if (ver) {
+      e.stopPropagation();
+      if (v) useVersion(app, v);
+      return draw();
+    }
     const end = e.target.closest("[data-tend]");
     if (end) {
       e.stopPropagation();
@@ -125,12 +136,20 @@ export function openTree(app) {
     const way = new Set(wayThrough(tree, node.dataset.tree));
     scroll.querySelectorAll("[data-tree]").forEach((n) => n.classList.toggle("way", way.has(n.dataset.tree)));
     scroll.querySelectorAll("[data-edge]").forEach((p) => p.classList.toggle("way", way.has(p.dataset.edge)));
+    const v = versionOf(app, tree.takes.find((t) => t.folder === node.dataset.tree)), card = scroll.querySelector(".tree-diff");
+    if (!v || !card) return;
+    card.innerHTML = versionHTML(v);
+    card.hidden = false;
+    const right = node.offsetLeft + node.offsetWidth + 10, canvas = card.parentElement.offsetWidth;  // beside the take, where it fits
+    card.style.left = `${right + card.offsetWidth <= Math.max(canvas, scroll.scrollLeft + scroll.clientWidth) ? right : Math.max(4, node.offsetLeft - card.offsetWidth - 10)}px`;
+    card.style.top = `${node.offsetTop}px`;
   });
   scroll.addEventListener("pointerout", (e) => {
     const node = e.target.closest("[data-tree]");
     if (!node || node.contains(e.relatedTarget)) return;
     node.querySelector("video")?.remove();
     scroll.querySelectorAll(".way").forEach((n) => n.classList.remove("way"));
+    scroll.querySelector(".tree-diff")?.setAttribute("hidden", "");
   });
   grow();
 }

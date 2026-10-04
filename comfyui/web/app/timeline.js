@@ -4,10 +4,12 @@
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
 import { shape } from "./model.js";
+import { fetchTemplates, useVersion, versionOf, versionText } from "./versions.js";
 
-// The clips the chain holds, fetched again after every run.
+// The clips the chain holds, fetched again after every run, and the templates its takes were made with (#242).
 export async function loadChain(app) {
   try { app.data.chain = await app.api.chain(app.bridge.chain()); } catch { app.data.chain = null; }
+  await fetchTemplates(app, Object.values(app.data.chain?.takes || {}).flat());
   app.data.anchorV = Date.now();  // anchors change in place: a new run, a new URL
 }
 
@@ -68,6 +70,17 @@ function delHTML(folder) {
   return `<span class="del" role="button" data-del="${esc(folder)}" title="Delete this take" aria-label="Delete this take">${icon("x")}</span>`;
 }
 
+// ✎ on a take made with another prompt (#242): its title says what changed, a click puts that prompt in the editor.
+function verHTML(app, t) {
+  const v = versionOf(app, t);
+  return v ? `<span class="ver" role="button" data-ver="${esc(t.folder)}" title="${esc(`Made with another prompt · click: use this prompt\n${versionText(v)}`)}">✎</span>` : "";
+}
+
+// The takes made with another prompt, for the cells to tell when their marks change.
+export function olderTakes(app) {
+  return Object.values(app.data.chain?.takes || {}).flat().filter((t) => versionOf(app, t)).map((t) => t.folder);
+}
+
 // A take's size in the clip's shape (#215): `least`, the shorter side, as the grip at the strip's end sets it.
 function takeVars(app, least = Number(app.data.take_min) || 54) {
   const ratio = clipRatio(app), w = ratio >= 1 ? least * ratio : least, h = ratio >= 1 ? least : least / ratio;
@@ -84,7 +97,7 @@ function takesHTML(app, s) {
     + `<span class="btn ghost" role="button" data-playall title="Play every take of clip ${s + 1} at once, from the start, to compare them">${icon("play")}play all</span></span>${takes.map((t, i) =>
     `<button type="button" class="take${t.active ? " on" : ""}" data-take="${esc(t.folder)}" data-seg="${s}" title="Take ${i + 1} · seed ${t.seed ?? "?"}`
     + `${t.take ? ` + ${t.take}` : ""}${t.active ? " · in the film" : " · click to put it in the film"}">`
-    + `<img loading="lazy" alt="" src="${app.api.takeThumbURL(app.bridge.chain(), t.folder)}"><span class="n">${i + 1}</span>${delHTML(t.folder)}</button>`).join("")}`
+    + `<img loading="lazy" alt="" src="${app.api.takeThumbURL(app.bridge.chain(), t.folder)}"><span class="n">${i + 1}</span>${verHTML(app, t)}${delHTML(t.folder)}</button>`).join("")}`
     + `<span class="grip" data-grip title="Drag to size the takes"></span></div>`;
 }
 
@@ -276,6 +289,11 @@ export function wireClips(app, box) {
       return head.insertAdjacentHTML("beforeend", `<span class="ask">${others ? `Delete ${count - 1} takes? The one in the film stays.`
         : `Delete all ${count} takes? The film ends before clip ${s + 1}.`}<span class="btn danger" role="button" data-clearyes="${ask.dataset.clear}">Delete</span>`
         + `<span class="btn ghost" role="button" data-clearno>Keep</span></span>`);
+    }
+    const ver = e.target.closest("[data-ver]");
+    if (ver) {
+      const v = versionOf(app, Object.values(app.data.chain?.takes || {}).flat().find((t) => t.folder === ver.dataset.ver));
+      return v && useVersion(app, v);
     }
     const host = e.target.closest(".take, .tl-clip");
     if (e.target.closest("[data-delno]")) return host.querySelector(".ask")?.remove();

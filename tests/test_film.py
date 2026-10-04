@@ -25,10 +25,10 @@ def tail(fill=0.0):
     return Tail(np.full((1, 24, 7, 3, 4), fill, np.float32), np.full((1, 32, 2, 37), fill, np.float32), 0.25)
 
 
-def take(out, segment, n=24, w=64, fill=0.0, continues=-1, test=False):
+def take(out, segment, n=24, w=64, fill=0.0, continues=-1, test=False, meta=None):
     sound = np.sin(np.linspace(0, 400, round(n / 24 * SR), dtype=np.float32))[None].repeat(2, 0) * 0.1
     return film.save_take(out, "h3_context", segment, frames(n, w=w, shade=40 * segment), sound, SR, tail(fill),
-                          {"seed": 7}, continues, test)
+                          {"seed": 7, **(meta or {})}, continues, test)
 
 
 def active_run(out):
@@ -324,3 +324,13 @@ def test_a_clip_that_starts_afresh_knows_the_take_it_came_after(tmp_path):
     assert {t["folder"]: t["parent"] for t in film.tree(tmp_path, "h3_context")["takes"]}[fresh.name] == a.name
     with pytest.raises(film.FilmError, match="no take"):
         film.walk_to(tmp_path, "h3_context", "seg_0001_nothere1")
+
+
+def test_a_take_names_the_scene_and_the_template_it_was_made_with(tmp_path):
+    """#242: the tree and the takes under a clip tell a take made with another version of its scene."""
+    take(tmp_path, 0, meta={"template": "0123456789abcdef", "chunk": 0})
+    take(tmp_path, 0, n=26, meta={"template": "fedcba9876543210", "chunk": 0})
+    listed = film.takes(tmp_path, "h3_context")[0]
+    assert [(t["scene"], t["template"]) for t in listed] == [(0, "0123456789abcdef"), (0, "fedcba9876543210")]
+    grown = film.tree(tmp_path, "h3_context")["takes"]
+    assert [(t["scene"], t["template"]) for t in grown] == [(0, "0123456789abcdef"), (0, "fedcba9876543210")]

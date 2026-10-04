@@ -219,7 +219,8 @@ def _meta(take: Path) -> dict:
 
 def takes(output: Path | str, latent_path: str) -> dict[int, list[dict]]:
     """The takes of every segment in the active run that fit the clip before as it is now (a take made on
-    another take of it would not continue it), oldest first: {segment: [{folder, seed, take, created, active}]}."""
+    another take of it would not continue it), oldest first: {segment: [{folder, seed, take, created, active,
+    scene, template}]}, the scene it plays and its template's hash telling the prompt it was made with (#242)."""
     run, state = _active(_root(output, latent_path))
     if run is None:
         return {}
@@ -232,6 +233,7 @@ def takes(output: Path | str, latent_path: str) -> dict[int, list[dict]]:
         if fits and segment < len(clips):
             out.setdefault(segment, []).append({"folder": take.name, "seed": meta.get("seed"), "take": meta.get("take") or 0,
                                                 "created": meta.get("created"), "active": clips[segment]["folder"] == take.name,
+                                                "scene": meta.get("chunk"), "template": meta.get("template"),
                                                 "_at": (meta.get("created") or "", (take / "meta.json").stat().st_mtime_ns)})
     for listed in out.values():
         listed.sort(key=lambda t: t.pop("_at"))  # the order they were made in (older takes count whole seconds)
