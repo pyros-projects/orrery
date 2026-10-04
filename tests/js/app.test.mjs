@@ -940,6 +940,15 @@ test("a --slot-- is violet in the editor, what is in it coloured as ever (#280)"
   assert.doesNotMatch(highlight("# --not a slot--", new Set()), /t-slot/);
 });
 
+test("the API client names every call once: a second key would silently take the first one's place (#288)", async () => {
+  const { readFile } = await import("node:fs/promises");
+  const source = await readFile(new URL("../../comfyui/web/app/api.js", import.meta.url), "utf8");
+  const keys = [...source.matchAll(/^ {4}(\w+): /gm)].map((m) => m[1]);
+  assert.ok(keys.length > 40);
+  assert.deepEqual(keys.filter((k, i) => keys.indexOf(k) !== i), []);
+  assert.match(source, /^ {4}plan: \(body\) => call\("plan"/m);  // the grid's and the LoRA sweep's
+});
+
 test("with a text encoder, a run's language-model tasks go in mini-runs before it, in the plan's order (#171)", async () => {
   const { llmLocal, queueTasks } = await import("../../comfyui/web/app/miniruns.js");
   const app = (kind, clip = false) => ({ llmApi: () => kind === "api", data: { llm: { active: kind ? { kind } : null } },
@@ -949,7 +958,7 @@ test("with a text encoder, a run's language-model tasks go in mini-runs before i
   assert.equal(llmLocal(app("api")), false);
   assert.equal(llmLocal(app(null)), false);
   const asked = [], planned = [];
-  const local = { ...app("comfy"), api: { plan: async (body) => { planned.push(body); return { tasks: [{ task: "library", what: "sky" }, { task: "slot", what: "a key" }] }; } } };
+  const local = { ...app("comfy"), api: { llmPlan: async (body) => { planned.push(body); return { tasks: [{ task: "library", what: "sky" }, { task: "slot", what: "a key" }] }; } } };
   Object.assign(local.bridge, { getText: () => "t", getTarget: () => "text", getParams: () => ({}), getSeed: () => 7, getSegment: () => 2,
     getSweep: () => "", ask: async (...a) => { asked.push(a); } });
   assert.equal(await queueTasks(local), 2);
