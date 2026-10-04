@@ -81,7 +81,7 @@ export function drawMenu(host, input, choices, at = -1, describe = null, { filte
   box.style.minWidth = `${r.width / k}px`;
   const roomBelow = host.clientHeight + host.scrollTop - below;
   box.style.top = `${roomBelow >= Math.min(box.offsetHeight, 160) ? below + 4 : Math.max(4, above - box.offsetHeight - 4)}px`;
-  box.querySelector(".on")?.scrollIntoView({ block: "nearest" });
+  reveal(box, box.querySelector(".on"));
   return { box, items, at };
 }
 
@@ -119,6 +119,15 @@ function itemHTML(choice, more) {
 export function keptScroll(before, anchor) {
   if (before.anchor == null || anchor == null) return before.top;
   return Math.max(0, before.top + anchor - before.anchor);
+}
+
+// Scrolls `list` so `item` shows, and nothing else: scrollIntoView scrolls every scrolling box around it too, the
+// editor (which jumped up while typing at its end, #303) and ComfyUI's canvas.
+export function reveal(list, item) {
+  if (!list || !item) return;
+  const top = item.offsetTop - (item.offsetParent === list ? 0 : list.offsetTop), bottom = top + item.offsetHeight;
+  if (top < list.scrollTop) list.scrollTop = top;
+  else if (bottom > list.scrollTop + list.clientHeight) list.scrollTop = bottom - list.clientHeight;
 }
 
 export function closeMenu(host) {

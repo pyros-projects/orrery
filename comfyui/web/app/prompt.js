@@ -1,6 +1,6 @@
 // Prompt tab: preset bar, the highlighted editor with completion, dials, and a way into Test.
 import { KEYWORDS, castNames, inlineLibraries, suggest } from "../orrery-complete.js";
-import { chosen, closeMenu, drawMenu, fillMenu, joinChoices, keptScroll } from "./dialmenu.js";
+import { chosen, closeMenu, drawMenu, fillMenu, joinChoices, keptScroll, reveal } from "./dialmenu.js";
 import { esc, highlight } from "./highlight.js";
 import { annotationLines, mergeHints, shownHints } from "./annotate.js";
 import { wireHover } from "./hover.js";
@@ -998,8 +998,10 @@ function complete(app, ta) {
 function drawCompletion(app) {
   app.view.querySelector(".ac")?.remove();
   const { items, i, ta } = app.ac, { x, y } = caretPoint(ta), item = items[i] || {};
-  const editor = ta.closest(".editor"), cell = ta.closest(".cell");
-  const dx = cell ? cell.offsetLeft : 0, dy = cell ? cell.offsetTop - editor.scrollTop : 0;
+  // the popup lives in the editor, which scrolls in the cells view: placed where the caret is in its content, while
+  // the room around it is measured on screen (#303)
+  const editor = ta.closest(".editor"), cell = ta.closest(".cell"), scrolled = editor.scrollTop;
+  const dx = cell ? cell.offsetLeft : 0, dy = cell ? cell.offsetTop : 0;
   const box = document.createElement("div");
   box.className = "ac";
   const shown = item.thumbs?.length || item.preview;
@@ -1020,9 +1022,9 @@ function drawCompletion(app) {
   const k = er.width / editor.offsetWidth || 1, line = parseFloat(getComputedStyle(ta).lineHeight) || 20;
   box.style.left = `${Math.max(4, Math.min(x + 8 + dx, editor.clientWidth - box.offsetWidth - 4))}px`;
   const below = y + 4 + dy, above = y - line - box.offsetHeight - 4 + dy;
-  const roomBelow = (rr.bottom - er.top) / k - below, roomAbove = (er.top - rr.top) / k + above;
+  const roomBelow = (rr.bottom - er.top) / k - (below - scrolled), roomAbove = (er.top - rr.top) / k + (above - scrolled);
   box.style.top = `${box.offsetHeight <= roomBelow || roomAbove < 0 ? below : above}px`;
-  box.querySelector(".on")?.scrollIntoView({ block: "nearest" });
+  reveal(box.querySelector("ul"), box.querySelector(".on"));
 }
 
 function closeCompletion(app) {

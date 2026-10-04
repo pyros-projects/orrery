@@ -1016,3 +1016,20 @@ test("the results take what an output node of the run wrote, Orrery Log's pictur
   assert.equal(capturedMedia(done("9", { text: ["hi"] }), { outputs: [9], log: false }), null);  // nothing written
   assert.equal(capturedMedia({ node: "9", output: pic }, { outputs: [9], log: false }), null);  // no prompt to file it under
 });
+
+test("a popup's list scrolls to the marked item, and only the list (#303)", async () => {
+  const { reveal } = await import("../../comfyui/web/app/dialmenu.js");
+  const list = { scrollTop: 0, clientHeight: 100, offsetTop: 0 };
+  const item = (top) => ({ offsetTop: top, offsetHeight: 20, offsetParent: list });
+  reveal(list, item(40));
+  assert.equal(list.scrollTop, 0);  // already in view: nothing moves
+  reveal(list, item(150));
+  assert.equal(list.scrollTop, 70);  // below: its bottom edge at the list's
+  reveal(list, item(10));
+  assert.equal(list.scrollTop, 10);  // above: its top edge at the list's
+  const inner = { scrollTop: 0, clientHeight: 100, offsetTop: 3 };  // a list inside the popup, both measured from the popup
+  reveal(inner, { offsetTop: 133, offsetHeight: 20, offsetParent: {} });
+  assert.equal(inner.scrollTop, 50);
+  reveal(null, item(10));  // no list, no item: nothing to do
+  reveal(list, null);
+});
