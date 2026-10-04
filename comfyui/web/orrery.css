@@ -165,6 +165,17 @@
 .orrery-app .take .n { position: absolute; left: 3px; bottom: 2px; z-index: 2; font: 500 9.5px/1 var(--mono); color: #fff; text-shadow: 0 0 3px #000; }
 .orrery-app .take:hover { border-color: var(--muted); }
 .orrery-app .take.on { border: 2px solid var(--brass); cursor: default; }
+/* deleting a take (#214): a × on hover, then the question in place */
+.orrery-app .del { position: absolute; top: 3px; right: 3px; z-index: 3; display: none; place-items: center; width: 18px; height: 18px;
+  border-radius: 50%; background: rgba(0,0,0,.6); color: #fff; cursor: pointer; }
+.orrery-app .tl-clip:hover .del, .orrery-app .take:hover .del { display: grid; }
+.orrery-app .del:hover { background: var(--danger); }
+.orrery-app .del svg { width: 11px; height: 11px; }
+.orrery-app .ask { position: absolute; inset: 0; z-index: 4; display: flex; flex-wrap: wrap; align-content: center; justify-content: center;
+  gap: 4px 6px; padding: 4px; background: rgba(15,16,22,.88); color: var(--ink); font-size: 11px; text-align: center; cursor: default; }
+.orrery-app .ask .btn { padding: 1px 7px; font-size: 10.5px; cursor: pointer; }
+.orrery-app .take .ask { font-size: 9.5px; gap: 2px 4px; }
+.orrery-app .take .ask .btn { padding: 0 4px; font-size: 9.5px; }
 /* the dials' sidebar (#184): beside the editor, as wide as its grip sets (--side-w), one dial a row */
 .orrery-app .side-grip { width: 8px; flex: none; cursor: col-resize; border-radius: 4px; touch-action: none; }
 .orrery-app .side-grip:hover, .orrery-app .side-grip:focus-visible { background: var(--line); outline: none; }

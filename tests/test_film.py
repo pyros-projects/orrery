@@ -244,9 +244,32 @@ def test_a_picked_take_drops_the_clips_that_continued_another_and_hides_their_ta
         film.pick_take(tmp_path, "h3_context", 1, "seg_0001_../../x")
 
 
-def test_picking_a_take_can_delete_the_others(tmp_path):
+def test_a_take_beside_the_one_in_the_film_is_deleted_and_the_film_stays(tmp_path):
     take(tmp_path, 0)
-    surf = [take(tmp_path, 1) for _ in range(3)]
-    film.pick_take(tmp_path, "h3_context", 1, surf[0].name, delete=True)
-    assert surf[0].is_dir() and not surf[1].exists() and not surf[2].exists()
-    assert [t["folder"] for t in film.takes(tmp_path, "h3_context")[1]] == [surf[0].name]
+    a, b = take(tmp_path, 1), take(tmp_path, 1, n=30)
+    assert film.delete_take(tmp_path, "h3_context", 1, a.name) == {"folder": b.name}  # beside it: the film stays
+    assert not a.exists() and [t["folder"] for t in film.takes(tmp_path, "h3_context")[1]] == [b.name]
+    assert [c["frames"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [24, 30]
+
+
+def test_deleting_the_take_in_the_film_puts_the_newest_other_in_its_place(tmp_path):
+    take(tmp_path, 0)
+    a, b, c = take(tmp_path, 1, n=26), take(tmp_path, 1, n=28), take(tmp_path, 1, n=30)
+    take(tmp_path, 2)  # made on c
+    assert film.delete_take(tmp_path, "h3_context", 1, c.name) == {"folder": b.name, "seed": 7, "take": 0}
+    assert not c.exists() and a.is_dir()
+    assert [c["frames"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [24, 28]  # clip 3 continued c
+    assert decoded(active_run(tmp_path) / "film.mp4")[0] == 52
+
+
+def test_deleting_a_clips_last_take_ends_the_film_before_it(tmp_path):
+    only = take(tmp_path, 0)
+    two = take(tmp_path, 1)
+    assert film.delete_take(tmp_path, "h3_context", 1, two.name) == {"folder": None}
+    assert [c["frames"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [24]
+    film.delete_take(tmp_path, "h3_context", 0, only.name)
+    assert chain.listing(tmp_path, "h3_context")["clips"] == [] and not (active_run(tmp_path) / "film.mp4").exists()
+    again = take(tmp_path, 0)  # the run goes on
+    assert again.parent == only.parent
+    with pytest.raises(film.FilmError):
+        film.delete_take(tmp_path, "h3_context", 0, only.name)

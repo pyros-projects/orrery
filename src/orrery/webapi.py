@@ -227,7 +227,7 @@ def recent(home: Home, args: dict) -> dict:
 def ui_save(home: Home, args: dict) -> dict:
     """App switches kept in the home: `quickstart` (New templates open with their comments),
     `dividers` (chunk dividers in the editor), `timeline` (the reel's clips under its scenes), sample surfing's
-    `surf_numbered` and `keep_takes` (#206), the live preview's `preview_light` (#205), and its sizes
+    `surf_numbered` (#206), the live preview's `preview_light` (#205), and its sizes
     (`clip_min`: a clip's shorter side in the clips view; `preview_fps`: the smooth live preview's pictures a second)."""
     for flag in uistate.FLAGS:
         if flag in args:
@@ -583,8 +583,17 @@ def chain_pick(home: Home, args: dict) -> dict:
     from orrery import film
 
     try:
-        return film.pick_take(_output_dir(), _latent_path(args), _int(args, "segment", -1), _text(args, "folder"),
-                              delete=bool(args.get("delete")))
+        return film.pick_take(_output_dir(), _latent_path(args), _int(args, "segment", -1), _text(args, "folder"))
+    except film.FilmError as err:
+        raise ApiError(400, str(err)) from None
+
+
+def chain_delete(home: Home, args: dict) -> dict:
+    """A take of a clip deleted from disk (#214); the film keeps the clip's newest other take, or ends before it."""
+    from orrery import film
+
+    try:
+        return film.delete_take(_output_dir(), _latent_path(args), _int(args, "segment", -1), _text(args, "folder"))
     except film.FilmError as err:
         raise ApiError(400, str(err)) from None
 
@@ -1076,6 +1085,7 @@ ROUTES = [
     ("GET", "/orrery/chain/thumb", chain_thumb),
     ("POST", "/orrery/chain/move", chain_move),
     ("POST", "/orrery/chain/pick", chain_pick),
+    ("POST", "/orrery/chain/delete", chain_delete),
     ("GET", "/orrery/chain/video", chain_video),
     ("GET", "/orrery/anchor", anchor),
     ("GET", "/orrery/history", history_runs),
@@ -1107,7 +1117,7 @@ ROUTES = [
 
 
 # routes that wait for a language model run in a thread, so ComfyUI's server answers meanwhile
-SLOW = {llm_save, llm_check, write_libraries, write_idea, chain_pick}
+SLOW = {llm_save, llm_check, write_libraries, write_idea, chain_pick, chain_delete}
 
 
 def _handler(fn, method: str, web):

@@ -240,15 +240,28 @@ def take_file(output: Path | str, latent_path: str, folder: str) -> Path | None:
     return path if path is not None and path.is_file() else None
 
 
-def pick_take(output: Path | str, latent_path: str, segment: int, folder: str, delete: bool = False) -> dict:
+def _take(output: Path | str, latent_path: str, segment: int, folder: str) -> tuple[Path, dict, list]:
+    """The active run, its state and clips, if it holds the take `folder` of `segment`."""
+    run, state = _active(_root(output, latent_path))
+    match = _TAKE.match(folder or "")
+    if run is None or not match or int(match.group(1)) != segment or not (run / folder).is_dir():
+        raise FilmError(f"clip {segment + 1} has no take {folder!r} in the reel {latent_path!r}.")
+    return run, state, state.get("clips", [])
+
+
+def _keep(run: Path, state: dict, clips: list) -> None:
+    settings = state.get("settings") or []
+    write_atomic(run / "clips.json", json.dumps({"settings": settings, "clips": clips}, indent=2))
+    _join(run, clips, int(settings[3]) if len(settings) > 3 else 48000)
+
+
+def pick_take(output: Path | str, latent_path: str, segment: int, folder: str) -> dict:
     """Make a take of `segment` the active one (sample surfing, #206): the film is joined again with it, and the
     takes after it that continued the one it replaces leave the run, as when the segment renders again.
-    `delete`: the segment's other takes are deleted from disk. Returns the take's seed and take number."""
-    run, state = _active(_root(output, latent_path))
-    clips = state.get("clips", [])
-    match = _TAKE.match(folder or "")
-    if run is None or segment >= len(clips) or not match or int(match.group(1)) != segment or not (run / folder).is_dir():
-        raise FilmError(f"clip {segment + 1} has no take {folder!r} in the reel {latent_path!r}.")
+    Returns the take's seed and take number."""
+    run, state, clips = _take(output, latent_path, segment, folder)
+    if segment >= len(clips):
+        raise FilmError(f"clip {segment + 1} is not in the reel {latent_path!r}'s film.")
     fitting = {t["folder"] for t in takes(output, latent_path).get(segment, [])}
     if folder not in fitting:
         raise FilmError(f"take {folder!r} was made on another take of clip {segment}: it would not continue it.")
@@ -259,14 +272,25 @@ def pick_take(output: Path | str, latent_path: str, segment: int, folder: str, d
                                 "continues": meta.get("continues", old.get("continues")),
                                 **({"test": True} if old.get("test") else {})},
              *(clips[c] for c in later)]
-    settings = state.get("settings") or []
-    write_atomic(run / "clips.json", json.dumps({"settings": settings, "clips": clips}, indent=2))
-    _join(run, clips, int(settings[3]) if len(settings) > 3 else 48000)
-    if delete:
-        for other in run.iterdir():
-            if other.is_dir() and other.name != folder and _TAKE.match(other.name) and int(_TAKE.match(other.name).group(1)) == segment:
-                shutil.rmtree(other)
+    _keep(run, state, clips)
     return {"folder": folder, "seed": meta.get("seed"), "take": meta.get("take") or 0}
+
+
+def delete_take(output: Path | str, latent_path: str, segment: int, folder: str) -> dict:
+    """Delete a take of `segment` from disk (#214). The take in the film gives its place to the newest other take
+    of the clip that fits; without one, the film ends before the clip. Returns the take in the film there now (as
+    pick_take does), or folder None."""
+    run, state, clips = _take(output, latent_path, segment, folder)
+    got = {"folder": clips[segment]["folder"] if segment < len(clips) else None}
+    if got["folder"] == folder:
+        others = [t["folder"] for t in takes(output, latent_path).get(segment, []) if t["folder"] != folder]
+        if others:
+            got = pick_take(output, latent_path, segment, others[-1])
+        else:
+            got = {"folder": None}
+            _keep(run, state, clips[:segment])
+    shutil.rmtree(run / folder)
+    return got
 
 
 def film_file(take: Path) -> Path:

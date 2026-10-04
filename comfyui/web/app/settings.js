@@ -95,8 +95,6 @@ export async function openSettings(app) {
     <div class="llm-pick" role="radiogroup" aria-label="The takes' seeds">
       <label class="check"><input type="radio" name="oa-surf" value="numbered" ${app.data.surf_numbered !== false ? "checked" : ""}><span><b>Numbered</b> from the node's seed: seed+1, seed+2 … (the same takes again tomorrow)</span></label>
       <label class="check"><input type="radio" name="oa-surf" value="control" ${app.data.surf_numbered === false ? "checked" : ""}><span>As the node's <b>control after generate</b> says (randomize: new ones every time; fixed: the same take again)</span></label></div>
-    <label class="check"><input type="checkbox" id="oa-deltakes" ${app.data.keep_takes === false ? "checked" : ""}>
-      <span><b>Delete the takes you don't pick</b>, so they don't fill the disk</span></label>
     <label class="check"><input type="checkbox" id="oa-log" ${app.data.log_prompts !== false ? "checked" : ""}>
       <span><b>Log each run</b> to ComfyUI's console: its seed, every pick and the resolved prompt (the <b>History</b> tab keeps them either way)</span></label>
     <div class="acts"><button type="button" class="btn ghost" data-cancel>Cancel</button><button class="btn primary">${icon("save")}Save</button></div>
@@ -142,7 +140,7 @@ export async function openSettings(app) {
       }
       const flags = { quickstart: sheet.querySelector("#oa-qs").checked, dividers: sheet.querySelector("#oa-div").checked,
         timeline: sheet.querySelector("#oa-tl").checked, log_prompts: sheet.querySelector("#oa-log").checked,
-        surf_numbered: sheet.querySelector('[name="oa-surf"]:checked').value === "numbered", keep_takes: !sheet.querySelector("#oa-deltakes").checked,
+        surf_numbered: sheet.querySelector('[name="oa-surf"]:checked').value === "numbered",
         preview_light: sheet.querySelector('[name="oa-pv"]:checked').value === "light" };
       if (Object.entries(flags).some(([k, on]) => on !== (app.data[k] !== false))) Object.assign(app.data, await app.api.saveUi(flags));
       const clipMin = Number(sheet.querySelector("#oa-clipmin").value) || 360;

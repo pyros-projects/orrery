@@ -46,7 +46,7 @@ function bigClipHTML(app, s, clip, segment) {
   const path = app.bridge.chain(), src = app.api.chainVideoURL(s, path, clip.version);
   return `<button class="tl-clip big${s === segment ? " now" : ""}" data-seg="${s}" title="Clip ${s + 1} · ${clip.frames ?? "?"} frames · hover to play, click to open${s === segment ? " · next" : ""}">`
     + `<video muted loop playsinline preload="metadata" poster="${app.api.chainThumbURL(s, path, clip.version)}" src="${src}#t=0.05"></video>`
-    + `<span class="n">${s + 1}</span></button>`;
+    + `<span class="n">${s + 1}</span>${TAKE.test(clip.version || "") ? delHTML(clip.version) : ""}</button>`;
 }
 
 // A chunk's clips for its section in the cells view; the section sizes them (--clip-w, --clip-h). The frames
@@ -61,6 +61,13 @@ export function sectionHTML(app, c) {
   return `<div class="cm-clips">${segs.map((s) => bigClipHTML(app, s, clips.get(s), segment)).join("")}</div>${segs.map((s) => takesHTML(app, s)).join("")}`;
 }
 
+const TAKE = /^seg_\d{4}_[0-9a-f]{8}$/;  // an Orrery Film take's folder
+
+// The × that deletes a take (#214), on hover; a click asks in place.
+function delHTML(folder) {
+  return `<span class="del" role="button" data-del="${esc(folder)}" title="Delete this take" aria-label="Delete this take">${icon("x")}</span>`;
+}
+
 // A clip's takes (#206), where it has more than one: hover plays one, a click puts it in the film.
 function takesHTML(app, s) {
   const takes = app.data.chain?.takes?.[s] || [];
@@ -68,18 +75,37 @@ function takesHTML(app, s) {
   return `<div class="cm-takes" data-seg="${s}"><span class="muted">clip ${s + 1} · ${takes.length} takes</span>${takes.map((t, i) =>
     `<button type="button" class="take${t.active ? " on" : ""}" data-take="${esc(t.folder)}" data-seg="${s}" title="Take ${i + 1} · seed ${t.seed ?? "?"}`
     + `${t.take ? ` + ${t.take}` : ""}${t.active ? " · in the film" : " · click to put it in the film"}">`
-    + `<img loading="lazy" alt="" src="${app.api.takeThumbURL(app.bridge.chain(), t.folder)}"><span class="n">${i + 1}</span></button>`).join("")}</div>`;
+    + `<img loading="lazy" alt="" src="${app.api.takeThumbURL(app.bridge.chain(), t.folder)}"><span class="n">${i + 1}</span>${delHTML(t.folder)}</button>`).join("")}</div>`;
 }
 
 // Sample surfing (#206): the take picked is the one the film, REMEMBER: and the next clip use. A take that rolled
 // anew sets the node's seed to its own, so the clips after it roll the same world.
 async function pickTake(app, segment, folder) {
   try {
-    const got = await app.api.pickTake(app.bridge.chain(), segment, folder, app.data.keep_takes === false);
-    if (!got.take && got.seed != null && Number(got.seed) !== Number(app.bridge.getSeed())) app.bridge.setSeed(Number(got.seed));
+    const got = await app.api.pickTake(app.bridge.chain(), segment, folder);
+    followSeed(app, got);
     await loadChain(app);
     app.refreshRun?.();
-    app.toast(`This take of clip ${segment + 1} is in the film${app.data.keep_takes === false ? "; the others are deleted" : ""}`);
+    app.toast(`This take of clip ${segment + 1} is in the film`);
+  } catch (err) { app.fail(err); }
+}
+
+function followSeed(app, got) {
+  if (!got.take && got.seed != null && Number(got.seed) !== Number(app.bridge.getSeed())) app.bridge.setSeed(Number(got.seed));
+}
+
+// A take deleted (#214): the film keeps the clip's newest other take, or ends before the clip, and then the next
+// clip is that one.
+async function deleteTake(app, segment, folder) {
+  try {
+    const got = await app.api.deleteTake(app.bridge.chain(), segment, folder);
+    const ended = !got.folder && Number(app.bridge.getSegment()) > segment;
+    if (got.folder) followSeed(app, got);
+    else if (ended) app.bridge.setSegment(segment);
+    await loadChain(app);
+    app.refreshRun?.();
+    app.toast(got.folder ? `Take deleted; clip ${segment + 1} plays another take`
+      : `Clip ${segment + 1} deleted: the film ends before it${ended ? `, and the next clip is ${segment + 1}` : ""}`);
   } catch (err) { app.fail(err); }
 }
 
@@ -154,6 +180,14 @@ export function wireClips(app, box) {
     else clip.querySelector("video")?.remove();
   });
   box.addEventListener("click", (e) => {
+    const host = e.target.closest(".take, .tl-clip");
+    if (e.target.closest("[data-delno]")) return host.querySelector(".ask")?.remove();
+    if (e.target.closest("[data-delyes]")) return deleteTake(app, Number(host.dataset.seg), host.querySelector("[data-del]").dataset.del);
+    if (e.target.closest(".ask")) return;
+    if (e.target.closest("[data-del]")) {
+      return host.insertAdjacentHTML("beforeend", `<span class="ask">Delete${host.classList.contains("take") ? " this take" : ` clip ${Number(host.dataset.seg) + 1}`}?`
+        + `<span class="btn danger" role="button" data-delyes>Delete</span><span class="btn ghost" role="button" data-delno>Keep</span></span>`);
+    }
     const take = e.target.closest(".take");
     if (take) { if (!take.classList.contains("on")) pickTake(app, Number(take.dataset.seg), take.dataset.take); return; }
     const clip = e.target.closest(".tl-clip:not(.empty)");

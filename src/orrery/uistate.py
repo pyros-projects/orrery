@@ -1,7 +1,7 @@
 """What the node app remembers between sessions: favorite and recently opened presets, and its
 switches: New templates open with their quickstart comments, the editor draws chunk dividers and
 shows the reel's clips under its scenes, each run prints its prompt and picks to ComfyUI's log, sample
-surfing numbers its takes' seeds and keeps the takes not picked, the live preview is light (a few pictures)
+surfing numbers its takes' seeds, the live preview is light (a few pictures)
 rather than smooth. Every switch is on until turned off. And its sizes: `clip_min`, the shorter side of a clip in
 the clips view, and `preview_fps`, the smooth live preview's pictures a second."""
 
@@ -11,8 +11,7 @@ from orrery.home import Home, write_atomic
 
 RECENT_MAX = 12
 LISTS = ("favorites", "recent")  # preset names, followed by renames and deletes
-FLAGS = ("quickstart", "dividers", "timeline", "log_prompts", "surf_numbered", "keep_takes",  # surfing: #206
-         "preview_light")  # #205
+FLAGS = ("quickstart", "dividers", "timeline", "log_prompts", "surf_numbered", "preview_light")  # #206, #205
 SIZES = {"clip_min": (360, 96, 1600), "preview_fps": (12, 1, 24)}  # name → (default, least, most): CSS pixels, pictures a second
 
 
