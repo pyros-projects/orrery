@@ -142,8 +142,7 @@ def sent_block(name: str, sent: dict, latent_path: str, vae) -> dict:
                          "none: wire a Load Video into the Orrery Prompt's video input.")
     if path is None:
         raise ValueError(f"refmod {name} is sent from clip {segment + 1}, but the chain {latent_path!r} has no clip "
-                         f"{segment + 1}: render the reel from that scene on, or check the Orrery Prompt's "
-                         "latent_path.")
+                         f"{segment + 1}: render the reel from that scene on.")
     key = (str(path), Path(path).stat().st_mtime_ns, json.dumps(sent["frames"]), step)
     if key not in _BUILT:
         if vae is None:

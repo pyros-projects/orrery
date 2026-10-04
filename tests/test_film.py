@@ -163,13 +163,24 @@ def test_a_scene_after_the_input_video_pins_its_last_frames_and_sound(tmp_path, 
     assert tuple(tail.video.shape) == (1, 24, 7, 30, 40) and tuple(tail.audio.shape) == (1, 32, 2, 37)
 
 
-def test_segment_0_starts_a_new_run(tmp_path):
-    take(tmp_path, 0)
+def test_clip_1_again_stays_in_its_run_beside_its_other_takes(tmp_path):
+    first = take(tmp_path, 0)
     take(tmp_path, 1)
     before = active_run(tmp_path)
-    take(tmp_path, 0, n=30)
-    assert active_run(tmp_path) != before and before.is_dir()
+    again = take(tmp_path, 0, n=30)
+    assert active_run(tmp_path) == before  # clip 2 continued the first take: it leaves the film
     assert [c["frames"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [30]
+    assert [t["folder"] for t in film.takes(tmp_path, "h3_context")[0]] == [first.name, again.name]
+    film.pick_take(tmp_path, "h3_context", 0, first.name)
+    assert [c["frames"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [24]
+
+
+def test_clip_1_in_another_size_starts_a_new_run(tmp_path):
+    take(tmp_path, 0)
+    before = active_run(tmp_path)
+    take(tmp_path, 0, w=96)
+    assert active_run(tmp_path) != before and before.is_dir()
+    assert len(film.takes(tmp_path, "h3_context")[0]) == 1
 
 
 def test_a_segment_continues_only_the_one_before_it(tmp_path):
@@ -203,3 +214,62 @@ def test_the_readers_follow_the_store_written_last(tmp_path):
     os.utime(theirs / "clips.json", (0, 0))
     os.utime(clips_json, (5, 5))
     assert chain.clip_file(tmp_path, "h3_context", 0) == ours / "video.mp4"
+
+
+def test_sample_surfing_offers_a_clips_takes_and_picks_one(tmp_path):
+    """#206: four takes of clip 2, the best one picked; the film and the next clip follow it."""
+    take(tmp_path, 0)
+    surf = [take(tmp_path, 1, n=24 + k) for k in range(4)]  # the newest is active, as after a render
+    listed = film.takes(tmp_path, "h3_context")
+    assert [t["folder"] for t in listed[1]] == [p.name for p in surf] and listed[1][-1]["active"]
+    assert len(listed[0]) == 1
+    picked = film.pick_take(tmp_path, "h3_context", 1, surf[1].name)
+    assert picked == {"folder": surf[1].name, "seed": 7, "take": 0}
+    assert [(c["segment"], c["frames"]) for c in chain.listing(tmp_path, "h3_context")["clips"]] == [(0, 24), (1, 25)]
+    assert chain.clip_file(tmp_path, "h3_context", 1) == surf[1] / "video.mp4"
+    assert decoded(active_run(tmp_path) / "film.mp4")[0] == 49
+    assert film.take_file(tmp_path, "h3_context", surf[2].name) == surf[2] / "video.mp4"
+
+
+def test_a_picked_take_drops_the_clips_that_continued_another_and_hides_their_takes(tmp_path):
+    take(tmp_path, 0)
+    a, _ = take(tmp_path, 1), take(tmp_path, 1, n=30)  # the second, b, is the active one
+    on_b = take(tmp_path, 2)  # made on take b of clip 2
+    film.pick_take(tmp_path, "h3_context", 1, a.name)
+    assert [c["segment"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [0, 1]  # clip 3 continued b
+    assert 2 not in film.takes(tmp_path, "h3_context")  # nothing of clip 3 fits take a
+    with pytest.raises(film.FilmError):  # clip 3 has left the film: none of its takes is offered or picked
+        film.pick_take(tmp_path, "h3_context", 2, on_b.name)
+    with pytest.raises(film.FilmError):
+        film.pick_take(tmp_path, "h3_context", 1, "seg_0001_../../x")
+
+
+def test_a_take_beside_the_one_in_the_film_is_deleted_and_the_film_stays(tmp_path):
+    take(tmp_path, 0)
+    a, b = take(tmp_path, 1), take(tmp_path, 1, n=30)
+    assert film.delete_take(tmp_path, "h3_context", 1, a.name) == {"folder": b.name}  # beside it: the film stays
+    assert not a.exists() and [t["folder"] for t in film.takes(tmp_path, "h3_context")[1]] == [b.name]
+    assert [c["frames"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [24, 30]
+
+
+def test_deleting_the_take_in_the_film_puts_the_newest_other_in_its_place(tmp_path):
+    take(tmp_path, 0)
+    a, b, c = take(tmp_path, 1, n=26), take(tmp_path, 1, n=28), take(tmp_path, 1, n=30)
+    take(tmp_path, 2)  # made on c
+    assert film.delete_take(tmp_path, "h3_context", 1, c.name) == {"folder": b.name, "seed": 7, "take": 0}
+    assert not c.exists() and a.is_dir()
+    assert [c["frames"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [24, 28]  # clip 3 continued c
+    assert decoded(active_run(tmp_path) / "film.mp4")[0] == 52
+
+
+def test_deleting_a_clips_last_take_ends_the_film_before_it(tmp_path):
+    only = take(tmp_path, 0)
+    two = take(tmp_path, 1)
+    assert film.delete_take(tmp_path, "h3_context", 1, two.name) == {"folder": None}
+    assert [c["frames"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [24]
+    film.delete_take(tmp_path, "h3_context", 0, only.name)
+    assert chain.listing(tmp_path, "h3_context")["clips"] == [] and not (active_run(tmp_path) / "film.mp4").exists()
+    again = take(tmp_path, 0)  # the run goes on
+    assert again.parent == only.parent
+    with pytest.raises(film.FilmError):
+        film.delete_take(tmp_path, "h3_context", 0, only.name)

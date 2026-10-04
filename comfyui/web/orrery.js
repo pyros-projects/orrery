@@ -44,7 +44,7 @@ function mount(node) {
   loadStyles();
   const find = (name) => node.widgets?.find((w) => w.name === name);
   const template = find("template"), preset = find("preset"), home = find("home"), params = find("params");
-  [template, preset, home, params, find("sweep")].forEach(hide);
+  [template, preset, home, params, find("sweep"), find("chain"), find("take")].forEach(hide);
   node.properties = node.properties || {};
 
   // the control_after_generate combo that belongs to an INT widget (seed and segment each have one); newer frontends
@@ -178,14 +178,12 @@ function mount(node) {
         Object.entries(on).forEach(([kind, f]) => api.removeEventListener(kind, f));
       }
     },
-    // The chain the reel's clips live in: the string wired into latent_path, else the default h3_context.
-    latentPath: () => {
-      const input = node.inputs?.find((i) => i.name === "latent_path"), g = node.graph || app.graph;
-      const link = input?.link != null && (g.links?.get ? g.links.get(input.link) : g.links?.[input.link]);
-      const source = link && g.getNodeById?.(link.origin_id);
-      const text = source?.widgets?.find((w) => typeof w.value === "string" && w.value.trim());
-      return text ? text.value.trim() : "";
-    },
+    // The folder the reel's clips live in (#197): the hidden chain widget, which the app names after the reel
+    // (reels/<preset>, reels/untitled/<date time>); empty is the server's default, h3_context.
+    chain: () => find("chain")?.value || "",
+    setChain: (name) => { if (!sweep.on && (find("chain")?.value || "") !== name) set("chain", name); },
+    // Sample surfing (#206): the take the next run renders; the seed output carries seed + take.
+    setTake: (take) => { if (find("take") && Number(find("take").value) !== take) set("take", take); },
     // The frames wired into the node: they shape width and height (the server reads their size when it runs).
     frames: () => ["first_frame", "last_frame"].filter((name) => node.inputs?.find((i) => i.name === name)?.link != null),
     wired: (name) => node.inputs?.find((i) => i.name === name)?.link != null,
@@ -251,7 +249,12 @@ function mount(node) {
   if (node.size[0] < NEW.width || node.size[1] < 900) node.setSize([Math.max(node.size[0], NEW.width), Math.max(node.size[1], NEW.height)]);
 
   // configure() (a loaded workflow's values and properties) runs after nodeCreated.
-  setTimeout(() => orrery.start(), 0);
+  setTimeout(() => {
+    // a workflow saved before #199 brings the latent_path input back with it: the node has none now, the app names the folder
+    const stale = node.inputs?.findIndex((i) => i.name === "latent_path") ?? -1;
+    if (stale >= 0) node.removeInput(stale);
+    orrery.start();
+  }, 0);
 
   // Which reel segment runs: the node announces it; a finished, failed or stopped prompt ends it.
   const mine = (id) => id != null && (String(id) === String(node.id) || String(id).endsWith(`:${node.id}`));
@@ -259,6 +262,12 @@ function mount(node) {
   const onDone = ({ detail }) => orrery.runDone(detail?.prompt_id);
   const ENDS = ["execution_success", "execution_error", "execution_interrupted"];
   api.addEventListener("orrery.segment", onSegment);
+  // orrery's previews (#209): this node's whole clip (its model through the node), or ComfyUI's still for any run
+  const onPreview = ({ detail: d }) => {
+    if (!d?.image || (d.node != null && !mine(d.node))) return;
+    orrery.preview({ src: `data:${d.mime};base64,${d.image}`, rank: d.animated ? 3 : 2, step: d.step, total: d.total, prompt: d.prompt_id });
+  };
+  api.addEventListener("orrery.preview", onPreview);
   ENDS.forEach((e) => api.addEventListener(e, onDone));
   // the segment, the seed and the target change what the editor shows (its annotations, the scene marked next)
   for (const name of ["segment", "seed", "target"]) {
@@ -269,6 +278,7 @@ function mount(node) {
   const onRemoved = node.onRemoved;
   node.onRemoved = function (...args) {
     api.removeEventListener("orrery.segment", onSegment);
+    api.removeEventListener("orrery.preview", onPreview);
     ENDS.forEach((e) => api.removeEventListener(e, onDone));
     orrery.destroy();
     return onRemoved?.apply(this, args);

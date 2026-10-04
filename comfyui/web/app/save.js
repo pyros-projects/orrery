@@ -67,12 +67,17 @@ export function openSave(app, { text, from = null, copyOf = false, link = false 
       e.preventDefault();
       keep();
       try {
+        const untitled = link && !app.preset && app.bridge.props.orrery_untitled;  // an unsaved reel's folder (#197)
         const saved = await app.api.savePreset({ name: st.name.trim(), text, title: st.title, tags: st.tags, note: st.note, overwrite: st.overwrite });
         await app.refreshPresets();
         if (link) { app.preset = saved.name; app.base = text; app.text = text; app.bridge.setParams({}); }
+        // its clips move to the preset's name, so the next clip still continues the last
+        const moved = untitled ? await app.api.moveChain(untitled, `reels/${saved.name}`).catch((err) => ({ reason: err.message })) : null;
+        if (untitled && !moved.reason) delete app.bridge.props.orrery_untitled;
         app.closeSheet();
         app.render();
-        app.toast(`Saved <b>@${esc(saved.name)}</b>${st.overwrite ? " (overwritten)" : ""}`);
+        app.toast(`Saved <b>@${esc(saved.name)}</b>${st.overwrite ? " (overwritten)" : ""}${moved?.moved ? `, its clips with it in <b>reels/${esc(saved.name)}</b>` : ""}`
+          + (moved?.reason ? `. Its clips stay in <b>${esc(untitled)}</b> (${esc(moved.reason)}); Restart starts its film under the new name.` : ""));
       } catch (err) {
         if (err.status === 409) { st.error = ""; st.overwrite = false; await app.refreshPresets().catch(() => {}); }
         else st.error = err.message;

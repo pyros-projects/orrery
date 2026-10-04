@@ -26,13 +26,6 @@
           "link": null
         },
         {
-          "localized_name": "latent_path",
-          "name": "latent_path",
-          "shape": 7,
-          "type": "STRING",
-          "link": null
-        },
-        {
           "localized_name": "video",
           "name": "video",
           "shape": 7,
@@ -192,6 +185,7 @@
         "",
         0,
         "increment",
+        "",
         ""
       ],
       "widgets_values_named": {

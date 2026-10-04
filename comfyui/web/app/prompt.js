@@ -6,9 +6,10 @@ import { annotationLines, mergeHints } from "./annotate.js";
 import { wireHover } from "./hover.js";
 import { hintsFor } from "./remember.js";
 import { icon } from "./icons.js";
-import { applyDials, chunkInfo, dials, hasGoto, plays, folderColor, pickerGroups, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
+import { applyDials, chunkInfo, dials, hasGoto, nextSceneClip, plays, folderColor, pickerGroups, sceneTarget, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
 import { drag, thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
+import { openSceneStats } from "./scenestats.js";
 import { STARTERS } from "./starters.js";
 import { runRolls } from "./test.js";
 import { caretPoint, cellStart, inCell, jumpCell, paintCells, renderCells, wireCells } from "./cells.js";
@@ -24,7 +25,7 @@ function statsHTML(app) {
   const wired = /^\s*(:\s*.*\b[wh]\d|@size\b)/m.test(app.text) ? [] : app.bridge.frames?.() || [];  // `@size` wins
   const outs = (app.data.rows || []).filter((r) => r.template === templateHash(app.text)).length;
   const forever = reel && reel.clips === Infinity, clips = !reel ? "" : forever ? "∞" : Number.isNaN(reel.clips) ? "?" : reel.clips;
-  const how = !reel ? "" : "Wire the picks into Orrery Continue (and the clip into Orrery Film). Next clip counts up by itself after each run (unless held): "
+  const how = !reel ? "" : `Its clips live in output/${app.bridge.chain?.() || "h3_context"}. Wire the picks into Orrery Continue (and the clip into Orrery Film). Next clip counts up by itself after each run (unless held): `
     + (forever ? "Run (Instant) plays clip after clip until you stop it." : `a Run count of ${clips} plays the whole reel${reel.goto ? " at this seed (its GOTO lines may jump on what rolls)" : ""}; after the last clip nothing downstream runs.`);
   const timing = reel
     ? `<span class="stat" title="${esc(how)}"><b>Reel</b> · ${reel.secs.map((s, i) => `<b>${s.toFixed(1)} s</b>${reel.repeats[i] === 1 ? "" : ` ×${reel.repeats[i] === Infinity ? "∞" : reel.repeats[i]}`}`).join(" + ")}${reel.goto ? " · GOTO" : ""} · <b>${clips}</b> clip${reel.clips === 1 ? "" : "s"}</span>`
@@ -56,6 +57,95 @@ function statsHTML(app) {
         + `<label class="rep" title="How many seeds: each runs the whole sweep, the seed stepping between them and after the last as its control after generate says">next<input type="number" min="1" max="999" value="${repeats(app)}" data-rep aria-label="Seeds per sweep">${plural(repeats(app), "seed")}</label>`
       : `<button class="btn primary" data-act="generate" title="Queue only what this node feeds, up to its Save nodes; their files go to the gallery">${icon("play")}Roll</button>`
         + `<label class="rep" title="How many runs Roll queues, one after another; seed and segment step between them as their control after generate says, so a reel plays that many clips">next<input type="number" min="1" max="999" value="${repeats(app)}" data-rep aria-label="Runs per Roll">${plural(repeats(app), reel ? "clip" : st.h3 ? "video" : "image")}</label>`);
+}
+
+// The folder a reel's clips live in (#197): reels/<preset>, or for an unsaved reel reels/untitled/<date time>,
+// named the first time it is needed and kept in the node until New starts another; "" without scenes.
+export function chainName(app) {
+  if (!app.chunks()) return "";
+  if (app.preset) return `reels/${app.preset}`;
+  const now = new Date(), two = (n) => String(n).padStart(2, "0");
+  return (app.bridge.props.orrery_untitled ||= `reels/untitled/${now.getFullYear()}-${two(now.getMonth() + 1)}-${two(now.getDate())} `
+    + `${two(now.getHours())}-${two(now.getMinutes())}`);
+}
+
+// The hidden chain widget follows the reel; another chain is another film, so the clips load again.
+function syncChain(app) {
+  const name = chainName(app);
+  if (name === app.bridge.chain?.() || app.bridge.sweeping?.()) return;
+  app.bridge.setChain?.(name);
+  if (name) app.data.chain = undefined;  // paintEditor loads the new chain's clips
+}
+
+// A scene's buttons in its divider (#204): generate its clip and stay on it, go to the next scene, or both. Sample
+// surfing (#206): ×N takes per Generate (for the node), and 📌, kept per scene: the takes keep the rolled prompt
+// and only the sampler's noise changes; without it every take rolls anew.
+const TAKES = [1, 2, 4, 8];
+const takesOf = (app) => (TAKES.includes(Number(app.bridge.props.orrery_takes)) ? Number(app.bridge.props.orrery_takes) : 1);
+const kept = (app, n) => !!app.bridge.props.orrery_keep?.[n];
+
+export function sceneActs(app) {
+  const chunks = app.chunks() || [], segment = Number(app.bridge.getSegment()), busy = !!app.state.sweepQueue, takes = takesOf(app);
+  const button = (act, name, title, off, n, extra = "") => `<button type="button" class="scene-act" data-scene-act="${act}" data-chunk="${n}" `
+    + `title="${esc(title)}" aria-label="${esc(title)}" ${extra} ${off ? "disabled" : ""}>${name.startsWith("×") ? name : icon(name)}</button>`;
+  return (c, n) => {
+    const target = sceneTarget(c, segment), next = nextSceneClip(c, chunks);
+    const none = c.last === Infinity ? "This scene repeats forever: no scene comes after it" : "No scene comes after this one";
+    const what = takes > 1 ? `${takes} takes of clip ${target + 1}` : `a take of clip ${target + 1}`;
+    // + every time: the first take of a clip or one more, as ×N says
+    return `<span class="scene-acts">${button("gen", "plus", target === null ? "This scene never plays"
+      : `Add ${what}, and stay on this scene`, target === null || busy, n)}`
+      + button("takes", `×${takes}`, `Takes per Generate: ${takes}. Click for ${TAKES[(TAKES.indexOf(takes) + 1) % TAKES.length]}; pick the best under the clip. `
+        + "Takes differ only if their seeds do (see the gear, Sample surfing)", false, n)
+      + button("keep", "pin", kept(app, n) ? "Keeps the rolled prompt: the takes change only the sampler's noise. Click to roll each take anew"
+        : "Each take rolls anew. Click to keep the rolled prompt and change only the sampler's noise", false, n, `aria-pressed="${kept(app, n)}"`)
+      + button("jump", "skip", next === null ? none : `To the next scene: Next clip becomes ${next + 1}`, next === null || busy, n)
+      + button("jumpgen", "ffwd", next === null ? none : `To the next scene, and add ${takes > 1 ? `${takes} takes` : "a take"} of its clip ${next + 1}`,
+        next === null || busy, n)
+      + button("stats", "chart", "This scene in numbers: where and how often it plays, what leads to it, what it rolls, what it made", false, n)
+      + "</span>";
+  };
+}
+
+// The seeds of N takes of clip `to` (#206): numbered on from the takes it has (seed+1, seed+2 …: reproducible),
+// or as the node's seed control steps (randomize: any). With 📌 they are take numbers (the noise: seed + take),
+// without, the node's seed for each take.
+export function surfSeeds(app, to, n, keep) {
+  const base = Number(app.bridge.getSeed()) || 0, control = app.bridge.getControl();
+  const had = (app.data.chain?.takes?.[to] || []).map((t) => (keep ? t.take : (t.seed ?? base) - base)).filter((v) => v >= 0);
+  if (!had.length && (app.data.chain?.clips || []).some((c) => c.segment === to)) had.push(0);  // its one clip
+  const start = had.length ? Math.max(...had) + 1 : 0;
+  return Array.from({ length: n }, (_, k) => (app.data.surf_numbered !== false || control === "increment" ? start + k
+    : control === "randomize" ? Math.floor(Math.random() * 2 ** 31) : control === "decrement" ? -(start + k) : 0));
+}
+
+async function sceneAct(app, act, n, button = null) {
+  if (act === "stats") return openSceneStats(app, n, button);  // #219, also while a sweep runs
+  const chunks = app.chunks() || [], c = chunks[n];
+  if (!c || app.state.sweepQueue) return;
+  if (act === "takes") { app.bridge.props.orrery_takes = TAKES[(TAKES.indexOf(takesOf(app)) + 1) % TAKES.length]; return paintEditor(app); }
+  if (act === "keep") { app.bridge.props.orrery_keep = { ...app.bridge.props.orrery_keep, [n]: !kept(app, n) }; return paintEditor(app); }
+  const to = act === "gen" ? sceneTarget(c, Number(app.bridge.getSegment())) : nextSceneClip(c, chunks);
+  if (to === null) return;
+  app.bridge.setSegment(to);
+  if (act === "jump") return refreshFoot(app);
+  const scene = chunks.findIndex((o) => plays(o, to)), keep = kept(app, scene), base = Number(app.bridge.getSeed()) || 0;
+  const offsets = surfSeeds(app, to, takesOf(app), keep);
+  let queued = 0;
+  try {
+    for (const offset of offsets) {
+      app.bridge.setSegment(to);
+      app.bridge.setTake(keep ? Math.max(0, offset) : 0);
+      app.bridge.setSeed(keep ? base : Math.max(0, base + offset) % 2 ** 32);
+      queued += await app.bridge.generate(1);
+    }
+    if (!queued) app.toast("Nothing to generate: connect this node's outputs toward a Save or Preview node.");
+    else if (offsets.length > 1) app.toast(`Queued <b>${queued}</b> takes of clip ${to + 1}: pick the best under it once they are in`);
+  } catch (err) { app.fail(err); }
+  app.bridge.setSegment(to);  // the clip steps on after it is queued: back, so the scene stays where it is
+  app.bridge.setTake(0);
+  app.bridge.setSeed(base);
+  refreshFoot(app);
 }
 
 // Write now (#168): with an API endpoint, the libraries the template still needs, written at once beside ComfyUI.
@@ -95,6 +185,7 @@ function chipHTML(app) {
 
 export function renderPrompt(app) {
   app.bridge.syncSegment?.(!!app.chunks());
+  syncChain(app);
   const card = app.preset && app.card(app.preset);
   const d = app.dirty();
   app.view.innerHTML = `
@@ -150,7 +241,10 @@ export function renderPrompt(app) {
   wireHover(app, app.view.querySelector(".editor"));
   if (app.data.timeline !== false && app.chunks()) loadChain(app).then(paint);
 
+  app.sceneActs = () => sceneActs(app);
   app.view.onclick = (e) => {
+    const scene = e.target.closest("[data-scene-act]");
+    if (scene) return sceneAct(app, scene.dataset.sceneAct, Number(scene.dataset.chunk), scene);
     const act = e.target.closest("[data-act]")?.dataset.act;
     const load = e.target.closest("[data-load]");
     if (load) return app.loadPreset(load.dataset.load);
@@ -187,6 +281,7 @@ export function renderPrompt(app) {
   fixReelSeed(app);
   fixUniqueSeed(app);
   refreshPlan(app);
+  refreshReelPath(app);  // a reel with CUT TO: walks at the seed: without it no scene knows its clips
   refreshRemembered(app);  // the hints and the remembered frames of a reel just opened
   refreshAnnotations(app);
 }
@@ -263,11 +358,12 @@ function paintEditor(app) {
   const pre = app.view.querySelector(".editor pre.hl");
   if (!pre) return;
   const chunks = app.chunks(), known = app.known(), llm = app.llmActive(), segment = chunks && Number(app.bridge.getSegment());
+  const acts = chunks && sceneActs(app);
   const hints = mergeHints(hintsFor(app.text, app.remembered()), annotationLines(app.text, app.annotations(), app.api.thumbURL));
-  const key = JSON.stringify([app.text, [...known], llm, chunks, segment, [...hints]]);
+  const key = JSON.stringify([app.text, [...known], llm, chunks, segment, [...hints], acts ? chunks.map((c, n) => acts(c, c.index ?? n)) : ""]);
   if (painted.get(pre) !== key) {
     painted.set(pre, key);
-    pre.innerHTML = `${highlight(app.text, known, { llm, chunks, segment, hints })}\n`;
+    pre.innerHTML = `${highlight(app.text, known, { llm, chunks, segment, sceneActs: acts, hints })}\n`;
   }
   if (chunks && app.data.timeline !== false && app.data.chain === undefined) {  // a reel typed or pasted in
     app.data.chain = null;
@@ -298,6 +394,7 @@ function jumpToChunk(app) {
 
 export function refreshFoot(app) {
   app.bridge.syncSegment?.(!!app.chunks());  // a template without scenes: clip 0, not stepping (#190)
+  syncChain(app);
   refreshPlan(app);  // a dial or an edit can change what Generate queues
   refreshReelPath(app);
   refreshRemembered(app);
@@ -633,10 +730,12 @@ function pickChoice(app, input, value) {
 
 function startNew(app, kind) {
   if (app.busy()) return;
-  const s = STARTERS[kind], prev = { preset: app.preset, base: app.base, text: app.text, params: app.bridge.getParams(), target: app.bridge.getTarget() };
+  const s = STARTERS[kind], prev = { preset: app.preset, base: app.base, text: app.text, params: app.bridge.getParams(), target: app.bridge.getTarget(),
+    untitled: app.bridge.props.orrery_untitled };
   const hadWork = app.dirty();
   app.preset = null;
   app.base = null;
+  delete app.bridge.props.orrery_untitled;  // a new reel gets a folder of its own (#197)
   app.text = app.data.quickstart === false ? stripComments(s.text).trimStart() : s.text;  // the gear turns it off
   app.bridge.setParams({});
   app.bridge.setTarget(s.target);
@@ -647,6 +746,7 @@ function startNew(app, kind) {
     label: "Undo",
     run: () => {
       app.preset = prev.preset; app.base = prev.base; app.text = prev.text;
+      if (prev.untitled) app.bridge.props.orrery_untitled = prev.untitled;  // the unsaved reel's clips are there
       app.bridge.setParams(prev.params); app.bridge.setTarget(prev.target); renderPrompt(app);
     },
   } : null);

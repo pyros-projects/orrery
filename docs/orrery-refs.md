@@ -283,9 +283,9 @@ line if you want the prompt to point at it after all.
 
 ### Where the frames come from
 
-Orrery Refs reads the clip from the reel's chain, in the folder the Orrery
-Prompt's `latent_path` names (`h3_context` unless you wire another one): Orrery
-Film's takes, or H3 Motion Context's Chain Video, whichever was written last.
+Orrery Refs reads the clip from the reel's chain, in the reel's own folder (orrery
+names it, see [comfyui.md](comfyui.md)): Orrery Film's takes, or H3 Motion
+Context's Chain Video, whichever was written last.
 Both replace a clip when it renders again and drop the ones that continue it,
 so a reel rendered from the top with **Restart** always remembers frames of this
 reel, never of an older one. Start in the middle of a reel whose remembering
@@ -443,7 +443,7 @@ ComfyUI console.
 | `This clip's CAST uses image_2, but nothing is wired into it.` | the clip uses an image that is neither wired nor remembered | wire `image_2`, or take it out of the clip's CAST |
 | `This clip uses 3 reference images, but Reference to Video has 2 wired: <Picture 3> and up point at nothing.` (lint) | fewer `ref_image` slots are wired than the clip uses | wire `ref_3` → `ref_image_2` |
 | `[orrery] warn: image 3 is wired into Orrery Refs and kept by a REMEMBER: (SEND:) line too: …` (console) | a remembered image has a picture wired as well | fine if intended: the wired picture stands in until the frames exist |
-| `image 3 is sent from clip 1, but the chain 'h3_context' has no clip 1: …` | the remembering clip is not in the chain | render the reel from that scene on (Restart), or check `latent_path` |
+| `image 3 is sent from clip 1, but the chain 'h3_context' has no clip 1: …` | the remembering clip is not in the chain | render the reel from that scene on (Restart) |
 | `This reel REMEMBERs frames as reference images, which Orrery Refs fetches: …` | no Orrery Refs reads the prompt's `picks` | wire `picks` into Orrery Refs |
 | `image 3 is held (keep_sent), but it has no stored anchor: …` | `keep_sent` is on for an image that was never fetched | run once with `keep_sent` off, then switch it on |
 | `REMEMBER: hands frames to Reference to Video as reference images, so it needs an @h3 references screenplay.` | `REMEMBER: … as image N` in another mode | switch the header to `@h3 references` |

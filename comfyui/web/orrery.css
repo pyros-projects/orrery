@@ -140,6 +140,45 @@
 .orrery-app .chunkline.now .chunkinfo { border-top: 1px solid var(--brass); background: var(--brass-soft); }
 .orrery-app .chunkline.now .chunkinfo > span { color: var(--brass); background: color-mix(in srgb, var(--brass) 14%, var(--well)); }
 .orrery-app .editor.nodiv .chunkinfo { display: none; }
+/* a scene's buttons (#204, #206): part of the divider's label, in its colour (brass on the scene that plays next),
+   above the textarea and clickable while the rest of the divider is not */
+.orrery-app .chunkinfo > span.scene-acts { display: inline-flex; align-items: center; gap: 3px; padding: 1px 6px 1px 6px; margin-left: -1px;
+  max-width: none; overflow: visible; pointer-events: auto; position: relative; z-index: 2; }
+/* small raised keys: a rim and a hint of fill in the label's colour, a shadow under them; they sink when pressed */
+.orrery-app .scene-act { display: inline-flex; align-items: center; justify-content: center; height: 15px; min-width: 18px; padding: 0 3px;
+  border: 1px solid color-mix(in srgb, currentColor 38%, transparent); border-radius: 4px; color: inherit; font: inherit; cursor: pointer;
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  box-shadow: 0 1px 0 rgba(0,0,0,.55), inset 0 1px 0 color-mix(in srgb, currentColor 18%, transparent); }
+.orrery-app .scene-act .i { width: 10px; height: 10px; }
+.orrery-app .scene-act:hover:not(:disabled) { background: color-mix(in srgb, currentColor 22%, transparent); border-color: color-mix(in srgb, currentColor 60%, transparent); }
+.orrery-app .scene-act:active:not(:disabled) { transform: translateY(1px); box-shadow: inset 0 1px 1px rgba(0,0,0,.35); }
+.orrery-app .scene-act:disabled { opacity: .3; cursor: default; box-shadow: none; }
+.orrery-app .scene-act[aria-pressed="false"] { opacity: .55; }
+.orrery-app .scene-act[aria-pressed="true"] { background: color-mix(in srgb, currentColor 26%, transparent); box-shadow: inset 0 1px 1px rgba(0,0,0,.35); }
+/* a clip's takes (#206): a strip under the scene's clips; the one in the film is marked */
+.orrery-app .cm-takes { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; }
+.orrery-app .cm-takes .muted { margin-right: 4px; }
+.orrery-app .take { position: relative; width: var(--take-w, 96px); height: var(--take-h, 54px); padding: 0; border: 1px solid var(--line); border-radius: 4px; overflow: hidden;
+  background: #22232e; cursor: pointer; }
+.orrery-app .take img, .orrery-app .take video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.orrery-app .take video { z-index: 1; }
+.orrery-app .take .n { position: absolute; left: 3px; bottom: 2px; z-index: 2; font: 500 9.5px/1 var(--mono); color: #fff; text-shadow: 0 0 3px #000; }
+.orrery-app .take:hover { border-color: var(--muted); }
+.orrery-app .take.on { border: 2px solid var(--brass); cursor: default; }
+.orrery-app .cm-takes .grip { align-self: flex-end; width: 12px; height: 12px; cursor: nwse-resize; touch-action: none; opacity: .7;
+  background: linear-gradient(135deg, transparent 45%, var(--faint) 45% 55%, transparent 55% 70%, var(--faint) 70% 80%, transparent 80%); }
+.orrery-app .cm-takes .grip:hover { opacity: 1; }
+/* deleting a take (#214): a × on hover, then the question in place */
+.orrery-app .del { position: absolute; top: 3px; right: 3px; z-index: 3; display: none; place-items: center; width: 18px; height: 18px;
+  border-radius: 50%; background: rgba(0,0,0,.6); color: #fff; cursor: pointer; }
+.orrery-app .tl-clip:hover .del, .orrery-app .take:hover .del { display: grid; }
+.orrery-app .del:hover { background: var(--danger); }
+.orrery-app .del svg { width: 11px; height: 11px; }
+.orrery-app .ask { position: absolute; inset: 0; z-index: 4; display: flex; flex-wrap: wrap; align-content: center; justify-content: center;
+  gap: 4px 6px; padding: 4px; background: rgba(15,16,22,.88); color: var(--ink); font-size: 11px; text-align: center; cursor: default; }
+.orrery-app .ask .btn { padding: 1px 7px; font-size: 10.5px; cursor: pointer; }
+.orrery-app .take .ask { font-size: 9.5px; gap: 2px 4px; }
+.orrery-app .take .ask .btn { padding: 0 4px; font-size: 9.5px; }
 /* the dials' sidebar (#184): beside the editor, as wide as its grip sets (--side-w), one dial a row */
 .orrery-app .side-grip { width: 8px; flex: none; cursor: col-resize; border-radius: 4px; touch-action: none; }
 .orrery-app .side-grip:hover, .orrery-app .side-grip:focus-visible { background: var(--line); outline: none; }
@@ -210,6 +249,12 @@
 .orrery-app .tl-clip:not(.empty):hover { border-color: var(--muted); }
 .orrery-app .tl-clip img, .orrery-app .tl-clip video, .orrery-app .tl-clip .missing { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .orrery-app .tl-clip video { z-index: 1; }
+/* the clip rendering now (#205): as big as a made one, with the sampler's preview and its step */
+.orrery-app .tl-clip.live, .orrery-app .tl-clip.empty.small.live { width: var(--clip-w); height: var(--clip-h); border: 1px solid var(--brass); }
+.orrery-app .tl-clip .tl-live { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 2; }  /* over the clip it replaces */
+.orrery-app .tl-step { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; font: 500 10px/1 var(--mono); color: #fff; padding: 4px 6px 6px;
+  background: linear-gradient(to top, rgba(0,0,0,.65), transparent); text-shadow: 0 0 3px #000; }
+.orrery-app .tl-step::after { content: ""; position: absolute; left: 0; bottom: 0; height: 3px; width: var(--p, 0%); background: var(--brass); transition: width .3s; }
 .orrery-app .tl-clip .n { position: absolute; left: 3px; bottom: 2px; z-index: 2; font: 500 9.5px/1 var(--mono); color: #fff; text-shadow: 0 0 3px #000, 0 0 2px #000; }
 .orrery-app .tl-clip.empty .n { color: var(--faint); text-shadow: none; }
 .orrery-app .tl-video { width: 100%; max-height: 60vh; border-radius: 8px; background: #000; }
@@ -500,6 +545,14 @@
   box-shadow: 0 10px 40px rgba(0,0,0,.5); animation: orrery-down .18s ease-out; max-height: 100%; overflow-y: auto; }
 .orrery-app.big .sheet { align-items: center; }
 .orrery-app.big .sheet .panel { border-radius: 14px; border-top: 1px solid var(--line); }
+/* a scene in numbers (#219) */
+.orrery-app .scene-stats section { display: grid; gap: 6px; }
+.orrery-app .scene-stats h4 { display: flex; align-items: center; gap: 8px; }
+.orrery-app .ss-strip { display: flex; flex-wrap: wrap; gap: 2px; }
+.orrery-app .ss-strip i { width: 7px; height: 14px; border-radius: 2px; background: #2e3040; }
+.orrery-app .ss-strip i.on { background: var(--brass); }
+.orrery-app .ss-strip i.next { outline: 1px solid var(--ink); outline-offset: 1px; }
+.orrery-app .ss-lines { margin: 0; padding: 6px 8px; border-radius: 6px; background: #17181f; font: 11.5px/1.5 var(--mono); white-space: pre-wrap; color: var(--muted); }
 @keyframes orrery-up { from { transform: translateY(24px); opacity: 0; } }
 @keyframes orrery-down { from { transform: translateY(-24px); opacity: 0; } }
 .orrery-app .panel h4 { margin: 0; font: italic 400 21px/1.1 var(--serif); }

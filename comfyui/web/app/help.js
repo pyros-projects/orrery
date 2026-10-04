@@ -78,6 +78,8 @@ const REF = [
   ]],
   ["Reels (Orrery Continue)", [
     ["SCENE the salon", "one clip, continuing the one before; everything before the first SCENE (style, CAST, bindings) is the world and holds for every clip", "SCENE \nSHOT 5s: push in, slow\n"],
+    ["+ ⏭ ⏩ 📊 (a scene's divider)", "add takes of this scene's clip and stay on it (its first take, or one more), go to the next scene, or go there and add takes of its clip; 📊 the scene in numbers (where and how often it plays, what leads to it, what it rolls); the clip rendering now shows the sampler's preview in its box", ""],
+    ["×4 📌 (a scene's divider)", "sample surfing: Generate renders 4 takes of the clip, which line up under it; a click puts one in the film. 📌 keeps the rolled prompt (only the noise changes); without it each take rolls anew. The gear: numbered seeds or the node's control. A × on a take or a clip deletes it (it asks first); the grip at the takes' end sizes them", ""],
     ["style: … (in a SCENE)", "that clip's own style, in place of the head's", "style: "],
     ["SCENE the walk ×8", "plays this scene 8 times (forever: until you stop); bindings inside a scene roll anew every clip", "SCENE the walk forever\n"],
     ["SCENE the forest (test)", "rendered and kept, but left out of the film, and it starts afresh: frames it REMEMBERs serve the scenes after it", "SCENE  (test)\n"],
@@ -86,7 +88,7 @@ const REF = [
     ["AFTER: 2", "continue scene 2's last clip (title or number) instead of the clip before: many scenes can branch off one clip, each with its own SET:", "AFTER: "],
     ["AFTER: the input video", "continue the video wired into the Orrery Prompt's video input (Orrery Continue needs the vae and audio_vae); an END ON: in the head says how the video ends, a REMEMBER: there keeps its frames for every clip", "AFTER: the input video\n"],
     ["CUT TO: the stairs ×2 (30%)", "at a scene's end: jump to that scene (title or number) instead of going on; ×2 twice, then on, without ×N for good; (30%) that often", "CUT TO: "],
-    ["IF $w is a storm: CUT TO: the stairs", "a jump on what this clip rolled: each seed its own story; the dividers list the clips each scene plays at the node's seed", "IF $w is "],
+    ["IF $w is a storm: CUT TO: the stairs", "a jump on what this clip rolled: each seed its own story; a divider names the next clip its scene plays at the node's seed, and its 📊 where and how often it plays", "IF $w is "],
     ["$look[-1]", "$look as it was one clip ago ([-2]: two clips); $look[\"the salon\"]: when that scene last played", "$look[-1]"],
     ["REMEMBER: first frame as @GIRL", "that frame of this clip becomes GIRL's picture for the clips after it: the CAST's image of hers, or a free one; wire the picks into Orrery Refs and it comes out there (a picture wired there stands in until then)", "REMEMBER: first frame as @"],
     ["REMEMBER: frames 0, 50 as @GIRL", "a picture of hers per frame: her CAST's first ones, then free ones; the clips view shows each frame and where it goes before any run", "REMEMBER: frames 0, 50 as @"],

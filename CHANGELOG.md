@@ -55,6 +55,21 @@ checks) are left out.
 
 ### Changed
 
+- A reel keeps its clips in a folder named after it, `output/reels/<preset>` or `reels/untitled/<date time>`, which
+  moves with Save as; two reels no longer write into one `h3_context`. The Orrery Prompt's `latent_path` input
+  is gone (#197).
+- A scene's divider names the next clip it plays (its hover all of them), and its 📊 shows the scene in numbers: where
+  and how often it plays on the walk, how long, what plays before and after it, what it rolls, what it made (#197).
+- A scene's divider adds takes of its clip (+) and stays on it, goes to the next scene, or both; the clip rendering now
+  shows the sampler's preview and its step under its scene (KJNodes' Model Preview Override, or ComfyUI's own) (#197).
+- Sample surfing: a scene's + adds ×1, ×2, ×4 or ×8 takes of its clip, you pick the best under it, and the
+  film, `REMEMBER:` and the next clip use that one; 📌 keeps the scene's rolled prompt so only the noise changes, and
+  the gear numbers the takes' seeds; a × deletes a take, under the clip or in its box, and a grip sizes the takes,
+  in the clip's shape. Clip 1 too: rendering it again stays in its run beside its other takes; another size or
+  sound starts a new run (#197).
+- The Orrery Prompt takes the model through it: the clip being sampled then plays in orrery's clip box as it
+  forms, in real time (the tiny VAE taeh3, else Latent2RGB), light or smooth at the pictures a second the gear's
+  Live preview sets, at the size it sets (1024 px on the long side unless set, 0 as sampled). Without it, ComfyUI's own preview reaches the clip box in every open tab (#197).
 - The dials are a list in a sidebar beside the editor, one a row with what it rolls at this seed, to widen,
   fold or clear; a dial's menu filters by a regex over text, properties and tags, with All and None; a reel's
   clips show only under its scenes, and the column beside the editor is gone; the node's segment widget is

@@ -102,7 +102,7 @@ def test_node_classes_declare_comfy_interfaces():
     inputs = OrreryPrompt.INPUT_TYPES()["required"]
     assert inputs["target"][0] == ["text", "h3-base", "flat"]
     assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length", "lora_stack",
-                                         "megapixels")
+                                         "megapixels", "model")  # the model through orrery (#209)
     assert OrreryLog.OUTPUT_NODE is True
     film, cont = NODE_CLASS_MAPPINGS["OrreryFilm"], NODE_CLASS_MAPPINGS["OrreryContinue"]
     assert film.OUTPUT_NODE is True and film.RETURN_TYPES == ("IMAGE", "AUDIO", "VIDEO")
@@ -458,9 +458,10 @@ def test_an_unusable_answer_keeps_the_directions_and_says_so(home, monkeypatch):
 
 
 def test_outside_a_chain_the_node_runs_without_a_previous_clip(home):
-    assert OrreryPrompt.INPUT_TYPES()["optional"]["latent_path"][1]["forceInput"] is True
+    optional = OrreryPrompt.INPUT_TYPES()["optional"]
+    assert "latent_path" not in optional and optional["chain"][1]["default"] == ""  # the app names it (#197)
     outputs = OrreryPrompt().run("a quiet street", 1, "text", home=str(home), segment=2)
-    assert len(outputs) == len(OrreryPrompt.RETURN_TYPES) and outputs[-1] > 0  # megapixels
+    assert len(outputs) == len(OrreryPrompt.RETURN_TYPES) and outputs[-2] > 0 and outputs[-1] is None  # megapixels, no model
 
 
 def test_only_slots_in_the_played_chunk_can_go_unanswered(home, monkeypatch):
@@ -575,11 +576,11 @@ def test_megapixels_in_the_header_set_the_canvas_by_area():
 
 
 def test_the_node_puts_out_megapixels(home):
-    assert OrreryPrompt.RETURN_NAMES[-1] == "megapixels" and OrreryPrompt.RETURN_TYPES[-1] == "FLOAT"
+    assert OrreryPrompt.RETURN_NAMES[-2] == "megapixels" and OrreryPrompt.RETURN_TYPES[-2] == "FLOAT"
     outputs = OrreryPrompt().run("@h3 t2va 16:9 0.6MP\nSHOT 5s\nA fox runs.\nSFX: wind", 1, "h3-base", home=str(home))
-    assert outputs[-1] == 0.6 and json.loads(outputs[1])["megapixels"] == 0.6
+    assert outputs[-2] == 0.6 and json.loads(outputs[1])["megapixels"] == 0.6
     outputs = OrreryPrompt().run("@h3 t2va 9:16\nSHOT 5s\nA fox runs.\nSFX: wind", 1, "h3-base", home=str(home))
-    assert outputs[-1] == round(768 * 1344 / 1e6, 3)
+    assert outputs[-2] == round(768 * 1344 / 1e6, 3)
 
 
 def test_a_reel_tells_the_app_which_segment_runs(home, monkeypatch):
@@ -630,11 +631,11 @@ REFS_GRAPH = {"9": {"class_type": "OrreryPrompt", "inputs": {}},
 
 def test_the_picks_tell_orrery_refs_what_is_sent_and_from_which_chain(home):
     _, picks, *_ = OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), segment=0,
-                                      latent_path="reels/one", prompt=REFS_GRAPH, unique_id="9")
+                                      chain="reels/one", prompt=REFS_GRAPH, unique_id="9")
     data = json.loads(picks)
     assert data["refs"] == [1] and data["sends"] == {"chain": "reels/one", "home": str(home), "slots": [3, 4], "ready": {}}
     _, picks, *_ = OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), segment=1,
-                                      latent_path="reels/one", prompt=REFS_GRAPH, unique_id="9")
+                                      chain="reels/one", prompt=REFS_GRAPH, unique_id="9")
     data = json.loads(picks)
     assert data["refs"] == [1, 3, 4]
     assert data["sends"]["ready"] == {"3": {"segment": 0, "frames": [[0, 0]]},

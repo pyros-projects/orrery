@@ -94,7 +94,7 @@ of that chunk's clip, as the chain keeps it, reference `image 3` for every
 later clip, with or without a CAST naming it; bound in the CAST
 (`GIRL (image 1, image 3)`), the prompt says whose picture it is, and each later
 clip sees how she looked when the reel began instead of a copy of a copy. Orrery Refs
-fetches the frames from the chain the prompt's `latent_path` names; before the
+fetches the frames from the reel's chain, in the folder orrery names after it; before the
 sending clip exists, the image is left out of the clip. Details in
 [h3.md](h3.md#1d-reels-chunk).
 

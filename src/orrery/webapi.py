@@ -226,8 +226,9 @@ def recent(home: Home, args: dict) -> dict:
 
 def ui_save(home: Home, args: dict) -> dict:
     """App switches kept in the home: `quickstart` (New templates open with their comments),
-    `dividers` (chunk dividers in the editor), `timeline` (the reel's clips beside it), and its sizes
-    (`clip_min`: a clip's shorter side in the clips view)."""
+    `dividers` (chunk dividers in the editor), `timeline` (the reel's clips under its scenes), sample surfing's
+    `surf_numbered` (#206), the live preview's `preview_light` (#205), and its sizes
+    (`clip_min`: a clip's shorter side in the clips view; `take_min`: a take's, under it; `preview_fps`: the smooth live preview's pictures a second; `preview_edge`: its long edge)."""
     for flag in uistate.FLAGS:
         if flag in args:
             uistate.set_flag(home, flag, bool(args[flag]))
@@ -561,19 +562,76 @@ def galaxy_media(home: Home, args: dict) -> Path:
 # --- the timeline: the chain's clips and the sent frames ------------------------------------
 
 def _latent_path(args: dict) -> str:
-    return str(args.get("latent_path") or DEFAULT_CHAIN)
+    """The reel's chain folder under ComfyUI's output, as the app names it (#197), else h3_context."""
+    return str(args.get("chain") or DEFAULT_CHAIN)
 
 
 def chain(home: Home, args: dict) -> dict:
     """The clips the reel's chain holds (Orrery Film's or Chain Video's), by segment."""
+    from orrery import film
     from orrery.chain import listing
 
-    return {"latent_path": _latent_path(args), **listing(_output_dir(), _latent_path(args))}
+    try:  # sample surfing (#206): a clip's takes, where it has more than one
+        takes = {str(k): v for k, v in film.takes(_output_dir(), _latent_path(args)).items() if len(v) > 1}
+    except film.FilmError:
+        takes = {}
+    return {"chain": _latent_path(args), **listing(_output_dir(), _latent_path(args)), "takes": takes}
+
+
+def chain_pick(home: Home, args: dict) -> dict:
+    """Sample surfing (#206): one take of a clip becomes the one the film, REMEMBER: and the next clip use."""
+    from orrery import film
+
+    try:
+        return film.pick_take(_output_dir(), _latent_path(args), _int(args, "segment", -1), _text(args, "folder"))
+    except film.FilmError as err:
+        raise ApiError(400, str(err)) from None
+
+
+def chain_delete(home: Home, args: dict) -> dict:
+    """A take of a clip deleted from disk (#214); the film keeps the clip's newest other take, or ends before it."""
+    from orrery import film
+
+    try:
+        return film.delete_take(_output_dir(), _latent_path(args), _int(args, "segment", -1), _text(args, "folder"))
+    except film.FilmError as err:
+        raise ApiError(400, str(err)) from None
+
+
+REELS = "reels"  # the reels the app names (#197) live under output/reels/
+
+
+def chain_move(home: Home, args: dict) -> dict:
+    """An unsaved reel saved as a preset (#197): its folder moves to the preset's name, so the next clip still
+    continues the last. A folder already there is not touched: the reel then keeps its own."""
+    from orrery.chain import chain_folder
+
+    out, names = _output_dir().resolve(), [_text(args, k).strip().strip("/") for k in ("from", "to")]
+    if not all(n.startswith(f"{REELS}/") and len(n) > len(REELS) + 1 for n in names):
+        raise ApiError(400, f"Only a reel's own folder moves: both names start with {REELS}/.")
+    source, target = (chain_folder(out, n) for n in names)
+    if source is None or target is None or not source.is_relative_to(out / REELS) or not target.is_relative_to(out / REELS):
+        raise ApiError(400, "A reel's folder stays inside ComfyUI's output.")
+    if not source.is_dir():
+        return {"moved": False, "chain": names[1]}  # no clip yet: the new name is simply used
+    if target.exists() and any(target.iterdir()):
+        return {"moved": False, "chain": names[0], "reason": f"{names[1]} already holds a reel"}
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if target.exists():
+        target.rmdir()
+    source.rename(target)
+    return {"moved": True, "chain": names[1]}
 
 
 def chain_video(home: Home, args: dict) -> Path:
     from orrery.chain import clip_file
 
+    if args.get("take"):  # one take of a clip (#206)
+        from orrery import film
+        path = film.take_file(_output_dir(), _latent_path(args), str(args["take"]))
+        if path is None:
+            raise ApiError(404, f"the reel has no take {args['take']}.")
+        return path
     path = clip_file(_output_dir(), _latent_path(args), _int(args, "segment", -1))
     if path is None:
         raise ApiError(404, f"the chain has no clip for segment {args.get('segment')}.")
@@ -1025,6 +1083,9 @@ ROUTES = [
     ("GET", "/orrery/galaxy/media", galaxy_media),
     ("GET", "/orrery/chain", chain),
     ("GET", "/orrery/chain/thumb", chain_thumb),
+    ("POST", "/orrery/chain/move", chain_move),
+    ("POST", "/orrery/chain/pick", chain_pick),
+    ("POST", "/orrery/chain/delete", chain_delete),
     ("GET", "/orrery/chain/video", chain_video),
     ("GET", "/orrery/anchor", anchor),
     ("GET", "/orrery/history", history_runs),
@@ -1056,7 +1117,7 @@ ROUTES = [
 
 
 # routes that wait for a language model run in a thread, so ComfyUI's server answers meanwhile
-SLOW = {llm_save, llm_check, write_libraries, write_idea}
+SLOW = {llm_save, llm_check, write_libraries, write_idea, chain_pick, chain_delete}
 
 
 def _handler(fn, method: str, web):

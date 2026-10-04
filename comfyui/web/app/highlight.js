@@ -1,6 +1,7 @@
 // Syntax colouring for orrery templates. Pure: returns HTML for a <pre> under the editor.
 
 import { castNames } from "../orrery-complete.js";
+import { chunkShort } from "./model.js";
 
 export const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
@@ -63,24 +64,26 @@ function line(text, known, llm, members) {
 
 // The divider on a SCENE line: absolutely placed, so the text keeps its place under the textarea's caret;
 // first in the line, so its static top is the line's top.
-function chunkLine(html, c, segment) {
+function chunkLine(html, c, segment, acts = "") {
   const now = segment !== null && (c.segs ? c.segs.includes(segment) : c.first !== null && segment >= c.first && segment <= c.last);
   const turn = !now ? "" : c.segs ? (c.segs.length > 1 ? ` ${c.segs.indexOf(segment) + 1}/${c.segs.length}${c.endless ? "+" : ""}` : "")
     : c.repeat > 1 ? ` ${segment - c.first + 1}/${c.repeat === Infinity ? "∞" : c.repeat}` : "";
-  const label = `${now ? `▶ next${turn} · ` : ""}${c.label}`;
-  return `<span class="chunkline${now ? " now" : ""}"><span class="chunkinfo"><span>${esc(label)}</span></span>${html}</span>`;
+  const title = `${now ? `next${turn} · ` : ""}${c.label}`;  // the whole story on hover; the divider names one clip (#219)
+  return `<span class="chunkline${now ? " now" : ""}"><span class="chunkinfo"><span title="${esc(title)}">${esc(chunkShort(c, segment))}</span>${acts}</span>${html}</span>`;
 }
 
 // options.llm: a language model is set, so unknown libraries are to be made, not missing.
 // options.chunks (model.chunkInfo): SCENE lines get dividers; the one playing options.segment is marked.
+// options.sceneActs(c, index): a scene's buttons in its divider (#204), the chunk's index in the reel `c.index` when
+// the chunks are a cell's own.
 // options.cast: the CAST's names, in brass (a cell passes the whole template's); else read from src.
 // `hints`: line index → { text, replaced } drawn after the line (REMEMBER: lines say where their frames go);
 // a hint takes no room, so the text wraps exactly as the textarea's.
-export function highlight(src, known, { llm = false, chunks = null, segment = null, cast = null, hints = null } = {}) {
-  const at = new Map((chunks || []).map((c) => [c.line, c]));
+export function highlight(src, known, { llm = false, chunks = null, segment = null, cast = null, hints = null, sceneActs = null } = {}) {
+  const at = new Map((chunks || []).map((c, i) => [c.line, { ...c, index: c.index ?? i }]));
   const members = memberPattern(cast ?? castNames(src));
   const hint = (i) => (hints?.has(i) ? `<span class="hint${hints.get(i).replaced ? " replaced" : ""}${hints.get(i).kind ? ` ${hints.get(i).kind}` : ""}"><span>`
     + `${(hints.get(i).thumbs || []).map((u) => `<img class="hint-pic" src="${esc(u)}" alt="">`).join("")}${esc(hints.get(i).text)}</span></span>` : "");
-  return src.split("\n").map((l, i) => (at.has(i) ? chunkLine(line(l, known, llm, members), at.get(i), segment)
+  return src.split("\n").map((l, i) => (at.has(i) ? chunkLine(line(l, known, llm, members), at.get(i), segment, sceneActs ? sceneActs(at.get(i), at.get(i).index) : "")
     : line(l, known, llm, members)) + hint(i)).join("\n");
 }

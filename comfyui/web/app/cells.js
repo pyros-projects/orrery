@@ -9,7 +9,7 @@ import { highlight } from "./highlight.js";
 import { splitCells } from "./model.js";
 import { annotationLines, mergeHints } from "./annotate.js";
 import { fillStrip, hintsFor, openPicker, rememberLines, stripHTML } from "./remember.js";
-import { clipRatio, sectionHTML, sourceClip, wireClips } from "./timeline.js";
+import { clipRatio, paintLive, sectionHTML, sourceClip, wireClips } from "./timeline.js";
 
 const box = (app) => app.view.querySelector(".editor.cells");
 const areas = (app) => [...(box(app)?.querySelectorAll("textarea") || [])];
@@ -59,21 +59,21 @@ export function paintCells(app) {
   if (!host) return;
   const cells = splitCells(app.text), chunks = app.chunks() || [], segment = Number(app.bridge.getSegment());
   const remembered = app.remembered(), annotations = app.annotations(), known = app.known(), llm = app.llmActive();
-  const cast = castNames(app.text), shared = JSON.stringify([[...known], cast, llm, segment]);
+  const cast = castNames(app.text), shared = JSON.stringify([[...known], cast, llm, segment]), acts = app.sceneActs?.();
   let before = 0;  // the REMEMBER: lines in the cells above: the hints count them through the whole text
   host.querySelectorAll(".cell").forEach((cell, i) => {
     const c = cells[i];
     if (!c) return;
-    const local = c.chunk >= 0 && chunks[c.chunk] ? [{ ...chunks[c.chunk], line: 0 }] : null;
+    const local = c.chunk >= 0 && chunks[c.chunk] ? [{ ...chunks[c.chunk], line: 0, index: c.chunk }] : null;
     const hints = mergeHints(hintsFor(c.text, remembered, before), annotationLines(c.text, annotations, app.api.thumbURL));
     before += rememberLines(c.text).length;
-    const key = JSON.stringify([shared, c.text, local, [...hints]]);
+    const key = JSON.stringify([shared, c.text, local, [...hints], acts && local ? acts(local[0], c.chunk) : ""]);
     if (painted.get(cell) === key) return;
     painted.set(cell, key);
-    cell.querySelector("pre").innerHTML = `${highlight(c.text, known, { llm, chunks: local, segment, cast, hints })}​`;
+    cell.querySelector("pre").innerHTML = `${highlight(c.text, known, { llm, chunks: local, segment, cast, hints, sceneActs: acts })}​`;
   });
   const sig = JSON.stringify([chunks.map((c) => [c.first, c.last, c.segs]), (app.data.chain?.clips || []).map((c) => c.version),
-    segment, clipRatio(app), app.data.clip_min, remembered?.key, remembered?.lines]);
+    segment, clipRatio(app), app.data.clip_min, app.data.take_min, remembered?.key, remembered?.lines]);
   if (sig === app.cellsSig) return;
   app.cellsSig = sig;
   host.querySelectorAll(".chunkmedia").forEach((m) => {
@@ -86,6 +86,7 @@ export function paintCells(app) {
     fillStrip(body, source?.frames);
   });
   sizeSections(app);
+  paintLive(app);  // the clip rendering now keeps its preview through a redraw
 }
 
 // Every section's clips at the settings' clip size, as far as the section is wide.
