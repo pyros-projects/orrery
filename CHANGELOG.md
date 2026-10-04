@@ -14,8 +14,9 @@ checks) are left out.
   chrome, street fashion, gangs, a neon city), sci-fi (`krea/12_…`: forty species, thirty roles), creatures
   (`krea/13_…`: seventy kinds with coverings, features and habitats, and the sound each makes) and noir (`krea/14_…`:
   a 1940s city in black and white with one colour). They share new parts with the Character creator (facial hair,
-  motifs, things in hand, companions), each roll the same character from four sides, and each exports what the
-  picture cannot show for a reel that casts it.
+  motifs, things in hand, companions), each roll the same character from four sides, the shot first and only what
+  each view can show (gear, companions and the body's chrome in the full figure), and each exports what the picture
+  cannot show for a reel that casts it.
 - Local language models, one task per run (#171): with a text encoder, Roll queues a run of its own (Orrery Ask) for
   each of a run's language-model tasks ahead of it (each library, the rewrites, each slot), and the run takes their
   answers; Write now and the takes at the line work with a text encoder too, in runs of their own at the front of the
@@ -110,6 +111,9 @@ checks) are left out.
 
 ### Changed
 
+- The Character creator puts the shot first (#138): "A studio photograph: a head-and-shoulders portrait of …", and
+  each view says its pose in a sentence of its own, the way Krea 2's own samples are written; the picks stay the same.
+  How a Krea 2 preset is written is in docs/presets.md ("Writing a Krea 2 preset").
 - The language model is the one chosen in the gear: the Orrery Prompt (and Orrery Write) have no `clip` input any
   more, and a workflow that wired one loses the link when it loads (#282).
 - The settings are a tab of their own, behind the gear: their sections on the left (Home, Language model, Writers,

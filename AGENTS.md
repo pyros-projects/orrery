@@ -149,6 +149,8 @@ test by test:
   without it, and never in the earlier words (`CHUNK`, `HANDOFF:`, `SEND:`, `GOTO:`, `?`,
   `__name__(directions)`): they still work, and nothing new is built on them.
 - Write like the surrounding code: its naming, its comment density, its idiom.
+- A Krea 2 preset follows the format in `docs/presets.md` ("Writing a Krea 2 preset"): the medium and the shot
+  first, only what the shot can show, a second subject in a sentence of its own.
 - A user-visible change updates its docs in the same PR (`docs/`, the in-app help in
   `comfyui/web/app/help.js`, and the example workflows when their templates or nodes change), and
   adds its line to `CHANGELOG.md` under Unreleased (Added, Changed or Fixed), naming its feature
