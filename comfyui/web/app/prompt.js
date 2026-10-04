@@ -2,7 +2,7 @@
 import { KEYWORDS, castNames, inlineLibraries, suggest } from "../orrery-complete.js";
 import { chosen, closeMenu, drawMenu, fillMenu, joinChoices } from "./dialmenu.js";
 import { esc, highlight } from "./highlight.js";
-import { annotationLines, mergeHints } from "./annotate.js";
+import { annotationLines, mergeHints, shownHints } from "./annotate.js";
 import { wireHover } from "./hover.js";
 import { hintsFor } from "./remember.js";
 import { icon } from "./icons.js";
@@ -362,7 +362,8 @@ function paintEditor(app) {
   if (!pre) return;
   const chunks = app.chunks(), known = app.known(), llm = app.llmActive(), segment = chunks && Number(app.bridge.getSegment());
   const acts = chunks && sceneActs(app);
-  const hints = mergeHints(hintsFor(app.text, app.remembered()), annotationLines(app.text, app.annotations(), app.api.thumbURL));
+  const hints = shownHints(app.data.annotations_show, mergeHints(hintsFor(app.text, app.remembered()),
+    annotationLines(app.text, app.annotations(), app.api.thumbURL)));
   const key = JSON.stringify([app.text, [...known], llm, chunks, segment, [...hints], acts ? chunks.map((c, n) => acts(c, c.index ?? n)) : ""]);
   if (painted.get(pre) !== key) {
     painted.set(pre, key);

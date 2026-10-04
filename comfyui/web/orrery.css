@@ -437,6 +437,9 @@
 .orrery-app .set-saved.warn { color: var(--danger); }
 .orrery-app .set-main h5.label { margin: 6px 0 0; }
 .orrery-app .gear-btn.on { color: var(--brass); }
+/* annotations on hover (#203): what has one is underlined quietly, as a footnote; its card says the roll first */
+.orrery-app pre .t-has { text-decoration: underline dotted; text-decoration-color: rgba(157,154,179,.55); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.orrery-app .hv .hv-roll { margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid var(--line); color: var(--teal); font: 12px/1.4 var(--mono); }
 .orrery-app .libs { --libw: 190px; display: grid; grid-template-columns: var(--libw) minmax(0, 1fr); flex: 1; min-height: 0; }
 .orrery-app.big .libs:not([style*="--libw"]) { --libw: 250px; }
 .orrery-app .liblist { border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; position: relative; }

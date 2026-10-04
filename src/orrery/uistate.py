@@ -4,7 +4,8 @@ shows the reel's clips under its scenes, each run prints its prompt and picks to
 surfing numbers its takes' seeds, the live preview is light (a few pictures)
 rather than smooth. Every switch is on until turned off. And its sizes: `clip_min`, the shorter side of a clip in
 the clips view, `take_min`, a take's under it (#215), `preview_fps`, the smooth live preview's pictures a
-second, and `preview_edge`, its long edge in pixels (0: as sampled)."""
+second, and `preview_edge`, its long edge in pixels (0: as sampled). And its choices: `annotations_show`, where the
+editor's annotations go: at the line ends, on hover, or nowhere (#203)."""
 
 import json
 
@@ -15,6 +16,7 @@ LISTS = ("favorites", "recent")  # preset names, followed by renames and deletes
 FLAGS = ("quickstart", "dividers", "timeline", "log_prompts", "surf_numbered", "preview_light")  # #206, #205
 SIZES = {"clip_min": (360, 96, 1600), "take_min": (54, 32, 480),  # name → (default, least, most): CSS pixels,
          "preview_fps": (12, 1, 24), "preview_edge": (1024, 0, 4096)}  # pictures a second; a preview's long edge (0: as sampled)
+CHOICES = {"annotations_show": ("appended", "hover", "none")}  # name → its values, the first the default
 
 
 def _path(home: Home):
@@ -26,7 +28,8 @@ def load_ui(home: Home) -> dict:
     data = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
     return {"favorites": list(data.get("favorites") or []), "recent": list(data.get("recent") or []),
             **{flag: data.get(flag) is not False for flag in FLAGS},
-            **{name: _size(name, data.get(name)) for name in SIZES}}
+            **{name: _size(name, data.get(name)) for name in SIZES},
+            **{name: data.get(name) if data.get(name) in CHOICES[name] else CHOICES[name][0] for name in CHOICES}}
 
 
 def _size(name: str, value) -> int:
@@ -64,6 +67,12 @@ def set_size(home: Home, name: str, value) -> int:
     if name not in SIZES:
         raise ValueError(f"unknown size {name!r}")
     return _save(home, {**load_ui(home), name: _size(name, value)})[name]
+
+
+def set_choice(home: Home, name: str, value: str) -> str:
+    if name not in CHOICES or value not in CHOICES[name]:
+        raise ValueError(f"{value!r} is not one of {name}'s: {', '.join(CHOICES.get(name, ()))}")
+    return _save(home, {**load_ui(home), name: value})[name]
 
 
 def rename_everywhere(home: Home, old: str, new: str) -> None:
