@@ -130,7 +130,7 @@ class OrreryContinue:
         continues = data.get("continues", segment - 1 if segment else None)  # see Reel.before; -1 the input video
         info = {"chain": chain, "segment": segment, "continues": None if continues == -1 else continues,
                 "test": bool(data.get("test")),
-                "meta": {k: data.get(k) for k in ("seed", "template", "preset", "picks")}}
+                "meta": {k: data.get(k) for k in ("seed", "take", "template", "preset", "picks", "chunk", "kept")}}
         if continues is None:  # the first clip, or a test scene: it starts afresh
             return conditioning, {**latent, KEY: info}
         video, audio = _streams(latent)

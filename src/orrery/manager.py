@@ -13,7 +13,7 @@ from dataclasses import dataclass, field, replace
 from datetime import UTC, datetime
 from pathlib import Path
 
-from orrery.home import Home
+from orrery.home import Home, locked
 from orrery.library import NAME, Entry, Library, library_files, load_library
 from orrery.llm import Backend, InvalidProposal, extract_json
 
@@ -185,6 +185,7 @@ def _snapshot(home: Home, files: list[Path], action: str) -> None:
     (folder / "manifest.json").write_text(json.dumps(manifest, indent=2))
 
 
+@locked  # it moves the learned weights to the new name (#260)
 def rename_library(home: Home, old: str, new: str) -> dict:
     """Move a library of yours to a new name (folders included) and carry along everything that
     names it: learned weights, `__old__` in your other libraries and in your presets. Undoable."""
@@ -274,6 +275,7 @@ def propose_edit(home: Home, name: str, instruction: str, backend: Backend) -> O
     return parse_ops(backend.complete(edit_prompt(lib, others, instruction)), lib)
 
 
+@locked  # it moves the learned weights of renamed entries (#260)
 def apply_ops(home: Home, name: str, ops: Ops, by: str) -> None:
     lib = _library(home, name)
     path = home.library_path(name)

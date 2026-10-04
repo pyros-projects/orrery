@@ -1,0 +1,15 @@
+---
+title: "20 · One way to turn the model's knobs (H3)"
+lesson: "A LoRA, a RefMod, a reference picture and a CAST member all change how the model behaves, and SET: turns them all the same way: name(strength, start, end), the start and the end a share of sampling. Here the picture holds while H3 lays the scene out and lets go at 60%, so the prompt has the last say; 0.4|0.7|1 is a sweep: Roll renders all three strengths, one run each, and the gallery keeps them side by side. A LoRA takes the same shape: SET: your_lora(0.8, 0%, 50%) puts it on for the first half of sampling, and its long form <lora:your_lora:0.8, 0%, 50%> says its kind when a RefMod has the same name. Wire a picture into Orrery Refs' image 1."
+tags: [tutorial, h3, references, sweep]
+---
+@h3 references 16:9
+style: live-action, cinematic, golden-hour light
+$place = {a windswept beach|a quiet train platform at dawn|an empty theatre stage}
+SET: image_1(0.4|0.7|1, 0%, 60%)
+# a LoRA, timed: SET: your_lora(0.8, 0%, 50%)   its long form: SET: <lora:your_lora:0.8, 0%, 50%>
+
+SHOT 6s: push in, slow
+The person in <Image 1> stands in $place and turns toward the camera; the low light catches the side of the face and the wind moves the hair.
+SFX: the ambience of $place; a few slow footsteps
+MUSIC: N/A

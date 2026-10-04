@@ -21,7 +21,15 @@ from orrery.comfy_llm import can_write, llm_config, text_encoders
 from orrery.completion import completion_data
 from orrery.dsl import MissingLibrary, expand, override, strip_comments
 from orrery.h3 import compile_scene
-from orrery.home import BUILTIN_DIR, Home, home_setting, home_source, resolve_home, set_home_setting
+from orrery.home import (
+    BUILTIN_DIR,
+    Home,
+    home_setting,
+    home_source,
+    locked,
+    resolve_home,
+    set_home_setting,
+)
 from orrery.library import NAME, Entry, Library, load_library
 from orrery.loras import lora_files, lora_stack
 from orrery.manager import list_name
@@ -167,6 +175,7 @@ def presets(home: Home, args: dict) -> dict:
         "recent": [n for n in ui["recent"] if n in known],
         **{flag: ui[flag] for flag in uistate.FLAGS},
         **{name: ui[name] for name in uistate.SIZES},
+        **{name: ui[name] for name in uistate.CHOICES},
     }
 
 
@@ -226,16 +235,24 @@ def recent(home: Home, args: dict) -> dict:
 
 def ui_save(home: Home, args: dict) -> dict:
     """App switches kept in the home: `quickstart` (New templates open with their comments),
-    `dividers` (chunk dividers in the editor), `timeline` (the reel's clips beside it), and its sizes
-    (`clip_min`: a clip's shorter side in the clips view)."""
+    `dividers` (chunk dividers in the editor), `timeline` (the reel's clips under its scenes), sample surfing's
+    `surf_numbered` (#206), the live preview's `preview_light` (#205), and its sizes
+    (`clip_min`: a clip's shorter side in the clips view; `take_min`: a take's, under it; `preview_fps`: the smooth live preview's pictures a second; `preview_edge`: its long edge)."""
     for flag in uistate.FLAGS:
         if flag in args:
             uistate.set_flag(home, flag, bool(args[flag]))
     for name in uistate.SIZES:
         if name in args:
             uistate.set_size(home, name, args[name])
+    for name in uistate.CHOICES:  # `annotations_show`: appended, hover or none (#203)
+        if name in args:
+            try:
+                uistate.set_choice(home, name, str(args[name]))
+            except ValueError as err:
+                raise ApiError(400, str(err)) from None
     ui = uistate.load_ui(home)
-    return {**{flag: ui[flag] for flag in uistate.FLAGS}, **{name: ui[name] for name in uistate.SIZES}}
+    return {**{flag: ui[flag] for flag in uistate.FLAGS}, **{name: ui[name] for name in uistate.SIZES},
+            **{name: ui[name] for name in uistate.CHOICES}}
 
 
 def _preset_by_hash(home: Home) -> dict[str, str]:
@@ -341,6 +358,7 @@ def library(home: Home, args: dict) -> dict:
     return _library_json(home, name, lib, home.weights())
 
 
+@locked  # renamed entries take their learned weights along (#260)
 def library_save(home: Home, args: dict) -> dict:
     name = _library_name(args.get("name"))
     path = home.library_file(name)
@@ -561,19 +579,122 @@ def galaxy_media(home: Home, args: dict) -> Path:
 # --- the timeline: the chain's clips and the sent frames ------------------------------------
 
 def _latent_path(args: dict) -> str:
-    return str(args.get("latent_path") or DEFAULT_CHAIN)
+    """The reel's chain folder under ComfyUI's output, as the app names it (#197), else h3_context."""
+    return str(args.get("chain") or DEFAULT_CHAIN)
 
 
 def chain(home: Home, args: dict) -> dict:
     """The clips the reel's chain holds (Orrery Film's or Chain Video's), by segment."""
+    from orrery import film
     from orrery.chain import listing
 
-    return {"latent_path": _latent_path(args), **listing(_output_dir(), _latent_path(args))}
+    try:  # sample surfing (#206): a clip's takes, where it has more than one
+        takes = {str(k): v for k, v in film.takes(_output_dir(), _latent_path(args)).items() if len(v) > 1}
+    except film.FilmError:
+        takes = {}
+    return {"chain": _latent_path(args), **listing(_output_dir(), _latent_path(args)), "takes": takes}
+
+
+def chain_pick(home: Home, args: dict) -> dict:
+    """Sample surfing (#206): one take of a clip becomes the one the film, REMEMBER: and the next clip use."""
+    from orrery import film
+
+    try:
+        return film.pick_take(_output_dir(), _latent_path(args), _int(args, "segment", -1), _text(args, "folder"))
+    except film.FilmError as err:
+        raise ApiError(400, str(err)) from None
+
+
+def chain_delete(home: Home, args: dict) -> dict:
+    """A take of a clip deleted from disk (#214); the film keeps the clip's newest other take, or ends before it."""
+    from orrery import film
+
+    try:
+        return film.delete_take(_output_dir(), _latent_path(args), _int(args, "segment", -1), _text(args, "folder"))
+    except film.FilmError as err:
+        raise ApiError(400, str(err)) from None
+
+
+def chain_clear(home: Home, args: dict) -> dict:
+    """A clip's takes deleted at once (#234): all but the one in the film (`keep`), or that one too."""
+    from orrery import film
+
+    try:
+        return film.delete_takes(_output_dir(), _latent_path(args), _int(args, "segment", -1), bool(args.get("keep", True)))
+    except film.FilmError as err:
+        raise ApiError(400, str(err)) from None
+
+
+def chain_tree(home: Home, args: dict) -> dict:
+    """The reel's takes as a tree (#240): every take, its parent, the film's path, the way last walked from each."""
+    from orrery import film
+
+    try:
+        return film.tree(_output_dir(), _latent_path(args))
+    except film.FilmError as err:
+        raise ApiError(400, str(err)) from None
+
+
+def chain_walk(home: Home, args: dict) -> dict:
+    """The film through a take of the tree (#240): the path to it, and on from it as last walked."""
+    from orrery import film
+
+    try:
+        return film.walk_to(_output_dir(), _latent_path(args), _text(args, "folder"))
+    except film.FilmError as err:
+        raise ApiError(400, str(err)) from None
+
+
+def chain_end(home: Home, args: dict) -> dict:
+    """The film ends after a clip (#240)."""
+    from orrery import film
+
+    try:
+        return film.end_film(_output_dir(), _latent_path(args), _int(args, "segment", -1))
+    except film.FilmError as err:
+        raise ApiError(400, str(err)) from None
+
+
+REELS = "reels"  # the reels the app names (#197) live under output/reels/
+
+
+def chain_move(home: Home, args: dict) -> dict:
+    """An unsaved reel saved as a preset (#197): its folder moves to the preset's name, so the next clip still
+    continues the last. A folder already there is not touched: the reel then keeps its own."""
+    from orrery.chain import chain_folder
+
+    out, names = _output_dir().resolve(), [_text(args, k).strip().strip("/") for k in ("from", "to")]
+    if not all(n.startswith(f"{REELS}/") and len(n) > len(REELS) + 1 for n in names):
+        raise ApiError(400, f"Only a reel's own folder moves: both names start with {REELS}/.")
+    source, target = (chain_folder(out, n) for n in names)
+    if source is None or target is None or not source.is_relative_to(out / REELS) or not target.is_relative_to(out / REELS):
+        raise ApiError(400, "A reel's folder stays inside ComfyUI's output.")
+    if not source.is_dir():
+        return {"moved": False, "chain": names[1]}  # no clip yet: the new name is simply used
+    if target.exists() and any(target.iterdir()):
+        return {"moved": False, "chain": names[0], "reason": f"{names[1]} already holds a reel"}
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if target.exists():
+        target.rmdir()
+    source.rename(target)
+    return {"moved": True, "chain": names[1]}
 
 
 def chain_video(home: Home, args: dict) -> Path:
     from orrery.chain import clip_file
 
+    if args.get("film"):  # the film, its takes joined (#243)
+        from orrery import film
+        path = film.joined_film(_output_dir(), _latent_path(args))
+        if path is None:
+            raise ApiError(404, "the reel has no film yet.")
+        return path
+    if args.get("take"):  # one take of a clip (#206)
+        from orrery import film
+        path = film.take_file(_output_dir(), _latent_path(args), str(args["take"]))
+        if path is None:
+            raise ApiError(404, f"the reel has no take {args['take']}.")
+        return path
     path = clip_file(_output_dir(), _latent_path(args), _int(args, "segment", -1))
     if path is None:
         raise ApiError(404, f"the chain has no clip for segment {args.get('segment')}.")
@@ -755,17 +876,55 @@ def _slots(numbers: list[int]) -> str:
     return f"image{'s' if len(numbers) > 1 else ''} {', '.join(map(str, numbers))}"
 
 
+def _rolls(text: str, sites: list[dict]) -> dict[str, list]:
+    """The trace's rolls (dsl.traced) on the lines of the template as the editor has it: {line index: [[k, roll]]},
+    `k` the library's place among the `__…__` of its line (#202). A line is found by its text, from the last one
+    found on; one the trace cannot find (its LoRA tag written short, say) says nothing."""
+    from orrery.dsl import _LIB
+
+    def norm(s: str) -> str:
+        return " ".join(s.split())
+
+    lines, out, cursor, joined, last, line = [norm(raw) for raw in text.split("\n")], {}, 0, None, None, None
+    for site in sites:
+        if "lines" in site:
+            joined = site["lines"]
+            continue
+        rest, k = site["rest"], site["k"]
+        token = next((m for i, m in enumerate(_LIB.finditer(rest)) if i == k), None)
+        if token is None:
+            continue
+        part, at = site["line"], token.start() + max(site["line"].rfind(rest), 0)
+        if joined and site["line"] == " ".join(joined):  # a text template's lines, one expression
+            for held in joined:
+                if at <= len(held):
+                    part = held
+                    break
+                at -= len(held) + 1
+        piece = norm(part)
+        if (part, site["line"]) != last:  # a new expression: its line is found from the one after the last
+            last = (part, site["line"])
+            line = next((i for i in [*range(cursor, len(lines)), *range(cursor)] if piece and piece in lines[i]), None)
+            cursor = cursor if line is None else line + 1
+        if line is None:
+            continue
+        before = len(list(_LIB.finditer(lines[line][:lines[line].find(piece)]))) + len(list(_LIB.finditer(norm(part[:at]))))
+        out.setdefault(str(line), []).append([before, _short(site["value"], 60)])
+    return out
+
+
 def annotate(home: Home, args: dict) -> dict:
     """What lines of a template give at a seed, for the editor to show at their ends (#163): each binding
     as it rolled, each export, a grid's cells, and in a screenplay where each CAST member's pictures go
     (a named picture with its name). Errors leave a part empty: the editor shows what it can."""
-    from orrery.dsl import parse, with_inline
+    from orrery.dsl import parse, traced, with_inline
     from orrery.loras import long_form
 
     text, target = _template_for(home, args)
     seed, libs = _int(args, "seed", 0), home.libraries()
     src = long_form(strip_comments(text))
-    out: dict = {"bindings": {}, "fields": {}, "exports": {}, "grid": "", "cast": {}, "members": {}}
+    out: dict = {"bindings": {}, "fields": {}, "exports": {}, "grid": "", "cast": {}, "members": {}, "rolls": {}}
+    screenplay = target != "text" and src.lstrip().startswith("@h3")
     grid = None
     try:
         if parse(src).params.grid is not None:
@@ -778,7 +937,10 @@ def annotate(home: Home, args: dict) -> dict:
     try:
         for _ in range(8):  # a library still to be written stands in as its name, so the rest still shows
             try:
-                x = expand(src, seed, libs, home.weights(), cell=0 if grid else None)
+                with traced() as sites:
+                    x = expand(src, seed, libs, home.weights(), cell=0 if grid else None)
+                if not screenplay:  # a text template rolls as one: its libraries' rolls (#202)
+                    out["rolls"] = _rolls(text, sites)
                 break
             except MissingLibrary as err:
                 libs = {**libs, err.name: Library(err.name, [Entry(f"\\__{err.name}\\__")])}  # escaped: shown, not rolled
@@ -793,9 +955,11 @@ def annotate(home: Home, args: dict) -> dict:
         out["exports"] = {k: _short(_shown(v)) for k, v in x.exports.items()}
     except (ValueError, KeyError, MissingLibrary):
         pass
-    if target != "text" and src.lstrip().startswith("@h3"):
+    if screenplay:
         try:
-            c = compile_scene(src, seed, libs, home.weights(), segment=_int(args, "segment", 0), cell=0 if grid else None)
+            with traced() as sites:
+                c = compile_scene(src, seed, libs, home.weights(), segment=_int(args, "segment", 0), cell=0 if grid else None)
+            out["rolls"] = _rolls(text, sites)  # a screenplay's lines roll one by one, the clip's scene among them
             for m in c.scene.cast:
                 images = sorted({s.index for s in m.sources if s.kind == "image"})
                 named = list(dict.fromkeys(c.pictures[n]["name"] for n in images if n in c.pictures))
@@ -921,15 +1085,18 @@ def llm_save(home: Home, args: dict) -> dict:
     if file and not can_write(file):
         raise ApiError(400, f"{file} is a truncated text encoder (MiniMax H3's): it loads but cannot write. "
                             "Pick a Qwen3-VL build such as Krea 2's qwen3vl_4b.")
-    source = str(args.get("source") or endpoint.config(home)["source"])
+    before = endpoint.config(home)
+    source = str(args.get("source") or before["source"])
     if source not in ("comfy", "api"):
         raise ApiError(400, "'source' must be comfy or api.")
     config = home.config()
     api = {**((config.get("llm") or {}).get("api") or {})}
     api.update({k: str(args[k]).strip() for k in ("base_url", "model") if args.get(k) is not None})
     typed = str(args.get("key") or "").strip()
-    if source == "api":  # the endpoint has to answer before it writes for orrery
-        cfg = {**endpoint.config(home), **api}
+    cfg = {**before, **api}
+    # the endpoint has to answer before it writes for orrery: when it is new, or its address, model or key changed
+    # (a setting saved on its own, such as the entries a library starts with, asks it nothing, #212)
+    if source == "api" and (typed or before["source"] != "api" or any(cfg[k] != before[k] for k in ("base_url", "model"))):
         checked = endpoint.check(cfg["base_url"], typed or endpoint.key(home, cfg)[0], cfg["model"])
         if not checked["ok"]:
             raise ApiError(400, checked["error"])
@@ -1025,6 +1192,13 @@ ROUTES = [
     ("GET", "/orrery/galaxy/media", galaxy_media),
     ("GET", "/orrery/chain", chain),
     ("GET", "/orrery/chain/thumb", chain_thumb),
+    ("POST", "/orrery/chain/move", chain_move),
+    ("POST", "/orrery/chain/pick", chain_pick),
+    ("POST", "/orrery/chain/delete", chain_delete),
+    ("POST", "/orrery/chain/clear", chain_clear),
+    ("GET", "/orrery/chain/tree", chain_tree),
+    ("POST", "/orrery/chain/walk", chain_walk),
+    ("POST", "/orrery/chain/end", chain_end),
     ("GET", "/orrery/chain/video", chain_video),
     ("GET", "/orrery/anchor", anchor),
     ("GET", "/orrery/history", history_runs),
@@ -1056,7 +1230,7 @@ ROUTES = [
 
 
 # routes that wait for a language model run in a thread, so ComfyUI's server answers meanwhile
-SLOW = {llm_save, llm_check, write_libraries, write_idea}
+SLOW = {llm_save, llm_check, write_libraries, write_idea, chain_pick, chain_delete, chain_clear, chain_walk, chain_end}
 
 
 def _handler(fn, method: str, web):

@@ -18,23 +18,38 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "the clear ice of a frozen lake"
+       "the clear ice of a frozen lake",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=the clear ice of a frozen lake"
+       ]
       ],
       [
        "$body ← __evo_bodies__",
-       "a slender body balanced on a long tail"
+       "a slender body balanced on a long tail",
+       [
+        "__evo_bodies__=a slender body balanced on a long tail"
+       ]
       ],
       [
        "$skin ← __evo_skins__",
-       "mottled green scales"
+       "mottled green scales",
+       [
+        "__evo_skins__=mottled green scales"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "six thin jointed legs"
+       "six thin jointed legs",
+       [
+        "__evo_limbs__=six thin jointed legs"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "a single huge dark eye"
+       "a single huge dark eye",
+       [
+        "__evo_eyes__=a single huge dark eye"
+       ]
       ]
      ]
     },
@@ -44,19 +59,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "the clear ice of a frozen lake"
+       "the clear ice of a frozen lake",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=the clear ice of a frozen lake"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "eyes"
+       "eyes",
+       [
+        "{body|skin|limbs|eyes}=eyes"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "a single huge dark eye"
+       "a single huge dark eye",
+       [
+        "__evo_eyes__=a single huge dark eye"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -66,19 +93,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "the clear ice of a frozen lake"
+       "the clear ice of a frozen lake",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=the clear ice of a frozen lake"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "limbs"
+       "limbs",
+       [
+        "{body|skin|limbs|eyes}=limbs"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "six thin jointed legs"
+       "six thin jointed legs",
+       [
+        "__evo_limbs__=six thin jointed legs"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -88,19 +127,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "the clear ice of a frozen lake"
+       "the clear ice of a frozen lake",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=the clear ice of a frozen lake"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "eyes"
+       "eyes",
+       [
+        "{body|skin|limbs|eyes}=eyes"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "no eyes at all, only quivering feelers"
+       "no eyes at all, only quivering feelers",
+       [
+        "__evo_eyes__=no eyes at all, only quivering feelers"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -110,19 +161,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "the clear ice of a frozen lake"
+       "the clear ice of a frozen lake",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=the clear ice of a frozen lake"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "limbs"
+       "limbs",
+       [
+        "{body|skin|limbs|eyes}=limbs"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "two broad paddle fins"
+       "two broad paddle fins",
+       [
+        "__evo_limbs__=two broad paddle fins"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -132,19 +195,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "the clear ice of a frozen lake"
+       "the clear ice of a frozen lake",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=the clear ice of a frozen lake"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "skin"
+       "skin",
+       [
+        "{body|skin|limbs|eyes}=skin"
+       ]
       ],
       [
        "$skin ← __evo_skins__",
-       "iridescent feathers"
+       "iridescent feathers",
+       [
+        "__evo_skins__=iridescent feathers"
+       ]
       ],
       [
        "{6% leap}",
-       "leap"
+       "leap",
+       [
+        "{6% leap}=leap"
+       ]
       ]
      ]
     }
@@ -167,23 +242,38 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "$body ← __evo_bodies__",
-       "a slender body balanced on a long tail"
+       "a slender body balanced on a long tail",
+       [
+        "__evo_bodies__=a slender body balanced on a long tail"
+       ]
       ],
       [
        "$skin ← __evo_skins__",
-       "translucent skin that glows faintly blue"
+       "translucent skin that glows faintly blue",
+       [
+        "__evo_skins__=translucent skin that glows faintly blue"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "six thin jointed legs"
+       "six thin jointed legs",
+       [
+        "__evo_limbs__=six thin jointed legs"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "no eyes at all, only quivering feelers"
+       "no eyes at all, only quivering feelers",
+       [
+        "__evo_eyes__=no eyes at all, only quivering feelers"
+       ]
       ]
      ]
     },
@@ -193,19 +283,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "skin"
+       "skin",
+       [
+        "{body|skin|limbs|eyes}=skin"
+       ]
       ],
       [
        "$skin ← __evo_skins__",
-       "ridged amber plates"
+       "ridged amber plates",
+       [
+        "__evo_skins__=ridged amber plates"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -215,19 +317,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "eyes"
+       "eyes",
+       [
+        "{body|skin|limbs|eyes}=eyes"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "eyes on long stalks"
+       "eyes on long stalks",
+       [
+        "__evo_eyes__=eyes on long stalks"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -237,19 +351,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "skin"
+       "skin",
+       [
+        "{body|skin|limbs|eyes}=skin"
+       ]
       ],
       [
        "$skin ← __evo_skins__",
-       "iridescent feathers"
+       "iridescent feathers",
+       [
+        "__evo_skins__=iridescent feathers"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -259,19 +385,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "limbs"
+       "limbs",
+       [
+        "{body|skin|limbs|eyes}=limbs"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "a ring of soft tentacles"
+       "a ring of soft tentacles",
+       [
+        "__evo_limbs__=a ring of soft tentacles"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -281,19 +419,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "eyes"
+       "eyes",
+       [
+        "{body|skin|limbs|eyes}=eyes"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "a row of tiny bright eyes"
+       "a row of tiny bright eyes",
+       [
+        "__evo_eyes__=a row of tiny bright eyes"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     }
@@ -316,23 +466,38 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "the clear ice of a frozen lake"
+       "the clear ice of a frozen lake",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=the clear ice of a frozen lake"
+       ]
       ],
       [
        "$body ← __evo_bodies__",
-       "a slender body balanced on a long tail"
+       "a slender body balanced on a long tail",
+       [
+        "__evo_bodies__=a slender body balanced on a long tail"
+       ]
       ],
       [
        "$skin ← __evo_skins__",
-       "translucent skin that glows faintly blue"
+       "translucent skin that glows faintly blue",
+       [
+        "__evo_skins__=translucent skin that glows faintly blue"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "two broad paddle fins"
+       "two broad paddle fins",
+       [
+        "__evo_limbs__=two broad paddle fins"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "a row of tiny bright eyes"
+       "a row of tiny bright eyes",
+       [
+        "__evo_eyes__=a row of tiny bright eyes"
+       ]
       ]
      ]
     },
@@ -342,19 +507,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "the clear ice of a frozen lake"
+       "the clear ice of a frozen lake",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=the clear ice of a frozen lake"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "eyes"
+       "eyes",
+       [
+        "{body|skin|limbs|eyes}=eyes"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "a single huge dark eye"
+       "a single huge dark eye",
+       [
+        "__evo_eyes__=a single huge dark eye"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -364,19 +541,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "the clear ice of a frozen lake"
+       "the clear ice of a frozen lake",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=the clear ice of a frozen lake"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "limbs"
+       "limbs",
+       [
+        "{body|skin|limbs|eyes}=limbs"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "two broad paddle fins"
+       "two broad paddle fins",
+       [
+        "__evo_limbs__=two broad paddle fins"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -386,19 +575,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "the clear ice of a frozen lake"
+       "the clear ice of a frozen lake",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=the clear ice of a frozen lake"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "eyes"
+       "eyes",
+       [
+        "{body|skin|limbs|eyes}=eyes"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "a row of tiny bright eyes"
+       "a row of tiny bright eyes",
+       [
+        "__evo_eyes__=a row of tiny bright eyes"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -408,19 +609,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "the clear ice of a frozen lake"
+       "the clear ice of a frozen lake",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=the clear ice of a frozen lake"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "limbs"
+       "limbs",
+       [
+        "{body|skin|limbs|eyes}=limbs"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "a ring of soft tentacles"
+       "a ring of soft tentacles",
+       [
+        "__evo_limbs__=a ring of soft tentacles"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -430,19 +643,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "the clear ice of a frozen lake"
+       "the clear ice of a frozen lake",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=the clear ice of a frozen lake"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "body"
+       "body",
+       [
+        "{body|skin|limbs|eyes}=body"
+       ]
       ],
       [
        "$body ← __evo_bodies__",
-       "a round, armoured body"
+       "a round, armoured body",
+       [
+        "__evo_bodies__=a round, armoured body"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     }
@@ -465,23 +690,38 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a tide pool among black rocks"
+       "a tide pool among black rocks",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a tide pool among black rocks"
+       ]
       ],
       [
        "$body ← __evo_bodies__",
-       "a long segmented body"
+       "a long segmented body",
+       [
+        "__evo_bodies__=a long segmented body"
+       ]
       ],
       [
        "$skin ← __evo_skins__",
-       "mottled green scales"
+       "mottled green scales",
+       [
+        "__evo_skins__=mottled green scales"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "a pair of delicate wings"
+       "a pair of delicate wings",
+       [
+        "__evo_limbs__=a pair of delicate wings"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "eyes on long stalks"
+       "eyes on long stalks",
+       [
+        "__evo_eyes__=eyes on long stalks"
+       ]
       ]
      ]
     },
@@ -491,19 +731,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a tide pool among black rocks"
+       "a tide pool among black rocks",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a tide pool among black rocks"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "eyes"
+       "eyes",
+       [
+        "{body|skin|limbs|eyes}=eyes"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "a row of tiny bright eyes"
+       "a row of tiny bright eyes",
+       [
+        "__evo_eyes__=a row of tiny bright eyes"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -513,19 +765,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a tide pool among black rocks"
+       "a tide pool among black rocks",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a tide pool among black rocks"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "body"
+       "body",
+       [
+        "{body|skin|limbs|eyes}=body"
+       ]
       ],
       [
        "$body ← __evo_bodies__",
-       "a body like a soft glass bead"
+       "a body like a soft glass bead",
+       [
+        "__evo_bodies__=a body like a soft glass bead"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -535,19 +799,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a tide pool among black rocks"
+       "a tide pool among black rocks",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a tide pool among black rocks"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "limbs"
+       "limbs",
+       [
+        "{body|skin|limbs|eyes}=limbs"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "a pair of delicate wings"
+       "a pair of delicate wings",
+       [
+        "__evo_limbs__=a pair of delicate wings"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -557,19 +833,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a tide pool among black rocks"
+       "a tide pool among black rocks",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a tide pool among black rocks"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "limbs"
+       "limbs",
+       [
+        "{body|skin|limbs|eyes}=limbs"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "a pair of delicate wings"
+       "a pair of delicate wings",
+       [
+        "__evo_limbs__=a pair of delicate wings"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -579,19 +867,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a tide pool among black rocks"
+       "a tide pool among black rocks",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a tide pool among black rocks"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "skin"
+       "skin",
+       [
+        "{body|skin|limbs|eyes}=skin"
+       ]
       ],
       [
        "$skin ← __evo_skins__",
-       "iridescent feathers"
+       "iridescent feathers",
+       [
+        "__evo_skins__=iridescent feathers"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     }
@@ -614,23 +914,38 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "$body ← __evo_bodies__",
-       "a round, armoured body"
+       "a round, armoured body",
+       [
+        "__evo_bodies__=a round, armoured body"
+       ]
       ],
       [
        "$skin ← __evo_skins__",
-       "ridged amber plates"
+       "ridged amber plates",
+       [
+        "__evo_skins__=ridged amber plates"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "a pair of delicate wings"
+       "a pair of delicate wings",
+       [
+        "__evo_limbs__=a pair of delicate wings"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "eyes on long stalks"
+       "eyes on long stalks",
+       [
+        "__evo_eyes__=eyes on long stalks"
+       ]
       ]
      ]
     },
@@ -640,19 +955,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "limbs"
+       "limbs",
+       [
+        "{body|skin|limbs|eyes}=limbs"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "a ring of soft tentacles"
+       "a ring of soft tentacles",
+       [
+        "__evo_limbs__=a ring of soft tentacles"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -662,19 +989,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "body"
+       "body",
+       [
+        "{body|skin|limbs|eyes}=body"
+       ]
       ],
       [
        "$body ← __evo_bodies__",
-       "a round, armoured body"
+       "a round, armoured body",
+       [
+        "__evo_bodies__=a round, armoured body"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -684,19 +1023,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "limbs"
+       "limbs",
+       [
+        "{body|skin|limbs|eyes}=limbs"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "a pair of delicate wings"
+       "a pair of delicate wings",
+       [
+        "__evo_limbs__=a pair of delicate wings"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -706,19 +1057,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "eyes"
+       "eyes",
+       [
+        "{body|skin|limbs|eyes}=eyes"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "eyes on long stalks"
+       "eyes on long stalks",
+       [
+        "__evo_eyes__=eyes on long stalks"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -728,19 +1091,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "body"
+       "body",
+       [
+        "{body|skin|limbs|eyes}=body"
+       ]
       ],
       [
        "$body ← __evo_bodies__",
-       "a slender body balanced on a long tail"
+       "a slender body balanced on a long tail",
+       [
+        "__evo_bodies__=a slender body balanced on a long tail"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     }
@@ -763,23 +1138,38 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a tide pool among black rocks"
+       "a tide pool among black rocks",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a tide pool among black rocks"
+       ]
       ],
       [
        "$body ← __evo_bodies__",
-       "a round, armoured body"
+       "a round, armoured body",
+       [
+        "__evo_bodies__=a round, armoured body"
+       ]
       ],
       [
        "$skin ← __evo_skins__",
-       "mottled green scales"
+       "mottled green scales",
+       [
+        "__evo_skins__=mottled green scales"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "six thin jointed legs"
+       "six thin jointed legs",
+       [
+        "__evo_limbs__=six thin jointed legs"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "a row of tiny bright eyes"
+       "a row of tiny bright eyes",
+       [
+        "__evo_eyes__=a row of tiny bright eyes"
+       ]
       ]
      ]
     },
@@ -789,19 +1179,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a tide pool among black rocks"
+       "a tide pool among black rocks",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a tide pool among black rocks"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "body"
+       "body",
+       [
+        "{body|skin|limbs|eyes}=body"
+       ]
       ],
       [
        "$body ← __evo_bodies__",
-       "a round, armoured body"
+       "a round, armoured body",
+       [
+        "__evo_bodies__=a round, armoured body"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -811,19 +1213,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a tide pool among black rocks"
+       "a tide pool among black rocks",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a tide pool among black rocks"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "limbs"
+       "limbs",
+       [
+        "{body|skin|limbs|eyes}=limbs"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "two broad paddle fins"
+       "two broad paddle fins",
+       [
+        "__evo_limbs__=two broad paddle fins"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -833,19 +1247,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a tide pool among black rocks"
+       "a tide pool among black rocks",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a tide pool among black rocks"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "eyes"
+       "eyes",
+       [
+        "{body|skin|limbs|eyes}=eyes"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "eyes on long stalks"
+       "eyes on long stalks",
+       [
+        "__evo_eyes__=eyes on long stalks"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -855,19 +1281,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a tide pool among black rocks"
+       "a tide pool among black rocks",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a tide pool among black rocks"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "limbs"
+       "limbs",
+       [
+        "{body|skin|limbs|eyes}=limbs"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "a pair of delicate wings"
+       "a pair of delicate wings",
+       [
+        "__evo_limbs__=a pair of delicate wings"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -877,19 +1315,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a tide pool among black rocks"
+       "a tide pool among black rocks",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a tide pool among black rocks"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "limbs"
+       "limbs",
+       [
+        "{body|skin|limbs|eyes}=limbs"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "two broad paddle fins"
+       "two broad paddle fins",
+       [
+        "__evo_limbs__=two broad paddle fins"
+       ]
       ],
       [
        "{6% leap}",
-       "leap"
+       "leap",
+       [
+        "{6% leap}=leap"
+       ]
       ]
      ]
     }
@@ -912,23 +1362,38 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "$body ← __evo_bodies__",
-       "a slender body balanced on a long tail"
+       "a slender body balanced on a long tail",
+       [
+        "__evo_bodies__=a slender body balanced on a long tail"
+       ]
       ],
       [
        "$skin ← __evo_skins__",
-       "mottled green scales"
+       "mottled green scales",
+       [
+        "__evo_skins__=mottled green scales"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "a pair of delicate wings"
+       "a pair of delicate wings",
+       [
+        "__evo_limbs__=a pair of delicate wings"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "no eyes at all, only quivering feelers"
+       "no eyes at all, only quivering feelers",
+       [
+        "__evo_eyes__=no eyes at all, only quivering feelers"
+       ]
       ]
      ]
     },
@@ -938,19 +1403,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "eyes"
+       "eyes",
+       [
+        "{body|skin|limbs|eyes}=eyes"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "no eyes at all, only quivering feelers"
+       "no eyes at all, only quivering feelers",
+       [
+        "__evo_eyes__=no eyes at all, only quivering feelers"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -960,19 +1437,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "skin"
+       "skin",
+       [
+        "{body|skin|limbs|eyes}=skin"
+       ]
       ],
       [
        "$skin ← __evo_skins__",
-       "translucent skin that glows faintly blue"
+       "translucent skin that glows faintly blue",
+       [
+        "__evo_skins__=translucent skin that glows faintly blue"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -982,19 +1471,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "limbs"
+       "limbs",
+       [
+        "{body|skin|limbs|eyes}=limbs"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "a pair of delicate wings"
+       "a pair of delicate wings",
+       [
+        "__evo_limbs__=a pair of delicate wings"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -1004,19 +1505,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "limbs"
+       "limbs",
+       [
+        "{body|skin|limbs|eyes}=limbs"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "a pair of delicate wings"
+       "a pair of delicate wings",
+       [
+        "__evo_limbs__=a pair of delicate wings"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -1026,19 +1539,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "body"
+       "body",
+       [
+        "{body|skin|limbs|eyes}=body"
+       ]
       ],
       [
        "$body ← __evo_bodies__",
-       "a body like a soft glass bead"
+       "a body like a soft glass bead",
+       [
+        "__evo_bodies__=a body like a soft glass bead"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     }
@@ -1061,23 +1586,38 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "$body ← __evo_bodies__",
-       "a long segmented body"
+       "a long segmented body",
+       [
+        "__evo_bodies__=a long segmented body"
+       ]
       ],
       [
        "$skin ← __evo_skins__",
-       "ridged amber plates"
+       "ridged amber plates",
+       [
+        "__evo_skins__=ridged amber plates"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "six thin jointed legs"
+       "six thin jointed legs",
+       [
+        "__evo_limbs__=six thin jointed legs"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "a row of tiny bright eyes"
+       "a row of tiny bright eyes",
+       [
+        "__evo_eyes__=a row of tiny bright eyes"
+       ]
       ]
      ]
     },
@@ -1087,19 +1627,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "limbs"
+       "limbs",
+       [
+        "{body|skin|limbs|eyes}=limbs"
+       ]
       ],
       [
        "$limbs ← __evo_limbs__",
-       "a pair of delicate wings"
+       "a pair of delicate wings",
+       [
+        "__evo_limbs__=a pair of delicate wings"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -1109,19 +1661,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "body"
+       "body",
+       [
+        "{body|skin|limbs|eyes}=body"
+       ]
       ],
       [
        "$body ← __evo_bodies__",
-       "a round, armoured body"
+       "a round, armoured body",
+       [
+        "__evo_bodies__=a round, armoured body"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -1131,19 +1695,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "eyes"
+       "eyes",
+       [
+        "{body|skin|limbs|eyes}=eyes"
+       ]
       ],
       [
        "$eyes ← __evo_eyes__",
-       "no eyes at all, only quivering feelers"
+       "no eyes at all, only quivering feelers",
+       [
+        "__evo_eyes__=no eyes at all, only quivering feelers"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -1153,19 +1729,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "body"
+       "body",
+       [
+        "{body|skin|limbs|eyes}=body"
+       ]
       ],
       [
        "$body ← __evo_bodies__",
-       "a long segmented body"
+       "a long segmented body",
+       [
+        "__evo_bodies__=a long segmented body"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     },
@@ -1175,19 +1763,31 @@
      "picks": [
       [
        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}",
-       "a rainforest floor of wet leaves"
+       "a rainforest floor of wet leaves",
+       [
+        "{a tide pool among black rocks|a rainforest floor of wet leaves|a desert of red sand at dusk|the clear ice of a frozen lake}=a rainforest floor of wet leaves"
+       ]
       ],
       [
        "{body|skin|limbs|eyes}",
-       "body"
+       "body",
+       [
+        "{body|skin|limbs|eyes}=body"
+       ]
       ],
       [
        "$body ← __evo_bodies__",
-       "a long segmented body"
+       "a long segmented body",
+       [
+        "__evo_bodies__=a long segmented body"
+       ]
       ],
       [
        "{6% leap}",
-       ""
+       "",
+       [
+        "{6% leap}="
+       ]
       ]
      ]
     }

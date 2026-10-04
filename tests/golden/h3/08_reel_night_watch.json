@@ -15,7 +15,10 @@
      "picks": [
       [
        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
-       "a thunderstorm rolling in from the sea"
+       "a thunderstorm rolling in from the sea",
+       [
+        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}=a thunderstorm rolling in from the sea"
+       ]
       ]
      ]
     },
@@ -25,7 +28,10 @@
      "picks": [
       [
        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
-       "a thunderstorm rolling in from the sea"
+       "a thunderstorm rolling in from the sea",
+       [
+        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}=a thunderstorm rolling in from the sea"
+       ]
       ]
      ]
     },
@@ -35,7 +41,10 @@
      "picks": [
       [
        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
-       "a thunderstorm rolling in from the sea"
+       "a thunderstorm rolling in from the sea",
+       [
+        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}=a thunderstorm rolling in from the sea"
+       ]
       ]
      ]
     }
@@ -55,7 +64,10 @@
      "picks": [
       [
        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
-       "a rising gale"
+       "a rising gale",
+       [
+        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}=a rising gale"
+       ]
       ]
      ]
     },
@@ -65,7 +77,10 @@
      "picks": [
       [
        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
-       "a rising gale"
+       "a rising gale",
+       [
+        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}=a rising gale"
+       ]
       ]
      ]
     },
@@ -75,7 +90,10 @@
      "picks": [
       [
        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
-       "a rising gale"
+       "a rising gale",
+       [
+        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}=a rising gale"
+       ]
       ]
      ]
     }
@@ -95,7 +113,10 @@
      "picks": [
       [
        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
-       "a heavy sea fog"
+       "a heavy sea fog",
+       [
+        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}=a heavy sea fog"
+       ]
       ]
      ]
     },
@@ -105,7 +126,10 @@
      "picks": [
       [
        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
-       "a heavy sea fog"
+       "a heavy sea fog",
+       [
+        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}=a heavy sea fog"
+       ]
       ]
      ]
     },
@@ -115,7 +139,10 @@
      "picks": [
       [
        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}",
-       "a heavy sea fog"
+       "a heavy sea fog",
+       [
+        "{a rising gale|a heavy sea fog|a thunderstorm rolling in from the sea}=a heavy sea fog"
+       ]
       ]
      ]
     }

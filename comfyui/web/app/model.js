@@ -72,9 +72,11 @@ export function withDice(text, row) {
   return lines.join("\n");
 }
 
-// `@style(0.8)` is `<lora:style:0.8>`, as orrery.loras.long_form writes it (not @include or @h3).
+// `@style(0.8)` is `<lora:style:0.8>` and `@image_1(0.6)` `<image:1:0.6>`, as orrery.loras.long_form writes them (not
+// @include or @h3); a RefMod's name the server tells by its files (#227).
 export const longForm = (text) => text.replace(/(?<![\w@<\\])@([\w./\\-]+)\(([^()<>]*)\)/g,
-  (m, name, spec) => (/^(include|h3)$/i.test(name) ? m : `<lora:${name}:${spec.trim()}>`));
+  (m, name, spec) => (/^(include|h3)$/i.test(name) ? m : /^image[_\s]*\d+$/i.test(name)
+    ? `<image:${name.replace(/\D/g, "")}:${spec.trim()}>` : `<lora:${name}:${spec.trim()}>`));
 
 // A brace's options: split at `|`, but not inside `[...]` (`{__a[x|y]__|b}` has two). Mirrors orrery.dsl.split_options.
 export function splitOptions(inner) {
@@ -325,6 +327,21 @@ function walkedInfo(out, walked) {
 // Does chunk c play segment s? On its range, or on its list when GOTO lines set the path.
 export const plays = (c, s) => s != null && (c.segs ? c.segs.includes(s) : c.first !== null && s >= c.first && s <= c.last);
 
+// A scene's buttons (#204): the clip Generate renders, the next one while the scene plays it, else the scene's first;
+// null when the scene never plays.
+export function sceneTarget(c, segment) {
+  if (plays(c, segment)) return segment;
+  return c.segs ? c.segs[0] ?? null : c.first;
+}
+
+// The clip the scene after this one starts on: the one after this scene's last, when the reel plays it; null after
+// a scene that repeats forever, at the reel's end, or before a walk has found the path.
+export function nextSceneClip(c, chunks) {
+  const last = c.segs ? c.segs[c.segs.length - 1] ?? null : c.last;
+  if (last === null || last === Infinity) return null;
+  return chunks.some((o) => plays(o, last + 1)) ? last + 1 : null;
+}
+
 // 1, 3–4, 7: a scene's clips in short, counted from 1 (segments from 0).
 function runs(segs) {
   const parts = [];
@@ -347,11 +364,11 @@ export function splitCells(text) {
   return cells;
 }
 
-const clock = (secs) => {
+export const clock = (secs) => {
   const s = Math.round(secs * 10) / 10, m = Math.floor(s / 60), r = Math.round((s - m * 60) * 10) / 10;
   return `${m}:${Number.isInteger(r) ? String(r).padStart(2, "0") : r.toFixed(1).padStart(4, "0")}`;
 };
-const span = (secs) => `${Math.round(secs * 100) / 100} s`;
+export const span = (secs) => `${Math.round(secs * 100) / 100} s`;
 
 // `clip 5 · 0:20 → 0:25 · 1:35 left`, `clips 2–5 · 4 × 5 s · …`, `clip 8 → ∞ · 6 s each · from 0:35`:
 // clips count from 1, the segments behind them from 0.
@@ -367,6 +384,17 @@ export function chunkLabel(c) {
   const segs = c.repeat > 1 ? `clips ${c.first + 1}–${c.last + 1} · ${c.repeat} × ${span(c.secs)}` : `clip ${c.first + 1}`;
   const left = c.left === null ? "" : c.left > 0 ? ` · ${clock(c.left)} left` : " · the end";
   return `${segs} · ${clock(c.start)} → ${clock(c.end)}${left}`;
+}
+
+// A scene's divider names one clip (#219): the next one where the scene plays it, else the clip it comes next as;
+// its full label (every clip, the times) is the divider's hover, and its 📊 explains it.
+export function chunkShort(c, segment) {
+  if (c.segs ? !c.segs.length : c.first === null) return c.label;
+  const each = span(c.secs), at = segment ?? -1;
+  if (plays(c, at)) return `▶ next: clip ${at + 1} · ${each}`;
+  const ahead = c.segs ? c.segs.find((s) => s > at) : at < c.first ? c.first : null;
+  if (ahead != null) return `comes next as clip ${ahead + 1} · ${each}`;
+  return `played as clip ${(c.segs ? c.segs[c.segs.length - 1] : c.last) + 1} · ${each}`;
 }
 
 function h3Length(seconds) {
@@ -428,9 +456,75 @@ export function dials(text) {
 
 export function applyDials(text, values) {
   const set = Object.fromEntries(Object.entries(values || {}).map(([k, v]) => [k.replace(/^\$/, ""), String(v).trim()]).filter(([, v]) => v));
-  return text.split("\n").map((l) => {
+  return applyKnobs(text.split("\n").map((l) => {
     const m = BINDING_LINE.exec(l);
     return m && set[m[2]] ? `${m[1]}$${m[2]}${m[3]}${set[m[2]]}` : l;
+  }).join("\n"), values);
+}
+
+// The template's knobs (#226, #227): the LoRAs, RefMods, pictures and members its SET: and LORA: lines turn, each
+// where it holds (scope -1: the head, every clip; else its scene's index), as written and as fields. A short
+// name is told by `known` (your LoRA files and RefMods, the CAST), as the server tells it by its files.
+const SCENE_LINE = /^\s*(?:SCENE|CHUNK)\b\s*(.*)$/;
+const KNOB_LONG = /<(lora|refmod|image|cast):([^<>:]+?)(?::([^<>]*))?>/gi;
+const KNOB_SHORT = /(?<![\w@<\\])@([\w./\\-]+)\(([^()<>]*)\)/g;
+const KNOB_ITEM = /([^,()<>]+?)\s*\(([^()]*)\)/g;
+const stem = (name) => name.replace(/\\/g, "/").split("/").pop().toLowerCase().replace(/\.[^.]+$/, "").replace(/_(video|audio)$/, "");
+
+export function knobsOf(text, { loras = [], refmods = [], cast = [] } = {}) {
+  const lorasBy = new Set(loras.map(stem)), refmodsBy = new Set(refmods.map(stem)), members = new Set(cast);
+  const kindOf = (name, set) => (members.has(name) ? "cast" : /^image[_\s]*\d+$/i.test(name) ? "image"
+    : refmodsBy.has(stem(name)) && !lorasBy.has(stem(name)) ? "refmod" : lorasBy.has(stem(name)) ? "lora" : set ? "refmod" : "lora");
+  const out = [];
+  let scope = -1, scene = null;
+  for (const raw of text.split("\n")) {
+    const sc = SCENE_LINE.exec(raw);
+    if (sc) { scope += 1; scene = sc[1].trim(); continue; }
+    const m = /^\s*(SET|LORA):(.*)$/.exec(raw);
+    if (!m) continue;
+    const found = [];  // in the order written: each kind of form found, then blanked, so the next finds what is left
+    const add = (at, written, kind, name, spec) => found.push({ at, scope, scene, text: written, kind, name,
+      fields: (spec || "").split(",").map((f) => f.trim()) });
+    const blank = (w) => " ".repeat(w.length);
+    let rest = m[2].replace(KNOB_LONG, (w, kind, name, spec, at) => { add(at, w, kind.toLowerCase(), name.trim(), spec); return blank(w); });
+    rest = rest.replace(KNOB_SHORT, (w, name, spec, at) => { add(at, w, kindOf(name, m[1] === "SET"), name, spec); return blank(w); });
+    if (m[1] === "SET") {
+      for (const it of rest.matchAll(KNOB_ITEM)) {
+        const name = it[1].trim();
+        if (name.toLowerCase() !== "refmods") add(it.index + it[0].indexOf(name), it[0].trim(), kindOf(name, true), name, it[2]);
+      }
+    }
+    out.push(...found.sort((x, y) => x.at - y.at).map(({ at, ...k }) => k));
+  }
+  return out;
+}
+
+// A knob's key among the node's params, beside the dials' names: where it holds and how it is written.
+export const knobKey = (k) => `~${k.scope}|${k.text}`;
+
+// A knob as written with other fields: `turbo(0.8, 0%, 50%)` → `turbo(0.6, 0%)`, `<lora:x:0.8>` → `<lora:x:0.6>`.
+export function withFields(knob, fields) {
+  const spec = [...fields].map((f) => String(f ?? "").trim());
+  while (spec.length > 1 && !spec[spec.length - 1]) spec.pop();
+  const text = spec.join(", ");
+  const long = /^<(lora|refmod|image|cast):([^<>:]+?)(?::([^<>:]*))?((?::[^<>]*)?)>$/i.exec(knob.text);
+  if (long) return `<${long[1]}:${long[2]}:${text}${long[4] || ""}>`;
+  return knob.text.replace(/\(([^()]*)\)$/, `(${text})`);
+}
+
+// The knobs the node turns (params `~scope|as written` → the knob written anew), put into their lines: in the
+// scope it holds in, its first place there. A knob no longer in the text is left out (#226).
+export function applyKnobs(text, values) {
+  const wanted = Object.entries(values || {}).filter(([k, v]) => k.startsWith("~") && String(v).trim())
+    .map(([k, v]) => { const at = k.indexOf("|"); return { scope: Number(k.slice(1, at)), was: k.slice(at + 1), now: String(v).trim(), done: false }; });
+  if (!wanted.length) return text;
+  let scope = -1;
+  return text.split("\n").map((l) => {
+    if (SCENE_LINE.test(l)) { scope += 1; return l; }
+    for (const w of wanted) {
+      if (!w.done && w.scope === scope && /^\s*(?:SET|LORA):/.test(l) && l.includes(w.was)) { l = l.replace(w.was, w.now); w.done = true; }
+    }
+    return l;
   }).join("\n");
 }
 
@@ -524,5 +618,6 @@ export async function queueSweep({ count, seeds, mode, getSeed, setSeed, queue, 
 // What Generate queues is planned by the server (orrery.batch.plan, /orrery/plan): a LoRA sweep's runs
 // times a grid's cells. It is asked only when the template may hold one: a LoRA tag with several
 // strengths, a solo or test tag, or a grid.
-export const PLAN_HINT = /<lora:[^<>]*[,;][^<>]*>|<lora:[^<>]*:(?:solo|test)\b|(?<![\w@<\\])@[\w./\\-]+\([^()<>]*[,;][^()<>]*\)|^\s*(?:@grid|:\s*grid)\b/m;
+// A knob's field that sweeps (#227): `0.6|0.8`, a range `0.2-1;0.2`, in a long form, a short one or a SET: line.
+export const PLAN_HINT = /<lora:[^<>]*[,;|][^<>]*>|<(?:refmod|image|cast):[^<>]*[|;][^<>]*>|<lora:[^<>]*:(?:solo|test)\b|(?<![\w@<\\])@[\w./\\-]+\([^()<>]*[,;|][^()<>]*\)|^\s*SET:.*\([^(){}<>]*[|;][^(){}<>]*\)|^\s*(?:@grid|:\s*grid)\b/m;
 

@@ -7,9 +7,10 @@
 import { castNames } from "../orrery-complete.js";
 import { highlight } from "./highlight.js";
 import { splitCells } from "./model.js";
-import { annotationLines, mergeHints } from "./annotate.js";
+import { annotationLines, mergeHints, shownHints } from "./annotate.js";
 import { fillStrip, hintsFor, openPicker, rememberLines, stripHTML } from "./remember.js";
-import { clipRatio, sectionHTML, sourceClip, wireClips } from "./timeline.js";
+import { clipRatio, olderTakes, paintLive, sectionHTML, sourceClip, takeVars, wireClips } from "./timeline.js";
+import { resultsHTML, resultsSig, wireResults } from "./results.js";
 
 const box = (app) => app.view.querySelector(".editor.cells");
 const areas = (app) => [...(box(app)?.querySelectorAll("textarea") || [])];
@@ -49,23 +50,33 @@ export function renderCells(app, at = null) {
   if (at !== null) placeCaret(app, at);
 }
 
-// Highlights with the chunk dividers, and the sections when what they show changed.
+const painted = new WeakMap();  // a cell → what its highlight was made from
+
+// Highlights with the chunk dividers, and the sections when what they show changed. A cell is highlighted
+// again only when something it shows changed (#218): its text, its divider, its hints, the libraries known,
+// the CAST, the segment; what every cell reads is worked out once.
 export function paintCells(app) {
   const host = box(app);
   if (!host) return;
   const cells = splitCells(app.text), chunks = app.chunks() || [], segment = Number(app.bridge.getSegment());
-  const remembered = app.remembered();
+  const remembered = app.remembered(), annotations = app.annotations(), known = app.known(), llm = app.llmActive();
+  const cast = castNames(app.text), shared = JSON.stringify([[...known], cast, llm, segment]), acts = app.sceneActs?.();
   let before = 0;  // the REMEMBER: lines in the cells above: the hints count them through the whole text
   host.querySelectorAll(".cell").forEach((cell, i) => {
     const c = cells[i];
     if (!c) return;
-    const local = c.chunk >= 0 && chunks[c.chunk] ? [{ ...chunks[c.chunk], line: 0 }] : null;
-    const hints = mergeHints(hintsFor(c.text, remembered, before), annotationLines(c.text, app.annotations(), app.api.thumbURL));
+    const local = c.chunk >= 0 && chunks[c.chunk] ? [{ ...chunks[c.chunk], line: 0, index: c.chunk }] : null;
+    const hints = shownHints(app.data.annotations_show, mergeHints(hintsFor(c.text, remembered, before),
+      annotationLines(c.text, annotations, app.api.thumbURL, c.line)));
     before += rememberLines(c.text).length;
-    cell.querySelector("pre").innerHTML = `${highlight(c.text, app.known(), { llm: app.llmActive(), chunks: local, segment, cast: castNames(app.text), hints })}​`;
+    const key = JSON.stringify([shared, c.text, local, [...hints], acts && local ? acts(local[0], c.chunk) : ""]);
+    if (painted.get(cell) === key) return;
+    painted.set(cell, key);
+    cell.querySelector("pre").innerHTML = `${highlight(c.text, known, { llm, chunks: local, segment, cast, hints, sceneActs: acts })}​`;
   });
   const sig = JSON.stringify([chunks.map((c) => [c.first, c.last, c.segs]), (app.data.chain?.clips || []).map((c) => c.version),
-    segment, clipRatio(app), app.data.clip_min, remembered?.key, remembered?.lines]);
+    segment, clipRatio(app), app.data.clip_min, app.data.take_min, remembered?.key, remembered?.lines, olderTakes(app),
+    chunks.length ? null : resultsSig(app)]);
   if (sig === app.cellsSig) return;
   app.cellsSig = sig;
   host.querySelectorAll(".chunkmedia").forEach((m) => {
@@ -74,10 +85,12 @@ export function paintCells(app) {
     const line = remembered?.lines.find((l) => l.scene === scene);
     const source = line ? sourceClip(app, line.source) : null;
     const body = m.querySelector(".cm-body");
-    body.innerHTML = (scene >= 0 ? sectionHTML(app, c) : "") + stripHTML(app, scene, source?.url);
+    // a scene's clips; a template without scenes, its results under its one cell (#211)
+    body.innerHTML = (scene >= 0 ? sectionHTML(app, c) : chunks.length ? "" : resultsHTML(app, takeVars(app))) + stripHTML(app, scene, source?.url);
     fillStrip(body, source?.frames);
   });
   sizeSections(app);
+  paintLive(app);  // the clip rendering now keeps its preview through a redraw
 }
 
 // Every section's clips at the settings' clip size, as far as the section is wide.
@@ -177,6 +190,7 @@ export function wireCells(app, { onEdit, onKey, onFocus, onBlur }) {
     }
   });
   wireClips(app, host);
+  wireResults(app, host, () => { app.cellsSig = null; paintCells(app); });
   host.addEventListener("click", (e) => {  // a remembered frame clicked: pick another by eye
     const img = e.target.closest(".rm-item img.pick");
     if (!img) return;

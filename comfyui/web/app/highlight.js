@@ -1,6 +1,7 @@
 // Syntax colouring for orrery templates. Pure: returns HTML for a <pre> under the editor.
 
 import { castNames } from "../orrery-complete.js";
+import { chunkShort } from "./model.js";
 
 export const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
@@ -50,7 +51,7 @@ function line(text, known, llm, members) {
   // <lora:…> tags and their @name(0.8) short form are opaque (file names may contain __), as orrery's expander treats them
   const lora = (part) => (members && new RegExp(`^${members.source}\\(`).test(part) ? brass(esc(part), members)  // SET: @JINX(0.6)
     : `<span class="t-lora">${esc(part)}</span>`);
-  return out + rest.split(/((?<!\\)<lora:[^<>]*>|(?<![\w@<\\])@[\w./\\-]+\([^()<>]*\))/).map((part, i) => (i % 2 ? lora(part)
+  return out + rest.split(/((?<!\\)<(?:lora|refmod|image|cast):[^<>]*>|(?<![\w@<\\])@[\w./\\-]+\([^()<>]*\))/).map((part, i) => (i % 2 ? lora(part)
     : part.replace(TOKEN, (m, escaped, lib, name, v, multi, brace) => {
       if (escaped) return `<span class="t-esc" title="Written as it is: the backslash keeps it from being syntax">${esc(m)}</span>`;
       if (lib) return isKnown(name, known) ? `<span class="t-lib">${esc(lib)}</span>`
@@ -63,24 +64,37 @@ function line(text, known, llm, members) {
 
 // The divider on a SCENE line: absolutely placed, so the text keeps its place under the textarea's caret;
 // first in the line, so its static top is the line's top.
-function chunkLine(html, c, segment) {
+function chunkLine(html, c, segment, acts = "") {
   const now = segment !== null && (c.segs ? c.segs.includes(segment) : c.first !== null && segment >= c.first && segment <= c.last);
   const turn = !now ? "" : c.segs ? (c.segs.length > 1 ? ` ${c.segs.indexOf(segment) + 1}/${c.segs.length}${c.endless ? "+" : ""}` : "")
     : c.repeat > 1 ? ` ${segment - c.first + 1}/${c.repeat === Infinity ? "∞" : c.repeat}` : "";
-  const label = `${now ? `▶ next${turn} · ` : ""}${c.label}`;
-  return `<span class="chunkline${now ? " now" : ""}"><span class="chunkinfo"><span>${esc(label)}</span></span>${html}</span>`;
+  const title = `${now ? `next${turn} · ` : ""}${c.label}`;  // the whole story on hover; the divider names one clip (#219)
+  return `<span class="chunkline${now ? " now" : ""}"><span class="chunkinfo"><span title="${esc(title)}">${esc(chunkShort(c, segment))}</span>${acts}</span>${html}</span>`;
 }
 
 // options.llm: a language model is set, so unknown libraries are to be made, not missing.
 // options.chunks (model.chunkInfo): SCENE lines get dividers; the one playing options.segment is marked.
+// options.sceneActs(c, index): a scene's buttons in its divider (#204), the chunk's index in the reel `c.index` when
+// the chunks are a cell's own.
 // options.cast: the CAST's names, in brass (a cell passes the whole template's); else read from src.
+// A hover hint (#203) on what it belongs to, quietly marked: each library's roll on its `__…__` (`rolls`, by its
+// place in the line), what the line says besides (`note`) on its first word that has a card: a keyword, a
+// binding's name, a directive.
+export function onHover(html, h) {
+  let k = -1;
+  const rolls = new Map(h.rolls || []);
+  html = html.replace(/<span class="t-lib/g, (m) => (++k, rolls.has(k) ? `<span data-roll="${esc(`at this seed: ${rolls.get(k)}`)}" class="t-has t-lib` : m));
+  return h.note ? html.replace(/<span class="(t-kw|t-var|t-param)/, (m, kind) => `<span data-roll="${esc(h.note)}" class="t-has ${kind}`) : html;
+}
+
 // `hints`: line index → { text, replaced } drawn after the line (REMEMBER: lines say where their frames go);
-// a hint takes no room, so the text wraps exactly as the textarea's.
-export function highlight(src, known, { llm = false, chunks = null, segment = null, cast = null, hints = null } = {}) {
-  const at = new Map((chunks || []).map((c) => [c.line, c]));
+// a hint takes no room, so the text wraps exactly as the textarea's. One with `hover` goes on the line's words.
+export function highlight(src, known, { llm = false, chunks = null, segment = null, cast = null, hints = null, sceneActs = null } = {}) {
+  const at = new Map((chunks || []).map((c, i) => [c.line, { ...c, index: c.index ?? i }]));
   const members = memberPattern(cast ?? castNames(src));
-  const hint = (i) => (hints?.has(i) ? `<span class="hint${hints.get(i).replaced ? " replaced" : ""}${hints.get(i).kind ? ` ${hints.get(i).kind}` : ""}"><span>`
+  const hint = (i) => (hints?.has(i) && !hints.get(i).hover ? `<span class="hint${hints.get(i).replaced ? " replaced" : ""}${hints.get(i).kind ? ` ${hints.get(i).kind}` : ""}"><span>`
     + `${(hints.get(i).thumbs || []).map((u) => `<img class="hint-pic" src="${esc(u)}" alt="">`).join("")}${esc(hints.get(i).text)}</span></span>` : "");
-  return src.split("\n").map((l, i) => (at.has(i) ? chunkLine(line(l, known, llm, members), at.get(i), segment)
-    : line(l, known, llm, members)) + hint(i)).join("\n");
+  const words = (l, i) => (hints?.get(i)?.hover ? onHover(line(l, known, llm, members), hints.get(i)) : line(l, known, llm, members));
+  return src.split("\n").map((l, i) => (at.has(i) ? chunkLine(words(l, i), at.get(i), segment, sceneActs ? sceneActs(at.get(i), at.get(i).index) : "")
+    : words(l, i)) + hint(i)).join("\n");
 }

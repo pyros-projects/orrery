@@ -101,8 +101,8 @@ def test_node_classes_declare_comfy_interfaces():
                                         "OrreryWrite", "OrreryRefMods"}
     inputs = OrreryPrompt.INPUT_TYPES()["required"]
     assert inputs["target"][0] == ["text", "h3-base", "flat"]
-    assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length", "lora_stack",
-                                         "megapixels")
+    assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length",
+                                         "megapixels", "model")  # the model through orrery (#209)
     assert OrreryLog.OUTPUT_NODE is True
     film, cont = NODE_CLASS_MAPPINGS["OrreryFilm"], NODE_CLASS_MAPPINGS["OrreryContinue"]
     assert film.OUTPUT_NODE is True and film.RETURN_TYPES == ("IMAGE", "AUDIO", "VIDEO")
@@ -302,15 +302,16 @@ def test_the_node_writes_the_chunk_its_segment_asks_for(home, monkeypatch):
     assert "wakes" in text and "sleeps" not in text
     assert (data["segment"], data["chunks"]) == (1, 2)
     assert (width, height, length) == (1344, 768, h3_length(4 + 22 / 24))
-    assert stack == [("x/all.safetensors", 1.0, 1.0), ("two.safetensors", 0.5, 0.5)]
+    assert stack == [("x/all.safetensors", 1.0, 1.0, 0.0, 1.0), ("two.safetensors", 0.5, 0.5, 0.0, 1.0)]
     first = run_prompt(REEL, 1, "h3-base", str(home))
     assert first[5] == h3_length(5) and json.loads(first[1])["segment"] == 0
+    assert set(json.loads(first[1])["kept"]) == {"bindings", "handoff"}  # what its take keeps for the clips after it (#261)
 
 
 def test_unresolved_loras_are_left_out_and_reported(home, monkeypatch):
     fake_loras(monkeypatch, ["x/all.safetensors"])
     _, picks, _, _, _, _, stack, *_ = run_prompt(REEL, 1, "h3-base", str(home), segment=1)
-    assert stack == [("x/all.safetensors", 1.0, 1.0)]
+    assert stack == [("x/all.safetensors", 1.0, 1.0, 0.0, 1.0)]
     assert any("two" in i["message"] for i in json.loads(picks)["lint"])
 
 
@@ -422,8 +423,18 @@ def test_a_slot_and_a_missing_library_share_the_one_request(home, monkeypatch):
 def test_the_model_sees_the_clip_it_continues(home, monkeypatch):
     backend = fake_llm(monkeypatch, {"slot 1": "he lets go"})
     frames = [object()] * 6
-    run_prompt("--what happens next--", 1, "text", str(home), frames=frames)
+    reel = "@h3 t2va\nSCENE start\nSHOT 5s: static\nA man holds a rope.\nSFX: wind\nSCENE next\nSHOT 5s: static\n--what happens next--\nSFX: wind"
+    run_prompt(reel, 1, "h3-base", str(home), segment=1, frames=frames)
     assert backend.images[0] is frames and "6 images" in backend.prompts[0]
+
+
+def test_without_scenes_the_node_never_continues_an_old_clip(home, monkeypatch):
+    """A segment left at 4 by earlier reels: a template without SCENE lines is one clip on its own (#190)."""
+    backend = fake_llm(monkeypatch, {"slot 1": "she waves"})
+    _, picks, *_ = run_prompt("@h3 t2va\nSHOT 5s: static\n--what happens--\nSFX: wind", 1, "h3-base", str(home),
+                              segment=4, frames=[object()] * 6)
+    assert backend.images == [None] and "frames of the previous clip" not in backend.prompts[0]
+    assert "segment" not in json.loads(picks)
 
 
 def test_frames_alone_ask_the_model_nothing(home, monkeypatch):
@@ -448,9 +459,10 @@ def test_an_unusable_answer_keeps_the_directions_and_says_so(home, monkeypatch):
 
 
 def test_outside_a_chain_the_node_runs_without_a_previous_clip(home):
-    assert OrreryPrompt.INPUT_TYPES()["optional"]["latent_path"][1]["forceInput"] is True
+    optional = OrreryPrompt.INPUT_TYPES()["optional"]
+    assert "latent_path" not in optional and optional["chain"][1]["default"] == ""  # the app names it (#197)
     outputs = OrreryPrompt().run("a quiet street", 1, "text", home=str(home), segment=2)
-    assert len(outputs) == len(OrreryPrompt.RETURN_TYPES) and outputs[-1] > 0  # megapixels
+    assert len(outputs) == len(OrreryPrompt.RETURN_TYPES) and outputs[-2] > 0 and outputs[-1] is None  # megapixels, no model
 
 
 def test_only_slots_in_the_played_chunk_can_go_unanswered(home, monkeypatch):
@@ -565,11 +577,11 @@ def test_megapixels_in_the_header_set_the_canvas_by_area():
 
 
 def test_the_node_puts_out_megapixels(home):
-    assert OrreryPrompt.RETURN_NAMES[-1] == "megapixels" and OrreryPrompt.RETURN_TYPES[-1] == "FLOAT"
+    assert OrreryPrompt.RETURN_NAMES[-2] == "megapixels" and OrreryPrompt.RETURN_TYPES[-2] == "FLOAT"
     outputs = OrreryPrompt().run("@h3 t2va 16:9 0.6MP\nSHOT 5s\nA fox runs.\nSFX: wind", 1, "h3-base", home=str(home))
-    assert outputs[-1] == 0.6 and json.loads(outputs[1])["megapixels"] == 0.6
+    assert outputs[-2] == 0.6 and json.loads(outputs[1])["megapixels"] == 0.6
     outputs = OrreryPrompt().run("@h3 t2va 9:16\nSHOT 5s\nA fox runs.\nSFX: wind", 1, "h3-base", home=str(home))
-    assert outputs[-1] == round(768 * 1344 / 1e6, 3)
+    assert outputs[-2] == round(768 * 1344 / 1e6, 3)
 
 
 def test_a_reel_tells_the_app_which_segment_runs(home, monkeypatch):
@@ -579,16 +591,17 @@ def test_a_reel_tells_the_app_which_segment_runs(home, monkeypatch):
     monkeypatch.setitem(sys.modules, "server", server)
     reel = "@h3 t2va\nCHUNK a\nSHOT 5s\nA fox.\nCHUNK b repeat 2\nSHOT 5s\nThe fox again."
     OrreryPrompt().run(reel, 1, "h3-base", home=str(home), segment=2, unique_id="427")
-    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": 2, "end": False})]
+    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": 2, "end": False, "seed": 1, "take": 0})]
     sent.clear()
-    OrreryPrompt().run("@h3 t2va\nSHOT 5s\nA fox.", 1, "h3-base", home=str(home), unique_id="427")
-    assert sent == []  # not a reel: nothing to count
+    OrreryPrompt().run("@h3 t2va\nSHOT 5s\nA fox.", 1, "h3-base", home=str(home), unique_id="427", take=3)
+    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": -1, "end": False, "seed": 1, "take": 3})]
+    sent.clear()  # not a reel: segment -1, its result a take under the prompt (#211)
     blocker = types.ModuleType("comfy_execution.graph_utils")
     blocker.ExecutionBlocker = lambda v: v
     monkeypatch.setitem(sys.modules, "comfy_execution", types.ModuleType("comfy_execution"))
     monkeypatch.setitem(sys.modules, "comfy_execution.graph_utils", blocker)
     OrreryPrompt().run(reel, 1, "h3-base", home=str(home), segment=3, unique_id="427")
-    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": 3, "end": True})]
+    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": 3, "end": True, "seed": None, "take": 0})]
 
 
 def test_comments_neither_roll_nor_ask_for_libraries(home):
@@ -620,11 +633,11 @@ REFS_GRAPH = {"9": {"class_type": "OrreryPrompt", "inputs": {}},
 
 def test_the_picks_tell_orrery_refs_what_is_sent_and_from_which_chain(home):
     _, picks, *_ = OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), segment=0,
-                                      latent_path="reels/one", prompt=REFS_GRAPH, unique_id="9")
+                                      chain="reels/one", prompt=REFS_GRAPH, unique_id="9")
     data = json.loads(picks)
     assert data["refs"] == [1] and data["sends"] == {"chain": "reels/one", "home": str(home), "slots": [3, 4], "ready": {}}
     _, picks, *_ = OrreryPrompt().run(SEND_REEL, 1, "h3-base", home=str(home), segment=1,
-                                      latent_path="reels/one", prompt=REFS_GRAPH, unique_id="9")
+                                      chain="reels/one", prompt=REFS_GRAPH, unique_id="9")
     data = json.loads(picks)
     assert data["refs"] == [1, 3, 4]
     assert data["sends"]["ready"] == {"3": {"segment": 0, "frames": [[0, 0]]},

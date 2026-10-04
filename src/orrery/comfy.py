@@ -13,7 +13,7 @@ import re
 from datetime import UTC, datetime
 from pathlib import Path
 
-from orrery import anchors, endpoint, history, runs, uistate
+from orrery import anchors, endpoint, history, loras, preview, runs, uistate
 from orrery import batch as batches
 from orrery import sweep as sweeps
 from orrery.autolib import needs, write_apart
@@ -36,7 +36,7 @@ from orrery.dsl import (
 )
 from orrery.h3 import DEFAULT_CONTEXT, compile_scene, image_slots, render_scene
 from orrery.h3_ref import word_issue
-from orrery.home import Home, resolve_home
+from orrery.home import STATE, Home, resolve_home
 from orrery.library import library_files
 from orrery.llm import Backend, InvalidProposal, OpenAIBackend
 from orrery.loras import long_form, lora_files, lora_stack
@@ -47,7 +47,7 @@ from orrery.presets import (
     remember_template,
     resolve_includes,
 )
-from orrery.reel import ReelEnd
+from orrery.reel import ReelEnd, split_reel
 from orrery.slots import (
     SLOT,
     export_slots,
@@ -277,6 +277,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     known = {name for name, _ in bindings(template)}
     dials = {k: v for k, v in dial_values(params).items() if k in known}
     source = long_form(strip_comments(resolve_includes(h, override(template, dials))))  # the hash keeps the comments
+    if target == "text" or split_reel(source) is None:  # no SCENE: one clip on its own, never a reel's next (#190)
+        segment, frames = 0, None
     plan, sweep_picks, sweep_data, folder, cell = sweeps.runs(source), [], None, "", None
     grid = batches.axes(*with_inline(source, h.libraries())) if parse(source).params.grid is not None else []
     cells = batches.cells(grid) if grid else 1
@@ -321,7 +323,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         else:
             result = compile_scene(source, seed, h.libraries(), h.weights(), target=target, segment=segment,
                                    packed=packed, held=anchors.stored(h) if keep else frozenset(), cell=cell,
-                                   standing=standing)
+                                   standing=standing, past=_past(chain, segment))
             lint = [{"severity": i.severity, "message": i.message} for i in result.lint]
             needed = len(result.refs) if packed else max(image_slots(result.scene), default=0)
             if wired is not None and wired < needed:
@@ -376,6 +378,11 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         if issue := word_issue(described):
             lint.append({"severity": issue.severity, "message": issue.message})
     lint = [{"severity": "info", "message": n} for n in notes] + lint
+    for old in sweeps.legacy(source):
+        swept = old.split(":", 2)[-1].rstrip(">")
+        lint.append({"severity": "info", "message": f"{old} sweeps with commas, as before: write "
+                     f"{old.replace(swept, swept.replace(',', '|'))}, since commas now separate a knob's strength, "
+                     "start and end (#227)."})
     if (plan or grid) and not sweep:
         what = "LoRA sweep" if not grid else "Grid" if not plan else "LoRA sweep and grid"
         on = " on this clip (the segment holds still)" if getattr(result, "chunks", 0) else ""
@@ -429,6 +436,8 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
             length = h3_length(result.scene.duration)
         if result.chunks:
             data["segment"], data["chunks"], data["segments"] = result.segment, result.chunks, result.segments
+            data["chunk"] = result.chunk  # the scene this clip plays, which its take keeps (#240)
+            data["kept"] = result.kept  # its bindings and END ON:, so the clips after it read the past as rendered (#261)
             data["continues"] = result.continues
             if result.test:
                 data["test"] = True
@@ -475,8 +484,23 @@ def _previous(latent_path: str, segment: int):
     return load(path) if path else None
 
 
-def _announce(unique_id, segment: int, end: bool = False) -> None:
-    """Tell the node's app which reel segment runs (or that the reel is over), so Generate can show it."""
+def _past(latent_path: str, segment: int) -> dict[int, dict]:
+    """What the clips before this segment rendered, from Orrery Film's takes (#261); nothing outside ComfyUI."""
+    if segment <= 0:
+        return {}
+    from orrery import film
+
+    try:
+        import folder_paths  # ComfyUI
+
+        return film.past(Path(folder_paths.get_output_directory()), latent_path or DEFAULT_CHAIN, segment)
+    except Exception:  # noqa: BLE001 - no store, no past: the clip rolls its past as before
+        return {}
+
+
+def _announce(unique_id, segment: int, end: bool = False, seed: int | None = None, take: int = 0) -> None:
+    """Tell the node's app which reel segment runs (or that the reel is over), so Generate can show it; a template
+    without scenes runs as segment -1 (#211), with its seed and take, so its result becomes a take under the prompt."""
     if unique_id is None:
         return
     try:
@@ -484,7 +508,7 @@ def _announce(unique_id, segment: int, end: bool = False) -> None:
     except ImportError:
         return
     PromptServer.instance.send_sync("orrery.segment", {"node": str(unique_id), "prompt_id": runs.current_prompt(),
-                                                       "segment": segment, "end": end})
+                                                       "segment": segment, "end": end, "seed": seed, "take": take})
 
 
 def state_token(home: Home) -> str:
@@ -535,7 +559,7 @@ def log_outputs(home: Home, picks_json: str, media: list[str]) -> list[dict]:
         "rating": None,
     } for m in (media or [None])]
     home.root.mkdir(parents=True, exist_ok=True)
-    with home.galaxy_path.open("a", encoding="utf-8") as f:
+    with STATE, home.galaxy_path.open("a", encoding="utf-8") as f:  # never while a rating rewrites the log (#260)
         for row in rows:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
     return rows
@@ -556,15 +580,13 @@ def save_png(image, path: Path | str, picks_json: str) -> None:
 class OrreryPrompt:
     CATEGORY = "orrery"
     FUNCTION = "run"
-    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "LORA_STACK", "FLOAT")
-    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "lora_stack", "megapixels")
+    RETURN_TYPES = ("STRING", "STRING", "INT", "INT", "INT", "INT", "FLOAT", "MODEL")
+    RETURN_NAMES = ("text", "picks", "seed", "width", "height", "length", "megapixels", "model")
     OUTPUT_TOOLTIPS = ("", "", "", "From `: w…` in the template, else the @h3 ratio, else 1024.",
                        "From `: h…` in the template, else the @h3 ratio, else 1024.",
                        ("Frames at 24 fps for the MiniMax H3 nodes' length input: the sum of the SHOT "
                         "durations (in a reel: the scene's, plus the pinned context from the second "
                         "clip on), snapped up to H3's 17k+5 grid (124 without SHOTs)."),
-                       ("The LORA: lines (the head's, plus the scene's in a reel) as a LORA_STACK for any "
-                        "loader with a lora_stack input (LoraManager, Efficiency, Easy-Use …)."),
                        ("The canvas area: `0.6MP` from the @h3 line, else width × height, for resolution and "
                         "scale nodes that take megapixels."))
     DESCRIPTION = ("Expands an orrery template (text) or compiles a screenplay (h3-base, flat) "
@@ -597,45 +619,58 @@ class OrreryPrompt:
                 "last_frame": ("IMAGE", {"tooltip": (
                     "Optional: the picture the clip ends on (and the H3 node's last_frame). Without a first frame, width "
                     "and height take its shape, so H3 does not crop it.")}),
+                "model": ("MODEL", {"tooltip": (
+                    "Optional: the model, through orrery to the sampler (#209). The clip being sampled then plays in "
+                    "orrery's clip box as it forms, in real time, decoded with the tiny VAE (taeh3 in models/vae_approx); "
+                    "the gear's Live preview makes it light or smooth. "
+                    "The model output is this model with that preview and the template's LORA: lines on it (#208), "
+                    "so no LoRA node is needed; nothing loads again.")}),
                 "video": ("VIDEO", {"tooltip": (
                     "Optional: a video of your own that the reel starts from (a Load Video). The template's head is "
                     "its scene: REMEMBER: there keeps its frames, END ON: there says how it ends, and a scene with "
                     "AFTER: the input video continues it.")}),
-                "latent_path": ("STRING", {"forceInput": True, "tooltip": (
-                    "Where the reel's clips live, under ComfyUI's output (default h3_context; H3 Motion "
-                    "Context's latent_path): Orrery Film keeps them in its orrery_film folder, Chain Video in "
-                    "chain_video. From the second segment on the model watches the previous clip when it writes "
-                    "--…-- slots.")}),
                 "sweep": ("STRING", {"default": "", "tooltip": (
                     "Set by Roll for each run of a LoRA sweep (run|gallery folder); empty runs the first.")}),
+                "take": ("INT", {"default": 0, "min": 0, "max": 0xFFFFFFFF, "tooltip": (
+                    "Set by the app for sample surfing (#206): the seed output carries seed + take, so the sampler's "
+                    "noise changes while the prompt rolls at the seed as before.")}),
+                "chain": ("STRING", {"default": "", "tooltip": (
+                    "Set by the app (#197): the folder under ComfyUI's output where this reel's clips live, "
+                    "reels/<preset> or reels/untitled/<date time>; empty is h3_context. Orrery Film keeps them in "
+                    "its orrery_film folder.")}),
             },
             "hidden": {"unique_id": "UNIQUE_ID", "extra_pnginfo": "EXTRA_PNGINFO", "prompt": "PROMPT"},
         }
 
     @classmethod
     def IS_CHANGED(cls, template, seed, target, preset=NO_PRESET, home="", params="", segment=0,
-                   latent_path=DEFAULT_CHAIN, sweep="", **_):
+                   sweep="", chain="", take=0, **_):
         h = resolve_home(home or None)
         chosen = load_preset(h, preset) if preset and preset != NO_PRESET else template
-        return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{segment}:{latent_path}:{sweep}:{state_token(h)}"
+        return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{segment}:{chain}:{take}:{sweep}:{state_token(h)}"
 
     def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, clip=None,
-            latent_path=DEFAULT_CHAIN, sweep="", unique_id=None, extra_pnginfo=None, prompt=None,
-            first_frame=None, last_frame=None, video=None):
-        stills = _previous(latent_path, segment)
+            sweep="", chain="", take=0, unique_id=None, extra_pnginfo=None, prompt=None,
+            first_frame=None, last_frame=None, video=None, model=None):
+        preview.forward_core_previews()  # ComfyUI's own preview reaches every tab, not just the one that queued
+        chain = chain or DEFAULT_CHAIN  # the app names it after the reel; old workflows and the CLI keep h3_context
+        stills = _previous(chain, segment)
         packed, wired, keep, standing = wiring(prompt, unique_id)
         try:
             outputs = run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
-                                 params, segment, clip, stills, packed, wired, latent_path or DEFAULT_CHAIN, keep,
+                                 params, segment, clip, stills, packed, wired, chain, keep,
                                  sweep, continued(prompt, unique_id), (_size(first_frame), _size(last_frame)),
                                  reads_picks(prompt, unique_id, "OrreryRefMods"), standing)
             data = json.loads(outputs[1])
+            if take:  # sample surfing (#206): the rolls as at the seed, the sampler's noise from seed + take
+                data["take"] = take
+                outputs = (outputs[0], json.dumps(data, ensure_ascii=False), (seed + take) % 2**32, *outputs[3:])
             h = resolve_home(home or None)
             history.record(h, data)
             if uistate.load_ui(h)["log_prompts"]:
                 print("\n".join(history.log_lines(data)))
             if data.get("input"):
-                _keep_input(video, latent_path or DEFAULT_CHAIN)
+                _keep_input(video, chain)
             if "sends" in data and not packed:
                 raise ValueError("This reel REMEMBERs frames as reference images, which Orrery Refs fetches: wire this "
                                  "node's picks into an Orrery Refs, and its ref outputs into Reference to Video.")
@@ -645,8 +680,18 @@ class OrreryPrompt:
             if (prompt_id := runs.current_prompt()) and unique_id is not None:
                 runs.remember(prompt_id, unique_id, outputs[1])  # for Generate: Save nodes log to the galaxy
             if "segments" in data:  # a reel
-                _announce(unique_id, data["segment"])
-            return (*outputs, data["megapixels"])
+                _announce(unique_id, data["segment"], seed=seed, take=take)
+            else:  # results under the prompt in every mode (#211)
+                _announce(unique_id, -1, seed=seed, take=take)
+            stack, outputs = outputs[6], outputs[:6]  # the LORA: lines go on the model, not out (#208)
+            if stack and model is not None:
+                model = loras.apply(model, stack)
+                when = lambda a, b: "" if (a, b) == (0, 1) else f", {a:.0%}–{b:.0%}"  # a timed LoRA's start and end (#227)
+                print(f"[orrery] LoRAs on the model: {', '.join(f'{n} ({s:g}{when(a, b)})' for n, s, _, a, b in stack if s)}")
+            elif stack:
+                print("[orrery] warn: the LORA: lines go on the model that passes through this node; wire the model "
+                      "loader into its model input and its model output on to the sampler, else they change nothing.")
+            return (*outputs, data["megapixels"], preview.patched(model, unique_id, h) if model is not None else None)
         except ReelEnd as end:
             try:
                 from comfy_execution.graph_utils import ExecutionBlocker  # ComfyUI
@@ -925,8 +970,7 @@ class OrreryRefs:
                              "none: wire a Load Video into the Orrery Prompt's video input.")
         if path is None:
             raise ValueError(f"image {n} is sent from clip {segment + 1}, but the chain {latent_path!r} has no clip "
-                             f"{segment + 1}: render the reel from that scene on, or check the Orrery Prompt's "
-                             "latent_path.")
+                             f"{segment + 1}: render the reel from that scene on.")
         batch, dropped = chain.frames(path, send["frames"], send.get("step", 1))
         if dropped:
             many = len(dropped) > 1

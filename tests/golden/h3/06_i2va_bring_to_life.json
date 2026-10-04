@@ -8,15 +8,24 @@
      "picks": [
       [
        "__camera__",
-       "pull out, small, slow"
+       "pull out, small, slow",
+       [
+        "__camera__=pull out, small, slow"
+       ]
       ],
       [
        "{a light breeze moves hair, fabric and leaves|dust drifts slowly through the light|the light shifts slowly as a cloud passes}",
-       "the light shifts slowly as a cloud passes"
+       "the light shifts slowly as a cloud passes",
+       [
+        "{a light breeze moves hair, fabric and leaves|dust drifts slowly through the light|the light shifts slowly as a cloud passes}=the light shifts slowly as a cloud passes"
+       ]
       ],
       [
        "{slowly turns toward the camera|blinks and takes a slow breath|looks up at something above the frame}",
-       "slowly turns toward the camera"
+       "slowly turns toward the camera",
+       [
+        "{slowly turns toward the camera|blinks and takes a slow breath|looks up at something above the frame}=slowly turns toward the camera"
+       ]
       ]
      ]
     }
@@ -29,15 +38,24 @@
      "picks": [
       [
        "__camera__",
-       "arc, slow"
+       "arc, slow",
+       [
+        "__camera__=arc, slow"
+       ]
       ],
       [
        "{a light breeze moves hair, fabric and leaves|dust drifts slowly through the light|the light shifts slowly as a cloud passes}",
-       "dust drifts slowly through the light"
+       "dust drifts slowly through the light",
+       [
+        "{a light breeze moves hair, fabric and leaves|dust drifts slowly through the light|the light shifts slowly as a cloud passes}=dust drifts slowly through the light"
+       ]
       ],
       [
        "{slowly turns toward the camera|blinks and takes a slow breath|looks up at something above the frame}",
-       "slowly turns toward the camera"
+       "slowly turns toward the camera",
+       [
+        "{slowly turns toward the camera|blinks and takes a slow breath|looks up at something above the frame}=slowly turns toward the camera"
+       ]
       ]
      ]
     }
@@ -50,15 +68,24 @@
      "picks": [
       [
        "__camera__",
-       "push in, small, slow"
+       "push in, small, slow",
+       [
+        "__camera__=push in, small, slow"
+       ]
       ],
       [
        "{a light breeze moves hair, fabric and leaves|dust drifts slowly through the light|the light shifts slowly as a cloud passes}",
-       "dust drifts slowly through the light"
+       "dust drifts slowly through the light",
+       [
+        "{a light breeze moves hair, fabric and leaves|dust drifts slowly through the light|the light shifts slowly as a cloud passes}=dust drifts slowly through the light"
+       ]
       ],
       [
        "{slowly turns toward the camera|blinks and takes a slow breath|looks up at something above the frame}",
-       "blinks and takes a slow breath"
+       "blinks and takes a slow breath",
+       [
+        "{slowly turns toward the camera|blinks and takes a slow breath|looks up at something above the frame}=blinks and takes a slow breath"
+       ]
       ]
      ]
     }

@@ -1,0 +1,74 @@
+{
+ "preset": "tutorial/19_h3_references_in_text",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, natural light. A woman who looks like <Picture 1> stands in a rain-soaked night market, framed from the waist up. The camera pushes in at slow speed. She walks slowly past the camera, glancing at it. Her face and her hair stay as in <Picture 1>; her clothes and everything around her belong to the scene.\n\noverall_soundscape: The soft ambience of a rain-soaked night market and her footsteps.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a rooftop garden at dusk|a quiet library with tall windows|a rain-soaked night market}",
+       "a rain-soaked night market",
+       [
+        "{a rooftop garden at dusk|a quiet library with tall windows|a rain-soaked night market}=a rain-soaked night market"
+       ]
+      ],
+      [
+       "{turns toward the camera and smiles|walks slowly past the camera, glancing at it|sits down on a bench and looks up}",
+       "walks slowly past the camera, glancing at it",
+       [
+        "{turns toward the camera and smiles|walks slowly past the camera, glancing at it|sits down on a bench and looks up}=walks slowly past the camera, glancing at it"
+       ]
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, natural light. A woman who looks like <Picture 1> stands in a rain-soaked night market, framed from the waist up. The camera pushes in at slow speed. She turns toward the camera and smiles. Her face and her hair stay as in <Picture 1>; her clothes and everything around her belong to the scene.\n\noverall_soundscape: The soft ambience of a rain-soaked night market and her footsteps.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a rooftop garden at dusk|a quiet library with tall windows|a rain-soaked night market}",
+       "a rain-soaked night market",
+       [
+        "{a rooftop garden at dusk|a quiet library with tall windows|a rain-soaked night market}=a rain-soaked night market"
+       ]
+      ],
+      [
+       "{turns toward the camera and smiles|walks slowly past the camera, glancing at it|sits down on a bench and looks up}",
+       "turns toward the camera and smiles",
+       [
+        "{turns toward the camera and smiles|walks slowly past the camera, glancing at it|sits down on a bench and looks up}=turns toward the camera and smiles"
+       ]
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, natural light. A woman who looks like <Picture 1> stands in a rooftop garden at dusk, framed from the waist up. The camera pushes in at slow speed. She walks slowly past the camera, glancing at it. Her face and her hair stay as in <Picture 1>; her clothes and everything around her belong to the scene.\n\noverall_soundscape: The soft ambience of a rooftop garden at dusk and her footsteps.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a rooftop garden at dusk|a quiet library with tall windows|a rain-soaked night market}",
+       "a rooftop garden at dusk",
+       [
+        "{a rooftop garden at dusk|a quiet library with tall windows|a rain-soaked night market}=a rooftop garden at dusk"
+       ]
+      ],
+      [
+       "{turns toward the camera and smiles|walks slowly past the camera, glancing at it|sits down on a bench and looks up}",
+       "walks slowly past the camera, glancing at it",
+       [
+        "{turns toward the camera and smiles|walks slowly past the camera, glancing at it|sits down on a bench and looks up}=walks slowly past the camera, glancing at it"
+       ]
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

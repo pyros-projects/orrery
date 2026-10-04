@@ -8,59 +8,101 @@
      "picks": [
       [
        "{tame|curious|unhinged}",
-       "tame"
+       "tame",
+       [
+        "{tame|curious|unhinged}=tame"
+       ]
       ],
       [
        "{person|animal|thing|place}",
-       "person"
+       "person",
+       [
+        "{person|animal|thing|place}=person"
+       ]
       ],
       [
        "{average_joes|models|gothic|cyberpunk|horror|noir|fantasy}",
-       "average_joes"
+       "average_joes",
+       [
+        "{average_joes|models|gothic|cyberpunk|horror|noir|fantasy}=average_joes"
+       ]
       ],
       [
        "$who ← __characters/average_joes__",
-       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$who ← __characters/looks/hair__",
-       "wind-blown __characters/looks/hair_color__ hair down to the collar"
+       "wind-blown __characters/looks/hair_color__ hair down to the collar",
+       [
+        "__characters/looks/hair__=wind-blown __characters/looks/hair_color__ hair down to the collar"
+       ]
       ],
       [
        "$who ← __characters/looks/hair_color__",
-       "warm caramel"
+       "warm caramel",
+       [
+        "__characters/looks/hair_color__=warm caramel"
+       ]
       ],
       [
        "$who ← __characters/average_joes/outfit__",
-       "a corduroy blazer with elbow patches"
+       "a corduroy blazer with elbow patches",
+       [
+        "__characters/average_joes/outfit__=a corduroy blazer with elbow patches"
+       ]
       ],
       [
        "$act ← __moments/person__",
-       "runs, stumbles, catches themselves and keeps running"
+       "runs, stumbles, catches themselves and keeps running",
+       [
+        "__moments/person__=runs, stumbles, catches themselves and keeps running"
+       ]
       ],
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$place ← __world/landscapes__",
-       "terraced rice paddies filled with water, each terrace holding a strip of sky"
+       "terraced rice paddies filled with water, each terrace holding a strip of sky",
+       [
+        "__world/landscapes__=terraced rice paddies filled with water, each terrace holding a strip of sky"
+       ]
       ],
       [
        "$land ← __world/landscapes__",
-       "an iceberg-strewn bay where humpback whales surface between the ice"
+       "an iceberg-strewn bay where humpback whales surface between the ice",
+       [
+        "__world/landscapes__=an iceberg-strewn bay where humpback whales surface between the ice"
+       ]
       ],
       [
        "$sky ← __world/weather__",
-       "a thunderstorm rolling in, lightning flickering inside black cloud"
+       "a thunderstorm rolling in, lightning flickering inside black cloud",
+       [
+        "__world/weather__=a thunderstorm rolling in, lightning flickering inside black cloud"
+       ]
       ],
       [
        "$move ← __drone/moves__",
-       "dives from high above in a fast FPV plunge and pulls out just above the ground"
+       "dives from high above in a fast FPV plunge and pulls out just above the ground",
+       [
+        "__drone/moves__=dives from high above in a fast FPV plunge and pulls out just above the ground"
+       ]
       ],
       [
        "$look ← __looks/video__",
-       "Vintage film, 1960s Kodachrome home movie: saturated reds and deep blues, crisp grain, bright daylight, and the gentle gate weave and flicker of a small-gauge reel"
+       "Vintage film, 1960s Kodachrome home movie: saturated reds and deep blues, crisp grain, bright daylight, and the gentle gate weave and flicker of a small-gauge reel",
+       [
+        "__looks/video__=Vintage film, 1960s Kodachrome home movie: saturated reds and deep blues, crisp grain, bright daylight, and the gentle gate weave and flicker of a small-gauge reel"
+       ]
       ]
      ]
     }
@@ -73,63 +115,108 @@
      "picks": [
       [
        "{tame|curious|unhinged}",
-       "curious"
+       "curious",
+       [
+        "{tame|curious|unhinged}=curious"
+       ]
       ],
       [
        "{person|animal|thing|place}",
-       "person"
+       "person",
+       [
+        "{person|animal|thing|place}=person"
+       ]
       ],
       [
        "{average_joes|models|gothic|cyberpunk|horror|noir|fantasy}",
-       "cyberpunk"
+       "cyberpunk",
+       [
+        "{average_joes|models|gothic|cyberpunk|horror|noir|fantasy}=cyberpunk"
+       ]
       ],
       [
        "$who ← __characters/cyberpunk__",
-       "a back-alley street medic in her forties, Vietnamese, calm hands and exhausted eyes, with __characters/cyberpunk/hair__, __characters/cyberpunk/augment__, wearing __characters/cyberpunk/outfit__"
+       "a back-alley street medic in her forties, Vietnamese, calm hands and exhausted eyes, with __characters/cyberpunk/hair__, __characters/cyberpunk/augment__, wearing __characters/cyberpunk/outfit__",
+       [
+        "__characters/cyberpunk__=a back-alley street medic in her forties, Vietnamese, calm hands and exhausted eyes, with __characters/cyberpunk/hair__, __characters/cyberpunk/augment__, wearing __characters/cyberpunk/outfit__"
+       ]
       ],
       [
        "$who ← __characters/cyberpunk/hair__",
-       "a shaved head with a glowing __characters/cyberpunk/dye__ circuit tattoo"
+       "a shaved head with a glowing __characters/cyberpunk/dye__ circuit tattoo",
+       [
+        "__characters/cyberpunk/hair__=a shaved head with a glowing __characters/cyberpunk/dye__ circuit tattoo"
+       ]
       ],
       [
        "$who ← __characters/cyberpunk/dye__",
-       "ultraviolet"
+       "ultraviolet",
+       [
+        "__characters/cyberpunk/dye__=ultraviolet"
+       ]
       ],
       [
        "$who ← __characters/cyberpunk/augment__",
-       "one eye replaced by a many-lensed camera"
+       "one eye replaced by a many-lensed camera",
+       [
+        "__characters/cyberpunk/augment__=one eye replaced by a many-lensed camera"
+       ]
       ],
       [
        "$who ← __characters/cyberpunk/outfit__",
-       "a quilted kimono jacket with a holographic obi"
+       "a quilted kimono jacket with a holographic obi",
+       [
+        "__characters/cyberpunk/outfit__=a quilted kimono jacket with a holographic obi"
+       ]
       ],
       [
        "$act ← __moments/person__",
-       "runs, stumbles, catches themselves and keeps running"
+       "runs, stumbles, catches themselves and keeps running",
+       [
+        "__moments/person__=runs, stumbles, catches themselves and keeps running"
+       ]
       ],
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$place ← __world/landscapes__",
-       "a savanna with one acacia tree and a herd of elephants crossing it"
+       "a savanna with one acacia tree and a herd of elephants crossing it",
+       [
+        "__world/landscapes__=a savanna with one acacia tree and a herd of elephants crossing it"
+       ]
       ],
       [
        "$land ← __world/landscapes__",
-       "a savanna with one acacia tree and a herd of elephants crossing it"
+       "a savanna with one acacia tree and a herd of elephants crossing it",
+       [
+        "__world/landscapes__=a savanna with one acacia tree and a herd of elephants crossing it"
+       ]
       ],
       [
        "$sky ← __world/weather__",
-       "a thunderstorm rolling in, lightning flickering inside black cloud"
+       "a thunderstorm rolling in, lightning flickering inside black cloud",
+       [
+        "__world/weather__=a thunderstorm rolling in, lightning flickering inside black cloud"
+       ]
       ],
       [
        "$move ← __drone/moves__",
-       "skims a few metres above the surface toward the horizon, then climbs steeply to reveal the whole expanse at once"
+       "skims a few metres above the surface toward the horizon, then climbs steeply to reveal the whole expanse at once",
+       [
+        "__drone/moves__=skims a few metres above the surface toward the horizon, then climbs steeply to reveal the whole expanse at once"
+       ]
       ],
       [
        "$look ← __looks/video__",
-       "Sand animation on a light table: pictures drawn in dark sand against a warm glowing backlight, a hand sweeping one picture into the next, grains trickling at the edges"
+       "Sand animation on a light table: pictures drawn in dark sand against a warm glowing backlight, a hand sweeping one picture into the next, grains trickling at the edges",
+       [
+        "__looks/video__=Sand animation on a light table: pictures drawn in dark sand against a warm glowing backlight, a hand sweeping one picture into the next, grains trickling at the edges"
+       ]
       ]
      ]
     }
@@ -142,55 +229,94 @@
      "picks": [
       [
        "{tame|curious|unhinged}",
-       "tame"
+       "tame",
+       [
+        "{tame|curious|unhinged}=tame"
+       ]
       ],
       [
        "{person|animal|thing|place}",
-       "person"
+       "person",
+       [
+        "{person|animal|thing|place}=person"
+       ]
       ],
       [
        "{average_joes|models|gothic|cyberpunk|horror|noir|fantasy}",
-       "gothic"
+       "gothic",
+       [
+        "{average_joes|models|gothic|cyberpunk|horror|noir|fantasy}=gothic"
+       ]
       ],
       [
        "$who ← __characters/gothic__",
-       "an aristocratic recluse in his seventies, tall and bloodless, with __characters/gothic/hair__, a signet ring worn thin and a silver-topped cane he does not need, wearing __characters/gothic/attire__"
+       "an aristocratic recluse in his seventies, tall and bloodless, with __characters/gothic/hair__, a signet ring worn thin and a silver-topped cane he does not need, wearing __characters/gothic/attire__",
+       [
+        "__characters/gothic__=an aristocratic recluse in his seventies, tall and bloodless, with __characters/gothic/hair__, a signet ring worn thin and a silver-topped cane he does not need, wearing __characters/gothic/attire__"
+       ]
       ],
       [
        "$who ← __characters/gothic/hair__",
-       "silver-white hair pinned in Victorian coils"
+       "silver-white hair pinned in Victorian coils",
+       [
+        "__characters/gothic/hair__=silver-white hair pinned in Victorian coils"
+       ]
       ],
       [
        "$who ← __characters/gothic/attire__",
-       "a high-necked black lace blouse under a velvet frock coat"
+       "a high-necked black lace blouse under a velvet frock coat",
+       [
+        "__characters/gothic/attire__=a high-necked black lace blouse under a velvet frock coat"
+       ]
       ],
       [
        "$act ← __moments/person__",
-       "turns slowly and looks straight into the camera as the wind lifts their hair"
+       "turns slowly and looks straight into the camera as the wind lifts their hair",
+       [
+        "__moments/person__=turns slowly and looks straight into the camera as the wind lifts their hair"
+       ]
       ],
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$place ← __world/landscapes__",
-       "a flooded forest where the trunks stand in still black water"
+       "a flooded forest where the trunks stand in still black water",
+       [
+        "__world/landscapes__=a flooded forest where the trunks stand in still black water"
+       ]
       ],
       [
        "$land ← __world/landscapes__",
-       "a lighthouse on a lone rock in a storm-whipped sea"
+       "a lighthouse on a lone rock in a storm-whipped sea",
+       [
+        "__world/landscapes__=a lighthouse on a lone rock in a storm-whipped sea"
+       ]
       ],
       [
        "$sky ← __world/weather__",
-       "high noon under a fierce white sun and heat shimmer"
+       "high noon under a fierce white sun and heat shimmer",
+       [
+        "__world/weather__=high noon under a fierce white sun and heat shimmer"
+       ]
       ],
       [
        "$move ← __drone/moves__",
-       "threads low through a narrow gap between rocks or trees and bursts out into open space"
+       "threads low through a narrow gap between rocks or trees and bursts out into open space",
+       [
+        "__drone/moves__=threads low through a narrow gap between rocks or trees and bursts out into open space"
+       ]
       ],
       [
        "$look ← __looks/video__",
-       "Live-action, cinematic, shot on bleach-bypass film: colour drained almost to silver, dense inky shadows, hard metallic sheen on wet skin and steel, and fine grain crawling across the frame"
+       "Live-action, cinematic, shot on bleach-bypass film: colour drained almost to silver, dense inky shadows, hard metallic sheen on wet skin and steel, and fine grain crawling across the frame",
+       [
+        "__looks/video__=Live-action, cinematic, shot on bleach-bypass film: colour drained almost to silver, dense inky shadows, hard metallic sheen on wet skin and steel, and fine grain crawling across the frame"
+       ]
       ]
      ]
     }

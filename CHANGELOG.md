@@ -9,6 +9,37 @@ checks) are left out.
 
 ### Added
 
+- A reel's past is what was rendered: each take keeps its bindings and its `END ON:`, and the clips after it read
+  them (and the scenes the film went through) from the takes, not from a new roll with libraries, ratings or earlier
+  scenes changed since; what has no take rolls as before (#261).
+- A template without scenes, a Krea prompt or an `@h3` scene, has its results under the prompt: the live preview while
+  it samples (an image model's preview sized by its own latent format), then what it made; every run a take under the
+  result, a click shows it, and +, ×N and 📌 make takes as in a reel's scenes (#211).
+- Every library in a line says what it rolled at the line's end, in order (`→ arcade · bob cut · tracksuit`), one in
+  a branch that did not roll nothing; and the settings' *Annotations* puts them all at the line ends, on hover (what
+  has one underlined quietly, its roll shown on hover) or nowhere (#201).
+- The take tree: every take of a reel keeps its path, and picking it brings back the clips last made after it. **Tree**
+  shows them all like a git graph with videos, the film's path lit; a click makes the film the way through a take, ✂
+  ends it after one, ▶ Film plays the film as clicked together, a timeline of its clips under it, and a filter hides
+  the dead ends (the takes fewer than N takes were made on). Switching takes
+  never changes the editor; a take made with another prompt carries ✎, its hover shows what changed and a click puts
+  that prompt back in the editor, with Undo. Beside a clip's takes, a column: play all, the clip in numbers, the
+  others and all (#213).
+- A clip's takes play all at once, from the start and in step, to compare their motion: play all, stop all (#227).
+- The template's knobs beside its dials: LoRAs, RefMods, pictures and members, grouped where they hold (all clips,
+  then each scene), with strength, start and end in number fields stepping 0.05 and a sweep's values as chips;
+  turned as dials are, the template stays as written and Save bakes them in (#227).
+- One way to turn the model's knobs: LoRAs, RefMods, pictures and members take (strength, start, end), in `SET:` or
+  their own long form (`<lora:…>`, `<refmod:…>`, `<image:N:…>`, `<cast:NAME:…>`); a LoRA comes on at its start and
+  goes off at its end, every field sweeps with `|` or a range, and `<` completes the long forms: `<refmod:` lists
+  your RefMods, `<lora:` your LoRAs, `<cast:` the members (#227).
+- A reference needs no CAST: `<Image N>` in the text, as H3's own prompts write it, hands the picture to H3 as
+  `[image N]` does; `SET: image_N(…)` dials it, and `SET:` with a RefMod's name brings that RefMod in, with
+  strength, start and end. Tutorial 19 shows it (#224).
+- A clip's takes go at once: under their label, **the others** keeps only the one in the film, **all** deletes that
+  one too and the film ends before the clip; each asks first (#234).
+- The Orrery Prompt puts its `LORA:` lines on the model that passes through it, a clip's own and the head's, a
+  sweep's run included: no LoRA node needed (#208).
 - The language model can be an API endpoint (OpenAI, or a server that speaks its protocol), set in the gear
   with a key kept in the home's `.env`: a run's libraries, slots and `> enhance`, the Write menu and
   `orrery lib` go through it, beside ComfyUI (no VRAM, no queue). The Write menu answers while a render
@@ -55,6 +86,34 @@ checks) are left out.
 
 ### Changed
 
+- The settings are a tab of their own, behind the gear: their sections on the left (Home, Language model, Writers,
+  Editor, Clips, Log), the one chosen on the right. A setting is saved the moment it changes, no Save at the end of a
+  long page; the home folder, an API endpoint and a writer's text keep buttons of their own, and a setting changed on
+  its own no longer asks the endpoint (#212).
+- A sweep's values are separated by `|` (`<lora:x:0.5|1.0>`), since commas separate a knob's fields now; the
+  comma lists of before still sweep as they did, and the log suggests `|` (#227).
+- The `lora_stack` output is gone, since a LoRA stack needed a third-party node: the LoRAs go on the model through
+  the node. A workflow saved with it loses it when it opens, and its other outputs keep their links (#208).
+- A reel keeps its clips in a folder named after it, `output/reels/<preset>` or `reels/untitled/<date time>`, which
+  moves with Save as; two reels no longer write into one `h3_context`. The Orrery Prompt's `latent_path` input
+  is gone (#197).
+- A scene's divider names the next clip it plays (its hover all of them), and its 📊 shows the scene in numbers: where
+  and how often it plays on the walk, how long, what plays before and after it, what it rolls, what it made (#197).
+- A scene's divider adds takes of its clip (+) and stays on it, goes to the next scene, or both; the clip rendering now
+  shows the sampler's preview and its step under its scene (KJNodes' Model Preview Override, or ComfyUI's own) (#197).
+- Sample surfing: a scene's + adds ×1, ×2, ×4 or ×8 takes of its clip, you pick the best under it, and the
+  film, `REMEMBER:` and the next clip use that one; 📌 keeps the scene's rolled prompt so only the noise changes, and
+  the gear numbers the takes' seeds; a × deletes a take, under the clip or in its box, and a grip sizes the takes,
+  in the clip's shape. Clip 1 too: rendering it again stays in its run beside its other takes; another size or
+  sound starts a new run (#197).
+- The Orrery Prompt takes the model through it: the clip being sampled then plays in orrery's clip box as it
+  forms, in real time (the tiny VAE taeh3, else Latent2RGB), light or smooth at the pictures a second the gear's
+  Live preview sets, at the size it sets (1024 px on the long side unless set, 0 as sampled). Without it, ComfyUI's own preview reaches the clip box in every open tab (#197).
+- The dials are a list in a sidebar beside the editor, one a row with what it rolls at this seed, to widen,
+  fold or clear; a dial's menu filters by a regex over text, properties and tags, with All and None; a reel's
+  clips show only under its scenes, and the column beside the editor is gone; the node's segment widget is
+  orrery's own now, set in the footer with Next clip and Hold, and a template without scenes stays at clip 1
+  and never continues an old clip (#183).
 - `REMEMBER: frames 0, 50 as @NAME` gives her one picture per frame (it was one batch, of which
   Reference to Video read only the first); the lint names the two lines that fill one picture (#97).
 - The galaxy is the gallery now, and Generate is Roll, with how many runs it queues after it:
@@ -62,6 +121,21 @@ checks) are left out.
 
 ### Fixed
 
+- Rating an output while a run logs its own no longer loses the new one: the gallery's log and the learned weights
+  have one writer at a time, and two writes of one file never share a temp file (#260).
+- History's and the Gallery's restore no longer promise that the next run reproduces a run: it rolls again with today's
+  libraries and learned weights, and says so (#259).
+- Taking ratings back gives an entry's weight back: many outputs with one pick, rated and cleared, no longer leave it
+  off (twenty hates and their clearing left it a hundredfold), and the same ratings in any order give the same weight
+  (#257).
+- Typing in a long reel no longer lags: the editor highlights a scene again only when something it shows
+  changed, and works out once what every scene reads, instead of every scene on every keystroke (#218).
+- Save as, the gear and the app's other sheets open at the top of the app, where their buttons are, not at the
+  bottom edge of the node, which a tall node puts out of sight (#220).
+- The editor's annotations follow a seed or target changed in the node, not only an edit or a run (#187).
+- A new Orrery Prompt starts 1300 px wide, so the footer of a prompt or an H3 scene fits on one line (#181).
+- The gear saves again when `max_tokens` in `orrery.yaml` is not a multiple of 500 (the browser refused the
+  form); the API endpoint's text no longer looks like a label, and its model list waits for a pick (#179).
 - A dial's list of choices opens every time: a menu of its own shows every choice while the dial holds
   one of them, filters what you type, and a library's choices come back after a run (#155).
 - The Libraries tab opens at once with a home of a hundred thousand entries (it loaded all of them,

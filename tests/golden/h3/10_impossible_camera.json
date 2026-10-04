@@ -8,19 +8,31 @@
      "picks": [
       [
        "$start ← __world/landscapes__",
-       "tea plantations combed across rolling hills in morning haze"
+       "tea plantations combed across rolling hills in morning haze",
+       [
+        "__world/landscapes__=tea plantations combed across rolling hills in morning haze"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a hairline crack in an old stone wall"
+       "a hairline crack in an old stone wall",
+       [
+        "__scale/portals__=a hairline crack in an old stone wall"
+       ]
       ],
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$end ← __world/landscapes__",
-       "white gypsum dunes rippling under a hard blue sky"
+       "white gypsum dunes rippling under a hard blue sky",
+       [
+        "__world/landscapes__=white gypsum dunes rippling under a hard blue sky"
+       ]
       ]
      ]
     }
@@ -33,19 +45,31 @@
      "picks": [
       [
        "$start ← __world/landscapes__",
-       "a bamboo forest with stalks towering into a green ceiling"
+       "a bamboo forest with stalks towering into a green ceiling",
+       [
+        "__world/landscapes__=a bamboo forest with stalks towering into a green ceiling"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a keyhole glowing with light from the other side"
+       "a keyhole glowing with light from the other side",
+       [
+        "__scale/portals__=a keyhole glowing with light from the other side"
+       ]
       ],
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$end ← __world/landscapes__",
-       "karst peaks rising out of river mist, fishing boats small below them"
+       "karst peaks rising out of river mist, fishing boats small below them",
+       [
+        "__world/landscapes__=karst peaks rising out of river mist, fishing boats small below them"
+       ]
       ]
      ]
     }
@@ -58,19 +82,31 @@
      "picks": [
       [
        "$start ← __world/landscapes__",
-       "an alpine valley meadow blazing with wildflowers under glaciers"
+       "an alpine valley meadow blazing with wildflowers under glaciers",
+       [
+        "__world/landscapes__=an alpine valley meadow blazing with wildflowers under glaciers"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a single dewdrop hanging from a blade of grass"
+       "a single dewdrop hanging from a blade of grass",
+       [
+        "__scale/portals__=a single dewdrop hanging from a blade of grass"
+       ]
       ],
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$end ← __world/landscapes__",
-       "tea plantations combed across rolling hills in morning haze"
+       "tea plantations combed across rolling hills in morning haze",
+       [
+        "__world/landscapes__=tea plantations combed across rolling hills in morning haze"
+       ]
       ]
      ]
     }

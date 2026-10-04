@@ -1,6 +1,7 @@
 // Hover in the editor (#136, #147): a keyword says what it does and its forms, a directive what it sets, a
 // CAST member who it is in this clip (its description, its pictures with their strengths, its RefMods), a
-// library how big it is and what it holds, a binding what it rolled at the node's seed.
+// library how big it is and what it holds, a binding what it rolled at the node's seed. With the annotations on
+// hover (#203), a marked word says first what it rolled.
 import { DIRECTIVES, KEYWORDS } from "../orrery-complete.js";
 import { esc } from "./highlight.js";
 
@@ -31,7 +32,14 @@ export function dialText(d) {
   return parts.join(" ");
 }
 
+// What a marked word rolled (#203: annotations on hover), above its own card.
 function card(app, span) {
+  const roll = span.dataset.roll ? `<div class="hv-roll">${esc(span.dataset.roll)}</div>` : "";
+  const own = help(app, span);
+  return own && span.classList.contains("t-var") ? own : roll + own;  // a binding's card says its roll already
+}
+
+function help(app, span) {
   const text = span.textContent;
   if (span.classList.contains("t-cast")) {
     const name = text.replace(/^@/, "").replace(/[(:].*$/, "").trim(), m = app.annotations?.()?.members?.[name];

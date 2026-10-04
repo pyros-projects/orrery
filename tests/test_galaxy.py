@@ -72,6 +72,31 @@ def test_rerating_replaces_the_old_factor_and_clearing_restores(home, tmp_path):
     assert weights["__animal__=fox"] == pytest.approx(2.0)
 
 
+def test_ratings_taken_back_leave_the_weight_as_it_was_whatever_their_number_and_order(home, tmp_path):
+    """#257: twenty outputs with one pick, hated and cleared, left it at 104.86 when each step rounded to four places."""
+    rows = [row(image(tmp_path, f"{i}.png", size=(8, 8)), seed=i) for i in range(20)]
+    write_rows(home, rows)
+    Home(home).save_weights({"__animal__=fox": 2.0})
+    for r in rows:
+        rate(Home(home), row_id(r), "hate")
+    assert Home(home).weights()["__animal__=fox"] == pytest.approx(2.0 * 0.5 ** 20)  # no floor
+    for r in rows:
+        rate(Home(home), row_id(r), None)
+    assert Home(home).weights() == {"__animal__=fox": 2.0}
+    order = ["love", "hate", "like", "nope", "love", "hate", "like", "nope"] * 2
+    for r, rating in zip(rows, order, strict=False):
+        rate(Home(home), row_id(r), rating)
+    forward = Home(home).weights()["__animal__=fox"]
+    for r in rows:
+        rate(Home(home), row_id(r), None)
+    for r, rating in reversed(list(zip(rows, order, strict=False))):
+        rate(Home(home), row_id(r), rating)
+    assert Home(home).weights()["__animal__=fox"] == forward  # the same ratings, the other way round
+    for r in rows:
+        rate(Home(home), row_id(r), None)
+    assert Home(home).weights() == {"__animal__=fox": 2.0}
+
+
 def test_a_weight_back_at_one_leaves_the_file(home, tmp_path):
     r = row(image(tmp_path, "a.png"))
     write_rows(home, [r])
@@ -287,3 +312,51 @@ def test_export_names_are_one_plain_folder(home, tmp_path):
         with pytest.raises(ValueError):
             export(Home(home), [a], bad)
     assert not (home / "export").exists()
+
+
+def test_one_writer_at_a_time_for_the_log_and_the_weights(home, tmp_path):
+    """#260: a run's outputs appended while a rating rewrote galaxy.jsonl were lost; both hold one lock now."""
+    import threading
+
+    from orrery.comfy import log_outputs
+    from orrery.home import STATE
+
+    r = row(image(tmp_path, "a.png"))
+    write_rows(home, [r])
+    done = {}
+    with STATE:  # a rating (or a rename) is writing
+        logger = threading.Thread(target=lambda: done.setdefault("log", log_outputs(Home(home), json.dumps({"seed": 2, "picks": []}), ["b.png"])))
+        rater = threading.Thread(target=lambda: done.setdefault("rate", rate(Home(home), row_id(r), "love")))
+        logger.start()
+        rater.start()
+        logger.join(0.3)
+        rater.join(0.3)
+        assert done == {}  # both wait
+    logger.join(5)
+    rater.join(5)
+    assert set(done) == {"log", "rate"} and len(read_rows(Home(home))) == 2  # the logged row survived the rating
+
+
+def test_writers_of_one_file_never_share_a_temp_file(tmp_path):
+    """#260: every write went through `<name>.tmp`; two at once could replace each other's half-written file."""
+    import threading
+
+    from orrery.home import write_atomic
+
+    path, errors = tmp_path / "galaxy.jsonl", []
+
+    def write(k):
+        try:
+            for i in range(200):
+                write_atomic(path, f"{k}-{i}\n" * 50)
+        except Exception as err:  # noqa: BLE001 - what the test is about
+            errors.append(err)
+
+    threads = [threading.Thread(target=write, args=(k,)) for k in range(4)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    text = path.read_text()
+    assert not errors and len(set(text.splitlines())) == 1 and len(text.splitlines()) == 50  # one write, whole
+    assert [p.name for p in tmp_path.iterdir()] == ["galaxy.jsonl"]  # no temp file left behind

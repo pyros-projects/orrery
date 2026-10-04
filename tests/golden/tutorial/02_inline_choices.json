@@ -8,7 +8,10 @@
      "picks": [
       [
        "{a flooded cathedral|a neon-lit city gutter|the rings of Saturn|a teacup the size of a lake}",
-       "the rings of Saturn"
+       "the rings of Saturn",
+       [
+        "{a flooded cathedral|a neon-lit city gutter|the rings of Saturn|a teacup the size of a lake}=the rings of Saturn"
+       ]
       ]
      ]
     }
@@ -21,7 +24,10 @@
      "picks": [
       [
        "{a flooded cathedral|a neon-lit city gutter|the rings of Saturn|a teacup the size of a lake}",
-       "the rings of Saturn"
+       "the rings of Saturn",
+       [
+        "{a flooded cathedral|a neon-lit city gutter|the rings of Saturn|a teacup the size of a lake}=the rings of Saturn"
+       ]
       ]
      ]
     }
@@ -34,7 +40,10 @@
      "picks": [
       [
        "{a flooded cathedral|a neon-lit city gutter|the rings of Saturn|a teacup the size of a lake}",
-       "a teacup the size of a lake"
+       "a teacup the size of a lake",
+       [
+        "{a flooded cathedral|a neon-lit city gutter|the rings of Saturn|a teacup the size of a lake}=a teacup the size of a lake"
+       ]
       ]
      ]
     }

@@ -27,13 +27,6 @@
           "link": null
         },
         {
-          "localized_name": "latent_path",
-          "name": "latent_path",
-          "shape": 7,
-          "type": "STRING",
-          "link": null
-        },
-        {
           "localized_name": "template",
           "name": "template",
           "type": "STRING",
@@ -163,12 +156,6 @@
           ]
         },
         {
-          "localized_name": "lora_stack",
-          "name": "lora_stack",
-          "type": "LORA_STACK",
-          "links": null
-        },
-        {
           "localized_name": "megapixels",
           "name": "megapixels",
           "type": "FLOAT",
@@ -179,7 +166,7 @@
         "Node name for S&R": "OrreryPrompt"
       },
       "widgets_values": [
-        "# H3 REFMOD REEL · quickstart: @JINX leaves, the room stays empty, she comes back\n# Wiring: Reference to Video's positive → Orrery RefMods → Orrery Continue · picks → Orrery Refs,\n#   Orrery RefMods and Orrery Continue · the H3 video VAE → Orrery RefMods' vae\n# Her RefMod ships with orrery (examples/refmods); yours go into models/refmods. Orrery RefMods puts it on\n#   the clips that name her: scene 2 never does, so it goes without her. RefMod files need ComfyUI-H3RefMods\n# SET: @JINX(1, 0%, 10%)   strength, start, end: here her look only in the first 10%\n# REMEMBER: every 10th frame as refmod jinx_today   makes a RefMod from this scene's clip for the clips after it\n@h3 references 2:3 0.6MP\nstyle: live-action, cinematic\ncontext: 22\n\nCAST\n@JINX (refmod minimaxh3_jinx_v1_refmod): a young woman\n\nSCENE 1\nSHOT 6s: static\n@JINX waves at the camera and walks out of the frame to the left.\nEND ON: the room is empty and still\n\nSCENE 2\nSHOT 5s: static\nThe bedroom stays empty the whole time. Nobody comes in.\nEND ON: the room is empty and still\n\nSCENE 3\nSHOT 6s: static\n@JINX slides back into the frame from the left, laughing.\n",
+        "# H3 REFMOD REEL · quickstart: @JINX leaves, the room stays empty, she comes back\n# Wiring: Reference to Video's positive → Orrery RefMods → Orrery Continue · picks → Orrery Refs,\n#   Orrery RefMods and Orrery Continue · the H3 video VAE → Orrery RefMods' vae\n# Her RefMod ships with orrery (examples/refmods); yours go into models/refmods. Orrery RefMods puts it on\n#   the clips that name her: scene 2 never does, so it goes without her. RefMod files need ComfyUI-H3RefMods\n# SET: @JINX(1, 0%, 10%)   strength, start, end: here her look only in the first 10%\n# REMEMBER: every 10th frame as refmod jinx_today   makes a RefMod from this scene's clip for the clips after it\n@h3 references 2:3 0.6MP\nstyle: live-action, cinematic\ncontext: 22\n\nCAST\n@JINX (refmod minimaxh3_jinx_v1_refmod): a young woman with long blue braids, in a cropped dark top, striped trousers and boots\n\nSCENE 1\nSHOT 6s: static\n@JINX waves at the camera and walks out of the frame to the left.\nEND ON: the room is empty and still\n\nSCENE 2\nSHOT 5s: static\nThe bedroom stays empty the whole time. Nobody comes in.\nEND ON: the room is empty and still\n\nSCENE 3\nSHOT 6s: static\n@JINX slides back into the frame from the left, laughing.\n",
         1,
         "fixed",
         "h3-base",
@@ -188,6 +175,7 @@
         "",
         0,
         "increment",
+        "",
         ""
       ],
       "widgets_values_named": {

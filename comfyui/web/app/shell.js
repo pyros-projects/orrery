@@ -9,8 +9,11 @@ import { refreshHistory, renderHistory } from "./history.js";
 import { icon, LOGO } from "./icons.js";
 import { renderLibraries } from "./libraries.js";
 import { renderPresets } from "./presets.js";
+import { paintLive } from "./timeline.js";
+import { paintCells } from "./cells.js";
+import { resultBegins, resultEnds, resultMedia } from "./results.js";
 import { refreshReel, renderPrompt } from "./prompt.js";
-import { openSettings } from "./settings.js";
+import { openSettings, renderSettings } from "./settings.js";
 import { renderTest } from "./test.js";
 
 const TABS = [
@@ -21,6 +24,7 @@ const TABS = [
   ["galaxy", "Gallery", renderGalaxy],
   ["history", "History", renderHistory],
   ["help", "Help", renderHelp],
+  ["settings", "Settings", renderSettings, "gear"],  // the gear is its button, not the tab bar (#212)
 ];
 
 function canScroll(el, dy) {
@@ -47,7 +51,7 @@ export class OrreryApp {
     this.root = document.createElement("div");
     this.root.className = "orrery-app";
     this.root.innerHTML = `<div class="app-head"><div class="brand">${LOGO}orrery</div><nav class="tabs" role="tablist"></nav>`
-      + `<button class="icon-btn gear-btn" title="Settings: home folder, language model">${icon("gear")}</button><button class="icon-btn big-btn"></button></div><section class="view"></section><div class="sheet-host"></div><div class="toast-host"></div>`;
+      + `<button class="icon-btn gear-btn" title="Settings: the home folder, the language model, writers, editor, clips, log">${icon("gear")}</button><button class="icon-btn big-btn"></button></div><section class="view"></section><div class="sheet-host"></div><div class="toast-host"></div>`;
     this.view = this.$(".view");
     this.$(".tabs").addEventListener("click", (e) => { const t = e.target.closest("[data-tab]"); if (t) this.go(t.dataset.tab); });
     this.$(".big-btn").addEventListener("click", () => this.setBig(!this.state.big));
@@ -98,6 +102,7 @@ export class OrreryApp {
     else if (this.preset) await this.fetchBase();
     this.stopListening = this.api.onRunDone(() => this.afterRun());
     this.stopCapture = this.api.onExecuted((e) => this.capture(e.detail || {}));
+    this.stopPreview = this.api.onPreview((p) => this.preview(p));
     this.render();
   }
 
@@ -133,7 +138,13 @@ export class OrreryApp {
     this.data.dividers = d.dividers !== false;
     this.data.timeline = d.timeline !== false;
     this.data.log_prompts = d.log_prompts !== false;
+    this.data.surf_numbered = d.surf_numbered !== false;
+    this.data.preview_light = d.preview_light !== false;
     this.data.clip_min = d.clip_min ?? 360;
+    this.data.take_min = d.take_min ?? 54;
+    this.data.preview_fps = d.preview_fps ?? 12;
+    this.data.preview_edge = d.preview_edge ?? 1024;
+    this.data.annotations_show = d.annotations_show || "appended";
   }
   async refreshCompletion() {
     const [completion, gallery] = await Promise.all([this.api.completions(), this.api.pictures().catch(() => ({ presets: [] }))]);
@@ -143,11 +154,14 @@ export class OrreryApp {
   render() {
     const n = { presets: this.data.presets.length, libraries: this.data.completion?.libraries.length, galaxy: this.data.gTotal ?? this.data.rows?.length,
       history: this.data.hAll };
-    this.$(".tabs").innerHTML = TABS.map(([k, label]) => `<button class="tab" role="tab" aria-selected="${this.state.tab === k}" data-tab="${k}">`
+    this.$(".tabs").innerHTML = TABS.filter((t) => !t[3]).map(([k, label]) => `<button class="tab" role="tab" aria-selected="${this.state.tab === k}" data-tab="${k}">`
       + `${label}${n[k] ? `<span class="n">${n[k]}</span>` : ""}</button>`).join("");
     const big = this.$(".big-btn");
     big.innerHTML = icon(this.state.big ? "shrink" : "expand");
     big.title = this.state.big ? "Back into the node (Esc)" : "Big view";
+    const gear = this.$(".gear-btn");
+    gear.classList.toggle("on", this.state.tab === "settings");
+    gear.setAttribute("aria-pressed", String(this.state.tab === "settings"));
     TABS.find(([k]) => k === this.state.tab)[2](this);
   }
   go(tab) {
@@ -209,11 +223,21 @@ export class OrreryApp {
     this.toast(esc(err?.message || String(err)));
   }
 
-  openSheet(html) {
+  // A sheet opens at the app's top, where most of its buttons are; one that belongs to something lower down (a
+  // scene's 📊) opens just under it, or `over` it (a clip), as far as it fits (#219). The big view centres it.
+  openSheet(html, near = null, { over = false } = {}) {
     const host = this.$(".sheet-host");
     host.innerHTML = `<div class="sheet">${html}</div>`;
-    host.firstChild.addEventListener("mousedown", (e) => { if (e.target === host.firstChild) this.closeSheet(); });
-    return host.firstChild;
+    const sheet = host.firstChild, panel = sheet.firstElementChild;
+    sheet.addEventListener("mousedown", (e) => { if (e.target === sheet) this.closeSheet(); });
+    if (near && panel && !this.state.big) {  // on screen, in px: the canvas draws the node scaled, and often taller than the window
+      const box = sheet.getBoundingClientRect(), scale = box.height / sheet.offsetHeight || 1, at = near.getBoundingClientRect();
+      const h = panel.getBoundingClientRect().height, bottom = Math.min(box.bottom, innerHeight) - 8;
+      let y = over ? at.top : at.bottom + 6;
+      if (y + h > bottom) y = Math.max(Math.max(box.top, 0) + 8, bottom - h);  // in view, as near as it fits
+      panel.style.marginTop = `${Math.round(Math.max(0, (y - box.top) / scale))}px`;
+    }
+    return sheet;
   }
   closeSheet() { this.$(".sheet-host").innerHTML = ""; }
   sheetOpen() { return !!this.$(".sheet"); }
@@ -267,27 +291,54 @@ export class OrreryApp {
     const out = detail.output || {};
     const media = ["images", "gifs", "videos", "audio"].flatMap((k) => out[k] || []).filter((m) => m && m.filename);
     if (!media.length || !detail.prompt_id) return;
+    if (resultMedia(this, detail)) this.paintResults();  // this node's run: a take under the prompt (#211)
     try {
       const res = await this.api.captureOutputs({ prompt_id: detail.prompt_id, node: this.bridge.nodeId(), media });
       if (res.logged) { this.data.rows = null; this.data.gRows = null; if (this.state.tab === "galaxy") this.render(); }
     } catch { /* an older run or a restarted ComfyUI: nothing to log */ }
   }
 
+  // The clip rendering now, as the sampler previews it (#205): only while this node's reel clip runs.
+  preview(p) {
+    if (!this.run || (p.prompt && this.run.prompt && p.prompt !== this.run.prompt)) return;
+    const live = (this.live ??= { segment: this.run.segment, rank: 0 });
+    // the best source wins: a whole clip (orrery's through the model, or KJNodes') over a still (orrery's copy of
+    // ComfyUI's preview) over ComfyUI's own, which reaches only the tab that queued the run
+    if ((p.src || p.blob) && (p.rank || 0) >= live.rank) {
+      if (live.url?.startsWith("blob:")) URL.revokeObjectURL(live.url);
+      Object.assign(live, { url: p.src || URL.createObjectURL(p.blob), video: !!p.video, rank: p.rank || 0 });
+    }
+    if (p.total) Object.assign(live, { step: p.step, total: p.total });
+    paintLive(this);
+  }
+
   showRun(d) {
     this.run = d.end ? null : { segment: d.segment, prompt: d.prompt_id };
-    if (d.end) this.toast(`Segment <b>${d.segment}</b> is past the end of the reel, so nothing ran. Restart plays it from the beginning.`);
+    if (d.segment === -1) resultBegins(this, d);  // a template without scenes: its result becomes a take (#211)
+    this.endLive();
+    if (d.end) this.toast(`Clip <b>${d.segment + 1}</b> is past the end of the reel, so nothing ran. Restart plays it from the beginning.`);
     this.refreshRun();
   }
+  endLive() {
+    if (this.live?.url?.startsWith("blob:")) URL.revokeObjectURL(this.live.url);
+    this.live = null;
+    paintLive(this);
+  }
+
   runDone(prompt) {
+    resultEnds(this, prompt);
     if (!this.run || (prompt && this.run.prompt && prompt !== this.run.prompt)) return;
     this.run = null;
+    this.endLive();
     this.refreshRun();
   }
   refreshRun() { refreshReel(this); }
+  paintResults() { if (this.state.tab === "prompt") { this.cellsSig = null; paintCells(this); } }
 
   destroy() {
     this.stopListening?.();
     this.stopCapture?.();
+    this.stopPreview?.();
     clearTimeout(this.toastTimer);
     this.overlay?.remove();
     this.parked?.remove();

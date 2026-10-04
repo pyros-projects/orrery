@@ -1,7 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { highlight } from "../../comfyui/web/app/highlight.js";
-import { fitThumbs } from "../../comfyui/web/app/timeline.js";
 import { openLibraries, writerBlock } from "../../comfyui/web/app/write.js";
 import {
   applyDials, dials, downstream, nextSeed, queueSweep, entryPage, libraryHead, filterPresets, folderDropPath, folderTree, libraryGroups, filterRows, glyph, markPicks, pickerGroups,
@@ -406,20 +405,10 @@ test("CHUNK lines get a divider with their label, and the next segment's chunk i
   const info = chunkInfo(REEL_TEXT);
   const html = highlight(REEL_TEXT, new Set(), { chunks: info, segment: 2 });
   assert.equal(html.split("\n").length, REEL_TEXT.split("\n").length);  // no extra lines: the caret stays put
-  assert.match(html, /<span class="chunkline"><span class="chunkinfo"><span>clip 1 · 0:00 → 0:05 · 0:30 left<\/span><\/span><span class="t-kw">CHUNK<\/span> the opening<\/span>/);
-  assert.match(html, /<span class="chunkline now"><span class="chunkinfo"><span>▶ next 2\/4 · clips 2–5 [^<]*<\/span><\/span><span class="t-kw">CHUNK<\/span> the walk repeat 4/);
+  // the divider names one clip (#219); its whole label is its hover
+  assert.match(html, /<span class="chunkline"><span class="chunkinfo"><span title="clip 1 · 0:00 → 0:05 · 0:30 left">played as clip 1 · 5 s<\/span><\/span><span class="t-kw">CHUNK<\/span> the opening<\/span>/);
+  assert.match(html, /<span class="chunkline now"><span class="chunkinfo"><span title="next 2\/4 · clips 2–5 [^"]*">▶ next: clip 3 · 5 s<\/span><\/span><span class="t-kw">CHUNK<\/span> the walk repeat 4/);
   assert.doesNotMatch(highlight(REEL_TEXT, new Set()), /chunkinfo/);
-});
-
-test("timeline thumbs keep the clips' aspect ratio, portrait as well as landscape, and always fit their chunk", () => {
-  assert.deepEqual(fitThumbs(1, 120, 74, 16 / 9), { cols: 1, w: 120, h: 67 });
-  assert.deepEqual(fitThumbs(1, 120, 74, 9 / 16), { cols: 1, w: 41, h: 74 });
-  assert.deepEqual(fitThumbs(4, 120, 53, 9 / 16), { cols: 4, w: 27, h: 49 });  // portrait repeats side by side
-  assert.deepEqual(fitThumbs(1, 120, 400, 9 / 16), { cols: 1, w: 101, h: 180 });  // a tall chunk stops at 180 px
-  for (const ratio of [16 / 9, 1, 9 / 16]) {
-    const { cols, w, h } = fitThumbs(20, 120, 53, ratio), rows = Math.ceil(20 / cols);
-    assert.ok(cols * w + (cols - 1) * 3 <= 120 && rows * h + (rows - 1) * 3 <= 53, `ratio ${ratio}`);
-  }
 });
 
 test("the cells view splits a reel at its CHUNK lines, and joining the cells gives the text back", () => {
@@ -447,6 +436,41 @@ test("the Write menu offers a writer only where it can write", () => {
   assert.match(writerBlock(app("a photo of a fox", { frames: ["first_frame", "last_frame"] }), "story"), /@h3/);
   assert.match(writerBlock(app("a photo of a fox"), "describe"), /first_frame/);
   assert.equal(writerBlock(app("a photo of a fox", { frames: ["last_frame"] }), "describe"), "");
+});
+
+test("a scene's buttons: the clip it generates and where the next scene starts (#204)", async () => {
+  const { chunkInfo, nextSceneClip, sceneTarget } = await import("../../comfyui/web/app/model.js");
+  const reel = "@h3 t2va\nSCENE a\nSHOT 5s\nA.\nSCENE b ×3\nSHOT 5s\nB.\nSCENE c forever\nSHOT 5s\nC.";
+  const [a, b, c] = chunkInfo(reel), all = [a, b, c];
+  assert.equal(sceneTarget(a, 2), 0);  // the next clip is elsewhere: the scene's first
+  assert.equal(sceneTarget(b, 2), 2);  // the scene plays the next clip: that one
+  assert.equal(sceneTarget(b, 0), 1);
+  assert.equal(nextSceneClip(a, all), 1);
+  assert.equal(nextSceneClip(b, all), 4);
+  assert.equal(nextSceneClip(c, all), null);  // forever: nothing after it
+  const [end] = chunkInfo("@h3 t2va\nSCENE only\nSHOT 5s\nA.");
+  assert.equal(nextSceneClip(end, [end]), null);  // the reel's last scene
+});
+
+test("sample surfing numbers its takes on from the ones a clip has, or follows the seed's control (#206)", async () => {
+  const { surfSeeds } = await import("../../comfyui/web/app/prompt.js");
+  const app = (takes, { control = "fixed", numbered = true, clips = [] } = {}) => ({
+    data: { chain: { takes, clips }, surf_numbered: numbered }, bridge: { getSeed: () => 100, getControl: () => control } });
+  assert.deepEqual(surfSeeds(app({}), 2, 4, true), [0, 1, 2, 3]);  // a clip not rendered yet: the plain take first
+  assert.deepEqual(surfSeeds(app({}, { clips: [{ segment: 2 }] }), 2, 2, true), [1, 2]);  // its one clip is take 0
+  assert.deepEqual(surfSeeds(app({ 2: [{ take: 0, seed: 100 }, { take: 3, seed: 100 }] }), 2, 2, true), [4, 5]);
+  assert.deepEqual(surfSeeds(app({ 2: [{ take: 0, seed: 100 }, { take: 0, seed: 102 }] }), 2, 2, false), [3, 4]);  // seeds, rolled anew
+  assert.deepEqual(surfSeeds(app({}, { numbered: false, control: "fixed" }), 2, 2, true), [0, 0]);  // the same take again
+  const random = surfSeeds(app({}, { numbered: false, control: "randomize" }), 2, 3, true);
+  assert.equal(new Set(random).size, 3);
+});
+
+test("a scene that plays no clip says why: the walk not known yet, not reached, or after a forever (#210)", async () => {
+  const { sectionHTML } = await import("../../comfyui/web/app/timeline.js");
+  const app = (walked) => ({ reelPath: () => walked });
+  assert.match(sectionHTML(app(null), { first: null, segs: [] }), /walking the reel at this seed/);
+  assert.match(sectionHTML(app({ path: [0, 2] }), { first: null, segs: [] }), /walk does not reach it/);
+  assert.match(sectionHTML(app(null), { first: null }), /a scene before it repeats forever/);
 });
 
 test("Write now counts the libraries a template still needs, as autolib does", () => {
@@ -528,7 +552,9 @@ test("with GOTO lines the chunks follow the path the server walked", () => {
   assert.ok(plays(walked[2], 4) && !plays(walked[2], 3) && plays(chunkInfo("CHUNK a\nSHOT 5s\nA.")[0], 0));
   const endless = chunkInfo(text, { path: [0, 1, 2, 1, 2], ended: false });
   assert.match(endless[2].label, /^clips 3, 5, … · 2\+ × 6 s/);
-  assert.match(highlight(text, known, { chunks: walked, segment: 3 }), /▶ next 2\/3/);
+  const html = highlight(text, known, { chunks: walked, segment: 3 });
+  assert.match(html, /title="next 2\/3 · clips 2, 4, 6 [^"]*">▶ next: clip 4 · 4 s</);
+  assert.match(html, />comes next as clip 5 · 6 s</);
 });
 
 test("a dial's menu lists every choice while the box holds one of them, and filters what is typed (#155)", async () => {
@@ -563,6 +589,25 @@ test("a dial ticks several choices into one that rolls among them (#156)", async
   assert.equal(joinChoices([]), "");
   assert.equal(joinChoices(["noir"]), "noir");
   assert.equal(joinChoices(["noir", "gothic"]), "{noir|gothic}");
+});
+
+test("the dial menu's filter reads a choice's text, properties and tags, as a regex or as plain text (#186)", async () => {
+  const { filterChoices, matchedBy, filterPattern } = await import("../../comfyui/web/app/dialmenu.js");
+  const outfits = { "a trench coat": { props: { genre: "noir", fit: "all" }, tags: ["coat"] },
+    "a corset gown": { props: { genre: "gothic", fit: "women" }, tags: [] }, "a flight suit": { props: { genre: "spacefarer" }, tags: ["space"] } };
+  const names = Object.keys(outfits), info = (c) => outfits[c];
+  assert.deepEqual(filterChoices(names, "noir|gothic", info), ["a trench coat", "a corset gown"]);
+  assert.deepEqual(filterChoices(names, "^genre=goth", info), ["a corset gown"]);
+  assert.deepEqual(filterChoices(names, "fit: women", info), ["a corset gown"]);
+  assert.deepEqual(filterChoices(names, "SPACE", info), ["a flight suit"]);  // case-insensitive, a tag
+  assert.deepEqual(filterChoices(names, "suit", info), ["a flight suit"]);
+  assert.deepEqual(filterChoices(names, "coat (", info), []);  // no regex: plain text, which nothing holds
+  assert.deepEqual(filterChoices(names, "  ", info), names);
+  assert.deepEqual(filterChoices(["noir", "gothic"], "oi"), ["noir"]);  // a choice list without properties
+  const rx = filterPattern("noir");
+  assert.equal(matchedBy("a trench coat", rx, info), "genre: noir");
+  assert.equal(matchedBy("noir", rx), "");
+  assert.equal(matchedBy("a corset gown", rx, info), null);
 });
 
 test("annotations sit at the ends of the lines they belong to (#163)", async () => {
@@ -606,4 +651,244 @@ test("a CAST line's note says nothing the line says itself", async () => {
   const ann = { cast: { PLACE: "image 1", HERO: "image 9 · krea/x/7" } };
   const notes = annotationLines("CAST\n@PLACE (image 1): a street\n@HERO (image krea/x/7): a heron", ann);
   assert.deepEqual([...notes.keys()], [2]);
+});
+
+test("a scene is highlighted again only when something it shows changed (#218)", async () => {
+  const { paintCells } = await import("../../comfyui/web/app/cells.js");
+  const text = "@h3 text\n$x = __place__\n\nSCENE one\nSHOT 5s: static\nA room.\n\nSCENE two\nSHOT 5s: static\nA hall.\n";
+  const writes = [];
+  const cells = splitCells(text).map((_, i) => {
+    const pre = { set innerHTML(_html) { writes.push(i); } };
+    return { querySelector: () => pre };
+  });
+  const host = { querySelectorAll: (sel) => (sel === ".cell" ? cells : []) };
+  let libraries = new Set(["place"]);
+  const app = {
+    text, view: { querySelector: () => host }, chunks: () => [], bridge: { getSegment: () => 0 }, remembered: () => null,
+    annotations: () => null, known: () => libraries, llmActive: () => false, api: { thumbURL: () => "" }, data: {},
+  };
+  paintCells(app);
+  assert.deepEqual(writes, [0, 1, 2]);
+  writes.length = 0;
+  paintCells(app);  // nothing changed: nothing is written
+  assert.deepEqual(writes, []);
+  app.text = text.replace("A hall.", "A long hall.");
+  paintCells(app);  // only the scene typed in
+  assert.deepEqual(writes, [2]);
+  writes.length = 0;
+  libraries = new Set(["place", "creature"]);
+  paintCells(app);  // a library more: every scene may show it
+  assert.deepEqual(writes, [0, 1, 2]);
+});
+
+test("deleting a take asks what it does: another take plays, or the film ends before the clip (#214)", async () => {
+  const { deleteQuestion } = await import("../../comfyui/web/app/timeline.js");
+  const host = (folder) => ({ dataset: { seg: "1" }, querySelector: () => ({ dataset: { del: folder } }) });
+  const takes = [{ folder: "a", active: false }, { folder: "b", active: false }, { folder: "c", active: true }];
+  const app = { data: { chain: { takes: { 1: takes } } } };
+  assert.equal(deleteQuestion(app, host("a")), "Delete take 1?");
+  assert.equal(deleteQuestion(app, host("c")), "Delete this take? Clip 2 then plays take 2.");
+  assert.equal(deleteQuestion({ data: { chain: { takes: {} } } }, host("c")), "Delete clip 2? The film ends before it.");
+});
+
+test("a scene in numbers: where and how often it plays, before and after, what it rolls, what it made (#219)", async () => {
+  const { sceneStats, sceneStatsHTML } = await import("../../comfyui/web/app/scenestats.js");
+  const text = "@h3 text\nSCENE the gate\nSHOT 5s: static\nA gate.\nCUT TO: the stairs\n\nSCENE the stairs\n$step = __place__\n$mood = {calm|grim}\n"
+    + "$luck = {40% lucky}\nSHOT 4s: static\nStairs.\nIF $mood is grim: CUT TO: the lamp\nCUT TO: the lamp\n\nSCENE the lamp\nSHOT 6s: static\nA lamp.\nCUT TO: the stairs\n";
+  const walked = { path: [0, 1, 2, 1, 2, 1, 2], ended: true };
+  const app = {
+    text, chunks: () => chunkInfo(text, walked), reelPath: () => walked, bridge: { getSegment: () => 3, getSeed: () => 7 },
+    data: { completion: { libraries: [{ name: "place", count: 12 }] }, chain: { clips: [{ segment: 1 }, { segment: 3 }], takes: { 1: [{}, {}, {}] } } },
+  };
+  const s = sceneStats(app, 1);
+  assert.deepEqual(s.plays, [1, 3, 5]);
+  assert.equal(s.times, "3");
+  assert.deepEqual(s.before, [["the lamp", 2], ["the gate", 1]]);
+  assert.deepEqual(s.after, [["the lamp", 3]]);
+  assert.deepEqual(s.steers, ["IF $mood is grim: CUT TO: the lamp", "CUT TO: the lamp"]);
+  assert.deepEqual(s.rolls.map((r) => [r.name, r.count, r.lib, r.chance]), [["step", 12, true, null], ["mood", 2, false, null], ["luck", null, false, 40]]);
+  assert.deepEqual(s.made, [{ clip: 2, takes: 3 }, { clip: 4, takes: 1 }]);
+  const html = sceneStatsHTML(app, 1);
+  assert.match(html, /It plays <b>3<\/b> of the <b>7<\/b> clips of the film/);
+  assert.equal((html.match(/<i class="on/g) || []).length, 3);
+  assert.match(html, /<i class="on next" title="clip 4: the stairs">/);
+  assert.match(html, /<small>a 40 % chance<\/small>/);
+  assert.match(html, /<dt>comes after<\/dt><dd>the lamp <b>2×<\/b> · the gate <b>1×<\/b><\/dd>/);
+});
+
+test("a knob's sweep plans its runs, and its long forms are opaque like a LoRA tag (#227)", () => {
+  for (const t of ["SET: image_1(0.3|0.6)", "SET: jinx(1, 0%, 0%-30%;10%)", "LORA: <refmod:jinx:0.6|0.8>", "LORA: <lora:x:0.6|0.8, 20%>", "@x(0.6|0.8)"]) {
+    assert.ok(PLAN_HINT.test(t), t);
+  }
+  for (const t of ["SET: image_1(0.5, 35%)", "SET: x({0.3|0.6})", "<refmod:jinx:0.8, 0%, 10%>"]) assert.ok(!PLAN_HINT.test(t), t);
+  assert.match(highlight("SET: <refmod:jinx_v1:0.8, 0%, 10%>", new Set()), /<span class="t-lora">&lt;refmod:jinx_v1:0\.8, 0%, 10%&gt;<\/span>/);
+  assert.equal(longForm("@image_2(0.6) @style(0.8)"), "<image:2:0.6> <lora:style:0.8>");
+});
+
+test("the template's knobs, where they hold, written anew and put back (#226)", async () => {
+  const { knobsOf, knobKey, withFields, applyKnobs } = await import("../../comfyui/web/app/model.js");
+  const text = "@h3 ref2va\nLORA: <lora:turbo:0.8> @style(0.5)\nSET: image_1(0.3|0.6), jinx(1, 0%, 10%)\nCAST\n@JINX (image 1): a woman\n"
+    + "SCENE the walk\nSET: turbo(1), @JINX(0.6, refmods), refmods(1, 35%)\nSHOT 5s: static\nx.\n";
+  const knobs = knobsOf(text, { loras: ["minimax/turbo.safetensors"], refmods: ["jinx_Video.safetensors"], cast: ["JINX"] });
+  assert.deepEqual(knobs.map((k) => [k.scope, k.kind, k.name, k.fields.join(" / ")]), [
+    [-1, "lora", "turbo", "0.8"], [-1, "lora", "style", "0.5"], [-1, "image", "image_1", "0.3|0.6"], [-1, "refmod", "jinx", "1 / 0% / 10%"],
+    [0, "lora", "turbo", "1"], [0, "cast", "JINX", "0.6 / refmods"],
+  ]);
+  assert.equal(knobs[4].scene, "the walk");
+  assert.equal(withFields(knobs[0], ["0.6", "0%", "50%"]), "<lora:turbo:0.6, 0%, 50%>");
+  assert.equal(withFields(knobs[3], ["0.8", "", ""]), "jinx(0.8)");
+  assert.equal(withFields(knobs[1], ["0.4"]), "@style(0.4)");
+  const turned = applyKnobs(text, { [knobKey(knobs[4])]: "turbo(0.5)", [knobKey(knobs[0])]: "<lora:turbo:0.6>", "~3|gone(1)": "x(2)" });
+  assert.match(turned, /LORA: <lora:turbo:0\.6> @style\(0\.5\)/);
+  assert.match(turned, /SCENE the walk\nSET: turbo\(0\.5\), @JINX/);
+});
+
+test("the take tree lays its takes out as a tidy tree, rows where they were made, and shows the way through a take (#241)", async () => {
+  const { layoutTree, wayThrough } = await import("../../comfyui/web/app/tree.js");
+  const t = (folder, segment, parent, created) => ({ folder, segment, parent, created });
+  const takes = [t("a", 0, null, "1"), t("a1", 1, "a", "2"), t("a1x", 2, "a1", "3"), t("b", 0, null, "4"), t("b1", 1, "b", "5"), t("a2", 1, "a", "6")];
+  const rows = layoutTree(takes);
+  assert.deepEqual(["a", "a1", "a1x"].map((f) => rows.get(f)), [0, 0, 0]);  // a parent on its first child's row: a path runs straight
+  assert.equal(rows.get("a2"), 1);  // a branch below
+  assert.deepEqual([rows.get("b"), rows.get("b1")], [2, 2]);  // a later take of clip 1 below: whatever the film, no row moves
+  assert.deepEqual(wayThrough({ takes, last: { a: "a1", a1: "a1x" } }, "a"), ["a", "a1", "a1x"]);
+  assert.deepEqual(wayThrough({ takes, last: {} }, "a1x"), ["a", "a1", "a1x"]);
+});
+
+test("a take made with another version of its scene is told, its change shown, and Use this prompt brings it back (#242)", async () => {
+  const { fetchTemplates, lineDiff, sceneIn, useVersion, versionHTML, versionOf, wordMarks } = await import("../../comfyui/web/app/versions.js");
+  const old = "@h3 base 16:9\n\nSCENE the door\nSHOT 5s: static\na red door opens.\n\nSCENE the hall\nSHOT 5s: dolly in\na long hall.\n";
+  const now = "@h3 base 16:9\n\nSCENE the hall\nSHOT 5s: dolly in\na long hall.\n\nSCENE the door\nSHOT 5s: static\n# a note\na blue door opens.\n";
+  const asked = [];
+  let toast = null, rendered = 0;
+  const app = {
+    text: now, data: {}, state: { tab: "prompt" }, render: () => { rendered++; }, toast: (html, action) => { toast = { html, action }; },
+    api: { template: async (h) => { asked.push(h); if (h === "gone") throw new Error("404"); return { text: old }; } },
+  };
+  await fetchTemplates(app, [{ template: "old" }, { template: "old" }, { template: "gone" }, {}]);
+  await fetchTemplates(app, [{ template: "old" }]);
+  assert.deepEqual(asked.sort(), ["gone", "old"]);  // each hash once
+  assert.equal(sceneIn(now, 0, "SCENE the door").text.split("\n")[0], "SCENE the door");  // by its heading, moved
+  assert.equal(versionOf(app, { template: "old", scene: 1 }), null);  // the hall: the same text, moved and all
+  assert.equal(versionOf(app, { template: "gone", scene: 0 }), null);  // a template the home has lost: no mark
+  const v = versionOf(app, { template: "old", scene: 0 });
+  assert.deepEqual([v.scene, v.at, v.then.split("\n").pop(), v.now.split("\n").pop()], [0, 1, "a red door opens.", "a blue door opens."]);
+  assert.deepEqual(lineDiff("a\nb\nc", "a\nx\nc"), [[" ", "a"], ["-", "b"], ["+", "x"], [" ", "c"]]);
+  const card = versionHTML(v);
+  assert.match(card, /class="cut"><i>−<\/i><span>a <mark>blue<\/mark> door opens\.<\/span>/);  // the changed word marked
+  assert.match(card, /class="add"><i>\+<\/i><span>a <mark>red<\/mark> door opens\.<\/span>/);
+  assert.match(card, /SCENE the door/);
+  assert.deepEqual(wordMarks("walks slowly on", "walks on"), ["walks <mark>slowly</mark> on", "walks on"]);
+  useVersion(app, v);
+  assert.ok(app.text.startsWith("@h3 base 16:9\n\nSCENE the hall\nSHOT 5s: dolly in\na long hall.\n\nSCENE the door\nSHOT 5s: static\na red door opens."));
+  assert.equal(versionOf(app, { template: "old", scene: 0 }), null);
+  assert.ok(rendered === 1 && toast.action.label === "Undo");
+  toast.action.run();
+  assert.equal(app.text, now);
+  app.text = "@h3 base 16:9\n\nSCENE the door\nSHOT 5s: static\na red door opens.\n";  // the hall gone: it comes back at the end
+  useVersion(app, versionOf(app, { template: "old", scene: 1 }));
+  assert.equal(app.text, "@h3 base 16:9\n\nSCENE the door\nSHOT 5s: static\na red door opens.\n\nSCENE the hall\nSHOT 5s: dolly in\na long hall.");
+});
+
+test("the film plays in the tree: its clips in film.mp4's time, a test scene's take left out (#243)", async () => {
+  const { filmClips } = await import("../../comfyui/web/app/tree.js");
+  const takes = [{ folder: "a", frames: 240 }, { folder: "t", frames: 120, test: true }, { folder: "b", frames: 120 }, { folder: "x", frames: 99 }];
+  assert.deepEqual(filmClips({ takes, path: ["a", "t", "b"] }), [{ folder: "a", n: 1, start: 0, end: 10 }, { folder: "b", n: 3, start: 10, end: 15 }]);
+  assert.deepEqual(filmClips({ takes, path: [] }), []);
+});
+
+test("a clip's takes have a head that reads as content: play on top, the clip in numbers, deleting at the bottom (#245)", async () => {
+  const { takesHeadHTML } = await import("../../comfyui/web/app/timeline.js");
+  const app = { data: {}, text: "" };
+  const takes = [{ folder: "a", seed: 3, created: "2026-10-04T05:01:02.1+02:00" }, { folder: "b", seed: 7, take: 2, active: true, created: "2026-10-04T05:09:12.5+02:00" }];
+  const html = takesHeadHTML(app, 1, takes, "the walk");
+  const at = (s) => html.indexOf(s);
+  assert.ok(at("data-playall") < at("th-mid") && at("th-mid") < at('data-clear="others"'));  // play, numbers, deleting
+  assert.match(html, /clip 2<\/span><span class="th-scene" title="the walk">the walk/);
+  assert.match(html, /<i>takes<\/i><b>2<\/b>.*<i>in the film<\/i><b>#2<\/b>.*<i>seed<\/i><b>7 \+ 2<\/b>.*<i>newest<\/i><b>05:09<\/b>/);
+  assert.doesNotMatch(html, /other prompt/);  // none made with another prompt
+});
+
+test("the take tree hides the dead ends: the film's, the last clip's and those a shown take came after stay (#246)", async () => {
+  const { shownTakes } = await import("../../comfyui/web/app/tree.js");
+  const t = (folder, segment, parent = null) => ({ folder, segment, parent });
+  const takes = [t("a", 0), t("b", 0), t("c", 0), t("d", 0), t("a1", 1, "a"), t("a2", 1, "a"), t("c1", 1, "c"), t("a1x", 2, "a1"), t("c1x", 2, "c1"), t("c1y", 2, "c1")];
+  const tree = { takes, path: ["b"] };
+  const names = (least) => shownTakes(tree, least).map((x) => x.folder).sort().join(" ");
+  assert.equal(names(0), takes.map((x) => x.folder).sort().join(" "));  // 0: all of them
+  assert.equal(names(1), "a a1 a1x b c c1 c1x c1y");  // d goes; a2 too (no take after it, not the last clip); b is the film
+  assert.equal(names(2), "a a1 a1x b c c1 c1x c1y");  // c has one take after it, but c1 has two: the path to it stays whole
+  assert.equal(names(3), "a a1 a1x b c c1 c1x c1y");  // the last clip's takes stay, and the takes they came after
+});
+
+test("a template without scenes shows its results under the prompt, its takes kept on the node per preset (#211)", async () => {
+  const R = await import("../../comfyui/web/app/results.js");
+  const props = {};
+  let seed = 10;
+  const app = { preset: "krea/fox", props, state: {}, data: {}, bridge: { props, getSeed: () => seed, getControl: () => "fixed" },
+    api: { viewURL: (m) => `/view?filename=${m.filename}&type=${m.type}` } };
+  assert.equal(R.resultsHTML(app, "").includes("comes in here"), true);  // none yet: where they will come
+  R.resultBegins(app, { prompt_id: "p1", seed: 10, take: 0 });
+  assert.equal(R.resultMedia(app, { prompt_id: "other", output: { images: [{ filename: "x.png", type: "output" }] } }), false);
+  assert.equal(R.resultMedia(app, { prompt_id: "p1", output: { images: [{ filename: "fox_0001.png", subfolder: "", type: "output" }] } }), true);
+  R.resultBegins(app, { prompt_id: "p2", seed: 11, take: 0 });
+  R.resultMedia(app, { prompt_id: "p2", output: { gifs: [{ filename: "fox.mp4", type: "output", format: "video/h264-mp4" }] } });
+  R.resultMedia(app, { prompt_id: "p2", output: { images: [{ filename: "prev.png", type: "temp" }] } });  // a second node of the run
+  assert.deepEqual(R.resultsOf(app).map((t) => [t.prompt, t.seed, t.media.map((m) => m.kind)]), [["p1", 10, ["image"]], ["p2", 11, ["video", "image"]]]);
+  assert.equal(R.shownResult(app).prompt, "p2");  // the newest is shown
+  const html = R.resultsHTML(app, "--take-w:96px");
+  assert.match(html, /class="tl-clip big result" data-seg="-1"[^>]*><video[^>]*src="\/view\?filename=fox\.mp4&amp;type=output#t=0\.05"/);  // a saved file first
+  assert.match(html, /data-result="p1"[^>]*>.*<img loading="lazy" alt="" src="\/view\?filename=fox_0001\.png/);
+  assert.match(html, /<i>takes<\/i><b>2<\/b>.*<i>shown<\/i><b>#2<\/b>.*<i>seed<\/i><b>11<\/b>/);
+  assert.deepEqual(R.resultSeeds(app, 2, false), [2, 3]);  // numbered on from the takes there are: seeds 12, 13
+  assert.deepEqual(R.resultSeeds(app, 2, true), [1, 2]);  // with 📌 take numbers
+  app.preset = "krea/owl";
+  assert.deepEqual(R.resultsOf(app), []);  // another preset, its own takes
+  R.resultBegins(app, { prompt_id: "p3", seed: 12, take: 0 });
+  R.resultEnds(app, "p3");  // nothing written: no take
+  assert.equal(R.resultMedia(app, { prompt_id: "p3", output: { images: [{ filename: "y.png" }] } }), false);
+});
+
+test("the settings are a tab of sections, and every setting of the old sheet is in one (#212)", async () => {
+  const { SECTIONS, SECTION_HTML } = await import("../../comfyui/web/app/settings.js");
+  assert.deepEqual(SECTIONS.map(([k]) => k), ["home", "llm", "writers", "editor", "clips", "log"]);
+  const app = { data: { quickstart: true, dividers: false, timeline: true, log_prompts: true, clip_min: 400, preview_fps: 8, preview_edge: 768, preview_light: false, surf_numbered: true } };
+  const st = {
+    home: { home: "/h", setting: "/h", source: "setting" },
+    llm: { source: "comfy", file: "qwen3vl_4b.safetensors", entries: 12, max_tokens: 16000, files: [{ name: "qwen3vl_4b.safetensors", size: 8e9, can_write: true }],
+      api: { base_url: "https://api.openai.com/v1", model: "", key: "", key_from: "none", key_env: "OPENAI_API_KEY" } },
+    writers: Object.fromEntries(["continue", "story", "describe", "describe_shot"].map((k) => [k, { text: "t", default: "d", edited: k === "story" }])),
+    wcur: "continue",
+  };
+  const html = Object.fromEntries(SECTIONS.map(([k]) => [k, SECTION_HTML[k](app, st)]));
+  const has = (k, ...bits) => bits.forEach((b) => assert.ok(html[k].includes(b), `${k} lacks ${b}`));
+  has("home", 'id="oa-home"', "data-home", "Use this folder");  // moving the home keeps its own button
+  has("llm", 'name="oa-src"', 'id="oa-llm"', 'id="oa-api-url"', 'id="oa-api-key"', "data-check", "data-useapi", 'id="oa-llm-n"', 'id="oa-llm-t"');
+  has("writers", 'id="oa-wr"', 'id="oa-wt"', "data-wreset", "data-wsave", "Story between frames · edited");
+  has("editor", 'data-flag="quickstart" checked', 'data-flag="dividers" >', 'data-flag="timeline" checked');
+  has("clips", 'value="400"', 'id="oa-pvfps" type="number" min="1" max="24" step="1" value="8"', 'value="768"', 'value="smooth" checked', 'value="numbered" checked');
+  has("log", 'data-flag="log_prompts" checked');
+  assert.doesNotMatch(Object.values(html).join(""), /data-cancel|>Save</);  // no Save at the end of a long page
+});
+
+test("every library in a line says its roll, at the line's end, on hover or not at all (#202, #203)", async () => {
+  const { annotationLines, shownHints } = await import("../../comfyui/web/app/annotate.js");
+  const { highlight, onHover } = await import("../../comfyui/web/app/highlight.js");
+  const text = "$a = __animal__\nSHOT 5s: static\nA __animal__ in an __arcade__ with __hair__ hair.";
+  const ann = { bindings: { a: "fox" }, rolls: { 4: [[0, "heron"], [1, "arcade"], [2, "bob cut"]], 2: [[0, "owl"]] } };
+  const cell = annotationLines(text, ann, null, 2);  // a cell from the template's line 2 on
+  assert.equal(cell.get(2).text, "→ heron · arcade · bob cut");
+  assert.equal(cell.get(0).text, "= fox");  // a binding's line says it as a binding, never its library's roll
+  assert.equal(shownHints("none", cell).size, 0);
+  assert.equal(shownHints("appended", cell), cell);
+  const hover = shownHints("hover", cell);
+  assert.ok(hover.get(2).hover && hover.get(0).note === "= fox");
+  const known = new Set(["animal", "arcade", "hair"]);
+  const html = highlight(text, known, { hints: hover });
+  assert.doesNotMatch(html, /class="hint/);  // nothing at the line ends
+  assert.match(html, /data-roll="at this seed: heron" class="t-has t-lib">__animal__/);
+  assert.match(html, /data-roll="at this seed: bob cut" class="t-has t-lib">__hair__/);
+  assert.match(html, /data-roll="= fox" class="t-has t-var">\$a/);
+  assert.match(onHover('<span class="t-kw">REMEMBER:</span> x', { note: "→ image 3" }), /data-roll="→ image 3" class="t-has t-kw"/);
+  assert.match(highlight(text, known, { hints: cell }), /class="hint note"><span>→ heron · arcade · bob cut/);
 });

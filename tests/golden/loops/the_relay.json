@@ -18,27 +18,45 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a potted lemon tree"
+       "a potted lemon tree",
+       [
+        "__relay_things__=a potted lemon tree"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a high __characters/looks/hair_color__ bun"
+       "a high __characters/looks/hair_color__ bun",
+       [
+        "__characters/looks/hair__=a high __characters/looks/hair_color__ bun"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "dark brown"
+       "dark brown",
+       [
+        "__characters/looks/hair_color__=dark brown"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a cheap grey suit that almost fits"
+       "a cheap grey suit that almost fits",
+       [
+        "__characters/average_joes/outfit__=a cheap grey suit that almost fits"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a crowded tram stop"
+       "a crowded tram stop",
+       [
+        "__relay_places__=a crowded tram stop"
+       ]
       ]
      ]
     },
@@ -48,31 +66,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a potted lemon tree"
+       "a potted lemon tree",
+       [
+        "__relay_things__=a potted lemon tree"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a close-cropped __characters/looks/hair_color__ buzz cut"
+       "a close-cropped __characters/looks/hair_color__ buzz cut",
+       [
+        "__characters/looks/hair__=a close-cropped __characters/looks/hair_color__ buzz cut"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "ginger"
+       "ginger",
+       [
+        "__characters/looks/hair_color__=ginger"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a navy windbreaker and worn jeans"
+       "a navy windbreaker and worn jeans",
+       [
+        "__characters/average_joes/outfit__=a navy windbreaker and worn jeans"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a flower market under striped awnings"
+       "a flower market under striped awnings",
+       [
+        "__relay_places__=a flower market under striped awnings"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -82,31 +121,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a potted lemon tree"
+       "a potted lemon tree",
+       [
+        "__relay_things__=a potted lemon tree"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "short __characters/looks/hair_color__ hair in a messy crop"
+       "short __characters/looks/hair_color__ hair in a messy crop",
+       [
+        "__characters/looks/hair__=short __characters/looks/hair_color__ hair in a messy crop"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "sandy-brown"
+       "sandy-brown",
+       [
+        "__characters/looks/hair_color__=sandy-brown"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a creased white shirt with the sleeves rolled up"
+       "a creased white shirt with the sleeves rolled up",
+       [
+        "__characters/average_joes/outfit__=a creased white shirt with the sleeves rolled up"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a rooftop garden above the traffic"
+       "a rooftop garden above the traffic",
+       [
+        "__relay_places__=a rooftop garden above the traffic"
+       ]
       ],
       [
        "{25% slips}",
-       "slips"
+       "slips",
+       [
+        "{25% slips}=slips"
+       ]
       ]
      ]
     },
@@ -116,31 +176,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a potted lemon tree"
+       "a potted lemon tree",
+       [
+        "__relay_things__=a potted lemon tree"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__"
+       "a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "short __characters/looks/hair_color__ hair in a messy crop"
+       "short __characters/looks/hair_color__ hair in a messy crop",
+       [
+        "__characters/looks/hair__=short __characters/looks/hair_color__ hair in a messy crop"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "silver-grey"
+       "silver-grey",
+       [
+        "__characters/looks/hair_color__=silver-grey"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a creased white shirt with the sleeves rolled up"
+       "a creased white shirt with the sleeves rolled up",
+       [
+        "__characters/average_joes/outfit__=a creased white shirt with the sleeves rolled up"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a narrow stairway between old houses"
+       "a narrow stairway between old houses",
+       [
+        "__relay_places__=a narrow stairway between old houses"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -150,31 +231,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a potted lemon tree"
+       "a potted lemon tree",
+       [
+        "__relay_things__=a potted lemon tree"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a __characters/looks/hair_color__ pixie cut"
+       "a __characters/looks/hair_color__ pixie cut",
+       [
+        "__characters/looks/hair__=a __characters/looks/hair_color__ pixie cut"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "ginger"
+       "ginger",
+       [
+        "__characters/looks/hair_color__=ginger"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a green supermarket fleece with a name badge"
+       "a green supermarket fleece with a name badge",
+       [
+        "__characters/average_joes/outfit__=a green supermarket fleece with a name badge"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a laundromat late at night"
+       "a laundromat late at night",
+       [
+        "__relay_places__=a laundromat late at night"
+       ]
       ],
       [
        "{25% slips}",
-       "slips"
+       "slips",
+       [
+        "{25% slips}=slips"
+       ]
       ]
      ]
     },
@@ -184,27 +286,45 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a potted lemon tree"
+       "a potted lemon tree",
+       [
+        "__relay_things__=a potted lemon tree"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "short __characters/looks/hair_color__ hair in a messy crop"
+       "short __characters/looks/hair_color__ hair in a messy crop",
+       [
+        "__characters/looks/hair__=short __characters/looks/hair_color__ hair in a messy crop"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "jet-black"
+       "jet-black",
+       [
+        "__characters/looks/hair_color__=jet-black"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a tracksuit in two slightly different blues"
+       "a tracksuit in two slightly different blues",
+       [
+        "__characters/average_joes/outfit__=a tracksuit in two slightly different blues"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a laundromat late at night"
+       "a laundromat late at night",
+       [
+        "__relay_places__=a laundromat late at night"
+       ]
       ]
      ]
     }
@@ -227,27 +347,45 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a sealed blue envelope"
+       "a sealed blue envelope",
+       [
+        "__relay_things__=a sealed blue envelope"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ hair in a neat side part"
+       "__characters/looks/hair_color__ hair in a neat side part",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ hair in a neat side part"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "ash-blonde"
+       "ash-blonde",
+       [
+        "__characters/looks/hair_color__=ash-blonde"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a creased white shirt with the sleeves rolled up"
+       "a creased white shirt with the sleeves rolled up",
+       [
+        "__characters/average_joes/outfit__=a creased white shirt with the sleeves rolled up"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a bridge over a slow green river"
+       "a bridge over a slow green river",
+       [
+        "__relay_places__=a bridge over a slow green river"
+       ]
       ]
      ]
     },
@@ -257,31 +395,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a sealed blue envelope"
+       "a sealed blue envelope",
+       [
+        "__relay_things__=a sealed blue envelope"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ hair slicked straight back"
+       "__characters/looks/hair_color__ hair slicked straight back",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ hair slicked straight back"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "__characters/looks/hair_color__=salt-and-pepper"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a tracksuit in two slightly different blues"
+       "a tracksuit in two slightly different blues",
+       [
+        "__characters/average_joes/outfit__=a tracksuit in two slightly different blues"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a narrow stairway between old houses"
+       "a narrow stairway between old houses",
+       [
+        "__relay_places__=a narrow stairway between old houses"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -291,31 +450,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a sealed blue envelope"
+       "a sealed blue envelope",
+       [
+        "__relay_things__=a sealed blue envelope"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "wind-blown __characters/looks/hair_color__ hair down to the collar"
+       "wind-blown __characters/looks/hair_color__ hair down to the collar",
+       [
+        "__characters/looks/hair__=wind-blown __characters/looks/hair_color__ hair down to the collar"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "black streaked with grey"
+       "black streaked with grey",
+       [
+        "__characters/looks/hair_color__=black streaked with grey"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a puffy black winter jacket zipped to the chin"
+       "a puffy black winter jacket zipped to the chin",
+       [
+        "__characters/average_joes/outfit__=a puffy black winter jacket zipped to the chin"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a flower market under striped awnings"
+       "a flower market under striped awnings",
+       [
+        "__relay_places__=a flower market under striped awnings"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -325,31 +505,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a sealed blue envelope"
+       "a sealed blue envelope",
+       [
+        "__relay_things__=a sealed blue envelope"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "short __characters/looks/hair_color__ hair in a messy crop"
+       "short __characters/looks/hair_color__ hair in a messy crop",
+       [
+        "__characters/looks/hair__=short __characters/looks/hair_color__ hair in a messy crop"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "strawberry-blonde"
+       "strawberry-blonde",
+       [
+        "__characters/looks/hair_color__=strawberry-blonde"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a cable-knit cardigan over a plain T-shirt"
+       "a cable-knit cardigan over a plain T-shirt",
+       [
+        "__characters/average_joes/outfit__=a cable-knit cardigan over a plain T-shirt"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a laundromat late at night"
+       "a laundromat late at night",
+       [
+        "__relay_places__=a laundromat late at night"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -359,31 +560,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a sealed blue envelope"
+       "a sealed blue envelope",
+       [
+        "__relay_things__=a sealed blue envelope"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a chin-length __characters/looks/hair_color__ bob"
+       "a chin-length __characters/looks/hair_color__ bob",
+       [
+        "__characters/looks/hair__=a chin-length __characters/looks/hair_color__ bob"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "warm caramel"
+       "warm caramel",
+       [
+        "__characters/looks/hair_color__=warm caramel"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a cheap grey suit that almost fits"
+       "a cheap grey suit that almost fits",
+       [
+        "__characters/average_joes/outfit__=a cheap grey suit that almost fits"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a rooftop garden above the traffic"
+       "a rooftop garden above the traffic",
+       [
+        "__relay_places__=a rooftop garden above the traffic"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -393,11 +615,17 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a sealed blue envelope"
+       "a sealed blue envelope",
+       [
+        "__relay_things__=a sealed blue envelope"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a crowded tram stop"
+       "a crowded tram stop",
+       [
+        "__relay_places__=a crowded tram stop"
+       ]
       ]
      ]
     }
@@ -420,27 +648,45 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a sealed blue envelope"
+       "a sealed blue envelope",
+       [
+        "__relay_things__=a sealed blue envelope"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "thick __characters/looks/hair_color__ curls pinned up loosely"
+       "thick __characters/looks/hair_color__ curls pinned up loosely",
+       [
+        "__characters/looks/hair__=thick __characters/looks/hair_color__ curls pinned up loosely"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "jet-black"
+       "jet-black",
+       [
+        "__characters/looks/hair_color__=jet-black"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a navy windbreaker and worn jeans"
+       "a navy windbreaker and worn jeans",
+       [
+        "__characters/average_joes/outfit__=a navy windbreaker and worn jeans"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a crowded tram stop"
+       "a crowded tram stop",
+       [
+        "__relay_places__=a crowded tram stop"
+       ]
       ]
      ]
     },
@@ -450,31 +696,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a sealed blue envelope"
+       "a sealed blue envelope",
+       [
+        "__relay_things__=a sealed blue envelope"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a long __characters/looks/hair_color__ braid over one shoulder"
+       "a long __characters/looks/hair_color__ braid over one shoulder",
+       [
+        "__characters/looks/hair__=a long __characters/looks/hair_color__ braid over one shoulder"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "warm caramel"
+       "warm caramel",
+       [
+        "__characters/looks/hair_color__=warm caramel"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a rain-spotted beige trench coat"
+       "a rain-spotted beige trench coat",
+       [
+        "__characters/average_joes/outfit__=a rain-spotted beige trench coat"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "the doorway of a busy bakery"
+       "the doorway of a busy bakery",
+       [
+        "__relay_places__=the doorway of a busy bakery"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -484,27 +751,45 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a sealed blue envelope"
+       "a sealed blue envelope",
+       [
+        "__relay_things__=a sealed blue envelope"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a shaved head"
+       "a shaved head",
+       [
+        "__characters/looks/hair__=a shaved head"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a polo shirt tucked into khakis"
+       "a polo shirt tucked into khakis",
+       [
+        "__characters/average_joes/outfit__=a polo shirt tucked into khakis"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a rooftop garden above the traffic"
+       "a rooftop garden above the traffic",
+       [
+        "__relay_places__=a rooftop garden above the traffic"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -514,31 +799,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a sealed blue envelope"
+       "a sealed blue envelope",
+       [
+        "__relay_things__=a sealed blue envelope"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__"
+       "a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+       "long __characters/looks/hair_color__ hair tied in a low ponytail",
+       [
+        "__characters/looks/hair__=long __characters/looks/hair_color__ hair tied in a low ponytail"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "copper-red"
+       "copper-red",
+       [
+        "__characters/looks/hair_color__=copper-red"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a corduroy blazer with elbow patches"
+       "a corduroy blazer with elbow patches",
+       [
+        "__characters/average_joes/outfit__=a corduroy blazer with elbow patches"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a crowded tram stop"
+       "a crowded tram stop",
+       [
+        "__relay_places__=a crowded tram stop"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -548,31 +854,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a sealed blue envelope"
+       "a sealed blue envelope",
+       [
+        "__relay_things__=a sealed blue envelope"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__"
+       "a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a long __characters/looks/hair_color__ braid over one shoulder"
+       "a long __characters/looks/hair_color__ braid over one shoulder",
+       [
+        "__characters/looks/hair__=a long __characters/looks/hair_color__ braid over one shoulder"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "honey-blonde"
+       "honey-blonde",
+       [
+        "__characters/looks/hair_color__=honey-blonde"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a cheap grey suit that almost fits"
+       "a cheap grey suit that almost fits",
+       [
+        "__characters/average_joes/outfit__=a cheap grey suit that almost fits"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a laundromat late at night"
+       "a laundromat late at night",
+       [
+        "__relay_places__=a laundromat late at night"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -582,11 +909,17 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a sealed blue envelope"
+       "a sealed blue envelope",
+       [
+        "__relay_things__=a sealed blue envelope"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "the doorway of a busy bakery"
+       "the doorway of a busy bakery",
+       [
+        "__relay_places__=the doorway of a busy bakery"
+       ]
       ]
      ]
     }
@@ -609,27 +942,45 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ box braids gathered at the nape"
+       "__characters/looks/hair_color__ box braids gathered at the nape",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ box braids gathered at the nape"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "warm caramel"
+       "warm caramel",
+       [
+        "__characters/looks/hair_color__=warm caramel"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a navy windbreaker and worn jeans"
+       "a navy windbreaker and worn jeans",
+       [
+        "__characters/average_joes/outfit__=a navy windbreaker and worn jeans"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a rooftop garden above the traffic"
+       "a rooftop garden above the traffic",
+       [
+        "__relay_places__=a rooftop garden above the traffic"
+       ]
       ]
      ]
     },
@@ -639,31 +990,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a __characters/looks/hair_color__ mullet"
+       "a __characters/looks/hair_color__ mullet",
+       [
+        "__characters/looks/hair__=a __characters/looks/hair_color__ mullet"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "black streaked with grey"
+       "black streaked with grey",
+       [
+        "__characters/looks/hair_color__=black streaked with grey"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a cable-knit cardigan over a plain T-shirt"
+       "a cable-knit cardigan over a plain T-shirt",
+       [
+        "__characters/average_joes/outfit__=a cable-knit cardigan over a plain T-shirt"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a laundromat late at night"
+       "a laundromat late at night",
+       [
+        "__relay_places__=a laundromat late at night"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -673,31 +1045,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__"
+       "a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "short __characters/looks/hair_color__ hair in a messy crop"
+       "short __characters/looks/hair_color__ hair in a messy crop",
+       [
+        "__characters/looks/hair__=short __characters/looks/hair_color__ hair in a messy crop"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "honey-blonde"
+       "honey-blonde",
+       [
+        "__characters/looks/hair_color__=honey-blonde"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a faded denim jacket over a grey hoodie"
+       "a faded denim jacket over a grey hoodie",
+       [
+        "__characters/average_joes/outfit__=a faded denim jacket over a grey hoodie"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a flower market under striped awnings"
+       "a flower market under striped awnings",
+       [
+        "__relay_places__=a flower market under striped awnings"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -707,31 +1100,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "tousled __characters/looks/hair_color__ hair that never quite behaves"
+       "tousled __characters/looks/hair_color__ hair that never quite behaves",
+       [
+        "__characters/looks/hair__=tousled __characters/looks/hair_color__ hair that never quite behaves"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a cheap grey suit that almost fits"
+       "a cheap grey suit that almost fits",
+       [
+        "__characters/average_joes/outfit__=a cheap grey suit that almost fits"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a crowded tram stop"
+       "a crowded tram stop",
+       [
+        "__relay_places__=a crowded tram stop"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -741,31 +1155,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a __characters/looks/hair_color__ pixie cut"
+       "a __characters/looks/hair_color__ pixie cut",
+       [
+        "__characters/looks/hair__=a __characters/looks/hair_color__ pixie cut"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a creased white shirt with the sleeves rolled up"
+       "a creased white shirt with the sleeves rolled up",
+       [
+        "__characters/average_joes/outfit__=a creased white shirt with the sleeves rolled up"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a laundromat late at night"
+       "a laundromat late at night",
+       [
+        "__relay_places__=a laundromat late at night"
+       ]
       ],
       [
        "{25% slips}",
-       "slips"
+       "slips",
+       [
+        "{25% slips}=slips"
+       ]
       ]
      ]
     },
@@ -775,27 +1210,45 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a full __characters/looks/hair_color__ afro"
+       "a full __characters/looks/hair_color__ afro",
+       [
+        "__characters/looks/hair__=a full __characters/looks/hair_color__ afro"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "strawberry-blonde"
+       "strawberry-blonde",
+       [
+        "__characters/looks/hair_color__=strawberry-blonde"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a polo shirt tucked into khakis"
+       "a polo shirt tucked into khakis",
+       [
+        "__characters/average_joes/outfit__=a polo shirt tucked into khakis"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a crowded tram stop"
+       "a crowded tram stop",
+       [
+        "__relay_places__=a crowded tram stop"
+       ]
       ]
      ]
     }
@@ -818,27 +1271,45 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a battered red umbrella"
+       "a battered red umbrella",
+       [
+        "__relay_things__=a battered red umbrella"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+       "long __characters/looks/hair_color__ hair tied in a low ponytail",
+       [
+        "__characters/looks/hair__=long __characters/looks/hair_color__ hair tied in a low ponytail"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "auburn"
+       "auburn",
+       [
+        "__characters/looks/hair_color__=auburn"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a green supermarket fleece with a name badge"
+       "a green supermarket fleece with a name badge",
+       [
+        "__characters/average_joes/outfit__=a green supermarket fleece with a name badge"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a crowded tram stop"
+       "a crowded tram stop",
+       [
+        "__relay_places__=a crowded tram stop"
+       ]
       ]
      ]
     },
@@ -848,31 +1319,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a battered red umbrella"
+       "a battered red umbrella",
+       [
+        "__relay_things__=a battered red umbrella"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ hair in a neat side part"
+       "__characters/looks/hair_color__ hair in a neat side part",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ hair in a neat side part"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "chestnut"
+       "chestnut",
+       [
+        "__characters/looks/hair_color__=chestnut"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a rain-spotted beige trench coat"
+       "a rain-spotted beige trench coat",
+       [
+        "__characters/average_joes/outfit__=a rain-spotted beige trench coat"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a rooftop garden above the traffic"
+       "a rooftop garden above the traffic",
+       [
+        "__relay_places__=a rooftop garden above the traffic"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -882,31 +1374,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a battered red umbrella"
+       "a battered red umbrella",
+       [
+        "__relay_things__=a battered red umbrella"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a long __characters/looks/hair_color__ braid over one shoulder"
+       "a long __characters/looks/hair_color__ braid over one shoulder",
+       [
+        "__characters/looks/hair__=a long __characters/looks/hair_color__ braid over one shoulder"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "mousy brown"
+       "mousy brown",
+       [
+        "__characters/looks/hair_color__=mousy brown"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a navy windbreaker and worn jeans"
+       "a navy windbreaker and worn jeans",
+       [
+        "__characters/average_joes/outfit__=a navy windbreaker and worn jeans"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a rooftop garden above the traffic"
+       "a rooftop garden above the traffic",
+       [
+        "__relay_places__=a rooftop garden above the traffic"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -916,31 +1429,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a battered red umbrella"
+       "a battered red umbrella",
+       [
+        "__relay_things__=a battered red umbrella"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a __characters/looks/hair_color__ mullet"
+       "a __characters/looks/hair_color__ mullet",
+       [
+        "__characters/looks/hair__=a __characters/looks/hair_color__ mullet"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "copper-red"
+       "copper-red",
+       [
+        "__characters/looks/hair_color__=copper-red"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a red-and-black flannel shirt"
+       "a red-and-black flannel shirt",
+       [
+        "__characters/average_joes/outfit__=a red-and-black flannel shirt"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a bridge over a slow green river"
+       "a bridge over a slow green river",
+       [
+        "__relay_places__=a bridge over a slow green river"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -950,31 +1484,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a battered red umbrella"
+       "a battered red umbrella",
+       [
+        "__relay_things__=a battered red umbrella"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__"
+       "a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "tousled __characters/looks/hair_color__ hair that never quite behaves"
+       "tousled __characters/looks/hair_color__ hair that never quite behaves",
+       [
+        "__characters/looks/hair__=tousled __characters/looks/hair_color__ hair that never quite behaves"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "sandy-brown"
+       "sandy-brown",
+       [
+        "__characters/looks/hair_color__=sandy-brown"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a rain-spotted beige trench coat"
+       "a rain-spotted beige trench coat",
+       [
+        "__characters/average_joes/outfit__=a rain-spotted beige trench coat"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "the doorway of a busy bakery"
+       "the doorway of a busy bakery",
+       [
+        "__relay_places__=the doorway of a busy bakery"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -984,11 +1539,17 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a battered red umbrella"
+       "a battered red umbrella",
+       [
+        "__relay_things__=a battered red umbrella"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a rooftop garden above the traffic"
+       "a rooftop garden above the traffic",
+       [
+        "__relay_places__=a rooftop garden above the traffic"
+       ]
       ]
      ]
     }
@@ -1011,27 +1572,45 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a battered red umbrella"
+       "a battered red umbrella",
+       [
+        "__relay_things__=a battered red umbrella"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a high __characters/looks/hair_color__ bun"
+       "a high __characters/looks/hair_color__ bun",
+       [
+        "__characters/looks/hair__=a high __characters/looks/hair_color__ bun"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "silver-grey"
+       "silver-grey",
+       [
+        "__characters/looks/hair_color__=silver-grey"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a navy windbreaker and worn jeans"
+       "a navy windbreaker and worn jeans",
+       [
+        "__characters/average_joes/outfit__=a navy windbreaker and worn jeans"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a laundromat late at night"
+       "a laundromat late at night",
+       [
+        "__relay_places__=a laundromat late at night"
+       ]
       ]
      ]
     },
@@ -1041,31 +1620,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a battered red umbrella"
+       "a battered red umbrella",
+       [
+        "__relay_things__=a battered red umbrella"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ hair in a neat side part"
+       "__characters/looks/hair_color__ hair in a neat side part",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ hair in a neat side part"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "warm caramel"
+       "warm caramel",
+       [
+        "__characters/looks/hair_color__=warm caramel"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a knitted sweater with a reindeer pattern"
+       "a knitted sweater with a reindeer pattern",
+       [
+        "__characters/average_joes/outfit__=a knitted sweater with a reindeer pattern"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a rooftop garden above the traffic"
+       "a rooftop garden above the traffic",
+       [
+        "__relay_places__=a rooftop garden above the traffic"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -1075,31 +1675,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a battered red umbrella"
+       "a battered red umbrella",
+       [
+        "__relay_things__=a battered red umbrella"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       "a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a supermarket cashier in her twenties, round-faced and sharp-eyed, with __characters/looks/hair__, chipped purple nail polish and a pen tucked behind one ear, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "long __characters/looks/hair_color__ hair tied in a low ponytail"
+       "long __characters/looks/hair_color__ hair tied in a low ponytail",
+       [
+        "__characters/looks/hair__=long __characters/looks/hair_color__ hair tied in a low ponytail"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "honey-blonde"
+       "honey-blonde",
+       [
+        "__characters/looks/hair_color__=honey-blonde"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a hi-vis vest over a hoodie"
+       "a hi-vis vest over a hoodie",
+       [
+        "__characters/average_joes/outfit__=a hi-vis vest over a hoodie"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a crowded tram stop"
+       "a crowded tram stop",
+       [
+        "__relay_places__=a crowded tram stop"
+       ]
       ],
       [
        "{25% slips}",
-       "slips"
+       "slips",
+       [
+        "{25% slips}=slips"
+       ]
       ]
      ]
     },
@@ -1109,31 +1730,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a battered red umbrella"
+       "a battered red umbrella",
+       [
+        "__relay_things__=a battered red umbrella"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+       "a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a primary school teacher in her thirties, tall and warm, with __characters/looks/hair__, dark brown skin, a chalk smudge on one cheek and a lanyard of paper clips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a close-cropped __characters/looks/hair_color__ buzz cut"
+       "a close-cropped __characters/looks/hair_color__ buzz cut",
+       [
+        "__characters/looks/hair__=a close-cropped __characters/looks/hair_color__ buzz cut"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "black streaked with grey"
+       "black streaked with grey",
+       [
+        "__characters/looks/hair_color__=black streaked with grey"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a green supermarket fleece with a name badge"
+       "a green supermarket fleece with a name badge",
+       [
+        "__characters/average_joes/outfit__=a green supermarket fleece with a name badge"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a crowded tram stop"
+       "a crowded tram stop",
+       [
+        "__relay_places__=a crowded tram stop"
+       ]
       ],
       [
        "{25% slips}",
-       "slips"
+       "slips",
+       [
+        "{25% slips}=slips"
+       ]
       ]
      ]
     },
@@ -1143,31 +1785,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a battered red umbrella"
+       "a battered red umbrella",
+       [
+        "__relay_things__=a battered red umbrella"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__"
+       "a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "wind-blown __characters/looks/hair_color__ hair down to the collar"
+       "wind-blown __characters/looks/hair_color__ hair down to the collar",
+       [
+        "__characters/looks/hair__=wind-blown __characters/looks/hair_color__ hair down to the collar"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "platinum-blonde"
+       "platinum-blonde",
+       [
+        "__characters/looks/hair_color__=platinum-blonde"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a faded denim jacket over a grey hoodie"
+       "a faded denim jacket over a grey hoodie",
+       [
+        "__characters/average_joes/outfit__=a faded denim jacket over a grey hoodie"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a narrow stairway between old houses"
+       "a narrow stairway between old houses",
+       [
+        "__relay_places__=a narrow stairway between old houses"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -1177,11 +1840,17 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a battered red umbrella"
+       "a battered red umbrella",
+       [
+        "__relay_things__=a battered red umbrella"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a rooftop garden above the traffic"
+       "a rooftop garden above the traffic",
+       [
+        "__relay_places__=a rooftop garden above the traffic"
+       ]
       ]
      ]
     }
@@ -1204,27 +1873,45 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       "a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a retired watchmaker in his seventies, small and exact, with __characters/looks/hair__, magnifying loupe marks around one eye and ink-stained fingertips, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       "long straight __characters/looks/hair_color__ hair with a blunt fringe",
+       [
+        "__characters/looks/hair__=long straight __characters/looks/hair_color__ hair with a blunt fringe"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "ash-blonde"
+       "ash-blonde",
+       [
+        "__characters/looks/hair_color__=ash-blonde"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a hi-vis vest over a hoodie"
+       "a hi-vis vest over a hoodie",
+       [
+        "__characters/average_joes/outfit__=a hi-vis vest over a hoodie"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a narrow stairway between old houses"
+       "a narrow stairway between old houses",
+       [
+        "__relay_places__=a narrow stairway between old houses"
+       ]
       ]
      ]
     },
@@ -1234,31 +1921,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__"
+       "a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "tousled __characters/looks/hair_color__ hair that never quite behaves"
+       "tousled __characters/looks/hair_color__ hair that never quite behaves",
+       [
+        "__characters/looks/hair__=tousled __characters/looks/hair_color__ hair that never quite behaves"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "jet-black"
+       "jet-black",
+       [
+        "__characters/looks/hair_color__=jet-black"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a cable-knit cardigan over a plain T-shirt"
+       "a cable-knit cardigan over a plain T-shirt",
+       [
+        "__characters/average_joes/outfit__=a cable-knit cardigan over a plain T-shirt"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a bridge over a slow green river"
+       "a bridge over a slow green river",
+       [
+        "__relay_places__=a bridge over a slow green river"
+       ]
       ],
       [
        "{25% slips}",
-       "slips"
+       "slips",
+       [
+        "{25% slips}=slips"
+       ]
       ]
      ]
     },
@@ -1268,31 +1976,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       "a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a barista in their twenties, freckled and soft-spoken, with __characters/looks/hair__, small silver hoops along both ears and a burn scar on one wrist, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a long __characters/looks/hair_color__ braid over one shoulder"
+       "a long __characters/looks/hair_color__ braid over one shoulder",
+       [
+        "__characters/looks/hair__=a long __characters/looks/hair_color__ braid over one shoulder"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "jet-black"
+       "jet-black",
+       [
+        "__characters/looks/hair_color__=jet-black"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a polo shirt tucked into khakis"
+       "a polo shirt tucked into khakis",
+       [
+        "__characters/average_joes/outfit__=a polo shirt tucked into khakis"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a bridge over a slow green river"
+       "a bridge over a slow green river",
+       [
+        "__relay_places__=a bridge over a slow green river"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -1302,31 +2031,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+       "a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a hospital cleaner in her sixties, wiry and quick, with __characters/looks/hair__, calloused hands, deep laugh lines and a small gold cross at the throat, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ box braids gathered at the nape"
+       "__characters/looks/hair_color__ box braids gathered at the nape",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ box braids gathered at the nape"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "honey-blonde"
+       "honey-blonde",
+       [
+        "__characters/looks/hair_color__=honey-blonde"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a navy windbreaker and worn jeans"
+       "a navy windbreaker and worn jeans",
+       [
+        "__characters/average_joes/outfit__=a navy windbreaker and worn jeans"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a bridge over a slow green river"
+       "a bridge over a slow green river",
+       [
+        "__relay_places__=a bridge over a slow green river"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -1336,31 +2086,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__"
+       "a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a high __characters/looks/hair_color__ bun"
+       "a high __characters/looks/hair_color__ bun",
+       [
+        "__characters/looks/hair__=a high __characters/looks/hair_color__ bun"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "jet-black"
+       "jet-black",
+       [
+        "__characters/looks/hair_color__=jet-black"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a green supermarket fleece with a name badge"
+       "a green supermarket fleece with a name badge",
+       [
+        "__characters/average_joes/outfit__=a green supermarket fleece with a name badge"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "the doorway of a busy bakery"
+       "the doorway of a busy bakery",
+       [
+        "__relay_places__=the doorway of a busy bakery"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -1370,11 +2141,17 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a laundromat late at night"
+       "a laundromat late at night",
+       [
+        "__relay_places__=a laundromat late at night"
+       ]
       ]
      ]
     }
@@ -1397,27 +2174,45 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a long __characters/looks/hair_color__ braid over one shoulder"
+       "a long __characters/looks/hair_color__ braid over one shoulder",
+       [
+        "__characters/looks/hair__=a long __characters/looks/hair_color__ braid over one shoulder"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "black streaked with grey"
+       "black streaked with grey",
+       [
+        "__characters/looks/hair_color__=black streaked with grey"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a tracksuit in two slightly different blues"
+       "a tracksuit in two slightly different blues",
+       [
+        "__characters/average_joes/outfit__=a tracksuit in two slightly different blues"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "the doorway of a busy bakery"
+       "the doorway of a busy bakery",
+       [
+        "__relay_places__=the doorway of a busy bakery"
+       ]
       ]
      ]
     },
@@ -1427,31 +2222,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a loose __characters/looks/hair_color__ top knot"
+       "a loose __characters/looks/hair_color__ top knot",
+       [
+        "__characters/looks/hair__=a loose __characters/looks/hair_color__ top knot"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "snow-white"
+       "snow-white",
+       [
+        "__characters/looks/hair_color__=snow-white"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a red-and-black flannel shirt"
+       "a red-and-black flannel shirt",
+       [
+        "__characters/average_joes/outfit__=a red-and-black flannel shirt"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a crowded tram stop"
+       "a crowded tram stop",
+       [
+        "__relay_places__=a crowded tram stop"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -1461,31 +2277,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__"
+       "a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a lanky pizza courier in his early twenties, all elbows and nervous energy, with __characters/looks/hair__, a chipped front tooth and a scooter helmet hooked over one arm, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "wind-blown __characters/looks/hair_color__ hair down to the collar"
+       "wind-blown __characters/looks/hair_color__ hair down to the collar",
+       [
+        "__characters/looks/hair__=wind-blown __characters/looks/hair_color__ hair down to the collar"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "honey-blonde"
+       "honey-blonde",
+       [
+        "__characters/looks/hair_color__=honey-blonde"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a polo shirt tucked into khakis"
+       "a polo shirt tucked into khakis",
+       [
+        "__characters/average_joes/outfit__=a polo shirt tucked into khakis"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a flower market under striped awnings"
+       "a flower market under striped awnings",
+       [
+        "__relay_places__=a flower market under striped awnings"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -1495,31 +2332,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       "a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a single father in his thirties, broad-shouldered and permanently tired, with __characters/looks/hair__, stubble he forgot about and a glittery unicorn backpack over one shoulder, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "__characters/looks/hair_color__ hair slicked straight back"
+       "__characters/looks/hair_color__ hair slicked straight back",
+       [
+        "__characters/looks/hair__=__characters/looks/hair_color__ hair slicked straight back"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "strawberry-blonde"
+       "strawberry-blonde",
+       [
+        "__characters/looks/hair_color__=strawberry-blonde"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a puffy black winter jacket zipped to the chin"
+       "a puffy black winter jacket zipped to the chin",
+       [
+        "__characters/average_joes/outfit__=a puffy black winter jacket zipped to the chin"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a flower market under striped awnings"
+       "a flower market under striped awnings",
+       [
+        "__relay_places__=a flower market under striped awnings"
+       ]
       ],
       [
        "{25% slips}",
-       ""
+       "",
+       [
+        "{25% slips}="
+       ]
       ]
      ]
     },
@@ -1529,31 +2387,52 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__"
+       "a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a long-haul trucker in his fifties, heavyset and sunburned on the left arm only, with __characters/looks/hair__, a grey-shot beard and a toothpick he never lights, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "a loose __characters/looks/hair_color__ top knot"
+       "a loose __characters/looks/hair_color__ top knot",
+       [
+        "__characters/looks/hair__=a loose __characters/looks/hair_color__ top knot"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "dark brown"
+       "dark brown",
+       [
+        "__characters/looks/hair_color__=dark brown"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a faded denim jacket over a grey hoodie"
+       "a faded denim jacket over a grey hoodie",
+       [
+        "__characters/average_joes/outfit__=a faded denim jacket over a grey hoodie"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a laundromat late at night"
+       "a laundromat late at night",
+       [
+        "__relay_places__=a laundromat late at night"
+       ]
       ],
       [
        "{25% slips}",
-       "slips"
+       "slips",
+       [
+        "{25% slips}=slips"
+       ]
       ]
      ]
     },
@@ -1563,27 +2442,45 @@
      "picks": [
       [
        "$thing ← __relay_things__",
-       "a small brass key on a red ribbon"
+       "a small brass key on a red ribbon",
+       [
+        "__relay_things__=a small brass key on a red ribbon"
+       ]
       ],
       [
        "$holder ← __characters/average_joes__",
-       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       "a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__",
+       [
+        "__characters/average_joes__=a school bus driver in her fifties, sturdy and unhurried, with __characters/looks/hair__, a patient crease between the brows and reading glasses on a beaded chain, wearing __characters/average_joes/outfit__"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair__",
-       "tousled __characters/looks/hair_color__ hair that never quite behaves"
+       "tousled __characters/looks/hair_color__ hair that never quite behaves",
+       [
+        "__characters/looks/hair__=tousled __characters/looks/hair_color__ hair that never quite behaves"
+       ]
       ],
       [
        "$holder ← __characters/looks/hair_color__",
-       "ash-blonde"
+       "ash-blonde",
+       [
+        "__characters/looks/hair_color__=ash-blonde"
+       ]
       ],
       [
        "$holder ← __characters/average_joes/outfit__",
-       "a cable-knit cardigan over a plain T-shirt"
+       "a cable-knit cardigan over a plain T-shirt",
+       [
+        "__characters/average_joes/outfit__=a cable-knit cardigan over a plain T-shirt"
+       ]
       ],
       [
        "$place ← __relay_places__",
-       "a crowded tram stop"
+       "a crowded tram stop",
+       [
+        "__relay_places__=a crowded tram stop"
+       ]
       ]
      ]
     }

@@ -27,13 +27,6 @@
           "link": null
         },
         {
-          "localized_name": "latent_path",
-          "name": "latent_path",
-          "shape": 7,
-          "type": "STRING",
-          "link": null
-        },
-        {
           "localized_name": "template",
           "name": "template",
           "type": "STRING",
@@ -162,12 +155,6 @@
           ]
         },
         {
-          "localized_name": "lora_stack",
-          "name": "lora_stack",
-          "type": "LORA_STACK",
-          "links": null
-        },
-        {
           "localized_name": "megapixels",
           "name": "megapixels",
           "type": "FLOAT",
@@ -187,6 +174,7 @@
         "",
         0,
         "increment",
+        "",
         ""
       ],
       "widgets_values_named": {

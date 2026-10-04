@@ -55,7 +55,8 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"),
         ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/discard"),
         ("GET", "/orrery/home"), ("POST", "/orrery/home"),
-        ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("GET", "/orrery/chain/video"),
+        ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("POST", "/orrery/chain/move"), ("POST", "/orrery/chain/pick"), ("POST", "/orrery/chain/delete"), ("POST", "/orrery/chain/clear"), ("GET", "/orrery/chain/tree"), ("POST", "/orrery/chain/walk"), ("POST", "/orrery/chain/end"),
+        ("GET", "/orrery/chain/video"),
         ("GET", "/orrery/anchor"),
         ("GET", "/orrery/history"),
         ("GET", "/orrery/writers"),
@@ -129,7 +130,8 @@ def test_register_attaches_every_route_through_one_adapter(home, tmp_path):
     kind, status, body = hit("GET", "/orrery/presets", query=q)
     assert (kind, status) == ("json", 200) and body["favorites"] == [] and body["quickstart"] is True
     assert hit("POST", "/orrery/ui", query=q, body={"quickstart": False}) == \
-        ("json", 200, {"quickstart": False, "dividers": True, "timeline": True, "log_prompts": True, "clip_min": 360})
+        ("json", 200, {"quickstart": False, "dividers": True, "timeline": True, "log_prompts": True, "surf_numbered": True, "preview_light": True, "clip_min": 360, "take_min": 54, "preview_fps": 12, "preview_edge": 1024,
+                     "annotations_show": "appended"})
     assert hit("GET", "/orrery/presets", query=q)[2]["quickstart"] is False
     assert hit("GET", "/orrery/preset", query={**q, "name": "nope"})[1] == 404
     assert hit("POST", "/orrery/recent", query=q, broken=True)[1] == 400
@@ -524,6 +526,8 @@ def test_an_api_endpoint_is_saved_only_once_it_answers_and_its_key_never_comes_b
     assert "sk-right" not in (home / "orrery.yaml").read_text() and "sk-right-0042" in (home / ".env").read_text()
     body = ok(home, webapi.llm_save, source="api", model="gpt-6-luna")  # the stored key and URL stay
     assert body["api"]["model"] == "gpt-6-luna" and body["api"]["base_url"] == fake_api.url
+    asked = len(fake_api.requests)  # #212: a setting saved on its own asks the endpoint nothing
+    assert ok(home, webapi.llm_save, source="api", entries=30)["entries"] == 30 and len(fake_api.requests) == asked
     assert ok(home, webapi.llm_save, source="comfy")["active"] is None
 
 
@@ -691,9 +695,9 @@ def test_outputs_of_ordinary_save_nodes_reach_the_galaxy(home, tmp_path, monkeyp
 
 # --- the timeline: the chain's clips and the sent frames ----------------------------------------
 
-def fake_chain(output, clips=2):
+def fake_chain(output, folder="h3_context", clips=2):
     import av
-    run = output / "h3_context" / "chain_video" / "run_1"
+    run = output / folder / "chain_video" / "run_1"
     run.mkdir(parents=True)
     folders = []
     for i in range(1, clips + 1):
@@ -717,15 +721,32 @@ def test_the_chain_lists_its_clips_by_segment_and_serves_them(home, tmp_path, mo
     fake_chain(out)
     monkeypatch.setattr(webapi, "_output_dir", lambda: out)
     body = ok(home, webapi.chain)
-    assert body == {"latent_path": "h3_context", "width": 64, "height": 48,  # Chain Video keeps one size per chain
+    assert body == {"chain": "h3_context", "width": 64, "height": 48,  # Chain Video keeps one size per chain
                     "clips": [{"segment": 0, "frames": 24, "version": "clip_00001_abc"},
-                              {"segment": 1, "frames": 24, "version": "clip_00002_abc"}]}
+                              {"segment": 1, "frames": 24, "version": "clip_00002_abc"}], "takes": {}}
     assert ok(home, webapi.chain_video, segment="1").name == "video.mp4"
     thumb = ok(home, webapi.chain_thumb, segment="0")
     assert thumb.suffix == ".webp" and thumb.is_file()
     assert api(home, webapi.chain_video, segment="5")[0] == 404
-    assert ok(home, webapi.chain, latent_path="nowhere") == {"latent_path": "nowhere", "width": None, "height": None, "clips": []}
-    assert api(home, webapi.chain, latent_path="../../etc")[0] in (400, 200)
+    assert ok(home, webapi.chain, chain="nowhere") == {"chain": "nowhere", "width": None, "height": None, "clips": [], "takes": {}}
+    assert api(home, webapi.chain, chain="../../etc")[0] in (400, 200)
+
+
+def test_an_unsaved_reels_folder_moves_to_its_presets_name(home, tmp_path, monkeypatch):
+    """Saved as a preset after three clips, the reel goes on with clip 4 (#197)."""
+    out = tmp_path / "out"
+    fake_chain(out, "reels/untitled/2026-10-03 23-15")
+    monkeypatch.setattr(webapi, "_output_dir", lambda: out)
+    body = ok(home, webapi.chain_move, **{"from": "reels/untitled/2026-10-03 23-15", "to": "reels/h3/night_watch"})
+    assert body == {"moved": True, "chain": "reels/h3/night_watch"}
+    assert (out / "reels/h3/night_watch/chain_video").is_dir() and not (out / "reels/untitled/2026-10-03 23-15").exists()
+    assert len(ok(home, webapi.chain, chain="reels/h3/night_watch")["clips"]) == 2
+    fake_chain(out, "reels/untitled/second")
+    body = ok(home, webapi.chain_move, **{"from": "reels/untitled/second", "to": "reels/h3/night_watch"})
+    assert body["moved"] is False and body["chain"] == "reels/untitled/second" and "already holds" in body["reason"]
+    assert ok(home, webapi.chain_move, **{"from": "reels/untitled/none", "to": "reels/new"}) == {"moved": False, "chain": "reels/new"}
+    for bad in ({"from": "", "to": "reels/x"}, {"from": "h3_context", "to": "reels/x"}, {"from": "reels/../..", "to": "reels/x"}):
+        assert api(home, webapi.chain_move, **bad)[0] == 400
 
 
 def test_an_anchor_is_served_by_image_number(home):
@@ -741,9 +762,13 @@ def test_an_anchor_is_served_by_image_number(home):
 def test_the_editor_switches_travel_with_the_presets_and_are_saved(home):
     assert ok(home, webapi.presets)["dividers"] is True and ok(home, webapi.presets)["timeline"] is True
     assert ok(home, webapi.ui_save, timeline=False) == {"quickstart": True, "dividers": True, "timeline": False, "log_prompts": True,
-                                                         "clip_min": 360}
+                                                         "surf_numbered": True, "preview_light": True, "clip_min": 360, "take_min": 54, "preview_fps": 12, "preview_edge": 1024,
+                                                         "annotations_show": "appended"}
     assert ok(home, webapi.ui_save, clip_min=480)["clip_min"] == 480 and ok(home, webapi.presets)["clip_min"] == 480
     assert ok(home, webapi.presets)["timeline"] is False
+    assert ok(home, webapi.ui_save, annotations_show="hover")["annotations_show"] == "hover"  # #203
+    assert ok(home, webapi.presets)["annotations_show"] == "hover"
+    assert api(home, webapi.ui_save, annotations_show="sideways")[0] == 400
 
 
 def test_the_history_lists_runs_newest_first_and_searches(home):
@@ -811,3 +836,62 @@ def test_annotate_says_what_each_line_gives_at_a_seed(home):
     assert ok(home, webapi.annotate, template="A __missing_lib__.", seed=1, target="text")["bindings"] == {}  # never fails
     held = ok(home, webapi.annotate, template="$a = __animal__\nEXPORT: mood = __moods__\nA $a.", seed=3, target="text")
     assert held["bindings"]["a"] in ("fox", "heron", "owl") and held["exports"]["mood"] == "__moods__"  # one missing library
+
+
+def test_a_clips_takes_are_listed_served_picked_and_deleted(home, tmp_path, monkeypatch):
+    """Sample surfing (#206) through the routes: the takes of clip 2, one of them picked, one deleted (#214)."""
+    import numpy as np
+
+    from orrery import film
+    from orrery.continuum.masked import Tail
+    out = tmp_path / "out"
+    monkeypatch.setattr(webapi, "_output_dir", lambda: out)
+    tail = Tail(np.zeros((1, 24, 7, 3, 4), np.float32), np.zeros((1, 32, 2, 37), np.float32), 0.25)
+    def make(segment, take):
+        frames = [np.full((48, 64, 3), 40 * take, np.uint8) for _ in range(24)]
+        return film.save_take(out, "reels/a", segment, frames, np.zeros((2, 48000), np.float32), 48000, tail,
+                              {"seed": 7, "take": take}, -1)
+    make(0, 0)
+    surf = [make(1, k) for k in range(3)]
+    listed = ok(home, webapi.chain, chain="reels/a")["takes"]
+    assert list(listed) == ["1"] and [t["take"] for t in listed["1"]] == [0, 1, 2]
+    assert ok(home, webapi.chain_video, chain="reels/a", take=surf[0].name) == surf[0] / "video.mp4"
+    assert ok(home, webapi.chain_pick, chain="reels/a", segment=1, folder=surf[1].name)["take"] == 1
+    assert api(home, webapi.chain_pick, chain="reels/a", segment=1, folder="seg_0001_nothere1")[0] == 400
+    assert ok(home, webapi.chain_delete, chain="reels/a", segment=1, folder=surf[1].name)["folder"] == surf[2].name
+    assert not surf[1].exists()
+    assert api(home, webapi.chain_delete, chain="reels/a", segment=1, folder=surf[1].name)[0] == 400
+    assert ok(home, webapi.chain_clear, chain="reels/a", segment=1, keep=True)["deleted"] == 1  # #234: all but the film's
+    assert ok(home, webapi.chain_clear, chain="reels/a", segment=1, keep=False) == {"deleted": 1, "folder": None}
+    assert api(home, webapi.chain_clear, chain="reels/a", segment=1)[0] == 400  # none left
+    grown = ok(home, webapi.chain_tree, chain="reels/a")  # #240: the tree, then a walk and an end
+    assert len(grown["takes"]) == 1 and grown["path"] == [grown["takes"][0]["folder"]]
+    assert ok(home, webapi.chain_walk, chain="reels/a", folder=grown["takes"][0]["folder"])["clips"] == 1
+    assert ok(home, webapi.chain_end, chain="reels/a", segment=0) == {"clips": 1}
+    assert ok(home, webapi.chain_video, chain="reels/a", film=1).name == "film.mp4"  # #243: the film to watch
+    assert api(home, webapi.chain_video, chain="reels/none", film=1)[0] == 404
+    assert api(home, webapi.chain_walk, chain="reels/a", folder="seg_0009_nothere1")[0] == 400
+
+
+def test_every_library_in_a_line_says_what_it_rolled_where_it_is_written(home):
+    """#202: each library of a line its own roll, by its place among the line's libraries; one in a branch that
+    did not roll says nothing, one used twice says it twice. A text template and a screenplay alike."""
+    from orrery.dsl import expand
+    from orrery.home import Home
+
+    libs = Home(home).libraries()
+    text = "# a comment\n$a = __animal__\nA __animal__ in __style__,\n{__style__ ink|plain} beside __animal__."
+    for seed in range(12):
+        out = ok(home, webapi.annotate, template=text, seed=seed, target="text")
+        x = expand(text, seed, libs)
+        first, second = out["rolls"]["2"], out["rolls"]["3"]
+        assert [k for k, _ in first] == [0, 1] and first[0][1] in ("fox", "heron", "owl") and first[1][1] in ("linocut", "gouache")
+        assert first[0][1] in x.text and first[1][1] in x.text
+        branch = "ink" in x.text  # the brace rolled its library, or the plain branch
+        assert [k for k, _ in second] == ([0, 1] if branch else [1])  # k counts the line's __…__: the second is __animal__
+        assert second[-1][1] in ("fox", "heron", "owl") and second[-1][1] in x.text.split("beside")[-1]
+    assert "1" not in out["rolls"]  # the binding's line says it as a binding
+    screenplay = "@h3 t2va\n$x = __style__\nSHOT 5s: static\nA __animal__ and an __animal__ in __style__.\nSFX: __animal__ calls"
+    out = ok(home, webapi.annotate, template=screenplay, seed=4, target="h3-base")
+    assert [k for k, _ in out["rolls"]["3"]] == [0, 1, 2] and [k for k, _ in out["rolls"]["4"]] == [0]
+    assert "1" not in out["rolls"] and out["bindings"]["x"] in ("linocut", "gouache")

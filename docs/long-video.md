@@ -70,8 +70,8 @@ Per chunk orrery emits (built):
   and its own handoff as its closing one;
 - the length in frames: from the second chunk on, Shot 1 also covers the
   `context` frames the clip continues from, pinned and trimmed again (22);
-- the `lora_stack` output: the `LORA:` lines before the first `CHUNK` plus the
-  chunk's own, as a LORA_STACK;
+- the LoRAs on the model through the node: the `LORA:` lines before the first
+  `CHUNK` plus the chunk's own;
 - the picks of the head, the chunk and its handoffs only, so ratings teach the
   gallery what was in the clip;
 - `--…--` slots written by the language model, which from the second segment
@@ -94,7 +94,7 @@ of that chunk's clip, as the chain keeps it, reference `image 3` for every
 later clip, with or without a CAST naming it; bound in the CAST
 (`GIRL (image 1, image 3)`), the prompt says whose picture it is, and each later
 clip sees how she looked when the reel began instead of a copy of a copy. Orrery Refs
-fetches the frames from the chain the prompt's `latent_path` names; before the
+fetches the frames from the reel's chain, in the folder orrery names after it; before the
 sending clip exists, the image is left out of the clip. Details in
 [h3.md](h3.md#1d-reels-chunk).
 
@@ -124,8 +124,7 @@ Wiring: Orrery `picks` → Orrery Continue, with the H3 node's latent (and
 conditioning) on their way to the sampler, and the sampled latent with the
 decoded clip into Orrery Film (orrery counts the segments itself); `text` →
 Reference to Video `prompt`; `length` → its `length`;
-`lora_stack` → the `lora_stack` input of Lora Loader (LoraManager) or any
-other stack loader. Queue with a Run count of the reel's clips (the stats line
+the model through the Orrery Prompt (loader → `model` → sampler) gets the `LORA:` lines. Queue with a Run count of the reel's clips (the stats line
 shows it), or Run (Instant) for `repeat forever`; the Orrery seed stays fixed
 (the node does that for a reel). `CHUNK … repeat N|forever` and `$x~N` make
 loops such as `fashion/runway_loop`.

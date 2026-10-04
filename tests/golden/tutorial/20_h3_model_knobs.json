@@ -1,0 +1,53 @@
+{
+ "preset": "tutorial/20_h3_model_knobs",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, golden-hour light. The person in <Picture 1> stands in a windswept beach and turns toward the camera; the low light catches the side of the face and the wind moves the hair. The camera pushes in at slow speed.\n\noverall_soundscape: The ambience of a windswept beach and a few slow footsteps.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a windswept beach|a quiet train platform at dawn|an empty theatre stage}",
+       "a windswept beach",
+       [
+        "{a windswept beach|a quiet train platform at dawn|an empty theatre stage}=a windswept beach"
+       ]
+      ]
+     ]
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, golden-hour light. The person in <Picture 1> stands in an empty theatre stage and turns toward the camera; the low light catches the side of the face and the wind moves the hair. The camera pushes in at slow speed.\n\noverall_soundscape: The ambience of an empty theatre stage and a few slow footsteps.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a windswept beach|a quiet train platform at dawn|an empty theatre stage}",
+       "an empty theatre stage",
+       [
+        "{a windswept beach|a quiet train platform at dawn|an empty theatre stage}=an empty theatre stage"
+       ]
+      ]
+     ]
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "text": "integrated_multimodal_description: [Shot 1] Live-action, cinematic, golden-hour light. The person in <Picture 1> stands in a windswept beach and turns toward the camera; the low light catches the side of the face and the wind moves the hair. The camera pushes in at slow speed.\n\noverall_soundscape: The ambience of a windswept beach and a few slow footsteps.\n\nnon_diegetic_music: N/A",
+     "picks": [
+      [
+       "{a windswept beach|a quiet train platform at dawn|an empty theatre stage}",
+       "a windswept beach",
+       [
+        "{a windswept beach|a quiet train platform at dawn|an empty theatre stage}=a windswept beach"
+       ]
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

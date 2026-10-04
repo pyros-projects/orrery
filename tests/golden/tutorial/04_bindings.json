@@ -8,11 +8,17 @@
      "picks": [
       [
        "$hero ← __creature__",
-       "selkie"
+       "selkie",
+       [
+        "__creature__=selkie"
+       ]
       ],
       [
        "__creature__",
-       "snow leopard"
+       "snow leopard",
+       [
+        "__creature__=snow leopard"
+       ]
       ]
      ]
     }
@@ -25,11 +31,17 @@
      "picks": [
       [
        "$hero ← __creature__",
-       "red panda"
+       "red panda",
+       [
+        "__creature__=red panda"
+       ]
       ],
       [
        "__creature__",
-       "qilin"
+       "qilin",
+       [
+        "__creature__=qilin"
+       ]
       ]
      ]
     }
@@ -42,11 +54,17 @@
      "picks": [
       [
        "$hero ← __creature__",
-       "selkie"
+       "selkie",
+       [
+        "__creature__=selkie"
+       ]
       ],
       [
        "__creature__",
-       "anglerfish"
+       "anglerfish",
+       [
+        "__creature__=anglerfish"
+       ]
       ]
      ]
     }

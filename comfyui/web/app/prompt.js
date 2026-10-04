@@ -1,18 +1,21 @@
 // Prompt tab: preset bar, the highlighted editor with completion, dials, and a way into Test.
-import { KEYWORDS, inlineLibraries, suggest } from "../orrery-complete.js";
-import { chosen, closeMenu, drawMenu, joinChoices } from "./dialmenu.js";
+import { KEYWORDS, castNames, inlineLibraries, suggest } from "../orrery-complete.js";
+import { chosen, closeMenu, drawMenu, fillMenu, joinChoices } from "./dialmenu.js";
 import { esc, highlight } from "./highlight.js";
-import { annotationLines, mergeHints } from "./annotate.js";
+import { annotationLines, mergeHints, shownHints } from "./annotate.js";
 import { wireHover } from "./hover.js";
 import { hintsFor } from "./remember.js";
 import { icon } from "./icons.js";
-import { applyDials, chunkInfo, dials, hasGoto, plays, folderColor, pickerGroups, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
-import { thumbHTML } from "./parts.js";
+import { applyDials, chunkInfo, dials, hasGoto, knobKey, knobsOf, withFields, nextSceneClip, plays, folderColor, pickerGroups, sceneTarget, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
+import { drag, thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
+import { openSceneStats } from "./scenestats.js";
+import { openTree } from "./tree.js";
+import { kept, TAKES, takesOf } from "./results.js";
 import { STARTERS } from "./starters.js";
 import { runRolls } from "./test.js";
 import { caretPoint, cellStart, inCell, jumpCell, paintCells, renderCells, wireCells } from "./cells.js";
-import { layoutTimeline, loadChain, scrollTimeline, wireTimeline } from "./timeline.js";
+import { loadChain } from "./timeline.js";
 import { openLibraries, openWrite, writeMenuHTML, writeNow } from "./write.js";
 
 function statsHTML(app) {
@@ -24,7 +27,7 @@ function statsHTML(app) {
   const wired = /^\s*(:\s*.*\b[wh]\d|@size\b)/m.test(app.text) ? [] : app.bridge.frames?.() || [];  // `@size` wins
   const outs = (app.data.rows || []).filter((r) => r.template === templateHash(app.text)).length;
   const forever = reel && reel.clips === Infinity, clips = !reel ? "" : forever ? "∞" : Number.isNaN(reel.clips) ? "?" : reel.clips;
-  const how = !reel ? "" : "Wire the picks into Orrery Continue (and the clip into Orrery Film). The segment widget counts up by itself (increment): "
+  const how = !reel ? "" : `Its clips live in output/${app.bridge.chain?.() || "h3_context"}. Wire the picks into Orrery Continue (and the clip into Orrery Film). Next clip counts up by itself after each run (unless held): `
     + (forever ? "Run (Instant) plays clip after clip until you stop it." : `a Run count of ${clips} plays the whole reel${reel.goto ? " at this seed (its GOTO lines may jump on what rolls)" : ""}; after the last clip nothing downstream runs.`);
   const timing = reel
     ? `<span class="stat" title="${esc(how)}"><b>Reel</b> · ${reel.secs.map((s, i) => `<b>${s.toFixed(1)} s</b>${reel.repeats[i] === 1 ? "" : ` ×${reel.repeats[i] === Infinity ? "∞" : reel.repeats[i]}`}`).join(" + ")}${reel.goto ? " · GOTO" : ""} · <b>${clips}</b> clip${reel.clips === 1 ? "" : "s"}</span>`
@@ -43,11 +46,12 @@ function statsHTML(app) {
     + `${outs ? `<button class="btn ghost" data-act="outputs">${icon("image")}${outs} output${outs === 1 ? "" : "s"}</button>` : ""}`
     + `<button class="btn" data-act="test" title="Roll it in the Test tab: a few seeds, or a reel's clips">${icon("dice")}Test</button>`
     + (reel ? (app.run
-      ? `<span class="stat live" title="The clip of the reel this node is rendering now (its segment widget counts from 0)">Rolling clip <b>${Number(app.run.segment) + 1}</b></span>`
-      : `<span class="stat" title="The clip Roll plays next: the node's segment widget, which counts from 0">Next clip <b>${Number(app.bridge.getSegment()) + 1}</b></span>`)
+      ? `<span class="stat live" title="The clip of the reel this node is rendering now">Rolling clip <b>${Number(app.run.segment) + 1}</b></span>`
+      : `<label class="rep" title="The clip Roll plays next; after each run it steps on to the next, unless held">Next clip<input type="number" min="1" value="${Number(app.bridge.getSegment()) + 1}" data-nextclip aria-label="The clip Roll plays next"></label>`
+        + `<button class="btn ghost" data-act="hold" aria-pressed="${!!app.bridge.segmentHeld?.()}" title="${app.bridge.segmentHeld?.()
+          ? "Held: every Roll plays this clip again, for takes. Press to step on after each run" : "Hold this clip: every Roll plays it again, for takes"}">${icon("lock")}Hold</button>`)
       + `<button class="btn ghost" data-act="jump" title="Scroll the editor to the scene that plays the next clip">${icon("jump")}Jump</button>`
-      + (app.data.timeline === false ? "" : `<button class="btn ghost" data-act="tlview" aria-pressed="${cellsView(app)}" title="${cellsView(app)
-        ? "Clips under each scene: show them in a column beside the editor instead" : "Clips in a column beside the editor: show them under each scene instead"}">${icon("film")}${cellsView(app) ? "Clips below" : "Clips beside"}</button>`)
+      + `<button class="btn ghost" data-act="tree" title="The take tree: every take of the reel, its paths and the film's">${icon("tree")}Tree</button>`
       + `<button class="btn" data-act="restart" title="Cancel this node's queued and running clips, set segment to 0 and generate from the start">${icon("undo")}Restart</button>` : "")
     + (app.state.sweepQueue
       ? `<button class="btn primary" data-act="stopsweep" title="Stop queueing the sweep; what is queued already still runs">${icon("x")}Stop<small class="sweep">${app.state.sweepQueue.done}/${app.state.sweepQueue.total} queued</small></button>`
@@ -56,6 +60,92 @@ function statsHTML(app) {
         + `<label class="rep" title="How many seeds: each runs the whole sweep, the seed stepping between them and after the last as its control after generate says">next<input type="number" min="1" max="999" value="${repeats(app)}" data-rep aria-label="Seeds per sweep">${plural(repeats(app), "seed")}</label>`
       : `<button class="btn primary" data-act="generate" title="Queue only what this node feeds, up to its Save nodes; their files go to the gallery">${icon("play")}Roll</button>`
         + `<label class="rep" title="How many runs Roll queues, one after another; seed and segment step between them as their control after generate says, so a reel plays that many clips">next<input type="number" min="1" max="999" value="${repeats(app)}" data-rep aria-label="Runs per Roll">${plural(repeats(app), reel ? "clip" : st.h3 ? "video" : "image")}</label>`);
+}
+
+// The folder a reel's clips live in (#197): reels/<preset>, or for an unsaved reel reels/untitled/<date time>,
+// named the first time it is needed and kept in the node until New starts another; "" without scenes.
+export function chainName(app) {
+  if (!app.chunks()) return "";
+  if (app.preset) return `reels/${app.preset}`;
+  const now = new Date(), two = (n) => String(n).padStart(2, "0");
+  return (app.bridge.props.orrery_untitled ||= `reels/untitled/${now.getFullYear()}-${two(now.getMonth() + 1)}-${two(now.getDate())} `
+    + `${two(now.getHours())}-${two(now.getMinutes())}`);
+}
+
+// The hidden chain widget follows the reel; another chain is another film, so the clips load again.
+function syncChain(app) {
+  const name = chainName(app);
+  if (name === app.bridge.chain?.() || app.bridge.sweeping?.()) return;
+  app.bridge.setChain?.(name);
+  if (name) app.data.chain = undefined;  // paintEditor loads the new chain's clips
+}
+
+// A scene's buttons in its divider (#204): generate its clip and stay on it, go to the next scene, or both. Sample
+// surfing (#206): ×N takes per Generate (for the node), and 📌, kept per scene: the takes keep the rolled prompt
+// and only the sampler's noise changes; without it every take rolls anew.
+
+export function sceneActs(app) {
+  const chunks = app.chunks() || [], segment = Number(app.bridge.getSegment()), busy = !!app.state.sweepQueue, takes = takesOf(app);
+  const button = (act, name, title, off, n, extra = "") => `<button type="button" class="scene-act" data-scene-act="${act}" data-chunk="${n}" `
+    + `title="${esc(title)}" aria-label="${esc(title)}" ${extra} ${off ? "disabled" : ""}>${name.startsWith("×") ? name : icon(name)}</button>`;
+  return (c, n) => {
+    const target = sceneTarget(c, segment), next = nextSceneClip(c, chunks);
+    const none = c.last === Infinity ? "This scene repeats forever: no scene comes after it" : "No scene comes after this one";
+    const what = takes > 1 ? `${takes} takes of clip ${target + 1}` : `a take of clip ${target + 1}`;
+    // + every time: the first take of a clip or one more, as ×N says
+    return `<span class="scene-acts">${button("gen", "plus", target === null ? "This scene never plays"
+      : `Add ${what}, and stay on this scene`, target === null || busy, n)}`
+      + button("takes", `×${takes}`, `Takes per Generate: ${takes}. Click for ${TAKES[(TAKES.indexOf(takes) + 1) % TAKES.length]}; pick the best under the clip. `
+        + "Takes differ only if their seeds do (see the gear, Sample surfing)", false, n)
+      + button("keep", "pin", kept(app, n) ? "Keeps the rolled prompt: the takes change only the sampler's noise. Click to roll each take anew"
+        : "Each take rolls anew. Click to keep the rolled prompt and change only the sampler's noise", false, n, `aria-pressed="${kept(app, n)}"`)
+      + button("jump", "skip", next === null ? none : `To the next scene: Next clip becomes ${next + 1}`, next === null || busy, n)
+      + button("jumpgen", "ffwd", next === null ? none : `To the next scene, and add ${takes > 1 ? `${takes} takes` : "a take"} of its clip ${next + 1}`,
+        next === null || busy, n)
+      + button("stats", "chart", "This scene in numbers: where and how often it plays, what leads to it, what it rolls, what it made", false, n)
+      + "</span>";
+  };
+}
+
+// The seeds of N takes of clip `to` (#206): numbered on from the takes it has (seed+1, seed+2 …: reproducible),
+// or as the node's seed control steps (randomize: any). With 📌 they are take numbers (the noise: seed + take),
+// without, the node's seed for each take.
+export function surfSeeds(app, to, n, keep) {
+  const base = Number(app.bridge.getSeed()) || 0, control = app.bridge.getControl();
+  const had = (app.data.chain?.takes?.[to] || []).map((t) => (keep ? t.take : (t.seed ?? base) - base)).filter((v) => v >= 0);
+  if (!had.length && (app.data.chain?.clips || []).some((c) => c.segment === to)) had.push(0);  // its one clip
+  const start = had.length ? Math.max(...had) + 1 : 0;
+  return Array.from({ length: n }, (_, k) => (app.data.surf_numbered !== false || control === "increment" ? start + k
+    : control === "randomize" ? Math.floor(Math.random() * 2 ** 31) : control === "decrement" ? -(start + k) : 0));
+}
+
+async function sceneAct(app, act, n, button = null) {
+  if (act === "stats") return openSceneStats(app, n, button);  // #219, also while a sweep runs
+  const chunks = app.chunks() || [], c = chunks[n];
+  if (!c || app.state.sweepQueue) return;
+  if (act === "takes") { app.bridge.props.orrery_takes = TAKES[(TAKES.indexOf(takesOf(app)) + 1) % TAKES.length]; return paintEditor(app); }
+  if (act === "keep") { app.bridge.props.orrery_keep = { ...app.bridge.props.orrery_keep, [n]: !kept(app, n) }; return paintEditor(app); }
+  const to = act === "gen" ? sceneTarget(c, Number(app.bridge.getSegment())) : nextSceneClip(c, chunks);
+  if (to === null) return;
+  app.bridge.setSegment(to);
+  if (act === "jump") return refreshFoot(app);
+  const scene = chunks.findIndex((o) => plays(o, to)), keep = kept(app, scene), base = Number(app.bridge.getSeed()) || 0;
+  const offsets = surfSeeds(app, to, takesOf(app), keep);
+  let queued = 0;
+  try {
+    for (const offset of offsets) {
+      app.bridge.setSegment(to);
+      app.bridge.setTake(keep ? Math.max(0, offset) : 0);
+      app.bridge.setSeed(keep ? base : Math.max(0, base + offset) % 2 ** 32);
+      queued += await app.bridge.generate(1);
+    }
+    if (!queued) app.toast("Nothing to generate: connect this node's outputs toward a Save or Preview node.");
+    else if (offsets.length > 1) app.toast(`Queued <b>${queued}</b> takes of clip ${to + 1}: pick the best under it once they are in`);
+  } catch (err) { app.fail(err); }
+  app.bridge.setSegment(to);  // the clip steps on after it is queued: back, so the scene stays where it is
+  app.bridge.setTake(0);
+  app.bridge.setSeed(base);
+  refreshFoot(app);
 }
 
 // Write now (#168): with an API endpoint, the libraries the template still needs, written at once beside ComfyUI.
@@ -71,8 +161,14 @@ function writeNowHTML(app) {
 const plural = (n, noun) => (n === 1 ? noun : `${noun}s`);
 
 // The cells view: each chunk its own cell with its clips under it (a reel, the timeline on, chosen in the footer).
-// The clips under each scene unless the node was set to beside them (Pyro, 3 October: the default).
-const cellsView = (app) => app.data.timeline !== false && app.bridge.props.orrery_tl_view !== "beside" && !!app.chunks();
+// A reel's clips under each scene, the timeline on (the column beside the editor went in #185).
+// The cells view: a reel's scenes each a cell with its clips under it; a template without scenes one cell with its
+// results under it (#211).
+const cellsView = (app) => app.data.timeline !== false;
+
+// The dials' sidebar (#184): its width, kept in the node, and whether it is folded.
+const SIDE_W = 300, ROOMY = 900;  // a row narrower than ROOMY starts with the sidebar folded
+const sideWidth = (app) => Number(app.bridge.props.orrery_side_w) || SIDE_W;
 
 // `0.6MP` in the @h3 line: the area a frame-shaped clip gets.
 const headerMP = (text) => /^\s*@h3\b[^\n]*\s\d+(?:\.\d+)?mp\b/im.test(stripComments(text));
@@ -90,6 +186,8 @@ function chipHTML(app) {
 }
 
 export function renderPrompt(app) {
+  app.bridge.syncSegment?.(!!app.chunks());
+  syncChain(app);
   const card = app.preset && app.card(app.preset);
   const d = app.dirty();
   app.view.innerHTML = `
@@ -104,11 +202,11 @@ export function renderPrompt(app) {
       ${app.state.writeMenu ? writeMenuHTML(app) : ""}
     </div>
     ${card?.note ? `<p class="pnote"><b>${esc(card.title)}.</b> ${esc(card.note)}</p>` : '<p class="pnote">Type a template, or open a preset. <b>__</b> lists your libraries, <b>$</b> your bindings.</p>'}
-    <div class="edrow"${app.bridge.props.orrery_tl_w ? ` style="--tl-w:${Number(app.bridge.props.orrery_tl_w)}px"` : ""}>${cellsView(app)
+    <div class="edrow" style="--side-w:${sideWidth(app)}px">${cellsView(app)
       ? `<div class="editor cells${app.data.dividers === false ? " nodiv" : ""}"></div>`
-      : `<div class="editor${app.data.dividers === false ? " nodiv" : ""}"><pre class="hl" aria-hidden="true"></pre><textarea spellcheck="false" aria-label="Template"></textarea></div>
-      ${app.data.timeline === false ? "" : '<div class="tl-grip" role="separator" aria-orientation="vertical" tabindex="0" title="Drag to resize the timeline"></div><div class="timeline" hidden aria-label="The reel\'s clips"><div class="tl-track"></div></div>'}`}</div>
-    <div class="dials"></div>
+      : `<div class="editor${app.data.dividers === false ? " nodiv" : ""}"><pre class="hl" aria-hidden="true"></pre><textarea spellcheck="false" aria-label="Template"></textarea></div>`}
+      <div class="side-grip" role="separator" aria-orientation="vertical" tabindex="0" title="Drag to resize the dials" hidden></div>
+      <aside class="dials" aria-label="Dials" hidden></aside></div>
     <div class="pfoot">${statsHTML(app)}</div>
     ${app.state.pick ? pickerHTML(app) : ""}`;
 
@@ -124,7 +222,6 @@ export function renderPrompt(app) {
   // only this textarea's completion: in the cells view focus moves between textareas while typing goes on
   const blur = (ta) => setTimeout(() => { if (!app.ac || app.ac.ta === ta) closeCompletion(app); }, 120);
   const focus = () => app.refreshCompletion().then(paint).catch(() => {});
-  app.edResize?.disconnect();
   if (cellsView(app)) {
     renderCells(app);
     wireCells(app, { onEdit: afterEdit, onKey: (e) => completionKey(app, e), onFocus: focus, onBlur: blur });
@@ -138,10 +235,7 @@ export function renderPrompt(app) {
       paint();
       afterEdit(ed);
     });
-    ed.addEventListener("scroll", () => { pre.scrollTop = ed.scrollTop; scrollTimeline(app); });
-    app.edResize = new ResizeObserver(() => layoutTimeline(app, app.chunks()));  // wrapped lines move the chunks
-    app.edResize.observe(ed);
-    wireTimeline(app);
+    ed.addEventListener("scroll", () => { pre.scrollTop = ed.scrollTop; });
     ed.addEventListener("keydown", (e) => completionKey(app, e));
     ed.addEventListener("blur", () => blur(ed));
     ed.addEventListener("focus", focus);
@@ -149,7 +243,10 @@ export function renderPrompt(app) {
   wireHover(app, app.view.querySelector(".editor"));
   if (app.data.timeline !== false && app.chunks()) loadChain(app).then(paint);
 
+  app.sceneActs = () => sceneActs(app);
   app.view.onclick = (e) => {
+    const scene = e.target.closest("[data-scene-act]");
+    if (scene) return sceneAct(app, scene.dataset.sceneAct, Number(scene.dataset.chunk), scene);
     const act = e.target.closest("[data-act]")?.dataset.act;
     const load = e.target.closest("[data-load]");
     if (load) return app.loadPreset(load.dataset.load);
@@ -162,7 +259,7 @@ export function renderPrompt(app) {
     if (act === "generate") return generate(app);
     if (act === "restart") restart(app);
     if (act === "jump") jumpToChunk(app);
-    if (act === "tlview") { app.bridge.props.orrery_tl_view = cellsView(app) ? "beside" : "below"; return renderPrompt(app); }
+    if (act === "tree") openTree(app);
     if (act === "new") { app.state.newMenu = !app.state.newMenu; app.state.writeMenu = false; return renderPrompt(app); }
     if (act === "write") { app.state.writeMenu = !app.state.writeMenu; app.state.newMenu = false; return renderPrompt(app); }
     const writer = e.target.closest("[data-write]")?.dataset.write;
@@ -171,9 +268,11 @@ export function renderPrompt(app) {
     if (starter) startNew(app, starter);
     if (act === "outputs") { app.state.gScope = "prompt"; app.go("galaxy"); }
     if (act === "writenow") return writeNow(app);
+    if (act === "hold") { app.bridge.holdSegment(!app.bridge.segmentHeld()); return refreshFoot(app); }
     if (act === "browse") app.go("presets");
   };
   app.view.onchange = (e) => {
+    if (e.target.dataset.nextclip !== undefined) return app.bridge.setSegment(Math.max(0, Math.floor(Number(e.target.value) || 1) - 1));
     if (e.target.dataset.rep === undefined) return;
     app.bridge.props.repeat = Number(e.target.value) || 1;
     e.target.value = repeats(app);
@@ -185,6 +284,7 @@ export function renderPrompt(app) {
   fixReelSeed(app);
   fixUniqueSeed(app);
   refreshPlan(app);
+  refreshReelPath(app);  // a reel with CUT TO: walks at the seed: without it no scene knows its clips
   refreshRemembered(app);  // the hints and the remembered frames of a reel just opened
   refreshAnnotations(app);
 }
@@ -251,15 +351,24 @@ function generateSweep(app, cancelled = 0) {
   sheet.querySelector("button.primary").focus();
 }
 
-// The highlight with the reel's chunk dividers, the next segment's chunk marked, and the timeline level with them.
+const painted = new WeakMap();  // the editor's highlight → what it was made from
+
+// The highlight with the reel's chunk dividers and the next segment's chunk marked; the dials say what they roll.
+// It is made again only when something it shows changed (#218).
 function paintEditor(app) {
+  paintRolls(app);
   if (app.view.querySelector(".editor.cells")) return paintCells(app);
   const pre = app.view.querySelector(".editor pre.hl");
   if (!pre) return;
-  const chunks = app.chunks();
-  pre.innerHTML = `${highlight(app.text, app.known(), { llm: app.llmActive(), chunks, segment: chunks && Number(app.bridge.getSegment()),
-    hints: mergeHints(hintsFor(app.text, app.remembered()), annotationLines(app.text, app.annotations(), app.api.thumbURL)) })}\n`;
-  layoutTimeline(app, chunks);
+  const chunks = app.chunks(), known = app.known(), llm = app.llmActive(), segment = chunks && Number(app.bridge.getSegment());
+  const acts = chunks && sceneActs(app);
+  const hints = shownHints(app.data.annotations_show, mergeHints(hintsFor(app.text, app.remembered()),
+    annotationLines(app.text, app.annotations(), app.api.thumbURL)));
+  const key = JSON.stringify([app.text, [...known], llm, chunks, segment, [...hints], acts ? chunks.map((c, n) => acts(c, c.index ?? n)) : ""]);
+  if (painted.get(pre) !== key) {
+    painted.set(pre, key);
+    pre.innerHTML = `${highlight(app.text, known, { llm, chunks, segment, sceneActs: acts, hints })}\n`;
+  }
   if (chunks && app.data.timeline !== false && app.data.chain === undefined) {  // a reel typed or pasted in
     app.data.chain = null;
     loadChain(app).then(() => paintEditor(app));
@@ -288,6 +397,8 @@ function jumpToChunk(app) {
 }
 
 export function refreshFoot(app) {
+  app.bridge.syncSegment?.(!!app.chunks());  // a template without scenes: clip 0, not stepping (#190)
+  syncChain(app);
   refreshPlan(app);  // a dial or an edit can change what Generate queues
   refreshReelPath(app);
   refreshRemembered(app);
@@ -401,10 +512,9 @@ function fixReelSeed(app) {
 
 /* dials: every binding can be turned without editing the template; empty = its default roll */
 
-const dialKey = (text) => dials(text).map((d) => `${d.name}=${d.expr}`).join("\n");
+const dialKey = (text) => [...dials(text).map((d) => `${d.name}=${d.expr}`), ...knobsOf(text).map(knobKey)].join("\n");
 const setDials = (app) => Object.keys(app.bridge.getParams()).length;
 
-const DIAL_CHOICES = 500;  // a dial lists this many of its library's entries; any other can be typed
 
 // A dial's choices: its braces' options, or its library's entries (null while they are on their way).
 function dialChoices(app, d) {
@@ -420,43 +530,193 @@ function dialChoices(app, d) {
       .finally(() => { delete app.libsLoading[d.lib]; refreshMenu(app); });  // asked again after a run empties the cache
     return null;
   }
-  return lib.entries.filter((e) => matches(d.tag, e.tags, e.props)).slice(0, DIAL_CHOICES).map((e) => e.value);
+  return lib.entries.filter((e) => matches(d.tag, e.tags, e.props)).map((e) => e.value);  // the menu shows the first MENU_MAX
 }
 
+// The dials (#184): a list in the sidebar beside the editor, one binding a row: its name, what it rolls at the
+// node's seed, its box (the default expression as placeholder) and its menu. Folded, the sidebar is a strip.
 function renderDials(app) {
   const box = app.view.querySelector(".dials");
   if (!box) return;
   if (app.dm) shutMenu(app);
-  const list = dials(app.text), values = app.bridge.getParams();
-  const kept = Object.fromEntries(Object.entries(values).filter(([k]) => list.some((d) => d.name === k)));
+  const list = dials(app.text), values = app.bridge.getParams(), knobs = templateKnobs(app), keys = new Set(knobs.map(knobKey));
+  const kept = Object.fromEntries(Object.entries(values).filter(([k]) => list.some((d) => d.name === k) || keys.has(k)));
   if (Object.keys(kept).length !== Object.keys(values).length) app.bridge.setParams(kept);
   app.state.dialKey = dialKey(app.text);
-  box.innerHTML = list.length ? `<span class="label" title="Turn a binding without editing the template. Empty means its default roll; saving bakes the dials in.">Dials</span>`
-    + list.map((d) => {
+  const chosen = app.bridge.props.orrery_side, set = Object.keys(kept).length;
+  const folded = chosen === "folded" || (chosen !== "open" && (app.view.querySelector(".edrow")?.clientWidth || ROOMY) < ROOMY);
+  const any = list.length + knobs.length;
+  box.hidden = !any;
+  box.classList.toggle("folded", folded);
+  app.view.querySelector(".side-grip").hidden = !any || folded;
+  if (!any) return void (box.innerHTML = "");
+  if (folded) {
+    const what = [list.length ? `Dials · ${list.length}` : "", knobs.length ? `Knobs · ${knobs.length}` : ""].filter(Boolean).join(" · ");
+    box.innerHTML = `<button class="side-strip" data-dfold title="Show the dials and knobs">${icon("chev")}<span>${what}${set ? ` · ${set} turned` : ""}</span></button>`;
+    return;
+  }
+  box.innerHTML = `<div class="side-head">${sideHead(list.length, set, knobs.length)}</div><div class="dlist">${list.map((d) => {
       const v = kept[d.name] || "", id = `oa-${app.uid}-dl-${d.name}`;
-      return `<label class="dial${v ? " on" : ""}" title="$${esc(d.name)} = ${esc(d.expr)}"><span class="dn">$${esc(d.name)}</span>`
-        + `<input class="dv" id="${id}" data-dial="${esc(d.name)}" value="${esc(v)}" placeholder="${esc(d.expr)}" spellcheck="false" autocomplete="off" role="combobox" aria-expanded="false">`
-        + `<button type="button" class="mini" data-dreset="${esc(d.name)}" aria-label="Back to the default roll">${icon("x")}</button></label>`;
-    }).join("") : "";
+      return `<div class="dial${v ? " on" : ""}" title="$${esc(d.name)} = ${esc(d.expr)}"><div class="dtop"><label class="dn" for="${id}">$${esc(d.name)}</label>`
+        + `<span class="droll" data-roll="${esc(d.name)}"></span>`
+        + `<button type="button" class="mini" data-dreset="${esc(d.name)}" aria-label="Back to the default roll">${icon("x")}</button></div>`
+        + `<input class="dv" id="${id}" data-dial="${esc(d.name)}" value="${esc(v)}" placeholder="${esc(d.expr)}" spellcheck="false" autocomplete="off" role="combobox" aria-expanded="false"></div>`;
+    }).join("")}${knobs.length ? knobsHTML(app, knobs, kept) : ""}</div>`;
+  paintRolls(app);
+}
+
+function sideHead(n, set, knobs = 0) {
+  const label = n ? "Dials" : "Knobs";
+  return `<span class="label" title="Turn a binding or a knob without editing the template. Empty means the template's own; saving bakes them in.">${label}</span>`
+    + `<span class="muted">${n || knobs}${set ? ` · <b>${set}</b> turned` : ""}</span><span class="grow"></span>`
+    + (set ? '<button type="button" class="btn ghost" data-dclear title="Every dial back to its default roll">Clear</button>' : "")
+    + `<button type="button" class="icon-btn" data-dfold aria-label="Fold the dials">${icon("chev")}</button>`;
+}
+
+// The template's knobs (#226): its LoRAs, RefMods, pictures and members, grouped where they hold, "All clips" first,
+// then each scene with knobs of its own, the scene of the next clip open. A value set here is the node's, as a
+// dial's: the template stays as written, and Save writes it in. A sweep's values are chips to take out or back in.
+const KNOB_KIND = { lora: "LoRA", refmod: "RefMod", image: "image", cast: "member" };
+
+function templateKnobs(app) {
+  const done = app.data.completion || {};
+  return knobsOf(app.text, { loras: (done.loras || []).map((l) => (l.folder ? `${l.folder}/${l.name}` : l.name)),
+    refmods: done.refmods || [], cast: castNames(app.text) });
+}
+
+// A knob's (strength, start, end) and its words (a member's `refmods`), as written or as the node turns it.
+function knobParts(fields) {
+  const numbers = fields.filter((f) => !/^[A-Za-z]/.test(f)), words = fields.filter((f) => /^[A-Za-z]/.test(f));
+  return { numbers: [0, 1, 2].map((i) => numbers[i] ?? ""), words };
+}
+
+function knobsHTML(app, knobs, values) {
+  const chunks = app.chunks() || [], segment = Number(app.bridge.getSegment());
+  const next = chunks.findIndex((c) => plays(c, segment)), head = knobs.filter((k) => k.scope === -1);
+  const groups = [...new Set(knobs.map((k) => k.scope))];
+  const open = app.state.knobOpen ??= new Set([-1, next]);
+  return `<div class="ksec"><span class="label">Knobs</span><span class="muted">${knobs.length}</span></div>` + groups.map((scope) => {
+    const ks = knobs.filter((k) => k.scope === scope), shut = !open.has(scope);
+    return `<div class="kgroup${shut ? " shut" : ""}"><button type="button" class="khead" data-kgroup="${scope}">${icon("chev")}`
+      + `<span>${scope < 0 ? "All clips" : `SCENE ${esc(ks[0].scene || String(scope + 1))}`}</span>`
+      + `${scope >= 0 && scope === next ? '<span class="knext">▶ next</span>' : ""}<span class="muted">${ks.length}</span></button>`
+      + (shut ? "" : ks.map((k) => knobHTML(app, k, values, head)).join("")) + "</div>";
+  }).join("");
+}
+
+function knobHTML(app, k, values, head) {
+  const key = knobKey(k), now = values[key], own = knobParts(k.fields);
+  const turned = now ? knobParts(specOf(now).split(",").map((f) => f.trim())) : null;
+  const over = k.scope >= 0 && head.find((h) => h.kind === k.kind && h.name.toLowerCase() === k.name.toLowerCase());
+  const shown = turned || own;
+  // a number field with its little buttons, in steps of 0.05; a sweep's field stays text, its values chips below
+  const field = (i, label) => (shown.numbers[i].includes("|")
+    ? `<input class="dv kf" data-knob="${esc(key)}" data-field="${i}" value="${esc(shown.numbers[i])}" title="${label}" aria-label="${esc(k.name)} ${label}" spellcheck="false" autocomplete="off">`
+    : `<input class="dv kf" type="number" step="0.05"${i ? ' min="0" max="1"' : ""} data-knob="${esc(key)}" data-field="${i}" value="${knobNumber(shown.numbers[i], i)}"`
+      + ` title="${label}${i ? ": a share of sampling, 0 the first step, 1 the last" : ""}" aria-label="${esc(k.name)} ${label}">`);
+  const chips = shown.numbers.map((f, i) => (f.includes("|") ? [i, f] : null)).filter(Boolean).map(([i, f]) => {
+    const all = (own.numbers[i].includes("|") ? own.numbers[i] : f).split("|").map((v) => v.trim()), on = new Set(f.split("|").map((v) => v.trim()));
+    return `<div class="kchips" title="The sweep's values: a click takes one out or back in">${all.map((v) => `<button type="button" class="kchip${on.has(v) ? " on" : ""}"`
+      + ` data-knob="${esc(key)}" data-chip="${i}" data-value="${esc(v)}">${esc(v)}</button>`).join("")}</div>`;
+  }).join("");
+  return `<div class="dial knob${now ? " on" : ""}" data-row="${esc(key)}" title="${esc(k.text)}"><div class="dtop"><span class="kk ${k.kind}">${KNOB_KIND[k.kind]}</span>`
+    + `<span class="dn">${esc(k.name)}</span><span class="droll">${over ? `overrides ${esc(over.fields.filter(Boolean).join(", "))} here` : ""}</span>`
+    + `<button type="button" class="mini" data-kreset="${esc(key)}" aria-label="Back to the template's">${icon("x")}</button></div>`
+    + `<div class="kfields">${field(0, "strength")}${field(1, "start")}${field(2, "end")}</div>${chips}</div>`;
+}
+
+// A knob's field as a number for its field: the strength as written (1 unless written), a start or an end as a share
+// of sampling (`20%` is 0.2; 0 and 1 unless written).
+function knobNumber(text, i) {
+  const v = parseFloat(text);
+  if (Number.isNaN(v)) return i === 1 ? 0 : 1;
+  return i && (String(text).trim().endsWith("%") || v > 1) ? Math.round(v * 100) / 10000 : v;
+}
+
+// The knob written anew from its row (#226): a field the same as the template's keeps how it is written, another is
+// written anew (a start or an end with `%`, so a LoRA tag never reads as the commas' sweep of before); words kept.
+function knobFromRow(app, key, chip = null) {
+  const k = templateKnobs(app).find((x) => knobKey(x) === key);
+  const row = app.view.querySelector(`.dials [data-row="${CSS.escape(key)}"]`);
+  if (!k || !row) return null;
+  const own = knobParts(k.fields);
+  const numbers = [...row.querySelectorAll(".kf")].map((input, i) => {
+    if (input.type !== "number") return input.value.trim() || own.numbers[i];
+    const v = Number(input.value);
+    if (input.value === "" || Number.isNaN(v) || Math.abs(v - knobNumber(own.numbers[i], i)) < 1e-6) return own.numbers[i];
+    return i ? `${Math.round(v * 10000) / 100}%` : String(Math.round(v * 10000) / 10000);
+  });
+  if (chip) {  // a sweep's value taken out or back in, in the order written; one stays
+    const all = (own.numbers[chip.field].includes("|") ? own.numbers[chip.field] : numbers[chip.field]).split("|").map((v) => v.trim());
+    const on = new Set(numbers[chip.field].split("|").map((v) => v.trim()));
+    if (on.has(chip.value) && on.size > 1) on.delete(chip.value); else on.add(chip.value);
+    numbers[chip.field] = all.filter((v) => on.has(v)).join("|");
+  }
+  while (numbers.length && !numbers[numbers.length - 1]) numbers.pop();  // a member's words follow its last number
+  const text = withFields(k, [...numbers, ...own.words]);
+  return text === k.text ? "" : text;
+}
+
+// The fields of a knob as written: `name(…)`, `@name(…)`, or a long form `<kind:name:…>` (a LoRA's `:clip` after them).
+const specOf = (text) => (/\(([^()]*)\)$/.exec(text) || /^<\w+:[^<>:]+?:([^<>:]*)(?::[^<>]*)?>$/.exec(text) || [0, ""])[1];
+
+// What each dial rolls at the node's seed, from the annotations (#163): the binding's value, else nothing yet.
+function paintRolls(app) {
+  const rolled = app.annotations?.()?.bindings || {};
+  app.view.querySelectorAll(".dials [data-roll]").forEach((el) => {
+    const v = rolled[el.dataset.roll], text = v ? `= ${v}` : "";
+    if (el.textContent === text) return;  // #218: unchanged, untouched
+    el.textContent = text;
+    el.title = v ? `At this seed: ${v}` : "";
+  });
 }
 
 function wireDials(app) {
-  const box = app.view.querySelector(".dials");
+  const box = app.view.querySelector(".dials"), row = app.view.querySelector(".edrow"), grip = app.view.querySelector(".side-grip");
+  const width = (px) => {
+    const w = Math.round(Math.min(Math.max(px, 200), row.clientWidth * 0.6));
+    row.style.setProperty("--side-w", `${w}px`);
+    app.bridge.props.orrery_side_w = w;
+  };
+  drag(grip, (dx, from) => width(from - dx), () => box.offsetWidth, () => {});
+  grip.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault();
+    width(box.offsetWidth + (e.key === "ArrowLeft" ? 16 : -16));
+  });
+  box.addEventListener("scroll", (e) => {  // the menu follows its box while the list scrolls; gone from view, it closes
+    if (!app.dm) return;
+    const list = e.target.getBoundingClientRect?.(), at = app.dm.input.getBoundingClientRect();
+    if (list && (at.bottom < list.top || at.top > list.bottom)) shutMenu(app);
+    else refreshMenu(app);
+  }, true);
   const put = (name, value) => {
     const values = app.bridge.getParams();
     if (value.trim()) values[name] = value.trim(); else delete values[name];
     app.bridge.setParams(values);
     box.querySelector(`[data-dial="${CSS.escape(name)}"]`)?.closest(".dial").classList.toggle("on", !!value.trim());
+    const head = box.querySelector(".side-head");
+    if (head) head.innerHTML = sideHead(box.querySelectorAll(".dial").length, Object.keys(values).length);
+    refreshBar(app);
+  };
+  const turn = (key, text) => {  // a knob (#226): its key among the params, its row marked
+    const values = app.bridge.getParams();
+    if (text) values[key] = text; else delete values[key];
+    app.bridge.setParams(values);
+    box.querySelector(`[data-row="${CSS.escape(key)}"]`)?.classList.toggle("on", !!text);
     refreshBar(app);
   };
   box.addEventListener("input", (e) => {
+    if (e.target.dataset.knob) return turn(e.target.dataset.knob, knobFromRow(app, e.target.dataset.knob));
     if (!e.target.dataset.dial) return;
     put(e.target.dataset.dial, e.target.value);
     openMenu(app, e.target, -1);
   });
   box.addEventListener("focusin", (e) => { if (e.target.dataset.dial) openMenu(app, e.target, -1); });
   box.addEventListener("mousedown", (e) => { if (e.target.dataset.dial && !app.dm) openMenu(app, e.target, -1); });
-  box.addEventListener("focusout", (e) => { if (e.target.dataset.dial) setTimeout(() => { if (app.dm?.input === e.target) shutMenu(app); }, 0); });
+  box.addEventListener("focusout", (e) => {  // into the menu's filter, the menu stays
+    if (e.target.dataset.dial) setTimeout(() => { if (app.dm?.input === e.target && !app.dm.box.contains(document.activeElement)) shutMenu(app); }, 0);
+  });
   box.addEventListener("keydown", (e) => {
     const input = e.target;
     if (!input.dataset.dial) return;
@@ -478,6 +738,31 @@ function wireDials(app) {
   });
   app.pickChoice = (input, value) => { input.value = value; put(input.dataset.dial, value); };
   box.addEventListener("click", (e) => {
+    if (e.target.closest("[data-dfold]")) {
+      app.bridge.props.orrery_side = box.classList.contains("folded") ? "open" : "folded";
+      return renderDials(app);
+    }
+    if (e.target.closest("[data-dclear]")) {
+      app.bridge.setParams({});
+      renderDials(app);
+      return refreshBar(app);
+    }
+    const group = e.target.closest("[data-kgroup]");
+    if (group) {
+      const scope = Number(group.dataset.kgroup), open = app.state.knobOpen;
+      if (open.has(scope)) open.delete(scope); else open.add(scope);
+      return renderDials(app);
+    }
+    const chip = e.target.closest("[data-chip]");
+    if (chip) {
+      turn(chip.dataset.knob, knobFromRow(app, chip.dataset.knob, { field: Number(chip.dataset.chip), value: chip.dataset.value }));
+      return renderDials(app);
+    }
+    const kr = e.target.closest("[data-kreset]");
+    if (kr) {
+      turn(kr.dataset.kreset, "");
+      return renderDials(app);
+    }
     const r = e.target.closest("[data-dreset]");
     if (!r) return;
     e.preventDefault();
@@ -493,21 +778,41 @@ function openMenu(app, input, at) {
   const d = dials(app.text).find((x) => x.name === input.dataset.dial);
   if (!d) return;
   const lib = d.lib && (app.data.libFull?.[d.lib] || app.dialLibs?.[d.lib]);
-  const gallery = lib && d.lib.startsWith("pictures/") ? new Map(lib.entries.map((e) => [e.value, e.props || {}])) : null;
-  const describe = gallery && ((c) => {
-    const p = gallery.get(c);
+  const entries = lib ? new Map(lib.entries.map((e) => [e.value, e])) : null;
+  const describe = lib && d.lib.startsWith("pictures/") ? (c) => {
+    const p = entries.get(c)?.props;
     const id = p?.ids?.split("\n")[0];
     return p && { sub: p.who || (p.prompt || "").slice(0, 110), thumb: id && app.api.thumbURL(id) };
-  });
-  const state = drawMenu(menuHost(app), input, dialChoices(app, d), at, describe);
-  app.dm = { ...state, input };
+  } : null;
+  const info = entries ? (c) => entries.get(c) : null;  // the filter reads an entry's properties and tags (#186)
+  const filter = app.dm?.input === input ? app.dm.filter || "" : "";
+  const refocus = !!app.dm?.box.contains(document.activeElement);  // a redraw while the filter is typed in keeps it there
+  const choices = dialChoices(app, d);
+  const state = drawMenu(menuHost(app), input, choices, at, describe, { filter, info });
+  app.dm = { ...state, input, filter };
   input.setAttribute("aria-expanded", "true");
+  const field = state.box.querySelector(".dm-filter");
+  if (refocus && field) { field.focus(); field.setSelectionRange(field.value.length, field.value.length); }
   state.box.addEventListener("mousedown", (e) => {
+    if (e.target === field) return;  // the filter takes the focus; everything else leaves it with the box
     const item = e.target.closest("[data-n]"), box = e.target.closest("[data-toggle]");
-    e.preventDefault();  // the box keeps the focus
+    e.preventDefault();
+    if (e.target.closest("[data-all]")) return pickAll(app, input, app.dm.items);
+    if (e.target.closest("[data-none]")) return pickAll(app, input, []);
     if (box) toggleChoice(app, input, app.dm.items[Number(box.dataset.toggle)]);
     else if (item) pickChoice(app, input, app.dm.items[Number(item.dataset.n)]);
   });
+  field?.addEventListener("input", () => {
+    app.dm.filter = field.value;
+    app.dm.at = -1;
+    app.dm.items = fillMenu(state.box, input, choices, -1, describe, { filter: field.value, info });
+  });
+  field?.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") { e.preventDefault(); input.focus(); shutMenu(app); }
+  });
+  field?.addEventListener("blur", () => setTimeout(() => {
+    if (app.dm?.input === input && document.activeElement !== input && !app.dm.box.contains(document.activeElement)) shutMenu(app);
+  }, 0));
 }
 
 function refreshMenu(app) {
@@ -528,6 +833,12 @@ function toggleChoice(app, input, value) {
   openMenu(app, input, app.dm ? app.dm.at : -1);
 }
 
+// All (the choices the menu shows) or None (the default roll); the menu stays open.
+function pickAll(app, input, items) {
+  app.pickChoice(input, joinChoices(items));
+  openMenu(app, input, -1);
+}
+
 function pickChoice(app, input, value) {
   app.pickChoice(input, value);
   shutMenu(app);
@@ -537,10 +848,12 @@ function pickChoice(app, input, value) {
 
 function startNew(app, kind) {
   if (app.busy()) return;
-  const s = STARTERS[kind], prev = { preset: app.preset, base: app.base, text: app.text, params: app.bridge.getParams(), target: app.bridge.getTarget() };
+  const s = STARTERS[kind], prev = { preset: app.preset, base: app.base, text: app.text, params: app.bridge.getParams(), target: app.bridge.getTarget(),
+    untitled: app.bridge.props.orrery_untitled };
   const hadWork = app.dirty();
   app.preset = null;
   app.base = null;
+  delete app.bridge.props.orrery_untitled;  // a new reel gets a folder of its own (#197)
   app.text = app.data.quickstart === false ? stripComments(s.text).trimStart() : s.text;  // the gear turns it off
   app.bridge.setParams({});
   app.bridge.setTarget(s.target);
@@ -551,6 +864,7 @@ function startNew(app, kind) {
     label: "Undo",
     run: () => {
       app.preset = prev.preset; app.base = prev.base; app.text = prev.text;
+      if (prev.untitled) app.bridge.props.orrery_untitled = prev.untitled;  // the unsaved reel's clips are there
       app.bridge.setParams(prev.params); app.bridge.setTarget(prev.target); renderPrompt(app);
     },
   } : null);

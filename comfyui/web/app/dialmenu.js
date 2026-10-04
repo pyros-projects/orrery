@@ -2,6 +2,8 @@
 // match what the box holds: once a dial had a value, its list was one choice or none (#155).
 import { esc } from "./highlight.js";
 
+export const MENU_MAX = 500;  // a menu lists this many choices; the filter reaches the rest, and any can be typed
+
 // The choices the box holds: one of them, or several as `{a|b}` (a narrower roll that still varies, #156).
 export function chosen(choices, value) {
   const v = (value || "").trim();
@@ -34,21 +36,43 @@ export function menuItems(choices, value) {
   return choices.filter((c) => c.toLowerCase().includes(v));
 }
 
+// The filter (#186): a regex, case-insensitive, over a choice's text, its properties (`genre: noir` and `genre=noir`)
+// and its tags; a pattern that is no regex matches as plain text. `info(choice)` → { props, tags } for an entry.
+export function filterPattern(query) {
+  const q = (query || "").trim();
+  if (!q) return null;
+  try { return new RegExp(q, "i"); } catch { const low = q.toLowerCase(); return { test: (text) => text.toLowerCase().includes(low) }; }
+}
+
+// Why a choice matches: "" for its text, else the property or tag that does; null when nothing does.
+export function matchedBy(choice, rx, info = null) {
+  if (!rx || rx.test(choice)) return "";
+  const more = info?.(choice) || {};
+  const prop = Object.entries(more.props || {}).find(([k, v]) => rx.test(`${k}: ${v}`) || rx.test(`${k}=${v}`));
+  if (prop) return `${prop[0]}: ${prop[1]}`;
+  const tag = (more.tags || []).find((t) => rx.test(t));
+  return tag ? `#${tag}` : null;
+}
+
+export function filterChoices(choices, query, info = null) {
+  const rx = filterPattern(query);
+  return rx ? choices.filter((c) => matchedBy(c, rx, info) !== null) : choices;
+}
+
 // The menu under (or, near the bottom, above) the dial's box, inside `host`. `choices` is null while a
 // library's entries are still on their way. Returns the menu's state for keys and picks.
 // `describe(choice)` → { sub, thumb } shows more than a choice's text (a gallery character: who it is, its picture).
-export function drawMenu(host, input, choices, at = -1, describe = null) {
+// `filter` and `info` (#186): the filter's text, and a choice's properties and tags. The head (filter, All, None)
+// shows for a list of more than one; fillMenu redraws only the list, so the filter keeps its focus while typing.
+export function drawMenu(host, input, choices, at = -1, describe = null, { filter = "", info = null } = {}) {
   host.querySelector(".dm")?.remove();
-  const items = choices ? menuItems(choices, input.value) : [];
   const box = document.createElement("div");
   box.className = "dm";
   box.setAttribute("role", "listbox");
-  const picked = new Set(choices ? chosen(choices, input.value) : []);
-  const head = picked.size > 1 ? `<div class="dm-note">${picked.size} chosen · rolls among them</div>` : "";
-  box.innerHTML = !choices ? '<div class="dm-note">Loading the choices…</div>'
-    : items.length ? head + items.map((c, n) => `<div role="option" aria-selected="${picked.has(c)}" class="dm-item${n === at ? " on" : ""}${picked.has(c) ? " cur" : ""}" data-n="${n}">`
-      + `<span class="dm-box" data-toggle="${n}" title="Add to the choices it rolls among (Space)">${picked.has(c) ? "✓" : ""}</span>${itemHTML(c, describe?.(c))}</div>`).join("")
-      : `<div class="dm-note">${choices.length ? "Nothing matches: the dial takes what you type." : "No list here: type any value or expression."}</div>`;
+  const head = choices?.length > 1 ? `<div class="dm-head"><input class="dm-filter" value="${esc(filter)}" placeholder="Filter · a regex, properties too" spellcheck="false" autocomplete="off" aria-label="Filter the choices">`
+    + '<button type="button" class="dm-act" data-all title="Roll among every choice shown">All</button><button type="button" class="dm-act" data-none title="No choice: the default roll">None</button></div>' : "";
+  box.innerHTML = `${head}<div class="dm-list"></div>`;
+  const items = fillMenu(box, input, choices, at, describe, { filter, info });
   host.appendChild(box);
   // the host may be scaled (the node on ComfyUI's canvas): place it in the host's own pixels
   const h = host.getBoundingClientRect(), r = input.closest(".dial").getBoundingClientRect(), k = h.width / host.offsetWidth || 1;
@@ -61,7 +85,29 @@ export function drawMenu(host, input, choices, at = -1, describe = null) {
   return { box, items, at };
 }
 
+export function fillMenu(box, input, choices, at = -1, describe = null, { filter = "", info = null } = {}) {
+  const rx = filterPattern(filter);
+  const found = choices ? filterChoices(menuItems(choices, input.value), filter, info) : [];
+  const items = found.slice(0, MENU_MAX);
+  const picked = new Set(choices ? chosen(choices, input.value) : []);
+  const note = (picked.size > 1 ? `<div class="dm-note">${picked.size} chosen · rolls among them</div>` : "")
+    + (found.length > MENU_MAX ? `<div class="dm-note">The first ${MENU_MAX} of ${found.length}: filter for the rest.</div>` : "");
+  box.querySelector(".dm-list").innerHTML = !choices ? '<div class="dm-note">Loading the choices…</div>'
+    : items.length ? note + items.map((c, n) => `<div role="option" aria-selected="${picked.has(c)}" class="dm-item${n === at ? " on" : ""}${picked.has(c) ? " cur" : ""}" data-n="${n}">`
+      + `<span class="dm-box" data-toggle="${n}" title="Add to the choices it rolls among (Space)">${picked.has(c) ? "✓" : ""}</span>${itemHTML(c, describe?.(c) || why(c, rx, info))}</div>`).join("")
+      : `<div class="dm-note">${!choices.length ? "No list here: type any value or expression." : filter.trim() ? "Nothing matches the filter."
+        : "Nothing matches: the dial takes what you type."}</div>`;
+  return items;
+}
+
+// The property or tag a choice was found by, under its text.
+function why(choice, rx, info) {
+  const by = rx && matchedBy(choice, rx, info);
+  return by ? { sub: choice, note: by } : null;
+}
+
 function itemHTML(choice, more) {
+  if (more?.note) return `<span class="dm-text"><span>${esc(choice)}</span><small>${esc(more.note)}</small></span>`;
   if (!more) return `<span>${esc(choice)}</span>`;
   return `${more.thumb ? `<img class="dm-pic" src="${esc(more.thumb)}" alt="" loading="lazy">` : ""}`
     + `<span class="dm-text"><span>${esc(more.sub || choice)}</span>${more.sub ? `<small>${esc(choice)}</small>` : ""}</span>`;

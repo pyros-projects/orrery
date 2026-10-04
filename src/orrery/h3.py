@@ -24,6 +24,7 @@ import re
 from collections.abc import Mapping
 from dataclasses import dataclass, field, replace
 
+from orrery import knobs
 from orrery.cast import (
     MAX_SLOTS,
     MEMBER,
@@ -142,7 +143,7 @@ class Scene:
     refmod_start: float = REFMOD_START
     refmod_end: float = 1.0  # `refmods: … to 80%`: where a RefMod without its own `to` stops
     dials: dict = field(default_factory=dict)  # `SET: image_1(0.5, 35%)`: ("image", 1) or ("refmod", name) → {"strength", "from"}
-    sets: list = field(default_factory=list)  # the SET: items in order, (target, strength, start, end, words): see _apply_sets
+    sets: list = field(default_factory=list)  # the SET: items in order, (target, strength, start, end, words, kind, spec): see _apply_sets
     enhance: str = ""  # a `> instruction` before the first shot: for every shot without its own
 
     @property
@@ -169,6 +170,8 @@ class Compiled:
     test: bool = False  # a test scene's clip: Orrery Film leaves it out of the film
     uses_input: bool = False  # the reel reads the Orrery Prompt's input video (Reel.uses_input)
     pictures: dict[int, dict] = field(default_factory=dict)  # image slot → {file, prompt} a CAST names (name_pictures)
+    chunk: int | None = None  # a reel's scene this clip plays (its index), for the take tree (#240)
+    kept: dict | None = None  # what a reel clip's take keeps (#261): its bindings and its END ON:
 
 
 # --- front end ------------------------------------------------------------------------------
@@ -187,7 +190,7 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
     for raw in lines:
         if not raw or _BINDING.match(raw) or _DSL_ONLY.match(raw):
             continue
-        line = raw if expanded else ex.expr(raw)
+        line = _IMAGE_ANGLE.sub(r"[image \1]", raw if expanded else ex.expr(raw))  # <Image N>, as H3 users write it (#224)
         if not line.strip():  # a `? cond:` line that does not hold
             continue
         if m := _ENHANCE.match(line):
@@ -206,8 +209,13 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
             scene.style = m.group(1).strip()
         elif m := _SUMMARY.match(line):
             scene.summary = m.group(1).strip()
-        elif m := _LORA.match(line):
-            scene.loras.append(m.group(1).strip())
+        elif m := _LORA.match(line):  # its LoRAs; a RefMod's, an image's or a member's long form is a SET item (#227)
+            others = [k.group(0) for k in knobs.LONG.finditer(m.group(1)) if k.group(1).lower() != "lora"]
+            loras = knobs.LONG.sub(lambda k: k.group(0) if k.group(1).lower() == "lora" else "", m.group(1)).strip()
+            if loras:
+                scene.loras.append(loras)
+            if others:
+                _set_line(scene, ", ".join(others), lint)
         elif _HANDOFF.match(line):
             lint.append(Issue("warn", "END ON: only works inside a SCENE; it is ignored."))
         elif _AFTER.match(line):
@@ -270,12 +278,12 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
     for shot in scene.shots:
         shot.start, t = t, t + shot.duration
     _apply_sets(scene, lint)
-    pictures = {s.name or s.index for m in scene.cast for s in m.sources if s.kind == "image"}
-    refmods = {_refmod_key(s.name) for m in scene.cast for s in m.sources if s.kind == "refmod"}
+    # SET: dials any image the clip hands to H3, CAST or not, and brings in a RefMod no member has (#224)
+    pictures = {s.name or s.index for m in scene.cast for s in m.sources if s.kind == "image"} | set(image_slots(scene))
     for kind, target in scene.dials:
-        if (kind == "image" and target not in pictures) or (kind == "refmod" and target not in refmods):
-            name = f"image_{target}" if kind == "image" else target
-            lint.append(Issue("warn", f"SET: {name} is not a picture or a RefMod of the CAST, so it changes nothing."))
+        if kind == "image" and target not in pictures:
+            lint.append(Issue("warn", f"SET: image_{target}: the clip hands no image {target} to H3 (a CAST source, a frame "
+                                      f"anchor, or [image {target}] or <Image {target}> in its text), so it changes nothing."))
     return scene
 
 
@@ -293,18 +301,26 @@ def _share(text: str) -> float | None:
 
 
 def _set_line(scene: Scene, text: str, lint: list[Issue]) -> None:
-    """`SET: image_1(0.5, 35%), emma_canon(0.3), @JINX(0.6, refmods), refmods(1, 35%)`: the dials of a
-    picture, a RefMod, a member's references (all, or those its words choose) and the RefMod defaults,
-    for every clip in the head, for that clip in a chunk. Kept in order and applied once the CAST is
+    """`SET: image_1(0.5, 35%), emma_canon(0.3), @JINX(0.6, refmods), refmods(1, 35%), turbo(0.8, 0%, 50%)`: the
+    dials of a picture, a RefMod, a member's references (all, or those its words choose), the RefMod defaults
+    and a LoRA (#227), for every clip in the head, for that clip in a chunk. A long form names its kind
+    (`<lora:…>`, `<refmod:…>`, `<image:N:…>`, `<cast:NAME:…>`); a short one is told by its name once the CAST is
     read (_apply_sets): a later SET wins, and SET wins over the CAST."""
-    items = _SET_ITEM.findall(text)
+    long = list(knobs.LONG.finditer(text))
+    items = [(k.group(2).strip() if k.group(1).lower() != "image" else f"image_{k.group(2).strip()}", k.group(3) or "",
+              k.group(1).lower()) for k in long if k.group(1).lower() != "lora"]
+    loras = [k.group(0) for k in long if k.group(1).lower() == "lora"]
+    scene.loras += loras
+    text = knobs.LONG.sub("", text)
+    items += [(target, args, None) for target, args in _SET_ITEM.findall(text)]
     rest = _SET_ITEM.sub("", text).replace(",", "").strip()
-    if not items or rest:
+    if not (items or loras) or rest:
         lint.append(Issue("warn", f"SET: {text[:48]} is not name(strength, start), e.g. SET: image_1(0.5, 35%) or "
                                   "SET: emma_canon(0.3); it is left out."))
         return
-    for target, args in items:
-        values = [v.strip() for v in args.split(",")]
+    for target, args, kind in items:
+        # a sweep's field (#227) not run by Roll (the Test tab, ComfyUI's own Run) takes its first value
+        values = [knobs.options(v)[0].strip() if knobs.sweeps(v) else v.strip() for v in args.split(",")]
         words = [v for v in values if v[:1].isalpha()]  # `refmods`, `image 1`: which of a member's references
         numbers = [v for v in values if not v[:1].isalpha()]
         try:
@@ -315,7 +331,7 @@ def _set_line(scene: Scene, text: str, lint: list[Issue]) -> None:
             lint.append(Issue("warn", f"SET: {target.strip()}({args}) takes numbers: (strength), (strength, start) or "
                                       "(strength, start, end)."))
             continue
-        scene.sets.append((target.strip(), strength, start, end, words))
+        scene.sets.append((target.strip(), strength, start, end, words, kind, args.strip()))
 
 
 _CHOICE = re.compile(r"^(images?|refmods?)$|^image\s+(\d+)$|^refmod\s+([\w./-]+)$", re.IGNORECASE)
@@ -325,8 +341,20 @@ def _apply_sets(scene: Scene, lint: list[Issue]) -> None:
     """The SET: items as dials, in the order written, now that the CAST is known: a member's name turns
     all its pictures and RefMods, or the ones its words choose (`images`, `refmods`, `image 1`, `refmod
     NAME`); `refmods` alone sets the RefMod defaults, as a `refmods:` line does."""
-    for target, strength, start, end, words in scene.sets:
-        member = next((m for m in scene.cast if m.name == target), None)
+    for target, strength, start, end, words, kind, spec in scene.sets:
+        member = next((m for m in scene.cast if m.name == target), None) if kind in (None, "cast") else None
+        if kind == "cast" and member is None:
+            lint.append(Issue("warn", f"SET: <cast:{target}:…>: no member {target} in the CAST, so it changes nothing."))
+            continue
+        if kind is None and member is None and not _SET_IMAGE.match(target) and target.lower() != "refmods":
+            found = knobs.kind_of(target)  # a LoRA's name, or a RefMod's (#227)
+            if found == "lora":
+                scene.loras.append(f"<lora:{target}:{spec}>")
+                continue
+            if found == "both":
+                lint.append(Issue("warn", f"SET: {target}(…) names a LoRA and a RefMod: write <lora:{target}:…> or "
+                                          f"<refmod:{target}:…>. It is left out."))
+                continue
         if member is None and target.lower() == "refmods" and not words:
             for name, value in (("refmod_strength", strength), ("refmod_start", start), ("refmod_end", end)):
                 if value is not None:
@@ -750,13 +778,17 @@ def clip_refmods(scene: Scene) -> list[dict]:
                 end = scene.refmod_end if src.end is None else src.end
                 out[src.name] = {"name": src.name, "member": m.name, "strength": dial.get("strength", strength),
                                  "from": dial.get("from", start), "to": dial.get("to", end)}
+    for (kind, name), dial in scene.dials.items():  # `SET: NAME(…)`: a RefMod no member has (#224)
+        if kind == "refmod" and not any(_refmod_key(n) == name for n in out):
+            out[name] = {"name": name, "member": None, "strength": dial.get("strength", scene.refmod_strength),
+                         "from": dial.get("from", scene.refmod_start), "to": dial.get("to", scene.refmod_end)}
     return list(out.values())
 
 
 def clip_images(scene: Scene, refs: list[int]) -> list[dict]:
     """The clip's pictures with an `at` or a `from` (`image 1 at 0.5 from 35%`), for Orrery RefMods:
     `ref` is the picture's place among those Reference to Video gets (packed by Orrery Refs when
-    `refs` lists the original slots), `image` its slot in the CAST."""
+    `refs` lists the original slots), `image` its slot as written (in the CAST, the text or a frame anchor)."""
     out: dict[int, dict] = {}
     for m in scene.cast:
         for src in m.sources:
@@ -768,10 +800,17 @@ def clip_images(scene: Scene, refs: list[int]) -> list[dict]:
                                   "strength": dial.get("strength", 1.0 if src.strength is None else src.strength),
                                   "from": dial.get("from", 0.0 if src.start is None else src.start),
                                   "to": dial.get("to", 1.0 if src.end is None else src.end)}
+    for slot in image_slots(scene):  # an image in the text or a frame anchor, which `SET: image_N(…)` dials (#224)
+        image = refs[slot - 1] if refs else slot
+        dial = scene.dials.get(("image", image))
+        if dial and slot not in out:
+            out[slot] = {"ref": slot, "image": image, "member": None, "strength": dial.get("strength", 1.0),
+                         "from": dial.get("from", 0.0), "to": dial.get("to", 1.0)}
     return list(out.values())
 
 
 _IMAGE_BRACKET = re.compile(r"\[image\s+(\d+)\]", re.IGNORECASE)
+_IMAGE_ANGLE = re.compile(r"<image\s+(\d+)>", re.IGNORECASE)  # H3's own way to name a reference in the text
 
 
 def image_slots(scene: Scene) -> list[int]:
@@ -906,11 +945,13 @@ def render_scene(scene: Scene, target: str, lint: list[Issue]) -> str:
 def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                   weights: Mapping[str, float] | None = None, target: str = "h3-base",
                   segment: int = 0, packed: bool = False, held: set[int] | frozenset = frozenset(),
-                  cell: int | None = None, standing: set[int] | frozenset = frozenset()) -> Compiled:
+                  cell: int | None = None, standing: set[int] | frozenset = frozenset(),
+                  past: Mapping[int, dict] | None = None) -> Compiled:
     """`segment` picks a reel's clip (see orrery.reel); plain screenplays ignore it. `packed`: the
     images are renumbered to the ones this clip uses (Orrery Refs hands on only those). `cell`: the
     run of a `: grid` (orrery.batch); None rolls its axes. `standing`: the images wired into Orrery
-    Refs: one a REMEMBER: line keeps stays in the clip as wired until those frames exist."""
+    Refs: one a REMEMBER: line keeps stays in the clip as wired until those frames exist. `past`: what the
+    reel's clips before this one rendered, from their takes (#261; see reel._unroll)."""
     from orrery.batch import prepare
     from orrery.dsl import parse, strip_exports, with_inline
     from orrery.reel import build_segment, shared_sends, split_reel
@@ -933,7 +974,7 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
     sends: dict[int, dict] = {}
     sent_mods: dict[str, dict] = {}  # RefMods made from the reel's own frames, which Orrery RefMods builds
     if reel:
-        scene, picks, path = build_segment(reel, seed, libraries, weights, segment, lint)
+        scene, picks, path, kept = build_segment(reel, seed, libraries, weights, segment, lint, past)
         absent = drop_absent(scene)  # a chunk without a member leaves its definition and its RefMods out
         lint += [Issue("warn", problem) for m in absent for problem in m.problems]
         if reel.send_slots:
@@ -994,4 +1035,5 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                     sends, reel.send_slots if reel else [],
                     [{**r, "sent": sent_mods[r["name"]]} if r["name"] in sent_mods else r for r in clip_refmods(scene)],
                     clip_images(scene, refs), reel.before(segment, path) if reel else None,
-                    bool(reel and reel.blocks[path[segment][0]].test), bool(reel and reel.uses_input), named)
+                    bool(reel and reel.blocks[path[segment][0]].test), bool(reel and reel.uses_input), named,
+                    path[segment][0] if reel else None, kept if reel else None)

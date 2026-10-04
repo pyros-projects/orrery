@@ -8,19 +8,31 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "red panda"
+       "red panda",
+       [
+        "__creature__=red panda"
+       ]
       ],
       [
        "{19th-century natural history field guide|Victorian naturalist's sketchbook|1950s children's encyclopedia}",
-       "Victorian naturalist's sketchbook"
+       "Victorian naturalist's sketchbook",
+       [
+        "{19th-century natural history field guide|Victorian naturalist's sketchbook|1950s children's encyclopedia}=Victorian naturalist's sketchbook"
+       ]
       ],
       [
        "{hand-colored copperplate engraving|delicate watercolor study|gouache illustration}",
-       "delicate watercolor study"
+       "delicate watercolor study",
+       [
+        "{hand-colored copperplate engraving|delicate watercolor study|gouache illustration}=delicate watercolor study"
+       ]
       ],
       [
        "{IV|VII|XII|XXIII}",
-       "XXIII"
+       "XXIII",
+       [
+        "{IV|VII|XII|XXIII}=XXIII"
+       ]
       ]
      ]
     }
@@ -33,19 +45,31 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "axolotl"
+       "axolotl",
+       [
+        "__creature__=axolotl"
+       ]
       ],
       [
        "{19th-century natural history field guide|Victorian naturalist's sketchbook|1950s children's encyclopedia}",
-       "1950s children's encyclopedia"
+       "1950s children's encyclopedia",
+       [
+        "{19th-century natural history field guide|Victorian naturalist's sketchbook|1950s children's encyclopedia}=1950s children's encyclopedia"
+       ]
       ],
       [
        "{hand-colored copperplate engraving|delicate watercolor study|gouache illustration}",
-       "hand-colored copperplate engraving"
+       "hand-colored copperplate engraving",
+       [
+        "{hand-colored copperplate engraving|delicate watercolor study|gouache illustration}=hand-colored copperplate engraving"
+       ]
       ],
       [
        "{IV|VII|XII|XXIII}",
-       "XII"
+       "XII",
+       [
+        "{IV|VII|XII|XXIII}=XII"
+       ]
       ]
      ]
     }
@@ -58,19 +82,31 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "giant isopod"
+       "giant isopod",
+       [
+        "__creature__=giant isopod"
+       ]
       ],
       [
        "{19th-century natural history field guide|Victorian naturalist's sketchbook|1950s children's encyclopedia}",
-       "Victorian naturalist's sketchbook"
+       "Victorian naturalist's sketchbook",
+       [
+        "{19th-century natural history field guide|Victorian naturalist's sketchbook|1950s children's encyclopedia}=Victorian naturalist's sketchbook"
+       ]
       ],
       [
        "{hand-colored copperplate engraving|delicate watercolor study|gouache illustration}",
-       "gouache illustration"
+       "gouache illustration",
+       [
+        "{hand-colored copperplate engraving|delicate watercolor study|gouache illustration}=gouache illustration"
+       ]
       ],
       [
        "{IV|VII|XII|XXIII}",
-       "XXIII"
+       "XXIII",
+       [
+        "{IV|VII|XII|XXIII}=XXIII"
+       ]
       ]
      ]
     }

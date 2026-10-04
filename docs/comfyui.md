@@ -1,6 +1,6 @@
 # The ComfyUI nodes
 
-Everything the Orrery Prompt node puts out, the six tabs of its app, Roll and Restart, Orrery Log and Orrery Refs.
+Everything the Orrery Prompt node puts out, the tabs of its app and its settings, Roll and Restart, Orrery Log and Orrery Refs.
 
 ```bash
 cd /path/to/ComfyUI/custom_nodes && git clone https://github.com/pyros-projects/orrery.git
@@ -29,9 +29,19 @@ files in instead.
 Nodes under **orrery**:
 
 - **Orrery Prompt**: seed and target (`text`, `h3-base`, `flat`), optional
-  `segment`, `first_frame`, `last_frame` and `video` → `text`, `picks`, `seed`, `width`,
-  `height`, `length`, `lora_stack` and
-  `megapixels`. A picture wired into `first_frame` (else
+  `model`, `first_frame`, `last_frame` and `video` → `text`, `picks`, `seed`, `width`,
+  `height`, `length`,
+  `megapixels` and `model`. Wire the model through it (loader → Orrery Prompt
+  → guider or sampler) and the clip being sampled plays in its box as it
+  forms, in real time, decoded with the tiny VAE for the model's latents
+  (`taeh3` in `models/vae_approx` for MiniMax H3, else Latent2RGB). The gear's
+  **Live preview** makes it light (a few pictures spread over the clip) or
+  smooth (so many pictures a second as you set, as far as the clip gives them:
+  taeh3 and Latent2RGB have one a latent frame, about 7 a second), and its
+  **Preview size** sets the long edge, 1024 px as KJNodes' (0: as sampled;
+  bigger is sharper and takes longer each step); the model
+  output is the same model with that preview, nothing loads again. Without it
+  the box shows ComfyUI's own preview, which orrery passes to every open tab. A picture wired into `first_frame` (else
   `last_frame`), the same one the H3 node gets, gives `width`/`height` its shape
   at the header's megapixels (else H3's canvas area), on the 32 grid as close to
   its shape as the grid allows: H3 stretches a first frame and crops a last one
@@ -41,16 +51,20 @@ Nodes under **orrery**:
   `width`/`height` come from `: w… h…` or the `@h3` ratio (`@h3 references 16:9 0.6MP`
   sizes the canvas by area, and `megapixels` puts that out for resolution and
   scale nodes), `length` is the
-  screenplay's duration in frames for the H3 latent, `lora_stack` carries the
-  `LORA:` lines as a LORA_STACK for any loader with a `lora_stack` input
-  (LoraManager, Efficiency, Easy-Use …); unknown or ambiguous names are
-  reported in the log and in the Test tab. A reel (`SCENE` blocks, `×N` and
+  screenplay's duration in frames for the H3 latent. The `LORA:` lines go on
+  the model that passes through the node (model strengths, as
+  LoraLoaderModelOnly puts them: a clip's own LoRAs, the head's, a sweep's run),
+  so no LoRA node is needed; without the model wired through, they change
+  nothing (the log says so). Unknown or ambiguous names are reported in the log
+  and in the Test tab. A workflow saved with the earlier `lora_stack` output
+  loses it when it opens, and the outputs after it keep their links. A reel (`SCENE` blocks, `×N` and
   `forever`, `$x[-1]`, `AFTER:`, `(test)`; see [h3.md](h3.md) 1d) writes one clip per run:
-  `segment` counts up by itself, and Orrery Continue / Orrery Film (below)
+  the next clip counts up by itself (the Prompt tab's **Next clip**, and **Hold**
+  for takes; the node's `segment` input is orrery's, hidden), and Orrery Continue / Orrery Film (below)
   chain the clips. A video wired into `video` (Load Video) is the scene before
   the reel's first: the node keeps it at 24 fps beside the clips, a head
   `REMEMBER:` keeps its frames, and a scene with `AFTER: the input video`
-  continues it ([h3.md](h3.md) 1d, *The input video*). The node is the whole of orrery, in six tabs (⤢ opens the
+  continues it ([h3.md](h3.md) 1d, *The input video*). The node is the whole of orrery, in seven tabs and its settings (⤢ opens the
   same app over the canvas, Esc brings it back):
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `__creature#` properties and their
@@ -65,9 +79,15 @@ Nodes under **orrery**:
     keyword and every form of it (`REME` → `REMEMBER: frames 0, 50 as @NAME` …),
     `EXPORT:` and `IF` in text templates too; Ctrl+Space opens the completion where
     the caret is. Each line shows at its end what it gives at the node's seed: a
-    binding what it rolled, an EXPORT what it keeps, a grid its cells, a CAST
+    binding what it rolled, every library in a line its own roll, in order
+    (`→ arcade · bob cut · tracksuit`; one in a `{…|…}` branch that did not
+    roll says nothing, #202), an EXPORT what it keeps, a grid its cells, a CAST
     member where its pictures go (gallery pictures as thumbnails), a REMEMBER:
-    line where its frames go. Hovering a keyword shows what it does and its
+    line where its frames go. *Annotations* in the settings' *Editor* says where
+    they go (#203): **Appended** (at the line's end, the default), **Hover**
+    (nothing at the line ends: what has one is underlined quietly, a dotted line
+    as for a footnote, and hovering it shows the roll first) or **None**. A
+    screenplay's lines say what they roll for the scene of the next clip. Hovering a keyword shows what it does and its
     forms; a CAST member who it is in this clip (description, pictures and their
     strengths, RefMods, voice); a library its size and entries; a binding what it
     rolled. **New** starts a fresh
@@ -75,26 +95,103 @@ Nodes under **orrery**:
     H3 references, H3 keyframes (image, first-last, last) or a Krea prompt,
     each with a quickstart of the essentials as `#` comments on top (the gear
     turns the quickstart off). Open a preset from the bar above it; ● marks unsaved
-    edits; Save, Save as…, Revert. Under the editor, every binding is a
-    **dial**: pick a library entry or choice, tick several to roll among them
-    (`{noir|gothic}`), or type any expression; empty means its default roll. Saving bakes the dials in, and a gallery output
-    restores them. **Test** jumps to the Test tab and rolls. **Write** has
+    edits; Save, Save as…, Revert. Beside the editor, in a sidebar, every
+    binding is a **dial**, one a row, with what it rolls at the node's seed:
+    pick a library entry or choice, tick several to roll among them
+    (`{noir|gothic}`), or type any expression; empty means its default roll,
+    and **Clear** sets them all back. A dial's menu has a filter, a regex over
+    the choices, their properties (`genre: noir`) and tags, and **All** (roll
+    among every choice it shows) and **None**. Drag the sidebar's edge to widen it, or
+    fold it to a strip. Saving bakes the dials in, and a gallery output
+    restores them. Under the dials, the template's **knobs** (#226): its
+    LoRAs, RefMods, pictures and members, grouped where they hold, *All
+    clips* first and then each scene with knobs of its own (the scene of the
+    next clip open; a scene's knob says when it overrides the head's), each
+    with its strength, start and end in number fields whose little buttons
+    step 0.05 (the start and the end a share of sampling, 0 and 1 unless
+    written), and a sweep's values as chips to take out or back in. A knob turned there is the node's, as a
+    dial is: the template stays as written, and saving bakes it in. **Test** jumps to the Test tab and rolls. **Write** has
     the language model write the reel's next scene, the shot between two
     frames or a prompt from a picture, one idea per short run, browsed
     before it goes in ([wildcard-manager.md](wildcard-manager.md)). With an
     API endpoint as the language model (the gear), it asks the endpoint
     directly, beside ComfyUI's queue, and **Write now** in the footer writes
     the libraries the template still needs, all at once.
-    In a reel, every `SCENE` line carries a divider that says which clips
-    it plays (counted from 1), when and how much film is left (`clips 2–5 · 4 × 5 s · 0:05 →
-    0:25 · 1:35 left`); the scene that plays the next clip is
-    marked (`▶ next`), and **Jump** beside *Next clip* puts the caret
-    there. A reel opens in the **clips view**: the editor cut into one cell
+    In a reel, every `SCENE` line carries a divider that names one clip of
+    the film (counted from 1): the next clip where the scene plays it
+    (`▶ next: clip 3 · 5 s`), else the clip it comes next as (`comes next as
+    clip 41 · 10 s`). Its hover says every clip it plays, when and how much
+    film is left (`clips 2–5 · 4 × 5 s · 0:05 → 0:25 · 1:35 left`), and its
+    📊 explains them: where and how often the scene plays on the walk at the
+    node's seed, drawn clip by clip, how long, what plays before and after it
+    (and its lines that steer), what it rolls, and the clips it made.
+    **Jump** beside *Next clip* puts the caret on the scene of the next clip.
+    A template without scenes (a Krea prompt, an `@h3` scene) has its
+    **results under the prompt** (#211): under its one cell the live preview
+    while it samples (the model wired through the Orrery Prompt; an image
+    model's tiny VAE or Latent2RGB, sized by its own latent format), then what
+    the run made, a picture, a clip or its sound, as its Save or Preview nodes
+    wrote it. Every run becomes a **take**, lined up under the result: a click
+    shows it (and a take that rolled anew gives the node its seed). Beside the
+    takes, **+** adds takes, **×N** says how many a Generate makes and **📌**
+    keeps the rolled prompt so only the sampler's noise changes, as in a
+    reel's scenes; the gear's *Sample surfing* numbers their seeds or follows
+    the node's control. The takes are kept on the node, per preset, and saved
+    with the workflow; × takes one off the list (**the others** and **all**
+    take more), its files stay where they are. A reel opens in the **clips view**: the editor cut into one cell
     per SCENE, each followed by that scene's clips as Orrery Film (or H3
     Motion Context's Chain Video) keeps them, big: a clip's shorter side is
     the **Clip size** in the gear (360 px unless set otherwise), as far as the
     editor is wide. Hover plays one, a click opens it; small dashed boxes are
-    clips not rendered yet. Under a scene's clips come the frames its
+    clips not rendered yet. A scene's divider has its buttons: +
+    **Add takes** of its clip (its first, or one more) and stay on the scene,
+    ⏭ go to the **next scene** (Next clip becomes its first clip), and ⏩ go
+    there **and add takes** of its clip (the box of the clip rendering shows it
+    as it forms: see Orrery Prompt's `model` below). **Sample surfing**: ×1 beside
+    + turns to ×2, ×4, ×8, and + renders that many **takes** of the
+    clip. They line up under it; hover plays one, a click puts it in the film
+    (the next clip and `REMEMBER:` then use it too), and the clips last made
+    after it come back with it: no path is lost (#213). 📌 in a scene keeps its
+    rolled prompt, so the takes change only the sampler's noise (the Orrery
+    Prompt's `seed` output carries seed + take into the noise, as in the
+    example workflows); without it each take rolls anew, and the one you pick
+    gives the node its seed, so the clips after it roll the same world. The
+    gear's **Sample surfing** numbers the takes' seeds (seed+1, seed+2 …: the
+    same takes tomorrow) or follows the node's control after generate. The grip
+    at the end of a clip's takes sizes them all, in the clip's shape. A × on
+    a take, or on the clip in its box, deletes it from disk (it asks first): the
+    film then plays the clip's newest other take, or ends before the clip.
+    Beside a clip's takes stands a column that stays with them as you scroll
+    (#245): **play all** on top plays every take of the clip at once, from the
+    start and in step, to compare their motion (**stop all** stops them, #238);
+    in the middle the clip and its scene in numbers (its takes, the one in the
+    film, its seed, the newest, how many were made with another prompt); at the
+    bottom **the others** deletes every take but the one in the film, and
+    **all** every one, the film then ending before the clip; each asks first,
+    and takes made on another path stay (#234). **Tree**
+    beside *Jump* opens the **take tree** (#213): every take of the reel's run,
+    a column per clip, a line from each take to the takes made on it, and the
+    film's path lit in brass; the rows stay where they are, only the light moves. Hover plays a take and shows the
+    way the film would go through it; a click makes the film that way (to the
+    take from clip 1, then on as it was last walked), and ✂ on a take of the
+    film ends the film after it, so a film is clicked together along the tree.
+    The prompt is the script and the takes are the footage: switching takes
+    never changes the editor, and what renders next is shot with the editor's
+    text on the film's path. A take made with another version of its scene
+    carries ✎, in the tree and under its clip: hovering it shows what changed,
+    and a click on ✎ (**Use this prompt**) puts that version of the scene in
+    the editor, with Undo; the editor shows that scene, lit for a moment.
+    **▶ Film** in the tree's head plays the film as it is clicked together
+    (#243), in a section of its own above the tree that the split under it
+    sizes: under the video a timeline of its clips with a playhead (a click
+    plays the film from there), and the take playing glows in the tree.
+    **hide < N after** in its head hides the dead ends (#246): the takes fewer
+    than N takes were made on. The film's takes, the last clip's (nothing can
+    come after them yet) and every take a shown take came after stay, so every
+    path shown is whole; the head counts the hidden ones, 0 shows all. While a clip renders, its box
+    shows the sampler's preview and the step it is at: KJNodes' Model Preview
+    Override (a picture, or the whole clip as it forms), else ComfyUI's own
+    preview when its live preview is on. Under a scene's clips come the frames its
     `REMEMBER:` lines take, cut from that clip in the browser as you type
     (`frame 50` → `frame 20` shows frame 20 at once, a range as a strip with
     its count, frames past the end in red), and each says where they go;
@@ -105,12 +202,8 @@ Nodes under **orrery**:
     frame opens its clip with a slider: **Use frame N** writes that frame into
     the line. Arrow keys cross from cell to cell, Backspace at a cell's start
     and Delete at its end join two, and a SCENE line typed or removed cuts
-    the text anew. **Clips beside** in the footer puts the clips in a
-    **timeline** beside the editor instead, level with their scenes, with the
-    frames Orrery Refs last fetched (drag the edge between editor and
-    timeline to widen it). It reads the chain from the string wired into
-    `latent_path`, else `h3_context`, and refreshes after every run. The gear
-    turns dividers and the clips off.
+    the text anew. It reads the reel's folder (below) and refreshes after
+    every run. The gear turns dividers and the clips off.
   - **Test**: what the template makes, without queueing anything. **Rolls**
     shows three seeds (a reel: six clips at one seed, pageable through a
     forever loop). **Frequencies** rolls it 50, 200 or 500 times, across seeds
@@ -129,8 +222,9 @@ Nodes under **orrery**:
     click it.
   - **Gallery**: every logged output. love / like / nope / hate multiply the
     learned weight of each pick by 1.5 / 1.2 / 0.8 / 0.5 (re-rating replaces
-    the factor). **Use template + seed** restores an output and sets the seed
-    to fixed. An output whose template EXPORTed data shows it as a sheet
+    the factor). **Use template + seed** restores an output's template and seed
+    and sets the seed to fixed; the next run rolls them with today's libraries
+    and learned weights (#259). An output whose template EXPORTed data shows it as a sheet
     under its prompt (**JSON** copies it). Folders on the left sort outputs without moving their files:
     drag cards onto a folder (a selected card brings the whole selection),
     drag a folder onto another to nest it, double-click to rename. Removing
@@ -147,11 +241,25 @@ Nodes under **orrery**:
     the output was not (the last 2000 runs, in `prompt_history.jsonl` in the
     orrery home). Search by prompt, pick, preset or seed; **Use template +
     seed** puts the run back in the Prompt tab (segment included, control
-    after generate fixed), so a lucky roll can be made again (a run from before
+    after generate fixed), so a lucky roll can be rolled again: with today's
+    libraries, learned weights and included presets, so a library edited or an
+    output rated since rolls something else, and the prompt it made is a copy
+    away (#259) (a run from before
     2026-10-02 comes back with `@rng 1` on top: the dice it was made with). Each run is
     also printed to ComfyUI's console (seed, picks, prompt); the gear turns
     that off.
   - **Help**: the DSL at a glance, the tutorial lessons, writing tips.
+  - **Settings** (the gear, #212; again, and the tab before is back): its
+    sections on the left, *Home*, *Language model*, *Writers*, *Editor*,
+    *Clips* (clip size, live preview, sample surfing) and *Log*, the one
+    chosen on the right, and the tab opens on the one shown last. A setting
+    is saved the moment it changes and says so beside the section's title.
+    What moves things or asks the outside has a button of its own: **Use
+    this folder** for the home folder, **Use this endpoint** for an API
+    endpoint (checked first: the key, and one short answer from the model;
+    a setting changed on its own, such as the entries a library starts with,
+    asks the endpoint nothing), **Save text** and **Reset to default** for a
+    writer's text.
 
   Workflows that used the old `preset` dropdown open with that preset loaded
   into the editor.
@@ -192,14 +300,26 @@ Nodes under **orrery**:
   clip whose pinned frames the sampler changed (a sampler that ignores
   `noise_mask`). Orrery Film trims the 22 frames, puts out the clip
   (`images`, `audio`) and `film`, the reel so far, and keeps the takes under
-  `output/<latent_path>/orrery_film/` (`h3_context` unless the Orrery Prompt's
-  `latent_path` says otherwise): each clip, its sound and the tail the
-  next one continues from. Rendering a clip again replaces its take and drops
-  the ones after it that continue it (branches beside it stay); clip 1 starts a new
-  run; older takes stay on disk. A `(test)` scene's take is kept but left out of
+  `output/<the reel's folder>/orrery_film/`: each clip, its sound and the tail the
+  next one continues from. Rendering a clip again adds a take, and the film ends
+  with it; the clips that continued the take before stay in the take tree and
+  come back when that take is picked again, clip 1 too: its
+  takes stay side by side (another size or sound starts a new run); older takes stay on disk. A `(test)` scene's take is kept but left out of
   the joined film. The previous clip, `REMEMBER:` and the timeline read
   this store or H3 Motion Context's Chain Video, whichever was written last.
   Another `context:` than 22 is a warning: 22 frames are pinned all the same.
+
+  **The reel's folder.** orrery names it, under `output/reels/`, so reels keep
+  their clips apart (the Prompt tab's Reel shows it on hover):
+
+  | The reel | Its folder |
+  |---|---|
+  | a saved preset | named after it: `reels/h3/08_reel_night_watch` |
+  | unsaved | `reels/untitled/2026-10-03 23-15`, named when it is first needed and kept in the node until **New** |
+  | unsaved, then saved | the folder moves to the preset's name with **Save as**, so the next clip continues the last |
+  | the same preset in two nodes | the same folder, as it is the same reel; **Save as** makes a second one |
+
+  A template run outside the app (the CLI, an old workflow) keeps `output/h3_context`.
 - **Orrery RefMods**: `conditioning` + `picks` → `conditioning`. It puts the
   clip's RefMods on the conditioning, the ones its CAST names
   (`refmod NAME` with `SET: @JINX(0.5, 35%)`, see [h3.md](h3.md#1e-refmods-refmod-name-set-jinx05-35)),
