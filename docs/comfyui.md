@@ -253,7 +253,9 @@ Nodes under **orrery**:
   - **History**: every run of the node as it resolved, newest first: the
     seed, the segment, the dials, every pick and the prompt, kept even when
     the output was not (the last 2000 runs, in `prompt_history.jsonl` in the
-    orrery home). Search by prompt, pick, preset or seed; **Use template +
+    orrery home). A run a `>` line rewrote says so, and opened shows the instruction, the
+    passage before the rewrite and whether it was kept with **Use selected** or written for
+    the run (#279). Search by prompt, pick, preset or seed; **Use template +
     seed** puts the run back in the Prompt tab (segment included, control
     after generate fixed), so a lucky roll can be rolled again: with today's
     libraries, learned weights and included presets, so a library edited or an

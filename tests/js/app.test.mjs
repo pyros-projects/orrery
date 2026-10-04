@@ -1033,3 +1033,13 @@ test("a popup's list scrolls to the marked item, and only the list (#303)", asyn
   reveal(null, item(10));  // no list, no item: nothing to do
   reveal(list, null);
 });
+
+test("History says what a > line did to a run: the instruction, how it came about, the passage before (#279)", async () => {
+  const { enhancedHTML } = await import("../../comfyui/web/app/history.js");
+  assert.equal(enhancedHTML(undefined), "");
+  const html = enhancedHTML([{ instruction: "make it <moody>", before: "a fox", after: "a fox in fog", kept: true },
+    { instruction: "shorter", before: "b", after: "c" }]);
+  assert.match(html, /&gt; make it &lt;moody&gt;<\/b> · a rewrite you kept \(Use selected\)/);
+  assert.match(html, /<pre class="codebox before">a fox<\/pre>/);
+  assert.match(html, /shorter<\/b> · written for this run/);
+});

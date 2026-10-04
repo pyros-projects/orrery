@@ -35,14 +35,25 @@ function rowHTML(r, open) {
       <span class="tagchip">seed ${esc(String(r.seed))}</span>${r.segment != null ? `<span class="tagchip">clip ${r.segment + 1}</span>` : ""}
       ${r.preset ? `<span class="tagchip">@${esc(r.preset)}${r.edited ? " · edited" : ""}</span>` : ""}
       ${r.issues ? `<span class="warn" title="Lint warnings when it ran">${r.issues} ⚠</span>` : ""}
+      ${r.enhanced?.length ? `<span class="tagchip" title="A > line rewrote the prompt: open the run for what it was before">&gt; enhanced</span>` : ""}
       <span class="htext">${esc(first)}</span></button>
     ${open ? `<div class="hbody">
       ${(r.picks || []).length ? `<div class="hpicks">${r.picks.map((p) => `<span class="tagchip mono"><b>${esc(p.label)}</b> ${esc(p.value)}</span>`).join("")}</div>` : ""}
       ${Object.keys(r.params || {}).length ? `<p class="muted flush">Dials: ${Object.entries(r.params).map(([k, v]) => `<code>$${esc(k)} = ${esc(v)}</code>`).join(" ")}</p>` : ""}
+      ${enhancedHTML(r.enhanced)}
       <pre class="codebox">${esc(r.text || "")}</pre>
       <div class="acts"><button class="btn primary" data-hact="use" title="The template, its dials and this seed (and segment) back in the Prompt tab, control after generate fixed">${icon("undo")}Use template + seed</button>
         <button class="btn" data-hact="copyp">${icon("copy")}Copy prompt</button><button class="btn" data-hact="copys">${icon("copy")}Copy seed</button></div>
     </div>` : ""}</div>`;
+}
+
+// What each `> enhance` line did to the run (#279): its instruction, how the rewrite came about, the passage before it.
+// The prompt below is what it became.
+export function enhancedHTML(enhanced) {
+  if (!enhanced?.length) return "";
+  const how = (x) => (x.kept ? "a rewrite you kept (Use selected)" : x.asked ? "written by its own run first" : "written for this run");
+  return enhanced.map((x) => `<div class="henh"><p class="muted flush"><b>&gt; ${esc(x.instruction)}</b> · ${how(x)}. Before:</p>`
+    + `<pre class="codebox before">${esc(x.before)}</pre></div>`).join("");
 }
 
 export async function renderHistory(app) {

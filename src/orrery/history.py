@@ -12,7 +12,7 @@ from orrery.home import Home, write_atomic
 FILE = "prompt_history.jsonl"
 KEEP = 2000  # runs kept; the file is trimmed back to this when it grows a quarter past it
 FIELDS = ("seed", "target", "template", "preset", "edited", "params", "rng", "format", "text", "picks", "segment",
-          "sweep")
+          "sweep", "enhanced")  # enhanced: what each `> enhance` line did (#279)
 
 
 def _path(home: Home):
