@@ -1,0 +1,3029 @@
+{
+ "preset": "krea/15_expression_creator",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A photograph: a wide-angle close-up, the face close to the lens, facing the camera, of a 58-year-old man of Indian descent, with light brown skin: a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, wearing a crimson cardigan over a white tee. Their face shows calm: the brows level, the eyelids relaxed, the lips closed and soft, the gaze straight into the lens. Facial muscles at work: none, every muscle at rest. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on a 24mm lens close to the face, slight wide-angle distortion, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{19-26}",
+       "25",
+       [
+        "{19-26}=25"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "58",
+       [
+        "{40-58}=57–58"
+       ]
+      ],
+      [
+       "{59-79}",
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Indian descent, with {warm brown|light brown|deep brown} skin",
+       [
+        "__characters/creator/origin__=Indian descent, with {warm brown|light brown|deep brown} skin"
+       ]
+      ],
+      [
+       "{warm brown|light brown|deep brown}",
+       "light brown",
+       [
+        "{warm brown|light brown|deep brown}=light brown"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "salt-and-pepper",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=salt-and-pepper"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "$colour-dyed",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=$colour-dyed"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "salt-and-pepper",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=salt-and-pepper"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "loose $haircolour curls on top over a tight fade",
+       [
+        "__characters/creator/hair__=loose $haircolour curls on top over a tight fade"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a $colour cardigan over a white tee",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a $colour cardigan over a white tee"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "calm",
+       [
+        "__characters/creator/expression__=calm"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "wide",
+       [
+        "{portrait|wide}=wide"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 58-year-old man of Indian descent, with light brown skin: a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, wearing a crimson cardigan over a white tee",
+      "age": "58",
+      "gender": "man",
+      "colour": "crimson",
+      "expression": {
+       "value": "calm",
+       "face": "the brows level, the eyelids relaxed, the lips closed and soft, the gaze straight into the lens",
+       "set": "basic",
+       "units": "none, every muscle at rest"
+      }
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A photograph: a wide-angle close-up, the face close to the lens, facing the camera, of a 58-year-old man of Indian descent, with light brown skin: a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, wearing a crimson cardigan over a white tee. Their face shows joy: the cheeks lifted, crow's feet at the corners of the eyes, the mouth corners pulled up and out into a wide smile, the upper teeth showing. Facial muscles at work: cheek raiser, lip corner puller, lips part. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on a 24mm lens close to the face, slight wide-angle distortion, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{19-26}",
+       "25",
+       [
+        "{19-26}=25"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "58",
+       [
+        "{40-58}=57–58"
+       ]
+      ],
+      [
+       "{59-79}",
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Indian descent, with {warm brown|light brown|deep brown} skin",
+       [
+        "__characters/creator/origin__=Indian descent, with {warm brown|light brown|deep brown} skin"
+       ]
+      ],
+      [
+       "{warm brown|light brown|deep brown}",
+       "light brown",
+       [
+        "{warm brown|light brown|deep brown}=light brown"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "salt-and-pepper",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=salt-and-pepper"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "$colour-dyed",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=$colour-dyed"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "salt-and-pepper",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=salt-and-pepper"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "loose $haircolour curls on top over a tight fade",
+       [
+        "__characters/creator/hair__=loose $haircolour curls on top over a tight fade"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a $colour cardigan over a white tee",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a $colour cardigan over a white tee"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "joy",
+       [
+        "__characters/creator/expression__=joy"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "wide",
+       [
+        "{portrait|wide}=wide"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 58-year-old man of Indian descent, with light brown skin: a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, wearing a crimson cardigan over a white tee",
+      "age": "58",
+      "gender": "man",
+      "colour": "crimson",
+      "expression": {
+       "value": "joy",
+       "face": "the cheeks lifted, crow's feet at the corners of the eyes, the mouth corners pulled up and out into a wide smile, the upper teeth showing",
+       "set": "basic",
+       "units": "cheek raiser, lip corner puller, lips part"
+      }
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A photograph: a wide-angle close-up, the face close to the lens, facing the camera, of a 58-year-old man of Indian descent, with light brown skin: a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, wearing a crimson cardigan over a white tee. Their face shows sadness: the inner ends of the brows drawn up and together, the upper eyelids drooping, the mouth corners pulled down, the chin pushed up and wrinkled. Facial muscles at work: inner brow raiser, brow lowerer, lip corner depressor, chin raiser. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on a 24mm lens close to the face, slight wide-angle distortion, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{19-26}",
+       "25",
+       [
+        "{19-26}=25"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "58",
+       [
+        "{40-58}=57–58"
+       ]
+      ],
+      [
+       "{59-79}",
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Indian descent, with {warm brown|light brown|deep brown} skin",
+       [
+        "__characters/creator/origin__=Indian descent, with {warm brown|light brown|deep brown} skin"
+       ]
+      ],
+      [
+       "{warm brown|light brown|deep brown}",
+       "light brown",
+       [
+        "{warm brown|light brown|deep brown}=light brown"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "salt-and-pepper",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=salt-and-pepper"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "$colour-dyed",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=$colour-dyed"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "salt-and-pepper",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=salt-and-pepper"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "loose $haircolour curls on top over a tight fade",
+       [
+        "__characters/creator/hair__=loose $haircolour curls on top over a tight fade"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a $colour cardigan over a white tee",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a $colour cardigan over a white tee"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "sadness",
+       [
+        "__characters/creator/expression__=sadness"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "wide",
+       [
+        "{portrait|wide}=wide"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 58-year-old man of Indian descent, with light brown skin: a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, wearing a crimson cardigan over a white tee",
+      "age": "58",
+      "gender": "man",
+      "colour": "crimson",
+      "expression": {
+       "value": "sadness",
+       "face": "the inner ends of the brows drawn up and together, the upper eyelids drooping, the mouth corners pulled down, the chin pushed up and wrinkled",
+       "set": "basic",
+       "units": "inner brow raiser, brow lowerer, lip corner depressor, chin raiser"
+      }
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A photograph: a wide-angle close-up, the face close to the lens, facing the camera, of a 58-year-old man of Indian descent, with light brown skin: a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, wearing a crimson cardigan over a white tee. Their face shows anger: the brows pulled down and together, a hard glare under raised upper lids, the lids tightened, the lips pressed thin. Facial muscles at work: brow lowerer, upper lid raiser, lid tightener, lip tightener, lip pressor. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on a 24mm lens close to the face, slight wide-angle distortion, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{19-26}",
+       "25",
+       [
+        "{19-26}=25"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "58",
+       [
+        "{40-58}=57–58"
+       ]
+      ],
+      [
+       "{59-79}",
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Indian descent, with {warm brown|light brown|deep brown} skin",
+       [
+        "__characters/creator/origin__=Indian descent, with {warm brown|light brown|deep brown} skin"
+       ]
+      ],
+      [
+       "{warm brown|light brown|deep brown}",
+       "light brown",
+       [
+        "{warm brown|light brown|deep brown}=light brown"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "salt-and-pepper",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=salt-and-pepper"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "$colour-dyed",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=$colour-dyed"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "salt-and-pepper",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=salt-and-pepper"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "loose $haircolour curls on top over a tight fade",
+       [
+        "__characters/creator/hair__=loose $haircolour curls on top over a tight fade"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a $colour cardigan over a white tee",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a $colour cardigan over a white tee"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "anger",
+       [
+        "__characters/creator/expression__=anger"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "wide",
+       [
+        "{portrait|wide}=wide"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 58-year-old man of Indian descent, with light brown skin: a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, wearing a crimson cardigan over a white tee",
+      "age": "58",
+      "gender": "man",
+      "colour": "crimson",
+      "expression": {
+       "value": "anger",
+       "face": "the brows pulled down and together, a hard glare under raised upper lids, the lids tightened, the lips pressed thin",
+       "set": "basic",
+       "units": "brow lowerer, upper lid raiser, lid tightener, lip tightener, lip pressor"
+      }
+     }
+    },
+    {
+     "cell": 4,
+     "text": "A photograph: a wide-angle close-up, the face close to the lens, facing the camera, of a 58-year-old man of Indian descent, with light brown skin: a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, wearing a crimson cardigan over a white tee. Their face shows fear: the brows raised and drawn together, the upper lids raised to show the whites above the irises, the lips stretched sideways, the jaw dropped. Facial muscles at work: inner brow raiser, outer brow raiser, brow lowerer, upper lid raiser, lid tightener, lip stretcher, jaw drop. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on a 24mm lens close to the face, slight wide-angle distortion, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{19-26}",
+       "25",
+       [
+        "{19-26}=25"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "58",
+       [
+        "{40-58}=57–58"
+       ]
+      ],
+      [
+       "{59-79}",
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Indian descent, with {warm brown|light brown|deep brown} skin",
+       [
+        "__characters/creator/origin__=Indian descent, with {warm brown|light brown|deep brown} skin"
+       ]
+      ],
+      [
+       "{warm brown|light brown|deep brown}",
+       "light brown",
+       [
+        "{warm brown|light brown|deep brown}=light brown"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "salt-and-pepper",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=salt-and-pepper"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "$colour-dyed",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=$colour-dyed"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "salt-and-pepper",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=salt-and-pepper"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "loose $haircolour curls on top over a tight fade",
+       [
+        "__characters/creator/hair__=loose $haircolour curls on top over a tight fade"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a $colour cardigan over a white tee",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a $colour cardigan over a white tee"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "fear",
+       [
+        "__characters/creator/expression__=fear"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "wide",
+       [
+        "{portrait|wide}=wide"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 58-year-old man of Indian descent, with light brown skin: a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, wearing a crimson cardigan over a white tee",
+      "age": "58",
+      "gender": "man",
+      "colour": "crimson",
+      "expression": {
+       "value": "fear",
+       "face": "the brows raised and drawn together, the upper lids raised to show the whites above the irises, the lips stretched sideways, the jaw dropped",
+       "set": "basic",
+       "units": "inner brow raiser, outer brow raiser, brow lowerer, upper lid raiser, lid tightener, lip stretcher, jaw drop"
+      }
+     }
+    },
+    {
+     "cell": 5,
+     "text": "A photograph: a wide-angle close-up, the face close to the lens, facing the camera, of a 58-year-old man of Indian descent, with light brown skin: a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, wearing a crimson cardigan over a white tee. Their face shows disgust: the nose wrinkled, the upper lip raised, the cheeks pushed up, the mouth corners pulled down. Facial muscles at work: nose wrinkler, upper lip raiser, lip corner depressor, lower lip depressor. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on a 24mm lens close to the face, slight wide-angle distortion, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{19-26}",
+       "25",
+       [
+        "{19-26}=25"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "58",
+       [
+        "{40-58}=57–58"
+       ]
+      ],
+      [
+       "{59-79}",
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Indian descent, with {warm brown|light brown|deep brown} skin",
+       [
+        "__characters/creator/origin__=Indian descent, with {warm brown|light brown|deep brown} skin"
+       ]
+      ],
+      [
+       "{warm brown|light brown|deep brown}",
+       "light brown",
+       [
+        "{warm brown|light brown|deep brown}=light brown"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "salt-and-pepper",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=salt-and-pepper"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "$colour-dyed",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=$colour-dyed"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "salt-and-pepper",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=salt-and-pepper"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "loose $haircolour curls on top over a tight fade",
+       [
+        "__characters/creator/hair__=loose $haircolour curls on top over a tight fade"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a $colour cardigan over a white tee",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a $colour cardigan over a white tee"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "disgust",
+       [
+        "__characters/creator/expression__=disgust"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "wide",
+       [
+        "{portrait|wide}=wide"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 58-year-old man of Indian descent, with light brown skin: a face wider at the jaw than at the forehead, yellow-green eyes, loose salt-and-pepper curls on top over a tight fade and laugh lines carved deep around the eyes, wearing a crimson cardigan over a white tee",
+      "age": "58",
+      "gender": "man",
+      "colour": "crimson",
+      "expression": {
+       "value": "disgust",
+       "face": "the nose wrinkled, the upper lip raised, the cheeks pushed up, the mouth corners pulled down",
+       "set": "basic",
+       "units": "nose wrinkler, upper lip raiser, lip corner depressor, lower lip depressor"
+      }
+     }
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A photograph: a close-up portrait, the head and shoulders filling the frame, facing the camera, of a 24-year-old woman of Tibetan descent, with weathered tan skin: a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, wearing a denim jacket over a mustard-yellow t-shirt. Their face shows calm: the brows level, the eyelids relaxed, the lips closed and soft, the gaze straight into the lens. Facial muscles at work: none, every muscle at rest. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman",
+       [
+        "{woman|man|nonbinary person}=woman"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young",
+       [
+        "{young|prime|middle-aged|old}=young"
+       ]
+      ],
+      [
+       "{19-26}",
+       "24",
+       [
+        "{19-26}=24"
+       ]
+      ],
+      [
+       "{27-39}",
+       "33",
+       [
+        "{27-39}=33"
+       ]
+      ],
+      [
+       "{40-58}",
+       "56",
+       [
+        "{40-58}=55–56"
+       ]
+      ],
+      [
+       "{59-79}",
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tibetan descent, with {weathered tan|light brown} skin",
+       [
+        "__characters/creator/origin__=Tibetan descent, with {weathered tan|light brown} skin"
+       ]
+      ],
+      [
+       "{weathered tan|light brown}",
+       "weathered tan",
+       [
+        "{weathered tan|light brown}=weathered tan"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a denim jacket over a $colour t-shirt",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a denim jacket over a $colour t-shirt"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "calm",
+       [
+        "__characters/creator/expression__=calm"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "portrait",
+       [
+        "{portrait|wide}=portrait"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, wearing a denim jacket over a mustard-yellow t-shirt",
+      "age": "24",
+      "gender": "woman",
+      "colour": "mustard-yellow",
+      "expression": {
+       "value": "calm",
+       "face": "the brows level, the eyelids relaxed, the lips closed and soft, the gaze straight into the lens",
+       "set": "basic",
+       "units": "none, every muscle at rest"
+      }
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A photograph: a close-up portrait, the head and shoulders filling the frame, facing the camera, of a 24-year-old woman of Tibetan descent, with weathered tan skin: a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, wearing a denim jacket over a mustard-yellow t-shirt. Their face shows joy: the cheeks lifted, crow's feet at the corners of the eyes, the mouth corners pulled up and out into a wide smile, the upper teeth showing. Facial muscles at work: cheek raiser, lip corner puller, lips part. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman",
+       [
+        "{woman|man|nonbinary person}=woman"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young",
+       [
+        "{young|prime|middle-aged|old}=young"
+       ]
+      ],
+      [
+       "{19-26}",
+       "24",
+       [
+        "{19-26}=24"
+       ]
+      ],
+      [
+       "{27-39}",
+       "33",
+       [
+        "{27-39}=33"
+       ]
+      ],
+      [
+       "{40-58}",
+       "56",
+       [
+        "{40-58}=55–56"
+       ]
+      ],
+      [
+       "{59-79}",
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tibetan descent, with {weathered tan|light brown} skin",
+       [
+        "__characters/creator/origin__=Tibetan descent, with {weathered tan|light brown} skin"
+       ]
+      ],
+      [
+       "{weathered tan|light brown}",
+       "weathered tan",
+       [
+        "{weathered tan|light brown}=weathered tan"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a denim jacket over a $colour t-shirt",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a denim jacket over a $colour t-shirt"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "joy",
+       [
+        "__characters/creator/expression__=joy"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "portrait",
+       [
+        "{portrait|wide}=portrait"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, wearing a denim jacket over a mustard-yellow t-shirt",
+      "age": "24",
+      "gender": "woman",
+      "colour": "mustard-yellow",
+      "expression": {
+       "value": "joy",
+       "face": "the cheeks lifted, crow's feet at the corners of the eyes, the mouth corners pulled up and out into a wide smile, the upper teeth showing",
+       "set": "basic",
+       "units": "cheek raiser, lip corner puller, lips part"
+      }
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A photograph: a close-up portrait, the head and shoulders filling the frame, facing the camera, of a 24-year-old woman of Tibetan descent, with weathered tan skin: a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, wearing a denim jacket over a mustard-yellow t-shirt. Their face shows sadness: the inner ends of the brows drawn up and together, the upper eyelids drooping, the mouth corners pulled down, the chin pushed up and wrinkled. Facial muscles at work: inner brow raiser, brow lowerer, lip corner depressor, chin raiser. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman",
+       [
+        "{woman|man|nonbinary person}=woman"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young",
+       [
+        "{young|prime|middle-aged|old}=young"
+       ]
+      ],
+      [
+       "{19-26}",
+       "24",
+       [
+        "{19-26}=24"
+       ]
+      ],
+      [
+       "{27-39}",
+       "33",
+       [
+        "{27-39}=33"
+       ]
+      ],
+      [
+       "{40-58}",
+       "56",
+       [
+        "{40-58}=55–56"
+       ]
+      ],
+      [
+       "{59-79}",
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tibetan descent, with {weathered tan|light brown} skin",
+       [
+        "__characters/creator/origin__=Tibetan descent, with {weathered tan|light brown} skin"
+       ]
+      ],
+      [
+       "{weathered tan|light brown}",
+       "weathered tan",
+       [
+        "{weathered tan|light brown}=weathered tan"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a denim jacket over a $colour t-shirt",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a denim jacket over a $colour t-shirt"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "sadness",
+       [
+        "__characters/creator/expression__=sadness"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "portrait",
+       [
+        "{portrait|wide}=portrait"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, wearing a denim jacket over a mustard-yellow t-shirt",
+      "age": "24",
+      "gender": "woman",
+      "colour": "mustard-yellow",
+      "expression": {
+       "value": "sadness",
+       "face": "the inner ends of the brows drawn up and together, the upper eyelids drooping, the mouth corners pulled down, the chin pushed up and wrinkled",
+       "set": "basic",
+       "units": "inner brow raiser, brow lowerer, lip corner depressor, chin raiser"
+      }
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A photograph: a close-up portrait, the head and shoulders filling the frame, facing the camera, of a 24-year-old woman of Tibetan descent, with weathered tan skin: a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, wearing a denim jacket over a mustard-yellow t-shirt. Their face shows anger: the brows pulled down and together, a hard glare under raised upper lids, the lids tightened, the lips pressed thin. Facial muscles at work: brow lowerer, upper lid raiser, lid tightener, lip tightener, lip pressor. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman",
+       [
+        "{woman|man|nonbinary person}=woman"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young",
+       [
+        "{young|prime|middle-aged|old}=young"
+       ]
+      ],
+      [
+       "{19-26}",
+       "24",
+       [
+        "{19-26}=24"
+       ]
+      ],
+      [
+       "{27-39}",
+       "33",
+       [
+        "{27-39}=33"
+       ]
+      ],
+      [
+       "{40-58}",
+       "56",
+       [
+        "{40-58}=55–56"
+       ]
+      ],
+      [
+       "{59-79}",
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tibetan descent, with {weathered tan|light brown} skin",
+       [
+        "__characters/creator/origin__=Tibetan descent, with {weathered tan|light brown} skin"
+       ]
+      ],
+      [
+       "{weathered tan|light brown}",
+       "weathered tan",
+       [
+        "{weathered tan|light brown}=weathered tan"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a denim jacket over a $colour t-shirt",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a denim jacket over a $colour t-shirt"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "anger",
+       [
+        "__characters/creator/expression__=anger"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "portrait",
+       [
+        "{portrait|wide}=portrait"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, wearing a denim jacket over a mustard-yellow t-shirt",
+      "age": "24",
+      "gender": "woman",
+      "colour": "mustard-yellow",
+      "expression": {
+       "value": "anger",
+       "face": "the brows pulled down and together, a hard glare under raised upper lids, the lids tightened, the lips pressed thin",
+       "set": "basic",
+       "units": "brow lowerer, upper lid raiser, lid tightener, lip tightener, lip pressor"
+      }
+     }
+    },
+    {
+     "cell": 4,
+     "text": "A photograph: a close-up portrait, the head and shoulders filling the frame, facing the camera, of a 24-year-old woman of Tibetan descent, with weathered tan skin: a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, wearing a denim jacket over a mustard-yellow t-shirt. Their face shows fear: the brows raised and drawn together, the upper lids raised to show the whites above the irises, the lips stretched sideways, the jaw dropped. Facial muscles at work: inner brow raiser, outer brow raiser, brow lowerer, upper lid raiser, lid tightener, lip stretcher, jaw drop. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman",
+       [
+        "{woman|man|nonbinary person}=woman"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young",
+       [
+        "{young|prime|middle-aged|old}=young"
+       ]
+      ],
+      [
+       "{19-26}",
+       "24",
+       [
+        "{19-26}=24"
+       ]
+      ],
+      [
+       "{27-39}",
+       "33",
+       [
+        "{27-39}=33"
+       ]
+      ],
+      [
+       "{40-58}",
+       "56",
+       [
+        "{40-58}=55–56"
+       ]
+      ],
+      [
+       "{59-79}",
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tibetan descent, with {weathered tan|light brown} skin",
+       [
+        "__characters/creator/origin__=Tibetan descent, with {weathered tan|light brown} skin"
+       ]
+      ],
+      [
+       "{weathered tan|light brown}",
+       "weathered tan",
+       [
+        "{weathered tan|light brown}=weathered tan"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a denim jacket over a $colour t-shirt",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a denim jacket over a $colour t-shirt"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "fear",
+       [
+        "__characters/creator/expression__=fear"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "portrait",
+       [
+        "{portrait|wide}=portrait"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, wearing a denim jacket over a mustard-yellow t-shirt",
+      "age": "24",
+      "gender": "woman",
+      "colour": "mustard-yellow",
+      "expression": {
+       "value": "fear",
+       "face": "the brows raised and drawn together, the upper lids raised to show the whites above the irises, the lips stretched sideways, the jaw dropped",
+       "set": "basic",
+       "units": "inner brow raiser, outer brow raiser, brow lowerer, upper lid raiser, lid tightener, lip stretcher, jaw drop"
+      }
+     }
+    },
+    {
+     "cell": 5,
+     "text": "A photograph: a close-up portrait, the head and shoulders filling the frame, facing the camera, of a 24-year-old woman of Tibetan descent, with weathered tan skin: a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, wearing a denim jacket over a mustard-yellow t-shirt. Their face shows disgust: the nose wrinkled, the upper lip raised, the cheeks pushed up, the mouth corners pulled down. Facial muscles at work: nose wrinkler, upper lip raiser, lip corner depressor, lower lip depressor. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "woman",
+       [
+        "{woman|man|nonbinary person}=woman"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "young",
+       [
+        "{young|prime|middle-aged|old}=young"
+       ]
+      ],
+      [
+       "{19-26}",
+       "24",
+       [
+        "{19-26}=24"
+       ]
+      ],
+      [
+       "{27-39}",
+       "33",
+       [
+        "{27-39}=33"
+       ]
+      ],
+      [
+       "{40-58}",
+       "56",
+       [
+        "{40-58}=55–56"
+       ]
+      ],
+      [
+       "{59-79}",
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tibetan descent, with {weathered tan|light brown} skin",
+       [
+        "__characters/creator/origin__=Tibetan descent, with {weathered tan|light brown} skin"
+       ]
+      ],
+      [
+       "{weathered tan|light brown}",
+       "weathered tan",
+       [
+        "{weathered tan|light brown}=weathered tan"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "$haircolour ← __characters/creator/haircolour__",
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a denim jacket over a $colour t-shirt",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a denim jacket over a $colour t-shirt"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "disgust",
+       [
+        "__characters/creator/expression__=disgust"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "portrait",
+       [
+        "{portrait|wide}=portrait"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 24-year-old woman of Tibetan descent, with weathered tan skin: a large face with broad, open features, amber eyes, 1920s-style dark ash-brown finger waves pressed close to the head and a tiny heart tattooed on one earlobe, wearing a denim jacket over a mustard-yellow t-shirt",
+      "age": "24",
+      "gender": "woman",
+      "colour": "mustard-yellow",
+      "expression": {
+       "value": "disgust",
+       "face": "the nose wrinkled, the upper lip raised, the cheeks pushed up, the mouth corners pulled down",
+       "set": "basic",
+       "units": "nose wrinkler, upper lip raiser, lip corner depressor, lower lip depressor"
+      }
+     }
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A photograph: a close-up portrait, the head and shoulders filling the frame, facing the camera, of a 50-year-old man of Tuareg descent, with copper-brown skin: wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, wearing a denim jacket over a camel t-shirt. Their face shows calm: the brows level, the eyelids relaxed, the lips closed and soft, the gaze straight into the lens. Facial muscles at work: none, every muscle at rest. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{19-26}",
+       "19",
+       [
+        "{19-26}=19"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "50",
+       [
+        "{40-58}=49–50"
+       ]
+      ],
+      [
+       "{59-79}",
+       "69",
+       [
+        "{59-79}=69–70"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin",
+       [
+        "__characters/creator/origin__=Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       ]
+      ],
+      [
+       "{light brown|copper-brown|dark brown}",
+       "copper-brown",
+       [
+        "{light brown|copper-brown|dark brown}=copper-brown"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "greying",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=greying"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "chin-length $haircolour two-strand twists",
+       [
+        "__characters/creator/hair__=chin-length $haircolour two-strand twists"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a denim jacket over a $colour t-shirt",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a denim jacket over a $colour t-shirt"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "calm",
+       [
+        "__characters/creator/expression__=calm"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "portrait",
+       [
+        "{portrait|wide}=portrait"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 50-year-old man of Tuareg descent, with copper-brown skin: wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, wearing a denim jacket over a camel t-shirt",
+      "age": "50",
+      "gender": "man",
+      "colour": "camel",
+      "expression": {
+       "value": "calm",
+       "face": "the brows level, the eyelids relaxed, the lips closed and soft, the gaze straight into the lens",
+       "set": "basic",
+       "units": "none, every muscle at rest"
+      }
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A photograph: a close-up portrait, the head and shoulders filling the frame, facing the camera, of a 50-year-old man of Tuareg descent, with copper-brown skin: wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, wearing a denim jacket over a camel t-shirt. Their face shows joy: the cheeks lifted, crow's feet at the corners of the eyes, the mouth corners pulled up and out into a wide smile, the upper teeth showing. Facial muscles at work: cheek raiser, lip corner puller, lips part. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{19-26}",
+       "19",
+       [
+        "{19-26}=19"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "50",
+       [
+        "{40-58}=49–50"
+       ]
+      ],
+      [
+       "{59-79}",
+       "69",
+       [
+        "{59-79}=69–70"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin",
+       [
+        "__characters/creator/origin__=Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       ]
+      ],
+      [
+       "{light brown|copper-brown|dark brown}",
+       "copper-brown",
+       [
+        "{light brown|copper-brown|dark brown}=copper-brown"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "greying",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=greying"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "chin-length $haircolour two-strand twists",
+       [
+        "__characters/creator/hair__=chin-length $haircolour two-strand twists"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a denim jacket over a $colour t-shirt",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a denim jacket over a $colour t-shirt"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "joy",
+       [
+        "__characters/creator/expression__=joy"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "portrait",
+       [
+        "{portrait|wide}=portrait"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 50-year-old man of Tuareg descent, with copper-brown skin: wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, wearing a denim jacket over a camel t-shirt",
+      "age": "50",
+      "gender": "man",
+      "colour": "camel",
+      "expression": {
+       "value": "joy",
+       "face": "the cheeks lifted, crow's feet at the corners of the eyes, the mouth corners pulled up and out into a wide smile, the upper teeth showing",
+       "set": "basic",
+       "units": "cheek raiser, lip corner puller, lips part"
+      }
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A photograph: a close-up portrait, the head and shoulders filling the frame, facing the camera, of a 50-year-old man of Tuareg descent, with copper-brown skin: wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, wearing a denim jacket over a camel t-shirt. Their face shows sadness: the inner ends of the brows drawn up and together, the upper eyelids drooping, the mouth corners pulled down, the chin pushed up and wrinkled. Facial muscles at work: inner brow raiser, brow lowerer, lip corner depressor, chin raiser. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{19-26}",
+       "19",
+       [
+        "{19-26}=19"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "50",
+       [
+        "{40-58}=49–50"
+       ]
+      ],
+      [
+       "{59-79}",
+       "69",
+       [
+        "{59-79}=69–70"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin",
+       [
+        "__characters/creator/origin__=Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       ]
+      ],
+      [
+       "{light brown|copper-brown|dark brown}",
+       "copper-brown",
+       [
+        "{light brown|copper-brown|dark brown}=copper-brown"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "greying",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=greying"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "chin-length $haircolour two-strand twists",
+       [
+        "__characters/creator/hair__=chin-length $haircolour two-strand twists"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a denim jacket over a $colour t-shirt",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a denim jacket over a $colour t-shirt"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "sadness",
+       [
+        "__characters/creator/expression__=sadness"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "portrait",
+       [
+        "{portrait|wide}=portrait"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 50-year-old man of Tuareg descent, with copper-brown skin: wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, wearing a denim jacket over a camel t-shirt",
+      "age": "50",
+      "gender": "man",
+      "colour": "camel",
+      "expression": {
+       "value": "sadness",
+       "face": "the inner ends of the brows drawn up and together, the upper eyelids drooping, the mouth corners pulled down, the chin pushed up and wrinkled",
+       "set": "basic",
+       "units": "inner brow raiser, brow lowerer, lip corner depressor, chin raiser"
+      }
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A photograph: a close-up portrait, the head and shoulders filling the frame, facing the camera, of a 50-year-old man of Tuareg descent, with copper-brown skin: wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, wearing a denim jacket over a camel t-shirt. Their face shows anger: the brows pulled down and together, a hard glare under raised upper lids, the lids tightened, the lips pressed thin. Facial muscles at work: brow lowerer, upper lid raiser, lid tightener, lip tightener, lip pressor. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{19-26}",
+       "19",
+       [
+        "{19-26}=19"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "50",
+       [
+        "{40-58}=49–50"
+       ]
+      ],
+      [
+       "{59-79}",
+       "69",
+       [
+        "{59-79}=69–70"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin",
+       [
+        "__characters/creator/origin__=Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       ]
+      ],
+      [
+       "{light brown|copper-brown|dark brown}",
+       "copper-brown",
+       [
+        "{light brown|copper-brown|dark brown}=copper-brown"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "greying",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=greying"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "chin-length $haircolour two-strand twists",
+       [
+        "__characters/creator/hair__=chin-length $haircolour two-strand twists"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a denim jacket over a $colour t-shirt",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a denim jacket over a $colour t-shirt"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "anger",
+       [
+        "__characters/creator/expression__=anger"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "portrait",
+       [
+        "{portrait|wide}=portrait"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 50-year-old man of Tuareg descent, with copper-brown skin: wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, wearing a denim jacket over a camel t-shirt",
+      "age": "50",
+      "gender": "man",
+      "colour": "camel",
+      "expression": {
+       "value": "anger",
+       "face": "the brows pulled down and together, a hard glare under raised upper lids, the lids tightened, the lips pressed thin",
+       "set": "basic",
+       "units": "brow lowerer, upper lid raiser, lid tightener, lip tightener, lip pressor"
+      }
+     }
+    },
+    {
+     "cell": 4,
+     "text": "A photograph: a close-up portrait, the head and shoulders filling the frame, facing the camera, of a 50-year-old man of Tuareg descent, with copper-brown skin: wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, wearing a denim jacket over a camel t-shirt. Their face shows fear: the brows raised and drawn together, the upper lids raised to show the whites above the irises, the lips stretched sideways, the jaw dropped. Facial muscles at work: inner brow raiser, outer brow raiser, brow lowerer, upper lid raiser, lid tightener, lip stretcher, jaw drop. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{19-26}",
+       "19",
+       [
+        "{19-26}=19"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "50",
+       [
+        "{40-58}=49–50"
+       ]
+      ],
+      [
+       "{59-79}",
+       "69",
+       [
+        "{59-79}=69–70"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin",
+       [
+        "__characters/creator/origin__=Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       ]
+      ],
+      [
+       "{light brown|copper-brown|dark brown}",
+       "copper-brown",
+       [
+        "{light brown|copper-brown|dark brown}=copper-brown"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "greying",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=greying"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "chin-length $haircolour two-strand twists",
+       [
+        "__characters/creator/hair__=chin-length $haircolour two-strand twists"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a denim jacket over a $colour t-shirt",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a denim jacket over a $colour t-shirt"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "fear",
+       [
+        "__characters/creator/expression__=fear"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "portrait",
+       [
+        "{portrait|wide}=portrait"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 50-year-old man of Tuareg descent, with copper-brown skin: wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, wearing a denim jacket over a camel t-shirt",
+      "age": "50",
+      "gender": "man",
+      "colour": "camel",
+      "expression": {
+       "value": "fear",
+       "face": "the brows raised and drawn together, the upper lids raised to show the whites above the irises, the lips stretched sideways, the jaw dropped",
+       "set": "basic",
+       "units": "inner brow raiser, outer brow raiser, brow lowerer, upper lid raiser, lid tightener, lip stretcher, jaw drop"
+      }
+     }
+    },
+    {
+     "cell": 5,
+     "text": "A photograph: a close-up portrait, the head and shoulders filling the frame, facing the camera, of a 50-year-old man of Tuareg descent, with copper-brown skin: wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, wearing a denim jacket over a camel t-shirt. Their face shows disgust: the nose wrinkled, the upper lip raised, the cheeks pushed up, the mouth corners pulled down. Facial muscles at work: nose wrinkler, upper lip raiser, lip corner depressor, lower lip depressor. Behind them is a seamless mid-grey studio backdrop, in soft, even light. Shot on an 85mm lens at eye level, true colours, natural skin texture.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "{woman|man|nonbinary person}",
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
+      ],
+      [
+       "{young|prime|middle-aged|old}",
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
+      ],
+      [
+       "{19-26}",
+       "19",
+       [
+        "{19-26}=19"
+       ]
+      ],
+      [
+       "{27-39}",
+       "28",
+       [
+        "{27-39}=28"
+       ]
+      ],
+      [
+       "{40-58}",
+       "50",
+       [
+        "{40-58}=49–50"
+       ]
+      ],
+      [
+       "{59-79}",
+       "69",
+       [
+        "{59-79}=69–70"
+       ]
+      ],
+      [
+       "$origin ← __characters/creator/origin__",
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin",
+       [
+        "__characters/creator/origin__=Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       ]
+      ],
+      [
+       "{light brown|copper-brown|dark brown}",
+       "copper-brown",
+       [
+        "{light brown|copper-brown|dark brown}=copper-brown"
+       ]
+      ],
+      [
+       "$face ← __characters/creator/face__",
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
+      ],
+      [
+       "$eyes ← __characters/creator/eyes__",
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
+      ],
+      [
+       "{silver|white|snow-white|iron-grey|salt-and-pepper}",
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|$colour-dyed}",
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
+      ],
+      [
+       "{__characters/creator/haircolour__|greying|salt-and-pepper}",
+       "greying",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=greying"
+       ]
+      ],
+      [
+       "$hair ← __characters/creator/hair[fit=$fit|all]__",
+       "chin-length $haircolour two-strand twists",
+       [
+        "__characters/creator/hair__=chin-length $haircolour two-strand twists"
+       ]
+      ],
+      [
+       "{__characters/creator/beard__|none}",
+       "none",
+       [
+        "{__characters/creator/beard__|none}=none"
+       ]
+      ],
+      [
+       "$mark ← __characters/creator/mark__",
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
+      ],
+      [
+       "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}",
+       "a denim jacket over a $colour t-shirt",
+       [
+        "{a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}=a denim jacket over a $colour t-shirt"
+       ]
+      ],
+      [
+       "$expression ← __characters/creator/expression[set=basic]__",
+       "disgust",
+       [
+        "__characters/creator/expression__=disgust"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{portrait|wide}",
+       "portrait",
+       [
+        "{portrait|wide}=portrait"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a 50-year-old man of Tuareg descent, with copper-brown skin: wide, flat cheekbones and a gently curved nose, near-black eyes, chin-length greying two-strand twists and a split earlobe, healed in two points, wearing a denim jacket over a camel t-shirt",
+      "age": "50",
+      "gender": "man",
+      "colour": "camel",
+      "expression": {
+       "value": "disgust",
+       "face": "the nose wrinkled, the upper lip raised, the cheeks pushed up, the mouth corners pulled down",
+       "set": "basic",
+       "units": "nose wrinkler, upper lip raiser, lip corner depressor, lower lip depressor"
+      }
+     }
+    }
+   ]
+  }
+ }
+}
