@@ -930,6 +930,19 @@ def test_takes_at_the_line_ask_the_endpoint_for_one_place_at_the_seed(home, fake
     assert api(home, webapi.llm_takes, kind="slot", what="one small object in its paws", template=template)[0] == 502
 
 
+def test_how_many_takes_each_sheet_asks_for_is_a_setting(home, fake_api):
+    """#274: a count per kind in the llm settings, 1 to 12; the sheets ask for it (More too), unless they say n."""
+    assert ok(home, webapi.llm_settings)["takes"] == {"slot": 3, "enhance": 3, "rolled": 3, "new": 3}
+    saved = ok(home, webapi.llm_save, takes={"slot": 5, "enhance": 40, "new": "x"})["takes"]
+    assert saved == {"slot": 5, "enhance": 12, "rolled": 3, "new": 3}  # capped, a bad value its default
+    assert ok(home, webapi.llm_save, entries=20)["takes"]["slot"] == 5  # another setting saved keeps them
+    Home(home).save_config({**Home(home).config(), "llm": {**Home(home).config()["llm"], "source": "api",
+                                                            "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})
+    fake_api.answer = lambda body: json.dumps([f"take {i}" for i in range(9)])
+    body = ok(home, webapi.llm_takes, kind="slot", what="a small object", template="A fox with --a small object--.")
+    assert len(body["takes"]) == 5 and "Write 5 different takes" in fake_api.requests[-1]["messages"][0]["content"]
+
+
 def test_takes_for_a_slot_see_the_pictures_it_names(home, fake_api, tmp_path, monkeypatch):
     """#174: a slot's takes get the Load Image file behind first_frame as Picture 1; without it they ask nothing
     and say what is missing; one from image output come from the Gallery, never here."""

@@ -1,6 +1,6 @@
 // Takes at the line (#173): a 🎲 at the end of a slot's line, of a library still to be written and of a `> enhance`
-// line opens a sheet with three takes for that place, written at the node's seed. More asks for three more, new
-// against those there are; a steering line goes with them. A click selects a take (#276), and Use selected puts it in
+// line opens a sheet with takes for that place (three, or as many as the settings say, #274), written at the node's
+// seed. More asks for as many more, new against those there are; a steering line goes with them. A click selects a take (#276), and Use selected puts it in
 // place of the slot (or the library) as an unsaved edit; Keep the direction writes the steer into the slot's (the
 // library's, the line's) directions; both with Undo. A `> enhance` take is kept for its roll instead: the run that
 // rolls the same prompt uses it. With an API endpoint the server asks it directly, outside ComfyUI's queue. A gallery
@@ -87,7 +87,7 @@ export function openTakes(app, place, near = null) {
     draw();
     try {
       if (picture) {
-        const got = await app.api.galaxyTakes({ id: place.id, what: place.what, steer: steer.value, have: s.takes, n: 3 });
+        const got = await app.api.galaxyTakes({ id: place.id, what: place.what, steer: steer.value, have: s.takes });
         s.takes.push(...got.takes.filter((t) => !s.takes.includes(t)));
         return;
       }
@@ -95,7 +95,7 @@ export function openTakes(app, place, near = null) {
       const frames = /\bimage\s+(first|last)_frame\b/.test(place.what) ? (await app.bridge.frameFiles?.())?.names || {} : {};
       const got = await app.api.takes({ kind: place.kind, what: place.what, directions: place.directions, template: app.text,
         target: app.bridge.getTarget(), params: app.bridge.getParams(), seed: app.bridge.getSeed(), segment: app.bridge.getSegment?.() ?? 0,
-        chain: app.bridge.chain?.() || "", steer: steer.value, have: s.takes, n: 3, frames });
+        chain: app.bridge.chain?.() || "", steer: steer.value, have: s.takes, frames });  // as many as the settings say (#274)
       s.takes.push(...got.takes.filter((t) => !s.takes.includes(t)));
       if (enhance) s.keep = got.keep || null;
     } catch (err) { s.error = err.message; } finally {

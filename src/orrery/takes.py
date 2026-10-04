@@ -16,6 +16,20 @@ from orrery.llm import InvalidProposal, extract_json
 from orrery.slots import as_pictures
 
 REWRITES = "rewrites.json"
+COUNTS = {"slot": 3, "enhance": 3, "rolled": 3, "new": 3}  # how many takes each sheet asks for (#274)
+
+
+def counts(llm: dict) -> dict[str, int]:
+    """The takes a sheet asks for, from the llm settings: a slot's (a gallery picture's too), a `> enhance` line's,
+    entries rolled from a library and new ones the model writes for it; 1 to 12 each."""
+    saved = llm.get("takes") if isinstance(llm.get("takes"), dict) else {}
+    out = {}
+    for kind, default in COUNTS.items():
+        try:
+            out[kind] = min(max(int(saved.get(kind, default)), 1), 12)
+        except (TypeError, ValueError):
+            out[kind] = default
+    return out
 
 KINDS = ("slot", "library", "enhance")  # in the editor; "picture": an export slot of a gallery picture (#175)
 MARK = "[this part]"

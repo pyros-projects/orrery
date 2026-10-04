@@ -65,8 +65,9 @@ function line(text, known, llm, members) {
 
 const SLOT = /--(?=[^\s-])([^\n]*?[^\s-])--/g;
 const LIBRARY = /(?<!\\)__([\w]+(?:\/[\w]+)*)(?:\[[^\[\]\n]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\(([^()]*)\))?/g;
-const ASK = { slot: "Takes for this slot: three, then more, steered, and Insert one", library: "Takes for this library still to be written: "
-  + "entries that could stand here; Insert one, or keep a direction for the list", enhance: "Takes for this rewrite: what it does at this seed, steered" };
+const ASK = { slot: "Takes for this slot: then more, steered; pick one and Use selected puts it in", library: "Takes for this library still to be written: "
+  + "entries that could stand here; Use selected puts one in, or keep a direction for the list",
+  enhance: "Takes for this rewrite: what it does at this seed, steered; Use selected keeps one for this roll" };
 
 // The places on a line the language model writes for (#173): a `>` line's rewrite, its slots, its libraries still
 // to be written; each with what names it (`what`) and a library's own directions (`dirs`).

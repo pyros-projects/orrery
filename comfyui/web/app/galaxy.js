@@ -185,7 +185,7 @@ function detailHTML(app, r) {
 
 // An export's text; a slot still to be written from the picture gets a 🎲 that opens its takes (#175).
 const slotted = (v) => pictureSlots(v).map((p) => (p.slot === undefined ? esc(p.text) : `<code>--${esc(p.slot)}--</code>`
-  + `<button class="llm-key" data-gwrite="${esc(p.slot)}" title="Takes for this slot, written from the picture: three, then more, steered, and Insert one">${icon("dice")}</button>`)).join("");
+  + `<button class="llm-key" data-gwrite="${esc(p.slot)}" title="Takes for this slot, written from the picture: then more, steered; pick one and Use selected writes it in">${icon("dice")}</button>`)).join("");
 
 // What the picture carries beyond its prompt (EXPORT:): a reel reads it as $hero.mood, other systems from the gallery.
 function sheetHTML(r) {

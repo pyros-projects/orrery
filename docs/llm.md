@@ -15,6 +15,9 @@ The gear in the node opens the Settings tab; its section **Language model**:
 
 `orrery.yaml` (`llm:`) also holds:
 - `entries`: how many entries a new library starts with, 12 by default;
+- `takes`: how many takes a 🎲 asks for, each 1 to 12, 3 by default (#274): `slot` (a gallery picture's slot too),
+  `enhance`, `rolled` (entries rolled from a library) and `new` (entries the model writes for it). The gear shows
+  them as *Takes a 🎲 asks for*;
 - `max_tokens`: the longest answer, 16000 by default;
 - `temperature`: 0.3, for lists, slots and rewrites;
 - `writer_temperature`: 0.8, for the Write menu.
@@ -43,7 +46,7 @@ The footer of the Prompt tab names the active model: `LLM qwen3vl_8b…`, or `LL
 | **Write menu: Story between frames** | `@h3 fl2va`, both frames wired | The shot that gets from the first frame to the last. |
 | **Write menu: Prompt from image** | a picture in `first_frame` | A Krea image prompt, or an i2va shot when the template is `@h3`. |
 | **The writers' prompts** | the gear, **Writers** | What each writer is sent, editable, with **Reset to default**. |
-| **Takes at the line** (API, #173) | a 🎲 at the end of a slot's line, of a library still to be written, of a `> enhance` line | Three takes for that place, written at the node's seed with the prompt as it rolls around it. **More takes** asks for three more (new against those there), the steering line goes with them ("darker", "as an anime character"). A click selects a take (a violet border), a click on another moves the selection, and **Use selected** puts it in place of the slot or the library (#276); **Keep the direction** writes your steer into its directions (`--…, darker--`, `__name__(darker)`, `> …, darker`); both are unsaved edits with Undo. A `> enhance` line's takes show what the rewrite does at this seed; **Use selected** keeps the one you pick for exactly this roll (the instruction and the prompt as it rolled), and a run that rolls it uses it instead of asking the model; another roll is rewritten as before. A `>` over several passages of a screenplay keeps none, since the run rewrites each apart. With a text encoder the takes come with #171. |
+| **Takes at the line** (API, #173) | a 🎲 at the end of a slot's line, of a library still to be written, of a `> enhance` line | Three takes for that place (or as many as the gear's *Takes a 🎲 asks for* says, #274), written at the node's seed with the prompt as it rolls around it. **More takes** asks for as many more (new against those there), the steering line goes with them ("darker", "as an anime character"). A click selects a take (a violet border), a click on another moves the selection, and **Use selected** puts it in place of the slot or the library (#276); **Keep the direction** writes your steer into its directions (`--…, darker--`, `__name__(darker)`, `> …, darker`); both are unsaved edits with Undo. A `> enhance` line's takes show what the rewrite does at this seed; **Use selected** keeps the one you pick for exactly this roll (the instruction and the prompt as it rolled), and a run that rolls it uses it instead of asking the model; another roll is rewritten as before. A `>` over several passages of a screenplay keeps none, since the run rewrites each apart. With a text encoder the takes come with #171. |
 | **Write now** (API only, #168) | a template with libraries still to write | A button in the footer writes them all at once, one request each, before any run. They wait in To review. |
 | **`orrery lib`** (CLI) | `gen`, `more`, `edit`, `undo` | Libraries in plain language: `orrery lib edit animal 'make a feline list from the cats'`. Nothing is kept until you confirm it. |
 

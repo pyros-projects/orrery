@@ -1077,8 +1077,10 @@ def llm_settings(home: Home, args: dict) -> dict:
     value, where = endpoint.key(home, api)
     active = ({"kind": "api", "name": api["model"]} if api["source"] == "api" and api["model"]
               else {"kind": "comfy", "name": Path(cfg["file"]).stem} if cfg["file"] else None)
+    from orrery.takes import counts
+
     return {"file": cfg["file"], "clip_type": cfg["clip_type"], "entries": int(cfg["entries"]),
-            "max_tokens": int(cfg["max_tokens"]), "files": text_encoders(), "source": api["source"],
+            "max_tokens": int(cfg["max_tokens"]), "takes": counts(cfg), "files": text_encoders(), "source": api["source"],
             "api": {"base_url": api["base_url"], "model": api["model"], "key_env": api["key_env"],
                     "key": endpoint.hint(value) if value else "", "key_from": where},
             "active": active}
@@ -1106,9 +1108,13 @@ def llm_save(home: Home, args: dict) -> dict:
             raise ApiError(400, checked["error"])
     if typed:
         endpoint.save_key(home, api.get("key_env") or endpoint.DEFAULT_KEY_ENV, typed)
+    from orrery.takes import counts
+
     llm = {**(config.get("llm") or {}), "file": file, "entries": min(max(_int(args, "entries", 12), 1), 200),
            "max_tokens": min(max(_int(args, "max_tokens", 16000), 64), 131072), "source": source,
            **({"api": api} if api else {})}
+    if isinstance(args.get("takes"), dict):  # how many takes each sheet asks for (#274)
+        llm["takes"] = counts({"takes": {**counts(llm), **args["takes"]}})
     if args.get("clip_type"):
         llm["clip_type"] = str(args["clip_type"])
     home.save_config({**config, "llm": llm})
@@ -1205,9 +1211,9 @@ def llm_takes(home: Home, args: dict) -> dict:
     named, shown = _slot_pictures(home, pictures_in([what]), result, inputs, said) if kind == "slot" else ([], [])
     if said:  # a run writes on without it; takes without the picture would only repeat the directions
         raise ApiError(400, " ".join(i["message"].removesuffix(" it is written without it.") + " its takes need it." for i in said))
-    n = min(max(_int(args, "n", 3), 1), 6)
+    n = min(max(_int(args, "n", takes.counts(llm_config(home))[{"slot": "slot", "enhance": "enhance"}.get(kind, "new")]), 1), 12)
     prompt = takes.request(kind, what, context, n, str(args.get("steer") or ""),
-                           [str(h) for h in args.get("have") or [] if str(h).strip()][:24],
+                           [str(h) for h in args.get("have") or [] if str(h).strip()][:60],
                            " ".join(str(args.get("directions") or "").split()), len(frames) if frames is not None else 0, named)
     try:
         out = takes.parse(api.complete(prompt, images=_images(frames, shown, api)), n)
@@ -1249,8 +1255,8 @@ def galaxy_takes(home: Home, args: dict) -> dict:
     api = endpoint.backend(home, float(llm_config(home)["writer_temperature"]))
     if api is None:
         raise ApiError(400, "Writing from a picture asks an API endpoint for now (the gear: Language model).")
-    n = min(max(_int(args, "n", 3), 1), 6)
-    prompt = takes.for_picture(row, what, n, str(args.get("steer") or ""), [str(h) for h in args.get("have") or [] if str(h).strip()][:24])
+    n = min(max(_int(args, "n", takes.counts(llm_config(home))["slot"]), 1), 12)
+    prompt = takes.for_picture(row, what, n, str(args.get("steer") or ""), [str(h) for h in args.get("have") or [] if str(h).strip()][:60])
     try:
         out = takes.parse(api.complete(prompt, images=[picture]), n)
     except RuntimeError as err:
