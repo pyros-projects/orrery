@@ -1,7 +1,7 @@
 """Orrery Write: the language model writes for the editor, one idea per run (see orrery.writers).
 
-The app queues it on its own, with only what the model needs (the frames and a text encoder wired
-into the Orrery Prompt), so the run ends when the model has written and no video model is loaded.
+The app queues it on its own, with only what the model needs (the frames wired into the Orrery
+Prompt; the text encoder is the one in orrery's settings), so the run ends when the model has written and no video model is loaded.
 The idea comes back as the node's UI output: the text, the template with it in place, or what is
 wrong with it. With an API endpoint the app asks the server instead (`write_idea`, #167), and only
 frames it cannot name as files still take this run.
@@ -68,13 +68,13 @@ class OrreryWrite:
                 # idea n samples the model at seed + n; the picks it reads still roll at the node's seed
                 "optional": {"idea": ("INT", {"default": 0, "min": 0, "max": 0xFFFF}),
                              "home": ("STRING", {"default": ""}), "params": ("STRING", {"default": ""}),
-                             "clip": ("CLIP",), "first_frame": ("IMAGE",), "last_frame": ("IMAGE",)}}
+                             "first_frame": ("IMAGE",), "last_frame": ("IMAGE",)}}
 
     @classmethod
     def IS_CHANGED(cls, **_):
         return float("NaN")  # every request is a new idea
 
-    def write(self, task, template, seed, idea=0, home="", params="", clip=None, first_frame=None, last_frame=None):
+    def write(self, task, template, seed, idea=0, home="", params="", first_frame=None, last_frame=None):
         from orrery import (
             comfy,  # the node pack's helpers; imported here, as comfy imports this module
         )
@@ -82,7 +82,7 @@ class OrreryWrite:
         h = resolve_home(home or None)
 
         def backend():
-            return comfy.llm_for(h, clip, seed=(seed + idea) % 2**32, temperature=float(llm_config(h)["writer_temperature"]))
+            return comfy.llm_for(h, seed=(seed + idea) % 2**32, temperature=float(llm_config(h)["writer_temperature"]))
 
         result = write_idea(h, task, template, seed, idea, params, backend, lambda: _frames(task, first_frame, last_frame))
         return {"ui": {"orrery_write": [json.dumps(result, ensure_ascii=False)]}}
@@ -106,7 +106,7 @@ def write_idea(h, task: str, template: str, seed: int, idea: int, params, backen
         model = backend()
         if model is None:
             raise writers.WriterError("The writers need a language model: pick one in orrery's settings (the gear "
-                                      "in the node), or wire a text encoder into the Orrery Prompt's clip.")
+                                      "in the node).")
         answer = model.complete(prompt, images=images)
         text, problem = writers.check(task, template, answer)
         result = {"task": task, "seed": seed, "idea": idea, "text": text, "problem": problem,
@@ -143,14 +143,14 @@ class OrreryAsk:
                              "params": ("STRING", {"default": ""}), "segment": ("INT", {"default": 0, "min": 0, "max": 99999}),
                              "sweep": ("STRING", {"default": ""}), "chain": ("STRING", {"default": ""}),
                              "graph": ("STRING", {"default": ""}), "node": ("STRING", {"default": ""}),
-                             "clip": ("CLIP",), "first_frame": ("IMAGE",), "last_frame": ("IMAGE",)}}
+                             "first_frame": ("IMAGE",), "last_frame": ("IMAGE",)}}
 
     @classmethod
     def IS_CHANGED(cls, **_):
         return float("NaN")  # every task is asked anew
 
     def ask(self, task, what, template, seed, target="text", args="", preset="", home="", params="", segment=0,
-            sweep="", chain="", graph="", node="", clip=None, first_frame=None, last_frame=None):
+            sweep="", chain="", graph="", node="", first_frame=None, last_frame=None):
         from orrery import comfy, webapi
 
         h = resolve_home(home or None)
@@ -158,7 +158,7 @@ class OrreryAsk:
         try:
             if task == "takes":  # a sheet's take (#178): sampled anew for each take it already has
                 given = json.loads(args or "{}")
-                model = comfy.llm_for(h, clip, seed=(seed + len(given.get("have") or [])) % 2**32,
+                model = comfy.llm_for(h, seed=(seed + len(given.get("have") or [])) % 2**32,
                                       temperature=float(llm_config(h)["writer_temperature"]))
                 if model is None:
                     raise ValueError("Takes need a language model: pick one in orrery's settings (the gear in the node).")
@@ -171,7 +171,7 @@ class OrreryAsk:
                 packed, wired, keep, standing = comfy.wiring(prompt, node) if prompt else (False, None, False, frozenset())
                 chain = chain or comfy.DEFAULT_CHAIN
                 result = comfy.run_prompt(template, seed, target, home, preset or comfy.NO_PRESET, None, params, segment,
-                                          clip, comfy._previous(chain, segment), packed, wired, chain, keep, sweep,
+                                          comfy._previous(chain, segment), packed, wired, chain, keep, sweep,
                                           comfy.continued(prompt, node), (comfy._size(first_frame), comfy._size(last_frame)),
                                           comfy.reads_picks(prompt, node, "OrreryRefMods"), standing, frames,
                                           ask={"task": task, "what": what})

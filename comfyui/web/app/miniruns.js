@@ -3,10 +3,9 @@
 // it, one task each (Orrery Ask): Roll asks the server for the run's tasks and queues them ahead of it, and the run
 // takes their answers. Write now (#176) and the takes at the line (#178) queue theirs at the queue's front.
 
-// Whether the language model is a text encoder in ComfyUI: chosen in the gear, or wired into the node's clip (an
-// API endpoint wins over both).
+// Whether the language model is a text encoder in ComfyUI, as chosen in the gear (#282: nothing wired overrides it).
 export function llmLocal(app) {
-  return !app.llmApi() && (app.data.llm?.active?.kind === "comfy" || !!app.bridge.wired?.("clip"));
+  return app.data.llm?.active?.kind === "comfy";
 }
 
 // Before each run Generate queues: a mini-run for each of its tasks, in the server's order (libraries, the rewrites,

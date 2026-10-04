@@ -71,7 +71,7 @@ async function writeOne(app, task, idea, template) {
 
 // Why a writer cannot run on this node now, or "" when it can.
 export function writerBlock(app, task) {
-  if (!app.llmActive() && !app.bridge.wired("clip")) return "Needs a language model: pick one in the settings, or wire a text encoder into clip";
+  if (!app.llmActive()) return "Needs a language model: pick one in the settings";
   const h3 = stats(app.text).h3, reel = h3?.reel, frames = app.bridge.frames();
   if (task === "continue") return !reel ? "Needs a reel: a screenplay with SCENE lines" : reel.clips === Infinity ? "The reel repeats a scene forever: there is no next scene" : "";
   if (reel) return "Writes one shot, so not for a reel";

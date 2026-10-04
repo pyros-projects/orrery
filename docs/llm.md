@@ -10,8 +10,8 @@ The gear in the node opens the Settings tab; its section **Language model**:
 
 | Choice | What it is | Where it runs |
 |---|---|---|
-| **A text encoder in ComfyUI** | A text encoder that is a whole language model: Krea 2's `qwen3vl_4b`, or a Qwen3-VL 8B build. MiniMax H3's encoder is cut short and cannot write. A text encoder wired into the node's `clip` input wins over the choice. | In ComfyUI's queue, on the GPU. It loads when the node runs and answers **once per run**. ComfyUI moves it out when the video model needs the room. |
-| **An API endpoint** (#165) | OpenAI, or a server that speaks its protocol (llama.cpp, LM Studio, OpenRouter): the endpoint, a key, a model. **Check** lists the models and asks for one answer. **Use this endpoint** checks it first and uses it. The key goes into the home folder's `.env`, never into `orrery.yaml`. It wins over a wired `clip`. | Beside ComfyUI: no VRAM, no queue. It can be asked more than once per run, and in parallel. |
+| **A text encoder in ComfyUI** | A text encoder that is a whole language model: Krea 2's `qwen3vl_4b`, or a Qwen3-VL 8B build. MiniMax H3's encoder is cut short and cannot write. | In ComfyUI's queue, on the GPU. It loads when the node runs and answers **once per run**. ComfyUI moves it out when the video model needs the room. |
+| **An API endpoint** (#165) | OpenAI, or a server that speaks its protocol (llama.cpp, LM Studio, OpenRouter): the endpoint, a key, a model. **Check** lists the models and asks for one answer. **Use this endpoint** checks it first and uses it. The key goes into the home folder's `.env`, never into `orrery.yaml`. | Beside ComfyUI: no VRAM, no queue. It can be asked more than once per run, and in parallel. |
 
 `orrery.yaml` (`llm:`) also holds:
 - `entries`: how many entries a new library starts with, 12 by default;

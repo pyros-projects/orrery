@@ -103,6 +103,8 @@ checks) are left out.
 
 ### Changed
 
+- The language model is the one chosen in the gear: the Orrery Prompt (and Orrery Write) have no `clip` input any
+  more, and a workflow that wired one loses the link when it loads (#282).
 - The settings are a tab of their own, behind the gear: their sections on the left (Home, Language model, Writers,
   Editor, Clips, Log), the one chosen on the right. A setting is saved the moment it changes, no Save at the end of a
   long page; the home folder, an API endpoint and a writer's text keep buttons of their own, and a setting changed on

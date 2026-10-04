@@ -213,17 +213,14 @@ def dial_values(params: str) -> dict[str, str]:
     return {str(k).lstrip("$"): str(v).strip() for k, v in values.items() if str(v).strip()} if isinstance(values, dict) else {}
 
 
-def llm_for(home: Home, clip=None, seed: int = 0, temperature: float | None = None) -> Backend | None:
-    """The active language model: an API endpoint chosen in orrery's settings (it wins over a wired text
-    encoder, #165), else a text encoder on the node's clip input, else the one chosen in the settings, else
-    none. `temperature` overrides the configured one (the writers' own)."""
+def llm_for(home: Home, seed: int = 0, temperature: float | None = None) -> Backend | None:
+    """The language model chosen in orrery's settings: an API endpoint (#165) or a text encoder there, else none;
+    nothing wired overrides it (#282). `temperature` overrides the configured one (the writers' own)."""
     cfg = llm_config(home)
     options = {"temperature": float(cfg["temperature"] if temperature is None else temperature),
                "max_length": int(cfg["max_tokens"]), "seed": seed}
     if (api := endpoint.backend(home, options["temperature"])) is not None:
         return api
-    if clip is not None:
-        return ComfyBackend(clip=clip, **options)
     if cfg["file"] and can_write(cfg["file"]):
         return ComfyBackend(file=cfg["file"], clip_type=cfg["clip_type"], **options)
     return None
@@ -413,7 +410,7 @@ def _ask_slot(h, directions: str, todo: list[str], result, target: str, packed: 
 
 def run_prompt(template: str, seed: int, target: str, home: str = "",
                preset: str = NO_PRESET, linked: str | None = None,
-               params: str = "", segment: int = 0, clip=None,
+               params: str = "", segment: int = 0,
                frames=None, packed: bool = False,
                wired: int | None = None, chain: str = DEFAULT_CHAIN,
                keep: bool = False, sweep: str = "",
@@ -447,10 +444,10 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     # One request per run (ComfyUI cannot safely generate twice): libraries still missing and the
     # slots go together, the slots then seeing the template; otherwise the slots see the compiled prompt.
     written, missing = slots(source), _missing_libraries(h, source)
-    backend = llm_for(h, clip, seed=seed) if written or missing else None
+    backend = llm_for(h, seed=seed) if written or missing else None
     if written and backend is None:
         raise ValueError("--…-- slots are written by a language model: pick one in orrery's settings (the gear in "
-                         "the node) or wire a text encoder into its clip input")
+                         "the node)")
     texts: dict[str, str] = {}
     notes: list[str] = []
     missed: dict[str, str] = {}  # marker → directions of the slots the combined answer left out
@@ -502,7 +499,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         if enhanced and target != "text":
             result.text = render_scene(result.scene, target, [])
     if ask and ask.get("task") == "rewrites":
-        return _ask_rewrites(h, passages, result, target, packed, backend or llm_for(h, clip, seed=seed))
+        return _ask_rewrites(h, passages, result, target, packed, backend or llm_for(h, seed=seed))
     todo = slots(result.text)
     todo += [d for d in export_slots(getattr(result, "exports", {})) if d not in todo]  # EXPORT: lines write too
     later = [d for d in todo if names_output(d)]  # from the picture the run makes: once it exists (#174, #175)
@@ -524,7 +521,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         lint.append({"severity": "info", "message": "The > enhance instructions run on the next run; this one "
                                                     "writes the missing libraries."})
     elif passages and backend is None:
-        backend = llm_for(h, clip, seed=seed)
+        backend = llm_for(h, seed=seed)
         if backend is None:
             lint.append({"severity": "warn", "message": "> enhance needs a language model: pick one in orrery's "
                                                         "settings (the gear in the node); the prompt stays as written."})
@@ -794,8 +791,6 @@ class OrreryPrompt:
                 "home": ("STRING", {"default": ""}),
                 "params": ("STRING", {"default": "", "tooltip": "The dials: JSON {binding: expression}, "
                                                                 "set in the Prompt tab."}),
-                "clip": ("CLIP", {"tooltip": "Optional: a text encoder that can write (Krea 2's Qwen3-VL) "
-                                             "as the language model, in place of the one in orrery's settings."}),
                 "segment": ("INT", {"default": 0, "min": 0, "max": 99999, "control_after_generate": True,
                                     "tooltip": "The reel's clip to write, counted from 0 here (0 is clip 1). With "
                                                "increment, every queued run plays the next clip, which Orrery "
@@ -836,16 +831,16 @@ class OrreryPrompt:
         chosen = load_preset(h, preset) if preset and preset != NO_PRESET else template
         return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{segment}:{chain}:{take}:{sweep}:{state_token(h)}"
 
-    def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0, clip=None,
+    def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0,
             sweep="", chain="", take=0, unique_id=None, extra_pnginfo=None, prompt=None,
-            first_frame=None, last_frame=None, video=None, model=None):
+            first_frame=None, last_frame=None, video=None, model=None, clip=None):  # clip: an old workflow's, unused (#282)
         preview.forward_core_previews()  # ComfyUI's own preview reaches every tab, not just the one that queued
         chain = chain or DEFAULT_CHAIN  # the app names it after the reel; old workflows and the CLI keep h3_context
         stills = _previous(chain, segment)
         packed, wired, keep, standing = wiring(prompt, unique_id)
         try:
             outputs = run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
-                                 params, segment, clip, stills, packed, wired, chain, keep,
+                                 params, segment, stills, packed, wired, chain, keep,
                                  sweep, continued(prompt, unique_id), (_size(first_frame), _size(last_frame)),
                                  reads_picks(prompt, unique_id, "OrreryRefMods"), standing,
                                  {"first_frame": first_frame, "last_frame": last_frame})

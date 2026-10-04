@@ -1,4 +1,5 @@
 import importlib.util
+import inspect
 import json
 import sys
 import types
@@ -375,8 +376,13 @@ def test_without_an_llm_a_missing_library_still_names_the_fix(home, monkeypatch)
         run_prompt("a model in __runway_shoes__", 1, "text", str(home))
 
 
-def test_the_node_takes_an_optional_clip_as_its_llm():
-    assert OrreryPrompt.INPUT_TYPES()["optional"]["clip"][0] == "CLIP"
+def test_the_language_model_is_the_one_in_the_settings_never_a_wired_clip():
+    """#282: no clip input on the nodes that write; an old workflow's wired clip reaches run() and is ignored."""
+    from orrery.comfy_write import OrreryAsk, OrreryWrite
+
+    for node in (OrreryPrompt, OrreryWrite, OrreryAsk):
+        assert "clip" not in {**node.INPUT_TYPES()["required"], **node.INPUT_TYPES().get("optional", {})}
+    assert "clip" in inspect.signature(OrreryPrompt.run).parameters
 
 
 def test_the_node_leaves_unloading_to_comfyui(home, monkeypatch):

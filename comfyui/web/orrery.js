@@ -187,11 +187,11 @@ function mount(node) {
     },
     // The Write menu: an idea in a run of its own (Orrery Write); idea n samples the model at seed + n.
     write: (task, idea, template) => bridge.mini("OrreryWrite", { task, template, idea },
-      { wire: ["seed", "home", "params", "clip", "first_frame", "last_frame"] }),
+      { wire: ["seed", "home", "params", "first_frame", "last_frame"] }),
     // One task of the language model in a run of its own (Orrery Ask, #171): with a text encoder, a library, a run's
     // rewrites, a slot, a take at the line. It reads the node's values and wiring as the run that renders does.
     ask: (task, what = "", args = "", options = {}) => bridge.mini("OrreryAsk", { task, what, args }, { ...options, graph: true,
-      wire: ["template", "seed", "target", "preset", "home", "params", "segment", "sweep", "chain", "clip", "first_frame", "last_frame"] }),
+      wire: ["template", "seed", "target", "preset", "home", "params", "segment", "sweep", "chain", "first_frame", "last_frame"] }),
     // Before each run Generate queues: the app's mini-runs for it (#171), set by the app.
     beforeRun: null,
     getSweep: () => find("sweep")?.value || "",
@@ -270,6 +270,9 @@ function mount(node) {
     // a workflow saved before #199 brings the latent_path input back with it: the node has none now, the app names the folder
     const stale = node.inputs?.findIndex((i) => i.name === "latent_path") ?? -1;
     if (stale >= 0) node.removeInput(stale);
+    // and the clip input before #282: the language model is the one in orrery's settings
+    const clip = node.inputs?.findIndex((i) => i.name === "clip") ?? -1;
+    if (clip >= 0) node.removeInput(clip);
     // and the lora_stack output before #208: the LoRAs go on the model now; the outputs after it move up with their links
     const stack = node.outputs?.findIndex((o) => o.name === "lora_stack") ?? -1;
     if (stack >= 0) node.removeOutput(stack);
