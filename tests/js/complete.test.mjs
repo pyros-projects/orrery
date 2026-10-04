@@ -345,3 +345,15 @@ test("after as image and from image: the slots, each saying what has it already"
   const shot = "@h3 references\nCAST\n@HERO (image 2): a heron\nSHOT 5s: from image ";
   assert.equal(suggest(shot, shot.length, DATA).items[1].detail, "HERO's picture");
 });
+
+test("the knobs' long forms complete: < offers their kinds, then each kind its names (#227)", () => {
+  assert.deepEqual(names("@h3 ref2va\nSET: <"), ["<lora:", "<refmod:", "<image:", "<cast:", "<Image "]);
+  assert.deepEqual(names("@h3 ref2va\nSET: <re"), ["<refmod:"]);
+  assert.deepEqual(names("@h3 ref2va\nSET: <Im"), ["<image:", "<Image "]);
+  assert.deepEqual(names("@h3 ref2va\nSET: <refmod:sal"), ["<refmod:salon_old/abc:1>", "<refmod:orrery_abc_salon:1>"]);
+  assert.deepEqual(names("@h3 ref2va\nSET: <lora:mot").slice(0, 1), ["<lora:Motion_Repair:1.00>"]);
+  assert.deepEqual(names("@h3 ref2va\nCAST\n@JINX (image 1): a woman\n\nSET: <cast:"), ["<cast:JINX:1>"]);
+  assert.equal(names("@h3 ref2va\nSET: <image:").length, 9);
+  assert.deepEqual(names("a cat <"), ["<lora:"]);  // a text prompt: LoRAs only
+  assert.ok(!names("@h3 ref2va\nSHOT 5s: static\na cat with fur").some((n) => n.startsWith("<")));  // no <, no knobs
+});

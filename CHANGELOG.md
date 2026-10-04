@@ -11,7 +11,8 @@ checks) are left out.
 
 - One way to turn the model's knobs: LoRAs, RefMods, pictures and members take (strength, start, end), in `SET:` or
   their own long form (`<lora:…>`, `<refmod:…>`, `<image:N:…>`, `<cast:NAME:…>`); a LoRA comes on at its start and
-  goes off at its end, and every field sweeps with `|` or a range (#227).
+  goes off at its end, every field sweeps with `|` or a range, and `<` completes the long forms: `<refmod:` lists
+  your RefMods, `<lora:` your LoRAs, `<cast:` the members (#227).
 - The Orrery Prompt puts its `LORA:` lines on the model that passes through it, a clip's own and the head's, a
   sweep's run included: no LoRA stack node needed. Wired, `lora_stack` leaves them to its loader (#208).
 - A reference needs no CAST: `<Image N>` in the text, as H3's own prompts write it, hands the picture to H3 as
