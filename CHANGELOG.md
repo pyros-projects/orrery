@@ -24,19 +24,13 @@ checks) are left out.
   their own long form (`<lora:…>`, `<refmod:…>`, `<image:N:…>`, `<cast:NAME:…>`); a LoRA comes on at its start and
   goes off at its end, every field sweeps with `|` or a range, and `<` completes the long forms: `<refmod:` lists
   your RefMods, `<lora:` your LoRAs, `<cast:` the members (#227).
-- The Orrery Prompt puts its `LORA:` lines on the model that passes through it, a clip's own and the head's, a
-  sweep's run included: no LoRA stack node needed. Wired, `lora_stack` leaves them to its loader (#208).
 - A reference needs no CAST: `<Image N>` in the text, as H3's own prompts write it, hands the picture to H3 as
   `[image N]` does; `SET: image_N(…)` dials it, and `SET:` with a RefMod's name brings that RefMod in, with
   strength, start and end. Tutorial 19 shows it (#224).
-  sweep's run included: no LoRA node needed (#208).
 - A clip's takes go at once: under their label, **the others** keeps only the one in the film, **all** deletes that
   one too and the film ends before the clip; each asks first (#234).
 - The Orrery Prompt puts its `LORA:` lines on the model that passes through it, a clip's own and the head's, a
   sweep's run included: no LoRA node needed (#208).
-- A reference needs no CAST: `<Image N>` in the text, as H3's own prompts write it, hands the picture to H3 as
-  `[image N]` does; `SET: image_N(…)` dials it, and `SET:` with a RefMod's name brings that RefMod in, with
-  strength, start and end. Tutorial 19 shows it (#224).
 - The language model can be an API endpoint (OpenAI, or a server that speaks its protocol), set in the gear
   with a key kept in the home's `.env`: a run's libraries, slots and `> enhance`, the Write menu and
   `orrery lib` go through it, beside ComfyUI (no VRAM, no queue). The Write menu answers while a render
