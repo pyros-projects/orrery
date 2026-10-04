@@ -115,13 +115,15 @@ export function highlight(src, known, { llm = false, chunks = null, segment = nu
   const said = (i) => {  // a line's hint drawn after it: its class and what it says
     const h = hints?.get(i);
     if (!h || h.hover) return null;
-    // with a language model set, each library's roll opens that library's takes (#273)
+    const pics = (h.thumbs || []).map((u) => `<img class="hint-pic" src="${esc(u)}" alt="">`).join("");
+    // with a language model set, each library's roll opens that library's takes (#273): a span of their own beside
+    // the faded text, since its opacity would keep them under the textarea
     const rolls = llm && h.rolls?.length ? `→ ${h.rolls.map(([, v]) => v).join(" · ")}` : "";
-    const text = rolls && h.text.endsWith(rolls)
-      ? `${esc(h.text.slice(0, -rolls.length))}→ ${h.rolls.map(([k, v]) => `<span class="lroll" role="button" data-lroll="${k}" data-line="${i}" title="${esc(ASK.entries)}">${esc(v)}</span>`).join(" · ")}`
-      : esc(h.text);
-    return { cls: `${h.replaced ? " replaced" : ""}${h.kind ? ` ${h.kind}` : ""}`,
-      inner: `<span>${(h.thumbs || []).map((u) => `<img class="hint-pic" src="${esc(u)}" alt="">`).join("")}${text}</span>` };
+    const head = rolls && h.text.endsWith(rolls) ? h.text.slice(0, -rolls.length).trimEnd() : null;
+    const inner = head === null ? `<span>${pics}${esc(h.text)}</span>`
+      : `${head || pics ? `<span>${pics}${esc(head)}</span>` : ""}<span class="lrolls">→ ${h.rolls.map(([k, v]) =>
+        `<span class="lroll" role="button" data-lroll="${k}" data-line="${i}" title="${esc(ASK.entries)}">${esc(v)}</span>`).join(" · ")}</span>`;
+    return { cls: `${h.replaced ? " replaced" : ""}${h.kind ? ` ${h.kind}` : ""}`, inner };
   };
   const hint = (i) => (said(i) ? `<span class="hint${said(i).cls}">${said(i).inner}</span>` : "");
   const words = (l, i) => (hints?.get(i)?.hover ? onHover(line(l, known, llm, members), hints.get(i)) : line(l, known, llm, members));

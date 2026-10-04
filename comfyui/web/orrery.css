@@ -264,7 +264,9 @@
 .orrery-app .editor .hint > span.llm-keys { display: inline-flex; gap: 3px; margin-left: 1ch; opacity: 1; font-style: normal; color: var(--violet);
   pointer-events: auto; position: relative; z-index: 2; vertical-align: top; }
 .orrery-app .editor .hint.with-keys > span:not(.llm-keys) { margin-left: 1ch; }
-.orrery-app .editor .hint .lroll { pointer-events: auto; position: relative; z-index: 2; cursor: pointer; }
+.orrery-app .editor .hint > span.lrolls { opacity: 1; color: color-mix(in srgb, var(--muted) 55%, transparent); pointer-events: auto; position: relative; z-index: 2; }
+.orrery-app .editor .hint > span + span.lrolls { margin-left: 1ch; }
+.orrery-app .editor .hint .lroll { cursor: pointer; }
 .orrery-app .editor .hint .lroll:hover { color: var(--violet); text-decoration: underline dotted; }
 .orrery-app .llm-key { display: inline-grid; place-items: center; width: 17px; height: 15px; border: 1px solid color-mix(in srgb, currentColor 40%, transparent);
   border-radius: 4px; cursor: pointer; background: color-mix(in srgb, currentColor 10%, transparent); box-shadow: 0 1px 0 rgba(0,0,0,.5); }
