@@ -436,6 +436,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
             length = h3_length(result.scene.duration)
         if result.chunks:
             data["segment"], data["chunks"], data["segments"] = result.segment, result.chunks, result.segments
+            data["chunk"] = result.chunk  # the scene this clip plays, which its take keeps (#240)
             data["continues"] = result.continues
             if result.test:
                 data["test"] = True
