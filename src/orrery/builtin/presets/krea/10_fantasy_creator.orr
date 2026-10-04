@@ -23,7 +23,7 @@ $presence = __characters/creator/presence__
 $backdrop = {studio:3|world}
 # A people takes the parts its body has: a human-like one face, eyes, hair and a mark; beastfolk their eyes; spirits and constructs only their own look.
 $folk = {IF $gender is none: $age $people|$age $people $gender}
-$body = {IF $people.like is human: $people.look, $build, $face, $eyes, $hair{IF $beard is not none: , $beard|} and $mark|{IF $people.like is beast: $people.look, $eyes|$people.look}}
+$body = {IF $people.like is human: $people.look, $build, $face, $eyes, $hair{IF $beard is not none: , $beard|} and $mark|{IF $people.like is beast: {IF $people.eyes is own: $people.look|$people.look, $eyes}|$people.look}}
 $who = a $folk with $body: $class in $class.wear, their clothes marked by $motif, with $gear{IF $familiar is not none: , $familiar|}
 # What the picture carries beyond its prompt (EXPORT:): a screenplay that casts it reads $hero.who, $hero.people, $hero.gear …
 EXPORT:

@@ -1,0 +1,72 @@
+meta: {source: "orrery creature creator: what a creature is, with its article and its own shape; `skin` which coverings fit it (fur, scales, feathers, chitin, hide, slime, stone, bark, shadow), `size` how big it rolls, `home` where it lives (the backdrop follows it)", builtin: true}
+entries:
+  - {value: "a dragon", props: {skin: scales, home: mountain, size: "{horse-sized|elephant-sized|towering}", shape: "a long neck, great bat-like wings and a spined tail"}}
+  - {value: "a wyvern", props: {skin: scales, home: mountain, size: "{horse-sized|elephant-sized}", shape: "two legs, leathery wings for forelimbs and a barbed tail"}}
+  - {value: "a griffin", props: {skin: feathers, home: mountain, size: "{horse-sized}", shape: "an eagle's head and wings on a lion's body"}}
+  - {value: "a chimera", props: {skin: fur, home: plains, size: "{horse-sized}", shape: "a lion's body with a goat's head rising from the back and a serpent for a tail"}}
+  - {value: "a basilisk", props: {skin: scales, home: cave, size: "{wolf-sized|horse-sized}", shape: "a low, eight-legged lizard body and a crowned head"}}
+  - {value: "a kraken", props: {skin: slime, home: sea, size: "{towering|colossal}", shape: "a bulbous mantle and a writhing mass of suckered arms"}}
+  - {value: "a sea serpent", props: {skin: scales, home: sea, size: "{elephant-sized|colossal}", shape: "an endless coiling body with fin-like crests"}}
+  - {value: "a hydra", props: {skin: scales, home: swamp, size: "{elephant-sized|towering}", shape: "a squat body and {five|seven|nine} long necks, each with its own head"}}
+  - {value: "a manticore", props: {skin: fur, home: desert, size: "{horse-sized}", shape: "a lion's body, a scorpion's tail and a strangely human face"}}
+  - {value: "an owlbear", props: {skin: feathers, home: forest, size: "{horse-sized}", shape: "a bear's heavy body with an owl's beaked head"}}
+  - {value: "a qilin", props: {skin: scales, home: mountain, size: "{horse-sized}", shape: "a deer's body, an ox's tail and a single branching horn"}}
+  - {value: "a phoenix", props: {skin: feathers, home: volcano, size: "{wolf-sized|horse-sized}", shape: "a great bird with a long trailing tail"}}
+  - {value: "a thunderbird", props: {skin: feathers, home: sky, size: "{elephant-sized|towering}", shape: "a vast eagle with crackling wingtips"}}
+  - {value: "a giant spider", props: {skin: chitin, home: cave, size: "{wolf-sized|horse-sized}", shape: "eight jointed legs and a cluster of eyes"}}
+  - {value: "a giant scorpion", props: {skin: chitin, home: desert, size: "{horse-sized|elephant-sized}", shape: "great pincers and a curled, stinging tail"}}
+  - {value: "a sand worm", props: {skin: hide, home: desert, size: "{towering|colossal}", shape: "a ringed, eyeless body and a mouth of inward-curving teeth"}}
+  - {value: "a kaiju", props: {skin: scales, home: sea, size: "{colossal}", shape: "an upright, heavy-tailed body and dorsal plates down its back"}}
+  - {value: "a slime", props: {skin: slime, home: cave, size: "{cat-sized|wolf-sized}", shape: "a wobbling, translucent blob with half-digested things inside"}}
+  - {value: "a mimic", props: {skin: hide, home: ruin, size: "{wolf-sized}", shape: "a treasure chest with a lid full of teeth and a long tongue"}}
+  - {value: "a floating eye-beast", props: {skin: hide, home: cave, size: "{wolf-sized|horse-sized}", shape: "a floating sphere with one great eye and many eyes on stalks"}}
+  - {value: "a wendigo", props: {skin: hide, home: ice, size: "{horse-sized}", shape: "an emaciated, towering frame with antlers on a skull-like head"}}
+  - {value: "a troll", props: {skin: hide, home: forest, size: "{horse-sized|elephant-sized}", shape: "long arms, a hunched back and a huge nose"}}
+  - {value: "a cyclops", props: {skin: hide, home: mountain, size: "{towering}", shape: "a giant's body and one great eye in the middle of the brow"}}
+  - {value: "a yeti", props: {skin: fur, home: ice, size: "{horse-sized}", shape: "an ape-like body with long arms and huge flat feet"}}
+  - {value: "a werewolf", props: {skin: fur, home: forest, size: "{horse-sized}", shape: "a wolf's head on a hulking, half-upright body"}}
+  - {value: "a gargoyle", props: {skin: stone, home: ruin, size: "{wolf-sized|horse-sized}", shape: "a crouching, winged body with horns and a grinning face"}}
+  - {value: "a unicorn", props: {skin: fur, home: forest, size: "{horse-sized}", shape: "a horse's body with a spiralled horn on the brow"}}
+  - {value: "a hippogriff", props: {skin: feathers, home: mountain, size: "{horse-sized}", shape: "an eagle's front half on a horse's hindquarters"}}
+  - {value: "a leviathan", props: {skin: scales, home: sea, size: "{colossal}", shape: "a whale-like body armoured in plates, with fins like sails"}}
+  - {value: "a dire boar", props: {skin: fur, home: forest, size: "{horse-sized}", shape: "a massive boar's body and tusks as long as swords"}}
+  - {value: "a sabre-toothed cat", props: {skin: fur, home: plains, size: "{horse-sized}", shape: "a powerful cat's body and two long downward fangs"}}
+  - {value: "a giant owl", props: {skin: feathers, home: forest, size: "{horse-sized}", shape: "a round owl's body and a face like a moon"}}
+  - {value: "a forest stag spirit", props: {skin: bark, home: forest, size: "{horse-sized|elephant-sized}", shape: "a stag's body with antlers that branch into living trees"}}
+  - {value: "an abyssal angler", props: {skin: slime, home: sea, size: "{horse-sized|elephant-sized}", shape: "a gaping, needle-toothed mouth and a glowing lure on a stalk"}}
+  - {value: "a cave crawler", props: {skin: chitin, home: cave, size: "{wolf-sized|horse-sized}", shape: "a long many-legged body and blind feelers"}}
+  - {value: "a shadow hound", props: {skin: shadow, home: ruin, size: "{wolf-sized|horse-sized}", shape: "a lean hound's body that frays into smoke at the edges"}}
+  - {value: "a kitsune", props: {skin: fur, home: forest, size: "{wolf-sized}", shape: "a fox's body and {three|five|nine} flowing tails"}}
+  - {value: "a kappa", props: {skin: slime, home: swamp, size: "{cat-sized|wolf-sized}", shape: "a turtle-like shell, a beak and a bowl-shaped dip in the head"}}
+  - {value: "a baku", props: {skin: hide, home: ruin, size: "{horse-sized}", shape: "an elephant's trunk, a tapir's body and tiger's paws"}}
+  - {value: "a thunder lizard", props: {skin: scales, home: jungle, size: "{elephant-sized|towering}", shape: "a long-necked dinosaur's body and a whip-like tail"}}
+  - {value: "a raptor", props: {skin: feathers, home: jungle, size: "{wolf-sized|horse-sized}", shape: "a lean two-legged body, a sickle claw on each foot and a feathered crest"}}
+  - {value: "a moth-beast", props: {skin: fur, home: forest, size: "{horse-sized}", shape: "a furry moth's body with wings as wide as a house"}}
+  - {value: "a giant tardigrade", props: {skin: hide, home: ice, size: "{wolf-sized|horse-sized}", shape: "a plump segmented body on eight stubby, clawed legs"}}
+  - {value: "a jellyfish titan", props: {skin: slime, home: sky, size: "{towering|colossal}", shape: "a floating translucent bell trailing curtains of tentacles"}}
+  - {value: "a crab colossus", props: {skin: chitin, home: sea, size: "{towering}", shape: "a crab's armoured body with a ruined tower on its back"}}
+  - {value: "a salamander", props: {skin: scales, home: volcano, size: "{cat-sized|wolf-sized}", shape: "a slick lizard's body that leaves glowing footprints"}}
+  - {value: "a frost drake", props: {skin: scales, home: ice, size: "{horse-sized}", shape: "a wingless dragon's body crusted with ice"}}
+  - {value: "a fungal beast", props: {skin: slime, home: cave, size: "{wolf-sized|horse-sized}", shape: "a lumbering body sprouting shelves of mushrooms"}}
+  - {value: "a carnivorous plant beast", props: {skin: bark, home: jungle, size: "{horse-sized}", shape: "a great flytrap head on a body of writhing vines"}}
+  - {value: "a bone dragon", props: {skin: stone, home: ruin, size: "{elephant-sized|towering}", shape: "a dragon's skeleton held together by dark magic"}}
+  - {value: "a nue", props: {skin: fur, home: forest, size: "{horse-sized}", shape: "a monkey's face, a tanuki's body, tiger's legs and a snake for a tail"}}
+  - {value: "a giant centipede", props: {skin: chitin, home: jungle, size: "{horse-sized|elephant-sized}", shape: "a long, armoured body on a hundred legs"}}
+  - {value: "a bat-winged horror", props: {skin: hide, home: cave, size: "{wolf-sized|horse-sized}", shape: "a gaunt body, vast bat wings and a mouth that opens too wide"}}
+  - {value: "a stone colossus", props: {skin: stone, home: mountain, size: "{colossal}", shape: "a humanoid body of piled boulders with trees on its shoulders"}}
+  - {value: "a will-o'-the-wisp swarm", props: {skin: shadow, home: swamp, size: "{cat-sized|wolf-sized}", shape: "a drifting cluster of glowing orbs around a faint body"}}
+  - {value: "a pangolin dragon", props: {skin: scales, home: jungle, size: "{wolf-sized|horse-sized}", shape: "a pangolin's armoured body that curls into a ball, with a dragon's head"}}
+  - {value: "an axolotl drake", props: {skin: slime, home: swamp, size: "{wolf-sized|horse-sized}", shape: "a smiling axolotl's face, feathery gills and a long tail"}}
+  - {value: "a sky whale", props: {skin: hide, home: sky, size: "{colossal}", shape: "a whale's body swimming through clouds with fin-like wings"}}
+  - {value: "a lava golem-beast", props: {skin: stone, home: volcano, size: "{elephant-sized}", shape: "a four-legged body of cooling rock with magma in the cracks"}}
+  - {value: "a glass serpent", props: {skin: scales, home: cave, size: "{horse-sized}", shape: "a transparent snake's body with its bones visible inside"}}
+  - {value: "a thorn wolf", props: {skin: bark, home: forest, size: "{wolf-sized}", shape: "a wolf's body grown from brambles and thorns"}}
+  - {value: "a desert sphinx", props: {skin: fur, home: desert, size: "{elephant-sized}", shape: "a lion's body, folded wings and a calm, ancient face"}}
+  - {value: "a marsh hag-beast", props: {skin: slime, home: swamp, size: "{horse-sized}", shape: "a crouching, long-limbed body draped in weeds"}}
+  - {value: "a storm eel", props: {skin: slime, home: sea, size: "{horse-sized|elephant-sized}", shape: "a long eel's body crackling with lightning"}}
+  - {value: "a cave bear", props: {skin: fur, home: cave, size: "{horse-sized}", shape: "a bear's huge, hunched body and a heavy skull"}}
+  - {value: "a giant beetle", props: {skin: chitin, home: jungle, size: "{wolf-sized|horse-sized}", shape: "a domed shell, a great horn and folded wings beneath"}}
+  - {value: "a nightmare horse", props: {skin: shadow, home: ruin, size: "{horse-sized}", shape: "a horse's body with a burning mane and hooves of flame"}}
+  - {value: "a cloud ray", props: {skin: hide, home: sky, size: "{elephant-sized}", shape: "a manta ray's flat body gliding through the air"}}
+  - {value: "a hedge dragon", props: {skin: bark, home: forest, size: "{wolf-sized}", shape: "a small dragon's body grown from a clipped garden hedge"}}
+  - {value: "an ice wolf pack leader", props: {skin: fur, home: ice, size: "{wolf-sized|horse-sized}", shape: "a wolf's body with a mane of icicles"}}

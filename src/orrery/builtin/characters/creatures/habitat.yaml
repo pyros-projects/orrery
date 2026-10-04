@@ -1,0 +1,50 @@
+meta: {source: "orrery creature creator: where a creature lives, by its `home`, to follow 'in'", builtin: true}
+entries:
+  - {value: "a misty pine forest", props: {home: forest}}
+  - {value: "a sun-dappled oak wood", props: {home: forest}}
+  - {value: "a dark forest of twisted trunks", props: {home: forest}}
+  - {value: "a birch grove in autumn", props: {home: forest}}
+  - {value: "a jagged mountain ridge above the clouds", props: {home: mountain}}
+  - {value: "a snowy peak at sunrise", props: {home: mountain}}
+  - {value: "a cliff face of nests and ledges", props: {home: mountain}}
+  - {value: "a high pass of wind and loose scree", props: {home: mountain}}
+  - {value: "a stormy grey sea", props: {home: sea}}
+  - {value: "a deep blue ocean lit by shafts of sunlight", props: {home: sea}}
+  - {value: "a rocky coast pounded by waves", props: {home: sea}}
+  - {value: "the black abyss of the deep sea", props: {home: sea}}
+  - {value: "a cavern of dripping stalactites", props: {home: cave}}
+  - {value: "a cave lit by glowing crystals", props: {home: cave}}
+  - {value: "an underground lake", props: {home: cave}}
+  - {value: "a narrow tunnel strewn with bones", props: {home: cave}}
+  - {value: "a sea of rolling dunes", props: {home: desert}}
+  - {value: "a cracked salt flat under a white sun", props: {home: desert}}
+  - {value: "a red-rock canyon", props: {home: desert}}
+  - {value: "a desert ruin half buried in sand", props: {home: desert}}
+  - {value: "a swamp of hanging moss and green water", props: {home: swamp}}
+  - {value: "a foggy marsh at dusk", props: {home: swamp}}
+  - {value: "a mangrove maze of roots", props: {home: swamp}}
+  - {value: "a bog of peat and will-o'-wisps", props: {home: swamp}}
+  - {value: "a volcano's slope of black rock and lava rivers", props: {home: volcano}}
+  - {value: "a caldera glowing orange", props: {home: volcano}}
+  - {value: "a field of steaming vents", props: {home: volcano}}
+  - {value: "an ash-grey plain under a burning sky", props: {home: volcano}}
+  - {value: "a sky of towering clouds", props: {home: sky}}
+  - {value: "a sunset sky above a sea of clouds", props: {home: sky}}
+  - {value: "a stormy sky split by lightning", props: {home: sky}}
+  - {value: "a pale dawn sky over distant mountains", props: {home: sky}}
+  - {value: "a ruined castle overgrown with ivy", props: {home: ruin}}
+  - {value: "a crumbling cathedral at night", props: {home: ruin}}
+  - {value: "a sunken temple courtyard", props: {home: ruin}}
+  - {value: "a forgotten graveyard in the fog", props: {home: ruin}}
+  - {value: "a glacier of blue ice", props: {home: ice}}
+  - {value: "a frozen tundra under the northern lights", props: {home: ice}}
+  - {value: "an ice cave of blue light", props: {home: ice}}
+  - {value: "a snowfield in a blizzard", props: {home: ice}}
+  - {value: "a steaming jungle of giant ferns", props: {home: jungle}}
+  - {value: "a jungle river under a green canopy", props: {home: jungle}}
+  - {value: "a waterfall in a rainforest", props: {home: jungle}}
+  - {value: "a jungle clearing of ancient stones", props: {home: jungle}}
+  - {value: "a golden grassland at sunset", props: {home: plains}}
+  - {value: "a savanna of acacia trees", props: {home: plains}}
+  - {value: "a windswept steppe", props: {home: plains}}
+  - {value: "a meadow of wildflowers", props: {home: plains}}

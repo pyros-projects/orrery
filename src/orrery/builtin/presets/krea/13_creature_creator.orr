@@ -1,0 +1,34 @@
+---
+title: "Creature creator"
+note: "A creature for Krea 2: one of seventy kinds (dragons, griffins, krakens, hydras, owlbears, kitsune, sand worms, kaiju, mimics, wendigos, jellyfish titans, axolotl drakes …), each with its own shape and size, a covering that fits its skin (scales, feathers, fur, slime, chitin, hide, stone, bark, shadow) in the signature colour, and one or two features you remember. Its habitat follows its home, a forest, a sea, a cave, a volcano, the sky. It keeps what the picture cannot show (EXPORT:): its temperament, what it eats and the sound it makes, so a reel that casts it from the gallery reads $beast.call for its SFX. One seed is one creature, from four sides by the grid; $backdrop puts it in its habitat instead of the studio, $view one side only to try creatures faster."
+tags: [krea, creatures, references]
+---
+$colour = __characters/creator/colour__
+$kind = __characters/creatures/kind__
+$size = $kind.size
+$age = {young:2|full-grown:4|ancient:2}
+$covering = __characters/creatures/covering[skin=$kind.skin]__
+$features = {1-2$$__characters/creatures/feature__}
+$home = __characters/creatures/habitat[home=$kind.home]__
+$backdrop = {studio:3|habitat:2}
+$who = $kind, $size and $age, with $kind.shape, covered in $covering, with $features
+# What the picture carries beyond its prompt (EXPORT:): a screenplay that casts it reads $beast.temper, $beast.call …
+EXPORT:
+  who = $who
+  $kind
+  size = $size
+  age = $age
+  home = $home
+  $colour
+  temper = __characters/creatures/nature[aspect=temper]__
+  diet = __characters/creatures/nature[aspect=diet]__
+  call = __characters/creatures/nature[aspect=call]__
+# The grid runs every view: one creature from four sides. Set $view to one of them to try creatures faster.
+$look = {photo:4|animated:2|painted:2|concept:2}
+$view = {head|three-quarter|side|front}
+$opening = {IF $look is photo: A photograph of a lifelike practical creature, as on a film set,|{IF $look is animated: A 3D creature render, in the style of a modern animated feature film,|{IF $look is painted: A naturalist's watercolour plate|A creature concept-art painting}}}
+$frame = {IF $view is head: A close study of the head and neck|{IF $view is three-quarter: A three-quarter view of the whole creature, turned to the left|{IF $view is side: A full side view of the whole body, from the head to the tip of the tail, with space around it in frame|A front view of the whole creature, facing the camera}}}
+$finish = {IF $look is photo: Shot on a 50mm lens, true colours, every scale and hair sharp.|{IF $look is animated: Stylised shapes, soft subsurface light.|{IF $look is painted: Fine ink lines and translucent washes on cream paper.|Loose painterly strokes and a clear silhouette.}}}
+$opening of $who. $frame, against {IF $backdrop is studio: a seamless mid-grey studio backdrop|$home, softly out of focus}, in soft, even light. $finish
+@size 1216x832
+@grid $view

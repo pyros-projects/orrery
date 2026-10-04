@@ -1,0 +1,48 @@
+---
+title: "Noir creator"
+note: "A character of a 1940s city of rain and secrets for Krea 2: one of thirty roles (private eye, nightclub singer, crooked cop, mob accountant, reporter, heiress, gangster, forger, safecracker, coroner …) with its clothes and what it holds, or a noir outfit instead, for whom it fits; a bloodhound or a canary in a cage now and then. Mostly black and white, with the signature colour as the one accent that keeps its colour. It keeps what the picture cannot show (EXPORT:): the role, what it holds, a mood, a quirk, two skills, a voice, so a reel that casts it from the gallery reads $hero.role and $hero.voice. One seed is one character, from four sides by the grid; $backdrop puts it on the streets instead of the studio, $view one side only to try characters faster."
+tags: [krea, characters, references, noir]
+---
+$colour = __characters/creator/colour__
+$gender = {woman:4|man:4|nonbinary person}
+$fit = {IF $gender is woman: women|{IF $gender is man: men|all}}
+$age = {young:2|prime:4|middle-aged:3|old}
+$years = {IF $age is young: {21-26}|{IF $age is prime: {27-39}|{IF $age is middle-aged: {40-58}|{59-75}}}}
+$origin = __characters/creator/origin__
+$build = __characters/creator/build__
+$face = __characters/creator/face__
+$eyes = __characters/creator/eyes__
+$haircolour = {IF $age is old: {silver|white|iron-grey}|__characters/creator/haircolour__}
+$hair = __characters/creator/hair[fit=$fit|all, !modern=yes]__
+$beard = {IF $gender is man: {__characters/creator/beard__|none:3}|none}
+$mark = __characters/creator/mark__
+$role = __characters/noir/role[fit=$fit|all]__
+$outfit = {$role.wear:3|__characters/creator/outfit[genre=noir, fit=$fit|all]__:2}
+$gear = $role.gear
+$motif = __characters/creator/motif[genre=noir|all]__
+$companion = {__characters/creator/companion[genre=noir]__|none:4}
+$presence = __characters/creator/presence__
+$backdrop = {studio:3|street}
+$who = a $years-year-old $gender of $origin: $build, $face, $eyes, $hair{IF $beard is not none: , $beard|} and $mark; $role in $outfit, their clothes marked by $motif, with $gear{IF $companion is not none: , $companion|}
+# What the picture carries beyond its prompt (EXPORT:): a screenplay that casts it reads $hero.who, $hero.role, $hero.voice …
+EXPORT:
+  who = $who
+  age = $years
+  $gender
+  $role
+  gear = $gear
+  companion = $companion
+  $colour
+  mood = __characters/creator/mood__
+  quirk = __characters/creator/quirk__
+  skills = {2$$__characters/creator/skill[genre=noir|all]__}
+  voice = __characters/creator/voice__
+# The grid runs every view: one character from four sides. Set $view to one of them to try characters faster.
+$look = {monochrome:5|colour:2|comic:2|painted}
+$view = {portrait|three-quarter|full-length|profile}
+$opening = {IF $look is monochrome: A black-and-white film-noir still, high contrast,|{IF $look is colour: A Technicolor photograph, as from a 1940s crime film,|{IF $look is comic: A pulp comic panel in heavy black ink|A painted pulp-magazine cover}}}
+$frame = {IF $view is portrait: A head-and-shoulders portrait, facing the camera|{IF $view is three-quarter: A head-and-shoulders view turned three-quarters to the left|{IF $view is full-length: A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera|A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible}}}
+$finish = {IF $look is monochrome: Deep shadows and silver highlights, black and white except for the $colour accents.|{IF $look is colour: Saturated period colour and soft studio key light.|{IF $look is comic: Flat spot colour, $colour on black and white.|Gouache with bold shadows and a weathered paper texture.}}}
+$opening of $who, with $presence. $frame, against {IF $backdrop is studio: a seamless mid-grey studio backdrop|__characters/noir/street__}, in soft, even light. $finish
+@size 832x1216
+@grid $view

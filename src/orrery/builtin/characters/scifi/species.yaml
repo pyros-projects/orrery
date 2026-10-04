@@ -1,0 +1,42 @@
+meta: {source: "orrery sci-fi creator: humans and the species beyond them; `look` is a species' own body, `like` says which of the creator's parts it takes (human: face, eyes, hair, marks; beast: eyes; other, machine: none), `gender` whether it is a woman or a man, `beard` whether its men may grow one, `eyes: own` that its look has its eyes already; some read the signature $colour", needs: [colour], builtin: true}
+entries:
+  - {value: "human", props: {like: human, gender: "yes", beard: "yes", look: "{pale|fair|olive|tan|bronze|brown|deep brown} skin"}}
+  - {value: "spacer human", props: {like: human, gender: "yes", beard: "yes", look: "a tall, thin, low-gravity frame and {pale|ashen|olive} skin that has never seen a sun"}}
+  - {value: "gene-tailored human", props: {like: human, gender: "yes", beard: "no", look: "flawless {porcelain|bronze|deep brown} skin and faint $colour bioluminescent freckles"}}
+  - {value: "Martian colonist", props: {like: human, gender: "yes", beard: "yes", look: "{dust-reddened|tan|brown} skin and a breathing implant scar at the throat"}}
+  - {value: "deep-space miner", props: {like: human, gender: "yes", beard: "yes", look: "{weathered|ruddy|dark} skin pitted with old radiation burns"}}
+  - {value: "cyborg", props: {like: human, gender: "yes", beard: "yes", look: "{pale|tan|brown} skin with half the skull replaced by a chrome plate"}}
+  - {value: "clone", props: {like: human, gender: "yes", beard: "no", look: "{fair|olive|brown} skin with a barcode tattooed on the side of the neck"}}
+  - {value: "android", props: {like: other, gender: "yes", beard: "no", look: "flawless synthetic skin, a thin seam along the jaw and eyes that glow faint $colour"}}
+  - {value: "service robot", props: {like: machine, gender: "no", beard: "no", look: "a white enamelled body, a smooth faceplate and one round $colour optic"}}
+  - {value: "combat mech", props: {like: machine, gender: "no", beard: "no", look: "a hulking armoured chassis of scratched olive plates with a sensor slit for a face"}}
+  - {value: "salvage drone", props: {like: machine, gender: "no", beard: "no", look: "a spindly body of mismatched parts, three manipulator arms and a camera head"}}
+  - {value: "grey", props: {like: other, gender: "no", beard: "no", look: "smooth grey skin, a large bulbous head and huge black almond eyes"}}
+  - {value: "insectoid", props: {like: beast, eyes: own, gender: "yes", beard: "no", look: "a glossy {green|amber|$colour} carapace, compound eyes and four slender arms"}}
+  - {value: "reptiloid", props: {like: beast, gender: "yes", beard: "no", look: "{dark green|sand|copper} scales, a crested head and a heavy tail"}}
+  - {value: "felinoid", props: {like: beast, gender: "yes", beard: "no", look: "a lion-like face, {gold|silver|black} fur and tufted ears"}}
+  - {value: "avian", props: {like: beast, gender: "yes", beard: "no", look: "a hooked beak, plumage of {iridescent blue|white and grey|$colour} feathers and clawed feet"}}
+  - {value: "amphibian", props: {like: beast, eyes: own, gender: "yes", beard: "no", look: "smooth, moist {blue-green|speckled orange|violet} skin, wide-set eyes and webbed hands"}}
+  - {value: "cephalopod", props: {like: other, gender: "no", beard: "no", look: "a soft mantle of a head, colour-shifting {red|$colour|purple} skin and a fringe of tentacles at the mouth"}}
+  - {value: "crystalline being", props: {like: other, gender: "no", beard: "no", look: "a humanoid lattice of $colour crystal with light moving inside it"}}
+  - {value: "energy being", props: {like: other, gender: "no", beard: "no", look: "a humanoid shape of shimmering $colour plasma held in a containment suit"}}
+  - {value: "blue-skinned humanoid", props: {like: human, gender: "yes", beard: "yes", look: "{cobalt|cerulean|pale blue} skin and fine white markings across the temples"}}
+  - {value: "horned humanoid", props: {like: human, gender: "yes", beard: "yes", look: "{maroon|ochre|grey} skin and a crown of short backswept horns"}}
+  - {value: "four-armed humanoid", props: {like: human, gender: "yes", beard: "yes", look: "{green|red-brown|grey} skin and a second pair of arms below the first"}}
+  - {value: "elongated humanoid", props: {like: human, gender: "yes", beard: "no", look: "a willowy frame over two metres tall, {lavender|pale gold|ashen} skin and long fingers"}}
+  - {value: "ridged humanoid", props: {like: human, gender: "yes", beard: "yes", look: "{bronze|olive|dark} skin and ridged plates across the forehead"}}
+  - {value: "silver-skinned humanoid", props: {like: human, gender: "yes", beard: "no", look: "mirror-silver skin and solid black eyes"}}
+  - {value: "furred humanoid", props: {like: beast, gender: "yes", beard: "no", look: "a short muzzle, soft {grey|cream|striped brown} fur and large round ears"}}
+  - {value: "tusked giant", props: {like: beast, gender: "yes", beard: "no", look: "a massive frame, thick {grey|brown} hide and two curved tusks"}}
+  - {value: "mollusc-folk", props: {like: other, gender: "no", beard: "no", look: "a spiralled shell on the back and a soft, glistening {pink|amber|$colour} body"}}
+  - {value: "plant-based alien", props: {like: other, gender: "no", beard: "no", look: "a body of fibrous green stems, leaf-like gills and flowers opening at the shoulders"}}
+  - {value: "fungal alien", props: {like: other, gender: "no", beard: "no", look: "a pale, spongy body with gill frills and a cap of {red|grey|$colour} for a head"}}
+  - {value: "gas giant native", props: {like: other, gender: "no", beard: "no", look: "a floating, translucent bladder-like body with trailing tendrils, kept upright by a frame"}}
+  - {value: "stone-skinned alien", props: {like: other, gender: "yes", beard: "no", look: "skin of cracked grey stone with $colour light glowing in the cracks"}}
+  - {value: "two-headed alien", props: {like: other, gender: "no", beard: "no", look: "two small heads on long necks, {mottled green|purple} skin and four eyes between them"}}
+  - {value: "aquatic alien", props: {like: beast, gender: "yes", beard: "no", look: "{silver-blue|teal} scales, fin-like crests on the head and gills along the neck, wearing a water-filled helmet"}}
+  - {value: "hive drone", props: {like: other, gender: "no", beard: "no", look: "a chitinous body, a featureless head and a glowing $colour antenna linking it to the hive"}}
+  - {value: "uplifted ape", props: {like: beast, eyes: own, gender: "yes", beard: "no", look: "a gorilla's frame and face with a {silver-backed|dark} coat and thoughtful eyes"}}
+  - {value: "uplifted dog", props: {like: beast, gender: "yes", beard: "no", look: "a {shepherd|husky|beagle}'s head on an upright body"}}
+  - {value: "ancient AI in a body", props: {like: machine, gender: "no", beard: "no", look: "a slender chrome frame with a glass dome head full of $colour drifting light"}}
+  - {value: "symbiote host", props: {like: human, gender: "yes", beard: "yes", look: "{pale|tan|brown} skin veined with a black symbiote that coils up the neck"}}

@@ -1,0 +1,1529 @@
+{
+ "preset": "krea/13_creature_creator",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A creature concept-art painting of a unicorn, horse-sized and young, with a horse's body with a spiralled horn on the brow, covered in patchy crimson fur over scarred skin, with no eyes at all. A close study of the head and neck, against a seamless mid-grey studio backdrop, in soft, even light. Loose painterly strokes and a clear silhouette.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "$kind ← __characters/creatures/kind__",
+       "a unicorn",
+       [
+        "__characters/creatures/kind__=a unicorn"
+       ]
+      ],
+      [
+       "{horse-sized}",
+       "horse-sized",
+       [
+        "{horse-sized}=horse-sized"
+       ]
+      ],
+      [
+       "{young|full-grown|ancient}",
+       "young",
+       [
+        "{young|full-grown|ancient}=young"
+       ]
+      ],
+      [
+       "$covering ← __characters/creatures/covering[skin=$kind.skin]__",
+       "patchy $colour fur over scarred skin",
+       [
+        "__characters/creatures/covering__=patchy $colour fur over scarred skin"
+       ]
+      ],
+      [
+       "__characters/creatures/feature__ ×1–2",
+       "no eyes at all",
+       [
+        "__characters/creatures/feature__=no eyes at all"
+       ]
+      ],
+      [
+       "$home ← __characters/creatures/habitat[home=$kind.home]__",
+       "a sun-dappled oak wood",
+       [
+        "__characters/creatures/habitat__=a sun-dappled oak wood"
+       ]
+      ],
+      [
+       "{studio|habitat}",
+       "studio",
+       [
+        "{studio|habitat}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|painted|concept}",
+       "concept",
+       [
+        "{photo|animated|painted|concept}=concept"
+       ]
+      ],
+      [
+       "{head|three-quarter|side|front}",
+       "head",
+       [
+        "{head|three-quarter|side|front}=head"
+       ]
+      ],
+      [
+       "EXPORT temper ← __characters/creatures/nature[aspect=temper]__",
+       "cunning, setting traps for its prey",
+       [
+        "__characters/creatures/nature__=cunning, setting traps for its prey"
+       ]
+      ],
+      [
+       "EXPORT diet ← __characters/creatures/nature[aspect=diet]__",
+       "mushrooms that glow in the dark",
+       [
+        "__characters/creatures/nature__=mushrooms that glow in the dark"
+       ]
+      ],
+      [
+       "EXPORT call ← __characters/creatures/nature[aspect=call]__",
+       "a crackling buzz like a live wire",
+       [
+        "__characters/creatures/nature__=a crackling buzz like a live wire"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a unicorn, horse-sized and young, with a horse's body with a spiralled horn on the brow, covered in patchy crimson fur over scarred skin, with no eyes at all",
+      "kind": {
+       "value": "a unicorn",
+       "home": "forest",
+       "shape": "a horse's body with a spiralled horn on the brow",
+       "size": "horse-sized",
+       "skin": "fur"
+      },
+      "size": "horse-sized",
+      "age": "young",
+      "home": {
+       "value": "a sun-dappled oak wood",
+       "home": "forest"
+      },
+      "colour": "crimson",
+      "temper": {
+       "value": "cunning, setting traps for its prey",
+       "aspect": "temper"
+      },
+      "diet": {
+       "value": "mushrooms that glow in the dark",
+       "aspect": "diet"
+      },
+      "call": {
+       "value": "a crackling buzz like a live wire",
+       "aspect": "call"
+      }
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A creature concept-art painting of a unicorn, horse-sized and young, with a horse's body with a spiralled horn on the brow, covered in patchy crimson fur over scarred skin, with no eyes at all. A three-quarter view of the whole creature, turned to the left, against a seamless mid-grey studio backdrop, in soft, even light. Loose painterly strokes and a clear silhouette.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "$kind ← __characters/creatures/kind__",
+       "a unicorn",
+       [
+        "__characters/creatures/kind__=a unicorn"
+       ]
+      ],
+      [
+       "{horse-sized}",
+       "horse-sized",
+       [
+        "{horse-sized}=horse-sized"
+       ]
+      ],
+      [
+       "{young|full-grown|ancient}",
+       "young",
+       [
+        "{young|full-grown|ancient}=young"
+       ]
+      ],
+      [
+       "$covering ← __characters/creatures/covering[skin=$kind.skin]__",
+       "patchy $colour fur over scarred skin",
+       [
+        "__characters/creatures/covering__=patchy $colour fur over scarred skin"
+       ]
+      ],
+      [
+       "__characters/creatures/feature__ ×1–2",
+       "no eyes at all",
+       [
+        "__characters/creatures/feature__=no eyes at all"
+       ]
+      ],
+      [
+       "$home ← __characters/creatures/habitat[home=$kind.home]__",
+       "a sun-dappled oak wood",
+       [
+        "__characters/creatures/habitat__=a sun-dappled oak wood"
+       ]
+      ],
+      [
+       "{studio|habitat}",
+       "studio",
+       [
+        "{studio|habitat}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|painted|concept}",
+       "concept",
+       [
+        "{photo|animated|painted|concept}=concept"
+       ]
+      ],
+      [
+       "{head|three-quarter|side|front}",
+       "three-quarter",
+       [
+        "{head|three-quarter|side|front}=three-quarter"
+       ]
+      ],
+      [
+       "EXPORT temper ← __characters/creatures/nature[aspect=temper]__",
+       "cunning, setting traps for its prey",
+       [
+        "__characters/creatures/nature__=cunning, setting traps for its prey"
+       ]
+      ],
+      [
+       "EXPORT diet ← __characters/creatures/nature[aspect=diet]__",
+       "mushrooms that glow in the dark",
+       [
+        "__characters/creatures/nature__=mushrooms that glow in the dark"
+       ]
+      ],
+      [
+       "EXPORT call ← __characters/creatures/nature[aspect=call]__",
+       "a crackling buzz like a live wire",
+       [
+        "__characters/creatures/nature__=a crackling buzz like a live wire"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a unicorn, horse-sized and young, with a horse's body with a spiralled horn on the brow, covered in patchy crimson fur over scarred skin, with no eyes at all",
+      "kind": {
+       "value": "a unicorn",
+       "home": "forest",
+       "shape": "a horse's body with a spiralled horn on the brow",
+       "size": "horse-sized",
+       "skin": "fur"
+      },
+      "size": "horse-sized",
+      "age": "young",
+      "home": {
+       "value": "a sun-dappled oak wood",
+       "home": "forest"
+      },
+      "colour": "crimson",
+      "temper": {
+       "value": "cunning, setting traps for its prey",
+       "aspect": "temper"
+      },
+      "diet": {
+       "value": "mushrooms that glow in the dark",
+       "aspect": "diet"
+      },
+      "call": {
+       "value": "a crackling buzz like a live wire",
+       "aspect": "call"
+      }
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A creature concept-art painting of a unicorn, horse-sized and young, with a horse's body with a spiralled horn on the brow, covered in patchy crimson fur over scarred skin, with no eyes at all. A full side view of the whole body, from the head to the tip of the tail, with space around it in frame, against a seamless mid-grey studio backdrop, in soft, even light. Loose painterly strokes and a clear silhouette.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "$kind ← __characters/creatures/kind__",
+       "a unicorn",
+       [
+        "__characters/creatures/kind__=a unicorn"
+       ]
+      ],
+      [
+       "{horse-sized}",
+       "horse-sized",
+       [
+        "{horse-sized}=horse-sized"
+       ]
+      ],
+      [
+       "{young|full-grown|ancient}",
+       "young",
+       [
+        "{young|full-grown|ancient}=young"
+       ]
+      ],
+      [
+       "$covering ← __characters/creatures/covering[skin=$kind.skin]__",
+       "patchy $colour fur over scarred skin",
+       [
+        "__characters/creatures/covering__=patchy $colour fur over scarred skin"
+       ]
+      ],
+      [
+       "__characters/creatures/feature__ ×1–2",
+       "no eyes at all",
+       [
+        "__characters/creatures/feature__=no eyes at all"
+       ]
+      ],
+      [
+       "$home ← __characters/creatures/habitat[home=$kind.home]__",
+       "a sun-dappled oak wood",
+       [
+        "__characters/creatures/habitat__=a sun-dappled oak wood"
+       ]
+      ],
+      [
+       "{studio|habitat}",
+       "studio",
+       [
+        "{studio|habitat}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|painted|concept}",
+       "concept",
+       [
+        "{photo|animated|painted|concept}=concept"
+       ]
+      ],
+      [
+       "{head|three-quarter|side|front}",
+       "side",
+       [
+        "{head|three-quarter|side|front}=side"
+       ]
+      ],
+      [
+       "EXPORT temper ← __characters/creatures/nature[aspect=temper]__",
+       "cunning, setting traps for its prey",
+       [
+        "__characters/creatures/nature__=cunning, setting traps for its prey"
+       ]
+      ],
+      [
+       "EXPORT diet ← __characters/creatures/nature[aspect=diet]__",
+       "mushrooms that glow in the dark",
+       [
+        "__characters/creatures/nature__=mushrooms that glow in the dark"
+       ]
+      ],
+      [
+       "EXPORT call ← __characters/creatures/nature[aspect=call]__",
+       "a crackling buzz like a live wire",
+       [
+        "__characters/creatures/nature__=a crackling buzz like a live wire"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a unicorn, horse-sized and young, with a horse's body with a spiralled horn on the brow, covered in patchy crimson fur over scarred skin, with no eyes at all",
+      "kind": {
+       "value": "a unicorn",
+       "home": "forest",
+       "shape": "a horse's body with a spiralled horn on the brow",
+       "size": "horse-sized",
+       "skin": "fur"
+      },
+      "size": "horse-sized",
+      "age": "young",
+      "home": {
+       "value": "a sun-dappled oak wood",
+       "home": "forest"
+      },
+      "colour": "crimson",
+      "temper": {
+       "value": "cunning, setting traps for its prey",
+       "aspect": "temper"
+      },
+      "diet": {
+       "value": "mushrooms that glow in the dark",
+       "aspect": "diet"
+      },
+      "call": {
+       "value": "a crackling buzz like a live wire",
+       "aspect": "call"
+      }
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A creature concept-art painting of a unicorn, horse-sized and young, with a horse's body with a spiralled horn on the brow, covered in patchy crimson fur over scarred skin, with no eyes at all. A front view of the whole creature, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Loose painterly strokes and a clear silhouette.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
+      ],
+      [
+       "$kind ← __characters/creatures/kind__",
+       "a unicorn",
+       [
+        "__characters/creatures/kind__=a unicorn"
+       ]
+      ],
+      [
+       "{horse-sized}",
+       "horse-sized",
+       [
+        "{horse-sized}=horse-sized"
+       ]
+      ],
+      [
+       "{young|full-grown|ancient}",
+       "young",
+       [
+        "{young|full-grown|ancient}=young"
+       ]
+      ],
+      [
+       "$covering ← __characters/creatures/covering[skin=$kind.skin]__",
+       "patchy $colour fur over scarred skin",
+       [
+        "__characters/creatures/covering__=patchy $colour fur over scarred skin"
+       ]
+      ],
+      [
+       "__characters/creatures/feature__ ×1–2",
+       "no eyes at all",
+       [
+        "__characters/creatures/feature__=no eyes at all"
+       ]
+      ],
+      [
+       "$home ← __characters/creatures/habitat[home=$kind.home]__",
+       "a sun-dappled oak wood",
+       [
+        "__characters/creatures/habitat__=a sun-dappled oak wood"
+       ]
+      ],
+      [
+       "{studio|habitat}",
+       "studio",
+       [
+        "{studio|habitat}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|painted|concept}",
+       "concept",
+       [
+        "{photo|animated|painted|concept}=concept"
+       ]
+      ],
+      [
+       "{head|three-quarter|side|front}",
+       "front",
+       [
+        "{head|three-quarter|side|front}=front"
+       ]
+      ],
+      [
+       "EXPORT temper ← __characters/creatures/nature[aspect=temper]__",
+       "cunning, setting traps for its prey",
+       [
+        "__characters/creatures/nature__=cunning, setting traps for its prey"
+       ]
+      ],
+      [
+       "EXPORT diet ← __characters/creatures/nature[aspect=diet]__",
+       "mushrooms that glow in the dark",
+       [
+        "__characters/creatures/nature__=mushrooms that glow in the dark"
+       ]
+      ],
+      [
+       "EXPORT call ← __characters/creatures/nature[aspect=call]__",
+       "a crackling buzz like a live wire",
+       [
+        "__characters/creatures/nature__=a crackling buzz like a live wire"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a unicorn, horse-sized and young, with a horse's body with a spiralled horn on the brow, covered in patchy crimson fur over scarred skin, with no eyes at all",
+      "kind": {
+       "value": "a unicorn",
+       "home": "forest",
+       "shape": "a horse's body with a spiralled horn on the brow",
+       "size": "horse-sized",
+       "skin": "fur"
+      },
+      "size": "horse-sized",
+      "age": "young",
+      "home": {
+       "value": "a sun-dappled oak wood",
+       "home": "forest"
+      },
+      "colour": "crimson",
+      "temper": {
+       "value": "cunning, setting traps for its prey",
+       "aspect": "temper"
+      },
+      "diet": {
+       "value": "mushrooms that glow in the dark",
+       "aspect": "diet"
+      },
+      "call": {
+       "value": "a crackling buzz like a live wire",
+       "aspect": "call"
+      }
+     }
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A naturalist's watercolour plate of a thunder lizard, elephant-sized and ancient, with a long-necked dinosaur's body and a whip-like tail, covered in dark scales with mustard-yellow stripes along the spine, with an eye on the end of its tail. A close study of the head and neck, against a jungle clearing of ancient stones, softly out of focus, in soft, even light. Fine ink lines and translucent washes on cream paper.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "$kind ← __characters/creatures/kind__",
+       "a thunder lizard",
+       [
+        "__characters/creatures/kind__=a thunder lizard"
+       ]
+      ],
+      [
+       "{elephant-sized|towering}",
+       "elephant-sized",
+       [
+        "{elephant-sized|towering}=elephant-sized"
+       ]
+      ],
+      [
+       "{young|full-grown|ancient}",
+       "ancient",
+       [
+        "{young|full-grown|ancient}=ancient"
+       ]
+      ],
+      [
+       "$covering ← __characters/creatures/covering[skin=$kind.skin]__",
+       "dark scales with $colour stripes along the spine",
+       [
+        "__characters/creatures/covering__=dark scales with $colour stripes along the spine"
+       ]
+      ],
+      [
+       "__characters/creatures/feature__ ×1–2",
+       "an eye on the end of its tail",
+       [
+        "__characters/creatures/feature__=an eye on the end of its tail"
+       ]
+      ],
+      [
+       "$home ← __characters/creatures/habitat[home=$kind.home]__",
+       "a jungle clearing of ancient stones",
+       [
+        "__characters/creatures/habitat__=a jungle clearing of ancient stones"
+       ]
+      ],
+      [
+       "{studio|habitat}",
+       "habitat",
+       [
+        "{studio|habitat}=habitat"
+       ]
+      ],
+      [
+       "{photo|animated|painted|concept}",
+       "painted",
+       [
+        "{photo|animated|painted|concept}=painted"
+       ]
+      ],
+      [
+       "{head|three-quarter|side|front}",
+       "head",
+       [
+        "{head|three-quarter|side|front}=head"
+       ]
+      ],
+      [
+       "EXPORT temper ← __characters/creatures/nature[aspect=temper]__",
+       "protective of its young above all",
+       [
+        "__characters/creatures/nature__=protective of its young above all"
+       ]
+      ],
+      [
+       "EXPORT diet ← __characters/creatures/nature[aspect=diet]__",
+       "nightmares, eaten while people sleep",
+       [
+        "__characters/creatures/nature__=nightmares, eaten while people sleep"
+       ]
+      ],
+      [
+       "EXPORT call ← __characters/creatures/nature[aspect=call]__",
+       "a crashing like waves on rocks",
+       [
+        "__characters/creatures/nature__=a crashing like waves on rocks"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a thunder lizard, elephant-sized and ancient, with a long-necked dinosaur's body and a whip-like tail, covered in dark scales with mustard-yellow stripes along the spine, with an eye on the end of its tail",
+      "kind": {
+       "value": "a thunder lizard",
+       "home": "jungle",
+       "shape": "a long-necked dinosaur's body and a whip-like tail",
+       "size": "elephant-sized",
+       "skin": "scales"
+      },
+      "size": "elephant-sized",
+      "age": "ancient",
+      "home": {
+       "value": "a jungle clearing of ancient stones",
+       "home": "jungle"
+      },
+      "colour": "mustard-yellow",
+      "temper": {
+       "value": "protective of its young above all",
+       "aspect": "temper"
+      },
+      "diet": {
+       "value": "nightmares, eaten while people sleep",
+       "aspect": "diet"
+      },
+      "call": {
+       "value": "a crashing like waves on rocks",
+       "aspect": "call"
+      }
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A naturalist's watercolour plate of a thunder lizard, elephant-sized and ancient, with a long-necked dinosaur's body and a whip-like tail, covered in dark scales with mustard-yellow stripes along the spine, with an eye on the end of its tail. A three-quarter view of the whole creature, turned to the left, against a jungle clearing of ancient stones, softly out of focus, in soft, even light. Fine ink lines and translucent washes on cream paper.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "$kind ← __characters/creatures/kind__",
+       "a thunder lizard",
+       [
+        "__characters/creatures/kind__=a thunder lizard"
+       ]
+      ],
+      [
+       "{elephant-sized|towering}",
+       "elephant-sized",
+       [
+        "{elephant-sized|towering}=elephant-sized"
+       ]
+      ],
+      [
+       "{young|full-grown|ancient}",
+       "ancient",
+       [
+        "{young|full-grown|ancient}=ancient"
+       ]
+      ],
+      [
+       "$covering ← __characters/creatures/covering[skin=$kind.skin]__",
+       "dark scales with $colour stripes along the spine",
+       [
+        "__characters/creatures/covering__=dark scales with $colour stripes along the spine"
+       ]
+      ],
+      [
+       "__characters/creatures/feature__ ×1–2",
+       "an eye on the end of its tail",
+       [
+        "__characters/creatures/feature__=an eye on the end of its tail"
+       ]
+      ],
+      [
+       "$home ← __characters/creatures/habitat[home=$kind.home]__",
+       "a jungle clearing of ancient stones",
+       [
+        "__characters/creatures/habitat__=a jungle clearing of ancient stones"
+       ]
+      ],
+      [
+       "{studio|habitat}",
+       "habitat",
+       [
+        "{studio|habitat}=habitat"
+       ]
+      ],
+      [
+       "{photo|animated|painted|concept}",
+       "painted",
+       [
+        "{photo|animated|painted|concept}=painted"
+       ]
+      ],
+      [
+       "{head|three-quarter|side|front}",
+       "three-quarter",
+       [
+        "{head|three-quarter|side|front}=three-quarter"
+       ]
+      ],
+      [
+       "EXPORT temper ← __characters/creatures/nature[aspect=temper]__",
+       "protective of its young above all",
+       [
+        "__characters/creatures/nature__=protective of its young above all"
+       ]
+      ],
+      [
+       "EXPORT diet ← __characters/creatures/nature[aspect=diet]__",
+       "nightmares, eaten while people sleep",
+       [
+        "__characters/creatures/nature__=nightmares, eaten while people sleep"
+       ]
+      ],
+      [
+       "EXPORT call ← __characters/creatures/nature[aspect=call]__",
+       "a crashing like waves on rocks",
+       [
+        "__characters/creatures/nature__=a crashing like waves on rocks"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a thunder lizard, elephant-sized and ancient, with a long-necked dinosaur's body and a whip-like tail, covered in dark scales with mustard-yellow stripes along the spine, with an eye on the end of its tail",
+      "kind": {
+       "value": "a thunder lizard",
+       "home": "jungle",
+       "shape": "a long-necked dinosaur's body and a whip-like tail",
+       "size": "elephant-sized",
+       "skin": "scales"
+      },
+      "size": "elephant-sized",
+      "age": "ancient",
+      "home": {
+       "value": "a jungle clearing of ancient stones",
+       "home": "jungle"
+      },
+      "colour": "mustard-yellow",
+      "temper": {
+       "value": "protective of its young above all",
+       "aspect": "temper"
+      },
+      "diet": {
+       "value": "nightmares, eaten while people sleep",
+       "aspect": "diet"
+      },
+      "call": {
+       "value": "a crashing like waves on rocks",
+       "aspect": "call"
+      }
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A naturalist's watercolour plate of a thunder lizard, elephant-sized and ancient, with a long-necked dinosaur's body and a whip-like tail, covered in dark scales with mustard-yellow stripes along the spine, with an eye on the end of its tail. A full side view of the whole body, from the head to the tip of the tail, with space around it in frame, against a jungle clearing of ancient stones, softly out of focus, in soft, even light. Fine ink lines and translucent washes on cream paper.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "$kind ← __characters/creatures/kind__",
+       "a thunder lizard",
+       [
+        "__characters/creatures/kind__=a thunder lizard"
+       ]
+      ],
+      [
+       "{elephant-sized|towering}",
+       "elephant-sized",
+       [
+        "{elephant-sized|towering}=elephant-sized"
+       ]
+      ],
+      [
+       "{young|full-grown|ancient}",
+       "ancient",
+       [
+        "{young|full-grown|ancient}=ancient"
+       ]
+      ],
+      [
+       "$covering ← __characters/creatures/covering[skin=$kind.skin]__",
+       "dark scales with $colour stripes along the spine",
+       [
+        "__characters/creatures/covering__=dark scales with $colour stripes along the spine"
+       ]
+      ],
+      [
+       "__characters/creatures/feature__ ×1–2",
+       "an eye on the end of its tail",
+       [
+        "__characters/creatures/feature__=an eye on the end of its tail"
+       ]
+      ],
+      [
+       "$home ← __characters/creatures/habitat[home=$kind.home]__",
+       "a jungle clearing of ancient stones",
+       [
+        "__characters/creatures/habitat__=a jungle clearing of ancient stones"
+       ]
+      ],
+      [
+       "{studio|habitat}",
+       "habitat",
+       [
+        "{studio|habitat}=habitat"
+       ]
+      ],
+      [
+       "{photo|animated|painted|concept}",
+       "painted",
+       [
+        "{photo|animated|painted|concept}=painted"
+       ]
+      ],
+      [
+       "{head|three-quarter|side|front}",
+       "side",
+       [
+        "{head|three-quarter|side|front}=side"
+       ]
+      ],
+      [
+       "EXPORT temper ← __characters/creatures/nature[aspect=temper]__",
+       "protective of its young above all",
+       [
+        "__characters/creatures/nature__=protective of its young above all"
+       ]
+      ],
+      [
+       "EXPORT diet ← __characters/creatures/nature[aspect=diet]__",
+       "nightmares, eaten while people sleep",
+       [
+        "__characters/creatures/nature__=nightmares, eaten while people sleep"
+       ]
+      ],
+      [
+       "EXPORT call ← __characters/creatures/nature[aspect=call]__",
+       "a crashing like waves on rocks",
+       [
+        "__characters/creatures/nature__=a crashing like waves on rocks"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a thunder lizard, elephant-sized and ancient, with a long-necked dinosaur's body and a whip-like tail, covered in dark scales with mustard-yellow stripes along the spine, with an eye on the end of its tail",
+      "kind": {
+       "value": "a thunder lizard",
+       "home": "jungle",
+       "shape": "a long-necked dinosaur's body and a whip-like tail",
+       "size": "elephant-sized",
+       "skin": "scales"
+      },
+      "size": "elephant-sized",
+      "age": "ancient",
+      "home": {
+       "value": "a jungle clearing of ancient stones",
+       "home": "jungle"
+      },
+      "colour": "mustard-yellow",
+      "temper": {
+       "value": "protective of its young above all",
+       "aspect": "temper"
+      },
+      "diet": {
+       "value": "nightmares, eaten while people sleep",
+       "aspect": "diet"
+      },
+      "call": {
+       "value": "a crashing like waves on rocks",
+       "aspect": "call"
+      }
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A naturalist's watercolour plate of a thunder lizard, elephant-sized and ancient, with a long-necked dinosaur's body and a whip-like tail, covered in dark scales with mustard-yellow stripes along the spine, with an eye on the end of its tail. A front view of the whole creature, facing the camera, against a jungle clearing of ancient stones, softly out of focus, in soft, even light. Fine ink lines and translucent washes on cream paper.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
+      ],
+      [
+       "$kind ← __characters/creatures/kind__",
+       "a thunder lizard",
+       [
+        "__characters/creatures/kind__=a thunder lizard"
+       ]
+      ],
+      [
+       "{elephant-sized|towering}",
+       "elephant-sized",
+       [
+        "{elephant-sized|towering}=elephant-sized"
+       ]
+      ],
+      [
+       "{young|full-grown|ancient}",
+       "ancient",
+       [
+        "{young|full-grown|ancient}=ancient"
+       ]
+      ],
+      [
+       "$covering ← __characters/creatures/covering[skin=$kind.skin]__",
+       "dark scales with $colour stripes along the spine",
+       [
+        "__characters/creatures/covering__=dark scales with $colour stripes along the spine"
+       ]
+      ],
+      [
+       "__characters/creatures/feature__ ×1–2",
+       "an eye on the end of its tail",
+       [
+        "__characters/creatures/feature__=an eye on the end of its tail"
+       ]
+      ],
+      [
+       "$home ← __characters/creatures/habitat[home=$kind.home]__",
+       "a jungle clearing of ancient stones",
+       [
+        "__characters/creatures/habitat__=a jungle clearing of ancient stones"
+       ]
+      ],
+      [
+       "{studio|habitat}",
+       "habitat",
+       [
+        "{studio|habitat}=habitat"
+       ]
+      ],
+      [
+       "{photo|animated|painted|concept}",
+       "painted",
+       [
+        "{photo|animated|painted|concept}=painted"
+       ]
+      ],
+      [
+       "{head|three-quarter|side|front}",
+       "front",
+       [
+        "{head|three-quarter|side|front}=front"
+       ]
+      ],
+      [
+       "EXPORT temper ← __characters/creatures/nature[aspect=temper]__",
+       "protective of its young above all",
+       [
+        "__characters/creatures/nature__=protective of its young above all"
+       ]
+      ],
+      [
+       "EXPORT diet ← __characters/creatures/nature[aspect=diet]__",
+       "nightmares, eaten while people sleep",
+       [
+        "__characters/creatures/nature__=nightmares, eaten while people sleep"
+       ]
+      ],
+      [
+       "EXPORT call ← __characters/creatures/nature[aspect=call]__",
+       "a crashing like waves on rocks",
+       [
+        "__characters/creatures/nature__=a crashing like waves on rocks"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a thunder lizard, elephant-sized and ancient, with a long-necked dinosaur's body and a whip-like tail, covered in dark scales with mustard-yellow stripes along the spine, with an eye on the end of its tail",
+      "kind": {
+       "value": "a thunder lizard",
+       "home": "jungle",
+       "shape": "a long-necked dinosaur's body and a whip-like tail",
+       "size": "elephant-sized",
+       "skin": "scales"
+      },
+      "size": "elephant-sized",
+      "age": "ancient",
+      "home": {
+       "value": "a jungle clearing of ancient stones",
+       "home": "jungle"
+      },
+      "colour": "mustard-yellow",
+      "temper": {
+       "value": "protective of its young above all",
+       "aspect": "temper"
+      },
+      "diet": {
+       "value": "nightmares, eaten while people sleep",
+       "aspect": "diet"
+      },
+      "call": {
+       "value": "a crashing like waves on rocks",
+       "aspect": "call"
+      }
+     }
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A naturalist's watercolour plate of a yeti, horse-sized and young, with an ape-like body with long arms and huge flat feet, covered in sleek camel fur that gleams like velvet, with a small garden growing on its back. A close study of the head and neck, against a seamless mid-grey studio backdrop, in soft, even light. Fine ink lines and translucent washes on cream paper.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "$kind ← __characters/creatures/kind__",
+       "a yeti",
+       [
+        "__characters/creatures/kind__=a yeti"
+       ]
+      ],
+      [
+       "{horse-sized}",
+       "horse-sized",
+       [
+        "{horse-sized}=horse-sized"
+       ]
+      ],
+      [
+       "{young|full-grown|ancient}",
+       "young",
+       [
+        "{young|full-grown|ancient}=young"
+       ]
+      ],
+      [
+       "$covering ← __characters/creatures/covering[skin=$kind.skin]__",
+       "sleek $colour fur that gleams like velvet",
+       [
+        "__characters/creatures/covering__=sleek $colour fur that gleams like velvet"
+       ]
+      ],
+      [
+       "__characters/creatures/feature__ ×1–2",
+       "a small garden growing on its back",
+       [
+        "__characters/creatures/feature__=a small garden growing on its back"
+       ]
+      ],
+      [
+       "$home ← __characters/creatures/habitat[home=$kind.home]__",
+       "a frozen tundra under the northern lights",
+       [
+        "__characters/creatures/habitat__=a frozen tundra under the northern lights"
+       ]
+      ],
+      [
+       "{studio|habitat}",
+       "studio",
+       [
+        "{studio|habitat}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|painted|concept}",
+       "painted",
+       [
+        "{photo|animated|painted|concept}=painted"
+       ]
+      ],
+      [
+       "{head|three-quarter|side|front}",
+       "head",
+       [
+        "{head|three-quarter|side|front}=head"
+       ]
+      ],
+      [
+       "EXPORT temper ← __characters/creatures/nature[aspect=temper]__",
+       "gentle with children, savage with hunters",
+       [
+        "__characters/creatures/nature__=gentle with children, savage with hunters"
+       ]
+      ],
+      [
+       "EXPORT diet ← __characters/creatures/nature[aspect=diet]__",
+       "moss and lichen scraped from rocks",
+       [
+        "__characters/creatures/nature__=moss and lichen scraped from rocks"
+       ]
+      ],
+      [
+       "EXPORT call ← __characters/creatures/nature[aspect=call]__",
+       "a crashing like waves on rocks",
+       [
+        "__characters/creatures/nature__=a crashing like waves on rocks"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a yeti, horse-sized and young, with an ape-like body with long arms and huge flat feet, covered in sleek camel fur that gleams like velvet, with a small garden growing on its back",
+      "kind": {
+       "value": "a yeti",
+       "home": "ice",
+       "shape": "an ape-like body with long arms and huge flat feet",
+       "size": "horse-sized",
+       "skin": "fur"
+      },
+      "size": "horse-sized",
+      "age": "young",
+      "home": {
+       "value": "a frozen tundra under the northern lights",
+       "home": "ice"
+      },
+      "colour": "camel",
+      "temper": {
+       "value": "gentle with children, savage with hunters",
+       "aspect": "temper"
+      },
+      "diet": {
+       "value": "moss and lichen scraped from rocks",
+       "aspect": "diet"
+      },
+      "call": {
+       "value": "a crashing like waves on rocks",
+       "aspect": "call"
+      }
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A naturalist's watercolour plate of a yeti, horse-sized and young, with an ape-like body with long arms and huge flat feet, covered in sleek camel fur that gleams like velvet, with a small garden growing on its back. A three-quarter view of the whole creature, turned to the left, against a seamless mid-grey studio backdrop, in soft, even light. Fine ink lines and translucent washes on cream paper.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "$kind ← __characters/creatures/kind__",
+       "a yeti",
+       [
+        "__characters/creatures/kind__=a yeti"
+       ]
+      ],
+      [
+       "{horse-sized}",
+       "horse-sized",
+       [
+        "{horse-sized}=horse-sized"
+       ]
+      ],
+      [
+       "{young|full-grown|ancient}",
+       "young",
+       [
+        "{young|full-grown|ancient}=young"
+       ]
+      ],
+      [
+       "$covering ← __characters/creatures/covering[skin=$kind.skin]__",
+       "sleek $colour fur that gleams like velvet",
+       [
+        "__characters/creatures/covering__=sleek $colour fur that gleams like velvet"
+       ]
+      ],
+      [
+       "__characters/creatures/feature__ ×1–2",
+       "a small garden growing on its back",
+       [
+        "__characters/creatures/feature__=a small garden growing on its back"
+       ]
+      ],
+      [
+       "$home ← __characters/creatures/habitat[home=$kind.home]__",
+       "a frozen tundra under the northern lights",
+       [
+        "__characters/creatures/habitat__=a frozen tundra under the northern lights"
+       ]
+      ],
+      [
+       "{studio|habitat}",
+       "studio",
+       [
+        "{studio|habitat}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|painted|concept}",
+       "painted",
+       [
+        "{photo|animated|painted|concept}=painted"
+       ]
+      ],
+      [
+       "{head|three-quarter|side|front}",
+       "three-quarter",
+       [
+        "{head|three-quarter|side|front}=three-quarter"
+       ]
+      ],
+      [
+       "EXPORT temper ← __characters/creatures/nature[aspect=temper]__",
+       "gentle with children, savage with hunters",
+       [
+        "__characters/creatures/nature__=gentle with children, savage with hunters"
+       ]
+      ],
+      [
+       "EXPORT diet ← __characters/creatures/nature[aspect=diet]__",
+       "moss and lichen scraped from rocks",
+       [
+        "__characters/creatures/nature__=moss and lichen scraped from rocks"
+       ]
+      ],
+      [
+       "EXPORT call ← __characters/creatures/nature[aspect=call]__",
+       "a crashing like waves on rocks",
+       [
+        "__characters/creatures/nature__=a crashing like waves on rocks"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a yeti, horse-sized and young, with an ape-like body with long arms and huge flat feet, covered in sleek camel fur that gleams like velvet, with a small garden growing on its back",
+      "kind": {
+       "value": "a yeti",
+       "home": "ice",
+       "shape": "an ape-like body with long arms and huge flat feet",
+       "size": "horse-sized",
+       "skin": "fur"
+      },
+      "size": "horse-sized",
+      "age": "young",
+      "home": {
+       "value": "a frozen tundra under the northern lights",
+       "home": "ice"
+      },
+      "colour": "camel",
+      "temper": {
+       "value": "gentle with children, savage with hunters",
+       "aspect": "temper"
+      },
+      "diet": {
+       "value": "moss and lichen scraped from rocks",
+       "aspect": "diet"
+      },
+      "call": {
+       "value": "a crashing like waves on rocks",
+       "aspect": "call"
+      }
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A naturalist's watercolour plate of a yeti, horse-sized and young, with an ape-like body with long arms and huge flat feet, covered in sleek camel fur that gleams like velvet, with a small garden growing on its back. A full side view of the whole body, from the head to the tip of the tail, with space around it in frame, against a seamless mid-grey studio backdrop, in soft, even light. Fine ink lines and translucent washes on cream paper.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "$kind ← __characters/creatures/kind__",
+       "a yeti",
+       [
+        "__characters/creatures/kind__=a yeti"
+       ]
+      ],
+      [
+       "{horse-sized}",
+       "horse-sized",
+       [
+        "{horse-sized}=horse-sized"
+       ]
+      ],
+      [
+       "{young|full-grown|ancient}",
+       "young",
+       [
+        "{young|full-grown|ancient}=young"
+       ]
+      ],
+      [
+       "$covering ← __characters/creatures/covering[skin=$kind.skin]__",
+       "sleek $colour fur that gleams like velvet",
+       [
+        "__characters/creatures/covering__=sleek $colour fur that gleams like velvet"
+       ]
+      ],
+      [
+       "__characters/creatures/feature__ ×1–2",
+       "a small garden growing on its back",
+       [
+        "__characters/creatures/feature__=a small garden growing on its back"
+       ]
+      ],
+      [
+       "$home ← __characters/creatures/habitat[home=$kind.home]__",
+       "a frozen tundra under the northern lights",
+       [
+        "__characters/creatures/habitat__=a frozen tundra under the northern lights"
+       ]
+      ],
+      [
+       "{studio|habitat}",
+       "studio",
+       [
+        "{studio|habitat}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|painted|concept}",
+       "painted",
+       [
+        "{photo|animated|painted|concept}=painted"
+       ]
+      ],
+      [
+       "{head|three-quarter|side|front}",
+       "side",
+       [
+        "{head|three-quarter|side|front}=side"
+       ]
+      ],
+      [
+       "EXPORT temper ← __characters/creatures/nature[aspect=temper]__",
+       "gentle with children, savage with hunters",
+       [
+        "__characters/creatures/nature__=gentle with children, savage with hunters"
+       ]
+      ],
+      [
+       "EXPORT diet ← __characters/creatures/nature[aspect=diet]__",
+       "moss and lichen scraped from rocks",
+       [
+        "__characters/creatures/nature__=moss and lichen scraped from rocks"
+       ]
+      ],
+      [
+       "EXPORT call ← __characters/creatures/nature[aspect=call]__",
+       "a crashing like waves on rocks",
+       [
+        "__characters/creatures/nature__=a crashing like waves on rocks"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a yeti, horse-sized and young, with an ape-like body with long arms and huge flat feet, covered in sleek camel fur that gleams like velvet, with a small garden growing on its back",
+      "kind": {
+       "value": "a yeti",
+       "home": "ice",
+       "shape": "an ape-like body with long arms and huge flat feet",
+       "size": "horse-sized",
+       "skin": "fur"
+      },
+      "size": "horse-sized",
+      "age": "young",
+      "home": {
+       "value": "a frozen tundra under the northern lights",
+       "home": "ice"
+      },
+      "colour": "camel",
+      "temper": {
+       "value": "gentle with children, savage with hunters",
+       "aspect": "temper"
+      },
+      "diet": {
+       "value": "moss and lichen scraped from rocks",
+       "aspect": "diet"
+      },
+      "call": {
+       "value": "a crashing like waves on rocks",
+       "aspect": "call"
+      }
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A naturalist's watercolour plate of a yeti, horse-sized and young, with an ape-like body with long arms and huge flat feet, covered in sleek camel fur that gleams like velvet, with a small garden growing on its back. A front view of the whole creature, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Fine ink lines and translucent washes on cream paper.",
+     "picks": [
+      [
+       "$colour ← __characters/creator/colour__",
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
+      ],
+      [
+       "$kind ← __characters/creatures/kind__",
+       "a yeti",
+       [
+        "__characters/creatures/kind__=a yeti"
+       ]
+      ],
+      [
+       "{horse-sized}",
+       "horse-sized",
+       [
+        "{horse-sized}=horse-sized"
+       ]
+      ],
+      [
+       "{young|full-grown|ancient}",
+       "young",
+       [
+        "{young|full-grown|ancient}=young"
+       ]
+      ],
+      [
+       "$covering ← __characters/creatures/covering[skin=$kind.skin]__",
+       "sleek $colour fur that gleams like velvet",
+       [
+        "__characters/creatures/covering__=sleek $colour fur that gleams like velvet"
+       ]
+      ],
+      [
+       "__characters/creatures/feature__ ×1–2",
+       "a small garden growing on its back",
+       [
+        "__characters/creatures/feature__=a small garden growing on its back"
+       ]
+      ],
+      [
+       "$home ← __characters/creatures/habitat[home=$kind.home]__",
+       "a frozen tundra under the northern lights",
+       [
+        "__characters/creatures/habitat__=a frozen tundra under the northern lights"
+       ]
+      ],
+      [
+       "{studio|habitat}",
+       "studio",
+       [
+        "{studio|habitat}=studio"
+       ]
+      ],
+      [
+       "{photo|animated|painted|concept}",
+       "painted",
+       [
+        "{photo|animated|painted|concept}=painted"
+       ]
+      ],
+      [
+       "{head|three-quarter|side|front}",
+       "front",
+       [
+        "{head|three-quarter|side|front}=front"
+       ]
+      ],
+      [
+       "EXPORT temper ← __characters/creatures/nature[aspect=temper]__",
+       "gentle with children, savage with hunters",
+       [
+        "__characters/creatures/nature__=gentle with children, savage with hunters"
+       ]
+      ],
+      [
+       "EXPORT diet ← __characters/creatures/nature[aspect=diet]__",
+       "moss and lichen scraped from rocks",
+       [
+        "__characters/creatures/nature__=moss and lichen scraped from rocks"
+       ]
+      ],
+      [
+       "EXPORT call ← __characters/creatures/nature[aspect=call]__",
+       "a crashing like waves on rocks",
+       [
+        "__characters/creatures/nature__=a crashing like waves on rocks"
+       ]
+      ]
+     ],
+     "exports": {
+      "who": "a yeti, horse-sized and young, with an ape-like body with long arms and huge flat feet, covered in sleek camel fur that gleams like velvet, with a small garden growing on its back",
+      "kind": {
+       "value": "a yeti",
+       "home": "ice",
+       "shape": "an ape-like body with long arms and huge flat feet",
+       "size": "horse-sized",
+       "skin": "fur"
+      },
+      "size": "horse-sized",
+      "age": "young",
+      "home": {
+       "value": "a frozen tundra under the northern lights",
+       "home": "ice"
+      },
+      "colour": "camel",
+      "temper": {
+       "value": "gentle with children, savage with hunters",
+       "aspect": "temper"
+      },
+      "diet": {
+       "value": "moss and lichen scraped from rocks",
+       "aspect": "diet"
+      },
+      "call": {
+       "value": "a crashing like waves on rocks",
+       "aspect": "call"
+      }
+     }
+    }
+   ]
+  }
+ }
+}

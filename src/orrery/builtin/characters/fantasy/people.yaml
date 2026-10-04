@@ -1,4 +1,4 @@
-meta: {source: "orrery fantasy creator: humans and the peoples beyond them; `look` is a people's own body (skin, ears, horns, fur, scales …), `like` says which of the creator's parts it takes (human: face, eyes, hair, marks; beast: eyes; spirit, construct: none), `gender` whether it is a woman or a man, `beard` whether its men may grow one; some read the signature $colour", needs: [colour], builtin: true}
+meta: {source: "orrery fantasy creator: humans and the peoples beyond them; `look` is a people's own body (skin, ears, horns, fur, scales …), `like` says which of the creator's parts it takes (human: face, eyes, hair, marks; beast: eyes; spirit, construct: none), `gender` whether it is a woman or a man, `beard` whether its men may grow one, `eyes: own` that its look has its eyes already; some read the signature $colour", needs: [colour], builtin: true}
 entries:
   - {value: "human", props: {like: human, gender: "yes", beard: "yes", look: "{pale|fair|olive|tan|bronze|brown|deep brown|ebony} skin"}}
   - {value: "high elf", props: {like: human, gender: "yes", beard: "no", look: "{porcelain|pale gold|moon-pale} skin, long tapering ears and fine, ageless features"}}
@@ -41,7 +41,7 @@ entries:
   - {value: "bearfolk", props: {like: beast, gender: "yes", beard: "no", look: "a bear's broad head and thick {brown|black|cinnamon} fur over a towering frame"}}
   - {value: "mothfolk", props: {like: beast, gender: "yes", beard: "no", look: "fuzzy {ivory|dusty grey|$colour} fur, feathered antennae and soft patterned wings"}}
   - {value: "harefolk", props: {like: beast, gender: "yes", beard: "no", look: "long upright ears, {brown|white|grey} fur and powerful hind legs"}}
-  - {value: "goatfolk", props: {like: beast, gender: "yes", beard: "no", look: "a goat's head with slotted eyes, ridged horns and {white|black|brown} shaggy hair"}}
+  - {value: "goatfolk", props: {like: beast, eyes: own, gender: "yes", beard: "no", look: "a goat's head with slotted eyes, ridged horns and {white|black|brown} shaggy hair"}}
   - {value: "ghost", props: {like: spirit, gender: "yes", beard: "no", look: "a translucent, pale blue-white form whose edges fray into mist"}}
   - {value: "banshee", props: {like: spirit, gender: "no", beard: "no", look: "a gaunt, translucent wailing figure with long hair drifting as if under water"}}
   - {value: "fire elemental", props: {like: spirit, gender: "no", beard: "no", look: "a body of living flame burning $colour at its heart, with eyes like coals"}}

@@ -1,0 +1,33 @@
+meta: {source: "orrery noir creator: who a character is in a 1940s city of rain and secrets, with its article; `fit` for whom (women or all, as the outfits), `wear` its clothes (reading the signature $colour as the one accent), `gear` what it holds (one of several)", needs: [colour], builtin: true}
+entries:
+  - {value: "a private eye", props: {fit: all, wear: "a rumpled trench coat over a loosened $colour tie and a fedora", gear: "{a snub-nosed revolver|a notebook and a stubby pencil|a photograph of a missing girl}"}}
+  - {value: "a nightclub singer", props: {fit: women, wear: "a bias-cut $colour satin gown and long gloves", gear: "{a silver microphone|a long cigarette holder|a gardenia in the hair}"}}
+  - {value: "a crooked cop", props: {fit: all, wear: "a creased police uniform with a $colour handkerchief stuffed in the pocket", gear: "{an envelope of cash|a nightstick|a badge held up to the light}"}}
+  - {value: "a mob accountant", props: {fit: all, wear: "a grey three-piece suit with $colour sleeve garters and round spectacles", gear: "{a ledger with a broken lock|an adding machine tape|a briefcase of banknotes}"}}
+  - {value: "a newspaper reporter", props: {fit: all, wear: "a press card tucked in a $colour hatband and rolled shirtsleeves", gear: "{a flash camera|a notepad full of shorthand|a copy of the late edition}"}}
+  - {value: "a wealthy heiress", props: {fit: women, wear: "a $colour silk dress under a fox-fur stole and pearls", gear: "{a jewelled compact|a small pearl-handled pistol|a cocktail glass}"}}
+  - {value: "a gangster", props: {fit: all, wear: "a sharp pinstriped suit with a $colour silk tie and a pocket square", gear: "{a tommy gun in a violin case|a fat cigar|a pair of brass knuckles}"}}
+  - {value: "a bartender", props: {fit: all, wear: "a white jacket with a $colour bow tie", gear: "{a bottle of rye|a rag over one shoulder|a shotgun under the counter}"}}
+  - {value: "a cab driver", props: {fit: all, wear: "a flat cap, a leather jacket and a $colour scarf", gear: "{a dented taxi meter key|a racing form|a thermos of coffee}"}}
+  - {value: "a washed-up boxer", props: {fit: all, wear: "a $colour robe over taped hands", gear: "{a pair of laced gloves|a cold steak for a black eye|a fight poster}"}}
+  - {value: "a cigarette seller", props: {fit: all, wear: "a pillbox hat and a short $colour uniform jacket", gear: "{a tray of cigarettes and matches|a coin changer|a single rose}"}}
+  - {value: "a jazz pianist", props: {fit: all, wear: "a white dinner jacket with a $colour carnation", gear: "{sheet music|a glass of whisky on the piano lid|a cigarette in the corner of the mouth}"}}
+  - {value: "a forger", props: {fit: all, wear: "a cardigan over a shirt with $colour ink stains on the cuffs", gear: "{a loupe and a fake passport|a fountain pen|a stack of counterfeit bills}"}}
+  - {value: "a getaway driver", props: {fit: all, wear: "a leather driving coat and $colour gloves", gear: "{a set of car keys|a map with an escape route|a stopwatch}"}}
+  - {value: "a city coroner", props: {fit: all, wear: "a stained lab coat over a $colour bow tie", gear: "{a toe tag|a scalpel|a file of autopsy photographs}"}}
+  - {value: "a fixer", props: {fit: all, wear: "a camel overcoat with a $colour scarf and a homburg", gear: "{a little black book|a telephone receiver|an envelope sealed with wax}"}}
+  - {value: "a priest", props: {fit: all, wear: "a black cassock with a $colour stole", gear: "{a rosary|a confession booth key|a worn bible}"}}
+  - {value: "a bookie", props: {fit: all, wear: "a loud checked jacket with a $colour waistcoat", gear: "{a chalkboard of odds|a fat roll of bills|a racing paper}"}}
+  - {value: "a crime-scene photographer", props: {fit: all, wear: "a rumpled suit and a $colour press armband", gear: "{a press camera with a flashbulb|a box of glass plates|a print still wet from the darkroom}"}}
+  - {value: "a defence lawyer", props: {fit: all, wear: "a double-breasted suit with a $colour tie pin", gear: "{a briefcase of affidavits|a law book|a pocket watch}"}}
+  - {value: "a showgirl", props: {fit: women, wear: "a sequinned $colour costume under a long coat", gear: "{a feather fan|a dressing-room key|a telegram}"}}
+  - {value: "an informant", props: {fit: all, wear: "a threadbare coat and a $colour knitted cap", gear: "{a folded note|a pack of cigarettes|a pair of dice}"}}
+  - {value: "a union boss", props: {fit: all, wear: "shirtsleeves, braces and a $colour armband", gear: "{a megaphone|a strike placard|a cigar}"}}
+  - {value: "a safecracker", props: {fit: all, wear: "a dark sweater and a $colour neckerchief", gear: "{a stethoscope|a roll of lock picks|a stick of dynamite}"}}
+  - {value: "a switchboard operator", props: {fit: all, wear: "a headset over a neat $colour blouse", gear: "{a switchboard plug|a notepad of overheard numbers|a lipstick}"}}
+  - {value: "a hotel night clerk", props: {fit: all, wear: "a hotel uniform with $colour piping", gear: "{a ring of room keys|a guest register|a bell}"}}
+  - {value: "a dockworker", props: {fit: all, wear: "a pea coat and a $colour wool cap", gear: "{a cargo hook|a lunch pail|a smuggled package}"}}
+  - {value: "a femme fatale", props: {fit: women, wear: "a fitted $colour suit with padded shoulders and a veiled hat", gear: "{a small revolver in a gloved hand|a lit cigarette|a letter she won't let go of}"}}
+  - {value: "a disgraced detective", props: {fit: all, wear: "a stained raincoat and a crooked $colour tie", gear: "{a revolver with no bullets|a hip flask|a case file}"}}
+  - {value: "a radio announcer", props: {fit: all, wear: "a sharp suit with a $colour bow tie, headphones on", gear: "{a ribbon microphone|a script|a stopwatch}"}}
+  - {value: "a crooner", props: {fit: men, wear: "a white dinner jacket with a $colour boutonnière and slicked-back hair", gear: "{a microphone on a stand|a glass of champagne|a cigarette held low}"}}

@@ -29,7 +29,12 @@ character from parts the way designers build one (a silhouette, a signature colo
 clothes and accents, one detail you remember, a face, hair that fits the age, a genre), every part a
 dial, and shows it from four sides: portrait, three-quarter, full figure and profile, on a grey
 studio backdrop, ready as references for H3 or a RefMod; set `$view` to one of them to try
-characters faster), and `h3/` holds MiniMax H3 scenes (dialogue in German
+characters faster; beside it a shelf of creators per world on the same parts (#138): fantasy
+(sixty peoples beyond humans, each with its own body, classes with their gear, familiars),
+cyberpunk (roles, chrome, street fashion, gangs), sci-fi (forty species, roles aboard and beyond),
+creatures (seventy kinds with their coverings, features and habitats) and noir (a 1940s city,
+black and white with one colour); each exports what the picture cannot show, for a reel that casts
+it), and `h3/` holds MiniMax H3 scenes (dialogue in German
 and Cantonese, a voiceover, fast cuts, an animated fable, on-screen music, and
 an I2VA starter for your own stills, a three-clip reel for H3 Motion
 Context, a drone flight, an impossible camera move that dives into a dewdrop
