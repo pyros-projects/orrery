@@ -861,4 +861,6 @@ def test_a_clips_takes_are_listed_served_picked_and_deleted(home, tmp_path, monk
     assert len(grown["takes"]) == 1 and grown["path"] == [grown["takes"][0]["folder"]]
     assert ok(home, webapi.chain_walk, chain="reels/a", folder=grown["takes"][0]["folder"])["clips"] == 1
     assert ok(home, webapi.chain_end, chain="reels/a", segment=0) == {"clips": 1}
+    assert ok(home, webapi.chain_video, chain="reels/a", film=1).name == "film.mp4"  # #243: the film to watch
+    assert api(home, webapi.chain_video, chain="reels/none", film=1)[0] == 404
     assert api(home, webapi.chain_walk, chain="reels/a", folder="seg_0009_nothere1")[0] == 400

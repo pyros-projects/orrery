@@ -666,6 +666,12 @@ def chain_move(home: Home, args: dict) -> dict:
 def chain_video(home: Home, args: dict) -> Path:
     from orrery.chain import clip_file
 
+    if args.get("film"):  # the film, its takes joined (#243)
+        from orrery import film
+        path = film.joined_film(_output_dir(), _latent_path(args))
+        if path is None:
+            raise ApiError(404, "the reel has no film yet.")
+        return path
     if args.get("take"):  # one take of a clip (#206)
         from orrery import film
         path = film.take_file(_output_dir(), _latent_path(args), str(args["take"]))

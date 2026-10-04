@@ -99,6 +99,7 @@ export function client(home) {
     endFilm: (chain, segment) => call("chain/end", { body: { chain, segment } }),
     takeThumbURL: (chain, take) => url("chain/thumb", { take, ...(chain ? { chain } : {}) }),
     takeVideoURL: (chain, take) => url("chain/video", { take, ...(chain ? { chain } : {}) }),
+    filmURL: (chain, v) => url("chain/video", { film: 1, v: v ?? "", ...(chain ? { chain } : {}) }),
     anchorURL: (image, v) => url("anchor", { image, v: v ?? "" }),
   };
 }

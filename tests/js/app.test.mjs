@@ -758,7 +758,7 @@ test("the take tree lays its takes out as a tidy tree, the film's path on top, a
 });
 
 test("a take made with another version of its scene is told, its change shown, and Use this prompt brings it back (#242)", async () => {
-  const { fetchTemplates, lineDiff, sceneIn, useVersion, versionHTML, versionOf } = await import("../../comfyui/web/app/versions.js");
+  const { fetchTemplates, lineDiff, sceneIn, useVersion, versionHTML, versionOf, wordMarks } = await import("../../comfyui/web/app/versions.js");
   const old = "@h3 base 16:9\n\nSCENE the door\nSHOT 5s: static\na red door opens.\n\nSCENE the hall\nSHOT 5s: dolly in\na long hall.\n";
   const now = "@h3 base 16:9\n\nSCENE the hall\nSHOT 5s: dolly in\na long hall.\n\nSCENE the door\nSHOT 5s: static\n# a note\na blue door opens.\n";
   const asked = [];
@@ -777,8 +777,10 @@ test("a take made with another version of its scene is told, its change shown, a
   assert.deepEqual([v.scene, v.at, v.then.split("\n").pop(), v.now.split("\n").pop()], [0, 1, "a red door opens.", "a blue door opens."]);
   assert.deepEqual(lineDiff("a\nb\nc", "a\nx\nc"), [[" ", "a"], ["-", "b"], ["+", "x"], [" ", "c"]]);
   const card = versionHTML(v);
-  assert.match(card, /class="cut">- a blue door opens\./);
-  assert.match(card, /class="add">\+ a red door opens\./);
+  assert.match(card, /class="cut"><i>−<\/i>a <mark>blue<\/mark> door opens\./);  // the changed word marked
+  assert.match(card, /class="add"><i>\+<\/i>a <mark>red<\/mark> door opens\./);
+  assert.match(card, /SCENE the door/);
+  assert.deepEqual(wordMarks("walks slowly on", "walks on"), ["walks <mark>slowly</mark> on", "walks on"]);
   useVersion(app, v);
   assert.ok(app.text.startsWith("@h3 base 16:9\n\nSCENE the hall\nSHOT 5s: dolly in\na long hall.\n\nSCENE the door\nSHOT 5s: static\na red door opens."));
   assert.equal(versionOf(app, { template: "old", scene: 0 }), null);
@@ -788,4 +790,11 @@ test("a take made with another version of its scene is told, its change shown, a
   app.text = "@h3 base 16:9\n\nSCENE the door\nSHOT 5s: static\na red door opens.\n";  // the hall gone: it comes back at the end
   useVersion(app, versionOf(app, { template: "old", scene: 1 }));
   assert.equal(app.text, "@h3 base 16:9\n\nSCENE the door\nSHOT 5s: static\na red door opens.\n\nSCENE the hall\nSHOT 5s: dolly in\na long hall.");
+});
+
+test("the film plays in the tree: its clips in film.mp4's time, a test scene's take left out (#243)", async () => {
+  const { filmClips } = await import("../../comfyui/web/app/tree.js");
+  const takes = [{ folder: "a", frames: 240 }, { folder: "t", frames: 120, test: true }, { folder: "b", frames: 120 }, { folder: "x", frames: 99 }];
+  assert.deepEqual(filmClips({ takes, path: ["a", "t", "b"] }), [{ folder: "a", n: 1, start: 0, end: 10 }, { folder: "b", n: 3, start: 10, end: 15 }]);
+  assert.deepEqual(filmClips({ takes, path: [] }), []);
 });

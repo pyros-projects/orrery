@@ -240,6 +240,13 @@ def takes(output: Path | str, latent_path: str) -> dict[int, list[dict]]:
     return out
 
 
+def joined_film(output: Path | str, latent_path: str) -> Path | None:
+    """The active run's film, its takes joined (#243), if it has one."""
+    run, _ = _active(_root(output, latent_path))
+    path = run / "film.mp4" if run is not None else None
+    return path if path is not None and path.is_file() else None
+
+
 def take_file(output: Path | str, latent_path: str, folder: str) -> Path | None:
     """A take's video in the active run, by its folder's name."""
     run, _ = _active(_root(output, latent_path))
