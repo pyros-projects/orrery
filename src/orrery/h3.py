@@ -187,7 +187,7 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
     for raw in lines:
         if not raw or _BINDING.match(raw) or _DSL_ONLY.match(raw):
             continue
-        line = raw if expanded else ex.expr(raw)
+        line = _IMAGE_ANGLE.sub(r"[image \1]", raw if expanded else ex.expr(raw))  # <Image N>, as H3 users write it (#224)
         if not line.strip():  # a `? cond:` line that does not hold
             continue
         if m := _ENHANCE.match(line):
@@ -270,12 +270,12 @@ def parse_scene(src: str, ex: Expander, lint: list[Issue], expanded: bool = Fals
     for shot in scene.shots:
         shot.start, t = t, t + shot.duration
     _apply_sets(scene, lint)
-    pictures = {s.name or s.index for m in scene.cast for s in m.sources if s.kind == "image"}
-    refmods = {_refmod_key(s.name) for m in scene.cast for s in m.sources if s.kind == "refmod"}
+    # SET: dials any image the clip hands to H3, CAST or not, and brings in a RefMod no member has (#224)
+    pictures = {s.name or s.index for m in scene.cast for s in m.sources if s.kind == "image"} | set(image_slots(scene))
     for kind, target in scene.dials:
-        if (kind == "image" and target not in pictures) or (kind == "refmod" and target not in refmods):
-            name = f"image_{target}" if kind == "image" else target
-            lint.append(Issue("warn", f"SET: {name} is not a picture or a RefMod of the CAST, so it changes nothing."))
+        if kind == "image" and target not in pictures:
+            lint.append(Issue("warn", f"SET: image_{target}: the clip hands no image {target} to H3 (a CAST source, a frame "
+                                      f"anchor, or [image {target}] or <Image {target}> in its text), so it changes nothing."))
     return scene
 
 
@@ -750,13 +750,17 @@ def clip_refmods(scene: Scene) -> list[dict]:
                 end = scene.refmod_end if src.end is None else src.end
                 out[src.name] = {"name": src.name, "member": m.name, "strength": dial.get("strength", strength),
                                  "from": dial.get("from", start), "to": dial.get("to", end)}
+    for (kind, name), dial in scene.dials.items():  # `SET: NAME(…)`: a RefMod no member has (#224)
+        if kind == "refmod" and not any(_refmod_key(n) == name for n in out):
+            out[name] = {"name": name, "member": None, "strength": dial.get("strength", scene.refmod_strength),
+                         "from": dial.get("from", scene.refmod_start), "to": dial.get("to", scene.refmod_end)}
     return list(out.values())
 
 
 def clip_images(scene: Scene, refs: list[int]) -> list[dict]:
     """The clip's pictures with an `at` or a `from` (`image 1 at 0.5 from 35%`), for Orrery RefMods:
     `ref` is the picture's place among those Reference to Video gets (packed by Orrery Refs when
-    `refs` lists the original slots), `image` its slot in the CAST."""
+    `refs` lists the original slots), `image` its slot as written (in the CAST, the text or a frame anchor)."""
     out: dict[int, dict] = {}
     for m in scene.cast:
         for src in m.sources:
@@ -768,10 +772,17 @@ def clip_images(scene: Scene, refs: list[int]) -> list[dict]:
                                   "strength": dial.get("strength", 1.0 if src.strength is None else src.strength),
                                   "from": dial.get("from", 0.0 if src.start is None else src.start),
                                   "to": dial.get("to", 1.0 if src.end is None else src.end)}
+    for slot in image_slots(scene):  # an image in the text or a frame anchor, which `SET: image_N(…)` dials (#224)
+        image = refs[slot - 1] if refs else slot
+        dial = scene.dials.get(("image", image))
+        if dial and slot not in out:
+            out[slot] = {"ref": slot, "image": image, "member": None, "strength": dial.get("strength", 1.0),
+                         "from": dial.get("from", 0.0), "to": dial.get("to", 1.0)}
     return list(out.values())
 
 
 _IMAGE_BRACKET = re.compile(r"\[image\s+(\d+)\]", re.IGNORECASE)
+_IMAGE_ANGLE = re.compile(r"<image\s+(\d+)>", re.IGNORECASE)  # H3's own way to name a reference in the text
 
 
 def image_slots(scene: Scene) -> list[int]:

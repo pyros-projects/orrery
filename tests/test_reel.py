@@ -897,5 +897,5 @@ def test_a_dial_can_stop_before_sampling_does():
 def test_a_set_line_written_wrong_or_naming_nothing_is_lint():
     lint = lambda line: [i.message for i in ref2va(LEAVES.replace("EMMA slides back", f"{line}\nEMMA slides back"), segment=2).lint]
     assert any("is not name(strength, start)" in m for m in lint("SET: image_1 at 0.5"))
-    assert any("SET: image_4 is not a picture or a RefMod of the CAST" in m for m in lint("SET: image_4(0.5)"))
+    assert any("SET: image_4: the clip hands no image 4 to H3" in m for m in lint("SET: image_4(0.5)"))
     assert any("takes numbers" in m for m in lint("SET: emma_canon(half)"))
