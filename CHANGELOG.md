@@ -9,6 +9,10 @@ checks) are left out.
 
 ### Added
 
+- An expression creator for Krea 2 (#291): `krea/15_expression_creator` rolls a character in a close-up, and the
+  grid shows it in the eight expressions of a set (basic, subtle, intense, social, inner, playful); each expression
+  says what the face does and the muscles that do it, in FACS action units. Render it with Krea 2 Raw and the turbo
+  LoRA: the Turbo checkpoint gives one flat face whatever the expression.
 - A shelf of character creators for Krea 2 (#138): fantasy (`krea/10_fantasy_creator`: a human or one of sixty
   peoples, each with its own body, a class with its clothes and gear, a familiar), cyberpunk (`krea/11_…`: 32 roles,
   chrome, street fashion, gangs, a neon city), sci-fi (`krea/12_…`: forty species, thirty roles), creatures

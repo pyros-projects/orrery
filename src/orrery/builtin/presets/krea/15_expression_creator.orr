@@ -1,0 +1,37 @@
+---
+title: "Expression creator"
+note: "One face in eight expressions, for Krea 2: a character from the Character creator's parts in a close-up, and the grid runs every expression of a set, so one seed is one person in eight moods (references for H3, faces for a storyboard, a dataset for a LoRA). Each expression says what the face does and the muscles that do it, in the action units of FACS, Ekman's Facial Action Coding System (inner brow raiser, lid tightener, lip corner puller …), the way a sheet on r/StableDiffusion did it by hand. Six sets of eight: basic (the seven universal emotions and calm), subtle, intense, social, inner and playful; change [set=basic] in $expression to another, or set $expression to one of them to try faces faster. $lens = wide puts the face close to a wide-angle lens. Render it with Krea 2 Raw and the turbo LoRA: the Turbo checkpoint gives the same flat face whatever the expression."
+tags: [krea, characters, references, expressions]
+---
+$colour = __characters/creator/colour__
+$gender = {woman:4|man:4|nonbinary person}
+$fit = {IF $gender is woman: women|{IF $gender is man: men|all}}
+$age = {young:3|prime:3|middle-aged:2|old:2}
+$years = {IF $age is young: {19-26}|{IF $age is prime: {27-39}|{IF $age is middle-aged: {40-58}|{59-79}}}}
+$origin = __characters/creator/origin__
+$face = __characters/creator/face__
+$eyes = __characters/creator/eyes__
+$haircolour = {IF $age is old: {silver|white|snow-white|iron-grey|salt-and-pepper}|{IF $age is young: {__characters/creator/haircolour__:4|$colour-dyed}|{IF $age is middle-aged: {__characters/creator/haircolour__:3|greying|salt-and-pepper}|__characters/creator/haircolour__}}}
+$hair = __characters/creator/hair[fit=$fit|all]__
+$beard = {IF $gender is man: {__characters/creator/beard__|none:2}|none}
+$mark = __characters/creator/mark__
+$top = {a $colour crew-neck t-shirt|a $colour turtleneck|a chunky $colour knit sweater|a white shirt with an open collar and a $colour scarf|a $colour hoodie|a $colour silk blouse|a denim jacket over a $colour t-shirt|a $colour linen shirt|a black leather jacket over a $colour top|a $colour cardigan over a white tee}
+# A close-up shows the head and the shoulders, so the person is only what it can see: no build, nothing in hand.
+$person = a $years-year-old $gender of $origin: $face, $eyes, $hair{IF $beard is not none: , $beard|} and $mark, wearing $top
+# The grid runs every expression of the set: one face, eight moods. Change [set=basic] to subtle, intense, social, inner or playful.
+$expression = __characters/creator/expression[set=basic]__
+# What the picture carries beyond its prompt (EXPORT:): a screenplay that casts it reads $hero.who and $hero.expression.
+EXPORT:
+  who = $person
+  age = $years
+  $gender
+  $colour
+  $expression
+$look = {photo:5|animated:2|anime:2|painted}
+$lens = {portrait:3|wide}
+$opening = {IF $look is photo: A photograph|{IF $look is animated: A 3D character render, in the style of a modern animated feature film|{IF $look is anime: An anime character portrait|A painted character study}}}
+$shot = {IF $lens is wide: a wide-angle close-up, the face close to the lens|a close-up portrait, the head and shoulders filling the frame}
+$finish = {IF $look is photo: {IF $lens is wide: Shot on a 24mm lens close to the face, slight wide-angle distortion, true colours, natural skin texture.|Shot on an 85mm lens at eye level, true colours, natural skin texture.}|{IF $look is animated: Stylised proportions, expressive animation acting, soft subsurface skin.|{IF $look is anime: Clean line art and flat cel shading.|Gouache with visible brush strokes.}}}
+$opening: $shot, facing the camera, of $person. Their face shows $expression: $expression.face. Facial muscles at work: $expression.units. Behind them is a seamless mid-grey studio backdrop, in soft, even light. $finish
+@size 1024x1024
+@grid $expression
