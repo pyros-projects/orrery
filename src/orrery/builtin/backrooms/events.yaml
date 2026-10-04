@@ -1,0 +1,42 @@
+meta: {source: "orrery pack: what happens on an endless found-footage walk, a clause after it (value) and its sound (sfx); small and wrong rather than loud", builtin: true}
+entries:
+  - {value: "a phone starts ringing in a room ahead and stops the moment the camera gets close", props: {sfx: "an old phone ringing, cut off mid-ring"}}
+  - {value: "somewhere behind the camera, footsteps fall into step with the operator's and stop when they stop", props: {sfx: "a second set of footsteps, a beat behind"}}
+  - {value: "a door at the end of the room stands ajar with warm light behind it, and is shut when the camera reaches it", props: {sfx: "a door latch clicking softly"}}
+  - {value: "a VHS tape lies on the floor with the operator's own handwriting on its label", props: {sfx: "the operator's breath catching"}}
+  - {value: "the date stamp in the corner of the picture jumps back an hour and runs on", props: {sfx: "a short burst of tape warble"}}
+  - {value: "every light in the room dims at once, as if something large passed in front of the sun, and comes back", props: {sfx: "the fluorescent buzz dropping and rising again"}}
+  - {value: "a child's drawing taped to the wall shows this very room and a stick figure holding a camera", props: {sfx: "paper fluttering in a draught from nowhere"}}
+  - {value: "a figure stands at the far end of a corridor, and is gone when the camera looks again", props: {sfx: "a single creak of a floorboard"}}
+  - {value: "the operator's own voice comes out of a speaker in the ceiling, saying hello, is anyone there", props: {sfx: "a tinny recording of the operator's voice"}}
+  - {value: "fresh wet footprints lead across the floor and stop in the middle of the room", props: {sfx: "water dripping from nowhere"}}
+  - {value: "a television on a cart plays a recording of the camera walking through the room a minute ago", props: {sfx: "the television's tinny copy of the operator's footsteps"}}
+  - {value: "a lift at the end of the room opens its doors, waits, and closes them again", props: {sfx: "a lift chime and doors sliding"}}
+  - {value: "chalk writing on the floor reads DON'T LOOK UP, and the camera does not", props: {sfx: "something shifting overhead"}}
+  - {value: "the wallpaper ripples once, as if a breath went through the wall", props: {sfx: "a long, low exhale inside the wall"}}
+  - {value: "a vending machine lights up and drops a can that rolls up to the operator's feet", props: {sfx: "a can thunking down and rolling"}}
+  - {value: "a hand-drawn arrow on the wall points back the way the camera came", props: {sfx: "a marker squeaking somewhere nearby"}}
+  - {value: "every door in the room swings shut, one after another, all down the line", props: {sfx: "doors slamming in sequence, getting closer"}}
+  - {value: "a party balloon drifts out of a doorway at head height and floats past", props: {sfx: "a balloon squeaking against the ceiling"}}
+  - {value: "a lost camcorder lies on the carpet, still recording, its red light blinking", props: {sfx: "a second camera's motor whirring"}}
+  - {value: "the room's clock runs backwards, and so for a moment does the picture", props: {sfx: "a clock ticking backwards and tape rewinding"}}
+  - {value: "a tap is running in a sink with no one at it, the water already overflowing onto the floor", props: {sfx: "water running and splashing on tiles"}}
+  - {value: "the camera's picture flickers to a view from somewhere high up looking down at the operator, and back", props: {sfx: "a burst of static"}}
+  - {value: "a radio on a desk tunes itself from station to station, each one reading out the same date", props: {sfx: "a radio dial sweeping through voices"}}
+  - {value: "a trail of breadcrumbs leads across the floor and into a wall", props: {sfx: "a dry crumb crunching underfoot"}}
+  - {value: "a fire alarm on the wall flashes red without a sound", props: {sfx: "an alarm light ticking silently"}}
+  - {value: "a door at the side of the room has a fresh handprint on its frosted glass, on the inside", props: {sfx: "a palm sliding slowly down glass"}}
+  - {value: "a row of hanging lights starts to swing, one after another, as if something walked through them", props: {sfx: "light fittings creaking on their chains"}}
+  - {value: "a mannequin stands in the middle of the room, and is facing the camera the second time the camera looks", props: {sfx: "a stiff joint creaking"}}
+  - {value: "the fluorescent buzz forms a word for a moment, close enough to a name", props: {sfx: "the buzz shaping a whispered name"}}
+  - {value: "a stack of chairs topples over in another room", props: {sfx: "chairs crashing down in the distance"}}
+  - {value: "a note on the floor reads YOU WERE HERE in the operator's handwriting", props: {sfx: "paper scraping along the carpet"}}
+  - {value: "an air vent breathes out warm air that smells of something cooking", props: {sfx: "a vent rattling and sighing"}}
+  - {value: "a mirror on the wall shows the room without the camera in it", props: {sfx: "a faint, high ringing"}}
+  - {value: "a toy car rolls out of a doorway, slows, and stops against the operator's shoe", props: {sfx: "small plastic wheels rolling"}}
+  - {value: "the light ahead turns from white to a sick green and stays that way", props: {sfx: "the fluorescent tubes changing pitch"}}
+  - {value: "a door number counts down by one each time the camera passes it", props: {sfx: "a little metal number clinking"}}
+  - {value: "someone has knocked from the other side of a wall, three times, in the operator's rhythm", props: {sfx: "three knocks inside the wall"}}
+  - {value: "a puddle on the floor reflects a ceiling that is not the ceiling above it", props: {sfx: "a drop falling into the puddle"}}
+  - {value: "a security camera in the corner turns slowly to follow the operator", props: {sfx: "a small servo motor whining"}}
+  - {value: "a birthday cake sits on a table with its candles still burning", props: {sfx: "candle flames fluttering and a distant, slow happy birthday"}}
