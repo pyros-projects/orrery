@@ -5,7 +5,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "A black-and-white film-noir still, high contrast, of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a bulldog with a spiked collar, with a steady, amused half-smile. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Deep shadows and silver highlights, black and white except for the crimson accents.",
+     "text": "A black-and-white film-noir still, high contrast, of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a canary in a brass cage, with a steady, amused half-smile. A head-and-shoulders portrait, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Deep shadows and silver highlights, black and white except for the crimson accents.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -163,9 +163,9 @@
       ],
       [
        "$companion ← __characters/creator/companion[genre=noir]__",
-       "a bulldog with a spiked collar",
+       "a canary in a brass cage",
        [
-        "__characters/creator/companion__=a bulldog with a spiked collar"
+        "__characters/creator/companion__=a canary in a brass cage"
        ]
       ],
       [
@@ -227,7 +227,7 @@
       ]
      ],
      "exports": {
-      "who": "a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a bulldog with a spiked collar",
+      "who": "a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a canary in a brass cage",
       "age": "58",
       "gender": "man",
       "role": {
@@ -238,7 +238,7 @@
       },
       "gear": "a cold steak for a black eye",
       "companion": {
-       "value": "a bulldog with a spiked collar",
+       "value": "a canary in a brass cage",
        "genre": "noir"
       },
       "colour": "crimson",
@@ -253,7 +253,7 @@
     },
     {
      "cell": 1,
-     "text": "A black-and-white film-noir still, high contrast, of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a bulldog with a spiked collar, with a steady, amused half-smile. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Deep shadows and silver highlights, black and white except for the crimson accents.",
+     "text": "A black-and-white film-noir still, high contrast, of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a canary in a brass cage, with a steady, amused half-smile. A head-and-shoulders view turned three-quarters to the left, against a seamless mid-grey studio backdrop, in soft, even light. Deep shadows and silver highlights, black and white except for the crimson accents.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -411,9 +411,9 @@
       ],
       [
        "$companion ← __characters/creator/companion[genre=noir]__",
-       "a bulldog with a spiked collar",
+       "a canary in a brass cage",
        [
-        "__characters/creator/companion__=a bulldog with a spiked collar"
+        "__characters/creator/companion__=a canary in a brass cage"
        ]
       ],
       [
@@ -475,7 +475,7 @@
       ]
      ],
      "exports": {
-      "who": "a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a bulldog with a spiked collar",
+      "who": "a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a canary in a brass cage",
       "age": "58",
       "gender": "man",
       "role": {
@@ -486,7 +486,7 @@
       },
       "gear": "a cold steak for a black eye",
       "companion": {
-       "value": "a bulldog with a spiked collar",
+       "value": "a canary in a brass cage",
        "genre": "noir"
       },
       "colour": "crimson",
@@ -501,7 +501,7 @@
     },
     {
      "cell": 2,
-     "text": "A black-and-white film-noir still, high contrast, of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a bulldog with a spiked collar, with a steady, amused half-smile. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Deep shadows and silver highlights, black and white except for the crimson accents.",
+     "text": "A black-and-white film-noir still, high contrast, of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a canary in a brass cage, with a steady, amused half-smile. A full-length view of the whole body, from the top of the head to the shoes, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a seamless mid-grey studio backdrop, in soft, even light. Deep shadows and silver highlights, black and white except for the crimson accents.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -659,9 +659,9 @@
       ],
       [
        "$companion ← __characters/creator/companion[genre=noir]__",
-       "a bulldog with a spiked collar",
+       "a canary in a brass cage",
        [
-        "__characters/creator/companion__=a bulldog with a spiked collar"
+        "__characters/creator/companion__=a canary in a brass cage"
        ]
       ],
       [
@@ -723,7 +723,7 @@
       ]
      ],
      "exports": {
-      "who": "a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a bulldog with a spiked collar",
+      "who": "a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a canary in a brass cage",
       "age": "58",
       "gender": "man",
       "role": {
@@ -734,7 +734,7 @@
       },
       "gear": "a cold steak for a black eye",
       "companion": {
-       "value": "a bulldog with a spiked collar",
+       "value": "a canary in a brass cage",
        "genre": "noir"
       },
       "colour": "crimson",
@@ -749,7 +749,7 @@
     },
     {
      "cell": 3,
-     "text": "A black-and-white film-noir still, high contrast, of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a bulldog with a spiked collar, with a steady, amused half-smile. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Deep shadows and silver highlights, black and white except for the crimson accents.",
+     "text": "A black-and-white film-noir still, high contrast, of a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a canary in a brass cage, with a steady, amused half-smile. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a seamless mid-grey studio backdrop, in soft, even light. Deep shadows and silver highlights, black and white except for the crimson accents.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -907,9 +907,9 @@
       ],
       [
        "$companion ← __characters/creator/companion[genre=noir]__",
-       "a bulldog with a spiked collar",
+       "a canary in a brass cage",
        [
-        "__characters/creator/companion__=a bulldog with a spiked collar"
+        "__characters/creator/companion__=a canary in a brass cage"
        ]
       ],
       [
@@ -971,7 +971,7 @@
       ]
      ],
      "exports": {
-      "who": "a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a bulldog with a spiked collar",
+      "who": "a 58-year-old man of Indian descent, with light brown skin: athletic, with a sprinter's strong legs, a face wider at the jaw than at the forehead, yellow-green eyes, blue-black cornrows running straight back to the nape and laugh lines carved deep around the eyes; a washed-up boxer in a crimson robe over taped hands, their clothes marked by a monogram stitched in crimson on the cuff, with a cold steak for a black eye, a canary in a brass cage",
       "age": "58",
       "gender": "man",
       "role": {
@@ -982,7 +982,7 @@
       },
       "gear": "a cold steak for a black eye",
       "companion": {
-       "value": "a bulldog with a spiked collar",
+       "value": "a canary in a brass cage",
        "genre": "noir"
       },
       "colour": "crimson",

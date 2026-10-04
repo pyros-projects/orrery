@@ -27,7 +27,7 @@ EXPORT:
 $look = {photo:4|animated:2|painted:2|concept:2}
 $view = {head|three-quarter|side|front}
 $opening = {IF $look is photo: A photograph of a lifelike practical creature, as on a film set,|{IF $look is animated: A 3D creature render, in the style of a modern animated feature film,|{IF $look is painted: A naturalist's watercolour plate|A creature concept-art painting}}}
-$frame = {IF $view is head: A close study of the head and neck|{IF $view is three-quarter: A three-quarter view of the whole creature, turned to the left|{IF $view is side: A full side view of the whole body, from the head to the tip of the tail, with space around it in frame|A front view of the whole creature, facing the camera}}}
+$frame = {IF $view is head: A close-up of the head and neck alone, filling the frame|{IF $view is three-quarter: A three-quarter view of the whole creature, turned to the left|{IF $view is side: A full side view of the whole body, from the head to the tip of the tail, with space around it in frame|A front view of the whole creature, facing the camera}}}
 $finish = {IF $look is photo: Shot on a 50mm lens, true colours, every scale and hair sharp.|{IF $look is animated: Stylised shapes, soft subsurface light.|{IF $look is painted: Fine ink lines and translucent washes on cream paper.|Loose painterly strokes and a clear silhouette.}}}
 $opening of $who. $frame, against {IF $backdrop is studio: a seamless mid-grey studio backdrop|$home, softly out of focus}, in soft, even light. $finish
 @size 1216x832

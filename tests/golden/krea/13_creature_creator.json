@@ -5,7 +5,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "A creature concept-art painting of a unicorn, horse-sized and young, with a horse's body with a spiralled horn on the brow, covered in patchy crimson fur over scarred skin, with no eyes at all. A close study of the head and neck, against a seamless mid-grey studio backdrop, in soft, even light. Loose painterly strokes and a clear silhouette.",
+     "text": "A creature concept-art painting of a unicorn, horse-sized and young, with a horse's body with a spiralled horn on the brow, covered in patchy crimson fur over scarred skin, with no eyes at all. A close-up of the head and neck alone, filling the frame, against a seamless mid-grey studio backdrop, in soft, even light. Loose painterly strokes and a clear silhouette.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -513,7 +513,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "A naturalist's watercolour plate of a thunder lizard, elephant-sized and ancient, with a long-necked dinosaur's body and a whip-like tail, covered in dark scales with mustard-yellow stripes along the spine, with an eye on the end of its tail. A close study of the head and neck, against a jungle clearing of ancient stones, softly out of focus, in soft, even light. Fine ink lines and translucent washes on cream paper.",
+     "text": "A naturalist's watercolour plate of a thunder lizard, elephant-sized and ancient, with a long-necked dinosaur's body and a whip-like tail, covered in dark scales with mustard-yellow stripes along the spine, with an eye on the end of its tail. A close-up of the head and neck alone, filling the frame, against a jungle clearing of ancient stones, softly out of focus, in soft, even light. Fine ink lines and translucent washes on cream paper.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -1021,7 +1021,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "A naturalist's watercolour plate of a yeti, horse-sized and young, with an ape-like body with long arms and huge flat feet, covered in sleek camel fur that gleams like velvet, with a small garden growing on its back. A close study of the head and neck, against a seamless mid-grey studio backdrop, in soft, even light. Fine ink lines and translucent washes on cream paper.",
+     "text": "A naturalist's watercolour plate of a yeti, horse-sized and young, with an ape-like body with long arms and huge flat feet, covered in sleek camel fur that gleams like velvet, with a small garden growing on its back. A close-up of the head and neck alone, filling the frame, against a seamless mid-grey studio backdrop, in soft, even light. Fine ink lines and translucent washes on cream paper.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",

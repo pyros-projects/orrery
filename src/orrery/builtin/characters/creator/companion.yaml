@@ -1,4 +1,4 @@
-meta: {source: "orrery character creator: a companion and where it is, to follow 'with'; `genre` says where it belongs (all fits anywhere); a fantasy one is a familiar; several read the creator's $colour", needs: [colour], builtin: true}
+meta: {source: "orrery character creator: a companion and where it is, to follow 'with'; `genre` says where it belongs (all fits anywhere); a fantasy one is a familiar; never a person, who would be a second subject in a reference picture; several read the creator's $colour", needs: [colour], builtin: true}
 entries:
   - {value: "a ginger cat draped over one shoulder", props: {genre: all}}
   - {value: "a scruffy terrier sitting at their feet", props: {genre: all}}
@@ -75,7 +75,6 @@ entries:
   - {value: "a pit bull in a $colour LED collar", props: {genre: cyberpunk}}
   - {value: "a floating orb drone that scans everything", props: {genre: cyberpunk}}
   - {value: "a clone of a pet that died years ago", props: {genre: cyberpunk}}
-  - {value: "a glitching hologram of a little girl", props: {genre: cyberpunk}}
   - {value: "a mechanical snake coiled around one arm", props: {genre: cyberpunk}}
   - {value: "a security drone with a cracked lens", props: {genre: cyberpunk}}
   - {value: "a pigeon with a tiny antenna", props: {genre: cyberpunk}}
@@ -87,7 +86,6 @@ entries:
   - {value: "a black cat on the windowsill behind them", props: {genre: noir}}
   - {value: "a canary in a brass cage", props: {genre: noir}}
   - {value: "a bulldog with a spiked collar", props: {genre: noir}}
-  - {value: "a nervous informant hovering behind them", props: {genre: noir}}
   - {value: "a pigeon on the ledge, watching", props: {genre: noir}}
   - {value: "a Doberman at their side", props: {genre: noir}}
   - {value: "a lapdog in a jewelled collar", props: {genre: noir}}
@@ -108,10 +106,8 @@ entries:
   - {value: "a ship's cat in a tiny space suit", props: {genre: spacefarer}}
   - {value: "a hovering spherical drone with one antenna", props: {genre: spacefarer}}
   - {value: "an alien lizard with feathered frills", props: {genre: spacefarer}}
-  - {value: "a hologram of the ship's AI", props: {genre: spacefarer}}
   - {value: "a furry creature with too many eyes", props: {genre: spacefarer}}
   - {value: "a crystalline being that chimes when it moves", props: {genre: spacefarer}}
-  - {value: "an android aide standing a step behind", props: {genre: spacefarer}}
   - {value: "a space monkey in a $colour jumpsuit", props: {genre: spacefarer}}
   - {value: "a bioluminescent alien moth", props: {genre: spacefarer}}
   - {value: "a sleek robot hound with a $colour stripe", props: {genre: spacefarer}}

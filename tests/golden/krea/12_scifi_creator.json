@@ -1781,7 +1781,7 @@
    "takes": [
     {
      "cell": 0,
-     "text": "A cinematic photograph, as from the set of a space opera, of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a hovering spherical drone with one antenna, with a sheepish, apologetic look. A head-and-shoulders portrait, facing the camera, against a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "text": "A cinematic photograph, as from the set of a space opera, of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a ship's cat in a tiny space suit, with a sheepish, apologetic look. A head-and-shoulders portrait, facing the camera, against a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -1904,9 +1904,9 @@
       ],
       [
        "$companion ← __characters/creator/companion[genre=spacefarer]__",
-       "a hovering spherical drone with one antenna",
+       "a ship's cat in a tiny space suit",
        [
-        "__characters/creator/companion__=a hovering spherical drone with one antenna"
+        "__characters/creator/companion__=a ship's cat in a tiny space suit"
        ]
       ],
       [
@@ -1975,7 +1975,7 @@
       ]
      ],
      "exports": {
-      "who": "a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a hovering spherical drone with one antenna",
+      "who": "a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a ship's cat in a tiny space suit",
       "species": {
        "value": "uplifted ape",
        "beard": "no",
@@ -1993,7 +1993,7 @@
       },
       "gear": "a riot helmet",
       "companion": {
-       "value": "a hovering spherical drone with one antenna",
+       "value": "a ship's cat in a tiny space suit",
        "genre": "spacefarer"
       },
       "colour": "camel",
@@ -2008,7 +2008,7 @@
     },
     {
      "cell": 1,
-     "text": "A cinematic photograph, as from the set of a space opera, of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a hovering spherical drone with one antenna, with a sheepish, apologetic look. A head-and-shoulders view turned three-quarters to the left, against a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "text": "A cinematic photograph, as from the set of a space opera, of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a ship's cat in a tiny space suit, with a sheepish, apologetic look. A head-and-shoulders view turned three-quarters to the left, against a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -2131,9 +2131,9 @@
       ],
       [
        "$companion ← __characters/creator/companion[genre=spacefarer]__",
-       "a hovering spherical drone with one antenna",
+       "a ship's cat in a tiny space suit",
        [
-        "__characters/creator/companion__=a hovering spherical drone with one antenna"
+        "__characters/creator/companion__=a ship's cat in a tiny space suit"
        ]
       ],
       [
@@ -2202,7 +2202,7 @@
       ]
      ],
      "exports": {
-      "who": "a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a hovering spherical drone with one antenna",
+      "who": "a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a ship's cat in a tiny space suit",
       "species": {
        "value": "uplifted ape",
        "beard": "no",
@@ -2220,7 +2220,7 @@
       },
       "gear": "a riot helmet",
       "companion": {
-       "value": "a hovering spherical drone with one antenna",
+       "value": "a ship's cat in a tiny space suit",
        "genre": "spacefarer"
       },
       "colour": "camel",
@@ -2235,7 +2235,7 @@
     },
     {
      "cell": 2,
-     "text": "A cinematic photograph, as from the set of a space opera, of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a hovering spherical drone with one antenna, with a sheepish, apologetic look. A full-length view of the whole body, from the top of the head to the feet, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "text": "A cinematic photograph, as from the set of a space opera, of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a ship's cat in a tiny space suit, with a sheepish, apologetic look. A full-length view of the whole body, from the top of the head to the feet, with floor and space around it in frame, standing straight with the arms relaxed, facing the camera, against a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -2358,9 +2358,9 @@
       ],
       [
        "$companion ← __characters/creator/companion[genre=spacefarer]__",
-       "a hovering spherical drone with one antenna",
+       "a ship's cat in a tiny space suit",
        [
-        "__characters/creator/companion__=a hovering spherical drone with one antenna"
+        "__characters/creator/companion__=a ship's cat in a tiny space suit"
        ]
       ],
       [
@@ -2429,7 +2429,7 @@
       ]
      ],
      "exports": {
-      "who": "a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a hovering spherical drone with one antenna",
+      "who": "a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a ship's cat in a tiny space suit",
       "species": {
        "value": "uplifted ape",
        "beard": "no",
@@ -2447,7 +2447,7 @@
       },
       "gear": "a riot helmet",
       "companion": {
-       "value": "a hovering spherical drone with one antenna",
+       "value": "a ship's cat in a tiny space suit",
        "genre": "spacefarer"
       },
       "colour": "camel",
@@ -2462,7 +2462,7 @@
     },
     {
      "cell": 3,
-     "text": "A cinematic photograph, as from the set of a space opera, of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a hovering spherical drone with one antenna, with a sheepish, apologetic look. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
+     "text": "A cinematic photograph, as from the set of a space opera, of a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a ship's cat in a tiny space suit, with a sheepish, apologetic look. A strict side profile of the head and shoulders: the face seen exactly from the side, turned 90 degrees to the left, the nose pointing at the left edge of the frame and only one eye visible, against a spaceport crowd under towering cranes, in soft, even light. Shot on an 85mm lens at eye level, true colours, practical costume and prosthetics.",
      "picks": [
       [
        "$colour ← __characters/creator/colour__",
@@ -2585,9 +2585,9 @@
       ],
       [
        "$companion ← __characters/creator/companion[genre=spacefarer]__",
-       "a hovering spherical drone with one antenna",
+       "a ship's cat in a tiny space suit",
        [
-        "__characters/creator/companion__=a hovering spherical drone with one antenna"
+        "__characters/creator/companion__=a ship's cat in a tiny space suit"
        ]
       ],
       [
@@ -2656,7 +2656,7 @@
       ]
      ],
      "exports": {
-      "who": "a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a hovering spherical drone with one antenna",
+      "who": "a seasoned uplifted ape woman with a gorilla's frame and face with a silver-backed coat and thoughtful eyes: a station security officer in a camel security vest with a station badge, their clothes marked by Thai temple flame motifs picked out in gold thread, with a riot helmet, a ship's cat in a tiny space suit",
       "species": {
        "value": "uplifted ape",
        "beard": "no",
@@ -2674,7 +2674,7 @@
       },
       "gear": "a riot helmet",
       "companion": {
-       "value": "a hovering spherical drone with one antenna",
+       "value": "a ship's cat in a tiny space suit",
        "genre": "spacefarer"
       },
       "colour": "camel",
