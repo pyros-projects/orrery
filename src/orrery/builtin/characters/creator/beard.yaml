@@ -1,0 +1,72 @@
+meta: {source: "orrery character creator: facial hair, in the hair's colour ($haircolour); the creators roll it for men, beside a clean-shaven face", needs: [haircolour], builtin: true}
+entries:
+  - {value: "a full $haircolour beard trimmed close at the cheeks"}
+  - {value: "a long $haircolour beard braided into two plaits"}
+  - {value: "a short boxed $haircolour beard"}
+  - {value: "a thick $haircolour beard down to the chest"}
+  - {value: "a pointed $haircolour goatee"}
+  - {value: "a neat $haircolour Van Dyke"}
+  - {value: "a bushy $haircolour handlebar moustache"}
+  - {value: "a thin $haircolour pencil moustache"}
+  - {value: "a drooping $haircolour horseshoe moustache"}
+  - {value: "a $haircolour walrus moustache that hides the upper lip"}
+  - {value: "a $haircolour chevron moustache"}
+  - {value: "three days of $haircolour stubble"}
+  - {value: "a shadow of $haircolour stubble along the jaw"}
+  - {value: "patchy $haircolour stubble that never quite grew in"}
+  - {value: "$haircolour mutton-chop sideburns"}
+  - {value: "long $haircolour sideburns down to the jaw"}
+  - {value: "a $haircolour chinstrap beard and a bare upper lip"}
+  - {value: "a $haircolour soul patch under the lower lip"}
+  - {value: "a forked $haircolour beard"}
+  - {value: "a square-cut $haircolour beard oiled to a shine"}
+  - {value: "a wild, untamed $haircolour beard full of tangles"}
+  - {value: "a short $haircolour beard with a streak of grey at the chin"}
+  - {value: "a $haircolour beard braided with small metal rings"}
+  - {value: "a $haircolour beard tied with a leather thong at the tip"}
+  - {value: "a $haircolour beard with beads woven into it"}
+  - {value: "a carefully faded $haircolour beard"}
+  - {value: "a $haircolour beard shaped into a sharp point"}
+  - {value: "a rounded $haircolour beard trimmed like a hedge"}
+  - {value: "a sparse, wispy $haircolour beard"}
+  - {value: "a $haircolour beard grown only on the chin"}
+  - {value: "a $haircolour moustache waxed into curled tips"}
+  - {value: "a toothbrush-short $haircolour moustache"}
+  - {value: "a $haircolour Fu Manchu moustache hanging past the chin"}
+  - {value: "a $haircolour Garibaldi beard, wide and round at the bottom"}
+  - {value: "a $haircolour ducktail beard"}
+  - {value: "a $haircolour Balbo beard with a floating moustache"}
+  - {value: "a $haircolour anchor beard along the jawline"}
+  - {value: "a $haircolour beard with a shaved line through one side"}
+  - {value: "a $haircolour beard dusted with grey"}
+  - {value: "a $haircolour beard gone white at the corners of the mouth"}
+  - {value: "a scruffy $haircolour beard with crumbs in it"}
+  - {value: "a $haircolour beard braided in a single long rope"}
+  - {value: "a short $haircolour beard and a moustache curled at the ends"}
+  - {value: "a $haircolour beard split down the middle and combed apart"}
+  - {value: "a trim $haircolour beard with a crisp cheek line"}
+  - {value: "a $haircolour beard that runs up into the sideburns"}
+  - {value: "a stubbly $haircolour moustache and goatee"}
+  - {value: "a $haircolour beard with a scar running bare through it"}
+  - {value: "a $haircolour beard flecked with sawdust"}
+  - {value: "a thick $haircolour moustache over a clean chin"}
+  - {value: "a $haircolour beard knotted with tiny bones and feathers"}
+  - {value: "a $haircolour beard stiff with salt spray"}
+  - {value: "a dense, curly $haircolour beard"}
+  - {value: "a straight, silky $haircolour beard to the collarbone"}
+  - {value: "a $haircolour beard shaped like an upturned spade"}
+  - {value: "a narrow strip of $haircolour beard along the chin"}
+  - {value: "a $haircolour beard and moustache grown together, unkempt"}
+  - {value: "a $haircolour moustache with long tapering ends"}
+  - {value: "a $haircolour beard pinned with a small silver clasp"}
+  - {value: "a $haircolour beard grown in a square block below the chin"}
+  - {value: "light $haircolour fuzz along the upper lip"}
+  - {value: "a $haircolour beard trimmed into two short points"}
+  - {value: "a $haircolour beard with a single braid at the centre"}
+  - {value: "heavy $haircolour stubble and a moustache"}
+  - {value: "a pale scar crossing a short $haircolour beard"}
+  - {value: "a $haircolour beard tucked into the collar"}
+  - {value: "a lopsided $haircolour beard, longer on the left"}
+  - {value: "a $haircolour beard with a patch of white at the chin"}
+  - {value: "a grand $haircolour beard spread over the chest like a bib"}
+  - {value: "a $haircolour pencil moustache and a tiny chin tuft"}
