@@ -1077,8 +1077,10 @@ def llm_settings(home: Home, args: dict) -> dict:
     value, where = endpoint.key(home, api)
     active = ({"kind": "api", "name": api["model"]} if api["source"] == "api" and api["model"]
               else {"kind": "comfy", "name": Path(cfg["file"]).stem} if cfg["file"] else None)
+    from orrery.takes import counts
+
     return {"file": cfg["file"], "clip_type": cfg["clip_type"], "entries": int(cfg["entries"]),
-            "max_tokens": int(cfg["max_tokens"]), "files": text_encoders(), "source": api["source"],
+            "max_tokens": int(cfg["max_tokens"]), "takes": counts(cfg), "files": text_encoders(), "source": api["source"],
             "api": {"base_url": api["base_url"], "model": api["model"], "key_env": api["key_env"],
                     "key": endpoint.hint(value) if value else "", "key_from": where},
             "active": active}
@@ -1106,9 +1108,13 @@ def llm_save(home: Home, args: dict) -> dict:
             raise ApiError(400, checked["error"])
     if typed:
         endpoint.save_key(home, api.get("key_env") or endpoint.DEFAULT_KEY_ENV, typed)
+    from orrery.takes import counts
+
     llm = {**(config.get("llm") or {}), "file": file, "entries": min(max(_int(args, "entries", 12), 1), 200),
            "max_tokens": min(max(_int(args, "max_tokens", 16000), 64), 131072), "source": source,
            **({"api": api} if api else {})}
+    if isinstance(args.get("takes"), dict):  # how many takes each sheet asks for (#274)
+        llm["takes"] = counts({"takes": {**counts(llm), **args["takes"]}})
     if args.get("clip_type"):
         llm["clip_type"] = str(args["clip_type"])
     home.save_config({**config, "llm": llm})
@@ -1151,6 +1157,188 @@ def write_idea(home: Home, args: dict) -> dict:
                                                 _input_picture(frames.get("last_frame")))
     return comfy_write.write_idea(home, task, _text(args, "template"), _int(args, "seed", 0), _int(args, "idea", 0),
                                   args.get("params") or "", lambda: endpoint.backend(home, temperature), pictures_)
+
+
+def llm_takes(home: Home, args: dict) -> dict:
+    """Takes at the line (#173): N takes for one place of the template at the node's seed, a slot (`what`: its
+    directions), a library still to be written (`what`: its name, `directions`: its own) or a `> enhance` line
+    (`what`: its instruction), steered by `steer`, new against `have`. Over the API endpoint, outside the queue."""
+    from orrery import takes
+    from orrery.comfy import _images, _passages, _previous, _slot_pictures
+    from orrery.loras import long_form
+    from orrery.slots import names_output, pictures_in
+
+    kind, what = str(args.get("kind") or ""), " ".join(str(args.get("what") or "").split())
+    if kind not in takes.KINDS:
+        raise ApiError(400, f"'kind' must be one of {', '.join(takes.KINDS)}.")
+    if not what:
+        raise ApiError(400, "'what' names the place: a slot's directions, a library's name or an instruction.")
+    api = endpoint.backend(home, float(llm_config(home)["writer_temperature"]))
+    if api is None:
+        raise ApiError(400, "Takes at the line ask an API endpoint for now (the gear: Language model); with a text "
+                            "encoder in ComfyUI they come as mini-runs (#171).")
+    text, target = _template_for(home, args)
+    seed, segment, libs = _int(args, "seed", 0), max(_int(args, "segment", 0), 0), home.libraries()
+    src, screenplay = long_form(strip_comments(text)), target != "text" and long_form(strip_comments(text)).lstrip().startswith("@h3")
+    if kind == "library":
+        return _library_takes(home, args, what, src, api)
+    if kind == "entries":
+        return _entry_takes(home, args, what, src, api, seed)
+    result = None
+    for _ in range(8):  # a library still to be written stands in as its name, as the annotations do
+        try:
+            result = (compile_scene(src, seed, libs, home.weights(), target=target, segment=segment) if screenplay
+                      else expand(src, seed, libs, home.weights()))
+            break
+        except MissingLibrary as err:
+            libs = {**libs, err.name: Library(err.name, [Entry(f"\\__{err.name}\\__")])}
+        except ValueError as err:
+            raise ApiError(400, str(err)) from None
+    if result is None:
+        raise ApiError(400, "Too many libraries are still to be written to roll the prompt.")
+    keep = None  # the roll a picked rewrite is kept for: one passage only, as the run rewrites each apart (#276)
+    if kind == "enhance":
+        rolled = [passage for instruction, passage, _ in _passages(result, target if screenplay else "text")
+                  if " ".join(instruction.split()) == what]
+        context, keep = "\n".join(rolled), takes.rewrite_key(what, rolled[0]) if len(rolled) == 1 else None
+    else:
+        context = takes.marked(result.text, f"--{what}--")
+    if not context:
+        raise ApiError(400, f"The prompt at seed {seed} has no {kind} {what!r} to write for (a branch that did not roll?).")
+    if kind == "slot" and names_output(what):
+        raise ApiError(400, "This slot is written from the picture a run makes (image output): its takes come from the "
+                            "Gallery, for a picture there.")
+    frames = _previous(_latent_path(args), segment) if kind == "slot" and screenplay and segment else None
+    said: list[dict] = []  # a picture a slot names that is not there (#174)
+    wired = args.get("frames") if isinstance(args.get("frames"), dict) else {}
+    inputs = {k: _input_picture(wired.get(k)) for k in ("first_frame", "last_frame") if wired.get(k)}
+    named, shown = _slot_pictures(home, pictures_in([what]), result, inputs, said) if kind == "slot" else ([], [])
+    if said:  # a run writes on without it; takes without the picture would only repeat the directions
+        raise ApiError(400, " ".join(i["message"].removesuffix(" it is written without it.") + " its takes need it." for i in said))
+    n = min(max(_int(args, "n", takes.counts(llm_config(home))[{"slot": "slot", "enhance": "enhance"}.get(kind, "new")]), 1), 12)
+    prompt = takes.request(kind, what, context, n, str(args.get("steer") or ""),
+                           [str(h) for h in args.get("have") or [] if str(h).strip()][:60],
+                           frames=len(frames) if frames is not None else 0, pictures=named)
+    try:
+        out = takes.parse(api.complete(prompt, images=_images(frames, shown, api)), n)
+    except RuntimeError as err:
+        raise ApiError(502, str(err)) from None
+    if not out:
+        raise ApiError(502, "The language model wrote no takes; ask again.")
+    return {"takes": out, **({"keep": keep} if kind == "enhance" else {})}
+
+
+def _library_takes(home: Home, args: dict, name: str, src: str, api) -> dict:
+    """A library still to be written, written in the sheet (#272): as many entries as a new library starts with
+    (or `__name:N__`'s N), as a run would ask for them."""
+    from orrery import takes
+    from orrery.dsl import wanted_libraries
+    from orrery.llm import InvalidProposal
+
+    if name in home.libraries():
+        raise ApiError(400, f"__{name}__ is written already.")
+    minimum = wanted_libraries(src).get(name)
+    if minimum is None:
+        raise ApiError(400, f"The template does not use __{name}__.")
+    n = min(max(_int(args, "n", max(minimum, int(llm_config(home)["entries"]))), 1), 200)
+    have = [str(h) for h in args.get("have") or [] if str(h).strip()][:400]
+    prompt, need = takes.for_library(src, name, n, str(args.get("directions") or ""), str(args.get("steer") or ""), have)
+    try:
+        out = takes.library_entries(api.complete(prompt), need)
+    except (RuntimeError, InvalidProposal) as err:
+        raise ApiError(502, str(err)) from None
+    if not out:
+        raise ApiError(502, "The language model wrote no new entries; ask again.")
+    return {"takes": out}
+
+
+def _entry_takes(home: Home, args: dict, name: str, src: str, api, seed: int) -> dict:
+    """A library that exists, at the line (#273): entries rolled from it (the one at this seed first, `roll`) and new
+    ones the model writes, not in it, as a top-up asks for them; as many of each as the settings say."""
+    from orrery import takes
+    from orrery.llm import InvalidProposal
+
+    lib = home.libraries().get(name)
+    if lib is None:
+        raise ApiError(400, f"__{name}__ is still to be written: its 🎲 writes it.")
+    count, have = takes.counts(llm_config(home)), [str(h) for h in args.get("have") or [] if str(h).strip()][:400]
+    rolled = takes.rolled_entries(lib, home.weights(), seed, count["rolled"], have, str(args.get("roll") or ""))
+    directions = " ".join(str(args.get("directions") or "").split()) or str(lib.meta.get("directions") or "")
+    prompt, need = takes.for_library(src, name, count["new"], directions, str(args.get("steer") or ""), [*lib.values(), *have])
+    try:
+        new = takes.library_entries(api.complete(prompt), need)
+    except (RuntimeError, InvalidProposal) as err:
+        raise ApiError(502, str(err)) from None
+    return {"rolled": rolled, "takes": new, "directions": directions}
+
+
+def library_add(home: Home, args: dict) -> dict:
+    """Keep as the library, Add to the library (#272, #273): the entries picked in a takes sheet, straight in."""
+    from orrery import takes
+
+    name = _library_name(args.get("name"))
+    values = [str(v) for v in args.get("entries") or [] if str(v).strip()]
+    if not values and not (str(args.get("directions") or "").strip() and name in home.libraries()):
+        raise ApiError(400, "'entries' are the picked entries: none were sent.")
+    cfg = endpoint.config(home)
+    added = takes.add_to_library(home, name, values, str(args.get("directions") or ""), cfg["model"] if cfg["source"] == "api" else "")
+    lib = home.libraries().get(name)
+    if lib is None:
+        raise ApiError(400, f"Nothing was written into __{name}__.")
+    return {"added": added, "library": _library_json(home, name, lib, home.weights())}
+
+
+def llm_keep(home: Home, args: dict) -> dict:
+    """Use selected on a `> enhance` take (#276): kept for the roll its takes named (`key`), the run uses it."""
+    from orrery import takes
+
+    key = str(args.get("key") or "")
+    if len(key) != 16 or any(c not in "0123456789abcdef" for c in key):
+        raise ApiError(400, "'key' names the roll the takes were written for.")
+    try:
+        takes.keep_rewrite(home, key, str(args.get("instruction") or ""), str(args.get("text") or ""))
+    except ValueError as err:
+        raise ApiError(400, str(err)) from None
+    return {"kept": key}
+
+
+def galaxy_takes(home: Home, args: dict) -> dict:
+    """Takes for a gallery picture's export slot from `image output` (#175): the picture is Picture 1, the prompt that
+    made it the context; over the API endpoint."""
+    from orrery import takes
+    from orrery.slots import export_slots
+
+    rid, what = str(args.get("id") or ""), " ".join(str(args.get("what") or "").split())
+    try:
+        row = gx._find(home, rid)
+        picture = gx.picture_of(row)
+    except KeyError as err:
+        raise ApiError(404, err.args[0]) from None
+    if what not in export_slots(row.get("exports") or {}):
+        raise ApiError(400, f"gallery output {rid} has no slot --{what}-- left to write.")
+    api = endpoint.backend(home, float(llm_config(home)["writer_temperature"]))
+    if api is None:
+        raise ApiError(400, "Writing from a picture asks an API endpoint for now (the gear: Language model).")
+    n = min(max(_int(args, "n", takes.counts(llm_config(home))["slot"]), 1), 12)
+    prompt = takes.for_picture(row, what, n, str(args.get("steer") or ""), [str(h) for h in args.get("have") or [] if str(h).strip()][:60])
+    try:
+        out = takes.parse(api.complete(prompt, images=[picture]), n)
+    except RuntimeError as err:
+        raise ApiError(502, str(err)) from None
+    if not out:
+        raise ApiError(502, "The language model wrote no takes; ask again.")
+    return {"takes": out}
+
+
+def galaxy_write(home: Home, args: dict) -> dict:
+    """A take written into a gallery picture's export slot (#175)."""
+    try:
+        row = gx.write_export(home, str(args.get("id") or ""), " ".join(str(args.get("what") or "").split()), str(args.get("text") or ""))
+    except KeyError as err:
+        raise ApiError(404, err.args[0]) from None
+    except ValueError as err:
+        raise ApiError(400, str(err)) from None
+    return {"row": _row_json(row, _preset_by_hash(home), set(ps.list_presets(home)))}
 
 
 def write_libraries(home: Home, args: dict) -> dict:
@@ -1228,13 +1416,18 @@ ROUTES = [
     ("POST", "/orrery/llm/check", llm_check),
     ("POST", "/orrery/llm/libraries", write_libraries),
     ("POST", "/orrery/write", write_idea),
+    ("POST", "/orrery/llm/takes", llm_takes),
+    ("POST", "/orrery/llm/keep", llm_keep),
+    ("POST", "/orrery/galaxy/takes", galaxy_takes),
+    ("POST", "/orrery/galaxy/write", galaxy_write),
     ("POST", "/orrery/library/accept", library_accept),
+    ("POST", "/orrery/library/add", library_add),
     ("POST", "/orrery/library/discard", library_discard),
 ]
 
 
 # routes that wait for a language model run in a thread, so ComfyUI's server answers meanwhile
-SLOW = {llm_save, llm_check, write_libraries, write_idea, chain_pick, chain_delete, chain_clear, chain_walk, chain_end}
+SLOW = {llm_save, llm_check, write_libraries, write_idea, llm_takes, galaxy_takes, galaxy_capture, chain_pick, chain_delete, chain_clear, chain_walk, chain_end}
 
 
 def _handler(fn, method: str, web):

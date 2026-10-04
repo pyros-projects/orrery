@@ -29,7 +29,7 @@ Every construct of orrery's template language, where libraries live, how Dynamic
 | `IF $c[myth, size=small\|tiny]: …`, `{IF $w[kind=rain]: wet \| dry}` | a condition in the brackets' language, against what `$c` rolled: all of them (`,`), either (`\|`), not (`!`). There is no AND or OR word: the brackets say it. Earlier orrery wrote `?` for `IF` (`? $c[wren]: It sings.`), and still may |
 | `EXPORT: mood = __moods__`, `EXPORT: $who, $job`, `EXPORT:` + indented `name = …` lines | what the run keeps beside its prompt, never in it: it rolls like a binding (seeded, recorded, learned) and goes with the output into History, the gallery (`exports` in `galaxy.jsonl`) and `orrery expand --json`, for other systems and for screenplays that cast the picture (`$hero.mood`, see below). An exported entry brings its properties, a `{N$$…}` pick is a list, and a `--…--` in an export is written with the run. Text templates only: a screenplay leaves it out |
 | `> make it moody and cinematic` | with a language model set in the node, it rewrites the rolled prompt as asked; in a screenplay a `>` before the first `SHOT` rewrites every shot's prose and one inside a `SHOT` only that shot's, never dialogue. The CLI records it with the picks |
-| `--one detail, 5 to 8 words--` | a slot: the language model writes it where it stands, after everything else has rolled (see [wildcard-manager.md](wildcard-manager.md)) |
+| `--one detail, 5 to 8 words--` | a slot: the language model writes it where it stands, after everything else has rolled (see [wildcard-manager.md](wildcard-manager.md)); `image first_frame`, `image last_frame`, `image N` or a gallery name in it sends the model that picture, `image output` (in `EXPORT:` only) the one the run makes, once it exists (#174) |
 | `\{` `\}` `\|` `\$` `\__` `\@` `\#` `\\` | the character as written, not syntax: `a sign reading \{OPEN\}`, `\__init__` |
 | `# a note` | a comment: a line starting with `#` never reaches the model (filters like `__lib#key:value__` are not comments) |
 | `@size 832x1216` | the node's width and height outputs |
@@ -135,7 +135,9 @@ uv run orrery compile @effects/subsurface_travel --set start="upper back" --set 
 ## What the language guarantees
 
 The language is DSL 2.0 (2026-10-03, #81), the words these docs teach; its version is its own, apart
-from the package's. The earlier words (`CHUNK`, `HANDOFF:`, `SEND:`, `GOTO:`, `?`) still work.
+from the package's. The earlier words (`CHUNK`, `HANDOFF:`, `SEND:`, `GOTO:`, `?`, a library's `__name__(directions)`)
+still work; nothing new is built on them. A library's directions now stay with the library: its takes sheet keeps
+them (#275, [llm.md](llm.md)).
 What a change to orrery must keep, and the tests that hold it. The golden corpus
 (`tests/test_golden.py`) is the executable half: it pins what every built-in preset rolls.
 

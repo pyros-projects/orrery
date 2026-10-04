@@ -93,6 +93,33 @@ def rate(home: Home, rid: str, rating: str | None) -> tuple[dict, dict[str, floa
     return _with_id(row, rid), {k: weights.get(k, 1.0) for k in keys}
 
 
+def picture_of(row: dict):
+    """A row's picture as PIL: its image, or for a clip the frame a third of the way in (#175)."""
+    from PIL import Image
+
+    media = Path(str(row.get("media") or ""))
+    if media_kind(media) == "image" and media.is_file():
+        return Image.open(media)
+    if media_kind(media) == "video" and media.is_file():
+        return _poster(media)
+    raise KeyError(f"gallery output {row_id(row)} has no picture to look at")
+
+
+def write_export(home: Home, rid: str, directions: str, text: str) -> dict:
+    """A written text in place of the export slot `--directions--` of row `rid` (#175): what the Gallery writes from
+    the picture, kept with it; a screenplay that casts the picture reads it."""
+    from orrery.slots import fill_exports
+
+    text = " ".join(str(text).split())
+    if not text:
+        raise ValueError("an empty text writes nothing")
+    touched = _edit_rows(home, lambda row: {**row, "exports": fill_exports(row.get("exports") or {}, {directions: text})}
+                         if row_id(row) == rid else row)
+    if not touched:
+        raise KeyError(f"gallery output {rid} has no slot --{directions}--")
+    return _find(home, rid)
+
+
 def media_path(home: Home, rid: str) -> Path:
     """The output's file, only for paths the galaxy recorded."""
     media = _find(home, rid).get("media")

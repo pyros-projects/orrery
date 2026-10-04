@@ -504,6 +504,21 @@ def test_enhance_rewrites_a_text_prompt_and_keeps_the_original(home, monkeypatch
     assert "moody, cinematic" in backend.prompts[0]
 
 
+def test_a_rewrite_kept_with_use_selected_stands_in_for_its_roll_without_asking(home, monkeypatch):
+    """#276: the take picked in the sheet is kept for the instruction and the passage as it rolled; another roll
+    is rewritten as before."""
+    from orrery.takes import keep_rewrite, rewrite_key
+
+    backend = fake_llm(monkeypatch, {"rewrite 1": "a fox at dusk, rewritten"})
+    keep_rewrite(Home(home), rewrite_key("moody", "a fox in a field"), "moody", "the fox you picked, in fog")
+    text, picks, *_ = run_prompt("a fox in a field\n> moody", 1, "text", str(home))
+    assert text == "the fox you picked, in fog" and backend.prompts == []  # nothing asked
+    assert json.loads(picks)["enhanced"] == [{"instruction": "moody", "before": "a fox in a field",
+                                               "after": "the fox you picked, in fog", "kept": True}]
+    text, *_ = run_prompt("a fox in a meadow\n> moody", 1, "text", str(home))
+    assert text == "a fox at dusk, rewritten"  # another passage: the model rewrites it
+
+
 def test_enhance_rewrites_shot_prose_but_not_dialogue(home, monkeypatch):
     backend = fake_llm(monkeypatch, {"rewrite 1": "FOX crouches low in the wet grass, ears flat.", "slot 1": "it rains"})
     src = ("@h3 t2va 16:9\nCAST\nFOX: a red fox\nSHOT 5s\n> make it eerie\nFOX waits.\n"
@@ -958,3 +973,41 @@ def test_the_picks_carry_picture_strengths(home):
     data = json.loads(picks)
     assert data["images"] == [{"ref": 1, "image": 1, "member": "SALON", "strength": 0.5, "from": 0.0, "to": 1.0}]
     assert any("picture strengths (image 1 at 0.5)" in i["message"] for i in data["lint"])
+
+
+def test_a_slot_sees_the_pictures_it_names_and_one_from_image_output_waits(home, monkeypatch):
+    """#174: the picture wired into first_frame goes to the model as Picture 1; an EXPORT slot from image output
+    stays a slot (the Gallery writes it, #175); one outside EXPORT: says so."""
+    import importlib.util
+    import sys
+    import types
+
+    import numpy as np
+
+    from orrery import comfy
+
+    if importlib.util.find_spec("torch") is None:  # CI has no torch: the batch stays numpy, its shape is what counts
+        monkeypatch.setitem(sys.modules, "torch", types.SimpleNamespace(from_numpy=lambda a: a))
+
+    class Seen:
+        def __init__(self):
+            self.prompts, self.images = [], []
+
+        def complete(self, prompt, images=None):
+            self.prompts.append(prompt)
+            self.images.append(images)
+            return json.dumps({"slot 1": "a brass key"})
+
+    seen = Seen()
+    monkeypatch.setattr(comfy, "llm_for", lambda h, clip=None, **_: seen)
+    template = "A fox holding --the object in image first_frame, one phrase--.\nEXPORT: sheet = --a character sheet from image output--"
+    text, picks, *_ = run_prompt(template, 1, "text", str(home), pictures={"first_frame": np.zeros((1, 8, 8, 3), np.float32)})
+    assert "a brass key" in text and "the object in Picture 1, one phrase" in seen.prompts[0]
+    assert tuple(seen.images[0].shape) == (1, 512, 512, 3)  # a text encoder: one batch, fitted into a square
+    data = json.loads(picks)
+    assert data["exports"]["sheet"] == "--a character sheet from image output--"
+    assert not any("image output" in i["message"] for i in data["lint"])
+    _, picks, *_ = run_prompt("A fox --from image output--.", 1, "text", str(home))
+    assert any("stands in an EXPORT: line" in i["message"] for i in json.loads(picks)["lint"])
+    _, picks, *_ = run_prompt("A fox holding --the object in image first_frame--.", 1, "text", str(home))
+    assert any("nothing is wired into the Orrery Prompt's first_frame" in i["message"] for i in json.loads(picks)["lint"])

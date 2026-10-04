@@ -1,6 +1,7 @@
 // Syntax colouring for orrery templates. Pure: returns HTML for a <pre> under the editor.
 
 import { castNames } from "../orrery-complete.js";
+import { icon } from "./icons.js";
 import { chunkShort } from "./model.js";
 
 export const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -51,7 +52,7 @@ function line(text, known, llm, members) {
   // <lora:…> tags and their @name(0.8) short form are opaque (file names may contain __), as orrery's expander treats them
   const lora = (part) => (members && new RegExp(`^${members.source}\\(`).test(part) ? brass(esc(part), members)  // SET: @JINX(0.6)
     : `<span class="t-lora">${esc(part)}</span>`);
-  return out + rest.split(/((?<!\\)<(?:lora|refmod|image|cast):[^<>]*>|(?<![\w@<\\])@[\w./\\-]+\([^()<>]*\))/).map((part, i) => (i % 2 ? lora(part)
+  const words = (s) => s.split(/((?<!\\)<(?:lora|refmod|image|cast):[^<>]*>|(?<![\w@<\\])@[\w./\\-]+\([^()<>]*\))/).map((part, i) => (i % 2 ? lora(part)
     : part.replace(TOKEN, (m, escaped, lib, name, v, multi, brace) => {
       if (escaped) return `<span class="t-esc" title="Written as it is: the backslash keeps it from being syntax">${esc(m)}</span>`;
       if (lib) return isKnown(name, known) ? `<span class="t-lib">${esc(lib)}</span>`
@@ -60,6 +61,27 @@ function line(text, known, llm, members) {
       if (multi || brace) return `<span class="t-brace">${esc(m)}</span>`;
       return brass(esc(m), members);
     }))).join("");
+  // a --slot-- in violet, what is in it coloured as ever (#280)
+  return out + rest.split(/(--(?=[^\s-])[^\n]*?[^\s-]--)/).map((part, i) => (i % 2 ? `<span class="t-slot">${words(part)}</span>` : words(part))).join("");
+}
+
+const SLOT = /--(?=[^\s-])([^\n]*?[^\s-])--/g;
+export const LIBRARY = /(?<!\\)__([\w]+(?:\/[\w]+)*)(?:\[[^\[\]\n]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\(([^()]*)\))?/g;
+const ASK = { slot: "Takes for this slot: then more, steered; pick one and Use selected puts it in", library: "Takes for this library still to be written: "
+  + "entries that could stand here; Use selected puts one in, or keep a direction for the list",
+  enhance: "Takes for this rewrite: what it does at this seed, steered; Use selected keeps one for this roll",
+  entries: "This library's takes: its rolls and new entries from the language model; Use selected puts one in, Add to the library keeps new ones (Ctrl+click on a library's name does the same)" };
+
+// The places on a line the language model writes for (#173): a `>` line's rewrite, its slots, its libraries still
+// to be written; each with what names it (`what`) and a library's own directions (`dirs`).
+export function llmPlaces(text, known) {
+  if (/^\s*#/.test(text)) return [];
+  const enhance = /^\s*>\s*(.*\S)\s*$/.exec(text);
+  if (enhance) return [{ kind: "enhance", what: enhance[1] }];
+  return [...[...text.matchAll(SLOT)].filter((m) => !/\bimage\s+output\b/.test(m[1]))  // written from the Gallery (#175)
+    .map((m) => ({ kind: "slot", what: m[1], at: m.index })),
+    ...[...text.matchAll(LIBRARY)].filter((m) => !isKnown(m[1], known)).map((m) => ({ kind: "library", what: m[1], dirs: m[2] || "", at: m.index }))]
+    .sort((a, b) => a.at - b.at);
 }
 
 // The divider on a SCENE line: absolutely placed, so the text keeps its place under the textarea's caret;
@@ -92,9 +114,28 @@ export function onHover(html, h) {
 export function highlight(src, known, { llm = false, chunks = null, segment = null, cast = null, hints = null, sceneActs = null } = {}) {
   const at = new Map((chunks || []).map((c, i) => [c.line, { ...c, index: c.index ?? i }]));
   const members = memberPattern(cast ?? castNames(src));
-  const hint = (i) => (hints?.has(i) && !hints.get(i).hover ? `<span class="hint${hints.get(i).replaced ? " replaced" : ""}${hints.get(i).kind ? ` ${hints.get(i).kind}` : ""}"><span>`
-    + `${(hints.get(i).thumbs || []).map((u) => `<img class="hint-pic" src="${esc(u)}" alt="">`).join("")}${esc(hints.get(i).text)}</span></span>` : "");
+  const said = (i) => {  // a line's hint drawn after it: its class and what it says
+    const h = hints?.get(i);
+    if (!h || h.hover) return null;
+    const pics = (h.thumbs || []).map((u) => `<img class="hint-pic" src="${esc(u)}" alt="">`).join("");
+    // with a language model set, each library's roll opens that library's takes (#273): a span of their own beside
+    // the faded text, since its opacity would keep them under the textarea
+    const rolls = llm && h.rolls?.length ? `→ ${h.rolls.map(([, v]) => v).join(" · ")}` : "";
+    const head = rolls && h.text.endsWith(rolls) ? h.text.slice(0, -rolls.length).trimEnd() : null;
+    const inner = head === null ? `<span>${pics}${esc(h.text)}</span>`
+      : `${head || pics ? `<span>${pics}${esc(head)}</span>` : ""}<span class="lrolls">→ ${h.rolls.map(([k, v]) =>
+        `<span class="lroll" role="button" data-lroll="${k}" data-line="${i}" title="${esc(ASK.entries)}">${esc(v)}</span>`).join(" · ")}</span>`;
+    return { cls: `${h.replaced ? " replaced" : ""}${h.kind ? ` ${h.kind}` : ""}`, inner };
+  };
+  const hint = (i) => (said(i) ? `<span class="hint${said(i).cls}">${said(i).inner}</span>` : "");
   const words = (l, i) => (hints?.get(i)?.hover ? onHover(line(l, known, llm, members), hints.get(i)) : line(l, known, llm, members));
+  // with a language model set, a 🎲 at the end of a line with a place it writes for (#173), before the line's hint
+  const tail = (l, i) => {
+    const keys = llm ? llmPlaces(l, known).map((p) => `<span class="llm-key" role="button" data-llm="${p.kind}" data-what="${esc(p.what)}" `
+      + `data-dirs="${esc(p.dirs || "")}" data-line="${i}" title="${esc(ASK[p.kind])}">${icon("dice")}</span>`).join("") : "";
+    if (!keys) return hint(i);
+    return `<span class="hint${said(i)?.cls || ""} with-keys"><span class="llm-keys">${keys}</span>${said(i)?.inner || ""}</span>`;
+  };
   return src.split("\n").map((l, i) => (at.has(i) ? chunkLine(words(l, i), at.get(i), segment, sceneActs ? sceneActs(at.get(i), at.get(i).index) : "")
-    : words(l, i)) + hint(i)).join("\n");
+    : words(l, i)) + tail(l, i)).join("\n");
 }

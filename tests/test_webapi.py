@@ -52,8 +52,8 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/galaxy/folder/add"), ("POST", "/orrery/galaxy/folder/rename"),
         ("POST", "/orrery/galaxy/folder/delete"),
         ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
-        ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"),
-        ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/discard"),
+        ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"), ("POST", "/orrery/llm/takes"), ("POST", "/orrery/llm/keep"), ("POST", "/orrery/galaxy/takes"), ("POST", "/orrery/galaxy/write"),
+        ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/add"), ("POST", "/orrery/library/discard"),
         ("GET", "/orrery/home"), ("POST", "/orrery/home"),
         ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("POST", "/orrery/chain/move"), ("POST", "/orrery/chain/pick"), ("POST", "/orrery/chain/delete"), ("POST", "/orrery/chain/clear"), ("GET", "/orrery/chain/tree"), ("POST", "/orrery/chain/walk"), ("POST", "/orrery/chain/end"),
         ("GET", "/orrery/chain/video"),
@@ -131,7 +131,7 @@ def test_register_attaches_every_route_through_one_adapter(home, tmp_path):
     assert (kind, status) == ("json", 200) and body["favorites"] == [] and body["quickstart"] is True
     assert hit("POST", "/orrery/ui", query=q, body={"quickstart": False}) == \
         ("json", 200, {"quickstart": False, "dividers": True, "timeline": True, "log_prompts": True, "surf_numbered": True, "preview_light": True, "clip_min": 360, "take_min": 54, "preview_fps": 12, "preview_edge": 1024,
-                     "annotations_show": "appended"})
+                     "annotations_show": "appended", "picture_slots": "gallery"})
     assert hit("GET", "/orrery/presets", query=q)[2]["quickstart"] is False
     assert hit("GET", "/orrery/preset", query={**q, "name": "nope"})[1] == 404
     assert hit("POST", "/orrery/recent", query=q, broken=True)[1] == 400
@@ -763,7 +763,7 @@ def test_the_editor_switches_travel_with_the_presets_and_are_saved(home):
     assert ok(home, webapi.presets)["dividers"] is True and ok(home, webapi.presets)["timeline"] is True
     assert ok(home, webapi.ui_save, timeline=False) == {"quickstart": True, "dividers": True, "timeline": False, "log_prompts": True,
                                                          "surf_numbered": True, "preview_light": True, "clip_min": 360, "take_min": 54, "preview_fps": 12, "preview_edge": 1024,
-                                                         "annotations_show": "appended"}
+                                                         "annotations_show": "appended", "picture_slots": "gallery"}
     assert ok(home, webapi.ui_save, clip_min=480)["clip_min"] == 480 and ok(home, webapi.presets)["clip_min"] == 480
     assert ok(home, webapi.presets)["timeline"] is False
     assert ok(home, webapi.ui_save, annotations_show="hover")["annotations_show"] == "hover"  # #203
@@ -895,6 +895,133 @@ def test_every_library_in_a_line_says_what_it_rolled_where_it_is_written(home):
     out = ok(home, webapi.annotate, template=screenplay, seed=4, target="h3-base")
     assert [k for k, _ in out["rolls"]["3"]] == [0, 1, 2] and [k for k, _ in out["rolls"]["4"]] == [0]
     assert "1" not in out["rolls"] and out["bindings"]["x"] in ("linocut", "gouache")
+
+
+def test_takes_at_the_line_ask_the_endpoint_for_one_place_at_the_seed(home, fake_api):
+    """#173: a slot, a library still to be written and a > enhance line, each its place marked in the prompt as it
+    rolls; a steer and the takes written before go with the next ones."""
+    template = "A __animal__ with --one small object in its paws--, under a __sky_kind__.\n> make it moody"
+    status, body = api(home, webapi.llm_takes, kind="slot", what="one small object in its paws", template=template)
+    assert status == 400 and "API endpoint" in body["error"]
+    Home(home).save_config({"llm": {"source": "api", "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})
+    fake_api.answer = lambda body: json.dumps(["a brass key", "a cracked marble", "a folded note", "a fourth"])
+    body = ok(home, webapi.llm_takes, kind="slot", what="one small object in its paws", template=template, seed=4,
+              steer="older, worn", have=["a red ball"])
+    assert body["takes"] == ["a brass key", "a cracked marble", "a folded note"]  # three, as asked
+    prompt = fake_api.requests[-1]["messages"][0]["content"]
+    prompt = prompt if isinstance(prompt, str) else prompt[-1]["text"]
+    assert "[this part]" in prompt and "--one small object" not in prompt and "__sky_kind__" in prompt  # rolled, the place marked
+    assert "Steer them: older, worn." in prompt and "- a red ball" in prompt and fake_api.requests[-1]["temperature"] == 0.8
+    body = ok(home, webapi.llm_takes, kind="library", what="sky_kind", template=template, seed=4, directions="weather words")
+    prompt = fake_api.requests[-1]["messages"][0]["content"]
+    prompt = prompt if isinstance(prompt, str) else prompt[-1]["text"]
+    assert "__sky_kind__: 12 entries." in prompt and "Directions: weather words" in prompt  # the library, as a run asks (#272)
+    assert len(body["takes"]) == 4
+    ok(home, webapi.llm_takes, kind="enhance", what="make it moody", template=template, seed=4)
+    prompt = fake_api.requests[-1]["messages"][0]["content"]
+    prompt = prompt if isinstance(prompt, str) else prompt[-1]["text"]
+    assert "instruction: make it moody" in prompt and "The passage:\nA " in prompt
+    key = ok(home, webapi.llm_takes, kind="enhance", what="make it moody", template=template, seed=4)["keep"]
+    assert len(key) == 16  # the roll a picked rewrite is kept for (#276)
+    assert ok(home, webapi.llm_keep, key=key, instruction="make it moody", text="A moody fox.")["kept"] == key
+    assert api(home, webapi.llm_keep, key="nonsense", text="x")[0] == 400
+    assert api(home, webapi.llm_keep, key=key, instruction="make it moody", text=" ")[0] == 400
+    assert api(home, webapi.llm_takes, kind="slot", what="nothing like it", template=template)[0] == 400  # no such slot
+    fake_api.answer = lambda body: "no list here"
+    assert api(home, webapi.llm_takes, kind="slot", what="one small object in its paws", template=template)[0] == 502
+
+
+def test_a_library_that_exists_offers_its_rolls_and_new_entries_from_the_model(home, fake_api):
+    """#273: rolls from the library, the one at this seed first, and new entries asked as a top-up asks, none of
+    those it has or the sheet shows; Add to the library writes picked ones in, or only its directions."""
+    (home / "library" / "sky_kind.txt").write_text("fog\nlow cloud\nhail\nsleet\n")
+    Home(home).save_config({"llm": {"source": "api", "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})
+    fake_api.answer = lambda body: json.dumps(["Fog", "sun dogs", "a heat haze", "graupel", "virga"])
+    body = ok(home, webapi.llm_takes, kind="entries", what="sky_kind", template="A fox under a __sky_kind__ sky.", seed=3, roll="hail")
+    assert body["rolled"][0] == "hail" and len(body["rolled"]) == 3 and set(body["rolled"]) <= {"fog", "low cloud", "hail", "sleet"}
+    assert body["takes"] == ["sun dogs", "a heat haze", "graupel"]  # three new, none it has
+    prompt = fake_api.requests[-1]["messages"][0]["content"]
+    assert "3 NEW entries in the spirit of the existing ones" in prompt and '"sleet"' in prompt
+    assert api(home, webapi.llm_takes, kind="entries", what="moods", template="A __moods__ fox.")[0] == 400  # not written yet
+    assert ok(home, webapi.library_add, name="sky_kind", entries=["graupel", "hail"])["added"] == 1
+    assert ok(home, webapi.library_add, name="sky_kind", directions="weather a painter sees")["added"] == 0
+    assert Home(home).libraries()["sky_kind"].meta["directions"] == "weather a painter sees"
+
+
+def test_keep_as_the_library_writes_the_picked_entries_straight_in(home):
+    """#272: a new library made of the entries picked in the sheet, not To review, its directions kept; picked again,
+    only the new ones are added; `orrery lib undo` has a snapshot."""
+    body = ok(home, webapi.library_add, name="sky_kind", entries=["fog", "low cloud", "fog"], directions="weather words")
+    assert body["added"] == 2 and [e["value"] for e in body["library"]["entries"]] == ["fog", "low cloud"]
+    lib = Home(home).libraries()["sky_kind"]
+    assert lib.meta["directions"] == "weather words" and not lib.meta.get("pending")
+    assert ok(home, webapi.library_add, name="sky_kind", entries=["Fog", "hail"])["added"] == 1
+    assert api(home, webapi.library_add, name="sky_kind", entries=[])[0] == 400
+
+
+def test_how_many_takes_each_sheet_asks_for_is_a_setting(home, fake_api):
+    """#274: a count per kind in the llm settings, 1 to 12; the sheets ask for it (More too), unless they say n."""
+    assert ok(home, webapi.llm_settings)["takes"] == {"slot": 3, "enhance": 3, "rolled": 3, "new": 3}
+    saved = ok(home, webapi.llm_save, takes={"slot": 5, "enhance": 40, "new": "x"})["takes"]
+    assert saved == {"slot": 5, "enhance": 12, "rolled": 3, "new": 3}  # capped, a bad value its default
+    assert ok(home, webapi.llm_save, entries=20)["takes"]["slot"] == 5  # another setting saved keeps them
+    Home(home).save_config({**Home(home).config(), "llm": {**Home(home).config()["llm"], "source": "api",
+                                                            "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})
+    fake_api.answer = lambda body: json.dumps([f"take {i}" for i in range(9)])
+    body = ok(home, webapi.llm_takes, kind="slot", what="a small object", template="A fox with --a small object--.")
+    assert len(body["takes"]) == 5 and "Write 5 different takes" in fake_api.requests[-1]["messages"][0]["content"]
+
+
+def test_takes_for_a_slot_see_the_pictures_it_names(home, fake_api, tmp_path, monkeypatch):
+    """#174: a slot's takes get the Load Image file behind first_frame as Picture 1; without it they ask nothing
+    and say what is missing; one from image output come from the Gallery, never here."""
+    picture = tmp_path / "fox.png"
+    Image.new("RGB", (64, 48), "orange").save(picture)
+    monkeypatch.setattr(webapi, "_input_picture", lambda name: picture if name else None)
+    Home(home).save_config({"llm": {"source": "api", "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})
+    fake_api.answer = lambda body: json.dumps(["a brass key", "a coin", "a note"])
+    template = "A fox holding --the object in image first_frame--."
+    body = ok(home, webapi.llm_takes, kind="slot", what="the object in image first_frame", template=template,
+              frames={"first_frame": "fox.png"})
+    content = fake_api.requests[-1]["messages"][0]["content"]
+    assert content[0]["type"] == "image_url" and "the object in Picture 1" in content[-1]["text"]
+    asked = len(fake_api.requests)
+    status, body = api(home, webapi.llm_takes, kind="slot", what="the object in image first_frame", template=template)
+    assert status == 400 and "nothing is wired into the Orrery Prompt's first_frame: its takes need it." in body["error"]
+    assert len(fake_api.requests) == asked  # the model is not asked
+    status, body = api(home, webapi.llm_takes, kind="slot", what="a sheet from image output", template="A --a sheet from image output--.")
+    assert status == 400 and "Gallery" in body["error"]
+
+
+def test_a_gallery_picture_writes_its_slots_from_image_output(home, fake_api, tmp_path):
+    """#175: the Gallery's takes for an export slot see the picture as Picture 1; Write puts one into the row; the
+    setting writes them after every run instead."""
+    from orrery.comfy import log_outputs
+    from orrery.galaxy import read_rows
+
+    picture = tmp_path / "hero.png"
+    Image.new("RGB", (64, 48), "teal").save(picture)
+    data = {"seed": 3, "text": "A character sheet of a ferryman.", "picks": [],
+            "exports": {"who": "a ferryman", "sheet": "--a full character sheet, as image output shows them--"}}
+    log_outputs(Home(home), json.dumps(data), [str(picture)])
+    rid = read_rows(Home(home))[0]["id"]
+    what = "a full character sheet, as image output shows them"
+    assert api(home, webapi.galaxy_takes, id=rid, what=what)[0] == 400  # no endpoint yet
+    Home(home).save_config({"llm": {"source": "api", "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})
+    fake_api.answer = lambda body: json.dumps(["tall, grey coat, a lantern", "weathered hands, a pole", "a hood, calm eyes"])
+    body = ok(home, webapi.galaxy_takes, id=rid, what=what)
+    content = fake_api.requests[-1]["messages"][0]["content"]
+    assert body["takes"][0] == "tall, grey coat, a lantern" and content[0]["type"] == "image_url"
+    assert "a full character sheet, as Picture 1 shows them" in content[-1]["text"] and "A character sheet of a ferryman." in content[-1]["text"]
+    assert "never name them (Picture 1)" in content[-1]["text"]  # a kept take that says "as Picture 1" means nothing later
+    row = ok(home, webapi.galaxy_write, id=rid, what=what, text="weathered hands, a pole")["row"]
+    assert row["exports"]["sheet"] == "weathered hands, a pole" and row["exports"]["who"] == "a ferryman"
+    assert api(home, webapi.galaxy_takes, id=rid, what=what)[0] == 400  # written: no slot left
+    ok(home, webapi.ui_save, picture_slots="every run")  # the setting: after every run
+    assert webapi.galaxy_capture in webapi.SLOW  # it waits for the endpoint then: in a thread, so ComfyUI answers
+    fake_api.answer = lambda body: json.dumps(["a red scarf"])
+    log_outputs(Home(home), json.dumps(data), [str(picture)])
+    assert read_rows(Home(home))[0]["exports"]["sheet"] == "a red scarf"
 
 
 def test_a_library_still_to_be_written_says_no_roll_and_escapes_show_as_written(home):

@@ -33,6 +33,7 @@ llm:
   max_tokens: 16000                   # the longest answer it may write
   temperature: 0.3                    # libraries, slots and > rewrites: reliable judgement
   writer_temperature: 0.8             # the Write menu: each idea a different one
+  takes: {slot: 3, enhance: 3, rolled: 3, new: 3}   # what a 🎲 asks for: a slot's takes, a > line's, rolls of a library, new entries
 ```
 
 Or an API endpoint, which then does all of the language model's work

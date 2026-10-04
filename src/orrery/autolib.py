@@ -30,6 +30,7 @@ class Need:
     context: str
     directions: str = ""
     existing: list[str] = field(default_factory=list)  # a top-up: the library as it is
+    steer: str = ""  # the takes sheet's steering line (#272): it goes with the directions, never instead
 
 
 def _context(template: str, name: str) -> str:
@@ -59,7 +60,7 @@ def library_lines(wanted: list[Need]) -> list[str]:
         # with its slot mid-sentence, still pulls small models toward short phrases, however it is ranked.
         guide = (f"Directions: {n.directions}" if n.directions
                  else f"Used in: {n.context}\n  Style: {DEFAULT_STYLE}")
-        lines.append(f"- __{n.name}__: {what}.\n  {guide}")
+        lines.append(f"- __{n.name}__: {what}.\n  {guide}" + (f"\n  Steer them: {n.steer}" if n.steer else ""))
     return lines
 
 

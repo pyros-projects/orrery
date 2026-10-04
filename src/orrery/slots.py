@@ -22,6 +22,31 @@ from orrery.llm import Backend, InvalidProposal, extract_json
 
 SLOT = re.compile(r"--(?=[^\s-])([^\n]*?[^\s-])--")
 _FILLED = re.compile(SLOT.pattern + r"(\.?)")  # a period the compiler set after the slot
+# A picture a slot names (#174): the node's first_frame or last_frame, a picture of the clip (image 3), a picture
+# of the gallery by its name (image krea/09_character_creator/1283456183), or the picture the run makes (output,
+# only in EXPORT:, written after it exists). The model gets them as pictures and reads them as Picture N.
+PICTURE = re.compile(r"\bimage\s+(output|first_frame|last_frame|\d+|[\w.-]+(?:/[\w.-]+)+)\b")
+OUTPUT = "output"
+
+
+def pictures_in(directions: list[str]) -> list[str]:
+    """The pictures the slots name, in order, each once; `output` never (it is not there yet)."""
+    found: list[str] = []
+    for d in directions:
+        for m in PICTURE.finditer(d):
+            if m.group(1) != OUTPUT and m.group(1) not in found:
+                found.append(m.group(1))
+    return found
+
+
+def names_output(directions: str) -> bool:
+    """Whether a slot is written from the picture the run makes (#174): then only after it exists."""
+    return any(m.group(1) == OUTPUT for m in PICTURE.finditer(directions))
+
+
+def as_pictures(directions: str, order: list[str]) -> str:
+    """The directions as the model reads them: each `image …` it is sent as `Picture N`, N its place in `order`."""
+    return PICTURE.sub(lambda m: f"Picture {order.index(m.group(1)) + 1}" if m.group(1) in order else m.group(0), directions)
 
 
 def slots(text: str) -> list[str]:
@@ -53,9 +78,10 @@ def export_slots(exports) -> list[str]:
 
 
 def fill_exports(exports, texts: dict[str, str]):
-    """The exports with their slots written, as fill does for the prompt (no full stop added)."""
+    """The exports with their slots written, as fill does for the prompt (no full stop added). A slot from the
+    picture the run makes (`image output`) stays a slot, for the Gallery to write once it exists (#174, #175)."""
     if isinstance(exports, str):
-        return SLOT.sub(lambda m: texts.get(m.group(1)) or m.group(1), exports)
+        return SLOT.sub(lambda m: texts.get(m.group(1)) or (m.group(0) if names_output(m.group(1)) else m.group(1)), exports)
     if isinstance(exports, list):
         return [fill_exports(v, texts) for v in exports]
     if isinstance(exports, dict):
@@ -75,11 +101,13 @@ def _strings(value):
 
 
 def request(wanted: list[Need], directions: list[str], context: str, frames: int = 0,
-            rewrites: list[tuple[str, str]] = (), made: dict[str, str] | None = None) -> str:
+            rewrites: list[tuple[str, str]] = (), made: dict[str, str] | None = None,
+            pictures: list[str] = ()) -> str:
     """The one request of a run: libraries to write, slots to fill, passages to rewrite (`> …`,
     as (instruction, passage)), and the clip to continue. `made`: the prompt that made each gallery
     picture the CAST names, by its label (`<Picture 2>`); a slot that defines a subject gets its own
-    pictures' prompt beside it, so the model never has to work out which picture is whose."""
+    pictures' prompt beside it, so the model never has to work out which picture is whose. `pictures`: the
+    pictures the slots name (`pictures_in`), sent after the frames, read as Picture 1, 2 … (#174)."""
     made = made or {}
     if not directions and not rewrites:
         return prompt_for(wanted)
@@ -87,9 +115,14 @@ def request(wanted: list[Need], directions: list[str], context: str, frames: int
     shown = SLOT.sub(lambda m: f"[{keys[m.group(1)]}]" if m.group(1) in keys else m.group(0), context)
     parts = ["You write for a text-to-image and text-to-video prompt generator."]
     if frames:
-        parts.append(f"The {frames} images are frames of the previous clip, one a second, the last one where it "
-                     "ends. The prompt below makes the clip that follows it: continue from that last frame, with the "
-                     "same people and place, and move the story on instead of retelling it.")
+        parts.append(f"The {'first ' if pictures else ''}{frames} images are frames of the previous clip, one a second, "
+                     "the last one where it ends. The prompt below makes the clip that follows it: continue from that last "
+                     "frame, with the same people and place, and move the story on instead of retelling it.")
+    if pictures:
+        parts.append(f"The {'images after them' if frames else 'images'} are "
+                     + ", ".join(f"Picture {i}" for i in range(1, len(pictures) + 1))
+                     + ", in that order: the parts to write name them so. Look at them closely, and write what they show: "
+                     "never name them (Picture 1) in what you write.")
     if wanted:
         parts.append("Wildcard lists to write:\n" + "\n".join(library_lines(wanted)) + f"\n{LIST_RULES}")
     replies = ["each list name (without underscores) to a JSON array of its entries"] if wanted else []
@@ -117,7 +150,7 @@ def request(wanted: list[Need], directions: list[str], context: str, frames: int
                         + " / ".join(f"«{p}»" for p in prompts))
             return out
         parts.append(f"Parts to write, each as prose that fits where it stands and follows its directions exactly.{labels}\n"
-                     + "\n".join(f'- "{keys[d]}": {d}{hint(d)}' for d in directions))
+                     + "\n".join(f'- "{keys[d]}": {as_pictures(d, list(pictures))}{hint(d)}' for d in directions))
         replies.append('each part ("slot 1", …) to its text')
     if rewrites:
         parts.append("Passages to rewrite, each following its instruction. Keep every UPPERCASE name, every <label> "

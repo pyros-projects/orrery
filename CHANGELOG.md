@@ -9,6 +9,19 @@ checks) are left out.
 
 ### Added
 
+- The language model at the line (#170): with an API endpoint, a 🎲 at the end of a slot's line, of a library still to
+  be written and of a `> enhance` line opens three takes for that place at the node's seed; **More takes** asks for
+  three more, a steer goes with them; a click selects a take, **Use selected** puts it in place and **Keep the
+  direction** writes the steer into its directions, both with Undo; a `> enhance` take is kept for its roll, and the
+  run uses it instead of asking. A library still to be written is written in its sheet (as many entries as a new
+  library starts with): pick the good ones and **Keep as the library** writes them straight in; a library that exists
+  opens from its roll at the line's end (or Ctrl+click on its name) with its rolls and new entries to **Add to the
+  library**. Slots are violet in the editor, a 🎲 outlines its place while the pointer is on it, and Ctrl+click on a
+  slot opens its takes. How many takes each 🎲 asks for is a setting. `__name__(directions)` is deprecated: it still works, and a
+  library keeps its directions itself. A slot sees the pictures it names (`image first_frame`, `image last_frame`,
+  `image 3`, a gallery name); one from `image output` waits in `EXPORT:` for the picture the run makes and is written
+  from the Gallery, its 🎲 in the picture's sheet, or after every run (the gear's *Picture slots*). `docs/llm.md`
+  holds every language-model feature on one page.
 - A reel's past is what was rendered: each take keeps its bindings and its `END ON:`, and the clips after it read
   them (and the scenes the film went through) from the takes, not from a new roll with libraries, ratings or earlier
   scenes changed since; what has no take rolls as before (#261).

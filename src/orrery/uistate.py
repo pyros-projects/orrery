@@ -16,7 +16,8 @@ LISTS = ("favorites", "recent")  # preset names, followed by renames and deletes
 FLAGS = ("quickstart", "dividers", "timeline", "log_prompts", "surf_numbered", "preview_light")  # #206, #205
 SIZES = {"clip_min": (360, 96, 1600), "take_min": (54, 32, 480),  # name → (default, least, most): CSS pixels,
          "preview_fps": (12, 1, 24), "preview_edge": (1024, 0, 4096)}  # pictures a second; a preview's long edge (0: as sampled)
-CHOICES = {"annotations_show": ("appended", "hover", "none")}  # name → its values, the first the default
+CHOICES = {"annotations_show": ("appended", "hover", "none"),  # name → its values, the first the default
+           "picture_slots": ("gallery", "every run")}  # an export slot from image output: written on demand, or after each run (#175)
 
 
 def _path(home: Home):

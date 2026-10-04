@@ -54,12 +54,15 @@ from orrery.slots import (
     fill,
     fill_exports,
     keep_marks,
+    names_output,
+    pictures_in,
     put_back,
     request,
     rewrites_in,
     slots,
     write,
 )
+from orrery.takes import kept_rewrites, rewrite_key, write_pictures
 
 TARGETS = ["text", "h3-base", "flat"]
 NO_PRESET = "(none)"
@@ -236,6 +239,66 @@ def _count(frames) -> int:
     return len(frames) if frames is not None else 0
 
 
+def _picture(image):
+    """The first picture of a ComfyUI IMAGE batch, as PIL."""
+    from PIL import Image
+
+    batch = image.detach().cpu().numpy() if hasattr(image, "detach") else image
+    return Image.fromarray((batch[0].clip(0, 1) * 255).round().astype("uint8"))
+
+
+def _slot_pictures(h, words: list[str], result, inputs: dict | None, lint: list) -> tuple[list[str], list]:
+    """The pictures the slots name (#174), as PIL, and the words of those found: first_frame and last_frame from
+    the node's inputs, `image N` from the gallery pictures of the clip's CAST, a gallery name from its file. One
+    that is not there is said and left out; its slot is written without it."""
+    from PIL import Image
+
+    from orrery import pictures as gallery
+
+    kept, shown = [], []
+    for word in words:
+        if word in ("first_frame", "last_frame"):  # an IMAGE in a run, the Load Image's file over the API
+            wired = (inputs or {}).get(word)
+            picture = None if wired is None else Image.open(wired) if isinstance(wired, str | Path) else _picture(wired)
+            why = f"nothing is wired into the Orrery Prompt's {word}"
+        elif word.isdigit():
+            made = (getattr(result, "pictures", None) or {}).get(int(word)) or {}
+            picture = Image.open(made["file"]) if made.get("file") else None
+            why = f"image {word} is no gallery picture of the CAST (one wired into Orrery Refs is not there while the prompt is written)"
+        else:
+            files = gallery.find(word, h.libraries()) or []
+            picture, why = (Image.open(files[0]) if files else None), f"image {word} is no picture of the gallery"
+        if picture is None:
+            lint.append({"severity": "warn", "message": f"A slot names image {word}, but {why}: it is written without it."})
+            continue
+        kept.append(word)
+        shown.append(picture)
+    return kept, shown
+
+
+def _images(frames, shown: list, backend):
+    """What the model sees: the previous clip's frames, then the pictures the slots name. An endpoint takes them as
+    they are; a text encoder takes one IMAGE batch, so every picture is fitted into one square size (#174)."""
+    if not shown:
+        return frames
+    stills = [_picture(frames[i:i + 1]) for i in range(len(frames))] if frames is not None and len(frames) else []
+    every = stills + shown
+    if isinstance(backend, OpenAIBackend):
+        return every
+    import numpy as np
+    import torch
+    from PIL import Image
+
+    edge, squares = 512, []
+    for picture in every:
+        picture = picture.convert("RGB")
+        picture.thumbnail((edge, edge))
+        square = Image.new("RGB", (edge, edge))
+        square.paste(picture, ((edge - picture.width) // 2, (edge - picture.height) // 2))
+        squares.append(np.asarray(square, dtype=np.float32) / 255)
+    return torch.from_numpy(np.stack(squares))
+
+
 def _passages(result, target: str) -> list[tuple[str, str, object]]:
     """What `> instructions` ask to rewrite: (instruction, passage, put the rewrite in its place).
     A text prompt is one passage; in a screenplay, each prose line of a shot in scope, never dialogue."""
@@ -259,8 +322,10 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                wired: int | None = None, chain: str = DEFAULT_CHAIN,
                keep: bool = False, sweep: str = "",
                continued: bool = False, sizes: tuple[Size, Size] = (None, None),
-               refmodded: bool = True, standing: frozenset[int] = frozenset()) -> tuple[str, str, int, int, int, int, list, int, int]:
+               refmodded: bool = True, standing: frozenset[int] = frozenset(),
+               pictures: dict | None = None) -> tuple[str, str, int, int, int, int, list, int, int]:
     """`frames`: the previous clip's stills, which the model sees when it writes `--…--` slots.
+    `pictures`: the IMAGEs wired into first_frame and last_frame, for a slot that names them (#174).
     `packed`: Orrery Refs routes the images per clip; `wired`: the reference images Reference to
     Video has (both from the graph, see `wiring`). `chain`: the Motion Context chain SEND: reads;
     `keep`: Orrery Refs' keep_sent, so sent images with a stored anchor are held from segment 0.
@@ -333,10 +398,26 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     except MissingLibrary as err:
         raise ValueError(f"{err}, or pick a language model in orrery's settings (the gear in the node) "
                          "and it is created when the node runs") from err
-    todo = slots(result.text)
-    todo += [d for d in export_slots(getattr(result, "exports", {})) if d not in todo]  # EXPORT: lines write too
     passages = _passages(result, target)
     enhanced: list[dict] = []
+    if passages:  # a rewrite kept for this roll (Use selected, #276) stands in for the model's, before the slots
+        kept = kept_rewrites(h)
+        for instruction, before, place in [p for p in passages if rewrite_key(p[0], p[1]) in kept]:
+            place(kept[rewrite_key(instruction, before)]["text"])
+            enhanced.append({"instruction": instruction, "before": before,
+                             "after": kept[rewrite_key(instruction, before)]["text"], "kept": True})
+        passages = [p for p in passages if rewrite_key(p[0], p[1]) not in kept]
+        if enhanced and target != "text":
+            result.text = render_scene(result.scene, target, [])
+    todo = slots(result.text)
+    todo += [d for d in export_slots(getattr(result, "exports", {})) if d not in todo]  # EXPORT: lines write too
+    later = [d for d in todo if names_output(d)]  # from the picture the run makes: once it exists (#174, #175)
+    todo = [d for d in todo if d not in later]
+    exported = set(export_slots(getattr(result, "exports", {})))
+    lint += [{"severity": "warn", "message": f"--{d}-- names image output, the picture this run makes, which exists only "
+                                             "after it: such a slot stands in an EXPORT: line, and the Gallery writes it."}
+             for d in later if d not in exported]
+    named, shown = _slot_pictures(h, pictures_in(todo), result, pictures, lint) if todo else ([], [])
     if passages and wanted:
         lint.append({"severity": "info", "message": "The > enhance instructions run on the next run; this one "
                                                     "writes the missing libraries."})
@@ -349,9 +430,9 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         marked = [keep_marks(passage) for _, passage, _ in passages] if backend is not None else []
         prompt = request([], todo, result.text, _count(frames),
                          [(instruction, text) for (instruction, _, _), (text, _) in zip(passages, marked, strict=False)],
-                         made=_made(result, packed) if target != "text" else [])
+                         made=_made(result, packed) if target != "text" else [], pictures=named)
         try:
-            reply = backend.complete(prompt, images=frames)
+            reply = backend.complete(prompt, images=_images(frames, shown, backend))
             texts, _ = write(h, [], todo, reply, backend)
             for (instruction, before, place), (_, kept), new in zip(passages, marked, rewrites_in(reply, len(marked)),
                                                                     strict=False):
@@ -562,6 +643,9 @@ def log_outputs(home: Home, picks_json: str, media: list[str]) -> list[dict]:
     with STATE, home.galaxy_path.open("a", encoding="utf-8") as f:  # never while a rating rewrites the log (#260)
         for row in rows:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
+    if uistate.load_ui(home)["picture_slots"] == "every run":  # its picture slots written now (#175)
+        for note in write_pictures(home, [r for r in rows if r.get("media")]):
+            print(f"[orrery] warn: {note}")
     return rows
 
 
@@ -660,7 +744,8 @@ class OrreryPrompt:
             outputs = run_prompt(template, seed, target, home, preset, linked_preset(extra_pnginfo, unique_id),
                                  params, segment, clip, stills, packed, wired, chain, keep,
                                  sweep, continued(prompt, unique_id), (_size(first_frame), _size(last_frame)),
-                                 reads_picks(prompt, unique_id, "OrreryRefMods"), standing)
+                                 reads_picks(prompt, unique_id, "OrreryRefMods"), standing,
+                                 {"first_frame": first_frame, "last_frame": last_frame})
             data = json.loads(outputs[1])
             if take:  # sample surfing (#206): the rolls as at the seed, the sampler's noise from seed + take
                 data["take"] = take

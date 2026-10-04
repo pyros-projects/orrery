@@ -83,6 +83,8 @@ async function saveLlm(app, st, view, withApi = false) {
   const q = (sel) => view.querySelector(sel);
   const body = { file: st.llm.file || "", entries: Number(q("#oa-llm-n")?.value ?? st.llm.entries) || 12,
     max_tokens: Number(q("#oa-llm-t")?.value ?? st.llm.max_tokens) || 16000, source: st.llm.source };
+  const takes = [...view.querySelectorAll("[data-takes]")];
+  if (takes.length) body.takes = Object.fromEntries(takes.map((i) => [i.dataset.takes, Number(i.value) || 3]));  // #274
   if (q("#oa-llm")) body.file = q("#oa-llm").value;
   if (withApi) Object.assign(body, { source: "api", base_url: q("#oa-api-url").value.trim(), model: q("#oa-api-model").value.trim(), key: q("#oa-api-key").value.trim() });
   const before = app.data.llm?.active;
@@ -129,7 +131,16 @@ export const SECTION_HTML = {
       <div class="row"><span id="oa-api-model-box" class="grow">${modelField([], s.api.model)}</span>
         <button type="button" class="btn ghost" data-check title="Ask the endpoint for its models and the model for one short answer">${icon("spark")}Check</button>
         <button type="button" class="btn primary" data-useapi title="Check the endpoint and use it for every language-model task">${icon("check")}Use this endpoint</button></div>
-      <span class="muted" id="oa-api-status"></span></div></div>
+      <span class="muted" id="oa-api-status"></span></div>
+    <h5 class="label">Picture slots</h5>
+    <p class="muted flush">A slot written from the picture a run makes (<code>--a caption of image output--</code>) waits for the picture, then the endpoint looks at it.</p>
+    <div class="llm-pick" role="radiogroup" aria-label="When picture slots are written">${[["gallery", "<b>In the Gallery</b>: the picture's exports show the slot with a 🎲: takes, then more, steered; Use selected writes one in"],
+      ["every run", "<b>After every run</b>: one take each, written in as the picture is kept"]].map(([v, label]) =>
+      `<label class="check"><input type="radio" name="oa-ps" value="${v}" ${(app.data.picture_slots || "gallery") === v ? "checked" : ""}><span>${label}</span></label>`).join("")}</div></div>
+    <div class="field"><span class="label">Takes a 🎲 asks for</span>
+      <div class="row wrap takes-n">${[["slot", "for a <code>--slot--</code>"], ["enhance", "for <code>&gt; enhance</code>"], ["rolled", "rolled from a library"], ["new", "new for a library"]].map(([k, label]) =>
+        `<label class="row"><input class="input narrow" type="number" min="1" max="12" data-takes="${k}" value="${s.takes?.[k] ?? 3}" aria-label="Takes ${k}"><span class="muted">${label}</span></label>`).join("")}</div>
+      <span class="muted">More takes asks for as many again.</span></div>
     <div class="field"><label class="label" for="oa-llm-n">A library it creates starts with</label>
       <div class="row"><input class="input narrow" id="oa-llm-n" type="number" min="1" max="200" value="${s.entries}"><span class="muted">entries · <code>__name:30__</code> asks for at least 30</span></div></div>
     <div class="field"><label class="label" for="oa-llm-t">Max tokens</label>
@@ -230,7 +241,9 @@ const WIRE = {
       };
     });
     view.querySelector("#oa-llm").onchange = () => saveLlm(app, st, view);
+    view.querySelectorAll('[name="oa-ps"]').forEach((r) => { r.onchange = () => saveUi(app, { picture_slots: r.value }); });
     for (const id of ["#oa-llm-n", "#oa-llm-t"]) view.querySelector(id).onchange = () => saveLlm(app, st, view);
+    view.querySelectorAll("[data-takes]").forEach((i) => { i.onchange = () => saveLlm(app, st, view); });
     view.querySelector("[data-check]").onclick = () => check(true);
     view.querySelector("[data-useapi]").onclick = async () => {
       status.className = "muted";
