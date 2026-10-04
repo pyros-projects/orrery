@@ -49,6 +49,27 @@ def test_every_orrery_node_in_an_example_saves_its_widget_values_in_order(path):
         assert not wrong, f"{path.name}: {node['type']} {node['id']}: {wrong}"
 
 
+@pytest.mark.parametrize("path", [p for p in EXAMPLES if p.name.startswith("orrery_h3")], ids=lambda p: p.name)
+def test_every_h3_example_runs_the_model_through_the_orrery_prompt(path):
+    """#314: its LORA: lines go on the model that passes through the node, and its sampler shows the live preview."""
+    w = json.loads(path.read_text(encoding="utf-8"))
+    types = {n["id"]: n["type"] for n in w["nodes"]}
+    model = sorted((types[a], types[b]) for _, a, _, b, _, kind in w["links"] if kind == "MODEL")
+    assert model == [("ModelAttentionBackend", "OrreryPrompt"), ("OrreryPrompt", "BasicGuider"), ("OrreryPrompt", "BasicScheduler"),
+                     ("UNETLoader", "ModelAttentionBackend")]
+
+
+@pytest.mark.parametrize("path", EXAMPLES, ids=lambda p: p.name)
+def test_every_link_and_its_two_ends_agree(path):
+    """A link names the slots it joins, and those slots name it back."""
+    w = json.loads(path.read_text(encoding="utf-8"))
+    nodes = {n["id"]: n for n in w["nodes"]}
+    for link, a, out, b, slot, _ in w["links"]:
+        assert link in (nodes[a]["outputs"][out].get("links") or []), (path.name, link)
+        assert nodes[b]["inputs"][slot].get("link") == link, (path.name, link)
+    assert w["last_link_id"] >= max(link[0] for link in w["links"])
+
+
 def test_the_krea_example_runs_the_model_through_the_orrery_prompt():
     """#302: the live preview hangs on the sampler of the model that passes through the node (as KJNodes' preview)."""
     w = json.loads((Path(__file__).parent.parent / "example_workflows" / "orrery_krea2_t2i.json").read_text(encoding="utf-8"))

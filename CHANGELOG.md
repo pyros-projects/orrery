@@ -150,6 +150,11 @@ checks) are left out.
 
 ### Changed
 
+- Infinite backrooms goes all out (#217): nearly sixty levels, forty ways from one to the next, forty things that happen
+  on the walk, forty things of orrery's own that find the camera besides the SCPs, each with its way out (look away,
+  hold your breath, run, the water, hide, the camera light, follow it, a kindness), and the hiding places, chase routes
+  and approaches rolled. The levels and exits are shared, so `loops/backrooms` and `the_specimen` roll from the larger
+  lists too and their picks move.
 - The Character creator puts the shot first (#138): "A studio photograph: a head-and-shoulders portrait of …", and
   each view says its pose in a sentence of its own, the way Krea 2's own samples are written; the picks stay the same.
   How a Krea 2 preset is written is in docs/presets.md ("Writing a Krea 2 preset").
@@ -190,6 +195,8 @@ checks) are left out.
 
 ### Fixed
 
+- The H3 example workflows run their model through the Orrery Prompt, so their `LORA:` lines take effect and the
+  results show the live preview (#314).
 - A text template's `LORA:` line (a Krea prompt) goes on the model that passes through the Orrery Prompt, as in a
   screenplay, instead of landing in the prompt (#311).
 - Ticking a choice in a dial's menu no longer throws its list back to the top (#290).

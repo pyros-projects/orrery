@@ -8,3 +8,33 @@ entries:
   - {value: "the camera steps into an elevator and its doors slide shut", props: {open: "The elevator doors slide open"}}
   - {value: "the camera crawls into a dark vent at floor level", props: {open: "The camera crawls out of a vent at floor level"}}
   - {value: "the tape rolls and the picture dissolves into VHS static", props: {open: "The static clears as the tape picks up again"}}
+  - {value: "the camera opens a cupboard door and steps into the dark shelves behind it", props: {open: "A cupboard door swings open and the camera steps out"}}
+  - {value: "the floor tilts slowly and the camera slides down it into a gap that opens along the wall", props: {open: "The camera slides out onto a level floor"}}
+  - {value: "the camera walks through a doorway that is suddenly not there, and the picture skips like a scratched tape", props: {open: "The picture skips back in"}}
+  - {value: "the camera climbs into a laundry chute and lets go", props: {open: "The camera tumbles out of a laundry chute onto a pile of sheets"}}
+  - {value: "the camera follows the arrows painted on the floor around one last corner, and the corner keeps going", props: {open: "The arrows on the floor end at the camera's feet"}}
+  - {value: "the camera turns around, and the room behind it has already changed", props: {open: "The camera turns back to face the way it came"}}
+  - {value: "the camera leans out of a window, loses its grip, and falls", props: {open: "The camera lands hard on a carpet, the window gone"}}
+  - {value: "the camera presses the button of a lift with no numbers and the doors close on the dark", props: {open: "A lift bell dings and its doors open"}}
+  - {value: "the camera pushes through a heavy fire door, and a white light floods the lens", props: {open: "The white light fades and a fire door thuds shut behind the camera"}}
+  - {value: "the camera goes down a staircase that keeps going past the bottom", props: {open: "The camera steps off the last stair"}}
+  - {value: "the camera crawls under a bed in the corner and keeps crawling", props: {open: "The camera crawls out from under a bed"}}
+  - {value: "the camera opens the door of a running washing machine and climbs into the spinning water", props: {open: "The camera spills out of a washing machine door onto wet tiles"}}
+  - {value: "the camera walks into a mirror, and its reflection walks out the other side", props: {open: "The camera steps out of a mirror"}}
+  - {value: "the picture freezes, the date stamp jumps forward by an hour, and the tape goes on somewhere else", props: {open: "The frozen picture jolts and the tape runs on"}}
+  - {value: "the camera opens a hatch in the floor and climbs down a ladder into the dark", props: {open: "The camera climbs up out of a floor hatch"}}
+  - {value: "the camera sits down in an empty chair, and the chair falls backwards through the floor", props: {open: "The camera rolls out of an overturned chair"}}
+  - {value: "the camera steps onto a moving walkway that speeds up until the walls blur", props: {open: "The walkway slows and spills the camera onto a carpet"}}
+  - {value: "the camera parts a curtain and walks into a black space with no floor", props: {open: "The camera stumbles out through a curtain"}}
+  - {value: "the camera wades into a drained pool, and the empty pool is suddenly full", props: {open: "The camera rises dripping out of shallow water"}}
+  - {value: "every light goes out at once and the camera keeps walking in the dark", props: {open: "The lights come on all at once"}}
+  - {value: "the camera reaches the end of a corridor and the corridor folds closed over it like a book", props: {open: "The walls unfold around the camera"}}
+  - {value: "the camera opens a door marked STAFF ONLY onto a staircase going up", props: {open: "The camera comes up a staircase through a door marked STAFF ONLY"}}
+  - {value: "the camera walks backwards through a doorway without turning around", props: {open: "The camera walks backwards out of a doorway"}}
+  - {value: "the camera lies down on the carpet and sinks into it as if it were water", props: {open: "The camera surfaces out of the carpet"}}
+  - {value: "the tape is ejected with a clunk, the picture goes black, and someone pushes it back in", props: {open: "The tape clunks back in and the picture rolls into place"}}
+  - {value: "the camera follows a power cable along the floor into a gap in the skirting board", props: {open: "The camera squeezes out of a gap in a skirting board"}}
+  - {value: "the camera steps into a revolving door that keeps turning", props: {open: "A revolving door turns the camera out"}}
+  - {value: "a wall slides open like an automatic door, and the camera walks through before it can close", props: {open: "A wall slides shut behind the camera"}}
+  - {value: "the camera presses its lens against a crack in the wall until the crack is all there is", props: {open: "The camera pulls back from a crack in a wall"}}
+  - {value: "the camera opens a fridge, and the light inside is so bright the picture burns white", props: {open: "The white glare dims and a fridge door swings closed"}}

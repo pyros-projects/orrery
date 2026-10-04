@@ -69,8 +69,10 @@ steered by CUT TO:: every clip rolls who walks next and cuts to the scene that d
 season (a dial) puts the runway outside in spring and summer, inside in autumn and winter. `loops/` holds H3 Motion Context reels
 that never end (`forever` or `CUT TO:`, Run (Instant)). Six are steered by `CUT TO:` and play out differently
 with every seed: `the_specimen` (a test scene films the SCP the seed rolled and REMEMBER keeps it, so the
-walk through the Backrooms meets that very thing, at a 35% chance, twice at most), `infinite_backrooms` (a found-footage horror film: after every third level a chance that
-an SCP finds the camera, and which one decides how it gets away), `dice_dungeon` (rooms, foes and a relic
+walk through the Backrooms meets that very thing, at a 35% chance, twice at most), `infinite_backrooms` (a found-footage horror film through nearly sixty levels, where small wrong things
+happen on the walk; after every third level something finds the camera, one of forty things of orrery's own or now and
+then an SCP, and what it is decides the way out: look away, hold your breath, run, flee through the water, hide, hold it
+off with the camera light, follow it, or be shown a kindness, #217), `dice_dungeon` (rooms, foes and a relic
 that ends it, so every seed is an adventure of its own length), `the_relay` (a thing passed from hand to
 hand through a city), `evolution` (a creature that changes one trait per generation, and sometimes all of
 them) and `endless_kitchen` (a dinner service where every ticket picks a station). `surprise_me` casts from

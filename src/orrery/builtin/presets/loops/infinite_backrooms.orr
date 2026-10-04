@@ -1,19 +1,12 @@
 ---
 title: "Infinite backrooms"
-note: "A found-footage horror film that writes itself. The camera walks the Backrooms three levels at a time; after every third, there is a 40% chance that something finds it. Which SCP it is decides how the camera gets away: it does not look at SCP-096, holds its breath while SCP-939 listens, runs from SCP-682 (and is sometimes caught: the tape tears, rewinds, and the walk starts again in the yellow rooms), dives through the flooded floor away from SCP-3000, and is hugged by SCP-999. Every way out noclips into a new level, and the walk goes on. CUT TO: lines steer it; another seed is another film. The entities come from the SCP Wiki (CC BY-SA 3.0, credited in __scp/entities__)."
+note: "A found-footage horror film that writes itself. The camera walks the Backrooms, nearly sixty levels of them, three at a time, and on the way things happen: a phone rings and stops, footsteps fall into step behind, the date stamp jumps, a mirror shows the room without the camera. After every third level there is a 40% chance that something finds it: one of forty things of orrery's own (faceless office workers, listening dogs with human hands, a mascot that runs too fast, a deer of light) or now and then an SCP. How it shows itself is rolled, and what it is decides how the camera gets away: it looks away, holds its breath, runs (and is sometimes caught: the tape tears, rewinds, and the walk starts again in the yellow rooms), flees through the water, hides, holds it off with the camera light, follows where it leads, or is simply shown a kindness. Every way out noclips into a new level, forty ways of it, and the walk goes on. CUT TO: lines steer it; another seed is another film. The SCPs come from the SCP Wiki (CC BY-SA 3.0, credited in __scp/entities__)."
 tags: [loops, h3, reel, goto, horror, motion_context]
 ---
 @h3 text 16:9
 context: 22
 style: found footage from a 1990s VHS camcorder, one continuous unbroken ten-second shot: soft smeared colour, faint tracking lines, the date stamp "JUN 14 1996 3:12 AM" in the lower corner, handheld at chest height
 MUSIC: N/A
-
-@lib backrooms_approach
-  stands at the far end of the room, perfectly still, facing the camera
-  steps out from behind a pillar a few metres ahead
-  crawls out of a dark doorway on all fours
-  is already in the room when the lights flicker back on
-  rises slowly from behind a row of empty desks
 
 SCENE the yellow rooms
 $level = __backrooms/levels#start:yes__
@@ -26,40 +19,46 @@ END ON: $exit
 SCENE the walk ×3
 $level = __backrooms/levels__
 $exit = __backrooms/exits__
+$event = {__backrooms/events__:3|none:2}
 $contact = {40% contact}
-SHOT 10s: push in, slow
-$exit[-1].open, into $level. The camera operator walks slowly on. The place is completely empty and goes on in every direction{30% , and far away a door closes softly by itself}.
-SFX: $level.sfx; the camera operator's breathing and footsteps close to the microphone
+SHOT 10s: {push in, slow|tracking, slow|push in, small, slow|pan left, slow|pan right, slow}
+$exit[-1].open, into $level, which goes on in every direction. The camera operator walks slowly on{IF $event is not none: ; $event|}.
+SFX: $level.sfx{IF $event is not none: ; $event.sfx|}; the camera operator's breathing and footsteps close to the microphone
 END ON: $exit
 IF $contact is contact: CUT TO: contact
 CUT TO: the walk
 
+# What finds the camera, and how it shows itself; what it is decides the way out.
 SCENE contact
-$scp = __scp/entities__
+$thing = {__backrooms/entities__:4|__scp/entities__}
 $level = __backrooms/levels__
 SHOT 10s: static
-$exit[-1].open, into $level. The camera operator stops dead: $scp __backrooms_approach__. The camera trembles in the operator's hands.
-SFX: $scp.sfx; the operator's breath catching; the fluorescent buzz rising
+$exit[-1].open, into $level. The camera operator stops dead: $thing __backrooms/approaches__. The camera trembles in the operator's hands.
+SFX: $thing.sfx; the operator's breath catching; the fluorescent buzz rising
 END ON: the thing stands between the camera and the way on
-IF $scp[id=SCP-096]: CUT TO: eyes shut
-IF $scp[id=SCP-939]: CUT TO: silence
-IF $scp[id=SCP-682]: CUT TO: the chase
-IF $scp[id=SCP-3000]: CUT TO: the deep floor
-CUT TO: the hug
+IF $thing.escape is look-away: CUT TO: eyes shut
+IF $thing.escape is silence: CUT TO: silence
+IF $thing.escape is chase: CUT TO: the chase
+IF $thing.escape is water: CUT TO: the deep floor
+IF $thing.escape is hide: CUT TO: hiding
+IF $thing.escape is light: CUT TO: the light
+IF $thing.escape is follow: CUT TO: following
+CUT TO: a kindness
 
 SCENE eyes shut
 $exit = __backrooms/exits__
 SHOT 10s: tilt down, fast
-The camera swings down to the floor before it can see the face of $scp[-1]. The operator squeezes their eyes shut; the picture shows only carpet and shaking hands while something huge walks past, close enough to brush the lens, and moves on. Then the operator stumbles forward, and $exit.
-SFX: $scp[-1].sfx passing very close; the operator's ragged, held breath
+The camera swings down to the floor before it can look straight at $thing[-1]. The operator squeezes their eyes shut; the picture shows only the floor and shaking hands while the thing $thing[-1].meet. Then the operator stumbles forward, and $exit.
+SFX: $thing[-1].sfx very close; the operator's ragged, held breath
 END ON: $exit
 CUT TO: the walk
 
 SCENE silence
 $exit = __backrooms/exits__
+$hide = __backrooms/hides__
 SHOT 10s: static, small
-The operator crouches behind an overturned desk and holds their breath. $scp[-1] moves through the room, its head turning toward every small sound, stops right beside the desk, then drifts away into the dark. The operator slips out the other way, and $exit.
-SFX: total silence but for $scp[-1].sfx; one drop of water falling
+The operator crouches behind $hide and holds their breath. $thing[-1] $thing[-1].meet. The operator slips out the other way, and $exit.
+SFX: total silence but for $thing[-1].sfx; one drop of water falling
 END ON: $exit
 CUT TO: the walk
 
@@ -67,10 +66,10 @@ SCENE the chase
 $exit = __backrooms/exits__
 $fate = {70% gone|caught}
 SHOT 10s: tracking, fast
-The operator turns and runs, the camera jolting wildly, through room after identical room with $scp[-1] crashing after them, doorframes splintering behind.
-IF $fate is gone: At the last moment $exit, and the crashing stops.
+The operator turns and runs, the camera jolting wildly, __backrooms/routes__, while $thing[-1] $thing[-1].meet.
+IF $fate is gone: At the last moment $exit, and the noise behind stops.
 IF $fate is caught: A huge shape fills the frame from the side, the camera is torn away and tumbles across the floor, still recording.
-SFX: running footsteps; $scp[-1].sfx right behind; the camera's case cracking
+SFX: running footsteps; $thing[-1].sfx right behind; the camera's case cracking
 END ON: the picture jolts and breaks up for a moment
 IF $fate is caught: CUT TO: the tape
 CUT TO: the walk
@@ -78,16 +77,41 @@ CUT TO: the walk
 SCENE the deep floor
 $exit = __backrooms/exits[open=The camera rises dripping out of shallow water]__
 SHOT 10s: push in, slow
-The floor ahead is flooded with dark water. $scp[-1] rises out of it, enormous, and glides past just under the surface; the operator holds the camera high and backs away until $exit, the picture going green and murky.
-SFX: water rushing into the microphone; $scp[-1].sfx muffled through the water
+The floor ahead is flooded with dark water. $thing[-1] $thing[-1].meet; the operator holds the camera high and backs away until $exit, the picture going green and murky.
+SFX: water rushing into the microphone; $thing[-1].sfx muffled through the water
 END ON: $exit
 CUT TO: the walk
 
-SCENE the hug
+SCENE hiding
+$exit = __backrooms/exits__
+$hide = __backrooms/hides__
+SHOT 10s: static, small
+The operator backs into $hide and pulls the camera in close. Through a gap the picture shows $thing[-1], which $thing[-1].meet. When it is gone, the operator creeps out, and $exit.
+SFX: $thing[-1].sfx coming closer, then going away; the operator's heartbeat close to the microphone
+END ON: $exit
+CUT TO: the walk
+
+SCENE the light
+$exit = __backrooms/exits__
+SHOT 10s: push in, small
+The operator flicks on the camera's light and holds the beam straight on $thing[-1], which $thing[-1].meet. Keeping the beam on it, the operator backs away, and $exit.
+SFX: the camera light clicking on; $thing[-1].sfx
+END ON: $exit
+CUT TO: the walk
+
+SCENE following
+$exit = __backrooms/exits__
+SHOT 10s: tracking, slow
+$thing[-1] $thing[-1].meet. The operator follows at a distance, room after room, until it stops beside a door and is gone, and $exit.
+SFX: $thing[-1].sfx ahead; the operator's careful footsteps
+END ON: $exit
+CUT TO: the walk
+
+SCENE a kindness
 $exit = __backrooms/exits__
 SHOT 10s: static
-$scp[-1] wobbles up to the camera, rises tall and wraps two soft pseudopods around the operator, who laughs in spite of everything. It lets go, wobbles away happily, and the operator, still smiling, walks on, and $exit.
-SFX: a happy bubbling hum; the operator's shaky laughter
+$thing[-1] $thing[-1].meet. The operator, still shaking, laughs in spite of everything, walks on, and $exit.
+SFX: $thing[-1].sfx; the operator's shaky laughter
 END ON: $exit
 CUT TO: the walk
 
