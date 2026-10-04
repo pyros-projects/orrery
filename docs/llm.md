@@ -6,12 +6,12 @@ a template rolled needs no model, so orrery never asks one for that.
 
 ## Choosing the model
 
-The gear in the node, **Language model**:
+The gear in the node opens the Settings tab; its section **Language model**:
 
 | Choice | What it is | Where it runs |
 |---|---|---|
 | **A text encoder in ComfyUI** | A text encoder that is a whole language model: Krea 2's `qwen3vl_4b`, or a Qwen3-VL 8B build. MiniMax H3's encoder is cut short and cannot write. A text encoder wired into the node's `clip` input wins over the choice. | In ComfyUI's queue, on the GPU. It loads when the node runs and answers **once per run**. ComfyUI moves it out when the video model needs the room. |
-| **An API endpoint** (#165) | OpenAI, or a server that speaks its protocol (llama.cpp, LM Studio, OpenRouter): the endpoint, a key, a model. **Check** lists the models and asks for one answer; **Save** checks first. The key goes into the home folder's `.env`, never into `orrery.yaml`. It wins over a wired `clip`. | Beside ComfyUI: no VRAM, no queue. It can be asked more than once per run, and in parallel. |
+| **An API endpoint** (#165) | OpenAI, or a server that speaks its protocol (llama.cpp, LM Studio, OpenRouter): the endpoint, a key, a model. **Check** lists the models and asks for one answer. **Use this endpoint** checks it first and uses it. The key goes into the home folder's `.env`, never into `orrery.yaml`. It wins over a wired `clip`. | Beside ComfyUI: no VRAM, no queue. It can be asked more than once per run, and in parallel. |
 
 `orrery.yaml` (`llm:`) also holds:
 - `entries`: how many entries a new library starts with, 12 by default;
@@ -40,6 +40,7 @@ The footer of the Prompt tab names the active model: `LLM qwen3vl_8b…`, or `LL
 | **Write menu: Story between frames** | `@h3 fl2va`, both frames wired | The shot that gets from the first frame to the last. |
 | **Write menu: Prompt from image** | a picture in `first_frame` | A Krea image prompt, or an i2va shot when the template is `@h3`. |
 | **The writers' prompts** | the gear, **Writers** | What each writer is sent, editable, with **Reset to default**. |
+| **Takes at the line** (API, #173) | a 🎲 at the end of a slot's line, of a library still to be written, of a `> enhance` line | Three takes for that place, written at the node's seed with the prompt as it rolls around it. **More takes** asks for three more (new against those there), the steering line goes with them ("darker", "as an anime character"). **Insert** puts a take in place of the slot or the library, **Keep the direction** writes your steer into its directions (`--…, darker--`, `__name__(darker)`, `> …, darker`); both are unsaved edits with Undo. A `> enhance` line's takes show what the rewrite does at this seed. With a text encoder the takes come with #171. |
 | **Write now** (API only, #168) | a template with libraries still to write | A button in the footer writes them all at once, one request each, before any run. They wait in To review. |
 | **`orrery lib`** (CLI) | `gen`, `more`, `edit`, `undo` | Libraries in plain language: `orrery lib edit animal 'make a feline list from the cats'`. Nothing is kept until you confirm it. |
 
@@ -75,19 +76,20 @@ With a **text encoder** (the gear → A text encoder in ComfyUI):
 
 With an **API endpoint** (the gear → An API endpoint, then Check and Save):
 
-- [ ] A wrong key is refused on Save; the right one shows only how it ends.
+- [ ] A wrong key is refused on **Use this endpoint**; the right one shows only how it ends.
 - [ ] The footer says `LLM <model> · API`.
 - [ ] Tutorial 17 with fresh library names: **Write now** appears in the footer, writes them, and disappears.
 - [ ] Tutorial 18 with a new library added (`… on the last night bus that smells of __bus_smells__`): one Run writes the library, the slot and the rewrite. With a text encoder the rewrite waits for the next run.
 - [ ] Write → Prompt from image while a render runs: the idea comes before the render ends.
 - [ ] Write → Story between frames, both frames from Load Image nodes.
+- [ ] A slot's 🎲 (Tutorial 18): three takes; a steer and **More takes** bring three more in that direction; **Insert** one, then Undo; **Keep the direction** puts the steer into the slot.
+- [ ] A library still to be written (`__bus_smells__`): its 🎲 offers entries for that place; **Keep the direction** gives it `(your steer)`.
+- [ ] A `> enhance` line's 🎲: three rewrites of the prompt as it rolls.
 - [ ] Back to the text encoder in the gear: everything goes through the queue again.
 
 ## Planned
 
-- 🎲 **The language model at the line** (#170). A button at the end of a slot's line, of a library
-  still to be written, and of a `> enhance` line opens three takes. You can ask for more, steer
-  them with a line of your own, **Insert** one, or keep your steer as the slot's direction.
+- 🎲 **The language model at the line** (#170): the takes at the line are built (above, #173). Still to come:
   - Slots can see pictures: `--a full character sheet from $who, as image output shows them--`, and also `image first_frame`, `image last_frame`, `image 3` or a gallery name.
   - A slot with `image output` is written after the picture exists, on demand from the Gallery's export sheet, for the characters worth it.
 - 🏠 **Local language models, one task per run** (#171). A text encoder can answer only once per
