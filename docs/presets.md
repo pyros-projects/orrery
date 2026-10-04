@@ -73,7 +73,10 @@ walk through the Backrooms meets that very thing, at a 35% chance, twice at most
 an SCP finds the camera, and which one decides how it gets away), `dice_dungeon` (rooms, foes and a relic
 that ends it, so every seed is an adventure of its own length), `the_relay` (a thing passed from hand to
 hand through a city), `evolution` (a creature that changes one trait per generation, and sometimes all of
-them) and `endless_kitchen` (a dinner service where every ticket picks a station). Then: an endless tour through one
+them) and `endless_kitchen` (a dinner service where every ticket picks a station). `surprise_me` casts from
+your gallery: a character of a Krea creator and a place of the landscape or setting creator (pictures by name, the
+places marked `cast = backdrop`), a genre and a director's hand told by what it does (`film/`), and every clip
+throws the hero into a wild scenario until the genre has its big moment. Then: an endless tour through one
 building (Codie's Garamonde method: the building described again in every
 clip, each clip ending on a framed threshold the next one opens), a set change
 where stagehands strike one place and reveal the next (Pyro's tested idea and
@@ -92,7 +95,8 @@ music, still looks by family), `moments/`, `subjects/`, `frame/`, `drone/`,
 `tour/`, `transitions/`, `scale/`, `time/`, `backrooms/` and `places/` (the landscape creator's lands, seasons,
 weather, hours and signs of life, filtered by climate and water, and the setting creator's places in
 five worlds), `scenarios/` (eight worlds of situations, fantasy, sci-fi, pirates, fights, festive, everyday,
-dreamlike and abstract, each from `wild: tame` through odd and wild to abstract). One library is
+dreamlike and abstract, each from `wild: tame` through odd and wild to abstract), `film/` (genres and directors'
+hands, for Surprise me). One library is
 licensed differently: the `scp/` libraries are adapted from the SCP Wiki and
 are CC BY-SA 3.0, each entry carrying its article's citation in `cite`. Videos
 made from it are adaptations as well: credit the cite and share them under

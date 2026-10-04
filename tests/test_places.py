@@ -1,3 +1,6 @@
+"""The places feature (#143): lands and settings for the creators, scenarios, and the film libraries of Surprise me."""
+
+from orrery.h3 import CAMERA
 from orrery.home import BUILTIN_DIR
 from orrery.library import load_libraries
 
@@ -67,3 +70,11 @@ def test_every_world_of_scenarios_goes_from_tame_to_abstract():
         assert len({e.value for e in scenarios}) == len(scenarios) >= 60, world
         for level in ("tame", "odd", "wild", "abstract"):
             assert len([e for e in scenarios if e.prop("wild") == level]) >= 15, (world, level)
+
+
+def test_every_genre_plays_and_peaks_and_every_hand_moves_the_camera_in_h3s_words():
+    """#149: Surprise me reads a genre's manner, peak, music and sound, and a director's hand's camera."""
+    genres, hands = BUILTIN["film/genres"].entries, BUILTIN["film/directing"].entries
+    assert len({e.value for e in genres}) == len(genres) >= 30 and len({e.value for e in hands}) == len(hands) >= 30
+    assert all(e.prop("manner") and e.prop("peak") and e.prop("music") and e.prop("sfx") for e in genres)
+    assert all(e.prop("shot").split(",")[0] in CAMERA for e in hands)

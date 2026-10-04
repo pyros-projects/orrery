@@ -47,6 +47,8 @@
        "sfx": "a dripping tap",
        "world": "noir"
       },
+      "sfx": "a dripping tap",
+      "cast": "backdrop",
       "place": {
        "value": "a morgue of steel tables and a wall of drawers",
        "detail": "a toe tag on a drawer handle",
@@ -104,6 +106,8 @@
        "sfx": "a dripping tap",
        "world": "noir"
       },
+      "sfx": "a dripping tap",
+      "cast": "backdrop",
       "place": {
        "value": "a morgue of steel tables and a wall of drawers",
        "detail": "a toe tag on a drawer handle",
@@ -161,6 +165,8 @@
        "sfx": "a dripping tap",
        "world": "noir"
       },
+      "sfx": "a dripping tap",
+      "cast": "backdrop",
       "place": {
        "value": "a morgue of steel tables and a wall of drawers",
        "detail": "a toe tag on a drawer handle",
@@ -218,6 +224,8 @@
        "sfx": "a dripping tap",
        "world": "noir"
       },
+      "sfx": "a dripping tap",
+      "cast": "backdrop",
       "place": {
        "value": "a morgue of steel tables and a wall of drawers",
        "detail": "a toe tag on a drawer handle",
@@ -279,6 +287,8 @@
        "sfx": "a bell ringing far off",
        "world": "everyday"
       },
+      "sfx": "a bell ringing far off",
+      "cast": "backdrop",
       "place": {
        "value": "a school classroom with rows of desks, a green chalkboard and children's drawings on the walls",
        "detail": "a stick of chalk and an eraser on the chalkboard ledge",
@@ -336,6 +346,8 @@
        "sfx": "a bell ringing far off",
        "world": "everyday"
       },
+      "sfx": "a bell ringing far off",
+      "cast": "backdrop",
       "place": {
        "value": "a school classroom with rows of desks, a green chalkboard and children's drawings on the walls",
        "detail": "a stick of chalk and an eraser on the chalkboard ledge",
@@ -393,6 +405,8 @@
        "sfx": "a bell ringing far off",
        "world": "everyday"
       },
+      "sfx": "a bell ringing far off",
+      "cast": "backdrop",
       "place": {
        "value": "a school classroom with rows of desks, a green chalkboard and children's drawings on the walls",
        "detail": "a stick of chalk and an eraser on the chalkboard ledge",
@@ -450,6 +464,8 @@
        "sfx": "a bell ringing far off",
        "world": "everyday"
       },
+      "sfx": "a bell ringing far off",
+      "cast": "backdrop",
       "place": {
        "value": "a school classroom with rows of desks, a green chalkboard and children's drawings on the walls",
        "detail": "a stick of chalk and an eraser on the chalkboard ledge",
@@ -511,6 +527,8 @@
        "sfx": "a deep resonant tone",
        "world": "scifi"
       },
+      "sfx": "a deep resonant tone",
+      "cast": "backdrop",
       "place": {
        "value": "an alien throne hall of organic curves and glowing pools",
        "detail": "a glowing pool rippling at the foot of a throne",
@@ -568,6 +586,8 @@
        "sfx": "a deep resonant tone",
        "world": "scifi"
       },
+      "sfx": "a deep resonant tone",
+      "cast": "backdrop",
       "place": {
        "value": "an alien throne hall of organic curves and glowing pools",
        "detail": "a glowing pool rippling at the foot of a throne",
@@ -625,6 +645,8 @@
        "sfx": "a deep resonant tone",
        "world": "scifi"
       },
+      "sfx": "a deep resonant tone",
+      "cast": "backdrop",
       "place": {
        "value": "an alien throne hall of organic curves and glowing pools",
        "detail": "a glowing pool rippling at the foot of a throne",
@@ -682,6 +704,8 @@
        "sfx": "a deep resonant tone",
        "world": "scifi"
       },
+      "sfx": "a deep resonant tone",
+      "cast": "backdrop",
       "place": {
        "value": "an alien throne hall of organic curves and glowing pools",
        "detail": "a glowing pool rippling at the foot of a throne",

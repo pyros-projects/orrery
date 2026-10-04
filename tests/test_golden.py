@@ -8,9 +8,9 @@ needs a reason in the PR (AGENTS.md). Then rewrite them:
 
     uv run python tests/test_golden.py --write
 
-Only orrery's own libraries take part (an empty home, no learned weights). A library a language model
-would write is stubbed (`name 0`, `name 1` …), and `--…--` slots and `>` lines stay as written, so no
-model is needed.
+Only orrery's own libraries take part (an empty home, no learned weights), and a small gallery (GALLERY)
+for the presets that cast its pictures by name. A library a language model would write is stubbed
+(`name 0`, `name 1` …), and `--…--` slots and `>` lines stay as written, so no model is needed.
 """
 
 import difflib
@@ -21,6 +21,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
+from PIL import Image
 
 from orrery.batch import axes, cells
 from orrery.dsl import expand, parse, strip_comments, wanted_libraries, with_inline
@@ -34,6 +35,20 @@ SEEDS = (0, 1, 7)
 WALK_SEEDS = (0, 1, 2, 3, 4, 5, 6, 7)  # a reel whose path hangs on its rolls walks more seeds
 CLIPS = 6
 CELLS = 6
+# The gallery a preset rolls pictures by name from (#149): two characters and two places, each a seed of its
+# creator with two views and what the creator exports.
+GALLERY = (
+    ("krea/09_character_creator", 11, {"who": "a 34-year-old woman of Portuguese descent, lean, with a scar through "
+                                              "one eyebrow, in a mustard raincoat", "genre": "everyday"}),
+    ("krea/13_creature_creator", 12, {"who": "an owlbear, huge and ancient, covered in grey-brown feathers, with one "
+                                             "cracked tusk", "call": "a hooting roar"}),
+    ("krea/16_landscape_creator", 13, {"where": "a fjord of steep rock walls dropping into still dark water, in deep "
+                                              "midwinter, snowbound and silent",
+                                       "sfx": "a waterfall far off, the hush of falling snow", "cast": "backdrop"}),
+    ("krea/17_setting_creator", 14, {"where": "a smoky tavern taproom with low beams, long oak tables and a fire in a "
+                                            "stone hearth",
+                                     "sfx": "a crackling fire and the clatter of tankards", "cast": "backdrop"}),
+)
 PRESETS = sorted(p.relative_to(BUILTIN_PRESETS).with_suffix("").as_posix()
                  for p in BUILTIN_PRESETS.rglob("*.orr"))
 
@@ -79,6 +94,21 @@ def snapshot(home: Home, name: str) -> dict:
                     takes.append(take(expand(source, seed, libs, weights, cell=cell), **where))
         out[str(seed)] = {**rolled, "takes": takes}
     return {"preset": name, "seeds": out}
+
+
+def gallery(home: Home) -> Home:
+    """GALLERY in the home: its pictures as tiny files beside galaxy.jsonl."""
+    out = home.root / "out"
+    out.mkdir(parents=True, exist_ok=True)
+    rows = []
+    for preset, seed, exports in GALLERY:
+        for view in range(2):
+            path = out / f"{preset.replace('/', '_')}_{seed}_{view}.png"
+            Image.new("RGB", (4, 4), (seed, view, 0)).save(path)
+            rows.append({"ts": f"2026-10-04T12:{len(rows):02d}:00", "kind": "image", "media": str(path), "seed": seed,
+                         "preset": preset, "text": f"a picture of {preset}, seed {seed}", "exports": exports})
+    home.galaxy_path.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
+    return home
 
 
 def golden_file(name: str) -> Path:
@@ -137,7 +167,7 @@ def differences(name: str, want: dict, got: dict) -> list[str]:
 
 @pytest.fixture(scope="module")
 def bare_home(tmp_path_factory):
-    return Home(tmp_path_factory.mktemp("golden-home"))
+    return gallery(Home(tmp_path_factory.mktemp("golden-home")))
 
 
 @pytest.mark.parametrize("name", PRESETS)
@@ -169,7 +199,7 @@ def test_every_snapshot_has_its_preset():
 
 def write() -> None:
     with tempfile.TemporaryDirectory() as tmp:
-        home = Home(Path(tmp))
+        home = gallery(Home(Path(tmp)))
         for path in GOLDEN.rglob("*.json"):
             path.unlink()
         for name in PRESETS:

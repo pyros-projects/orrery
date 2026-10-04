@@ -1,13 +1,15 @@
 ---
 title: "Setting creator"
-note: "A place people are in, for Krea 2, empty and waiting for them: one of a hundred and fifty rooms, halls, shops, streets, vehicles and ruins across five worlds (everyday, fantasy, cyberpunk, sci-fi, noir), each with what fills it, its own light and its sound. The grid shows it as a film would: an establishing shot of the outside, a wide shot of the whole of it, a medium shot of one part with open floor in front (where a character goes, as a CAST picture), and one thing in it up close. One seed is one place in four shots. Dial $world to stay in one world; add kind=shop (room, hall, street, vehicle, ruin) to the filter of $place for one kind. It keeps its sound and light (EXPORT:): a reel that casts it reads $set.place_sfx."
+note: "A place people are in, for Krea 2, empty and waiting for them: one of a hundred and fifty rooms, halls, shops, streets, vehicles and ruins across five worlds (everyday, fantasy, cyberpunk, sci-fi, noir), each with what fills it, its own light and its sound. The grid shows it as a film would: an establishing shot of the outside, a wide shot of the whole of it, a medium shot of one part with open floor in front (where a character goes, as a CAST picture), and one thing in it up close. One seed is one place in four shots. Dial $world to stay in one world; add kind=shop (room, hall, street, vehicle, ruin) to the filter of $place for one kind. It keeps its sound and light (EXPORT:): a reel that casts it reads $set.where and $set.sfx, and `cast = backdrop` tells it from a character (Surprise me rolls places with [cast=backdrop])."
 tags: [krea, places, settings, references]
 ---
 $world = {everyday:3|fantasy:2|cyberpunk:2|scifi:2|noir:2}
 $place = __places/setting[world=$world]__
-# What the picture carries beyond its prompt (EXPORT:): a screenplay that casts it reads $set.where, $set.place_sfx …
+# What the picture carries beyond its prompt (EXPORT:): a screenplay that casts it reads $set.where, $set.sfx …
 EXPORT:
   where = $place
+  sfx = $place.sfx
+  cast = backdrop
   $place
   $world
 # The grid runs every shot: the outside, the whole, one part, one thing. Set $view to one of them to try places faster.

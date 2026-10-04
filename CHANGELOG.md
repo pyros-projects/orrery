@@ -9,6 +9,11 @@ checks) are left out.
 
 ### Added
 
+- Surprise me (#149): `loops/surprise_me` casts a character of a Krea creator and a place of the landscape or setting
+  creator from your gallery, rolls a genre (thirty, from soap opera to puppet show) and a director's hand told by what
+  it does, and goes on for ever: every clip throws the hero into a wild scenario, every fourth the genre has its big
+  moment. The landscape and setting creators export `cast = backdrop` and their sound, so a reel tells a place from a
+  character.
 - Wild scenarios (#150): eight libraries of situations under `scenarios/` (fantasy, sci-fi, pirates, fights, festive,
   everyday, dreamlike, abstract), sixty each, from tame through odd and wild to abstract, and two presets that roll
   one and let the model picture it: `krea/18_wild_scenarios` in a still look and `h3/16_wild_scenarios` in a video

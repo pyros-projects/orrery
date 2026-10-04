@@ -59,6 +59,8 @@
      ],
      "exports": {
       "where": "a deep forested valley seen from above its rim, in full autumn, the colours turned to red, orange and gold",
+      "sfx": "a muffled quiet and a crow, a gusting wind",
+      "cast": "backdrop",
       "land": {
        "value": "a deep forested valley seen from above its rim",
        "climate": "temperate",
@@ -149,6 +151,8 @@
      ],
      "exports": {
       "where": "a deep forested valley seen from above its rim, in full autumn, the colours turned to red, orange and gold",
+      "sfx": "a muffled quiet and a crow, a gusting wind",
+      "cast": "backdrop",
       "land": {
        "value": "a deep forested valley seen from above its rim",
        "climate": "temperate",
@@ -239,6 +243,8 @@
      ],
      "exports": {
       "where": "a deep forested valley seen from above its rim, in full autumn, the colours turned to red, orange and gold",
+      "sfx": "a muffled quiet and a crow, a gusting wind",
+      "cast": "backdrop",
       "land": {
        "value": "a deep forested valley seen from above its rim",
        "climate": "temperate",
@@ -329,6 +335,8 @@
      ],
      "exports": {
       "where": "a deep forested valley seen from above its rim, in full autumn, the colours turned to red, orange and gold",
+      "sfx": "a muffled quiet and a crow, a gusting wind",
+      "cast": "backdrop",
       "land": {
        "value": "a deep forested valley seen from above its rim",
        "climate": "temperate",
@@ -423,6 +431,8 @@
      ],
      "exports": {
       "where": "a vast steppe of short grass and scattered stones, in early summer, lush and deep green",
+      "sfx": "an empty wind and a distant horse, a few drops falling",
+      "cast": "backdrop",
       "land": {
        "value": "a vast steppe of short grass and scattered stones",
        "climate": "temperate",
@@ -513,6 +523,8 @@
      ],
      "exports": {
       "where": "a vast steppe of short grass and scattered stones, in early summer, lush and deep green",
+      "sfx": "an empty wind and a distant horse, a few drops falling",
+      "cast": "backdrop",
       "land": {
        "value": "a vast steppe of short grass and scattered stones",
        "climate": "temperate",
@@ -603,6 +615,8 @@
      ],
      "exports": {
       "where": "a vast steppe of short grass and scattered stones, in early summer, lush and deep green",
+      "sfx": "an empty wind and a distant horse, a few drops falling",
+      "cast": "backdrop",
       "land": {
        "value": "a vast steppe of short grass and scattered stones",
        "climate": "temperate",
@@ -693,6 +707,8 @@
      ],
      "exports": {
       "where": "a vast steppe of short grass and scattered stones, in early summer, lush and deep green",
+      "sfx": "an empty wind and a distant horse, a few drops falling",
+      "cast": "backdrop",
       "land": {
        "value": "a vast steppe of short grass and scattered stones",
        "climate": "temperate",
@@ -787,6 +803,8 @@
      ],
      "exports": {
       "where": "a rocky arctic coast of ice floes and dark water, in arctic autumn, the low plants turned red and gold",
+      "sfx": "ice knocking and a far-off seal, a damp quiet and a far-off bird",
+      "cast": "backdrop",
       "land": {
        "value": "a rocky arctic coast of ice floes and dark water",
        "climate": "cold",
@@ -877,6 +895,8 @@
      ],
      "exports": {
       "where": "a rocky arctic coast of ice floes and dark water, in arctic autumn, the low plants turned red and gold",
+      "sfx": "ice knocking and a far-off seal, a damp quiet and a far-off bird",
+      "cast": "backdrop",
       "land": {
        "value": "a rocky arctic coast of ice floes and dark water",
        "climate": "cold",
@@ -967,6 +987,8 @@
      ],
      "exports": {
       "where": "a rocky arctic coast of ice floes and dark water, in arctic autumn, the low plants turned red and gold",
+      "sfx": "ice knocking and a far-off seal, a damp quiet and a far-off bird",
+      "cast": "backdrop",
       "land": {
        "value": "a rocky arctic coast of ice floes and dark water",
        "climate": "cold",
@@ -1057,6 +1079,8 @@
      ],
      "exports": {
       "where": "a rocky arctic coast of ice floes and dark water, in arctic autumn, the low plants turned red and gold",
+      "sfx": "ice knocking and a far-off seal, a damp quiet and a far-off bird",
+      "cast": "backdrop",
       "land": {
        "value": "a rocky arctic coast of ice floes and dark water",
        "climate": "cold",

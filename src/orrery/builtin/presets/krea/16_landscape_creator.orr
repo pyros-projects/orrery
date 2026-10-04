@@ -1,18 +1,20 @@
 ---
 title: "Landscape creator"
-note: "A place for Krea 2, from four distances: one of seventy-eight lands (glacier ranges, salt flats, mangroves, fjords, karst towers, cenotes, tundra, rice terraces …) in a season of its own climate, a sky that fits the season, an hour the sky allows (the Milky Way only under a clear one), and one sign of life that belongs there, never a person: a heron where there is water, reindeer in the north, a stilt house in the tropics. The grid runs establishing, wide, medium and detail, so one seed is one place, from high above to the ground at your feet, where the sign of life left its trace. Empty of people, it is a backdrop to put characters into (a CAST picture), and it keeps its sounds (EXPORT:): a reel that casts it reads $place.land_sfx and $place.sky_sfx. Set $view to one distance to try places faster."
+note: "A place for Krea 2, from four distances: one of seventy-eight lands (glacier ranges, salt flats, mangroves, fjords, karst towers, cenotes, tundra, rice terraces …) in a season of its own climate, a sky that fits the season, an hour the sky allows (the Milky Way only under a clear one), and one sign of life that belongs there, never a person: a heron where there is water, reindeer in the north, a stilt house in the tropics. The grid runs establishing, wide, medium and detail, so one seed is one place, from high above to the ground at your feet, where the sign of life left its trace. Empty of people, it is a backdrop to put characters into (a CAST picture), and it keeps its sounds (EXPORT:): a reel that casts it reads $place.where and $place.sfx, and `cast = backdrop` tells it from a character (Surprise me rolls places with [cast=backdrop]). Set $view to one distance to try places faster."
 tags: [krea, landscape, places, references]
 ---
 $land = __places/terrain__
 $season = __places/season[climate=$land.climate]__
 $sky = __places/weather[cold=$season.cold|any]__
 $hour = __places/hour[clear=$sky.clear|any, climate=$land.climate|any]__
-# A boat, a heron or a jetty only where there is water: life needs any water, the land's (sea or fresh), or either.
+# A boat, a heron or a jetty only where there is water: life needs no water (any), the land's own (sea, lake or stream), or any water (yes).
 $water = {IF $land.wet is no: no|yes}
 $life = __places/life[climate=$land.climate|any, water=any|$land.wet|$water]__
-# What the picture carries beyond its prompt (EXPORT:): a screenplay that casts it reads $place.where, $place.land_sfx …
+# What the picture carries beyond its prompt (EXPORT:): a screenplay that casts it reads $place.where, $place.sfx …
 EXPORT:
   where = $land, in $season
+  sfx = $land.sfx, $sky.sfx
+  cast = backdrop
   $land
   $season
   $sky
