@@ -43,15 +43,24 @@ export function shootId(app) {
   return made;
 }
 
+// The take circled in a shoot leads the shoot's album in the gallery (#321), by the files its Save nodes wrote.
+export function markCircled(app, shoot, t) {
+  const files = (t?.media || []).filter((m) => m.type === "output").map((m) => m.filename);
+  if (shoot && files.length) app.api.circle?.(shoot, files)?.catch(() => {});  // nothing logged: nothing to lead
+}
+
 // Finish shoot: the takes fold into the earlier shoots with the circled one, and the next Roll starts a new shoot.
 export function finishShoot(app) {
   const list = resultsOf(app);
   if (!list.length) return false;
-  keepShoots(app, [...shootsOf(app), { id: shootId(app), takes: list, circled: chosenResult(app)?.prompt ?? null, finished: new Date().toISOString() }]);
+  const id = shootId(app), circled = chosenResult(app);
+  keepShoots(app, [...shootsOf(app), { id, takes: list, circled: circled?.prompt ?? null, finished: new Date().toISOString() }]);
+  markCircled(app, id, circled);
   keepResults(app, []);
   setFor(app, "orrery_chosen", null);
   setFor(app, "orrery_shown", null);
   setFor(app, "orrery_shoot", null);
+  app.bridge.setShoot?.("");  // a run from ComfyUI's own Queue goes to no shoot until a Roll begins the next
   return true;
 }
 
@@ -66,6 +75,7 @@ export function openShoot(app, id) {
   setFor(app, "orrery_chosen", at.circled);
   setFor(app, "orrery_shown", at.circled);
   setFor(app, "orrery_shoot", at.id);
+  app.bridge.setShoot?.(at.id);
   return true;
 }
 
@@ -79,6 +89,7 @@ export const chosenResult = (app) => {
 export function chooseResult(app, t) {
   if (!t) return;
   app.bridge.props.orrery_chosen = { ...app.bridge.props.orrery_chosen, [key(app)]: t.prompt };
+  markCircled(app, app.bridge.props.orrery_shoot?.[key(app)], t);
   if (!t.take && t.seed != null && Number(t.seed) !== Number(app.bridge.getSeed())) app.bridge.setSeed(Number(t.seed));
 }
 

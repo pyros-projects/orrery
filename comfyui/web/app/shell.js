@@ -12,7 +12,7 @@ import { queueTasks } from "./miniruns.js";
 import { reloadPresets, renderPresets } from "./presets.js";
 import { paintLive } from "./timeline.js";
 import { paintCells } from "./cells.js";
-import { capturedMedia, resultBegins, resultEnds, resultMedia } from "./results.js";
+import { capturedMedia, resultBegins, resultEnds, resultMedia, shootId } from "./results.js";
 import { refreshReel, renderPrompt } from "./prompt.js";
 import { openSettings, renderSettings } from "./settings.js";
 import { renderTest } from "./test.js";
@@ -36,7 +36,10 @@ function canScroll(el, dy) {
 export class OrreryApp {
   constructor(bridge) {
     this.bridge = bridge;
-    bridge.beforeRun = () => queueTasks(this);  // with a text encoder, a run's tasks in mini-runs before it (#171)
+    bridge.beforeRun = () => {  // each run names its shoot (#321); with a text encoder, its tasks in mini-runs before it (#171)
+      bridge.setShoot?.(this.chunks() ? "" : shootId(this));
+      return queueTasks(this);
+    };
     this.api = client(() => bridge.home());
     this.state = {
       tab: bridge.props.orrery_tab || "prompt", big: false,

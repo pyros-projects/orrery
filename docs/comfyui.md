@@ -253,9 +253,10 @@ Nodes under **orrery**:
     On the left (#290): **All outputs**, **All images**, **All videos**, then the
     days, newest first, each with its `images` and `videos`, then the
     collections. What belongs together is one card, an album with up to eight
-    of its pictures: a sweep's or a grid's runs, a reel's clips, and inside a
-    reel each scene's takes, named by its `SCENE` line; a click opens it, the
-    bar above leads back. A filter (This prompt, a rating, a pick) shows the
+    of its pictures: a shoot's takes, its circled take first, and inside it each
+    grid's or sweep's runs (#321); a sweep's or a grid's runs outside a shoot; a
+    reel's clips, and inside a reel each scene's takes, named by its `SCENE` line;
+    a click opens it, the bar above leads back. A filter (This prompt, a rating, a pick) shows the
     outputs themselves. Collections hold outputs without moving them, one
     output in as many as you like (folders from before are collections now):
     drag cards or albums onto one (a selected card brings the whole

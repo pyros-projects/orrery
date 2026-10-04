@@ -93,6 +93,17 @@ def test_a_reels_clip_is_logged_with_its_reel_and_its_scene(home):
     assert not {"segment", "chain", "chunk"} & set(row)
 
 
+def test_a_templates_take_is_logged_with_its_shoot_and_a_reels_clip_without(home):
+    """#321: the Gallery's album of a shoot; a reel's clips have their reel's."""
+    outputs = OrreryPrompt().run("a __animal__", 2, "text", home=str(home), shoot="2026-10-05T10:00:00.000Z")
+    [row] = log_outputs(Home(home), outputs[1], ["out/a.png"])
+    assert row["shoot"] == "2026-10-05T10:00:00.000Z"
+    outputs = OrreryPrompt().run("@h3 t2va\nSCENE a\nSHOT 5s\nA fox.", 2, "h3-base", home=str(home), shoot="S")
+    [row] = log_outputs(Home(home), outputs[1], ["out/clip.mp4"])
+    assert "shoot" not in row
+    assert OrreryPrompt.IS_CHANGED("a", 1, "text", shoot="S") != OrreryPrompt.IS_CHANGED("a", 1, "text", shoot="T")
+
+
 def test_log_without_media_still_records_the_picks(home):
     _, picks, *_ = run_prompt("a __animal__", 2, "text", str(home))
     [row] = log_outputs(Home(home), picks, [])

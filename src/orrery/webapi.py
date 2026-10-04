@@ -533,8 +533,8 @@ def galaxy_view(home: Home, args: dict) -> dict:
         raise ApiError(400, "'view' is all, images or videos.")
     if day and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", day):
         raise ApiError(400, "'day' is a date: YYYY-MM-DD.")
-    if album and not album.startswith(("sweep:", "reel:", "scene:")):
-        raise ApiError(400, "'album' is a sweep:, reel: or scene: key.")
+    if album and not album.startswith(("shoot:", "sweep:", "reel:", "scene:")):
+        raise ApiError(400, "'album' is a shoot:, sweep:, reel: or scene: key.")
     collection = _gx(gx.clean_folder, args.get("collection")) if args.get("collection") else None
     limit, tz = _int(args, "limit", 400), max(-840, min(840, _int(args, "tz", 0)))
     if limit < 1:
@@ -559,7 +559,9 @@ def galaxy_view(home: Home, args: dict) -> dict:
             continue
         first = by_id[card["ids"][0]]
         card["preset"] = _owner(first, by_hash, known)
-        if card["type"] == "sweep":
+        if card["type"] == "shoot":  # when it began: the app says it as a date
+            card["title"] = first.get("shoot") or ""
+        elif card["type"] == "sweep":
             card["title"] = gx.sweep_of(first)[len(gx.SWEEPS):]
         elif card["type"] == "reel":
             card["title"] = first.get("chain") or ""
@@ -592,6 +594,11 @@ def galaxy_export(home: Home, args: dict) -> dict:
 def galaxy_collect(home: Home, args: dict) -> dict:
     """Outputs into a collection as well (#299): they keep their day, their album and their other collections."""
     return {"collected": _gx(gx.collect, home, _ids(args), args.get("path")), "collections": gx.collections(home)}
+
+
+def galaxy_circle(home: Home, args: dict) -> dict:
+    """The take circled in a shoot (#321) leads its album: {shoot, files} → how many outputs it marked."""
+    return {"circled": _gx(gx.circle, home, str(args.get("shoot") or ""), args.get("files"))}
 
 
 def galaxy_uncollect(home: Home, args: dict) -> dict:
@@ -1524,6 +1531,7 @@ ROUTES = [
     ("POST", "/orrery/galaxy/delete", galaxy_delete),
     ("POST", "/orrery/galaxy/export", galaxy_export),
     ("POST", "/orrery/galaxy/collect", galaxy_collect),
+    ("POST", "/orrery/galaxy/circle", galaxy_circle),
     ("POST", "/orrery/galaxy/uncollect", galaxy_uncollect),
     ("POST", "/orrery/galaxy/collection/add", galaxy_collection_add),
     ("POST", "/orrery/galaxy/collection/rename", galaxy_collection_rename),

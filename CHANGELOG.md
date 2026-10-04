@@ -12,6 +12,7 @@ checks) are left out.
 - Shoots (#320, under #318): a template's takes make a shoot, like a sitting in a photo studio. Finish shoot folds them
   into the earlier shoots under the strip, each shown by its circled take, and the next Roll starts a new one; a click
   opens an earlier shoot again. A grid's or a sweep's runs at one seed are one take: a creator's four views together.
+  The Gallery shows a shoot as an album, its circled take first, a grid's runs together inside it (#321).
 - Surprise me (#149): `loops/surprise_me` casts a character of a Krea creator and a place of the landscape or setting
   creator from your gallery, rolls a genre (thirty, from soap opera to puppet show) and a director's hand told by what
   it does, and goes on for ever: every clip throws the hero into a wild scenario, every fourth the genre has its big
