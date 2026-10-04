@@ -222,10 +222,12 @@ export class OrreryApp {
     host.innerHTML = `<div class="sheet">${html}</div>`;
     const sheet = host.firstChild, panel = sheet.firstElementChild;
     sheet.addEventListener("mousedown", (e) => { if (e.target === sheet) this.closeSheet(); });
-    if (near && panel && !this.state.big) {
-      const box = sheet.getBoundingClientRect(), scale = box.height / sheet.offsetHeight || 1;  // the canvas draws the node scaled
-      const at = near.getBoundingClientRect(), top = ((over ? at.top : at.bottom + 6) - box.top) / scale;
-      panel.style.marginTop = `${Math.round(Math.max(0, Math.min(top, sheet.offsetHeight - panel.offsetHeight)))}px`;
+    if (near && panel && !this.state.big) {  // on screen, in px: the canvas draws the node scaled, and often taller than the window
+      const box = sheet.getBoundingClientRect(), scale = box.height / sheet.offsetHeight || 1, at = near.getBoundingClientRect();
+      const h = panel.getBoundingClientRect().height, bottom = Math.min(box.bottom, innerHeight) - 8;
+      let y = over ? at.top : at.bottom + 6;
+      if (y + h > bottom) y = Math.max(Math.max(box.top, 0) + 8, bottom - h);  // in view, as near as it fits
+      panel.style.marginTop = `${Math.round(Math.max(0, (y - box.top) / scale))}px`;
     }
     return sheet;
   }
