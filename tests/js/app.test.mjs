@@ -820,3 +820,25 @@ test("the take tree hides the dead ends: the film's, the last clip's and those a
   assert.equal(names(2), "a a1 a1x b c c1 c1x c1y");  // c has one take after it, but c1 has two: the path to it stays whole
   assert.equal(names(3), "a a1 a1x b c c1 c1x c1y");  // the last clip's takes stay, and the takes they came after
 });
+
+test("the settings are a tab of sections, and every setting of the old sheet is in one (#212)", async () => {
+  const { SECTIONS, SECTION_HTML } = await import("../../comfyui/web/app/settings.js");
+  assert.deepEqual(SECTIONS.map(([k]) => k), ["home", "llm", "writers", "editor", "clips", "log"]);
+  const app = { data: { quickstart: true, dividers: false, timeline: true, log_prompts: true, clip_min: 400, preview_fps: 8, preview_edge: 768, preview_light: false, surf_numbered: true } };
+  const st = {
+    home: { home: "/h", setting: "/h", source: "setting" },
+    llm: { source: "comfy", file: "qwen3vl_4b.safetensors", entries: 12, max_tokens: 16000, files: [{ name: "qwen3vl_4b.safetensors", size: 8e9, can_write: true }],
+      api: { base_url: "https://api.openai.com/v1", model: "", key: "", key_from: "none", key_env: "OPENAI_API_KEY" } },
+    writers: Object.fromEntries(["continue", "story", "describe", "describe_shot"].map((k) => [k, { text: "t", default: "d", edited: k === "story" }])),
+    wcur: "continue",
+  };
+  const html = Object.fromEntries(SECTIONS.map(([k]) => [k, SECTION_HTML[k](app, st)]));
+  const has = (k, ...bits) => bits.forEach((b) => assert.ok(html[k].includes(b), `${k} lacks ${b}`));
+  has("home", 'id="oa-home"', "data-home", "Use this folder");  // moving the home keeps its own button
+  has("llm", 'name="oa-src"', 'id="oa-llm"', 'id="oa-api-url"', 'id="oa-api-key"', "data-check", "data-useapi", 'id="oa-llm-n"', 'id="oa-llm-t"');
+  has("writers", 'id="oa-wr"', 'id="oa-wt"', "data-wreset", "data-wsave", "Story between frames · edited");
+  has("editor", 'data-flag="quickstart" checked', 'data-flag="dividers" >', 'data-flag="timeline" checked');
+  has("clips", 'value="400"', 'id="oa-pvfps" type="number" min="1" max="24" step="1" value="8"', 'value="768"', 'value="smooth" checked', 'value="numbered" checked');
+  has("log", 'data-flag="log_prompts" checked');
+  assert.doesNotMatch(Object.values(html).join(""), /data-cancel|>Save</);  // no Save at the end of a long page
+});

@@ -1,6 +1,6 @@
 # The ComfyUI nodes
 
-Everything the Orrery Prompt node puts out, the six tabs of its app, Roll and Restart, Orrery Log and Orrery Refs.
+Everything the Orrery Prompt node puts out, the tabs of its app and its settings, Roll and Restart, Orrery Log and Orrery Refs.
 
 ```bash
 cd /path/to/ComfyUI/custom_nodes && git clone https://github.com/pyros-projects/orrery.git
@@ -64,7 +64,7 @@ Nodes under **orrery**:
   chain the clips. A video wired into `video` (Load Video) is the scene before
   the reel's first: the node keeps it at 24 fps beside the clips, a head
   `REMEMBER:` keeps its frames, and a scene with `AFTER: the input video`
-  continues it ([h3.md](h3.md) 1d, *The input video*). The node is the whole of orrery, in six tabs (⤢ opens the
+  continues it ([h3.md](h3.md) 1d, *The input video*). The node is the whole of orrery, in seven tabs and its settings (⤢ opens the
   same app over the canvas, Esc brings it back):
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `__creature#` properties and their
@@ -226,6 +226,17 @@ Nodes under **orrery**:
     also printed to ComfyUI's console (seed, picks, prompt); the gear turns
     that off.
   - **Help**: the DSL at a glance, the tutorial lessons, writing tips.
+  - **Settings** (the gear, #212; again, and the tab before is back): its
+    sections on the left, *Home*, *Language model*, *Writers*, *Editor*,
+    *Clips* (clip size, live preview, sample surfing) and *Log*, the one
+    chosen on the right, and the tab opens on the one shown last. A setting
+    is saved the moment it changes and says so beside the section's title.
+    What moves things or asks the outside has a button of its own: **Use
+    this folder** for the home folder, **Use this endpoint** for an API
+    endpoint (checked first: the key, and one short answer from the model;
+    a setting changed on its own, such as the entries a library starts with,
+    asks the endpoint nothing), **Save text** and **Reset to default** for a
+    writer's text.
 
   Workflows that used the old `preset` dropdown open with that preset loaded
   into the editor.

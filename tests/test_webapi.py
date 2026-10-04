@@ -525,6 +525,8 @@ def test_an_api_endpoint_is_saved_only_once_it_answers_and_its_key_never_comes_b
     assert "sk-right" not in (home / "orrery.yaml").read_text() and "sk-right-0042" in (home / ".env").read_text()
     body = ok(home, webapi.llm_save, source="api", model="gpt-6-luna")  # the stored key and URL stay
     assert body["api"]["model"] == "gpt-6-luna" and body["api"]["base_url"] == fake_api.url
+    asked = len(fake_api.requests)  # #212: a setting saved on its own asks the endpoint nothing
+    assert ok(home, webapi.llm_save, source="api", entries=30)["entries"] == 30 and len(fake_api.requests) == asked
     assert ok(home, webapi.llm_save, source="comfy")["active"] is None
 
 
