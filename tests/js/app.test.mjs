@@ -870,7 +870,7 @@ test("a template without scenes shows its results under the prompt, its takes ke
   assert.equal(R.chosenResult(app).prompt, "p2");
   assert.match(R.resultsHTML(app, ""), /class="take shown" data-result="p1".*class="take on" data-result="p2"/);
   seed = 99;
-  R.chooseResult(app, R.shownResult(app));  // Use this take: the output now, and a take that rolled anew gives its seed
+  R.chooseResult(app, R.shownResult(app));  // Circle this take: it counts now, and a take that rolled anew gives its seed
   assert.equal(R.chosenResult(app).prompt, "p1");
   assert.equal(seed, 10);
   app.preset = "krea/owl";
@@ -878,6 +878,57 @@ test("a template without scenes shows its results under the prompt, its takes ke
   R.resultBegins(app, { prompt_id: "p3", seed: 12, take: 0 });
   R.resultEnds(app, "p3");  // nothing written: no take
   assert.equal(R.resultMedia(app, { prompt_id: "p3", output: { images: [{ filename: "y.png" }] } }), false);
+});
+
+test("a template's takes are a shoot: finish it, open an earlier one again, the numbers stay (#320)", async () => {
+  const R = await import("../../comfyui/web/app/results.js");
+  const props = {};
+  const app = { preset: "krea/fox", state: {}, data: {}, bridge: { props, getSeed: () => 1, setSeed: () => {}, getControl: () => "fixed" },
+    api: { viewURL: (m) => m.filename } };
+  const run = (id, seed, file, roll = "") => {
+    R.resultBegins(app, { prompt_id: id, seed, take: 0, roll });
+    R.resultMedia(app, { prompt_id: id, output: { images: [{ filename: file, type: "output" }] } });
+  };
+  run("a", 1, "a.png");
+  run("b", 2, "b.png");
+  props.orrery_chosen = { "krea/fox": "a" };  // a circled
+  const first = props.orrery_shoot["krea/fox"];
+  assert.ok(first);  // the shoot began with its first take
+  assert.match(R.resultsHTML(app, ""), /shoot 1<\/span>.*data-ract="finish"/);
+  assert.equal(R.finishShoot(app), true);
+  assert.deepEqual(R.resultsOf(app), []);
+  assert.deepEqual(R.shootsOf(app).map((x) => [x.id, x.takes.length, x.circled]), [[first, 2, "a"]]);
+  assert.equal(R.finishShoot(app), false);  // nothing to finish
+  let html = R.resultsHTML(app, "");
+  assert.match(html, /shoot 2<\/span>/);  // the next one, before its first take
+  assert.match(html, /data-shoot="[^"]+" title="Shoot 1 · 2 takes[^>]*><span class="take on"><img[^>]*src="a\.png"/);  // shown by its circled take
+  run("c", 3, "c.png");
+  const second = props.orrery_shoot["krea/fox"];
+  assert.ok(second > first);
+  assert.equal(R.openShoot(app, first), true);  // the first again: shoot 2 goes among the earlier ones
+  assert.deepEqual(R.resultsOf(app).map((t) => t.prompt), ["a", "b"]);
+  assert.equal(R.chosenResult(app).prompt, "a");
+  assert.deepEqual(R.shootsOf(app).map((x) => x.id), [second]);
+  html = R.resultsHTML(app, "");
+  assert.match(html, /shoot 1<\/span>/);  // its number kept
+  assert.match(html, /title="Shoot 2 · 1 take ·/);
+  app.preset = "krea/owl";
+  assert.deepEqual(R.shootsOf(app), []);  // every preset its own shoots
+});
+
+test("a grid's or a sweep's runs at one seed are one take, its views in a mosaic (#320)", async () => {
+  const R = await import("../../comfyui/web/app/results.js");
+  const props = {};
+  const app = { preset: "krea/09", state: {}, data: {}, bridge: { props }, api: { viewURL: (m) => m.filename } };
+  const run = (id, seed, file, roll) => {
+    R.resultBegins(app, { prompt_id: id, seed, take: 0, roll });
+    R.resultMedia(app, { prompt_id: id, output: { images: [{ filename: file, type: "output" }] } });
+  };
+  ["front", "side", "back", "face"].forEach((v, i) => run(`s1-${i}`, 7, `${v}7.png`, "sweeps/x"));
+  run("s2-0", 8, "front8.png", "sweeps/x");  // the sweep's next seed: a take of its own
+  run("solo", 9, "solo.png", "");
+  assert.deepEqual(R.resultsOf(app).map((t) => [t.seed, t.media.length]), [[7, 4], [8, 1], [9, 1]]);
+  assert.match(R.resultsHTML(app, ""), /<span class="mosaic m4"><img[^>]*front7\.png.*face7\.png"><\/span>/);
 });
 
 test("the settings are a tab of sections, and every setting of the old sheet is in one (#212)", async () => {

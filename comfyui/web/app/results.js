@@ -4,7 +4,9 @@
 // the circled one, is chosen apart from the one shown (Circle this take): browsing never changes it, nor the node's seed.
 // Generate ×N and 📌 work as in a reel's scenes (#206): the takes' seeds numbered on, or as the node's control after
 // generate says; with 📌 the rolled prompt stays and only the sampler's noise changes. The takes are kept on the node, per preset (saved
-// with the workflow); taking one off the list leaves its files where they are.
+// with the workflow); taking one off the list leaves its files where they are. They belong to a shoot (#320): Finish
+// shoot folds them into the earlier shoots, each shown by its circled take, and a click opens one again. A grid's or
+// a sweep's runs at one seed are one take.
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
 
@@ -25,6 +27,48 @@ export const shownResult = (app) => {
 };
 const show = (app, prompt) => { app.bridge.props.orrery_shown = { ...app.bridge.props.orrery_shown, [key(app)]: prompt }; };
 
+// The shoots (#320): the one the takes go to now (its takes are the results above, its id names it in the gallery)
+// and the finished ones, newest last; the node keeps the last SHOOTS, the gallery every one.
+const SHOOTS = 12;
+export const shootsOf = (app) => app.bridge.props?.orrery_shoots?.[key(app)] || [];
+const keepShoots = (app, list) => { app.bridge.props.orrery_shoots = { ...app.bridge.props.orrery_shoots, [key(app)]: list.slice(-SHOOTS) }; };
+const setFor = (app, prop, value) => { app.bridge.props[prop] = { ...app.bridge.props[prop], [key(app)]: value }; };
+export function shootId(app) {
+  const id = app.bridge.props?.orrery_shoot?.[key(app)];
+  if (id) return id;
+  const ids = shootsOf(app).map((x) => x.id);
+  let made = new Date().toISOString();
+  while (ids.includes(made)) made += "+";  // begun in the same millisecond as one before: still after it
+  setFor(app, "orrery_shoot", made);
+  return made;
+}
+
+// Finish shoot: the takes fold into the earlier shoots with the circled one, and the next Roll starts a new shoot.
+export function finishShoot(app) {
+  const list = resultsOf(app);
+  if (!list.length) return false;
+  keepShoots(app, [...shootsOf(app), { id: shootId(app), takes: list, circled: chosenResult(app)?.prompt ?? null, finished: new Date().toISOString() }]);
+  keepResults(app, []);
+  setFor(app, "orrery_chosen", null);
+  setFor(app, "orrery_shown", null);
+  setFor(app, "orrery_shoot", null);
+  return true;
+}
+
+// An earlier shoot opened again: its takes are the results, the next Roll adds to it; the shoot open till now, if
+// it has takes, goes among the earlier ones.
+export function openShoot(app, id) {
+  const shoots = shootsOf(app), at = shoots.find((x) => x.id === id);
+  if (!at) return false;
+  finishShoot(app);
+  keepShoots(app, shootsOf(app).filter((x) => x.id !== id));
+  keepResults(app, at.takes);
+  setFor(app, "orrery_chosen", at.circled);
+  setFor(app, "orrery_shown", at.circled);
+  setFor(app, "orrery_shoot", at.id);
+  return true;
+}
+
 // The take that counts: the one chosen, else the newest (a fresh run's is chosen as it comes).
 export const chosenResult = (app) => {
   const list = resultsOf(app);
@@ -40,13 +84,13 @@ export function chooseResult(app, t) {
 
 // What changes the section, for the cells to tell when to draw it again.
 export const resultsSig = (app) => [key(app), resultsOf(app).map((t) => `${t.prompt}:${t.media.length}`), shownResult(app)?.prompt,
-  chosenResult(app)?.prompt, takesOf(app), kept(app, HEAD)];
+  chosenResult(app)?.prompt, takesOf(app), kept(app, HEAD), shootsOf(app).map((x) => `${x.id}:${x.takes.length}:${x.circled}`)];
 
 // A run of this node begins (orrery.segment, segment -1): its take waits for what the run writes.
 export function resultBegins(app, d) {
   if (!d.prompt_id) return;
   (app.state.pendingResults ??= {})[d.prompt_id] = { prompt: d.prompt_id, seed: d.seed ?? null, take: d.take || 0,
-    created: new Date().toISOString(), preset: key(app), media: [] };
+    ...(d.roll ? { roll: d.roll } : {}), created: new Date().toISOString(), preset: key(app), media: [] };
 }
 
 const KIND = (m) => (/\.(mp4|webm|mov|mkv|m4v)$/i.test(m.filename) || /^video\//.test(m.format || "") ? "video"
@@ -71,10 +115,13 @@ export function resultMedia(app, detail) {
   const media = ["images", "gifs", "videos", "audio"].flatMap((k) => (out[k] || []).map((m) => ({ ...m, kind: k })))
     .filter((m) => m?.filename).map((m) => ({ filename: m.filename, subfolder: m.subfolder || "", type: m.type || "output", kind: KIND(m) }));
   if (!media.length || pending.preset !== key(app)) return false;
-  const list = resultsOf(app), had = list.find((t) => t.prompt === pending.prompt);
+  // a grid's or a sweep's runs at one seed (and take) are one take: its views together (#320)
+  const same = (t) => (pending.roll ? t.roll === pending.roll && t.seed === pending.seed && (t.take || 0) === pending.take : t.prompt === pending.prompt);
+  const list = resultsOf(app), had = list.find(same);
   const take = { ...pending, ...had, media: [...(had?.media || []), ...media] };
   delete take.preset;
   keepResults(app, [...list.filter((t) => t.prompt !== take.prompt), take]);
+  shootId(app);  // the shoot begins with its first take
   show(app, take.prompt);
   app.bridge.props.orrery_chosen = { ...app.bridge.props.orrery_chosen, [key(app)]: take.prompt };  // made at the node's seed
   return true;
@@ -83,9 +130,17 @@ export function resultMedia(app, detail) {
 // A run that ends without writing anything leaves no take.
 export function resultEnds(app, prompt) { if (prompt && app.state.pendingResults) delete app.state.pendingResults[prompt]; }
 
-// A take's media to show: a saved file before a preview's.
+// A take's media to show: a saved file before a preview's; a take of a grid or a sweep has several (#320).
 export const mainMedia = (t) => t.media.find((m) => m.type === "output") || t.media[0];
 const main = mainMedia;
+export const takeMedia = (t) => (t.media.some((m) => m.type === "output") ? t.media.filter((m) => m.type === "output") : t.media);
+
+// A take's tile: its picture, or up to four of a grid's in a mosaic.
+export function thumbHTML(app, t) {
+  const all = takeMedia(t);
+  if (all.length < 2) return mediaHTML(app, main(t));
+  return `<span class="mosaic m${Math.min(all.length, 4)}">${all.slice(0, 4).map((m) => mediaHTML(app, m)).join("")}</span>`;
+}
 
 // `controls`: the preview's, a clip playing with its controls.
 export function mediaHTML(app, m, big = false, controls = false) {
@@ -148,27 +203,60 @@ export function playAll(strip, button, load = (t) => t.querySelector("video")) {
 export function resultsHTML(app, takeVars) {
   const list = resultsOf(app), shown = shownResult(app), chosen = chosenResult(app), n = list.indexOf(shown) + 1;
   const attr = (act) => `data-ract="${act}"`;
-  const head = stripHeadHTML(app, { attr, keep: kept(app, HEAD), play: list.filter((t) => main(t).kind === "video").length > 1, title: "results",
+  const earlier = shootsOf(app), number = shootNumbers(app);
+  const head = stripHeadHTML(app, { attr, keep: kept(app, HEAD), play: list.filter((t) => main(t).kind === "video").length > 1, title: `shoot ${number(null)}`,
     stats: statHTML("takes", list.length) + (chosen ? statHTML("circled", `#${list.indexOf(chosen) + 1}`) : "")
       + (shown ? statHTML("shown", `#${n}`) + statHTML("seed", `${shown.seed ?? "?"}${shown.take ? ` + ${shown.take}` : ""}`) : ""),
-    low: list.length > 1 ? ghostHTML(attr("others"), `${icon("trash")}the others`, "Take every take off the list but the circled one (the files stay)")
-      + ghostHTML(attr("all"), `${icon("trash")}all`, "Take every take off the list (the files stay)", 'data-danger="1"') : "" });
+    low: (list.length ? ghostHTML(attr("finish"), `${icon("check")}finish shoot`, "Finish this shoot: its takes fold into the earlier shoots, shown by the circled one, and the next Roll starts a new shoot") : "")
+      + (list.length > 1 ? ghostHTML(attr("others"), `${icon("trash")}the others`, "Take every take off the list but the circled one (the files stay)")
+      + ghostHTML(attr("all"), `${icon("trash")}all`, "Take every take off the list (the files stay)", 'data-danger="1"') : "") });
   const strip = list.length ? `<div class="cm-takes results" data-seg="-1" style="${takeVars}">${head}<div class="cm-takes-list">${list.map((t, i) =>
     `<button type="button" class="take${t === chosen ? " on" : ""}${t === shown ? " shown" : ""}" data-result="${esc(t.prompt)}" title="Take ${i + 1} · seed ${t.seed ?? "?"}${t.take ? ` + ${t.take}` : ""}${t === chosen ? " · circled" : ""}${t === shown ? " · shown" : " · click to show it"}">`
-    + `${mediaHTML(app, main(t))}<span class="n">${i + 1}</span><span class="del" role="button" data-rdel="${esc(t.prompt)}" title="Take it off the list (the file stays)">${icon("x")}</span></button>`).join("")}`
+    + `${thumbHTML(app, t)}<span class="n">${i + 1}</span><span class="del" role="button" data-rdel="${esc(t.prompt)}" title="Take it off the list (the file stays)">${icon("x")}</span></button>`).join("")}`
     + `<span class="grip" data-grip title="Drag to size the takes"></span></div></div>`
     : `<div class="cm-takes results" data-seg="-1">${head}</div>`;
-  return strip;
+  return strip + shootsHTML(app, earlier, number, takeVars);
+}
+
+// The shoots numbered in the order they began (their ids are when), so opening an old one keeps every number;
+// number(null) is the shoot open now, which begins with its first take.
+export function shootNumbers(app) {
+  const now = app.bridge.props?.orrery_shoot?.[key(app)];
+  const order = [...shootsOf(app).map((x) => x.id), ...(now ? [now] : [])].sort();
+  return (id) => (id === null && !now ? order.length + 1 : order.indexOf(id ?? now) + 1);
+}
+
+// The earlier shoots under the strip (#320), the newest first, each shown by its circled take; a click opens one again.
+function shootsHTML(app, earlier, number, takeVars) {
+  if (!earlier.length) return "";
+  const day = (iso) => new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short" });
+  return `<div class="shoots" style="${takeVars}"><span class="sh-label">earlier shoots</span>${earlier.slice().sort((a, b) => b.id.localeCompare(a.id)).map((x) => {
+    const t = x.takes.find((y) => y.prompt === x.circled) || x.takes[x.takes.length - 1], n = number(x.id);
+    return `<button type="button" class="shoot" data-shoot="${esc(x.id)}" title="Shoot ${n} · ${x.takes.length} take${x.takes.length === 1 ? "" : "s"} · finished ${esc(day(x.finished))} · click to open it again: the next Roll adds to it">`
+      + `<span class="take on">${t ? thumbHTML(app, t) : ""}</span><span class="sh-n">shoot ${n}</span><span class="sh-c">${x.takes.length} · ${esc(day(x.finished))}</span></button>`;
+  }).join("")}</div>`;
 }
 
 // Clicks in the results: show a take, take one or more off the list (Undo brings them back), ×N, 📌, Generate.
 export function wireResults(app, box, repaint) {
   box.addEventListener("click", (e) => {
     const act = e.target.closest("[data-ract]")?.dataset.ract, del = e.target.closest("[data-rdel]"), pick = e.target.closest("[data-result]");
-    if (!act && !del && !pick) return;
+    const shoot = e.target.closest("[data-shoot]");
+    if (!act && !del && !pick && !shoot) return;
     e.stopPropagation();
     const list = resultsOf(app), before = list.slice(), chosen = chosenResult(app);
     const undo = (said) => app.toast(said, { label: "Undo", run: () => { keepResults(app, before); repaint(); } });
+    const props = ["orrery_results", "orrery_shoots", "orrery_chosen", "orrery_shown", "orrery_shoot"];
+    const was = Object.fromEntries(props.map((p) => [p, app.bridge.props[p]]));
+    const undoShoot = (said) => app.toast(said, { label: "Undo", run: () => { Object.assign(app.bridge.props, was); repaint(); } });
+    if (shoot) {
+      if (openShoot(app, shoot.dataset.shoot)) undoShoot(`Shoot opened again: the next Roll adds to it${list.length ? "; the one before is among the earlier shoots" : ""}`);
+      return repaint();
+    }
+    if (act === "finish") {
+      if (finishShoot(app)) undoShoot(`Shoot finished with ${list.length} take${list.length === 1 ? "" : "s"}: the next Roll starts a new one`);
+      return repaint();
+    }
     if (act === "takes") app.bridge.props.orrery_takes = TAKES[(TAKES.indexOf(takesOf(app)) + 1) % TAKES.length];
     else if (act === "keep") app.bridge.props.orrery_keep = { ...app.bridge.props.orrery_keep, [HEAD]: !kept(app, HEAD) };
     else if (act === "gen") return generate(app);

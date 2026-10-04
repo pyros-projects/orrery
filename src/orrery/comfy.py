@@ -679,9 +679,10 @@ def _past(latent_path: str, segment: int) -> dict[int, dict]:
         return {}
 
 
-def _announce(unique_id, segment: int, end: bool = False, seed: int | None = None, take: int = 0) -> None:
+def _announce(unique_id, segment: int, end: bool = False, seed: int | None = None, take: int = 0, roll: str = "") -> None:
     """Tell the node's app which reel segment runs (or that the reel is over), so Generate can show it; a template
-    without scenes runs as segment -1 (#211), with its seed and take, so its result becomes a take under the prompt."""
+    without scenes runs as segment -1 (#211), with its seed and take, so its result becomes a take under the prompt,
+    and `roll`, the folder of the sweep or grid it is a run of, so a Roll's runs at one seed are one take (#320)."""
     if unique_id is None:
         return
     try:
@@ -689,7 +690,8 @@ def _announce(unique_id, segment: int, end: bool = False, seed: int | None = Non
     except ImportError:
         return
     PromptServer.instance.send_sync("orrery.segment", {"node": str(unique_id), "prompt_id": runs.current_prompt(),
-                                                       "segment": segment, "end": end, "seed": seed, "take": take})
+                                                       "segment": segment, "end": end, "seed": seed, "take": take,
+                                                       "roll": roll})
 
 
 def state_token(home: Home) -> str:
@@ -868,7 +870,7 @@ class OrreryPrompt:
             if "segments" in data:  # a reel
                 _announce(unique_id, data["segment"], seed=seed, take=take)
             else:  # results under the prompt in every mode (#211)
-                _announce(unique_id, -1, seed=seed, take=take)
+                _announce(unique_id, -1, seed=seed, take=take, roll=data.get("folder", ""))
             stack, outputs = outputs[6], outputs[:6]  # the LORA: lines go on the model, not out (#208)
             if stack and model is not None:
                 model = loras.apply(model, stack)

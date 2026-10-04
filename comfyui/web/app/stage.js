@@ -7,7 +7,7 @@
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
 import { plays, splitCells } from "./model.js";
-import { chooseResult, chosenResult, mediaHTML, mainMedia, resultsHTML, resultsOf, shownResult, wireResults } from "./results.js";
+import { chooseResult, chosenResult, mediaHTML, mainMedia, resultsHTML, resultsOf, shownResult, takeMedia, wireResults } from "./results.js";
 import { pickTake, takeVars } from "./timeline.js";
 
 const FPS = 24;  // the frames REMEMBER: counts, as the reel keeps a clip
@@ -58,11 +58,12 @@ function singleHTML(app) {
       + `${app.bridge.modelWired?.() === false ? " For the live preview, run the model through this node: the loader into its <b>model</b> input, its <b>model</b> output on to the sampler." : ""}</div></div>`
       + resultsHTML(app, takeVars(app, resultTake(app)));
   }
-  const m = mainMedia(shown), counts = shown === chosen;
-  return `<div class="st-head"><b>Take ${n}</b><span class="muted">seed ${shown.seed ?? "?"}${shown.take ? ` + ${shown.take}` : ""} · ${esc(m.filename)}</span>`
+  const m = mainMedia(shown), all = takeMedia(shown), counts = shown === chosen;
+  return `<div class="st-head"><b>Take ${n}</b><span class="muted">seed ${shown.seed ?? "?"}${shown.take ? ` + ${shown.take}` : ""} · ${all.length > 1 ? `${all.length} pictures` : esc(m.filename)}</span>`
     + `<span class="grow"></span>${counts ? `<span class="st-chosen">${icon("check")}circled</span>`
       : `<button type="button" class="btn slim" data-stact="choose" title="Circle this take: it is the one that counts, the golden one; a take that rolled anew gives the node its seed">${icon("check")}Circle this take</button>`}</div>`
-    + `<div class="st-media${counts ? " chosen" : ""}">${mediaHTML(app, m, true, true)}</div>`
+    + `<div class="st-media${counts ? " chosen" : ""}">${all.length > 1  // a grid's take: its views side by side (#320)
+      ? `<div class="st-views">${all.map((x) => mediaHTML(app, x, true, true)).join("")}</div>` : mediaHTML(app, m, true, true)}</div>`
     + resultsHTML(app, takeVars(app, resultTake(app)));
 }
 

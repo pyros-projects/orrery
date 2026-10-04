@@ -150,7 +150,13 @@ Nodes under **orrery**:
     once. The gear's *Sample surfing* numbers their seeds or follows
     the node's control. The takes are kept on the node, per preset, and saved
     with the workflow; × takes one off the list (**the others** and **all**
-    take more), its files stay where they are. A reel opens in the **clips view**: the editor cut into one cell
+    take more), its files stay where they are. They make a **shoot** (#320), like a
+    sitting in a photo studio: **finish shoot** folds its takes into the **earlier
+    shoots** under the strip, each shown by its circled take, and the next Roll
+    starts a new one; a click on an earlier shoot opens it again, and the next Roll
+    adds to it. The node keeps the last twelve shoots of a preset. A grid's or a
+    sweep's runs at one seed are one take: a creator's four views come in together,
+    as a mosaic in the strip and side by side in the preview. A reel opens in the **clips view**: the editor cut into one cell
     per SCENE, each followed by that scene's clips as Orrery Film (or H3
     Motion Context's Chain Video) keeps them, big: a clip's shorter side is
     the **Clip size** in the gear (360 px unless set otherwise), as far as the
