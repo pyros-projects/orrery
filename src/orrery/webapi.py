@@ -1160,9 +1160,20 @@ def write_idea(home: Home, args: dict) -> dict:
 
 
 def llm_takes(home: Home, args: dict) -> dict:
-    """Takes at the line (#173): N takes for one place of the template at the node's seed, a slot (`what`: its
-    directions), a library still to be written (`what`: its name, `directions`: its own) or a `> enhance` line
-    (`what`: its instruction), steered by `steer`, new against `have`. Over the API endpoint, outside the queue."""
+    """Takes at the line (#173) over the API endpoint, outside the queue; with a text encoder the app queues them as
+    mini-runs instead (Orrery Ask, #178)."""
+    api = endpoint.backend(home, float(llm_config(home)["writer_temperature"]))
+    if api is None:
+        raise ApiError(400, "Takes at the line ask an API endpoint here (the gear: Language model); with a text "
+                            "encoder in ComfyUI the node queues them as mini-runs.")
+    return takes_with(home, args, api)
+
+
+def takes_with(home: Home, args: dict, api, pictures: dict | None = None) -> dict:
+    """N takes for one place of the template at the node's seed: a slot (`what`: its directions), a library still to
+    be written (`what`: its name, `directions`: its own), one that exists (#273) or a `> enhance` line (`what`: its
+    instruction), steered by `steer`, new against `have`. `api`: the endpoint, or in a mini-run a text encoder (#178);
+    `pictures`: the IMAGEs wired into first_frame and last_frame there, else the Load Image files `frames` names."""
     from orrery import takes
     from orrery.comfy import _images, _passages, _previous, _slot_pictures
     from orrery.loras import long_form
@@ -1173,10 +1184,6 @@ def llm_takes(home: Home, args: dict) -> dict:
         raise ApiError(400, f"'kind' must be one of {', '.join(takes.KINDS)}.")
     if not what:
         raise ApiError(400, "'what' names the place: a slot's directions, a library's name or an instruction.")
-    api = endpoint.backend(home, float(llm_config(home)["writer_temperature"]))
-    if api is None:
-        raise ApiError(400, "Takes at the line ask an API endpoint for now (the gear: Language model); with a text "
-                            "encoder in ComfyUI they come as mini-runs (#171).")
     text, target = _template_for(home, args)
     seed, segment, libs = _int(args, "seed", 0), max(_int(args, "segment", 0), 0), home.libraries()
     src, screenplay = long_form(strip_comments(text)), target != "text" and long_form(strip_comments(text)).lstrip().startswith("@h3")
@@ -1211,7 +1218,7 @@ def llm_takes(home: Home, args: dict) -> dict:
     frames = _previous(_latent_path(args), segment) if kind == "slot" and screenplay and segment else None
     said: list[dict] = []  # a picture a slot names that is not there (#174)
     wired = args.get("frames") if isinstance(args.get("frames"), dict) else {}
-    inputs = {k: _input_picture(wired.get(k)) for k in ("first_frame", "last_frame") if wired.get(k)}
+    inputs = pictures if pictures is not None else {k: _input_picture(wired.get(k)) for k in ("first_frame", "last_frame") if wired.get(k)}
     named, shown = _slot_pictures(home, pictures_in([what]), result, inputs, said) if kind == "slot" else ([], [])
     if said:  # a run writes on without it; takes without the picture would only repeat the directions
         raise ApiError(400, " ".join(i["message"].removesuffix(" it is written without it.") + " its takes need it." for i in said))
@@ -1286,6 +1293,21 @@ def library_add(home: Home, args: dict) -> dict:
     if lib is None:
         raise ApiError(400, f"Nothing was written into __{name}__.")
     return {"added": added, "library": _library_json(home, name, lib, home.weights())}
+
+
+def llm_plan(home: Home, args: dict) -> dict:
+    """The language model's tasks of the run Roll is about to queue (#171): with a text encoder, the app queues a
+    mini-run for each before it, in this order."""
+    from orrery import miniruns
+
+    text, target = _text(args, "template"), str(args.get("target") or "text")
+    params = args.get("params") if isinstance(args.get("params"), dict | str) else {}
+    try:
+        tasks = miniruns.plan(home, text, target, params, _int(args, "seed", 0), max(_int(args, "segment", 0), 0),
+                              str(args.get("sweep") or ""))
+    except (KeyError, FileNotFoundError, ValueError) as err:
+        raise ApiError(400, str(err)) from None
+    return {"tasks": tasks}
 
 
 def llm_keep(home: Home, args: dict) -> dict:
@@ -1418,6 +1440,7 @@ ROUTES = [
     ("POST", "/orrery/write", write_idea),
     ("POST", "/orrery/llm/takes", llm_takes),
     ("POST", "/orrery/llm/keep", llm_keep),
+    ("POST", "/orrery/llm/plan", llm_plan),
     ("POST", "/orrery/galaxy/takes", galaxy_takes),
     ("POST", "/orrery/galaxy/write", galaxy_write),
     ("POST", "/orrery/library/accept", library_accept),

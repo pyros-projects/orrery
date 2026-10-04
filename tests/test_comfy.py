@@ -1,4 +1,5 @@
 import importlib.util
+import inspect
 import json
 import sys
 import types
@@ -98,7 +99,7 @@ def test_save_png_embeds_the_picks(tmp_path):
 
 def test_node_classes_declare_comfy_interfaces():
     assert set(NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm",
-                                        "OrreryWrite", "OrreryRefMods"}
+                                        "OrreryWrite", "OrreryRefMods", "OrreryAsk"}
     inputs = OrreryPrompt.INPUT_TYPES()["required"]
     assert inputs["target"][0] == ["text", "h3-base", "flat"]
     assert OrreryPrompt.RETURN_NAMES == ("text", "picks", "seed", "width", "height", "length",
@@ -117,7 +118,7 @@ def test_node_pack_imports_from_the_repo_folder(monkeypatch):
     pack = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(pack)
     assert set(pack.NODE_CLASS_MAPPINGS) == {"OrreryPrompt", "OrreryLog", "OrreryRefs", "OrreryContinue", "OrreryFilm",
-                                             "OrreryWrite", "OrreryRefMods"}
+                                             "OrreryWrite", "OrreryRefMods", "OrreryAsk"}
 
 
 def test_prompt_node_uses_a_preset_and_remembers_the_template(home):
@@ -375,8 +376,13 @@ def test_without_an_llm_a_missing_library_still_names_the_fix(home, monkeypatch)
         run_prompt("a model in __runway_shoes__", 1, "text", str(home))
 
 
-def test_the_node_takes_an_optional_clip_as_its_llm():
-    assert OrreryPrompt.INPUT_TYPES()["optional"]["clip"][0] == "CLIP"
+def test_the_language_model_is_the_one_in_the_settings_never_a_wired_clip():
+    """#282: no clip input on the nodes that write; an old workflow's wired clip reaches run() and is ignored."""
+    from orrery.comfy_write import OrreryAsk, OrreryWrite
+
+    for node in (OrreryPrompt, OrreryWrite, OrreryAsk):
+        assert "clip" not in {**node.INPUT_TYPES()["required"], **node.INPUT_TYPES().get("optional", {})}
+    assert "clip" in inspect.signature(OrreryPrompt.run).parameters
 
 
 def test_the_node_leaves_unloading_to_comfyui(home, monkeypatch):
@@ -517,6 +523,60 @@ def test_a_rewrite_kept_with_use_selected_stands_in_for_its_roll_without_asking(
                                                "after": "the fox you picked, in fog", "kept": True}]
     text, *_ = run_prompt("a fox in a meadow\n> moody", 1, "text", str(home))
     assert text == "a fox at dusk, rewritten"  # another passage: the model rewrites it
+
+
+def test_a_run_s_language_model_work_goes_in_mini_runs_one_task_each(home, monkeypatch):
+    """#171: the plan of a run (the library to write, the rewrites, each slot); each mini-run answers one task with
+    one request; the render run then takes the answers and asks the model nothing."""
+    from orrery import comfy, miniruns
+    from orrery.llm import FakeBackend
+
+    def model(reply):
+        backend = FakeBackend([json.dumps(reply)], name="qwen3vl_4b")
+        monkeypatch.setattr(comfy, "llm_for", lambda h, clip=None, **_: backend)
+        return backend
+
+    template = "a fox under a __sky_mood__ sky, --one small object--\n> moody"
+    tasks = miniruns.plan(Home(home), template, "text", "", 3)
+    assert tasks == [{"task": "library", "what": "sky_mood"}, {"task": "rewrites", "what": ""},
+                     {"task": "slot", "what": "one small object"}]
+    model({"sky_mood": ["grey", "low"]})
+    got = run_prompt(template, 3, "text", str(home), ask=tasks[0])
+    assert got["what"] == "sky_mood" and Home(home).libraries()["sky_mood"].meta["pending"]  # written as a run would
+    backend = model({"rewrite 1": "a fox, low and moody, under a grey sky, [keep 1]"})
+    got = run_prompt(template, 3, "text", str(home), ask=tasks[1])
+    assert got == {"task": "rewrites", "written": 1, "of": 1} and len(backend.prompts) == 1
+    backend = model({"slot 1": "a brass key"})
+    got = run_prompt(template, 3, "text", str(home), ask=tasks[2])
+    assert got["text"] == "a brass key" and "a fox, low and moody" in backend.prompts[0]  # the slot sees the rewrite
+    backend = model({"slot 1": "never asked"})
+    text, picks, *_ = run_prompt(template, 3, "text", str(home))
+    assert text == "a fox, low and moody, under a grey sky, a brass key" and backend.prompts == []
+    assert json.loads(picks)["enhanced"][0]["asked"] is True
+    backend = model({"slot 1": "a coin", "rewrite 1": "a fox at dusk, [keep 1]"})
+    text, *_ = run_prompt(template, 4, "text", str(home))  # another seed: asked in the run, as before
+    assert len(backend.prompts) == 1
+
+
+def test_orrery_ask_answers_one_task_in_its_ui_output(home, monkeypatch):
+    """#171, #178: the node of a mini-run: a take at the line (sampled anew for the takes it has) and a slot."""
+    from orrery import comfy
+    from orrery.comfy_write import OrreryAsk
+    from orrery.llm import FakeBackend
+
+    seeds = []
+    backend = FakeBackend([json.dumps(["a brass key"])], name="qwen3vl_4b")
+    monkeypatch.setattr(comfy, "llm_for", lambda h, clip=None, seed=0, **_: seeds.append(seed) or backend)
+    template = "A fox with --one small object--."
+    out = OrreryAsk().ask("takes", "", template, 7, args=json.dumps({"kind": "slot", "what": "one small object",
+                                                                     "have": ["a coin"], "n": 1}), home=str(home))
+    assert json.loads(out["ui"]["orrery_ask"][0]) == {"takes": ["a brass key"]} and seeds == [8]
+    assert "- a coin" in backend.prompts[-1]
+    backend.replies = [json.dumps({"slot 1": "a brass key"})]
+    got = json.loads(OrreryAsk().ask("slot", "one small object", template, 7, home=str(home))["ui"]["orrery_ask"][0])
+    assert got["text"] == "a brass key"
+    got = json.loads(OrreryAsk().ask("slot", "no such slot", template, 7, home=str(home))["ui"]["orrery_ask"][0])
+    assert "no such slot" in got["error"]
 
 
 def test_enhance_rewrites_shot_prose_but_not_dialogue(home, monkeypatch):

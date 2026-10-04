@@ -12,6 +12,7 @@ import { openSave } from "./save.js";
 import { openSceneStats } from "./scenestats.js";
 import { openTree } from "./tree.js";
 import { kept, TAKES, takesOf } from "./results.js";
+import { llmLocal } from "./miniruns.js";
 import { markPlace, openTakes, placeAt, placeOf, placeOfRoll } from "./takes.js";
 import { STARTERS } from "./starters.js";
 import { runRolls } from "./test.js";
@@ -149,12 +150,14 @@ async function sceneAct(app, act, n, button = null) {
   refreshFoot(app);
 }
 
-// Write now (#168): with an API endpoint, the libraries the template still needs, written at once beside ComfyUI.
+// Write now (#168): the libraries the template still needs, written before any run: with an API endpoint at once
+// beside ComfyUI, with a text encoder in a run of its own each, at the queue's front (#176).
 function writeNowHTML(app) {
-  if (!app.llmApi()) return "";
+  if (!app.llmApi() && !llmLocal(app)) return "";
   if (app.state.writingNow) return `<span class="stat live">Writing <b>${app.state.writingNow}</b> librar${app.state.writingNow === 1 ? "y" : "ies"}…</span>`;
   const open = openLibraries(app.text, app.data.completion?.libraries || [], new Set(inlineLibraries(app.text).map((l) => l.name)));
-  return open.length ? `<button class="btn ghost" data-act="writenow" title="Write ${esc(open.map((n) => `__${n}__`).join(", "))} now: each in a request of its own, all at once, beside ComfyUI. The next run finds them done; they wait for review in Libraries.">`
+  const how = app.llmApi() ? "each in a request of its own, all at once, beside ComfyUI" : "each in a run of its own, at the front of ComfyUI's queue";
+  return open.length ? `<button class="btn ghost" data-act="writenow" title="Write ${esc(open.map((n) => `__${n}__`).join(", "))} now: ${how}. The next run finds them done; they wait for review in Libraries.">`
     + `${icon("spark")}Write ${open.length} now</button>` : "";
 }
 

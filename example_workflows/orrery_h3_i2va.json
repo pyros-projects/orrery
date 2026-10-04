@@ -20,13 +20,6 @@
       "mode": 0,
       "inputs": [
         {
-          "localized_name": "clip",
-          "name": "clip",
-          "shape": 7,
-          "type": "CLIP",
-          "link": null
-        },
-        {
           "localized_name": "first_frame",
           "name": "first_frame",
           "shape": 7,
@@ -1272,7 +1265,7 @@
       10,
       0,
       1,
-      1,
+      0,
       "IMAGE"
     ],
     [

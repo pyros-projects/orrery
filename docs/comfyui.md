@@ -361,3 +361,7 @@ Nodes under **orrery**:
   runs dense and keeps all of it, so under SLA 0.99 can hold more than 1.
 - **Orrery Write** (`orrery/internal`): the Write menu queues it on its own;
   you don't add it.
+- **Orrery Ask** (`orrery/internal`): with a text encoder, one task of the
+  language model in a run of its own (#171): Roll queues one per library,
+  rewrite and slot before each run, Write now and the takes at the line theirs
+  at the front of the queue; you don't add it.

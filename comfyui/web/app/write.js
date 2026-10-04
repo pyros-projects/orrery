@@ -35,6 +35,18 @@ export async function writeNow(app) {
   app.state.writingNow = open.length;
   if (app.state.tab === "prompt") app.render();
   try {
+    if (!app.llmApi()) {  // a text encoder: a run of its own per library, at the queue's front (#176)
+      const notes = [];
+      for (const name of open) {
+        const got = await app.bridge.ask("library", name, "", { front: true });
+        notes.push(...(got.error ? [`__${name}__: ${got.error}`] : got.notes || []));
+        app.state.writingNow = Math.max(1, app.state.writingNow - 1);
+        if (app.state.tab === "prompt") app.render();
+      }
+      await app.refreshCompletion();
+      return app.toast(notes.length ? notes.map(esc).join("<br>") : "Nothing left to write: the libraries are there.",
+        { label: "Review", run: () => app.go("libraries") });
+    }
     const got = await app.api.writeLibraries({ template: app.text, params: app.bridge.getParams() });
     await app.refreshCompletion();
     app.toast(got.notes.length ? got.notes.map(esc).join("<br>") : "Nothing left to write: the libraries are there.",
@@ -59,7 +71,7 @@ async function writeOne(app, task, idea, template) {
 
 // Why a writer cannot run on this node now, or "" when it can.
 export function writerBlock(app, task) {
-  if (!app.llmActive() && !app.bridge.wired("clip")) return "Needs a language model: pick one in the settings, or wire a text encoder into clip";
+  if (!app.llmActive()) return "Needs a language model: pick one in the settings";
   const h3 = stats(app.text).h3, reel = h3?.reel, frames = app.bridge.frames();
   if (task === "continue") return !reel ? "Needs a reel: a screenplay with SCENE lines" : reel.clips === Infinity ? "The reel repeats a scene forever: there is no next scene" : "";
   if (reel) return "Writes one shot, so not for a reel";
