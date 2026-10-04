@@ -10,7 +10,7 @@ const REF = [
     ["__clothing/*__", "a library of the folder at random (** and below, features* a name's start), then its entry", "wearing __clothing/*__"],
     ["__film/genre__", "a library in a folder: library/film/genre.yaml or .txt (one entry per line); the language model creates folder and file when they don't exist", ""],
     ["__runway_shoes:20__", "with a language model set (the gear): an unknown library is created when the node runs, and :20 tops it up to at least 20 entries; with an API endpoint, Write now in the footer writes them at once, before the run", ""],
-    ["__film_scene__(30 words, set and cast)", "directions for the model that writes the library; they never reach the prompt. New entries wait in Libraries for Accept or Discard", ""],
+    ["__runway_shoes__ 🎲", "a library you don't have: a run writes it (it waits in Libraries for Accept or Discard), or with an API endpoint its 🎲 writes it in a sheet: steer, pick, Keep as the library; Keep the direction keeps its directions with it (the earlier __name__(directions) still works)", ""],
     ["__characters/noir#gender:female__", "only entries with that property: props in the YAML, or key:value typed into an entry's tags in Libraries", "__characters/noir#gender:female__"],
     ["__world/habitats#habitat:$animal.habitat__", "a filter that reads an earlier roll: the place is one the animal lives in", "$animal = __subjects/animals__\na photograph of $animal in __world/habitats#habitat:$animal.habitat__"],
     ["{misty|frozen:3}", "inline choice; :3 makes frozen three times as likely", "a {misty|frozen:3} forest"],

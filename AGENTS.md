@@ -146,8 +146,8 @@ test by test:
   presets and operators (`@include`), compiler targets or UI, not as syntax. A fix where two existing
   constructs don't work together (a dial that loses an entry's properties) is allowed, with the
   golden corpus showing what moved. New syntax comes only when a real preset cannot be written
-  without it, and never in the earlier words (`CHUNK`, `HANDOFF:`, `SEND:`, `GOTO:`, `?`): they
-  still work, and nothing new is built on them.
+  without it, and never in the earlier words (`CHUNK`, `HANDOFF:`, `SEND:`, `GOTO:`, `?`,
+  `__name__(directions)`): they still work, and nothing new is built on them.
 - Write like the surrounding code: its naming, its comment density, its idiom.
 - A user-visible change updates its docs in the same PR (`docs/`, the in-app help in
   `comfyui/web/app/help.js`, and the example workflows when their templates or nodes change), and

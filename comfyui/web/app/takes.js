@@ -1,11 +1,13 @@
 // Takes at the line (#173): a 🎲 at the end of a slot's line, of a library still to be written and of a `> enhance`
 // line opens a sheet with takes for that place (three, or as many as the settings say, #274), written at the node's
-// seed. More asks for as many more, new against those there are; a steering line goes with them. A click selects a take (#276), and Use selected puts it in
-// place of the slot (or the library) as an unsaved edit; Keep the direction writes the steer into the slot's (the
-// library's, the line's) directions; both with Undo. A `> enhance` take is kept for its roll instead: the run that
-// rolls the same prompt uses it. With an API endpoint the server asks it directly, outside ComfyUI's queue. A gallery
-// picture's slot from `image output` (#175) opens the same sheet: its takes are written from the picture, Use
-// selected writes one into its exports.
+// seed. More asks for as many more, new against those there are; a steering line goes with them. A click selects a
+// take (#276), and Use selected puts it in place of the slot as an unsaved edit; Keep the direction writes the steer
+// into the slot's (the line's) directions; both with Undo. A `> enhance` take is kept for its roll instead: the run
+// that rolls the same prompt uses it. A library's sheet selects several: one still to be written is written in it and
+// kept as the library (#272), one that exists offers its rolls and new entries to add (#273); its directions stay
+// with the library, never in the template (#275). With an API endpoint the server asks it directly, outside
+// ComfyUI's queue. A gallery picture's slot from `image output` (#175) opens the same sheet: its takes are written
+// from the picture, Use selected writes one into its exports.
 import { esc, LIBRARY } from "./highlight.js";
 import { icon } from "./icons.js";
 import { splitCells } from "./model.js";
@@ -41,21 +43,14 @@ export function insertTake(text, place, take) {
   return text;
 }
 
-// The steer into the place's directions: a slot's (`--a, steer--`), a library's (`__name__(a, steer)`), the
-// instruction of a `>` line.
+// The steer into the place's directions: a slot's (`--a, steer--`), the instruction of a `>` line. A library keeps
+// its own, never `(…)` in the template (#275).
 export function keepDirection(text, place, steer) {
   const s = steer.trim();
   if (!s) return text;
   if (place.kind === "slot") return onLine(text, place, (l) => (l.includes(`--${place.what}--`) ? l.replace(`--${place.what}--`, `--${place.what}, ${s}--`) : null));
-  if (place.kind === "library") {
-    return onLine(text, place, (l) => {
-      const m = LIB(place.what).exec(l);
-      if (!m) return null;
-      const token = m[1] !== undefined ? m[0].replace(/\(([^()]*)\)$/, `(${m[1]}, ${s})`) : `${m[0]}(${s})`;
-      return l.slice(0, m.index) + token + l.slice(m.index + m[0].length);
-    });
-  }
-  return onLine(text, place, (l) => (/^\s*>/.test(l) ? `${l.replace(/\s+$/, "")}, ${s}` : null));
+  if (place.kind === "enhance") return onLine(text, place, (l) => (/^\s*>/.test(l) ? `${l.replace(/\s+$/, "")}, ${s}` : null));
+  return text;
 }
 
 // The place a 🎲 stands for, its line counted in the whole template (a cell's key counts in its cell).

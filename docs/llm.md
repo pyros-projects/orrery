@@ -32,7 +32,7 @@ The footer of the Prompt tab names the active model: `LLM qwen3vl_8b…`, or `LL
 |---|---|---|
 | **A new library** | `__runway_shoes__` | A library you don't have is written when the node runs, from the lines around it. The editor marks it as "made when the node runs". |
 | **A top-up** | `__runway_shoes:30__` | A library with fewer entries is topped up to at least 30, once. |
-| **Directions for a list** | `__film_scene__(at least 30 words, set and characters)` | The list gets only these directions, never the prompt. They stay with the library for later top-ups. |
+| **Directions for a list** | the library's takes sheet: **Keep the direction** | The list gets only its directions, never the prompt, and they stay with the library for later top-ups. The earlier `__film_scene__(at least 30 words, set and characters)` still works, deprecated (#275): the sheet shapes a library instead. |
 | **Review** | Libraries tab, **To review** (violet) | What the model wrote waits: **Accept** keeps it, **Discard** drops it. `orrery lib undo` undoes a write. |
 | **A slot** | `--one small object in their hands, 4 to 8 words--` | Prose written where it stands, after everything else has rolled. The model sees the whole prompt. In a screenplay, CAST names in the directions arrive as `<Subject N>` labels. |
 | **A slot in a reel** | `--what WASHER does next, moving the story on--` | From the second clip on, the model also watches the clip before (one frame a second and its last frame) and continues it. |

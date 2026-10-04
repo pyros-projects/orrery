@@ -913,8 +913,7 @@ test("a 🎲 stands at the end of a line the language model writes for; Insert a
   assert.equal(insertTake(text, { ...slot, line: 1 }, "x"), text);  // not on its line: nothing changes
   const lib = "A fox under a __sky_kind__ and a __sky_kind__(grey).";
   assert.equal(insertTake(lib, { kind: "library", what: "sky_kind", line: 0 }, "low fog"), "A fox under a low fog and a __sky_kind__(grey).");
-  assert.equal(keepDirection(lib, { kind: "library", what: "sky_kind", line: 0 }, "stormy"), "A fox under a __sky_kind__(stormy) and a __sky_kind__(grey).");
-  assert.equal(keepDirection("__sky_kind__(grey) sky", { kind: "library", what: "sky_kind", line: 0 }, "stormy"), "__sky_kind__(grey, stormy) sky");
+  assert.equal(keepDirection(lib, { kind: "library", what: "sky_kind", line: 0 }, "stormy"), lib);  // a library keeps its own (#275)
   assert.equal(keepDirection("A fox.\n> make it moody", { kind: "enhance", what: "make it moody", line: 1 }, "darker"), "A fox.\n> make it moody, darker");
   assert.equal(insertTake("> make it moody", { kind: "enhance", what: "make it moody", line: 0 }, "x"), "> make it moody");
 });
