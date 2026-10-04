@@ -118,6 +118,8 @@ checks) are left out.
 
 ### Fixed
 
+- Rating an output while a run logs its own no longer loses the new one: the gallery's log and the learned weights
+  have one writer at a time, and two writes of one file never share a temp file (#260).
 - History's and the Gallery's restore no longer promise that the next run reproduces a run: it rolls again with today's
   libraries and learned weights, and says so (#259).
 - Taking ratings back gives an entry's weight back: many outputs with one pick, rated and cleared, no longer leave it
