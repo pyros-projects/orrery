@@ -38,7 +38,9 @@ it; the expression creator shows one face in the eight expressions of a set (bas
 social, inner, playful), each told by what the face does and the muscles that do it, in FACS action
 units; the landscape creator rolls a place to put them in, a land in a season of its climate, a sky,
 an hour and one sign of life that belongs there (never a person), from four distances: establishing,
-wide, medium and the ground up close), and `h3/` holds MiniMax H3 scenes (dialogue in German
+wide, medium and the ground up close; the setting creator rolls a place people are in, a room, hall,
+shop, street, vehicle or ruin of one of five worlds, empty, as a film shows it: the outside, the whole,
+one part with open floor in front and one thing in it up close), and `h3/` holds MiniMax H3 scenes (dialogue in German
 and Cantonese, a voiceover, fast cuts, an animated fable, on-screen music, and
 an I2VA starter for your own stills, a three-clip reel for H3 Motion
 Context, a drone flight, an impossible camera move that dives into a dewdrop
@@ -86,7 +88,8 @@ to unhinged. They draw on the pack libraries: `world/` (landscapes, weather,
 habitats), `looks/` (fifty-odd video looks with their own camera, sound and
 music, still looks by family), `moments/`, `subjects/`, `frame/`, `drone/`,
 `tour/`, `transitions/`, `scale/`, `time/`, `backrooms/` and `places/` (the landscape creator's lands, seasons,
-weather, hours and signs of life, filtered by climate and water). One library is
+weather, hours and signs of life, filtered by climate and water, and the setting creator's places in
+five worlds). One library is
 licensed differently: the `scp/` libraries are adapted from the SCP Wiki and
 are CC BY-SA 3.0, each entry carrying its article's citation in `cite`. Videos
 made from it are adaptations as well: credit the cite and share them under

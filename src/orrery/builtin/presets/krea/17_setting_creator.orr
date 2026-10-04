@@ -1,0 +1,24 @@
+---
+title: "Setting creator"
+note: "A place people are in, for Krea 2, empty and waiting for them: one of a hundred and fifty rooms, halls, shops, streets, vehicles and ruins across five worlds (everyday, fantasy, cyberpunk, sci-fi, noir), each with what fills it, its own light and its sound. The grid shows it as a film would: an establishing shot of the outside, a wide shot of the whole of it, a medium shot of one part with open floor in front (where a character goes, as a CAST picture), and one thing in it up close. One seed is one place in four shots. Dial $world to stay in one world; add kind=shop (room, hall, street, vehicle, ruin) to the filter of $place for one kind. It keeps its sound and light (EXPORT:): a reel that casts it reads $set.place_sfx."
+tags: [krea, places, settings, references]
+---
+$world = {everyday:3|fantasy:2|cyberpunk:2|scifi:2|noir:2}
+$place = __places/setting[world=$world]__
+# What the picture carries beyond its prompt (EXPORT:): a screenplay that casts it reads $set.where, $set.place_sfx …
+EXPORT:
+  where = $place
+  $place
+  $world
+# The grid runs every shot: the outside, the whole, one part, one thing. Set $view to one of them to try places faster.
+$look = {photo:5|animated:2|anime:2|painted}
+$view = {establishing|wide|medium|detail}
+$opening = {IF $look is photo: {IF $world is everyday: A photograph|{IF $world is fantasy: A cinematic photograph, as from the set of a fantasy film|{IF $world is cyberpunk: A cinematic photograph, as from a neo-noir science-fiction film|{IF $world is scifi: A cinematic photograph, as from the set of a space opera|A black-and-white film-noir still, high contrast}}}}|{IF $look is animated: A 3D environment render, in the style of a modern animated feature film|{IF $look is anime: A hand-painted anime film background|A painted concept-art environment}}}
+$whole = {IF $place.kind is vehicle: a wide shot from the rear of $place, all of it in frame|{IF $place.inside is yes: a wide shot from the doorway of $place, all of it in frame from the floor to the ceiling|a wide shot at eye level of $place, all of it in frame from one end}}
+$floor = {IF $place.inside is yes: open floor|open ground}
+$scene = {IF $view is establishing: an establishing shot of the outside: $place.outside.|{IF $view is wide: $whole. It is lit by $place.light, and it stands empty and still.|{IF $view is medium: a medium shot at eye level into one part of $place, $floor in the foreground. It is lit by $place.light, and it stands empty and still.|a close-up of $place.detail, lit by $place.light.}}}
+$lens = {IF $view is detail: a 100mm macro lens with a shallow depth of field|{IF $view is establishing: a 35mm lens|a 24mm wide-angle lens}}
+$finish = {IF $look is photo: {IF $world is noir: Shot on $lens, deep shadows and silver highlights, black and white.|{IF $world is cyberpunk: Shot on $lens, true colours with a touch of neon in the highlights.|{IF $world is everyday: Shot on $lens, true colours, natural texture.|Shot on $lens, true colours, practical sets and props.}}}|{IF $look is animated: Stylised shapes, soft global illumination and rich, saturated colour.|{IF $look is anime: Painterly detail, clean shapes and soft, luminous colour.|Loose painterly strokes, strong shapes and atmospheric light.}}}
+$opening: $scene $finish
+@size 1344x768
+@grid $view

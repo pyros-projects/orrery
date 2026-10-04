@@ -1,0 +1,701 @@
+{
+ "preset": "krea/17_setting_creator",
+ "seeds": {
+  "0": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A black-and-white film-noir still, high contrast: an establishing shot of the outside: the back door of the city morgue. Shot on a 35mm lens, deep shadows and silver highlights, black and white.",
+     "picks": [
+      [
+       "{everyday|fantasy|cyberpunk|scifi|noir}",
+       "noir",
+       [
+        "{everyday|fantasy|cyberpunk|scifi|noir}=noir"
+       ]
+      ],
+      [
+       "$place ← __places/setting[world=$world]__",
+       "a morgue of steel tables and a wall of drawers",
+       [
+        "__places/setting__=a morgue of steel tables and a wall of drawers"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "establishing",
+       [
+        "{establishing|wide|medium|detail}=establishing"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": {
+       "value": "a morgue of steel tables and a wall of drawers",
+       "detail": "a toe tag on a drawer handle",
+       "inside": "yes",
+       "kind": "room",
+       "light": "cold overhead light",
+       "outside": "the back door of the city morgue",
+       "sfx": "a dripping tap",
+       "world": "noir"
+      },
+      "place": {
+       "value": "a morgue of steel tables and a wall of drawers",
+       "detail": "a toe tag on a drawer handle",
+       "inside": "yes",
+       "kind": "room",
+       "light": "cold overhead light",
+       "outside": "the back door of the city morgue",
+       "sfx": "a dripping tap",
+       "world": "noir"
+      },
+      "world": "noir"
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A black-and-white film-noir still, high contrast: a wide shot from the doorway of a morgue of steel tables and a wall of drawers, all of it in frame from the floor to the ceiling. It is lit by cold overhead light, and it stands empty and still. Shot on a 24mm wide-angle lens, deep shadows and silver highlights, black and white.",
+     "picks": [
+      [
+       "{everyday|fantasy|cyberpunk|scifi|noir}",
+       "noir",
+       [
+        "{everyday|fantasy|cyberpunk|scifi|noir}=noir"
+       ]
+      ],
+      [
+       "$place ← __places/setting[world=$world]__",
+       "a morgue of steel tables and a wall of drawers",
+       [
+        "__places/setting__=a morgue of steel tables and a wall of drawers"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "wide",
+       [
+        "{establishing|wide|medium|detail}=wide"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": {
+       "value": "a morgue of steel tables and a wall of drawers",
+       "detail": "a toe tag on a drawer handle",
+       "inside": "yes",
+       "kind": "room",
+       "light": "cold overhead light",
+       "outside": "the back door of the city morgue",
+       "sfx": "a dripping tap",
+       "world": "noir"
+      },
+      "place": {
+       "value": "a morgue of steel tables and a wall of drawers",
+       "detail": "a toe tag on a drawer handle",
+       "inside": "yes",
+       "kind": "room",
+       "light": "cold overhead light",
+       "outside": "the back door of the city morgue",
+       "sfx": "a dripping tap",
+       "world": "noir"
+      },
+      "world": "noir"
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A black-and-white film-noir still, high contrast: a medium shot at eye level into one part of a morgue of steel tables and a wall of drawers, open floor in the foreground. It is lit by cold overhead light, and it stands empty and still. Shot on a 24mm wide-angle lens, deep shadows and silver highlights, black and white.",
+     "picks": [
+      [
+       "{everyday|fantasy|cyberpunk|scifi|noir}",
+       "noir",
+       [
+        "{everyday|fantasy|cyberpunk|scifi|noir}=noir"
+       ]
+      ],
+      [
+       "$place ← __places/setting[world=$world]__",
+       "a morgue of steel tables and a wall of drawers",
+       [
+        "__places/setting__=a morgue of steel tables and a wall of drawers"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "medium",
+       [
+        "{establishing|wide|medium|detail}=medium"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": {
+       "value": "a morgue of steel tables and a wall of drawers",
+       "detail": "a toe tag on a drawer handle",
+       "inside": "yes",
+       "kind": "room",
+       "light": "cold overhead light",
+       "outside": "the back door of the city morgue",
+       "sfx": "a dripping tap",
+       "world": "noir"
+      },
+      "place": {
+       "value": "a morgue of steel tables and a wall of drawers",
+       "detail": "a toe tag on a drawer handle",
+       "inside": "yes",
+       "kind": "room",
+       "light": "cold overhead light",
+       "outside": "the back door of the city morgue",
+       "sfx": "a dripping tap",
+       "world": "noir"
+      },
+      "world": "noir"
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A black-and-white film-noir still, high contrast: a close-up of a toe tag on a drawer handle, lit by cold overhead light. Shot on a 100mm macro lens with a shallow depth of field, deep shadows and silver highlights, black and white.",
+     "picks": [
+      [
+       "{everyday|fantasy|cyberpunk|scifi|noir}",
+       "noir",
+       [
+        "{everyday|fantasy|cyberpunk|scifi|noir}=noir"
+       ]
+      ],
+      [
+       "$place ← __places/setting[world=$world]__",
+       "a morgue of steel tables and a wall of drawers",
+       [
+        "__places/setting__=a morgue of steel tables and a wall of drawers"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "detail",
+       [
+        "{establishing|wide|medium|detail}=detail"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": {
+       "value": "a morgue of steel tables and a wall of drawers",
+       "detail": "a toe tag on a drawer handle",
+       "inside": "yes",
+       "kind": "room",
+       "light": "cold overhead light",
+       "outside": "the back door of the city morgue",
+       "sfx": "a dripping tap",
+       "world": "noir"
+      },
+      "place": {
+       "value": "a morgue of steel tables and a wall of drawers",
+       "detail": "a toe tag on a drawer handle",
+       "inside": "yes",
+       "kind": "room",
+       "light": "cold overhead light",
+       "outside": "the back door of the city morgue",
+       "sfx": "a dripping tap",
+       "world": "noir"
+      },
+      "world": "noir"
+     }
+    }
+   ]
+  },
+  "1": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A photograph: an establishing shot of the outside: a red-brick school with a playground and a flagpole. Shot on a 35mm lens, true colours, natural texture.",
+     "picks": [
+      [
+       "{everyday|fantasy|cyberpunk|scifi|noir}",
+       "everyday",
+       [
+        "{everyday|fantasy|cyberpunk|scifi|noir}=everyday"
+       ]
+      ],
+      [
+       "$place ← __places/setting[world=$world]__",
+       "a school classroom with rows of desks, a green chalkboard and children's drawings on the walls",
+       [
+        "__places/setting__=a school classroom with rows of desks, a green chalkboard and children's drawings on the walls"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "establishing",
+       [
+        "{establishing|wide|medium|detail}=establishing"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": {
+       "value": "a school classroom with rows of desks, a green chalkboard and children's drawings on the walls",
+       "detail": "a stick of chalk and an eraser on the chalkboard ledge",
+       "inside": "yes",
+       "kind": "room",
+       "light": "daylight from tall windows",
+       "outside": "a red-brick school with a playground and a flagpole",
+       "sfx": "a bell ringing far off",
+       "world": "everyday"
+      },
+      "place": {
+       "value": "a school classroom with rows of desks, a green chalkboard and children's drawings on the walls",
+       "detail": "a stick of chalk and an eraser on the chalkboard ledge",
+       "inside": "yes",
+       "kind": "room",
+       "light": "daylight from tall windows",
+       "outside": "a red-brick school with a playground and a flagpole",
+       "sfx": "a bell ringing far off",
+       "world": "everyday"
+      },
+      "world": "everyday"
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A photograph: a wide shot from the doorway of a school classroom with rows of desks, a green chalkboard and children's drawings on the walls, all of it in frame from the floor to the ceiling. It is lit by daylight from tall windows, and it stands empty and still. Shot on a 24mm wide-angle lens, true colours, natural texture.",
+     "picks": [
+      [
+       "{everyday|fantasy|cyberpunk|scifi|noir}",
+       "everyday",
+       [
+        "{everyday|fantasy|cyberpunk|scifi|noir}=everyday"
+       ]
+      ],
+      [
+       "$place ← __places/setting[world=$world]__",
+       "a school classroom with rows of desks, a green chalkboard and children's drawings on the walls",
+       [
+        "__places/setting__=a school classroom with rows of desks, a green chalkboard and children's drawings on the walls"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "wide",
+       [
+        "{establishing|wide|medium|detail}=wide"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": {
+       "value": "a school classroom with rows of desks, a green chalkboard and children's drawings on the walls",
+       "detail": "a stick of chalk and an eraser on the chalkboard ledge",
+       "inside": "yes",
+       "kind": "room",
+       "light": "daylight from tall windows",
+       "outside": "a red-brick school with a playground and a flagpole",
+       "sfx": "a bell ringing far off",
+       "world": "everyday"
+      },
+      "place": {
+       "value": "a school classroom with rows of desks, a green chalkboard and children's drawings on the walls",
+       "detail": "a stick of chalk and an eraser on the chalkboard ledge",
+       "inside": "yes",
+       "kind": "room",
+       "light": "daylight from tall windows",
+       "outside": "a red-brick school with a playground and a flagpole",
+       "sfx": "a bell ringing far off",
+       "world": "everyday"
+      },
+      "world": "everyday"
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A photograph: a medium shot at eye level into one part of a school classroom with rows of desks, a green chalkboard and children's drawings on the walls, open floor in the foreground. It is lit by daylight from tall windows, and it stands empty and still. Shot on a 24mm wide-angle lens, true colours, natural texture.",
+     "picks": [
+      [
+       "{everyday|fantasy|cyberpunk|scifi|noir}",
+       "everyday",
+       [
+        "{everyday|fantasy|cyberpunk|scifi|noir}=everyday"
+       ]
+      ],
+      [
+       "$place ← __places/setting[world=$world]__",
+       "a school classroom with rows of desks, a green chalkboard and children's drawings on the walls",
+       [
+        "__places/setting__=a school classroom with rows of desks, a green chalkboard and children's drawings on the walls"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "medium",
+       [
+        "{establishing|wide|medium|detail}=medium"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": {
+       "value": "a school classroom with rows of desks, a green chalkboard and children's drawings on the walls",
+       "detail": "a stick of chalk and an eraser on the chalkboard ledge",
+       "inside": "yes",
+       "kind": "room",
+       "light": "daylight from tall windows",
+       "outside": "a red-brick school with a playground and a flagpole",
+       "sfx": "a bell ringing far off",
+       "world": "everyday"
+      },
+      "place": {
+       "value": "a school classroom with rows of desks, a green chalkboard and children's drawings on the walls",
+       "detail": "a stick of chalk and an eraser on the chalkboard ledge",
+       "inside": "yes",
+       "kind": "room",
+       "light": "daylight from tall windows",
+       "outside": "a red-brick school with a playground and a flagpole",
+       "sfx": "a bell ringing far off",
+       "world": "everyday"
+      },
+      "world": "everyday"
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A photograph: a close-up of a stick of chalk and an eraser on the chalkboard ledge, lit by daylight from tall windows. Shot on a 100mm macro lens with a shallow depth of field, true colours, natural texture.",
+     "picks": [
+      [
+       "{everyday|fantasy|cyberpunk|scifi|noir}",
+       "everyday",
+       [
+        "{everyday|fantasy|cyberpunk|scifi|noir}=everyday"
+       ]
+      ],
+      [
+       "$place ← __places/setting[world=$world]__",
+       "a school classroom with rows of desks, a green chalkboard and children's drawings on the walls",
+       [
+        "__places/setting__=a school classroom with rows of desks, a green chalkboard and children's drawings on the walls"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "detail",
+       [
+        "{establishing|wide|medium|detail}=detail"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": {
+       "value": "a school classroom with rows of desks, a green chalkboard and children's drawings on the walls",
+       "detail": "a stick of chalk and an eraser on the chalkboard ledge",
+       "inside": "yes",
+       "kind": "room",
+       "light": "daylight from tall windows",
+       "outside": "a red-brick school with a playground and a flagpole",
+       "sfx": "a bell ringing far off",
+       "world": "everyday"
+      },
+      "place": {
+       "value": "a school classroom with rows of desks, a green chalkboard and children's drawings on the walls",
+       "detail": "a stick of chalk and an eraser on the chalkboard ledge",
+       "inside": "yes",
+       "kind": "room",
+       "light": "daylight from tall windows",
+       "outside": "a red-brick school with a playground and a flagpole",
+       "sfx": "a bell ringing far off",
+       "world": "everyday"
+      },
+      "world": "everyday"
+     }
+    }
+   ]
+  },
+  "7": {
+   "takes": [
+    {
+     "cell": 0,
+     "text": "A cinematic photograph, as from the set of a space opera: an establishing shot of the outside: an alien palace of curved spires grown like coral. Shot on a 35mm lens, true colours, practical sets and props.",
+     "picks": [
+      [
+       "{everyday|fantasy|cyberpunk|scifi|noir}",
+       "scifi",
+       [
+        "{everyday|fantasy|cyberpunk|scifi|noir}=scifi"
+       ]
+      ],
+      [
+       "$place ← __places/setting[world=$world]__",
+       "an alien throne hall of organic curves and glowing pools",
+       [
+        "__places/setting__=an alien throne hall of organic curves and glowing pools"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "establishing",
+       [
+        "{establishing|wide|medium|detail}=establishing"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": {
+       "value": "an alien throne hall of organic curves and glowing pools",
+       "detail": "a glowing pool rippling at the foot of a throne",
+       "inside": "yes",
+       "kind": "hall",
+       "light": "a bioluminescent glow",
+       "outside": "an alien palace of curved spires grown like coral",
+       "sfx": "a deep resonant tone",
+       "world": "scifi"
+      },
+      "place": {
+       "value": "an alien throne hall of organic curves and glowing pools",
+       "detail": "a glowing pool rippling at the foot of a throne",
+       "inside": "yes",
+       "kind": "hall",
+       "light": "a bioluminescent glow",
+       "outside": "an alien palace of curved spires grown like coral",
+       "sfx": "a deep resonant tone",
+       "world": "scifi"
+      },
+      "world": "scifi"
+     }
+    },
+    {
+     "cell": 1,
+     "text": "A cinematic photograph, as from the set of a space opera: a wide shot from the doorway of an alien throne hall of organic curves and glowing pools, all of it in frame from the floor to the ceiling. It is lit by a bioluminescent glow, and it stands empty and still. Shot on a 24mm wide-angle lens, true colours, practical sets and props.",
+     "picks": [
+      [
+       "{everyday|fantasy|cyberpunk|scifi|noir}",
+       "scifi",
+       [
+        "{everyday|fantasy|cyberpunk|scifi|noir}=scifi"
+       ]
+      ],
+      [
+       "$place ← __places/setting[world=$world]__",
+       "an alien throne hall of organic curves and glowing pools",
+       [
+        "__places/setting__=an alien throne hall of organic curves and glowing pools"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "wide",
+       [
+        "{establishing|wide|medium|detail}=wide"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": {
+       "value": "an alien throne hall of organic curves and glowing pools",
+       "detail": "a glowing pool rippling at the foot of a throne",
+       "inside": "yes",
+       "kind": "hall",
+       "light": "a bioluminescent glow",
+       "outside": "an alien palace of curved spires grown like coral",
+       "sfx": "a deep resonant tone",
+       "world": "scifi"
+      },
+      "place": {
+       "value": "an alien throne hall of organic curves and glowing pools",
+       "detail": "a glowing pool rippling at the foot of a throne",
+       "inside": "yes",
+       "kind": "hall",
+       "light": "a bioluminescent glow",
+       "outside": "an alien palace of curved spires grown like coral",
+       "sfx": "a deep resonant tone",
+       "world": "scifi"
+      },
+      "world": "scifi"
+     }
+    },
+    {
+     "cell": 2,
+     "text": "A cinematic photograph, as from the set of a space opera: a medium shot at eye level into one part of an alien throne hall of organic curves and glowing pools, open floor in the foreground. It is lit by a bioluminescent glow, and it stands empty and still. Shot on a 24mm wide-angle lens, true colours, practical sets and props.",
+     "picks": [
+      [
+       "{everyday|fantasy|cyberpunk|scifi|noir}",
+       "scifi",
+       [
+        "{everyday|fantasy|cyberpunk|scifi|noir}=scifi"
+       ]
+      ],
+      [
+       "$place ← __places/setting[world=$world]__",
+       "an alien throne hall of organic curves and glowing pools",
+       [
+        "__places/setting__=an alien throne hall of organic curves and glowing pools"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "medium",
+       [
+        "{establishing|wide|medium|detail}=medium"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": {
+       "value": "an alien throne hall of organic curves and glowing pools",
+       "detail": "a glowing pool rippling at the foot of a throne",
+       "inside": "yes",
+       "kind": "hall",
+       "light": "a bioluminescent glow",
+       "outside": "an alien palace of curved spires grown like coral",
+       "sfx": "a deep resonant tone",
+       "world": "scifi"
+      },
+      "place": {
+       "value": "an alien throne hall of organic curves and glowing pools",
+       "detail": "a glowing pool rippling at the foot of a throne",
+       "inside": "yes",
+       "kind": "hall",
+       "light": "a bioluminescent glow",
+       "outside": "an alien palace of curved spires grown like coral",
+       "sfx": "a deep resonant tone",
+       "world": "scifi"
+      },
+      "world": "scifi"
+     }
+    },
+    {
+     "cell": 3,
+     "text": "A cinematic photograph, as from the set of a space opera: a close-up of a glowing pool rippling at the foot of a throne, lit by a bioluminescent glow. Shot on a 100mm macro lens with a shallow depth of field, true colours, practical sets and props.",
+     "picks": [
+      [
+       "{everyday|fantasy|cyberpunk|scifi|noir}",
+       "scifi",
+       [
+        "{everyday|fantasy|cyberpunk|scifi|noir}=scifi"
+       ]
+      ],
+      [
+       "$place ← __places/setting[world=$world]__",
+       "an alien throne hall of organic curves and glowing pools",
+       [
+        "__places/setting__=an alien throne hall of organic curves and glowing pools"
+       ]
+      ],
+      [
+       "{photo|animated|anime|painted}",
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
+      ],
+      [
+       "{establishing|wide|medium|detail}",
+       "detail",
+       [
+        "{establishing|wide|medium|detail}=detail"
+       ]
+      ]
+     ],
+     "exports": {
+      "where": {
+       "value": "an alien throne hall of organic curves and glowing pools",
+       "detail": "a glowing pool rippling at the foot of a throne",
+       "inside": "yes",
+       "kind": "hall",
+       "light": "a bioluminescent glow",
+       "outside": "an alien palace of curved spires grown like coral",
+       "sfx": "a deep resonant tone",
+       "world": "scifi"
+      },
+      "place": {
+       "value": "an alien throne hall of organic curves and glowing pools",
+       "detail": "a glowing pool rippling at the foot of a throne",
+       "inside": "yes",
+       "kind": "hall",
+       "light": "a bioluminescent glow",
+       "outside": "an alien palace of curved spires grown like coral",
+       "sfx": "a deep resonant tone",
+       "world": "scifi"
+      },
+      "world": "scifi"
+     }
+    }
+   ]
+  }
+ }
+}

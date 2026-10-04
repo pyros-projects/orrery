@@ -40,3 +40,19 @@ def test_every_sign_of_life_leaves_a_trace_and_every_sky_shows_up_close():
     assert all(e.prop("trace") for e in entries("life"))
     assert all(e.prop("near") and e.prop("sfx") for e in entries("weather"))
     assert all(e.prop("light") for e in entries("hour"))
+
+
+WORLDS = ("everyday", "fantasy", "cyberpunk", "scifi", "noir")
+KINDS = ("room", "hall", "shop", "street", "vehicle", "ruin")
+
+
+def test_every_world_has_thirty_settings_and_every_kind_of_them():
+    """#145: the setting creator rolls a place of its world; a kind added to the filter never leaves it empty."""
+    settings = entries("setting")
+    assert len({e.value for e in settings}) == len(settings)
+    for world in WORLDS:
+        mine = [e for e in settings if e.prop("world") == world]
+        assert len(mine) >= 30, world
+        assert {e.prop("kind") for e in mine} == set(KINDS), world
+    assert all(e.prop("inside") in ("yes", "no") for e in settings)
+    assert all(e.prop("outside") and e.prop("detail") and e.prop("light") and e.prop("sfx") for e in settings)
