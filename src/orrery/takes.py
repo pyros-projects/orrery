@@ -26,7 +26,8 @@ def request(kind: str, what: str, context: str, n: int = 3, steer: str = "", hav
                      "frame, with the same people and place, and move the story on instead of retelling it.")
     if pictures:
         parts.append(f"The {'images after them' if frames else 'images'} are "
-                     + ", ".join(f"Picture {i}" for i in range(1, len(pictures) + 1)) + ", in that order. Look at them closely.")
+                     + ", ".join(f"Picture {i}" for i in range(1, len(pictures) + 1))
+                     + ", in that order. Look at them closely, and write what they show: never name them (Picture 1) in a take.")
     if kind == "picture":
         parts.append(context.strip())
         parts.append(f"Write {n} different takes for {MARK}, each following its directions exactly: {as_pictures(what, list(pictures))}")

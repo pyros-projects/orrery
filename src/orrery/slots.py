@@ -121,7 +121,8 @@ def request(wanted: list[Need], directions: list[str], context: str, frames: int
     if pictures:
         parts.append(f"The {'images after them' if frames else 'images'} are "
                      + ", ".join(f"Picture {i}" for i in range(1, len(pictures) + 1))
-                     + ", in that order: the parts to write name them so. Look at them closely.")
+                     + ", in that order: the parts to write name them so. Look at them closely, and write what they show: "
+                     "never name them (Picture 1) in what you write.")
     if wanted:
         parts.append("Wildcard lists to write:\n" + "\n".join(library_lines(wanted)) + f"\n{LIST_RULES}")
     replies = ["each list name (without underscores) to a JSON array of its entries"] if wanted else []

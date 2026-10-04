@@ -966,6 +966,7 @@ def test_a_gallery_picture_writes_its_slots_from_image_output(home, fake_api, tm
     content = fake_api.requests[-1]["messages"][0]["content"]
     assert body["takes"][0] == "tall, grey coat, a lantern" and content[0]["type"] == "image_url"
     assert "a full character sheet, as Picture 1 shows them" in content[-1]["text"] and "A character sheet of a ferryman." in content[-1]["text"]
+    assert "never name them (Picture 1)" in content[-1]["text"]  # a kept take that says "as Picture 1" means nothing later
     row = ok(home, webapi.galaxy_write, id=rid, what=what, text="weathered hands, a pole")["row"]
     assert row["exports"]["sheet"] == "weathered hands, a pole" and row["exports"]["who"] == "a ferryman"
     assert api(home, webapi.galaxy_takes, id=rid, what=what)[0] == 400  # written: no slot left

@@ -84,4 +84,5 @@ def test_a_slot_names_pictures_and_the_model_reads_them_as_picture_n():
     asked = request([], directions[:1], "A fox in --the outfit in image first_frame, one phrase--.", frames=2, pictures=["first_frame"])
     assert "The first 2 images are frames" in asked and "The images after them are Picture 1, in that order" in asked
     assert '"slot 1": the outfit in Picture 1, one phrase' in asked
+    assert "never name them (Picture 1) in what you write" in asked
     assert fill_exports({"sheet": "--a sheet from image output--", "who": "--a name--"}, {}) == {"sheet": "--a sheet from image output--", "who": "a name"}
