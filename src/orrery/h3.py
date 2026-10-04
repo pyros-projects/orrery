@@ -317,7 +317,8 @@ def _set_line(scene: Scene, text: str, lint: list[Issue]) -> None:
                                   "SET: emma_canon(0.3); it is left out."))
         return
     for target, args, kind in items:
-        values = [v.strip() for v in args.split(",")]
+        # a sweep's field (#227) not run by Roll (the Test tab, ComfyUI's own Run) takes its first value
+        values = [knobs.options(v)[0].strip() if knobs.sweeps(v) else v.strip() for v in args.split(",")]
         words = [v for v in values if v[:1].isalpha()]  # `refmods`, `image 1`: which of a member's references
         numbers = [v for v in values if not v[:1].isalpha()]
         try:

@@ -9,6 +9,9 @@ checks) are left out.
 
 ### Added
 
+- One way to turn the model's knobs: LoRAs, RefMods, pictures and members take (strength, start, end), in `SET:` or
+  their own long form (`<lora:…>`, `<refmod:…>`, `<image:N:…>`, `<cast:NAME:…>`); a LoRA comes on at its start and
+  goes off at its end, and every field sweeps with `|` or a range (#227).
 - The Orrery Prompt puts its `LORA:` lines on the model that passes through it, a clip's own and the head's, a
   sweep's run included: no LoRA stack node needed. Wired, `lora_stack` leaves them to its loader (#208).
 - A reference needs no CAST: `<Image N>` in the text, as H3's own prompts write it, hands the picture to H3 as
@@ -61,6 +64,8 @@ checks) are left out.
 
 ### Changed
 
+- A sweep's values are separated by `|` (`<lora:x:0.5|1.0>`), since commas separate a knob's fields now; the
+  comma lists of before still sweep as they did, and the log suggests `|` (#227).
 - The `lora_stack` output is gone, since a LoRA stack needed a third-party node: the LoRAs go on the model through
   the node. A workflow saved with it loses it when it opens, and its other outputs keep their links (#208).
 - A reel keeps its clips in a folder named after it, `output/reels/<preset>` or `reels/untitled/<date time>`, which

@@ -69,7 +69,8 @@ def lora_stack(text: str, files: list[str]) -> tuple[Stack, list[str]]:
         by_name.setdefault(PurePosixPath(_key(f)).name, []).append(f)
     stack, warnings = [], []
     for m in tags:
-        name, (model, *when) = m.group(1).strip(), [f.strip() for f in m.group(2).split(",")]  # strength, start, end (#227)
+        name, (model, *when) = m.group(1).strip(), [knobs.options(f)[0].strip() if knobs.sweeps(f) else f.strip()
+                                                     for f in m.group(2).split(",")]  # strength, start, end (#227): a sweep's first
         try:
             strengths = float(model), float((m.group(3) or model).strip())
             start, end = (knobs.share(when[0]) if when else None) or 0.0, (knobs.share(when[1]) if len(when) > 1 else None)

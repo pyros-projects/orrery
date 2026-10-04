@@ -62,17 +62,24 @@ field (type another to play it next) with **Hold** beside it, which plays the
 same clip on every run, for takes. **Restart** cancels this node's queued and
 running clips and generates from clip 1; other jobs in the queue stay.
 
-**LoRA sweeps.** A LoRA tag with several strengths, in a text prompt or on a
-`LORA:` line, makes Roll run once per strength:
+**Sweeps.** A LoRA tag with several strengths, in a text prompt or on a
+`LORA:` line, makes Roll run once per strength, and so does any knob's field
+(#227: a LoRA, a RefMod, a reference image, a member; see [h3.md](h3.md#1e-refmods-refmod-name-set-jinx05-35)):
+`|` separates the values, commas the fields (strength, start, end):
 
 ```
-<lora:relim_v2_lora_500:0.5,0.6,0.7>                      3 runs
+<lora:relim_v2_lora_500:0.5|0.6|0.7>                      3 runs
 <lora:relim_v2_lora_500:0-1;0.1>                          0, 0.1 … 1: 11 runs
-<lora:style_x:0.5,1.0:1.0>                                the model strength swept, CLIP fixed
-<lora:a:0.5,1.0><lora:b:0.5,1.0>                          they combine: 2 × 2 = 4 runs
-<lora:a:0.5,1.0:solo><lora:b:0.5,1.0:solo>                they take turns: 2 + 2 = 4 runs
+<lora:style_x:0.5|1.0:1.0>                                the model strength swept, CLIP fixed
+<lora:a:0.5|1.0><lora:b:0.5|1.0>                          they combine: 2 × 2 = 4 runs
+<lora:a:0.5|1.0:solo><lora:b:0.5|1.0:solo>                they take turns: 2 + 2 = 4 runs
 <lora:H3-Icy-real-v1_000004200:test>                      the macro: 1.0,0.7,0.5:solo
+<lora:turbo:0.8, 0%|20%|40%>                              its start swept: 3 runs
+SET: image_1(0.3|0.6|1), jinx_refmod(1, 0%, 10%|30%)      a picture and a RefMod: 3 × 2 = 6 runs
 ```
+
+The comma lists of before (`<lora:a:0.5,1.0>`, `@style(0.5,0.7)`) still sweep
+as they did, and the log suggests `|`.
 
 Swept LoRAs combine, the first in the text changing slowest; `solo` ones take
 turns with the other solo LoRAs off, and combined ones run with every turn.
@@ -86,7 +93,7 @@ While the runs are being queued, the editor waits (each queue item reads the
 template) and **Stop** ends the queueing. Every output records the swept
 strengths as picks (`<lora:a>` = 0.5, or off) and lands in a gallery folder
 `sweeps/<first swept LoRA> <date> <time>`. ComfyUI's own Run takes the first
-run. `@style(0.5,0.7)` is short for the tag and sweeps the same; a range without
+run. `@style(0.5|0.7)` is short for the tag and sweeps the same; a range without
 a step, `<lora:style:0.4-0.9>`, rolls a strength per run instead. A library
 of LoRA sets (`LORA: __my_lora_sets__`, entries such as `<lora:ink:0.8>
 <lora:grain:0.4>`) rolls a set per run; `@grid __my_lora_sets__` runs each set

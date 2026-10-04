@@ -20,9 +20,9 @@ uv run orrery compile @h3/winter_forest --seed 7
 ```
 
 Built-in presets are read-only (`preset save NAME @NAME` makes a copy yours):
-`tutorial/` walks through the DSL in nineteen lessons, from a first wildcard
+`tutorial/` walks through the DSL in twenty lessons, from a first wildcard
 to a three-shot H3 scene, an endless reel, the language model's lists,
-slots and `>` rewrites and a reference named in the text without a CAST, `krea/` holds Krea 2 stills (natural language, the medium named, text
+slots and `>` rewrites, a reference named in the text without a CAST and the model's knobs, `krea/` holds Krea 2 stills (natural language, the medium named, text
 to render in quotes; the cabinet of curiosities deals a different specimen to every seed with
 `@unique` and shoots each in three lights with `@grid`; the character creator rolls an original
 character from parts the way designers build one (a silhouette, a signature colour carried through
