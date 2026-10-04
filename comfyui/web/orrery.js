@@ -203,6 +203,8 @@ function mount(node) {
     setTake: (take) => { if (find("take") && Number(find("take").value) !== take) set("take", take); },
     // The frames wired into the node: they shape width and height (the server reads their size when it runs).
     frames: () => ["first_frame", "last_frame"].filter((name) => node.inputs?.find((i) => i.name === name)?.link != null),
+    // the live preview comes from the sampler of the model that passes through this node (#302)
+    modelWired: () => node.inputs?.find((i) => i.name === "model")?.link != null,
     wired: (name) => node.inputs?.find((i) => i.name === name)?.link != null,
     // The files behind the frames, for the Write menu over an API (#167): { names: {first_frame: "a.png"} }, and
     // other: true when a frame comes from anything but a Load Image (a run computes it, so the queue writes).

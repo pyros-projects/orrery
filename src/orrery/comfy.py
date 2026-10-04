@@ -736,6 +736,9 @@ def log_outputs(home: Home, picks_json: str, media: list[str]) -> list[dict]:
         **({"rng": data["rng"]} if data.get("rng") else {}),
         **({"format": data["format"]} if data.get("format") else {}),
         **({"segment": data["segment"], "chunks": data["chunks"]} if data.get("chunks") else {}),
+        # the reel and the scene a clip belongs to: the Gallery's albums (#298)
+        **({"chain": data["chain"]} if data.get("chunks") and data.get("chain") else {}),
+        **({"chunk": data["chunk"]} if data.get("chunks") and isinstance(data.get("chunk"), int) else {}),
         **({"folder": folder} if (folder := _galaxy_folder(data.get("folder"))) else {}),
         "rating": None,
     } for m in (media or [None])]

@@ -14,6 +14,13 @@ async function ensure(app) {
   try { app.data.libraries = (await app.api.libraries()).libraries; } catch (e) { app.data.libraries ??= []; app.fail(e); }
 }
 
+// The libraries folder read again (#301): on opening the tab and with its reload button; the open library too.
+export function reloadLibraries(app) {
+  app.data.libStale = true;
+  app.refreshCompletion().catch(() => {});
+  if (app.state.tab === "libraries") renderLibraries(app);
+}
+
 async function loadFull(app, name) {
   app.data.libFull ??= {};
   if (app.data.libFull[name]) return app.data.libFull[name];
@@ -128,7 +135,7 @@ export async function renderLibraries(app) {
   const { rows, total } = entryPage(L.entries, { name: L.name, query: s.libSearch, tag: s.libTag, shown: s.libShown });
   const width = Number(app.bridge.props.libWidth) || 0;
   app.view.innerHTML = `<div class="libs"${width ? ` style="--libw:${width}px"` : ""}>
-    <div class="liblist"><div class="libgrip" role="separator" aria-orientation="vertical" aria-label="Library list width" tabindex="0" title="Drag to resize (or ← →)"></div><label class="search">${icon("search")}<input class="input" id="oa-ls" placeholder="Library or entry…" value="${esc(s.libSearch)}"></label>
+    <div class="liblist"><div class="libgrip" role="separator" aria-orientation="vertical" aria-label="Library list width" tabindex="0" title="Drag to resize (or ← →)"></div><div class="row nowrap libfind"><label class="search">${icon("search")}<input class="input" id="oa-ls" placeholder="Library or entry…" value="${esc(s.libSearch)}"></label><button class="icon-btn" data-lact="reload" title="Read the libraries again">${icon("reload")}</button></div>
       <div class="scroll"><ul>${listHTML(app, libs, L.name)}</ul></div>
       <div class="addrow">${s.libNew !== null ? '<input class="input mono" id="oa-newlib" placeholder="name or folder/name, e.g. film/genre">' : `<button class="btn wide" data-lact="new">${icon("plus")}New library</button>`}</div></div>
     <div class="libmain">
@@ -142,7 +149,6 @@ export async function renderLibraries(app) {
       ${rows.map(({ e, i }) => rowHTML(e, i, ro, (L.pending_entries || []).includes(e.value), L.source === "gallery" ? app.api.thumbURL : null)).join("") || '<tr><td colspan="4" class="empty">No entries yet. Add some below.</td></tr>'}
       </tbody></table>${total > rows.length ? `<div class="addrow"><button class="btn ghost wide" data-lact="more">Show ${Math.min(LIB_PAGE, total - rows.length)} more of ${total - rows.length}</button></div>` : ""}</div>
       ${ro ? "" : `<div class="addrow"><input class="input" id="oa-add" placeholder="Add entries: one per line or comma-separated, then ↵"><button class="btn" data-lact="add">${icon("plus")}Add</button></div>`}
-      <div class="ask">${icon("spark")}<span>Ask the LLM, e.g. “remove all cats and make them a new list feline”: coming in stage 5. It runs in the ComfyUI queue and shows a diff before anything changes.</span></div>
     </div></div>`;
   app.view.querySelectorAll(".entries textarea").forEach(fit);
   wire(app, L);
@@ -238,6 +244,7 @@ function wire(app, L) {
       return commit(app, L, entries);
     }
     const act = e.target.closest("[data-lact]")?.dataset.lact;
+    if (act === "reload") return reloadLibraries(app);
     if (act === "own") {
       try {
         setFull(app, await app.api.ownLibrary(L.name));

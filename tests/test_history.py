@@ -22,6 +22,15 @@ def test_every_run_is_kept_newest_first(home):
     assert newest["ts"] and newest["id"] != got["runs"][1]["id"]
 
 
+def test_a_run_keeps_what_its_enhance_lines_did(home):
+    """#279: History shows the instruction, the passage before the rewrite, and how the rewrite came about."""
+    h, enhanced = Home(home), [{"instruction": "make it moody", "before": "a fox in a field", "after": "a fox in fog", "kept": True}]
+    history.record(h, run(1, text="a fox in fog", enhanced=enhanced))
+    history.record(h, run(2))
+    runs = history.read(h)["runs"]
+    assert runs[1]["enhanced"] == enhanced and "enhanced" not in runs[0]
+
+
 def test_search_finds_the_prompt_its_picks_and_its_preset(home):
     h = Home(home)
     history.record(h, run(1, text="a heron at dawn"))

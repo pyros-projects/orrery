@@ -65,7 +65,8 @@ Nodes under **orrery**:
   the reel's first: the node keeps it at 24 fps beside the clips, a head
   `REMEMBER:` keeps its frames, and a scene with `AFTER: the input video`
   continues it ([h3.md](h3.md) 1d, *The input video*). The node is the whole of orrery, in seven tabs and its settings (⤢ opens the
-  same app over the canvas, Esc brings it back):
+  same app over the canvas, Esc brings it back). Opening a tab reads what it shows
+  again, and Presets, Libraries, Gallery and History have a ⟳ that does it any time (#301):
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `__creature#` properties and their
     values, `$` bindings, the CAST after `@` (`@KEEPER`; at a line's start also
@@ -126,13 +127,23 @@ Nodes under **orrery**:
     node's seed, drawn clip by clip, how long, what plays before and after it
     (and its lines that steer), what it rolls, and the clips it made.
     **Jump** beside *Next clip* puts the caret on the scene of the next clip.
+    Under the prompt and the dials, the whole width, sits the **preview** (#305); the grip
+    above it sizes it, and the node keeps its height. While a run samples it shows the
+    live preview, then what is shown: the clip or the take clicked under a reel's scene,
+    playing with its controls, or a template's result. A click only shows: the take that
+    counts, the one in the film or a single run's output, has the golden border, and the
+    preview's **Put in the film** or **Use this take** chooses another (only choosing gives
+    the node a take's seed). For a reel's clip in the film, **Pick frames** steps through it
+    frame by frame (← →, M marks a frame) and **Write REMEMBER:** puts the frames marked
+    into its scene as `REMEMBER: frames 12, 40 as …` (#223).
     A template without scenes (a Krea prompt, an `@h3` scene) has its
-    **results under the prompt** (#211; the text takes the free height, the results sit at the bottom, #271): the live preview
+    **results** in the preview (#211, #305): the live preview
     while it samples (the model wired through the Orrery Prompt; an image
-    model's tiny VAE or Latent2RGB, sized by its own latent format), then what
-    the run made, a picture, a clip or its sound, as its Save or Preview nodes
-    wrote it. Every run becomes a **take**, lined up under the result: a click
-    shows it (and a take that rolled anew gives the node its seed). Beside the
+    model's tiny VAE or Latent2RGB, sized by its own latent format; with the model
+    input unconnected the empty result says how to wire it), then what
+    the run made, a picture, a clip or its sound, as its Save, Preview or Orrery Log
+    nodes wrote it (#302). Every run becomes a **take**, lined up under the result like a
+    photo viewer: a click shows it, a fresh run's take is the output. Beside the
     takes, **+** adds takes, **×N** says how many a Generate makes and **📌**
     keeps the rolled prompt so only the sampler's noise changes, as in a
     reel's scenes; the gear's *Sample surfing* numbers their seeds or follows
@@ -142,15 +153,15 @@ Nodes under **orrery**:
     per SCENE, each followed by that scene's clips as Orrery Film (or H3
     Motion Context's Chain Video) keeps them, big: a clip's shorter side is
     the **Clip size** in the gear (360 px unless set otherwise), as far as the
-    editor is wide. Hover plays one, a click opens it; small dashed boxes are
+    editor is wide. Hover plays one, a click shows it in the preview; small dashed boxes are
     clips not rendered yet. A scene's divider has its buttons: +
     **Add takes** of its clip (its first, or one more) and stay on the scene,
     ⏭ go to the **next scene** (Next clip becomes its first clip), and ⏩ go
     there **and add takes** of its clip (the box of the clip rendering shows it
     as it forms: see Orrery Prompt's `model` below). **Sample surfing**: ×1 beside
     + turns to ×2, ×4, ×8, and + renders that many **takes** of the
-    clip. They line up under it; hover plays one, a click puts it in the film
-    (the next clip and `REMEMBER:` then use it too), and the clips last made
+    clip. They line up under it; hover plays one, a click shows it in the preview, whose
+    **Put in the film** puts it in the film (the next clip and `REMEMBER:` then use it too), and the clips last made
     after it come back with it: no path is lost (#213). 📌 in a scene keeps its
     rolled prompt, so the takes change only the sampler's noise (the Orrery
     Prompt's `seed` output carries seed + take into the noise, as in the
@@ -209,8 +220,13 @@ Nodes under **orrery**:
     forever loop). **Frequencies** rolls it 50, 200 or 500 times, across seeds
     or across a reel's clips, and shows how often every value comes up, plus
     how often each lint warning fires.
-  - **Presets**: every preset with your newest output as its preview; search,
-    folders, favorites, recents, a sample roll and the template per preset.
+  - **Presets**: every preset with your newest output as its preview. On the
+    left (#307) **All presets**, **All image presets**, **All video presets**,
+    the favorites and the recent ones, then the collections (the folders,
+    `mine` the presets at the top), each with its `image` and `video`. Above
+    the cards the filters (#308): a name (title, tag or note), a kind (still,
+    scene, reel), how recently it changed, and a regex over the template text.
+    A card opens a sample roll and the template.
   - **Libraries**: edit wildcard lists by hand: entries, their tags and
     properties (on a line under each entry), weights, and the weight each
     entry learned from your ratings. Libraries that share a name prefix sit in
@@ -226,10 +242,23 @@ Nodes under **orrery**:
     and sets the seed to fixed; the next run rolls them with today's libraries
     and learned weights (#259). An output whose template EXPORTed data shows it as a sheet
     under its prompt (**JSON** copies it). A slot there still to be written from the picture
-    (`image output`, #175) has a 🎲: takes written from the picture, **Use selected** keeps one. Folders on the left sort outputs without moving their files:
-    drag cards onto a folder (a selected card brings the whole selection),
-    drag a folder onto another to nest it, double-click to rename. Removing
-    a folder moves what is in it up a level. Select with the checkbox,
+    (`image output`, #175) has a 🎲: takes written from the picture, **Use selected** keeps one.
+    On the left (#290): **All outputs**, **All images**, **All videos**, then the
+    days, newest first, each with its `images` and `videos`, then the
+    collections. What belongs together is one card, an album with up to eight
+    of its pictures: a sweep's or a grid's runs, a reel's clips, and inside a
+    reel each scene's takes, named by its `SCENE` line; a click opens it, the
+    bar above leads back. A filter (This prompt, a rating, a pick) shows the
+    outputs themselves. Collections hold outputs without moving them, one
+    output in as many as you like (folders from before are collections now):
+    drag cards or albums onto one (a selected card brings the whole
+    selection), drag a collection onto another to nest it (onto the
+    *Collections* heading: to the top), double-click to rename; **Out of the
+    collection** takes a selection out again. Removing a collection deletes
+    nothing: its outputs stay in the gallery, the collections in it move up a
+    level. The filters (#308) find outputs by their preset's name or title, a
+    kind (images, videos, a reel's clips, a sweep's runs), how recently they were
+    made and a regex over the prompt. Select with the checkbox,
     Shift-click for a range, Ctrl/Cmd-click for one more; then **Export
     pairs** copies each picture or video into `~/.orrery/export/<name>/`
     with a `.txt` of the prompt that made it (training pairs), and
@@ -240,7 +269,9 @@ Nodes under **orrery**:
   - **History**: every run of the node as it resolved, newest first: the
     seed, the segment, the dials, every pick and the prompt, kept even when
     the output was not (the last 2000 runs, in `prompt_history.jsonl` in the
-    orrery home). Search by prompt, pick, preset or seed; **Use template +
+    orrery home). A run a `>` line rewrote says so, and opened shows the instruction, the
+    passage before the rewrite and whether it was kept with **Use selected** or written for
+    the run (#279). Search by prompt, pick, preset or seed; **Use template +
     seed** puts the run back in the Prompt tab (segment included, control
     after generate fixed), so a lucky roll can be rolled again: with today's
     libraries, learned weights and included presets, so a library edited or an
@@ -249,11 +280,19 @@ Nodes under **orrery**:
     2026-10-02 comes back with `@rng 1` on top: the dice it was made with). Each run is
     also printed to ComfyUI's console (seed, picks, prompt); the gear turns
     that off.
-  - **Help**: the DSL at a glance, the tutorial lessons, writing tips.
+  - **Help**: in pages (#309), a nav on the left as the Settings have: a start
+    with the tutorial lessons, the language section by section (each line with
+    an Insert), writing for the models, the keys in the editor and the
+    settings.
   - **Settings** (the gear, #212; again, and the tab before is back): its
     sections on the left, *Home*, *Language model*, *Writers*, *Editor*,
-    *Clips* (clip size, live preview, sample surfing) and *Log*, the one
-    chosen on the right, and the tab opens on the one shown last. A setting
+    *Clips* (clip size, live preview, sample surfing), *Log* and *Reset*, the one
+    chosen on the right, and the tab opens on the one shown last. *Reset* (#310)
+    takes back the ratings (and the learned weights), deletes the history or the
+    gallery, puts the presets or the libraries back to factory, or everything at
+    once; each asks first. What you made by hand (presets, libraries, exports)
+    goes to the home's `trash`, and the gallery's pictures and videos only when
+    its box is ticked (they stay in ComfyUI's output otherwise). A setting
     is saved the moment it changes and says so beside the section's title.
     What moves things or asks the outside has a button of its own: **Use
     this folder** for the home folder, **Use this endpoint** for an API

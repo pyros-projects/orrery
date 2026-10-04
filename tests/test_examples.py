@@ -47,3 +47,12 @@ def test_every_orrery_node_in_an_example_saves_its_widget_values_in_order(path):
         assert len(values) == len(kinds), f"{path.name}: {node['type']} {node['id']} saves {len(values)} values for {len(kinds)} widgets"
         wrong = [(i, k, v) for i, (k, v) in enumerate(zip(kinds, values, strict=True)) if not fits(k, v)]
         assert not wrong, f"{path.name}: {node['type']} {node['id']}: {wrong}"
+
+
+def test_the_krea_example_runs_the_model_through_the_orrery_prompt():
+    """#302: the live preview hangs on the sampler of the model that passes through the node (as KJNodes' preview)."""
+    w = json.loads((Path(__file__).parent.parent / "example_workflows" / "orrery_krea2_t2i.json").read_text(encoding="utf-8"))
+    types = {n["id"]: n["type"] for n in w["nodes"]}
+    model = [(types[a], types[b]) for _, a, _, b, _, kind in w["links"] if kind == "MODEL"]
+    assert ("OrreryPrompt", "KSampler") in model and ("ModelAttentionBackend", "OrreryPrompt") in model
+    assert ("ModelAttentionBackend", "KSampler") not in model

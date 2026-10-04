@@ -8,6 +8,7 @@ UI can show. The contract lives in docs/plan-node-app.md.
 import asyncio
 import hashlib
 import re
+import time
 import traceback
 from collections import Counter
 from pathlib import Path
@@ -149,10 +150,37 @@ def _card(home: Home, name: str, outputs: dict, with_text: bool = False) -> dict
         "hash": digest,
         "outputs": len(ids),
         "thumb": ids[0] if ids else None,
+        **_kind(text),
+        "modified": time.strftime("%Y-%m-%d", time.localtime(ps.preset_file(home, name).stat().st_mtime)),
     }
     if with_text:
         card["text"] = text
     return card
+
+
+def _kind(text: str) -> dict:
+    """What a preset makes (#307): a video (an @h3 screenplay: a scene, or a reel with SCENE lines) or an image (a still)."""
+    body = strip_comments(text).lstrip()
+    if not body.startswith("@h3"):
+        return {"kind": "image", "sub": "still"}
+    try:
+        reel = split_reel(body)
+    except ValueError:
+        reel = None
+    return {"kind": "video", "sub": "reel" if reel else "scene"}
+
+
+def presets_grep(home: Home, args: dict) -> dict:
+    """The presets whose template text matches `pattern` (#308): a regex, case-insensitive; one that is no regex is
+    plain text."""
+    pattern = str(args.get("pattern") or "")
+    if not pattern.strip():
+        return {"names": ps.list_presets(home)}
+    try:
+        rx = re.compile(pattern, re.IGNORECASE)
+    except re.error:
+        rx = re.compile(re.escape(pattern), re.IGNORECASE)
+    return {"names": [n for n in ps.list_presets(home) if rx.search(ps.load_preset(home, n))]}
 
 
 def _full(home: Home, name: str) -> dict:
@@ -449,7 +477,7 @@ def _row_json(row: dict, by_hash: dict[str, str], known: set[str]) -> dict:
         "picks": row.get("picks") or [], "rating": row.get("rating"), "params": row.get("params") or {},
         "exports": row.get("exports") or {},
         "media_name": Path(media).name if media else None, "kind": row["kind"],
-        "preset": _owner(row, by_hash, known), "folder": row.get("folder") or "",
+        "preset": _owner(row, by_hash, known), "collections": gx.collections_of(row), "album": gx.album_of(row) or "",
     }
 
 
@@ -465,26 +493,84 @@ def _gx(fn, *args):
         raise ApiError(404, err.args[0]) from None
 
 
-def _folder_list(home: Home, rows: list[dict] | None = None) -> dict:
-    rows = gx.read_rows(home) if rows is None else rows
-    return {"folders": gx.folders(home, rows), "total": len(rows),
-            "unsorted": sum(1 for r in rows if not r.get("folder"))}
-
-
 def galaxy(home: Home, args: dict) -> dict:
-    """Outputs, newest first; `folder` shows one folder's own outputs ('' the unsorted ones)."""
+    """Outputs, newest first, of a template or a preset when asked (the Presets tab's pictures)."""
     limit, wanted, owner = _int(args, "limit", 200), args.get("template") or None, args.get("preset") or None
     if limit < 1:
         raise ApiError(400, "'limit' must be at least 1.")
-    folder = None if args.get("folder") is None else _gx(gx.clean_folder, args["folder"])
     by_hash, known, weights = _preset_by_hash(home), set(ps.list_presets(home)), home.weights()
-    every = gx.read_rows(home)
-    rows = [r for r in every if (wanted is None or r.get("template") == wanted)
-            and (owner is None or _owner(r, by_hash, known) == owner)
-            and (folder is None or (r.get("folder") or "") == folder)][:limit]
+    rows = [r for r in gx.read_rows(home) if (wanted is None or r.get("template") == wanted)
+            and (owner is None or _owner(r, by_hash, known) == owner)][:limit]
     keys = sorted({k for r in rows for p in r.get("picks") or [] for k in p.get("keys") or []})
-    return {"rows": [_row_json(r, by_hash, known) for r in rows],
-            "weights": {k: weights.get(k, 1.0) for k in keys}, **_folder_list(home, every)}
+    return {"rows": [_row_json(r, by_hash, known) for r in rows], "weights": {k: weights.get(k, 1.0) for k in keys}}
+
+
+_VIEWS = {"all": None, "images": "image", "videos": "video"}
+
+
+def _scene_title(home: Home, row: dict, seen: dict) -> str:
+    """A reel scene's title from its SCENE line, as its template has it; else `scene N`."""
+    digest, chunk = row.get("template"), row["chunk"]
+    if digest not in seen:
+        text = ps.recall_template(home, digest) if digest else None
+        try:
+            reel = split_reel(text) if text else None
+        except ValueError:
+            reel = None
+        seen[digest] = [b.title for b in reel.blocks] if reel else []
+    titles = seen[digest]
+    return (titles[chunk] if 0 <= chunk < len(titles) else "") or f"scene {chunk + 1}"
+
+
+def galaxy_view(home: Home, args: dict) -> dict:
+    """The Gallery (#290): what one place in its tree shows, as cards, newest first. A place is a view (all, images,
+    videos), of one day or of every day; a collection; or an album (a sweep, a reel, a scene). Outputs that belong
+    together come as one album's card; `flat` (a filter on) and a collection show the outputs themselves. `tz`: the
+    viewer's time zone, minutes east of UTC, for the days. With the tree: the days, the collections, and each
+    template's count of outputs."""
+    view, day, album = args.get("view") or "all", str(args.get("day") or ""), str(args.get("album") or "") or None
+    if view not in _VIEWS:
+        raise ApiError(400, "'view' is all, images or videos.")
+    if day and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", day):
+        raise ApiError(400, "'day' is a date: YYYY-MM-DD.")
+    if album and not album.startswith(("sweep:", "reel:", "scene:")):
+        raise ApiError(400, "'album' is a sweep:, reel: or scene: key.")
+    collection = _gx(gx.clean_folder, args.get("collection")) if args.get("collection") else None
+    limit, tz = _int(args, "limit", 400), max(-840, min(840, _int(args, "tz", 0)))
+    if limit < 1:
+        raise ApiError(400, "'limit' must be at least 1.")
+    every = gx.read_rows(home)
+    rows = every
+    if album:
+        rows = [r for r in rows if gx.in_album(r, album)]
+    else:
+        if collection:
+            rows = [r for r in rows if collection in gx.collections_of(r)]
+        if day:
+            rows = [r for r in rows if gx.day_of(r.get("ts"), tz) == day]
+        if _VIEWS[view]:
+            rows = [r for r in rows if r["kind"] == _VIEWS[view]]
+    flat = str(args.get("flat") or "").lower() in ("1", "true") or collection
+    shown = ([{"kind": "row", "id": r["id"], "ts": r.get("ts") or ""} for r in rows] if flat else gx.cards(rows, album))[:limit]
+    by_id, by_hash, known, weights = {r["id"]: r for r in rows}, _preset_by_hash(home), set(ps.list_presets(home)), home.weights()
+    titles: dict = {}
+    for card in shown:
+        if card["kind"] != "album":
+            continue
+        first = by_id[card["ids"][0]]
+        card["preset"] = _owner(first, by_hash, known)
+        if card["type"] == "sweep":
+            card["title"] = gx.sweep_of(first)[len(gx.SWEEPS):]
+        elif card["type"] == "reel":
+            card["title"] = first.get("chain") or ""
+        else:
+            card["title"], card["chunk"] = _scene_title(home, first, titles), first["chunk"]
+    listed = [by_id[c["id"]] for c in shown if c["kind"] == "row"]
+    keys = sorted({k for r in listed for p in r.get("picks") or [] for k in p.get("keys") or []})
+    return {"cards": shown, "rows": [_row_json(r, by_hash, known) for r in listed], "count": len(rows),
+            "weights": {k: weights.get(k, 1.0) for k in keys},
+            "tree": {**gx.tree(every, tz), "collections": gx.collections(home, every),
+                     "templates": dict(Counter(r["template"] for r in every if r.get("template")))}}
 
 
 def _ids(args: dict) -> list[str]:
@@ -494,33 +580,34 @@ def _ids(args: dict) -> list[str]:
     return ids
 
 
-def galaxy_move(home: Home, args: dict) -> dict:
-    return {"moved": _gx(gx.move, home, _ids(args), args.get("folder") or ""), **_folder_list(home)}
-
-
 def galaxy_delete(home: Home, args: dict) -> dict:
     """Outputs leave the galaxy; their files go to the home's trash."""
-    return {"deleted": _gx(gx.delete, home, _ids(args)), **_folder_list(home)}
+    return {"deleted": _gx(gx.delete, home, _ids(args))}
 
 
 def galaxy_export(home: Home, args: dict) -> dict:
-    """Picture or video + prompt .txt pairs in export/<name>/, for training other models."""
     return _gx(gx.export, home, _ids(args), args.get("name"))
 
 
-def galaxy_folder_add(home: Home, args: dict) -> dict:
-    _gx(gx.add_folder, home, args.get("path"))
-    return _folder_list(home)
+def galaxy_collect(home: Home, args: dict) -> dict:
+    """Outputs into a collection as well (#299): they keep their day, their album and their other collections."""
+    return {"collected": _gx(gx.collect, home, _ids(args), args.get("path")), "collections": gx.collections(home)}
 
 
-def galaxy_folder_rename(home: Home, args: dict) -> dict:
-    _gx(gx.rename_folder, home, args.get("path"), args.get("to"))
-    return _folder_list(home)
+def galaxy_uncollect(home: Home, args: dict) -> dict:
+    return {"removed": _gx(gx.uncollect, home, _ids(args), args.get("path")), "collections": gx.collections(home)}
 
 
-def galaxy_folder_delete(home: Home, args: dict) -> dict:
-    _gx(gx.delete_folder, home, args.get("path"))
-    return _folder_list(home)
+def galaxy_collection_add(home: Home, args: dict) -> dict:
+    return {"path": _gx(gx.add_collection, home, args.get("path")), "collections": gx.collections(home)}
+
+
+def galaxy_collection_rename(home: Home, args: dict) -> dict:
+    return {"path": _gx(gx.rename_collection, home, args.get("path"), args.get("to")), "collections": gx.collections(home)}
+
+
+def galaxy_collection_delete(home: Home, args: dict) -> dict:
+    return {"path": _gx(gx.delete_collection, home, args.get("path")), "collections": gx.collections(home)}
 
 
 def _output_dir() -> Path:
@@ -1054,6 +1141,19 @@ def frequency(home: Home, args: dict) -> dict:
     }
 
 
+# --- resets ---------------------------------------------------------------------------------
+
+def reset(home: Home, args: dict) -> dict:
+    """A reset from the Settings (#310): ratings, history, gallery, presets, libraries or all; `files` takes the
+    logged pictures and videos to the trash too (gallery, all)."""
+    from orrery import resets
+
+    what, files = str(args.get("what") or ""), args.get("files") is True
+    if what not in resets.WHAT:
+        raise ApiError(400, f"'what' is one of {', '.join(resets.WHAT)}.")
+    return {"what": what, "done": resets.reset(home, what, files)}
+
+
 # --- home folder ----------------------------------------------------------------------------
 
 def home_settings(home: Home, args: dict) -> dict:
@@ -1418,12 +1518,16 @@ ROUTES = [
     ("GET", "/orrery/history", history_runs),
     ("GET", "/orrery/writers", writer_texts),
     ("POST", "/orrery/writers", writer_save),
-    ("POST", "/orrery/galaxy/move", galaxy_move),
+    ("GET", "/orrery/galaxy/view", galaxy_view),
+    ("GET", "/orrery/presets/grep", presets_grep),
+    ("POST", "/orrery/reset", reset),
     ("POST", "/orrery/galaxy/delete", galaxy_delete),
     ("POST", "/orrery/galaxy/export", galaxy_export),
-    ("POST", "/orrery/galaxy/folder/add", galaxy_folder_add),
-    ("POST", "/orrery/galaxy/folder/rename", galaxy_folder_rename),
-    ("POST", "/orrery/galaxy/folder/delete", galaxy_folder_delete),
+    ("POST", "/orrery/galaxy/collect", galaxy_collect),
+    ("POST", "/orrery/galaxy/uncollect", galaxy_uncollect),
+    ("POST", "/orrery/galaxy/collection/add", galaxy_collection_add),
+    ("POST", "/orrery/galaxy/collection/rename", galaxy_collection_rename),
+    ("POST", "/orrery/galaxy/collection/delete", galaxy_collection_delete),
     ("POST", "/orrery/roll", roll),
     ("POST", "/orrery/plan", generate_plan),
     ("POST", "/orrery/reel", reel_walk),

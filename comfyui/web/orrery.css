@@ -125,6 +125,14 @@
 .orrery-app .pchip .caret { margin-left: auto; color: var(--faint); display: inline-flex; }
 .orrery-app .pnote { margin: 0 12px 8px; color: var(--muted); font-size: 12.5px; line-height: 1.5; max-width: 80ch; }
 .orrery-app .pnote b { color: var(--ink); font-weight: 500; }
+.orrery-app .pnote.pfold { cursor: pointer; }
+.orrery-app .henh { display: grid; gap: 4px; }
+.orrery-app .reset-row { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; padding: 10px 0; border-top: 1px solid var(--line); }
+.orrery-app .reset-row > div { display: grid; gap: 4px; min-width: 0; }
+.orrery-app .reset-row .btn { flex: none; }
+.orrery-app .henh .codebox.before { opacity: .75; max-height: 160px; overflow: auto; }
+.orrery-app .pnote.pfold:not(.open) { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: none; }
+.orrery-app .pnote.pfold:hover { color: var(--ink); }
 .orrery-app .edrow { display: flex; gap: 2px; margin: 0 12px; flex: 1 1 auto; min-height: 210px; }
 .orrery-app .editor { position: relative; border: 1px solid var(--line); border-radius: 8px; background: var(--well); flex: 1 1 auto; min-width: 0; }
 .orrery-app .editor pre, .orrery-app .editor textarea { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 10px 12px; font: 12.5px/1.65 var(--mono); letter-spacing: 0;
@@ -186,7 +194,9 @@
 .orrery-app .take video { z-index: 1; }
 .orrery-app .take .n { position: absolute; left: 3px; bottom: 2px; z-index: 2; font: 500 9.5px/1 var(--mono); color: #fff; text-shadow: 0 0 3px #000; }
 .orrery-app .take:hover { border-color: var(--muted); }
-.orrery-app .take.on { border: 2px solid var(--brass); cursor: default; }
+/* the take that counts (the film's, a single run's output) is golden; the one only shown, outlined (#305) */
+.orrery-app .take.on { border: 2px solid var(--brass); box-shadow: 0 0 0 1px var(--brass), 0 0 14px rgba(226,180,92,.55); }
+.orrery-app .take.shown { outline: 2px solid var(--ink); outline-offset: 2px; }
 .orrery-app .cm-takes .grip { align-self: flex-end; width: 12px; height: 12px; cursor: nwse-resize; touch-action: none; opacity: .7;
   background: linear-gradient(135deg, transparent 45%, var(--faint) 45% 55%, transparent 55% 70%, var(--faint) 70% 80%, transparent 80%); }
 .orrery-app .cm-takes .grip:hover { opacity: 1; }
@@ -489,6 +499,8 @@
 .orrery-app .libgrip { position: absolute; top: 0; right: -4px; width: 8px; height: 100%; cursor: col-resize; z-index: 2; touch-action: none; }
 .orrery-app .libgrip:hover, .orrery-app .libgrip:focus-visible { background: linear-gradient(90deg, transparent 3px, var(--brass) 3px, var(--brass) 5px, transparent 5px); outline: none; }
 .orrery-app .liblist .search { margin: 10px; flex: none; }
+.orrery-app .liblist .libfind { margin: 10px; flex: none; }
+.orrery-app .liblist .libfind .search { margin: 0; flex: 1; }
 .orrery-app .liblist ul { list-style: none; margin: 0; padding: 0 6px; }
 .orrery-app .liblist li button { width: 100%; border-radius: 7px; padding: 6px 8px; display: flex; align-items: center; gap: 6px; text-align: left; }
 .orrery-app .liblist li button:hover { background: var(--hover); }
@@ -524,8 +536,6 @@
 .orrery-app .learn.up { color: var(--teal); }
 .orrery-app .learn.dn { color: var(--nope); }
 .orrery-app .addrow { display: flex; gap: 6px; padding: 10px 12px; border-top: 1px solid var(--line); flex: none; }
-.orrery-app .ask { margin: 0 12px 12px; display: flex; gap: 8px; align-items: center; border: 1px dashed #3d3f58; border-radius: 8px; padding: 7px 10px; color: var(--faint); font-size: 12px; flex: none; }
-.orrery-app .ask .i { color: var(--violet); }
 .orrery-app .libpics { display: inline-flex; gap: 4px; margin-right: 4px; }
 .orrery-app .libpics img { width: 44px; height: 56px; object-fit: cover; border-radius: 4px; background: #14151b; }
 .orrery-app .tagadd:focus { width: 18ch; }
@@ -589,7 +599,20 @@
 .orrery-app .gtree > .scroll { flex: 1; min-height: 0; padding: 8px 0; }
 .orrery-app .gtree ul { list-style: none; margin: 0; padding: 0 6px; }
 .orrery-app .gtree ul ul { padding: 0; }
-.orrery-app .gtree .gfolders { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--line); }
+.orrery-app .gtree .gfolders { padding-bottom: 6px; }
+.orrery-app .gtree .glabel { margin: 10px 6px 2px; padding: 6px 6px 2px; border-top: 1px solid var(--line); font: 10.5px var(--ui); text-transform: uppercase; letter-spacing: .08em; color: var(--faint); border-radius: 7px; }
+.orrery-app .gtree .glabel.dropping { background: var(--brass-soft); color: var(--ink); }
+.orrery-app .gcard.album { cursor: pointer; }
+.orrery-app .gcard.album .agrid { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); grid-auto-rows: minmax(0, 1fr); gap: 2px;
+  aspect-ratio: 4 / 5; background: #0e0f14; }
+.orrery-app .gcard.album .agrid img { aspect-ratio: auto; width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+.orrery-app .gcard.album .gfoot span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.orrery-app .gcard.album .gfoot span:last-child { flex: 0 1 auto; max-width: 55%; }
+.orrery-app .gcard.album .aempty { grid-column: 1 / -1; display: grid; place-items: center; color: var(--faint); }
+.orrery-app .gcard.album .abadge { position: absolute; top: 6px; left: 6px; display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 999px; background: rgba(14,15,20,.82); font: 11px var(--mono); color: var(--ink); }
+.orrery-app .gcard.album .abadge .i { width: 12px; height: 12px; }
+.orrery-app .bar.crumbs { gap: 4px; flex-wrap: wrap; }
+.orrery-app .bar.crumbs b { font-weight: 600; }
 .orrery-app .gtree .addrow { padding: 8px; }
 .orrery-app .gf { display: flex; align-items: center; gap: 5px; padding: 4px 6px; border-radius: 7px; border: 1px dashed transparent; cursor: pointer; color: var(--muted); user-select: none; }
 .orrery-app .gf:hover { background: var(--hover); color: var(--ink); }
@@ -635,6 +658,8 @@
 .orrery-app.big .help { grid-template-columns: 1fr 1fr; align-items: start; }
 .orrery-app .help section { display: grid; gap: 8px; }
 .orrery-app .help h5 { margin: 0; }
+.orrery-app .help-pages .help { grid-template-columns: minmax(0, 1fr); max-width: 110ch; padding: 0; }
+.orrery-app .help-pages .help > p { line-height: 1.6; }
 .orrery-app .lessons { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 6px; }
 .orrery-app .lesson { display: flex; gap: 8px; align-items: baseline; text-align: left; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; }
 .orrery-app .lesson:hover { border-color: var(--brass); }
@@ -759,6 +784,10 @@
 .orrery-parked .i { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; }
 .orrery-app .input.narrow { width: 90px; }
 .orrery-app select.input { appearance: auto; }
+/* the filters (#308): the two text fields share the row, the choices as wide as they need */
+.orrery-app .gfilters, .orrery-app .pfilters { flex-wrap: nowrap; }
+.orrery-app .gfilters .search, .orrery-app .pfilters .search { flex: 1 1 0; min-width: 120px; }
+.orrery-app .gfilters select.input, .orrery-app .pfilters select.input { width: auto; flex: none; }
 .orrery-app .liblist .grp { padding: 10px 10px 4px; font: 600 10.5px var(--ui); letter-spacing: .06em; text-transform: uppercase; color: var(--faint); display: flex; gap: 6px; align-items: center; }
 .orrery-app .liblist .grp.review { color: var(--violet); }
 .orrery-app .liblist .fold-btn { display: flex; align-items: center; gap: 6px; width: 100%; padding: 0; color: inherit; font: inherit; letter-spacing: inherit; text-transform: inherit; background: none; border: 0; }
@@ -789,3 +818,38 @@
 .orrery-app .ideas .empty { padding: 22px 12px; }
 .orrery-app .ideas .icon-btn { font-size: 18px; line-height: 1; }
 .orrery-app .btn small.sweep { font-weight: 400; opacity: .75; margin-left: 2px; }
+
+/* The preview (#305): under the prompt and the dials, the whole width; the grip above it sizes it. */
+.orrery-app .stage-grip { flex: none; height: 10px; margin: 0 12px; cursor: ns-resize; position: relative; touch-action: none; }
+.orrery-app .stage-grip::after { content: ""; position: absolute; left: 50%; top: 4px; width: 44px; height: 3px; margin-left: -22px; border-radius: 2px; background: var(--line); }
+.orrery-app .stage-grip:hover::after { background: var(--brass); }
+.orrery-app .stage { flex: none; height: var(--stage-h, 320px); min-height: 140px; margin: 0 12px; display: flex; flex-direction: column;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--well); overflow: hidden; }
+.orrery-app .stage .st-body { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+/* the picture's place, between the head and the takes: what is shown fits it, and so does the live preview */
+.orrery-app .stage .st-live { position: absolute; inset: 0; z-index: 2; display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center;
+  padding: 6px; background: var(--well); }
+.orrery-app .stage .st-live-pic { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; }
+.orrery-app .stage .st-head { display: flex; align-items: center; gap: 8px; padding: 6px 10px 2px; flex: none; font-size: 12px; }
+.orrery-app .stage .st-chosen { display: inline-flex; align-items: center; gap: 4px; color: var(--brass); font-size: 12px; }
+.orrery-app .stage .st-chosen .i { width: 13px; height: 13px; }
+.orrery-app .stage .st-media { flex: 1; min-height: 0; display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; padding: 6px; position: relative; }
+.orrery-app .stage .st-media > img, .orrery-app .stage .st-media > video { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; border: 2px solid transparent; }
+.orrery-app .stage .st-media.chosen > img, .orrery-app .stage .st-media.chosen > video { border-color: var(--brass); box-shadow: 0 0 18px rgba(226,180,92,.4); }
+.orrery-app .stage .st-empty { margin: auto; padding: 16px; text-align: center; max-width: 64ch; }
+.orrery-app .stage .cm-takes.results { flex: none; margin: 0 6px 6px; }
+.orrery-app .stage .cm-takes.results .cm-takes-list { flex-wrap: nowrap; overflow-x: auto; padding: 4px 2px; scrollbar-width: thin; }
+.orrery-app .stage .cm-takes.results .take { flex: none; }
+/* in the preview the takes' head lies flat above them, one row: the picture keeps the height */
+.orrery-app .stage .cm-takes.results { flex-direction: column; gap: 2px; margin-top: 2px; }
+.orrery-app .stage .cm-takes.results .cm-takes-head { position: static; flex-direction: row; align-items: center; align-self: stretch; flex-wrap: wrap;
+  justify-content: flex-start; gap: 4px 14px; width: auto; min-height: 0; margin: 0; padding: 0 2px; border: 0; }
+.orrery-app .stage .cm-takes.results .th-low { margin-left: auto; }
+.orrery-app .stage .cm-takes.results .th-mid { display: flex; align-items: baseline; gap: 10px; }
+.orrery-app .stage .cm-takes.results .th-clip { font-size: 12px; }
+.orrery-app .stage .cm-takes.results .th-stats { display: flex; gap: 10px; margin-top: 0; }
+.orrery-app .stage .cm-takes.results .th-stats > span { gap: 4px; }
+.orrery-app .stage .st-picker { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 6px 10px; flex: none; border-top: 1px solid var(--line); }
+.orrery-app .stage .st-frame { min-width: 64px; text-align: center; font-size: 12px; }
+.orrery-app .stage .st-marks { display: flex; flex-wrap: wrap; gap: 4px; }
+.orrery-app .stage .st-as { width: 230px; }

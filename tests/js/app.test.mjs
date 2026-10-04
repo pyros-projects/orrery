@@ -610,6 +610,17 @@ test("the dial menu's filter reads a choice's text, properties and tags, as a re
   assert.equal(matchedBy("a corset gown", rx, info), null);
 });
 
+test("a tick in a dial's menu keeps the list where it was, the choice ticked where it was on screen (#300)", async () => {
+  const { keptScroll } = await import("../../comfyui/web/app/dialmenu.js");
+  // scrolled 400 down, the ticked choice 520 into the list: 120 below the box's top edge
+  assert.equal(keptScroll({ top: 400, anchor: 520 }, 520), 400);  // nothing moved: the same place
+  assert.equal(keptScroll({ top: 400, anchor: 520 }, 546), 426);  // the "2 chosen" note came in above: down with it
+  assert.equal(keptScroll({ top: 400, anchor: 546 }, 520), 374);  // and went again
+  assert.equal(keptScroll({ top: 400, anchor: null }, 520), 400);  // All or None: no choice to follow, the old position
+  assert.equal(keptScroll({ top: 400, anchor: 520 }, null), 400);  // the choice left the list
+  assert.equal(keptScroll({ top: 10, anchor: 40 }, 0), 0);  // never above the top
+});
+
 test("annotations sit at the ends of the lines they belong to (#163)", async () => {
   const { annotationLines, mergeHints } = await import("../../comfyui/web/app/annotate.js");
   const text = ["$colour = __colours__", "$backdrop = a grey wall", "EXPORT:", "  mood = __moods__", "  $who", "EXPORT: $a, $b",
@@ -825,9 +836,9 @@ test("a template without scenes shows its results under the prompt, its takes ke
   const R = await import("../../comfyui/web/app/results.js");
   const props = {};
   let seed = 10;
-  const app = { preset: "krea/fox", props, state: {}, data: {}, bridge: { props, getSeed: () => seed, getControl: () => "fixed" },
+  const app = { preset: "krea/fox", props, state: {}, data: {}, bridge: { props, getSeed: () => seed, setSeed: (s) => { seed = s; }, getControl: () => "fixed" },
     api: { viewURL: (m) => `/view?filename=${m.filename}&type=${m.type}` } };
-  assert.equal(R.resultsHTML(app, "").includes("comes in here"), true);  // none yet: where they will come
+  assert.equal(R.resultsHTML(app, "").includes("data-result"), false);  // no takes yet: the strip's head only
   R.resultBegins(app, { prompt_id: "p1", seed: 10, take: 0 });
   assert.equal(R.resultMedia(app, { prompt_id: "other", output: { images: [{ filename: "x.png", type: "output" }] } }), false);
   assert.equal(R.resultMedia(app, { prompt_id: "p1", output: { images: [{ filename: "fox_0001.png", subfolder: "", type: "output" }] } }), true);
@@ -837,11 +848,19 @@ test("a template without scenes shows its results under the prompt, its takes ke
   assert.deepEqual(R.resultsOf(app).map((t) => [t.prompt, t.seed, t.media.map((m) => m.kind)]), [["p1", 10, ["image"]], ["p2", 11, ["video", "image"]]]);
   assert.equal(R.shownResult(app).prompt, "p2");  // the newest is shown
   const html = R.resultsHTML(app, "--take-w:96px");
-  assert.match(html, /class="tl-clip big result" data-seg="-1"[^>]*><video[^>]*src="\/view\?filename=fox\.mp4&amp;type=output#t=0\.05"/);  // a saved file first
+  assert.match(html, /class="take on shown" data-result="p2"[^>]*><video[^>]*src="\/view\?filename=fox\.mp4&amp;type=output#t=0\.05"/);  // a saved file first; the newest shown and the output
   assert.match(html, /data-result="p1"[^>]*>.*<img loading="lazy" alt="" src="\/view\?filename=fox_0001\.png/);
   assert.match(html, /<i>takes<\/i><b>2<\/b>.*<i>shown<\/i><b>#2<\/b>.*<i>seed<\/i><b>11<\/b>/);
   assert.deepEqual(R.resultSeeds(app, 2, false), [2, 3]);  // numbered on from the takes there are: seeds 12, 13
   assert.deepEqual(R.resultSeeds(app, 2, true), [1, 2]);  // with 📌 take numbers
+  props.orrery_shown = { "krea/fox": "p1" };  // a click shows a take: the output and the node's seed stay (#305)
+  assert.equal(R.shownResult(app).prompt, "p1");
+  assert.equal(R.chosenResult(app).prompt, "p2");
+  assert.match(R.resultsHTML(app, ""), /class="take shown" data-result="p1".*class="take on" data-result="p2"/);
+  seed = 99;
+  R.chooseResult(app, R.shownResult(app));  // Use this take: the output now, and a take that rolled anew gives its seed
+  assert.equal(R.chosenResult(app).prompt, "p1");
+  assert.equal(seed, 10);
   app.preset = "krea/owl";
   assert.deepEqual(R.resultsOf(app), []);  // another preset, its own takes
   R.resultBegins(app, { prompt_id: "p3", seed: 12, take: 0 });
@@ -851,7 +870,7 @@ test("a template without scenes shows its results under the prompt, its takes ke
 
 test("the settings are a tab of sections, and every setting of the old sheet is in one (#212)", async () => {
   const { SECTIONS, SECTION_HTML } = await import("../../comfyui/web/app/settings.js");
-  assert.deepEqual(SECTIONS.map(([k]) => k), ["home", "llm", "writers", "editor", "clips", "log"]);
+  assert.deepEqual(SECTIONS.map(([k]) => k), ["home", "llm", "writers", "editor", "clips", "log", "reset"]);
   const app = { data: { quickstart: true, dividers: false, timeline: true, log_prompts: true, clip_min: 400, preview_fps: 8, preview_edge: 768, preview_light: false, surf_numbered: true } };
   const st = {
     home: { home: "/h", setting: "/h", source: "setting" },
@@ -975,4 +994,146 @@ test("a gallery picture's export keeps its slots from image output apart, for a 
   assert.deepEqual(pictureSlots("--a caption of image output--"), [{ slot: "a caption of image output" }]);
   assert.deepEqual(pictureSlots("a coat, --as image 2 shows it--"), [{ text: "a coat, --as image 2 shows it--" }]);  // written in the run
   assert.deepEqual(pictureSlots(""), []);
+});
+
+test("the presets and the libraries are read again on request (#301): an open preset's detail with them", async () => {
+  const { reloadPresets } = await import("../../comfyui/web/app/presets.js");
+  const { reloadLibraries } = await import("../../comfyui/web/app/libraries.js");
+  const calls = [];
+  const app = { state: { tab: "prompt", pOpen: "mine/gone" }, data: {}, refreshPresets: async () => calls.push("presets"),
+    refreshCompletion: async () => calls.push("completion"), card: () => null, render: () => calls.push("render"), fail: (e) => { throw e; } };
+  await reloadPresets(app);
+  assert.deepEqual(calls, ["presets"]);  // read again; another tab is not drawn
+  assert.equal(app.state.pOpen, null);  // the preset open in the detail is gone from the home: the detail closes
+  app.state.tab = "presets";
+  await reloadPresets(app);
+  assert.deepEqual(calls, ["presets", "presets", "render"]);
+  app.state.tab = "prompt";
+  reloadLibraries(app);
+  assert.equal(app.data.libStale, true);  // the folder is read when the tab draws, the open library with it
+  assert.equal(calls.at(-1), "completion");
+});
+
+test("the results take what an output node of the run wrote, Orrery Log's pictures too; only without it the app logs them (#302)", async () => {
+  const { capturedMedia } = await import("../../comfyui/web/app/results.js");
+  const done = (node, output) => ({ node, prompt_id: "p1", output });
+  const pic = { images: [{ filename: "orrery_00001_.png", subfolder: "", type: "output" }] };
+  assert.deepEqual(capturedMedia(done("9", pic), { outputs: [9], log: true }), { media: pic.images, log: false });  // Orrery Log
+  assert.deepEqual(capturedMedia(done("9", pic), { outputs: [9], log: false }), { media: pic.images, log: true });  // a Save node
+  assert.equal(capturedMedia(done("7", pic), { outputs: [9], log: false }), null);  // a node this one does not feed
+  assert.equal(capturedMedia(done("9", { text: ["hi"] }), { outputs: [9], log: false }), null);  // nothing written
+  assert.equal(capturedMedia({ node: "9", output: pic }, { outputs: [9], log: false }), null);  // no prompt to file it under
+});
+
+test("a popup's list scrolls to the marked item, and only the list (#303)", async () => {
+  const { reveal } = await import("../../comfyui/web/app/dialmenu.js");
+  const list = { scrollTop: 0, clientHeight: 100, offsetTop: 0 };
+  const item = (top) => ({ offsetTop: top, offsetHeight: 20, offsetParent: list });
+  reveal(list, item(40));
+  assert.equal(list.scrollTop, 0);  // already in view: nothing moves
+  reveal(list, item(150));
+  assert.equal(list.scrollTop, 70);  // below: its bottom edge at the list's
+  reveal(list, item(10));
+  assert.equal(list.scrollTop, 10);  // above: its top edge at the list's
+  const inner = { scrollTop: 0, clientHeight: 100, offsetTop: 3 };  // a list inside the popup, both measured from the popup
+  reveal(inner, { offsetTop: 133, offsetHeight: 20, offsetParent: {} });
+  assert.equal(inner.scrollTop, 50);
+  reveal(null, item(10));  // no list, no item: nothing to do
+  reveal(list, null);
+});
+
+test("History says what a > line did to a run: the instruction, how it came about, the passage before (#279)", async () => {
+  const { enhancedHTML } = await import("../../comfyui/web/app/history.js");
+  assert.equal(enhancedHTML(undefined), "");
+  const html = enhancedHTML([{ instruction: "make it <moody>", before: "a fox", after: "a fox in fog", kept: true },
+    { instruction: "shorter", before: "b", after: "c" }]);
+  assert.match(html, /&gt; make it &lt;moody&gt;<\/b> · a rewrite you kept \(Use selected\)/);
+  assert.match(html, /<pre class="codebox before">a fox<\/pre>/);
+  assert.match(html, /shorter<\/b> · written for this run/);
+});
+
+test("the Settings offer every reset the server knows, the gallery and everything with the files as a choice (#310)", async () => {
+  const { RESETS, SECTIONS } = await import("../../comfyui/web/app/settings.js");
+  assert.deepEqual(RESETS.map(([k]) => k), ["ratings", "history", "gallery", "presets", "libraries", "all"]);  // resets.WHAT
+  assert.deepEqual(RESETS.filter((r) => r[3]).map(([k]) => k), ["gallery", "all"]);
+  assert.ok(SECTIONS.some(([k]) => k === "reset"));
+});
+
+test("the preview shows the clip or take clicked, else the newest clip; the film's take counts (#305)", async () => {
+  const { reelShown } = await import("../../comfyui/web/app/stage.js");
+  const takes = [{ folder: "seg_0002_aaaaaaaa", active: false, seed: 1 }, { folder: "seg_0002_bbbbbbbb", active: true, seed: 2 }];
+  const app = { state: {}, data: { chain: { clips: [{ segment: 0, version: "x" }, { segment: 2, version: "seg_0002_bbbbbbbb" }], takes: { 2: takes } } } };
+  assert.deepEqual([reelShown(app).seg, reelShown(app).take.folder, reelShown(app).film], [2, "seg_0002_bbbbbbbb", true]);  // the newest, its film take
+  app.state.stage = { seg: 2, folder: "seg_0002_aaaaaaaa" };
+  assert.deepEqual([reelShown(app).take.seed, reelShown(app).film], [1, false]);  // a take only shown: not the film's
+  app.state.stage = { seg: 0 };
+  assert.deepEqual([reelShown(app).seg, reelShown(app).take], [0, null]);
+  app.state.stage = { seg: 7 };  // a clip gone: the newest again
+  assert.equal(reelShown(app).seg, 2);
+  assert.equal(reelShown({ state: {}, data: {} }), null);
+});
+
+test("frames picked in the preview become a REMEMBER: line at the end of their scene (#223)", async () => {
+  const { rememberLine, withRemember } = await import("../../comfyui/web/app/stage.js");
+  assert.equal(rememberLine([50, 12, 50], " @GIRL "), "REMEMBER: frames 12, 50 as @GIRL");
+  assert.equal(rememberLine([7], "image 3"), "REMEMBER: frame 7 as image 3");
+  const text = "@h3 text\nSCENE one\nSHOT 5s: static\nA room.\n\nSCENE two\nSHOT 5s: static\nA hall.";
+  assert.equal(withRemember(text, 0, "REMEMBER: frame 7 as image 3"),
+    "@h3 text\nSCENE one\nSHOT 5s: static\nA room.\nREMEMBER: frame 7 as image 3\n\nSCENE two\nSHOT 5s: static\nA hall.");  // the blank line stays
+  assert.equal(withRemember(text, 1, "REMEMBER: frame 1 as @GIRL").split("\n").at(-1), "REMEMBER: frame 1 as @GIRL");
+});
+
+test("the Presets tree: every preset, images, videos, favorites, recent, and collections with their images and videos (#307)", async () => {
+  const { presetsAt, presetFolders } = await import("../../comfyui/web/app/model.js");
+  const cards = [
+    { name: "krea/fox", folder: "krea", kind: "image", sub: "still" }, { name: "h3/den", folder: "h3", kind: "video", sub: "scene" },
+    { name: "loops/walk", folder: "loops", kind: "video", sub: "reel" }, { name: "loops/deep/stair", folder: "loops/deep", kind: "video", sub: "reel" },
+    { name: "mine", folder: "", kind: "image", sub: "still" }];
+  const names = (place, more) => presetsAt(cards, { view: "all", folder: null, kind: null, ...place }, more).map((c) => c.name);
+  assert.deepEqual(names({ view: "image" }), ["krea/fox", "mine"]);
+  assert.deepEqual(names({ view: "video" }), ["h3/den", "loops/walk", "loops/deep/stair"]);
+  assert.deepEqual(names({ view: "fav" }, { favorites: new Set(["h3/den"]) }), ["h3/den"]);
+  assert.deepEqual(names({ view: "recent" }, { recent: ["mine", "krea/fox"] }), ["mine", "krea/fox"]);
+  assert.deepEqual(names({ folder: "loops" }), ["loops/walk", "loops/deep/stair"]);  // a collection holds the ones in it
+  assert.deepEqual(names({ folder: "mine", kind: "image" }), ["mine"]);
+  assert.deepEqual(presetFolders(cards), [{ path: "h3", count: 1, image: 0, video: 1 }, { path: "krea", count: 1, image: 1, video: 0 },
+    { path: "loops", count: 2, image: 0, video: 2 }, { path: "loops/deep", count: 1, image: 0, video: 1 }, { path: "mine", count: 1, image: 1, video: 0 }]);
+});
+
+test("Presets and the Gallery filter by name, kind, date and a regex over the prompt (#308)", async () => {
+  const { filterCards, filterRows } = await import("../../comfyui/web/app/model.js");
+  const today = new Date(2026, 9, 4, 12);
+  const cards = [{ name: "krea/fox", title: "Fox", tags: [], note: "", sub: "still", modified: "2026-10-04" },
+    { name: "h3/den", title: "The den", tags: ["moody"], note: "", sub: "scene", modified: "2026-09-20" }];
+  const names = (f) => filterCards(cards, { today, ...f }).map((c) => c.name);
+  assert.deepEqual(names({ name: "MOODY" }), ["h3/den"]);
+  assert.deepEqual(names({ sub: "still" }), ["krea/fox"]);
+  assert.deepEqual(names({ since: 1 }), ["krea/fox"]);
+  assert.deepEqual(names({ since: 30 }), ["krea/fox", "h3/den"]);
+  assert.deepEqual(names({ grep: new Set(["h3/den"]) }), ["h3/den"]);  // the names the server's regex matched
+  const rows = [{ id: "a", preset: "krea/fox", kind: "image", album: "", ts: "2026-10-04T08:00:00Z", text: "a fox in snow", picks: [] },
+    { id: "b", preset: "h3/den", kind: "video", album: "reel:reels/den", ts: "2026-09-01T08:00:00Z", text: "A den. Rain.", picks: [] }];
+  const ids = (f) => filterRows(rows, { today, title: (n) => ({ "krea/fox": "Fox" })[n], ...f }).map((r) => r.id);
+  assert.deepEqual(ids({ name: "fox" }), ["a"]);
+  assert.deepEqual(ids({ sub: "reel" }), ["b"]);
+  assert.deepEqual(ids({ sub: "image" }), ["a"]);
+  assert.deepEqual(ids({ since: 7 }), ["a"]);
+  assert.deepEqual(ids({ grep: "den\\.\\s+rain" }), ["b"]);
+  assert.deepEqual(ids({ grep: "fox (" }), []);  // no regex: plain text, which no prompt holds
+});
+
+test("Help is in pages: a start with the lessons, the language section by section, the models, the keys, the settings (#309)", async () => {
+  const { PAGES, renderHelp } = await import("../../comfyui/web/app/help.js");
+  assert.deepEqual(PAGES.map(([k]) => k), ["start", "wildcards", "bindings-and-extras", "h3-screenplays", "cast-and-references", "reels-orrery-continue",
+    "models", "keys", "settings"]);
+  let html = "";
+  const app = { state: {}, bridge: { props: {} }, known: () => new Set(), data: { presets: [{ name: "tutorial/01_first", title: "01 · A first wildcard" }] },
+    view: { set innerHTML(h) { html = h; }, get innerHTML() { return html; } } };
+  renderHelp(app);
+  assert.match(html, /data-hpage="start" aria-current="true"/);
+  assert.match(html, /data-load="tutorial\/01_first"/);  // the lessons on the start page
+  app.state.helpPage = "models";
+  renderHelp(app);
+  assert.match(html, /<h4>Writing for the models<\/h4>/);
+  assert.match(html, /Krea 2 faces/);
 });
