@@ -139,6 +139,7 @@ class Expansion:
     warnings: list[str] = field(default_factory=list)  # what rolled, but not as written (a sweep in an entry)
     exports: dict[str, object] = field(default_factory=dict)  # what EXPORT: rolled: text, {value, fields} or a list
     bound: dict[str, str] = field(default_factory=dict)  # each binding as it rolled (the editor's annotations)
+    loras: str = ""  # what the text's LORA: lines rolled: they go on the model, never into the prompt (#311)
 
 
 @dataclass
@@ -480,6 +481,7 @@ def _label(name: str, tag: str | None, props: str | None) -> str:
 
 # Where each library written in a template's text rolled what (#202), for the editor's annotations: while
 # `traced()` is open, every expander records it. It only records: no draw changes.
+_LORA_LINE = re.compile(r"^\s*LORA:\s*(.*)$")  # a text template's LORA: line (#311)
 _TRACE: ContextVar[list[dict] | None] = ContextVar("orrery_trace", default=None)
 
 
@@ -951,6 +953,9 @@ def expand(template: str, seed: int, libraries: Mapping[str, Library],
     for name, expr in parsed.bindings:
         ex.bind(name, expr)
     held = [line for raw in parsed.body if (line := ex.guarded(raw)) is not None]
+    # a LORA: line is the model's, as in a screenplay (#311): rolled on its own, its picks kept, out of the prompt
+    loras = " ".join(filter(None, (ex.expr(m.group(1)).strip() for line in held if (m := _LORA_LINE.match(line)))))
+    held = [line for line in held if not _LORA_LINE.match(line)]
     if ex._trace is not None:  # the text's lines, joined into one expression: the trace finds them in it (#202)
         ex._trace.append({"lines": held})
     text = ex.expr(" ".join(held))
@@ -958,7 +963,7 @@ def expand(template: str, seed: int, libraries: Mapping[str, Library],
         ex.picks.append(Pick("> enhance", parsed.enhance))
     exports = {name: ex.export(name, expr) for name, expr in parsed.exports}
     bound = {k: v for k, v in ex.vars.items() if not k.startswith("\x1e")}
-    return Expansion(seed, text, ex.picks, parsed.params, parsed.enhance, cell, ex.warnings, exports, bound)
+    return Expansion(seed, text, ex.picks, parsed.params, parsed.enhance, cell, ex.warnings, exports, bound, loras)
 
 
 def expand_batch(template: str, seed: int, count: int, libraries: Mapping[str, Library],

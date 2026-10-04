@@ -72,13 +72,15 @@ def _cmd_expand(args: argparse.Namespace) -> int:
         print(f"orrery: warning: {warning}", file=sys.stderr)
     if args.json:
         print(json.dumps([
-            {"seed": e.seed, **({} if e.cell is None else {"cell": e.cell}), "text": e.text,
+            {"seed": e.seed, **({} if e.cell is None else {"cell": e.cell}), "text": e.text, **({"loras": e.loras} if e.loras else {}),
              "picks": {p.label: p.value for p in e.picks}, **({"exports": e.exports} if e.exports else {})}
             for e in rows
         ], ensure_ascii=False, indent=2))
         return 0
     for e in rows:
         print(f"[{e.seed}{'' if e.cell is None else f' · grid {e.cell + 1}'}] {e.text}")
+        if e.loras:
+            print(f"     LORA: {e.loras}")
         if e.picks:
             print("     " + " · ".join(f"{p.label}: {p.value}" for p in e.picks))
     return 0

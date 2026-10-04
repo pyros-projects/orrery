@@ -155,6 +155,8 @@ checks) are left out.
 
 ### Fixed
 
+- A text template's `LORA:` line (a Krea prompt) goes on the model that passes through the Orrery Prompt, as in a
+  screenplay, instead of landing in the prompt (#311).
 - Roll runs a grid and a LoRA sweep again: the mini-runs' plan (#171) had taken the place of theirs in the app's
   API client, so Roll queued one run per seed instead of the grid's cells (#288).
 - A template without scenes takes the editor's free height with its text, and its results sit at the bottom, instead
