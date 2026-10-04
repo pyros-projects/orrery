@@ -8,19 +8,31 @@
      "picks": [
       [
        "{turtleneck|smock|suit}",
-       "smock"
+       "smock",
+       [
+        "{turtleneck|smock|suit}=smock"
+       ]
       ],
       [
        "__couture_quote__",
-       "We are post-shoulder now."
+       "We are post-shoulder now.",
+       [
+        "__couture_quote__=We are post-shoulder now."
+       ]
       ],
       [
        "__couture_material__",
-       "moss velvet"
+       "moss velvet",
+       [
+        "__couture_material__=moss velvet"
+       ]
       ],
       [
        "__couture_quote__",
-       "Beige is not a colour. It is a decision."
+       "Beige is not a colour. It is a decision.",
+       [
+        "__couture_quote__=Beige is not a colour. It is a decision."
+       ]
       ]
      ]
     }
@@ -33,19 +45,31 @@
      "picks": [
       [
        "{turtleneck|smock|suit}",
-       "smock"
+       "smock",
+       [
+        "{turtleneck|smock|suit}=smock"
+       ]
       ],
       [
        "__couture_quote__",
-       "This season, we asked what a sleeve owes the arm."
+       "This season, we asked what a sleeve owes the arm.",
+       [
+        "__couture_quote__=This season, we asked what a sleeve owes the arm."
+       ]
       ],
       [
        "__couture_material__",
-       "boiled wool"
+       "boiled wool",
+       [
+        "__couture_material__=boiled wool"
+       ]
       ],
       [
        "__couture_quote__",
-       "It is not a coat. It is a coat remembering a coat."
+       "It is not a coat. It is a coat remembering a coat.",
+       [
+        "__couture_quote__=It is not a coat. It is a coat remembering a coat."
+       ]
       ]
      ]
     }
@@ -58,19 +82,31 @@
      "picks": [
       [
        "{turtleneck|smock|suit}",
-       "suit"
+       "suit",
+       [
+        "{turtleneck|smock|suit}=suit"
+       ]
       ],
       [
        "__couture_quote__",
-       "The hem is where the garment admits it is afraid."
+       "The hem is where the garment admits it is afraid.",
+       [
+        "__couture_quote__=The hem is where the garment admits it is afraid."
+       ]
       ],
       [
        "__couture_material__",
-       "crushed silver lamé"
+       "crushed silver lamé",
+       [
+        "__couture_material__=crushed silver lamé"
+       ]
       ],
       [
        "__couture_quote__",
-       "Every button is a small betrayal."
+       "Every button is a small betrayal.",
+       [
+        "__couture_quote__=Every button is a small betrayal."
+       ]
       ]
      ]
     }

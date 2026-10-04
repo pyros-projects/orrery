@@ -8,19 +8,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a tiled changing room at a public swimming pool"
+       "a tiled changing room at a public swimming pool",
+       [
+        "__bh_room__=a tiled changing room at a public swimming pool"
+       ]
       ],
       [
        "{a tiny point in the skin at the centre of the sternum|the skin at the side of the neck|a small point in the skin just below one cheekbone}",
-       "a tiny point in the skin at the centre of the sternum"
+       "a tiny point in the skin at the centre of the sternum",
+       [
+        "{a tiny point in the skin at the centre of the sternum|the skin at the side of the neck|a small point in the skin just below one cheekbone}=a tiny point in the skin at the centre of the sternum"
+       ]
       ],
       [
        "{pale|ivory|silver-white}",
-       "ivory"
+       "ivory",
+       [
+        "{pale|ivory|silver-white}=ivory"
+       ]
       ]
      ]
     }
@@ -33,19 +45,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the young man"
+       "the young man",
+       [
+        "__bh_host__=the young man"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a dim apartment sitting room"
+       "a dim apartment sitting room",
+       [
+        "__bh_room__=a dim apartment sitting room"
+       ]
       ],
       [
        "{a tiny point in the skin at the centre of the sternum|the skin at the side of the neck|a small point in the skin just below one cheekbone}",
-       "the skin at the side of the neck"
+       "the skin at the side of the neck",
+       [
+        "{a tiny point in the skin at the centre of the sternum|the skin at the side of the neck|a small point in the skin just below one cheekbone}=the skin at the side of the neck"
+       ]
       ],
       [
        "{pale|ivory|silver-white}",
-       "silver-white"
+       "silver-white",
+       [
+        "{pale|ivory|silver-white}=silver-white"
+       ]
       ]
      ]
     }
@@ -58,19 +82,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a narrow hotel corridor"
+       "a narrow hotel corridor",
+       [
+        "__bh_room__=a narrow hotel corridor"
+       ]
       ],
       [
        "{a tiny point in the skin at the centre of the sternum|the skin at the side of the neck|a small point in the skin just below one cheekbone}",
-       "a tiny point in the skin at the centre of the sternum"
+       "a tiny point in the skin at the centre of the sternum",
+       [
+        "{a tiny point in the skin at the centre of the sternum|the skin at the side of the neck|a small point in the skin just below one cheekbone}=a tiny point in the skin at the centre of the sternum"
+       ]
       ],
       [
        "{pale|ivory|silver-white}",
-       "ivory"
+       "ivory",
+       [
+        "{pale|ivory|silver-white}=ivory"
+       ]
       ]
      ]
     }

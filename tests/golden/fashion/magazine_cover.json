@@ -8,23 +8,38 @@
      "picks": [
       [
        "$adjective ← __couture_adjective__",
-       "hauntological"
+       "hauntological",
+       [
+        "__couture_adjective__=hauntological"
+       ]
       ],
       [
        "{VOID|OBJET|ÉPOQUE|SILHOUETTE|NOTHING}",
-       "SILHOUETTE"
+       "SILHOUETTE",
+       [
+        "{VOID|OBJET|ÉPOQUE|SILHOUETTE|NOTHING}=SILHOUETTE"
+       ]
       ],
       [
        "__couture_model__",
-       "a gaunt model with a shaved head"
+       "a gaunt model with a shaved head",
+       [
+        "__couture_model__=a gaunt model with a shaved head"
+       ]
       ],
       [
        "__couture_form__",
-       "sleeves that forget where the arm ends"
+       "sleeves that forget where the arm ends",
+       [
+        "__couture_form__=sleeves that forget where the arm ends"
+       ]
       ],
       [
        "__couture_material__",
-       "moss velvet"
+       "moss velvet",
+       [
+        "__couture_material__=moss velvet"
+       ]
       ]
      ]
     }
@@ -37,23 +52,38 @@
      "picks": [
       [
        "$adjective ← __couture_adjective__",
-       "neo-ecclesiastical"
+       "neo-ecclesiastical",
+       [
+        "__couture_adjective__=neo-ecclesiastical"
+       ]
       ],
       [
        "{VOID|OBJET|ÉPOQUE|SILHOUETTE|NOTHING}",
-       "ÉPOQUE"
+       "ÉPOQUE",
+       [
+        "{VOID|OBJET|ÉPOQUE|SILHOUETTE|NOTHING}=ÉPOQUE"
+       ]
       ],
       [
        "__couture_model__",
-       "a stern silver-haired model"
+       "a stern silver-haired model",
+       [
+        "__couture_model__=a stern silver-haired model"
+       ]
       ],
       [
        "__couture_form__",
-       "lapels that fold back into themselves"
+       "lapels that fold back into themselves",
+       [
+        "__couture_form__=lapels that fold back into themselves"
+       ]
       ],
       [
        "__couture_material__",
-       "boiled wool"
+       "boiled wool",
+       [
+        "__couture_material__=boiled wool"
+       ]
       ]
      ]
     }
@@ -66,23 +96,38 @@
      "picks": [
       [
        "$adjective ← __couture_adjective__",
-       "radically tailored"
+       "radically tailored",
+       [
+        "__couture_adjective__=radically tailored"
+       ]
       ],
       [
        "{VOID|OBJET|ÉPOQUE|SILHOUETTE|NOTHING}",
-       "VOID"
+       "VOID",
+       [
+        "{VOID|OBJET|ÉPOQUE|SILHOUETTE|NOTHING}=VOID"
+       ]
       ],
       [
        "__couture_model__",
-       "a pale model with bleached eyelashes and no brows"
+       "a pale model with bleached eyelashes and no brows",
+       [
+        "__couture_model__=a pale model with bleached eyelashes and no brows"
+       ]
       ],
       [
        "__couture_form__",
-       "pockets placed exactly where regret lives"
+       "pockets placed exactly where regret lives",
+       [
+        "__couture_form__=pockets placed exactly where regret lives"
+       ]
       ],
       [
        "__couture_material__",
-       "crushed silver lamé"
+       "crushed silver lamé",
+       [
+        "__couture_material__=crushed silver lamé"
+       ]
       ]
      ]
     }

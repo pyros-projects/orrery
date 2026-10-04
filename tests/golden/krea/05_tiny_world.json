@@ -8,27 +8,45 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "red panda"
+       "red panda",
+       [
+        "__creature__=red panda"
+       ]
       ],
       [
        "{cardboard and balsa wood|clay and real moss|plastic toy bricks|folded paper}",
-       "cardboard and balsa wood"
+       "cardboard and balsa wood",
+       [
+        "{cardboard and balsa wood|clay and real moss|plastic toy bricks|folded paper}=cardboard and balsa wood"
+       ]
       ],
       [
        "{waiting in line|taking photos|fleeing in panic}",
-       "taking photos"
+       "taking photos",
+       [
+        "{waiting in line|taking photos|fleeing in panic}=taking photos"
+       ]
       ],
       [
        "{as tall as the tallest building|peeking in from the edge of the table|asleep across the middle of it}",
-       "as tall as the tallest building"
+       "as tall as the tallest building",
+       [
+        "{as tall as the tallest building|peeking in from the edge of the table|asleep across the middle of it}=as tall as the tallest building"
+       ]
       ],
       [
        "__place__",
-       "a laundromat at 3 a.m."
+       "a laundromat at 3 a.m.",
+       [
+        "__place__=a laundromat at 3 a.m."
+       ]
       ],
       [
        "__light__",
-       "aurora light"
+       "aurora light",
+       [
+        "__light__=aurora light"
+       ]
       ]
      ]
     }
@@ -41,27 +59,45 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "axolotl"
+       "axolotl",
+       [
+        "__creature__=axolotl"
+       ]
       ],
       [
        "{cardboard and balsa wood|clay and real moss|plastic toy bricks|folded paper}",
-       "plastic toy bricks"
+       "plastic toy bricks",
+       [
+        "{cardboard and balsa wood|clay and real moss|plastic toy bricks|folded paper}=plastic toy bricks"
+       ]
       ],
       [
        "{waiting in line|taking photos|fleeing in panic}",
-       "waiting in line"
+       "waiting in line",
+       [
+        "{waiting in line|taking photos|fleeing in panic}=waiting in line"
+       ]
       ],
       [
        "{as tall as the tallest building|peeking in from the edge of the table|asleep across the middle of it}",
-       "as tall as the tallest building"
+       "as tall as the tallest building",
+       [
+        "{as tall as the tallest building|peeking in from the edge of the table|asleep across the middle of it}=as tall as the tallest building"
+       ]
       ],
       [
        "__place__",
-       "a snowed-in train station"
+       "a snowed-in train station",
+       [
+        "__place__=a snowed-in train station"
+       ]
       ],
       [
        "__light__",
-       "neon reflections on wet asphalt"
+       "neon reflections on wet asphalt",
+       [
+        "__light__=neon reflections on wet asphalt"
+       ]
       ]
      ]
     }
@@ -74,27 +110,45 @@
      "picks": [
       [
        "$beast ← __creature__",
-       "giant isopod"
+       "giant isopod",
+       [
+        "__creature__=giant isopod"
+       ]
       ],
       [
        "{cardboard and balsa wood|clay and real moss|plastic toy bricks|folded paper}",
-       "folded paper"
+       "folded paper",
+       [
+        "{cardboard and balsa wood|clay and real moss|plastic toy bricks|folded paper}=folded paper"
+       ]
       ],
       [
        "{waiting in line|taking photos|fleeing in panic}",
-       "waiting in line"
+       "waiting in line",
+       [
+        "{waiting in line|taking photos|fleeing in panic}=waiting in line"
+       ]
       ],
       [
        "{as tall as the tallest building|peeking in from the edge of the table|asleep across the middle of it}",
-       "asleep across the middle of it"
+       "asleep across the middle of it",
+       [
+        "{as tall as the tallest building|peeking in from the edge of the table|asleep across the middle of it}=asleep across the middle of it"
+       ]
       ],
       [
        "__place__",
-       "a greenhouse on the moon"
+       "a greenhouse on the moon",
+       [
+        "__place__=a greenhouse on the moon"
+       ]
       ],
       [
        "__light__",
-       "soft overcast north light"
+       "soft overcast north light",
+       [
+        "__light__=soft overcast north light"
+       ]
       ]
      ]
     }

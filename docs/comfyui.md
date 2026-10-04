@@ -1,6 +1,6 @@
 # The ComfyUI nodes
 
-Everything the Orrery Prompt node puts out, the six tabs of its app, Roll and Restart, Orrery Log and Orrery Refs.
+Everything the Orrery Prompt node puts out, the tabs of its app and its settings, Roll and Restart, Orrery Log and Orrery Refs.
 
 ```bash
 cd /path/to/ComfyUI/custom_nodes && git clone https://github.com/pyros-projects/orrery.git
@@ -64,7 +64,7 @@ Nodes under **orrery**:
   chain the clips. A video wired into `video` (Load Video) is the scene before
   the reel's first: the node keeps it at 24 fps beside the clips, a head
   `REMEMBER:` keeps its frames, and a scene with `AFTER: the input video`
-  continues it ([h3.md](h3.md) 1d, *The input video*). The node is the whole of orrery, in six tabs (⤢ opens the
+  continues it ([h3.md](h3.md) 1d, *The input video*). The node is the whole of orrery, in seven tabs and its settings (⤢ opens the
   same app over the canvas, Esc brings it back):
   - **Prompt**: the template editor with syntax colours and completion
     (`__` libraries, `__creature[` tags, `__creature#` properties and their
@@ -79,9 +79,15 @@ Nodes under **orrery**:
     keyword and every form of it (`REME` → `REMEMBER: frames 0, 50 as @NAME` …),
     `EXPORT:` and `IF` in text templates too; Ctrl+Space opens the completion where
     the caret is. Each line shows at its end what it gives at the node's seed: a
-    binding what it rolled, an EXPORT what it keeps, a grid its cells, a CAST
+    binding what it rolled, every library in a line its own roll, in order
+    (`→ arcade · bob cut · tracksuit`; one in a `{…|…}` branch that did not
+    roll says nothing, #202), an EXPORT what it keeps, a grid its cells, a CAST
     member where its pictures go (gallery pictures as thumbnails), a REMEMBER:
-    line where its frames go. Hovering a keyword shows what it does and its
+    line where its frames go. *Annotations* in the settings' *Editor* says where
+    they go (#203): **Appended** (at the line's end, the default), **Hover**
+    (nothing at the line ends: what has one is underlined quietly, a dotted line
+    as for a footnote, and hovering it shows the roll first) or **None**. A
+    screenplay's lines say what they roll for the scene of the next clip. Hovering a keyword shows what it does and its
     forms; a CAST member who it is in this clip (description, pictures and their
     strengths, RefMods, voice); a library its size and entries; a binding what it
     rolled. **New** starts a fresh
@@ -119,7 +125,20 @@ Nodes under **orrery**:
     📊 explains them: where and how often the scene plays on the walk at the
     node's seed, drawn clip by clip, how long, what plays before and after it
     (and its lines that steer), what it rolls, and the clips it made.
-    **Jump** beside *Next clip* puts the caret on the scene of the next clip. A reel opens in the **clips view**: the editor cut into one cell
+    **Jump** beside *Next clip* puts the caret on the scene of the next clip.
+    A template without scenes (a Krea prompt, an `@h3` scene) has its
+    **results under the prompt** (#211): under its one cell the live preview
+    while it samples (the model wired through the Orrery Prompt; an image
+    model's tiny VAE or Latent2RGB, sized by its own latent format), then what
+    the run made, a picture, a clip or its sound, as its Save or Preview nodes
+    wrote it. Every run becomes a **take**, lined up under the result: a click
+    shows it (and a take that rolled anew gives the node its seed). Beside the
+    takes, **+** adds takes, **×N** says how many a Generate makes and **📌**
+    keeps the rolled prompt so only the sampler's noise changes, as in a
+    reel's scenes; the gear's *Sample surfing* numbers their seeds or follows
+    the node's control. The takes are kept on the node, per preset, and saved
+    with the workflow; × takes one off the list (**the others** and **all**
+    take more), its files stay where they are. A reel opens in the **clips view**: the editor cut into one cell
     per SCENE, each followed by that scene's clips as Orrery Film (or H3
     Motion Context's Chain Video) keeps them, big: a clip's shorter side is
     the **Clip size** in the gear (360 px unless set otherwise), as far as the
@@ -230,6 +249,17 @@ Nodes under **orrery**:
     also printed to ComfyUI's console (seed, picks, prompt); the gear turns
     that off.
   - **Help**: the DSL at a glance, the tutorial lessons, writing tips.
+  - **Settings** (the gear, #212; again, and the tab before is back): its
+    sections on the left, *Home*, *Language model*, *Writers*, *Editor*,
+    *Clips* (clip size, live preview, sample surfing) and *Log*, the one
+    chosen on the right, and the tab opens on the one shown last. A setting
+    is saved the moment it changes and says so beside the section's title.
+    What moves things or asks the outside has a button of its own: **Use
+    this folder** for the home folder, **Use this endpoint** for an API
+    endpoint (checked first: the key, and one short answer from the model;
+    a setting changed on its own, such as the entries a library starts with,
+    asks the endpoint nothing), **Save text** and **Reset to default** for a
+    writer's text.
 
   Workflows that used the old `preset` dropdown open with that preset loaded
   into the editor.

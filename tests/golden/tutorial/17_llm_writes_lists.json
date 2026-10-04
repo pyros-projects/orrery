@@ -8,11 +8,17 @@
      "picks": [
       [
        "$shoe ← __runway_shoes__",
-       "runway_shoes 12"
+       "runway_shoes 12",
+       [
+        "__runway_shoes__=runway_shoes 12"
+       ]
       ],
       [
        "$venue ← __unusual_runway_venue__",
-       "unusual_runway_venue 0"
+       "unusual_runway_venue 0",
+       [
+        "__unusual_runway_venue__=unusual_runway_venue 0"
+       ]
       ]
      ]
     }
@@ -25,11 +31,17 @@
      "picks": [
       [
        "$shoe ← __runway_shoes__",
-       "runway_shoes 10"
+       "runway_shoes 10",
+       [
+        "__runway_shoes__=runway_shoes 10"
+       ]
       ],
       [
        "$venue ← __unusual_runway_venue__",
-       "unusual_runway_venue 1"
+       "unusual_runway_venue 1",
+       [
+        "__unusual_runway_venue__=unusual_runway_venue 1"
+       ]
       ]
      ]
     }
@@ -42,11 +54,17 @@
      "picks": [
       [
        "$shoe ← __runway_shoes__",
-       "runway_shoes 19"
+       "runway_shoes 19",
+       [
+        "__runway_shoes__=runway_shoes 19"
+       ]
       ],
       [
        "$venue ← __unusual_runway_venue__",
-       "unusual_runway_venue 2"
+       "unusual_runway_venue 2",
+       [
+        "__unusual_runway_venue__=unusual_runway_venue 2"
+       ]
       ]
      ]
     }

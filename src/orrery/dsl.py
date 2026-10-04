@@ -12,7 +12,9 @@ Every expansion returns the text *and* the picks that produced it. Pick keys
 
 import re
 import zlib
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Iterator, Mapping
+from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass, field
 
 from orrery.library import Entry, Library
@@ -476,6 +478,24 @@ def _label(name: str, tag: str | None, props: str | None) -> str:
     return f"__{name}{f'[{tag}]' if tag else ''}{props or ''}__"
 
 
+# Where each library written in a template's text rolled what (#202), for the editor's annotations: while
+# `traced()` is open, every expander records it. It only records: no draw changes.
+_TRACE: ContextVar[list[dict] | None] = ContextVar("orrery_trace", default=None)
+
+
+@contextmanager
+def traced() -> Iterator[list[dict]]:
+    """The libraries of the template's own lines as they roll: {line, rest, k, value} each, `line` an expression
+    as the expander got it, `rest` what of it rolled (after a `? cond:`), `k` the library's place among the
+    `__…__` of `rest` (one in a `{…|…}` branch not chosen rolls nothing, so it is never there)."""
+    sites: list[dict] = []
+    token = _TRACE.set(sites)
+    try:
+        yield sites
+    finally:
+        _TRACE.reset(token)
+
+
 class Expander:
     """Expands DSL expressions against libraries, one seeded draw sequence per instance."""
 
@@ -503,6 +523,8 @@ class Expander:
         self._depth = 0  # expressions within expressions (an entry, a field): escapes come back at 0
         self._escaped: list[str] = []
         self.warnings: list[str] = []  # a reel's expanders share their world's list
+        self._trace = _TRACE.get()  # the editor's record of what each library in the text rolled (#202)
+        self._traced: tuple[str, str] | None = None  # the expression being traced, and what of it rolls
 
     def _stream(self, label: str) -> Rng:
         """The dice for one pick. With RNG 2 a pick's stream comes from the seed, its label and how often
@@ -605,9 +627,12 @@ class Expander:
         return m.group(5) if self.holds(*m.group(1, 2, 3, 4)) else None
 
     def expr(self, text: str, label_prefix: str = "") -> str:
+        written = text
         if "\n" not in text and (text := self.guarded(text)) is None:
             return ""
         outermost, first = not self._depth, len(self.picks)
+        if outermost and self._trace is not None:  # a line of the text, not a binding's or an export's (#202)
+            self._traced = (written, text) if not label_prefix else None
         self._depth += 1
         try:
             # escaped characters wait as placeholders until the outermost expression is done, so no
@@ -632,6 +657,9 @@ class Expander:
         return text
 
     def _expand(self, text: str, label_prefix: str) -> str:
+        # traced (#202): `at` follows each character back to its place in the text as written, through the braces
+        traced = self._traced if self._trace is not None and self._depth == 1 else None
+        written, at = text, list(range(len(text))) if traced else None
         for _ in range(MAX_CHOICES):
             m = _BRACE.search(text)
             if not m:
@@ -640,13 +668,23 @@ class Expander:
             if not rolled and start and text[start - 1] == " " and text[m.end():m.end() + 1] in ("", " ", ",", ".", ";",
                                                                                                 ":", "!", "?", ")"):
                 start -= 1  # nothing rolled: the space before it goes too ("a fox {30% in the rain}.")
+            if at is not None:  # the branch that rolled, where it was written; text made up is from nowhere
+                i = text.find(rolled, m.start(), m.end()) if rolled else -1
+                at = at[:start] + (at[i:i + len(rolled)] if i >= 0 else [-1] * len(rolled)) + at[m.end():]
             text = text[:start] + rolled + text[m.end():]
         else:
             if m := _BRACE.search(text):
                 raise ValueError(f"More than {MAX_CHOICES} {{…}} choices in one place, and {m.group(0)[:60]} is still "
                                  "to roll: a {N$$__lib__} whose entries bring it back?")
-        text = _LIB.sub(lambda m: _mid_line(self._library(m.group(1), m.group(2), label_prefix, m.group(3),
-                                                          _fixed(m.group(5))), m), text)
+        place = {lib.start(): k for k, lib in enumerate(_LIB.finditer(written))} if at is not None else {}
+
+        def library(m: re.Match) -> str:
+            value = _mid_line(self._library(m.group(1), m.group(2), label_prefix, m.group(3), _fixed(m.group(5))), m)
+            if at is not None and (k := place.get(at[m.start()])) is not None:
+                self._trace.append({"line": traced[0], "rest": traced[1], "k": k, "value": value})
+            return value
+
+        text = _LIB.sub(library, text)
         text = _VAR.sub(lambda m: _mid_line(self._var(m), m), text)
         return self._articles(text)
 
@@ -911,7 +949,10 @@ def expand(template: str, seed: int, libraries: Mapping[str, Library],
     ex = Expander(seed, libraries, weights, parsed.params.rng)
     for name, expr in parsed.bindings:
         ex.bind(name, expr)
-    text = ex.expr(" ".join(line for raw in parsed.body if (line := ex.guarded(raw)) is not None))
+    held = [line for raw in parsed.body if (line := ex.guarded(raw)) is not None]
+    if ex._trace is not None:  # the text's lines, joined into one expression: the trace finds them in it (#202)
+        ex._trace.append({"lines": held})
+    text = ex.expr(" ".join(held))
     if parsed.enhance:
         ex.picks.append(Pick("> enhance", parsed.enhance))
     exports = {name: ex.export(name, expr) for name, expr in parsed.exports}

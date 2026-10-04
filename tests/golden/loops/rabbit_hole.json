@@ -18,11 +18,17 @@
      "picks": [
       [
        "$world ← __world/landscapes__",
-       "a fjord between sheer granite walls, a thread of waterfall falling into dark water"
+       "a fjord between sheer granite walls, a thread of waterfall falling into dark water",
+       [
+        "__world/landscapes__=a fjord between sheer granite walls, a thread of waterfall falling into dark water"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a sunlit pinhole in a green leaf"
+       "a sunlit pinhole in a green leaf",
+       [
+        "__scale/portals__=a sunlit pinhole in a green leaf"
+       ]
       ]
      ]
     },
@@ -32,15 +38,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$world ← __world/landscapes__",
-       "a waterfall plunging off the edge of a flat-topped table mountain into cloud"
+       "a waterfall plunging off the edge of a flat-topped table mountain into cloud",
+       [
+        "__world/landscapes__=a waterfall plunging off the edge of a flat-topped table mountain into cloud"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a sunlit pinhole in a green leaf"
+       "a sunlit pinhole in a green leaf",
+       [
+        "__scale/portals__=a sunlit pinhole in a green leaf"
+       ]
       ]
      ]
     },
@@ -50,15 +65,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$world ← __world/landscapes__",
-       "a crater lake of impossible blue inside a ring of scree"
+       "a crater lake of impossible blue inside a ring of scree",
+       [
+        "__world/landscapes__=a crater lake of impossible blue inside a ring of scree"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a snowflake settling on dark wool"
+       "a snowflake settling on dark wool",
+       [
+        "__scale/portals__=a snowflake settling on dark wool"
+       ]
       ]
      ]
     },
@@ -68,15 +92,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__tour/rooms__"
+       "__tour/rooms__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__tour/rooms__"
+       ]
       ],
       [
        "$world ← __tour/rooms__",
-       "a double-height library with rolling brass ladders and reading lamps"
+       "a double-height library with rolling brass ladders and reading lamps",
+       [
+        "__tour/rooms__=a double-height library with rolling brass ladders and reading lamps"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a raindrop running down a window pane"
+       "a raindrop running down a window pane",
+       [
+        "__scale/portals__=a raindrop running down a window pane"
+       ]
       ]
      ]
     },
@@ -86,15 +119,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$world ← __world/landscapes__",
-       "a savanna with one acacia tree and a herd of elephants crossing it"
+       "a savanna with one acacia tree and a herd of elephants crossing it",
+       [
+        "__world/landscapes__=a savanna with one acacia tree and a herd of elephants crossing it"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a single dewdrop hanging from a blade of grass"
+       "a single dewdrop hanging from a blade of grass",
+       [
+        "__scale/portals__=a single dewdrop hanging from a blade of grass"
+       ]
       ]
      ]
     },
@@ -104,15 +146,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$world ← __world/landscapes__",
-       "a ghost town half swallowed by sand dunes, doors open to the desert"
+       "a ghost town half swallowed by sand dunes, doors open to the desert",
+       [
+        "__world/landscapes__=a ghost town half swallowed by sand dunes, doors open to the desert"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a soap bubble drifting past, its skin swirling with colour"
+       "a soap bubble drifting past, its skin swirling with colour",
+       [
+        "__scale/portals__=a soap bubble drifting past, its skin swirling with colour"
+       ]
       ]
      ]
     }
@@ -135,11 +186,17 @@
      "picks": [
       [
        "$world ← __world/landscapes__",
-       "a giant sinkhole with a whole rainforest growing at its bottom"
+       "a giant sinkhole with a whole rainforest growing at its bottom",
+       [
+        "__world/landscapes__=a giant sinkhole with a whole rainforest growing at its bottom"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "an old photograph lying face up on the ground"
+       "an old photograph lying face up on the ground",
+       [
+        "__scale/portals__=an old photograph lying face up on the ground"
+       ]
       ]
      ]
     },
@@ -149,15 +206,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$world ← __world/landscapes__",
-       "a slot canyon of striped red sandstone, light falling in a single shaft"
+       "a slot canyon of striped red sandstone, light falling in a single shaft",
+       [
+        "__world/landscapes__=a slot canyon of striped red sandstone, light falling in a single shaft"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a hairline crack in an old stone wall"
+       "a hairline crack in an old stone wall",
+       [
+        "__scale/portals__=a hairline crack in an old stone wall"
+       ]
       ]
      ]
     },
@@ -167,15 +233,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$world ← __world/landscapes__",
-       "a coral atoll ringed by turquoise shallows and a line of white surf"
+       "a coral atoll ringed by turquoise shallows and a line of white surf",
+       [
+        "__world/landscapes__=a coral atoll ringed by turquoise shallows and a line of white surf"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a single dewdrop hanging from a blade of grass"
+       "a single dewdrop hanging from a blade of grass",
+       [
+        "__scale/portals__=a single dewdrop hanging from a blade of grass"
+       ]
       ]
      ]
     },
@@ -185,15 +260,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__tour/rooms__"
+       "__tour/rooms__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__tour/rooms__"
+       ]
       ],
       [
        "$world ← __tour/rooms__",
-       "an indoor swimming pool under a glass roof, light rippling on the tiles"
+       "an indoor swimming pool under a glass roof, light rippling on the tiles",
+       [
+        "__tour/rooms__=an indoor swimming pool under a glass roof, light rippling on the tiles"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a keyhole glowing with light from the other side"
+       "a keyhole glowing with light from the other side",
+       [
+        "__scale/portals__=a keyhole glowing with light from the other side"
+       ]
       ]
      ]
     },
@@ -203,15 +287,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$world ← __world/landscapes__",
-       "a ghost town half swallowed by sand dunes, doors open to the desert"
+       "a ghost town half swallowed by sand dunes, doors open to the desert",
+       [
+        "__world/landscapes__=a ghost town half swallowed by sand dunes, doors open to the desert"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "the lens of an old brass telescope"
+       "the lens of an old brass telescope",
+       [
+        "__scale/portals__=the lens of an old brass telescope"
+       ]
       ]
      ]
     },
@@ -221,15 +314,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__tour/rooms__"
+       "__tour/rooms__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__tour/rooms__"
+       ]
       ],
       [
        "$world ← __tour/rooms__",
-       "an observatory dome opening onto a night full of stars"
+       "an observatory dome opening onto a night full of stars",
+       [
+        "__tour/rooms__=an observatory dome opening onto a night full of stars"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "an old photograph lying face up on the ground"
+       "an old photograph lying face up on the ground",
+       [
+        "__scale/portals__=an old photograph lying face up on the ground"
+       ]
       ]
      ]
     }
@@ -252,11 +354,17 @@
      "picks": [
       [
        "$world ← __world/landscapes__",
-       "a black-sand beach on a volcanic island, sea stacks standing in the surf"
+       "a black-sand beach on a volcanic island, sea stacks standing in the surf",
+       [
+        "__world/landscapes__=a black-sand beach on a volcanic island, sea stacks standing in the surf"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a keyhole glowing with light from the other side"
+       "a keyhole glowing with light from the other side",
+       [
+        "__scale/portals__=a keyhole glowing with light from the other side"
+       ]
       ]
      ]
     },
@@ -266,15 +374,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__tour/rooms__"
+       "__tour/rooms__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__tour/rooms__"
+       ]
       ],
       [
        "$world ← __tour/rooms__",
-       "a cabinet of curiosities crowded with specimens, globes and brass instruments"
+       "a cabinet of curiosities crowded with specimens, globes and brass instruments",
+       [
+        "__tour/rooms__=a cabinet of curiosities crowded with specimens, globes and brass instruments"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a soap bubble drifting past, its skin swirling with colour"
+       "a soap bubble drifting past, its skin swirling with colour",
+       [
+        "__scale/portals__=a soap bubble drifting past, its skin swirling with colour"
+       ]
       ]
      ]
     },
@@ -284,15 +401,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$world ← __world/landscapes__",
-       "an alpine valley meadow blazing with wildflowers under glaciers"
+       "an alpine valley meadow blazing with wildflowers under glaciers",
+       [
+        "__world/landscapes__=an alpine valley meadow blazing with wildflowers under glaciers"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a glowing ember at the heart of a campfire"
+       "a glowing ember at the heart of a campfire",
+       [
+        "__scale/portals__=a glowing ember at the heart of a campfire"
+       ]
       ]
      ]
     },
@@ -302,15 +428,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$world ← __world/landscapes__",
-       "a coast of hexagonal basalt columns stepping down into the sea"
+       "a coast of hexagonal basalt columns stepping down into the sea",
+       [
+        "__world/landscapes__=a coast of hexagonal basalt columns stepping down into the sea"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a hairline crack in an old stone wall"
+       "a hairline crack in an old stone wall",
+       [
+        "__scale/portals__=a hairline crack in an old stone wall"
+       ]
       ]
      ]
     },
@@ -320,15 +455,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$world ← __world/landscapes__",
-       "a cherry orchard in full bloom, petals drifting over a mossy temple roof"
+       "a cherry orchard in full bloom, petals drifting over a mossy temple roof",
+       [
+        "__world/landscapes__=a cherry orchard in full bloom, petals drifting over a mossy temple roof"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a snowflake settling on dark wool"
+       "a snowflake settling on dark wool",
+       [
+        "__scale/portals__=a snowflake settling on dark wool"
+       ]
       ]
      ]
     },
@@ -338,15 +482,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$world ← __world/landscapes__",
-       "a savanna with one acacia tree and a herd of elephants crossing it"
+       "a savanna with one acacia tree and a herd of elephants crossing it",
+       [
+        "__world/landscapes__=a savanna with one acacia tree and a herd of elephants crossing it"
+       ]
       ],
       [
        "$portal ← __scale/portals__",
-       "a hairline crack in an old stone wall"
+       "a hairline crack in an old stone wall",
+       [
+        "__scale/portals__=a hairline crack in an old stone wall"
+       ]
       ]
      ]
     }

@@ -9,6 +9,12 @@ checks) are left out.
 
 ### Added
 
+- A template without scenes, a Krea prompt or an `@h3` scene, has its results under the prompt: the live preview while
+  it samples (an image model's preview sized by its own latent format), then what it made; every run a take under the
+  result, a click shows it, and +, ×N and 📌 make takes as in a reel's scenes (#211).
+- Every library in a line says what it rolled at the line's end, in order (`→ arcade · bob cut · tracksuit`), one in
+  a branch that did not roll nothing; and the settings' *Annotations* puts them all at the line ends, on hover (what
+  has one underlined quietly, its roll shown on hover) or nowhere (#201).
 - The take tree: every take of a reel keeps its path, and picking it brings back the clips last made after it. **Tree**
   shows them all like a git graph with videos, the film's path lit; a click makes the film the way through a take, ✂
   ends it after one, ▶ Film plays the film as clicked together, a timeline of its clips under it, and a filter hides
@@ -77,6 +83,10 @@ checks) are left out.
 
 ### Changed
 
+- The settings are a tab of their own, behind the gear: their sections on the left (Home, Language model, Writers,
+  Editor, Clips, Log), the one chosen on the right. A setting is saved the moment it changes, no Save at the end of a
+  long page; the home folder, an API endpoint and a writer's text keep buttons of their own, and a setting changed on
+  its own no longer asks the endpoint (#212).
 - A sweep's values are separated by `|` (`<lora:x:0.5|1.0>`), since commas separate a knob's fields now; the
   comma lists of before still sweep as they did, and the log suggests `|` (#227).
 - The `lora_stack` output is gone, since a LoRA stack needed a third-party node: the LoRAs go on the model through
@@ -110,6 +120,9 @@ checks) are left out.
 
 - History's and the Gallery's restore no longer promise that the next run reproduces a run: it rolls again with today's
   libraries and learned weights, and says so (#259).
+- Taking ratings back gives an entry's weight back: many outputs with one pick, rated and cleared, no longer leave it
+  off (twenty hates and their clearing left it a hundredfold), and the same ratings in any order give the same weight
+  (#257).
 - Typing in a long reel no longer lags: the editor highlights a scene again only when something it shows
   changed, and works out once what every scene reads, instead of every scene on every keystroke (#218).
 - Save as, the gear and the app's other sheets open at the top of the app, where their buttons are, not at the

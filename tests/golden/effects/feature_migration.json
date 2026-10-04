@@ -8,23 +8,38 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a tiled changing room at a public swimming pool"
+       "a tiled changing room at a public swimming pool",
+       [
+        "__bh_room__=a tiled changing room at a public swimming pool"
+       ]
       ],
       [
        "{the mouth|the left eye|a small dark mole beneath the eye}",
-       "a small dark mole beneath the eye"
+       "a small dark mole beneath the eye",
+       [
+        "{the mouth|the left eye|a small dark mole beneath the eye}=a small dark mole beneath the eye"
+       ]
       ],
       [
        "{the palm of the right hand|the side of the neck|the inside of the forearm}",
-       "the palm of the right hand"
+       "the palm of the right hand",
+       [
+        "{the palm of the right hand|the side of the neck|the inside of the forearm}=the palm of the right hand"
+       ]
       ],
       [
        "{it settles into $target and opens, alive, while the old place stays smooth and blank|HOST raises the hand to the camera, and $feature looks back from $target|HOST touches the blank skin where it used to be, and a faint line begins to form there again}",
-       "HOST raises the hand to the camera, and $feature looks back from $target"
+       "HOST raises the hand to the camera, and $feature looks back from $target",
+       [
+        "{it settles into $target and opens, alive, while the old place stays smooth and blank|HOST raises the hand to the camera, and $feature looks back from $target|HOST touches the blank skin where it used to be, and a faint line begins to form there again}=HOST raises the hand to the camera, and $feature looks back from $target"
+       ]
       ]
      ]
     }
@@ -37,23 +52,38 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the young man"
+       "the young man",
+       [
+        "__bh_host__=the young man"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a dim apartment sitting room"
+       "a dim apartment sitting room",
+       [
+        "__bh_room__=a dim apartment sitting room"
+       ]
       ],
       [
        "{the mouth|the left eye|a small dark mole beneath the eye}",
-       "the mouth"
+       "the mouth",
+       [
+        "{the mouth|the left eye|a small dark mole beneath the eye}=the mouth"
+       ]
       ],
       [
        "{the palm of the right hand|the side of the neck|the inside of the forearm}",
-       "the palm of the right hand"
+       "the palm of the right hand",
+       [
+        "{the palm of the right hand|the side of the neck|the inside of the forearm}=the palm of the right hand"
+       ]
       ],
       [
        "{it settles into $target and opens, alive, while the old place stays smooth and blank|HOST raises the hand to the camera, and $feature looks back from $target|HOST touches the blank skin where it used to be, and a faint line begins to form there again}",
-       "HOST touches the blank skin where it used to be, and a faint line begins to form there again"
+       "HOST touches the blank skin where it used to be, and a faint line begins to form there again",
+       [
+        "{it settles into $target and opens, alive, while the old place stays smooth and blank|HOST raises the hand to the camera, and $feature looks back from $target|HOST touches the blank skin where it used to be, and a faint line begins to form there again}=HOST touches the blank skin where it used to be, and a faint line begins to form there again"
+       ]
       ]
      ]
     }
@@ -66,23 +96,38 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a narrow hotel corridor"
+       "a narrow hotel corridor",
+       [
+        "__bh_room__=a narrow hotel corridor"
+       ]
       ],
       [
        "{the mouth|the left eye|a small dark mole beneath the eye}",
-       "the mouth"
+       "the mouth",
+       [
+        "{the mouth|the left eye|a small dark mole beneath the eye}=the mouth"
+       ]
       ],
       [
        "{the palm of the right hand|the side of the neck|the inside of the forearm}",
-       "the palm of the right hand"
+       "the palm of the right hand",
+       [
+        "{the palm of the right hand|the side of the neck|the inside of the forearm}=the palm of the right hand"
+       ]
       ],
       [
        "{it settles into $target and opens, alive, while the old place stays smooth and blank|HOST raises the hand to the camera, and $feature looks back from $target|HOST touches the blank skin where it used to be, and a faint line begins to form there again}",
-       "it settles into $target and opens, alive, while the old place stays smooth and blank"
+       "it settles into $target and opens, alive, while the old place stays smooth and blank",
+       [
+        "{it settles into $target and opens, alive, while the old place stays smooth and blank|HOST raises the hand to the camera, and $feature looks back from $target|HOST touches the blank skin where it used to be, and a faint line begins to form there again}=it settles into $target and opens, alive, while the old place stays smooth and blank"
+       ]
       ]
      ]
     }

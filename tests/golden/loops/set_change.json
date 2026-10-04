@@ -18,11 +18,17 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__tour/rooms__"
+       "__tour/rooms__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__tour/rooms__"
+       ]
       ],
       [
        "$place ← __tour/rooms__",
-       "a dormitory of identical beds under high windows"
+       "a dormitory of identical beds under high windows",
+       [
+        "__tour/rooms__=a dormitory of identical beds under high windows"
+       ]
       ]
      ]
     },
@@ -32,15 +38,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$place ← __world/landscapes__",
-       "a savanna with one acacia tree and a herd of elephants crossing it"
+       "a savanna with one acacia tree and a herd of elephants crossing it",
+       [
+        "__world/landscapes__=a savanna with one acacia tree and a herd of elephants crossing it"
+       ]
       ],
       [
        "$shift ← __transitions/between__",
-       "a huge flock of starlings pours across the frame over $from, and when it disperses the camera is over $to"
+       "a huge flock of starlings pours across the frame over $from, and when it disperses the camera is over $to",
+       [
+        "__transitions/between__=a huge flock of starlings pours across the frame over $from, and when it disperses the camera is over $to"
+       ]
       ]
      ]
     },
@@ -50,15 +65,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$place ← __world/landscapes__",
-       "a tidal island crowned by a stone abbey, the sea retreating across wet sand"
+       "a tidal island crowned by a stone abbey, the sea retreating across wet sand",
+       [
+        "__world/landscapes__=a tidal island crowned by a stone abbey, the sea retreating across wet sand"
+       ]
       ],
       [
        "$shift ← __transitions/between__",
-       "the camera tilts down into a puddle that reflects $from, the reflection ripples and becomes $to, and the camera rises into it"
+       "the camera tilts down into a puddle that reflects $from, the reflection ripples and becomes $to, and the camera rises into it",
+       [
+        "__transitions/between__=the camera tilts down into a puddle that reflects $from, the reflection ripples and becomes $to, and the camera rises into it"
+       ]
       ]
      ]
     },
@@ -68,15 +92,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__tour/rooms__"
+       "__tour/rooms__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__tour/rooms__"
+       ]
       ],
       [
        "$place ← __tour/rooms__",
-       "an indoor swimming pool under a glass roof, light rippling on the tiles"
+       "an indoor swimming pool under a glass roof, light rippling on the tiles",
+       [
+        "__tour/rooms__=an indoor swimming pool under a glass roof, light rippling on the tiles"
+       ]
       ],
       [
        "$shift ← __transitions/between__",
-       "a long train thunders between the camera and $from, and when the last carriage has passed, $to stands there"
+       "a long train thunders between the camera and $from, and when the last carriage has passed, $to stands there",
+       [
+        "__transitions/between__=a long train thunders between the camera and $from, and when the last carriage has passed, $to stands there"
+       ]
       ]
      ]
     },
@@ -86,15 +119,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$place ← __world/landscapes__",
-       "a cherry orchard in full bloom, petals drifting over a mossy temple roof"
+       "a cherry orchard in full bloom, petals drifting over a mossy temple roof",
+       [
+        "__world/landscapes__=a cherry orchard in full bloom, petals drifting over a mossy temple roof"
+       ]
       ],
       [
        "$shift ← __transitions/between__",
-       "a long train thunders between the camera and $from, and when the last carriage has passed, $to stands there"
+       "a long train thunders between the camera and $from, and when the last carriage has passed, $to stands there",
+       [
+        "__transitions/between__=a long train thunders between the camera and $from, and when the last carriage has passed, $to stands there"
+       ]
       ]
      ]
     },
@@ -104,15 +146,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$place ← __world/landscapes__",
-       "a tidal island crowned by a stone abbey, the sea retreating across wet sand"
+       "a tidal island crowned by a stone abbey, the sea retreating across wet sand",
+       [
+        "__world/landscapes__=a tidal island crowned by a stone abbey, the sea retreating across wet sand"
+       ]
       ],
       [
        "$shift ← __transitions/between__",
-       "dozens of stagehands in black run into frame and strike $from piece by piece, carrying off walls, trees and props, until $to stands revealed behind it"
+       "dozens of stagehands in black run into frame and strike $from piece by piece, carrying off walls, trees and props, until $to stands revealed behind it",
+       [
+        "__transitions/between__=dozens of stagehands in black run into frame and strike $from piece by piece, carrying off walls, trees and props, until $to stands revealed behind it"
+       ]
       ]
      ]
     }
@@ -135,11 +186,17 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$place ← __world/landscapes__",
-       "a coast of hexagonal basalt columns stepping down into the sea"
+       "a coast of hexagonal basalt columns stepping down into the sea",
+       [
+        "__world/landscapes__=a coast of hexagonal basalt columns stepping down into the sea"
+       ]
       ]
      ]
     },
@@ -149,15 +206,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$place ← __world/landscapes__",
-       "a salt flat after rain, a perfect mirror of the sky stretching to the horizon"
+       "a salt flat after rain, a perfect mirror of the sky stretching to the horizon",
+       [
+        "__world/landscapes__=a salt flat after rain, a perfect mirror of the sky stretching to the horizon"
+       ]
       ],
       [
        "$shift ← __transitions/between__",
-       "the camera tilts down into a puddle that reflects $from, the reflection ripples and becomes $to, and the camera rises into it"
+       "the camera tilts down into a puddle that reflects $from, the reflection ripples and becomes $to, and the camera rises into it",
+       [
+        "__transitions/between__=the camera tilts down into a puddle that reflects $from, the reflection ripples and becomes $to, and the camera rises into it"
+       ]
       ]
      ]
     },
@@ -167,15 +233,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$place ← __world/landscapes__",
-       "a boreal forest of snow-loaded spruce under a pale winter sun"
+       "a boreal forest of snow-loaded spruce under a pale winter sun",
+       [
+        "__world/landscapes__=a boreal forest of snow-loaded spruce under a pale winter sun"
+       ]
       ],
       [
        "$shift ← __transitions/between__",
-       "$from turns away on a giant stage revolve, carrying $to around into view"
+       "$from turns away on a giant stage revolve, carrying $to around into view",
+       [
+        "__transitions/between__=$from turns away on a giant stage revolve, carrying $to around into view"
+       ]
       ]
      ]
     },
@@ -185,15 +260,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__tour/rooms__"
+       "__tour/rooms__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__tour/rooms__"
+       ]
       ],
       [
        "$place ← __tour/rooms__",
-       "a double-height library with rolling brass ladders and reading lamps"
+       "a double-height library with rolling brass ladders and reading lamps",
+       [
+        "__tour/rooms__=a double-height library with rolling brass ladders and reading lamps"
+       ]
       ],
       [
        "$shift ← __transitions/between__",
-       "$from turns away on a giant stage revolve, carrying $to around into view"
+       "$from turns away on a giant stage revolve, carrying $to around into view",
+       [
+        "__transitions/between__=$from turns away on a giant stage revolve, carrying $to around into view"
+       ]
       ]
      ]
     },
@@ -203,15 +287,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$place ← __world/landscapes__",
-       "karst peaks rising out of river mist, fishing boats small below them"
+       "karst peaks rising out of river mist, fishing boats small below them",
+       [
+        "__world/landscapes__=karst peaks rising out of river mist, fishing boats small below them"
+       ]
       ],
       [
        "$shift ← __transitions/between__",
-       "time rushes forward: plants overgrow $from and crumble it to ruins, and out of the ruins $to grows up"
+       "time rushes forward: plants overgrow $from and crumble it to ruins, and out of the ruins $to grows up",
+       [
+        "__transitions/between__=time rushes forward: plants overgrow $from and crumble it to ruins, and out of the ruins $to grows up"
+       ]
       ]
      ]
     },
@@ -221,15 +314,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__tour/rooms__"
+       "__tour/rooms__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__tour/rooms__"
+       ]
       ],
       [
        "$place ← __tour/rooms__",
-       "a private cinema of red velvet seats, a film flickering on the screen"
+       "a private cinema of red velvet seats, a film flickering on the screen",
+       [
+        "__tour/rooms__=a private cinema of red velvet seats, a film flickering on the screen"
+       ]
       ],
       [
        "$shift ← __transitions/between__",
-       "every light in $from goes out, then a match flares in the dark and its small glow shows $to"
+       "every light in $from goes out, then a match flares in the dark and its small glow shows $to",
+       [
+        "__transitions/between__=every light in $from goes out, then a match flares in the dark and its small glow shows $to"
+       ]
       ]
      ]
     }
@@ -252,11 +354,17 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__tour/rooms__"
+       "__tour/rooms__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__tour/rooms__"
+       ]
       ],
       [
        "$place ← __tour/rooms__",
-       "a private cinema of red velvet seats, a film flickering on the screen"
+       "a private cinema of red velvet seats, a film flickering on the screen",
+       [
+        "__tour/rooms__=a private cinema of red velvet seats, a film flickering on the screen"
+       ]
       ]
      ]
     },
@@ -266,15 +374,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__tour/rooms__"
+       "__tour/rooms__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__tour/rooms__"
+       ]
       ],
       [
        "$place ← __tour/rooms__",
-       "a cabinet of curiosities crowded with specimens, globes and brass instruments"
+       "a cabinet of curiosities crowded with specimens, globes and brass instruments",
+       [
+        "__tour/rooms__=a cabinet of curiosities crowded with specimens, globes and brass instruments"
+       ]
       ],
       [
        "$shift ← __transitions/between__",
-       "time rushes forward: plants overgrow $from and crumble it to ruins, and out of the ruins $to grows up"
+       "time rushes forward: plants overgrow $from and crumble it to ruins, and out of the ruins $to grows up",
+       [
+        "__transitions/between__=time rushes forward: plants overgrow $from and crumble it to ruins, and out of the ruins $to grows up"
+       ]
       ]
      ]
     },
@@ -284,15 +401,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$place ← __world/landscapes__",
-       "a giant sinkhole with a whole rainforest growing at its bottom"
+       "a giant sinkhole with a whole rainforest growing at its bottom",
+       [
+        "__world/landscapes__=a giant sinkhole with a whole rainforest growing at its bottom"
+       ]
       ],
       [
        "$shift ← __transitions/between__",
-       "$from turns away on a giant stage revolve, carrying $to around into view"
+       "$from turns away on a giant stage revolve, carrying $to around into view",
+       [
+        "__transitions/between__=$from turns away on a giant stage revolve, carrying $to around into view"
+       ]
       ]
      ]
     },
@@ -302,15 +428,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$place ← __world/landscapes__",
-       "a boreal forest of snow-loaded spruce under a pale winter sun"
+       "a boreal forest of snow-loaded spruce under a pale winter sun",
+       [
+        "__world/landscapes__=a boreal forest of snow-loaded spruce under a pale winter sun"
+       ]
       ],
       [
        "$shift ← __transitions/between__",
-       "a theatre curtain drops across $from and rises again a moment later on $to"
+       "a theatre curtain drops across $from and rises again a moment later on $to",
+       [
+        "__transitions/between__=a theatre curtain drops across $from and rises again a moment later on $to"
+       ]
       ]
      ]
     },
@@ -320,15 +455,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$place ← __world/landscapes__",
-       "white gypsum dunes rippling under a hard blue sky"
+       "white gypsum dunes rippling under a hard blue sky",
+       [
+        "__world/landscapes__=white gypsum dunes rippling under a hard blue sky"
+       ]
       ],
       [
        "$shift ← __transitions/between__",
-       "everything in $from rises gently into the air and drifts away like dust, leaving $to underneath"
+       "everything in $from rises gently into the air and drifts away like dust, leaving $to underneath",
+       [
+        "__transitions/between__=everything in $from rises gently into the air and drifts away like dust, leaving $to underneath"
+       ]
       ]
      ]
     },
@@ -338,15 +482,24 @@
      "picks": [
       [
        "{__world/landscapes__|__tour/rooms__}",
-       "__world/landscapes__"
+       "__world/landscapes__",
+       [
+        "{__world/landscapes__|__tour/rooms__}=__world/landscapes__"
+       ]
       ],
       [
        "$place ← __world/landscapes__",
-       "a lighthouse on a lone rock in a storm-whipped sea"
+       "a lighthouse on a lone rock in a storm-whipped sea",
+       [
+        "__world/landscapes__=a lighthouse on a lone rock in a storm-whipped sea"
+       ]
       ],
       [
        "$shift ← __transitions/between__",
-       "every light in $from goes out, then a match flares in the dark and its small glow shows $to"
+       "every light in $from goes out, then a match flares in the dark and its small glow shows $to",
+       [
+        "__transitions/between__=every light in $from goes out, then a match flares in the dark and its small glow shows $to"
+       ]
       ]
      ]
     }

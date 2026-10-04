@@ -8,19 +8,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$inner ← __bh_inner__",
-       "a figure made entirely of folded white paper"
+       "a figure made entirely of folded white paper",
+       [
+        "__bh_inner__=a figure made entirely of folded white paper"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a tiled changing room at a public swimming pool"
+       "a tiled changing room at a public swimming pool",
+       [
+        "__bh_room__=a tiled changing room at a public swimming pool"
+       ]
       ],
       [
        "{down the centerline from the sternum to the navel|down the length of the spine|from the crown of the head down the middle of the face}",
-       "down the length of the spine"
+       "down the length of the spine",
+       [
+        "{down the centerline from the sternum to the navel|down the length of the spine|from the crown of the head down the middle of the face}=down the length of the spine"
+       ]
       ]
      ]
     }
@@ -33,19 +45,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the young man"
+       "the young man",
+       [
+        "__bh_host__=the young man"
+       ]
       ],
       [
        "$inner ← __bh_inner__",
-       "a taller, calmer and more perfectly proportioned version of the host"
+       "a taller, calmer and more perfectly proportioned version of the host",
+       [
+        "__bh_inner__=a taller, calmer and more perfectly proportioned version of the host"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a dim apartment sitting room"
+       "a dim apartment sitting room",
+       [
+        "__bh_room__=a dim apartment sitting room"
+       ]
       ],
       [
        "{down the centerline from the sternum to the navel|down the length of the spine|from the crown of the head down the middle of the face}",
-       "down the length of the spine"
+       "down the length of the spine",
+       [
+        "{down the centerline from the sternum to the navel|down the length of the spine|from the crown of the head down the middle of the face}=down the length of the spine"
+       ]
       ]
      ]
     }
@@ -58,19 +82,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$inner ← __bh_inner__",
-       "a smooth, featureless figure like a tailor's mannequin"
+       "a smooth, featureless figure like a tailor's mannequin",
+       [
+        "__bh_inner__=a smooth, featureless figure like a tailor's mannequin"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a narrow hotel corridor"
+       "a narrow hotel corridor",
+       [
+        "__bh_room__=a narrow hotel corridor"
+       ]
       ],
       [
        "{down the centerline from the sternum to the navel|down the length of the spine|from the crown of the head down the middle of the face}",
-       "down the length of the spine"
+       "down the length of the spine",
+       [
+        "{down the centerline from the sternum to the navel|down the length of the spine|from the crown of the head down the middle of the face}=down the length of the spine"
+       ]
       ]
      ]
     }

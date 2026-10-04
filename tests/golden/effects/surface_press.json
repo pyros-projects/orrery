@@ -8,23 +8,38 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a tiled changing room at a public swimming pool"
+       "a tiled changing room at a public swimming pool",
+       [
+        "__bh_room__=a tiled changing room at a public swimming pool"
+       ]
       ],
       [
        "{an open hand|a face|five fingertips}",
-       "an open hand"
+       "an open hand",
+       [
+        "{an open hand|a face|five fingertips}=an open hand"
+       ]
       ],
       [
        "{the chest|the stomach|the inside of the forearm}",
-       "the inside of the forearm"
+       "the inside of the forearm",
+       [
+        "{the chest|the stomach|the inside of the forearm}=the inside of the forearm"
+       ]
       ],
       [
        "{HOST presses their own palm against it from outside, palm to palm through the skin|the shape withdraws and the skin settles smooth, then a second shape presses out right beside it|the pressing face slowly opens its mouth beneath the stretched skin}",
-       "the shape withdraws and the skin settles smooth, then a second shape presses out right beside it"
+       "the shape withdraws and the skin settles smooth, then a second shape presses out right beside it",
+       [
+        "{HOST presses their own palm against it from outside, palm to palm through the skin|the shape withdraws and the skin settles smooth, then a second shape presses out right beside it|the pressing face slowly opens its mouth beneath the stretched skin}=the shape withdraws and the skin settles smooth, then a second shape presses out right beside it"
+       ]
       ]
      ]
     }
@@ -37,23 +52,38 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the young man"
+       "the young man",
+       [
+        "__bh_host__=the young man"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a dim apartment sitting room"
+       "a dim apartment sitting room",
+       [
+        "__bh_room__=a dim apartment sitting room"
+       ]
       ],
       [
        "{an open hand|a face|five fingertips}",
-       "five fingertips"
+       "five fingertips",
+       [
+        "{an open hand|a face|five fingertips}=five fingertips"
+       ]
       ],
       [
        "{the chest|the stomach|the inside of the forearm}",
-       "the inside of the forearm"
+       "the inside of the forearm",
+       [
+        "{the chest|the stomach|the inside of the forearm}=the inside of the forearm"
+       ]
       ],
       [
        "{HOST presses their own palm against it from outside, palm to palm through the skin|the shape withdraws and the skin settles smooth, then a second shape presses out right beside it|the pressing face slowly opens its mouth beneath the stretched skin}",
-       "the pressing face slowly opens its mouth beneath the stretched skin"
+       "the pressing face slowly opens its mouth beneath the stretched skin",
+       [
+        "{HOST presses their own palm against it from outside, palm to palm through the skin|the shape withdraws and the skin settles smooth, then a second shape presses out right beside it|the pressing face slowly opens its mouth beneath the stretched skin}=the pressing face slowly opens its mouth beneath the stretched skin"
+       ]
       ]
      ]
     }
@@ -66,23 +96,38 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a narrow hotel corridor"
+       "a narrow hotel corridor",
+       [
+        "__bh_room__=a narrow hotel corridor"
+       ]
       ],
       [
        "{an open hand|a face|five fingertips}",
-       "a face"
+       "a face",
+       [
+        "{an open hand|a face|five fingertips}=a face"
+       ]
       ],
       [
        "{the chest|the stomach|the inside of the forearm}",
-       "the chest"
+       "the chest",
+       [
+        "{the chest|the stomach|the inside of the forearm}=the chest"
+       ]
       ],
       [
        "{HOST presses their own palm against it from outside, palm to palm through the skin|the shape withdraws and the skin settles smooth, then a second shape presses out right beside it|the pressing face slowly opens its mouth beneath the stretched skin}",
-       "HOST presses their own palm against it from outside, palm to palm through the skin"
+       "HOST presses their own palm against it from outside, palm to palm through the skin",
+       [
+        "{HOST presses their own palm against it from outside, palm to palm through the skin|the shape withdraws and the skin settles smooth, then a second shape presses out right beside it|the pressing face slowly opens its mouth beneath the stretched skin}=HOST presses their own palm against it from outside, palm to palm through the skin"
+       ]
       ]
      ]
     }

@@ -8,19 +8,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a tiled changing room at a public swimming pool"
+       "a tiled changing room at a public swimming pool",
+       [
+        "__bh_room__=a tiled changing room at a public swimming pool"
+       ]
       ],
       [
        "{the wrist|the collarbone|the knuckles of one hand}",
-       "the wrist"
+       "the wrist",
+       [
+        "{the wrist|the collarbone|the knuckles of one hand}=the wrist"
+       ]
       ],
       [
        "{a final tiny crack advances a few millimetres beneath one eye, and HOST becomes even more still|HOST exhales, and a delicate web of hairline cracks blooms across the chest and stops|a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor}",
-       "a final tiny crack advances a few millimetres beneath one eye, and HOST becomes even more still"
+       "a final tiny crack advances a few millimetres beneath one eye, and HOST becomes even more still",
+       [
+        "{a final tiny crack advances a few millimetres beneath one eye, and HOST becomes even more still|HOST exhales, and a delicate web of hairline cracks blooms across the chest and stops|a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor}=a final tiny crack advances a few millimetres beneath one eye, and HOST becomes even more still"
+       ]
       ]
      ]
     }
@@ -33,19 +45,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the young man"
+       "the young man",
+       [
+        "__bh_host__=the young man"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a dim apartment sitting room"
+       "a dim apartment sitting room",
+       [
+        "__bh_room__=a dim apartment sitting room"
+       ]
       ],
       [
        "{the wrist|the collarbone|the knuckles of one hand}",
-       "the collarbone"
+       "the collarbone",
+       [
+        "{the wrist|the collarbone|the knuckles of one hand}=the collarbone"
+       ]
       ],
       [
        "{a final tiny crack advances a few millimetres beneath one eye, and HOST becomes even more still|HOST exhales, and a delicate web of hairline cracks blooms across the chest and stops|a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor}",
-       "a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor"
+       "a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor",
+       [
+        "{a final tiny crack advances a few millimetres beneath one eye, and HOST becomes even more still|HOST exhales, and a delicate web of hairline cracks blooms across the chest and stops|a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor}=a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor"
+       ]
       ]
      ]
     }
@@ -58,19 +82,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a narrow hotel corridor"
+       "a narrow hotel corridor",
+       [
+        "__bh_room__=a narrow hotel corridor"
+       ]
       ],
       [
        "{the wrist|the collarbone|the knuckles of one hand}",
-       "the collarbone"
+       "the collarbone",
+       [
+        "{the wrist|the collarbone|the knuckles of one hand}=the collarbone"
+       ]
       ],
       [
        "{a final tiny crack advances a few millimetres beneath one eye, and HOST becomes even more still|HOST exhales, and a delicate web of hairline cracks blooms across the chest and stops|a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor}",
-       "a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor"
+       "a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor",
+       [
+        "{a final tiny crack advances a few millimetres beneath one eye, and HOST becomes even more still|HOST exhales, and a delicate web of hairline cracks blooms across the chest and stops|a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor}=a single fragment the size of a fingernail slips from the cheek and falls, ringing like a small bell on the floor"
+       ]
       ]
      ]
     }

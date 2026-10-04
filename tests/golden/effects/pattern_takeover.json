@@ -8,19 +8,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "{tight black spirals|the faded floral print of old wallpaper|tiny handwritten lines of text|a fine honeycomb of hexagons}",
-       "a fine honeycomb of hexagons"
+       "a fine honeycomb of hexagons",
+       [
+        "{tight black spirals|the faded floral print of old wallpaper|tiny handwritten lines of text|a fine honeycomb of hexagons}=a fine honeycomb of hexagons"
+       ]
       ],
       [
        "{the wall HOST leans against|the pages of an open book in HOST's hands|a small tattoo on HOST's wrist}",
-       "the pages of an open book in HOST's hands"
+       "the pages of an open book in HOST's hands",
+       [
+        "{the wall HOST leans against|the pages of an open book in HOST's hands|a small tattoo on HOST's wrist}=the pages of an open book in HOST's hands"
+       ]
       ],
       [
        "{the pattern reaches the eyes and the irises become part of it|HOST steps back, and where the body was the pattern now covers the empty air in a person-shaped outline|the whole pattern begins to move, slowly turning across the body}",
-       "the whole pattern begins to move, slowly turning across the body"
+       "the whole pattern begins to move, slowly turning across the body",
+       [
+        "{the pattern reaches the eyes and the irises become part of it|HOST steps back, and where the body was the pattern now covers the empty air in a person-shaped outline|the whole pattern begins to move, slowly turning across the body}=the whole pattern begins to move, slowly turning across the body"
+       ]
       ]
      ]
     }
@@ -33,19 +45,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the young man"
+       "the young man",
+       [
+        "__bh_host__=the young man"
+       ]
       ],
       [
        "{tight black spirals|the faded floral print of old wallpaper|tiny handwritten lines of text|a fine honeycomb of hexagons}",
-       "the faded floral print of old wallpaper"
+       "the faded floral print of old wallpaper",
+       [
+        "{tight black spirals|the faded floral print of old wallpaper|tiny handwritten lines of text|a fine honeycomb of hexagons}=the faded floral print of old wallpaper"
+       ]
       ],
       [
        "{the wall HOST leans against|the pages of an open book in HOST's hands|a small tattoo on HOST's wrist}",
-       "the wall HOST leans against"
+       "the wall HOST leans against",
+       [
+        "{the wall HOST leans against|the pages of an open book in HOST's hands|a small tattoo on HOST's wrist}=the wall HOST leans against"
+       ]
       ],
       [
        "{the pattern reaches the eyes and the irises become part of it|HOST steps back, and where the body was the pattern now covers the empty air in a person-shaped outline|the whole pattern begins to move, slowly turning across the body}",
-       "HOST steps back, and where the body was the pattern now covers the empty air in a person-shaped outline"
+       "HOST steps back, and where the body was the pattern now covers the empty air in a person-shaped outline",
+       [
+        "{the pattern reaches the eyes and the irises become part of it|HOST steps back, and where the body was the pattern now covers the empty air in a person-shaped outline|the whole pattern begins to move, slowly turning across the body}=HOST steps back, and where the body was the pattern now covers the empty air in a person-shaped outline"
+       ]
       ]
      ]
     }
@@ -58,19 +82,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "{tight black spirals|the faded floral print of old wallpaper|tiny handwritten lines of text|a fine honeycomb of hexagons}",
-       "the faded floral print of old wallpaper"
+       "the faded floral print of old wallpaper",
+       [
+        "{tight black spirals|the faded floral print of old wallpaper|tiny handwritten lines of text|a fine honeycomb of hexagons}=the faded floral print of old wallpaper"
+       ]
       ],
       [
        "{the wall HOST leans against|the pages of an open book in HOST's hands|a small tattoo on HOST's wrist}",
-       "the pages of an open book in HOST's hands"
+       "the pages of an open book in HOST's hands",
+       [
+        "{the wall HOST leans against|the pages of an open book in HOST's hands|a small tattoo on HOST's wrist}=the pages of an open book in HOST's hands"
+       ]
       ],
       [
        "{the pattern reaches the eyes and the irises become part of it|HOST steps back, and where the body was the pattern now covers the empty air in a person-shaped outline|the whole pattern begins to move, slowly turning across the body}",
-       "the whole pattern begins to move, slowly turning across the body"
+       "the whole pattern begins to move, slowly turning across the body",
+       [
+        "{the pattern reaches the eyes and the irises become part of it|HOST steps back, and where the body was the pattern now covers the empty air in a person-shaped outline|the whole pattern begins to move, slowly turning across the body}=the whole pattern begins to move, slowly turning across the body"
+       ]
       ]
      ]
     }

@@ -8,19 +8,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a tiled changing room at a public swimming pool"
+       "a tiled changing room at a public swimming pool",
+       [
+        "__bh_room__=a tiled changing room at a public swimming pool"
+       ]
       ],
       [
        "{a narrow vertical corridor descending into darkness|a dim staircase leading down and away|a long hallway with a single lit doorway far away}",
-       "a dim staircase leading down and away"
+       "a dim staircase leading down and away",
+       [
+        "{a narrow vertical corridor descending into darkness|a dim staircase leading down and away|a long hallway with a single lit doorway far away}=a dim staircase leading down and away"
+       ]
       ],
       [
        "{a faint movement appears deep inside and comes slightly closer before HOST can close the zipper|a pale hand reaches up from the dark interior toward the opening|a small light switches on far down inside}",
-       "a small light switches on far down inside"
+       "a small light switches on far down inside",
+       [
+        "{a faint movement appears deep inside and comes slightly closer before HOST can close the zipper|a pale hand reaches up from the dark interior toward the opening|a small light switches on far down inside}=a small light switches on far down inside"
+       ]
       ]
      ]
     }
@@ -33,19 +45,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the young man"
+       "the young man",
+       [
+        "__bh_host__=the young man"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a dim apartment sitting room"
+       "a dim apartment sitting room",
+       [
+        "__bh_room__=a dim apartment sitting room"
+       ]
       ],
       [
        "{a narrow vertical corridor descending into darkness|a dim staircase leading down and away|a long hallway with a single lit doorway far away}",
-       "a dim staircase leading down and away"
+       "a dim staircase leading down and away",
+       [
+        "{a narrow vertical corridor descending into darkness|a dim staircase leading down and away|a long hallway with a single lit doorway far away}=a dim staircase leading down and away"
+       ]
       ],
       [
        "{a faint movement appears deep inside and comes slightly closer before HOST can close the zipper|a pale hand reaches up from the dark interior toward the opening|a small light switches on far down inside}",
-       "a faint movement appears deep inside and comes slightly closer before HOST can close the zipper"
+       "a faint movement appears deep inside and comes slightly closer before HOST can close the zipper",
+       [
+        "{a faint movement appears deep inside and comes slightly closer before HOST can close the zipper|a pale hand reaches up from the dark interior toward the opening|a small light switches on far down inside}=a faint movement appears deep inside and comes slightly closer before HOST can close the zipper"
+       ]
       ]
      ]
     }
@@ -58,19 +82,31 @@
      "picks": [
       [
        "$host ← __bh_host__",
-       "the older woman"
+       "the older woman",
+       [
+        "__bh_host__=the older woman"
+       ]
       ],
       [
        "$room ← __bh_room__",
-       "a narrow hotel corridor"
+       "a narrow hotel corridor",
+       [
+        "__bh_room__=a narrow hotel corridor"
+       ]
       ],
       [
        "{a narrow vertical corridor descending into darkness|a dim staircase leading down and away|a long hallway with a single lit doorway far away}",
-       "a narrow vertical corridor descending into darkness"
+       "a narrow vertical corridor descending into darkness",
+       [
+        "{a narrow vertical corridor descending into darkness|a dim staircase leading down and away|a long hallway with a single lit doorway far away}=a narrow vertical corridor descending into darkness"
+       ]
       ],
       [
        "{a faint movement appears deep inside and comes slightly closer before HOST can close the zipper|a pale hand reaches up from the dark interior toward the opening|a small light switches on far down inside}",
-       "a small light switches on far down inside"
+       "a small light switches on far down inside",
+       [
+        "{a faint movement appears deep inside and comes slightly closer before HOST can close the zipper|a pale hand reaches up from the dark interior toward the opening|a small light switches on far down inside}=a small light switches on far down inside"
+       ]
       ]
      ]
     }

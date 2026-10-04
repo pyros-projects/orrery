@@ -9,115 +9,200 @@
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
-       "cyberpunk"
+       "cyberpunk",
+       [
+        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}=cyberpunk"
+       ]
       ],
       [
        "$colour ← __characters/creator/colour__",
-       "crimson"
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
       ],
       [
        "{woman|man|nonbinary person}",
-       "man"
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
       ],
       [
        "{young|prime|middle-aged|old}",
-       "middle-aged"
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
       ],
       [
        "{19-26}",
-       "25"
+       "25",
+       [
+        "{19-26}=25"
+       ]
       ],
       [
        "{27-39}",
-       "28"
+       "28",
+       [
+        "{27-39}=28"
+       ]
       ],
       [
        "{40-58}",
-       "58"
+       "58",
+       [
+        "{40-58}=57–58"
+       ]
       ],
       [
        "{59-79}",
-       "61"
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
       ],
       [
        "$origin ← __characters/creator/origin__",
-       "Indian descent, with {warm brown|light brown|deep brown} skin"
+       "Indian descent, with {warm brown|light brown|deep brown} skin",
+       [
+        "__characters/creator/origin__=Indian descent, with {warm brown|light brown|deep brown} skin"
+       ]
       ],
       [
        "{warm brown|light brown|deep brown}",
-       "light brown"
+       "light brown",
+       [
+        "{warm brown|light brown|deep brown}=light brown"
+       ]
       ],
       [
        "$build ← __characters/creator/build__",
-       "athletic, with a sprinter's strong legs"
+       "athletic, with a sprinter's strong legs",
+       [
+        "__characters/creator/build__=athletic, with a sprinter's strong legs"
+       ]
       ],
       [
        "$face ← __characters/creator/face__",
-       "a face wider at the jaw than at the forehead"
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
       ],
       [
        "$eyes ← __characters/creator/eyes__",
-       "yellow-green eyes"
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
       ],
       [
        "{silver|white|snow-white|iron-grey|salt-and-pepper}",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=salt-and-pepper"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|$colour-dyed}",
-       "$colour-dyed"
+       "$colour-dyed",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=$colour-dyed"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|greying|salt-and-pepper}",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=salt-and-pepper"
+       ]
       ],
       [
        "$hair ← __characters/creator/hair[fit=$fit|all]__",
-       "loose $haircolour curls on top over a tight fade"
+       "loose $haircolour curls on top over a tight fade",
+       [
+        "__characters/creator/hair__=loose $haircolour curls on top over a tight fade"
+       ]
       ],
       [
        "$mark ← __characters/creator/mark__",
-       "laugh lines carved deep around the eyes"
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
       ],
       [
        "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
-       "a $colour reflective rain poncho over a black tracksuit"
+       "a $colour reflective rain poncho over a black tracksuit",
+       [
+        "__characters/creator/outfit__=a $colour reflective rain poncho over a black tracksuit"
+       ]
       ],
       [
        "{no|yes}",
-       "yes"
+       "yes",
+       [
+        "{no|yes}=yes"
+       ]
       ],
       [
        "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
-       "a $colour beret tilted to one side"
+       "a $colour beret tilted to one side",
+       [
+        "__characters/creator/accessory__=a $colour beret tilted to one side"
+       ]
       ],
       [
        "$presence ← __characters/creator/presence__",
-       "a steady, amused half-smile"
+       "a steady, amused half-smile",
+       [
+        "__characters/creator/presence__=a steady, amused half-smile"
+       ]
       ],
       [
        "{photo|animated|anime|painted}",
-       "photo"
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
       ],
       [
        "{portrait|three-quarter|full-length|profile}",
-       "portrait"
+       "portrait",
+       [
+        "{portrait|three-quarter|full-length|profile}=portrait"
+       ]
       ],
       [
        "EXPORT mood ← __characters/creator/mood__",
-       "brightly optimistic"
+       "brightly optimistic",
+       [
+        "__characters/creator/mood__=brightly optimistic"
+       ]
       ],
       [
        "EXPORT quirk ← __characters/creator/quirk__",
-       "brushes invisible dust off their clothes"
+       "brushes invisible dust off their clothes",
+       [
+        "__characters/creator/quirk__=brushes invisible dust off their clothes"
+       ]
       ],
       [
        "__characters/creator/skill__ ×2",
-       "sketching faces quickly, telling tall tales"
+       "sketching faces quickly, telling tall tales",
+       [
+        "__characters/creator/skill__=sketching faces quickly",
+        "__characters/creator/skill__=telling tall tales"
+       ]
       ],
       [
        "EXPORT voice ← __characters/creator/voice__",
-       "a fast, breathless voice that runs sentences together"
+       "a fast, breathless voice that runs sentences together",
+       [
+        "__characters/creator/voice__=a fast, breathless voice that runs sentences together"
+       ]
       ]
      ],
      "exports": {
@@ -141,115 +226,200 @@
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
-       "cyberpunk"
+       "cyberpunk",
+       [
+        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}=cyberpunk"
+       ]
       ],
       [
        "$colour ← __characters/creator/colour__",
-       "crimson"
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
       ],
       [
        "{woman|man|nonbinary person}",
-       "man"
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
       ],
       [
        "{young|prime|middle-aged|old}",
-       "middle-aged"
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
       ],
       [
        "{19-26}",
-       "25"
+       "25",
+       [
+        "{19-26}=25"
+       ]
       ],
       [
        "{27-39}",
-       "28"
+       "28",
+       [
+        "{27-39}=28"
+       ]
       ],
       [
        "{40-58}",
-       "58"
+       "58",
+       [
+        "{40-58}=57–58"
+       ]
       ],
       [
        "{59-79}",
-       "61"
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
       ],
       [
        "$origin ← __characters/creator/origin__",
-       "Indian descent, with {warm brown|light brown|deep brown} skin"
+       "Indian descent, with {warm brown|light brown|deep brown} skin",
+       [
+        "__characters/creator/origin__=Indian descent, with {warm brown|light brown|deep brown} skin"
+       ]
       ],
       [
        "{warm brown|light brown|deep brown}",
-       "light brown"
+       "light brown",
+       [
+        "{warm brown|light brown|deep brown}=light brown"
+       ]
       ],
       [
        "$build ← __characters/creator/build__",
-       "athletic, with a sprinter's strong legs"
+       "athletic, with a sprinter's strong legs",
+       [
+        "__characters/creator/build__=athletic, with a sprinter's strong legs"
+       ]
       ],
       [
        "$face ← __characters/creator/face__",
-       "a face wider at the jaw than at the forehead"
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
       ],
       [
        "$eyes ← __characters/creator/eyes__",
-       "yellow-green eyes"
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
       ],
       [
        "{silver|white|snow-white|iron-grey|salt-and-pepper}",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=salt-and-pepper"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|$colour-dyed}",
-       "$colour-dyed"
+       "$colour-dyed",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=$colour-dyed"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|greying|salt-and-pepper}",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=salt-and-pepper"
+       ]
       ],
       [
        "$hair ← __characters/creator/hair[fit=$fit|all]__",
-       "loose $haircolour curls on top over a tight fade"
+       "loose $haircolour curls on top over a tight fade",
+       [
+        "__characters/creator/hair__=loose $haircolour curls on top over a tight fade"
+       ]
       ],
       [
        "$mark ← __characters/creator/mark__",
-       "laugh lines carved deep around the eyes"
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
       ],
       [
        "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
-       "a $colour reflective rain poncho over a black tracksuit"
+       "a $colour reflective rain poncho over a black tracksuit",
+       [
+        "__characters/creator/outfit__=a $colour reflective rain poncho over a black tracksuit"
+       ]
       ],
       [
        "{no|yes}",
-       "yes"
+       "yes",
+       [
+        "{no|yes}=yes"
+       ]
       ],
       [
        "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
-       "a $colour beret tilted to one side"
+       "a $colour beret tilted to one side",
+       [
+        "__characters/creator/accessory__=a $colour beret tilted to one side"
+       ]
       ],
       [
        "$presence ← __characters/creator/presence__",
-       "a steady, amused half-smile"
+       "a steady, amused half-smile",
+       [
+        "__characters/creator/presence__=a steady, amused half-smile"
+       ]
       ],
       [
        "{photo|animated|anime|painted}",
-       "photo"
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
       ],
       [
        "{portrait|three-quarter|full-length|profile}",
-       "three-quarter"
+       "three-quarter",
+       [
+        "{portrait|three-quarter|full-length|profile}=three-quarter"
+       ]
       ],
       [
        "EXPORT mood ← __characters/creator/mood__",
-       "brightly optimistic"
+       "brightly optimistic",
+       [
+        "__characters/creator/mood__=brightly optimistic"
+       ]
       ],
       [
        "EXPORT quirk ← __characters/creator/quirk__",
-       "brushes invisible dust off their clothes"
+       "brushes invisible dust off their clothes",
+       [
+        "__characters/creator/quirk__=brushes invisible dust off their clothes"
+       ]
       ],
       [
        "__characters/creator/skill__ ×2",
-       "sketching faces quickly, telling tall tales"
+       "sketching faces quickly, telling tall tales",
+       [
+        "__characters/creator/skill__=sketching faces quickly",
+        "__characters/creator/skill__=telling tall tales"
+       ]
       ],
       [
        "EXPORT voice ← __characters/creator/voice__",
-       "a fast, breathless voice that runs sentences together"
+       "a fast, breathless voice that runs sentences together",
+       [
+        "__characters/creator/voice__=a fast, breathless voice that runs sentences together"
+       ]
       ]
      ],
      "exports": {
@@ -273,115 +443,200 @@
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
-       "cyberpunk"
+       "cyberpunk",
+       [
+        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}=cyberpunk"
+       ]
       ],
       [
        "$colour ← __characters/creator/colour__",
-       "crimson"
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
       ],
       [
        "{woman|man|nonbinary person}",
-       "man"
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
       ],
       [
        "{young|prime|middle-aged|old}",
-       "middle-aged"
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
       ],
       [
        "{19-26}",
-       "25"
+       "25",
+       [
+        "{19-26}=25"
+       ]
       ],
       [
        "{27-39}",
-       "28"
+       "28",
+       [
+        "{27-39}=28"
+       ]
       ],
       [
        "{40-58}",
-       "58"
+       "58",
+       [
+        "{40-58}=57–58"
+       ]
       ],
       [
        "{59-79}",
-       "61"
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
       ],
       [
        "$origin ← __characters/creator/origin__",
-       "Indian descent, with {warm brown|light brown|deep brown} skin"
+       "Indian descent, with {warm brown|light brown|deep brown} skin",
+       [
+        "__characters/creator/origin__=Indian descent, with {warm brown|light brown|deep brown} skin"
+       ]
       ],
       [
        "{warm brown|light brown|deep brown}",
-       "light brown"
+       "light brown",
+       [
+        "{warm brown|light brown|deep brown}=light brown"
+       ]
       ],
       [
        "$build ← __characters/creator/build__",
-       "athletic, with a sprinter's strong legs"
+       "athletic, with a sprinter's strong legs",
+       [
+        "__characters/creator/build__=athletic, with a sprinter's strong legs"
+       ]
       ],
       [
        "$face ← __characters/creator/face__",
-       "a face wider at the jaw than at the forehead"
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
       ],
       [
        "$eyes ← __characters/creator/eyes__",
-       "yellow-green eyes"
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
       ],
       [
        "{silver|white|snow-white|iron-grey|salt-and-pepper}",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=salt-and-pepper"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|$colour-dyed}",
-       "$colour-dyed"
+       "$colour-dyed",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=$colour-dyed"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|greying|salt-and-pepper}",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=salt-and-pepper"
+       ]
       ],
       [
        "$hair ← __characters/creator/hair[fit=$fit|all]__",
-       "loose $haircolour curls on top over a tight fade"
+       "loose $haircolour curls on top over a tight fade",
+       [
+        "__characters/creator/hair__=loose $haircolour curls on top over a tight fade"
+       ]
       ],
       [
        "$mark ← __characters/creator/mark__",
-       "laugh lines carved deep around the eyes"
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
       ],
       [
        "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
-       "a $colour reflective rain poncho over a black tracksuit"
+       "a $colour reflective rain poncho over a black tracksuit",
+       [
+        "__characters/creator/outfit__=a $colour reflective rain poncho over a black tracksuit"
+       ]
       ],
       [
        "{no|yes}",
-       "yes"
+       "yes",
+       [
+        "{no|yes}=yes"
+       ]
       ],
       [
        "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
-       "a $colour beret tilted to one side"
+       "a $colour beret tilted to one side",
+       [
+        "__characters/creator/accessory__=a $colour beret tilted to one side"
+       ]
       ],
       [
        "$presence ← __characters/creator/presence__",
-       "a steady, amused half-smile"
+       "a steady, amused half-smile",
+       [
+        "__characters/creator/presence__=a steady, amused half-smile"
+       ]
       ],
       [
        "{photo|animated|anime|painted}",
-       "photo"
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
       ],
       [
        "{portrait|three-quarter|full-length|profile}",
-       "full-length"
+       "full-length",
+       [
+        "{portrait|three-quarter|full-length|profile}=full-length"
+       ]
       ],
       [
        "EXPORT mood ← __characters/creator/mood__",
-       "brightly optimistic"
+       "brightly optimistic",
+       [
+        "__characters/creator/mood__=brightly optimistic"
+       ]
       ],
       [
        "EXPORT quirk ← __characters/creator/quirk__",
-       "brushes invisible dust off their clothes"
+       "brushes invisible dust off their clothes",
+       [
+        "__characters/creator/quirk__=brushes invisible dust off their clothes"
+       ]
       ],
       [
        "__characters/creator/skill__ ×2",
-       "sketching faces quickly, telling tall tales"
+       "sketching faces quickly, telling tall tales",
+       [
+        "__characters/creator/skill__=sketching faces quickly",
+        "__characters/creator/skill__=telling tall tales"
+       ]
       ],
       [
        "EXPORT voice ← __characters/creator/voice__",
-       "a fast, breathless voice that runs sentences together"
+       "a fast, breathless voice that runs sentences together",
+       [
+        "__characters/creator/voice__=a fast, breathless voice that runs sentences together"
+       ]
       ]
      ],
      "exports": {
@@ -405,115 +660,200 @@
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
-       "cyberpunk"
+       "cyberpunk",
+       [
+        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}=cyberpunk"
+       ]
       ],
       [
        "$colour ← __characters/creator/colour__",
-       "crimson"
+       "crimson",
+       [
+        "__characters/creator/colour__=crimson"
+       ]
       ],
       [
        "{woman|man|nonbinary person}",
-       "man"
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
       ],
       [
        "{young|prime|middle-aged|old}",
-       "middle-aged"
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
       ],
       [
        "{19-26}",
-       "25"
+       "25",
+       [
+        "{19-26}=25"
+       ]
       ],
       [
        "{27-39}",
-       "28"
+       "28",
+       [
+        "{27-39}=28"
+       ]
       ],
       [
        "{40-58}",
-       "58"
+       "58",
+       [
+        "{40-58}=57–58"
+       ]
       ],
       [
        "{59-79}",
-       "61"
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
       ],
       [
        "$origin ← __characters/creator/origin__",
-       "Indian descent, with {warm brown|light brown|deep brown} skin"
+       "Indian descent, with {warm brown|light brown|deep brown} skin",
+       [
+        "__characters/creator/origin__=Indian descent, with {warm brown|light brown|deep brown} skin"
+       ]
       ],
       [
        "{warm brown|light brown|deep brown}",
-       "light brown"
+       "light brown",
+       [
+        "{warm brown|light brown|deep brown}=light brown"
+       ]
       ],
       [
        "$build ← __characters/creator/build__",
-       "athletic, with a sprinter's strong legs"
+       "athletic, with a sprinter's strong legs",
+       [
+        "__characters/creator/build__=athletic, with a sprinter's strong legs"
+       ]
       ],
       [
        "$face ← __characters/creator/face__",
-       "a face wider at the jaw than at the forehead"
+       "a face wider at the jaw than at the forehead",
+       [
+        "__characters/creator/face__=a face wider at the jaw than at the forehead"
+       ]
       ],
       [
        "$eyes ← __characters/creator/eyes__",
-       "yellow-green eyes"
+       "yellow-green eyes",
+       [
+        "__characters/creator/eyes__=yellow-green eyes"
+       ]
       ],
       [
        "{silver|white|snow-white|iron-grey|salt-and-pepper}",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=salt-and-pepper"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|$colour-dyed}",
-       "$colour-dyed"
+       "$colour-dyed",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=$colour-dyed"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|greying|salt-and-pepper}",
-       "salt-and-pepper"
+       "salt-and-pepper",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=salt-and-pepper"
+       ]
       ],
       [
        "$hair ← __characters/creator/hair[fit=$fit|all]__",
-       "loose $haircolour curls on top over a tight fade"
+       "loose $haircolour curls on top over a tight fade",
+       [
+        "__characters/creator/hair__=loose $haircolour curls on top over a tight fade"
+       ]
       ],
       [
        "$mark ← __characters/creator/mark__",
-       "laugh lines carved deep around the eyes"
+       "laugh lines carved deep around the eyes",
+       [
+        "__characters/creator/mark__=laugh lines carved deep around the eyes"
+       ]
       ],
       [
        "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
-       "a $colour reflective rain poncho over a black tracksuit"
+       "a $colour reflective rain poncho over a black tracksuit",
+       [
+        "__characters/creator/outfit__=a $colour reflective rain poncho over a black tracksuit"
+       ]
       ],
       [
        "{no|yes}",
-       "yes"
+       "yes",
+       [
+        "{no|yes}=yes"
+       ]
       ],
       [
        "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
-       "a $colour beret tilted to one side"
+       "a $colour beret tilted to one side",
+       [
+        "__characters/creator/accessory__=a $colour beret tilted to one side"
+       ]
       ],
       [
        "$presence ← __characters/creator/presence__",
-       "a steady, amused half-smile"
+       "a steady, amused half-smile",
+       [
+        "__characters/creator/presence__=a steady, amused half-smile"
+       ]
       ],
       [
        "{photo|animated|anime|painted}",
-       "photo"
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
       ],
       [
        "{portrait|three-quarter|full-length|profile}",
-       "profile"
+       "profile",
+       [
+        "{portrait|three-quarter|full-length|profile}=profile"
+       ]
       ],
       [
        "EXPORT mood ← __characters/creator/mood__",
-       "brightly optimistic"
+       "brightly optimistic",
+       [
+        "__characters/creator/mood__=brightly optimistic"
+       ]
       ],
       [
        "EXPORT quirk ← __characters/creator/quirk__",
-       "brushes invisible dust off their clothes"
+       "brushes invisible dust off their clothes",
+       [
+        "__characters/creator/quirk__=brushes invisible dust off their clothes"
+       ]
       ],
       [
        "__characters/creator/skill__ ×2",
-       "sketching faces quickly, telling tall tales"
+       "sketching faces quickly, telling tall tales",
+       [
+        "__characters/creator/skill__=sketching faces quickly",
+        "__characters/creator/skill__=telling tall tales"
+       ]
       ],
       [
        "EXPORT voice ← __characters/creator/voice__",
-       "a fast, breathless voice that runs sentences together"
+       "a fast, breathless voice that runs sentences together",
+       [
+        "__characters/creator/voice__=a fast, breathless voice that runs sentences together"
+       ]
       ]
      ],
      "exports": {
@@ -541,119 +881,207 @@
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
-       "cyberpunk"
+       "cyberpunk",
+       [
+        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}=cyberpunk"
+       ]
       ],
       [
        "$colour ← __characters/creator/colour__",
-       "mustard-yellow"
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
       ],
       [
        "{woman|man|nonbinary person}",
-       "woman"
+       "woman",
+       [
+        "{woman|man|nonbinary person}=woman"
+       ]
       ],
       [
        "{young|prime|middle-aged|old}",
-       "young"
+       "young",
+       [
+        "{young|prime|middle-aged|old}=young"
+       ]
       ],
       [
        "{19-26}",
-       "24"
+       "24",
+       [
+        "{19-26}=24"
+       ]
       ],
       [
        "{27-39}",
-       "33"
+       "33",
+       [
+        "{27-39}=33"
+       ]
       ],
       [
        "{40-58}",
-       "56"
+       "56",
+       [
+        "{40-58}=55–56"
+       ]
       ],
       [
        "{59-79}",
-       "61"
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
       ],
       [
        "$origin ← __characters/creator/origin__",
-       "Tibetan descent, with {weathered tan|light brown} skin"
+       "Tibetan descent, with {weathered tan|light brown} skin",
+       [
+        "__characters/creator/origin__=Tibetan descent, with {weathered tan|light brown} skin"
+       ]
       ],
       [
        "{weathered tan|light brown}",
-       "weathered tan"
+       "weathered tan",
+       [
+        "{weathered tan|light brown}=weathered tan"
+       ]
       ],
       [
        "$build ← __characters/creator/build__",
-       "short and broad, with a wrestler's build"
+       "short and broad, with a wrestler's build",
+       [
+        "__characters/creator/build__=short and broad, with a wrestler's build"
+       ]
       ],
       [
        "$face ← __characters/creator/face__",
-       "a large face with broad, open features"
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
       ],
       [
        "$eyes ← __characters/creator/eyes__",
-       "amber eyes"
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
       ],
       [
        "{silver|white|snow-white|iron-grey|salt-and-pepper}",
-       "silver"
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|$colour-dyed}",
-       "__characters/creator/haircolour__"
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|greying|salt-and-pepper}",
-       "__characters/creator/haircolour__"
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=__characters/creator/haircolour__"
+       ]
       ],
       [
        "$haircolour ← __characters/creator/haircolour__",
-       "dark ash-brown"
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
       ],
       [
        "$hair ← __characters/creator/hair[fit=$fit|all]__",
-       "1920s-style $haircolour finger waves pressed close to the head"
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
       ],
       [
        "$mark ← __characters/creator/mark__",
-       "a tiny heart tattooed on one earlobe"
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
       ],
       [
        "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
-       "a $colour pleated skirt with chrome buckles and a short mesh top"
+       "a $colour pleated skirt with chrome buckles and a short mesh top",
+       [
+        "__characters/creator/outfit__=a $colour pleated skirt with chrome buckles and a short mesh top"
+       ]
       ],
       [
        "{no|yes}",
-       "yes"
+       "yes",
+       [
+        "{no|yes}=yes"
+       ]
       ],
       [
        "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
-       "chunky $colour headphones around the neck"
+       "chunky $colour headphones around the neck",
+       [
+        "__characters/creator/accessory__=chunky $colour headphones around the neck"
+       ]
       ],
       [
        "$presence ← __characters/creator/presence__",
-       "a brooding, lowered brow"
+       "a brooding, lowered brow",
+       [
+        "__characters/creator/presence__=a brooding, lowered brow"
+       ]
       ],
       [
        "{photo|animated|anime|painted}",
-       "photo"
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
       ],
       [
        "{portrait|three-quarter|full-length|profile}",
-       "portrait"
+       "portrait",
+       [
+        "{portrait|three-quarter|full-length|profile}=portrait"
+       ]
       ],
       [
        "EXPORT mood ← __characters/creator/mood__",
-       "mischievously secretive"
+       "mischievously secretive",
+       [
+        "__characters/creator/mood__=mischievously secretive"
+       ]
       ],
       [
        "EXPORT quirk ← __characters/creator/quirk__",
-       "points with the whole hand, never a finger"
+       "points with the whole hand, never a finger",
+       [
+        "__characters/creator/quirk__=points with the whole hand, never a finger"
+       ]
       ],
       [
        "__characters/creator/skill__ ×2",
-       "rewiring a cyber arm, tying sailor's knots"
+       "rewiring a cyber arm, tying sailor's knots",
+       [
+        "__characters/creator/skill__=rewiring a cyber arm",
+        "__characters/creator/skill__=tying sailor's knots"
+       ]
       ],
       [
        "EXPORT voice ← __characters/creator/voice__",
-       "a heavy, tired voice that trails off mid-sentence"
+       "a heavy, tired voice that trails off mid-sentence",
+       [
+        "__characters/creator/voice__=a heavy, tired voice that trails off mid-sentence"
+       ]
       ]
      ],
      "exports": {
@@ -677,119 +1105,207 @@
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
-       "cyberpunk"
+       "cyberpunk",
+       [
+        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}=cyberpunk"
+       ]
       ],
       [
        "$colour ← __characters/creator/colour__",
-       "mustard-yellow"
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
       ],
       [
        "{woman|man|nonbinary person}",
-       "woman"
+       "woman",
+       [
+        "{woman|man|nonbinary person}=woman"
+       ]
       ],
       [
        "{young|prime|middle-aged|old}",
-       "young"
+       "young",
+       [
+        "{young|prime|middle-aged|old}=young"
+       ]
       ],
       [
        "{19-26}",
-       "24"
+       "24",
+       [
+        "{19-26}=24"
+       ]
       ],
       [
        "{27-39}",
-       "33"
+       "33",
+       [
+        "{27-39}=33"
+       ]
       ],
       [
        "{40-58}",
-       "56"
+       "56",
+       [
+        "{40-58}=55–56"
+       ]
       ],
       [
        "{59-79}",
-       "61"
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
       ],
       [
        "$origin ← __characters/creator/origin__",
-       "Tibetan descent, with {weathered tan|light brown} skin"
+       "Tibetan descent, with {weathered tan|light brown} skin",
+       [
+        "__characters/creator/origin__=Tibetan descent, with {weathered tan|light brown} skin"
+       ]
       ],
       [
        "{weathered tan|light brown}",
-       "weathered tan"
+       "weathered tan",
+       [
+        "{weathered tan|light brown}=weathered tan"
+       ]
       ],
       [
        "$build ← __characters/creator/build__",
-       "short and broad, with a wrestler's build"
+       "short and broad, with a wrestler's build",
+       [
+        "__characters/creator/build__=short and broad, with a wrestler's build"
+       ]
       ],
       [
        "$face ← __characters/creator/face__",
-       "a large face with broad, open features"
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
       ],
       [
        "$eyes ← __characters/creator/eyes__",
-       "amber eyes"
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
       ],
       [
        "{silver|white|snow-white|iron-grey|salt-and-pepper}",
-       "silver"
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|$colour-dyed}",
-       "__characters/creator/haircolour__"
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|greying|salt-and-pepper}",
-       "__characters/creator/haircolour__"
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=__characters/creator/haircolour__"
+       ]
       ],
       [
        "$haircolour ← __characters/creator/haircolour__",
-       "dark ash-brown"
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
       ],
       [
        "$hair ← __characters/creator/hair[fit=$fit|all]__",
-       "1920s-style $haircolour finger waves pressed close to the head"
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
       ],
       [
        "$mark ← __characters/creator/mark__",
-       "a tiny heart tattooed on one earlobe"
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
       ],
       [
        "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
-       "a $colour pleated skirt with chrome buckles and a short mesh top"
+       "a $colour pleated skirt with chrome buckles and a short mesh top",
+       [
+        "__characters/creator/outfit__=a $colour pleated skirt with chrome buckles and a short mesh top"
+       ]
       ],
       [
        "{no|yes}",
-       "yes"
+       "yes",
+       [
+        "{no|yes}=yes"
+       ]
       ],
       [
        "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
-       "chunky $colour headphones around the neck"
+       "chunky $colour headphones around the neck",
+       [
+        "__characters/creator/accessory__=chunky $colour headphones around the neck"
+       ]
       ],
       [
        "$presence ← __characters/creator/presence__",
-       "a brooding, lowered brow"
+       "a brooding, lowered brow",
+       [
+        "__characters/creator/presence__=a brooding, lowered brow"
+       ]
       ],
       [
        "{photo|animated|anime|painted}",
-       "photo"
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
       ],
       [
        "{portrait|three-quarter|full-length|profile}",
-       "three-quarter"
+       "three-quarter",
+       [
+        "{portrait|three-quarter|full-length|profile}=three-quarter"
+       ]
       ],
       [
        "EXPORT mood ← __characters/creator/mood__",
-       "mischievously secretive"
+       "mischievously secretive",
+       [
+        "__characters/creator/mood__=mischievously secretive"
+       ]
       ],
       [
        "EXPORT quirk ← __characters/creator/quirk__",
-       "points with the whole hand, never a finger"
+       "points with the whole hand, never a finger",
+       [
+        "__characters/creator/quirk__=points with the whole hand, never a finger"
+       ]
       ],
       [
        "__characters/creator/skill__ ×2",
-       "rewiring a cyber arm, tying sailor's knots"
+       "rewiring a cyber arm, tying sailor's knots",
+       [
+        "__characters/creator/skill__=rewiring a cyber arm",
+        "__characters/creator/skill__=tying sailor's knots"
+       ]
       ],
       [
        "EXPORT voice ← __characters/creator/voice__",
-       "a heavy, tired voice that trails off mid-sentence"
+       "a heavy, tired voice that trails off mid-sentence",
+       [
+        "__characters/creator/voice__=a heavy, tired voice that trails off mid-sentence"
+       ]
       ]
      ],
      "exports": {
@@ -813,119 +1329,207 @@
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
-       "cyberpunk"
+       "cyberpunk",
+       [
+        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}=cyberpunk"
+       ]
       ],
       [
        "$colour ← __characters/creator/colour__",
-       "mustard-yellow"
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
       ],
       [
        "{woman|man|nonbinary person}",
-       "woman"
+       "woman",
+       [
+        "{woman|man|nonbinary person}=woman"
+       ]
       ],
       [
        "{young|prime|middle-aged|old}",
-       "young"
+       "young",
+       [
+        "{young|prime|middle-aged|old}=young"
+       ]
       ],
       [
        "{19-26}",
-       "24"
+       "24",
+       [
+        "{19-26}=24"
+       ]
       ],
       [
        "{27-39}",
-       "33"
+       "33",
+       [
+        "{27-39}=33"
+       ]
       ],
       [
        "{40-58}",
-       "56"
+       "56",
+       [
+        "{40-58}=55–56"
+       ]
       ],
       [
        "{59-79}",
-       "61"
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
       ],
       [
        "$origin ← __characters/creator/origin__",
-       "Tibetan descent, with {weathered tan|light brown} skin"
+       "Tibetan descent, with {weathered tan|light brown} skin",
+       [
+        "__characters/creator/origin__=Tibetan descent, with {weathered tan|light brown} skin"
+       ]
       ],
       [
        "{weathered tan|light brown}",
-       "weathered tan"
+       "weathered tan",
+       [
+        "{weathered tan|light brown}=weathered tan"
+       ]
       ],
       [
        "$build ← __characters/creator/build__",
-       "short and broad, with a wrestler's build"
+       "short and broad, with a wrestler's build",
+       [
+        "__characters/creator/build__=short and broad, with a wrestler's build"
+       ]
       ],
       [
        "$face ← __characters/creator/face__",
-       "a large face with broad, open features"
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
       ],
       [
        "$eyes ← __characters/creator/eyes__",
-       "amber eyes"
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
       ],
       [
        "{silver|white|snow-white|iron-grey|salt-and-pepper}",
-       "silver"
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|$colour-dyed}",
-       "__characters/creator/haircolour__"
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|greying|salt-and-pepper}",
-       "__characters/creator/haircolour__"
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=__characters/creator/haircolour__"
+       ]
       ],
       [
        "$haircolour ← __characters/creator/haircolour__",
-       "dark ash-brown"
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
       ],
       [
        "$hair ← __characters/creator/hair[fit=$fit|all]__",
-       "1920s-style $haircolour finger waves pressed close to the head"
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
       ],
       [
        "$mark ← __characters/creator/mark__",
-       "a tiny heart tattooed on one earlobe"
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
       ],
       [
        "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
-       "a $colour pleated skirt with chrome buckles and a short mesh top"
+       "a $colour pleated skirt with chrome buckles and a short mesh top",
+       [
+        "__characters/creator/outfit__=a $colour pleated skirt with chrome buckles and a short mesh top"
+       ]
       ],
       [
        "{no|yes}",
-       "yes"
+       "yes",
+       [
+        "{no|yes}=yes"
+       ]
       ],
       [
        "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
-       "chunky $colour headphones around the neck"
+       "chunky $colour headphones around the neck",
+       [
+        "__characters/creator/accessory__=chunky $colour headphones around the neck"
+       ]
       ],
       [
        "$presence ← __characters/creator/presence__",
-       "a brooding, lowered brow"
+       "a brooding, lowered brow",
+       [
+        "__characters/creator/presence__=a brooding, lowered brow"
+       ]
       ],
       [
        "{photo|animated|anime|painted}",
-       "photo"
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
       ],
       [
        "{portrait|three-quarter|full-length|profile}",
-       "full-length"
+       "full-length",
+       [
+        "{portrait|three-quarter|full-length|profile}=full-length"
+       ]
       ],
       [
        "EXPORT mood ← __characters/creator/mood__",
-       "mischievously secretive"
+       "mischievously secretive",
+       [
+        "__characters/creator/mood__=mischievously secretive"
+       ]
       ],
       [
        "EXPORT quirk ← __characters/creator/quirk__",
-       "points with the whole hand, never a finger"
+       "points with the whole hand, never a finger",
+       [
+        "__characters/creator/quirk__=points with the whole hand, never a finger"
+       ]
       ],
       [
        "__characters/creator/skill__ ×2",
-       "rewiring a cyber arm, tying sailor's knots"
+       "rewiring a cyber arm, tying sailor's knots",
+       [
+        "__characters/creator/skill__=rewiring a cyber arm",
+        "__characters/creator/skill__=tying sailor's knots"
+       ]
       ],
       [
        "EXPORT voice ← __characters/creator/voice__",
-       "a heavy, tired voice that trails off mid-sentence"
+       "a heavy, tired voice that trails off mid-sentence",
+       [
+        "__characters/creator/voice__=a heavy, tired voice that trails off mid-sentence"
+       ]
       ]
      ],
      "exports": {
@@ -949,119 +1553,207 @@
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
-       "cyberpunk"
+       "cyberpunk",
+       [
+        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}=cyberpunk"
+       ]
       ],
       [
        "$colour ← __characters/creator/colour__",
-       "mustard-yellow"
+       "mustard-yellow",
+       [
+        "__characters/creator/colour__=mustard-yellow"
+       ]
       ],
       [
        "{woman|man|nonbinary person}",
-       "woman"
+       "woman",
+       [
+        "{woman|man|nonbinary person}=woman"
+       ]
       ],
       [
        "{young|prime|middle-aged|old}",
-       "young"
+       "young",
+       [
+        "{young|prime|middle-aged|old}=young"
+       ]
       ],
       [
        "{19-26}",
-       "24"
+       "24",
+       [
+        "{19-26}=24"
+       ]
       ],
       [
        "{27-39}",
-       "33"
+       "33",
+       [
+        "{27-39}=33"
+       ]
       ],
       [
        "{40-58}",
-       "56"
+       "56",
+       [
+        "{40-58}=55–56"
+       ]
       ],
       [
        "{59-79}",
-       "61"
+       "61",
+       [
+        "{59-79}=61–62"
+       ]
       ],
       [
        "$origin ← __characters/creator/origin__",
-       "Tibetan descent, with {weathered tan|light brown} skin"
+       "Tibetan descent, with {weathered tan|light brown} skin",
+       [
+        "__characters/creator/origin__=Tibetan descent, with {weathered tan|light brown} skin"
+       ]
       ],
       [
        "{weathered tan|light brown}",
-       "weathered tan"
+       "weathered tan",
+       [
+        "{weathered tan|light brown}=weathered tan"
+       ]
       ],
       [
        "$build ← __characters/creator/build__",
-       "short and broad, with a wrestler's build"
+       "short and broad, with a wrestler's build",
+       [
+        "__characters/creator/build__=short and broad, with a wrestler's build"
+       ]
       ],
       [
        "$face ← __characters/creator/face__",
-       "a large face with broad, open features"
+       "a large face with broad, open features",
+       [
+        "__characters/creator/face__=a large face with broad, open features"
+       ]
       ],
       [
        "$eyes ← __characters/creator/eyes__",
-       "amber eyes"
+       "amber eyes",
+       [
+        "__characters/creator/eyes__=amber eyes"
+       ]
       ],
       [
        "{silver|white|snow-white|iron-grey|salt-and-pepper}",
-       "silver"
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|$colour-dyed}",
-       "__characters/creator/haircolour__"
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|greying|salt-and-pepper}",
-       "__characters/creator/haircolour__"
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=__characters/creator/haircolour__"
+       ]
       ],
       [
        "$haircolour ← __characters/creator/haircolour__",
-       "dark ash-brown"
+       "dark ash-brown",
+       [
+        "__characters/creator/haircolour__=dark ash-brown"
+       ]
       ],
       [
        "$hair ← __characters/creator/hair[fit=$fit|all]__",
-       "1920s-style $haircolour finger waves pressed close to the head"
+       "1920s-style $haircolour finger waves pressed close to the head",
+       [
+        "__characters/creator/hair__=1920s-style $haircolour finger waves pressed close to the head"
+       ]
       ],
       [
        "$mark ← __characters/creator/mark__",
-       "a tiny heart tattooed on one earlobe"
+       "a tiny heart tattooed on one earlobe",
+       [
+        "__characters/creator/mark__=a tiny heart tattooed on one earlobe"
+       ]
       ],
       [
        "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
-       "a $colour pleated skirt with chrome buckles and a short mesh top"
+       "a $colour pleated skirt with chrome buckles and a short mesh top",
+       [
+        "__characters/creator/outfit__=a $colour pleated skirt with chrome buckles and a short mesh top"
+       ]
       ],
       [
        "{no|yes}",
-       "yes"
+       "yes",
+       [
+        "{no|yes}=yes"
+       ]
       ],
       [
        "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
-       "chunky $colour headphones around the neck"
+       "chunky $colour headphones around the neck",
+       [
+        "__characters/creator/accessory__=chunky $colour headphones around the neck"
+       ]
       ],
       [
        "$presence ← __characters/creator/presence__",
-       "a brooding, lowered brow"
+       "a brooding, lowered brow",
+       [
+        "__characters/creator/presence__=a brooding, lowered brow"
+       ]
       ],
       [
        "{photo|animated|anime|painted}",
-       "photo"
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
       ],
       [
        "{portrait|three-quarter|full-length|profile}",
-       "profile"
+       "profile",
+       [
+        "{portrait|three-quarter|full-length|profile}=profile"
+       ]
       ],
       [
        "EXPORT mood ← __characters/creator/mood__",
-       "mischievously secretive"
+       "mischievously secretive",
+       [
+        "__characters/creator/mood__=mischievously secretive"
+       ]
       ],
       [
        "EXPORT quirk ← __characters/creator/quirk__",
-       "points with the whole hand, never a finger"
+       "points with the whole hand, never a finger",
+       [
+        "__characters/creator/quirk__=points with the whole hand, never a finger"
+       ]
       ],
       [
        "__characters/creator/skill__ ×2",
-       "rewiring a cyber arm, tying sailor's knots"
+       "rewiring a cyber arm, tying sailor's knots",
+       [
+        "__characters/creator/skill__=rewiring a cyber arm",
+        "__characters/creator/skill__=tying sailor's knots"
+       ]
       ],
       [
        "EXPORT voice ← __characters/creator/voice__",
-       "a heavy, tired voice that trails off mid-sentence"
+       "a heavy, tired voice that trails off mid-sentence",
+       [
+        "__characters/creator/voice__=a heavy, tired voice that trails off mid-sentence"
+       ]
       ]
      ],
      "exports": {
@@ -1089,115 +1781,200 @@
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
-       "gothic"
+       "gothic",
+       [
+        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}=gothic"
+       ]
       ],
       [
        "$colour ← __characters/creator/colour__",
-       "camel"
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
       ],
       [
        "{woman|man|nonbinary person}",
-       "man"
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
       ],
       [
        "{young|prime|middle-aged|old}",
-       "middle-aged"
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
       ],
       [
        "{19-26}",
-       "19"
+       "19",
+       [
+        "{19-26}=19"
+       ]
       ],
       [
        "{27-39}",
-       "28"
+       "28",
+       [
+        "{27-39}=28"
+       ]
       ],
       [
        "{40-58}",
-       "50"
+       "50",
+       [
+        "{40-58}=49–50"
+       ]
       ],
       [
        "{59-79}",
-       "69"
+       "69",
+       [
+        "{59-79}=69–70"
+       ]
       ],
       [
        "$origin ← __characters/creator/origin__",
-       "Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin",
+       [
+        "__characters/creator/origin__=Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       ]
       ],
       [
        "{light brown|copper-brown|dark brown}",
-       "copper-brown"
+       "copper-brown",
+       [
+        "{light brown|copper-brown|dark brown}=copper-brown"
+       ]
       ],
       [
        "$build ← __characters/creator/build__",
-       "trim and neatly proportioned"
+       "trim and neatly proportioned",
+       [
+        "__characters/creator/build__=trim and neatly proportioned"
+       ]
       ],
       [
        "$face ← __characters/creator/face__",
-       "wide, flat cheekbones and a gently curved nose"
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
       ],
       [
        "$eyes ← __characters/creator/eyes__",
-       "near-black eyes"
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
       ],
       [
        "{silver|white|snow-white|iron-grey|salt-and-pepper}",
-       "silver"
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|$colour-dyed}",
-       "__characters/creator/haircolour__"
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|greying|salt-and-pepper}",
-       "greying"
+       "greying",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=greying"
+       ]
       ],
       [
        "$hair ← __characters/creator/hair[fit=$fit|all]__",
-       "chin-length $haircolour two-strand twists"
+       "chin-length $haircolour two-strand twists",
+       [
+        "__characters/creator/hair__=chin-length $haircolour two-strand twists"
+       ]
       ],
       [
        "$mark ← __characters/creator/mark__",
-       "a split earlobe, healed in two points"
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
       ],
       [
        "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
-       "a black military jacket with silver frogging and $colour fringed epaulettes"
+       "a black military jacket with silver frogging and $colour fringed epaulettes",
+       [
+        "__characters/creator/outfit__=a black military jacket with silver frogging and $colour fringed epaulettes"
+       ]
       ],
       [
        "{no|yes}",
-       "no"
+       "no",
+       [
+        "{no|yes}=no"
+       ]
       ],
       [
        "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
-       "a battered cowboy hat"
+       "a battered cowboy hat",
+       [
+        "__characters/creator/accessory__=a battered cowboy hat"
+       ]
       ],
       [
        "$presence ← __characters/creator/presence__",
-       "a sheepish, apologetic look"
+       "a sheepish, apologetic look",
+       [
+        "__characters/creator/presence__=a sheepish, apologetic look"
+       ]
       ],
       [
        "{photo|animated|anime|painted}",
-       "photo"
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
       ],
       [
        "{portrait|three-quarter|full-length|profile}",
-       "portrait"
+       "portrait",
+       [
+        "{portrait|three-quarter|full-length|profile}=portrait"
+       ]
       ],
       [
        "EXPORT mood ← __characters/creator/mood__",
-       "theatrically dramatic"
+       "theatrically dramatic",
+       [
+        "__characters/creator/mood__=theatrically dramatic"
+       ]
       ],
       [
        "EXPORT quirk ← __characters/creator/quirk__",
-       "stands a little too close when talking"
+       "stands a little too close when talking",
+       [
+        "__characters/creator/quirk__=stands a little too close when talking"
+       ]
       ],
       [
        "__characters/creator/skill__ ×2",
-       "playing a pipe organ, playing a battered fiddle"
+       "playing a pipe organ, playing a battered fiddle",
+       [
+        "__characters/creator/skill__=playing a pipe organ",
+        "__characters/creator/skill__=playing a battered fiddle"
+       ]
       ],
       [
        "EXPORT voice ← __characters/creator/voice__",
-       "a scratchy, high voice like an old record"
+       "a scratchy, high voice like an old record",
+       [
+        "__characters/creator/voice__=a scratchy, high voice like an old record"
+       ]
       ]
      ],
      "exports": {
@@ -1221,115 +1998,200 @@
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
-       "gothic"
+       "gothic",
+       [
+        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}=gothic"
+       ]
       ],
       [
        "$colour ← __characters/creator/colour__",
-       "camel"
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
       ],
       [
        "{woman|man|nonbinary person}",
-       "man"
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
       ],
       [
        "{young|prime|middle-aged|old}",
-       "middle-aged"
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
       ],
       [
        "{19-26}",
-       "19"
+       "19",
+       [
+        "{19-26}=19"
+       ]
       ],
       [
        "{27-39}",
-       "28"
+       "28",
+       [
+        "{27-39}=28"
+       ]
       ],
       [
        "{40-58}",
-       "50"
+       "50",
+       [
+        "{40-58}=49–50"
+       ]
       ],
       [
        "{59-79}",
-       "69"
+       "69",
+       [
+        "{59-79}=69–70"
+       ]
       ],
       [
        "$origin ← __characters/creator/origin__",
-       "Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin",
+       [
+        "__characters/creator/origin__=Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       ]
       ],
       [
        "{light brown|copper-brown|dark brown}",
-       "copper-brown"
+       "copper-brown",
+       [
+        "{light brown|copper-brown|dark brown}=copper-brown"
+       ]
       ],
       [
        "$build ← __characters/creator/build__",
-       "trim and neatly proportioned"
+       "trim and neatly proportioned",
+       [
+        "__characters/creator/build__=trim and neatly proportioned"
+       ]
       ],
       [
        "$face ← __characters/creator/face__",
-       "wide, flat cheekbones and a gently curved nose"
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
       ],
       [
        "$eyes ← __characters/creator/eyes__",
-       "near-black eyes"
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
       ],
       [
        "{silver|white|snow-white|iron-grey|salt-and-pepper}",
-       "silver"
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|$colour-dyed}",
-       "__characters/creator/haircolour__"
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|greying|salt-and-pepper}",
-       "greying"
+       "greying",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=greying"
+       ]
       ],
       [
        "$hair ← __characters/creator/hair[fit=$fit|all]__",
-       "chin-length $haircolour two-strand twists"
+       "chin-length $haircolour two-strand twists",
+       [
+        "__characters/creator/hair__=chin-length $haircolour two-strand twists"
+       ]
       ],
       [
        "$mark ← __characters/creator/mark__",
-       "a split earlobe, healed in two points"
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
       ],
       [
        "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
-       "a black military jacket with silver frogging and $colour fringed epaulettes"
+       "a black military jacket with silver frogging and $colour fringed epaulettes",
+       [
+        "__characters/creator/outfit__=a black military jacket with silver frogging and $colour fringed epaulettes"
+       ]
       ],
       [
        "{no|yes}",
-       "no"
+       "no",
+       [
+        "{no|yes}=no"
+       ]
       ],
       [
        "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
-       "a battered cowboy hat"
+       "a battered cowboy hat",
+       [
+        "__characters/creator/accessory__=a battered cowboy hat"
+       ]
       ],
       [
        "$presence ← __characters/creator/presence__",
-       "a sheepish, apologetic look"
+       "a sheepish, apologetic look",
+       [
+        "__characters/creator/presence__=a sheepish, apologetic look"
+       ]
       ],
       [
        "{photo|animated|anime|painted}",
-       "photo"
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
       ],
       [
        "{portrait|three-quarter|full-length|profile}",
-       "three-quarter"
+       "three-quarter",
+       [
+        "{portrait|three-quarter|full-length|profile}=three-quarter"
+       ]
       ],
       [
        "EXPORT mood ← __characters/creator/mood__",
-       "theatrically dramatic"
+       "theatrically dramatic",
+       [
+        "__characters/creator/mood__=theatrically dramatic"
+       ]
       ],
       [
        "EXPORT quirk ← __characters/creator/quirk__",
-       "stands a little too close when talking"
+       "stands a little too close when talking",
+       [
+        "__characters/creator/quirk__=stands a little too close when talking"
+       ]
       ],
       [
        "__characters/creator/skill__ ×2",
-       "playing a pipe organ, playing a battered fiddle"
+       "playing a pipe organ, playing a battered fiddle",
+       [
+        "__characters/creator/skill__=playing a pipe organ",
+        "__characters/creator/skill__=playing a battered fiddle"
+       ]
       ],
       [
        "EXPORT voice ← __characters/creator/voice__",
-       "a scratchy, high voice like an old record"
+       "a scratchy, high voice like an old record",
+       [
+        "__characters/creator/voice__=a scratchy, high voice like an old record"
+       ]
       ]
      ],
      "exports": {
@@ -1353,115 +2215,200 @@
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
-       "gothic"
+       "gothic",
+       [
+        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}=gothic"
+       ]
       ],
       [
        "$colour ← __characters/creator/colour__",
-       "camel"
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
       ],
       [
        "{woman|man|nonbinary person}",
-       "man"
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
       ],
       [
        "{young|prime|middle-aged|old}",
-       "middle-aged"
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
       ],
       [
        "{19-26}",
-       "19"
+       "19",
+       [
+        "{19-26}=19"
+       ]
       ],
       [
        "{27-39}",
-       "28"
+       "28",
+       [
+        "{27-39}=28"
+       ]
       ],
       [
        "{40-58}",
-       "50"
+       "50",
+       [
+        "{40-58}=49–50"
+       ]
       ],
       [
        "{59-79}",
-       "69"
+       "69",
+       [
+        "{59-79}=69–70"
+       ]
       ],
       [
        "$origin ← __characters/creator/origin__",
-       "Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin",
+       [
+        "__characters/creator/origin__=Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       ]
       ],
       [
        "{light brown|copper-brown|dark brown}",
-       "copper-brown"
+       "copper-brown",
+       [
+        "{light brown|copper-brown|dark brown}=copper-brown"
+       ]
       ],
       [
        "$build ← __characters/creator/build__",
-       "trim and neatly proportioned"
+       "trim and neatly proportioned",
+       [
+        "__characters/creator/build__=trim and neatly proportioned"
+       ]
       ],
       [
        "$face ← __characters/creator/face__",
-       "wide, flat cheekbones and a gently curved nose"
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
       ],
       [
        "$eyes ← __characters/creator/eyes__",
-       "near-black eyes"
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
       ],
       [
        "{silver|white|snow-white|iron-grey|salt-and-pepper}",
-       "silver"
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|$colour-dyed}",
-       "__characters/creator/haircolour__"
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|greying|salt-and-pepper}",
-       "greying"
+       "greying",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=greying"
+       ]
       ],
       [
        "$hair ← __characters/creator/hair[fit=$fit|all]__",
-       "chin-length $haircolour two-strand twists"
+       "chin-length $haircolour two-strand twists",
+       [
+        "__characters/creator/hair__=chin-length $haircolour two-strand twists"
+       ]
       ],
       [
        "$mark ← __characters/creator/mark__",
-       "a split earlobe, healed in two points"
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
       ],
       [
        "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
-       "a black military jacket with silver frogging and $colour fringed epaulettes"
+       "a black military jacket with silver frogging and $colour fringed epaulettes",
+       [
+        "__characters/creator/outfit__=a black military jacket with silver frogging and $colour fringed epaulettes"
+       ]
       ],
       [
        "{no|yes}",
-       "no"
+       "no",
+       [
+        "{no|yes}=no"
+       ]
       ],
       [
        "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
-       "a battered cowboy hat"
+       "a battered cowboy hat",
+       [
+        "__characters/creator/accessory__=a battered cowboy hat"
+       ]
       ],
       [
        "$presence ← __characters/creator/presence__",
-       "a sheepish, apologetic look"
+       "a sheepish, apologetic look",
+       [
+        "__characters/creator/presence__=a sheepish, apologetic look"
+       ]
       ],
       [
        "{photo|animated|anime|painted}",
-       "photo"
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
       ],
       [
        "{portrait|three-quarter|full-length|profile}",
-       "full-length"
+       "full-length",
+       [
+        "{portrait|three-quarter|full-length|profile}=full-length"
+       ]
       ],
       [
        "EXPORT mood ← __characters/creator/mood__",
-       "theatrically dramatic"
+       "theatrically dramatic",
+       [
+        "__characters/creator/mood__=theatrically dramatic"
+       ]
       ],
       [
        "EXPORT quirk ← __characters/creator/quirk__",
-       "stands a little too close when talking"
+       "stands a little too close when talking",
+       [
+        "__characters/creator/quirk__=stands a little too close when talking"
+       ]
       ],
       [
        "__characters/creator/skill__ ×2",
-       "playing a pipe organ, playing a battered fiddle"
+       "playing a pipe organ, playing a battered fiddle",
+       [
+        "__characters/creator/skill__=playing a pipe organ",
+        "__characters/creator/skill__=playing a battered fiddle"
+       ]
       ],
       [
        "EXPORT voice ← __characters/creator/voice__",
-       "a scratchy, high voice like an old record"
+       "a scratchy, high voice like an old record",
+       [
+        "__characters/creator/voice__=a scratchy, high voice like an old record"
+       ]
       ]
      ],
      "exports": {
@@ -1485,115 +2432,200 @@
      "picks": [
       [
        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}",
-       "gothic"
+       "gothic",
+       [
+        "{everyday|adventure|fantasy|cyberpunk|noir|gothic|spacefarer}=gothic"
+       ]
       ],
       [
        "$colour ← __characters/creator/colour__",
-       "camel"
+       "camel",
+       [
+        "__characters/creator/colour__=camel"
+       ]
       ],
       [
        "{woman|man|nonbinary person}",
-       "man"
+       "man",
+       [
+        "{woman|man|nonbinary person}=man"
+       ]
       ],
       [
        "{young|prime|middle-aged|old}",
-       "middle-aged"
+       "middle-aged",
+       [
+        "{young|prime|middle-aged|old}=middle-aged"
+       ]
       ],
       [
        "{19-26}",
-       "19"
+       "19",
+       [
+        "{19-26}=19"
+       ]
       ],
       [
        "{27-39}",
-       "28"
+       "28",
+       [
+        "{27-39}=28"
+       ]
       ],
       [
        "{40-58}",
-       "50"
+       "50",
+       [
+        "{40-58}=49–50"
+       ]
       ],
       [
        "{59-79}",
-       "69"
+       "69",
+       [
+        "{59-79}=69–70"
+       ]
       ],
       [
        "$origin ← __characters/creator/origin__",
-       "Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       "Tuareg descent, with {light brown|copper-brown|dark brown} skin",
+       [
+        "__characters/creator/origin__=Tuareg descent, with {light brown|copper-brown|dark brown} skin"
+       ]
       ],
       [
        "{light brown|copper-brown|dark brown}",
-       "copper-brown"
+       "copper-brown",
+       [
+        "{light brown|copper-brown|dark brown}=copper-brown"
+       ]
       ],
       [
        "$build ← __characters/creator/build__",
-       "trim and neatly proportioned"
+       "trim and neatly proportioned",
+       [
+        "__characters/creator/build__=trim and neatly proportioned"
+       ]
       ],
       [
        "$face ← __characters/creator/face__",
-       "wide, flat cheekbones and a gently curved nose"
+       "wide, flat cheekbones and a gently curved nose",
+       [
+        "__characters/creator/face__=wide, flat cheekbones and a gently curved nose"
+       ]
       ],
       [
        "$eyes ← __characters/creator/eyes__",
-       "near-black eyes"
+       "near-black eyes",
+       [
+        "__characters/creator/eyes__=near-black eyes"
+       ]
       ],
       [
        "{silver|white|snow-white|iron-grey|salt-and-pepper}",
-       "silver"
+       "silver",
+       [
+        "{silver|white|snow-white|iron-grey|salt-and-pepper}=silver"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|$colour-dyed}",
-       "__characters/creator/haircolour__"
+       "__characters/creator/haircolour__",
+       [
+        "{__characters/creator/haircolour__|$colour-dyed}=__characters/creator/haircolour__"
+       ]
       ],
       [
        "{__characters/creator/haircolour__|greying|salt-and-pepper}",
-       "greying"
+       "greying",
+       [
+        "{__characters/creator/haircolour__|greying|salt-and-pepper}=greying"
+       ]
       ],
       [
        "$hair ← __characters/creator/hair[fit=$fit|all]__",
-       "chin-length $haircolour two-strand twists"
+       "chin-length $haircolour two-strand twists",
+       [
+        "__characters/creator/hair__=chin-length $haircolour two-strand twists"
+       ]
       ],
       [
        "$mark ← __characters/creator/mark__",
-       "a split earlobe, healed in two points"
+       "a split earlobe, healed in two points",
+       [
+        "__characters/creator/mark__=a split earlobe, healed in two points"
+       ]
       ],
       [
        "$outfit ← __characters/creator/outfit[genre=$genre, fit=$fit|all]__",
-       "a black military jacket with silver frogging and $colour fringed epaulettes"
+       "a black military jacket with silver frogging and $colour fringed epaulettes",
+       [
+        "__characters/creator/outfit__=a black military jacket with silver frogging and $colour fringed epaulettes"
+       ]
       ],
       [
        "{no|yes}",
-       "no"
+       "no",
+       [
+        "{no|yes}=no"
+       ]
       ],
       [
        "$accessory ← __characters/creator/accessory[fit=$fit|all]__",
-       "a battered cowboy hat"
+       "a battered cowboy hat",
+       [
+        "__characters/creator/accessory__=a battered cowboy hat"
+       ]
       ],
       [
        "$presence ← __characters/creator/presence__",
-       "a sheepish, apologetic look"
+       "a sheepish, apologetic look",
+       [
+        "__characters/creator/presence__=a sheepish, apologetic look"
+       ]
       ],
       [
        "{photo|animated|anime|painted}",
-       "photo"
+       "photo",
+       [
+        "{photo|animated|anime|painted}=photo"
+       ]
       ],
       [
        "{portrait|three-quarter|full-length|profile}",
-       "profile"
+       "profile",
+       [
+        "{portrait|three-quarter|full-length|profile}=profile"
+       ]
       ],
       [
        "EXPORT mood ← __characters/creator/mood__",
-       "theatrically dramatic"
+       "theatrically dramatic",
+       [
+        "__characters/creator/mood__=theatrically dramatic"
+       ]
       ],
       [
        "EXPORT quirk ← __characters/creator/quirk__",
-       "stands a little too close when talking"
+       "stands a little too close when talking",
+       [
+        "__characters/creator/quirk__=stands a little too close when talking"
+       ]
       ],
       [
        "__characters/creator/skill__ ×2",
-       "playing a pipe organ, playing a battered fiddle"
+       "playing a pipe organ, playing a battered fiddle",
+       [
+        "__characters/creator/skill__=playing a pipe organ",
+        "__characters/creator/skill__=playing a battered fiddle"
+       ]
       ],
       [
        "EXPORT voice ← __characters/creator/voice__",
-       "a scratchy, high voice like an old record"
+       "a scratchy, high voice like an old record",
+       [
+        "__characters/creator/voice__=a scratchy, high voice like an old record"
+       ]
       ]
      ],
      "exports": {

@@ -8,31 +8,54 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Atelier Sans Titre"
+       "Atelier Sans Titre",
+       [
+        "__couture_house__=Atelier Sans Titre"
+       ]
       ],
       [
        "{autumn-winter|spring-summer|resort}",
-       "spring-summer"
+       "spring-summer",
+       [
+        "{autumn-winter|spring-summer|resort}=spring-summer"
+       ]
       ],
       [
        "__couture_adjective__ ×2–3",
-       "post-luxury, pre-apocalyptic, aggressively understated"
+       "post-luxury, pre-apocalyptic, aggressively understated",
+       [
+        "__couture_adjective__=post-luxury",
+        "__couture_adjective__=pre-apocalyptic",
+        "__couture_adjective__=aggressively understated"
+       ]
       ],
       [
        "__couture_form__ ×1–2",
-       "a dress built from forty overlapping umbrellas"
+       "a dress built from forty overlapping umbrellas",
+       [
+        "__couture_form__=a dress built from forty overlapping umbrellas"
+       ]
       ],
       [
        "__couture_venue__",
-       "the ballroom of a crumbling palace"
+       "the ballroom of a crumbling palace",
+       [
+        "__couture_venue__=the ballroom of a crumbling palace"
+       ]
       ],
       [
        "__couture_form__",
-       "sleeves that forget where the arm ends"
+       "sleeves that forget where the arm ends",
+       [
+        "__couture_form__=sleeves that forget where the arm ends"
+       ]
       ],
       [
        "__couture_material__",
-       "moss velvet"
+       "moss velvet",
+       [
+        "__couture_material__=moss velvet"
+       ]
       ]
      ]
     }
@@ -45,31 +68,54 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Studio Kessler-Mourne"
+       "Studio Kessler-Mourne",
+       [
+        "__couture_house__=Studio Kessler-Mourne"
+       ]
       ],
       [
        "{autumn-winter|spring-summer|resort}",
-       "autumn-winter"
+       "autumn-winter",
+       [
+        "{autumn-winter|spring-summer|resort}=autumn-winter"
+       ]
       ],
       [
        "__couture_adjective__ ×2–3",
-       "subversively bourgeois, post-ironic"
+       "subversively bourgeois, post-ironic",
+       [
+        "__couture_adjective__=subversively bourgeois",
+        "__couture_adjective__=post-ironic"
+       ]
       ],
       [
        "__couture_form__ ×1–2",
-       "a single sleeve that continues into the floor, a cape cut from the idea of a staircase"
+       "a single sleeve that continues into the floor, a cape cut from the idea of a staircase",
+       [
+        "__couture_form__=a single sleeve that continues into the floor",
+        "__couture_form__=a cape cut from the idea of a staircase"
+       ]
       ],
       [
        "__couture_venue__",
-       "a runway of wet black sand"
+       "a runway of wet black sand",
+       [
+        "__couture_venue__=a runway of wet black sand"
+       ]
       ],
       [
        "__couture_form__",
-       "lapels that fold back into themselves"
+       "lapels that fold back into themselves",
+       [
+        "__couture_form__=lapels that fold back into themselves"
+       ]
       ],
       [
        "__couture_material__",
-       "boiled wool"
+       "boiled wool",
+       [
+        "__couture_material__=boiled wool"
+       ]
       ]
      ]
     }
@@ -82,31 +128,54 @@
      "picks": [
       [
        "$house ← __couture_house__",
-       "Maison Absente"
+       "Maison Absente",
+       [
+        "__couture_house__=Maison Absente"
+       ]
       ],
       [
        "{autumn-winter|spring-summer|resort}",
-       "spring-summer"
+       "spring-summer",
+       [
+        "{autumn-winter|spring-summer|resort}=spring-summer"
+       ]
       ],
       [
        "__couture_adjective__ ×2–3",
-       "quietly unwearable, radically tailored, neo-ecclesiastical"
+       "quietly unwearable, radically tailored, neo-ecclesiastical",
+       [
+        "__couture_adjective__=quietly unwearable",
+        "__couture_adjective__=radically tailored",
+        "__couture_adjective__=neo-ecclesiastical"
+       ]
       ],
       [
        "__couture_form__ ×1–2",
-       "a skirt that is mostly an argument"
+       "a skirt that is mostly an argument",
+       [
+        "__couture_form__=a skirt that is mostly an argument"
+       ]
       ],
       [
        "__couture_venue__",
-       "a greenhouse full of dead orchids"
+       "a greenhouse full of dead orchids",
+       [
+        "__couture_venue__=a greenhouse full of dead orchids"
+       ]
       ],
       [
        "__couture_form__",
-       "pockets placed exactly where regret lives"
+       "pockets placed exactly where regret lives",
+       [
+        "__couture_form__=pockets placed exactly where regret lives"
+       ]
       ],
       [
        "__couture_material__",
-       "crushed silver lamé"
+       "crushed silver lamé",
+       [
+        "__couture_material__=crushed silver lamé"
+       ]
       ]
      ]
     }

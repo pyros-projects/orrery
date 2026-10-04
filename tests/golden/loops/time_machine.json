@@ -18,11 +18,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a small harbour front with a stone quay"
+       "a small harbour front with a stone quay",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a small harbour front with a stone quay"
+       ]
       ],
       [
        "$era ← __time/eras#era:1850__",
-       "gas lamps, mud and cobbles, horse-drawn carts, men in top hats and women in long skirts, a blacksmith's forge smoking"
+       "gas lamps, mud and cobbles, horse-drawn carts, men in top hats and women in long skirts, a blacksmith's forge smoking",
+       [
+        "__time/eras__=gas lamps, mud and cobbles, horse-drawn carts, men in top hats and women in long skirts, a blacksmith's forge smoking"
+       ]
       ]
      ]
     },
@@ -32,11 +38,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a small harbour front with a stone quay"
+       "a small harbour front with a stone quay",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a small harbour front with a stone quay"
+       ]
       ],
       [
        "$era ← __time/eras#era:1920__",
-       "the first electric street lamps, a tram rattling past, flat caps and cloche hats, the first cars sharing the street with carts"
+       "the first electric street lamps, a tram rattling past, flat caps and cloche hats, the first cars sharing the street with carts",
+       [
+        "__time/eras__=the first electric street lamps, a tram rattling past, flat caps and cloche hats, the first cars sharing the street with carts"
+       ]
       ]
      ]
     },
@@ -46,11 +58,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a small harbour front with a stone quay"
+       "a small harbour front with a stone quay",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a small harbour front with a stone quay"
+       ]
       ],
       [
        "$era ← __time/eras#era:1955__",
-       "chrome cars with fins, a milk bar with a neon sign, children on bicycles and washing lines between the houses"
+       "chrome cars with fins, a milk bar with a neon sign, children on bicycles and washing lines between the houses",
+       [
+        "__time/eras__=chrome cars with fins, a milk bar with a neon sign, children on bicycles and washing lines between the houses"
+       ]
       ]
      ]
     },
@@ -60,11 +78,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a small harbour front with a stone quay"
+       "a small harbour front with a stone quay",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a small harbour front with a stone quay"
+       ]
       ],
       [
        "$era ← __time/eras#era:1978__",
-       "concrete and orange paint, a phone box, flared jeans, a boombox on a stoop and graffiti starting on the walls"
+       "concrete and orange paint, a phone box, flared jeans, a boombox on a stoop and graffiti starting on the walls",
+       [
+        "__time/eras__=concrete and orange paint, a phone box, flared jeans, a boombox on a stoop and graffiti starting on the walls"
+       ]
       ]
      ]
     },
@@ -74,11 +98,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a small harbour front with a stone quay"
+       "a small harbour front with a stone quay",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a small harbour front with a stone quay"
+       ]
       ],
       [
        "$era ← __time/eras#era:1995__",
-       "satellite dishes, a video rental shop, neon tubes and people with mobile phones the size of bricks"
+       "satellite dishes, a video rental shop, neon tubes and people with mobile phones the size of bricks",
+       [
+        "__time/eras__=satellite dishes, a video rental shop, neon tubes and people with mobile phones the size of bricks"
+       ]
       ]
      ]
     },
@@ -88,11 +118,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a small harbour front with a stone quay"
+       "a small harbour front with a stone quay",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a small harbour front with a stone quay"
+       ]
       ],
       [
        "$era ← __time/eras#era:2025__",
-       "glass shopfronts, e-scooters, people looking down at their phones and a food delivery rider weaving through"
+       "glass shopfronts, e-scooters, people looking down at their phones and a food delivery rider weaving through",
+       [
+        "__time/eras__=glass shopfronts, e-scooters, people looking down at their phones and a food delivery rider weaving through"
+       ]
       ]
      ]
     }
@@ -115,11 +151,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a street corner by an old railway bridge"
+       "a street corner by an old railway bridge",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a street corner by an old railway bridge"
+       ]
       ],
       [
        "$era ← __time/eras#era:1850__",
-       "gas lamps, mud and cobbles, horse-drawn carts, men in top hats and women in long skirts, a blacksmith's forge smoking"
+       "gas lamps, mud and cobbles, horse-drawn carts, men in top hats and women in long skirts, a blacksmith's forge smoking",
+       [
+        "__time/eras__=gas lamps, mud and cobbles, horse-drawn carts, men in top hats and women in long skirts, a blacksmith's forge smoking"
+       ]
       ]
      ]
     },
@@ -129,11 +171,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a street corner by an old railway bridge"
+       "a street corner by an old railway bridge",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a street corner by an old railway bridge"
+       ]
       ],
       [
        "$era ← __time/eras#era:1920__",
-       "the first electric street lamps, a tram rattling past, flat caps and cloche hats, the first cars sharing the street with carts"
+       "the first electric street lamps, a tram rattling past, flat caps and cloche hats, the first cars sharing the street with carts",
+       [
+        "__time/eras__=the first electric street lamps, a tram rattling past, flat caps and cloche hats, the first cars sharing the street with carts"
+       ]
       ]
      ]
     },
@@ -143,11 +191,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a street corner by an old railway bridge"
+       "a street corner by an old railway bridge",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a street corner by an old railway bridge"
+       ]
       ],
       [
        "$era ← __time/eras#era:1955__",
-       "chrome cars with fins, a milk bar with a neon sign, children on bicycles and washing lines between the houses"
+       "chrome cars with fins, a milk bar with a neon sign, children on bicycles and washing lines between the houses",
+       [
+        "__time/eras__=chrome cars with fins, a milk bar with a neon sign, children on bicycles and washing lines between the houses"
+       ]
       ]
      ]
     },
@@ -157,11 +211,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a street corner by an old railway bridge"
+       "a street corner by an old railway bridge",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a street corner by an old railway bridge"
+       ]
       ],
       [
        "$era ← __time/eras#era:1978__",
-       "concrete and orange paint, a phone box, flared jeans, a boombox on a stoop and graffiti starting on the walls"
+       "concrete and orange paint, a phone box, flared jeans, a boombox on a stoop and graffiti starting on the walls",
+       [
+        "__time/eras__=concrete and orange paint, a phone box, flared jeans, a boombox on a stoop and graffiti starting on the walls"
+       ]
       ]
      ]
     },
@@ -171,11 +231,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a street corner by an old railway bridge"
+       "a street corner by an old railway bridge",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a street corner by an old railway bridge"
+       ]
       ],
       [
        "$era ← __time/eras#era:1995__",
-       "satellite dishes, a video rental shop, neon tubes and people with mobile phones the size of bricks"
+       "satellite dishes, a video rental shop, neon tubes and people with mobile phones the size of bricks",
+       [
+        "__time/eras__=satellite dishes, a video rental shop, neon tubes and people with mobile phones the size of bricks"
+       ]
       ]
      ]
     },
@@ -185,11 +251,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a street corner by an old railway bridge"
+       "a street corner by an old railway bridge",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a street corner by an old railway bridge"
+       ]
       ],
       [
        "$era ← __time/eras#era:2025__",
-       "glass shopfronts, e-scooters, people looking down at their phones and a food delivery rider weaving through"
+       "glass shopfronts, e-scooters, people looking down at their phones and a food delivery rider weaving through",
+       [
+        "__time/eras__=glass shopfronts, e-scooters, people looking down at their phones and a food delivery rider weaving through"
+       ]
       ]
      ]
     }
@@ -212,11 +284,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a street corner by an old railway bridge"
+       "a street corner by an old railway bridge",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a street corner by an old railway bridge"
+       ]
       ],
       [
        "$era ← __time/eras#era:1850__",
-       "gas lamps, mud and cobbles, horse-drawn carts, men in top hats and women in long skirts, a blacksmith's forge smoking"
+       "gas lamps, mud and cobbles, horse-drawn carts, men in top hats and women in long skirts, a blacksmith's forge smoking",
+       [
+        "__time/eras__=gas lamps, mud and cobbles, horse-drawn carts, men in top hats and women in long skirts, a blacksmith's forge smoking"
+       ]
       ]
      ]
     },
@@ -226,11 +304,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a street corner by an old railway bridge"
+       "a street corner by an old railway bridge",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a street corner by an old railway bridge"
+       ]
       ],
       [
        "$era ← __time/eras#era:1920__",
-       "the first electric street lamps, a tram rattling past, flat caps and cloche hats, the first cars sharing the street with carts"
+       "the first electric street lamps, a tram rattling past, flat caps and cloche hats, the first cars sharing the street with carts",
+       [
+        "__time/eras__=the first electric street lamps, a tram rattling past, flat caps and cloche hats, the first cars sharing the street with carts"
+       ]
       ]
      ]
     },
@@ -240,11 +324,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a street corner by an old railway bridge"
+       "a street corner by an old railway bridge",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a street corner by an old railway bridge"
+       ]
       ],
       [
        "$era ← __time/eras#era:1955__",
-       "chrome cars with fins, a milk bar with a neon sign, children on bicycles and washing lines between the houses"
+       "chrome cars with fins, a milk bar with a neon sign, children on bicycles and washing lines between the houses",
+       [
+        "__time/eras__=chrome cars with fins, a milk bar with a neon sign, children on bicycles and washing lines between the houses"
+       ]
       ]
      ]
     },
@@ -254,11 +344,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a street corner by an old railway bridge"
+       "a street corner by an old railway bridge",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a street corner by an old railway bridge"
+       ]
       ],
       [
        "$era ← __time/eras#era:1978__",
-       "concrete and orange paint, a phone box, flared jeans, a boombox on a stoop and graffiti starting on the walls"
+       "concrete and orange paint, a phone box, flared jeans, a boombox on a stoop and graffiti starting on the walls",
+       [
+        "__time/eras__=concrete and orange paint, a phone box, flared jeans, a boombox on a stoop and graffiti starting on the walls"
+       ]
       ]
      ]
     },
@@ -268,11 +364,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a street corner by an old railway bridge"
+       "a street corner by an old railway bridge",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a street corner by an old railway bridge"
+       ]
       ],
       [
        "$era ← __time/eras#era:1995__",
-       "satellite dishes, a video rental shop, neon tubes and people with mobile phones the size of bricks"
+       "satellite dishes, a video rental shop, neon tubes and people with mobile phones the size of bricks",
+       [
+        "__time/eras__=satellite dishes, a video rental shop, neon tubes and people with mobile phones the size of bricks"
+       ]
       ]
      ]
     },
@@ -282,11 +384,17 @@
      "picks": [
       [
        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}",
-       "a street corner by an old railway bridge"
+       "a street corner by an old railway bridge",
+       [
+        "{a street corner by an old railway bridge|a small harbour front with a stone quay|a village square around a fountain|a crossroads in a river town}=a street corner by an old railway bridge"
+       ]
       ],
       [
        "$era ← __time/eras#era:2025__",
-       "glass shopfronts, e-scooters, people looking down at their phones and a food delivery rider weaving through"
+       "glass shopfronts, e-scooters, people looking down at their phones and a food delivery rider weaving through",
+       [
+        "__time/eras__=glass shopfronts, e-scooters, people looking down at their phones and a food delivery rider weaving through"
+       ]
       ]
      ]
     }

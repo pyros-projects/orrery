@@ -1,9 +1,9 @@
 """The golden corpus (#20): what every preset that ships rolls, pinned.
 
-Each built-in preset is rolled at a few seeds, as Generate rolls it: its text and its picks; for a
-reel the clips it plays (up to CLIPS), each with its scene, text and picks; for a grid its first CELLS
-cells. The snapshots live in tests/golden/<folder>/<name>.json, and a difference fails, naming the
-preset, the seed, the take and what changed. Determinism is a promise: a change that moves them
+Each built-in preset is rolled at a few seeds, as Generate rolls it: its text, its picks with the keys a
+rating teaches (#258) and what it exports; for a reel the clips it plays (up to CLIPS), each with its scene,
+text and picks; for a grid its first CELLS cells. The snapshots live in tests/golden/<folder>/<name>.json,
+and any difference fails, the preset, the seed, the take and what changed named. Determinism is a promise: a change that moves them
 needs a reason in the PR (AGENTS.md). Then rewrite them:
 
     uv run python tests/test_golden.py --write
@@ -40,7 +40,7 @@ PRESETS = sorted(p.relative_to(BUILTIN_PRESETS).with_suffix("").as_posix()
 
 def take(result, **where) -> dict:
     exports = getattr(result, "exports", None)  # EXPORT: (#157), pinned like the text when a preset has any
-    return {**where, "text": result.text, "picks": [[p.label, p.value] for p in result.picks],
+    return {**where, "text": result.text, "picks": [[p.label, p.value, list(p.keys)] for p in result.picks],
             **({"exports": exports} if exports else {})}
 
 
@@ -118,11 +118,17 @@ def differences(name: str, want: dict, got: dict) -> list[str]:
                 continue
             at = ", ".join(f"{k} {v + 1}" for k, v in x.items() if k in ("cell", "clip"))
             where = f"{name}, seed {seed}" + (f", {at}" if at else "")
-            if x["picks"] != y["picks"]:
-                moved = [f"{p} = {v!r}" for p, v in y["picks"] if [p, v] not in x["picks"]][:5]
+            rolled = [q[:2] for q in x["picks"]]
+            if rolled != [q[:2] for q in y["picks"]]:
+                moved = [f"{p} = {v!r}" for p, v, *_ in y["picks"] if [p, v] not in rolled][:5]
                 said.append(f"{where}: picks moved: {'; '.join(moved) or 'fewer picks'}")
+            elif x["picks"] != y["picks"]:  # the same rolls, another lesson for a rating (#258)
+                keys = [f"{p}: {k} → {kk}" for (p, _, k), (_, _, kk) in zip(x["picks"], y["picks"], strict=False) if k != kk][:5]
+                said.append(f"{where}: the picks' keys moved: {'; '.join(keys)}")
             if x["text"] != y["text"]:
                 said.append(f"{where}: the text changed\n" + "\n".join(words(x["text"], y["text"])))
+            if (other := sorted(k for k in x.keys() | y.keys() if k not in ("picks", "text") and x.get(k) != y.get(k))):
+                said.append(f"{where}: {', '.join(other)} changed: was {[x.get(k) for k in other]}, now {[y.get(k) for k in other]}")
             break
         else:
             said.append(f"{name}, seed {seed}: {len(a['takes'])} takes, now {len(b['takes'])}")
@@ -139,9 +145,9 @@ def test_the_preset_rolls_what_it_rolled(bare_home, name):
     path = golden_file(name)
     assert path.exists(), f"{name} has no snapshot: uv run python tests/test_golden.py --write"
     want, got = json.loads(path.read_text(encoding="utf-8")), snapshot(bare_home, name)
-    said = differences(name, want, got)
-    assert not said, "\n".join(said) + "\n\nIntended? Say why in the PR and run: " \
-                                       "uv run python tests/test_golden.py --write"
+    # the snapshot as a whole decides; the words only explain it (#258)
+    assert got == want, "\n".join(differences(name, want, got) or [f"{name}: the snapshot differs"]) \
+        + "\n\nIntended? Say why in the PR and run: uv run python tests/test_golden.py --write"
 
 
 MARKERS = re.compile("[\x1e\x1f\ue000-\uf8ff]")  # what the phases pass to each other inside the text (#22)
@@ -151,7 +157,7 @@ def test_no_marker_reaches_a_prompt():
     leaks = [f"{p.relative_to(GOLDEN)}, seed {seed}" for p in sorted(GOLDEN.rglob("*.json"))
              for seed, rolled in json.loads(p.read_text(encoding="utf-8"))["seeds"].items()
              for take in rolled["takes"]
-             if MARKERS.search(take["text"]) or any(MARKERS.search(v) for _, v in take["picks"])]
+             if MARKERS.search(take["text"]) or any(MARKERS.search(v) for _, v, *_ in take["picks"])]
     assert not leaks, f"a marker character reached the prompt: {leaks[:5]}"
 
 
@@ -178,3 +184,14 @@ if __name__ == "__main__":
     if sys.argv[1:] != ["--write"]:
         sys.exit(__doc__)
     write()
+
+
+def test_a_difference_is_named_whatever_moved():
+    """#258: exports or a pick's keys that moved, with the text and the rolls as they were, were let through."""
+    want = {"seeds": {"0": {"takes": [{"text": "A portrait", "picks": [["__mood__", "calm", ["__mood__=calm"]]], "exports": {"mood": "calm"}}]}}}
+    moved = json.loads(json.dumps(want))
+    moved["seeds"]["0"]["takes"][0]["exports"] = {"mood": "tense"}
+    assert moved != want and differences("x", want, moved) == ["x, seed 0: exports changed: was [{'mood': 'calm'}], now [{'mood': 'tense'}]"]
+    taught = json.loads(json.dumps(want))
+    taught["seeds"]["0"]["takes"][0]["picks"][0][2] = ["__moods__=calm"]
+    assert differences("x", want, taught) == ["x, seed 0: the picks' keys moved: __mood__: ['__mood__=calm'] → ['__moods__=calm']"]

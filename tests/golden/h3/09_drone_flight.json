@@ -8,15 +8,24 @@
      "picks": [
       [
        "$land ← __world/landscapes__",
-       "an iceberg-strewn bay where humpback whales surface between the ice"
+       "an iceberg-strewn bay where humpback whales surface between the ice",
+       [
+        "__world/landscapes__=an iceberg-strewn bay where humpback whales surface between the ice"
+       ]
       ],
       [
        "$sky ← __world/weather__",
-       "a thunderstorm rolling in, lightning flickering inside black cloud"
+       "a thunderstorm rolling in, lightning flickering inside black cloud",
+       [
+        "__world/weather__=a thunderstorm rolling in, lightning flickering inside black cloud"
+       ]
       ],
       [
        "$move ← __drone/moves__",
-       "dives from high above in a fast FPV plunge and pulls out just above the ground"
+       "dives from high above in a fast FPV plunge and pulls out just above the ground",
+       [
+        "__drone/moves__=dives from high above in a fast FPV plunge and pulls out just above the ground"
+       ]
       ]
      ]
     }
@@ -29,15 +38,24 @@
      "picks": [
       [
        "$land ← __world/landscapes__",
-       "a savanna with one acacia tree and a herd of elephants crossing it"
+       "a savanna with one acacia tree and a herd of elephants crossing it",
+       [
+        "__world/landscapes__=a savanna with one acacia tree and a herd of elephants crossing it"
+       ]
       ],
       [
        "$sky ← __world/weather__",
-       "a thunderstorm rolling in, lightning flickering inside black cloud"
+       "a thunderstorm rolling in, lightning flickering inside black cloud",
+       [
+        "__world/weather__=a thunderstorm rolling in, lightning flickering inside black cloud"
+       ]
       ],
       [
        "$move ← __drone/moves__",
-       "skims a few metres above the surface toward the horizon, then climbs steeply to reveal the whole expanse at once"
+       "skims a few metres above the surface toward the horizon, then climbs steeply to reveal the whole expanse at once",
+       [
+        "__drone/moves__=skims a few metres above the surface toward the horizon, then climbs steeply to reveal the whole expanse at once"
+       ]
       ]
      ]
     }
@@ -50,15 +68,24 @@
      "picks": [
       [
        "$land ← __world/landscapes__",
-       "a lighthouse on a lone rock in a storm-whipped sea"
+       "a lighthouse on a lone rock in a storm-whipped sea",
+       [
+        "__world/landscapes__=a lighthouse on a lone rock in a storm-whipped sea"
+       ]
       ],
       [
        "$sky ← __world/weather__",
-       "high noon under a fierce white sun and heat shimmer"
+       "high noon under a fierce white sun and heat shimmer",
+       [
+        "__world/weather__=high noon under a fierce white sun and heat shimmer"
+       ]
       ],
       [
        "$move ← __drone/moves__",
-       "threads low through a narrow gap between rocks or trees and bursts out into open space"
+       "threads low through a narrow gap between rocks or trees and bursts out into open space",
+       [
+        "__drone/moves__=threads low through a narrow gap between rocks or trees and bursts out into open space"
+       ]
       ]
      ]
     }
