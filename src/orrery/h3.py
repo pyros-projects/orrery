@@ -171,6 +171,7 @@ class Compiled:
     uses_input: bool = False  # the reel reads the Orrery Prompt's input video (Reel.uses_input)
     pictures: dict[int, dict] = field(default_factory=dict)  # image slot → {file, prompt} a CAST names (name_pictures)
     chunk: int | None = None  # a reel's scene this clip plays (its index), for the take tree (#240)
+    kept: dict | None = None  # what a reel clip's take keeps (#261): its bindings and its END ON:
 
 
 # --- front end ------------------------------------------------------------------------------
@@ -944,11 +945,13 @@ def render_scene(scene: Scene, target: str, lint: list[Issue]) -> str:
 def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                   weights: Mapping[str, float] | None = None, target: str = "h3-base",
                   segment: int = 0, packed: bool = False, held: set[int] | frozenset = frozenset(),
-                  cell: int | None = None, standing: set[int] | frozenset = frozenset()) -> Compiled:
+                  cell: int | None = None, standing: set[int] | frozenset = frozenset(),
+                  past: Mapping[int, dict] | None = None) -> Compiled:
     """`segment` picks a reel's clip (see orrery.reel); plain screenplays ignore it. `packed`: the
     images are renumbered to the ones this clip uses (Orrery Refs hands on only those). `cell`: the
     run of a `: grid` (orrery.batch); None rolls its axes. `standing`: the images wired into Orrery
-    Refs: one a REMEMBER: line keeps stays in the clip as wired until those frames exist."""
+    Refs: one a REMEMBER: line keeps stays in the clip as wired until those frames exist. `past`: what the
+    reel's clips before this one rendered, from their takes (#261; see reel._unroll)."""
     from orrery.batch import prepare
     from orrery.dsl import parse, strip_exports, with_inline
     from orrery.reel import build_segment, shared_sends, split_reel
@@ -971,7 +974,7 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
     sends: dict[int, dict] = {}
     sent_mods: dict[str, dict] = {}  # RefMods made from the reel's own frames, which Orrery RefMods builds
     if reel:
-        scene, picks, path = build_segment(reel, seed, libraries, weights, segment, lint)
+        scene, picks, path, kept = build_segment(reel, seed, libraries, weights, segment, lint, past)
         absent = drop_absent(scene)  # a chunk without a member leaves its definition and its RefMods out
         lint += [Issue("warn", problem) for m in absent for problem in m.problems]
         if reel.send_slots:
@@ -1033,4 +1036,4 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                     [{**r, "sent": sent_mods[r["name"]]} if r["name"] in sent_mods else r for r in clip_refmods(scene)],
                     clip_images(scene, refs), reel.before(segment, path) if reel else None,
                     bool(reel and reel.blocks[path[segment][0]].test), bool(reel and reel.uses_input), named,
-                    path[segment][0] if reel else None)
+                    path[segment][0] if reel else None, kept if reel else None)

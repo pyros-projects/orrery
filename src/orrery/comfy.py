@@ -323,7 +323,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         else:
             result = compile_scene(source, seed, h.libraries(), h.weights(), target=target, segment=segment,
                                    packed=packed, held=anchors.stored(h) if keep else frozenset(), cell=cell,
-                                   standing=standing)
+                                   standing=standing, past=_past(chain, segment))
             lint = [{"severity": i.severity, "message": i.message} for i in result.lint]
             needed = len(result.refs) if packed else max(image_slots(result.scene), default=0)
             if wired is not None and wired < needed:
@@ -437,6 +437,7 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
         if result.chunks:
             data["segment"], data["chunks"], data["segments"] = result.segment, result.chunks, result.segments
             data["chunk"] = result.chunk  # the scene this clip plays, which its take keeps (#240)
+            data["kept"] = result.kept  # its bindings and END ON:, so the clips after it read the past as rendered (#261)
             data["continues"] = result.continues
             if result.test:
                 data["test"] = True
@@ -481,6 +482,20 @@ def _previous(latent_path: str, segment: int):
         return None
     path = previous_clip(Path(folder_paths.get_output_directory()), latent_path or DEFAULT_CHAIN, segment)
     return load(path) if path else None
+
+
+def _past(latent_path: str, segment: int) -> dict[int, dict]:
+    """What the clips before this segment rendered, from Orrery Film's takes (#261); nothing outside ComfyUI."""
+    if segment <= 0:
+        return {}
+    from orrery import film
+
+    try:
+        import folder_paths  # ComfyUI
+
+        return film.past(Path(folder_paths.get_output_directory()), latent_path or DEFAULT_CHAIN, segment)
+    except Exception:  # noqa: BLE001 - no store, no past: the clip rolls its past as before
+        return {}
 
 
 def _announce(unique_id, segment: int, end: bool = False) -> None:

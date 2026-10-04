@@ -166,7 +166,8 @@ What a change to orrery must keep, and the tests that hold it. The golden corpus
   (`test_reel.py::test_bindings_roll_once_for_the_whole_reel`,
   `::test_the_world_holds_and_every_segment_rolls_its_chunk_anew`, `::test_a_field_of_the_reels_head_is_the_same_in_every_clip`).
 - `$x[-N]` is the value N clips back and `$x["title"]` the value when that scene last played,
-  recomputed, so there is no limit; before it exists it is this clip's own value, with a warning
+  recomputed, so there is no limit (in ComfyUI, a clip already rendered keeps what it rolled: #261, h3.md);
+  before it exists it is this clip's own value, with a warning
   (`test_reel.py::test_history_looks_back_n_clips_and_clamps_at_the_first`,
   `::test_history_in_brackets_is_the_value_clips_back_or_when_a_scene_last_played`,
   `::test_history_of_a_scene_that_has_not_played_is_this_clips_value_with_a_warning`).

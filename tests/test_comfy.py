@@ -305,6 +305,7 @@ def test_the_node_writes_the_chunk_its_segment_asks_for(home, monkeypatch):
     assert stack == [("x/all.safetensors", 1.0, 1.0, 0.0, 1.0), ("two.safetensors", 0.5, 0.5, 0.0, 1.0)]
     first = run_prompt(REEL, 1, "h3-base", str(home))
     assert first[5] == h3_length(5) and json.loads(first[1])["segment"] == 0
+    assert set(json.loads(first[1])["kept"]) == {"bindings", "handoff"}  # what its take keeps for the clips after it (#261)
 
 
 def test_unresolved_loras_are_left_out_and_reported(home, monkeypatch):

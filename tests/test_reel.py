@@ -899,3 +899,52 @@ def test_a_set_line_written_wrong_or_naming_nothing_is_lint():
     assert any("is not name(strength, start)" in m for m in lint("SET: image_1 at 0.5"))
     assert any("SET: image_4: the clip hands no image 4 to H3" in m for m in lint("SET: image_4(0.5)"))
     assert any("takes numbers" in m for m in lint("SET: emma_canon(half)"))
+
+
+def _lib(name, *values):
+    return Library(name, [Entry(v) for v in values])
+
+
+PAST_REEL = """@h3 t2va
+$hero = __animal__
+SCENE one
+$look = __style__
+SHOT 5s: static
+A $hero in $look.
+END ON: the $hero turns to __style__
+SCENE two
+SHOT 5s: static
+The $hero again, once in $look~1.
+"""
+
+
+def test_a_clip_reads_its_past_as_its_takes_rendered_it():
+    """#261: the head's bindings, $x~N and the END ON: of the clip before come from its take, not a new roll
+    with libraries changed since; without a take they roll as before."""
+    then = {"animal": _lib("animal", "fox"), "style": _lib("style", "linocut")}
+    now = {"animal": _lib("animal", "badger"), "style": _lib("style", "oil")}
+    first = compile_scene(PAST_REEL, 3, then, segment=0)
+    assert first.kept["bindings"]["hero"]["value"] == "fox" and first.kept["handoff"] == "the fox turns to linocut"
+    past = {0: {"scene": first.chunk, **first.kept}}
+    rolled = compile_scene(PAST_REEL, 3, now, segment=1)  # no takes: the past rolls again, as before
+    assert "badger" in rolled.text and "oil" in rolled.text and "fox" not in rolled.text
+    kept = compile_scene(PAST_REEL, 3, now, segment=1, past=past)
+    assert "The fox again, once in linocut" in kept.text and "turns to linocut" in kept.text and "badger" not in kept.text
+    assert any(i.severity == "info" and "$hero stays 'fox'" in i.message for i in kept.lint)
+    assert compile_scene(PAST_REEL, 3, then, segment=1, past=past).text == compile_scene(PAST_REEL, 3, then, segment=1).text  # nothing changed: as before
+
+
+def test_the_walk_follows_the_scenes_the_takes_played():
+    """#261: a CUT TO: that hangs on a roll goes where the film went, whatever it would roll now."""
+    from orrery.reel import _unroll
+
+    src = ("@h3 t2va\nSCENE start\n$c = {50% contact}\nSHOT 5s: static\nA room.\nIF $c is contact: CUT TO: contact\n"
+           "CUT TO: walk\nSCENE walk\nSHOT 5s: static\nA walk.\nCUT TO: end\nSCENE contact\nSHOT 5s: static\nA contact.\n"
+           "SCENE end\nSHOT 5s: static\nThe end.\n")
+    reel = split_reel(src)
+    for seed in range(8):
+        rolled = _unroll(reel, seed, {}, None, 1)[3][0][1][0]  # the scene clip 2 plays at this seed
+        other = 2 if rolled == 1 else 1
+        record = {"scene": 0, "bindings": {}, "handoff": None}
+        path = _unroll(reel, seed, {}, None, 2, past={0: record, 1: {"scene": other, "bindings": {}, "handoff": None}})[3][0]
+        assert path[1][0] == other  # the take played the other scene: the walk follows it

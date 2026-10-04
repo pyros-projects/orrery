@@ -9,6 +9,9 @@ checks) are left out.
 
 ### Added
 
+- A reel's past is what was rendered: each take keeps its bindings and its `END ON:`, and the clips after it read
+  them (and the scenes the film went through) from the takes, not from a new roll with libraries, ratings or earlier
+  scenes changed since; what has no take rolls as before (#261).
 - The take tree: every take of a reel keeps its path, and picking it brings back the clips last made after it. **Tree**
   shows them all like a git graph with videos, the film's path lit; a click makes the film the way through a take, ✂
   ends it after one, ▶ Film plays the film as clicked together, a timeline of its clips under it, and a filter hides
