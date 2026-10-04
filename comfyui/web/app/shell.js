@@ -215,11 +215,19 @@ export class OrreryApp {
     this.toast(esc(err?.message || String(err)));
   }
 
-  openSheet(html) {
+  // A sheet opens at the app's top, where most of its buttons are; one that belongs to something lower down (a
+  // scene's 📊) opens just under it, or `over` it (a clip), as far as it fits (#219). The big view centres it.
+  openSheet(html, near = null, { over = false } = {}) {
     const host = this.$(".sheet-host");
     host.innerHTML = `<div class="sheet">${html}</div>`;
-    host.firstChild.addEventListener("mousedown", (e) => { if (e.target === host.firstChild) this.closeSheet(); });
-    return host.firstChild;
+    const sheet = host.firstChild, panel = sheet.firstElementChild;
+    sheet.addEventListener("mousedown", (e) => { if (e.target === sheet) this.closeSheet(); });
+    if (near && panel && !this.state.big) {
+      const box = sheet.getBoundingClientRect(), scale = box.height / sheet.offsetHeight || 1;  // the canvas draws the node scaled
+      const at = near.getBoundingClientRect(), top = ((over ? at.top : at.bottom + 6) - box.top) / scale;
+      panel.style.marginTop = `${Math.round(Math.max(0, Math.min(top, sheet.offsetHeight - panel.offsetHeight)))}px`;
+    }
+    return sheet;
   }
   closeSheet() { this.$(".sheet-host").innerHTML = ""; }
   sheetOpen() { return !!this.$(".sheet"); }

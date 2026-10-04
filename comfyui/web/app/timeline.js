@@ -236,7 +236,7 @@ export function wireClips(app, box) {
     const sheet = app.openSheet(`<div class="panel"><div class="row spread"><h4>Clip ${Number(s) + 1}</h4>`
       + `<button class="icon-btn" data-close title="Close">${icon("x")}</button></div>`
       + `<video class="tl-video" controls autoplay loop src="${app.api.chainVideoURL(s, app.bridge.chain(), made?.version)}"></video>`
-      + `<p class="muted flush">${made?.frames ?? "?"} frames, as the reel keeps them (without the pinned frames)</p></div>`);
+      + `<p class="muted flush">${made?.frames ?? "?"} frames, as the reel keeps them (without the pinned frames)</p></div>`, clip, { over: true });
     sheet.querySelector("[data-close]").onclick = () => app.closeSheet();
   });
 }

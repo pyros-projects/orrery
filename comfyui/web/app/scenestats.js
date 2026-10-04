@@ -84,7 +84,7 @@ export function sceneStatsHTML(app, n) {
       + s.made.map((m) => `clip ${m.clip}${m.takes > 1 ? ` (${m.takes} takes)` : ""}`).join(", ") : "None of its clips is made yet."}</p></section></div>`;
 }
 
-export function openSceneStats(app, n) {
-  const sheet = app.openSheet(sceneStatsHTML(app, n));
+export function openSceneStats(app, n, near = null) {
+  const sheet = app.openSheet(sceneStatsHTML(app, n), near?.closest(".chunkline") || near);  // under the scene's divider
   sheet.querySelector("[data-close]").onclick = () => app.closeSheet();
 }

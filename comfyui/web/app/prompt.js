@@ -119,8 +119,8 @@ export function surfSeeds(app, to, n, keep) {
     : control === "randomize" ? Math.floor(Math.random() * 2 ** 31) : control === "decrement" ? -(start + k) : 0));
 }
 
-async function sceneAct(app, act, n) {
-  if (act === "stats") return openSceneStats(app, n);  // #219, also while a sweep runs
+async function sceneAct(app, act, n, button = null) {
+  if (act === "stats") return openSceneStats(app, n, button);  // #219, also while a sweep runs
   const chunks = app.chunks() || [], c = chunks[n];
   if (!c || app.state.sweepQueue) return;
   if (act === "takes") { app.bridge.props.orrery_takes = TAKES[(TAKES.indexOf(takesOf(app)) + 1) % TAKES.length]; return paintEditor(app); }
@@ -244,7 +244,7 @@ export function renderPrompt(app) {
   app.sceneActs = () => sceneActs(app);
   app.view.onclick = (e) => {
     const scene = e.target.closest("[data-scene-act]");
-    if (scene) return sceneAct(app, scene.dataset.sceneAct, Number(scene.dataset.chunk));
+    if (scene) return sceneAct(app, scene.dataset.sceneAct, Number(scene.dataset.chunk), scene);
     const act = e.target.closest("[data-act]")?.dataset.act;
     const load = e.target.closest("[data-load]");
     if (load) return app.loadPreset(load.dataset.load);
