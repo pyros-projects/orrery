@@ -10,6 +10,7 @@ for review: a new library is marked `pending`, entries added to an existing one 
 """
 
 import json
+import re
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -75,14 +76,22 @@ def prompt_for(wanted: list[Need]) -> str:
             "(without underscores) to a JSON array of its entries.")
 
 
+def _loose(name: str) -> str:
+    """A library's name as the model may key it back: any case, `_`, `-` or spaces alike, with or without __…__ (#324)."""
+    return re.sub(r"[\s_-]+", "_", str(name).strip().strip("_").lower())
+
+
 def lists_in(data, wanted: list[Need]) -> dict[str, list[str]]:
-    """The lists in a parsed reply, keyed by library name."""
+    """The lists in a parsed reply, keyed by library name: under its name as written, or as the model keyed it a
+    little differently (`80s/80s photographers`); one library asked for and one list answered, that list (#324)."""
     if isinstance(data, list) and len(wanted) == 1:  # small models answer one list with a bare array
         data = {wanted[0].name: data}
     if not isinstance(data, dict):
         raise InvalidProposal("the model did not answer with one list per library")
-    return {n.name: parse_list(json.dumps(data.get(n.name) or data.get(f"__{n.name}__") or []))
-            for n in wanted if data.get(n.name) or data.get(f"__{n.name}__")}
+    lists = {_loose(k): v for k, v in data.items() if isinstance(v, list) and v}
+    if len(wanted) == 1 and len(lists) == 1:
+        return {wanted[0].name: parse_list(json.dumps(next(iter(lists.values()))))}
+    return {n.name: parse_list(json.dumps(lists[_loose(n.name)])) for n in wanted if _loose(n.name) in lists}
 
 
 def _answers(reply: str, wanted: list[Need]) -> dict[str, list[str]]:

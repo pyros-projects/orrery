@@ -123,3 +123,17 @@ def test_a_library_the_endpoint_fails_is_a_note_and_a_refused_key_an_error(home,
     fake_api.key = "sk-right"
     with pytest.raises(RuntimeError, match="HTTP 401"):
         write_apart(Home(home), needs(Home(home), "__runway_hats__", 4), OpenAIBackend(fake_api.url, "gpt-5.4-mini"))
+
+
+def test_a_list_keyed_a_little_differently_still_lands_in_its_library(home):
+    """#324: the model keyed `80s/80s_photographers` back as `80s/80s photographers`, and the list was lost."""
+    from orrery.autolib import Need, lists_in
+
+    need = lambda name: Need(name, 3, "", "", [], "")
+    assert lists_in({"80s/80s photographers": ["miyako ishiuchi"]}, [need("80s/80s_photographers")]) == {"80s/80s_photographers": ["miyako ishiuchi"]}
+    assert lists_in({"__Sky-Kind__": ["fog"], "moods": ["calm"]}, [need("sky_kind"), need("moods")]) == {"sky_kind": ["fog"], "moods": ["calm"]}
+    assert lists_in({"weather": ["fog"], "moods": ["calm"]}, [need("sky_kind"), need("moods")]) == {"moods": ["calm"]}  # two asked: by name only
+    assert lists_in({"entries": ["fog"]}, [need("sky_kind")]) == {"sky_kind": ["fog"]}  # one asked, one answered
+    backend = FakeBackend([json.dumps({"Runway Shoes": [f"shoe {i}" for i in range(4)]})], name="qwen3vl_4b")
+    ensure_libraries(Home(home), "a model in __runway_shoes:4__", backend)
+    assert len(Home(home).libraries()["runway_shoes"].entries) == 4  # a run writing it keeps it too
