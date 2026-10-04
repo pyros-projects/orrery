@@ -649,3 +649,13 @@ test("a CAST line's note says nothing the line says itself", async () => {
   const notes = annotationLines("CAST\n@PLACE (image 1): a street\n@HERO (image krea/x/7): a heron", ann);
   assert.deepEqual([...notes.keys()], [2]);
 });
+
+test("deleting a take asks what it does: another take plays, or the film ends before the clip (#214)", async () => {
+  const { deleteQuestion } = await import("../../comfyui/web/app/timeline.js");
+  const host = (folder) => ({ dataset: { seg: "1" }, querySelector: () => ({ dataset: { del: folder } }) });
+  const takes = [{ folder: "a", active: false }, { folder: "b", active: false }, { folder: "c", active: true }];
+  const app = { data: { chain: { takes: { 1: takes } } } };
+  assert.equal(deleteQuestion(app, host("a")), "Delete take 1?");
+  assert.equal(deleteQuestion(app, host("c")), "Delete this take? Clip 2 then plays take 2.");
+  assert.equal(deleteQuestion({ data: { chain: { takes: {} } } }, host("c")), "Delete clip 2? The film ends before it.");
+});

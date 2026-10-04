@@ -101,6 +101,16 @@ function followSeed(app, got) {
   if (!got.take && got.seed != null && Number(got.seed) !== Number(app.bridge.getSeed())) app.bridge.setSeed(Number(got.seed));
 }
 
+// What deleting a take does, asked in place (#214): the clip plays another take, or the film ends before it.
+export function deleteQuestion(app, host) {
+  const s = Number(host.dataset.seg), folder = host.querySelector("[data-del]").dataset.del;
+  const takes = app.data.chain?.takes?.[s] || [], at = takes.findIndex((t) => t.folder === folder);
+  if (at >= 0 && !takes[at].active) return `Delete take ${at + 1}?`;
+  const others = takes.filter((t) => t.folder !== folder);  // the clip in its box is the take in the film
+  return others.length ? `Delete this take? Clip ${s + 1} then plays take ${takes.indexOf(others[others.length - 1]) + 1}.`
+    : `Delete clip ${s + 1}? The film ends before it.`;
+}
+
 // A take deleted (#214): the film keeps the clip's newest other take, or ends before the clip, and then the next
 // clip is that one.
 async function deleteTake(app, segment, folder) {
@@ -215,7 +225,7 @@ export function wireClips(app, box) {
     if (e.target.closest("[data-delyes]")) return deleteTake(app, Number(host.dataset.seg), host.querySelector("[data-del]").dataset.del);
     if (e.target.closest(".ask")) return;
     if (e.target.closest("[data-del]")) {
-      return host.insertAdjacentHTML("beforeend", `<span class="ask">Delete${host.classList.contains("take") ? " this take" : ` clip ${Number(host.dataset.seg) + 1}`}?`
+      return host.insertAdjacentHTML("beforeend", `<span class="ask">${deleteQuestion(app, host)}`
         + `<span class="btn danger" role="button" data-delyes>Delete</span><span class="btn ghost" role="button" data-delno>Keep</span></span>`);
     }
     const take = e.target.closest(".take");
