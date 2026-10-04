@@ -1005,3 +1005,14 @@ test("the presets and the libraries are read again on request (#301): an open pr
   assert.equal(app.data.libStale, true);  // the folder is read when the tab draws, the open library with it
   assert.equal(calls.at(-1), "completion");
 });
+
+test("the results take what an output node of the run wrote, Orrery Log's pictures too; only without it the app logs them (#302)", async () => {
+  const { capturedMedia } = await import("../../comfyui/web/app/results.js");
+  const done = (node, output) => ({ node, prompt_id: "p1", output });
+  const pic = { images: [{ filename: "orrery_00001_.png", subfolder: "", type: "output" }] };
+  assert.deepEqual(capturedMedia(done("9", pic), { outputs: [9], log: true }), { media: pic.images, log: false });  // Orrery Log
+  assert.deepEqual(capturedMedia(done("9", pic), { outputs: [9], log: false }), { media: pic.images, log: true });  // a Save node
+  assert.equal(capturedMedia(done("7", pic), { outputs: [9], log: false }), null);  // a node this one does not feed
+  assert.equal(capturedMedia(done("9", { text: ["hi"] }), { outputs: [9], log: false }), null);  // nothing written
+  assert.equal(capturedMedia({ node: "9", output: pic }, { outputs: [9], log: false }), null);  // no prompt to file it under
+});

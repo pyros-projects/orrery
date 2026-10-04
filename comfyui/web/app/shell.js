@@ -12,7 +12,7 @@ import { queueTasks } from "./miniruns.js";
 import { reloadPresets, renderPresets } from "./presets.js";
 import { paintLive } from "./timeline.js";
 import { paintCells } from "./cells.js";
-import { resultBegins, resultEnds, resultMedia } from "./results.js";
+import { capturedMedia, resultBegins, resultEnds, resultMedia } from "./results.js";
 import { refreshReel, renderPrompt } from "./prompt.js";
 import { openSettings, renderSettings } from "./settings.js";
 import { renderTest } from "./test.js";
@@ -290,17 +290,15 @@ export class OrreryApp {
     }, { passive: false });
   }
 
-  // Generate without Orrery Log: when a Save node downstream of this node writes files, they go to the
-  // galaxy with this run's picks (the node remembered them under the prompt id).
+  // What a Save node, Orrery Log or a Preview node downstream of this node wrote: a take under the prompt (#211); and,
+  // without Orrery Log, its files go to the galaxy with this run's picks (the node remembered them under the prompt id).
   async capture(detail) {
-    const { outputs, log } = this.bridge.downstream?.() || { outputs: [], log: true };
-    if (log || !outputs.map(String).includes(String(detail.display_node ?? detail.node))) return;
-    const out = detail.output || {};
-    const media = ["images", "gifs", "videos", "audio"].flatMap((k) => out[k] || []).filter((m) => m && m.filename);
-    if (!media.length || !detail.prompt_id) return;
-    if (resultMedia(this, detail)) this.paintResults();  // this node's run: a take under the prompt (#211)
+    const got = capturedMedia(detail, this.bridge.downstream?.() || { outputs: [], log: true });
+    if (!got) return;
+    if (resultMedia(this, detail)) this.paintResults();  // this node's run
+    if (!got.log) return;  // Orrery Log logged them itself
     try {
-      const res = await this.api.captureOutputs({ prompt_id: detail.prompt_id, node: this.bridge.nodeId(), media });
+      const res = await this.api.captureOutputs({ prompt_id: detail.prompt_id, node: this.bridge.nodeId(), media: got.media });
       if (res.logged) { this.data.rows = null; this.data.gRows = null; if (this.state.tab === "galaxy") this.render(); }
     } catch { /* an older run or a restarted ComfyUI: nothing to log */ }
   }

@@ -38,6 +38,16 @@ export function resultBegins(app, d) {
 const KIND = (m) => (/\.(mp4|webm|mov|mkv|m4v)$/i.test(m.filename) || /^video\//.test(m.format || "") ? "video"
   : /\.(wav|mp3|flac|ogg|m4a|opus)$/i.test(m.filename) || m.kind === "audio" ? "audio" : "image");
 
+// What an output node this one feeds wrote (ComfyUI's executed): its media, and whether the app logs them to the
+// gallery itself, which it does only without Orrery Log (that logs its own). null: another node's, or nothing written.
+// The results take the media either way (#302): with Orrery Log they never showed the picture.
+export function capturedMedia(detail, { outputs, log }) {
+  if (!outputs.map(String).includes(String(detail.display_node ?? detail.node))) return null;
+  const out = detail.output || {};
+  const media = ["images", "gifs", "videos", "audio"].flatMap((k) => out[k] || []).filter((m) => m && m.filename);
+  return media.length && detail.prompt_id ? { media, log: !log } : null;
+}
+
 // What a node of the run wrote (ComfyUI's executed): its media join the run's take, which is shown now. True when
 // it was this node's run.
 export function resultMedia(app, detail) {
@@ -84,7 +94,8 @@ export function resultsHTML(app, takeVars) {
   const tile = shown
     ? `<button type="button" class="tl-clip big result" data-seg="-1" title="Take ${n} · seed ${shown.seed ?? "?"}${shown.take ? ` + ${shown.take}` : ""} · click to open">`
       + `${mediaHTML(app, main(shown), true)}<span class="n">${n}</span></button>`
-    : `<div class="tl-clip big result empty" data-seg="-1"><span class="muted">What a run makes comes in here: the live preview while it samples, then the picture or the clip.</span></div>`;
+    : `<div class="tl-clip big result empty" data-seg="-1"><span class="muted">What a run makes comes in here: the live preview while it samples, then the picture or the clip.`
+      + `${app.bridge.modelWired?.() === false ? " For the live preview, run the model through this node: the loader into its <b>model</b> input, its <b>model</b> output on to the sampler." : ""}</span></div>`;
   const button = (act, inner, title, extra = "") => `<span class="btn ghost" role="button" data-ract="${act}" title="${esc(title)}" ${extra}>${inner}</span>`;
   const head = `<span class="cm-takes-head"><span class="th-top">`
     + button("gen", `${icon("plus")}${takes > 1 ? `${takes} takes` : "take"}`, `Add ${takes > 1 ? `${takes} takes` : "a take"}: Generate, as ×N and 📌 say`)
