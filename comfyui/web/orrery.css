@@ -220,6 +220,10 @@
 /* the cells view: one cell per CHUNK, each with its clips in a section under it */
 .orrery-app .editor.cells { overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: var(--line) transparent; padding: 6px 0 24px; }
 .orrery-app .editor.cells .cell { position: relative; }
+/* a template without scenes: its text takes the free height (a click anywhere in it writes there), its results sit
+   at the bottom; a longer one scrolls as before (#271) */
+.orrery-app .editor.cells.single { display: flex; flex-direction: column; }
+.orrery-app .editor.cells.single > .cell { flex: 1 0 auto; }
 /* a scene "Use this prompt" (#242) just changed, or Undo changed back: lit for a moment */
 .orrery-app .editor.cells .cell.vflash::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-left: 3px solid var(--violet);
   background: rgba(180,148,245,.16); animation: orrery-vflash 2.2s ease-out forwards; }

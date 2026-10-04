@@ -127,7 +127,7 @@ Nodes under **orrery**:
     (and its lines that steer), what it rolls, and the clips it made.
     **Jump** beside *Next clip* puts the caret on the scene of the next clip.
     A template without scenes (a Krea prompt, an `@h3` scene) has its
-    **results under the prompt** (#211): under its one cell the live preview
+    **results under the prompt** (#211; the text takes the free height, the results sit at the bottom, #271): the live preview
     while it samples (the model wired through the Orrery Prompt; an image
     model's tiny VAE or Latent2RGB, sized by its own latent format), then what
     the run made, a picture, a clip or its sound, as its Save or Preview nodes
