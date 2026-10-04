@@ -226,7 +226,7 @@ Nodes under **orrery**:
     and sets the seed to fixed; the next run rolls them with today's libraries
     and learned weights (#259). An output whose template EXPORTed data shows it as a sheet
     under its prompt (**JSON** copies it). A slot there still to be written from the picture
-    (`image output`, #175) has a 🎲: takes written from the picture, **Insert** keeps one. Folders on the left sort outputs without moving their files:
+    (`image output`, #175) has a 🎲: takes written from the picture, **Use selected** keeps one. Folders on the left sort outputs without moving their files:
     drag cards onto a folder (a selected card brings the whole selection),
     drag a folder onto another to nest it, double-click to rename. Removing
     a folder moves what is in it up a level. Select with the checkbox,

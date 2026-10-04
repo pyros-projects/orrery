@@ -52,7 +52,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/galaxy/folder/add"), ("POST", "/orrery/galaxy/folder/rename"),
         ("POST", "/orrery/galaxy/folder/delete"),
         ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
-        ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"), ("POST", "/orrery/llm/takes"), ("POST", "/orrery/galaxy/takes"), ("POST", "/orrery/galaxy/write"),
+        ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"), ("POST", "/orrery/llm/takes"), ("POST", "/orrery/llm/keep"), ("POST", "/orrery/galaxy/takes"), ("POST", "/orrery/galaxy/write"),
         ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/discard"),
         ("GET", "/orrery/home"), ("POST", "/orrery/home"),
         ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("POST", "/orrery/chain/move"), ("POST", "/orrery/chain/pick"), ("POST", "/orrery/chain/delete"), ("POST", "/orrery/chain/clear"), ("GET", "/orrery/chain/tree"), ("POST", "/orrery/chain/walk"), ("POST", "/orrery/chain/end"),
@@ -920,6 +920,11 @@ def test_takes_at_the_line_ask_the_endpoint_for_one_place_at_the_seed(home, fake
     prompt = fake_api.requests[-1]["messages"][0]["content"]
     prompt = prompt if isinstance(prompt, str) else prompt[-1]["text"]
     assert "instruction: make it moody" in prompt and "The passage:\nA " in prompt
+    key = ok(home, webapi.llm_takes, kind="enhance", what="make it moody", template=template, seed=4)["keep"]
+    assert len(key) == 16  # the roll a picked rewrite is kept for (#276)
+    assert ok(home, webapi.llm_keep, key=key, instruction="make it moody", text="A moody fox.")["kept"] == key
+    assert api(home, webapi.llm_keep, key="nonsense", text="x")[0] == 400
+    assert api(home, webapi.llm_keep, key=key, instruction="make it moody", text=" ")[0] == 400
     assert api(home, webapi.llm_takes, kind="slot", what="nothing like it", template=template)[0] == 400  # no such slot
     fake_api.answer = lambda body: "no list here"
     assert api(home, webapi.llm_takes, kind="slot", what="one small object in its paws", template=template)[0] == 502

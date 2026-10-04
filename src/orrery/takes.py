@@ -4,11 +4,18 @@ A place is a slot (`--directions--`), a library still to be written (`__name__`:
 there), or what a `> enhance` line rewrites. The model sees the prompt as it rolls, the place marked
 `[this part]`, and writes N different takes in one request, so they differ; a steering line sharpens them, and
 the takes written before are named so the next ones are new. With an API endpoint the server asks it directly,
-outside ComfyUI's queue.
+outside ComfyUI's queue. A `> enhance` take picked with Use selected is kept for its roll (#276): the run that
+rolls the same passage uses it instead of asking the model.
 """
 
+import hashlib
+import json
+
+from orrery.home import locked, write_atomic
 from orrery.llm import InvalidProposal, extract_json
 from orrery.slots import as_pictures
+
+REWRITES = "rewrites.json"
 
 KINDS = ("slot", "library", "enhance")  # in the editor; "picture": an export slot of a gallery picture (#175)
 MARK = "[this part]"
@@ -103,6 +110,28 @@ def write_pictures(home, rows: list[dict]) -> list[str]:
         except (RuntimeError, KeyError, OSError, ValueError) as err:
             notes.append(f"--{what}--: {err}")
     return notes
+
+
+def rewrite_key(instruction: str, passage: str) -> str:
+    """The roll a `> enhance` rewrite is kept for (#276): its instruction and the passage as it rolled, slots and all."""
+    return hashlib.sha256(f"{' '.join(instruction.split())}\n{passage}".encode()).hexdigest()[:16]
+
+
+def kept_rewrites(home) -> dict[str, dict]:
+    """The rewrites kept with Use selected, by `rewrite_key`: {"instruction", "text"}."""
+    path = home.root / REWRITES
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+
+
+@locked
+def keep_rewrite(home, key: str, instruction: str, text: str) -> None:
+    """Use selected on a `> enhance` take (#276): kept for the roll `key` names, the run uses it from now on."""
+    text = text.strip()
+    if not text:
+        raise ValueError("an empty rewrite keeps nothing")
+    data = kept_rewrites(home)
+    data[key] = {"instruction": " ".join(instruction.split()), "text": text}
+    write_atomic(home.root / REWRITES, json.dumps(data, indent=1, ensure_ascii=False))
 
 
 def marked(text: str, find: str, nth: int = 0) -> str | None:

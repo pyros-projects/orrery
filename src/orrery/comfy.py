@@ -62,6 +62,7 @@ from orrery.slots import (
     slots,
     write,
 )
+from orrery.takes import kept_rewrites, rewrite_key, write_pictures
 
 TARGETS = ["text", "h3-base", "flat"]
 NO_PRESET = "(none)"
@@ -397,6 +398,17 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
     except MissingLibrary as err:
         raise ValueError(f"{err}, or pick a language model in orrery's settings (the gear in the node) "
                          "and it is created when the node runs") from err
+    passages = _passages(result, target)
+    enhanced: list[dict] = []
+    if passages:  # a rewrite kept for this roll (Use selected, #276) stands in for the model's, before the slots
+        kept = kept_rewrites(h)
+        for instruction, before, place in [p for p in passages if rewrite_key(p[0], p[1]) in kept]:
+            place(kept[rewrite_key(instruction, before)]["text"])
+            enhanced.append({"instruction": instruction, "before": before,
+                             "after": kept[rewrite_key(instruction, before)]["text"], "kept": True})
+        passages = [p for p in passages if rewrite_key(p[0], p[1]) not in kept]
+        if enhanced and target != "text":
+            result.text = render_scene(result.scene, target, [])
     todo = slots(result.text)
     todo += [d for d in export_slots(getattr(result, "exports", {})) if d not in todo]  # EXPORT: lines write too
     later = [d for d in todo if names_output(d)]  # from the picture the run makes: once it exists (#174, #175)
@@ -406,8 +418,6 @@ def run_prompt(template: str, seed: int, target: str, home: str = "",
                                              "after it: such a slot stands in an EXPORT: line, and the Gallery writes it."}
              for d in later if d not in exported]
     named, shown = _slot_pictures(h, pictures_in(todo), result, pictures, lint) if todo else ([], [])
-    passages = _passages(result, target)
-    enhanced: list[dict] = []
     if passages and wanted:
         lint.append({"severity": "info", "message": "The > enhance instructions run on the next run; this one "
                                                     "writes the missing libraries."})
@@ -634,8 +644,6 @@ def log_outputs(home: Home, picks_json: str, media: list[str]) -> list[dict]:
         for row in rows:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
     if uistate.load_ui(home)["picture_slots"] == "every run":  # its picture slots written now (#175)
-        from orrery.takes import write_pictures
-
         for note in write_pictures(home, [r for r in rows if r.get("media")]):
             print(f"[orrery] warn: {note}")
     return rows

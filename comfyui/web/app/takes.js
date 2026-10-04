@@ -1,10 +1,11 @@
 // Takes at the line (#173): a 🎲 at the end of a slot's line, of a library still to be written and of a `> enhance`
 // line opens a sheet with three takes for that place, written at the node's seed. More asks for three more, new
-// against those there are; a steering line goes with them. Insert puts a take in place of the slot (or the library)
-// as an unsaved edit, Keep the direction writes the steer into the slot's (the library's, the line's) directions;
-// both with Undo. With an API endpoint the server asks it directly, outside ComfyUI's queue. A gallery picture's slot
-// from `image output` (#175) opens the same sheet: its takes are written from the picture, Insert writes one into its
-// exports.
+// against those there are; a steering line goes with them. A click selects a take (#276), and Use selected puts it in
+// place of the slot (or the library) as an unsaved edit; Keep the direction writes the steer into the slot's (the
+// library's, the line's) directions; both with Undo. A `> enhance` take is kept for its roll instead: the run that
+// rolls the same prompt uses it. With an API endpoint the server asks it directly, outside ComfyUI's queue. A gallery
+// picture's slot from `image output` (#175) opens the same sheet: its takes are written from the picture, Use
+// selected writes one into its exports.
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
 import { splitCells } from "./model.js";
@@ -54,25 +55,31 @@ export function placeOf(app, key) {
 }
 
 export function openTakes(app, place, near = null) {
-  const s = { takes: [], busy: false, error: "" };
-  const picture = place.kind === "picture";
+  const s = { takes: [], pick: null, keep: null, busy: false, error: "" };
+  const picture = place.kind === "picture", enhance = place.kind === "enhance";
   const token = place.kind === "slot" || picture ? `--${place.what}--` : place.kind === "library" ? `__${place.what}__` : `> ${place.what}`;
+  const useTitle = picture ? "Write the selected take into the picture's exports"
+    : enhance ? "Keep the selected rewrite for this roll: a run that rolls this prompt uses it instead of asking the model"
+      : `Put the selected take in place of ${esc(token)}: an unsaved edit`;
   const sheet = app.openSheet(`<div class="panel takes-panel"><div class="row spread"><h4>${icon("dice")} Takes</h4>`
     + `<button class="icon-btn" data-close title="Close">${icon("x")}</button></div>`
     + `<p class="muted flush">For ${SAID[place.kind]} <code>${esc(token)}</code>, ${picture ? "written from the picture, the prompt that made it beside it."
       : `at seed ${esc(String(app.bridge.getSeed()))}.`}`
-    + `${place.kind === "enhance" ? " A rewrite happens at every run: these show what it does, and Keep the direction puts your steer into it." : ""}</p>`
-    + `<ol class="take-list"></ol><p class="muted flush take-state" role="status"></p>`
+    + `${enhance ? " A rewrite happens at every run: Use selected keeps the one you pick for this roll, and the run uses it." : ""} Click a take to select it.</p>`
+    + `<ol class="take-list" role="listbox" aria-label="Takes"></ol><p class="muted flush take-state" role="status"></p>`
     + `<div class="row take-steer"><input class="input grow" data-steer placeholder="Steer them: darker, older, as an anime character …" aria-label="Steer the takes">`
     + `<button class="btn" data-tmore>${icon("dice")}More takes</button>`
-    + (picture ? "" : `<button class="btn ghost" data-tkeep title="Write the steer into ${esc(SAID[place.kind])}'s directions, so it keeps rolling that way">${icon("pin")}Keep the direction</button>`) + "</div></div>", near);
+    + (picture ? "" : `<button class="btn ghost" data-tkeep title="Write the steer into ${esc(SAID[place.kind])}'s directions, so it keeps rolling that way">${icon("pin")}Keep the direction</button>`) + "</div>"
+    + `<div class="row take-use"><span class="grow"></span><button class="btn primary" data-tuse title="${useTitle}">${icon("check")}Use selected</button></div></div>`, near);
   const list = sheet.querySelector(".take-list"), state = sheet.querySelector(".take-state"), steer = sheet.querySelector("[data-steer]");
+  const use = sheet.querySelector("[data-tuse]");
   const draw = () => {
-    list.innerHTML = s.takes.map((t, i) => `<li><span>${esc(t)}</span>${place.kind === "enhance" ? ""
-      : `<button class="btn primary" data-tins="${i}" title="${picture ? "Write it into the picture's exports" : `Put it in place of ${esc(token)}: an unsaved edit`}">Insert</button>`}</li>`).join("");
+    list.innerHTML = s.takes.map((t, i) => `<li class="${s.pick === i ? "on" : ""}" data-tpick="${i}" tabindex="0" role="option" aria-selected="${s.pick === i}">${esc(t)}</li>`).join("");
     state.textContent = s.busy ? "Writing…" : s.error;
     state.classList.toggle("warn", !!s.error && !s.busy);
     sheet.querySelector("[data-tmore]").disabled = s.busy;
+    use.disabled = s.busy || s.pick === null || (enhance && !s.keep);
+    if (enhance && !s.keep && s.takes.length) use.title = "This > rewrites several passages of the screenplay, each on its own at the run: there is no one rewrite to keep";
   };
   const ask = async () => {
     s.busy = true;
@@ -90,6 +97,7 @@ export function openTakes(app, place, near = null) {
         target: app.bridge.getTarget(), params: app.bridge.getParams(), seed: app.bridge.getSeed(), segment: app.bridge.getSegment?.() ?? 0,
         chain: app.bridge.chain?.() || "", steer: steer.value, have: s.takes, n: 3, frames });
       s.takes.push(...got.takes.filter((t) => !s.takes.includes(t)));
+      if (enhance) s.keep = got.keep || null;
     } catch (err) { s.error = err.message; } finally {
       s.busy = false;
       draw();
@@ -111,26 +119,39 @@ export function openTakes(app, place, near = null) {
     const text = keepDirection(app.text, place, steer.value), moved = text !== app.text;
     changed(text, `Your steer is in ${esc(SAID[place.kind])}'s directions · an unsaved edit`);
     if (!moved) return;
-    if (place.kind === "slot") place.what = `${place.what}, ${steer.value.trim()}`;  // the next takes ask with it
-    else if (place.kind === "enhance") place.what = `${place.what}, ${steer.value.trim()}`;
+    if (place.kind === "slot" || enhance) place.what = `${place.what}, ${steer.value.trim()}`;  // the next takes ask with it
     else place.directions = place.directions ? `${place.directions}, ${steer.value.trim()}` : steer.value.trim();
+    if (enhance) s.keep = null;  // another instruction: its takes come with More
     steer.value = "";
+    draw();
   };
-  list.addEventListener("click", async (e) => {
-    const ins = e.target.closest("[data-tins]");
-    if (!ins) return;
-    if (picture) {
-      try {
-        const d = await app.api.galaxyWrite({ id: place.id, what: place.what, text: s.takes[Number(ins.dataset.tins)] });
+  const select = (li) => {
+    if (!li) return;
+    s.pick = Number(li.dataset.tpick);
+    draw();
+    list.querySelector(`[data-tpick="${s.pick}"]`)?.focus();
+  };
+  list.addEventListener("click", (e) => select(e.target.closest("[data-tpick]")));
+  list.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(e.target.closest("[data-tpick]")); } });
+  use.onclick = async () => {
+    const take = s.takes[s.pick];
+    if (take === undefined) return;
+    try {
+      if (picture) {
+        const d = await app.api.galaxyWrite({ id: place.id, what: place.what, text: take });
         app.closeSheet();
         place.written?.(d.row);
-        app.toast("The take is in the picture's exports");
-      } catch (err) { s.error = err.message; draw(); }
-      return;
-    }
+        return app.toast("The take is in the picture's exports");
+      }
+      if (enhance) {
+        await app.api.keepRewrite({ key: s.keep, instruction: place.what, text: take });
+        app.closeSheet();
+        return app.toast(`Kept for this roll: a run at seed ${esc(String(app.bridge.getSeed()))} that rolls this prompt uses it instead of asking the model`);
+      }
+    } catch (err) { s.error = err.message; return draw(); }
     app.closeSheet();
-    changed(insertTake(app.text, place, s.takes[Number(ins.dataset.tins)]), "The take is in the editor · an unsaved edit");
-  });
+    changed(insertTake(app.text, place, take), "The take is in the editor · an unsaved edit");
+  };
   draw();
   ask();
 }

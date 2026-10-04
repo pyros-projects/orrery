@@ -270,9 +270,10 @@
 .orrery-app .llm-key:hover { background: color-mix(in srgb, currentColor 26%, transparent); }
 .orrery-app .sheet .llm-key { color: var(--violet); margin-left: 4px; vertical-align: -2px; }
 .orrery-app .takes-panel .take-list { display: grid; gap: 6px; margin: 0; padding-left: 22px; }
-.orrery-app .takes-panel .take-list li { display: flex; align-items: flex-start; gap: 10px; }
-.orrery-app .takes-panel .take-list li > span { flex: 1; font-size: 13px; line-height: 1.45; }
-.orrery-app .takes-panel .take-list li .btn { flex: none; padding: 2px 10px; }
+.orrery-app .takes-panel .take-list li { font-size: 13px; line-height: 1.45; padding: 5px 8px; border: 1px solid transparent; border-radius: 7px; cursor: pointer; }
+.orrery-app .takes-panel .take-list li:hover { background: color-mix(in srgb, var(--violet) 8%, transparent); }
+.orrery-app .takes-panel .take-list li.on { border: 2px solid var(--violet); padding: 4px 7px; background: color-mix(in srgb, var(--violet) 12%, transparent); }
+.orrery-app .takes-panel .take-list li:focus-visible { outline: 1px solid var(--violet); }
 .orrery-app .takes-panel .take-steer { gap: 6px; }
 .orrery-app .editor .hint .hint-pic { height: 1.45em; width: auto; border-radius: 3px; margin-right: 3px; vertical-align: top; opacity: 1; }
 .orrery-app .editor .hint.note > span:has(.hint-pic) { opacity: .8; }

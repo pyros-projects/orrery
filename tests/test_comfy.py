@@ -504,6 +504,21 @@ def test_enhance_rewrites_a_text_prompt_and_keeps_the_original(home, monkeypatch
     assert "moody, cinematic" in backend.prompts[0]
 
 
+def test_a_rewrite_kept_with_use_selected_stands_in_for_its_roll_without_asking(home, monkeypatch):
+    """#276: the take picked in the sheet is kept for the instruction and the passage as it rolled; another roll
+    is rewritten as before."""
+    from orrery.takes import keep_rewrite, rewrite_key
+
+    backend = fake_llm(monkeypatch, {"rewrite 1": "a fox at dusk, rewritten"})
+    keep_rewrite(Home(home), rewrite_key("moody", "a fox in a field"), "moody", "the fox you picked, in fog")
+    text, picks, *_ = run_prompt("a fox in a field\n> moody", 1, "text", str(home))
+    assert text == "the fox you picked, in fog" and backend.prompts == []  # nothing asked
+    assert json.loads(picks)["enhanced"] == [{"instruction": "moody", "before": "a fox in a field",
+                                               "after": "the fox you picked, in fog", "kept": True}]
+    text, *_ = run_prompt("a fox in a meadow\n> moody", 1, "text", str(home))
+    assert text == "a fox at dusk, rewritten"  # another passage: the model rewrites it
+
+
 def test_enhance_rewrites_shot_prose_but_not_dialogue(home, monkeypatch):
     backend = fake_llm(monkeypatch, {"rewrite 1": "FOX crouches low in the wet grass, ears flat.", "slot 1": "it rains"})
     src = ("@h3 t2va 16:9\nCAST\nFOX: a red fox\nSHOT 5s\n> make it eerie\nFOX waits.\n"

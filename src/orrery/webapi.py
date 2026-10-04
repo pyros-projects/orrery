@@ -1186,9 +1186,11 @@ def llm_takes(home: Home, args: dict) -> dict:
             raise ApiError(400, str(err)) from None
     if result is None:
         raise ApiError(400, "Too many libraries are still to be written to roll the prompt.")
+    keep = None  # the roll a picked rewrite is kept for: one passage only, as the run rewrites each apart (#276)
     if kind == "enhance":
-        context = "\n".join(passage for instruction, passage, _ in _passages(result, target if screenplay else "text")
-                            if " ".join(instruction.split()) == what)
+        rolled = [passage for instruction, passage, _ in _passages(result, target if screenplay else "text")
+                  if " ".join(instruction.split()) == what]
+        context, keep = "\n".join(rolled), takes.rewrite_key(what, rolled[0]) if len(rolled) == 1 else None
     else:
         context = takes.marked(result.text, f"--{what}--" if kind == "slot" else f"__{what}__")
     if not context:
@@ -1213,7 +1215,21 @@ def llm_takes(home: Home, args: dict) -> dict:
         raise ApiError(502, str(err)) from None
     if not out:
         raise ApiError(502, "The language model wrote no takes; ask again.")
-    return {"takes": out}
+    return {"takes": out, **({"keep": keep} if kind == "enhance" else {})}
+
+
+def llm_keep(home: Home, args: dict) -> dict:
+    """Use selected on a `> enhance` take (#276): kept for the roll its takes named (`key`), the run uses it."""
+    from orrery import takes
+
+    key = str(args.get("key") or "")
+    if len(key) != 16 or any(c not in "0123456789abcdef" for c in key):
+        raise ApiError(400, "'key' names the roll the takes were written for.")
+    try:
+        takes.keep_rewrite(home, key, str(args.get("instruction") or ""), str(args.get("text") or ""))
+    except ValueError as err:
+        raise ApiError(400, str(err)) from None
+    return {"kept": key}
 
 
 def galaxy_takes(home: Home, args: dict) -> dict:
@@ -1331,6 +1347,7 @@ ROUTES = [
     ("POST", "/orrery/llm/libraries", write_libraries),
     ("POST", "/orrery/write", write_idea),
     ("POST", "/orrery/llm/takes", llm_takes),
+    ("POST", "/orrery/llm/keep", llm_keep),
     ("POST", "/orrery/galaxy/takes", galaxy_takes),
     ("POST", "/orrery/galaxy/write", galaxy_write),
     ("POST", "/orrery/library/accept", library_accept),
