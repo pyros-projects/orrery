@@ -919,6 +919,21 @@ test("a 🎲 stands at the end of a line the language model writes for; Insert a
   assert.equal(insertTake("> make it moody", { kind: "enhance", what: "make it moody", line: 0 }, "x"), "> make it moody");
 });
 
+test("a library's roll at a line's end names the k-th library of its line, and Use selected puts an entry in its place (#273)", async () => {
+  const { insertTake, nthLibrary } = await import("../../comfyui/web/app/takes.js");
+  const line = "A __animal__ with __hair[fit=women]__ under a __sky_kind:30__ and \\__not__ this.";
+  assert.equal(nthLibrary(line, 0), "animal");
+  assert.equal(nthLibrary(line, 1), "hair");
+  assert.equal(nthLibrary(line, 2), "sky_kind");
+  assert.equal(nthLibrary(line, 3), null);  // an escaped one is no library
+  assert.equal(insertTake(line, { kind: "entries", what: "hair", line: 0 }, "a bob cut"), "A __animal__ with a bob cut under a __sky_kind:30__ and \\__not__ this.");
+  const { highlight } = await import("../../comfyui/web/app/highlight.js");
+  const hints = new Map([[0, { text: "→ fox · bob cut", kind: "note", rolls: [[0, "fox"], [1, "bob cut"]] }]]);
+  const known = new Set(["animal", "hair"]);
+  assert.match(highlight("A __animal__ with __hair__.", known, { llm: true, hints }), /→ <span class="lroll" role="button" data-lroll="0" data-line="0" [^>]*>fox<\/span> · <span class="lroll" role="button" data-lroll="1"/);
+  assert.doesNotMatch(highlight("A __animal__ with __hair__.", known, { hints }), /lroll/);  // no language model: plain text
+});
+
 test("a gallery picture's export keeps its slots from image output apart, for a 🎲 that writes them from the picture (#175)", async () => {
   const { pictureSlots } = await import("../../comfyui/web/app/model.js");
   assert.deepEqual(pictureSlots("a heron, --her coat as image output shows it--, waiting"),

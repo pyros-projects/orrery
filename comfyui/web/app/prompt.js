@@ -12,7 +12,7 @@ import { openSave } from "./save.js";
 import { openSceneStats } from "./scenestats.js";
 import { openTree } from "./tree.js";
 import { kept, TAKES, takesOf } from "./results.js";
-import { openTakes, placeOf } from "./takes.js";
+import { openTakes, placeAt, placeOf, placeOfRoll } from "./takes.js";
 import { STARTERS } from "./starters.js";
 import { runRolls } from "./test.js";
 import { caretPoint, cellStart, inCell, jumpCell, paintCells, renderCells, wireCells } from "./cells.js";
@@ -248,6 +248,12 @@ export function renderPrompt(app) {
   app.view.onclick = (e) => {
     const key = e.target.closest("[data-llm]");  // a 🎲 at a line's end (#173)
     if (key) return openTakes(app, placeOf(app, key), key);
+    const roll = e.target.closest("[data-lroll]");  // a library's roll at a line's end: that library's takes (#273)
+    if (roll && placeOfRoll(app, roll)) return openTakes(app, placeOfRoll(app, roll), roll);
+    if ((e.ctrlKey || e.metaKey) && e.target.tagName === "TEXTAREA" && app.llmActive()) {  // Ctrl+click on a library
+      const place = placeAt(app, e.target);
+      if (place) return openTakes(app, place, e.target);
+    }
     const scene = e.target.closest("[data-scene-act]");
     if (scene) return sceneAct(app, scene.dataset.sceneAct, Number(scene.dataset.chunk), scene);
     const act = e.target.closest("[data-act]")?.dataset.act;

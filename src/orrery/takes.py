@@ -32,7 +32,7 @@ def counts(llm: dict) -> dict[str, int]:
     return out
 
 
-KINDS = ("slot", "library", "enhance")  # in the editor; "picture": an export slot of a gallery picture (#175)
+KINDS = ("slot", "library", "entries", "enhance")  # in the editor; "picture": an export slot of a gallery picture (#175)
 MARK = "[this part]"
 
 
@@ -141,6 +141,22 @@ def library_entries(reply: str, need) -> list[str]:
     return list(dict.fromkeys(out))[:need.count]
 
 
+def rolled_entries(lib, weights: dict, seed: int, n: int, skip=(), first: str = "") -> list[str]:
+    """N entries of a library that exists, as its rolls would bring them (#273): the one it rolled at the node's
+    seed first (`first`, as the annotation shows it, maybe cut short with …), then weighted draws, each entry's
+    weight times what the ratings taught, none of `skip`."""
+    import random
+
+    skip = {s.lower() for s in skip}
+    pool = [(e.value, max(e.weight, 0.0) * weights.get(f"__{lib.name}__={e.value}", 1.0)) for e in lib.entries
+            if e.value.lower() not in skip]
+    cut = first[:-1] if first.endswith("…") else None
+    out = [v for v, _ in pool if v == first or (cut and v.startswith(cut))][:1]
+    rng = random.Random(f"{seed}:{lib.name}:{len(skip)}")
+    pool = sorted(((v, w) for v, w in pool if w > 0 and v not in out), key=lambda p: rng.random() ** (1 / p[1]), reverse=True)
+    return (out + [v for v, _ in pool])[:n]
+
+
 def add_to_library(home, name: str, values: list[str], directions: str = "", by: str = "") -> int:
     """Entries picked in a takes sheet, straight into the library, not To review (#272, #273): a new library is
     made of them, an existing one gets the new ones (a built-in one becomes yours). `directions` are kept with it
@@ -153,9 +169,9 @@ def add_to_library(home, name: str, values: list[str], directions: str = "", by:
     lib, path = home.libraries().get(name), home.library_path(name)
     known = {e.value.lower() for e in lib.entries} if lib else set()
     fresh = [v for v in dict.fromkeys(" ".join(str(v).split()) for v in values) if v and v.lower() not in known]
-    if not fresh:
-        return 0
     directions = " ".join(directions.split())
+    if not fresh and not (lib and directions):
+        return 0
     if lib is None:
         _snapshot(home, [path], f"gen {name}")
         meta = {"generated_by": by or "the takes sheet", "created": datetime.now(UTC).date().isoformat(),

@@ -64,10 +64,11 @@ function line(text, known, llm, members) {
 }
 
 const SLOT = /--(?=[^\s-])([^\n]*?[^\s-])--/g;
-const LIBRARY = /(?<!\\)__([\w]+(?:\/[\w]+)*)(?:\[[^\[\]\n]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\(([^()]*)\))?/g;
+export const LIBRARY = /(?<!\\)__([\w]+(?:\/[\w]+)*)(?:\[[^\[\]\n]+\])?(?:#[\w-]+:\$?[\w.-]+)*(?::\d+)?__(?:\(([^()]*)\))?/g;
 const ASK = { slot: "Takes for this slot: then more, steered; pick one and Use selected puts it in", library: "Takes for this library still to be written: "
   + "entries that could stand here; Use selected puts one in, or keep a direction for the list",
-  enhance: "Takes for this rewrite: what it does at this seed, steered; Use selected keeps one for this roll" };
+  enhance: "Takes for this rewrite: what it does at this seed, steered; Use selected keeps one for this roll",
+  entries: "This library's takes: its rolls and new entries from the language model; Use selected puts one in, Add to the library keeps new ones (Ctrl+click on a library's name does the same)" };
 
 // The places on a line the language model writes for (#173): a `>` line's rewrite, its slots, its libraries still
 // to be written; each with what names it (`what`) and a library's own directions (`dirs`).
@@ -113,8 +114,14 @@ export function highlight(src, known, { llm = false, chunks = null, segment = nu
   const members = memberPattern(cast ?? castNames(src));
   const said = (i) => {  // a line's hint drawn after it: its class and what it says
     const h = hints?.get(i);
-    return h && !h.hover ? { cls: `${h.replaced ? " replaced" : ""}${h.kind ? ` ${h.kind}` : ""}`,
-      inner: `<span>${(h.thumbs || []).map((u) => `<img class="hint-pic" src="${esc(u)}" alt="">`).join("")}${esc(h.text)}</span>` } : null;
+    if (!h || h.hover) return null;
+    // with a language model set, each library's roll opens that library's takes (#273)
+    const rolls = llm && h.rolls?.length ? `→ ${h.rolls.map(([, v]) => v).join(" · ")}` : "";
+    const text = rolls && h.text.endsWith(rolls)
+      ? `${esc(h.text.slice(0, -rolls.length))}→ ${h.rolls.map(([k, v]) => `<span class="lroll" role="button" data-lroll="${k}" data-line="${i}" title="${esc(ASK.entries)}">${esc(v)}</span>`).join(" · ")}`
+      : esc(h.text);
+    return { cls: `${h.replaced ? " replaced" : ""}${h.kind ? ` ${h.kind}` : ""}`,
+      inner: `<span>${(h.thumbs || []).map((u) => `<img class="hint-pic" src="${esc(u)}" alt="">`).join("")}${text}</span>` };
   };
   const hint = (i) => (said(i) ? `<span class="hint${said(i).cls}">${said(i).inner}</span>` : "");
   const words = (l, i) => (hints?.get(i)?.hover ? onHover(line(l, known, llm, members), hints.get(i)) : line(l, known, llm, members));

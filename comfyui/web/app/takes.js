@@ -6,12 +6,13 @@
 // rolls the same prompt uses it. With an API endpoint the server asks it directly, outside ComfyUI's queue. A gallery
 // picture's slot from `image output` (#175) opens the same sheet: its takes are written from the picture, Use
 // selected writes one into its exports.
-import { esc } from "./highlight.js";
+import { esc, LIBRARY } from "./highlight.js";
 import { icon } from "./icons.js";
 import { splitCells } from "./model.js";
 
 const LIB = (name) => new RegExp(`__${name.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&")}(?:\\[[^\\]\\n]*\\])?(?:#[\\w-]+:\\$?[\\w.-]+)*(?::\\d+)?__(?:\\(([^()]*)\\))?`);
-const SAID = { slot: "the slot", library: "the library still to be written", enhance: "what the line rewrites", picture: "the picture's slot" };
+const SAID = { slot: "the slot", library: "the library still to be written", entries: "the library", enhance: "what the line rewrites",
+  picture: "the picture's slot" };
 
 // After a library was written from a sheet: the editor knows it now, its 🎲 goes, its rolls show.
 async function librariesChanged(app) {
@@ -36,7 +37,7 @@ function onLine(text, place, edit) {
 // A take in place of the slot, or of the library (its directions go with it); `> enhance` has nothing to put in.
 export function insertTake(text, place, take) {
   if (place.kind === "slot") return onLine(text, place, (l) => (l.includes(`--${place.what}--`) ? l.replace(`--${place.what}--`, take) : null));
-  if (place.kind === "library") return onLine(text, place, (l) => (LIB(place.what).test(l) ? l.replace(LIB(place.what), take) : null));
+  if (place.kind === "library" || place.kind === "entries") return onLine(text, place, (l) => (LIB(place.what).test(l) ? l.replace(LIB(place.what), take) : null));
   return text;
 }
 
@@ -64,10 +65,38 @@ export function placeOf(app, key) {
   return { kind: key.dataset.llm, what: key.dataset.what || "", directions: key.dataset.dirs || "", line: start + local };
 }
 
+// The `n`-th library of a line, as the server counts them for its rolls (#202).
+export function nthLibrary(line, n) {
+  return [...line.matchAll(LIBRARY)][n]?.[1] ?? null;
+}
+
+const inHome = (app, name) => (app.data.completion?.libraries || []).some((l) => l.name === name);  // not a template's @lib
+
+// The library a roll at a line's end stands for (#273): the k-th `__…__` of its line.
+export function placeOfRoll(app, el) {
+  const local = Number(el.dataset.line) || 0, cell = el.closest(".cell");
+  const start = cell ? splitCells(app.text)[Number(cell.dataset.cell)]?.line ?? 0 : 0;
+  const name = nthLibrary(app.text.split("\n")[start + local] || "", Number(el.dataset.lroll));
+  return name && inHome(app, name) ? { kind: "entries", what: name, roll: el.textContent, directions: "", line: start + local } : null;
+}
+
+// The library a Ctrl+click in the editor landed on (#273): its takes, or, still to be written, its sheet (#272).
+export function placeAt(app, ta) {
+  const at = ta.selectionStart, cell = ta.closest(".cell");
+  const m = [...ta.value.matchAll(LIBRARY)].find((x) => x.index <= at && at <= x.index + x[0].length);
+  if (!m) return null;
+  const start = cell ? splitCells(app.text)[Number(cell.dataset.cell)]?.line ?? 0 : 0;
+  const line = start + ta.value.slice(0, m.index).split("\n").length - 1;
+  if (app.known().has(m[1]) && !inHome(app, m[1])) return null;
+  return { kind: app.known().has(m[1]) ? "entries" : "library", what: m[1], roll: "", directions: m[2] || "", line };
+}
+
 export function openTakes(app, place, near = null) {
   const s = { takes: [], pick: null, picked: new Set(), keep: null, busy: false, error: "", note: "" };
   const picture = place.kind === "picture", enhance = place.kind === "enhance";
-  const multi = place.kind === "library";  // a library's entries: several at once, kept as the library (#272)
+  const known = place.kind === "entries";  // a library that exists: its rolls and new entries (#273)
+  const multi = place.kind === "library" || known;  // a library's entries: several at once (#272)
+  const from = [];  // known: where each take came from, "rolled", "new" or "added"
   const token = place.kind === "slot" || picture ? `--${place.what}--` : place.kind === "library" ? `__${place.what}__` : `> ${place.what}`;
   const useTitle = picture ? "Write the selected take into the picture's exports"
     : enhance ? "Keep the selected rewrite for this roll: a run that rolls this prompt uses it instead of asking the model"
@@ -77,26 +106,29 @@ export function openTakes(app, place, near = null) {
     + `<p class="muted flush">For ${SAID[place.kind]} <code>${esc(token)}</code>, ${picture ? "written from the picture, the prompt that made it beside it."
       : `at seed ${esc(String(app.bridge.getSeed()))}.`}`
     + `${enhance ? " A rewrite happens at every run: Use selected keeps the one you pick for this roll, and the run uses it." : ""}`
-    + `${multi ? " As many entries as a new library starts with, written as a run would. Select the ones worth keeping: Keep as the library writes them as the library, straight in." : " Click a take to select it."}</p>`
+    + `${known ? " Its rolls (the one at this seed first) and new entries the language model writes, none it has. Select the new ones worth keeping: Add to the library writes them in."
+      : multi ? " As many entries as a new library starts with, written as a run would. Select the ones worth keeping: Keep as the library writes them as the library, straight in." : " Click a take to select it."}</p>`
     + (multi ? `<div class="row take-sel"><button class="btn ghost slim" data-tall>All</button><button class="btn ghost slim" data-tnone>None</button><span class="muted" data-tcount></span></div>` : "")
     + `<ol class="take-list${multi ? " multi" : ""}" role="listbox" aria-label="Takes"${multi ? ' aria-multiselectable="true"' : ""}></ol><p class="muted flush take-state" role="status"></p>`
     + `<div class="row take-steer"><input class="input grow" data-steer placeholder="Steer them: darker, older, as an anime character …" aria-label="Steer the takes">`
     + `<button class="btn" data-tmore>${icon("dice")}More takes</button>`
     + (picture ? "" : `<button class="btn ghost" data-tkeep title="Write the steer into ${esc(SAID[place.kind])}'s directions, so it keeps rolling that way">${icon("pin")}Keep the direction</button>`) + "</div>"
     + `<div class="row take-use"><span class="grow"></span><button class="btn${multi ? " ghost" : " primary"}" data-tuse title="${useTitle}">${icon("check")}Use selected</button>`
-    + (multi ? `<button class="btn primary" data-tlib title="Write the selected entries as __${esc(place.what)}__, straight into your libraries">${icon("save")}Keep as the library</button>` : "")
+    + (known ? `<button class="btn primary" data-tlib title="Write the selected new entries into __${esc(place.what)}__, straight in">${icon("save")}Add to the library</button>`
+      : multi ? `<button class="btn primary" data-tlib title="Write the selected entries as __${esc(place.what)}__, straight into your libraries">${icon("save")}Keep as the library</button>` : "")
     + "</div></div>", near);
   const list = sheet.querySelector(".take-list"), state = sheet.querySelector(".take-state"), steer = sheet.querySelector("[data-steer]");
   const use = sheet.querySelector("[data-tuse]"), lib = sheet.querySelector("[data-tlib]");
   const on = (i) => (multi ? s.picked.has(i) : s.pick === i);
   const chosen = () => (multi ? (s.picked.size === 1 ? [...s.picked][0] : null) : s.pick);
   const draw = () => {
-    list.innerHTML = s.takes.map((t, i) => `<li class="${on(i) ? "on" : ""}" data-tpick="${i}" tabindex="0" role="option" aria-selected="${on(i)}">${esc(t)}</li>`).join("");
+    const tag = (i) => (known ? `<small class="tk ${from[i]}">${from[i] === "new" ? "new" : from[i] === "added" ? "added" : "rolled"}</small>` : "");
+    list.innerHTML = s.takes.map((t, i) => `<li class="${on(i) ? "on" : ""}" data-tpick="${i}" tabindex="0" role="option" aria-selected="${on(i)}">${esc(t)}${tag(i)}</li>`).join("");
     state.textContent = s.busy ? "Writing…" : s.error || s.note;
     state.classList.toggle("warn", !!s.error && !s.busy);
     sheet.querySelector("[data-tmore]").disabled = s.busy;
     use.disabled = s.busy || chosen() === null || (enhance && !s.keep);
-    if (lib) lib.disabled = s.busy || !s.picked.size;
+    if (lib) lib.disabled = s.busy || !(known ? [...s.picked].some((i) => from[i] === "new") : s.picked.size);
     if (multi) sheet.querySelector("[data-tcount]").textContent = `${s.picked.size} of ${s.takes.length} selected`;
     if (enhance && !s.keep && s.takes.length) use.title = "This > rewrites several passages of the screenplay, each on its own at the run: there is no one rewrite to keep";
   };
@@ -114,8 +146,11 @@ export function openTakes(app, place, near = null) {
       const frames = /\bimage\s+(first|last)_frame\b/.test(place.what) ? (await app.bridge.frameFiles?.())?.names || {} : {};
       const got = await app.api.takes({ kind: place.kind, what: place.what, directions: place.directions, template: app.text,
         target: app.bridge.getTarget(), params: app.bridge.getParams(), seed: app.bridge.getSeed(), segment: app.bridge.getSegment?.() ?? 0,
-        chain: app.bridge.chain?.() || "", steer: steer.value, have: s.takes, frames });  // as many as the settings say (#274)
-      s.takes.push(...got.takes.filter((t) => !s.takes.includes(t)));
+        chain: app.bridge.chain?.() || "", steer: steer.value, have: s.takes, frames, roll: s.takes.length ? "" : place.roll || "" });  // as many as the settings say (#274)
+      for (const [list, kind] of [[got.rolled || [], "rolled"], [got.takes, "new"]]) {
+        for (const t of list.filter((x) => !s.takes.includes(x))) { s.takes.push(t); from.push(kind); }
+      }
+      if (known && !place.directions) place.directions = got.directions || "";
       if (enhance) s.keep = got.keep || null;
     } catch (err) { s.error = err.message; } finally {
       s.busy = false;
@@ -135,11 +170,16 @@ export function openTakes(app, place, near = null) {
   steer.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); ask(); } });
   if (!picture) sheet.querySelector("[data-tkeep]").onclick = () => {
     if (!steer.value.trim()) return steer.focus();
-    if (multi) {  // a library still to be written keeps its directions itself, once it is kept (#272, #275)
+    if (multi) {  // a library keeps its directions itself, not (…) in the template (#272, #275)
       place.directions = place.directions ? `${place.directions}, ${steer.value.trim()}` : steer.value.trim();
-      s.note = `Kept: __${place.what}__ gets the directions “${place.directions}” when you keep it, and More asks with them.`;
       steer.value = "";
-      return draw();
+      if (!known) {
+        s.note = `Kept: __${place.what}__ gets the directions “${place.directions}” when you keep it, and More asks with them.`;
+        return draw();
+      }
+      return app.api.addToLibrary({ name: place.what, entries: [], directions: place.directions })
+        .then(() => { s.note = `__${place.what}__ keeps the directions “${place.directions}”: its top-ups and More ask with them.`; draw(); })
+        .catch((err) => { s.error = err.message; draw(); });
     }
     const text = keepDirection(app.text, place, steer.value), moved = text !== app.text;
     changed(text, `Your steer is in ${esc(SAID[place.kind])}'s directions · an unsaved edit`);
@@ -165,8 +205,16 @@ export function openTakes(app, place, near = null) {
     sheet.querySelector("[data-tall]").onclick = () => { s.takes.forEach((_, i) => s.picked.add(i)); draw(); };
     sheet.querySelector("[data-tnone]").onclick = () => { s.picked.clear(); draw(); };
     lib.onclick = async () => {
-      const entries = [...s.picked].sort((a, b) => a - b).map((i) => s.takes[i]);
+      const picked = [...s.picked].sort((a, b) => a - b).filter((i) => !known || from[i] === "new");
+      const entries = picked.map((i) => s.takes[i]);
       try {
+        if (known) {  // the sheet stays: More, then add more
+          const d = await app.api.addToLibrary({ name: place.what, entries });
+          picked.forEach((i) => { from[i] = "added"; s.picked.delete(i); });
+          s.note = `Added ${d.added} to __${place.what}__.`;
+          draw();
+          return librariesChanged(app);
+        }
         const d = await app.api.addToLibrary({ name: place.what, entries, directions: place.directions || "" });
         app.closeSheet();
         app.toast(`<b>__${esc(place.what)}__</b> is written: ${d.added} entries, in your libraries`,

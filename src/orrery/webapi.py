@@ -1182,6 +1182,8 @@ def llm_takes(home: Home, args: dict) -> dict:
     src, screenplay = long_form(strip_comments(text)), target != "text" and long_form(strip_comments(text)).lstrip().startswith("@h3")
     if kind == "library":
         return _library_takes(home, args, what, src, api)
+    if kind == "entries":
+        return _entry_takes(home, args, what, src, api, seed)
     result = None
     for _ in range(8):  # a library still to be written stands in as its name, as the annotations do
         try:
@@ -1250,13 +1252,33 @@ def _library_takes(home: Home, args: dict, name: str, src: str, api) -> dict:
     return {"takes": out}
 
 
+def _entry_takes(home: Home, args: dict, name: str, src: str, api, seed: int) -> dict:
+    """A library that exists, at the line (#273): entries rolled from it (the one at this seed first, `roll`) and new
+    ones the model writes, not in it, as a top-up asks for them; as many of each as the settings say."""
+    from orrery import takes
+    from orrery.llm import InvalidProposal
+
+    lib = home.libraries().get(name)
+    if lib is None:
+        raise ApiError(400, f"__{name}__ is still to be written: its 🎲 writes it.")
+    count, have = takes.counts(llm_config(home)), [str(h) for h in args.get("have") or [] if str(h).strip()][:400]
+    rolled = takes.rolled_entries(lib, home.weights(), seed, count["rolled"], have, str(args.get("roll") or ""))
+    directions = " ".join(str(args.get("directions") or "").split()) or str(lib.meta.get("directions") or "")
+    prompt, need = takes.for_library(src, name, count["new"], directions, str(args.get("steer") or ""), [*lib.values(), *have])
+    try:
+        new = takes.library_entries(api.complete(prompt), need)
+    except (RuntimeError, InvalidProposal) as err:
+        raise ApiError(502, str(err)) from None
+    return {"rolled": rolled, "takes": new, "directions": directions}
+
+
 def library_add(home: Home, args: dict) -> dict:
     """Keep as the library, Add to the library (#272, #273): the entries picked in a takes sheet, straight in."""
     from orrery import takes
 
     name = _library_name(args.get("name"))
     values = [str(v) for v in args.get("entries") or [] if str(v).strip()]
-    if not values:
+    if not values and not (str(args.get("directions") or "").strip() and name in home.libraries()):
         raise ApiError(400, "'entries' are the picked entries: none were sent.")
     cfg = endpoint.config(home)
     added = takes.add_to_library(home, name, values, str(args.get("directions") or ""), cfg["model"] if cfg["source"] == "api" else "")

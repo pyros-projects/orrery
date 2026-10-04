@@ -21,6 +21,20 @@ def test_a_library_still_to_be_written_is_asked_for_as_a_run_asks_with_the_steer
     assert takes.library_entries('{"sky_kind": ["Fog", "low cloud", "hail", "sleet", "drizzle"]}', need) == ["low cloud", "hail", "sleet"]
 
 
+def test_a_library_that_exists_offers_its_roll_at_the_seed_first_then_weighted_rolls():
+    """#273: the roll the annotation shows (maybe cut short) first; then draws by weight times learned weight."""
+    from orrery.library import Entry, Library
+
+    lib = Library("hair", [Entry("bob cut"), Entry("a very long braided crown with ribbons woven through"), Entry("mohawk", weight=0),
+                           Entry("buzz cut"), Entry("pigtails")])
+    out = takes.rolled_entries(lib, {}, 7, 3, first="a very long braided…")
+    assert out[0] == "a very long braided crown with ribbons woven through" and len(out) == 3 and "mohawk" not in out
+    assert out == takes.rolled_entries(lib, {}, 7, 3, first="a very long braided…")  # the same seed, the same rolls
+    assert "bob cut" not in takes.rolled_entries(lib, {}, 7, 5, skip=["Bob cut"])
+    unlearned = {"__hair__=pigtails": 0.0, "__hair__=buzz cut": 0.0}
+    assert set(takes.rolled_entries(lib, unlearned, 1, 9)) == {"bob cut", "a very long braided crown with ribbons woven through"}
+
+
 def test_the_takes_come_out_of_an_array_or_an_object_holding_one():
     assert takes.parse('["a  key", "a coin", "a key"]', 3) == ["a key", "a coin"]  # one line each, each once
     assert takes.parse('{"takes": ["x", "y", "z", "w"]}', 3) == ["x", "y", "z"]

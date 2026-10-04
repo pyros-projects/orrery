@@ -931,6 +931,23 @@ def test_takes_at_the_line_ask_the_endpoint_for_one_place_at_the_seed(home, fake
     assert api(home, webapi.llm_takes, kind="slot", what="one small object in its paws", template=template)[0] == 502
 
 
+def test_a_library_that_exists_offers_its_rolls_and_new_entries_from_the_model(home, fake_api):
+    """#273: rolls from the library, the one at this seed first, and new entries asked as a top-up asks, none of
+    those it has or the sheet shows; Add to the library writes picked ones in, or only its directions."""
+    (home / "library" / "sky_kind.txt").write_text("fog\nlow cloud\nhail\nsleet\n")
+    Home(home).save_config({"llm": {"source": "api", "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})
+    fake_api.answer = lambda body: json.dumps(["Fog", "sun dogs", "a heat haze", "graupel", "virga"])
+    body = ok(home, webapi.llm_takes, kind="entries", what="sky_kind", template="A fox under a __sky_kind__ sky.", seed=3, roll="hail")
+    assert body["rolled"][0] == "hail" and len(body["rolled"]) == 3 and set(body["rolled"]) <= {"fog", "low cloud", "hail", "sleet"}
+    assert body["takes"] == ["sun dogs", "a heat haze", "graupel"]  # three new, none it has
+    prompt = fake_api.requests[-1]["messages"][0]["content"]
+    assert "3 NEW entries in the spirit of the existing ones" in prompt and '"sleet"' in prompt
+    assert api(home, webapi.llm_takes, kind="entries", what="moods", template="A __moods__ fox.")[0] == 400  # not written yet
+    assert ok(home, webapi.library_add, name="sky_kind", entries=["graupel", "hail"])["added"] == 1
+    assert ok(home, webapi.library_add, name="sky_kind", directions="weather a painter sees")["added"] == 0
+    assert Home(home).libraries()["sky_kind"].meta["directions"] == "weather a painter sees"
+
+
 def test_keep_as_the_library_writes_the_picked_entries_straight_in(home):
     """#272: a new library made of the entries picked in the sheet, not To review, its directions kept; picked again,
     only the new ones are added; `orrery lib undo` has a snapshot."""

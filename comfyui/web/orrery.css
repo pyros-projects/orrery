@@ -264,6 +264,8 @@
 .orrery-app .editor .hint > span.llm-keys { display: inline-flex; gap: 3px; margin-left: 1ch; opacity: 1; font-style: normal; color: var(--violet);
   pointer-events: auto; position: relative; z-index: 2; vertical-align: top; }
 .orrery-app .editor .hint.with-keys > span:not(.llm-keys) { margin-left: 1ch; }
+.orrery-app .editor .hint .lroll { pointer-events: auto; position: relative; z-index: 2; cursor: pointer; }
+.orrery-app .editor .hint .lroll:hover { color: var(--violet); text-decoration: underline dotted; }
 .orrery-app .llm-key { display: inline-grid; place-items: center; width: 17px; height: 15px; border: 1px solid color-mix(in srgb, currentColor 40%, transparent);
   border-radius: 4px; cursor: pointer; background: color-mix(in srgb, currentColor 10%, transparent); box-shadow: 0 1px 0 rgba(0,0,0,.5); }
 .orrery-app .llm-key .i { width: 11px; height: 11px; }
@@ -278,6 +280,9 @@
 .orrery-app .takes-panel .take-sel { gap: 6px; align-items: center; }
 .orrery-app .takes-panel .take-list.multi { max-height: 46vh; overflow-y: auto; }
 .orrery-app .takes-panel .take-use { gap: 6px; }
+.orrery-app .takes-panel .take-list .tk { margin-left: 8px; font: 500 10.5px var(--mono); color: var(--faint); }
+.orrery-app .takes-panel .take-list .tk.new { color: var(--violet); }
+.orrery-app .takes-panel .take-list .tk.added { color: var(--teal); }
 .orrery-app .takes-n { flex-wrap: wrap; gap: 6px 18px; }
 .orrery-app .takes-n label { gap: 6px; align-items: center; }
 .orrery-app .editor .hint .hint-pic { height: 1.45em; width: auto; border-radius: 3px; margin-right: 3px; vertical-align: top; opacity: 1; }
