@@ -10,6 +10,7 @@ import { applyDials, chunkInfo, dials, hasGoto, knobKey, knobsOf, withFields, ne
 import { drag, thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
 import { openSceneStats } from "./scenestats.js";
+import { openTree } from "./tree.js";
 import { STARTERS } from "./starters.js";
 import { runRolls } from "./test.js";
 import { caretPoint, cellStart, inCell, jumpCell, paintCells, renderCells, wireCells } from "./cells.js";
@@ -49,6 +50,7 @@ function statsHTML(app) {
         + `<button class="btn ghost" data-act="hold" aria-pressed="${!!app.bridge.segmentHeld?.()}" title="${app.bridge.segmentHeld?.()
           ? "Held: every Roll plays this clip again, for takes. Press to step on after each run" : "Hold this clip: every Roll plays it again, for takes"}">${icon("lock")}Hold</button>`)
       + `<button class="btn ghost" data-act="jump" title="Scroll the editor to the scene that plays the next clip">${icon("jump")}Jump</button>`
+      + `<button class="btn ghost" data-act="tree" title="The take tree: every take of the reel, its paths and the film's">${icon("tree")}Tree</button>`
       + `<button class="btn" data-act="restart" title="Cancel this node's queued and running clips, set segment to 0 and generate from the start">${icon("undo")}Restart</button>` : "")
     + (app.state.sweepQueue
       ? `<button class="btn primary" data-act="stopsweep" title="Stop queueing the sweep; what is queued already still runs">${icon("x")}Stop<small class="sweep">${app.state.sweepQueue.done}/${app.state.sweepQueue.total} queued</small></button>`
@@ -257,6 +259,7 @@ export function renderPrompt(app) {
     if (act === "generate") return generate(app);
     if (act === "restart") restart(app);
     if (act === "jump") jumpToChunk(app);
+    if (act === "tree") openTree(app);
     if (act === "new") { app.state.newMenu = !app.state.newMenu; app.state.writeMenu = false; return renderPrompt(app); }
     if (act === "write") { app.state.writeMenu = !app.state.writeMenu; app.state.newMenu = false; return renderPrompt(app); }
     const writer = e.target.closest("[data-write]")?.dataset.write;

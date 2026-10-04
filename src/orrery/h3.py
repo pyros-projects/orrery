@@ -170,6 +170,7 @@ class Compiled:
     test: bool = False  # a test scene's clip: Orrery Film leaves it out of the film
     uses_input: bool = False  # the reel reads the Orrery Prompt's input video (Reel.uses_input)
     pictures: dict[int, dict] = field(default_factory=dict)  # image slot → {file, prompt} a CAST names (name_pictures)
+    chunk: int | None = None  # a reel's scene this clip plays (its index), for the take tree (#240)
 
 
 # --- front end ------------------------------------------------------------------------------
@@ -1031,4 +1032,5 @@ def compile_scene(src: str, seed: int, libraries: Mapping[str, Library],
                     sends, reel.send_slots if reel else [],
                     [{**r, "sent": sent_mods[r["name"]]} if r["name"] in sent_mods else r for r in clip_refmods(scene)],
                     clip_images(scene, refs), reel.before(segment, path) if reel else None,
-                    bool(reel and reel.blocks[path[segment][0]].test), bool(reel and reel.uses_input), named)
+                    bool(reel and reel.blocks[path[segment][0]].test), bool(reel and reel.uses_input), named,
+                    path[segment][0] if reel else None)

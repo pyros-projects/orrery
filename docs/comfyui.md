@@ -131,7 +131,8 @@ Nodes under **orrery**:
     as it forms: see Orrery Prompt's `model` below). **Sample surfing**: ×1 beside
     + turns to ×2, ×4, ×8, and + renders that many **takes** of the
     clip. They line up under it; hover plays one, a click puts it in the film
-    (the next clip and `REMEMBER:` then use it too). 📌 in a scene keeps its
+    (the next clip and `REMEMBER:` then use it too), and the clips last made
+    after it come back with it: no path is lost (#213). 📌 in a scene keeps its
     rolled prompt, so the takes change only the sampler's noise (the Orrery
     Prompt's `seed` output carries seed + take into the noise, as in the
     example workflows); without it each take rolls anew, and the one you pick
@@ -141,11 +142,34 @@ Nodes under **orrery**:
     at the end of a clip's takes sizes them all, in the clip's shape. A × on
     a take, or on the clip in its box, deletes it from disk (it asks first): the
     film then plays the clip's newest other take, or ends before the clip.
-    Under the label of a clip's takes, **the others** deletes every take but
-    the one in the film, and **all** every one, the film then ending before
-    the clip; each asks first, and takes made on another path stay (#234).
-    **play all** plays every take of the clip at once, from the start and in
-    step, to compare their motion; **stop all** stops them (#238). While a clip renders, its box
+    Beside a clip's takes stands a column that stays with them as you scroll
+    (#245): **play all** on top plays every take of the clip at once, from the
+    start and in step, to compare their motion (**stop all** stops them, #238);
+    in the middle the clip and its scene in numbers (its takes, the one in the
+    film, its seed, the newest, how many were made with another prompt); at the
+    bottom **the others** deletes every take but the one in the film, and
+    **all** every one, the film then ending before the clip; each asks first,
+    and takes made on another path stay (#234). **Tree**
+    beside *Jump* opens the **take tree** (#213): every take of the reel's run,
+    a column per clip, a line from each take to the takes made on it, and the
+    film's path lit in brass; the rows stay where they are, only the light moves. Hover plays a take and shows the
+    way the film would go through it; a click makes the film that way (to the
+    take from clip 1, then on as it was last walked), and ✂ on a take of the
+    film ends the film after it, so a film is clicked together along the tree.
+    The prompt is the script and the takes are the footage: switching takes
+    never changes the editor, and what renders next is shot with the editor's
+    text on the film's path. A take made with another version of its scene
+    carries ✎, in the tree and under its clip: hovering it shows what changed,
+    and a click on ✎ (**Use this prompt**) puts that version of the scene in
+    the editor, with Undo; the editor shows that scene, lit for a moment.
+    **▶ Film** in the tree's head plays the film as it is clicked together
+    (#243), in a section of its own above the tree that the split under it
+    sizes: under the video a timeline of its clips with a playhead (a click
+    plays the film from there), and the take playing glows in the tree.
+    **hide < N after** in its head hides the dead ends (#246): the takes fewer
+    than N takes were made on. The film's takes, the last clip's (nothing can
+    come after them yet) and every take a shown take came after stay, so every
+    path shown is whole; the head counts the hidden ones, 0 shows all. While a clip renders, its box
     shows the sampler's preview and the step it is at: KJNodes' Model Preview
     Override (a picture, or the whole clip as it forms), else ComfyUI's own
     preview when its live preview is on. Under a scene's clips come the frames its
@@ -243,8 +267,9 @@ Nodes under **orrery**:
   `noise_mask`). Orrery Film trims the 22 frames, puts out the clip
   (`images`, `audio`) and `film`, the reel so far, and keeps the takes under
   `output/<the reel's folder>/orrery_film/`: each clip, its sound and the tail the
-  next one continues from. Rendering a clip again replaces its take and drops
-  the ones after it that continue it (branches beside it stay), clip 1 too: its
+  next one continues from. Rendering a clip again adds a take, and the film ends
+  with it; the clips that continued the take before stay in the take tree and
+  come back when that take is picked again, clip 1 too: its
   takes stay side by side (another size or sound starts a new run); older takes stay on disk. A `(test)` scene's take is kept but left out of
   the joined film. The previous clip, `REMEMBER:` and the timeline read
   this store or H3 Motion Context's Chain Video, whichever was written last.

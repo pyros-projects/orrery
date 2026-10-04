@@ -742,3 +742,81 @@ test("the template's knobs, where they hold, written anew and put back (#226)", 
   assert.match(turned, /LORA: <lora:turbo:0\.6> @style\(0\.5\)/);
   assert.match(turned, /SCENE the walk\nSET: turbo\(0\.5\), @JINX/);
 });
+
+test("the take tree lays its takes out as a tidy tree, rows where they were made, and shows the way through a take (#241)", async () => {
+  const { layoutTree, wayThrough } = await import("../../comfyui/web/app/tree.js");
+  const t = (folder, segment, parent, created) => ({ folder, segment, parent, created });
+  const takes = [t("a", 0, null, "1"), t("a1", 1, "a", "2"), t("a1x", 2, "a1", "3"), t("b", 0, null, "4"), t("b1", 1, "b", "5"), t("a2", 1, "a", "6")];
+  const rows = layoutTree(takes);
+  assert.deepEqual(["a", "a1", "a1x"].map((f) => rows.get(f)), [0, 0, 0]);  // a parent on its first child's row: a path runs straight
+  assert.equal(rows.get("a2"), 1);  // a branch below
+  assert.deepEqual([rows.get("b"), rows.get("b1")], [2, 2]);  // a later take of clip 1 below: whatever the film, no row moves
+  assert.deepEqual(wayThrough({ takes, last: { a: "a1", a1: "a1x" } }, "a"), ["a", "a1", "a1x"]);
+  assert.deepEqual(wayThrough({ takes, last: {} }, "a1x"), ["a", "a1", "a1x"]);
+});
+
+test("a take made with another version of its scene is told, its change shown, and Use this prompt brings it back (#242)", async () => {
+  const { fetchTemplates, lineDiff, sceneIn, useVersion, versionHTML, versionOf, wordMarks } = await import("../../comfyui/web/app/versions.js");
+  const old = "@h3 base 16:9\n\nSCENE the door\nSHOT 5s: static\na red door opens.\n\nSCENE the hall\nSHOT 5s: dolly in\na long hall.\n";
+  const now = "@h3 base 16:9\n\nSCENE the hall\nSHOT 5s: dolly in\na long hall.\n\nSCENE the door\nSHOT 5s: static\n# a note\na blue door opens.\n";
+  const asked = [];
+  let toast = null, rendered = 0;
+  const app = {
+    text: now, data: {}, state: { tab: "prompt" }, render: () => { rendered++; }, toast: (html, action) => { toast = { html, action }; },
+    api: { template: async (h) => { asked.push(h); if (h === "gone") throw new Error("404"); return { text: old }; } },
+  };
+  await fetchTemplates(app, [{ template: "old" }, { template: "old" }, { template: "gone" }, {}]);
+  await fetchTemplates(app, [{ template: "old" }]);
+  assert.deepEqual(asked.sort(), ["gone", "old"]);  // each hash once
+  assert.equal(sceneIn(now, 0, "SCENE the door").text.split("\n")[0], "SCENE the door");  // by its heading, moved
+  assert.equal(versionOf(app, { template: "old", scene: 1 }), null);  // the hall: the same text, moved and all
+  assert.equal(versionOf(app, { template: "gone", scene: 0 }), null);  // a template the home has lost: no mark
+  const v = versionOf(app, { template: "old", scene: 0 });
+  assert.deepEqual([v.scene, v.at, v.then.split("\n").pop(), v.now.split("\n").pop()], [0, 1, "a red door opens.", "a blue door opens."]);
+  assert.deepEqual(lineDiff("a\nb\nc", "a\nx\nc"), [[" ", "a"], ["-", "b"], ["+", "x"], [" ", "c"]]);
+  const card = versionHTML(v);
+  assert.match(card, /class="cut"><i>−<\/i><span>a <mark>blue<\/mark> door opens\.<\/span>/);  // the changed word marked
+  assert.match(card, /class="add"><i>\+<\/i><span>a <mark>red<\/mark> door opens\.<\/span>/);
+  assert.match(card, /SCENE the door/);
+  assert.deepEqual(wordMarks("walks slowly on", "walks on"), ["walks <mark>slowly</mark> on", "walks on"]);
+  useVersion(app, v);
+  assert.ok(app.text.startsWith("@h3 base 16:9\n\nSCENE the hall\nSHOT 5s: dolly in\na long hall.\n\nSCENE the door\nSHOT 5s: static\na red door opens."));
+  assert.equal(versionOf(app, { template: "old", scene: 0 }), null);
+  assert.ok(rendered === 1 && toast.action.label === "Undo");
+  toast.action.run();
+  assert.equal(app.text, now);
+  app.text = "@h3 base 16:9\n\nSCENE the door\nSHOT 5s: static\na red door opens.\n";  // the hall gone: it comes back at the end
+  useVersion(app, versionOf(app, { template: "old", scene: 1 }));
+  assert.equal(app.text, "@h3 base 16:9\n\nSCENE the door\nSHOT 5s: static\na red door opens.\n\nSCENE the hall\nSHOT 5s: dolly in\na long hall.");
+});
+
+test("the film plays in the tree: its clips in film.mp4's time, a test scene's take left out (#243)", async () => {
+  const { filmClips } = await import("../../comfyui/web/app/tree.js");
+  const takes = [{ folder: "a", frames: 240 }, { folder: "t", frames: 120, test: true }, { folder: "b", frames: 120 }, { folder: "x", frames: 99 }];
+  assert.deepEqual(filmClips({ takes, path: ["a", "t", "b"] }), [{ folder: "a", n: 1, start: 0, end: 10 }, { folder: "b", n: 3, start: 10, end: 15 }]);
+  assert.deepEqual(filmClips({ takes, path: [] }), []);
+});
+
+test("a clip's takes have a head that reads as content: play on top, the clip in numbers, deleting at the bottom (#245)", async () => {
+  const { takesHeadHTML } = await import("../../comfyui/web/app/timeline.js");
+  const app = { data: {}, text: "" };
+  const takes = [{ folder: "a", seed: 3, created: "2026-10-04T05:01:02.1+02:00" }, { folder: "b", seed: 7, take: 2, active: true, created: "2026-10-04T05:09:12.5+02:00" }];
+  const html = takesHeadHTML(app, 1, takes, "the walk");
+  const at = (s) => html.indexOf(s);
+  assert.ok(at("data-playall") < at("th-mid") && at("th-mid") < at('data-clear="others"'));  // play, numbers, deleting
+  assert.match(html, /clip 2<\/span><span class="th-scene" title="the walk">the walk/);
+  assert.match(html, /<i>takes<\/i><b>2<\/b>.*<i>in the film<\/i><b>#2<\/b>.*<i>seed<\/i><b>7 \+ 2<\/b>.*<i>newest<\/i><b>05:09<\/b>/);
+  assert.doesNotMatch(html, /other prompt/);  // none made with another prompt
+});
+
+test("the take tree hides the dead ends: the film's, the last clip's and those a shown take came after stay (#246)", async () => {
+  const { shownTakes } = await import("../../comfyui/web/app/tree.js");
+  const t = (folder, segment, parent = null) => ({ folder, segment, parent });
+  const takes = [t("a", 0), t("b", 0), t("c", 0), t("d", 0), t("a1", 1, "a"), t("a2", 1, "a"), t("c1", 1, "c"), t("a1x", 2, "a1"), t("c1x", 2, "c1"), t("c1y", 2, "c1")];
+  const tree = { takes, path: ["b"] };
+  const names = (least) => shownTakes(tree, least).map((x) => x.folder).sort().join(" ");
+  assert.equal(names(0), takes.map((x) => x.folder).sort().join(" "));  // 0: all of them
+  assert.equal(names(1), "a a1 a1x b c c1 c1x c1y");  // d goes; a2 too (no take after it, not the last clip); b is the film
+  assert.equal(names(2), "a a1 a1x b c c1 c1x c1y");  // c has one take after it, but c1 has two: the path to it stays whole
+  assert.equal(names(3), "a a1 a1x b c c1 c1x c1y");  // the last clip's takes stay, and the takes they came after
+});

@@ -25,10 +25,10 @@ def tail(fill=0.0):
     return Tail(np.full((1, 24, 7, 3, 4), fill, np.float32), np.full((1, 32, 2, 37), fill, np.float32), 0.25)
 
 
-def take(out, segment, n=24, w=64, fill=0.0, continues=-1, test=False):
+def take(out, segment, n=24, w=64, fill=0.0, continues=-1, test=False, meta=None):
     sound = np.sin(np.linspace(0, 400, round(n / 24 * SR), dtype=np.float32))[None].repeat(2, 0) * 0.1
     return film.save_take(out, "h3_context", segment, frames(n, w=w, shade=40 * segment), sound, SR, tail(fill),
-                          {"seed": 7}, continues, test)
+                          {"seed": 7, **(meta or {})}, continues, test)
 
 
 def active_run(out):
@@ -172,7 +172,7 @@ def test_clip_1_again_stays_in_its_run_beside_its_other_takes(tmp_path):
     assert [c["frames"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [30]
     assert [t["folder"] for t in film.takes(tmp_path, "h3_context")[0]] == [first.name, again.name]
     film.pick_take(tmp_path, "h3_context", 0, first.name)
-    assert [c["frames"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [24]
+    assert [c["frames"] for c in chain.listing(tmp_path, "h3_context")["clips"]] == [24, 24]  # #240: its clip 2 comes back
 
 
 def test_clip_1_in_another_size_starts_a_new_run(tmp_path):
@@ -289,3 +289,48 @@ def test_a_clips_takes_go_at_once_the_others_or_all_and_another_paths_stay(tmp_p
     assert not first.exists() and not other.exists() and chain.listing(tmp_path, "h3_context")["clips"] == []
     with pytest.raises(film.FilmError, match="no takes"):
         film.delete_takes(tmp_path, "h3_context", 0)
+
+
+def test_the_takes_grow_a_tree_and_every_path_comes_back(tmp_path):
+    """#240: a take remembers the take last made on it; picking it, or any take of the tree, brings its path back."""
+    a = take(tmp_path, 0)
+    a1 = take(tmp_path, 1)
+    a1x = take(tmp_path, 2)
+    b = take(tmp_path, 0, n=26)  # a second clip 1: the film is b alone, a's path waits
+    b1 = take(tmp_path, 1, n=28)
+    folders = lambda: [c["version"] for c in chain.listing(tmp_path, "h3_context")["clips"]]
+    assert folders() == [b.name, b1.name]
+    film.pick_take(tmp_path, "h3_context", 0, a.name)
+    assert folders() == [a.name, a1.name, a1x.name]  # back along a's path, to its end
+    assert film.walk_to(tmp_path, "h3_context", b1.name)["clips"] == 2
+    assert folders() == [b.name, b1.name]
+    film.walk_to(tmp_path, "h3_context", a1.name)  # a take in the middle: the path to it, and on from it
+    assert folders() == [a.name, a1.name, a1x.name]
+    assert film.end_film(tmp_path, "h3_context", 1) == {"clips": 2}
+    assert folders() == [a.name, a1.name]
+    film.walk_to(tmp_path, "h3_context", a.name)  # the memory still knows the way on
+    assert folders() == [a.name, a1.name, a1x.name]
+    grown = film.tree(tmp_path, "h3_context")
+    assert {t["folder"]: t["parent"] for t in grown["takes"]} == {
+        a.name: None, b.name: None, a1.name: a.name, b1.name: b.name, a1x.name: a1.name}
+    assert grown["path"] == [a.name, a1.name, a1x.name] and grown["last"][a.name] == a1.name
+
+
+def test_a_clip_that_starts_afresh_knows_the_take_it_came_after(tmp_path):
+    a = take(tmp_path, 0)
+    fresh = take(tmp_path, 1, continues=None)  # a scene that starts afresh: it continues nothing, but follows a
+    meta = json.loads((fresh / "meta.json").read_text())
+    assert (meta["after"], meta["follows"]) == (None, a.name)
+    assert {t["folder"]: t["parent"] for t in film.tree(tmp_path, "h3_context")["takes"]}[fresh.name] == a.name
+    with pytest.raises(film.FilmError, match="no take"):
+        film.walk_to(tmp_path, "h3_context", "seg_0001_nothere1")
+
+
+def test_a_take_names_the_scene_and_the_template_it_was_made_with(tmp_path):
+    """#242: the tree and the takes under a clip tell a take made with another version of its scene."""
+    take(tmp_path, 0, meta={"template": "0123456789abcdef", "chunk": 0})
+    take(tmp_path, 0, n=26, meta={"template": "fedcba9876543210", "chunk": 0})
+    listed = film.takes(tmp_path, "h3_context")[0]
+    assert [(t["scene"], t["template"]) for t in listed] == [(0, "0123456789abcdef"), (0, "fedcba9876543210")]
+    grown = film.tree(tmp_path, "h3_context")["takes"]
+    assert [(t["scene"], t["template"]) for t in grown] == [(0, "0123456789abcdef"), (0, "fedcba9876543210")]

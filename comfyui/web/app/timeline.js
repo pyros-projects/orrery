@@ -4,10 +4,12 @@
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
 import { shape } from "./model.js";
+import { fetchTemplates, useVersion, versionOf, versionText } from "./versions.js";
 
-// The clips the chain holds, fetched again after every run.
+// The clips the chain holds, fetched again after every run, and the templates its takes were made with (#242).
 export async function loadChain(app) {
   try { app.data.chain = await app.api.chain(app.bridge.chain()); } catch { app.data.chain = null; }
+  await fetchTemplates(app, Object.values(app.data.chain?.takes || {}).flat());
   app.data.anchorV = Date.now();  // anchors change in place: a new run, a new URL
 }
 
@@ -58,7 +60,7 @@ export function sectionHTML(app, c) {
   }
   const clips = new Map((app.data.chain?.clips || []).map((x) => [x.segment, x]));
   const segment = Number(app.bridge.getSegment()), segs = segmentsOf(c, clips);
-  return `<div class="cm-clips">${segs.map((s) => bigClipHTML(app, s, clips.get(s), segment)).join("")}</div>${segs.map((s) => takesHTML(app, s)).join("")}`;
+  return `<div class="cm-clips">${segs.map((s) => bigClipHTML(app, s, clips.get(s), segment)).join("")}</div>${segs.map((s) => takesHTML(app, s, c.title)).join("")}`;
 }
 
 const TAKE = /^seg_\d{4}_[0-9a-f]{8}$/;  // an Orrery Film take's folder
@@ -68,24 +70,47 @@ function delHTML(folder) {
   return `<span class="del" role="button" data-del="${esc(folder)}" title="Delete this take" aria-label="Delete this take">${icon("x")}</span>`;
 }
 
+// The column beside a clip's takes (#245): play all on top, the clip in numbers, deleting at the bottom.
+export function takesHeadHTML(app, s, takes, scene = "") {
+  const film = takes.findIndex((t) => t.active), on = takes[film];
+  const newest = takes.map((t) => String(t.created || "")).sort().pop().slice(11, 16), older = takes.filter((t) => versionOf(app, t)).length;
+  const row = (label, value, cls = "") => `<span class="${cls}"><i>${label}</i><b>${value}</b></span>`;
+  return `<span class="cm-takes-head">`
+    + `<span class="th-top"><span class="btn ghost th-play" role="button" data-playall title="Play every take of clip ${s + 1} at once, from the start, to compare them">${icon("play")}play all</span></span>`
+    + `<span class="th-mid"><span class="th-clip">clip ${s + 1}</span>${scene ? `<span class="th-scene" title="${esc(scene)}">${esc(scene)}</span>` : ""}`
+    + `<span class="th-stats">${row("takes", takes.length)}${row("in the film", on ? `#${film + 1}` : "none")}`
+    + (on ? row("seed", `${on.seed ?? "?"}${on.take ? ` + ${on.take}` : ""}`) : "") + (newest ? row("newest", newest) : "")
+    + (older ? row("✎ other prompt", older, "th-ver") : "") + `</span></span>`
+    + `<span class="th-low"><span class="btn ghost" role="button" data-clear="others" title="Delete every take of clip ${s + 1} but the one in the film">${icon("trash")}the others</span>`
+    + `<span class="btn ghost danger" role="button" data-clear="all" title="Delete every take of clip ${s + 1}, the one in the film too: the film then ends before it">${icon("trash")}all</span></span></span>`;
+}
+
+// ✎ on a take made with another prompt (#242): its title says what changed, a click puts that prompt in the editor.
+function verHTML(app, t) {
+  const v = versionOf(app, t);
+  return v ? `<span class="ver" role="button" data-ver="${esc(t.folder)}" title="${esc(`Made with another prompt · click: use this prompt\n${versionText(v)}`)}">✎</span>` : "";
+}
+
+// The takes made with another prompt, for the cells to tell when their marks change.
+export function olderTakes(app) {
+  return Object.values(app.data.chain?.takes || {}).flat().filter((t) => versionOf(app, t)).map((t) => t.folder);
+}
+
 // A take's size in the clip's shape (#215): `least`, the shorter side, as the grip at the strip's end sets it.
 function takeVars(app, least = Number(app.data.take_min) || 54) {
   const ratio = clipRatio(app), w = ratio >= 1 ? least * ratio : least, h = ratio >= 1 ? least : least / ratio;
-  return `--take-w:${Math.round(w)}px;--take-h:${Math.round(h)}px`;
+  return `--take-w:${Math.round(w)}px;--take-h:${Math.round(h)}px;--take-r:${(w / h).toFixed(4)}`;
 }
 
 // A clip's takes (#206), where it has more than one: hover plays one, a click puts it in the film.
-function takesHTML(app, s) {
+function takesHTML(app, s, scene = "") {
   const takes = app.data.chain?.takes?.[s] || [];
   if (takes.length < 2) return "";
-  return `<div class="cm-takes" data-seg="${s}" style="${takeVars(app)}"><span class="cm-takes-head"><span class="muted">clip ${s + 1} · ${takes.length} takes</span>`
-    + `<span class="btn ghost" role="button" data-clear="others" title="Delete every take of clip ${s + 1} but the one in the film">${icon("trash")}the others</span>`
-    + `<span class="btn ghost danger" role="button" data-clear="all" title="Delete every take of clip ${s + 1}, the one in the film too: the film then ends before it">${icon("trash")}all</span>`
-    + `<span class="btn ghost" role="button" data-playall title="Play every take of clip ${s + 1} at once, from the start, to compare them">${icon("play")}play all</span></span>${takes.map((t, i) =>
+  return `<div class="cm-takes" data-seg="${s}" style="${takeVars(app)}">${takesHeadHTML(app, s, takes, scene)}<div class="cm-takes-list">${takes.map((t, i) =>
     `<button type="button" class="take${t.active ? " on" : ""}" data-take="${esc(t.folder)}" data-seg="${s}" title="Take ${i + 1} · seed ${t.seed ?? "?"}`
     + `${t.take ? ` + ${t.take}` : ""}${t.active ? " · in the film" : " · click to put it in the film"}">`
-    + `<img loading="lazy" alt="" src="${app.api.takeThumbURL(app.bridge.chain(), t.folder)}"><span class="n">${i + 1}</span>${delHTML(t.folder)}</button>`).join("")}`
-    + `<span class="grip" data-grip title="Drag to size the takes"></span></div>`;
+    + `<img loading="lazy" alt="" src="${app.api.takeThumbURL(app.bridge.chain(), t.folder)}"><span class="n">${i + 1}</span>${verHTML(app, t)}${delHTML(t.folder)}</button>`).join("")}`
+    + `<span class="grip" data-grip title="Drag to size the takes"></span></div></div>`;
 }
 
 // Sample surfing (#206): the take picked is the one the film, REMEMBER: and the next clip use. A take that rolled
@@ -276,6 +301,11 @@ export function wireClips(app, box) {
       return head.insertAdjacentHTML("beforeend", `<span class="ask">${others ? `Delete ${count - 1} takes? The one in the film stays.`
         : `Delete all ${count} takes? The film ends before clip ${s + 1}.`}<span class="btn danger" role="button" data-clearyes="${ask.dataset.clear}">Delete</span>`
         + `<span class="btn ghost" role="button" data-clearno>Keep</span></span>`);
+    }
+    const ver = e.target.closest("[data-ver]");
+    if (ver) {
+      const v = versionOf(app, Object.values(app.data.chain?.takes || {}).flat().find((t) => t.folder === ver.dataset.ver));
+      return v && useVersion(app, v);
     }
     const host = e.target.closest(".take, .tl-clip");
     if (e.target.closest("[data-delno]")) return host.querySelector(".ask")?.remove();

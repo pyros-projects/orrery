@@ -9,7 +9,7 @@ import { highlight } from "./highlight.js";
 import { splitCells } from "./model.js";
 import { annotationLines, mergeHints } from "./annotate.js";
 import { fillStrip, hintsFor, openPicker, rememberLines, stripHTML } from "./remember.js";
-import { clipRatio, paintLive, sectionHTML, sourceClip, wireClips } from "./timeline.js";
+import { clipRatio, olderTakes, paintLive, sectionHTML, sourceClip, wireClips } from "./timeline.js";
 
 const box = (app) => app.view.querySelector(".editor.cells");
 const areas = (app) => [...(box(app)?.querySelectorAll("textarea") || [])];
@@ -73,7 +73,7 @@ export function paintCells(app) {
     cell.querySelector("pre").innerHTML = `${highlight(c.text, known, { llm, chunks: local, segment, cast, hints, sceneActs: acts })}​`;
   });
   const sig = JSON.stringify([chunks.map((c) => [c.first, c.last, c.segs]), (app.data.chain?.clips || []).map((c) => c.version),
-    segment, clipRatio(app), app.data.clip_min, app.data.take_min, remembered?.key, remembered?.lines]);
+    segment, clipRatio(app), app.data.clip_min, app.data.take_min, remembered?.key, remembered?.lines, olderTakes(app)]);
   if (sig === app.cellsSig) return;
   app.cellsSig = sig;
   host.querySelectorAll(".chunkmedia").forEach((m) => {

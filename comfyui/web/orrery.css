@@ -156,14 +156,29 @@
 .orrery-app .scene-act[aria-pressed="false"] { opacity: .55; }
 .orrery-app .scene-act[aria-pressed="true"] { background: color-mix(in srgb, currentColor 26%, transparent); box-shadow: inset 0 1px 1px rgba(0,0,0,.35); }
 /* a clip's takes (#206): a strip under the scene's clips; the one in the film is marked */
-.orrery-app .cm-takes { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; }
+.orrery-app .cm-takes { display: flex; align-items: stretch; margin-top: 6px; font-size: 11px; }
+.orrery-app .cm-takes-list { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: center; align-content: flex-start; gap: 4px; }
 .orrery-app .cm-takes .muted { margin-right: 4px; }
-/* a clip's takes deleted at once (#234): under its label, beside the takes */
-.orrery-app .cm-takes-head { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; align-self: stretch; margin-right: 4px; }
+/* the column beside a clip's takes (#245): play all on top, the clip in numbers, deleting (#234) at the bottom */
+.orrery-app .cm-takes-head { position: sticky; top: 6px; z-index: 2; flex: none; align-self: flex-start; display: flex; flex-direction: column;
+  justify-content: space-between; gap: 10px; width: 128px; min-height: var(--take-h, 54px); margin-right: 8px; padding: 2px 10px 2px 0;
+  border-right: 1px solid var(--line); }
 .orrery-app .cm-takes-head .btn { padding: 1px 7px; font-size: 10.5px; gap: 4px; cursor: pointer; }
 .orrery-app .cm-takes-head .btn svg { width: 11px; height: 11px; }
+.orrery-app .cm-takes-head .th-play { padding: 3px 11px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); }
+.orrery-app .cm-takes-head .th-play:hover { border-color: var(--brass); color: var(--brass); }
+.orrery-app .cm-takes.playing .th-play { border-color: var(--brass); background: var(--brass-soft); color: var(--brass); }
+.orrery-app .th-mid { display: grid; gap: 2px; min-width: 0; }
+.orrery-app .th-clip { font: 600 13px/1.2 var(--ui); color: var(--ink); }
+.orrery-app .th-scene { color: var(--muted); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.orrery-app .th-stats { display: grid; gap: 2px; margin-top: 6px; }
+.orrery-app .th-stats > span { display: flex; justify-content: space-between; gap: 8px; font-size: 10.5px; }
+.orrery-app .th-stats i { font-style: normal; color: var(--faint); }
+.orrery-app .th-stats b { font: 500 10.5px/1.4 var(--mono); color: var(--ink); }
+.orrery-app .th-stats .th-ver i, .orrery-app .th-stats .th-ver b { color: var(--violet); }
+.orrery-app .th-low { display: flex; flex-wrap: wrap; gap: 4px; }
 .orrery-app .cm-takes-head .ask { position: static; display: grid; gap: 4px; padding: 6px; border-radius: 6px; max-width: 150px; text-align: left; }
-.orrery-app .take { position: relative; width: var(--take-w, 96px); height: var(--take-h, 54px); padding: 0; border: 1px solid var(--line); border-radius: 4px; overflow: hidden;
+.orrery-app .take { position: relative; width: var(--take-w, 96px); max-width: 100%; aspect-ratio: var(--take-r, 16 / 9); padding: 0; border: 1px solid var(--line); border-radius: 4px; overflow: hidden;
   background: #22232e; cursor: pointer; }
 .orrery-app .take img, .orrery-app .take video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .orrery-app .take video { z-index: 1; }
@@ -184,6 +199,10 @@
 .orrery-app .ask .btn { padding: 1px 7px; font-size: 10.5px; cursor: pointer; }
 .orrery-app .take .ask { font-size: 9.5px; gap: 2px 4px; }
 .orrery-app .take .ask .btn { padding: 0 4px; font-size: 9.5px; }
+/* a take made with another prompt (#242): ✎, always shown; a click brings that prompt back */
+.orrery-app .ver { position: absolute; top: 3px; left: 3px; z-index: 3; display: grid; place-items: center; width: 18px; height: 18px;
+  border-radius: 50%; background: rgba(0,0,0,.65); color: var(--violet); font-size: 11px; line-height: 1; cursor: pointer; }
+.orrery-app .ver:hover { background: var(--violet); color: #15161d; }
 /* the dials' sidebar (#184): beside the editor, as wide as its grip sets (--side-w), one dial a row */
 .orrery-app .side-grip { width: 8px; flex: none; cursor: col-resize; border-radius: 4px; touch-action: none; }
 .orrery-app .side-grip:hover, .orrery-app .side-grip:focus-visible { background: var(--line); outline: none; }
@@ -201,6 +220,10 @@
 /* the cells view: one cell per CHUNK, each with its clips in a section under it */
 .orrery-app .editor.cells { overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: var(--line) transparent; padding: 6px 0 24px; }
 .orrery-app .editor.cells .cell { position: relative; }
+/* a scene "Use this prompt" (#242) just changed, or Undo changed back: lit for a moment */
+.orrery-app .editor.cells .cell.vflash::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-left: 3px solid var(--violet);
+  background: rgba(180,148,245,.16); animation: orrery-vflash 2.2s ease-out forwards; }
+@keyframes orrery-vflash { 0%, 35% { opacity: 1; } to { opacity: 0; } }
 .orrery-app .editor.cells .cell pre { position: relative; inset: auto; height: auto; overflow: visible; padding: 2px 12px; scrollbar-gutter: auto; min-height: 1.65em; }
 .orrery-app .editor.cells .cell textarea { position: absolute; inset: 0; height: 100%; overflow: hidden; padding: 2px 12px; scrollbar-gutter: auto; }
 .orrery-app .chunkmedia { position: relative; margin: 2px 0 6px; background: color-mix(in srgb, var(--surface) 70%, var(--well)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
@@ -576,6 +599,80 @@
 .orrery-app .ss-strip i.on { background: var(--brass); }
 .orrery-app .ss-strip i.next { outline: 1px solid var(--ink); outline-offset: 1px; }
 .orrery-app .ss-lines { margin: 0; padding: 6px 8px; border-radius: 6px; background: #17181f; font: 11.5px/1.5 var(--mono); white-space: pre-wrap; color: var(--muted); }
+/* the take tree (#241): a graph with videos, the film's path lit */
+.orrery-app .sheet .panel.tree-panel { max-width: none; width: calc(100% - 20px); height: calc(100% - 20px); display: flex; flex-direction: column; }
+.orrery-app .tree-panel > * { flex: none; }
+.orrery-app .tree-panel > .tree-scroll { flex: 1; }
+.orrery-app .tree-panel h4 { display: flex; align-items: center; gap: 8px; }
+.orrery-app .tree-panel input[type=range] { width: 120px; accent-color: var(--brass); }
+.orrery-app .tfilter { display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--muted); white-space: nowrap; }
+.orrery-app .tfilter input { width: 46px; padding: 2px 4px; border: 1px solid var(--line); border-radius: 5px; background: var(--well); color: var(--ink);
+  font: 12px var(--mono); text-align: center; }
+.orrery-app .tree-scroll { position: relative; overflow: auto; min-height: 0; border-radius: 8px; background: radial-gradient(ellipse at top left, rgba(212,175,95,.06), transparent 60%), #15161d; border: 1px solid var(--line); scrollbar-width: thin; }
+.orrery-app .tree-none { padding: 18px; }
+.orrery-app .tree-canvas { position: relative; }
+.orrery-app .tree-lines { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+.orrery-app .tedge { fill: none; stroke: #3a3c52; stroke-width: 2; transition: stroke .15s, opacity .15s; }
+.orrery-app .tedge.on { stroke: var(--brass); stroke-width: 3; filter: drop-shadow(0 0 4px rgba(212,175,95,.55)); }
+.orrery-app .tedge.way { stroke: var(--ink); stroke-dasharray: 6 5; stroke-width: 2.5; }
+.orrery-app .thead { position: absolute; top: 10px; display: flex; flex-direction: column; gap: 1px; font-size: 11px; color: var(--muted); overflow: hidden; white-space: nowrap; }
+.orrery-app .thead b { color: var(--ink); font-weight: 600; }
+.orrery-app .thead span { overflow: hidden; text-overflow: ellipsis; color: var(--faint); }
+.orrery-app .tnode { position: absolute; padding: 0; border: 1px solid #34364a; border-radius: 6px; overflow: hidden; background: #22232e; cursor: pointer; transition: transform .12s, box-shadow .15s, border-color .15s; }
+.orrery-app .tnode img, .orrery-app .tnode video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.orrery-app .tnode video { z-index: 1; }
+.orrery-app .tnode .n { position: absolute; left: 4px; bottom: 3px; z-index: 2; font: 600 10px/1 var(--mono); color: #fff; text-shadow: 0 0 3px #000, 0 0 2px #000; }
+.orrery-app .tnode:hover { transform: scale(1.04); z-index: 3; border-color: var(--muted); }
+.orrery-app .tnode.on { border: 2px solid var(--brass); box-shadow: 0 0 0 1px rgba(212,175,95,.25), 0 0 14px rgba(212,175,95,.35); }
+.orrery-app .tnode.way:not(.on) { border-color: var(--ink); border-style: dashed; }
+.orrery-app .tnode.test { opacity: .6; }
+.orrery-app .tnode .tend { position: absolute; top: 3px; right: 3px; z-index: 3; display: none; width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,.65); color: #fff; font-size: 12px; line-height: 20px; text-align: center; }
+.orrery-app .tnode:hover .tend { display: block; }
+.orrery-app .tnode .tend:hover { background: var(--danger); }
+.orrery-app .tnode.older:not(.on) { border-color: rgba(180,148,245,.55); }
+.orrery-app .tnode .ver { width: 20px; height: 20px; font-size: 12px; }
+.orrery-app .tree-diff { position: absolute; z-index: 5; width: 440px; pointer-events: none; animation: orrery-fade .12s ease-out; }
+.orrery-app .tree-diff[hidden] { display: none; }
+@keyframes orrery-fade { from { opacity: 0; transform: translateY(4px); } }
+.orrery-app .vcard { display: grid; gap: 8px; padding: 10px 12px; border: 1px solid rgba(180,148,245,.4); border-radius: 10px;
+  background: linear-gradient(180deg, rgba(180,148,245,.07), transparent 40%), rgba(19,20,27,.97); box-shadow: 0 12px 32px rgba(0,0,0,.55); font-size: 11.5px; }
+.orrery-app .vhead { display: grid; gap: 2px; }
+.orrery-app .vhead b { color: var(--violet); font-weight: 600; font-size: 12px; }
+.orrery-app .vhead span { color: var(--muted); font: 11px/1.3 var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.orrery-app .vcard pre { margin: 0; padding: 4px 0; border-radius: 6px; background: rgba(0,0,0,.25); font: 11px/1.5 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; color: var(--faint); }
+.orrery-app .vcard pre > span { display: grid; grid-template-columns: 18px 1fr; padding-right: 8px; }
+.orrery-app .vcard i { font-style: normal; text-align: center; opacity: .8; }
+.orrery-app .vcard .cut { color: #f3a5bf; background: rgba(240,122,160,.09); }
+.orrery-app .vcard .add { color: #8fe0db; background: rgba(92,200,194,.09); }
+.orrery-app .vcard .cut mark { color: #fff; background: rgba(240,122,160,.45); border-radius: 3px; padding: 0 1px; }
+.orrery-app .vcard .add mark { color: #10201f; background: var(--teal); border-radius: 3px; padding: 0 1px; }
+.orrery-app .vcard .fold { color: var(--faint); }
+.orrery-app .vfoot { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; font-size: 10.5px; }
+.orrery-app .vfoot .cut, .orrery-app .vfoot .add { background: none; font-family: var(--mono); }
+.orrery-app .vfoot i { margin-right: 3px; }
+.orrery-app .vfoot .muted { margin-left: auto; }
+.orrery-app .tree-hint { font-size: 11.5px; }
+/* the film as clicked together (#243): its own section under the head, sized by the split under it; the timeline
+   of its clips under the video, a playhead on it; the take playing lit in the tree */
+.orrery-app .tree-film { display: grid; justify-items: center; gap: 6px; padding: 10px; border: 1px solid rgba(226,180,92,.35); border-radius: 8px;
+  background: radial-gradient(ellipse at top, rgba(226,180,92,.08), transparent 60%), #15161d; animation: orrery-fade .15s ease-out; }
+.orrery-app .tree-film[hidden], .orrery-app .tree-split[hidden] { display: none; }
+.orrery-app .tree-film video { height: var(--film-h, 240px); width: var(--film-w, auto); max-width: 100%; border-radius: 6px; background: #000; }
+.orrery-app .tf-line { width: var(--film-w, 100%); max-width: 100%; display: grid; gap: 4px; }
+.orrery-app .tf-ribbon { position: relative; display: flex; gap: 2px; height: 22px; cursor: pointer; }
+.orrery-app .tf-ribbon > span[data-tseek] { min-width: 14px; display: grid; place-items: center; border: 1px solid #34364a; border-radius: 4px; background: #22232e;
+  color: var(--muted); font: 10.5px/1 var(--mono); transition: background .15s, color .15s, border-color .15s; }
+.orrery-app .tf-ribbon > span[data-tseek]:hover { border-color: var(--muted); color: var(--ink); }
+.orrery-app .tf-ribbon > span.on { background: var(--brass-soft); border-color: var(--brass); color: var(--brass); }
+.orrery-app .tf-head { position: absolute; top: -3px; bottom: -3px; left: var(--at, 0%); width: 2px; margin-left: -1px; border-radius: 1px;
+  background: var(--brass); box-shadow: 0 0 6px rgba(226,180,92,.8); pointer-events: none; }
+.orrery-app .tf-now { font: 11.5px/1.3 var(--mono); color: var(--brass); text-align: center; }
+.orrery-app .tree-split { height: 10px; margin: -4px 0; cursor: ns-resize; touch-action: none; position: relative; }
+.orrery-app .tree-split::after { content: ""; position: absolute; left: 50%; top: 3px; width: 44px; height: 4px; margin-left: -22px; border-radius: 2px; background: var(--line); }
+.orrery-app .tree-split:hover::after { background: var(--brass); }
+.orrery-app .tnode.playing { border: 2px solid var(--brass); box-shadow: 0 0 0 3px rgba(226,180,92,.35), 0 0 26px rgba(226,180,92,.6); animation: orrery-glow 1.6s ease-in-out infinite; }
+@keyframes orrery-glow { 50% { box-shadow: 0 0 0 5px rgba(226,180,92,.18), 0 0 34px rgba(226,180,92,.75); } }
+.orrery-app .tree-panel [data-tfilm][aria-pressed="true"] { color: var(--brass); border-color: var(--brass); }
 @keyframes orrery-up { from { transform: translateY(24px); opacity: 0; } }
 @keyframes orrery-down { from { transform: translateY(-24px); opacity: 0; } }
 .orrery-app .panel h4 { margin: 0; font: italic 400 21px/1.1 var(--serif); }

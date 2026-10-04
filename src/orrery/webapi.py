@@ -608,6 +608,36 @@ def chain_clear(home: Home, args: dict) -> dict:
         raise ApiError(400, str(err)) from None
 
 
+def chain_tree(home: Home, args: dict) -> dict:
+    """The reel's takes as a tree (#240): every take, its parent, the film's path, the way last walked from each."""
+    from orrery import film
+
+    try:
+        return film.tree(_output_dir(), _latent_path(args))
+    except film.FilmError as err:
+        raise ApiError(400, str(err)) from None
+
+
+def chain_walk(home: Home, args: dict) -> dict:
+    """The film through a take of the tree (#240): the path to it, and on from it as last walked."""
+    from orrery import film
+
+    try:
+        return film.walk_to(_output_dir(), _latent_path(args), _text(args, "folder"))
+    except film.FilmError as err:
+        raise ApiError(400, str(err)) from None
+
+
+def chain_end(home: Home, args: dict) -> dict:
+    """The film ends after a clip (#240)."""
+    from orrery import film
+
+    try:
+        return film.end_film(_output_dir(), _latent_path(args), _int(args, "segment", -1))
+    except film.FilmError as err:
+        raise ApiError(400, str(err)) from None
+
+
 REELS = "reels"  # the reels the app names (#197) live under output/reels/
 
 
@@ -636,6 +666,12 @@ def chain_move(home: Home, args: dict) -> dict:
 def chain_video(home: Home, args: dict) -> Path:
     from orrery.chain import clip_file
 
+    if args.get("film"):  # the film, its takes joined (#243)
+        from orrery import film
+        path = film.joined_film(_output_dir(), _latent_path(args))
+        if path is None:
+            raise ApiError(404, "the reel has no film yet.")
+        return path
     if args.get("take"):  # one take of a clip (#206)
         from orrery import film
         path = film.take_file(_output_dir(), _latent_path(args), str(args["take"]))
@@ -1097,6 +1133,9 @@ ROUTES = [
     ("POST", "/orrery/chain/pick", chain_pick),
     ("POST", "/orrery/chain/delete", chain_delete),
     ("POST", "/orrery/chain/clear", chain_clear),
+    ("GET", "/orrery/chain/tree", chain_tree),
+    ("POST", "/orrery/chain/walk", chain_walk),
+    ("POST", "/orrery/chain/end", chain_end),
     ("GET", "/orrery/chain/video", chain_video),
     ("GET", "/orrery/anchor", anchor),
     ("GET", "/orrery/history", history_runs),
@@ -1128,7 +1167,7 @@ ROUTES = [
 
 
 # routes that wait for a language model run in a thread, so ComfyUI's server answers meanwhile
-SLOW = {llm_save, llm_check, write_libraries, write_idea, chain_pick, chain_delete, chain_clear}
+SLOW = {llm_save, llm_check, write_libraries, write_idea, chain_pick, chain_delete, chain_clear, chain_walk, chain_end}
 
 
 def _handler(fn, method: str, web):

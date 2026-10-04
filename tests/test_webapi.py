@@ -55,7 +55,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"),
         ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/discard"),
         ("GET", "/orrery/home"), ("POST", "/orrery/home"),
-        ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("POST", "/orrery/chain/move"), ("POST", "/orrery/chain/pick"), ("POST", "/orrery/chain/delete"), ("POST", "/orrery/chain/clear"),
+        ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("POST", "/orrery/chain/move"), ("POST", "/orrery/chain/pick"), ("POST", "/orrery/chain/delete"), ("POST", "/orrery/chain/clear"), ("GET", "/orrery/chain/tree"), ("POST", "/orrery/chain/walk"), ("POST", "/orrery/chain/end"),
         ("GET", "/orrery/chain/video"),
         ("GET", "/orrery/anchor"),
         ("GET", "/orrery/history"),
@@ -857,3 +857,10 @@ def test_a_clips_takes_are_listed_served_picked_and_deleted(home, tmp_path, monk
     assert ok(home, webapi.chain_clear, chain="reels/a", segment=1, keep=True)["deleted"] == 1  # #234: all but the film's
     assert ok(home, webapi.chain_clear, chain="reels/a", segment=1, keep=False) == {"deleted": 1, "folder": None}
     assert api(home, webapi.chain_clear, chain="reels/a", segment=1)[0] == 400  # none left
+    grown = ok(home, webapi.chain_tree, chain="reels/a")  # #240: the tree, then a walk and an end
+    assert len(grown["takes"]) == 1 and grown["path"] == [grown["takes"][0]["folder"]]
+    assert ok(home, webapi.chain_walk, chain="reels/a", folder=grown["takes"][0]["folder"])["clips"] == 1
+    assert ok(home, webapi.chain_end, chain="reels/a", segment=0) == {"clips": 1}
+    assert ok(home, webapi.chain_video, chain="reels/a", film=1).name == "film.mp4"  # #243: the film to watch
+    assert api(home, webapi.chain_video, chain="reels/none", film=1)[0] == 404
+    assert api(home, webapi.chain_walk, chain="reels/a", folder="seg_0009_nothere1")[0] == 400
