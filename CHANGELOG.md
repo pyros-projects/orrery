@@ -150,6 +150,10 @@ checks) are left out.
 
 ### Changed
 
+- One strip of takes everywhere (#319, under #318): a reel's clip has the head the results have (+ take, ×N, 📌, ▶ all
+  for videos, the clip in numbers, the others and all), from its first take; its + take renders a take of that very
+  clip. The scene divider keeps 📊 and loses its jump buttons. The take chosen is **circled**: Circle this take replaces
+  Use this take and Put in the film.
 - Infinite backrooms goes all out (#217): nearly sixty levels, forty ways from one to the next, forty things that happen
   on the walk, forty things of orrery's own that find the camera besides the SCPs, each with its way out (look away,
   hold your breath, run, the water, hide, the camera light, follow it, a kindness), and the hiding places, chase routes

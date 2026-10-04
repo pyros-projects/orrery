@@ -11,6 +11,7 @@ import { annotationLines, mergeHints, shownHints } from "./annotate.js";
 import { fillStrip, hintsFor, openPicker, rememberLines, stripHTML } from "./remember.js";
 import { clipRatio, olderTakes, paintLive, sectionHTML, sourceClip, wireClips } from "./timeline.js";
 import { paintStage } from "./stage.js";
+import { takesOf } from "./results.js";
 
 const box = (app) => app.view.querySelector(".editor.cells");
 const areas = (app) => [...(box(app)?.querySelectorAll("textarea") || [])];
@@ -79,7 +80,8 @@ export function paintCells(app) {
   paintStage(app);  // the preview, when what it shows changed (#305)
   const sig = JSON.stringify([chunks.map((c) => [c.first, c.last, c.segs]), (app.data.chain?.clips || []).map((c) => c.version),
     segment, clipRatio(app), app.data.clip_min, app.data.take_min, remembered?.key, remembered?.lines, olderTakes(app),
-    Object.values(app.data.chain?.takes || {}).flat().filter((t) => t.active).map((t) => t.folder)]);
+    Object.values(app.data.chain?.takes || {}).flat().map((t) => `${t.folder}${t.active ? "*" : ""}`),
+    takesOf(app), app.bridge.props?.orrery_keep, !!app.state?.sweepQueue]);  // the strips' heads (#319)
   if (sig === app.cellsSig) { if (host.scrollTop !== top) host.scrollTop = top; return; }
   app.cellsSig = sig;
   host.querySelectorAll(".chunkmedia").forEach((m) => {

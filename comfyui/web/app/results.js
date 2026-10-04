@@ -1,7 +1,7 @@
 // Results under the prompt in every mode (#211): a template without scenes shows, in the preview (stage.js, #305),
 // the live preview while it samples, then what it made; its takes (each run's pictures, clips or sound, as its
 // Save, Preview or Orrery Log nodes wrote them) line up under the result, and a click shows one. The take that counts,
-// the output, is chosen apart from the one shown (Use this take): browsing never changes it, nor the node's seed.
+// the circled one, is chosen apart from the one shown (Circle this take): browsing never changes it, nor the node's seed.
 // Generate ×N and 📌 work as in a reel's scenes (#206): the takes' seeds numbered on, or as the node's control after
 // generate says; with 📌 the rolled prompt stays and only the sampler's noise changes. The takes are kept on the node, per preset (saved
 // with the workflow); taking one off the list leaves its files where they are.
@@ -31,7 +31,7 @@ export const chosenResult = (app) => {
   return list.find((t) => t.prompt === app.bridge.props?.orrery_chosen?.[key(app)]) || list[list.length - 1] || null;
 };
 
-// A take chosen as the output; one that rolled anew gives the node its seed, so the next roll is its world (#206).
+// A take circled; one that rolled anew gives the node its seed, so the next roll is its world (#206).
 export function chooseResult(app, t) {
   if (!t) return;
   app.bridge.props.orrery_chosen = { ...app.bridge.props.orrery_chosen, [key(app)]: t.prompt };
@@ -106,22 +106,55 @@ export function resultSeeds(app, n, keep) {
     : control === "randomize" ? Math.floor(Math.random() * 2 ** 31) : control === "decrement" ? -(start + k) : 0));
 }
 
-// Under a template without scenes: the result (the live preview while it samples), the takes beside their column.
-// The takes under the preview, like a photo viewer: the one shown outlined, the one that counts golden.
-export function resultsHTML(app, takeVars) {
-  const list = resultsOf(app), shown = shownResult(app), chosen = chosenResult(app), n = list.indexOf(shown) + 1, takes = takesOf(app), keep = kept(app, HEAD);
-  const button = (act, inner, title, extra = "") => `<span class="btn ghost" role="button" data-ract="${act}" title="${esc(title)}" ${extra}>${inner}</span>`;
-  const head = `<span class="cm-takes-head"><span class="th-top">`
-    + button("gen", `${icon("plus")}${takes > 1 ? `${takes} takes` : "take"}`, `Add ${takes > 1 ? `${takes} takes` : "a take"}: Generate, as ×N and 📌 say`)
-    + button("takes", `×${takes}`, `Takes per Generate: ${takes}. Click for ${TAKES[(TAKES.indexOf(takes) + 1) % TAKES.length]}. Takes differ only if their seeds do (the gear: Clips, Sample surfing)`)
-    + button("keep", icon("pin"), keep ? "Keeps the rolled prompt: the takes change only the sampler's noise. Click to roll each take anew"
+// A strip's buttons, its numbers.
+export const ghostHTML = (attrs, inner, title, extra = "") => `<span class="btn ghost" role="button" ${attrs} title="${esc(title)}" ${extra}>${inner}</span>`;
+export const statHTML = (label, value, cls = "") => `<span class="${cls}"><i>${label}</i><b>${value}</b></span>`;
+
+// The head every take strip shares (#319), the results' and each reel clip's: on top what makes takes (+ take, ×N,
+// 📌) and, for videos, plays them all at once; in the middle the strip in numbers; at the bottom what clears it.
+// `attr(act)` gives a button its data attributes, so each strip wires its own.
+// `off`: why + take can't add one now (it shows, greyed).
+export function stripHeadHTML(app, { attr, keep, off = "", play = false, title, sub = "", stats, low = "" }) {
+  const takes = takesOf(app);
+  return `<span class="cm-takes-head"><span class="th-top">`
+    + ghostHTML(off ? 'aria-disabled="true"' : attr("gen"), `${icon("plus")}${takes > 1 ? `${takes} takes` : "take"}`,
+      off || `Add ${takes > 1 ? `${takes} takes` : "a take"}, as ×N and 📌 say`)
+    + ghostHTML(attr("takes"), `×${takes}`, `Takes per click: ${takes}. Click for ${TAKES[(TAKES.indexOf(takes) + 1) % TAKES.length]}. Takes differ only if their seeds do (the gear: Clips, Sample surfing)`)
+    + ghostHTML(attr("keep"), icon("pin"), keep ? "Keeps the rolled prompt: the takes change only the sampler's noise. Click to roll each take anew"
       : "Each take rolls anew. Click to keep the rolled prompt and change only the sampler's noise", `aria-pressed="${keep}"`)
-    + `</span><span class="th-mid"><span class="th-clip">results</span><span class="th-stats">`
-    + `<span><i>takes</i><b>${list.length}</b></span>${shown ? `<span><i>shown</i><b>#${n}</b></span><span><i>seed</i><b>${shown.seed ?? "?"}${shown.take ? ` + ${shown.take}` : ""}</b></span>` : ""}</span></span>`
-    + (list.length > 1 ? `<span class="th-low">${button("others", `${icon("trash")}the others`, "Take every take off the list but the output, the golden one (the files stay)")}`
-      + `${button("all", `${icon("trash")}all`, "Take every take off the list (the files stay)", 'data-danger="1"')}</span>` : "") + "</span>";
+    + (play ? ghostHTML(attr("play"), `${icon("play")}all`, "Play every take at once, from the start, to compare them") : "")
+    + `</span><span class="th-mid"><span class="th-clip">${esc(title)}</span>${sub ? `<span class="th-scene" title="${esc(sub)}">${esc(sub)}</span>` : ""}`
+    + `<span class="th-stats">${stats}</span></span>${low ? `<span class="th-low">${low}</span>` : ""}</span>`;
+}
+
+// Every take of a strip at once (#238, #319): its videos from the start and in step, muted and looping, to compare
+// their motion; again, and they stop. `load(take)` gives a take's video; one it made (data-made) for a strip of
+// stills goes again at the stop.
+export function playAll(strip, button, load = (t) => t.querySelector("video")) {
+  const on = !strip.classList.contains("playing");
+  strip.classList.toggle("playing", on);
+  button.innerHTML = on ? `${icon("stop")}stop` : `${icon("play")}all`;
+  const videos = [...strip.querySelectorAll(".take")].map(load).filter(Boolean);
+  if (!on) return videos.forEach((v) => { if (v.dataset.made) return v.remove(); v.pause(); v.currentTime = 0.05; });  // a made one: the still again
+  videos.forEach((v) => v.pause());
+  Promise.all(videos.map((v) => (v.readyState >= 3 ? null : new Promise((ok) => v.addEventListener("canplay", ok, { once: true }))))).then(() => {
+    if (!strip.classList.contains("playing")) return;
+    videos.forEach((v) => { v.currentTime = 0; v.play().catch(() => {}); });
+  });
+}
+
+// Under a template without scenes: the result (the live preview while it samples), the takes beside their column.
+// The takes under the preview, like a photo viewer: the one shown outlined, the circled one golden.
+export function resultsHTML(app, takeVars) {
+  const list = resultsOf(app), shown = shownResult(app), chosen = chosenResult(app), n = list.indexOf(shown) + 1;
+  const attr = (act) => `data-ract="${act}"`;
+  const head = stripHeadHTML(app, { attr, keep: kept(app, HEAD), play: list.filter((t) => main(t).kind === "video").length > 1, title: "results",
+    stats: statHTML("takes", list.length) + (chosen ? statHTML("circled", `#${list.indexOf(chosen) + 1}`) : "")
+      + (shown ? statHTML("shown", `#${n}`) + statHTML("seed", `${shown.seed ?? "?"}${shown.take ? ` + ${shown.take}` : ""}`) : ""),
+    low: list.length > 1 ? ghostHTML(attr("others"), `${icon("trash")}the others`, "Take every take off the list but the circled one (the files stay)")
+      + ghostHTML(attr("all"), `${icon("trash")}all`, "Take every take off the list (the files stay)", 'data-danger="1"') : "" });
   const strip = list.length ? `<div class="cm-takes results" data-seg="-1" style="${takeVars}">${head}<div class="cm-takes-list">${list.map((t, i) =>
-    `<button type="button" class="take${t === chosen ? " on" : ""}${t === shown ? " shown" : ""}" data-result="${esc(t.prompt)}" title="Take ${i + 1} · seed ${t.seed ?? "?"}${t.take ? ` + ${t.take}` : ""}${t === chosen ? " · the output" : ""}${t === shown ? " · shown" : " · click to show it"}">`
+    `<button type="button" class="take${t === chosen ? " on" : ""}${t === shown ? " shown" : ""}" data-result="${esc(t.prompt)}" title="Take ${i + 1} · seed ${t.seed ?? "?"}${t.take ? ` + ${t.take}` : ""}${t === chosen ? " · circled" : ""}${t === shown ? " · shown" : " · click to show it"}">`
     + `${mediaHTML(app, main(t))}<span class="n">${i + 1}</span><span class="del" role="button" data-rdel="${esc(t.prompt)}" title="Take it off the list (the file stays)">${icon("x")}</span></button>`).join("")}`
     + `<span class="grip" data-grip title="Drag to size the takes"></span></div></div>`
     : `<div class="cm-takes results" data-seg="-1">${head}</div>`;
@@ -139,20 +172,23 @@ export function wireResults(app, box, repaint) {
     if (act === "takes") app.bridge.props.orrery_takes = TAKES[(TAKES.indexOf(takesOf(app)) + 1) % TAKES.length];
     else if (act === "keep") app.bridge.props.orrery_keep = { ...app.bridge.props.orrery_keep, [HEAD]: !kept(app, HEAD) };
     else if (act === "gen") return generate(app);
+    else if (act === "play") return playAll(box.querySelector(".cm-takes.results"), e.target.closest("[data-ract]"));
     else if (act === "others") { keepResults(app, chosen ? [chosen] : []); undo(`${list.length - 1} takes off the list; the files stay`); }
     else if (act === "all") { keepResults(app, []); undo(`${list.length} takes off the list; the files stay`); }
     else if (del) { keepResults(app, list.filter((t) => t.prompt !== del.dataset.rdel)); undo("A take off the list; its file stays"); }
-    else if (pick) {  // shown only: Use this take in the preview chooses it
+    else if (pick) {  // shown only: Circle this take in the preview chooses it
       const t = list.find((x) => x.prompt === pick.dataset.result);
       if (!t) return;
       show(app, t.prompt);
     }
     repaint();
   });
-  box.addEventListener("pointerover", (e) => e.target.closest(".take[data-result]")?.querySelector("video")?.play().catch(() => {}));
+  box.addEventListener("pointerover", (e) => {
+    if (!e.target.closest(".cm-takes.playing")) e.target.closest(".take[data-result]")?.querySelector("video")?.play().catch(() => {});
+  });
   box.addEventListener("pointerout", (e) => {
     const t = e.target.closest(".take[data-result]");
-    if (t && !t.contains(e.relatedTarget)) t.querySelector("video")?.pause();
+    if (t && !t.contains(e.relatedTarget) && !t.closest(".cm-takes.playing")) t.querySelector("video")?.pause();
   });
 }
 
