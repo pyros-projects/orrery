@@ -135,7 +135,10 @@ export class OrreryApp {
     this.data.dividers = d.dividers !== false;
     this.data.timeline = d.timeline !== false;
     this.data.log_prompts = d.log_prompts !== false;
+    this.data.surf_numbered = d.surf_numbered !== false;
+    this.data.preview_light = d.preview_light !== false;
     this.data.clip_min = d.clip_min ?? 360;
+    this.data.preview_fps = d.preview_fps ?? 12;
   }
   async refreshCompletion() {
     const [completion, gallery] = await Promise.all([this.api.completions(), this.api.pictures().catch(() => ({ presets: [] }))]);
