@@ -85,21 +85,21 @@ const kept = (app, n) => !!app.bridge.props.orrery_keep?.[n];
 
 export function sceneActs(app) {
   const chunks = app.chunks() || [], segment = Number(app.bridge.getSegment()), busy = !!app.state.sweepQueue, takes = takesOf(app);
-  const made = new Set((app.data.chain?.clips || []).map((c) => c.segment));
   const button = (act, name, title, off, n, extra = "") => `<button type="button" class="scene-act" data-scene-act="${act}" data-chunk="${n}" `
     + `title="${esc(title)}" aria-label="${esc(title)}" ${extra} ${off ? "disabled" : ""}>${name.startsWith("×") ? name : icon(name)}</button>`;
   return (c, n) => {
-    const target = sceneTarget(c, segment), next = nextSceneClip(c, chunks), again = target !== null && made.has(target);
+    const target = sceneTarget(c, segment), next = nextSceneClip(c, chunks);
     const none = c.last === Infinity ? "This scene repeats forever: no scene comes after it" : "No scene comes after this one";
-    const what = takes > 1 ? `${takes} takes of clip ${target + 1}` : `clip ${target + 1}`;
-    return `<span class="scene-acts">${button("gen", again ? "redo" : "play", target === null ? "This scene never plays"
-      : `${again ? "Regenerate" : "Generate"} ${what}${again ? " (new takes)" : ""}, and stay on this scene`, target === null || busy, n)}`
+    const what = takes > 1 ? `${takes} takes of clip ${target + 1}` : `a take of clip ${target + 1}`;
+    // + every time: the first take of a clip or one more, as ×N says
+    return `<span class="scene-acts">${button("gen", "plus", target === null ? "This scene never plays"
+      : `Add ${what}, and stay on this scene`, target === null || busy, n)}`
       + button("takes", `×${takes}`, `Takes per Generate: ${takes}. Click for ${TAKES[(TAKES.indexOf(takes) + 1) % TAKES.length]}; pick the best under the clip. `
         + "Takes differ only if their seeds do (see the gear, Sample surfing)", false, n)
       + button("keep", "pin", kept(app, n) ? "Keeps the rolled prompt: the takes change only the sampler's noise. Click to roll each take anew"
         : "Each take rolls anew. Click to keep the rolled prompt and change only the sampler's noise", false, n, `aria-pressed="${kept(app, n)}"`)
       + button("jump", "skip", next === null ? none : `To the next scene: Next clip becomes ${next + 1}`, next === null || busy, n)
-      + button("jumpgen", "ffwd", next === null ? none : `To the next scene, and generate ${takes > 1 ? `${takes} takes of ` : ""}its clip ${next + 1}`,
+      + button("jumpgen", "ffwd", next === null ? none : `To the next scene, and add ${takes > 1 ? `${takes} takes` : "a take"} of its clip ${next + 1}`,
         next === null || busy, n) + "</span>";
   };
 }

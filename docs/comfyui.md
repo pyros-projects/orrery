@@ -108,12 +108,12 @@ Nodes under **orrery**:
     Motion Context's Chain Video) keeps them, big: a clip's shorter side is
     the **Clip size** in the gear (360 px unless set otherwise), as far as the
     editor is wide. Hover plays one, a click opens it; small dashed boxes are
-    clips not rendered yet. A scene's divider has three buttons: ▷
-    **Generate** its clip (↻ **Regenerate** once it has one, a new take) and
-    stay on the scene, ⏭ go to the **next scene** (Next clip becomes its first
-    clip), and ⏩ go there **and generate** it (the box of the clip rendering
-    shows it as it forms: see Orrery Prompt's `model` below). **Sample surfing**: ×1 beside
-    ▷ turns to ×2, ×4, ×8, and Generate renders that many **takes** of the
+    clips not rendered yet. A scene's divider has three buttons: +
+    **Add takes** of its clip (its first, or one more) and stay on the scene,
+    ⏭ go to the **next scene** (Next clip becomes its first clip), and ⏩ go
+    there **and add takes** of its clip (the box of the clip rendering shows it
+    as it forms: see Orrery Prompt's `model` below). **Sample surfing**: ×1 beside
+    + turns to ×2, ×4, ×8, and + renders that many **takes** of the
     clip. They line up under it; hover plays one, a click puts it in the film
     (the next clip and `REMEMBER:` then use it too). 📌 in a scene keeps its
     rolled prompt, so the takes change only the sampler's noise (the Orrery

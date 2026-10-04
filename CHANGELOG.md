@@ -58,9 +58,9 @@ checks) are left out.
 - A reel keeps its clips in a folder named after it, `output/reels/<preset>` or `reels/untitled/<date time>`, which
   moves with Save as; two reels no longer write into one `h3_context`. The Orrery Prompt's `latent_path` input
   is gone (#197).
-- A scene's divider generates its clip and stays on it, goes to the next scene, or both; the clip rendering now
+- A scene's divider adds takes of its clip (+) and stays on it, goes to the next scene, or both; the clip rendering now
   shows the sampler's preview and its step under its scene (KJNodes' Model Preview Override, or ComfyUI's own) (#197).
-- Sample surfing: a scene's Generate makes ×2, ×4 or ×8 takes of its clip, you pick the best under it, and the
+- Sample surfing: a scene's + adds ×1, ×2, ×4 or ×8 takes of its clip, you pick the best under it, and the
   film, `REMEMBER:` and the next clip use that one; 📌 keeps the scene's rolled prompt so only the noise changes, and
   the gear numbers the takes' seeds; a × deletes a take, under the clip or in its box, and a grip sizes the takes,
   in the clip's shape. Clip 1 too: rendering it again stays in its run beside its other takes; another size or

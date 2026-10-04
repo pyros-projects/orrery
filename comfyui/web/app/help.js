@@ -78,7 +78,7 @@ const REF = [
   ]],
   ["Reels (Orrery Continue)", [
     ["SCENE the salon", "one clip, continuing the one before; everything before the first SCENE (style, CAST, bindings) is the world and holds for every clip", "SCENE \nSHOT 5s: push in, slow\n"],
-    ["▷ ⏭ ⏩ (a scene's divider)", "generate this scene's clip and stay on it (↻ once it has one: a new take), go to the next scene, or go there and generate it; the clip rendering now shows the sampler's preview in its box", ""],
+    ["+ ⏭ ⏩ (a scene's divider)", "add takes of this scene's clip and stay on it (its first take, or one more), go to the next scene, or go there and add takes of its clip; the clip rendering now shows the sampler's preview in its box", ""],
     ["×4 📌 (a scene's divider)", "sample surfing: Generate renders 4 takes of the clip, which line up under it; a click puts one in the film. 📌 keeps the rolled prompt (only the noise changes); without it each take rolls anew. The gear: numbered seeds or the node's control. A × on a take or a clip deletes it (it asks first); the grip at the takes' end sizes them", ""],
     ["style: … (in a SCENE)", "that clip's own style, in place of the head's", "style: "],
     ["SCENE the walk ×8", "plays this scene 8 times (forever: until you stop); bindings inside a scene roll anew every clip", "SCENE the walk forever\n"],
