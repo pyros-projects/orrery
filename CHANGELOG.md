@@ -9,6 +9,8 @@ checks) are left out.
 
 ### Added
 
+- The Orrery Prompt puts its `LORA:` lines on the model that passes through it, a clip's own and the head's, a
+  sweep's run included: no LoRA stack node needed. Wired, `lora_stack` leaves them to its loader (#208).
 - The language model can be an API endpoint (OpenAI, or a server that speaks its protocol), set in the gear
   with a key kept in the home's `.env`: a run's libraries, slots and `> enhance`, the Write menu and
   `orrery lib` go through it, beside ComfyUI (no VRAM, no queue). The Write menu answers while a render

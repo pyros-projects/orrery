@@ -49,10 +49,13 @@ Nodes under **orrery**:
   `width`/`height` come from `: w… h…` or the `@h3` ratio (`@h3 references 16:9 0.6MP`
   sizes the canvas by area, and `megapixels` puts that out for resolution and
   scale nodes), `length` is the
-  screenplay's duration in frames for the H3 latent, `lora_stack` carries the
-  `LORA:` lines as a LORA_STACK for any loader with a `lora_stack` input
-  (LoraManager, Efficiency, Easy-Use …); unknown or ambiguous names are
-  reported in the log and in the Test tab. A reel (`SCENE` blocks, `×N` and
+  screenplay's duration in frames for the H3 latent. The `LORA:` lines go on
+  the model that passes through the node (model strengths, as
+  LoraLoaderModelOnly puts them: a clip's own LoRAs, the head's, a sweep's run),
+  so no LoRA node is needed; `lora_stack` still carries them as a LORA_STACK
+  for a loader with a `lora_stack` input (LoraManager, Efficiency, Easy-Use …),
+  and when it is wired that loader puts them on instead. Unknown or ambiguous
+  names are reported in the log and in the Test tab. A reel (`SCENE` blocks, `×N` and
   `forever`, `$x[-1]`, `AFTER:`, `(test)`; see [h3.md](h3.md) 1d) writes one clip per run:
   the next clip counts up by itself (the Prompt tab's **Next clip**, and **Hold**
   for takes; the node's `segment` input is orrery's, hidden), and Orrery Continue / Orrery Film (below)

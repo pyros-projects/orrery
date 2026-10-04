@@ -124,6 +124,7 @@ Wiring: Orrery `picks` → Orrery Continue, with the H3 node's latent (and
 conditioning) on their way to the sampler, and the sampled latent with the
 decoded clip into Orrery Film (orrery counts the segments itself); `text` →
 Reference to Video `prompt`; `length` → its `length`;
+the model through the Orrery Prompt (loader → `model` → sampler) puts the `LORA:` lines on it; or
 `lora_stack` → the `lora_stack` input of Lora Loader (LoraManager) or any
 other stack loader. Queue with a Run count of the reel's clips (the stats line
 shows it), or Run (Instant) for `repeat forever`; the Orrery seed stays fixed
