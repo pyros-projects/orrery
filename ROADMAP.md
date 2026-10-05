@@ -21,6 +21,19 @@ release plan and the code. **Verified** marks a finding checked by hand, not onl
 
 ## 1. Before the release: what the docs promise and orrery does not do
 
+So nobody finds a reel better made by ComfyUI-H3-Continuum, whose continuation orrery shares (Masked AV, 22 frames;
+see *From Continuum* below):
+
+- **Smooth the sound at the seams** (measured). At a film's real seams the waveform steps further than 96–99% of the
+  steps inside its clips and the level jumps up to 10.8 dB in 20 ms: a click or a bump, where Continuum's assembly
+  aligns the sound, crossfades it over 10–60 ms and matches the level (`v2/seam_guard.py:113-151`). The picture's
+  seams are clean: no luma pulse, jumps within the clips' range (`experiments/seams/`). Keep a short pre-roll of each
+  take's sound and crossfade in Orrery Film's join; measure again after.
+- **Python 3.12** (tested). `pyproject.toml` asks for 3.13, and a ComfyUI on 3.12 refuses the install; all 1,331 tests
+  pass on 3.12.12 and ruff finds nothing 3.13-only. Lower the floor, refresh `uv.lock`, test 3.12 and 3.13 in CI.
+- **Example workflows on settings that look good**: people judge orrery by the first workflow they open. Continuum's
+  open safely and its README says which extras are needed and which not (the release plan's fifth question).
+
 - **`__cut__` is documented as shipped and does not exist** (verified). `docs/h3.md:622-625` lists it beside
   `__camera__` and `__h3style__`; `src/orrery/builtin/` has only `camera.yaml` and `h3style.yaml`. Ship it, or take
   the line out.
@@ -130,6 +143,43 @@ release plan and the code. **Verified** marks a finding checked by hand, not onl
   writes from a gallery picture's prompt, #82 covers the input video.
 - **Takes as images:** the contact sheet (group 3, sweeps); the brand study's one-click sharing
   (`docs/mock/orrery-brand.html:159`).
+
+## From Continuum
+
+ComfyUI-H3-Continuum (MIT; V3.9.1 read on 2026-10-05) is where orrery's continuation comes from. Its Masked AV files
+are unchanged since orrery took them (commit 1f6aec1). Its one-run Sampler encodes the prompt and the reference
+pictures once and keeps H3 loaded over all chunks; it adds nothing to the picture or the sound, and it would break "a
+clip is a run is a take" (Roll, Hold, +N takes, the take tree, `REMEMBER:`, a LoRA or a length per scene): not
+worth it. What is:
+
+- **Driving audio for a reel.** A music or speech track drives the clips: each gets its slice by reel time (from its
+  start less the 22 pinned frames), as Core's audio keyframe (`minimax_keyframes`, public, no model patch;
+  `driving_audio.py:133-192`), and Orrery Film lays the track under the film. Every take of a clip hears the same
+  bars. Music videos, dance. Untested with Masked AV's pinned sound (Continuum validated it before that). **M**;
+  before the release if the launch shows music or dance.
+- **Drift and seam numbers per take.** Continuum's open issue #13: continuing again and again with Masked AV raises
+  contrast and sharpness, orrery's route and its `repeat forever` reels. The tail's sharpness, contrast and motion
+  against clip 1, the seam's error (`v2/context_diagnostics.py:26-108`, `v2/diagnostics.py:17-24`), kept in the
+  take's meta, shown in the Gallery, ranking +N takes. **S.**
+- **Voices per clip.** Orrery Refs takes `audio_1..3` and gives a clip only the voices of who speaks in it, renumbered
+  like pictures; today every clip hears every voice reference (`reference_audio.py:385-391`). **M.** Then a voice
+  kept from an earlier clip's sound as a later clip's `<Audio N>`, needing a new word in `REMEMBER:` (the DSL is
+  frozen: Pyro's call).
+- **The release kit:** `[tool.comfy]` in `pyproject.toml`, a `.comfyignore` (tests, tools, dev docs out of the
+  Registry archive), a check after install that the nodes are there (`tools/verify_runtime.py`), a test that the
+  versions agree, the seed in the bug report template, "an AI can read this manual" pointing to the skill. **S.**
+- **The writers and the skill:** rules from their prompt-quality reference to try in `continue.md` and `story.md` (a
+  cap on moves a shot, "from pose A to pose B" instead of a bare "do not", `then` for steps in turn and `while` for
+  at once, END ON with the motion that carries on); a skill with its version pinned, made from one source (theirs
+  drifted between two hand-kept copies) and checked with the `orrery` CLI. **S–M.**
+- **Smaller:** a "ready to queue" line in the node ("3 clips × 5 s, first frame wired", or the first thing to fix;
+  `web/project_id.js:740-803`); a VRAM advisory for many reference pictures (`v3/reliability_v38.py:339-445`); pin the
+  picture only, the sound starting fresh (an Orrery Continue option); hard first and last frames beside references in
+  one clip; a long video as a motion reference sliced per clip (with #82); the raw AV latent kept per take (re-decode,
+  a second pass later); the model and LoRAs that made a take, hashed into its meta (`graph_contract.py:90-153`).
+- **Not for orrery:** the Reference Context route (a model patch over Core's layout), guides inside a clip (Continuum
+  keeps them on hold), BPM grids, their run storage with resume and locks, review buttons (Roll, Hold and +N cover
+  them).
 
 ## Dropped on purpose
 
