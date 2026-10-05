@@ -57,6 +57,15 @@ def test_frames_go_first_in_the_user_turn_one_vision_block_each():
     assert text.startswith(f"<|im_start|>user\n{block * 3}\nWhat happens next?")
 
 
+def test_a_prompt_can_put_its_frames_where_it_names_them():
+    """#333: after the screenplay they belong to, as the writers' text says."""
+    from orrery.llm import PICTURES
+
+    block = "<|vision_start|><|image_pad|><|vision_end|>"
+    assert chat(f"A screenplay.\nThe picture: {PICTURES} joins it.", images=2).startswith(
+        f"<|im_start|>user\nA screenplay.\nThe picture: {block * 2} joins it.\n/no_think")
+
+
 def test_the_engine_hands_the_frames_to_the_tokenizer():
     from orrery.comfy_llm import ComfyBackend
     seen = {}

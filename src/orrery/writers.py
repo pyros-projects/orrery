@@ -21,7 +21,7 @@ from pathlib import Path
 from orrery.home import Home, write_atomic
 
 BUILTIN = Path(__file__).parent / "builtin" / "writers"
-NAMES = ("continue", "story", "story_scenes", "story_keyframes", "describe", "describe_shot")
+NAMES = ("continue", "story", "story_scenes", "story_keyframes", "describe", "describe_shot", "describe_shot_into")
 TASKS = ("continue", "story", "describe")
 DEFAULT_SECONDS = 5
 MAX_SCENES = 99  # the scenes (or keyframes) one story asks for
@@ -46,7 +46,7 @@ class WriterError(ValueError):
 
 # What a writer expects to see when nothing else is sent along (#334): the pictures its prompt names.
 EXPECTS = {"continue": [], "story": ["the first frame", "the last frame"], "describe": ["the picture"],
-           "describe_shot": ["the first frame"]}
+           "describe_shot": ["the first frame"], "describe_shot_into": ["the first frame"]}
 _FRAME = {FIRST: "the first frame", LAST: "the last frame"}
 _HEADLINE = re.compile(r"\s*(#|@|\$\w+\s*=|(style|summary|context|music|lora|set|voice|keep|export)\s*:|cast\s*$)|[ \t]", re.IGNORECASE)
 
@@ -242,6 +242,11 @@ def request(home: Home, task: str, template: str, seed: int, libraries, weights,
     template, libraries = with_inline(template, libraries)
     opts = options(opts, template)
     name = task_name(task, template, opts)  # a reel's prompt from an image writes from its head (#334): at the caret
+    if name == "describe_shot" and prompt and given != []:
+        # the screenplay sent along with a picture (#333): who is in the picture joins it. The 8B kept the picture's
+        # room and ignored the screenplay until told to take only them from it, the picture after the screenplay
+        # (experiments/writer-framing)
+        name = "describe_shot_into"
     inside = False  # whether the prompt as it rolls is in the request already
     if name == "continue":
         if not is_reel(template):
@@ -271,6 +276,11 @@ def request(home: Home, task: str, template: str, seed: int, libraries, weights,
         if name in ("story_scenes", "story_keyframes"):
             ends, inside = _story_ends(template, opts, given, seed, libraries, weights)
             values.update(ends)
+        elif name == "describe_shot_into":
+            from orrery.llm import PICTURES
+
+            values.update(screenplay=_rolled(template, seed, libraries, weights), picture=PICTURES)
+            inside = True
     parts = [_fill(text(home, name), values).strip()]
     if (note := _came_along(name, given, template, seed, libraries, weights, opts)):
         parts.append(note)
@@ -305,6 +315,8 @@ def _came_along(name: str, given: list[str] | None, template: str, seed: int, li
     if given is None or given == EXPECTS[name]:
         return ""
     said = _said(given)
+    if name == "describe_shot_into":  # any picture can be who joins
+        return said
     if name == "continue" or set(EXPECTS[name]) <= set(given):
         return said + (" Let them shape what you write." if given else "")
     if name == "story":
@@ -362,6 +374,8 @@ def check(task: str, template: str, answer: str, opts: dict | None = None) -> tu
     opts = options(opts, template)
     name = task_name(task, template, opts)
     starts = {"continue": _CHUNK, "story": _SHOT, "story_scenes": _CHUNK, "describe_shot": _SHOT}.get(name)
+    if starts is not None:  # an SFX: the model ran onto the end of the prose goes on a line of its own
+        answer = re.sub(r"(?m)(?<=\S)[ \t]+(SFX:)", r"\n\1", answer or "")
     lines = _clean(answer, starts)
     if name == "describe":  # one paragraph, without a "Prompt:" label or the quotes around it
         joined = re.sub(r"^(image )?prompt:\s*", "", " ".join(ln.strip() for ln in lines if ln.strip()), flags=re.IGNORECASE)

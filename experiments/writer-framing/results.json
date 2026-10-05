@@ -1,0 +1,248 @@
+{
+ "V0": {
+  "prompt": "You write one shot for the MiniMax H3 video model, which makes video with sound. The picture is the first frame of a clip of 5 seconds; the shot brings it to life.\n\nstyle: live-action, cinematic\n\nHow the shot is written:\n\nSHOT 5s: <camera move>, <size>, <speed>\nTwo or three sentences in the present tense about what moves and happens from this frame on.\nSFX: a sound; another sound\n\n- Camera moves: push in, pull out, pan left, pan right, truck left, truck right, tilt up, tilt down, arc, tracking, static. Size is small or large, speed slow or fast; both may be left out. Choose the move that fits this picture.\n- Name what is in the picture by what it is, in one short phrase (an old man with a white beard and a red scarf, a clay robot with a blue antenna). Then write what happens: the main subject's first actions (it turns its head, steps forward, laughs) and what else moves (hair, fabric, light, water, leaves). Not how it looks standing still: what it does.\n- Speech, if anyone talks, goes on its own line: `NAME (how it sounds): the line.` Never in SFX.\n- SFX: the sounds you hear, each next to its cause, separated by semicolons; always at least one sound.\n\nNever write wildcards, variables, choices, comments, headers, markdown or explanations.\n\nAn example, of another picture:\n\nSHOT 5s: truck left, slow\nAn old fisherman in a yellow raincoat on a wooden pier looks up from his net, wipes the rain from his face and starts to coil the rope at his feet, while gulls wheel in the wind above him.\nSFX: rain patters on the boards; gulls cry; the rope scrapes on wood\n\nLook closely at the picture, then write the shot. Start with \"SHOT 5s:\". Answer with the shot alone.\n\nThe prompt you write for, as it rolls at this seed. What you write goes into it: keep its world, its people, its place and its style, and carry its story on, unless the direction below says otherwise:\n\nstyle: live-action, cinematic\nSHOT 5s | push in, small, slow\nA misty forest at dawn. The badger steps onto a fallen log, breath visible in the cold air.\nNARRATOR (calm low voice, off-screen): The forest remembers.\nSFX: branches creak under frost; soft footfalls press into snow\nSHOT 3s | cut, arc, slow\nA close-up of the badger's eyes glowing amber as snow drifts past.\nSFX: wind hisses through the bare trees\nMUSIC: sparse upright bass at a slow tempo, fading out\n\nThe direction, which outweighs everything above: made her join the previous shots.\n\nAnswer as asked above, with what you write alone.",
+  "takes": [
+   {
+    "seed": 1010,
+    "text": "SHOT 5s: push in, small, slow\nThe girl with red hair adjusts her black lace top, her fingers brushing the fabric as she tilts her head slightly, while the choker glints under the ceiling fan’s light and a faint hum vibrates through the room.\nSFX: soft fabric rustle; distant fan whirr",
+    "problem": null,
+    "story": false,
+    "her": true
+   },
+   {
+    "seed": 1011,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with red hair adjusts her black lace top slightly as she turns her head to look directly at the camera, her lips parting as if about to speak; her hair sways gently and the choker glints under the room’s light.\nSFX: soft fabric rustle; faint hum of a ceiling fan",
+    "problem": null,
+    "story": false,
+    "her": true
+   },
+   {
+    "seed": 1012,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with red hair adjusts her black lace top as she turns her head slightly to the side, letting strands of hair fall across her shoulder; her hand brushes down her thigh as her shorts shift with the movement.\nSFX: fabric rustles softly; a faint hum from a ceiling fan",
+    "problem": null,
+    "story": false,
+    "her": true
+   }
+  ]
+ },
+ "V1": {
+  "prompt": "The screenplay you write for, as it rolls now:\n\nstyle: live-action, cinematic\nSHOT 5s | push in, small, slow\nA misty forest at dawn. The badger steps onto a fallen log, breath visible in the cold air.\nNARRATOR (calm low voice, off-screen): The forest remembers.\nSFX: branches creak under frost; soft footfalls press into snow\nSHOT 3s | cut, arc, slow\nA close-up of the badger's eyes glowing amber as snow drifts past.\nSFX: wind hisses through the bare trees\nMUSIC: sparse upright bass at a slow tempo, fading out\n\nYou write one shot for the MiniMax H3 video model, which makes video with sound. The picture is the first frame of a clip of 5 seconds; the shot brings it to life.\n\nstyle: live-action, cinematic\n\nHow the shot is written:\n\nSHOT 5s: <camera move>, <size>, <speed>\nTwo or three sentences in the present tense about what moves and happens from this frame on.\nSFX: a sound; another sound\n\n- Camera moves: push in, pull out, pan left, pan right, truck left, truck right, tilt up, tilt down, arc, tracking, static. Size is small or large, speed slow or fast; both may be left out. Choose the move that fits this picture.\n- Name what is in the picture by what it is, in one short phrase (an old man with a white beard and a red scarf, a clay robot with a blue antenna). Then write what happens: the main subject's first actions (it turns its head, steps forward, laughs) and what else moves (hair, fabric, light, water, leaves). Not how it looks standing still: what it does.\n- Speech, if anyone talks, goes on its own line: `NAME (how it sounds): the line.` Never in SFX.\n- SFX: the sounds you hear, each next to its cause, separated by semicolons; always at least one sound.\n\nNever write wildcards, variables, choices, comments, headers, markdown or explanations.\n\nAn example, of another picture:\n\nSHOT 5s: truck left, slow\nAn old fisherman in a yellow raincoat on a wooden pier looks up from his net, wipes the rain from his face and starts to coil the rope at his feet, while gulls wheel in the wind above him.\nSFX: rain patters on the boards; gulls cry; the rope scrapes on wood\n\nLook closely at the picture, then write the shot. Start with \"SHOT 5s:\". Answer with the shot alone.\n\nThe direction, which outweighs everything above: made her join the previous shots.\n\nAnswer as asked above, with what you write alone.",
+  "takes": [
+   {
+    "seed": 1010,
+    "text": "SHOT 5s: push in, small, slow\nThe young woman with fiery red hair stands centered, her gaze fixed on the camera as she slightly adjusts her black lace crop top; her hand rests lightly on her hip while the other hangs by her side, and the ceiling fan above turns slowly overhead.\nSFX: soft rustle of fabric; distant hum of the fan",
+    "problem": null,
+    "story": false,
+    "her": true
+   },
+   {
+    "seed": 1011,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with red hair stands centered, her body slightly turned as she lifts her right hand to adjust the black lace crop top, her left hand resting on her hip; her hair shifts gently as if stirred by a breeze, and the choker glints under the room’s soft light.\nSFX: a faint hum from the ceiling fan; distant echo of footsteps on hardwood",
+    "problem": null,
+    "story": false,
+    "her": true
+   },
+   {
+    "seed": 1012,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with red hair stands still, then slowly lifts her right hand to brush a strand of hair from her face as the camera pushes in; her black lace top shifts slightly with the movement, and her left hand rests lightly on her hip while the ceiling fan above turns gently.\nSFX: soft fabric rustle; distant hum of the fan",
+    "problem": null,
+    "story": false,
+    "her": true
+   }
+  ]
+ },
+ "V2": {
+  "prompt": "Your direction for this, above everything else: made her join the previous shots.\n\nYou write one shot for the MiniMax H3 video model, which makes video with sound. The picture is the first frame of a clip of 5 seconds; the shot brings it to life.\n\nstyle: live-action, cinematic\n\nHow the shot is written:\n\nSHOT 5s: <camera move>, <size>, <speed>\nTwo or three sentences in the present tense about what moves and happens from this frame on.\nSFX: a sound; another sound\n\n- Camera moves: push in, pull out, pan left, pan right, truck left, truck right, tilt up, tilt down, arc, tracking, static. Size is small or large, speed slow or fast; both may be left out. Choose the move that fits this picture.\n- Name what is in the picture by what it is, in one short phrase (an old man with a white beard and a red scarf, a clay robot with a blue antenna). Then write what happens: the main subject's first actions (it turns its head, steps forward, laughs) and what else moves (hair, fabric, light, water, leaves). Not how it looks standing still: what it does.\n- Speech, if anyone talks, goes on its own line: `NAME (how it sounds): the line.` Never in SFX.\n- SFX: the sounds you hear, each next to its cause, separated by semicolons; always at least one sound.\n\nNever write wildcards, variables, choices, comments, headers, markdown or explanations.\n\nAn example, of another picture:\n\nSHOT 5s: truck left, slow\nAn old fisherman in a yellow raincoat on a wooden pier looks up from his net, wipes the rain from his face and starts to coil the rope at his feet, while gulls wheel in the wind above him.\nSFX: rain patters on the boards; gulls cry; the rope scrapes on wood\n\nLook closely at the picture, then write the shot. Start with \"SHOT 5s:\". Answer with the shot alone.\n\nThe prompt you write for, as it rolls at this seed. What you write goes into it: keep its world, its people, its place and its style, and carry its story on, unless the direction below says otherwise:\n\nstyle: live-action, cinematic\nSHOT 5s | push in, small, slow\nA misty forest at dawn. The badger steps onto a fallen log, breath visible in the cold air.\nNARRATOR (calm low voice, off-screen): The forest remembers.\nSFX: branches creak under frost; soft footfalls press into snow\nSHOT 3s | cut, arc, slow\nA close-up of the badger's eyes glowing amber as snow drifts past.\nSFX: wind hisses through the bare trees\nMUSIC: sparse upright bass at a slow tempo, fading out\n\nThe direction, which outweighs everything above: made her join the previous shots.\n\nAnswer as asked above, with what you write alone.",
+  "takes": [
+   {
+    "seed": 1010,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with red hair adjusts her black lace crop top as she turns her head slightly to the side, letting her hair fall across one shoulder; her hand rests on her hip while the choker glints under the room’s soft light.\nSFX: a faint hum from a distant appliance; the ceiling fan’s blades whisper overhead",
+    "problem": null,
+    "story": false,
+    "her": true
+   },
+   {
+    "seed": 1011,
+    "text": "SHOT 5s: push in, small, slow\nThe young woman with red hair adjusts her black lace crop top, her fingers brushing the fabric as she lifts her chin slightly and gazes directly into the camera; her dark shorts stay snug against her thighs as a faint breeze stirs her hair and the light from the ceiling fan above catches the glint of her choker.\nSFX: soft fabric rustle; distant hum of the ceiling fan",
+    "problem": null,
+    "story": false,
+    "her": true
+   },
+   {
+    "seed": 1012,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with red hair adjusts her black lace crop top, her fingers brushing the fabric as she lifts her chin slightly, while the choker glints under the room’s soft light and a ceiling fan turns slowly above.\nSFX: faint hum of the fan; soft rustle of fabric",
+    "problem": null,
+    "story": false,
+    "her": true
+   }
+  ]
+ },
+ "V3": {
+  "prompt": "You write one more shot for a screenplay of the MiniMax H3 video model, which makes video with sound. The screenplay as it rolls now:\n\nstyle: live-action, cinematic\nSHOT 5s | push in, small, slow\nA misty forest at dawn. The badger steps onto a fallen log, breath visible in the cold air.\nNARRATOR (calm low voice, off-screen): The forest remembers.\nSFX: branches creak under frost; soft footfalls press into snow\nSHOT 3s | cut, arc, slow\nA close-up of the badger's eyes glowing amber as snow drifts past.\nSFX: wind hisses through the bare trees\nMUSIC: sparse upright bass at a slow tempo, fading out\n\nThe picture sent along shows who or what your shot brings into this screenplay. Write the next shot: it goes on from the shots above, in their place, their light and their style, and shows what the picture shows, named by what it is (a woman with long red hair in a black top, not \"the picture\"), doing something there.\n\nHow the shot is written:\n\nSHOT 5s: <camera move>, <size>, <speed>\nTwo or three sentences in the present tense: what happens, in the order it happens.\nSFX: a sound; another sound\n\nThe direction, which outweighs everything above: made her join the previous shots.\n\nStart with \"SHOT 5s:\". Answer with the shot alone.",
+  "takes": [
+   {
+    "seed": 1010,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with long red hair stands in the center of the room, her black lace crop top catching the soft light as she slowly turns her head to meet the camera’s gaze. Her fingers trail down her thigh, then pause near the hem of her shorts.\nSFX: faint hum of a ceiling fan; distant muffled music from another room",
+    "problem": null,
+    "story": false,
+    "her": true
+   },
+   {
+    "seed": 1011,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with long red hair stands centered in the room, her black lace crop top catching the soft light as she slowly turns her head to meet the camera’s gaze. Her fingers brush the waistband of her dark shorts, a quiet stillness settling around her.\nSFX: faint hum of the ceiling fan; distant echo of a door creaking open",
+    "problem": null,
+    "story": false,
+    "her": true
+   },
+   {
+    "seed": 1012,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with long red hair stands centered in the room, her black lace crop top catching the soft light as she lifts one hand to adjust her hair, her gaze steady and direct.\nSFX: faint hum of a ceiling fan; distant muffled music from another room",
+    "problem": null,
+    "story": false,
+    "her": true
+   }
+  ]
+ },
+ "V4": {
+  "prompt": "You write one more shot for a screenplay of the MiniMax H3 video model, which makes video with sound. The screenplay as it rolls now:\n\nstyle: live-action, cinematic\nSHOT 5s | push in, small, slow\nA misty forest at dawn. The badger steps onto a fallen log, breath visible in the cold air.\nNARRATOR (calm low voice, off-screen): The forest remembers.\nSFX: branches creak under frost; soft footfalls press into snow\nSHOT 3s | cut, arc, slow\nA close-up of the badger's eyes glowing amber as snow drifts past.\nSFX: wind hisses through the bare trees\nMUSIC: sparse upright bass at a slow tempo, fading out\n\nThe picture sent along shows a person who joins this screenplay. From the picture take only the person: how they look, their hair, their clothes. Leave everything else in the picture behind (its room, its walls, its light, its furniture): your shot happens where the screenplay's shots happen, in their place, light and weather.\n\nWrite the next shot: it goes on from the shots above, and the person from the picture is in it, named by what they look like (a woman with long red hair in a black top), doing something in the screenplay's place.\n\nHow the shot is written:\n\nSHOT 5s: <camera move>, <size>, <speed>\nTwo or three sentences in the present tense: what happens, in the order it happens.\nSFX: a sound; another sound\n\nThe direction, which outweighs everything above: made her join the previous shots.\n\nStart with \"SHOT 5s:\". Answer with the shot alone.",
+  "takes": [
+   {
+    "seed": 1010,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with long red hair in a black top steps onto a mossy log in the misty forest at dawn, her breath curling in the cold air as she pauses, looking up at the bare branches.\nSFX: branches creak under frost; soft footfalls press into snow",
+    "problem": null,
+    "story": true,
+    "her": true
+   },
+   {
+    "seed": 1011,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with long red hair in a black top steps onto a mossy log in the misty forest at dawn, her breath curling in the cold air as she pauses, looking up.\nSFX: branches creak under frost; soft footfalls press into snow",
+    "problem": null,
+    "story": true,
+    "her": true
+   },
+   {
+    "seed": 1012,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with long red hair in a black top steps onto a mossy log, breath visible in the cold air as mist swirls around her.\nSFX: branches creak under frost; soft footfalls press into snow",
+    "problem": null,
+    "story": true,
+    "her": true
+   }
+  ]
+ },
+ "V5": {
+  "prompt": "You write one more shot for a screenplay of the MiniMax H3 video model, which makes video with sound. The screenplay as it rolls now:\n\nstyle: live-action, cinematic\nSHOT 5s | push in, small, slow\nA misty forest at dawn. The badger steps onto a fallen log, breath visible in the cold air.\nNARRATOR (calm low voice, off-screen): The forest remembers.\nSFX: branches creak under frost; soft footfalls press into snow\nSHOT 3s | cut, arc, slow\nA close-up of the badger's eyes glowing amber as snow drifts past.\nSFX: wind hisses through the bare trees\nMUSIC: sparse upright bass at a slow tempo, fading out\n\nThis picture shows who or what your shot brings into this screenplay: <<picture>>\n\nWrite the next shot: it goes on from the shots above, in their place, their light and their style, and shows what the picture shows, named by what it is (a woman with long red hair in a black top, not \"the picture\"), doing something there.\n\nHow the shot is written:\n\nSHOT 5s: <camera move>, <size>, <speed>\nTwo or three sentences in the present tense: what happens, in the order it happens.\nSFX: a sound; another sound\n\nThe direction, which outweighs everything above: made her join the previous shots.\n\nStart with \"SHOT 5s:\". Answer with the shot alone.",
+  "takes": [
+   {
+    "seed": 1010,
+    "text": "SHOT 5s: cut, steady, medium\nThe woman with long red hair in a black top stands in the center of the room, her gaze fixed on the camera as if she’s just stepped out of the misty forest into this warm, quiet space. She lifts one hand slightly, fingers brushing the edge of her shorts, as if adjusting to the new world.\nSFX: soft hum of a ceiling fan; distant echo of a door closing",
+    "problem": null,
+    "story": true,
+    "her": true
+   },
+   {
+    "seed": 1011,
+    "text": "SHOT 5s: push in, medium, slow\nThe woman with long red hair in a black top stands still, her gaze fixed forward as if seeing the forest mist through the window behind her. Her hand lifts slightly, brushing a strand of hair from her face.\nSFX: faint hum of a ceiling fan; distant birdsong",
+    "problem": null,
+    "story": true,
+    "her": true
+   },
+   {
+    "seed": 1012,
+    "text": "SHOT 5s: push in, medium, slow\nThe woman with long red hair in a black top stands still, her gaze locking onto the camera as if she’s just stepped out of the misty forest into this room. Her hand drifts up to rest on her hip, a subtle shift in posture that mirrors the badger’s quiet confidence.\nSFX: a single, soft click of a door closing; then, the faint hum of a distant refrigerator",
+    "problem": null,
+    "story": true,
+    "her": true
+   }
+  ]
+ },
+ "V6": {
+  "prompt": "You write one more shot for a screenplay of the MiniMax H3 video model, which makes video with sound. The screenplay as it rolls now:\n\nstyle: live-action, cinematic\nSHOT 5s | push in, small, slow\nA misty forest at dawn. The badger steps onto a fallen log, breath visible in the cold air.\nNARRATOR (calm low voice, off-screen): The forest remembers.\nSFX: branches creak under frost; soft footfalls press into snow\nSHOT 3s | cut, arc, slow\nA close-up of the badger's eyes glowing amber as snow drifts past.\nSFX: wind hisses through the bare trees\nMUSIC: sparse upright bass at a slow tempo, fading out\n\nThe picture: <<picture>> shows a person who joins this screenplay. From the picture take only the person: how they look, their hair, their clothes. Leave everything else in the picture behind (its room, its walls, its light, its furniture): your shot happens where the screenplay's shots happen, in their place, light and weather.\n\nWrite the next shot: it goes on from the shots above, and the person from the picture is in it, named by what they look like (a woman with long red hair in a black top), doing something in the screenplay's place.\n\nHow the shot is written:\n\nSHOT 5s: <camera move>, <size>, <speed>\nTwo or three sentences in the present tense: what happens, in the order it happens.\nSFX: a sound; another sound\n\nThe direction, which outweighs everything above: made her join the previous shots.\n\nStart with \"SHOT 5s:\". Answer with the shot alone.",
+  "takes": [
+   {
+    "seed": 1010,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with long red hair in a black top steps onto the fallen log beside the badger, her breath visible in the cold dawn air as she looks down at the snow. SFX: crunch of frost under boots; soft sigh of wind",
+    "problem": null,
+    "story": true,
+    "her": true
+   },
+   {
+    "seed": 1011,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with long red hair in a black top steps onto the fallen log beside the badger, her breath visible in the cold dawn air as she glances at the creature. SFX: crunch of frost under her boots; distant owl hoot",
+    "problem": null,
+    "story": true,
+    "her": true
+   },
+   {
+    "seed": 1012,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with long red hair in a black top steps onto the fallen log beside the badger, her breath visible in the cold dawn air as she looks down at the snow. Her gaze meets the badger’s glowing amber eyes.\nSFX: soft crunch of snow underfoot; distant rustle of unseen birds",
+    "problem": null,
+    "story": true,
+    "her": true
+   }
+  ]
+ },
+ "V7": {
+  "prompt": "You write one more shot for a screenplay of the MiniMax H3 video model, which makes video with sound. The screenplay as it rolls now:\n\nstyle: live-action, cinematic\nSHOT 5s | push in, small, slow\nA misty forest at dawn. The badger steps onto a fallen log, breath visible in the cold air.\nNARRATOR (calm low voice, off-screen): The forest remembers.\nSFX: branches creak under frost; soft footfalls press into snow\nSHOT 3s | cut, arc, slow\nA close-up of the badger's eyes glowing amber as snow drifts past.\nSFX: wind hisses through the bare trees\nMUSIC: sparse upright bass at a slow tempo, fading out\n\nThe picture: <|orrery_pictures|> shows who or what joins this screenplay. From the picture take only them: how they look, their hair, their clothes, their colors. Leave everything else in the picture behind (its room, its walls, its light, its furniture): your shot happens where the screenplay's shots happen, in their place, light and weather.\n\nWrite the next shot: it goes on from the shots above, and what the picture shows is in it, named by what it looks like (a woman with long red hair in a black top, never \"the picture\"), doing something in the screenplay's place, with the people and animals already there.\n\nHow the shot is written:\n\nSHOT 5s: <camera move>, <size>, <speed>\nTwo or three sentences in the present tense: what happens, in the order it happens.\nNAME (how it sounds): a line of speech, only if someone talks.\nSFX: a sound; another sound\n\nNever write wildcards, variables, choices, comments, headers, markdown or explanations.\n\nStart with \"SHOT 5s:\". Answer with the shot alone.\n\nThe direction, which outweighs everything above: made her join the previous shots.\n\nAnswer as asked above, with what you write alone.",
+  "takes": [
+   {
+    "seed": 1010,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with long red hair in a black top steps onto the fallen log beside the badger, her breath visible in the cold air as she looks down at the animal.\nNARRATOR (calm low voice, off-screen): She remembers too.\nSFX: soft crunch of snow under boots; distant rustle of unseen leaves",
+    "problem": null,
+    "story": true,
+    "her": true
+   },
+   {
+    "seed": 1011,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with long red hair in a black top steps onto the fallen log beside the badger, her breath visible in the cold air as she looks down at the creature.\nNARRATOR (calm low voice, off-screen): She remembers too.\nSFX: crunch of snow under boots; soft rustle of fabric",
+    "problem": null,
+    "story": true,
+    "her": true
+   },
+   {
+    "seed": 1012,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with long red hair in a black top steps onto the fallen log beside the badger, her breath visible in the cold air as she looks down at the creature.\nNARRATOR (calm low voice, off-screen): She remembers too.\nSFX: branches creak under frost; soft footfalls press into snow",
+    "problem": null,
+    "story": true,
+    "her": true
+   }
+  ]
+ },
+ "V8": {
+  "prompt": "You write one more shot for a screenplay of the MiniMax H3 video model, which makes video with sound. The screenplay as it rolls now:\n\nstyle: live-action, cinematic\nSHOT 5s | push in, small, slow\nA misty forest at dawn. The badger steps onto a fallen log, breath visible in the cold air.\nNARRATOR (calm low voice, off-screen): The forest remembers.\nSFX: branches creak under frost; soft footfalls press into snow\nSHOT 3s | cut, arc, slow\nA close-up of the badger's eyes glowing amber as snow drifts past.\nSFX: wind hisses through the bare trees\nMUSIC: sparse upright bass at a slow tempo, fading out\n\nThe picture: <|orrery_pictures|> shows who or what joins this screenplay. From the picture take only them: how they look, their hair, their clothes, their colors. Leave everything else in the picture behind (its room, its walls, its light, its furniture): your shot happens where the screenplay's shots happen, in their place, light and weather.\n\nWrite the next shot: it goes on from the shots above, and what the picture shows is in it, named by what it looks like (a woman with long red hair in a black top, never \"the picture\"), doing something in the screenplay's place, with the people and animals already there.\n\nHow the shot is written:\n\nSHOT 5s: <camera move>, <size>, <speed>\nTwo or three sentences in the present tense: what happens, in the order it happens.\nNAME (how it sounds): a line of speech, only if someone talks.\nSFX: a sound; another sound\n\nNever write wildcards, variables, choices, comments, headers, markdown or explanations.\n\nStart with \"SHOT 5s:\". Answer with the shot alone.",
+  "takes": [
+   {
+    "seed": 1010,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with long red hair in a black top steps onto the fallen log beside the badger, her breath visible in the cold dawn air. She looks down at the badger, then slowly raises her hand as if to touch its fur.\nNARRATOR (calm low voice, off-screen): It remembers you too.\nSFX: snow crunches under her boots; a soft sigh escapes her lips",
+    "problem": null,
+    "story": true,
+    "her": true
+   },
+   {
+    "seed": 1011,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with long red hair in a black top steps onto the fallen log beside the badger, her breath visible in the cold dawn air. She looks down at the badger, then meets its glowing amber eyes.\nNARRATOR (calm low voice, off-screen): It remembers you too.\nSFX: crunch of snow under boots; soft rustle of fabric",
+    "problem": null,
+    "story": true,
+    "her": true
+   }
+  ]
+ },
+ "V9": {
+  "prompt": "You write one more shot for a screenplay of the MiniMax H3 video model, which makes video with sound. The screenplay as it rolls now:\n\nstyle: live-action, cinematic\nSHOT 5s | push in, small, slow\nA misty forest at dawn. The badger steps onto a fallen log, breath visible in the cold air.\nNARRATOR (calm low voice, off-screen): The forest remembers.\nSFX: branches creak under frost; soft footfalls press into snow\nSHOT 3s | cut, arc, slow\nA close-up of the badger's eyes glowing amber as snow drifts past.\nSFX: wind hisses through the bare trees\nMUSIC: sparse upright bass at a slow tempo, fading out\n\nThe picture: <|orrery_pictures|> shows who or what joins this screenplay. From the picture take only them: how they look, their hair, their clothes, their colors. Leave everything else in the picture behind (its room, its walls, its light, its furniture): your shot happens where the screenplay's shots happen, in their place, light and weather.\n\nWrite the next shot: it goes on from the shots above, and what the picture shows is in it, named by what it looks like (a woman with long red hair in a black top, never \"the picture\"), doing something in the screenplay's place, with the people and animals already there.\n\nHow the shot is written:\n\nSHOT 5s: <camera move>, <size>, <speed>\nTwo or three sentences in the present tense: what happens, in the order it happens.\nNAME (how it sounds): a line of speech, only if someone talks.\nSFX: a sound; another sound\n\nNever write wildcards, variables, choices, comments, headers, markdown or explanations.\n\nStart with \"SHOT 5s:\". Answer with the shot alone.\n\nThe direction, which outweighs everything above: she chases the badger away.\n\nAnswer as asked above, with what you write alone.",
+  "takes": [
+   {
+    "seed": 1010,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with long red hair in a black top steps onto the fallen log beside the badger, her breath visible in the cold air as she stares down at it. She raises her hand, palm open, and speaks sharply.\nWOMAN (firm): Get out of here.\nSFX: her voice cuts through the wind; a sharp crackle as she snaps her fingers",
+    "problem": null,
+    "story": true,
+    "her": true
+   },
+   {
+    "seed": 1011,
+    "text": "SHOT 5s: push in, small, slow\nThe woman with long red hair in a black top steps onto the fallen log beside the badger, her breath visible in the cold air as she glares at it. She raises her hand, voice sharp and commanding.\nWOMAN (sharp): Get out of here!\nSFX: her boots crunch on frost; the badger snarls and bolts into the mist",
+    "problem": null,
+    "story": true,
+    "her": true
+   }
+  ]
+ }
+}

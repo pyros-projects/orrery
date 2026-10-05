@@ -942,7 +942,7 @@ test("the settings are a tab of sections, and every setting of the old sheet is 
     home: { home: "/h", setting: "/h", source: "setting" },
     llm: { source: "comfy", file: "qwen3vl_4b.safetensors", entries: 12, max_tokens: 16000, files: [{ name: "qwen3vl_4b.safetensors", size: 8e9, can_write: true }],
       api: { base_url: "https://api.openai.com/v1", model: "", key: "", key_from: "none", key_env: "OPENAI_API_KEY" } },
-    writers: Object.fromEntries(["continue", "story", "story_scenes", "story_keyframes", "describe", "describe_shot"].map((k) => [k, { text: "t", default: "d", edited: k === "story" }])),
+    writers: Object.fromEntries(["continue", "story", "story_scenes", "story_keyframes", "describe", "describe_shot", "describe_shot_into"].map((k) => [k, { text: "t", default: "d", edited: k === "story" }])),
     wcur: "continue",
   };
   const html = Object.fromEntries(SECTIONS.map(([k]) => [k, SECTION_HTML[k](app, st)]));

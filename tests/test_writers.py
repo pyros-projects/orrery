@@ -351,3 +351,21 @@ def test_takes_go_in_as_a_choice_a_roll_picks_one_whole_take():
     out = writers.place("continue", FILM, [s1, s2], {"after": 0}, how="insert", choice=True)["template"]
     assert "style: live-action\n$take = {1|2}\nSCENE one" in out and "\nSCENE the river\nIF $take is 1: SHOT 5s: static\n" in out
     assert "IF $take is 2: The fox sleeps.\n\nSCENE two repeat 2" in out and "SCENE the den" not in out
+
+
+def test_a_picture_with_the_screenplay_sent_along_joins_it(home):
+    """#333: Prompt from image with the prompt sent along writes the next shot of that screenplay with who is in the
+    picture, the picture after the screenplay; the 8B kept the picture's room otherwise (experiments/writer-framing)."""
+    from orrery.llm import PICTURES
+
+    fl = "@h3 t2va 16:9\nstyle: live-action\nSHOT 5s: static\nA badger steps onto a log in a misty forest."
+    joined = writers.request(Home(home), "describe", fl, 1, {}, {}, "she joins it", ["the first frame"], True)
+    assert joined.startswith("You write one more shot for a screenplay") and "A badger steps onto a log" in joined
+    assert joined.index("A badger steps") < joined.index(PICTURES) and "take only them" in joined
+    assert "carry its story on" not in joined and "The direction, which outweighs everything above: she joins it." in joined
+    alone = writers.request(Home(home), "describe", fl, 1, {}, {}, "", ["the first frame"], False)
+    assert alone.startswith(writers.default("describe_shot").strip()[:40]) and PICTURES not in alone
+    gallery = writers.request(Home(home), "describe", fl, 1, {}, {}, "", ["a picture from the Gallery"], True)
+    assert "Picture 1 is a picture from the Gallery." in gallery and "from this one instead" not in gallery
+    text, problem = writers.check("describe", fl, "SHOT 5s: static\nShe steps onto the log. SFX: snow crunches")
+    assert problem is None and text == "SHOT 5s: static\nShe steps onto the log.\nSFX: snow crunches"

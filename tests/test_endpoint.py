@@ -34,6 +34,19 @@ def test_frames_go_as_pictures_before_the_text(fake_api):
     assert content[0]["image_url"]["url"].startswith("data:image/jpeg;base64,") and content[2]["text"] == "what happens"
 
 
+def test_a_prompt_can_put_its_pictures_after_what_they_belong_to(fake_api):
+    """#333: a writer's text shows the picture after the screenplay; without pictures the mark goes."""
+    from orrery.llm import PICTURES
+
+    frames = np.zeros((1, 40, 64, 3), dtype="float32")
+    OpenAIBackend(fake_api.url, "gpt-5.4-mini").complete(f"the screenplay\n\nThe picture: {PICTURES} joins it.", images=frames)
+    content = fake_api.requests[-1]["messages"][0]["content"]
+    assert [part["type"] for part in content] == ["text", "image_url", "text"]
+    assert content[0]["text"] == "the screenplay\n\nThe picture: " and content[2]["text"] == " joins it."
+    OpenAIBackend(fake_api.url, "gpt-5.4-mini").complete(f"The picture: {PICTURES} joins it.")
+    assert fake_api.requests[-1]["messages"][0]["content"] == "The picture:  joins it."
+
+
 def test_a_busy_endpoint_is_asked_again_and_a_refused_key_says_so(fake_api):
     fake_api.busy = 2
     assert OpenAIBackend(fake_api.url, "gpt-5.4-mini").complete("hi") == "OK"

@@ -28,6 +28,11 @@ from typing import Protocol
 _FENCE = re.compile(r"```(?:json)?\s*(.*?)```", re.DOTALL)
 
 
+# Where a prompt shows the model its pictures (#333): a writer's text may put them after what they belong to, which
+# a small model weighs differently from pictures first. Without it they come first.
+PICTURES = "<|orrery_pictures|>"
+
+
 class InvalidProposal(ValueError):
     """The model's answer cannot be used safely."""
 
@@ -110,9 +115,13 @@ class OpenAIBackend:
         self.name = name or model
 
     def _body(self, prompt: str, images) -> dict:
-        content = prompt if images is None or not len(images) else [
-            *({"type": "image_url", "image_url": {"url": url}} for url in data_urls(images)),
-            {"type": "text", "text": prompt}]  # the frames first, as Picture 1, 2 … in the prompt
+        before, at, after = prompt.partition(PICTURES)  # where the prompt puts the frames (#333), else first
+        if images is None or not len(images):
+            content = before + after
+        else:
+            content = [*([{"type": "text", "text": before}] if at and before.strip() else []),
+                       *({"type": "image_url", "image_url": {"url": url}} for url in data_urls(images)),
+                       {"type": "text", "text": after if at else prompt}]  # as Picture 1, 2 … in the prompt
         body = {"model": self.model, "messages": [{"role": "user", "content": content}],
                 "temperature": self.temperature, "max_tokens": self.max_tokens}
         for quirk in _QUIRKS.get((self.url, self.model), ()):
@@ -209,7 +218,7 @@ class TransformersBackend:
         if self._model is None:
             self._load()
         tok = self._tokenizer
-        text = tok.apply_chat_template([{"role": "user", "content": prompt}], tokenize=False,
+        text = tok.apply_chat_template([{"role": "user", "content": prompt.replace(PICTURES, "")}], tokenize=False,
                                        add_generation_prompt=True, enable_thinking=False)
         inputs = tok(text, return_tensors="pt").to(self._model.device)
         output = self._model.generate(**inputs, max_new_tokens=self.max_new_tokens,

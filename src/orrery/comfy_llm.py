@@ -37,8 +37,13 @@ def can_write(file_name: str) -> bool:
 
 
 def chat(prompt: str, images: int = 0) -> str:
-    """One user turn in Qwen's chat format, thinking off, the frames first; used with skip_template,
-    so a model's own conditioning template (Krea's "Describe the image…") stays out."""
+    """One user turn in Qwen's chat format, thinking off, the frames first (or where the prompt puts them,
+    `llm.PICTURES`, #333); used with skip_template, so a model's own conditioning template (Krea's "Describe the
+    image…") stays out."""
+    from orrery.llm import PICTURES
+
+    if PICTURES in prompt:
+        return f"<|im_start|>user\n{prompt.strip().replace(PICTURES, VISION * images)}\n/no_think<|im_end|>\n<|im_start|>assistant\n"
     frames = VISION * images + "\n" if images else ""
     return f"<|im_start|>user\n{frames}{prompt.strip()}\n/no_think<|im_end|>\n<|im_start|>assistant\n"
 

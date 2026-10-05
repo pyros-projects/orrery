@@ -151,7 +151,9 @@ slots, which keeps it within a 4B or 8B model's reach):
   keyframe prompts, from first_frame to the picture the prompt makes, on a grid
   so one Roll renders them all. Without a frame it is told so and imagines it.
 - **Prompt from image**: it sees the picture in `first_frame` and writes an
-  image prompt (Krea 2), or an i2va shot when the template is `@h3`. **Replace**
+  image prompt (Krea 2), or an i2va shot when the template is `@h3`; with the
+  prompt sent along on a screenplay, the next shot of it, with who or what the
+  picture shows joining it there. **Replace**
   puts it in place of the prompt (comments and `: w… h…` lines stay) or of the
   shots; **Insert** above the shots, or on a reel under your cursor's line.
   Without a picture it writes from the prompt as it rolls.

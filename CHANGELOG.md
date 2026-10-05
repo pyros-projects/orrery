@@ -16,7 +16,8 @@ checks) are left out.
   of the Gallery, and several one-line takes go in **as a choice**, `{a|b|c}`. A writer's sheet takes any number of takes (× takes one
   out of the list), **Prepends** or **Appends** them to the prompt in every mode, **Replaces** or **Inserts** them where
   the writer has a place, as written or as one choice (a `$take` binding and IF lines for shots and scenes); the prompt
-  sent along is told what it is for, and the steer outweighs the rest. Continue picks the scene it continues
+  sent along is told what it is for, and the steer outweighs the rest. Prompt from image with the prompt sent along on
+  a screenplay writes the next shot of it, with who the picture shows joining the story there. Continue picks the scene it continues
   after, a reel that plays on and on too, and Replace or Insert says whether the scenes after it stay (#342). Story
   between frames became the **Story interpolator** (#343): from first_frame or any scene to last_frame or any scene, in
   N scenes of S seconds; on an image prompt N keyframe prompts on a grid, so one Roll renders the storyboard.

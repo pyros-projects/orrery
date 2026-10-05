@@ -852,7 +852,7 @@ def test_the_app_learns_where_each_remember_line_goes(home):
 
 def test_the_writer_texts_are_read_edited_and_reset(home):
     body = ok(home, webapi.writer_texts)
-    assert set(body) == {"continue", "story", "story_scenes", "story_keyframes", "describe", "describe_shot"} and body["continue"]["edited"] is False
+    assert set(body) == {"continue", "story", "story_scenes", "story_keyframes", "describe", "describe_shot", "describe_shot_into"} and body["continue"]["edited"] is False
     edited = ok(home, webapi.writer_save, name="story", text="Write {seconds} seconds.")
     assert edited["edited"] is True and edited["text"].startswith("Write {seconds}")
     assert ok(home, webapi.writer_save, name="story", text=None)["edited"] is False
