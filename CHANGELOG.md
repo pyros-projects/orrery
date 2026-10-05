@@ -224,6 +224,10 @@ checks) are left out.
 
 ### Fixed
 
+- No seams in Orrery Film's film (#361, #362, under #359): a clip's last frames and the end of its sound are played as
+  the next clip's decode has them, as one decode of the whole film would, so the brightness jumps and the clicks where
+  clips met are gone, and the sound's level eases across the seam (up to 1.5 dB, as H3 Continuum's seam guard does).
+  Measured with the Orrery Seam Meter against H3 Continuum and H3 Motion Context (`experiments/seams/`).
 - A clip's takes list in the order they were saved (#348): each take has its number in the run, so a clock set back
   between two saves (WSL resyncs its clock now and then) no longer mixes them up.
 - An `END ON:` under IF (#347): `IF $take is 1: END ON: …` is the scene's END ON: when the condition holds, and the clip

@@ -8,6 +8,8 @@ orrery.chain reads either store; `film.mp4` joins them. A take is a folder:
     audio.npy    its sound as float32 [channels, samples]; the film encodes all of it at once, so
                  the joins don't click
     tail.npz     its last 22 frames' latent, picture and sound, which the next segment continues from
+    seam.mp4     a continued take's: the clip before's last 5 frames and the end of its sound as this
+    seam.npy     clip's decode has them; the film ends the clip before with them (#361)
     meta.json    segment, frames, seed, template …
 
 Rendering segment N again makes the new take active and drops the takes after it, which continued
@@ -25,21 +27,37 @@ import shutil
 import time
 import uuid
 from collections.abc import Sequence
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from fractions import Fraction
 from pathlib import Path
 
 from orrery.chain import chain_folder, input_file
-from orrery.continuum.grid import FPS
+from orrery.continuum.grid import DECODE_BLEND, FPS
 from orrery.continuum.masked import Tail
 from orrery.home import write_atomic
 
 STORE = "orrery_film"
 CRF = "18"
+CROSSFADE = 0.02  # s: where the film's sound goes over to the next clip's decode of it (#361)
+PROBE = 0.02  # s: the sound's level either side of a seam (#362)
+LEVEL_DB, STEP_DB = 1.5, 6.0  # a seam's level comes this much closer, for a step this big or smaller (Continuum's)
+EASE_BEFORE, EASE_AFTER = 0.005, 0.06  # s: the gain goes to the match before the seam and back to 1 after it
 
 
 class FilmError(ValueError):
     pass
+
+
+@dataclass(frozen=True)
+class Seam:
+    """The end of the clip before as a continued clip's decode has it (#361). H3's VAE decodes a clip's last frames
+    without the blend into what follows and the end of its sound without what follows; the decode of the next clip,
+    which starts with them, has both. `frames`: the last DECODE_BLEND frames as uint8 [height, width, 3], one by one;
+    `sound`: float32 [channels, samples], ending where this clip's sound starts."""
+
+    frames: Sequence
+    sound: object
 
 
 def _root(output: Path | str, latent_path: str) -> Path:
@@ -86,12 +104,13 @@ def previous_tail(output: Path | str, latent_path: str, segment: int, continues:
 
 
 def save_take(output: Path | str, latent_path: str, segment: int, frames: Sequence, sound, sample_rate: int,
-              tail: Tail, meta: dict, continues: int | None = -1, test: bool = False) -> Path:
+              tail: Tail, meta: dict, continues: int | None = -1, test: bool = False, seam: Seam | None = None) -> Path:
     """Keep a clip as segment `segment`'s take and join the film again; returns the take's folder.
     `frames`: the clip's frames as uint8 [height, width, 3], one by one (anything with len() that
     iterates); `sound`: float32 [channels, samples]. `continues`: the segment it continues (-1: the one
     before; None: none, it started afresh). The takes after it stay as long as none of them continues it.
-    A `test` take (a test scene's) is kept, and the film is joined without it."""
+    A `test` take (a test scene's) is kept, and the film is joined without it. `seam`: the end of the take
+    it continues as this clip decoded it, which the film plays where this take follows that one."""
     import numpy as np
 
     root = _root(output, latent_path)
@@ -125,6 +144,10 @@ def save_take(output: Path | str, latent_path: str, segment: int, frames: Sequen
     sound = np.ascontiguousarray(sound, dtype=np.float32)
     _write_clip(tmp / "video.mp4", first, rest, sound, sample_rate)
     np.save(tmp / "audio.npy", sound)
+    if seam is not None:
+        blend = iter(seam.frames)
+        _write_clip(tmp / "seam.mp4", next(blend), blend, sound[:, :0], sample_rate)
+        np.save(tmp / "seam.npy", np.ascontiguousarray(seam.sound, dtype=np.float32))
     np.savez(tmp / "tail.npz", video=np.asarray(tail.video, np.float32), audio=np.asarray(tail.audio, np.float32))
     (tmp / "meta.json").write_text(json.dumps({**meta, "segment": segment, "frames": count, "continues": continues,
                                                "made": _next_made(run),
@@ -473,9 +496,52 @@ def _chain(first, rest):
     yield from rest
 
 
+def _seamed(run: Path, clips: list[dict]) -> list[bool]:
+    """Whether each clip ends the one before it in the film with its seam: it continues that very take (#361)."""
+    return [k > 0 and clips[k - 1]["frames"] > DECODE_BLEND and (run / c["folder"] / "seam.mp4").exists()
+            and (run / c["folder"] / "seam.npy").exists() and _meta(run / c["folder"]).get("after") == clips[k - 1]["folder"]
+            for k, c in enumerate(clips)]
+
+
+def _patch(before, seam, sample_rate: int) -> None:
+    """The end of a clip's sound as the next clip decoded it, in place, going over to it in CROSSFADE (#361): both
+    decode the same latent there, so a straight crossfade keeps the level."""
+    import numpy as np
+
+    n = min(seam.shape[-1], before.shape[-1])
+    at, fade = before.shape[-1] - n, min(round(CROSSFADE * sample_rate), n)
+    w = np.linspace(0.0, 1.0, fade, dtype=np.float32)
+    head = before[..., at:at + fade] * (1 - w) + seam[..., -n:][..., :fade] * w
+    before[..., at:] = seam[..., -n:]
+    before[..., at:at + fade] = head
+
+
+def _ease(before, after, sample_rate: int) -> None:
+    """A seam's level matched, in place, as Continuum's seam guard does (#362): the sound's level in the PROBE either
+    side, a step of STEP_DB or less (more is a new sound, meant) comes up to LEVEL_DB closer, never past full scale.
+    The gain goes there over the EASE_BEFORE before the seam and back to 1 over the EASE_AFTER after it."""
+    import numpy as np
+
+    probe = round(PROBE * sample_rate)
+    if before.shape[-1] < probe or after.shape[-1] < probe:
+        return
+    was, comes = (float(np.sqrt(np.mean(np.square(x)))) for x in (before[..., -probe:], after[..., :probe]))
+    if min(was, comes) < 1e-6:
+        return
+    step = 20 * np.log10(was / comes)
+    if abs(step) > STEP_DB:
+        return
+    m, k = min(round(EASE_BEFORE * sample_rate), before.shape[-1]), min(round(EASE_AFTER * sample_rate), after.shape[-1])
+    peak = max(float(np.abs(before[..., -m:]).max()), float(np.abs(after[..., :k]).max()))
+    gain = min(10 ** (np.clip(step, -LEVEL_DB, LEVEL_DB) / 20), max(1.0, 1 / peak))
+    before[..., -m:] *= np.linspace(1.0, gain, m, dtype=np.float32)
+    after[..., :k] *= np.linspace(gain, 1.0, k, dtype=np.float32)
+
+
 def _join(run: Path, clips: list[dict], sample_rate: int) -> None:
     """film.mp4: the takes' video stream-copied one after another, their sound joined and encoded once;
-    test takes are left out (none left: no film)."""
+    test takes are left out (none left: no film). Where a take continues the one before it, that one ends with
+    the take's seam (#361), its last frames and sound as this take decoded them, and the level eases across (#362)."""
     import av
     import numpy as np
 
@@ -484,25 +550,34 @@ def _join(run: Path, clips: list[dict], sample_rate: int) -> None:
         (run / "film.mp4").unlink(missing_ok=True)
         return
 
-    sound = np.concatenate([np.load(run / c["folder"] / "audio.npy") for c in clips], axis=1)
+    seamed = _seamed(run, clips)
+    sounds = [np.load(run / c["folder"] / "audio.npy") for c in clips]
+    pieces = []  # [video, its frames, the frames at its end the seam after it replaces]
+    for k, clip in enumerate(clips):
+        if seamed[k]:
+            _patch(sounds[k - 1], np.load(run / clip["folder"] / "seam.npy"), sample_rate)
+            _ease(sounds[k - 1], sounds[k], sample_rate)
+            pieces[-1][2] = DECODE_BLEND
+            pieces.append([run / clip["folder"] / "seam.mp4", DECODE_BLEND, 0])
+        pieces.append([run / clip["folder"] / "video.mp4", clip["frames"], 0])
+    sound = np.concatenate(sounds, axis=1)
     tmp = run / "film.tmp.mp4"
-    sources = [av.open(str(run / c["folder"] / "video.mp4")) for c in clips]
+    sources = [av.open(str(path)) for path, _, _ in pieces]
     try:
         with av.open(str(tmp), "w") as out:
             video = out.add_stream_from_template(sources[0].streams.video[0])
             audio = _sound_stream(out, sound, sample_rate) if sound.shape[-1] else None
             start = 0.0
-            for source, clip in zip(sources, clips, strict=True):
+            for source, (_, frames, replaced) in zip(sources, pieces, strict=True):
                 stream = source.streams.video[0]
                 shift = round(start / stream.time_base)
-                for packet in source.demux(stream):
-                    if packet.dts is None:
-                        continue
+                packets = [p for p in source.demux(stream) if p.dts is not None]  # one a frame: no B-frames
+                for packet in packets[:len(packets) - replaced]:
                     packet.pts += shift
                     packet.dts += shift
                     packet.stream = video
                     out.mux(packet)
-                start += clip["frames"] / FPS
+                start += (frames - replaced) / FPS
             if audio is not None:
                 _encode_sound(out, audio, sound, sample_rate)
     finally:

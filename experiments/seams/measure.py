@@ -1,54 +1,54 @@
-"""How a film's seams compare with the inside of its clips: the picture (mean luma jump, pixel MAE between the last
-frame of a clip and the first of the next) and the sound (sample step, 20 ms level change across the join). Reads the
-takes as Orrery Film stores them: video.mp4 (pinned frames trimmed) and audio.npy. See README.md.
+"""The seam meter (seam_meter/meter.py) from the command line: an Orrery Film run (its takes, the seams where they
+join), or any film file with its seams given. See README.md.
 
     uv run python experiments/seams/measure.py <output>/<reel>/orrery_film/<run> [...]
+    uv run python experiments/seams/measure.py film.mp4 --seams 121,99 [--label continuum]
 """
 
+import argparse
 import json
 import sys
-from itertools import pairwise
 from pathlib import Path
 
 import av
 import numpy as np
 
+sys.path.insert(0, str(Path(__file__).parent / "seam_meter"))
+from meter import measure, report, seams_from
 
-def frames(path: Path) -> list[np.ndarray]:
+
+def decode(path: Path) -> tuple[np.ndarray, float, np.ndarray | None, int | None]:
+    """Frames [N, H, W, 3] in 0..1, fps, sound [channels, samples], sample rate."""
     with av.open(str(path)) as c:
-        return [f.to_ndarray(format="gray").astype(np.float32) for f in c.decode(c.streams.video[0])]
+        stream = c.streams.video[0]
+        fps = float(stream.average_rate)
+        frames = np.stack([f.to_ndarray(format="rgb24") for f in c.decode(stream)]).astype(np.float32) / 255
+    sound = rate = None
+    with av.open(str(path)) as c:
+        if c.streams.audio:
+            parts = [f.to_ndarray() for f in c.decode(c.streams.audio[0])]
+            rate = c.streams.audio[0].rate
+            sound = np.concatenate([p if p.ndim > 1 else p[None] for p in parts], axis=1).astype(np.float32)
+    return frames, fps, sound, rate
 
 
-def rms(x: np.ndarray) -> float:
-    return float(np.sqrt(np.mean(x ** 2)) + 1e-9)
-
-
-def report(run: Path) -> None:
-    state = json.loads((run / "clips.json").read_text())
-    takes = [run / c["folder"] for c in state["clips"]]
-    rate = int(state["settings"][3])  # [width, height, fps, sample rate, channels]
-    vids = [frames(t / "video.mp4") for t in takes]
-    mono = [np.load(t / "audio.npy").mean(axis=0) for t in takes]
-    w = int(0.02 * rate)
-    inside = {
-        "luma jump": np.concatenate([np.abs(np.diff([f.mean() for f in v])) for v in vids]),
-        "pixel MAE": np.concatenate([[np.abs(a - b).mean() for a, b in pairwise(v)] for v in vids]),
-        "sound step": np.concatenate([np.abs(np.diff(m)) for m in mono]),
-        "20ms level dB": np.concatenate([[abs(20 * np.log10(rms(m[i + w:i + 2 * w]) / rms(m[i:i + w])))
-                                          for i in range(0, len(m) - 2 * w, w)] for m in mono]),
-    }
-    seams = {
-        "luma jump": [abs(b[0].mean() - a[-1].mean()) for a, b in pairwise(vids)],
-        "pixel MAE": [np.abs(b[0] - a[-1]).mean() for a, b in pairwise(vids)],
-        "sound step": [abs(b[0] - a[-1]) for a, b in pairwise(mono)],
-        "20ms level dB": [abs(20 * np.log10(rms(b[:w]) / rms(a[-w:]))) for a, b in pairwise(mono)],
-    }
-    print(f"{run.parent.parent.name}/{run.name}: {len(takes)} clips")
-    for name, values in inside.items():
-        shown = ", ".join(f"{s:.4f} (p{(values < s).mean() * 100:.0f})" for s in seams[name])
-        print(f"  {name:14s} inside: median {np.median(values):.4f}  p99 {np.percentile(values, 99):.4f} | seams: {shown}")
+def run_film(run: Path) -> tuple[np.ndarray, list[int], float, np.ndarray, int]:
+    """An Orrery Film run's film (its takes joined, with their seams, #361) and the frames where its clips join."""
+    clips = [c for c in json.loads((run / "clips.json").read_text())["clips"] if not c.get("test")]
+    frames, fps, sound, rate = decode(run / "film.mp4")
+    return frames, [int(s) for s in np.cumsum([c["frames"] for c in clips])[:-1]], fps, sound, rate
 
 
 if __name__ == "__main__":
-    for arg in sys.argv[1:]:
-        report(Path(arg))
+    ap = argparse.ArgumentParser()
+    ap.add_argument("paths", nargs="+", type=Path)
+    ap.add_argument("--seams", help="for a film file: `121,99` (first clip, then each) or `@121,220` (clip starts)")
+    ap.add_argument("--label", default="")
+    args = ap.parse_args()
+    for path in args.paths:
+        if path.is_dir():
+            frames, starts, fps, sound, rate = run_film(path)
+        else:
+            frames, fps, sound, rate = decode(path)
+            starts = seams_from(args.seams, len(frames))
+        print(report(measure(frames, starts, fps, sound, rate), args.label or f"{path.parent.parent.name}/{path.name}"))
