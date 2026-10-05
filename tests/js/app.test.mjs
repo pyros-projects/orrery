@@ -1225,3 +1225,12 @@ test("a sheet sends along by default what its kind needs: the prompt, the story 
   assert.deepEqual([...defaultSends("slot", both)], ["prompt"]);  // frames only when asked (a slot names its own)
   assert.ok(promptLocked("slot") && promptLocked("continue") && !promptLocked("entries") && !promptLocked("story"));
 });
+
+test("several takes go in as a choice, what the language reads as its own written as itself (#336)", async () => {
+  const { asChoice, insertTake } = await import("../../comfyui/web/app/takes.js");
+  assert.equal(asChoice(["a red scarf", "a lantern"]), "{a red scarf|a lantern}");
+  assert.equal(asChoice(["50% off | $5", "a {brass} key", "the __init__ file"]), "{50% off \\| \\$5|a \\{brass\\} key|the \\__init\\__ file}");
+  const line = "A woman with --what she carries-- walks on.";
+  assert.equal(insertTake(line, { kind: "slot", what: "what she carries", line: 0 }, asChoice(["a fan", "a cane"])),
+    "A woman with {a fan|a cane} walks on.");
+});

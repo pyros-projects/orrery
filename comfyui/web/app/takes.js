@@ -128,6 +128,10 @@ export function markPlace(key, on) {
     .filter(fits).forEach((el) => el.classList.add("t-hl"));
 }
 
+// Several takes as a choice (#336): `{a|b|c}`, every Roll picking one; what the language would read as its own
+// (`{ } | $ __ \\`) written as itself.
+export const asChoice = (takes) => `{${takes.map((t) => t.replace(/[\\{}|$]/g, (c) => `\\${c}`).replace(/__/g, "\\__")).join("|")}}`;
+
 // Send along (#335): what goes to the model beside the request. The prompt as it rolls (always, where the take is
 // written into it: a slot, a rewrite, the reel's next scene), the frames wired into first_frame and last_frame, four
 // stills of the video input, and any item of the Gallery (a video as four of its stills).
@@ -155,7 +159,9 @@ export function openTakes(app, place, near = null) {
   const wired = (name) => !!app.bridge.wired?.(name);
   const sends = defaultSends(place.kind, wired, tab), gallery = [];  // gallery: {id, kind} of the items sent along
   const sent = () => (picture ? null : [...sends, ...gallery.map((g) => `gallery:${g.id}`)]);
-  const multi = place.kind === "library" || known;  // a library's entries: several at once (#272)
+  // several at once: a library's entries (#272), and the one-line takes that can go in as a choice (#336)
+  const choice = place.kind === "slot" || place.kind === "describe" || ((place.kind === "library" || known) && !tab);
+  const multi = place.kind === "library" || known || choice;
   const from = [];  // known: where each take came from, "rolled", "new" or "added"
   const token = writer ? WRITERS[place.kind].label : place.kind === "slot" || picture ? `--${place.what}--` : enhance ? `> ${place.what}` : `__${place.what}__`;
   const useTitle = writer ? `Put the selected take in: ${WRITERS[place.kind].goes.replace(/^Use selected /, "it ")} An unsaved edit`
@@ -177,7 +183,9 @@ export function openTakes(app, place, near = null) {
     + `<div class="row take-steer"><input class="input grow" data-steer placeholder="Steer them: darker, older, as an anime character …" aria-label="Steer the takes">`
     + `<button class="btn" data-tmore>${icon("dice")}More takes</button>`
     + (picture || writer ? "" : `<button class="btn ghost" data-tkeep title="Write the steer into ${esc(SAID[place.kind])}'s directions, so it keeps rolling that way">${icon("pin")}Keep the direction</button>`) + "</div>"
-    + `<div class="row take-use"><span class="grow"></span>${tab ? "" : `<button class="btn${multi ? " ghost" : " primary"}" data-tuse title="${useTitle}">${icon("check")}Use selected</button>`}`
+    + `<div class="row take-use"><span class="grow"></span>`
+    + (choice ? `<button class="btn ghost" data-tchoice title="Put the selected takes in as a choice, {a|b|c}: every Roll picks one, so you see which works best">${icon("dice")}Insert as a choice</button>` : "")
+    + `${tab ? "" : `<button class="btn${place.kind === "library" || known ? " ghost" : " primary"}" data-tuse title="${useTitle}">${icon("check")}Use selected</button>`}`
     + (known ? `<button class="btn primary" data-tlib title="Write the selected new entries into __${esc(place.what)}__, straight in">${icon("save")}Add to the library</button>`
       : multi ? `<button class="btn primary" data-tlib title="Write the selected entries as __${esc(place.what)}__, straight into your libraries">${icon("save")}Keep as the library</button>` : "")
     + "</div></div>", near);
@@ -227,7 +235,9 @@ export function openTakes(app, place, near = null) {
     drawSends();
     drawGallery();
   });
-  const use = sheet.querySelector("[data-tuse]"), lib = sheet.querySelector("[data-tlib]");
+  const use = sheet.querySelector("[data-tuse]"), lib = sheet.querySelector("[data-tlib]"), pick = sheet.querySelector("[data-tchoice]");
+  const picks = () => [...s.picked].sort((a, b) => a - b);
+  const oneLine = () => picks().every((i) => !s.takes[i].includes("\n"));
   const on = (i) => (multi ? s.picked.has(i) : s.pick === i);
   const chosen = () => (multi ? (s.picked.size === 1 ? [...s.picked][0] : null) : s.pick);
   const draw = () => {
@@ -238,6 +248,11 @@ export function openTakes(app, place, near = null) {
     state.classList.toggle("warn", !!s.error && !s.busy);
     sheet.querySelector("[data-tmore]").disabled = s.busy;
     if (use) use.disabled = s.busy || chosen() === null || (enhance && !s.keep);
+    if (pick) {
+      pick.disabled = s.busy || s.picked.size < 2 || !oneLine();
+      pick.title = s.picked.size > 1 && !oneLine() ? "A take of several lines goes in alone: a choice holds one line each"
+        : "Put the selected takes in as a choice, {a|b|c}: every Roll picks one, so you see which works best";
+    }
     if (lib) lib.disabled = s.busy || !(known ? [...s.picked].some((i) => from[i] === "new") : s.picked.size);
     if (multi) sheet.querySelector("[data-tcount]").textContent = `${s.picked.size} of ${s.takes.length} selected`;
     if (enhance && !s.keep && s.takes.length) use.title = "This > rewrites several passages of the screenplay, each on its own at the run: there is no one rewrite to keep";
@@ -373,6 +388,12 @@ export function openTakes(app, place, near = null) {
       } catch (err) { s.error = err.message; draw(); }
     };
   }
+  if (pick) pick.onclick = () => {  // #336: in place of the slot, the library, or the prompt a picture's takes replace
+    const chosenTakes = picks().map((i) => s.takes[i]), text = asChoice(chosenTakes);
+    const next = place.kind === "describe" ? meta[picks()[0]].template.replace(chosenTakes[0], text) : insertTake(app.text, place, text);
+    app.closeSheet();
+    changed(next, `${chosenTakes.length} takes are in as a choice: every Roll picks one · an unsaved edit`);
+  };
   if (use) use.onclick = async () => {
     const take = s.takes[chosen()];
     if (take === undefined) return;
