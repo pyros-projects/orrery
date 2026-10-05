@@ -10,7 +10,8 @@ checks) are left out.
 ### Added
 
 - A transport in every scene divider (#340): ⏮ ⏭ move Next clip to the scene before or after, ▶ Rolls, +1/+2/+4 sets
-  the clips a Roll plays and 🔒 holds the clip, the footer's controls where you are, however tall the node.
+  the clips a Roll plays and 🔒 holds the clip, the footer's controls where you are, however tall the node; ⧉ duplicates
+  the scene and 🗑 deletes it, with Undo (#344).
 - One sheet for every ask (#333): the Write menu's writers open the 🎲 takes sheet a slot or a library opens, N takes
   as the settings say (a count for each writer), steered; nothing in the menu waits for an input any more
   (Continue makes a screenplay without scenes a reel; a writer without its pictures writes from what came along).

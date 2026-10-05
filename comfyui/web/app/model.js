@@ -379,6 +379,26 @@ function walkedInfo(out, walked) {
 // Does chunk c play segment s? On its range, or on its list when GOTO lines set the path.
 export const plays = (c, s) => s != null && (c.segs ? c.segs.includes(s) : c.first !== null && s >= c.first && s <= c.last);
 
+// A scene's lines in the template (#344): from its SCENE line to the next scene's, the blank lines before that one
+// with it. `chunks`: chunkInfo of the same text.
+function sceneSpan(lines, chunks, n) {
+  return [chunks[n].line, n + 1 < chunks.length ? chunks[n + 1].line : lines.length];
+}
+
+// The template without scene `n` (#344).
+export function dropScene(text, chunks, n) {
+  const lines = text.split("\n"), [a, b] = sceneSpan(lines, chunks, n);
+  return [...lines.slice(0, a), ...lines.slice(b)].join("\n");
+}
+
+// The template with a copy of scene `n` right after it (#344), a blank line between them.
+export function copyScene(text, chunks, n) {
+  const lines = text.split("\n"), [a, b] = sceneSpan(lines, chunks, n);
+  let end = b;
+  while (end > a + 1 && !lines[end - 1].trim()) end--;
+  return [...lines.slice(0, end), "", ...lines.slice(a, end), ...lines.slice(end)].join("\n");
+}
+
 // ⏮ ⏭ in a scene's divider (#341): the first clip of the scene before or after the one `segment` plays in, in the
 // order the scenes are written; scenes that never play are passed over. Past the reel's end, ⏮ goes to the last.
 export function sceneStep(chunks, segment, dir) {

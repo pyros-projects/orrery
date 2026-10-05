@@ -6,7 +6,7 @@ import { annotationLines, mergeHints, shownHints } from "./annotate.js";
 import { wireHover } from "./hover.js";
 import { hintsFor } from "./remember.js";
 import { icon } from "./icons.js";
-import { applyDials, chunkInfo, dials, hasGoto, knobKey, knobsOf, withFields, plays, sceneStep, folderColor, pickerGroups, sceneTarget, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
+import { applyDials, chunkInfo, copyScene, dials, dropScene, hasGoto, knobKey, knobsOf, withFields, plays, sceneStep, folderColor, pickerGroups, sceneTarget, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
 import { drag, thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
 import { openSceneStats } from "./scenestats.js";
@@ -88,6 +88,7 @@ function syncChain(app) {
 // The reel's transport in every divider (#341), the footer's controls where you are: ⏮ ⏭ move Next clip to the scene
 // before or after, ▶ Roll, +N the clips a Roll plays, 🔒 Hold; they act on the reel, whichever divider they are in.
 const MORE = [1, 2, 4];
+const sceneName = (c, n) => `SCENE ${n + 1}${c?.title ? ` (${c.title})` : ""}`;
 export function sceneActs(app) {
   const chunks = app.chunks() || [], seg = Number(app.bridge.getSegment()), busy = !!app.state.sweepQueue, runs = repeats(app);
   const held = !!app.bridge.segmentHeld?.(), prev = sceneStep(chunks, seg, -1), next = sceneStep(chunks, seg, 1);
@@ -102,6 +103,8 @@ export function sceneActs(app) {
     + button("hold", n, icon("lock"), held ? "Held: every Roll plays this clip again. Click to step on after each run"
       : "Hold this clip: every Roll plays it again, for takes", false, `aria-pressed="${held}"`)
     + button("stats", n, icon("chart"), "This scene in numbers: where and how often it plays, what leads to it, what it rolls, what it made")
+    + button("copy", n, icon("copy"), `Duplicate ${sceneName(c, n)}: a copy right after it`)  // #344
+    + button("drop", n, icon("trash"), `Delete ${sceneName(c, n)}`)
     + "</span>";
 }
 
@@ -122,6 +125,14 @@ async function sceneAct(app, act, n, button = null) {
   const chunks = app.chunks() || [], c = chunks[n];
   if (act === "hold") { app.bridge.holdSegment(!app.bridge.segmentHeld()); refreshFoot(app); return paintEditor(app); }
   if (!c || app.state.sweepQueue) return;
+  if (act === "copy" || act === "drop") {  // #344: an unsaved edit, with Undo
+    const before = app.text, name = sceneName(c, n);
+    app.text = act === "copy" ? copyScene(before, chunks, n) : dropScene(before, chunks, n);
+    app.cellsSig = null;
+    renderPrompt(app);
+    return app.toast(`${act === "copy" ? `A copy of ${esc(name)} is right after it` : `${esc(name)} is deleted`} · an unsaved edit`,
+      { label: "Undo", run: () => { app.text = before; app.cellsSig = null; renderPrompt(app); } });
+  }
   if (act === "roll") return generate(app);  // the footer's Roll (#341)
   if (act === "more") {
     app.bridge.props.repeat = MORE.find((m) => m > repeats(app)) ?? MORE[0];

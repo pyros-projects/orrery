@@ -131,7 +131,8 @@ Nodes under **orrery**:
     controls where you are, however tall the node: **⏮ ⏭** move *Next clip* to
     the first clip of the scene before or after, **▶** is Roll, **+1 / +2 / +4**
     the clips a Roll plays (a click cycles them) and **🔒** holds the clip; they act
-    on the reel, whichever divider they are clicked in.
+    on the reel, whichever divider they are clicked in. **⧉** duplicates the scene,
+    the copy right after it, and **🗑** deletes it (#344): unsaved edits, with Undo.
     **Jump** beside *Next clip* puts the caret on the scene of the next clip.
     Under the prompt and the dials, the whole width, sits the **preview** (#305); the grip
     above it sizes it, and the node keeps its height. While a run samples it shows the
