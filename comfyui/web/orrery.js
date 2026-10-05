@@ -44,7 +44,7 @@ function mount(node) {
   loadStyles();
   const find = (name) => node.widgets?.find((w) => w.name === name);
   const template = find("template"), preset = find("preset"), home = find("home"), params = find("params");
-  [template, preset, home, params, find("sweep"), find("chain"), find("take")].forEach(hide);
+  [template, preset, home, params, find("sweep"), find("chain"), find("take"), find("shoot")].forEach(hide);
   node.properties = node.properties || {};
 
   // the control_after_generate combo that belongs to an INT widget (seed and segment each have one); newer frontends
@@ -201,6 +201,8 @@ function mount(node) {
     setChain: (name) => { if (!sweep.on && (find("chain")?.value || "") !== name) set("chain", name); },
     // Sample surfing (#206): the take the next run renders; the seed output carries seed + take.
     setTake: (take) => { if (find("take") && Number(find("take").value) !== take) set("take", take); },
+    // The shoot a template's takes go to (#321): the gallery keeps them together; empty for a reel.
+    setShoot: (id) => { if (find("shoot") && (find("shoot").value || "") !== id) set("shoot", id); },
     // The frames wired into the node: they shape width and height (the server reads their size when it runs).
     frames: () => ["first_frame", "last_frame"].filter((name) => node.inputs?.find((i) => i.name === name)?.link != null),
     // the live preview comes from the sampler of the model that passes through this node (#302)

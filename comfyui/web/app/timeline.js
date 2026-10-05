@@ -6,6 +6,7 @@ import { icon } from "./icons.js";
 import { shape } from "./model.js";
 import { fetchTemplates, useVersion, versionOf, versionText } from "./versions.js";
 import { paintStageLive, showInStage } from "./stage.js";
+import { ghostHTML, kept, playAll, statHTML, stripHeadHTML } from "./results.js";
 
 // The clips the chain holds, fetched again after every run, and the templates its takes were made with (#242).
 export async function loadChain(app) {
@@ -61,7 +62,8 @@ export function sectionHTML(app, c) {
   }
   const clips = new Map((app.data.chain?.clips || []).map((x) => [x.segment, x]));
   const segment = Number(app.bridge.getSegment()), segs = segmentsOf(c, clips);
-  return `<div class="cm-clips">${segs.map((s) => bigClipHTML(app, s, clips.get(s), segment)).join("")}</div>${segs.map((s) => takesHTML(app, s, c.title)).join("")}`;
+  return `<div class="cm-clips">${segs.map((s) => bigClipHTML(app, s, clips.get(s), segment)).join("")}</div>`
+    + segs.map((s) => takesHTML(app, s, c, clips.has(s) || s === segment)).join("");
 }
 
 const TAKE = /^seg_\d{4}_[0-9a-f]{8}$/;  // an Orrery Film take's folder
@@ -71,19 +73,19 @@ function delHTML(folder) {
   return `<span class="del" role="button" data-del="${esc(folder)}" title="Delete this take" aria-label="Delete this take">${icon("x")}</span>`;
 }
 
-// The column beside a clip's takes (#245): play all on top, the clip in numbers, deleting at the bottom.
-export function takesHeadHTML(app, s, takes, scene = "") {
-  const film = takes.findIndex((t) => t.active), on = takes[film];
-  const newest = takes.map((t) => String(t.created || "")).sort().pop().slice(11, 16), older = takes.filter((t) => versionOf(app, t)).length;
-  const row = (label, value, cls = "") => `<span class="${cls}"><i>${label}</i><b>${value}</b></span>`;
-  return `<span class="cm-takes-head">`
-    + `<span class="th-top"><span class="btn ghost th-play" role="button" data-playall title="Play every take of clip ${s + 1} at once, from the start, to compare them">${icon("play")}play all</span></span>`
-    + `<span class="th-mid"><span class="th-clip">clip ${s + 1}</span>${scene ? `<span class="th-scene" title="${esc(scene)}">${esc(scene)}</span>` : ""}`
-    + `<span class="th-stats">${row("takes", takes.length)}${row("in the film", on ? `#${film + 1}` : "none")}`
-    + (on ? row("seed", `${on.seed ?? "?"}${on.take ? ` + ${on.take}` : ""}`) : "") + (newest ? row("newest", newest) : "")
-    + (older ? row("✎ other prompt", older, "th-ver") : "") + `</span></span>`
-    + `<span class="th-low"><span class="btn ghost" role="button" data-clear="others" title="Delete every take of clip ${s + 1} but the one in the film">${icon("trash")}the others</span>`
-    + `<span class="btn ghost danger" role="button" data-clear="all" title="Delete every take of clip ${s + 1}, the one in the film too: the film then ends before it">${icon("trash")}all</span></span></span>`;
+// The column beside a clip's takes (#245, #319), the results' head: + take, ×N, 📌 and play all on top, the clip in
+// numbers, deleting at the bottom. `ready`: the clip is made, or the next to make, so + take can make one.
+export function takesHeadHTML(app, s, takes, c = {}, ready = true) {
+  const film = takes.findIndex((t) => t.active), on = takes[film], n = c.index ?? 0;
+  const newest = takes.map((t) => String(t.created || "")).sort().pop()?.slice(11, 16), older = takes.filter((t) => versionOf(app, t)).length;
+  const attr = (act) => (act === "play" ? "data-playall" : `data-scene-act="${act}" data-chunk="${n}" data-seg="${s}"`);
+  return stripHeadHTML(app, { attr, keep: kept(app, n), play: takes.length > 1, title: `clip ${s + 1}`, sub: c.title || "",
+    off: app.state.sweepQueue ? "A sweep is queueing" : ready ? "" : `Clip ${s + 1} comes after clip ${s}: make that one first`,
+    stats: statHTML("takes", takes.length) + statHTML("circled", on ? `#${film + 1}` : "none")
+      + (on ? statHTML("seed", `${on.seed ?? "?"}${on.take ? ` + ${on.take}` : ""}`) : "") + (newest ? statHTML("newest", newest) : "")
+      + (older ? statHTML("✎ other prompt", older, "th-ver") : ""),
+    low: takes.length ? (takes.length > 1 ? ghostHTML('data-clear="others"', `${icon("trash")}the others`, `Delete every take of clip ${s + 1} but the circled one`) : "")
+      + ghostHTML('data-clear="all"', `${icon("trash")}all`, `Delete every take of clip ${s + 1}, the circled one too: the film then ends before it`, 'data-danger="1"') : "" });
 }
 
 // ✎ on a take made with another prompt (#242): its title says what changed, a click puts that prompt in the editor.
@@ -103,15 +105,14 @@ export function takeVars(app, least = Number(app.data.take_min) || 54) {
   return `--take-w:${Math.round(w)}px;--take-h:${Math.round(h)}px;--take-r:${(w / h).toFixed(4)}`;
 }
 
-// A clip's takes (#206), where it has more than one: hover plays one, a click puts it in the film.
-function takesHTML(app, s, scene = "") {
+// A clip's takes (#206), from its first (#319): hover plays one, a click shows it in the preview, which circles it.
+function takesHTML(app, s, c, ready) {
   const takes = app.data.chain?.takes?.[s] || [];
-  if (takes.length < 2) return "";
-  return `<div class="cm-takes" data-seg="${s}" style="${takeVars(app)}">${takesHeadHTML(app, s, takes, scene)}<div class="cm-takes-list">${takes.map((t, i) =>
+  return `<div class="cm-takes" data-seg="${s}" style="${takeVars(app)}">${takesHeadHTML(app, s, takes, c, ready)}<div class="cm-takes-list">${takes.map((t, i) =>
     `<button type="button" class="take${t.active ? " on" : ""}" data-take="${esc(t.folder)}" data-seg="${s}" title="Take ${i + 1} · seed ${t.seed ?? "?"}`
-    + `${t.take ? ` + ${t.take}` : ""}${t.active ? " · in the film" : " · click to put it in the film"}">`
+    + `${t.take ? ` + ${t.take}` : ""}${t.active ? " · circled: in the film" : " · click to show it"}">`
     + `<img loading="lazy" alt="" src="${app.api.takeThumbURL(app.bridge.chain(), t.folder)}"><span class="n">${i + 1}</span>${verHTML(app, t)}${delHTML(t.folder)}</button>`).join("")}`
-    + `<span class="grip" data-grip title="Drag to size the takes"></span></div></div>`;
+    + `${takes.length ? '<span class="grip" data-grip title="Drag to size the takes"></span>' : ""}</div></div>`;
 }
 
 // Sample surfing (#206): the take picked is the one the film, REMEMBER: and the next clip use. A take that rolled
@@ -122,7 +123,7 @@ export async function pickTake(app, segment, folder) {
     followSeed(app, got);
     await loadChain(app);
     app.refreshRun?.();
-    app.toast(`This take of clip ${segment + 1} is in the film`);
+    app.toast(`Take circled: clip ${segment + 1} plays it in the film`);
   } catch (err) { app.fail(err); }
 }
 
@@ -130,29 +131,17 @@ function followSeed(app, got) {
   if (!got.take && got.seed != null && Number(got.seed) !== Number(app.bridge.getSeed())) app.bridge.setSeed(Number(got.seed));
 }
 
-// Every take of a clip at once (#238): from the start and in step, muted and looping, to compare their motion;
-// again, and the stills are back.
-function playAll(app, strip, button) {
-  const on = !strip.classList.contains("playing");
-  strip.classList.toggle("playing", on);
-  button.innerHTML = on ? `${icon("stop")}stop all` : `${icon("play")}play all`;
-  const takes = [...strip.querySelectorAll(".take")];
-  if (!on) return takes.forEach((t) => t.querySelector("video")?.remove());
-  const videos = takes.map((t) => {
-    let v = t.querySelector("video");
-    if (!v) {
-      v = Object.assign(document.createElement("video"), { muted: true, loop: true, playsInline: true, preload: "auto" });
-      v.src = app.api.takeVideoURL(app.bridge.chain(), t.dataset.take);
-      t.prepend(v);
-    }
-    v.pause();
-    return v;
-  });
-  Promise.all(videos.map((v) => (v.readyState >= 3 ? null : new Promise((ok) => v.addEventListener("canplay", ok, { once: true }))))).then(() => {
-    if (!strip.classList.contains("playing")) return;
-    videos.forEach((v) => { v.currentTime = 0; v.play().catch(() => {}); });
-  });
-}
+// Every take of a clip at once (#238): their videos made from the stills, from the start and in step.
+const takeVideo = (app) => (t) => {
+  let v = t.querySelector("video");
+  if (!v) {
+    v = Object.assign(document.createElement("video"), { muted: true, loop: true, playsInline: true, preload: "auto" });
+    v.dataset.made = "1";
+    v.src = app.api.takeVideoURL(app.bridge.chain(), t.dataset.take);
+    t.prepend(v);
+  }
+  return v;
+};
 
 // A clip's takes deleted at once (#234), asked in place: all but the one in the film, or that one too, and then
 // the film ends before the clip, and the next clip is that one.
@@ -163,7 +152,7 @@ async function clearTakes(app, segment, keep) {
     if (ended) app.bridge.setSegment(segment);
     await loadChain(app);
     app.refreshRun?.();
-    app.toast(keep ? `${got.deleted} takes of clip ${segment + 1} deleted; the one in the film stays`
+    app.toast(keep ? `${got.deleted} takes of clip ${segment + 1} deleted; the circled one stays`
       : `Clip ${segment + 1} deleted with its ${got.deleted} takes: the film ends before it${ended ? `, and the next clip is ${segment + 1}` : ""}`);
   } catch (err) { app.fail(err); }
 }
@@ -293,7 +282,7 @@ export function wireClips(app, box) {
     if (head) {
       const strip = head.closest(".cm-takes"), s = Number(strip.dataset.seg), count = strip.querySelectorAll(".take").length;
       const play = e.target.closest("[data-playall]");
-      if (play) return playAll(app, strip, play);
+      if (play) return playAll(strip, play, takeVideo(app));
       if (e.target.closest("[data-clearno]")) return head.querySelector(".ask")?.remove();
       const yes = e.target.closest("[data-clearyes]");
       if (yes) return clearTakes(app, s, yes.dataset.clearyes === "others");
@@ -301,7 +290,7 @@ export function wireClips(app, box) {
       if (!ask) return;
       head.querySelector(".ask")?.remove();
       const others = ask.dataset.clear === "others";
-      return head.insertAdjacentHTML("beforeend", `<span class="ask">${others ? `Delete ${count - 1} takes? The one in the film stays.`
+      return head.insertAdjacentHTML("beforeend", `<span class="ask">${others ? `Delete ${count - 1} takes? The circled one stays.`
         : `Delete all ${count} takes? The film ends before clip ${s + 1}.`}<span class="btn danger" role="button" data-clearyes="${ask.dataset.clear}">Delete</span>`
         + `<span class="btn ghost" role="button" data-clearno>Keep</span></span>`);
     }
@@ -318,7 +307,7 @@ export function wireClips(app, box) {
       return host.insertAdjacentHTML("beforeend", `<span class="ask">${deleteQuestion(app, host)}`
         + `<span class="btn danger" role="button" data-delyes>Delete</span><span class="btn ghost" role="button" data-delno>Keep</span></span>`);
     }
-    // a click shows a take or a clip in the preview (#305); the preview's Put in the film puts a take in the film
+    // a click shows a take or a clip in the preview (#305); the preview's Circle this take puts it in the film
     const take = e.target.closest(".take");
     if (take) return showInStage(app, { seg: Number(take.dataset.seg), folder: take.dataset.take });
     const clip = e.target.closest(".tl-clip:not(.empty)");

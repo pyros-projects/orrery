@@ -131,9 +131,9 @@ Nodes under **orrery**:
     above it sizes it, and the node keeps its height. While a run samples it shows the
     live preview, then what is shown: the clip or the take clicked under a reel's scene,
     playing with its controls, or a template's result. A click only shows: the take that
-    counts, the one in the film or a single run's output, has the golden border, and the
-    preview's **Put in the film** or **Use this take** chooses another (only choosing gives
-    the node a take's seed). For a reel's clip in the film, **Pick frames** steps through it
+    counts, the **circled** one (the film's, in a reel), has the golden border, and the
+    preview's **Circle this take** chooses another (#319; only circling gives the node a
+    take's seed). For a reel's clip in the film, **Pick frames** steps through it
     frame by frame (← →, M marks a frame) and **Write REMEMBER:** puts the frames marked
     into its scene as `REMEMBER: frames 12, 40 as …` (#223).
     A template without scenes (a Krea prompt, an `@h3` scene) has its
@@ -143,26 +143,33 @@ Nodes under **orrery**:
     input unconnected the empty result says how to wire it), then what
     the run made, a picture, a clip or its sound, as its Save, Preview or Orrery Log
     nodes wrote it (#302). Every run becomes a **take**, lined up under the result like a
-    photo viewer: a click shows it, a fresh run's take is the output. Beside the
-    takes, **+** adds takes, **×N** says how many a Generate makes and **📌**
-    keeps the rolled prompt so only the sampler's noise changes, as in a
-    reel's scenes; the gear's *Sample surfing* numbers their seeds or follows
+    photo viewer: a click shows it, a fresh run's take is circled. Beside the
+    takes stands the strip's head, the same for a reel's clips (#319): **+ take** adds
+    takes, **×N** says how many it makes and **📌** keeps the rolled prompt so only
+    the sampler's noise changes; with two videos or more, **▶ all** plays them at
+    once. The gear's *Sample surfing* numbers their seeds or follows
     the node's control. The takes are kept on the node, per preset, and saved
     with the workflow; × takes one off the list (**the others** and **all**
-    take more), its files stay where they are. A reel opens in the **clips view**: the editor cut into one cell
+    take more), its files stay where they are. They make a **shoot** (#320), like a
+    sitting in a photo studio: **finish shoot** folds its takes into the **earlier
+    shoots** under the strip, each shown by its circled take, and the next Roll
+    starts a new one; a click on an earlier shoot opens it again, and the next Roll
+    adds to it. The node keeps the last twelve shoots of a preset. A grid's or a
+    sweep's runs at one seed are one take: a creator's four views come in together,
+    as a mosaic in the strip and side by side in the preview. A reel opens in the **clips view**: the editor cut into one cell
     per SCENE, each followed by that scene's clips as Orrery Film (or H3
     Motion Context's Chain Video) keeps them, big: a clip's shorter side is
     the **Clip size** in the gear (360 px unless set otherwise), as far as the
     editor is wide. Hover plays one, a click shows it in the preview; small dashed boxes are
-    clips not rendered yet. A scene's divider has its buttons: +
-    **Add takes** of its clip (its first, or one more) and stay on the scene,
-    ⏭ go to the **next scene** (Next clip becomes its first clip), and ⏩ go
-    there **and add takes** of its clip (the box of the clip rendering shows it
-    as it forms: see Orrery Prompt's `model` below). **Sample surfing**: ×1 beside
-    + turns to ×2, ×4, ×8, and + renders that many **takes** of the
-    clip. They line up under it; hover plays one, a click shows it in the preview, whose
-    **Put in the film** puts it in the film (the next clip and `REMEMBER:` then use it too), and the clips last made
-    after it come back with it: no path is lost (#213). 📌 in a scene keeps its
+    clips not rendered yet. Under each clip, made or the next to make, stands its
+    strip of **takes** with the results' head (#319): **+ take** renders a take of
+    that clip (the box of the clip rendering shows it as it forms: see Orrery
+    Prompt's `model` below); a clip whose turn has not come yet waits for the one
+    before it. **Sample surfing**: ×1 beside + turns to ×2, ×4, ×8, and + renders
+    that many takes. They line up under the clip; hover plays one, a click shows it
+    in the preview, whose **Circle this take** puts it in the film (the next clip and
+    `REMEMBER:` then use it too), and the clips last made
+    after it come back with it: no path is lost (#213). 📌 in a clip's strip keeps its scene's
     rolled prompt, so the takes change only the sampler's noise (the Orrery
     Prompt's `seed` output carries seed + take into the noise, as in the
     example workflows); without it each take rolls anew, and the one you pick
@@ -172,12 +179,12 @@ Nodes under **orrery**:
     at the end of a clip's takes sizes them all, in the clip's shape. A × on
     a take, or on the clip in its box, deletes it from disk (it asks first): the
     film then plays the clip's newest other take, or ends before the clip.
-    Beside a clip's takes stands a column that stays with them as you scroll
-    (#245): **play all** on top plays every take of the clip at once, from the
-    start and in step, to compare their motion (**stop all** stops them, #238);
-    in the middle the clip and its scene in numbers (its takes, the one in the
-    film, its seed, the newest, how many were made with another prompt); at the
-    bottom **the others** deletes every take but the one in the film, and
+    The strip's head stays with the takes as you scroll
+    (#245): on top **+ take**, ×N, 📌 and **▶ all**, which plays every take of the clip at once, from the
+    start and in step, to compare their motion (**■ stop** stops them, #238);
+    in the middle the clip and its scene in numbers (its takes, the circled
+    one, its seed, the newest, how many were made with another prompt); at the
+    bottom **the others** deletes every take but the circled one, and
     **all** every one, the film then ending before the clip; each asks first,
     and takes made on another path stay (#234). **Tree**
     beside *Jump* opens the **take tree** (#213): every take of the reel's run,
@@ -246,9 +253,10 @@ Nodes under **orrery**:
     On the left (#290): **All outputs**, **All images**, **All videos**, then the
     days, newest first, each with its `images` and `videos`, then the
     collections. What belongs together is one card, an album with up to eight
-    of its pictures: a sweep's or a grid's runs, a reel's clips, and inside a
-    reel each scene's takes, named by its `SCENE` line; a click opens it, the
-    bar above leads back. A filter (This prompt, a rating, a pick) shows the
+    of its pictures: a shoot's takes, its circled take first, and inside it each
+    grid's or sweep's runs (#321); a sweep's or a grid's runs outside a shoot; a
+    reel's clips, and inside a reel each scene's takes, named by its `SCENE` line;
+    a click opens it, the bar above leads back. A filter (This prompt, a rating, a pick) shows the
     outputs themselves. Collections hold outputs without moving them, one
     output in as many as you like (folders from before are collections now):
     drag cards or albums onto one (a selected card brings the whole

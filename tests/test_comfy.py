@@ -93,6 +93,17 @@ def test_a_reels_clip_is_logged_with_its_reel_and_its_scene(home):
     assert not {"segment", "chain", "chunk"} & set(row)
 
 
+def test_a_templates_take_is_logged_with_its_shoot_and_a_reels_clip_without(home):
+    """#321: the Gallery's album of a shoot; a reel's clips have their reel's."""
+    outputs = OrreryPrompt().run("a __animal__", 2, "text", home=str(home), shoot="2026-10-05T10:00:00.000Z")
+    [row] = log_outputs(Home(home), outputs[1], ["out/a.png"])
+    assert row["shoot"] == "2026-10-05T10:00:00.000Z"
+    outputs = OrreryPrompt().run("@h3 t2va\nSCENE a\nSHOT 5s\nA fox.", 2, "h3-base", home=str(home), shoot="S")
+    [row] = log_outputs(Home(home), outputs[1], ["out/clip.mp4"])
+    assert "shoot" not in row
+    assert OrreryPrompt.IS_CHANGED("a", 1, "text", shoot="S") != OrreryPrompt.IS_CHANGED("a", 1, "text", shoot="T")
+
+
 def test_log_without_media_still_records_the_picks(home):
     _, picks, *_ = run_prompt("a __animal__", 2, "text", str(home))
     [row] = log_outputs(Home(home), picks, [])
@@ -687,17 +698,21 @@ def test_a_reel_tells_the_app_which_segment_runs(home, monkeypatch):
     monkeypatch.setitem(sys.modules, "server", server)
     reel = "@h3 t2va\nCHUNK a\nSHOT 5s\nA fox.\nCHUNK b repeat 2\nSHOT 5s\nThe fox again."
     OrreryPrompt().run(reel, 1, "h3-base", home=str(home), segment=2, unique_id="427")
-    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": 2, "end": False, "seed": 1, "take": 0})]
+    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": 2, "end": False, "seed": 1, "take": 0, "roll": ""})]
     sent.clear()
     OrreryPrompt().run("@h3 t2va\nSHOT 5s\nA fox.", 1, "h3-base", home=str(home), unique_id="427", take=3)
-    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": -1, "end": False, "seed": 1, "take": 3})]
+    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": -1, "end": False, "seed": 1, "take": 3, "roll": ""})]
     sent.clear()  # not a reel: segment -1, its result a take under the prompt (#211)
+    OrreryPrompt().run("A fox, {seen from the side|seen from the front}.\n@grid {seen from the side|seen from the front}", 1, "text",
+                       home=str(home), unique_id="427", sweep="1|sweeps/fox 2026-10-05 10.00")
+    assert sent[0][1]["roll"] == "sweeps/fox 2026-10-05 10.00"  # a grid's run: its Roll's folder, so its views are one take (#320)
+    sent.clear()
     blocker = types.ModuleType("comfy_execution.graph_utils")
     blocker.ExecutionBlocker = lambda v: v
     monkeypatch.setitem(sys.modules, "comfy_execution", types.ModuleType("comfy_execution"))
     monkeypatch.setitem(sys.modules, "comfy_execution.graph_utils", blocker)
     OrreryPrompt().run(reel, 1, "h3-base", home=str(home), segment=3, unique_id="427")
-    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": 3, "end": True, "seed": None, "take": 0})]
+    assert sent == [("orrery.segment", {"node": "427", "prompt_id": None, "segment": 3, "end": True, "seed": None, "take": 0, "roll": ""})]
 
 
 def test_comments_neither_roll_nor_ask_for_libraries(home):

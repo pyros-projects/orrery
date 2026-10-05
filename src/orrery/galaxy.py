@@ -376,11 +376,25 @@ def day_of(ts, tz: int = 0) -> str:
     return (when + timedelta(minutes=tz)).date().isoformat()
 
 
+def shoot_of(row: dict) -> str | None:
+    """The shoot a template's take was made in (#321): `shoot:<its preset or template>|<the shoot's id>`."""
+    if row.get("shoot") and not row.get("chunks"):
+        return "shoot:{}|{}".format(row.get("preset") or row.get("template"), row["shoot"])
+    return None
+
+
+def _sweep_album(row: dict) -> str | None:
+    return f"sweep:{sweep}" if (sweep := sweep_of(row)) else None
+
+
 def album_of(row: dict) -> str | None:
-    """The album a row belongs to: `sweep:<its folder>`, `reel:<its chain>` (a reel's clips logged before the
-    chain was, by preset or template and seed); None for an output on its own."""
-    if sweep := sweep_of(row):
-        return f"sweep:{sweep}"
+    """The album a row belongs to: `shoot:<its shoot>` (#321; a grid or a sweep in it is an album inside it),
+    `sweep:<its folder>`, `reel:<its chain>` (a reel's clips logged before the chain was, by preset or template and
+    seed); None for an output on its own."""
+    if shoot := shoot_of(row):
+        return shoot
+    if sweep := _sweep_album(row):
+        return sweep
     if row.get("chunks"):
         reel = row.get("chain") or "{}|{}".format(row.get("preset") or row.get("template"), row.get("seed"))
         return f"reel:{reel}"
@@ -396,14 +410,40 @@ def scene_of(row: dict) -> str | None:
 
 
 def in_album(row: dict, key: str) -> bool:
-    return (scene_of(row) if key.startswith("scene:") else album_of(row)) == key
+    inner = scene_of if key.startswith("scene:") else _sweep_album if key.startswith("sweep:") else album_of
+    return inner(row) == key
+
+
+@locked
+def circle(home: Home, shoot: str, files) -> int:
+    """The take circled in a shoot (#321), by its files' names: its rows lead the shoot's album, and the ones
+    circled in that shoot before step back. How many rows it marked."""
+    names = {Path(f).name for f in files or [] if isinstance(f, str) and f}
+    if not shoot or not names:
+        raise ValueError("Circling needs the shoot and the files of its take.")
+    marked = 0
+
+    def edit(r: dict) -> dict:
+        nonlocal marked
+        if r.get("shoot") != shoot:
+            return r
+        on = bool(r.get("media")) and Path(r["media"]).name in names
+        marked += on
+        if on == bool(r.get("circled")):
+            return r
+        return {**r, "circled": True} if on else {k: v for k, v in r.items() if k != "circled"}
+
+    _edit_rows(home, edit)
+    return marked
 
 
 def cards(rows: list[dict], album: str | None = None) -> list[dict]:
     """What the overview shows of these rows, newest first (#297, #298): an output on its own, or an album of two
-    or more, a sweep's or a reel's; inside a reel, its scenes are albums; inside a sweep or a scene, the outputs.
-    An album's card carries its ids, newest first, and the first PREVIEWS with a picture to show."""
-    group = album_of if album is None else scene_of if album.startswith("reel:") else None
+    or more, a shoot's, a sweep's or a reel's; inside a reel, its scenes are albums, inside a shoot its grids and
+    sweeps (#321); inside a sweep or a scene, the outputs. An album's card carries its ids, newest first, and the
+    first PREVIEWS with a picture to show, a shoot's circled take first."""
+    group = (album_of if album is None else scene_of if album.startswith("reel:")
+             else _sweep_album if album.startswith("shoot:") else None)
     groups: dict[str, list[dict]] = {}
     for r in rows:
         key = group(r) if group else None
@@ -415,7 +455,8 @@ def cards(rows: list[dict], album: str | None = None) -> list[dict]:
             continue
         out.append({"kind": "album", "type": key.partition(":")[0], "key": key, "count": len(members),
                     "ids": [r["id"] for r in members], "ts": max(r.get("ts") or "" for r in members),
-                    "previews": [r["id"] for r in members if r["kind"] in ("image", "video")][:PREVIEWS],
+                    "previews": [r["id"] for r in sorted(members, key=lambda r: not r.get("circled"))
+                                 if r["kind"] in ("image", "video")][:PREVIEWS],
                     "videos": sum(r["kind"] == "video" for r in members)})
     return sorted(out, key=lambda c: c["ts"], reverse=True)
 

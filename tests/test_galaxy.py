@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 import av
 import pytest
@@ -8,6 +9,7 @@ from orrery.galaxy import (
     FACTORS,
     add_collection,
     cards,
+    circle,
     collect,
     collections,
     collections_of,
@@ -15,6 +17,7 @@ from orrery.galaxy import (
     delete,
     delete_collection,
     export,
+    in_album,
     media_path,
     rate,
     read_rows,
@@ -322,6 +325,32 @@ def test_sweeps_and_reels_are_albums_and_a_reels_scenes_albums_inside_it():
     assert [c["id"] for c in cards(rows[:2], "sweep:sweeps/$view 1")] == ["s1", "s2"]  # inside a sweep: the outputs
     many = [r(f"p{i}", 59 - i, folder="sweeps/big", kind="none" if i == 0 else "image") for i in range(12)]
     assert cards(many)[0]["previews"] == [f"p{i}" for i in range(1, 9)]  # eight pictures, none without a file
+
+
+def test_a_shoot_is_an_album_its_grids_albums_inside_it_and_its_circled_take_first(home, tmp_path):
+    """#321: a template's takes in one shoot; a grid's runs in it stay together inside; a reel's clips keep their reel."""
+    def r(n, ts, **more):
+        return {"id": n, "ts": f"2026-10-05T10:{ts:02d}:00+00:00", "kind": "image", "preset": "krea/09", **more}
+    grid = "sweeps/$view 2026-10-05 10.00"
+    rows = [r("g1", 50, shoot="S", folder=grid), r("g2", 49, shoot="S", folder=grid), r("t1", 48, shoot="S"),
+            r("other", 47, shoot="T"), r("clip", 46, shoot="S", chunks=2, segment=0, chain="reels/x", kind="video")]
+    top = cards(rows)
+    assert [(c["kind"], c.get("key") or c["id"]) for c in top] == [("album", "shoot:krea/09|S"), ("row", "other"), ("row", "clip")]
+    assert top[0]["count"] == 3
+    inside = cards([x for x in rows if in_album(x, "shoot:krea/09|S")], "shoot:krea/09|S")
+    assert [(c["kind"], c.get("key") or c["id"]) for c in inside] == [("album", f"sweep:{grid}"), ("row", "t1")]
+    assert [x["id"] for x in rows if in_album(x, f"sweep:{grid}")] == ["g1", "g2"]  # the grid inside it opens too
+    files = [image(tmp_path, f"{n}.png", (32, 32)) for n in ("a", "b", "c")]
+    write_rows(home, [{**row(files[0], seed=1), "shoot": "S"}, {**row(files[1], seed=2), "shoot": "S"}, {**row(files[2], seed=3), "shoot": "T"}])
+    circled = lambda: sorted(Path(x["media"]).name for x in read_rows(Home(home)) if x.get("circled"))
+    assert circle(Home(home), "S", ["b.png"]) == 1 and circled() == ["b.png"]
+    assert circle(Home(home), "S", ["/out/a.png"]) == 1  # another take circled: the one before steps back
+    assert circled() == ["a.png"]
+    shot = [{**x, "id": row_id(x), "kind": "image"} for x in read_rows(Home(home)) if x.get("shoot") == "S"]
+    lead = next(x["id"] for x in shot if x.get("circled"))
+    assert cards(shot)[0]["previews"][0] == lead  # the circled take leads the shoot's card
+    with pytest.raises(ValueError):
+        circle(Home(home), "S", [])
 
 
 def test_the_tree_counts_every_output_its_pictures_its_videos_and_each_day():

@@ -22,7 +22,7 @@ const filtering = (s) => s.gScope !== "all" || !!s.gRating || !!s.gPick  // a fi
   || !!(gfilt(s).name.trim() || gfilt(s).sub || gfilt(s).since || gfilt(s).grep.trim());
 const SUBS = [["", "Every kind"], ["image", "Images"], ["video", "Videos"], ["reel", "Reels' clips"], ["sweep", "Sweeps' runs"]];
 const SINCE = [[0, "Any time"], [1, "Today"], [7, "Last 7 days"], [30, "Last 30 days"]];
-const TYPE = { sweep: ["Sweep", "chart"], reel: ["Reel", "film"], scene: ["Scene", "play"] };
+const TYPE = { shoot: ["Shoot", "image"], sweep: ["Sweep", "chart"], reel: ["Reel", "film"], scene: ["Scene", "play"] };
 
 // What the place in the tree (gPlace: a view of every day or of one, or a collection) or the album open in it shows.
 // The server groups and limits; the cards come newest first.
@@ -189,6 +189,10 @@ function albumNames(app, c) {
   const preset = c.preset ? app.card(c.preset)?.title || c.preset : "";
   if (c.type === "scene") return { title: c.title, sub: `scene ${c.chunk + 1}` };
   if (c.type === "reel") return { title: preset || c.title, sub: preset ? c.title : "reel" };
+  if (c.type === "shoot") {  // its title is when it began (#321)
+    const at = new Date(c.title), when = Number.isNaN(at.getTime()) ? "" : at.toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+    return { title: preset || "Shoot", sub: `shoot${when ? ` · ${when}` : ""}` };
+  }
   return { title: preset || "Sweep", sub: c.title };
 }
 
@@ -197,7 +201,8 @@ function albumHTML(app, c) {
   const { title, sub } = albumNames(app, c), [label, ico] = TYPE[c.type];
   const n = c.previews.length, cols = n <= 1 ? 1 : n <= 4 ? 2 : 3;  // the pictures fill the card, row by row
   const pics = c.previews.map((id) => `<img loading="lazy" draggable="false" src="${esc(app.api.thumbURL(id))}" alt="">`).join("");
-  const what = c.type === "sweep" ? `${c.count} runs` : c.type === "reel" ? `${c.count} clips` : `${c.count} takes`;
+  const what = c.type === "sweep" ? `${c.count} runs` : c.type === "reel" ? `${c.count} clips`
+    : c.type === "shoot" ? `${c.count} ${c.videos === c.count ? "videos" : "pictures"}` : `${c.count} takes`;
   return `<div class="gcard album" draggable="true" data-galbum="${esc(c.key)}" tabindex="0" role="button" title="${esc(`${title} · ${sub} · ${what} · click to open`)}">`
     + `<div class="agrid" style="--cols:${cols}">${pics || `<span class="aempty">${icon(ico)}</span>`}</div>`
     + `<span class="abadge">${icon(ico)}${label} · ${c.count}</span>`
@@ -622,7 +627,7 @@ async function onClick(app, e, open, rows) {
   const alb = e.target.closest("[data-galbum]");
   if (alb) {
     const c = app.data.gCards.find((x) => x.key === alb.dataset.galbum);
-    return c && showAlbum(app, { key: c.key, title: albumNames(app, c).title + (c.type === "sweep" ? ` · ${c.title}` : "") });
+    return c && showAlbum(app, { key: c.key, title: albumNames(app, c).title + (c.type === "sweep" ? ` · ${c.title}` : c.type === "shoot" ? ` · ${albumNames(app, c).sub}` : "") });
   }
   const gs = e.target.closest("[data-gs]");
   // a filter shows the outputs themselves, every album opened: the cards come again
