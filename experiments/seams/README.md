@@ -1,5 +1,21 @@
 # Seams: how a film's joins compare with the inside of its clips
 
+## The seam meter
+
+One yardstick for every tool that chains H3 clips (#360): `seam_meter/meter.py`, plain numpy, used by the ComfyUI
+node and by `measure.py`. For each seam: the picture's jump in mean luma and pixel MAE from a clip's last frame to the
+next one's first, a luma pulse (how far the 6 frames after the seam stray from the line between the frames around
+them: a flash), the sound's sample step and its change in level from the 20 ms before to the 20 ms after; each with
+its percentile among the same quantity everywhere inside the clips.
+
+- **In ComfyUI**: copy `seam_meter/` into `custom_nodes/orrery-seam-meter` and put *Orrery Seam Meter* at the end of
+  a workflow, on the film's frames and sound. `seams`: `121,99` (the first clip 121 frames, then 99 each) or
+  `@121,220,319` (where clips start). It writes `output/seams/<label>-<time>.json`.
+- **From the command line**: `uv run python experiments/seams/measure.py <run>` for an Orrery Film run (the seams
+  where its takes join), or `measure.py film.mp4 --seams 121,99 --label continuum` for any film.
+
+## First look
+
 `measure.py` reads a film as Orrery Film stores it (each take's `video.mp4`, pinned frames trimmed, and `audio.npy`)
 and compares every seam with the steps inside the clips: the picture's mean luma jump and pixel MAE between the last
 frame of a clip and the first of the next, and the sound's sample step and 20 ms level change across the join. Each
