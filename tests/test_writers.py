@@ -117,10 +117,10 @@ def test_a_writer_without_its_pictures_writes_from_what_came_along(home):
     """#334: the story without frames imagines them; a prompt from an image without one writes from the prompt;
     a steer goes last."""
     story = writers.request(Home(home), "story", "@h3 fl2va\nSHOT 5s: static\nA fox.", 1, {}, {}, given=[])
-    assert "No pictures came along this time. Imagine the first and the last frame" in story
+    assert "No pictures came along this time. There is no first frame and no last frame this time: imagine them" in story
     assert "Picture 1 is" not in story.split("No pictures came along")[1]
     one = writers.request(Home(home), "story", "@h3 fl2va\nSHOT 5s: static\nA fox.", 1, {}, {}, given=["the first frame"])
-    assert "Picture 1 is the first frame." in one
+    assert "Picture 1 is the first frame. There is no last frame this time: imagine it" in one
     describe = writers.request(Home(home), "describe", "a photo of a red fox in snow", 1, {}, {}, steer="as a woodcut", given=[])
     assert "Write the prompt from this one instead" in describe and "a photo of a red fox in snow" in describe
     assert describe.endswith("Steer it: as a woodcut.")

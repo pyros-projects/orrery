@@ -37,18 +37,20 @@ MARK = "[this part]"
 
 
 def request(kind: str, what: str, context: str, n: int = 3, steer: str = "", have: list[str] | tuple = (),
-            frames: int = 0, pictures: list[str] = ()) -> str:
+            frames: int = 0, pictures: list[str] = (), labels: list[str] | None = None) -> str:
     """The prompt for N takes of a slot, a gallery picture's slot or a `> enhance` line (a library's: `for_library`).
     `context`: the prompt as it rolls with the place marked (MARK), or for `enhance` the passage the line rewrites;
-    `what`: the slot's directions or the rewrite's instruction; `pictures`: those a slot names, after the frames (#174)."""
+    `what`: the slot's directions or the rewrite's instruction; `pictures`: those a slot names, then those sent along
+    (#174, #335), after the frames; `labels`: what each of them is."""
     parts = ["You write for a text-to-image and text-to-video prompt generator."]
     if frames:
         parts.append(f"The {'first ' if pictures else ''}{frames} images are frames of the previous clip, one a second, "
                      "the last one where it ends. The prompt below makes the clip that follows it: continue from that last "
                      "frame, with the same people and place, and move the story on instead of retelling it.")
     if pictures:
-        parts.append(f"The {'images after them' if frames else 'images'} are "
-                     + ", ".join(f"Picture {i}" for i in range(1, len(pictures) + 1))
+        named = [f"Picture {i}{f' ({labels[i - 1]})' if labels and i <= len(labels) and labels[i - 1] else ''}"
+                 for i in range(1, len(pictures) + 1)]
+        parts.append(f"The {'images after them' if frames else 'images'} are " + ", ".join(named)
                      + ", in that order. Look at them closely, and write what they show: never name them (Picture 1) in a take.")
     if kind == "picture":
         parts.append(context.strip())
@@ -123,13 +125,18 @@ def write_pictures(home, rows: list[dict]) -> list[str]:
     return notes
 
 
-def for_library(template: str, name: str, n: int, directions: str = "", steer: str = "", have=()):
+def for_library(template: str, name: str, n: int, directions: str = "", steer: str = "", have=(), labels=()):
     """(prompt, need) for a library still to be written, in the sheet (#272): N entries, asked as a run asks for it
-    (the lines that use it, its directions), the steer beside them; the entries the sheet has are not written again."""
+    (the lines that use it, its directions), the steer beside them; the entries the sheet has are not written again.
+    `labels`: what the pictures sent along are (#335)."""
     from orrery.autolib import Need, _context, prompt_for
 
     need = Need(name, n, _context(template, name), " ".join(directions.split()), list(have), " ".join(steer.split()))
-    return prompt_for([need]), need
+    prompt = prompt_for([need])
+    if labels:
+        prompt += ("\n\nThe pictures that came along, in this order: "
+                   + "; ".join(f"Picture {i} is {what}" for i, what in enumerate(labels, 1)) + ". Let them shape the entries.")
+    return prompt, need
 
 
 def library_entries(reply: str, need) -> list[str]:

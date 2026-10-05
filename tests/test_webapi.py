@@ -1114,3 +1114,37 @@ def test_a_preset_card_says_what_it_makes_and_when_it_changed_and_the_text_can_b
     assert mine(ok(home, webapi.presets_grep, pattern="a den\\.")["names"]) == ["mine/reel", "mine/scene"]
     assert mine(ok(home, webapi.presets_grep, pattern="DUSK")["names"]) == ["mine/still"]
     assert mine(ok(home, webapi.presets_grep, pattern="den.(")["names"]) == []  # no regex: plain text
+
+
+def test_a_sheet_sends_along_what_its_toggles_say(home, fake_api, tmp_path, monkeypatch):
+    """#335: the frames a slot does not name go along when sent, each told what it is; a library's lines go along
+    only with the prompt; a writer sees only what is sent, the prompt when it is."""
+    frame = tmp_path / "first.png"
+    Image.new("RGB", (64, 48), "orange").save(frame)
+    monkeypatch.setattr(webapi, "_input_picture", lambda name, what="picture": frame if name else None)
+    Home(home).save_config({"llm": {"source": "api", "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})
+    fake_api.answer = lambda body: json.dumps(["a red scarf", "a lantern", "a hat"])
+    ok(home, webapi.llm_takes, kind="slot", what="what she carries", template="A woman with --what she carries--.",
+       sends=["prompt", "first_frame"], frames={"first_frame": "first.png"})
+    content = fake_api.requests[-1]["messages"][0]["content"]
+    assert content[0]["type"] == "image_url" and "The images are Picture 1 (the first frame)" in content[-1]["text"]
+    status, body = api(home, webapi.llm_takes, kind="slot", what="what she carries", template="A woman with --what she carries--.",
+                       sends=["last_frame"])
+    assert status == 400 and "nothing is wired into the Orrery Prompt's last_frame" in body["error"]
+    assert api(home, webapi.llm_takes, kind="slot", what="x", template="A --x--.", sends=["the moon"])[0] == 400
+    (home / "library" / "props.txt").write_text("a cane\na fan\n")
+    fake_api.answer = lambda body: json.dumps(["a parasol", "a cane"])
+    ok(home, webapi.llm_takes, kind="entries", what="props", template="A woman with __props__.", rolls=False,
+       sends=["first_frame"], frames={"first_frame": "first.png"})
+    content = fake_api.requests[-1]["messages"][0]["content"]
+    said = content[-1]["text"]
+    assert content[0]["type"] == "image_url" and "Picture 1 is the first frame. Let them shape the entries." in said
+    assert "A woman with" not in said  # the prompt was not sent: no lines that use it
+    fake_api.answer = lambda body: "SHOT 5s: static\nShe opens the fan."
+    body = ok(home, webapi.write_idea, task="story", template="@h3 fl2va\nSHOT 5s: static\nA woman with a __props__.",
+              sends=["prompt", "first_frame"], frames={"first_frame": "first.png"})
+    content = fake_api.requests[-1]["messages"][0]["content"]
+    said = content[-1]["text"]
+    assert body["text"].startswith("SHOT 5s") and sum(c["type"] == "image_url" for c in content) == 1
+    assert "Picture 1 is the first frame. There is no last frame this time: imagine it" in said  # it has the first
+    assert "The prompt as it rolls at this seed, sent along:\n\nSHOT 5s: static\nA woman with a" in said  # its lines kept

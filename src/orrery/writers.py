@@ -121,10 +121,11 @@ def task_name(task: str, template: str) -> str:
 
 
 def request(home: Home, task: str, template: str, seed: int, libraries, weights, steer: str = "",
-            given: list[str] | None = None) -> str:
+            given: list[str] | None = None, prompt: bool = False) -> str:
     """The writer's prompt, filled in for this template. `template` is the source as the node
     compiles it: dials applied, includes resolved, comments out. `given`: what the pictures sent along are, in
-    order (None: what the writer expects); `steer`: the sheet's steering line (#334)."""
+    order (None: what the writer expects); `steer`: the sheet's steering line (#334); `prompt`: the prompt as it
+    rolls goes along too (#335; Continue has the reel anyway)."""
     from orrery.dsl import with_inline
 
     template, libraries = with_inline(template, libraries)
@@ -166,6 +167,8 @@ def request(home: Home, task: str, template: str, seed: int, libraries, weights,
     parts = [_fill(text(home, name), values).strip()]
     if (note := _came_along(name, given, template, seed, libraries, weights)):
         parts.append(note)
+    if prompt and name != "continue" and "from this one instead" not in note:
+        parts.append(f"The prompt as it rolls at this seed, sent along:\n\n{_rolled(template, seed, libraries, weights)}")
     if steer.strip():
         parts.append(f"Steer it: {' '.join(steer.split())}.")
     return "\n\n".join(parts)
@@ -182,12 +185,26 @@ def _came_along(name: str, given: list[str] | None, template: str, seed: int, li
     if name == "continue" or set(EXPECTS[name]) <= set(given):
         return said + (" Let them shape what you write." if given else "")
     if name == "story":
-        return f"{said} Imagine the first and the last frame from what you know, and write the shot from one to the other."
-    from orrery.dsl import expand
-
-    rolled = expand(template, seed, libraries, weights).text.strip()
+        lacking = [w for w in EXPECTS[name] if w not in given]
+        return (f"{said} There is no {' and no '.join(w.removeprefix('the ') for w in lacking)} this time: imagine "
+                f"{'them' if len(lacking) > 1 else 'it'} from what you know, and write the shot from the first frame to the last.")
     what = "the prompt" if name == "describe" else "the shot"
-    return f"{said} Write {what} from this one instead, as the picture it makes would look:\n\n{rolled}"
+    return (f"{said} Write {what} from this one instead, as the picture it makes would look:\n\n"
+            f"{_rolled(template, seed, libraries, weights)}")
+
+
+def _rolled(template: str, seed: int, libraries, weights) -> str:
+    """The template as it rolls at the seed, line by line (a screenplay keeps its lines): no header, comments,
+    params or bindings (#335)."""
+    from orrery.dsl import Expander, parse
+
+    ex, out = Expander(seed, libraries, weights, parse(template).params.rng), []
+    for ln in template.splitlines():
+        if m := re.match(r"\s*\$(\w+)\s*=\s*(.+)$", ln):
+            ex.bind(m.group(1), m.group(2))
+        elif ln.strip() and not re.match(r"\s*(@h3\b|@(grid|unique|size|seed|batch|rng)\b|#|:)", ln):
+            out.append(ex.expr(ln))
+    return "\n".join(out).strip()
 
 
 # --- what comes back --------------------------------------------------------------------------

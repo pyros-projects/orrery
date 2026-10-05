@@ -290,6 +290,19 @@
 .orrery-app .takes-panel .take-steer { gap: 6px; }
 .orrery-app .takes-panel .take-sel { gap: 6px; align-items: center; }
 .orrery-app .takes-panel .take-list.multi, .orrery-app .takes-panel .take-list.long { max-height: 46vh; overflow-y: auto; }
+/* send along (#335): the sources as toggles, the Gallery's items as small pictures, its newest outputs to pick from */
+.orrery-app .takes-panel .take-send { gap: 5px; align-items: center; }
+.orrery-app .takes-panel .take-send .label { margin-right: 2px; }
+.orrery-app .takes-panel .take-send .chip:disabled { opacity: .45; cursor: default; }
+.orrery-app .takes-panel .take-send .chip.gal { padding: 2px 4px 2px 2px; }
+.orrery-app .takes-panel .take-send .chip.gal img { width: 22px; height: 22px; object-fit: cover; border-radius: 50%; }
+.orrery-app .takes-panel .take-gal { display: flex; flex-wrap: wrap; gap: 4px; max-height: 180px; overflow-y: auto; padding: 6px; background: var(--well); border: 1px solid var(--line); border-radius: 8px; }
+.orrery-app .takes-panel .take-gal[hidden] { display: none; }
+.orrery-app .takes-panel .gpick { position: relative; width: 56px; height: 56px; padding: 0; border: 2px solid transparent; border-radius: 6px; overflow: hidden; background: none; cursor: pointer; }
+.orrery-app .takes-panel .gpick img { width: 100%; height: 100%; object-fit: cover; }
+.orrery-app .takes-panel .gpick[aria-pressed="true"] { border-color: var(--brass); }
+.orrery-app .takes-panel .gpick .v { position: absolute; right: 2px; bottom: 2px; color: #fff; }
+.orrery-app .takes-panel .gpick .v .i { width: 11px; height: 11px; }
 .orrery-app .takes-panel .take-list.long .codebox { margin: 0; max-height: 30vh; overflow: auto; }
 .orrery-app .takes-panel .take-use { gap: 6px; }
 .orrery-app .takes-panel .take-list .tk { margin-left: 8px; font: 500 10.5px var(--mono); color: var(--faint); }

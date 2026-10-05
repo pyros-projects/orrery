@@ -128,6 +128,23 @@ export function markPlace(key, on) {
     .filter(fits).forEach((el) => el.classList.add("t-hl"));
 }
 
+// Send along (#335): what goes to the model beside the request. The prompt as it rolls (always, where the take is
+// written into it: a slot, a rewrite, the reel's next scene), the frames wired into first_frame and last_frame, four
+// stills of the video input, and any item of the Gallery (a video as four of its stills).
+export const SOURCES = [["prompt", "the prompt"], ["first_frame", "first_frame"], ["last_frame", "last_frame"], ["video", "video"]];
+const FRAMES = ["first_frame", "last_frame", "video"];
+export const promptLocked = (kind) => ["slot", "enhance", "continue"].includes(kind);
+
+// What a sheet sends along when it opens: the prompt (not from the Libraries tab, #323); the story both frames; a
+// prompt from an image the first frame wired (else the last), and the prompt only when no frame is.
+export function defaultSends(kind, wired, tab = false) {
+  const out = new Set(), frames = ["first_frame", "last_frame"].filter(wired);
+  if (kind === "describe") out.add(frames[0] || "prompt");
+  else if (!tab || promptLocked(kind)) out.add("prompt");
+  if (kind === "story") frames.forEach((f) => out.add(f));
+  return out;
+}
+
 export function openTakes(app, place, near = null) {
   const s = { takes: [], pick: null, picked: new Set(), keep: null, busy: false, error: "", note: "", asked: 0 };
   const picture = place.kind === "picture", enhance = place.kind === "enhance";
@@ -135,6 +152,9 @@ export function openTakes(app, place, near = null) {
   const tab = !!place.tab;  // from the Libraries tab (#323): new entries only, and no line to put one on
   const writer = !!WRITERS[place.kind];  // the Write menu's (#334): a take is a text with its whole template
   const meta = [];  // writer: each take's template and what is wrong with it
+  const wired = (name) => !!app.bridge.wired?.(name);
+  const sends = defaultSends(place.kind, wired, tab), gallery = [];  // gallery: {id, kind} of the items sent along
+  const sent = () => (picture ? null : [...sends, ...gallery.map((g) => `gallery:${g.id}`)]);
   const multi = place.kind === "library" || known;  // a library's entries: several at once (#272)
   const from = [];  // known: where each take came from, "rolled", "new" or "added"
   const token = writer ? WRITERS[place.kind].label : place.kind === "slot" || picture ? `--${place.what}--` : enhance ? `> ${place.what}` : `__${place.what}__`;
@@ -151,6 +171,7 @@ export function openTakes(app, place, near = null) {
   const sheet = app.openSheet(`<div class="panel takes-panel"><div class="row spread"><h4>${icon("dice")} Takes</h4>`
     + `<button class="icon-btn" data-close title="Close">${icon("x")}</button></div>`
     + `<p class="muted flush">For ${writer ? `<b>${esc(token)}</b>` : `${SAID[place.kind]} <code>${esc(token)}</code>`}${intro}</p>`
+    + (picture ? "" : '<div class="row wrap take-send" aria-label="Send along"></div><div class="take-gal" hidden></div>')
     + (multi ? `<div class="row take-sel"><button class="btn ghost slim" data-tall>All</button><button class="btn ghost slim" data-tnone>None</button><span class="muted" data-tcount></span></div>` : "")
     + `<ol class="take-list${multi ? " multi" : ""}${writer ? " long" : ""}" role="listbox" aria-label="Takes"${multi ? ' aria-multiselectable="true"' : ""}></ol><p class="muted flush take-state" role="status"></p>`
     + `<div class="row take-steer"><input class="input grow" data-steer placeholder="Steer them: darker, older, as an anime character …" aria-label="Steer the takes">`
@@ -161,6 +182,51 @@ export function openTakes(app, place, near = null) {
       : multi ? `<button class="btn primary" data-tlib title="Write the selected entries as __${esc(place.what)}__, straight into your libraries">${icon("save")}Keep as the library</button>` : "")
     + "</div></div>", near);
   const list = sheet.querySelector(".take-list"), state = sheet.querySelector(".take-state"), steer = sheet.querySelector("[data-steer]");
+  const sendRow = sheet.querySelector(".take-send"), galPick = sheet.querySelector(".take-gal");
+  const drawSends = () => {
+    if (!sendRow) return;
+    sendRow.innerHTML = '<span class="label">Send along</span>' + SOURCES.map(([k, label]) => {
+      const fixed = k === "prompt" && promptLocked(place.kind), can = k === "prompt" || wired(k);
+      const title = fixed ? "Always sent: what it writes is part of it" : !can ? `Nothing is wired into the Orrery Prompt's ${k}`
+        : k === "prompt" ? "The prompt as it rolls at this seed" : k === "video" ? "Four stills of the video wired into the Orrery Prompt"
+          : `The picture wired into the Orrery Prompt's ${k}`;
+      return `<button type="button" class="chip" data-tsend="${k}" aria-pressed="${sends.has(k)}" ${fixed || !can ? "disabled" : ""} title="${esc(title)}">${esc(label)}</button>`;
+    }).join("") + gallery.map((g) => `<span class="chip gal" aria-pressed="true" title="From the Gallery${g.kind === "video" ? ": four stills of it" : ""}">`
+      + `<img alt="" src="${esc(app.api.thumbURL(g.id))}"><button type="button" class="mini" data-tungal="${esc(g.id)}" aria-label="Leave it out">${icon("x")}</button></span>`).join("")
+      + `<button type="button" class="btn ghost slim" data-tgal aria-expanded="${!galPick.hidden}" title="Send any picture or video of the Gallery along">${icon("image")}Gallery</button>`
+      + '<span class="muted">the next takes get them</span>';
+  };
+  const drawGallery = async () => {  // the newest outputs, a click sends one along (or takes it back)
+    if (!galPick.dataset.loaded) {
+      galPick.innerHTML = '<span class="muted">Loading the Gallery…</span>';
+      try {
+        const got = await app.api.galaxyView({ view: "all", flat: 1, limit: 60 });
+        galPick.dataset.loaded = "1";
+        galPick.items = (got.rows || []).filter((r) => r.kind === "image" || r.kind === "video");
+      } catch (err) { galPick.innerHTML = `<span class="warn">${esc(err.message)}</span>`; return; }
+    }
+    galPick.innerHTML = (galPick.items || []).map((r) => `<button type="button" class="gpick" data-tgpick="${esc(r.id)}" data-kind="${r.kind}" `
+      + `aria-pressed="${gallery.some((g) => g.id === r.id)}" title="${esc(r.text || "")}"><img loading="lazy" alt="" src="${esc(app.api.thumbURL(r.id))}">`
+      + `${r.kind === "video" ? `<span class="v">${icon("play")}</span>` : ""}</button>`).join("") || '<span class="muted">The Gallery is empty.</span>';
+  };
+  sendRow?.addEventListener("click", (e) => {
+    const t = e.target.closest("[data-tsend]"), un = e.target.closest("[data-tungal]");
+    if (t && !t.disabled) sends[sends.has(t.dataset.tsend) ? "delete" : "add"](t.dataset.tsend);
+    else if (un) gallery.splice(gallery.findIndex((g) => g.id === un.dataset.tungal), 1);
+    else if (e.target.closest("[data-tgal]")) { galPick.hidden = !galPick.hidden; if (!galPick.hidden) drawGallery(); }
+    else return;
+    drawSends();
+    if (!galPick.hidden) drawGallery();
+  });
+  galPick?.addEventListener("click", (e) => {
+    const g = e.target.closest("[data-tgpick]");
+    if (!g) return;
+    const at = gallery.findIndex((x) => x.id === g.dataset.tgpick);
+    if (at >= 0) gallery.splice(at, 1);
+    else gallery.push({ id: g.dataset.tgpick, kind: g.dataset.kind });
+    drawSends();
+    drawGallery();
+  });
   const use = sheet.querySelector("[data-tuse]"), lib = sheet.querySelector("[data-tlib]");
   const on = (i) => (multi ? s.picked.has(i) : s.pick === i);
   const chosen = () => (multi ? (s.picked.size === 1 ? [...s.picked][0] : null) : s.pick);
@@ -195,8 +261,13 @@ export function openTakes(app, place, near = null) {
       }
       if (writer) return await writeTakes();
       const take = { kind: place.kind, what: place.what, directions: place.directions, steer: steer.value,
-        roll: s.takes.length ? "" : place.roll || "", ...(tab ? { rolls: false } : {}) };
-      if (!app.llmApi() && llmLocal(app)) {  // a text encoder: in runs of their own at the queue's front (#178)
+        roll: s.takes.length ? "" : place.roll || "", ...(tab ? { rolls: false } : {}), sends: sent() };
+      // the files of the Load Image and Load Video nodes behind what is sent along, or a slot names (#174, #335); one
+      // that is no file (a decode, a resize) only a run of its own can see
+      const need = sent().filter((k) => FRAMES.includes(k)), named = /\bimage\s+(first|last)_frame\b/.test(place.what);
+      const files = need.length || named ? (await app.bridge.frameFiles?.()) || { names: {}, others: [] } : { names: {}, others: [] };
+      const viaRun = (files.others || []).some((n) => need.includes(n) || (named && n !== "video"));
+      if ((!app.llmApi() && llmLocal(app)) || viaRun) {  // a text encoder: in runs of their own at the queue's front (#178)
         const one = place.kind === "slot" || enhance;  // one take a run, each sampled anew; a library's in one run
         const runs = one ? Number(app.data.llm?.takes?.[enhance ? "enhance" : "slot"]) || 3 : 1;
         for (let i = 0; i < runs; i++) {
@@ -207,11 +278,9 @@ export function openTakes(app, place, near = null) {
         }
         return;
       }
-      // a slot naming the node's first or last frame (#174): the files of the Load Image nodes behind them
-      const frames = /\bimage\s+(first|last)_frame\b/.test(place.what) ? (await app.bridge.frameFiles?.())?.names || {} : {};
       add(await app.api.takes({ ...take, template: app.text, target: app.bridge.getTarget(), params: app.bridge.getParams(),
         seed: app.bridge.getSeed(), segment: app.bridge.getSegment?.() ?? 0, chain: app.bridge.chain?.() || "",
-        have: s.takes, frames }));  // as many as the settings say (#274)
+        have: s.takes, frames: files.names }));  // as many as the settings say (#274)
     } catch (err) { s.error = err.message; } finally {
       s.busy = false;
       draw();
@@ -221,18 +290,20 @@ export function openTakes(app, place, near = null) {
   // over the API all at once, when the frames are files ComfyUI holds.
   const writeTakes = async () => {
     const n = Number(app.data.llm?.takes?.write) || 3, ideas = Array.from({ length: n }, () => s.asked++);
-    const files = app.llmApi() ? (place.kind === "continue" ? { names: {} } : await app.bridge.frameFiles?.()) : null;
-    const one = (idea) => (files && !files.other
+    const need = sent().filter((k) => FRAMES.includes(k));
+    const files = app.llmApi() ? (need.length ? (await app.bridge.frameFiles?.()) || null : { names: {}, others: [] }) : null;
+    const api = !!files && !(files.others || []).some((k) => need.includes(k));  // a sent input that is no file: a run
+    const one = (idea) => (api
       ? app.api.writeIdea({ task: place.kind, idea, template: app.text, seed: Number(app.bridge.getSeed()) || 0,
-        params: app.bridge.getParams(), frames: files.names, steer: steer.value })
-      : app.bridge.write(place.kind, idea, app.text, steer.value));
+        params: app.bridge.getParams(), frames: files.names, steer: steer.value, sends: sent() })
+      : app.bridge.write(place.kind, idea, app.text, steer.value, sent()));
     const errors = [];
     const took = (got) => {
       if (got.error) errors.push(got.error);
       else if (got.text && !s.takes.includes(got.text)) { s.takes.push(got.text); meta.push({ template: got.template, problem: got.problem }); }
       draw();
     };
-    if (files && !files.other) (await Promise.all(ideas.map((i) => one(i).catch((err) => ({ error: err.message }))))).forEach(took);
+    if (api) (await Promise.all(ideas.map((i) => one(i).catch((err) => ({ error: err.message }))))).forEach(took);
     else for (const i of ideas) took(await one(i).catch((err) => ({ error: err.message })));
     if (errors.length) s.error = [...new Set(errors)].join(" ");
   };
@@ -325,6 +396,7 @@ export function openTakes(app, place, near = null) {
     app.closeSheet();
     changed(insertTake(app.text, place, take), "The take is in the editor · an unsaved edit");
   };
+  drawSends();
   draw();
   ask();
 }

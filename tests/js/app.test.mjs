@@ -1211,3 +1211,17 @@ test("Help is in pages: a start with the lessons, the language section by sectio
   assert.match(html, /<h4>Writing for the models<\/h4>/);
   assert.match(html, /Krea 2 faces/);
 });
+
+test("a sheet sends along by default what its kind needs: the prompt, the story both frames, a picture its frame (#335)", async () => {
+  const { defaultSends, promptLocked, SOURCES } = await import("../../comfyui/web/app/takes.js");
+  const both = (n) => n === "first_frame" || n === "last_frame", last = (n) => n === "last_frame", none = () => false;
+  assert.deepEqual(SOURCES.map(([k]) => k), ["prompt", "first_frame", "last_frame", "video"]);
+  assert.deepEqual([...defaultSends("story", both)], ["prompt", "first_frame", "last_frame"]);
+  assert.deepEqual([...defaultSends("story", none)], ["prompt"]);
+  assert.deepEqual([...defaultSends("describe", both)], ["first_frame"]);  // the picture, not the prompt it would echo
+  assert.deepEqual([...defaultSends("describe", last)], ["last_frame"]);
+  assert.deepEqual([...defaultSends("describe", none)], ["prompt"]);  // no picture: written from the prompt
+  assert.deepEqual([...defaultSends("entries", both, true)], []);  // the Libraries tab: the node's prompt is elsewhere
+  assert.deepEqual([...defaultSends("slot", both)], ["prompt"]);  // frames only when asked (a slot names its own)
+  assert.ok(promptLocked("slot") && promptLocked("continue") && !promptLocked("entries") && !promptLocked("story"));
+});

@@ -1234,8 +1234,9 @@ def llm_check(home: Home, args: dict) -> dict:
     return endpoint.check(cfg["base_url"], str(args.get("key") or "").strip() or endpoint.key(home, cfg)[0], cfg["model"])
 
 
-def _input_picture(name) -> Path | None:
-    """A picture ComfyUI holds, named as a Load Image node names it (`a.png`, `sub/a.png [output]`)."""
+def _input_picture(name, what: str = "picture") -> Path | None:
+    """A picture (or a video) ComfyUI holds, named as a Load Image (Load Video) node names it (`a.png`,
+    `sub/a.png [output]`)."""
     if not name:
         return None
     import folder_paths  # ComfyUI
@@ -1244,8 +1245,47 @@ def _input_picture(name) -> Path | None:
     roots = [Path(d).resolve() for d in (folder_paths.get_input_directory(), folder_paths.get_output_directory(),
                                          folder_paths.get_temp_directory())]
     if not path.is_file() or not any(path.is_relative_to(r) for r in roots):
-        raise ApiError(400, f"No picture {name} in ComfyUI's input, output or temp folder.")
+        raise ApiError(400, f"No {what} {name} in ComfyUI's input, output or temp folder.")
     return path
+
+
+def _sends(args: dict) -> list[str] | None:
+    """What a sheet sends along with its request (#335), or None: the place's own."""
+    from orrery import sendalong
+
+    try:
+        return sendalong.parse(args.get("sends"))
+    except ValueError as err:
+        raise ApiError(400, str(err)) from None
+
+
+def _wired(args: dict, pictures: dict | None) -> tuple[dict, object]:
+    """The node's first_frame and last_frame, and its video: in a mini-run as the run has them, over the API the
+    files of the Load Image and Load Video nodes the app names (`frames`)."""
+    if pictures is not None:
+        return {k: v for k, v in pictures.items() if k != "video"}, pictures.get("video")
+    names = args.get("frames") if isinstance(args.get("frames"), dict) else {}
+    inputs = {k: _input_picture(names.get(k)) for k in ("first_frame", "last_frame") if names.get(k)}
+    return inputs, _input_picture(names.get("video"), "video") if names.get("video") else None
+
+
+def _sent(home: Home, sends: list[str] | None, inputs: dict, video, skip=()) -> tuple[list, list[str]]:
+    """The pictures `sends` names (the prompt aside, and those in `skip`, there already), as PIL, and what each is;
+    one that cannot be sent is said."""
+    from orrery import sendalong
+
+    if not sends:
+        return [], []
+    shown, labels, missing = sendalong.pictures(home, [s for s in sends if s != "prompt" and s not in skip], inputs, video)
+    if missing:
+        raise ApiError(400, f"Nothing to send along there: {'; '.join(missing)}.")
+    return shown, labels
+
+
+def _label(word: str) -> str:
+    """What a picture a slot names is, for the model (#335)."""
+    return {"first_frame": "the first frame", "last_frame": "the last frame"}.get(word) or (
+        f"image {word} of the CAST" if word.isdigit() else f"image {word} from the gallery")
 
 
 def write_idea(home: Home, args: dict) -> dict:
@@ -1259,12 +1299,17 @@ def write_idea(home: Home, args: dict) -> dict:
     temperature = float(llm_config(home)["writer_temperature"])
     if endpoint.backend(home, temperature) is None:
         raise ApiError(400, "No API endpoint is set: the Write menu runs in ComfyUI's queue.")
-    frames = args.get("frames") if isinstance(args.get("frames"), dict) else {}
-    pictures_ = lambda: comfy_write.pick_frames(task, _input_picture(frames.get("first_frame")),
-                                                _input_picture(frames.get("last_frame")))
+    sends = _sends(args)
+
+    def pictures_():
+        inputs, video = _wired(args, None)
+        if sends is None:
+            return comfy_write.pick_frames(task, inputs.get("first_frame"), inputs.get("last_frame"))
+        return _sent(home, sends, inputs, video)
+
     return comfy_write.write_idea(home, task, _text(args, "template"), _int(args, "seed", 0), _int(args, "idea", 0),
                                   args.get("params") or "", lambda: endpoint.backend(home, temperature), pictures_,
-                                  str(args.get("steer") or ""))
+                                  str(args.get("steer") or ""), sends is not None and "prompt" in sends)
 
 
 def llm_takes(home: Home, args: dict) -> dict:
@@ -1295,10 +1340,14 @@ def takes_with(home: Home, args: dict, api, pictures: dict | None = None) -> dic
     text, target = _template_for(home, args)
     seed, segment, libs = _int(args, "seed", 0), max(_int(args, "segment", 0), 0), home.libraries()
     src, screenplay = long_form(strip_comments(text)), target != "text" and long_form(strip_comments(text)).lstrip().startswith("@h3")
-    if kind == "library":
-        return _library_takes(home, args, what, src, api)
-    if kind == "entries":
-        return _entry_takes(home, args, what, src, api, seed)
+    sends = _sends(args)
+    inputs, video = _wired(args, pictures)
+    if kind in ("library", "entries"):  # the prompt goes along only when it is sent: the lines that use the library
+        sent = _sent(home, sends, inputs, video)
+        context = "" if sends is not None and "prompt" not in sends else src
+        if kind == "library":
+            return _library_takes(home, args, what, src, api, context, sent)
+        return _entry_takes(home, args, what, context, api, seed, sent)
     result = None
     for _ in range(8):  # a library still to be written stands in as its name, as the annotations do
         try:
@@ -1328,17 +1377,18 @@ def takes_with(home: Home, args: dict, api, pictures: dict | None = None) -> dic
                             "Gallery, for a picture there.")
     frames = _previous(_latent_path(args), segment) if kind == "slot" and screenplay and segment else None
     said: list[dict] = []  # a picture a slot names that is not there (#174)
-    wired = args.get("frames") if isinstance(args.get("frames"), dict) else {}
-    inputs = pictures if pictures is not None else {k: _input_picture(wired.get(k)) for k in ("first_frame", "last_frame") if wired.get(k)}
     named, shown = _slot_pictures(home, pictures_in([what]), result, inputs, said) if kind == "slot" else ([], [])
     if said:  # a run writes on without it; takes without the picture would only repeat the directions
         raise ApiError(400, " ".join(i["message"].removesuffix(" it is written without it.") + " its takes need it." for i in said))
+    sent, labels = _sent(home, sends, inputs, video, skip=named)  # what the sheet sends along, after what the slot names
     n = min(max(_int(args, "n", takes.counts(llm_config(home))[{"slot": "slot", "enhance": "enhance"}.get(kind, "new")]), 1), 12)
     prompt = takes.request(kind, what, context, n, str(args.get("steer") or ""),
                            [str(h) for h in args.get("have") or [] if str(h).strip()][:60],
-                           frames=len(frames) if frames is not None else 0, pictures=named)
+                           frames=len(frames) if frames is not None else 0,
+                           pictures=named + [f"sent {i}" for i in range(1, len(sent) + 1)],
+                           labels=[_label(w) for w in named] + labels)
     try:
-        out = takes.parse(api.complete(prompt, images=_images(frames, shown, api)), n)
+        out = takes.parse(api.complete(prompt, images=_images(frames, shown + sent, api)), n)
     except RuntimeError as err:
         raise ApiError(502, str(err)) from None
     if not out:
@@ -1346,10 +1396,13 @@ def takes_with(home: Home, args: dict, api, pictures: dict | None = None) -> dic
     return {"takes": out, **({"keep": keep} if kind == "enhance" else {})}
 
 
-def _library_takes(home: Home, args: dict, name: str, src: str, api) -> dict:
+def _library_takes(home: Home, args: dict, name: str, src: str, api, context: str | None = None,
+                   sent: tuple[list, list[str]] = ([], [])) -> dict:
     """A library still to be written, written in the sheet (#272): as many entries as a new library starts with
-    (or `__name:N__`'s N), as a run would ask for them."""
+    (or `__name:N__`'s N), as a run would ask for them. `context`: the template whose lines that use it go along
+    (#335; `src` when not said); `sent`: the pictures sent along and what each is."""
     from orrery import takes
+    from orrery.comfy import _images
     from orrery.dsl import wanted_libraries
     from orrery.llm import InvalidProposal
 
@@ -1360,9 +1413,10 @@ def _library_takes(home: Home, args: dict, name: str, src: str, api) -> dict:
         raise ApiError(400, f"The template does not use __{name}__.")
     n = min(max(_int(args, "n", max(minimum, int(llm_config(home)["entries"]))), 1), 200)
     have = [str(h) for h in args.get("have") or [] if str(h).strip()][:400]
-    prompt, need = takes.for_library(src, name, n, str(args.get("directions") or ""), str(args.get("steer") or ""), have)
+    prompt, need = takes.for_library(src if context is None else context, name, n, str(args.get("directions") or ""),
+                                     str(args.get("steer") or ""), have, sent[1])
     try:
-        out = takes.library_entries(api.complete(prompt), need)
+        out = takes.library_entries(api.complete(prompt, images=_images(None, sent[0], api) if sent[0] else None), need)
     except (RuntimeError, InvalidProposal) as err:
         raise ApiError(502, str(err)) from None
     if not out:
@@ -1370,7 +1424,8 @@ def _library_takes(home: Home, args: dict, name: str, src: str, api) -> dict:
     return {"takes": out}
 
 
-def _entry_takes(home: Home, args: dict, name: str, src: str, api, seed: int) -> dict:
+def _entry_takes(home: Home, args: dict, name: str, src: str, api, seed: int,
+                 sent: tuple[list, list[str]] = ([], [])) -> dict:
     """A library that exists, at the line (#273): entries rolled from it (the one at this seed first, `roll`) and new
     ones the model writes, not in it, as a top-up asks for them; as many of each as the settings say. `rolls: false`
     (the Libraries tab's Generate, #323): the new ones only."""
@@ -1384,9 +1439,12 @@ def _entry_takes(home: Home, args: dict, name: str, src: str, api, seed: int) ->
     rolled = ([] if args.get("rolls") is False
               else takes.rolled_entries(lib, home.weights(), seed, count["rolled"], have, str(args.get("roll") or "")))
     directions = " ".join(str(args.get("directions") or "").split()) or str(lib.meta.get("directions") or "")
-    prompt, need = takes.for_library(src, name, count["new"], directions, str(args.get("steer") or ""), [*lib.values(), *have])
+    prompt, need = takes.for_library(src, name, count["new"], directions, str(args.get("steer") or ""), [*lib.values(), *have],
+                                     sent[1])
     try:
-        new = takes.library_entries(api.complete(prompt), need)
+        from orrery.comfy import _images
+
+        new = takes.library_entries(api.complete(prompt, images=_images(None, sent[0], api) if sent[0] else None), need)
     except (RuntimeError, InvalidProposal) as err:
         raise ApiError(502, str(err)) from None
     if not new and not rolled:  # Generate (#323) asks for new ones only: an empty sheet would say nothing
