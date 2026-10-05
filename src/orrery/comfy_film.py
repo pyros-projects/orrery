@@ -15,7 +15,7 @@ from orrery import chain as chains
 from orrery import film
 from orrery.chain import DEFAULT_CHAIN
 from orrery.continuum import masked
-from orrery.continuum.grid import CONTEXT, pixel_frames_for_latent_t
+from orrery.continuum.grid import CONTEXT, DECODE_BLEND, pixel_frames_for_latent_t
 
 KEY = "orrery_film"  # what Orrery Continue leaves in the latent for Orrery Film
 TOLERANCE = 1e-2  # how far the pinned frames may move in the sampler (rounding; a lost mask moves them far)
@@ -167,7 +167,8 @@ class _Frames:
 
 class OrreryFilm:
     """Keeps a reel's clips: trims the 22 frames Orrery Continue pinned, stores the take (and the tail
-    the next segment continues from) and joins the reel so far into one video."""
+    the next segment continues from, and the seam: the clip before's end as this clip decoded it) and joins
+    the reel so far into one video."""
 
     CATEGORY = "orrery"
     FUNCTION = "keep"
@@ -211,14 +212,18 @@ class OrreryFilm:
         kept = images[trim:frames]
         wave, rate = audio["waveform"], int(audio["sample_rate"])
         start, count = masked.audio_span(trim, int(kept.shape[0]), rate)
+        continues = info.get("continues", segment - 1 if segment else None)
+        seam = None
+        if pinned is not None and continues is not None:  # the clip before's end as decoded with this one (#361)
+            seam = film.Seam(_Frames(images[CONTEXT - DECODE_BLEND:CONTEXT]),
+                             wave[0, :, start // 2:start].float().cpu().numpy())
         wave = wave[..., start:start + count]
         if wave.shape[-1] < count:
             wave = torch.nn.functional.pad(wave, (0, count - wave.shape[-1]))
         last = masked.tail(video, audio_latent, frames)
         tail = masked.Tail(last.video.float().cpu().numpy(), last.audio.float().cpu().numpy(), last.grid_offset)
         take = film.save_take(_output(), chain, segment, _Frames(kept), wave[0].float().cpu().numpy(), rate, tail,
-                              info.get("meta") or {}, info.get("continues", segment - 1 if segment else None),
-                              info.get("test", False))
+                              info.get("meta") or {}, continues, info.get("test", False), seam)
         print(f"[orrery] Orrery Film: clip {segment + 1} kept, {kept.shape[0]} frames "
               f"({kept.shape[0] / 24:.2f} s); the film is {film.film_file(take)}")
         sound = {**audio, "waveform": wave.contiguous(), "sample_rate": rate}

@@ -25,15 +25,31 @@ def tail(fill=0.0):
     return Tail(np.full((1, 24, 7, 3, 4), fill, np.float32), np.full((1, 32, 2, 37), fill, np.float32), 0.25)
 
 
-def take(out, segment, n=24, w=64, fill=0.0, continues=-1, test=False, meta=None):
+def take(out, segment, n=24, w=64, fill=0.0, continues=-1, test=False, meta=None, seam=None):
     sound = np.sin(np.linspace(0, 400, round(n / 24 * SR), dtype=np.float32))[None].repeat(2, 0) * 0.1
     return film.save_take(out, "h3_context", segment, frames(n, w=w, shade=40 * segment), sound, SR, tail(fill),
-                          {"seed": 7, **(meta or {})}, continues, test)
+                          {"seed": 7, **(meta or {})}, continues, test, seam)
+
+
+def seam(shade=250, seconds=0.25):
+    """The clip before's end as a continued clip decoded it: its last frames bright red, its sound silent."""
+    return film.Seam(frames(film.DECODE_BLEND, shade=shade), np.zeros((2, round(seconds * SR)), np.float32))
 
 
 def active_run(out):
     root = out / "h3_context" / film.STORE
     return root / json.loads((root / "active.json").read_text())["run"]
+
+
+def reds(path):
+    """How red each frame of a video is: the shade a take's frames carry."""
+    with av.open(str(path)) as c:
+        return np.array([f.to_ndarray(format="rgb24")[..., 0].mean() for f in c.decode(c.streams.video[0])])
+
+
+def sound_of(path):
+    with av.open(str(path)) as c:
+        return np.concatenate([f.to_ndarray() for f in c.decode(c.streams.audio[0])], axis=1)
 
 
 def decoded(path):
@@ -371,3 +387,89 @@ def test_takes_list_in_the_order_they_were_saved_whatever_the_clock_says(tmp_pat
     saved = [take(tmp_path, 1, n=24 + k) for k in range(3)]
     assert [t["folder"] for t in film.takes(tmp_path, "h3_context")[1]] == [old.name, *(p.name for p in saved)]
     assert [t["folder"] for t in film.tree(tmp_path, "h3_context")["takes"] if t["segment"] == 1] == [old.name, *(p.name for p in saved)]
+
+
+def test_a_continued_take_ends_the_clip_before_as_its_decode_has_it(tmp_path):
+    """#361: H3's VAE decodes a clip's last 5 frames without the blend into what follows, and the end of its sound
+    without what follows; the next clip's decode has both, so the film plays them there. The takes stay as they were."""
+    take(tmp_path, 0)
+    continued = take(tmp_path, 1, seam=seam())
+    assert len(reds(continued / "seam.mp4")) == film.DECODE_BLEND
+    red = reds(active_run(tmp_path) / "film.mp4")
+    assert len(red) == 48 and (red[:19] < 20).all() and (red[19:24] > 230).all() and (abs(red[24:] - 40) < 20).all()
+    sound = sound_of(active_run(tmp_path) / "film.mp4")
+    level = lambda a, b: np.sqrt(np.mean(np.square(sound[:, round(a * SR):round(b * SR)])))
+    assert level(0.3, 0.7) > 0.05 and level(0.8, 0.97) < 0.01  # clip 1's sound, then its last 0.25 s as clip 2 decoded it
+    assert (reds(chain.clip_file(tmp_path, "h3_context", 0))[19:] < 20).all()  # the take before keeps its own end
+
+
+def test_a_seam_joins_only_after_the_take_it_was_decoded_with(tmp_path):
+    take(tmp_path, 0)
+    take(tmp_path, 1)
+    take(tmp_path, 2, continues=0, seam=seam())  # AFTER: scene 1, in the film after scene 2's clip: a cut
+    red = reds(active_run(tmp_path) / "film.mp4")
+    assert len(red) == 72 and (abs(red[43:48] - 40) < 20).all()
+
+
+def test_the_seams_sound_goes_over_in_a_straight_crossfade():
+    """Both sides decode the same latent there: a straight crossfade keeps the level."""
+    before, quarter, fade = np.full((2, SR), 0.5, np.float32), SR // 4, round(film.CROSSFADE * SR)
+    film._patch(before, np.zeros((2, quarter), np.float32), SR)
+    assert (before[:, :-quarter] == 0.5).all() and (before[:, -quarter + fade:] == 0).all()
+    assert np.allclose(before[0, -quarter:-quarter + fade], np.linspace(0.5, 0, fade))
+
+
+def test_the_level_eases_across_a_seam_as_continuums_seam_guard_does():
+    """#362: a step of 6 dB or less comes 1.5 dB closer where the clip begins, and back to it over 60 ms; a bigger step
+    is a new sound and stays."""
+    t = np.arange(SR, dtype=np.float32) / SR
+    tone = lambda a: (np.sin(2 * np.pi * 440 * t) * a)[None].repeat(2, 0)
+    db = lambda x: 20 * np.log10(np.sqrt(np.mean(np.square(x))))
+    before, after, probe, back = tone(0.1), tone(0.15), round(0.02 * SR), round(film.EASE_AFTER * SR)
+    film._ease(before, after, SR)  # 3.5 dB louder after the seam
+    assert db(after[:, :probe]) - db(tone(0.15)[:, :probe]) < -1.0 and (after[:, back:] == tone(0.15)[:, back:]).all()
+    assert (before[:, :-round(film.EASE_BEFORE * SR)] == tone(0.1)[:, :-round(film.EASE_BEFORE * SR)]).all()
+    before, after = tone(0.1), tone(0.5)  # 14 dB
+    film._ease(before, after, SR)
+    assert (after == tone(0.5)).all() and (before == tone(0.1)).all()
+
+
+def test_film_takes_the_seam_from_the_continued_clips_decode(tmp_path, monkeypatch):
+    """Orrery Film: the decoded frames 17 to 21 of a continued clip (the clip before's last 5, blended into this one)
+    and its sound from the middle of the pinned frames to where the clip's own begins."""
+    torch = pytest.importorskip("torch")
+    import sys
+    import types
+
+    from orrery import comfy_film
+    from orrery.continuum.masked import Tail as Pinned
+
+    monkeypatch.setitem(sys.modules, "folder_paths", types.SimpleNamespace(get_output_directory=lambda: str(tmp_path)))
+    api = types.ModuleType("comfy_api")
+    api.latest = types.SimpleNamespace(InputImpl=types.SimpleNamespace(VideoFromFile=str))
+    monkeypatch.setitem(sys.modules, "comfy_api", api)
+    monkeypatch.setitem(sys.modules, "comfy_api.latest", api.latest)
+
+    class Nested:  # a NestedTensor, as Film reads one
+        is_nested = True
+
+        def __init__(self, *parts):
+            self.parts = parts
+
+        def unbind(self):
+            return self.parts
+
+    rate, n = 32000, 39  # 39 frames: 12 latent slots, 65 ticks
+    video, ticks = torch.zeros((1, 24, 12, 2, 4)), torch.zeros((1, 32, 2, 65))
+    images = (torch.arange(n, dtype=torch.float32) / 64)[:, None, None, None].expand(n, 32, 64, 3)  # frame i: shade i/64
+    wave = torch.arange(round(n / 24 * rate), dtype=torch.float32)[None, None].repeat(1, 2, 1)  # each sample its number
+    for segment in (0, 1):
+        info = {"segment": segment, "chain": "h3_context", "meta": {}}
+        if segment:
+            info |= {"continues": 0, "tail": Pinned(video[:, :, :7], ticks[..., :37], 0.0)}
+        comfy_film.OrreryFilm().keep({"samples": Nested(video, ticks), comfy_film.KEY: info}, images,
+                                     {"waveform": wave, "sample_rate": rate})
+    continued = active_run(tmp_path) / json.loads((active_run(tmp_path) / "clips.json").read_text())["clips"][1]["folder"]
+    start = round(22 / 24 * rate)
+    assert np.array_equal(np.load(continued / "seam.npy"), wave[0, :, start // 2:start].numpy())
+    assert np.allclose(reds(continued / "seam.mp4"), np.arange(17, 22) / 64 * 255, atol=3)

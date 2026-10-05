@@ -229,6 +229,7 @@ every one continuing the last 22 frames, picture and sound, of the one before.
 | [The wildcard manager](docs/wildcard-manager.md) | editing libraries in plain language, the language model in ComfyUI, the Write menu |
 | [Configuration](docs/configuration.md) | the orrery home folder and model settings |
 | [Changelog](CHANGELOG.md) | what changed, version by version |
+| [Roadmap](ROADMAP.md) | what the docs promise, plan or dream of that is not built or filed yet, sorted for the release |
 
 ## How It Works
 

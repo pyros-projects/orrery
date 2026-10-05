@@ -11,6 +11,7 @@ FPS = 24
 AUDIO_LATENT_FPS = 40
 FRAME_PER_TOKEN = (1, 4, 4, 4, 4)
 CONTEXT = 22  # the frames Orrery Continue pins: the one length Continuum validated with sound
+DECODE_BLEND = 5  # the frames H3's VAE blends where two of its 17-frame decode pieces meet (a clip's last 5 are left unblended)
 _TICKS_PER_FRAME = Fraction(AUDIO_LATENT_FPS, FPS)
 
 
