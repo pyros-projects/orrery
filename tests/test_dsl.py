@@ -616,3 +616,12 @@ def test_a_lora_line_rolls_on_its_own_and_stays_out_of_the_text():
     assert got.loras == "<lora:ink:0.8> <lora:grain:0.4>" and got.text.startswith("A ") and "LORA" not in got.text
     assert any(p.label == "__sets__" for p in got.picks)
     assert expand("A __animal__.", 1, libs).loras == ""
+
+
+def test_a_binding_s_escaped_brace_is_no_leftover_where_it_is_used():
+    """#353: the braces of `a \\{b\\} c` come back in the binding's value; in the line they are text, not half a choice.
+    A real half choice still says so."""
+    bound = expand("$k = {a \\{b\\} c|d}\n$k", 3, {})
+    assert bound.text == "a {b} c" and bound.warnings == []
+    assert expand("$k = \\__name\\__\nA $k.", 0, {}).warnings == []
+    assert any("left over" in w for w in expand("X {a|b", 0, {}).warnings)

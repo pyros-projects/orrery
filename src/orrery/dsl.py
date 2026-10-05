@@ -54,6 +54,7 @@ _BINDING_LINE = re.compile(r"^(\s*)\$([A-Za-z_]\w*)(\s*=\s*)(.+)$")
 _MULTI = re.compile(r"^(\d+)(?:-(\d+))?\$\$(?:(.*?)\$\$)?(.+)$")  # {2$$ and $$a|b|c}: Dynamic Prompts' joiner
 _ESCAPE = re.compile(r"\\([{}|$_@#\[\]\\<>])")  # \{ \__ \$ …: the character as written
 _ESCAPED = re.compile("\ue000(\\d+)\ue001")
+_HELD_IN_VALUE = re.compile(r"[{}]|__")  # what the leftovers look for, in a binding's value (#353)
 _WEIGHTED = re.compile(r"^(.*?):(\d+(?:\.\d+)?)$")
 _DP_WEIGHT = re.compile(r"^\s*(\d+(?:\.\d+)?)::(.*)$", re.DOTALL)  # Dynamic Prompts: {3::red|1::blue}
 _LIB_ONLY = re.compile(r"^__([\w*]+(?:/[\w*]+)*)(?:\[([^\[\]\n]+)\])?((?:#[\w-]+:\$?[\w.-]+)*)(?::\d+)?__(?:\([^()]*\))?$")
@@ -688,7 +689,13 @@ class Expander:
             return value
 
         text = _LIB.sub(library, text)
-        text = _VAR.sub(lambda m: _mid_line(self._var(m), m), text)
+
+        def var(m: re.Match) -> str:  # a binding's value is rolled text: a brace or __ in it (an escape come back) is held
+            # as written, so the line's leftovers do not take it for half a choice (#353); its own were told when it rolled
+            return _HELD_IN_VALUE.sub(lambda c: self._escaped.append(c.group(0)) or f"\ue000{len(self._escaped) - 1}\ue001",
+                                      _mid_line(self._var(m), m))
+
+        text = _VAR.sub(var, text)
         return self._articles(text)
 
     def _var(self, m: re.Match) -> str:
