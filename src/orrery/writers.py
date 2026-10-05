@@ -274,8 +274,11 @@ def request(home: Home, task: str, template: str, seed: int, libraries, weights,
         # no guardrail for a reel that plays on and on (#342): it continues after its scene's first end
         head, segments, ((_, n),) = _walked(template, seed, libraries, weights, [opts["after"]])
         last = segments[n - 1]["handoff"] if n else None
-        values = {"world": _world(head), "chunks": _scenes(segments[:n]), "next": n + 1,
-                  "handoff": f"the last clip ended as: {last}" if last else "where the last clip ended"}
+        k = opts["scenes"]  # how many, how long (#342): the story extended as far as asked
+        values = {"world": _world(head), "chunks": _scenes(segments[:n]), "next": n + 1, "seconds": opts["seconds"],
+                  "handoff": f"the last clip ended as: {last}" if last else "where the last clip ended",
+                  "write": f"Write clip {n + 1}, the next SCENE." if k == 1 else
+                           f"Write clips {n + 1} to {n + k}, the next {k} SCENEs, one after the other."}
         inside = True
     else:
         from orrery.dsl import Expander, parse
@@ -410,7 +413,7 @@ def check(task: str, template: str, answer: str, opts: dict | None = None) -> tu
     if name in ("continue", "story_scenes"):
         if not _CHUNK.match(lines[0]):
             return out, "The answer does not start with a SCENE line."
-        want = 1 if name == "continue" else asked
+        want = asked
         if chunks != want:
             return out, f"The answer writes {chunks} scenes; {'one was' if want == 1 else f'{want} were'} asked for."
         per = []  # the SHOT lines of each scene

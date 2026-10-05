@@ -9,7 +9,7 @@ NAME (how it sounds): A line of speech.
 SFX: a sound; another sound
 END ON: the simple, framed state the next clip opens on
 
-- One or two SHOT blocks per scene, together under 15 seconds; a shot lasts 2 to 10 seconds.
+- Every scene lasts {seconds} seconds: one SHOT of {seconds}s, or two whose seconds add up to {seconds}.
 - Camera moves: push in, pull out, zoom in, zoom out, pan left, pan right, truck left, truck right, tilt up, tilt down, pedestal up, pedestal down, arc, tracking, static, shake slightly, roll. Size is small or large, speed slow or fast; both may be left out. Choose the move the action needs; do not copy the moves of the example or of the earlier scenes.
 - The prose shows a visible action, never a frozen pose. Sentences start with a capital letter.
 - People and animals: a name in CAPITALS from the CAST stays that name. Anyone without a CAST entry is described in full again in every scene, with the same words the earlier scenes use ("a tall man in a grey trench coat", not "the man"): the clips are made one by one and do not see each other.
@@ -37,4 +37,4 @@ The reel you continue, its world and every clip so far, as it was made:
 
 {chunks}
 
-Write clip {next}, the next SCENE. It opens exactly where the last one ended ({handoff}), keeps the same people, place and style, and moves the story one step on. Start with "SCENE" and a short title, end with an END ON line. Answer with the scene alone.
+{write} The first opens exactly where the last clip ended ({handoff}); they keep the same people, place and style, and move the story on, one step a scene. Start each scene with "SCENE" and a short title, end each with an END ON line. Answer with the scenes alone.

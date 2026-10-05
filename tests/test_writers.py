@@ -395,3 +395,15 @@ def test_the_story_can_start_or_end_at_the_prompt_on_any_screenplay(home):
     assert after.endswith("misty forest.\n\nSCENE on\nSHOT 5s: static\nIt goes on.\n") and "SCENE the start" in after
     assert writers.place("story", FILM, [NEW_SCENE], {"from": "first_frame", "to": "prompt"}, how="insert")["template"].startswith(
         f"@h3 t2va 16:9\nstyle: live-action\n\n{NEW_SCENE}\n\nSCENE one")  # a reel: before its first scene
+
+
+def test_continue_writes_as_many_scenes_as_asked_as_long_as_asked(home):
+    """#342: the story extended as far as asked: N new scenes of S seconds after the scene picked."""
+    prompt = writers.request(Home(home), "continue", FILM, 1, {}, {}, opts={"after": 0, "scenes": 3, "seconds": 8})
+    assert "Every scene lasts 8 seconds" in prompt and "Write clips 2 to 4, the next 3 SCENEs, one after the other." in prompt
+    assert "Write clip 2, the next SCENE." in writers.request(Home(home), "continue", FILM, 1, {}, {}, opts={"after": 0})
+    two = NEW_SCENE + "\nEND ON: x\n\nSCENE the den\nSHOT 5s: static\nThe fox returns.\nSFX: leaves\nEND ON: y"
+    assert writers.check("continue", FILM, two, {"scenes": 2}) == (two, None)
+    assert "2 scenes; one was asked for" in writers.check("continue", FILM, two)[1]
+    placed = writers.place("continue", FILM, [two], {"after": 0, "scenes": 2}, how="replace")["template"]
+    assert placed.endswith(two + "\n") and "SCENE two" not in placed

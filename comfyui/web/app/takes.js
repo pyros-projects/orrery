@@ -182,9 +182,11 @@ function writerRow(kind, scenes, h3, wo) {
   const opt = (v, label, on) => `<option value="${v}"${on ? " selected" : ""}>${esc(label)}</option>`;
   const scene = (on) => scenes.map((t, i) => opt(i, `SCENE ${i + 1}${t ? ` · ${t}` : ""}`, on === i)).join("");
   const num = (k, min, max, label) => `<input type="number" class="input num" data-wo="${k}" min="${min}" max="${max}" value="${wo[k]}" aria-label="${label}">`;
-  if (kind === "continue") {
-    return scenes.length ? `<div class="row wrap take-opts"><span class="label">After</span><select class="input" data-wo="after" aria-label="The scene it continues after">`
-      + `${opt("", "the end", true)}${scene(null)}</select></div>` : "";
+  const length = `<span class="label">in</span>${num("scenes", 1, 99, h3 ? "How many scenes" : "How many keyframes")}<span class="label">${h3 ? "scenes" : "keyframes"}</span>`
+    + (h3 ? `<span class="label">of</span>${num("seconds", 1, 60, "Seconds a scene")}<span class="label">s</span>` : "");
+  if (kind === "continue") {  // the scene it continues after, on a reel; how many new scenes and how long (#342)
+    return `<div class="row wrap take-opts">${scenes.length ? `<span class="label">After</span><select class="input" data-wo="after" aria-label="The scene it continues after">`
+      + `${opt("", "the end", true)}${scene(null)}</select>` : ""}${length}</div>`;
   }
   if (kind !== "story") return "";
   const ends = h3 ? [[opt("first_frame", "first_frame", true), opt("prompt", "the prompt", false), scene(null)],
@@ -192,8 +194,7 @@ function writerRow(kind, scenes, h3, wo) {
     : [[opt("first_frame", "first_frame", true), opt("prompt", "the prompt", false)], [opt("prompt", "the prompt", true), opt("last_frame", "last_frame", false)]];
   return `<div class="row wrap take-opts"><span class="label">From</span><select class="input" data-wo="from" aria-label="Where the story starts">${ends[0].join("")}</select>`
     + `<span class="label">to</span><select class="input" data-wo="to" aria-label="Where the story ends">${ends[1].join("")}</select>`
-    + `<span class="label">in</span>${num("scenes", 1, 99, h3 ? "How many scenes" : "How many keyframes")}<span class="label">${h3 ? "scenes" : "keyframes"}</span>`
-    + (h3 ? `<span class="label">of</span>${num("seconds", 1, 60, "Seconds a scene")}<span class="label">s</span>` : "") + "</div>";
+    + `${length}</div>`;
 }
 
 export function openTakes(app, place, near = null) {
@@ -222,7 +223,8 @@ export function openTakes(app, place, near = null) {
   const wo = { after: null, from: "first_frame", to: h3 ? "last_frame" : "prompt", scenes: 1, choice: false,
     seconds: Math.round(Number(/^\s*SHOT\s+(\d+(?:\.\d+)?)\s*s\b/im.exec(app.text)?.[1]) || 5) };
   const reelShot = place.kind === "describe" && scenes.length > 0;  // its take goes in at the caret
-  const intro = writer ? `At seed ${esc(String(app.bridge.getSeed()))}: ${esc(WRITERS[place.kind].hint.toLowerCase())}. `
+  const hint = place.kind === "continue" && !scenes.length ? "The next scene, after the screenplay as it rolls at this seed" : WRITERS[place.kind]?.hint || "";
+  const intro = writer ? `At seed ${esc(String(app.bridge.getSeed()))}: ${esc(hint.toLowerCase())}. `
     + "Select as many as you like: Prepend or Append copies them into the prompt, Replace and Insert put them where the writer has a place."
     : tab ? ": new entries the language model writes, none it has. Steer them, ask for more, select the good ones: Add to the library writes them in."
     : `, ${picture ? "written from the picture, the prompt that made it beside it." : `at seed ${esc(String(app.bridge.getSeed()))}.`}`
@@ -328,8 +330,8 @@ export function openTakes(app, place, near = null) {
     wo.choice = m.dataset.tas === "choice";
     sheet.querySelectorAll("[data-tas]").forEach((b) => b.setAttribute("aria-pressed", String(b === m)));
   });
-  const writerOptions = () => (place.kind === "continue" ? { after: wo.after } : place.kind === "story"
-    ? { from: wo.from, to: wo.to, scenes: wo.scenes, seconds: wo.seconds } : {});
+  const writerOptions = () => (place.kind === "continue" ? { after: wo.after, scenes: wo.scenes, seconds: wo.seconds }
+    : place.kind === "story" ? { from: wo.from, to: wo.to, scenes: wo.scenes, seconds: wo.seconds } : {});
   // the selected takes, in the order selected, where the button says (#333): the server places them, no model asked
   const put = async (how) => {
     const order = [...s.picked].filter((i) => i < s.takes.length);
@@ -544,10 +546,10 @@ export function openTakes(app, place, near = null) {
     changed(insertTake(app.text, place, take), "The take is in the editor · an unsaved edit");
   };
   drawSends();
-  // a story, and a reel's Continue, wait for their choices: More takes writes them (#343)
-  const waits = place.kind === "story" || (place.kind === "continue" && scenes.length > 0);
+  // a story and Continue wait for their choices: More takes writes them (#342, #343)
+  const waits = place.kind === "story" || place.kind === "continue";
   if (waits) s.note = place.kind === "story" ? "Pick where the story starts and ends, how many scenes and how long: More takes writes them."
-    : "Pick the scene to continue after: More takes writes it.";
+    : `Pick ${scenes.length ? "the scene to continue after, " : ""}how many new scenes and how long: More takes writes them.`;
   draw();
   if (!waits) ask();
 }

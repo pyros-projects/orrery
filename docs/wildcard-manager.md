@@ -137,7 +137,8 @@ slots, which keeps it within a 4B or 8B model's reach):
 
 - **Continue the reel**: it reads every scene as it rolls at the node's seed
   (picks filled in, with the reel's style and CAST) up to the scene you pick
-  (**After**: the end, or any scene), and writes the next `SCENE`, with an
+  (**After**: the end, or any scene), and writes the next `SCENE`s, **in** N
+  scenes **of** S seconds (the sheet waits for these; **More takes** writes), with an
   `END ON:` that picks up that one's. A reel that plays on and on is read until
   the scene first ends (#342). **Replace** puts it in place of the scenes after
   it, **Insert** before them; a screenplay without SCENE lines becomes a reel
