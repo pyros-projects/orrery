@@ -124,7 +124,8 @@ def test_a_writer_without_its_pictures_writes_from_what_came_along(home):
     assert "Picture 1 is the first frame. There is no last frame this time: imagine it" in one
     describe = writers.request(Home(home), "describe", "a photo of a red fox in snow", 1, {}, {}, steer="as a woodcut", given=[])
     assert "Write the prompt from this one instead" in describe and "a photo of a red fox in snow" in describe
-    assert describe.endswith("Steer it: as a woodcut.")
+    assert describe.endswith("The direction, which outweighs everything above: as a woodcut.\n\n"
+                             "Answer as asked above, with what you write alone.")
     assert "came along" not in writers.request(Home(home), "describe", "a fox", 1, {}, {}, given=["the picture"])  # as it expects
 
 
@@ -195,7 +196,7 @@ def test_the_write_node_says_what_is_missing(home, monkeypatch):
                            steer="in the rain")
     assert result["text"] == "SHOT 5s: static\nA."  # no frames wired: written from what came along (#334)
     prompt, images, *_ = asked[0]
-    assert images is None and "No pictures came along this time." in prompt and prompt.endswith("Steer it: in the rain.")
+    assert images is None and "No pictures came along this time." in prompt and "The direction, which outweighs everything above: in the rain." in prompt
 
 
 def test_continue_follows_a_loop_and_one_without_end(home):
@@ -294,7 +295,7 @@ def test_on_an_image_prompt_the_story_writes_keyframes_onto_a_grid(home):
     prompt = writers.request(Home(home), "story", krea, 1, {}, {}, opts={"scenes": 3}, given=["the first frame"])
     assert "You write 3 image prompts for Krea 2" in prompt and "The start: the first frame, a picture sent along." in prompt
     assert "The end: the picture this prompt makes:\n\na photo of a red kite over a beach" in prompt
-    assert "SHOT" not in prompt and "sent along:\n\na photo" not in writers.request(
+    assert "SHOT" not in prompt and "carry its story on" not in writers.request(
         Home(home), "story", krea, 1, {}, {}, opts={"scenes": 3}, prompt=True)  # the prompt is in it already
     answer = "Here they are:\n1. A photo of a boy with a kite.\n2. The kite {lifts} | rises.\n3. The kite flies high."
     text, problem = writers.check("story", krea, answer, {"scenes": 3})
@@ -304,3 +305,49 @@ def test_on_an_image_prompt_the_story_writes_keyframes_onto_a_grid(home):
         "$keyframe\n: w832 h1216\n@grid $keyframe\n")
     assert "2 keyframes; 3 were asked for" in writers.check("story", krea, "A.\nB.", {"scenes": 3})[1]
     assert writers.apply("story", krea, "A kite.", {"scenes": 1}) == "# KREA 2 · kites\nA kite.\n: w832 h1216\n"
+
+
+SHOT_A = "SHOT 4s: push in\nA fox runs through snow.\nSFX: crunching snow"
+SHOT_B = "SHOT 4s: static\nA fox sleeps under a pine.\nSFX: wind"
+
+
+def test_a_sheet_prepends_appends_replaces_or_inserts_its_takes_one_after_the_other():
+    """#333: Prepend and Append copy the takes in, any number of them, in the order picked; Replace and Insert put them
+    where the writer has a place; the caret gets the text alone."""
+    fl = "@h3 t2va 16:9\nstyle: live-action\n\nSHOT 5s: static\nOld.\n"
+    head = "@h3 t2va 16:9\nstyle: live-action\n\n"
+    assert writers.place("describe", fl, [SHOT_A, SHOT_B], how="append")["template"] == f"{fl.rstrip()}\n\n{SHOT_A}\n\n{SHOT_B}\n"
+    assert writers.place("describe", fl, [SHOT_A], how="prepend")["template"] == f"{head}{SHOT_A}\n\nSHOT 5s: static\nOld.\n"
+    assert writers.place("describe", fl, [SHOT_B, SHOT_A], how="replace")["template"] == f"{head}{SHOT_B}\n\n{SHOT_A}\n"
+    assert writers.place("describe", fl, [SHOT_A], how="insert")["template"] == f"{head}{SHOT_A}\n\nSHOT 5s: static\nOld.\n"
+    assert writers.place("describe", REEL, [SHOT_A, SHOT_B], how="caret") == {"text": f"{SHOT_A}\n\n{SHOT_B}", "template": None}
+    krea = "a photo of a fox\n: w832 h1216\n"
+    assert writers.place("describe", krea, ["A fox."], how="prepend")["template"] == f"A fox.\n\n{krea}"
+    assert writers.place("story", krea, ["A boy.\nA kite.", "A gull."], {"scenes": 2}, how="replace")["template"] == (
+        "$keyframe = {A boy.|A kite.|A gull.}\n$keyframe\n: w832 h1216\n@grid $keyframe\n")  # every keyframe on the grid
+    with pytest.raises(writers.WriterError, match="Select a take"):
+        writers.place("describe", krea, ["  "])
+    with pytest.raises(writers.WriterError, match="'how'"):
+        writers.place("describe", krea, ["A fox."], how="somewhere")
+
+
+def test_takes_go_in_as_a_choice_a_roll_picks_one_whole_take():
+    """#333: one-line takes as {a|b}; shots as a binding and IF lines; scenes keep their SCENE lines, the binding in the
+    head, so every scene picks the same take."""
+    from orrery.h3 import compile_scene
+
+    krea = "a photo of a fox\n: w832 h1216\n"
+    assert writers.place("describe", krea, ["A red fox | snow.", "A fox, $5."], how="replace", choice=True)["template"] == (
+        "{A red fox \\| snow.|A fox, \\$5.}\n: w832 h1216\n")
+    assert writers.place("story", krea, ["A boy.\nA kite."], {"scenes": 2}, how="replace", choice=True)["template"] == (
+        "{A boy.|A kite.}\n: w832 h1216\n")  # a choice of keyframes, no grid
+    fl = "@h3 t2va 16:9\n\nSHOT 5s: static\nOld.\n"
+    placed = writers.place("describe", fl, [SHOT_A, SHOT_B], how="replace", choice=True)["template"]
+    assert placed.splitlines()[2:4] == ["$take = {1|2}", "IF $take is 1: SHOT 4s: push in"]
+    rolled = {compile_scene(placed, seed, {}, {}).text for seed in range(8)}
+    assert len(rolled) == 2 and all(("runs" in t) != ("sleeps" in t) for t in rolled)  # one whole shot each roll
+    s1 = "SCENE the river\nSHOT 5s: static\nThe fox drinks.\nEND ON: the fox looks up"
+    s2 = "SCENE the den\nSHOT 5s: static\nThe fox sleeps."
+    out = writers.place("continue", FILM, [s1, s2], {"after": 0}, how="insert", choice=True)["template"]
+    assert "style: live-action\n$take = {1|2}\nSCENE one" in out and "\nSCENE the river\nIF $take is 1: SHOT 5s: static\n" in out
+    assert "IF $take is 2: The fox sleeps.\n\nSCENE two repeat 2" in out and "SCENE the den" not in out

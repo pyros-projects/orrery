@@ -21,9 +21,9 @@ const SAID = { slot: "the slot", library: "the library still to be written", ent
 
 // The Write menu's writers (#334): what each writes, and where its take goes.
 export const WRITERS = {
-  continue: { label: "Continue the reel", hint: "The next scene, after the scene you pick, as the reel plays at this seed", goes: "Use selected puts it in after that scene (a screenplay without scenes becomes the first)." },
-  story: { label: "Story interpolator", hint: "What happens between a start and an end: a frame, a scene or the prompt", goes: "Use selected puts it in between them: in a screenplay its scenes, on an image prompt its keyframes." },
-  describe: { label: "Prompt from image", hint: "A prompt for the picture in first_frame", goes: "Use selected puts it in place of the prompt; comments and `: …` lines stay." },
+  continue: { label: "Continue the reel", hint: "The next scene, after the scene you pick, as the reel plays at this seed" },
+  story: { label: "Story interpolator", hint: "What happens between a start and an end: a frame, a scene or the prompt" },
+  describe: { label: "Prompt from image", hint: "A prompt for the picture in first_frame" },
 };
 
 // After a library was written from a sheet: the editor knows it now, its 🎲 goes, its rolls show.
@@ -150,42 +150,44 @@ export function defaultSends(kind, wired, tab = false) {
   return out;
 }
 
-// Where a writer's take goes (#342, #343), in words, as its sheet's choices stand: `after` the scene Continue continues
-// after (null: the end), `from`/`to` the story's start and end (a scene's index or first_frame, last_frame, prompt),
-// `insert` whether the scenes in between stay. `scenes`: the template's scene titles; `h3`: a screenplay.
-export function writerGoes(kind, { scenes = [], h3 = true, after = null, from = "first_frame", to = "last_frame", insert = false } = {}) {
+// Where Replace and Insert put a writer's takes (#333, #342, #343), in words, as its sheet's choices stand; null where
+// the writer has no such place (Prepend and Append work everywhere). `after`: the scene Continue continues after (null:
+// the end); `from`/`to`: the story's start and end (a scene's index, first_frame, last_frame or the prompt). `scenes`:
+// the template's scene titles; `h3`: a screenplay.
+export function writerPlaces(kind, { scenes = [], h3 = true, after = null, from = "first_frame", to = "last_frame" } = {}) {
   const name = (i) => `SCENE ${i + 1}${scenes[i] ? ` (${scenes[i]})` : ""}`;
   const span = (a, b) => (b - a === 1 ? name(a) : `${name(a)} to ${name(b - 1)}`);
-  if (!h3) return "On a grid in place of the prompt: one Roll renders every keyframe, in order.";
-  if (!scenes.length) return kind === "continue" ? "After the screenplay, which becomes the first scene."
-    : insert ? "Above the shots, which stay." : "In place of the shots below the header.";
+  if (kind === "describe") {
+    if (!h3) return { replace: "in place of the prompt, its comments and `: …` lines kept", insert: null };
+    if (scenes.length) return { replace: null, insert: "under the line your cursor was on" };
+  }
+  if (!h3) return { replace: "in place of the prompt, on a grid: one Roll renders every keyframe (as a choice: one a Roll)", insert: null };
+  if (kind !== "continue" && !scenes.length) return { replace: "in place of the shots below the header", insert: "above the shots, which stay" };
+  if (!scenes.length) return { replace: null, insert: "after the screenplay, which becomes the first scene" };
   const a = kind === "continue" ? (after ?? scenes.length - 1) : typeof from === "number" ? from : -1;
   const b = kind === "continue" || typeof to !== "number" ? scenes.length : to;
-  const where = a < 0 ? "Before the first scene" : `After ${name(a)}`;
-  if (b <= a + 1) return `${where}.`;
-  return insert ? `${where}: ${span(a + 1, b)} ${b - a > 2 ? "stay" : "stays"} after it.` : `${where}, in place of ${span(a + 1, b)}.`;
+  const where = a < 0 ? "before the first scene" : `after ${name(a)}`;
+  if (b <= a + 1) return { replace: null, insert: where };
+  return { replace: `${where}, in place of ${span(a + 1, b)}`, insert: `${where}, ${span(a + 1, b)} ${b - a > 2 ? "stay" : "stays"} after them` };
 }
 
-// The row of a writer's choices in its sheet (#342, #343); none for a writer without any.
+// The row of a writer's choices in its sheet (#342, #343): what the next takes are written for; none for a writer
+// without any.
 function writerRow(kind, scenes, h3, wo) {
   const opt = (v, label, on) => `<option value="${v}"${on ? " selected" : ""}>${esc(label)}</option>`;
   const scene = (on) => scenes.map((t, i) => opt(i, `SCENE ${i + 1}${t ? ` · ${t}` : ""}`, on === i)).join("");
   const num = (k, min, max, label) => `<input type="number" class="input num" data-wo="${k}" min="${min}" max="${max}" value="${wo[k]}" aria-label="${label}">`;
-  const mode = `<span class="row take-mode" role="group" aria-label="What happens to the scenes in between">`
-    + `<button type="button" class="chip" data-tmode="replace" aria-pressed="${!wo.insert}" title="The take goes in place of the scenes in between">Replace</button>`
-    + `<button type="button" class="chip" data-tmode="insert" aria-pressed="${wo.insert}" title="The take goes in, the scenes in between stay after it">Insert</button></span>`;
-  const goes = `<span class="muted" data-tgoes>${esc(writerGoes(kind, { ...wo, scenes, h3 }))}</span>`;
   if (kind === "continue") {
     return scenes.length ? `<div class="row wrap take-opts"><span class="label">After</span><select class="input" data-wo="after" aria-label="The scene it continues after">`
-      + `${opt("", "the end", true)}${scene(null)}</select>${mode}${goes}</div>` : "";
+      + `${opt("", "the end", true)}${scene(null)}</select></div>` : "";
   }
   if (kind !== "story") return "";
   const ends = h3 ? [[opt("first_frame", "first_frame", true), scene(null)], [opt("last_frame", "last_frame", true), scene(null)]]
     : [[opt("first_frame", "first_frame", true), opt("prompt", "the prompt", false)], [opt("prompt", "the prompt", true), opt("last_frame", "last_frame", false)]];
   return `<div class="row wrap take-opts"><span class="label">From</span><select class="input" data-wo="from" aria-label="Where the story starts">${ends[0].join("")}</select>`
     + `<span class="label">to</span><select class="input" data-wo="to" aria-label="Where the story ends">${ends[1].join("")}</select>`
-    + `<span class="label">in</span>${num("scenes", 1, 20, h3 ? "How many scenes" : "How many keyframes")}<span class="label">${h3 ? "scenes" : "keyframes"}</span>`
-    + (h3 ? `<span class="label">of</span>${num("seconds", 1, 15, "Seconds a scene")}<span class="label">s</span>${mode}` : "") + `${goes}</div>`;
+    + `<span class="label">in</span>${num("scenes", 1, 99, h3 ? "How many scenes" : "How many keyframes")}<span class="label">${h3 ? "scenes" : "keyframes"}</span>`
+    + (h3 ? `<span class="label">of</span>${num("seconds", 1, 60, "Seconds a scene")}<span class="label">s</span>` : "") + "</div>";
 }
 
 export function openTakes(app, place, near = null) {
@@ -194,31 +196,28 @@ export function openTakes(app, place, near = null) {
   const known = place.kind === "entries";  // a library that exists: its rolls and new entries (#273)
   const tab = !!place.tab;  // from the Libraries tab (#323): new entries only, and no line to put one on
   const writer = !!WRITERS[place.kind];  // the Write menu's (#334): a take is a text with its whole template
-  const meta = [];  // writer: each take's template and what is wrong with it
+  const meta = [];  // writer: what is wrong with each take
   const wired = (name) => !!app.bridge.wired?.(name);
   const sends = defaultSends(place.kind, wired, tab), gallery = [];  // gallery: {id, kind} of the items sent along
   const sent = () => (picture ? null : [...sends, ...gallery.map((g) => `gallery:${g.id}`)]);
   const h3 = /^@h3\b/i.test((app.text.split("\n").find((l) => l.trim() && !l.trim().startsWith("#")) || "").trim());
-  // several at once: a library's entries (#272), the one-line takes that can go in as a choice (#336), and a prompt from
-  // an image's shots on a screenplay, which go in one after the other, in the order they were picked
-  const shots = place.kind === "describe" && h3;
-  const choice = place.kind === "slot" || (place.kind === "describe" && !h3) || ((place.kind === "library" || known) && !tab);
-  const multi = place.kind === "library" || known || choice || shots;
+  // several at once: a library's entries (#272), the one-line takes that can go in as a choice (#336), and a writer's,
+  // which go in one after the other or as one choice, as many as you like (#333)
+  const choice = place.kind === "slot" || ((place.kind === "library" || known) && !tab);
+  const multi = place.kind === "library" || known || choice || writer;
   const from = [];  // known: where each take came from, "rolled", "new" or "added"
   const token = writer ? WRITERS[place.kind].label : place.kind === "slot" || picture ? `--${place.what}--` : enhance ? `> ${place.what}` : `__${place.what}__`;
-  const useTitle = shots ? "Put the selected shots in, one after the other in the order you picked them: in place of the shots below the header, on a reel under the caret's line. An unsaved edit"
-    : writer ? `Put the selected take in: ${WRITERS[place.kind].goes.replace(/^Use selected /, "it ")} An unsaved edit`
-    : picture ? "Write the selected take into the picture's exports"
+  const useTitle = picture ? "Write the selected take into the picture's exports"
     : enhance ? "Keep the selected rewrite for this roll: a run that rolls this prompt uses it instead of asking the model"
       : `Put the selected take in place of ${esc(token)}: an unsaved edit`;
   // the writer's choices (#342, #343): the scene Continue continues after (null: the end); the story's start and end,
-  // how many scenes (keyframes on an image prompt) and how long each; whether the scenes in between stay
+  // how many scenes (keyframes on an image prompt) and how long each; whether several takes go in as one choice
   const scenes = writer ? sceneTitles(app.text) : [];
-  const wo = { after: null, from: "first_frame", to: h3 ? "last_frame" : "prompt", scenes: 1, insert: false,
+  const wo = { after: null, from: "first_frame", to: h3 ? "last_frame" : "prompt", scenes: 1, choice: false,
     seconds: Math.round(Number(/^\s*SHOT\s+(\d+(?:\.\d+)?)\s*s\b/im.exec(app.text)?.[1]) || 5) };
   const reelShot = place.kind === "describe" && scenes.length > 0;  // its take goes in at the caret
   const intro = writer ? `, at seed ${esc(String(app.bridge.getSeed()))}: ${esc(WRITERS[place.kind].hint.toLowerCase())}. `
-    + esc(reelShot ? "On a reel, Use selected puts it in under the line your cursor was on." : WRITERS[place.kind].goes)
+    + "Select as many as you like: Prepend or Append copies them into the prompt, Replace and Insert put them where the writer has a place."
     : tab ? ": new entries the language model writes, none it has. Steer them, ask for more, select the good ones: Add to the library writes them in."
     : `, ${picture ? "written from the picture, the prompt that made it beside it." : `at seed ${esc(String(app.bridge.getSeed()))}.`}`
       + (enhance ? " A rewrite happens at every run: Use selected keeps the one you pick for this roll, and the run uses it." : "")
@@ -234,12 +233,20 @@ export function openTakes(app, place, near = null) {
     + `<div class="row take-steer"><input class="input grow" data-steer placeholder="Steer them: darker, older, as an anime character …" aria-label="Steer the takes">`
     + `<button class="btn" data-tmore>${icon("dice")}More takes</button>`
     + (picture || writer ? "" : `<button class="btn ghost" data-tkeep title="Write the steer into ${esc(SAID[place.kind])}'s directions, so it keeps rolling that way">${icon("pin")}Keep the direction</button>`) + "</div>"
-    + `<div class="row take-use"><span class="grow"></span>`
+    + (writer ? '<p class="muted flush take-goes" data-tgoes></p><div class="row wrap take-use">'
+      + '<span class="row take-mode" role="group" aria-label="How several takes go in">'
+      + '<button type="button" class="chip" data-tas="written" aria-pressed="true" title="One after the other, in the order you selected them">as written</button>'
+      + '<button type="button" class="chip" data-tas="choice" aria-pressed="false" title="As one choice, so every Roll picks one of them: {a|b} for one-line takes, a $take binding and IF lines for longer ones">as a choice</button></span>'
+      + '<span class="grow"></span>'
+      + `<button class="btn ghost" data-tput="prepend" title="At the start of the prompt (a screenplay's: under its head). An unsaved edit">${icon("up")}Prepend to prompt</button>`
+      + `<button class="btn ghost" data-tput="append" title="At the end of the prompt. An unsaved edit">${icon("down")}Append to prompt</button>`
+      + `<button class="btn" data-tput="replace">${icon("check")}Replace</button><button class="btn primary" data-tput="insert">${icon("plus")}Insert</button></div></div>`
+      : '<div class="row take-use"><span class="grow"></span>')
     + (choice ? `<button class="btn ghost" data-tchoice title="Put the selected takes in as a choice, {a|b|c}: every Roll picks one, so you see which works best">${icon("dice")}Insert as a choice</button>` : "")
-    + `${tab ? "" : `<button class="btn${place.kind === "library" || known ? " ghost" : " primary"}" data-tuse title="${useTitle}">${icon("check")}Use selected</button>`}`
+    + `${tab || writer ? "" : `<button class="btn${place.kind === "library" || known ? " ghost" : " primary"}" data-tuse title="${useTitle}">${icon("check")}Use selected</button>`}`
     + (known ? `<button class="btn primary" data-tlib title="Write the selected new entries into __${esc(place.what)}__, straight in">${icon("save")}Add to the library</button>`
       : place.kind === "library" ? `<button class="btn primary" data-tlib title="Write the selected entries as __${esc(place.what)}__, straight into your libraries">${icon("save")}Keep as the library</button>` : "")
-    + "</div></div>", near);
+    + (writer ? "" : "</div></div>"), near);
   const list = sheet.querySelector(".take-list"), state = sheet.querySelector(".take-state"), steer = sheet.querySelector("[data-steer]");
   const sendRow = sheet.querySelector(".take-send"), galPick = sheet.querySelector(".take-gal");
   const drawSends = () => {
@@ -292,7 +299,16 @@ export function openTakes(app, place, near = null) {
     if (place.kind !== "story") return;
     for (const k of ["first_frame", "last_frame"]) sends[(wo.from === k || wo.to === k) && wired(k) ? "add" : "delete"](k);
   };
-  const drawGoes = () => { const g = optRow?.querySelector("[data-tgoes]"); if (g) g.textContent = writerGoes(place.kind, { ...wo, scenes, h3 }); };
+  const drawGoes = () => {  // what Replace and Insert do, as the choices stand; the one the writer has no place for hidden
+    const places = writerPlaces(place.kind, { ...wo, scenes, h3 }), g = sheet.querySelector("[data-tgoes]");
+    if (!g) return;
+    g.textContent = [["Replace", places.replace], ["Insert", places.insert]].filter(([, w]) => w).map(([k, w]) => `${k}: ${w}.`).join(" ");
+    for (const k of ["replace", "insert"]) {
+      const b = sheet.querySelector(`[data-tput="${k}"]`);
+      b.hidden = !places[k];
+      b.title = places[k] ? `${places[k][0].toUpperCase()}${places[k].slice(1)}. An unsaved edit` : "";
+    }
+  };
   optRow?.addEventListener("change", (e) => {
     const k = e.target.dataset.wo, v = e.target.value;
     if (!k) return;
@@ -301,14 +317,30 @@ export function openTakes(app, place, near = null) {
     if (k === "from" || k === "to") { framesFor(); drawSends(); }
     drawGoes();
   });
-  optRow?.addEventListener("click", (e) => {
-    const m = e.target.closest("[data-tmode]");
+  sheet.querySelector(".take-mode")?.addEventListener("click", (e) => {
+    const m = e.target.closest("[data-tas]");
     if (!m) return;
-    wo.insert = m.dataset.tmode === "insert";
-    optRow.querySelectorAll("[data-tmode]").forEach((b) => b.setAttribute("aria-pressed", String(b === m)));
-    drawGoes();
+    wo.choice = m.dataset.tas === "choice";
+    sheet.querySelectorAll("[data-tas]").forEach((b) => b.setAttribute("aria-pressed", String(b === m)));
   });
+  const writerOptions = () => (place.kind === "continue" ? { after: wo.after } : place.kind === "story"
+    ? { from: wo.from, to: wo.to, scenes: wo.scenes, seconds: wo.seconds } : {});
+  // the selected takes, in the order selected, where the button says (#333): the server places them, no model asked
+  const put = async (how) => {
+    const order = [...s.picked].filter((i) => i < s.takes.length);
+    if (!order.length) return;
+    try {
+      const got = await app.api.writePlace({ task: place.kind, template: app.text, takes: order.map((i) => s.takes[i]),
+        how: how === "insert" && reelShot ? "caret" : how, choice: wo.choice, options: writerOptions() });
+      const next = got.template ?? atCaret(app.text, caretOffset(app), got.text);
+      app.closeSheet();
+      changed(next, `${order.length === 1 ? "The take is" : `${order.length} takes are`} in the editor${wo.choice && order.length > 1 ? " as a choice" : ""}`
+        + `${order.some((i) => meta[i]?.problem) ? ", with a problem" : ""} · an unsaved edit`);
+    } catch (err) { s.error = err.message; draw(); }
+  };
+  sheet.querySelectorAll("[data-tput]").forEach((b) => { b.onclick = () => put(b.dataset.tput); });
   framesFor();
+  drawGoes();
   const use = sheet.querySelector("[data-tuse]"), lib = sheet.querySelector("[data-tlib]"), pick = sheet.querySelector("[data-tchoice]");
   const picks = () => [...s.picked].sort((a, b) => a - b);
   const oneLine = () => picks().every((i) => !s.takes[i].includes("\n"));
@@ -317,11 +349,13 @@ export function openTakes(app, place, near = null) {
   const draw = () => {
     const tag = (i) => (known ? `<small class="tk ${from[i]}">${from[i] === "new" ? "new" : from[i] === "added" ? "added" : "rolled"}</small>` : "");
     const shown = (t, i) => (writer ? `<pre class="codebox">${highlight(t, app.known(), {})}</pre>${meta[i]?.problem ? `<p class="warn flush">${esc(meta[i].problem)}</p>` : ""}` : esc(t));
-    list.innerHTML = s.takes.map((t, i) => `<li class="${on(i) ? "on" : ""}" data-tpick="${i}" tabindex="0" role="option" aria-selected="${on(i)}">${shown(t, i)}${tag(i)}</li>`).join("");
+    list.innerHTML = s.takes.map((t, i) => `<li class="${on(i) ? "on" : ""}" data-tpick="${i}" tabindex="0" role="option" aria-selected="${on(i)}">${shown(t, i)}${tag(i)}`
+      + `<button type="button" class="icon-btn tdel" data-tdel="${i}" title="Take it out of the list" aria-label="Take it out of the list">${icon("x")}</button></li>`).join("");
     state.textContent = s.busy ? "Writing…" : s.error || s.note;
     state.classList.toggle("warn", !!s.error && !s.busy);
     sheet.querySelector("[data-tmore]").disabled = s.busy;
-    if (use) use.disabled = s.busy || (shots ? !s.picked.size : chosen() === null) || (enhance && !s.keep);
+    if (use) use.disabled = s.busy || chosen() === null || (enhance && !s.keep);
+    sheet.querySelectorAll("[data-tput]").forEach((b) => { b.disabled = s.busy || !s.picked.size; });
     if (pick) {
       pick.disabled = s.busy || s.picked.size < 2 || !oneLine();
       pick.title = s.picked.size > 1 && !oneLine() ? "A take of several lines goes in alone: a choice holds one line each"
@@ -379,8 +413,7 @@ export function openTakes(app, place, near = null) {
   // over the API all at once, when the frames are files ComfyUI holds.
   const writeTakes = async () => {
     const n = Number(app.data.llm?.takes?.write) || 3, ideas = Array.from({ length: n }, () => s.asked++);
-    const options = place.kind === "continue" ? { after: wo.after } : place.kind === "story"
-      ? { from: wo.from, to: wo.to, scenes: wo.scenes, seconds: wo.seconds } : {};
+    const options = writerOptions();
     const need = sent().filter((k) => FRAMES.includes(k));
     const files = app.llmApi() ? (need.length ? (await app.bridge.frameFiles?.()) || null : { names: {}, others: [] }) : null;
     const api = !!files && !(files.others || []).some((k) => need.includes(k));  // a sent input that is no file: a run
@@ -393,7 +426,7 @@ export function openTakes(app, place, near = null) {
       if (got.error) errors.push(got.error);
       else if (got.text && !s.takes.includes(got.text)) {
         s.takes.push(got.text);
-        meta.push({ template: got.template, inserted: got.inserted, problem: got.problem, caret: !!got.at_caret });
+        meta.push({ problem: got.problem });
       }
       draw();
     };
@@ -443,8 +476,22 @@ export function openTakes(app, place, near = null) {
     draw();
     list.querySelector(`[data-tpick="${s.pick}"]`)?.focus();
   };
-  list.addEventListener("click", (e) => select(e.target.closest("[data-tpick]")));
-  list.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(e.target.closest("[data-tpick]")); } });
+  const drop = (i) => {  // a take out of the list (#333); what is selected stays selected, in its order
+    s.takes.splice(i, 1);
+    meta.splice(i, 1);
+    from.splice(i, 1);
+    s.picked = new Set([...s.picked].filter((k) => k !== i).map((k) => (k > i ? k - 1 : k)));
+    s.pick = s.pick === i ? null : s.pick !== null && s.pick > i ? s.pick - 1 : s.pick;
+    draw();
+  };
+  list.addEventListener("click", (e) => {
+    const del = e.target.closest("[data-tdel]");
+    if (del) return drop(Number(del.dataset.tdel));
+    select(e.target.closest("[data-tpick]"));
+  });
+  list.addEventListener("keydown", (e) => {
+    if ((e.key === "Enter" || e.key === " ") && !e.target.closest("[data-tdel]")) { e.preventDefault(); select(e.target.closest("[data-tpick]")); }
+  });
   if (multi) {
     sheet.querySelector("[data-tall]").onclick = () => { s.takes.forEach((_, i) => s.picked.add(i)); draw(); };
     sheet.querySelector("[data-tnone]").onclick = () => { s.picked.clear(); draw(); };
@@ -468,26 +515,13 @@ export function openTakes(app, place, near = null) {
     };
   }
   if (pick) pick.onclick = () => {  // #336: in place of the slot, the library, or the prompt a picture's takes replace
-    const chosenTakes = picks().map((i) => s.takes[i]), text = asChoice(chosenTakes), m = meta[picks()[0]];
-    const next = !writer ? insertTake(app.text, place, text) : m.caret ? atCaret(app.text, caretOffset(app), text) : m.template.replace(chosenTakes[0], text);
+    const chosenTakes = picks().map((i) => s.takes[i]), next = insertTake(app.text, place, asChoice(chosenTakes));
     app.closeSheet();
     changed(next, `${chosenTakes.length} takes are in as a choice: every Roll picks one · an unsaved edit`);
   };
   if (use) use.onclick = async () => {
-    if (shots && s.picked.size > 1) {  // several shots, in the order they were picked, where one would go
-      const order = [...s.picked], text = order.map((i) => s.takes[i]).join("\n\n"), m = meta[order[0]];
-      app.closeSheet();
-      return changed(m.caret ? atCaret(app.text, caretOffset(app), text) : m.template.replace(s.takes[order[0]], text),
-        `${order.length} shots are in the editor${m.caret ? ", under the caret's line" : ""} · an unsaved edit`);
-    }
     const take = s.takes[chosen()];
     if (take === undefined) return;
-    if (writer) {  // the template with the take in its place, as the server wrote it; a reel's shot at the caret (#334)
-      const m = meta[chosen()];
-      app.closeSheet();
-      return changed(m.caret ? atCaret(app.text, caretOffset(app), take) : wo.insert ? m.inserted || m.template : m.template,
-        `The take is in the editor${m.caret ? ", under the caret's line" : ""}${m.problem ? ", with a problem" : ""} · an unsaved edit`);
-    }
     try {
       if (picture) {
         const d = await app.api.galaxyWrite({ id: place.id, what: place.what, text: take });

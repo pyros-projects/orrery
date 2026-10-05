@@ -1313,6 +1313,22 @@ def write_idea(home: Home, args: dict) -> dict:
                                   args.get("options") if isinstance(args.get("options"), dict) else None)
 
 
+def write_place(home: Home, args: dict) -> dict:
+    """Takes of a writer's sheet into the template (#333): `takes` in the order picked, `how` (prepend, append,
+    replace, insert, caret), `choice` (as one choice), `options` (what the sheet chose). No language model."""
+    from orrery import writers
+
+    takes = args.get("takes")
+    if not isinstance(takes, list) or not all(isinstance(t, str) for t in takes):
+        raise ApiError(400, "'takes' must be a list of texts.")
+    try:
+        return writers.place(str(args.get("task") or ""), _text(args, "template"), takes,
+                             args.get("options") if isinstance(args.get("options"), dict) else None,
+                             str(args.get("how") or "append"), bool(args.get("choice")))
+    except writers.WriterError as err:
+        raise ApiError(400, str(err)) from err
+
+
 def llm_takes(home: Home, args: dict) -> dict:
     """Takes at the line (#173) over the API endpoint, outside the queue; with a text encoder the app queues them as
     mini-runs instead (Orrery Ask, #178)."""
@@ -1617,6 +1633,7 @@ ROUTES = [
     ("POST", "/orrery/llm/check", llm_check),
     ("POST", "/orrery/llm/libraries", write_libraries),
     ("POST", "/orrery/write", write_idea),
+    ("POST", "/orrery/write/place", write_place),
     ("POST", "/orrery/llm/takes", llm_takes),
     ("POST", "/orrery/llm/keep", llm_keep),
     ("POST", "/orrery/llm/plan", llm_plan),

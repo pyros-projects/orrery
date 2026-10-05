@@ -151,9 +151,10 @@ slots, which keeps it within a 4B or 8B model's reach):
   keyframe prompts, from first_frame to the picture the prompt makes, on a grid
   so one Roll renders them all. Without a frame it is told so and imagines it.
 - **Prompt from image**: it sees the picture in `first_frame` and writes an
-  image prompt (Krea 2), or an i2va shot when the template is `@h3`. Comments
-  and `: w… h…` lines stay. Without a picture it writes from the prompt as it
-  rolls.
+  image prompt (Krea 2), or an i2va shot when the template is `@h3`. **Replace**
+  puts it in place of the prompt (comments and `: w… h…` lines stay) or of the
+  shots; **Insert** above the shots, or on a reel under your cursor's line.
+  Without a picture it writes from the prompt as it rolls.
 
 Each writer opens the 🎲 takes sheet every ask uses (#333): as many takes as
 the gear's count for the Write menu says, each a short run of its own (Orrery
@@ -162,10 +163,15 @@ so no video model loads; a run already in the queue goes first), sampled at
 seed + n and at `writer_temperature`, 0.8 by default in `orrery.yaml`'s `llm:`,
 so each take is a different one (the scenes it reads still roll at the node's
 seed). A steering line goes with them, **Send along** says which pictures and
-whether the prompt go too, and **Use selected** puts one into the editor as an
-unsaved edit (Undo in the toast); several one-line prompts go in **as a
-choice**. A take that writes wildcards, more than one scene or a shot orrery
-cannot compile shows what is wrong under it, and goes in anyway when you use it.
+whether the prompt go too (its prompt is told what that is for, and the steer
+goes last, above everything). Select as many takes as you like, × takes one
+out: **Prepend to prompt** and **Append to prompt** copy them in, at the start
+or the end, in every mode; **Replace** and **Insert** put them where the writer
+has a place, as said above. **as written** puts them one after the other, **as
+a choice** makes them one choice a Roll picks from (`{a|b}`, or a `$take`
+binding and IF lines for takes of several lines). Each is an unsaved edit
+(Undo in the toast). A take that writes wildcards, more than one scene or a
+shot orrery cannot compile shows what is wrong under it, and goes in anyway.
 The gear's **Writers** section holds what the model is sent: each writer its
 own prompt (the image prompt and the i2va shot of Prompt from image are two),
 with only the rules and examples it needs, so a small model is not confused by

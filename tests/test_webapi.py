@@ -64,7 +64,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/galaxy/collect"), ("POST", "/orrery/galaxy/circle"), ("POST", "/orrery/galaxy/uncollect"), ("POST", "/orrery/galaxy/collection/add"),
         ("POST", "/orrery/galaxy/collection/rename"), ("POST", "/orrery/galaxy/collection/delete"),
         ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
-        ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"), ("POST", "/orrery/llm/takes"), ("POST", "/orrery/llm/keep"), ("POST", "/orrery/llm/plan"), ("POST", "/orrery/galaxy/takes"), ("POST", "/orrery/galaxy/write"),
+        ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"), ("POST", "/orrery/write/place"), ("POST", "/orrery/llm/takes"), ("POST", "/orrery/llm/keep"), ("POST", "/orrery/llm/plan"), ("POST", "/orrery/galaxy/takes"), ("POST", "/orrery/galaxy/write"),
         ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/add"), ("POST", "/orrery/library/discard"),
         ("GET", "/orrery/home"), ("POST", "/orrery/home"),
         ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("POST", "/orrery/chain/move"), ("POST", "/orrery/chain/pick"), ("POST", "/orrery/chain/delete"), ("POST", "/orrery/chain/clear"), ("GET", "/orrery/chain/tree"), ("POST", "/orrery/chain/walk"), ("POST", "/orrery/chain/end"),
@@ -587,7 +587,7 @@ def test_the_write_menu_asks_the_endpoint_outside_the_queue(home, fake_api, tmp_
     assert body["text"] == "A cat curled on a red cushion."  # no picture wired: written from the prompt (#334)
     said = fake_api.requests[-1]["messages"][0]["content"]
     said = said if isinstance(said, str) else said[-1]["text"]
-    assert "No pictures came along this time" in said and said.endswith("Steer it: cosier.")
+    assert "No pictures came along this time" in said and "The direction, which outweighs everything above: cosier." in said
 
 
 def test_write_now_writes_the_templates_open_libraries(home, fake_api):
@@ -1147,4 +1147,4 @@ def test_a_sheet_sends_along_what_its_toggles_say(home, fake_api, tmp_path, monk
     said = content[-1]["text"]
     assert body["text"].startswith("SHOT 5s") and sum(c["type"] == "image_url" for c in content) == 1
     assert "Picture 1 is the first frame. There is no last frame this time: imagine it" in said  # it has the first
-    assert "The prompt as it rolls at this seed, sent along:\n\nSHOT 5s: static\nA woman with a" in said  # its lines kept
+    assert "carry its story on:\n\nSHOT 5s: static\nA woman with a" in said  # its lines kept, and what they are for

@@ -24,7 +24,9 @@ BUILTIN = Path(__file__).parent / "builtin" / "writers"
 NAMES = ("continue", "story", "story_scenes", "story_keyframes", "describe", "describe_shot")
 TASKS = ("continue", "story", "describe")
 DEFAULT_SECONDS = 5
-MAX_SCENES = 20  # the scenes (or keyframes) one story asks for
+MAX_SCENES = 99  # the scenes (or keyframes) one story asks for
+MAX_SECONDS = 60  # how long one of its scenes may be
+HOWS = ("prepend", "append", "replace", "insert", "caret")  # where a sheet puts takes in (see `place`)
 FIRST, LAST, PROMPT = "first_frame", "last_frame", "prompt"  # a story's start and end besides a scene (its index)
 
 _SHOT = re.compile(r"^\s*SHOT\s+(\d+(?:\.\d+)?)\s*s\b", re.IGNORECASE)
@@ -140,7 +142,7 @@ def options(raw: dict | None, template: str) -> dict:
     return {"after": raw["after"] if scene(raw.get("after")) else None,
             "from": end("from", FIRST), "to": end("to", LAST if is_h3(template) else PROMPT),
             "scenes": max(1, min(MAX_SCENES, int(raw.get("scenes") or 1))),
-            "seconds": max(1, min(15, int(seconds))) if seconds else shot_seconds(template)}
+            "seconds": max(1, min(MAX_SECONDS, int(seconds))) if seconds else shot_seconds(template)}
 
 
 def task_name(task: str, template: str, opts: dict | None = None) -> str:
@@ -272,10 +274,15 @@ def request(home: Home, task: str, template: str, seed: int, libraries, weights,
     parts = [_fill(text(home, name), values).strip()]
     if (note := _came_along(name, given, template, seed, libraries, weights, opts)):
         parts.append(note)
-    if prompt and not inside and "from this one instead" not in note:
-        parts.append(f"The prompt as it rolls at this seed, sent along:\n\n{_rolled(template, seed, libraries, weights)}")
-    if steer.strip():
-        parts.append(f"Steer it: {' '.join(steer.split())}.")
+    if prompt and not inside and "from this one instead" not in note:  # what it is for, or a small model passes it by
+        parts.append("The prompt you write for, as it rolls at this seed. What you write goes into it: keep its world, "
+                     "its people, its place and its style, and carry its story on"
+                     + (", unless the direction below says otherwise" if steer.strip() else "")
+                     + f":\n\n{_rolled(template, seed, libraries, weights)}")
+    if steer.strip():  # last, where a small model weighs it most (#333)
+        parts.append(f"The direction, which outweighs everything above: {' '.join(steer.split())}.")
+    if len(parts) > 1:
+        parts.append("Answer as asked above, with what you write alone.")
     return "\n\n".join(parts)
 
 
@@ -464,3 +471,106 @@ def apply(task: str, template: str, text_: str, opts: dict | None = None, insert
         prompt = [f"$keyframe = {{{'|'.join(frames)}}}", "$keyframe"]
         params = [ln for ln in params if not re.match(r"\s*@(grid|unique)\b", ln)] + ["@grid $keyframe"]
     return "\n".join([*comments, *blocks, *prompt, *params]) + "\n"
+
+
+# --- what the sheet puts in -------------------------------------------------------------------
+
+def _escaped(text_: str) -> str:
+    """A take inside `{a|b}`: what the language reads as its own (`{ } | $ __ \\`) written as itself."""
+    return re.sub(r"[\\{}|$]", lambda m: "\\" + m.group(0), text_).replace("__", "\\__")
+
+
+def _binding_name(text_: str) -> str:
+    used, name, n = set(re.findall(r"\$(\w+)", text_)), "take", 1
+    while name in used:
+        n += 1
+        name = f"take{n}"
+    return name
+
+
+def _scenes_of(take: str) -> list[list[str]]:
+    """A take's scenes, each its SCENE line and the lines under it (lines before the first go with it)."""
+    out, loose = [], []
+    for ln in take.splitlines():
+        if _CHUNK.match(ln):
+            out.append([ln.strip(), *loose])
+            loose = []
+        elif out:
+            out[-1].append(ln)
+        else:
+            loose.append(ln)
+    return out
+
+
+def as_choice(takes: list[str], template: str = "") -> tuple[str, str | None]:
+    """Several takes as one choice (#336), so every Roll picks one: (the text, a binding for the template's head or
+    None). One-line takes as `{a|b|c}`; takes of several lines (shots, keyframes) as a binding and IF lines, the
+    whole take or nothing; scenes keep their SCENE lines (IF cannot hide one) and choose what is in them by a binding
+    in the head, the same take in every scene (a binding in a scene holds only there)."""
+    takes = [t.strip() for t in takes if t.strip()]
+    if all("\n" not in t for t in takes):
+        return "{" + "|".join(_escaped(t) for t in takes) + "}", None
+    name = _binding_name(template + "\n" + "\n".join(takes))
+    pick = f"${name} = {{{'|'.join(str(i) for i in range(1, len(takes) + 1))}}}"
+
+    def guarded(i, lines):
+        return [f"IF ${name} is {i}: {ln.strip()}" for ln in lines if ln.strip()]
+
+    if not any(_CHUNK.match(ln) for t in takes for ln in t.splitlines()):
+        return "\n".join([pick, *(g for i, t in enumerate(takes, 1) for g in guarded(i, t.splitlines()))]), None
+    split, out = [_scenes_of(t) for t in takes], []
+    for k in range(max(len(scenes) for scenes in split)):
+        out += [next(scenes[k][0] for scenes in split if len(scenes) > k),
+                *(g for i, scenes in enumerate(split, 1) if len(scenes) > k for g in guarded(i, scenes[k][1:])), ""]
+    return "\n".join(out).strip(), pick
+
+
+def _head_end(lines: list[str]) -> int:
+    """Where a screenplay's head ends: its first SHOT or SCENE line, blank lines before it left out."""
+    at = next((i for i, ln in enumerate(lines) if _SHOT.match(ln) or _CHUNK.match(ln)), len(lines))
+    while at > 0 and not lines[at - 1].strip():
+        at -= 1
+    return at
+
+
+def place(task: str, template: str, takes: list[str], opts: dict | None = None, how: str = "append",
+          choice: bool = False) -> dict:
+    """The takes a writer's sheet puts in (#333), one after the other in the order picked, or as a choice: {"text": as
+    they go in, "template": with them in}. `how`: prepend (a screenplay's after its head, an image prompt's at the
+    top) and append, a plain copy for every writer in every mode; replace and insert where the writer has a place
+    (see `apply`: after the scene picked, between the story's start and end, in place of the shots or the prompt);
+    caret, the text alone, for the app to put in at the caret. No limit on how many."""
+    if how not in HOWS:
+        raise WriterError(f"'how' is one of {', '.join(HOWS)}.")
+    takes = [t.strip() for t in takes if t and t.strip()]
+    if not takes:
+        raise WriterError("Select a take first.")
+    opts = options(opts, template)
+    name = task_name(task, template, opts)
+    if name == "story_keyframes":  # every keyframe of every take: on the grid, or one choice
+        takes = [ln.strip() for t in takes for ln in t.splitlines() if ln.strip()]
+        text_, head = as_choice(takes) if choice else ("\n".join(takes), None)
+    elif choice and len(takes) > 1:
+        text_, head = as_choice(takes, template)
+    else:
+        text_, head = "\n\n".join(takes), None
+    if how == "caret":
+        return {"text": text_, "template": None}
+    lines = template.rstrip().splitlines()
+    if head:
+        lines.insert(_head_end(lines), head)
+    base = "\n".join(lines)
+    if how == "append":
+        out = f"{base.rstrip()}\n\n{text_}\n" if base.strip() else f"{text_}\n"
+    elif how == "prepend":
+        at = _head_end(lines) if is_h3(base) else 0
+        before, after = lines[:at], lines[at:]
+        while after and not after[0].strip():
+            after.pop(0)
+        out = "\n".join([*before, *([""] if before else []), text_, *(["", *after] if after else [])]) + "\n"
+    elif name == "story_keyframes" and choice:  # a choice of keyframes in place of the prompt, no grid
+        out = apply("describe", base, text_)
+    else:
+        out = apply(task, base, text_, opts, insert=how == "insert")
+    return {"text": text_, "template": out}
+

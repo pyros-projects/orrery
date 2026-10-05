@@ -13,7 +13,10 @@ checks) are left out.
   as the settings say (a new count for the Write menu), steered; nothing in the menu waits for an input any more
   (Continue makes a screenplay without scenes a reel; a writer without its pictures writes from what came along).
   Every sheet can **send along** the prompt, first_frame, last_frame, four stills of the video and any picture or video
-  of the Gallery, and several one-line takes go in **as a choice**, `{a|b|c}` (several shots of Prompt from image one after the other). Continue picks the scene it continues
+  of the Gallery, and several one-line takes go in **as a choice**, `{a|b|c}`. A writer's sheet takes any number of takes (× takes one
+  out of the list), **Prepends** or **Appends** them to the prompt in every mode, **Replaces** or **Inserts** them where
+  the writer has a place, as written or as one choice (a `$take` binding and IF lines for shots and scenes); the prompt
+  sent along is told what it is for, and the steer outweighs the rest. Continue picks the scene it continues
   after, a reel that plays on and on too, and Replace or Insert says whether the scenes after it stay (#342). Story
   between frames became the **Story interpolator** (#343): from first_frame or any scene to last_frame or any scene, in
   N scenes of S seconds; on an image prompt N keyframe prompts on a grid, so one Roll renders the storyboard.

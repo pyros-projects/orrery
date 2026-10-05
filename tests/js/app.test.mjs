@@ -1226,25 +1226,27 @@ test("a sheet sends along by default what its kind needs: the prompt, the story 
   assert.ok(promptLocked("slot") && promptLocked("continue") && !promptLocked("entries") && !promptLocked("story"));
 });
 
-test("a writer's sheet lists the scenes and says where its take goes: after a scene, in place of or before the rest (#342, #343)", async () => {
-  const { writerGoes } = await import("../../comfyui/web/app/takes.js");
+test("a writer's sheet lists the scenes and says where Replace and Insert put its takes, where it has a place (#333, #342, #343)", async () => {
+  const { writerPlaces } = await import("../../comfyui/web/app/takes.js");
   const { sceneTitles } = await import("../../comfyui/web/app/model.js");
   const reel = "@h3 t2va\nSCENE one\nSHOT 5s\nA.\n  SCENE two ×3\nSHOT 5s\nB.\nCHUNK three repeat forever (test)\nSHOT 5s\nC.";
   const scenes = sceneTitles(reel);
   assert.deepEqual(scenes, ["one", "two", "three"]);
   assert.deepEqual(sceneTitles("a photo of a fox"), []);
-  assert.equal(writerGoes("continue", { scenes }), "After SCENE 3 (three).");  // the end
-  assert.equal(writerGoes("continue", { scenes, after: 0 }), "After SCENE 1 (one), in place of SCENE 2 (two) to SCENE 3 (three).");
-  assert.equal(writerGoes("continue", { scenes, after: 1, insert: true }), "After SCENE 2 (two): SCENE 3 (three) stays after it.");
-  assert.equal(writerGoes("continue", { scenes: [] }), "After the screenplay, which becomes the first scene.");
-  assert.equal(writerGoes("story", { scenes, from: 0, to: 2 }), "After SCENE 1 (one), in place of SCENE 2 (two).");
-  assert.equal(writerGoes("story", { scenes, from: 1, to: 2 }), "After SCENE 2 (two).");  // neighbours: nothing in between
-  assert.equal(writerGoes("story", { scenes }), "Before the first scene, in place of SCENE 1 (one) to SCENE 3 (three).");
-  assert.equal(writerGoes("story", { scenes, to: 1, insert: true }), "Before the first scene: SCENE 1 (one) stays after it.");
-  assert.equal(writerGoes("story", { scenes, insert: true }), "Before the first scene: SCENE 1 (one) to SCENE 3 (three) stay after it.");
-  assert.equal(writerGoes("story", { scenes: [] }), "In place of the shots below the header.");
-  assert.equal(writerGoes("story", { scenes: [], insert: true }), "Above the shots, which stay.");
-  assert.match(writerGoes("story", { h3: false, to: "prompt" }), /^On a grid in place of the prompt/);
+  assert.deepEqual(writerPlaces("continue", { scenes }), { replace: null, insert: "after SCENE 3 (three)" });  // the end
+  assert.deepEqual(writerPlaces("continue", { scenes, after: 0 }), { replace: "after SCENE 1 (one), in place of SCENE 2 (two) to SCENE 3 (three)",
+    insert: "after SCENE 1 (one), SCENE 2 (two) to SCENE 3 (three) stay after them" });
+  assert.equal(writerPlaces("continue", { scenes, after: 1 }).insert, "after SCENE 2 (two), SCENE 3 (three) stays after them");
+  assert.deepEqual(writerPlaces("continue", { scenes: [] }), { replace: null, insert: "after the screenplay, which becomes the first scene" });
+  assert.equal(writerPlaces("story", { scenes, from: 0, to: 2 }).replace, "after SCENE 1 (one), in place of SCENE 2 (two)");
+  assert.deepEqual(writerPlaces("story", { scenes, from: 1, to: 2 }), { replace: null, insert: "after SCENE 2 (two)" });  // nothing between
+  assert.equal(writerPlaces("story", { scenes }).replace, "before the first scene, in place of SCENE 1 (one) to SCENE 3 (three)");
+  assert.deepEqual(writerPlaces("story", { scenes: [] }), { replace: "in place of the shots below the header", insert: "above the shots, which stay" });
+  assert.equal(writerPlaces("story", { h3: false, to: "prompt" }).insert, null);
+  assert.match(writerPlaces("story", { h3: false, to: "prompt" }).replace, /^in place of the prompt, on a grid/);
+  assert.deepEqual(writerPlaces("describe", { scenes: [] }), { replace: "in place of the shots below the header", insert: "above the shots, which stay" });
+  assert.deepEqual(writerPlaces("describe", { scenes }), { replace: null, insert: "under the line your cursor was on" });
+  assert.deepEqual(writerPlaces("describe", { h3: false }), { replace: "in place of the prompt, its comments and `: …` lines kept", insert: null });
 });
 
 test("several takes go in as a choice, what the language reads as its own written as itself (#336)", async () => {
