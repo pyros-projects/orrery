@@ -236,20 +236,40 @@ export class OrreryApp {
   // A sheet opens at the app's top, where most of its buttons are; one that belongs to something lower down (a
   // scene's 📊) opens just under it, or `over` it (a clip), as far as it fits (#219). The big view centres it.
   openSheet(html, near = null, { over = false } = {}) {
+    this.sheetWatch?.disconnect();
     const host = this.$(".sheet-host");
     host.innerHTML = `<div class="sheet">${html}</div>`;
     const sheet = host.firstChild, panel = sheet.firstElementChild;
     sheet.addEventListener("mousedown", (e) => { if (e.target === sheet) this.closeSheet(); });
-    if (near && panel && !this.state.big) {  // on screen, in px: the canvas draws the node scaled, and often taller than the window
-      const box = sheet.getBoundingClientRect(), scale = box.height / sheet.offsetHeight || 1, at = near.getBoundingClientRect();
-      const h = panel.getBoundingClientRect().height, bottom = Math.min(box.bottom, innerHeight) - 8;
+    if (!panel) return sheet;
+    const at = near && !this.state.big ? near.getBoundingClientRect() : null;
+    // on screen, in px: the canvas draws the node scaled, and often taller than the window. Placed again whenever it
+    // changes size (a takes sheet grows as its takes come in, #338): near its anchor as far as it fits, never past
+    // the node's box; taller than the room there is, it scrolls inside
+    const place = () => {
+      const box = sheet.getBoundingClientRect(), scale = box.height / sheet.offsetHeight || 1;
+      const top = Math.max(box.top, 0) + 8, bottom = Math.min(box.bottom, innerHeight) - 8;
+      panel.style.maxHeight = `${Math.max(120, Math.floor((bottom - top) / scale))}px`;
+      panel.style.overflowY = "auto";
+      if (!at) return;
+      const h = panel.getBoundingClientRect().height;
       let y = over ? at.top : at.bottom + 6;
-      if (y + h > bottom) y = Math.max(Math.max(box.top, 0) + 8, bottom - h);  // in view, as near as it fits
+      if (y + h > bottom) y = Math.max(top, bottom - h);  // in view, as near as it fits
       panel.style.marginTop = `${Math.round(Math.max(0, (y - box.top) / scale))}px`;
+    };
+    place();
+    if (typeof ResizeObserver !== "undefined") {
+      let last = panel.offsetHeight;
+      this.sheetWatch = new ResizeObserver(() => { if (panel.offsetHeight !== last) { last = panel.offsetHeight; place(); } });
+      this.sheetWatch.observe(panel);
     }
     return sheet;
   }
-  closeSheet() { this.$(".sheet-host").innerHTML = ""; }
+  closeSheet() {
+    this.sheetWatch?.disconnect();
+    this.sheetWatch = null;
+    this.$(".sheet-host").innerHTML = "";
+  }
   sheetOpen() { return !!this.$(".sheet"); }
 
   setBig(on) {
