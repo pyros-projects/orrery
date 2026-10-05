@@ -374,6 +374,15 @@ function walkedInfo(out, walked) {
 // Does chunk c play segment s? On its range, or on its list when GOTO lines set the path.
 export const plays = (c, s) => s != null && (c.segs ? c.segs.includes(s) : c.first !== null && s >= c.first && s <= c.last);
 
+// ⏮ ⏭ in a scene's divider (#341): the first clip of the scene before or after the one `segment` plays in, in the
+// order the scenes are written; scenes that never play are passed over. Past the reel's end, ⏮ goes to the last.
+export function sceneStep(chunks, segment, dir) {
+  const playing = chunks.map((c, i) => ({ i, first: c.segs ? c.segs[0] ?? null : c.first })).filter((x) => x.first !== null);
+  const at = chunks.findIndex((c) => plays(c, segment));
+  if (at < 0) return dir < 0 && playing.length ? playing[playing.length - 1].first : null;
+  return playing[playing.findIndex((x) => x.i === at) + dir]?.first ?? null;
+}
+
 // The clip a scene's + take renders (#204): the next one while the scene plays it, else the scene's first; null when
 // the scene never plays.
 export function sceneTarget(c, segment) {

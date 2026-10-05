@@ -6,7 +6,7 @@ import { annotationLines, mergeHints, shownHints } from "./annotate.js";
 import { wireHover } from "./hover.js";
 import { hintsFor } from "./remember.js";
 import { icon } from "./icons.js";
-import { applyDials, chunkInfo, dials, hasGoto, knobKey, knobsOf, withFields, plays, folderColor, pickerGroups, sceneTarget, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
+import { applyDials, chunkInfo, dials, hasGoto, knobKey, knobsOf, withFields, plays, sceneStep, folderColor, pickerGroups, sceneTarget, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
 import { drag, thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
 import { openSceneStats } from "./scenestats.js";
@@ -85,10 +85,24 @@ function syncChain(app) {
 
 // A scene's button in its divider (#204): its numbers (📊). What makes takes, + take, ×N and 📌, is in each clip's
 // strip of takes (#319), the results' head: there it makes a take of that clip.
+// The reel's transport in every divider (#341), the footer's controls where you are: ⏮ ⏭ move Next clip to the scene
+// before or after, ▶ Roll, +N the clips a Roll plays, 🔒 Hold; they act on the reel, whichever divider they are in.
+const MORE = [1, 2, 4];
 export function sceneActs(app) {
-  return (c, n) => `<span class="scene-acts"><button type="button" class="scene-act" data-scene-act="stats" data-chunk="${n}" `
-    + `title="This scene in numbers: where and how often it plays, what leads to it, what it rolls, what it made" `
-    + `aria-label="This scene in numbers">${icon("chart")}</button></span>`;
+  const chunks = app.chunks() || [], seg = Number(app.bridge.getSegment()), busy = !!app.state.sweepQueue, runs = repeats(app);
+  const held = !!app.bridge.segmentHeld?.(), prev = sceneStep(chunks, seg, -1), next = sceneStep(chunks, seg, 1);
+  const more = MORE.find((m) => m > runs) ?? MORE[0];
+  const button = (act, n, inner, title, off = false, extra = "") => `<button type="button" class="scene-act" data-scene-act="${act}" data-chunk="${n}" `
+    + `title="${esc(title)}" aria-label="${esc(title)}" ${extra} ${off ? "disabled" : ""}>${inner}</button>`;
+  return (c, n) => `<span class="scene-acts">`
+    + button("prev", n, icon("skip", "flip"), prev === null ? "No scene before this clip's" : `Next clip becomes ${prev + 1}: the first of the scene before`, prev === null || busy)
+    + button("roll", n, icon("play"), `Roll: clip ${seg + 1}${runs > 1 ? ` and the ${runs - 1} after it` : ""}, as Roll in the footer`, busy, 'data-roll="1"')
+    + button("more", n, `+${runs}`, `A Roll plays ${runs} clip${runs === 1 ? "" : "s"}. Click for ${more}`, busy)
+    + button("next", n, icon("skip"), next === null ? "No scene after this clip's" : `Next clip becomes ${next + 1}: the first of the scene after`, next === null || busy)
+    + button("hold", n, icon("lock"), held ? "Held: every Roll plays this clip again. Click to step on after each run"
+      : "Hold this clip: every Roll plays it again, for takes", false, `aria-pressed="${held}"`)
+    + button("stats", n, icon("chart"), "This scene in numbers: where and how often it plays, what leads to it, what it rolls, what it made")
+    + "</span>";
 }
 
 // The seeds of N takes of clip `to` (#206): numbered on from the takes it has (seed+1, seed+2 …: reproducible),
@@ -106,7 +120,21 @@ export function surfSeeds(app, to, n, keep) {
 async function sceneAct(app, act, n, button = null) {
   if (act === "stats") return openSceneStats(app, n, button);  // #219, also while a sweep runs
   const chunks = app.chunks() || [], c = chunks[n];
+  if (act === "hold") { app.bridge.holdSegment(!app.bridge.segmentHeld()); refreshFoot(app); return paintEditor(app); }
   if (!c || app.state.sweepQueue) return;
+  if (act === "roll") return generate(app);  // the footer's Roll (#341)
+  if (act === "more") {
+    app.bridge.props.repeat = MORE.find((m) => m > repeats(app)) ?? MORE[0];
+    refreshFoot(app);
+    return paintEditor(app);
+  }
+  if (act === "prev" || act === "next") {
+    const to = sceneStep(chunks, Number(app.bridge.getSegment()), act === "next" ? 1 : -1);
+    if (to === null) return;
+    app.bridge.setSegment(to);
+    refreshFoot(app);
+    return paintEditor(app);
+  }
   if (act === "takes") { app.bridge.props.orrery_takes = TAKES[(TAKES.indexOf(takesOf(app)) + 1) % TAKES.length]; return paintEditor(app); }
   if (act === "keep") { app.bridge.props.orrery_keep = { ...app.bridge.props.orrery_keep, [n]: !kept(app, n) }; return paintEditor(app); }
   if (act !== "gen") return;
@@ -282,15 +310,19 @@ export function renderPrompt(app) {
       app.go("galaxy");
     }
     if (act === "writenow") return writeNow(app);
-    if (act === "hold") { app.bridge.holdSegment(!app.bridge.segmentHeld()); return refreshFoot(app); }
+    if (act === "hold") { app.bridge.holdSegment(!app.bridge.segmentHeld()); refreshFoot(app); return paintEditor(app); }  // the dividers' 🔒 too (#341)
     if (act === "browse") app.go("presets");
   };
   app.view.onchange = (e) => {
-    if (e.target.dataset.nextclip !== undefined) return app.bridge.setSegment(Math.max(0, Math.floor(Number(e.target.value) || 1) - 1));
+    if (e.target.dataset.nextclip !== undefined) {
+      app.bridge.setSegment(Math.max(0, Math.floor(Number(e.target.value) || 1) - 1));
+      return paintEditor(app);  // the dividers' ⏮ ⏭ follow (#341)
+    }
     if (e.target.dataset.rep === undefined) return;
     app.bridge.props.repeat = Number(e.target.value) || 1;
     e.target.value = repeats(app);
     refreshFoot(app);  // the sweep button counts runs × seeds, and the noun after the number follows it
+    paintEditor(app);  // and the dividers' +N
   };
   if (app.state.pick) wirePicker(app);
   renderDials(app);

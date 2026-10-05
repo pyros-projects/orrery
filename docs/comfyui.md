@@ -126,6 +126,11 @@ Nodes under **orrery**:
     📊 explains them: where and how often the scene plays on the walk at the
     node's seed, drawn clip by clip, how long, what plays before and after it
     (and its lines that steer), what it rolls, and the clips it made.
+    Beside 📊 every divider carries the reel's **transport** (#341), the footer's
+    controls where you are, however tall the node: **⏮ ⏭** move *Next clip* to
+    the first clip of the scene before or after, **▶** is Roll, **+1 / +2 / +4**
+    the clips a Roll plays (a click cycles them) and **🔒** holds the clip; they act
+    on the reel, whichever divider they are clicked in.
     **Jump** beside *Next clip* puts the caret on the scene of the next clip.
     Under the prompt and the dials, the whole width, sits the **preview** (#305); the grip
     above it sizes it, and the node keeps its height. While a run samples it shows the

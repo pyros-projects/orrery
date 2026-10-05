@@ -9,6 +9,8 @@ checks) are left out.
 
 ### Added
 
+- A transport in every scene divider (#340): ⏮ ⏭ move Next clip to the scene before or after, ▶ Rolls, +1/+2/+4 sets
+  the clips a Roll plays and 🔒 holds the clip, the footer's controls where you are, however tall the node.
 - Shoots (#320, under #318): a template's takes make a shoot, like a sitting in a photo studio. Finish shoot folds them
   into the earlier shoots under the strip, each shown by its circled take, and the next Roll starts a new one; a click
   opens an earlier shoot again. A grid's or a sweep's runs at one seed are one take: a creator's four views together.
