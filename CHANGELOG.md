@@ -206,6 +206,9 @@ checks) are left out.
 
 ### Fixed
 
+- A library list the language model keys back a little differently (`80s/80s photographers` for
+  `80s/80s_photographers`, another case, `__…__`) lands in its library instead of being lost (#324); one library
+  asked for and one list answered, that list.
 - The H3 example workflows run their model through the Orrery Prompt, so their `LORA:` lines take effect and the
   results show the live preview (#314).
 - A text template's `LORA:` line (a Krea prompt) goes on the model that passes through the Orrery Prompt, as in a
