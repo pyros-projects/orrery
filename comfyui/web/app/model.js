@@ -709,3 +709,22 @@ export async function queueSweep({ count, seeds, mode, getSeed, setSeed, queue, 
 // A knob's field that sweeps (#227): `0.6|0.8`, a range `0.2-1;0.2`, in a long form, a short one or a SET: line.
 export const PLAN_HINT = /<lora:[^<>]*[,;|][^<>]*>|<(?:refmod|image|cast):[^<>]*[|;][^<>]*>|<lora:[^<>]*:(?:solo|test)\b|(?<![\w@<\\])@[\w./\\-]+\([^()<>]*[,;|][^()<>]*\)|^\s*SET:.*\([^(){}<>]*[|;][^(){}<>]*\)|^\s*(?:@grid|:\s*grid)\b/m;
 
+// Where the seed a run gets is set (#346): the node's own seed widget, or, when the seed comes in through a link
+// (through reroutes), the widget it comes from: a primitive's, the one named as the output that sends it, or one named
+// seed, noise_seed or value. A seed another node computes has no such widget: the node's own then. {node, widget}.
+export function seedSource(node, graph) {
+  const own = { node, widget: node.widgets?.find((w) => w.name === "seed") };
+  const linkOf = (id) => (graph?.links?.get ? graph.links.get(id) : graph?.links?.[id]);
+  let link = node.inputs?.find((i) => i.name === "seed" || i.widget?.name === "seed")?.link;
+  for (let hops = 0; link != null && hops < 32; hops++) {
+    const l = linkOf(link), from = l && graph.getNodeById?.(l.origin_id);
+    if (!from) break;
+    if ((from.comfyClass || from.type) === "Reroute") { link = from.inputs?.[0]?.link; continue; }
+    const out = from.outputs?.[l.origin_slot]?.name, ints = (from.widgets || []).filter((w) => typeof w.value === "number");
+    const widget = ints.find((w) => w.name === out) || ints.find((w) => /^(seed|noise_seed|value)$/.test(w.name))
+      || ((from.comfyClass || from.type) === "PrimitiveNode" ? ints[0] : null);
+    return widget ? { node: from, widget } : own;
+  }
+  return own;
+}
+

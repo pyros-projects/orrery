@@ -1313,3 +1313,22 @@ test("a reel's shot from a writer goes in under the caret's line, never inside i
   assert.equal(atCaret(reel, null, "SHOT 3s: static\nEnd."), `${reel}\nSHOT 3s: static\nEnd.`);  // no caret: at the end
   assert.equal(atCaret("A.\n", 0, "B."), "A.\nB.\n");
 });
+
+test("the seed a run gets is read where it is set: the node's own, or the widget a linked seed comes from (#346)", async () => {
+  const { seedSource } = await import("../../comfyui/web/app/model.js");
+  const own = { name: "seed", value: 0 };
+  const node = (inputs = []) => ({ widgets: [own, { name: "control_after_generate", value: "fixed" }], inputs });
+  const graph = (nodes, links) => ({ links: new Map(Object.entries(links).map(([k, v]) => [Number(k), v])), getNodeById: (id) => nodes[id] });
+  assert.equal(seedSource(node(), graph({}, {})).widget, own);  // not linked
+  const setter = { type: "ReservedVRAMSetter", outputs: [{ name: "anything" }, { name: "seed" }],
+    widgets: [{ name: "reserved", value: 8 }, { name: "seed", value: 1010 }] };  // Pyro's: the seed passes through it
+  const linked = node([{ name: "seed", widget: { name: "seed" }, link: 7 }]);
+  assert.equal(seedSource(linked, graph({ 459: setter }, { 7: { origin_id: 459, origin_slot: 1 } })).widget.value, 1010);
+  const reroute = { type: "Reroute", inputs: [{ link: 8 }] }, primitive = { type: "PrimitiveNode", outputs: [{ name: "connect to widget input" }],
+    widgets: [{ name: "seed", value: 42 }, { name: "control_after_generate", value: "increment" }] };
+  const via = seedSource(linked, graph({ 1: reroute, 2: primitive }, { 7: { origin_id: 1, origin_slot: 0 }, 8: { origin_id: 2, origin_slot: 0 } }));
+  assert.equal(via.node, primitive);
+  assert.equal(via.widget.value, 42);  // through a reroute, from a primitive
+  const math = { type: "SimpleMath", outputs: [{ name: "INT" }], widgets: [{ name: "expression", value: "a*2" }] };
+  assert.equal(seedSource(linked, graph({ 3: math }, { 7: { origin_id: 3, origin_slot: 0 } })).widget, own);  // computed: no widget holds it
+});
