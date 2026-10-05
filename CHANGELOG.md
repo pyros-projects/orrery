@@ -221,6 +221,9 @@ checks) are left out.
 
 ### Fixed
 
+- Requests to an API endpoint asked at once each adapt to what the model refuses (#333): with a model that wants
+  `max_completion_tokens` (gpt-5 and later), the first takes of a sheet, or libraries written together, failed with
+  "Unsupported parameter: 'max_tokens'" while the one that learned it went through.
 - A takes sheet stays inside the node as its takes come in (#338): it moves up as it grows, and scrolls inside when it
   is taller than the room there is (Generate at the bottom of the Libraries tab ran out of the node).
 - Takes find a slot in a CAST member's description (#328): its `(for NAME)` no longer hides it ("has no slot … to write

@@ -26,6 +26,26 @@ def test_a_model_that_refuses_max_tokens_and_temperature_is_asked_again_and_reme
     assert len(fake_api.requests) == 1 and fake_api.requests[0]["max_completion_tokens"] == 900
 
 
+def test_requests_asked_at_once_each_adapt_to_a_quirk_one_of_them_learned(fake_api, monkeypatch):
+    """#333: the takes of a writer ask together; the one that learns the model wants max_completion_tokens must not
+    leave the others, built before, failing with the 400."""
+    from orrery import llm
+
+    fake_api.refuse = {"gpt-6-luna": ("max_tokens",)}
+    monkeypatch.setattr(llm, "_QUIRKS", {})
+    backend = OpenAIBackend(fake_api.url, "gpt-6-luna", max_tokens=900)
+    built = backend._body
+
+    def beside(prompt, images):  # its body is built, then a request beside it learns the quirk
+        body = built(prompt, images)
+        llm._QUIRKS.setdefault((backend.url, backend.model), set()).add("completion_tokens")
+        return body
+
+    monkeypatch.setattr(backend, "_body", beside)
+    assert backend.complete("hi") == "OK"
+    assert [("max_tokens" in r, "max_completion_tokens" in r) for r in fake_api.requests] == [(True, False), (False, True)]
+
+
 def test_frames_go_as_pictures_before_the_text(fake_api):
     frames = np.zeros((2, 40, 64, 3), dtype="float32")  # an IMAGE batch, as ComfyUI hands it
     OpenAIBackend(fake_api.url, "gpt-5.4-mini").complete("what happens", images=frames)

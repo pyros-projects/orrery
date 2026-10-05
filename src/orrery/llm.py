@@ -141,6 +141,7 @@ class OpenAIBackend:
         return body
 
     def complete(self, prompt: str, images=None) -> str:
+        applied = set(_QUIRKS.get((self.url, self.model), ()))  # what this body adapted to (#333: takes ask at once)
         body, waits = self._body(prompt, images), list(RETRIES)
         while True:
             request = urllib.request.Request(self.url, data=json.dumps(body).encode(), method="POST",
@@ -152,8 +153,9 @@ class OpenAIBackend:
             except urllib.error.HTTPError as err:
                 message, param = _error(err)
                 quirk = _quirk(err.code, param, message)
-                if quirk and quirk not in _QUIRKS.setdefault((self.url, self.model), set()):
-                    _QUIRKS[(self.url, self.model)].add(quirk)
+                if quirk and quirk not in applied:  # learned here, or by a request asked beside this one
+                    _QUIRKS.setdefault((self.url, self.model), set()).add(quirk)
+                    applied.add(quirk)
                     _adapt(body, quirk)
                     continue
                 if err.code in (408, 429, 500, 502, 503, 504) and waits:
