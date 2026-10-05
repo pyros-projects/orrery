@@ -298,7 +298,8 @@
 .orrery-app .takes-panel .take-opts { gap: 5px; align-items: center; }  /* a writer's choices (#342, #343) */
 .orrery-app .takes-panel .take-opts select.input { width: auto; flex: none; max-width: 16em; }
 .orrery-app .takes-panel .take-opts input.num { width: 4.2em; flex: none; }
-.orrery-app .takes-panel .take-mode { gap: 3px; }
+.orrery-app .takes-panel .take-mode { gap: 3px; flex: none; }
+.orrery-app .takes-panel .take-how { gap: 8px; align-items: center; }
 .orrery-app .takes-panel .take-send .chip:disabled { opacity: .45; cursor: default; }
 .orrery-app .takes-panel .take-send .chip.gal { padding: 2px 4px 2px 2px; }
 .orrery-app .takes-panel .take-send .chip.gal img { width: 22px; height: 22px; object-fit: cover; border-radius: 50%; }

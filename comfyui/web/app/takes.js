@@ -233,13 +233,12 @@ export function openTakes(app, place, near = null) {
     + `<div class="row take-steer"><input class="input grow" data-steer placeholder="Steer them: darker, older, as an anime character …" aria-label="Steer the takes">`
     + `<button class="btn" data-tmore>${icon("dice")}More takes</button>`
     + (picture || writer ? "" : `<button class="btn ghost" data-tkeep title="Write the steer into ${esc(SAID[place.kind])}'s directions, so it keeps rolling that way">${icon("pin")}Keep the direction</button>`) + "</div>"
-    + (writer ? '<p class="muted flush take-goes" data-tgoes></p><div class="row wrap take-use">'
-      + '<span class="row take-mode" role="group" aria-label="How several takes go in">'
+    + (writer ? '<div class="row wrap take-how"><span class="row take-mode" role="group" aria-label="How several takes go in">'
       + '<button type="button" class="chip" data-tas="written" aria-pressed="true" title="One after the other, in the order you selected them">as written</button>'
       + '<button type="button" class="chip" data-tas="choice" aria-pressed="false" title="As one choice, so every Roll picks one of them: {a|b} for one-line takes, a $take binding and IF lines for longer ones">as a choice</button></span>'
-      + '<span class="grow"></span>'
-      + `<button class="btn ghost" data-tput="prepend" title="At the start of the prompt (a screenplay's: under its head). An unsaved edit">${icon("up")}Prepend to prompt</button>`
-      + `<button class="btn ghost" data-tput="append" title="At the end of the prompt. An unsaved edit">${icon("down")}Append to prompt</button>`
+      + '<span class="muted take-goes" data-tgoes></span></div><div class="row wrap take-use"><span class="grow"></span>'
+      + `<button class="btn ghost" data-tput="prepend" title="At the start of the prompt (a screenplay's: under its head). An unsaved edit">${icon("jump")}Prepend to prompt</button>`
+      + `<button class="btn ghost" data-tput="append" title="At the end of the prompt. An unsaved edit">${icon("land")}Append to prompt</button>`
       + `<button class="btn" data-tput="replace">${icon("check")}Replace</button><button class="btn primary" data-tput="insert">${icon("plus")}Insert</button></div></div>`
       : '<div class="row take-use"><span class="grow"></span>')
     + (choice ? `<button class="btn ghost" data-tchoice title="Put the selected takes in as a choice, {a|b|c}: every Roll picks one, so you see which works best">${icon("dice")}Insert as a choice</button>` : "")
