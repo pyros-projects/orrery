@@ -42,5 +42,61 @@ class OrrerySeamMeter:
         return {"ui": {"text": [text]}, "result": (text,)}
 
 
-NODE_CLASS_MAPPINGS = {"OrrerySeamMeter": OrrerySeamMeter}
-NODE_DISPLAY_NAME_MAPPINGS = {"OrrerySeamMeter": "Orrery Seam Meter"}
+class OrreryLatentKeep:
+    """Keeps a MiniMax H3 latent (video and audio together, which core Save Latent cannot store) as
+    output/<prefix>.pt, for decoding clips again later: one decode over a joined film (#360)."""
+
+    CATEGORY = "orrery/experiments"
+    FUNCTION = "keep"
+    OUTPUT_NODE = True
+    RETURN_TYPES = ()
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {"samples": ("LATENT",), "filename_prefix": ("STRING", {"default": "seam_bench/latent"})}}
+
+    def keep(self, samples, filename_prefix):
+        import folder_paths  # ComfyUI
+        import torch
+
+        latent = samples["samples"]
+        parts = latent.unbind() if getattr(latent, "is_nested", False) else [latent]
+        path = Path(folder_paths.get_output_directory()) / f"{filename_prefix}.pt"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        torch.save([t.detach().cpu() for t in parts], path)
+        return {}
+
+
+class OrreryLatentJoin:
+    """Joins clips kept with Orrery Latent Keep (`<prefix>0.pt` …) into one MiniMax H3 latent, each later clip without
+    the frames Orrery Continue pinned (22 frames: 7 video slots, 37 audio ticks), for one decode over the whole film
+    instead of one a clip (#360). A 124-frame clip has 37 slots: the 30 it adds keep H3's 1-4-4-4-4 rhythm."""
+
+    CATEGORY = "orrery/experiments"
+    FUNCTION = "join"
+    RETURN_TYPES = ("LATENT",)
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {"prefix": ("STRING", {"default": "seam_bench/s1/orrery/latent_"}),
+                             "clips": ("INT", {"default": 4, "min": 1, "max": 64}),
+                             "context_slots": ("INT", {"default": 7, "min": 0, "max": 64}),
+                             "context_ticks": ("INT", {"default": 37, "min": 0, "max": 512})}}
+
+    def join(self, prefix, clips, context_slots, context_ticks):
+        import folder_paths  # ComfyUI
+        import torch
+        from comfy.nested_tensor import NestedTensor
+
+        root = Path(folder_paths.get_output_directory())
+        videos, audios = [], []
+        for k in range(clips):
+            video, audio = torch.load(root / f"{prefix}{k}.pt")
+            videos.append(video if k == 0 else video[:, :, context_slots:])
+            audios.append(audio if k == 0 else audio[..., context_ticks:])
+        return ({"samples": NestedTensor((torch.cat(videos, dim=2), torch.cat(audios, dim=-1)))},)
+
+
+NODE_CLASS_MAPPINGS = {"OrrerySeamMeter": OrrerySeamMeter, "OrreryLatentKeep": OrreryLatentKeep, "OrreryLatentJoin": OrreryLatentJoin}
+NODE_DISPLAY_NAME_MAPPINGS = {"OrrerySeamMeter": "Orrery Seam Meter", "OrreryLatentKeep": "Orrery Latent Keep",
+                              "OrreryLatentJoin": "Orrery Latent Join"}
