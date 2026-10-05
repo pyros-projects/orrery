@@ -27,7 +27,8 @@ see *From Continuum* below):
 - **Smooth the sound at the seams** (measured). At a film's real seams the waveform steps further than 96–99% of the
   steps inside its clips and the level jumps up to 10.8 dB in 20 ms: a click or a bump, where Continuum's assembly
   aligns the sound, crossfades it over 10–60 ms and matches the level (`v2/seam_guard.py:113-151`). The picture's
-  seams are clean: no luma pulse, jumps within the clips' range (`experiments/seams/`). Keep a short pre-roll of each
+  jumps stay within the clips' range, but one of four seams flashes briefly after the join (a luma pulse at p100),
+  which Continuum's assembly levels too (`experiments/seams/`). Keep a short pre-roll of each
   take's sound and crossfade in Orrery Film's join; measure again after.
 - **Python 3.12** (tested). `pyproject.toml` asks for 3.13, and a ComfyUI on 3.12 refuses the install; all 1,331 tests
   pass on 3.12.12 and ruff finds nothing 3.13-only. Lower the floor, refresh `uv.lock`, test 3.12 and 3.13 in CI.

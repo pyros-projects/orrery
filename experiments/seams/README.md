@@ -16,6 +16,8 @@ Run on 2026-10-05 against ComfyUI-H3-Continuum's assembly, which repairs seams a
 | `contortion_full_routine1`, 2 clips | 1 | p76, p28 | step **p96**; level 10.8 dB (**p94**) |
 | `abc_refmods`, 7 clips | 6 | seams 3–6 jump hard (luma 25–39) | not a seam fault: clips 3–6 all continue clip 2, branches stored one after another |
 
-The luma of the frames around each real seam flows on (86.8 86.9 86.8 | 86.4 86.1 86.0 …), with no pulse. So the
-picture's seams are clean; the sound's are where orrery falls behind Continuum's assembled film: a click or a level
-bump at the join. A small sample (four real seams); measure again after a fix.
+The picture's jumps at the seams stay within the clips' range, but one of the four real seams flashes: after seam 3
+of `abc_c_late60` the luma climbs and falls back within 6 frames (84.1 83.9 84.4 | 83.8 85.1 85.9 87.2 85.8 84.6), the
+kind of pulse Continuum's assembly levels out (a later look with the seam meter's luma pulse: p100). The sound is
+where orrery falls behind most: a click or a level bump at every seam. A small sample (four real seams); measure again
+after a fix.
