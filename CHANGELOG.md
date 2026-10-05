@@ -209,6 +209,11 @@ checks) are left out.
 
 ### Fixed
 
+- Takes find a slot in a CAST member's description (#328): its `(for NAME)` no longer hides it ("has no slot … to write
+  for").
+- A reel clip's one take shows in its strip (#329); before, a clip's takes showed only once it had two.
+- Takes with a text encoder no longer repeat the same take forever (#330): every run of the sheet is sampled at a seed
+  of its own.
 - A library list the language model keys back a little differently (`80s/80s photographers` for
   `80s/80s_photographers`, another case, `__…__`) lands in its library instead of being lost (#324); one library
   asked for and one list answered, that list.
