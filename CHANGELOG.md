@@ -10,7 +10,7 @@ checks) are left out.
 ### Added
 
 - One sheet for every ask (#333): the Write menu's writers open the 🎲 takes sheet a slot or a library opens, N takes
-  as the settings say (a new count for the Write menu), steered; nothing in the menu waits for an input any more
+  as the settings say (a count for each writer), steered; nothing in the menu waits for an input any more
   (Continue makes a screenplay without scenes a reel; a writer without its pictures writes from what came along).
   Every sheet can **send along** the prompt, first_frame, last_frame, four stills of the video and any picture or video
   of the Gallery, and several one-line takes go in **as a choice**, `{a|b|c}`. A writer's sheet takes any number of takes (× takes one

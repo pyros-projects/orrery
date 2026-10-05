@@ -417,7 +417,7 @@ export function openTakes(app, place, near = null) {
   // A writer's takes (#334): each a run of its own with a text encoder (it writes once a run), at seed + its number;
   // over the API all at once, when the frames are files ComfyUI holds.
   const writeTakes = async () => {
-    const n = Number(app.data.llm?.takes?.write) || 3, ideas = Array.from({ length: n }, () => s.asked++);
+    const n = Number(app.data.llm?.takes?.[place.kind]) || 3, ideas = Array.from({ length: n }, () => s.asked++);  // each writer its own
     const options = writerOptions();
     const need = sent().filter((k) => FRAMES.includes(k));
     const files = app.llmApi() ? (need.length ? (await app.bridge.frameFiles?.()) || null : { names: {}, others: [] }) : null;

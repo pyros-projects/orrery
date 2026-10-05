@@ -16,13 +16,14 @@ The gear in the node opens the Settings tab; its section **Language model**:
 `orrery.yaml` (`llm:`) also holds:
 - `entries`: how many entries a new library starts with, 12 by default;
 - `takes`: how many takes a 🎲 asks for, each 1 to 12, 3 by default (#274): `slot` (a gallery picture's slot too),
-  `enhance`, `rolled` (entries rolled from a library) and `new` (entries the model writes for it). The gear shows
-  them as *Takes a 🎲 asks for*;
+  `enhance`, `rolled` (entries rolled from a library), `new` (entries the model writes for it) and one for each writer
+  of the Write menu, `continue`, `story` and `describe` (a story writes a lot; the one `write` count before #333 is
+  their default). The gear shows them as *Takes a 🎲 asks for*;
 - `max_tokens`: the longest answer, 16000 by default;
 - `temperature`: 0.3, for lists, slots and rewrites;
 - `writer_temperature`: 0.8, for the Write menu.
 - `takes`: how many takes a 🎲 asks for, per kind (a slot, a `>` rewrite, rolled from a library, new for a library,
-  the Write menu), 1 to 12 each, 3 unless set.
+  each writer of the Write menu), 1 to 12 each, 3 unless set.
 
 The CLI's `orrery lib` uses `models.library`, else the API endpoint ([configuration.md](configuration.md)).
 

@@ -161,7 +161,7 @@ slots, which keeps it within a 4B or 8B model's reach):
   Without a picture it writes from the prompt as it rolls.
 
 Each writer opens the 🎲 takes sheet every ask uses (#333): as many takes as
-the gear's count for the Write menu says, each a short run of its own (Orrery
+the gear's count for that writer says (each its own: a story writes a lot), each a short run of its own (Orrery
 Write with only the frames, the video and the text encoder wired into the node,
 so no video model loads; a run already in the queue goes first), sampled at
 seed + n and at `writer_temperature`, 0.8 by default in `orrery.yaml`'s `llm:`,

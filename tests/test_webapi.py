@@ -1016,9 +1016,13 @@ def test_the_plan_of_a_run_lists_its_language_model_tasks_in_order(home):
 
 def test_how_many_takes_each_sheet_asks_for_is_a_setting(home, fake_api):
     """#274: a count per kind in the llm settings, 1 to 12; the sheets ask for it (More too), unless they say n."""
-    assert ok(home, webapi.llm_settings)["takes"] == {"slot": 3, "enhance": 3, "rolled": 3, "new": 3, "write": 3}
-    saved = ok(home, webapi.llm_save, takes={"slot": 5, "enhance": 40, "new": "x", "write": 4})["takes"]
-    assert saved == {"slot": 5, "enhance": 12, "rolled": 3, "new": 3, "write": 4}  # capped, a bad value its default; the writers' (#334)
+    writers = {"continue": 3, "story": 3, "describe": 3}
+    assert ok(home, webapi.llm_settings)["takes"] == {"slot": 3, "enhance": 3, "rolled": 3, "new": 3, **writers}
+    saved = ok(home, webapi.llm_save, takes={"slot": 5, "enhance": 40, "new": "x", "story": 1})["takes"]
+    assert saved == {"slot": 5, "enhance": 12, "rolled": 3, "new": 3, **writers, "story": 1}  # capped, a bad value its default
+    from orrery.takes import counts
+    assert counts({"takes": {"write": 2}}) == {"slot": 3, "enhance": 3, "rolled": 3, "new": 3, "continue": 2, "story": 2,
+                                               "describe": 2}  # the one count before #333: each writer's default
     assert ok(home, webapi.llm_save, entries=20)["takes"]["slot"] == 5  # another setting saved keeps them
     Home(home).save_config({**Home(home).config(), "llm": {**Home(home).config()["llm"], "source": "api",
                                                             "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})

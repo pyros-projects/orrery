@@ -16,15 +16,20 @@ from orrery.llm import InvalidProposal, extract_json
 from orrery.slots import as_pictures
 
 REWRITES = "rewrites.json"
-COUNTS = {"slot": 3, "enhance": 3, "rolled": 3, "new": 3, "write": 3}  # how many takes each sheet asks for (#274, #334)
+# how many takes each sheet asks for (#274), each writer of the Write menu its own (#334): a story writes a lot
+COUNTS = {"slot": 3, "enhance": 3, "rolled": 3, "new": 3, "continue": 3, "story": 3, "describe": 3}
+WRITERS = ("continue", "story", "describe")
 
 
 def counts(llm: dict) -> dict[str, int]:
     """The takes a sheet asks for, from the llm settings: a slot's (a gallery picture's too), a `> enhance` line's,
-    entries rolled from a library and new ones the model writes for it, a writer's of the Write menu; 1 to 12 each."""
+    entries rolled from a library and new ones the model writes for it, each writer's of the Write menu (one count for
+    all of them, `write`, before #333, is their default); 1 to 12 each."""
     saved = llm.get("takes") if isinstance(llm.get("takes"), dict) else {}
     out = {}
     for kind, default in COUNTS.items():
+        if kind in WRITERS and "write" in saved:
+            default = saved["write"]
         try:
             out[kind] = min(max(int(saved.get(kind, default)), 1), 12)
         except (TypeError, ValueError):
