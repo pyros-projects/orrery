@@ -209,6 +209,8 @@ checks) are left out.
 
 ### Fixed
 
+- A takes sheet stays inside the node as its takes come in (#338): it moves up as it grows, and scrolls inside when it
+  is taller than the room there is (Generate at the bottom of the Libraries tab ran out of the node).
 - Takes find a slot in a CAST member's description (#328): its `(for NAME)` no longer hides it ("has no slot … to write
   for").
 - A reel clip's one take shows in its strip (#329); before, a clip's takes showed only once it had two.
