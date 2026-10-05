@@ -6,7 +6,7 @@ license = "MIT"
 authors = [
     { name = "pyros-projects", email = "pyros.sd.models@gmail.com" }
 ]
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     "pyyaml>=6.0.3",
 ]

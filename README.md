@@ -13,7 +13,7 @@
 
 [![License: MIT][license-shield]][license-url]
 [![Version][version-shield]][version-url]
-[![Python 3.13+][python-shield]][python-url]
+[![Python 3.12+][python-shield]][python-url]
 [![ComfyUI custom node][comfyui-shield]][comfyui-url]
 [![MiniMax H3][h3-shield]][h3-url]
 
@@ -140,7 +140,7 @@ uv sync --extra local    # + torch and transformers for a local language model
 
 | Requirement | Notes |
 |---|---|
-| Python | 3.13+ |
+| Python | 3.12+ |
 | ComfyUI | tested with frontend 1.53 |
 | MiniMax H3 nodes | only for video: Reference to Video (reels chain with orrery's own Orrery Continue / Orrery Film) |
 | A language model | optional: a text encoder that is a whole LLM, such as Krea 2's `qwen3vl_4b`, lets the node write libraries, `--slots--` and the Write menu's takes |
@@ -287,7 +287,7 @@ Crafted with [Readme Craft](https://github.com/motiful/readme-craft)
 [license-url]: LICENSE
 [version-shield]: https://img.shields.io/badge/version-0.1.0-blue.svg
 [version-url]: pyproject.toml
-[python-shield]: https://img.shields.io/badge/python-3.13%2B-3776AB.svg
+[python-shield]: https://img.shields.io/badge/python-3.12%2B-3776AB.svg
 [python-url]: https://www.python.org
 [comfyui-shield]: https://img.shields.io/badge/ComfyUI-custom%20node-5cc8c2.svg
 [comfyui-url]: https://github.com/comfyanonymous/ComfyUI

@@ -172,6 +172,7 @@ checks) are left out.
 
 ### Changed
 
+- orrery installs on Python 3.12 as well as 3.13 (#365): many ComfyUI installs run on 3.12, which orrery refused.
 - A scene shows its clips as their strips of takes only (#331): the box of the clip above them is gone, the clip
   big is in the preview, and the take being made forms at the end of its strip, small, beside the preview's big one. The
   Clip size setting went with the box.

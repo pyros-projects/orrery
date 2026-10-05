@@ -29,8 +29,7 @@ see *From Continuum* below):
   the film now plays that (#361), and eases the level as Continuum's seam guard does (#362). Measured
   (`experiments/seams/bench/results-seams.md`): clicks p70 → p27 (Continuum repaired p34), brightness jumps p93 → p86,
   none at p99. The flash after two of nine seams sits in the latent (risk #363).
-- **Python 3.12** (tested). `pyproject.toml` asks for 3.13, and a ComfyUI on 3.12 refuses the install; all 1,331 tests
-  pass on 3.12.12 and ruff finds nothing 3.13-only. Lower the floor, refresh `uv.lock`, test 3.12 and 3.13 in CI.
+- **Python 3.12** (done, #365). orrery installs on 3.12 and 3.13; CI runs its checks on both.
 - **Example workflows on settings that look good**: people judge orrery by the first workflow they open. Continuum's
   open safely and its README says which extras are needed and which not (the release plan's fifth question).
 
