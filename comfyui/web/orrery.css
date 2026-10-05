@@ -202,7 +202,7 @@
 /* deleting a take (#214): a × on hover, then the question in place */
 .orrery-app .del { position: absolute; top: 3px; right: 3px; z-index: 3; display: none; place-items: center; width: 18px; height: 18px;
   border-radius: 50%; background: rgba(0,0,0,.6); color: #fff; cursor: pointer; }
-.orrery-app .tl-clip:hover .del, .orrery-app .take:hover .del { display: grid; }
+.orrery-app .take:hover .del { display: grid; }
 .orrery-app .del:hover { background: var(--danger); }
 .orrery-app .del svg { width: 11px; height: 11px; }
 .orrery-app .ask { position: absolute; inset: 0; z-index: 4; display: flex; flex-wrap: wrap; align-content: center; justify-content: center;
@@ -237,7 +237,6 @@
 .orrery-app .editor.cells.single > .cell { flex: 1 0 auto; }
 /* like a photo viewer: what the run made big in the middle, the takes in a row under it (#271) */
 .orrery-app .editor.cells.single > .chunkmedia.head { margin-bottom: 0; border-bottom: 0; }
-.orrery-app .editor.cells.single > .chunkmedia.head .cm-clips { justify-content: center; }
 /* a scene "Use this prompt" (#242) just changed, or Undo changed back: lit for a moment */
 .orrery-app .editor.cells .cell.vflash::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-left: 3px solid var(--violet);
   background: rgba(180,148,245,.16); animation: orrery-vflash 2.2s ease-out forwards; }
@@ -247,17 +246,9 @@
 .orrery-app .chunkmedia { position: relative; margin: 2px 0 6px; background: color-mix(in srgb, var(--surface) 70%, var(--well)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .orrery-app .chunkmedia .cm-body { display: flex; flex-direction: column; gap: 8px; padding: 8px 12px 10px; }
 .orrery-app .chunkmedia.head:has(.cm-body:empty) { display: none; }
-.orrery-app .chunkmedia .cm-clips { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 6px; }
-.orrery-app .tl-clip.big { width: var(--clip-w); height: var(--clip-h); }
-.orrery-app .tl-clip.big video { object-fit: contain; background: #000; }
-/* the results under a template without scenes (#211): the take shown, a picture or a clip, its takes under it */
-.orrery-app .tl-clip.result img, .orrery-app .tl-clip.result video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
-.orrery-app .tl-clip.result audio { position: absolute; left: 8px; right: 8px; bottom: 8px; width: calc(100% - 16px); }
-.orrery-app .tl-clip.result.empty { display: grid; place-items: center; padding: 16px; border: 1px dashed var(--line); background: transparent; text-align: center; font-size: 12px; }
 .orrery-app .cm-takes.results .th-top { display: flex; flex-wrap: wrap; gap: 4px; }
 .orrery-app .cm-takes.results .th-top [aria-pressed="true"] { color: var(--brass); border-color: var(--brass); }
 .orrery-app .take .r-audio { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); }
-.orrery-app .tl-clip.empty.small { width: 54px; height: 32px; }
 /* the frames a scene's REMEMBER: lines take, cut from its clip; where they go */
 .orrery-app .rm-strip { display: flex; flex-direction: column; gap: 6px; }
 .orrery-app .rm-line { display: flex; flex-direction: column; gap: 3px; }
@@ -320,23 +311,13 @@
 .orrery-app .hv figcaption { font: 10.5px var(--mono); color: var(--muted); }
 .orrery-app .hv .hv-none { width: 64px; height: 80px; display: grid; place-items: center; border: 1px dashed var(--line); border-radius: 5px; color: var(--faint); font-size: 10.5px; }
   scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
-.orrery-app .chunkmedia .tl-clip { flex: none; }
 .orrery-app .chunkmedia .cm-none { font-size: 11.5px; padding: 4px 0; }
-.orrery-app .tl-clip { position: relative; width: var(--clip-w); height: var(--clip-h); padding: 0; border-radius: 4px; overflow: hidden; background: #22232e; border: 1px solid transparent; }
-.orrery-app .tl-clip.empty { background: none; border: 1px dashed #3d3f56; cursor: default; }
-.orrery-app .tl-clip.empty:disabled { opacity: 1; }
-.orrery-app .tl-clip.now { border-color: var(--brass); }
-.orrery-app .tl-clip:not(.empty):hover { border-color: var(--muted); }
-.orrery-app .tl-clip img, .orrery-app .tl-clip video, .orrery-app .tl-clip .missing { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.orrery-app .tl-clip video { z-index: 1; }
-/* the clip rendering now (#205): as big as a made one, with the sampler's preview and its step */
-.orrery-app .tl-clip.live, .orrery-app .tl-clip.empty.small.live { width: var(--clip-w); height: var(--clip-h); border: 1px solid var(--brass); }
-.orrery-app .tl-clip .tl-live { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 2; }  /* over the clip it replaces */
+/* the clip rendering now (#205, #331): the take being made, at the end of its strip, with the sampler's preview and its step */
+.orrery-app .take.live { border-color: var(--brass); cursor: default; }
+.orrery-app .take .tl-live { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 2; }
 .orrery-app .tl-step { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; font: 500 10px/1 var(--mono); color: #fff; padding: 4px 6px 6px;
   background: linear-gradient(to top, rgba(0,0,0,.65), transparent); text-shadow: 0 0 3px #000; }
 .orrery-app .tl-step::after { content: ""; position: absolute; left: 0; bottom: 0; height: 3px; width: var(--p, 0%); background: var(--brass); transition: width .3s; }
-.orrery-app .tl-clip .n { position: absolute; left: 3px; bottom: 2px; z-index: 2; font: 500 9.5px/1 var(--mono); color: #fff; text-shadow: 0 0 3px #000, 0 0 2px #000; }
-.orrery-app .tl-clip.empty .n { color: var(--faint); text-shadow: none; }
 .orrery-app .tl-video { width: 100%; max-height: 60vh; border-radius: 8px; background: #000; }
 .orrery-app .ac { position: absolute; z-index: 20; width: max-content; min-width: 260px; max-width: min(560px, calc(100% - 8px)); background: #1f2029; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.5); overflow: hidden; font-size: 12px; }
 .orrery-app .ac ul { list-style: none; margin: 0; padding: 3px 0; max-height: 264px; overflow-y: auto; }

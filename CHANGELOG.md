@@ -157,6 +157,9 @@ checks) are left out.
 
 ### Changed
 
+- A scene shows its clips as their strips of takes only (#331): the box of the clip above them is gone, the clip
+  big is in the preview, and the take being made forms at the end of its strip, small, beside the preview's big one. The
+  Clip size setting went with the box.
 - One strip of takes everywhere (#319, under #318): a reel's clip has the head the results have (+ take, ×N, 📌, ▶ all
   for videos, the clip in numbers, the others and all), from its first take; its + take renders a take of that very
   clip. The scene divider keeps 📊 and loses its jump buttons. The take chosen is **circled**: Circle this take replaces
@@ -206,6 +209,11 @@ checks) are left out.
 
 ### Fixed
 
+- Takes find a slot in a CAST member's description (#328): its `(for NAME)` no longer hides it ("has no slot … to write
+  for").
+- A reel clip's one take shows in its strip (#329); before, a clip's takes showed only once it had two.
+- Takes with a text encoder no longer repeat the same take forever (#330): every run of the sheet is sampled at a seed
+  of its own.
 - A library list the language model keys back a little differently (`80s/80s photographers` for
   `80s/80s_photographers`, another case, `__…__`) lands in its library instead of being lost (#324); one library
   asked for and one list answered, that list.

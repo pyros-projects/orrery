@@ -156,9 +156,11 @@ class OrreryAsk:
         h = resolve_home(home or None)
         frames = {"first_frame": first_frame, "last_frame": last_frame}
         try:
-            if task == "takes":  # a sheet's take (#178): sampled anew for each take it already has
+            if task == "takes":  # a sheet's take (#178): sampled anew for each run the sheet has asked (#330)
                 given = json.loads(args or "{}")
-                model = comfy.llm_for(h, seed=(seed + len(given.get("have") or [])) % 2**32,
+                asked = given.get("asked")
+                step = asked if isinstance(asked, int) and asked >= 0 else len(given.get("have") or [])
+                model = comfy.llm_for(h, seed=(seed + step) % 2**32,
                                       temperature=float(llm_config(h)["writer_temperature"]))
                 if model is None:
                     raise ValueError("Takes need a language model: pick one in orrery's settings (the gear in the node).")

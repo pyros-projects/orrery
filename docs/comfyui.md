@@ -32,8 +32,8 @@ Nodes under **orrery**:
   `model`, `first_frame`, `last_frame` and `video` → `text`, `picks`, `seed`, `width`,
   `height`, `length`,
   `megapixels` and `model`. Wire the model through it (loader → Orrery Prompt
-  → guider or sampler) and the clip being sampled plays in its box as it
-  forms, in real time, decoded with the tiny VAE for the model's latents
+  → guider or sampler) and the clip being sampled plays in the preview as it
+  forms, in real time (and small as the take being made in its strip of takes), decoded with the tiny VAE for the model's latents
   (`taeh3` in `models/vae_approx` for MiniMax H3, else Latent2RGB). The gear's
   **Live preview** makes it light (a few pictures spread over the clip) or
   smooth (so many pictures a second as you set, as far as the clip gives them:
@@ -41,7 +41,7 @@ Nodes under **orrery**:
   **Preview size** sets the long edge, 1024 px as KJNodes' (0: as sampled;
   bigger is sharper and takes longer each step); the model
   output is the same model with that preview, nothing loads again. Without it
-  the box shows ComfyUI's own preview, which orrery passes to every open tab. A picture wired into `first_frame` (else
+  the preview shows ComfyUI's own, which orrery passes to every open tab. A picture wired into `first_frame` (else
   `last_frame`), the same one the H3 node gets, gives `width`/`height` its shape
   at the header's megapixels (else H3's canvas area), on the 32 grid as close to
   its shape as the grid allows: H3 stretches a first frame and crops a last one
@@ -158,13 +158,11 @@ Nodes under **orrery**:
     sweep's runs at one seed are one take: a creator's four views come in together,
     as a mosaic in the strip and side by side in the preview. A reel opens in the **clips view**: the editor cut into one cell
     per SCENE, each followed by that scene's clips as Orrery Film (or H3
-    Motion Context's Chain Video) keeps them, big: a clip's shorter side is
-    the **Clip size** in the gear (360 px unless set otherwise), as far as the
-    editor is wide. Hover plays one, a click shows it in the preview; small dashed boxes are
-    clips not rendered yet. Under each clip, made or the next to make, stands its
-    strip of **takes** with the results' head (#319): **+ take** renders a take of
-    that clip (the box of the clip rendering shows it as it forms: see Orrery
-    Prompt's `model` below); a clip whose turn has not come yet waits for the one
+    Motion Context's Chain Video) keeps them: each clip, made or the next to
+    make, as its strip of **takes** with the results' head (#319, #331); the
+    clip itself, big, is in the preview below. **+ take** renders a take of
+    that clip (it forms at the end of the strip, small, and big in the preview:
+    see Orrery Prompt's `model` below); a clip whose turn has not come yet waits for the one
     before it. **Sample surfing**: ×1 beside + turns to ×2, ×4, ×8, and + renders
     that many takes. They line up under the clip; hover plays one, a click shows it
     in the preview, whose **Circle this take** puts it in the film (the next clip and
@@ -177,7 +175,7 @@ Nodes under **orrery**:
     gear's **Sample surfing** numbers the takes' seeds (seed+1, seed+2 …: the
     same takes tomorrow) or follows the node's control after generate. The grip
     at the end of a clip's takes sizes them all, in the clip's shape. A × on
-    a take, or on the clip in its box, deletes it from disk (it asks first): the
+    a take deletes it from disk (it asks first): the
     film then plays the clip's newest other take, or ends before the clip.
     The strip's head stays with the takes as you scroll
     (#245): on top **+ take**, ×N, 📌 and **▶ all**, which plays every take of the clip at once, from the
@@ -206,8 +204,8 @@ Nodes under **orrery**:
     **hide < N after** in its head hides the dead ends (#246): the takes fewer
     than N takes were made on. The film's takes, the last clip's (nothing can
     come after them yet) and every take a shown take came after stay, so every
-    path shown is whole; the head counts the hidden ones, 0 shows all. While a clip renders, its box
-    shows the sampler's preview and the step it is at: KJNodes' Model Preview
+    path shown is whole; the head counts the hidden ones, 0 shows all. While a clip renders, the take
+    being made at the end of its strip, and the preview, show the sampler's preview and the step it is at: KJNodes' Model Preview
     Override (a picture, or the whole clip as it forms), else ComfyUI's own
     preview when its live preview is on. Under a scene's clips come the frames its
     `REMEMBER:` lines take, cut from that clip in the browser as you type
@@ -296,7 +294,7 @@ Nodes under **orrery**:
     settings.
   - **Settings** (the gear, #212; again, and the tab before is back): its
     sections on the left, *Home*, *Language model*, *Writers*, *Editor*,
-    *Clips* (clip size, live preview, sample surfing), *Log* and *Reset*, the one
+    *Clips* (live preview, sample surfing), *Log* and *Reset*, the one
     chosen on the right, and the tab opens on the one shown last. *Reset* (#310)
     takes back the ratings (and the learned weights), deletes the history or the
     gallery, puts the presets or the libraries back to factory, or everything at

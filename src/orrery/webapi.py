@@ -682,8 +682,8 @@ def chain(home: Home, args: dict) -> dict:
     from orrery import film
     from orrery.chain import listing
 
-    try:  # sample surfing (#206): a clip's takes, where it has more than one
-        takes = {str(k): v for k, v in film.takes(_output_dir(), _latent_path(args)).items() if len(v) > 1}
+    try:  # sample surfing (#206): every clip's takes, from its first (#319)
+        takes = {str(k): v for k, v in film.takes(_output_dir(), _latent_path(args)).items()}
     except film.FilmError:
         takes = {}
     return {"chain": _latent_path(args), **listing(_output_dir(), _latent_path(args)), "takes": takes}
@@ -1317,6 +1317,9 @@ def takes_with(home: Home, args: dict, api, pictures: dict | None = None) -> dic
         context, keep = "\n".join(rolled), takes.rewrite_key(what, rolled[0]) if len(rolled) == 1 else None
     else:
         context = takes.marked(result.text, f"--{what}--")
+        tagged = kind == "slot" and not context and re.search(rf"--{re.escape(what)} \(for [^)\n]+\)--", result.text)
+        if tagged:  # a slot in a CAST member's description says whose it is (orrery.cast.parse_member)
+            context = takes.marked(result.text, tagged.group(0))
     if not context:
         raise ApiError(400, f"The prompt at seed {seed} has no {kind} {what!r} to write for (a branch that did not roll?).")
     if kind == "slot" and names_output(what):

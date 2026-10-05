@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { clipSize } from "../../comfyui/web/app/cells.js";
 import { framePicks, hintsFor, hintText, rememberLines, setFrame, shown } from "../../comfyui/web/app/remember.js";
 
 test("the frames a line takes are chain.frame_picks', every step-th of them", () => {
@@ -63,8 +62,3 @@ test("a frame picked by eye rewrites just that frame of the line", () => {
   assert.equal(setFrame("REMEMBER: every 10th frame as refmod pose", 0, 40), null);
 });
 
-test("a clip's shorter side is the clip size, as far as the section is wide", () => {
-  assert.deepEqual(clipSize(360, 2000, 16 / 9), { w: 640, h: 360 });  // landscape: its height
-  assert.deepEqual(clipSize(360, 2000, 9 / 16), { w: 360, h: 640 });  // portrait: its width
-  assert.deepEqual(clipSize(360, 480, 16 / 9), { w: 480, h: 270 });  // no wider than the section
-});

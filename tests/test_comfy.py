@@ -604,6 +604,10 @@ def test_orrery_ask_answers_one_task_in_its_ui_output(home, monkeypatch):
                                                                      "have": ["a coin"], "n": 1}), home=str(home))
     assert json.loads(out["ui"]["orrery_ask"][0]) == {"takes": ["a brass key"]} and seeds == [8]
     assert "- a coin" in backend.prompts[-1]
+    for asked in (3, 4):  # #330: the panel's runs so far, so a take it already has does not stall the seed
+        OrreryAsk().ask("takes", "", template, 7, args=json.dumps({"kind": "slot", "what": "one small object",
+                                                                  "have": ["a coin"], "n": 1, "asked": asked}), home=str(home))
+    assert seeds[-2:] == [10, 11]
     backend.replies = [json.dumps({"slot 1": "a brass key"})]
     got = json.loads(OrreryAsk().ask("slot", "one small object", template, 7, home=str(home))["ui"]["orrery_ask"][0])
     assert got["text"] == "a brass key"

@@ -468,6 +468,16 @@ test("a scene that plays no clip says why: the walk not known yet, not reached, 
   assert.match(sectionHTML(app(null), { first: null }), /a scene before it repeats forever/);
 });
 
+test("a scene shows its clips as their strips of takes, no box of the clip above them (#331)", async () => {
+  const { sectionHTML } = await import("../../comfyui/web/app/timeline.js");
+  const take = { folder: "seg_0000_aaaaaaaa", seed: 1010, active: true, created: "2026-10-05T05:13:00.1+02:00" };
+  const app = { text: "", state: {}, data: { chain: { width: 736, height: 768, clips: [{ segment: 0, version: take.folder, frames: 243 }], takes: { 0: [take] } } },
+    bridge: { chain: () => "reels/x", getSegment: () => 1, props: {} }, api: { takeThumbURL: (c, f) => `/thumb/${f}` } };
+  const html = sectionHTML(app, { index: 0, first: 0, segs: [0] });
+  assert.doesNotMatch(html, /tl-clip|cm-clips|<video/);
+  assert.match(html, /class="cm-takes" data-seg="0".*<i>takes<\/i><b>1<\/b>.*<i>circled<\/i><b>#1<\/b>.*class="take on" data-take="seg_0000_aaaaaaaa"/s);
+});
+
 test("Write now counts the libraries a template still needs, as autolib does", () => {
   const libs = [{ name: "animal", count: 3 }, { name: "style", count: 2 }];
   const text = "# __commented__\na __animal:5__ in __style__ by __makers/new__ <lora:__x__:1>\n__style:2__ \\__escaped__ __clothing/*__ __mine__";
@@ -934,7 +944,7 @@ test("a grid's or a sweep's runs at one seed are one take, its views in a mosaic
 test("the settings are a tab of sections, and every setting of the old sheet is in one (#212)", async () => {
   const { SECTIONS, SECTION_HTML } = await import("../../comfyui/web/app/settings.js");
   assert.deepEqual(SECTIONS.map(([k]) => k), ["home", "llm", "writers", "editor", "clips", "log", "reset"]);
-  const app = { data: { quickstart: true, dividers: false, timeline: true, log_prompts: true, clip_min: 400, preview_fps: 8, preview_edge: 768, preview_light: false, surf_numbered: true } };
+  const app = { data: { quickstart: true, dividers: false, timeline: true, log_prompts: true, preview_fps: 8, preview_edge: 768, preview_light: false, surf_numbered: true } };
   const st = {
     home: { home: "/h", setting: "/h", source: "setting" },
     llm: { source: "comfy", file: "qwen3vl_4b.safetensors", entries: 12, max_tokens: 16000, files: [{ name: "qwen3vl_4b.safetensors", size: 8e9, can_write: true }],
@@ -948,8 +958,9 @@ test("the settings are a tab of sections, and every setting of the old sheet is 
   has("llm", 'name="oa-src"', 'id="oa-llm"', 'id="oa-api-url"', 'id="oa-api-key"', "data-check", "data-useapi", 'id="oa-llm-n"', 'id="oa-llm-t"');
   has("writers", 'id="oa-wr"', 'id="oa-wt"', "data-wreset", "data-wsave", "Story between frames · edited");
   has("editor", 'data-flag="quickstart" checked', 'data-flag="dividers" >', 'data-flag="timeline" checked');
-  has("clips", 'value="400"', 'id="oa-pvfps" type="number" min="1" max="24" step="1" value="8"', 'value="768"', 'value="smooth" checked', 'value="numbered" checked');
+  has("clips", 'id="oa-pvfps" type="number" min="1" max="24" step="1" value="8"', 'value="768"', 'value="smooth" checked', 'value="numbered" checked');
   has("log", 'data-flag="log_prompts" checked');
+  assert.ok(!html.clips.includes("oa-clipmin") && html.clips.includes("in the preview below the scenes"));  // #331: no box under a scene
   assert.doesNotMatch(Object.values(html).join(""), /data-cancel|>Save</);  // no Save at the end of a long page
 });
 

@@ -873,7 +873,8 @@ def test_annotate_says_what_each_line_gives_at_a_seed(home):
 
 
 def test_a_clips_takes_are_listed_served_picked_and_deleted(home, tmp_path, monkeypatch):
-    """Sample surfing (#206) through the routes: the takes of clip 2, one of them picked, one deleted (#214)."""
+    """Sample surfing (#206) through the routes: the takes of clip 2, one of them picked, one deleted (#214); clip 1's
+    one take is listed too, as its strip shows every clip's takes from the first (#319)."""
     import numpy as np
 
     from orrery import film
@@ -888,7 +889,8 @@ def test_a_clips_takes_are_listed_served_picked_and_deleted(home, tmp_path, monk
     make(0, 0)
     surf = [make(1, k) for k in range(3)]
     listed = ok(home, webapi.chain, chain="reels/a")["takes"]
-    assert list(listed) == ["1"] and [t["take"] for t in listed["1"]] == [0, 1, 2]
+    assert list(listed) == ["0", "1"] and [t["take"] for t in listed["1"]] == [0, 1, 2]
+    assert len(listed["0"]) == 1 and listed["0"][0]["active"]  # its one take, circled
     assert ok(home, webapi.chain_video, chain="reels/a", take=surf[0].name) == surf[0] / "video.mp4"
     assert ok(home, webapi.chain_pick, chain="reels/a", segment=1, folder=surf[1].name)["take"] == 1
     assert api(home, webapi.chain_pick, chain="reels/a", segment=1, folder="seg_0001_nothere1")[0] == 400
@@ -1019,6 +1021,19 @@ def test_how_many_takes_each_sheet_asks_for_is_a_setting(home, fake_api):
     fake_api.answer = lambda body: json.dumps([f"take {i}" for i in range(9)])
     body = ok(home, webapi.llm_takes, kind="slot", what="a small object", template="A fox with --a small object--.")
     assert len(body["takes"]) == 5 and "Write 5 different takes" in fake_api.requests[-1]["messages"][0]["content"]
+
+
+def test_takes_find_a_slot_in_a_cast_line(home, fake_api):
+    """A slot in a CAST member's description compiles as `--… (for NAME)--` (two members, a text each); its takes
+    find it there and do not answer that the prompt has no such slot."""
+    Home(home).save_config({"llm": {"source": "api", "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})
+    fake_api.answer = lambda body: json.dumps(["a white cotton dress", "a grey wool coat", "a red raincoat"])
+    template = "@h3 t2va\nCAST\n@HOST: a tall woman. --what she wears--\n\nSHOT 5s: static\n@HOST stands in the rain."
+    body = ok(home, webapi.llm_takes, kind="slot", what="what she wears", template=template, target="h3-base", seed=4)
+    assert body["takes"] == ["a white cotton dress", "a grey wool coat", "a red raincoat"]
+    prompt = fake_api.requests[-1]["messages"][0]["content"]
+    prompt = prompt if isinstance(prompt, str) else prompt[-1]["text"]
+    assert "[this part]" in prompt and "--what she wears" not in prompt  # the place marked, as for any slot
 
 
 def test_takes_for_a_slot_see_the_pictures_it_names(home, fake_api, tmp_path, monkeypatch):
