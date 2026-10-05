@@ -292,6 +292,11 @@ function heading(rest) {
     test: TEST.test(rest) };
 }
 
+// The titles of a template's scenes, in order (#342): what a writer's sheet lets you pick. Empty without SCENE lines.
+export function sceneTitles(text) {
+  return text.split("\n").map((ln) => /^\s*(?:SCENE|CHUNK)\b\s*(.*)$/.exec(ln)).filter(Boolean).map((m) => heading(m[1]).title);
+}
+
 // A reel's scenes: the seconds of their shots (without the pinned context), how often each plays
 // (Infinity for forever), the clips in all, and which start afresh, with no pinned context: the
 // first scene, a test scene without AFTER:, a scene with only test scenes before it. Null without

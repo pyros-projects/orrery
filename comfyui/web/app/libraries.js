@@ -285,7 +285,7 @@ function wire(app, L) {
     if (act === "new") { s.libNew = ""; renderLibraries(app); app.$("#oa-newlib").focus(); }
     if (act === "accept" || act === "discard") return review(app, L, act);
     if (act === "add") addEntries(app, L);
-    if (act === "gen") openTakes(app, { kind: "entries", what: L.name, roll: "", directions: "", line: null }, e.target.closest("[data-lact]"));
+    if (act === "gen") openTakes(app, { kind: "entries", what: L.name, roll: "", directions: "", tab: true }, e.target.closest("[data-lact]"));
   };
   app.view.oninput = (e) => { if (e.target.dataset.ev !== undefined) fit(e.target); };
   app.view.onchange = (e) => {

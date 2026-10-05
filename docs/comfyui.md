@@ -113,8 +113,9 @@ Nodes under **orrery**:
     written), and a sweep's values as chips to take out or back in. A knob turned there is the node's, as a
     dial is: the template stays as written, and saving bakes it in. **Test** jumps to the Test tab and rolls. **Write** has
     the language model write the reel's next scene, the shot between two
-    frames or a prompt from a picture, one idea per short run, browsed
-    before it goes in ([wildcard-manager.md](wildcard-manager.md)). With an
+    frames or a prompt from a picture, in the 🎲 takes sheet every ask uses
+    (#333): N takes, steered, with what is sent along, one put in or several as
+    a choice ([llm.md](llm.md)). With an
     API endpoint as the language model (the gear), it asks the endpoint
     directly, beside ComfyUI's queue, and **Write now** in the footer writes
     the libraries the template still needs, all at once.

@@ -64,7 +64,7 @@ def test_routes_cover_the_contract():
         ("POST", "/orrery/galaxy/collect"), ("POST", "/orrery/galaxy/circle"), ("POST", "/orrery/galaxy/uncollect"), ("POST", "/orrery/galaxy/collection/add"),
         ("POST", "/orrery/galaxy/collection/rename"), ("POST", "/orrery/galaxy/collection/delete"),
         ("POST", "/orrery/frequency"), ("GET", "/orrery/llm"), ("POST", "/orrery/llm"),
-        ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"), ("POST", "/orrery/llm/takes"), ("POST", "/orrery/llm/keep"), ("POST", "/orrery/llm/plan"), ("POST", "/orrery/galaxy/takes"), ("POST", "/orrery/galaxy/write"),
+        ("POST", "/orrery/llm/check"), ("POST", "/orrery/llm/libraries"), ("POST", "/orrery/write"), ("POST", "/orrery/write/place"), ("POST", "/orrery/llm/takes"), ("POST", "/orrery/llm/keep"), ("POST", "/orrery/llm/plan"), ("POST", "/orrery/galaxy/takes"), ("POST", "/orrery/galaxy/write"),
         ("POST", "/orrery/library/accept"), ("POST", "/orrery/library/add"), ("POST", "/orrery/library/discard"),
         ("GET", "/orrery/home"), ("POST", "/orrery/home"),
         ("GET", "/orrery/chain"), ("GET", "/orrery/chain/thumb"), ("POST", "/orrery/chain/move"), ("POST", "/orrery/chain/pick"), ("POST", "/orrery/chain/delete"), ("POST", "/orrery/chain/clear"), ("GET", "/orrery/chain/tree"), ("POST", "/orrery/chain/walk"), ("POST", "/orrery/chain/end"),
@@ -582,8 +582,12 @@ def test_the_write_menu_asks_the_endpoint_outside_the_queue(home, fake_api, tmp_
     assert body["text"] == "A tabby cat asleep on a sunlit windowsill." and body["template"].startswith("A tabby cat")
     content = fake_api.requests[-1]["messages"][0]["content"]
     assert content[0]["type"] == "image_url" and fake_api.requests[-1]["temperature"] == 0.8  # the writers' own
-    body = ok(home, webapi.write_idea, task="describe", template="a cat")
-    assert "first_frame" in body["error"]
+    fake_api.answer = lambda body: "A cat curled on a red cushion."
+    body = ok(home, webapi.write_idea, task="describe", template="a cat", steer="cosier")
+    assert body["text"] == "A cat curled on a red cushion."  # no picture wired: written from the prompt (#334)
+    said = fake_api.requests[-1]["messages"][0]["content"]
+    said = said if isinstance(said, str) else said[-1]["text"]
+    assert "No pictures came along this time" in said and "The direction, which outweighs everything above: cosier." in said
 
 
 def test_write_now_writes_the_templates_open_libraries(home, fake_api):
@@ -848,7 +852,7 @@ def test_the_app_learns_where_each_remember_line_goes(home):
 
 def test_the_writer_texts_are_read_edited_and_reset(home):
     body = ok(home, webapi.writer_texts)
-    assert set(body) == {"continue", "story", "describe", "describe_shot"} and body["continue"]["edited"] is False
+    assert set(body) == {"continue", "story", "story_scenes", "story_keyframes", "describe", "describe_shot", "describe_shot_into"} and body["continue"]["edited"] is False
     edited = ok(home, webapi.writer_save, name="story", text="Write {seconds} seconds.")
     assert edited["edited"] is True and edited["text"].startswith("Write {seconds}")
     assert ok(home, webapi.writer_save, name="story", text=None)["edited"] is False
@@ -1012,9 +1016,13 @@ def test_the_plan_of_a_run_lists_its_language_model_tasks_in_order(home):
 
 def test_how_many_takes_each_sheet_asks_for_is_a_setting(home, fake_api):
     """#274: a count per kind in the llm settings, 1 to 12; the sheets ask for it (More too), unless they say n."""
-    assert ok(home, webapi.llm_settings)["takes"] == {"slot": 3, "enhance": 3, "rolled": 3, "new": 3}
-    saved = ok(home, webapi.llm_save, takes={"slot": 5, "enhance": 40, "new": "x"})["takes"]
-    assert saved == {"slot": 5, "enhance": 12, "rolled": 3, "new": 3}  # capped, a bad value its default
+    writers = {"continue": 3, "story": 3, "describe": 3}
+    assert ok(home, webapi.llm_settings)["takes"] == {"slot": 3, "enhance": 3, "rolled": 3, "new": 3, **writers}
+    saved = ok(home, webapi.llm_save, takes={"slot": 5, "enhance": 40, "new": "x", "story": 1})["takes"]
+    assert saved == {"slot": 5, "enhance": 12, "rolled": 3, "new": 3, **writers, "story": 1}  # capped, a bad value its default
+    from orrery.takes import counts
+    assert counts({"takes": {"write": 2}}) == {"slot": 3, "enhance": 3, "rolled": 3, "new": 3, "continue": 2, "story": 2,
+                                               "describe": 2}  # the one count before #333: each writer's default
     assert ok(home, webapi.llm_save, entries=20)["takes"]["slot"] == 5  # another setting saved keeps them
     Home(home).save_config({**Home(home).config(), "llm": {**Home(home).config()["llm"], "source": "api",
                                                             "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})
@@ -1110,3 +1118,37 @@ def test_a_preset_card_says_what_it_makes_and_when_it_changed_and_the_text_can_b
     assert mine(ok(home, webapi.presets_grep, pattern="a den\\.")["names"]) == ["mine/reel", "mine/scene"]
     assert mine(ok(home, webapi.presets_grep, pattern="DUSK")["names"]) == ["mine/still"]
     assert mine(ok(home, webapi.presets_grep, pattern="den.(")["names"]) == []  # no regex: plain text
+
+
+def test_a_sheet_sends_along_what_its_toggles_say(home, fake_api, tmp_path, monkeypatch):
+    """#335: the frames a slot does not name go along when sent, each told what it is; a library's lines go along
+    only with the prompt; a writer sees only what is sent, the prompt when it is."""
+    frame = tmp_path / "first.png"
+    Image.new("RGB", (64, 48), "orange").save(frame)
+    monkeypatch.setattr(webapi, "_input_picture", lambda name, what="picture": frame if name else None)
+    Home(home).save_config({"llm": {"source": "api", "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})
+    fake_api.answer = lambda body: json.dumps(["a red scarf", "a lantern", "a hat"])
+    ok(home, webapi.llm_takes, kind="slot", what="what she carries", template="A woman with --what she carries--.",
+       sends=["prompt", "first_frame"], frames={"first_frame": "first.png"})
+    content = fake_api.requests[-1]["messages"][0]["content"]
+    assert content[0]["type"] == "image_url" and "The images are Picture 1 (the first frame)" in content[-1]["text"]
+    status, body = api(home, webapi.llm_takes, kind="slot", what="what she carries", template="A woman with --what she carries--.",
+                       sends=["last_frame"])
+    assert status == 400 and "nothing is wired into the Orrery Prompt's last_frame" in body["error"]
+    assert api(home, webapi.llm_takes, kind="slot", what="x", template="A --x--.", sends=["the moon"])[0] == 400
+    (home / "library" / "props.txt").write_text("a cane\na fan\n")
+    fake_api.answer = lambda body: json.dumps(["a parasol", "a cane"])
+    ok(home, webapi.llm_takes, kind="entries", what="props", template="A woman with __props__.", rolls=False,
+       sends=["first_frame"], frames={"first_frame": "first.png"})
+    content = fake_api.requests[-1]["messages"][0]["content"]
+    said = content[-1]["text"]
+    assert content[0]["type"] == "image_url" and "Picture 1 is the first frame. Let them shape the entries." in said
+    assert "A woman with" not in said  # the prompt was not sent: no lines that use it
+    fake_api.answer = lambda body: "SHOT 5s: static\nShe opens the fan."
+    body = ok(home, webapi.write_idea, task="story", template="@h3 fl2va\nSHOT 5s: static\nA woman with a __props__.",
+              sends=["prompt", "first_frame"], frames={"first_frame": "first.png"})
+    content = fake_api.requests[-1]["messages"][0]["content"]
+    said = content[-1]["text"]
+    assert body["text"].startswith("SHOT 5s") and sum(c["type"] == "image_url" for c in content) == 1
+    assert "Picture 1 is the first frame. There is no last frame this time: imagine it" in said  # it has the first
+    assert "carry its story on:\n\nSHOT 5s: static\nA woman with a" in said  # its lines kept, and what they are for

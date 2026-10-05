@@ -285,13 +285,34 @@
 .orrery-app .llm-key:hover { background: color-mix(in srgb, currentColor 26%, transparent); }
 .orrery-app .gdetail .llm-key { color: var(--violet); margin-left: 4px; vertical-align: -2px; }
 .orrery-app .takes-panel .take-list { display: grid; gap: 6px; margin: 0; padding-left: 22px; }
-.orrery-app .takes-panel .take-list li { font-size: 13px; line-height: 1.45; padding: 5px 8px; border: 1px solid transparent; border-radius: 7px; cursor: pointer; }
+.orrery-app .takes-panel .take-list li { font-size: 13px; line-height: 1.45; padding: 5px 30px 5px 8px; border: 1px solid transparent; border-radius: 7px; cursor: pointer; position: relative; }
+.orrery-app .takes-panel .take-list .tdel { position: absolute; top: 4px; right: 3px; opacity: .45; }  /* a take out of the list (#333) */
+.orrery-app .takes-panel .take-list li:hover .tdel, .orrery-app .takes-panel .take-list .tdel:focus-visible { opacity: 1; }
 .orrery-app .takes-panel .take-list li:hover { background: color-mix(in srgb, var(--violet) 8%, transparent); }
-.orrery-app .takes-panel .take-list li.on { border: 2px solid var(--violet); padding: 4px 7px; background: color-mix(in srgb, var(--violet) 12%, transparent); }
+.orrery-app .takes-panel .take-list li.on { border: 2px solid var(--violet); padding: 4px 29px 4px 7px; background: color-mix(in srgb, var(--violet) 12%, transparent); }
 .orrery-app .takes-panel .take-list li:focus-visible { outline: 1px solid var(--violet); }
 .orrery-app .takes-panel .take-steer { gap: 6px; }
 .orrery-app .takes-panel .take-sel { gap: 6px; align-items: center; }
-.orrery-app .takes-panel .take-list.multi { max-height: 46vh; overflow-y: auto; }
+.orrery-app .takes-panel .take-list.multi, .orrery-app .takes-panel .take-list.long { max-height: 46vh; overflow-y: auto; }
+/* send along (#335): the sources as toggles, the Gallery's items as small pictures, its newest outputs to pick from */
+.orrery-app .takes-panel .take-send { gap: 5px; align-items: center; }
+.orrery-app .takes-panel .take-send .label { margin-right: 2px; }
+.orrery-app .takes-panel .take-opts { gap: 5px; align-items: center; }  /* a writer's choices (#342, #343) */
+.orrery-app .takes-panel .take-opts select.input { width: auto; flex: none; max-width: 16em; }
+.orrery-app .takes-panel .take-opts input.num { width: 4.2em; flex: none; }
+.orrery-app .takes-panel .take-mode { gap: 3px; flex: none; }
+.orrery-app .takes-panel .take-how { gap: 8px; align-items: center; }
+.orrery-app .takes-panel .take-send .chip:disabled { opacity: .45; cursor: default; }
+.orrery-app .takes-panel .take-send .chip.gal { padding: 2px 4px 2px 2px; }
+.orrery-app .takes-panel .take-send .chip.gal img { width: 22px; height: 22px; object-fit: cover; border-radius: 50%; }
+.orrery-app .takes-panel .take-gal { display: flex; flex-wrap: wrap; gap: 4px; max-height: 180px; overflow-y: auto; padding: 6px; background: var(--well); border: 1px solid var(--line); border-radius: 8px; }
+.orrery-app .takes-panel .take-gal[hidden], .orrery-app .takes-panel [data-tput][hidden] { display: none; }
+.orrery-app .takes-panel .gpick { position: relative; width: 56px; height: 56px; padding: 0; border: 2px solid transparent; border-radius: 6px; overflow: hidden; background: none; cursor: pointer; }
+.orrery-app .takes-panel .gpick img { width: 100%; height: 100%; object-fit: cover; }
+.orrery-app .takes-panel .gpick[aria-pressed="true"] { border-color: var(--brass); }
+.orrery-app .takes-panel .gpick .v { position: absolute; right: 2px; bottom: 2px; color: #fff; }
+.orrery-app .takes-panel .gpick .v .i { width: 11px; height: 11px; }
+.orrery-app .takes-panel .take-list.long .codebox { margin: 0; max-height: 30vh; overflow: auto; }
 .orrery-app .takes-panel .take-use { gap: 6px; }
 .orrery-app .takes-panel .take-list .tk { margin-left: 8px; font: 500 10.5px var(--mono); color: var(--faint); }
 .orrery-app .takes-panel .take-list .tk.new { color: var(--violet); }

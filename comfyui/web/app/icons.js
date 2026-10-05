@@ -17,6 +17,7 @@ const PATHS = {
   chev: '<polyline points="6 9 12 15 18 9"/>',
   back: '<line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>',
   jump: '<line x1="4" y1="4" x2="20" y2="4"/><line x1="12" y1="20" x2="12" y2="9"/><polyline points="7 13 12 8 17 13"/>',
+  land: '<line x1="4" y1="20" x2="20" y2="20"/><line x1="12" y1="4" x2="12" y2="15"/><polyline points="7 11 12 16 17 11"/>',  // to the end
   dice: '<rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/>',
   spark: '<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/>',
   image: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>',

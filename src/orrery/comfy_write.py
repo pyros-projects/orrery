@@ -8,6 +8,7 @@ frames it cannot name as files still take this run.
 """
 
 import json
+from pathlib import Path
 
 from orrery import writers
 from orrery.comfy_llm import llm_config
@@ -16,28 +17,25 @@ from orrery.home import resolve_home
 FRAME_EDGE = 768  # the long edge of a frame the model sees: enough to read it, a few hundred tokens
 
 
-def pick_frames(task: str, first, last) -> list | None:
-    """The frames a writer shows the model (pictures of any kind), or None."""
+def pick_frames(task: str, first, last) -> tuple[list, list[str]]:
+    """The frames a writer shows the model (pictures of any kind) and what each is: the story both frames, a prompt
+    from an image the first (else the last). What is not wired is left out, never an error (#334): the writer is
+    told what came along and writes from the rest."""
     if task == "story":
-        if first is None or last is None:
-            raise writers.WriterError("The story between two frames needs the first and the last frame: wire them "
-                                      "into the Orrery Prompt's first_frame and last_frame.")
-        frames = [first, last]
+        pairs = [(first, "the first frame"), (last, "the last frame")]
     elif task == "describe":
-        if first is None and last is None:
-            raise writers.WriterError("A prompt from an image needs a picture: wire it into the Orrery Prompt's "
-                                      "first_frame.")
-        frames = [first if first is not None else last]
+        pairs = [(first if first is not None else last, "the picture")]
     else:
-        return None
-    return frames
+        return [], []
+    kept = [(f, what) for f, what in pairs if f is not None]
+    return [f for f, _ in kept], [what for _, what in kept]
 
 
 def _frames(task: str, first, last):
-    """The frames a writer shows the model, as one IMAGE batch of one size, or None."""
-    frames = pick_frames(task, first, last)
-    if frames is None:
-        return None
+    """The frames a writer shows the model, as one IMAGE batch of one size, or None; and what each is."""
+    frames, given = pick_frames(task, first, last)
+    if not frames:
+        return None, given
     import comfy.utils  # ComfyUI
     import torch
 
@@ -46,7 +44,7 @@ def _frames(task: str, first, last):
     size = (max(32, round(w * scale / 16) * 16), max(32, round(h * scale / 16) * 16))
     fitted = [comfy.utils.common_upscale(f[:1].movedim(-1, 1), size[0], size[1], "bilinear", "center").movedim(1, -1)
               for f in frames]
-    return torch.cat(fitted)
+    return torch.cat(fitted), given
 
 
 class OrreryWrite:
@@ -68,13 +66,16 @@ class OrreryWrite:
                 # idea n samples the model at seed + n; the picks it reads still roll at the node's seed
                 "optional": {"idea": ("INT", {"default": 0, "min": 0, "max": 0xFFFF}),
                              "home": ("STRING", {"default": ""}), "params": ("STRING", {"default": ""}),
-                             "first_frame": ("IMAGE",), "last_frame": ("IMAGE",)}}
+                             "steer": ("STRING", {"default": ""}), "sends": ("STRING", {"default": ""}),
+                             "options": ("STRING", {"default": ""}),  # what the writer's sheet chose (JSON)
+                             "first_frame": ("IMAGE",), "last_frame": ("IMAGE",), "video": ("VIDEO",)}}
 
     @classmethod
     def IS_CHANGED(cls, **_):
         return float("NaN")  # every request is a new idea
 
-    def write(self, task, template, seed, idea=0, home="", params="", first_frame=None, last_frame=None):
+    def write(self, task, template, seed, idea=0, home="", params="", steer="", sends="", options="", first_frame=None,
+              last_frame=None, video=None):
         from orrery import (
             comfy,  # the node pack's helpers; imported here, as comfy imports this module
         )
@@ -84,13 +85,30 @@ class OrreryWrite:
         def backend():
             return comfy.llm_for(h, seed=(seed + idea) % 2**32, temperature=float(llm_config(h)["writer_temperature"]))
 
-        result = write_idea(h, task, template, seed, idea, params, backend, lambda: _frames(task, first_frame, last_frame))
+        from orrery import sendalong
+
+        sent = sendalong.parse(json.loads(sends)) if sends else None  # what the takes sheet sends along (#335)
+
+        def pictures():
+            if sent is None:
+                return _frames(task, first_frame, last_frame)
+            shown, labels, missing = sendalong.pictures(h, [s for s in sent if s != "prompt"],
+                                                        {"first_frame": first_frame, "last_frame": last_frame}, video)
+            if missing:
+                raise writers.WriterError(f"Nothing to send along there: {'; '.join(missing)}.")
+            return shown, labels
+
+        result = write_idea(h, task, template, seed, idea, params, backend, pictures, steer,
+                            sent is not None and "prompt" in sent, json.loads(options) if options else None)
         return {"ui": {"orrery_write": [json.dumps(result, ensure_ascii=False)]}}
 
 
-def write_idea(h, task: str, template: str, seed: int, idea: int, params, backend, frames) -> dict:
-    """One idea: the text, the template with it in place, what is wrong with it, or the error. `backend` and
-    `frames` are called when needed, so an error before them never loads a model or a picture."""
+def write_idea(h, task: str, template: str, seed: int, idea: int, params, backend, frames, steer: str = "",
+               prompt: bool = False, opts: dict | None = None) -> dict:
+    """One idea: the text, the template with it in place (`template`, in place of what it replaces; `inserted`, with
+    that kept, #342), what is wrong with it, or the error. `backend` and `frames` (the pictures and what each is) are
+    called when needed, so an error before them never loads a model or a picture. `steer`: the takes sheet's
+    steering line (#334); `prompt`: the prompt as it rolls goes along (#335); `opts`: what the sheet chose (#342)."""
     from orrery import comfy
     from orrery.dsl import bindings, override, strip_comments
     from orrery.presets import resolve_includes
@@ -101,16 +119,22 @@ def write_idea(h, task: str, template: str, seed: int, idea: int, params, backen
         dials = comfy.dial_values(params if isinstance(params, str) else json.dumps(params or {}))
         dials = {k: v for k, v in dials.items() if k in known}
         source = strip_comments(resolve_includes(h, override(template, dials)))
-        prompt = writers.request(h, task, source, seed, h.libraries(), h.weights())
-        images = frames()
+        images, given = frames()
+        asked = writers.request(h, task, source, seed, h.libraries(), h.weights(), steer, given, prompt, opts)
         model = backend()
         if model is None:
             raise writers.WriterError("The writers need a language model: pick one in orrery's settings (the gear "
                                       "in the node).")
-        answer = model.complete(prompt, images=images)
-        text, problem = writers.check(task, template, answer)
+        if isinstance(images, list) and images and not isinstance(images[0], str | Path):  # pictures sent along (#335)
+            images = comfy._images(None, images, model)
+        answer = model.complete(asked, images=images)
+        text, problem = writers.check(task, template, answer, opts)
+        caret = writers.at_caret(task, template)  # a reel's shot: the app puts it in at the caret (#334)
+        placed = text and not caret
         result = {"task": task, "seed": seed, "idea": idea, "text": text, "problem": problem,
-                  "template": writers.apply(task, template, text) if text else None}  # the app asks before it inserts one with a problem
+                  "template": writers.apply(task, template, text, opts) if placed else None,
+                  "inserted": writers.apply(task, template, text, opts, insert=True) if placed else None,
+                  **({"at_caret": True} if caret else {})}
     except (writers.WriterError, ValueError, RuntimeError) as err:
         result = {"task": task, "seed": seed, "idea": idea, "error": str(err), "raw": answer}
     print(f"[orrery] write · {task} · seed {seed} · idea {idea}: {result.get('error') or result.get('problem') or 'an idea'}")
@@ -143,18 +167,18 @@ class OrreryAsk:
                              "params": ("STRING", {"default": ""}), "segment": ("INT", {"default": 0, "min": 0, "max": 99999}),
                              "sweep": ("STRING", {"default": ""}), "chain": ("STRING", {"default": ""}),
                              "graph": ("STRING", {"default": ""}), "node": ("STRING", {"default": ""}),
-                             "first_frame": ("IMAGE",), "last_frame": ("IMAGE",)}}
+                             "first_frame": ("IMAGE",), "last_frame": ("IMAGE",), "video": ("VIDEO",)}}
 
     @classmethod
     def IS_CHANGED(cls, **_):
         return float("NaN")  # every task is asked anew
 
     def ask(self, task, what, template, seed, target="text", args="", preset="", home="", params="", segment=0,
-            sweep="", chain="", graph="", node="", first_frame=None, last_frame=None):
+            sweep="", chain="", graph="", node="", first_frame=None, last_frame=None, video=None):
         from orrery import comfy, webapi
 
         h = resolve_home(home or None)
-        frames = {"first_frame": first_frame, "last_frame": last_frame}
+        frames = {"first_frame": first_frame, "last_frame": last_frame, "video": video}  # a take's sends read them (#335)
         try:
             if task == "takes":  # a sheet's take (#178): sampled anew for each run the sheet has asked (#330)
                 given = json.loads(args or "{}")
@@ -175,8 +199,8 @@ class OrreryAsk:
                 result = comfy.run_prompt(template, seed, target, home, preset or comfy.NO_PRESET, None, params, segment,
                                           comfy._previous(chain, segment), packed, wired, chain, keep, sweep,
                                           comfy.continued(prompt, node), (comfy._size(first_frame), comfy._size(last_frame)),
-                                          comfy.reads_picks(prompt, node, "OrreryRefMods"), standing, frames,
-                                          ask={"task": task, "what": what})
+                                          comfy.reads_picks(prompt, node, "OrreryRefMods"), standing,
+                                          {"first_frame": first_frame, "last_frame": last_frame}, ask={"task": task, "what": what})
         except (webapi.ApiError, ValueError, RuntimeError) as err:
             result = {"task": task, "what": what, "error": str(err)}
         print(f"[orrery] ask · {task}{f' · {what[:60]}' if what else ''}: {result.get('error') or 'answered'}")

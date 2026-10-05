@@ -18,6 +18,20 @@ const areas = (app) => [...(box(app)?.querySelectorAll("textarea") || [])];
 export const inCell = (ta) => !!ta?.closest(".cell");
 
 // Where a cell's text starts in the whole text.
+// Where the caret was in the whole template when the editor last had it (#334): a take that has no place of its own
+// goes in there. null when no cell had it.
+export function caretOffset(app) {
+  const ta = app.lastArea;
+  return ta?.isConnected && areas(app).includes(ta) ? cellStart(app, ta) + ta.selectionEnd : null;
+}
+
+// `text` with a take of its own lines put in under the line the caret is on (at the end without a caret).
+export function atCaret(text, caret, take) {
+  const end = caret === null || caret === undefined ? text.length : (text.indexOf("\n", caret) + 1 || text.length + 1) - 1;
+  const before = text.slice(0, end), after = text.slice(end);
+  return `${before}${before && !before.endsWith("\n") ? "\n" : ""}${take.trim()}${after.startsWith("\n") || !after ? "" : "\n"}${after}`;
+}
+
 export function cellStart(app, ta) {
   let n = 0;
   for (const t of areas(app)) {
@@ -149,7 +163,7 @@ function join(app, at, caret, onEdit) {
 export function wireCells(app, { onEdit, onKey, onFocus, onBlur }) {
   const host = box(app);
   host.addEventListener("input", (e) => { if (e.target.tagName === "TEXTAREA") edited(app, e.target, onEdit); });
-  host.addEventListener("focusin", (e) => { if (e.target.tagName === "TEXTAREA") onFocus(); });
+  host.addEventListener("focusin", (e) => { if (e.target.tagName === "TEXTAREA") { app.lastArea = e.target; onFocus(); } });
   host.addEventListener("focusout", (e) => { if (e.target.tagName === "TEXTAREA") onBlur(e.target); });
   host.addEventListener("keydown", (e) => {
     const ta = e.target;
