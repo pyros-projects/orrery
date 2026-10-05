@@ -16,7 +16,8 @@ its percentile among the same quantity everywhere inside the clips.
 
 ## First look
 
-`measure.py` reads a film as Orrery Film stores it (each take's `video.mp4`, pinned frames trimmed, and `audio.npy`)
+`measure.py` read a film as Orrery Film stored it (each take's `video.mp4`, pinned frames trimmed, and `audio.npy`;
+since #361 it reads the run's `film.mp4`, which joins them with their seams)
 and compares every seam with the steps inside the clips: the picture's mean luma jump and pixel MAE between the last
 frame of a clip and the first of the next, and the sound's sample step and 20 ms level change across the join. Each
 seam value comes with its percentile among the steps inside the clips (p99: larger than 99% of them).

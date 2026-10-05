@@ -101,7 +101,7 @@ const REF = [
     ["REMEMBER: last frame as image 5 in clips 4+", "only those clips (from 1: 4, 4-8, 4, 6, 7), or until a scene first plays (… until the stairs), so several lines can fill one picture in turns", "REMEMBER: last frame as image "],
     ["LORA: <lora:name:0.8>", "put on the model that passes through the node (no LoRA node needed): lines before the first SCENE always, a scene's own only there; after LORA: the editor lists your LoRA files", "LORA: "],
     ["context: 22", "the frames each clip continues from (Orrery Continue pins 22; Motion Context 5, 22, 39, 56); from the second clip on, Shot 1 and length include them", "context: 22"],
-    ["Orrery Continue · Orrery Film", "picks and the H3 node's latent into Orrery Continue, its latent into the sampler; the sampled latent and the decoded clip into Orrery Film, which keeps the takes and joins the film; the segment counts up by itself, so Roll next N clips plays the reel", ""],
+    ["Orrery Continue · Orrery Film", "picks and the H3 node's latent into Orrery Continue, its latent into the sampler; the sampled latent and the decoded clip into Orrery Film, which keeps the takes and joins the film, a clip's end as the next clip decoded it (no jump in picture or sound where they meet); the segment counts up by itself, so Roll next N clips plays the reel", ""],
     ["CHUNK · HANDOFF: · GOTO: · SEND: · $x~1 · ? $x[a]:", "the words of earlier orrery: they still work, with the same dice", ""],
   ]],
 ];

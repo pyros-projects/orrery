@@ -356,7 +356,11 @@ Nodes under **orrery**:
   `noise_mask`). Orrery Film trims the 22 frames, puts out the clip
   (`images`, `audio`) and `film`, the reel so far, and keeps the takes under
   `output/<the reel's folder>/orrery_film/`: each clip, its sound and the tail the
-  next one continues from. Rendering a clip again adds a take, and the film ends
+  next one continues from. The film has no seams to see or hear where a clip
+  continues the one before: H3's VAE decodes a clip's last 5 frames and the end of
+  its sound as if nothing followed, so the film plays them as the next clip's decode
+  has them (the 22 frames it starts with), as one decode of the whole film would,
+  and the sound's level eases across, up to 1.5 dB as H3 Continuum's seam guard does. Rendering a clip again adds a take, and the film ends
   with it; the clips that continued the take before stay in the take tree and
   come back when that take is picked again, clip 1 too: its
   takes stay side by side (another size or sound starts a new run); older takes stay on disk. A `(test)` scene's take is kept but left out of

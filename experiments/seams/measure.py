@@ -33,13 +33,10 @@ def decode(path: Path) -> tuple[np.ndarray, float, np.ndarray | None, int | None
 
 
 def run_film(run: Path) -> tuple[np.ndarray, list[int], float, np.ndarray, int]:
-    """An Orrery Film run as one film: its takes' frames and sound end to end, the seams where they join."""
-    state = json.loads((run / "clips.json").read_text())
-    takes = [run / c["folder"] for c in state["clips"]]
-    clips = [decode(t / "video.mp4")[0] for t in takes]
-    sound = np.concatenate([np.load(t / "audio.npy") for t in takes], axis=1)
-    starts = list(np.cumsum([len(c) for c in clips])[:-1])
-    return np.concatenate(clips), [int(s) for s in starts], float(state["settings"][2]), sound, int(state["settings"][3])
+    """An Orrery Film run's film (its takes joined, with their seams, #361) and the frames where its clips join."""
+    clips = [c for c in json.loads((run / "clips.json").read_text())["clips"] if not c.get("test")]
+    frames, fps, sound, rate = decode(run / "film.mp4")
+    return frames, [int(s) for s in np.cumsum([c["frames"] for c in clips])[:-1]], fps, sound, rate
 
 
 if __name__ == "__main__":
