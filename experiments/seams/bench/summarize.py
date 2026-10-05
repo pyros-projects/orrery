@@ -23,10 +23,13 @@ QUANTITIES = ("luma jump", "luma pulse", "pixel MAE", "sound step", "20ms level 
 
 def films(seed_dir: Path) -> dict[str, tuple[Path, str]]:
     """Each tool's film in a seed's folder, with its seams: orrery and Motion Context 124 frames, then 102 new ones a
-    clip; Continuum 124, then 119 (its chunks are 141 frames, 22 of them context)."""
+    clip; Continuum 124, then 119 (its chunks are 141 frames, 22 of them context). orrery's third film is the first
+    with its seams (#361, #362); its second, each clip decoded on its own, is the one decode's latents."""
     found = {}
     if (f := sorted(seed_dir.glob("orrery_film_*.mp4"))):
         found["orrery"] = (f[-1], "124,102")
+        if len(f) >= 3:
+            found["orrery clip by clip"] = (f[1], "124,102")
     if (f := sorted(seed_dir.glob("orrery_onepass_*.mp4"))):
         found["orrery one decode"] = (f[-1], "124,102")
     for name in ("raw", "repaired"):
@@ -51,7 +54,7 @@ def main() -> None:
                 per_tool.setdefault(tool, []).append(seam)
             print(f"measured {seed_dir.name} {tool}: {len(result['seams'])} seams", file=sys.stderr)
     lines = ["| Tool | Seams | " + " | ".join(QUANTITIES) + " |", "|---|---|" + "---|" * len(QUANTITIES)]
-    for tool in ("orrery", "orrery one decode", "continuum raw", "continuum repaired", "motion context"):
+    for tool in ("orrery clip by clip", "orrery", "orrery one decode", "continuum raw", "continuum repaired", "motion context"):
         seams = per_tool.get(tool, [])
         if not seams:
             continue

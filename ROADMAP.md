@@ -24,12 +24,11 @@ release plan and the code. **Verified** marks a finding checked by hand, not onl
 So nobody finds a reel better made by ComfyUI-H3-Continuum, whose continuation orrery shares (Masked AV, 22 frames;
 see *From Continuum* below):
 
-- **Smooth the sound at the seams** (measured). At a film's real seams the waveform steps further than 96–99% of the
-  steps inside its clips and the level jumps up to 10.8 dB in 20 ms: a click or a bump, where Continuum's assembly
-  aligns the sound, crossfades it over 10–60 ms and matches the level (`v2/seam_guard.py:113-151`). The picture's
-  jumps stay within the clips' range, but one of four seams flashes briefly after the join (a luma pulse at p100),
-  which Continuum's assembly levels too (`experiments/seams/`). Keep a short pre-roll of each
-  take's sound and crossfade in Orrery Film's join; measure again after.
+- **Smooth the seams** (done, #359). Orrery Film played each clip as decoded on its own: a click at every seam and a
+  brightness jump at some. A continued clip's decode holds the clip before's end as one decode of the film has it, and
+  the film now plays that (#361), and eases the level as Continuum's seam guard does (#362). Measured
+  (`experiments/seams/bench/results-seams.md`): clicks p70 → p27 (Continuum repaired p34), brightness jumps p93 → p86,
+  none at p99. The flash after two of nine seams sits in the latent (risk #363).
 - **Python 3.12** (tested). `pyproject.toml` asks for 3.13, and a ComfyUI on 3.12 refuses the install; all 1,331 tests
   pass on 3.12.12 and ruff finds nothing 3.13-only. Lower the floor, refresh `uv.lock`, test 3.12 and 3.13 in CI.
 - **Example workflows on settings that look good**: people judge orrery by the first workflow they open. Continuum's
