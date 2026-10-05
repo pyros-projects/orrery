@@ -1,4 +1,4 @@
-# The three checks of AGENTS.md, in full, on every PR and on main.
+# The three checks of AGENTS.md, in full, on every PR and on main, on each Python orrery supports.
 name: CI
 
 on:
@@ -7,13 +7,17 @@ on:
     branches: [main]
 
 jobs:
-  checks:
+  python:
+    name: checks (${{ matrix.python }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.12", "3.13"]
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10.2.0  # setup-uv tags full versions only, there is no v10
         with:
-          python-version: "3.13"
+          python-version: ${{ matrix.python }}
           enable-cache: true
       - uses: actions/setup-node@v7
         with:
@@ -26,3 +30,10 @@ jobs:
         run: uv run pytest -n auto
       - name: node --test
         run: node --test tests/js/*.mjs
+
+  checks:  # the check main requires: green when the checks pass on every Python (always runs: skipped would count as passed)
+    needs: python
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: test "${{ needs.python.result }}" = success
