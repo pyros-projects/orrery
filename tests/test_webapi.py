@@ -1021,6 +1021,19 @@ def test_how_many_takes_each_sheet_asks_for_is_a_setting(home, fake_api):
     assert len(body["takes"]) == 5 and "Write 5 different takes" in fake_api.requests[-1]["messages"][0]["content"]
 
 
+def test_takes_find_a_slot_in_a_cast_line(home, fake_api):
+    """A slot in a CAST member's description compiles as `--… (for NAME)--` (two members, a text each); its takes
+    find it there and do not answer that the prompt has no such slot."""
+    Home(home).save_config({"llm": {"source": "api", "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})
+    fake_api.answer = lambda body: json.dumps(["a white cotton dress", "a grey wool coat", "a red raincoat"])
+    template = "@h3 t2va\nCAST\n@HOST: a tall woman. --what she wears--\n\nSHOT 5s: static\n@HOST stands in the rain."
+    body = ok(home, webapi.llm_takes, kind="slot", what="what she wears", template=template, target="h3-base", seed=4)
+    assert body["takes"] == ["a white cotton dress", "a grey wool coat", "a red raincoat"]
+    prompt = fake_api.requests[-1]["messages"][0]["content"]
+    prompt = prompt if isinstance(prompt, str) else prompt[-1]["text"]
+    assert "[this part]" in prompt and "--what she wears" not in prompt  # the place marked, as for any slot
+
+
 def test_takes_for_a_slot_see_the_pictures_it_names(home, fake_api, tmp_path, monkeypatch):
     """#174: a slot's takes get the Load Image file behind first_frame as Picture 1; without it they ask nothing
     and say what is missing; one from image output come from the Gallery, never here."""

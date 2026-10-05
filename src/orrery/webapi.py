@@ -1317,6 +1317,9 @@ def takes_with(home: Home, args: dict, api, pictures: dict | None = None) -> dic
         context, keep = "\n".join(rolled), takes.rewrite_key(what, rolled[0]) if len(rolled) == 1 else None
     else:
         context = takes.marked(result.text, f"--{what}--")
+        tagged = kind == "slot" and not context and re.search(rf"--{re.escape(what)} \(for [^)\n]+\)--", result.text)
+        if tagged:  # a slot in a CAST member's description says whose it is (orrery.cast.parse_member)
+            context = takes.marked(result.text, tagged.group(0))
     if not context:
         raise ApiError(400, f"The prompt at seed {seed} has no {kind} {what!r} to write for (a branch that did not roll?).")
     if kind == "slot" and names_output(what):
