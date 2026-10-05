@@ -28,6 +28,23 @@ from typing import Protocol
 _FENCE = re.compile(r"```(?:json)?\s*(.*?)```", re.DOTALL)
 
 
+# Where a prompt shows the model its pictures (#333): a writer's text may put them after what they belong to, which
+# a small model weighs differently from pictures first. Without it they come first; with several, picture i stands
+# at the i-th, the ones left over at the last.
+PICTURES = "<|orrery_pictures|>"
+
+
+def placed(prompt: str, pictures: int) -> list[tuple[str, int]]:
+    """The prompt as (text, pictures after it) pieces: where its PICTURES marks stand, or all of them first."""
+    parts = prompt.split(PICTURES)
+    if len(parts) == 1:
+        return [("", pictures), (prompt, 0)]
+    marks = len(parts) - 1
+    counts = [1 if i < pictures else 0 for i in range(marks)]
+    counts[-1] += max(0, pictures - marks)
+    return [*zip(parts[:-1], counts), (parts[-1], 0)]
+
+
 class InvalidProposal(ValueError):
     """The model's answer cannot be used safely."""
 
@@ -110,9 +127,13 @@ class OpenAIBackend:
         self.name = name or model
 
     def _body(self, prompt: str, images) -> dict:
-        content = prompt if images is None or not len(images) else [
-            *({"type": "image_url", "image_url": {"url": url}} for url in data_urls(images)),
-            {"type": "text", "text": prompt}]  # the frames first, as Picture 1, 2 … in the prompt
+        if images is None or not len(images):
+            content = prompt.replace(PICTURES, "")
+        else:  # the frames where the prompt puts them (#333), else first; as Picture 1, 2 … in the prompt
+            urls, content = iter(data_urls(images)), []
+            for text, n in placed(prompt, len(images)):
+                content += [*([{"type": "text", "text": text}] if text.strip() else []),
+                            *({"type": "image_url", "image_url": {"url": next(urls)}} for _ in range(n))]
         body = {"model": self.model, "messages": [{"role": "user", "content": content}],
                 "temperature": self.temperature, "max_tokens": self.max_tokens}
         for quirk in _QUIRKS.get((self.url, self.model), ()):
@@ -120,6 +141,7 @@ class OpenAIBackend:
         return body
 
     def complete(self, prompt: str, images=None) -> str:
+        applied = set(_QUIRKS.get((self.url, self.model), ()))  # what this body adapted to (#333: takes ask at once)
         body, waits = self._body(prompt, images), list(RETRIES)
         while True:
             request = urllib.request.Request(self.url, data=json.dumps(body).encode(), method="POST",
@@ -131,8 +153,9 @@ class OpenAIBackend:
             except urllib.error.HTTPError as err:
                 message, param = _error(err)
                 quirk = _quirk(err.code, param, message)
-                if quirk and quirk not in _QUIRKS.setdefault((self.url, self.model), set()):
-                    _QUIRKS[(self.url, self.model)].add(quirk)
+                if quirk and quirk not in applied:  # learned here, or by a request asked beside this one
+                    _QUIRKS.setdefault((self.url, self.model), set()).add(quirk)
+                    applied.add(quirk)
                     _adapt(body, quirk)
                     continue
                 if err.code in (408, 429, 500, 502, 503, 504) and waits:
@@ -209,7 +232,7 @@ class TransformersBackend:
         if self._model is None:
             self._load()
         tok = self._tokenizer
-        text = tok.apply_chat_template([{"role": "user", "content": prompt}], tokenize=False,
+        text = tok.apply_chat_template([{"role": "user", "content": prompt.replace(PICTURES, "")}], tokenize=False,
                                        add_generation_prompt=True, enable_thinking=False)
         inputs = tok(text, return_tensors="pt").to(self._model.device)
         output = self._model.generate(**inputs, max_new_tokens=self.max_new_tokens,

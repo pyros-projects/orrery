@@ -185,13 +185,15 @@ function mount(node) {
         if (wait) Object.entries(on).forEach(([ev, f]) => api.removeEventListener(ev, f));
       }
     },
-    // The Write menu: an idea in a run of its own (Orrery Write); idea n samples the model at seed + n.
-    write: (task, idea, template) => bridge.mini("OrreryWrite", { task, template, idea },
-      { wire: ["seed", "home", "params", "first_frame", "last_frame"] }),
+    // A writer's take in a run of its own (Orrery Write); take n samples the model at seed + n, steered (#334), for what
+    // its sheet chose (#342, #343).
+    write: (task, idea, template, steer = "", sends = null, options = null) => bridge.mini("OrreryWrite", { task, template, idea, steer,
+      sends: sends ? JSON.stringify(sends) : "", options: options ? JSON.stringify(options) : "" },
+    { wire: ["seed", "home", "params", "first_frame", "last_frame", "video"] }),
     // One task of the language model in a run of its own (Orrery Ask, #171): with a text encoder, a library, a run's
     // rewrites, a slot, a take at the line. It reads the node's values and wiring as the run that renders does.
     ask: (task, what = "", args = "", options = {}) => bridge.mini("OrreryAsk", { task, what, args }, { ...options, graph: true,
-      wire: ["template", "seed", "target", "preset", "home", "params", "segment", "sweep", "chain", "first_frame", "last_frame"] }),
+      wire: ["template", "seed", "target", "preset", "home", "params", "segment", "sweep", "chain", "first_frame", "last_frame", "video"] }),
     // Before each run Generate queues: the app's mini-runs for it (#171), set by the app.
     beforeRun: null,
     getSweep: () => find("sweep")?.value || "",
@@ -213,16 +215,15 @@ function mount(node) {
     frameFiles: async () => {
       const { output } = await app.graphToPrompt();
       const key = Object.keys(output).find((k) => output[k]?.class_type === "OrreryPrompt" && (k === String(node.id) || k.endsWith(`:${node.id}`)));
-      const names = {};
-      let other = false;
-      for (const name of ["first_frame", "last_frame"]) {
+      const names = {}, others = [];  // others: wired from a node that is no loader of a file (a decode, a resize)
+      for (const name of ["first_frame", "last_frame", "video"]) {  // the video's file too (#335): a Load Video's
         const from = key && output[key].inputs[name];
         if (!Array.isArray(from)) continue;
-        const source = output[String(from[0])];
-        if (source?.class_type === "LoadImage" && typeof source.inputs?.image === "string") names[name] = source.inputs.image;
-        else other = true;
+        const source = output[String(from[0])], file = { LoadImage: "image", LoadVideo: "file", VHS_LoadVideo: "video" }[source?.class_type];
+        if (file && typeof source.inputs?.[file] === "string") names[name] = source.inputs[file];
+        else others.push(name);
       }
-      return { names, other };
+      return { names, others, other: others.some((n) => n !== "video") };
     },
     getSegment: () => find("segment")?.value ?? 0,
     setSegment: (value) => set("segment", value),

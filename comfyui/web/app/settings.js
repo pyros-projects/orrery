@@ -23,8 +23,10 @@ export const RESETS = [
 ];
 
 // What the Write menu sends the model: each writer a prompt of its own, with only its own rules.
-const WRITER_TEXTS = { continue: "Continue the reel", story: "Story between frames", describe: "Prompt from image: an image prompt",
-  describe_shot: "Prompt from image: an @h3 i2va shot" };
+const WRITER_TEXTS = { continue: "Continue the reel", story: "Story interpolator: the fl2va shot between two frames",
+  story_scenes: "Story interpolator: scenes", story_keyframes: "Story interpolator: keyframes for an image prompt",
+  describe: "Prompt from image: an image prompt", describe_shot: "Prompt from image: an @h3 i2va shot",
+  describe_shot_into: "Prompt from image: a shot that brings the picture into the screenplay sent along" };
 
 // The model field: a list once the endpoint has named its models, else a text field.
 const modelField = (models, current) => (models.length
@@ -147,7 +149,7 @@ export const SECTION_HTML = {
       ["every run", "<b>After every run</b>: one take each, written in as the picture is kept"]].map(([v, label]) =>
       `<label class="check"><input type="radio" name="oa-ps" value="${v}" ${(app.data.picture_slots || "gallery") === v ? "checked" : ""}><span>${label}</span></label>`).join("")}</div></div>
     <div class="field"><span class="label">Takes a 🎲 asks for</span>
-      <div class="row wrap takes-n">${[["slot", "for a <code>--slot--</code>"], ["enhance", "for <code>&gt; enhance</code>"], ["rolled", "rolled from a library"], ["new", "new for a library"]].map(([k, label]) =>
+      <div class="row wrap takes-n">${[["slot", "for a <code>--slot--</code>"], ["enhance", "for <code>&gt; enhance</code>"], ["rolled", "rolled from a library"], ["new", "new for a library"], ["continue", "for <b>Continue the reel</b>"], ["story", "for the <b>Story interpolator</b>"], ["describe", "for <b>Prompt from image</b>"]].map(([k, label]) =>
         `<label class="row"><input class="input narrow" type="number" min="1" max="12" data-takes="${k}" value="${s.takes?.[k] ?? 3}" aria-label="Takes ${k}"><span class="muted">${label}</span></label>`).join("")}</div>
       <span class="muted">More takes asks for as many again.</span></div>
     <div class="field"><label class="label" for="oa-llm-n">A library it creates starts with</label>
@@ -157,7 +159,7 @@ export const SECTION_HTML = {
   },
 
   writers: (app, { writers: wr, wcur }) => `<p class="muted flush">What the <b>Write</b> menu sends the language model: each writer its own prompt, with only the rules it needs.
-      <code>{world}</code> <code>{chunks}</code> <code>{next}</code> <code>{handoff}</code> <code>{seconds}</code> are filled in when it runs; Picture 1 and 2 are the frames it sees.
+      <code>{world}</code> <code>{chunks}</code> <code>{next}</code> <code>{handoff}</code> <code>{seconds}</code> and the story's <code>{start}</code> <code>{end}</code> <code>{scenes}</code> <code>{keyframes}</code>, <code>{screenplay}</code> are filled in when it runs; Picture 1 and 2 are the frames it sees, shown first, or where <code>{picture}</code> stands.
       An edit is kept in the home folder, so an update of orrery leaves it alone.</p>
     <div class="field"><div class="row"><select class="input" id="oa-wr" aria-label="Writer text">${Object.entries(WRITER_TEXTS).map(([k, label]) =>
       `<option value="${k}" ${k === wcur ? "selected" : ""}>${esc(label)}${wr[k].edited ? " · edited" : ""}</option>`).join("")}</select>

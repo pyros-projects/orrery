@@ -421,21 +421,14 @@ test("the cells view splits a reel at its CHUNK lines, and joining the cells giv
   assert.deepEqual(splitCells("no chunks\nhere"), [{ line: 0, chunk: -1, text: "no chunks\nhere" }]);
 });
 
-test("the Write menu offers a writer only where it can write", () => {
-  const app = (text, { llm = true, clip = false, frames = [] } = {}) => ({
-    text, llmActive: () => llm, bridge: { wired: (n) => n === "clip" && clip, frames: () => frames },
-  });
-  const reel = "@h3 t2va\nCHUNK a\nSHOT 5s\nA.\nCHUNK b\nSHOT 5s\nB.", fl2va = "@h3 fl2va 16:9\nSHOT 5s\nA.";
-  assert.match(writerBlock(app(reel, { llm: false }), "continue"), /language model/);
-  assert.match(writerBlock(app(reel, { llm: false, clip: true }), "continue"), /language model/);  // a wired clip counts no more (#282)
-  assert.match(writerBlock(app("@h3 t2va\nCHUNK a repeat forever\nSHOT 5s\nA."), "continue"), /forever/);
-  assert.match(writerBlock(app(fl2va), "continue"), /Needs a reel/);
-  assert.match(writerBlock(app(reel, { frames: ["first_frame", "last_frame"] }), "story"), /not for a reel/);
-  assert.match(writerBlock(app(fl2va, { frames: ["first_frame"] }), "story"), /first and the last frame/);
-  assert.equal(writerBlock(app(fl2va, { frames: ["first_frame", "last_frame"] }), "story"), "");
-  assert.match(writerBlock(app("a photo of a fox", { frames: ["first_frame", "last_frame"] }), "story"), /@h3/);
-  assert.match(writerBlock(app("a photo of a fox"), "describe"), /first_frame/);
-  assert.equal(writerBlock(app("a photo of a fox", { frames: ["last_frame"] }), "describe"), "");
+test("the Write menu greys a writer only without a language model; the sheet says the rest (#334)", () => {
+  const app = (text, { llm = true, frames = [] } = {}) => ({ text, llmActive: () => llm, bridge: { frames: () => frames } });
+  const fl2va = "@h3 fl2va 16:9\nSHOT 5s\nA.";
+  assert.match(writerBlock(app(fl2va, { llm: false }), "continue"), /language model/);
+  for (const task of ["continue", "story", "describe"]) {
+    assert.equal(writerBlock(app("a photo of a fox"), task), "");  // no reel, no frames: it opens anyway
+    assert.equal(writerBlock(app(fl2va), task), "");
+  }
 });
 
 test("a scene's + take renders the clip it plays next, else its first (#204)", async () => {
@@ -949,14 +942,14 @@ test("the settings are a tab of sections, and every setting of the old sheet is 
     home: { home: "/h", setting: "/h", source: "setting" },
     llm: { source: "comfy", file: "qwen3vl_4b.safetensors", entries: 12, max_tokens: 16000, files: [{ name: "qwen3vl_4b.safetensors", size: 8e9, can_write: true }],
       api: { base_url: "https://api.openai.com/v1", model: "", key: "", key_from: "none", key_env: "OPENAI_API_KEY" } },
-    writers: Object.fromEntries(["continue", "story", "describe", "describe_shot"].map((k) => [k, { text: "t", default: "d", edited: k === "story" }])),
+    writers: Object.fromEntries(["continue", "story", "story_scenes", "story_keyframes", "describe", "describe_shot", "describe_shot_into"].map((k) => [k, { text: "t", default: "d", edited: k === "story" }])),
     wcur: "continue",
   };
   const html = Object.fromEntries(SECTIONS.map(([k]) => [k, SECTION_HTML[k](app, st)]));
   const has = (k, ...bits) => bits.forEach((b) => assert.ok(html[k].includes(b), `${k} lacks ${b}`));
   has("home", 'id="oa-home"', "data-home", "Use this folder");  // moving the home keeps its own button
   has("llm", 'name="oa-src"', 'id="oa-llm"', 'id="oa-api-url"', 'id="oa-api-key"', "data-check", "data-useapi", 'id="oa-llm-n"', 'id="oa-llm-t"');
-  has("writers", 'id="oa-wr"', 'id="oa-wt"', "data-wreset", "data-wsave", "Story between frames · edited");
+  has("writers", 'id="oa-wr"', 'id="oa-wt"', "data-wreset", "data-wsave", "Story interpolator: the fl2va shot between two frames · edited");
   has("editor", 'data-flag="quickstart" checked', 'data-flag="dividers" >', 'data-flag="timeline" checked');
   has("clips", 'id="oa-pvfps" type="number" min="1" max="24" step="1" value="8"', 'value="768"', 'value="smooth" checked', 'value="numbered" checked');
   has("log", 'data-flag="log_prompts" checked');
@@ -1217,4 +1210,64 @@ test("Help is in pages: a start with the lessons, the language section by sectio
   renderHelp(app);
   assert.match(html, /<h4>Writing for the models<\/h4>/);
   assert.match(html, /Krea 2 faces/);
+});
+
+test("a sheet sends along by default what its kind needs: the prompt, the story both frames, a picture its frame (#335)", async () => {
+  const { defaultSends, promptLocked, SOURCES } = await import("../../comfyui/web/app/takes.js");
+  const both = (n) => n === "first_frame" || n === "last_frame", last = (n) => n === "last_frame", none = () => false;
+  assert.deepEqual(SOURCES.map(([k]) => k), ["prompt", "first_frame", "last_frame", "video"]);
+  assert.deepEqual([...defaultSends("story", both)], ["prompt", "first_frame", "last_frame"]);
+  assert.deepEqual([...defaultSends("story", none)], ["prompt"]);
+  assert.deepEqual([...defaultSends("describe", both)], ["first_frame"]);  // the picture, not the prompt it would echo
+  assert.deepEqual([...defaultSends("describe", last)], ["last_frame"]);
+  assert.deepEqual([...defaultSends("describe", none)], ["prompt"]);  // no picture: written from the prompt
+  assert.deepEqual([...defaultSends("entries", both, true)], []);  // the Libraries tab: the node's prompt is elsewhere
+  assert.deepEqual([...defaultSends("slot", both)], ["prompt"]);  // frames only when asked (a slot names its own)
+  assert.ok(promptLocked("slot") && promptLocked("continue") && !promptLocked("entries") && !promptLocked("story"));
+});
+
+test("a writer's sheet lists the scenes and says where Replace and Insert put its takes, where it has a place (#333, #342, #343)", async () => {
+  const { writerPlaces } = await import("../../comfyui/web/app/takes.js");
+  const { sceneTitles } = await import("../../comfyui/web/app/model.js");
+  const reel = "@h3 t2va\nSCENE one\nSHOT 5s\nA.\n  SCENE two ×3\nSHOT 5s\nB.\nCHUNK three repeat forever (test)\nSHOT 5s\nC.";
+  const scenes = sceneTitles(reel);
+  assert.deepEqual(scenes, ["one", "two", "three"]);
+  assert.deepEqual(sceneTitles("a photo of a fox"), []);
+  assert.deepEqual(writerPlaces("continue", { scenes }), { replace: null, insert: "after SCENE 3 (three)" });  // the end
+  assert.deepEqual(writerPlaces("continue", { scenes, after: 0 }), { replace: "after SCENE 1 (one), in place of SCENE 2 (two) to SCENE 3 (three)",
+    insert: "after SCENE 1 (one), SCENE 2 (two) to SCENE 3 (three) stay after them" });
+  assert.equal(writerPlaces("continue", { scenes, after: 1 }).insert, "after SCENE 2 (two), SCENE 3 (three) stays after them");
+  assert.deepEqual(writerPlaces("continue", { scenes: [] }), { replace: null, insert: "after the screenplay, which becomes the first scene" });
+  assert.equal(writerPlaces("story", { scenes, from: 0, to: 2 }).replace, "after SCENE 1 (one), in place of SCENE 2 (two)");
+  assert.deepEqual(writerPlaces("story", { scenes, from: 1, to: 2 }), { replace: null, insert: "after SCENE 2 (two)" });  // nothing between
+  assert.equal(writerPlaces("story", { scenes }).replace, "before the first scene, in place of SCENE 1 (one) to SCENE 3 (three)");
+  assert.deepEqual(writerPlaces("story", { scenes: [] }), { replace: "in place of the shots below the header", insert: "above the shots, which stay" });
+  assert.deepEqual(writerPlaces("story", { scenes: [], count: 3 }), { replace: "in place of the shots below the header", insert: "before the shots, which become the scene after them" });
+  assert.deepEqual(writerPlaces("story", { scenes: [], to: "prompt", count: 3 }), { replace: null, insert: "before the screenplay, which becomes the scene they lead into" });
+  assert.deepEqual(writerPlaces("story", { scenes: [], from: "prompt" }), { replace: null, insert: "after the screenplay, which becomes the first scene" });
+  assert.deepEqual(writerPlaces("story", { scenes, to: "prompt" }), { replace: null, insert: "before the first scene" });  // a prequel
+  assert.deepEqual(writerPlaces("story", { scenes, from: "prompt" }), { replace: null, insert: "after SCENE 3 (three)" });  // a sequel
+  assert.equal(writerPlaces("story", { h3: false, to: "prompt" }).insert, null);
+  assert.match(writerPlaces("story", { h3: false, to: "prompt" }).replace, /^in place of the prompt, on a grid/);
+  assert.deepEqual(writerPlaces("describe", { scenes: [] }), { replace: "in place of the shots below the header", insert: "above the shots, which stay" });
+  assert.deepEqual(writerPlaces("describe", { scenes }), { replace: null, insert: "under the line your cursor was on" });
+  assert.deepEqual(writerPlaces("describe", { h3: false }), { replace: "in place of the prompt, its comments and `: …` lines kept", insert: null });
+});
+
+test("several takes go in as a choice, what the language reads as its own written as itself (#336)", async () => {
+  const { asChoice, insertTake } = await import("../../comfyui/web/app/takes.js");
+  assert.equal(asChoice(["a red scarf", "a lantern"]), "{a red scarf|a lantern}");
+  assert.equal(asChoice(["50% off | $5", "a {brass} key", "the __init__ file"]), "{50% off \\| \\$5|a \\{brass\\} key|the \\__init\\__ file}");
+  const line = "A woman with --what she carries-- walks on.";
+  assert.equal(insertTake(line, { kind: "slot", what: "what she carries", line: 0 }, asChoice(["a fan", "a cane"])),
+    "A woman with {a fan|a cane} walks on.");
+});
+
+test("a reel's shot from a writer goes in under the caret's line, never inside it (#334)", async () => {
+  const { atCaret } = await import("../../comfyui/web/app/cells.js");
+  const reel = "SCENE a\nSHOT 5s: static\nA fox.\nSCENE b\nB.";
+  assert.equal(atCaret(reel, reel.indexOf("A fox") + 2, "SHOT 3s: static\nShe smiles."),
+    "SCENE a\nSHOT 5s: static\nA fox.\nSHOT 3s: static\nShe smiles.\nSCENE b\nB.");
+  assert.equal(atCaret(reel, null, "SHOT 3s: static\nEnd."), `${reel}\nSHOT 3s: static\nEnd.`);  // no caret: at the end
+  assert.equal(atCaret("A.\n", 0, "B."), "A.\nB.\n");
 });

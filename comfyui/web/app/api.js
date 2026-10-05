@@ -73,6 +73,7 @@ export function client(home) {
     saveLlm: (body) => call("llm", { body }),
     checkLlm: (body) => call("llm/check", { body }),
     writeIdea: (body) => call("write", { body }),
+    writePlace: (body) => call("write/place", { body }),
     writeLibraries: (body) => call("llm/libraries", { body }),
     thumbURL: (id) => url("galaxy/thumb", { id }),
     onRunDone: (fn) => { api.addEventListener("execution_success", fn); return () => api.removeEventListener("execution_success", fn); },

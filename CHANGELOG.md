@@ -9,6 +9,18 @@ checks) are left out.
 
 ### Added
 
+- One sheet for every ask (#333): the Write menu's writers open the 🎲 takes sheet a slot or a library opens, N takes
+  as the settings say (a count for each writer), steered; nothing in the menu waits for an input any more
+  (Continue makes a screenplay without scenes a reel; a writer without its pictures writes from what came along).
+  Every sheet can **send along** the prompt, first_frame, last_frame, four stills of the video and any picture or video
+  of the Gallery, and several one-line takes go in **as a choice**, `{a|b|c}`. A writer's sheet takes any number of takes (× takes one
+  out of the list), **Prepends** or **Appends** them to the prompt in every mode, **Replaces** or **Inserts** them where
+  the writer has a place, as written or as one choice (a `$take` binding and IF lines for shots and scenes); the prompt
+  sent along is told what it is for, and the steer outweighs the rest. Prompt from image with the prompt sent along on
+  a screenplay writes the next shot of it, with who the picture shows joining the story there. Continue picks the scene it continues
+  after, a reel that plays on and on too, and how many new scenes of how many seconds, and Replace or Insert says whether the scenes after it stay (#342). Story
+  between frames became the **Story interpolator** (#343): from first_frame, the prompt or any scene to last_frame, the
+  prompt or any scene, in N scenes of S seconds (a cat's photo to the prompt: her walk into the screenplay's forest); on an image prompt N keyframe prompts on a grid, so one Roll renders the storyboard.
 - Shoots (#320, under #318): a template's takes make a shoot, like a sitting in a photo studio. Finish shoot folds them
   into the earlier shoots under the strip, each shown by its circled take, and the next Roll starts a new one; a click
   opens an earlier shoot again. A grid's or a sweep's runs at one seed are one take: a creator's four views together.
@@ -209,6 +221,9 @@ checks) are left out.
 
 ### Fixed
 
+- Requests to an API endpoint asked at once each adapt to what the model refuses (#333): with a model that wants
+  `max_completion_tokens` (gpt-5 and later), the first takes of a sheet, or libraries written together, failed with
+  "Unsupported parameter: 'max_tokens'" while the one that learned it went through.
 - A takes sheet stays inside the node as its takes come in (#338): it moves up as it grows, and scrolls inside when it
   is taller than the room there is (Generate at the bottom of the Libraries tab ran out of the node).
 - Takes find a slot in a CAST member's description (#328): its `(for NAME)` no longer hides it ("has no slot … to write
