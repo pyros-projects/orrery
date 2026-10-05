@@ -198,19 +198,22 @@ export function openTakes(app, place, near = null) {
   const wired = (name) => !!app.bridge.wired?.(name);
   const sends = defaultSends(place.kind, wired, tab), gallery = [];  // gallery: {id, kind} of the items sent along
   const sent = () => (picture ? null : [...sends, ...gallery.map((g) => `gallery:${g.id}`)]);
-  // several at once: a library's entries (#272), and the one-line takes that can go in as a choice (#336)
-  const choice = place.kind === "slot" || place.kind === "describe" || ((place.kind === "library" || known) && !tab);
-  const multi = place.kind === "library" || known || choice;
+  const h3 = /^@h3\b/i.test((app.text.split("\n").find((l) => l.trim() && !l.trim().startsWith("#")) || "").trim());
+  // several at once: a library's entries (#272), the one-line takes that can go in as a choice (#336), and a prompt from
+  // an image's shots on a screenplay, which go in one after the other, in the order they were picked
+  const shots = place.kind === "describe" && h3;
+  const choice = place.kind === "slot" || (place.kind === "describe" && !h3) || ((place.kind === "library" || known) && !tab);
+  const multi = place.kind === "library" || known || choice || shots;
   const from = [];  // known: where each take came from, "rolled", "new" or "added"
   const token = writer ? WRITERS[place.kind].label : place.kind === "slot" || picture ? `--${place.what}--` : enhance ? `> ${place.what}` : `__${place.what}__`;
-  const useTitle = writer ? `Put the selected take in: ${WRITERS[place.kind].goes.replace(/^Use selected /, "it ")} An unsaved edit`
+  const useTitle = shots ? "Put the selected shots in, one after the other in the order you picked them: in place of the shots below the header, on a reel under the caret's line. An unsaved edit"
+    : writer ? `Put the selected take in: ${WRITERS[place.kind].goes.replace(/^Use selected /, "it ")} An unsaved edit`
     : picture ? "Write the selected take into the picture's exports"
     : enhance ? "Keep the selected rewrite for this roll: a run that rolls this prompt uses it instead of asking the model"
       : `Put the selected take in place of ${esc(token)}: an unsaved edit`;
   // the writer's choices (#342, #343): the scene Continue continues after (null: the end); the story's start and end,
   // how many scenes (keyframes on an image prompt) and how long each; whether the scenes in between stay
   const scenes = writer ? sceneTitles(app.text) : [];
-  const h3 = /^@h3\b/i.test((app.text.split("\n").find((l) => l.trim() && !l.trim().startsWith("#")) || "").trim());
   const wo = { after: null, from: "first_frame", to: h3 ? "last_frame" : "prompt", scenes: 1, insert: false,
     seconds: Math.round(Number(/^\s*SHOT\s+(\d+(?:\.\d+)?)\s*s\b/im.exec(app.text)?.[1]) || 5) };
   const reelShot = place.kind === "describe" && scenes.length > 0;  // its take goes in at the caret
@@ -318,7 +321,7 @@ export function openTakes(app, place, near = null) {
     state.textContent = s.busy ? "Writing…" : s.error || s.note;
     state.classList.toggle("warn", !!s.error && !s.busy);
     sheet.querySelector("[data-tmore]").disabled = s.busy;
-    if (use) use.disabled = s.busy || chosen() === null || (enhance && !s.keep);
+    if (use) use.disabled = s.busy || (shots ? !s.picked.size : chosen() === null) || (enhance && !s.keep);
     if (pick) {
       pick.disabled = s.busy || s.picked.size < 2 || !oneLine();
       pick.title = s.picked.size > 1 && !oneLine() ? "A take of several lines goes in alone: a choice holds one line each"
@@ -471,6 +474,12 @@ export function openTakes(app, place, near = null) {
     changed(next, `${chosenTakes.length} takes are in as a choice: every Roll picks one · an unsaved edit`);
   };
   if (use) use.onclick = async () => {
+    if (shots && s.picked.size > 1) {  // several shots, in the order they were picked, where one would go
+      const order = [...s.picked], text = order.map((i) => s.takes[i]).join("\n\n"), m = meta[order[0]];
+      app.closeSheet();
+      return changed(m.caret ? atCaret(app.text, caretOffset(app), text) : m.template.replace(s.takes[order[0]], text),
+        `${order.length} shots are in the editor${m.caret ? ", under the caret's line" : ""} · an unsaved edit`);
+    }
     const take = s.takes[chosen()];
     if (take === undefined) return;
     if (writer) {  // the template with the take in its place, as the server wrote it; a reel's shot at the caret (#334)
