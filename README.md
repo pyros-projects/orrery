@@ -68,7 +68,8 @@ run to be different, and a little better than the last, orrery is for you.
   approve every change first.
 - **Writes with you.** The same model continues a reel by one chunk, writes
   the shot between a first and a last frame, or a prompt from a picture;
-  browse its ideas and insert the one you like.
+  pick from its takes, send it your frames, video or gallery pictures along,
+  or put several in as a choice.
 - **Tests your LoRAs.** `<lora:style:0.5,0.7,1.0>` or `0-1;0.1` and one click
   runs every strength on the same seed, several LoRAs combined or in turns,
   the whole sweep in a gallery folder of its own to compare and rate.
@@ -142,7 +143,7 @@ uv sync --extra local    # + torch and transformers for a local language model
 | Python | 3.13+ |
 | ComfyUI | tested with frontend 1.53 |
 | MiniMax H3 nodes | only for video: Reference to Video (reels chain with orrery's own Orrery Continue / Orrery Film) |
-| A language model | optional: a text encoder that is a whole LLM, such as Krea 2's `qwen3vl_4b`, lets the node write libraries, `--slots--` and the Write menu's ideas |
+| A language model | optional: a text encoder that is a whole LLM, such as Krea 2's `qwen3vl_4b`, lets the node write libraries, `--slots--` and the Write menu's takes |
 
 MiniMax H3's open weights are licensed outside the EU, the UK, South Korea and
 the US; check the model's license for where you are. orrery itself ships no

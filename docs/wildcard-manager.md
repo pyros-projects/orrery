@@ -138,24 +138,28 @@ slots, which keeps it within a 4B or 8B model's reach):
 - **Continue the reel**: it reads every scene as it rolls at the node's seed
   (picks filled in, with the reel's style and CAST) and writes the next
   `SCENE`, with an `END ON:` that picks up the last one's. It is appended to
-  the reel.
+  the reel; a screenplay without SCENE lines becomes a reel first, its shots the
+  first scene (#334).
 - **Story between frames**: it sees the pictures wired into `first_frame` and
   `last_frame` and writes the shot that gets from one to the other (fl2va). It
-  takes the place of the shots below the header.
+  takes the place of the shots below the header. Without a frame it is told so
+  and imagines it.
 - **Prompt from image**: it sees the picture in `first_frame` and writes an
   image prompt (Krea 2), or an i2va shot when the template is `@h3`. Comments
-  and `: w… h…` lines stay.
+  and `: w… h…` lines stay. Without a picture it writes from the prompt as it
+  rolls.
 
-Each idea is a short run of its own: Orrery Write with only the frames and the
-text encoder wired into the node, so no video model loads and the run ends
-when the model has written (a run already in the queue goes first). The ideas
-wait in a sheet: ‹ › pages through them, **Another idea** asks again (the
-model samples at seed + n and at `writer_temperature`, 0.8 by default in
-`orrery.yaml`'s `llm:`, so each idea is a different one; the chunks it reads
-still roll at the node's seed), **Insert** puts one into the editor as an unsaved edit (Undo in the
-toast). An answer that writes wildcards, more than one chunk or a shot orrery
-cannot compile is shown with what is wrong; **Insert anyway** takes it as it
-is. Close the sheet while it writes, and a toast says when the idea is ready.
+Each writer opens the 🎲 takes sheet every ask uses (#333): as many takes as
+the gear's count for the Write menu says, each a short run of its own (Orrery
+Write with only the frames, the video and the text encoder wired into the node,
+so no video model loads; a run already in the queue goes first), sampled at
+seed + n and at `writer_temperature`, 0.8 by default in `orrery.yaml`'s `llm:`,
+so each take is a different one (the scenes it reads still roll at the node's
+seed). A steering line goes with them, **Send along** says which pictures and
+whether the prompt go too, and **Use selected** puts one into the editor as an
+unsaved edit (Undo in the toast); several one-line prompts go in **as a
+choice**. A take that writes wildcards, more than one scene or a shot orrery
+cannot compile shows what is wrong under it, and goes in anyway when you use it.
 The gear's **Writers** section holds what the model is sent: each writer its
 own prompt (the image prompt and the i2va shot of Prompt from image are two),
 with only the rules and examples it needs, so a small model is not confused by
@@ -181,10 +185,10 @@ the video model out, no waiting behind a render. Models that want `max_completio
 temperature (the newer OpenAI ones) are asked again the way they accept, and
 a busy endpoint twice more before the run fails with its own words.
 
-- **The Write menu** asks the endpoint directly, without a run: an idea comes
-  while a render runs. Frames from a Load Image node go as its file; a frame
-  that something else computes still takes a run (Orrery Write), which
-  computes it.
+- **The Write menu** asks the endpoint directly, without a run: its takes come
+  while a render runs. Frames from a Load Image node and a video from a Load
+  Video go as their files; one that something else computes still takes a run
+  (Orrery Write), which computes it.
 - **Write now** stands in the Prompt tab's footer, beside the model's name,
   while the template names libraries to write (unknown ones, `__name:N__`
   above what a library holds): it writes them all at once, a request each,

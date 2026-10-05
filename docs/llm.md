@@ -21,6 +21,8 @@ The gear in the node opens the Settings tab; its section **Language model**:
 - `max_tokens`: the longest answer, 16000 by default;
 - `temperature`: 0.3, for lists, slots and rewrites;
 - `writer_temperature`: 0.8, for the Write menu.
+- `takes`: how many takes a 🎲 asks for, per kind (a slot, a `>` rewrite, rolled from a library, new for a library,
+  the Write menu), 1 to 12 each, 3 unless set.
 
 The CLI's `orrery lib` uses `models.library`, else the API endpoint ([configuration.md](configuration.md)).
 
@@ -42,21 +44,27 @@ The footer of the Prompt tab names the active model: `LLM qwen3vl_8b…`, or `LL
 | **A slot from the picture the run makes** (#174) | `EXPORT:` `sheet = --a full character sheet from $who, as image output shows them--` | `image output` exists only after the run, so the run leaves the slot as it is, kept with the picture; outside `EXPORT:` the lint says so. |
 | **Written from the Gallery** (API, #175) | a picture whose exports keep such a slot | The picture's sheet in the Gallery shows the slot with a 🎲: three takes written from the picture, with the prompt that made it beside it; **More takes** and a steer as at the line; select one and **Use selected** writes it into the picture's exports, where a screenplay that casts it reads it. The gear's **Picture slots: After every run** writes each such slot right after its run instead, one take each. |
 | **`> enhance`** | `> make it moody and cinematic` | It rewrites the rolled prompt as asked. In a screenplay, a `>` before the first SHOT covers every shot's prose, and one inside a SHOT only that shot; dialogue is never touched. |
-| **Write menu: Continue the reel** | a reel (SCENE lines) | The next SCENE, from every scene as it rolls at the node's seed, with an `END ON:`. It is appended. |
-| **Write menu: Story between frames** | `@h3 fl2va`, both frames wired | The shot that gets from the first frame to the last. |
-| **Write menu: Prompt from image** | a picture in `first_frame` | A Krea image prompt, or an i2va shot when the template is `@h3`. |
+| **Write menu: Continue the reel** | any screenplay | The next SCENE, from every scene as it rolls at the node's seed, with an `END ON:`. It is appended; a screenplay without SCENE lines becomes a reel first, its shots the first scene (#334). |
+| **Write menu: Story between frames** | `@h3 fl2va` | The shot that gets from the first frame to the last. Without a frame it is told so and imagines it (#334). |
+| **Write menu: Prompt from image** | a picture in `first_frame`, or none | A Krea image prompt, or an i2va shot when the template is `@h3`. Without a picture it writes from the prompt as it rolls (#334). |
 | **The writers' prompts** | the gear, **Writers** | What each writer is sent, editable, with **Reset to default**. |
 | **Takes at the line** (API, #173) | a 🎲 at the end of a slot's line, of a library still to be written, of a `> enhance` line | The slots are violet in the editor; hovering a 🎲 outlines the place it stands for, so two slots on one line tell their dice apart, and Ctrl+click on a slot opens its takes too (#280). Three takes for that place (or as many as the gear's *Takes a 🎲 asks for* says, #274), written at the node's seed with the prompt as it rolls around it. **More takes** asks for as many more (new against those there), the steering line goes with them ("darker", "as an anime character"). A click selects a take (a violet border), a click on another moves the selection, and **Use selected** puts it in place of the slot or the library (#276); **Keep the direction** writes your steer into its directions (`--…, darker--`, `__name__(darker)`, `> …, darker`); both are unsaved edits with Undo. A `> enhance` line's takes show what the rewrite does at this seed; **Use selected** keeps the one you pick for exactly this roll (the instruction and the prompt as it rolled), and a run that rolls it uses it instead of asking the model; another roll is rewritten as before. A `>` over several passages of a screenplay keeps none, since the run rewrites each apart. With a text encoder the takes come with #171. |
 | **A library at the line** (API, #272) | the 🎲 of a library still to be written (`__bus_smells__`) | The sheet writes the library itself: as many entries as a new library starts with (the gear, *A library it creates starts with*; `__name:30__` asks for at least 30), from the lines that use it, as a run would write it. Steer them, **More takes** for as many more; click the entries worth keeping (**All**, **None**), and **Keep as the library** writes them as the library, straight in, not To review (`orrery lib undo` takes it back). **Keep the direction** keeps your steer as the library's directions, for later top-ups. One entry selected, **Use selected** puts it into the line instead. |
 | **A library that exists, at the line** (API, #273) | a library's roll at the line's end (`→ arcade · bob cut`), or Ctrl+click on its name | Its takes: entries rolled from it (the one at this seed first, then as its weights and your ratings roll them) and new ones the language model writes, none it has, as many of each as the gear says. Select several; **Add to the library** writes the new ones you picked straight in (the sheet stays: More, then add more), **Use selected** puts one entry into the line. **Keep the direction** saves your steer as the library's directions. With the annotations on Hover or None, Ctrl+click on a library's name opens it (on one still to be written, its sheet from #272). |
 | **Generate in the Libraries tab** (#323) | **Generate** beside **Add** under a library of yours | The same sheet with new entries only: as many as the gear's *new for a library* says, none the library has or the sheet shows. Steer them, **More takes**, **Keep the direction**, select the good ones and **Add to the library**; the tab shows them at once. Greyed without a language model. |
+| **Send along** (#335) | the row under a takes sheet's text | What goes to the model beside the request, as toggles: **the prompt** as it rolls (always, where the take is written into it: a slot, a `>` rewrite, the reel's next scene), the pictures wired into **first_frame** and **last_frame**, four stills of the **video** wired into the Orrery Prompt, and **Gallery**: any picture or video of the gallery (a video as four stills). Each picture is told to the model as what it is ("Picture 2 (the last frame)"). A toggle with nothing wired behind it is greyed and says so. They count for the next takes (More takes). A picture computed in the graph (a decode, a resize) goes in a run of its own. |
+| **Insert as a choice** (#336) | several one-line takes selected | They go in as `{a|b|c}` in place of the slot, the library or the prompt, so every Roll picks one and you see which works best. Characters the language reads as its own are written as themselves. A take of several lines (a scene, a shot) goes in alone. |
 | **Write now** (#168, #176) | a template with libraries still to write | A button in the footer writes them before any run, one request each: with an API endpoint all at once beside ComfyUI, with a text encoder each in a run of its own at the front of the queue. They wait in To review. |
 | **`orrery lib`** (CLI) | `gen`, `more`, `edit`, `undo` | Libraries in plain language: `orrery lib edit animal 'make a feline list from the cats'`. Nothing is kept until you confirm it. |
 
-The Write menu shows its ideas in a sheet: ‹ › pages through them, **Another idea** asks again, and
-**Insert** puts one into the editor as an unsaved edit, with Undo. With an API endpoint the server
-asks the model directly, so an idea comes while a render runs. A frame that something other than a
-Load Image computes still takes a run of its own.
+Every ask is the same 🎲 **takes sheet** (#333): a slot's, a library's, a `>` rewrite's and the Write
+menu's. It asks for as many takes as the gear's *Takes a 🎲 asks for* says (the Write menu has its own
+count), steered by the line under them; **More takes** asks again, **Send along** says what goes with
+the request, and **Use selected** puts one in as an unsaved edit, with Undo (**Insert as a choice**
+several). Nothing in the Write menu waits for an input: a writer whose pictures are not there is told
+what came along and writes from the rest. With an API endpoint the server asks the model directly, so
+takes come while a render runs; a picture that something other than a Load Image or a Load Video
+computes still takes a run of its own.
 
 ### What changes with a text encoder: one task per run (#171)
 
@@ -107,7 +115,7 @@ With an **API endpoint** (the gear → An API endpoint, then Check and Save):
 - [ ] The footer says `LLM <model> · API`.
 - [ ] Tutorial 17 with fresh library names: **Write now** appears in the footer, writes them, and disappears.
 - [ ] Tutorial 18 with a new library added (`… on the last night bus that smells of __bus_smells__`): one Run writes the library, the slot and the rewrite. With a text encoder the rewrite waits for the next run.
-- [ ] Write → Prompt from image while a render runs: the idea comes before the render ends.
+- [ ] Write → Prompt from image while a render runs: the takes come before the render ends.
 - [ ] Write → Story between frames, both frames from Load Image nodes.
 - [ ] Two slots on one line (`a fox with --one small object-- under --a sky, two words--`): both violet, two 🎲; hovering each outlines its slot; Ctrl+click on the second opens its takes.
 - [ ] A slot's 🎲 (Tutorial 18): three takes; a steer and **More takes** bring three more in that direction; click one, another, then **Use selected**, then Undo; **Keep the direction** puts the steer into the slot.

@@ -9,6 +9,11 @@ checks) are left out.
 
 ### Added
 
+- One sheet for every ask (#333): the Write menu's writers open the 🎲 takes sheet a slot or a library opens, N takes
+  as the settings say (a new count for the Write menu), steered; nothing in the menu waits for an input any more
+  (Continue makes a screenplay without scenes a reel; a writer without its pictures writes from what came along).
+  Every sheet can **send along** the prompt, first_frame, last_frame, four stills of the video and any picture or video
+  of the Gallery, and several one-line takes go in **as a choice**, `{a|b|c}`.
 - Shoots (#320, under #318): a template's takes make a shoot, like a sitting in a photo studio. Finish shoot folds them
   into the earlier shoots under the strip, each shown by its circled take, and the next Roll starts a new one; a click
   opens an earlier shoot again. A grid's or a sweep's runs at one seed are one take: a creator's four views together.
