@@ -239,7 +239,9 @@ Nodes under **orrery**:
     entry learned from your ratings. Libraries that share a name prefix sit in
     a folder (`couture_form`, `couture_house` → couture); what the language
     model wrote waits on top for review. Built-ins become yours with **Make it
-    mine**. A library's entries load when you open it, so a home of a hundred
+    mine**. Under a library of yours, **Add** takes entries you type, and the yellow
+    **Generate** asks the language model for new ones in the 🎲 sheet (#323): none
+    the library has, steered as you like, added when you pick them. A library's entries load when you open it, so a home of a hundred
     thousand entries opens at once; the search finds libraries by name and by
     entry. Drag the list's edge to widen it; a long property opens when you
     click it.

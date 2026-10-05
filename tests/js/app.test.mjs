@@ -1015,6 +1015,13 @@ test("a library's roll at a line's end names the k-th library of its line, and U
   assert.doesNotMatch(highlight("A __animal__ with __hair__.", known, { hints }), /lroll/);  // no language model: plain text
 });
 
+test("Generate beside Add asks the language model for the settings' new entries, greyed without one (#323)", async () => {
+  const { genHTML } = await import("../../comfyui/web/app/libraries.js");
+  const app = (active) => ({ llmActive: () => active, data: { llm: { takes: { new: 5 } } } });
+  assert.match(genHTML(app(true)), /class="btn primary" data-lact="gen" title="The language model writes 5 new entries, none the library has/);
+  assert.match(genHTML(app(false)), /class="btn primary" disabled title="Generate asks a language model/);
+});
+
 test("a --slot-- is violet in the editor, what is in it coloured as ever (#280)", async () => {
   const { highlight } = await import("../../comfyui/web/app/highlight.js");
   const html = highlight("a fox with --one small object-- and --a sheet of $who--.", new Set());
