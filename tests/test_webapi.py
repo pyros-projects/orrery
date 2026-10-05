@@ -873,7 +873,8 @@ def test_annotate_says_what_each_line_gives_at_a_seed(home):
 
 
 def test_a_clips_takes_are_listed_served_picked_and_deleted(home, tmp_path, monkeypatch):
-    """Sample surfing (#206) through the routes: the takes of clip 2, one of them picked, one deleted (#214)."""
+    """Sample surfing (#206) through the routes: the takes of clip 2, one of them picked, one deleted (#214); clip 1's
+    one take is listed too, as its strip shows every clip's takes from the first (#319)."""
     import numpy as np
 
     from orrery import film
@@ -888,7 +889,8 @@ def test_a_clips_takes_are_listed_served_picked_and_deleted(home, tmp_path, monk
     make(0, 0)
     surf = [make(1, k) for k in range(3)]
     listed = ok(home, webapi.chain, chain="reels/a")["takes"]
-    assert list(listed) == ["1"] and [t["take"] for t in listed["1"]] == [0, 1, 2]
+    assert list(listed) == ["0", "1"] and [t["take"] for t in listed["1"]] == [0, 1, 2]
+    assert len(listed["0"]) == 1 and listed["0"][0]["active"]  # its one take, circled
     assert ok(home, webapi.chain_video, chain="reels/a", take=surf[0].name) == surf[0] / "video.mp4"
     assert ok(home, webapi.chain_pick, chain="reels/a", segment=1, folder=surf[1].name)["take"] == 1
     assert api(home, webapi.chain_pick, chain="reels/a", segment=1, folder="seg_0001_nothere1")[0] == 400

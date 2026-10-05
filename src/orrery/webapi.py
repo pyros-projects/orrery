@@ -682,8 +682,8 @@ def chain(home: Home, args: dict) -> dict:
     from orrery import film
     from orrery.chain import listing
 
-    try:  # sample surfing (#206): a clip's takes, where it has more than one
-        takes = {str(k): v for k, v in film.takes(_output_dir(), _latent_path(args)).items() if len(v) > 1}
+    try:  # sample surfing (#206): every clip's takes, from its first (#319)
+        takes = {str(k): v for k, v in film.takes(_output_dir(), _latent_path(args)).items()}
     except film.FilmError:
         takes = {}
     return {"chain": _latent_path(args), **listing(_output_dir(), _latent_path(args)), "takes": takes}
