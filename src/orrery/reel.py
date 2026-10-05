@@ -797,6 +797,9 @@ def _unroll(reel: Reel, seed: int, libraries: Mapping[str, Library], weights: Ma
             line = raw.strip()
             if not line or BINDING.match(line):
                 continue
+            if (line := ex.guarded(line)) is None:  # an IF line decided first: its END ON: is the scene's (#347)
+                continue
+            line = line.strip()
             if m := HANDOFF.match(line):
                 before = len(ex.picks)
                 handoff = ex.expr(m.group(1)).strip().rstrip(".")

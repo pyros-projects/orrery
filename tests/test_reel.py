@@ -948,3 +948,21 @@ def test_the_walk_follows_the_scenes_the_takes_played():
         record = {"scene": 0, "bindings": {}, "handoff": None}
         path = _unroll(reel, seed, {}, None, 2, past={0: record, 1: {"scene": other, "bindings": {}, "handoff": None}})[3][0]
         assert path[1][0] == other  # the take played the other scene: the walk follows it
+
+
+def test_an_end_on_under_if_is_the_scene_s_end_on():
+    """#347: an IF line is decided before its END ON: is read, so a scene that chooses its take by a binding ends as the
+    chosen take does, and the next clip opens there."""
+    reel = ("@h3 t2va 16:9\n$take = {1|2}\nSCENE one\nSHOT 5s: static\nA fox wakes.\nSCENE river\n"
+            "IF $take is 1: SHOT 5s: static\nIF $take is 1: The fox drinks.\nIF $take is 1: END ON: the fox looks up\n"
+            "IF $take is 2: SHOT 5s: pan left\nIF $take is 2: The fox sleeps.\nIF $take is 2: END ON: the fox curls up\n"
+            "SCENE three\nSHOT 5s: static\nSnow falls.")
+    seen = set()
+    for seed in range(8):
+        river, three = (compile_scene(reel, seed, {}, {}, segment=s) for s in (1, 2))
+        assert not [i for i in river.lint if "END ON" in i.message]
+        drinks = "The fox drinks." in river.text
+        end = "the fox looks up" if drinks else "the fox curls up"
+        assert f"The shot ends as {end}" in river.text and f"The shot opens as {end}" in three.text
+        seen.add(drinks)
+    assert seen == {True, False}  # both takes came

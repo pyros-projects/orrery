@@ -224,6 +224,10 @@ checks) are left out.
 
 ### Fixed
 
+- An `END ON:` under IF (#347): `IF $take is 1: END ON: …` is the scene's END ON: when the condition holds, and the clip
+  after it opens there; it was ignored ("END ON: only works inside a SCENE"). `START WITH:` too.
+- A binding's escaped brace is no leftover (#353): `$k = {a \{b\} c|d}` rolled `a {b} c` with a warning that a choice
+  was missing its other half; the braces of a binding's value are text where it is used.
 - A grid over a choice with escaped signs (#345): `\|`, `\{ \}` inside an option are part of it, as a roll reads them,
   so `@grid` makes one cell per option instead of failing ("neither one library nor one choice", or a crash).
 - A seed that comes in through a link is the seed the app uses (#346): the node's own seed widget stays at what it was
