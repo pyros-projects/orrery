@@ -153,7 +153,9 @@ def task_name(task: str, template: str, opts: dict | None = None) -> str:
     if task == "story":
         if not is_h3(template):
             return "story_keyframes"
-        return "story" if not is_reel(template) and (opts or {}).get("scenes", 1) == 1 else "story_scenes"
+        o = opts or {}  # the fl2va shot: one scene from frame to frame on a screenplay without scenes
+        shot = o.get("scenes", 1) == 1 and o.get("from", FIRST) == FIRST and o.get("to", LAST) == LAST
+        return "story" if shot and not is_reel(template) else "story_scenes"
     return "describe_shot" if task == "describe" and is_h3(template) else task
 
 
@@ -201,10 +203,20 @@ def _walked(template: str, seed: int, libraries, weights, scenes: list[int | Non
     return head, segments, runs
 
 
+def _first_shot(lines: list[str]) -> str:
+    """A screenplay's first shot, the lines from its first SHOT to the next: where the story's end begins. Shown
+    whole, the 8B wrote the end's shots again instead of leading into them (experiments/writer-framing)."""
+    at = [i for i, ln in enumerate(lines) if _SHOT.match(ln)]
+    return "\n".join(lines[at[0]:at[1] if len(at) > 1 else len(lines)]).strip() if at else "\n".join(lines).strip()
+
+
 def _story_ends(template: str, opts: dict, given: list[str] | None, seed: int, libraries, weights) -> tuple[dict, bool]:
-    """The story's {start} and {end} (#343): a frame sent along (imagined when it did not come), a scene of the reel
-    as it plays at the seed (from: with every clip up to its end), or the picture the prompt makes. And whether the
-    prompt as it rolls is in them."""
+    """The story's {start} and {end} (#343): a frame sent along, shown where it is named (imagined when it did not
+    come); a scene of the reel as it plays at the seed (from: with every clip up to its end; to: its first shot); the
+    screenplay itself (from: all of it; to: its first shot); or on an image prompt the picture the prompt makes. And
+    whether the prompt as it rolls is in them."""
+    from orrery.llm import PICTURES
+
     frm, to = opts["from"], opts["to"]
     came = given if given is not None else [_FRAME[k] for k in (frm, to) if k in _FRAME]
     ends = {}
@@ -219,14 +231,19 @@ def _story_ends(template: str, opts: dict, given: list[str] | None, seed: int, l
             ends["start"] = (f"The reel so far, every clip as it was made:\n\n{_scenes(segments[:n])}\n\n"
                              f"The start: where the last of these clips ends{f' ({last})' if last else ''}.")
         if isinstance(to, int):
-            ends["end"] = ("The end: the scene your last one leads into, as it was made; your last scene ends where it "
-                           f"begins:\n\n{_scenes([segments[runs[-1][0]]])}")
+            ends["end"] = ("The end: a scene that begins with this shot; your last scene leads into it:\n\n"
+                           + _first_shot(segments[runs[-1][0]]["lines"]))
     rolled = _rolled(template, seed, libraries, weights) if PROMPT in (frm, to) else ""
     for role, key in (("start", frm), ("end", to)):
-        if key == PROMPT:
+        if key == PROMPT and not is_h3(template):
             ends[role] = f"The {role}: the picture this prompt makes:\n\n{rolled}"
+        elif key == PROMPT and role == "start":  # the screenplay itself (#343): the story goes on from it
+            ends[role] = f"The start: this screenplay, as it rolls; your first scene goes on from where it ends:\n\n{rolled}"
+        elif key == PROMPT:  # or leads into it
+            ends[role] = ("The end: a screenplay that begins with this shot; your last scene leads into it:\n\n"
+                          + _first_shot(rolled.splitlines()))
         elif key in _FRAME:
-            ends[role] = (f"The {role}: {_FRAME[key]}, a picture sent along." if _FRAME[key] in came else
+            ends[role] = (f"The {role}: {_FRAME[key]}, this picture: {PICTURES}" if _FRAME[key] in came else
                           f"The {role}: {_FRAME[key]}, which did not come along this time: imagine it from what you know.")
     return ends, bool(rolled)
 
@@ -463,8 +480,9 @@ def apply(task: str, template: str, text_: str, opts: dict | None = None, insert
         return _place(template if is_reel(template) else as_reel(template), text_, opts["after"], None, insert)
     if name == "story_scenes":
         frm, to = opts["from"], opts["to"]
-        return _place(template if is_reel(template) else as_reel(template), text_,
-                      frm if isinstance(frm, int) else -1, to if isinstance(to, int) else None, insert)
+        after = frm if isinstance(frm, int) else None if frm == PROMPT else -1  # from the prompt: after all of it
+        until = to if isinstance(to, int) else (after + 1 if after is not None else None) if to == PROMPT else None
+        return _place(template if is_reel(template) else as_reel(template), text_, after, until, insert)
     lines = template.splitlines()
     if name in ("story", "describe_shot"):
         first = next((i for i, ln in enumerate(lines) if _SHOT.match(ln)), len(lines))

@@ -153,8 +153,8 @@ export function defaultSends(kind, wired, tab = false) {
 // Where Replace and Insert put a writer's takes (#333, #342, #343), in words, as its sheet's choices stand; null where
 // the writer has no such place (Prepend and Append work everywhere). `after`: the scene Continue continues after (null:
 // the end); `from`/`to`: the story's start and end (a scene's index, first_frame, last_frame or the prompt). `scenes`:
-// the template's scene titles; `h3`: a screenplay.
-export function writerPlaces(kind, { scenes = [], h3 = true, after = null, from = "first_frame", to = "last_frame" } = {}) {
+// the template's scene titles; `h3`: a screenplay; `count`: how many scenes the story writes.
+export function writerPlaces(kind, { scenes = [], h3 = true, after = null, from = "first_frame", to = "last_frame", count = 1 } = {}) {
   const name = (i) => `SCENE ${i + 1}${scenes[i] ? ` (${scenes[i]})` : ""}`;
   const span = (a, b) => (b - a === 1 ? name(a) : `${name(a)} to ${name(b - 1)}`);
   if (kind === "describe") {
@@ -162,10 +162,15 @@ export function writerPlaces(kind, { scenes = [], h3 = true, after = null, from 
     if (scenes.length) return { replace: null, insert: "under the line your cursor was on" };
   }
   if (!h3) return { replace: "in place of the prompt, on a grid: one Roll renders every keyframe (as a choice: one a Roll)", insert: null };
-  if (kind !== "continue" && !scenes.length) return { replace: "in place of the shots below the header", insert: "above the shots, which stay" };
-  if (!scenes.length) return { replace: null, insert: "after the screenplay, which becomes the first scene" };
-  const a = kind === "continue" ? (after ?? scenes.length - 1) : typeof from === "number" ? from : -1;
-  const b = kind === "continue" || typeof to !== "number" ? scenes.length : to;
+  if (!scenes.length) {  // a screenplay without scenes becomes a reel, its shots one scene; frame to frame in one, the fl2va shot
+    if (kind === "continue" || from === "prompt") return { replace: null, insert: "after the screenplay, which becomes the first scene" };
+    if (to === "prompt") return { replace: null, insert: "before the screenplay, which becomes the scene they lead into" };
+    if (from === "first_frame" && to === "last_frame" && count === 1) return { replace: "in place of the shots below the header", insert: "above the shots, which stay" };
+    return { replace: "in place of the shots below the header", insert: "before the shots, which become the scene after them" };
+  }
+  // from the prompt: after all of it; to the prompt: into its first scene, nothing in between
+  const a = kind === "continue" ? (after ?? scenes.length - 1) : typeof from === "number" ? from : from === "prompt" ? scenes.length - 1 : -1;
+  const b = kind === "continue" ? scenes.length : typeof to === "number" ? to : to === "prompt" ? a + 1 : scenes.length;
   const where = a < 0 ? "before the first scene" : `after ${name(a)}`;
   if (b <= a + 1) return { replace: null, insert: where };
   return { replace: `${where}, in place of ${span(a + 1, b)}`, insert: `${where}, ${span(a + 1, b)} ${b - a > 2 ? "stay" : "stays"} after them` };
@@ -182,7 +187,8 @@ function writerRow(kind, scenes, h3, wo) {
       + `${opt("", "the end", true)}${scene(null)}</select></div>` : "";
   }
   if (kind !== "story") return "";
-  const ends = h3 ? [[opt("first_frame", "first_frame", true), scene(null)], [opt("last_frame", "last_frame", true), scene(null)]]
+  const ends = h3 ? [[opt("first_frame", "first_frame", true), opt("prompt", "the prompt", false), scene(null)],
+    [opt("last_frame", "last_frame", true), opt("prompt", "the prompt", false), scene(null)]]
     : [[opt("first_frame", "first_frame", true), opt("prompt", "the prompt", false)], [opt("prompt", "the prompt", true), opt("last_frame", "last_frame", false)]];
   return `<div class="row wrap take-opts"><span class="label">From</span><select class="input" data-wo="from" aria-label="Where the story starts">${ends[0].join("")}</select>`
     + `<span class="label">to</span><select class="input" data-wo="to" aria-label="Where the story ends">${ends[1].join("")}</select>`
@@ -216,16 +222,16 @@ export function openTakes(app, place, near = null) {
   const wo = { after: null, from: "first_frame", to: h3 ? "last_frame" : "prompt", scenes: 1, choice: false,
     seconds: Math.round(Number(/^\s*SHOT\s+(\d+(?:\.\d+)?)\s*s\b/im.exec(app.text)?.[1]) || 5) };
   const reelShot = place.kind === "describe" && scenes.length > 0;  // its take goes in at the caret
-  const intro = writer ? `, at seed ${esc(String(app.bridge.getSeed()))}: ${esc(WRITERS[place.kind].hint.toLowerCase())}. `
+  const intro = writer ? `At seed ${esc(String(app.bridge.getSeed()))}: ${esc(WRITERS[place.kind].hint.toLowerCase())}. `
     + "Select as many as you like: Prepend or Append copies them into the prompt, Replace and Insert put them where the writer has a place."
     : tab ? ": new entries the language model writes, none it has. Steer them, ask for more, select the good ones: Add to the library writes them in."
     : `, ${picture ? "written from the picture, the prompt that made it beside it." : `at seed ${esc(String(app.bridge.getSeed()))}.`}`
       + (enhance ? " A rewrite happens at every run: Use selected keeps the one you pick for this roll, and the run uses it." : "")
       + (known ? " Its rolls (the one at this seed first) and new entries the language model writes, none it has. Select the new ones worth keeping: Add to the library writes them in."
         : multi ? " As many entries as a new library starts with, written as a run would. Select the ones worth keeping: Keep as the library writes them as the library, straight in." : " Click a take to select it.");
-  const sheet = app.openSheet(`<div class="panel takes-panel"><div class="row spread"><h4>${icon("dice")} Takes</h4>`
+  const sheet = app.openSheet(`<div class="panel takes-panel"><div class="row spread"><h4>${writer ? `${icon("spark")} ${esc(token)}` : `${icon("dice")} Takes`}</h4>`
     + `<button class="icon-btn" data-close title="Close">${icon("x")}</button></div>`
-    + `<p class="muted flush">For ${writer ? `<b>${esc(token)}</b>` : `${SAID[place.kind]} <code>${esc(token)}</code>`}${intro}</p>`
+    + `<p class="muted flush">${writer ? intro : `For ${SAID[place.kind]} <code>${esc(token)}</code>${intro}`}</p>`
     + writerRow(place.kind, scenes, h3, wo)
     + (picture ? "" : '<div class="row wrap take-send" aria-label="Send along"></div><div class="take-gal" hidden></div>')
     + (multi ? `<div class="row take-sel"><button class="btn ghost slim" data-tall>All</button><button class="btn ghost slim" data-tnone>None</button><span class="muted" data-tcount></span></div>` : "")
@@ -299,7 +305,7 @@ export function openTakes(app, place, near = null) {
     for (const k of ["first_frame", "last_frame"]) sends[(wo.from === k || wo.to === k) && wired(k) ? "add" : "delete"](k);
   };
   const drawGoes = () => {  // what Replace and Insert do, as the choices stand; the one the writer has no place for hidden
-    const places = writerPlaces(place.kind, { ...wo, scenes, h3 }), g = sheet.querySelector("[data-tgoes]");
+    const places = writerPlaces(place.kind, { ...wo, count: wo.scenes, scenes, h3 }), g = sheet.querySelector("[data-tgoes]");
     if (!g) return;
     g.textContent = [["Replace", places.replace], ["Insert", places.insert]].filter(([, w]) => w).map(([k, w]) => `${k}: ${w}.`).join(" ");
     for (const k of ["replace", "insert"]) {
@@ -373,7 +379,7 @@ export function openTakes(app, place, near = null) {
   };
   const ask = async () => {
     s.busy = true;
-    s.error = "";
+    s.error = s.note = "";
     draw();
     try {
       if (picture) {
@@ -538,6 +544,10 @@ export function openTakes(app, place, near = null) {
     changed(insertTake(app.text, place, take), "The take is in the editor · an unsaved edit");
   };
   drawSends();
+  // a story, and a reel's Continue, wait for their choices: More takes writes them (#343)
+  const waits = place.kind === "story" || (place.kind === "continue" && scenes.length > 0);
+  if (waits) s.note = place.kind === "story" ? "Pick where the story starts and ends, how many scenes and how long: More takes writes them."
+    : "Pick the scene to continue after: More takes writes it.";
   draw();
-  ask();
+  if (!waits) ask();
 }

@@ -262,9 +262,12 @@ def test_the_story_runs_from_a_scene_or_a_frame_to_a_scene_or_a_frame(home):
     assert "You write 2 scenes" in prompt and "Every scene lasts 6 seconds" in prompt and "style: live-action" in prompt
     so_far, end = prompt.split("The reel so far")[1].split("The end:")
     assert "SCENE one" in so_far and "SCENE two" not in so_far and "where the last of these clips ends (the fox stands)" in so_far
-    assert "SCENE three" in end and "The fox sleeps." in end and "Picture" not in prompt
+    assert "a scene that begins with this shot" in end and "SHOT 5s: static\nThe fox sleeps." in end  # its first shot
+    assert "SCENE three" not in end and "Picture" not in prompt
+    from orrery.llm import PICTURES
+
     frames = writers.request(h, "story", FILM, 1, {}, {}, given=["the first frame"])
-    assert "The start: the first frame, a picture sent along." in frames and "Picture 1 is the first frame." in frames
+    assert f"The start: the first frame, this picture: {PICTURES}" in frames and "Picture 1 is the first frame." in frames
     assert "The end: the last frame, which did not come along this time: imagine it" in frames and "You write one scene" in frames
     with pytest.raises(writers.WriterError, match="needs a reel"):
         writers.request(h, "story", "@h3 fl2va\nSHOT 5s\nA.", 1, {}, {}, opts={"from": 0, "scenes": 2})
@@ -293,7 +296,7 @@ def test_on_an_image_prompt_the_story_writes_keyframes_onto_a_grid(home):
     """#343: from the first frame to the picture the prompt makes, N keyframe prompts; one Roll renders them all."""
     krea = "# KREA 2 · kites\na photo of a {red|blue} kite over a beach\n: w832 h1216\n"
     prompt = writers.request(Home(home), "story", krea, 1, {}, {}, opts={"scenes": 3}, given=["the first frame"])
-    assert "You write 3 image prompts for Krea 2" in prompt and "The start: the first frame, a picture sent along." in prompt
+    assert "You write 3 image prompts for Krea 2" in prompt and "The start: the first frame, this picture: " in prompt
     assert "The end: the picture this prompt makes:\n\na photo of a red kite over a beach" in prompt
     assert "SHOT" not in prompt and "carry its story on" not in writers.request(
         Home(home), "story", krea, 1, {}, {}, opts={"scenes": 3}, prompt=True)  # the prompt is in it already
@@ -369,3 +372,26 @@ def test_a_picture_with_the_screenplay_sent_along_joins_it(home):
     assert "Picture 1 is a picture from the Gallery." in gallery and "from this one instead" not in gallery
     text, problem = writers.check("describe", fl, "SHOT 5s: static\nShe steps onto the log. SFX: snow crunches")
     assert problem is None and text == "SHOT 5s: static\nShe steps onto the log.\nSFX: snow crunches"
+
+
+def test_the_story_can_start_or_end_at_the_prompt_on_any_screenplay(home):
+    """#343: no scenes needed. To the prompt: the scenes that lead into it, before it (Lucy gets up in the living room
+    and walks into the forest); from the prompt: the scenes that go on from it, after it."""
+    fl = "@h3 t2va 16:9\nstyle: live-action\nSHOT 5s: static\nA badger steps onto a log in a misty forest."
+    into = {"from": "first_frame", "to": "prompt", "scenes": 3, "seconds": 10}
+    prompt = writers.request(Home(home), "story", fl, 1, {}, {}, given=["the first frame"], prompt=True, opts=into)
+    assert "You write 3 scenes" in prompt and "Every scene lasts 10 seconds" in prompt
+    assert "The end: a screenplay that begins with this shot; your last scene leads into it:\n\nSHOT 5s: static\nA badger" in prompt
+    assert prompt.count("A badger steps onto a log") == 1  # the prompt is the end, not sent twice
+    scenes = "SCENE up\nSHOT 10s: static\nLucy wakes.\nSCENE out\nSHOT 10s: static\nLucy walks.\nSCENE in\nSHOT 10s: static\nLucy arrives."
+    assert writers.check("story", fl, scenes, into)[1] is None
+    before = writers.place("story", fl, [scenes], into, how="insert")["template"]
+    assert before == f"@h3 t2va 16:9\nstyle: live-action\n\n{scenes}\n\nSCENE the start\nSHOT 5s: static\nA badger steps onto a log in a misty forest.\n"
+    assert writers.place("story", fl, [scenes], into, how="replace")["template"] == before  # nothing in between
+    on = {"from": "prompt", "to": "last_frame", "scenes": 1}
+    assert "The start: this screenplay, as it rolls; your first scene goes on from where it ends" in writers.request(
+        Home(home), "story", fl, 1, {}, {}, opts=on)
+    after = writers.place("story", fl, ["SCENE on\nSHOT 5s: static\nIt goes on."], on, how="insert")["template"]
+    assert after.endswith("misty forest.\n\nSCENE on\nSHOT 5s: static\nIt goes on.\n") and "SCENE the start" in after
+    assert writers.place("story", FILM, [NEW_SCENE], {"from": "first_frame", "to": "prompt"}, how="insert")["template"].startswith(
+        f"@h3 t2va 16:9\nstyle: live-action\n\n{NEW_SCENE}\n\nSCENE one")  # a reel: before its first scene

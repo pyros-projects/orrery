@@ -29,8 +29,20 @@ _FENCE = re.compile(r"```(?:json)?\s*(.*?)```", re.DOTALL)
 
 
 # Where a prompt shows the model its pictures (#333): a writer's text may put them after what they belong to, which
-# a small model weighs differently from pictures first. Without it they come first.
+# a small model weighs differently from pictures first. Without it they come first; with several, picture i stands
+# at the i-th, the ones left over at the last.
 PICTURES = "<|orrery_pictures|>"
+
+
+def placed(prompt: str, pictures: int) -> list[tuple[str, int]]:
+    """The prompt as (text, pictures after it) pieces: where its PICTURES marks stand, or all of them first."""
+    parts = prompt.split(PICTURES)
+    if len(parts) == 1:
+        return [("", pictures), (prompt, 0)]
+    marks = len(parts) - 1
+    counts = [1 if i < pictures else 0 for i in range(marks)]
+    counts[-1] += max(0, pictures - marks)
+    return [*zip(parts[:-1], counts), (parts[-1], 0)]
 
 
 class InvalidProposal(ValueError):
@@ -115,13 +127,13 @@ class OpenAIBackend:
         self.name = name or model
 
     def _body(self, prompt: str, images) -> dict:
-        before, at, after = prompt.partition(PICTURES)  # where the prompt puts the frames (#333), else first
         if images is None or not len(images):
-            content = before + after
-        else:
-            content = [*([{"type": "text", "text": before}] if at and before.strip() else []),
-                       *({"type": "image_url", "image_url": {"url": url}} for url in data_urls(images)),
-                       {"type": "text", "text": after if at else prompt}]  # as Picture 1, 2 … in the prompt
+            content = prompt.replace(PICTURES, "")
+        else:  # the frames where the prompt puts them (#333), else first; as Picture 1, 2 … in the prompt
+            urls, content = iter(data_urls(images)), []
+            for text, n in placed(prompt, len(images)):
+                content += [*([{"type": "text", "text": text}] if text.strip() else []),
+                            *({"type": "image_url", "image_url": {"url": next(urls)}} for _ in range(n))]
         body = {"model": self.model, "messages": [{"role": "user", "content": content}],
                 "temperature": self.temperature, "max_tokens": self.max_tokens}
         for quirk in _QUIRKS.get((self.url, self.model), ()):

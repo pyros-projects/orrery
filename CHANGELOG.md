@@ -19,8 +19,8 @@ checks) are left out.
   sent along is told what it is for, and the steer outweighs the rest. Prompt from image with the prompt sent along on
   a screenplay writes the next shot of it, with who the picture shows joining the story there. Continue picks the scene it continues
   after, a reel that plays on and on too, and Replace or Insert says whether the scenes after it stay (#342). Story
-  between frames became the **Story interpolator** (#343): from first_frame or any scene to last_frame or any scene, in
-  N scenes of S seconds; on an image prompt N keyframe prompts on a grid, so one Roll renders the storyboard.
+  between frames became the **Story interpolator** (#343): from first_frame, the prompt or any scene to last_frame, the
+  prompt or any scene, in N scenes of S seconds (a cat's photo to the prompt: her walk into the screenplay's forest); on an image prompt N keyframe prompts on a grid, so one Roll renders the storyboard.
 - Shoots (#320, under #318): a template's takes make a shoot, like a sitting in a photo studio. Finish shoot folds them
   into the earlier shoots under the strip, each shown by its circled take, and the next Roll starts a new one; a click
   opens an earlier shoot again. A grid's or a sweep's runs at one seed are one take: a creator's four views together.

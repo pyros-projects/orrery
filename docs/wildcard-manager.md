@@ -143,9 +143,11 @@ slots, which keeps it within a 4B or 8B model's reach):
   it, **Insert** before them; a screenplay without SCENE lines becomes a reel
   first, its shots the first scene (#334).
 - **Story interpolator**: what happens between a start and an end (#343).
-  **From** first_frame or any scene, **to** last_frame or any scene, **in** N
-  scenes **of** S seconds; a frame goes along as a picture, a scene as it
-  rolls. One scene from frame to frame on a screenplay without scenes is the
+  **From** first_frame, the prompt or any scene, **to** last_frame, the prompt
+  or any scene, **in** N scenes **of** S seconds; a frame goes along as a
+  picture, a scene or the prompt as it rolls (an end as its first shot). The
+  scenes travel from the start's place to the end's. The sheet waits for these
+  choices; **More takes** writes. One scene from frame to frame on a screenplay without scenes is the
   fl2va shot, in place of the shots below the header; on a reel the scenes go
   in between, with **Replace** or **Insert**. On an image prompt it writes N
   keyframe prompts, from first_frame to the picture the prompt makes, on a grid

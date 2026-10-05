@@ -1242,6 +1242,11 @@ test("a writer's sheet lists the scenes and says where Replace and Insert put it
   assert.deepEqual(writerPlaces("story", { scenes, from: 1, to: 2 }), { replace: null, insert: "after SCENE 2 (two)" });  // nothing between
   assert.equal(writerPlaces("story", { scenes }).replace, "before the first scene, in place of SCENE 1 (one) to SCENE 3 (three)");
   assert.deepEqual(writerPlaces("story", { scenes: [] }), { replace: "in place of the shots below the header", insert: "above the shots, which stay" });
+  assert.deepEqual(writerPlaces("story", { scenes: [], count: 3 }), { replace: "in place of the shots below the header", insert: "before the shots, which become the scene after them" });
+  assert.deepEqual(writerPlaces("story", { scenes: [], to: "prompt", count: 3 }), { replace: null, insert: "before the screenplay, which becomes the scene they lead into" });
+  assert.deepEqual(writerPlaces("story", { scenes: [], from: "prompt" }), { replace: null, insert: "after the screenplay, which becomes the first scene" });
+  assert.deepEqual(writerPlaces("story", { scenes, to: "prompt" }), { replace: null, insert: "before the first scene" });  // a prequel
+  assert.deepEqual(writerPlaces("story", { scenes, from: "prompt" }), { replace: null, insert: "after SCENE 3 (three)" });  // a sequel
   assert.equal(writerPlaces("story", { h3: false, to: "prompt" }).insert, null);
   assert.match(writerPlaces("story", { h3: false, to: "prompt" }).replace, /^in place of the prompt, on a grid/);
   assert.deepEqual(writerPlaces("describe", { scenes: [] }), { replace: "in place of the shots below the header", insert: "above the shots, which stay" });
