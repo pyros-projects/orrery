@@ -1,13 +1,13 @@
 // The preview (#305): a section of its own under the prompt and the dials, the whole width, as tall as its grip
 // makes it. While a run samples, its live preview; then what is shown. A template without scenes shows its result,
 // its takes under it like a photo viewer; a reel shows the clip or the take clicked under its scene, autoplaying with
-// its controls. A click only shows: the take that counts (the film's, a single run's output) has the golden border,
-// and the preview's button chooses another. A reel's clip in the film picks frames for a REMEMBER: line of its
-// scene (#223).
+// its controls. A click only shows: the take that counts, the circled one (in a reel the film's), has the golden
+// border, and the preview's Circle this take chooses another (#319). A reel's clip in the film picks frames for a
+// REMEMBER: line of its scene (#223).
 import { esc } from "./highlight.js";
 import { icon } from "./icons.js";
 import { plays, splitCells } from "./model.js";
-import { chooseResult, chosenResult, mediaHTML, mainMedia, resultsHTML, resultsOf, shownResult, wireResults } from "./results.js";
+import { chooseResult, chosenResult, mediaHTML, mainMedia, resultsHTML, resultsOf, shownResult, takeMedia, wireResults } from "./results.js";
 import { pickTake, takeVars } from "./timeline.js";
 
 const FPS = 24;  // the frames REMEMBER: counts, as the reel keeps a clip
@@ -58,11 +58,12 @@ function singleHTML(app) {
       + `${app.bridge.modelWired?.() === false ? " For the live preview, run the model through this node: the loader into its <b>model</b> input, its <b>model</b> output on to the sampler." : ""}</div></div>`
       + resultsHTML(app, takeVars(app, resultTake(app)));
   }
-  const m = mainMedia(shown), counts = shown === chosen;
-  return `<div class="st-head"><b>Take ${n}</b><span class="muted">seed ${shown.seed ?? "?"}${shown.take ? ` + ${shown.take}` : ""} · ${esc(m.filename)}</span>`
-    + `<span class="grow"></span>${counts ? `<span class="st-chosen">${icon("check")}the output</span>`
-      : `<button type="button" class="btn slim" data-stact="choose" title="This take is the output: the golden one; a take that rolled anew gives the node its seed">${icon("check")}Use this take</button>`}</div>`
-    + `<div class="st-media${counts ? " chosen" : ""}">${mediaHTML(app, m, true, true)}</div>`
+  const m = mainMedia(shown), all = takeMedia(shown), counts = shown === chosen;
+  return `<div class="st-head"><b>Take ${n}</b><span class="muted">seed ${shown.seed ?? "?"}${shown.take ? ` + ${shown.take}` : ""} · ${all.length > 1 ? `${all.length} pictures` : esc(m.filename)}</span>`
+    + `<span class="grow"></span>${counts ? `<span class="st-chosen">${icon("check")}circled</span>`
+      : `<button type="button" class="btn slim" data-stact="choose" title="Circle this take: it is the one that counts, the golden one; a take that rolled anew gives the node its seed">${icon("check")}Circle this take</button>`}</div>`
+    + `<div class="st-media${counts ? " chosen" : ""}">${all.length > 1  // a grid's take: its views side by side (#320)
+      ? `<div class="st-views">${all.map((x) => mediaHTML(app, x, true, true)).join("")}</div>` : mediaHTML(app, m, true, true)}</div>`
     + resultsHTML(app, takeVars(app, resultTake(app)));
 }
 
@@ -74,10 +75,10 @@ function reelHTML(app) {
   const picker = app.state.picker;
   const head = `<div class="st-head"><b>Clip ${r.seg + 1}</b>${i && r.takes.length > 1 ? `<span class="muted">take ${i} of ${r.takes.length}</span>` : ""}`
     + `${r.take ? `<span class="muted">seed ${r.take.seed ?? "?"}${r.take.take ? ` + ${r.take.take}` : ""}</span>` : ""}<span class="grow"></span>`
-    + (r.film ? `<span class="st-chosen">${icon("film")}in the film</span>`
-      : `<button type="button" class="btn slim" data-stact="film" title="This take goes in the film: REMEMBER: and the next clip use it">${icon("film")}Put in the film</button>`)
+    + (r.film ? `<span class="st-chosen">${icon("check")}circled</span>`
+      : `<button type="button" class="btn slim" data-stact="film" title="Circle this take: it goes in the film, and REMEMBER: and the next clip use it">${icon("check")}Circle this take</button>`)
     + `<button type="button" class="btn slim ghost" data-stact="picker" aria-pressed="${!!picker}" ${r.film ? "" : "disabled"} title="${r.film
-      ? "Step through the clip frame by frame and pick frames for a REMEMBER: line of its scene" : "Put it in the film first: REMEMBER: takes the film's frames"}">${icon("image")}Pick frames</button></div>`;
+      ? "Step through the clip frame by frame and pick frames for a REMEMBER: line of its scene" : "Circle it first: REMEMBER: takes the film's frames"}">${icon("image")}Pick frames</button></div>`;
   const video = `<div class="st-media${r.film ? " chosen" : ""}"><video class="st-video" controls autoplay loop playsinline src="${esc(src)}"></video></div>`;
   return head + video + (picker && r.film ? pickerHTML(picker, r.seg) : "");
 }

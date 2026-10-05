@@ -679,9 +679,10 @@ def _past(latent_path: str, segment: int) -> dict[int, dict]:
         return {}
 
 
-def _announce(unique_id, segment: int, end: bool = False, seed: int | None = None, take: int = 0) -> None:
+def _announce(unique_id, segment: int, end: bool = False, seed: int | None = None, take: int = 0, roll: str = "") -> None:
     """Tell the node's app which reel segment runs (or that the reel is over), so Generate can show it; a template
-    without scenes runs as segment -1 (#211), with its seed and take, so its result becomes a take under the prompt."""
+    without scenes runs as segment -1 (#211), with its seed and take, so its result becomes a take under the prompt,
+    and `roll`, the folder of the sweep or grid it is a run of, so a Roll's runs at one seed are one take (#320)."""
     if unique_id is None:
         return
     try:
@@ -689,7 +690,8 @@ def _announce(unique_id, segment: int, end: bool = False, seed: int | None = Non
     except ImportError:
         return
     PromptServer.instance.send_sync("orrery.segment", {"node": str(unique_id), "prompt_id": runs.current_prompt(),
-                                                       "segment": segment, "end": end, "seed": seed, "take": take})
+                                                       "segment": segment, "end": end, "seed": seed, "take": take,
+                                                       "roll": roll})
 
 
 def state_token(home: Home) -> str:
@@ -739,6 +741,7 @@ def log_outputs(home: Home, picks_json: str, media: list[str]) -> list[dict]:
         # the reel and the scene a clip belongs to: the Gallery's albums (#298)
         **({"chain": data["chain"]} if data.get("chunks") and data.get("chain") else {}),
         **({"chunk": data["chunk"]} if data.get("chunks") and isinstance(data.get("chunk"), int) else {}),
+        **({"shoot": data["shoot"]} if data.get("shoot") and not data.get("chunks") else {}),  # its shoot's album (#321)
         **({"folder": folder} if (folder := _galaxy_folder(data.get("folder"))) else {}),
         "rating": None,
     } for m in (media or [None])]
@@ -823,19 +826,22 @@ class OrreryPrompt:
                     "Set by the app (#197): the folder under ComfyUI's output where this reel's clips live, "
                     "reels/<preset> or reels/untitled/<date time>; empty is h3_context. Orrery Film keeps them in "
                     "its orrery_film folder.")}),
+                "shoot": ("STRING", {"default": "", "tooltip": (
+                    "Set by the app (#321): the shoot a template's takes belong to, so the gallery keeps them "
+                    "together; empty for a reel, whose clips have their chain.")}),
             },
             "hidden": {"unique_id": "UNIQUE_ID", "extra_pnginfo": "EXTRA_PNGINFO", "prompt": "PROMPT"},
         }
 
     @classmethod
     def IS_CHANGED(cls, template, seed, target, preset=NO_PRESET, home="", params="", segment=0,
-                   sweep="", chain="", take=0, **_):
+                   sweep="", chain="", take=0, shoot="", **_):
         h = resolve_home(home or None)
         chosen = load_preset(h, preset) if preset and preset != NO_PRESET else template
-        return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{segment}:{chain}:{take}:{sweep}:{state_token(h)}"
+        return f"{seed}:{target}:{hash(chosen)}:{hash(params)}:{segment}:{chain}:{take}:{sweep}:{shoot}:{state_token(h)}"
 
     def run(self, template, seed, target, preset=NO_PRESET, home="", params="", segment=0,
-            sweep="", chain="", take=0, unique_id=None, extra_pnginfo=None, prompt=None,
+            sweep="", chain="", take=0, shoot="", unique_id=None, extra_pnginfo=None, prompt=None,
             first_frame=None, last_frame=None, video=None, model=None, clip=None):  # clip: an old workflow's, unused (#282)
         preview.forward_core_previews()  # ComfyUI's own preview reaches every tab, not just the one that queued
         chain = chain or DEFAULT_CHAIN  # the app names it after the reel; old workflows and the CLI keep h3_context
@@ -851,6 +857,9 @@ class OrreryPrompt:
             if take:  # sample surfing (#206): the rolls as at the seed, the sampler's noise from seed + take
                 data["take"] = take
                 outputs = (outputs[0], json.dumps(data, ensure_ascii=False), (seed + take) % 2**32, *outputs[3:])
+            if shoot and "segments" not in data:  # a template's take, in its shoot: the gallery keeps them together (#321)
+                data["shoot"] = shoot
+                outputs = (outputs[0], json.dumps(data, ensure_ascii=False), *outputs[2:])
             h = resolve_home(home or None)
             history.record(h, data)
             if uistate.load_ui(h)["log_prompts"]:
@@ -868,7 +877,7 @@ class OrreryPrompt:
             if "segments" in data:  # a reel
                 _announce(unique_id, data["segment"], seed=seed, take=take)
             else:  # results under the prompt in every mode (#211)
-                _announce(unique_id, -1, seed=seed, take=take)
+                _announce(unique_id, -1, seed=seed, take=take, roll=data.get("folder", ""))
             stack, outputs = outputs[6], outputs[:6]  # the LORA: lines go on the model, not out (#208)
             if stack and model is not None:
                 model = loras.apply(model, stack)

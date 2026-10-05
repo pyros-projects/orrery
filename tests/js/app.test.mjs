@@ -438,18 +438,13 @@ test("the Write menu offers a writer only where it can write", () => {
   assert.equal(writerBlock(app("a photo of a fox", { frames: ["last_frame"] }), "describe"), "");
 });
 
-test("a scene's buttons: the clip it generates and where the next scene starts (#204)", async () => {
-  const { chunkInfo, nextSceneClip, sceneTarget } = await import("../../comfyui/web/app/model.js");
+test("a scene's + take renders the clip it plays next, else its first (#204)", async () => {
+  const { chunkInfo, sceneTarget } = await import("../../comfyui/web/app/model.js");
   const reel = "@h3 t2va\nSCENE a\nSHOT 5s\nA.\nSCENE b ×3\nSHOT 5s\nB.\nSCENE c forever\nSHOT 5s\nC.";
-  const [a, b, c] = chunkInfo(reel), all = [a, b, c];
+  const [a, b] = chunkInfo(reel);
   assert.equal(sceneTarget(a, 2), 0);  // the next clip is elsewhere: the scene's first
   assert.equal(sceneTarget(b, 2), 2);  // the scene plays the next clip: that one
   assert.equal(sceneTarget(b, 0), 1);
-  assert.equal(nextSceneClip(a, all), 1);
-  assert.equal(nextSceneClip(b, all), 4);
-  assert.equal(nextSceneClip(c, all), null);  // forever: nothing after it
-  const [end] = chunkInfo("@h3 t2va\nSCENE only\nSHOT 5s\nA.");
-  assert.equal(nextSceneClip(end, [end]), null);  // the reel's last scene
 });
 
 test("sample surfing numbers its takes on from the ones a clip has, or follows the seed's control (#206)", async () => {
@@ -808,16 +803,33 @@ test("the film plays in the tree: its clips in film.mp4's time, a test scene's t
   assert.deepEqual(filmClips({ takes, path: [] }), []);
 });
 
-test("a clip's takes have a head that reads as content: play on top, the clip in numbers, deleting at the bottom (#245)", async () => {
+test("a clip's takes have the results' head: + take, ×N, 📌 and play on top, the clip in numbers, deleting at the bottom (#245, #319)", async () => {
   const { takesHeadHTML } = await import("../../comfyui/web/app/timeline.js");
-  const app = { data: {}, text: "" };
+  const app = { data: {}, text: "", state: {}, bridge: { props: { orrery_takes: 2, orrery_keep: { 3: true } } } };
   const takes = [{ folder: "a", seed: 3, created: "2026-10-04T05:01:02.1+02:00" }, { folder: "b", seed: 7, take: 2, active: true, created: "2026-10-04T05:09:12.5+02:00" }];
-  const html = takesHeadHTML(app, 1, takes, "the walk");
+  const html = takesHeadHTML(app, 1, takes, { index: 3, title: "the walk" });
   const at = (s) => html.indexOf(s);
-  assert.ok(at("data-playall") < at("th-mid") && at("th-mid") < at('data-clear="others"'));  // play, numbers, deleting
+  assert.ok(at('data-scene-act="gen" data-chunk="3" data-seg="1"') < at("data-playall") && at("data-playall") < at("th-mid")
+    && at("th-mid") < at('data-clear="others"'));  // make takes of this clip, play, numbers, deleting
+  assert.match(html, /2 takes<\/span>.*×2<\/span>.*data-scene-act="keep"[^>]*aria-pressed="true"/);  // ×N and the scene's 📌
   assert.match(html, /clip 2<\/span><span class="th-scene" title="the walk">the walk/);
-  assert.match(html, /<i>takes<\/i><b>2<\/b>.*<i>in the film<\/i><b>#2<\/b>.*<i>seed<\/i><b>7 \+ 2<\/b>.*<i>newest<\/i><b>05:09<\/b>/);
+  assert.match(html, /<i>takes<\/i><b>2<\/b>.*<i>circled<\/i><b>#2<\/b>.*<i>seed<\/i><b>7 \+ 2<\/b>.*<i>newest<\/i><b>05:09<\/b>/);
   assert.doesNotMatch(html, /other prompt/);  // none made with another prompt
+  const next = takesHeadHTML(app, 4, [], { index: 3 }, false);  // a clip before its turn: no take to make, play or delete
+  assert.match(next, /aria-disabled="true" title="Clip 5 comes after clip 4/);
+  assert.doesNotMatch(next, /data-scene-act="gen"|data-playall|th-low/);
+});
+
+test("the results' head is the one every take strip has, and play all comes with two videos (#319)", async () => {
+  const { resultsHTML } = await import("../../comfyui/web/app/results.js");
+  const video = (p) => ({ prompt: p, seed: 1, media: [{ filename: `${p}.mp4`, type: "output", kind: "video" }] });
+  const app = { preset: "x", data: {}, api: { viewURL: (m) => m.filename }, bridge: { props: { orrery_results: { x: [video("a"), video("b")] }, orrery_chosen: { x: "a" } } } };
+  const html = resultsHTML(app, "");
+  assert.match(html, /data-ract="gen".*data-ract="takes".*data-ract="keep".*data-ract="play"/);
+  assert.match(html, /<i>circled<\/i><b>#1<\/b>/);
+  assert.match(html, /title="Take 1 · seed 1 · circled/);
+  app.bridge.props.orrery_results.x = [video("a")];
+  assert.doesNotMatch(resultsHTML(app, ""), /data-ract="play"/);  // one take: nothing to compare
 });
 
 test("the take tree hides the dead ends: the film's, the last clip's and those a shown take came after stay (#246)", async () => {
@@ -858,7 +870,7 @@ test("a template without scenes shows its results under the prompt, its takes ke
   assert.equal(R.chosenResult(app).prompt, "p2");
   assert.match(R.resultsHTML(app, ""), /class="take shown" data-result="p1".*class="take on" data-result="p2"/);
   seed = 99;
-  R.chooseResult(app, R.shownResult(app));  // Use this take: the output now, and a take that rolled anew gives its seed
+  R.chooseResult(app, R.shownResult(app));  // Circle this take: it counts now, and a take that rolled anew gives its seed
   assert.equal(R.chosenResult(app).prompt, "p1");
   assert.equal(seed, 10);
   app.preset = "krea/owl";
@@ -866,6 +878,57 @@ test("a template without scenes shows its results under the prompt, its takes ke
   R.resultBegins(app, { prompt_id: "p3", seed: 12, take: 0 });
   R.resultEnds(app, "p3");  // nothing written: no take
   assert.equal(R.resultMedia(app, { prompt_id: "p3", output: { images: [{ filename: "y.png" }] } }), false);
+});
+
+test("a template's takes are a shoot: finish it, open an earlier one again, the numbers stay (#320)", async () => {
+  const R = await import("../../comfyui/web/app/results.js");
+  const props = {};
+  const app = { preset: "krea/fox", state: {}, data: {}, bridge: { props, getSeed: () => 1, setSeed: () => {}, getControl: () => "fixed" },
+    api: { viewURL: (m) => m.filename } };
+  const run = (id, seed, file, roll = "") => {
+    R.resultBegins(app, { prompt_id: id, seed, take: 0, roll });
+    R.resultMedia(app, { prompt_id: id, output: { images: [{ filename: file, type: "output" }] } });
+  };
+  run("a", 1, "a.png");
+  run("b", 2, "b.png");
+  props.orrery_chosen = { "krea/fox": "a" };  // a circled
+  const first = props.orrery_shoot["krea/fox"];
+  assert.ok(first);  // the shoot began with its first take
+  assert.match(R.resultsHTML(app, ""), /shoot 1<\/span>.*data-ract="finish"/);
+  assert.equal(R.finishShoot(app), true);
+  assert.deepEqual(R.resultsOf(app), []);
+  assert.deepEqual(R.shootsOf(app).map((x) => [x.id, x.takes.length, x.circled]), [[first, 2, "a"]]);
+  assert.equal(R.finishShoot(app), false);  // nothing to finish
+  let html = R.resultsHTML(app, "");
+  assert.match(html, /shoot 2<\/span>/);  // the next one, before its first take
+  assert.match(html, /data-shoot="[^"]+" title="Shoot 1 · 2 takes[^>]*><span class="take on"><img[^>]*src="a\.png"/);  // shown by its circled take
+  run("c", 3, "c.png");
+  const second = props.orrery_shoot["krea/fox"];
+  assert.ok(second > first);
+  assert.equal(R.openShoot(app, first), true);  // the first again: shoot 2 goes among the earlier ones
+  assert.deepEqual(R.resultsOf(app).map((t) => t.prompt), ["a", "b"]);
+  assert.equal(R.chosenResult(app).prompt, "a");
+  assert.deepEqual(R.shootsOf(app).map((x) => x.id), [second]);
+  html = R.resultsHTML(app, "");
+  assert.match(html, /shoot 1<\/span>/);  // its number kept
+  assert.match(html, /title="Shoot 2 · 1 take ·/);
+  app.preset = "krea/owl";
+  assert.deepEqual(R.shootsOf(app), []);  // every preset its own shoots
+});
+
+test("a grid's or a sweep's runs at one seed are one take, its views in a mosaic (#320)", async () => {
+  const R = await import("../../comfyui/web/app/results.js");
+  const props = {};
+  const app = { preset: "krea/09", state: {}, data: {}, bridge: { props }, api: { viewURL: (m) => m.filename } };
+  const run = (id, seed, file, roll) => {
+    R.resultBegins(app, { prompt_id: id, seed, take: 0, roll });
+    R.resultMedia(app, { prompt_id: id, output: { images: [{ filename: file, type: "output" }] } });
+  };
+  ["front", "side", "back", "face"].forEach((v, i) => run(`s1-${i}`, 7, `${v}7.png`, "sweeps/x"));
+  run("s2-0", 8, "front8.png", "sweeps/x");  // the sweep's next seed: a take of its own
+  run("solo", 9, "solo.png", "");
+  assert.deepEqual(R.resultsOf(app).map((t) => [t.seed, t.media.length]), [[7, 4], [8, 1], [9, 1]]);
+  assert.match(R.resultsHTML(app, ""), /<span class="mosaic m4"><img[^>]*front7\.png.*face7\.png"><\/span>/);
 });
 
 test("the settings are a tab of sections, and every setting of the old sheet is in one (#212)", async () => {

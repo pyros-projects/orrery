@@ -55,6 +55,7 @@ export function client(home) {
     galaxyView: (query = {}) => call("galaxy/view", { query }),
     reset: (what, files = false) => call("reset", { body: { what, files } }),
     collect: (ids, path) => call("galaxy/collect", { body: { ids, path } }),
+    circle: (shoot, files) => call("galaxy/circle", { body: { shoot, files } }),
     uncollect: (ids, path) => call("galaxy/uncollect", { body: { ids, path } }),
     addCollection: (path) => call("galaxy/collection/add", { body: { path } }),
     renameCollection: (path, to) => call("galaxy/collection/rename", { body: { path, to } }),

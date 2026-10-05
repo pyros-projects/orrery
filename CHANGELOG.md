@@ -9,6 +9,10 @@ checks) are left out.
 
 ### Added
 
+- Shoots (#320, under #318): a template's takes make a shoot, like a sitting in a photo studio. Finish shoot folds them
+  into the earlier shoots under the strip, each shown by its circled take, and the next Roll starts a new one; a click
+  opens an earlier shoot again. A grid's or a sweep's runs at one seed are one take: a creator's four views together.
+  The Gallery shows a shoot as an album, its circled take first, a grid's runs together inside it (#321).
 - Generate in the Libraries tab (#322): a yellow Generate beside Add opens the 🎲 sheet for a library of yours with new
   entries the language model writes, as many as the settings' "new for a library", none it has; steer them, ask for
   more and add the good ones.
@@ -153,6 +157,10 @@ checks) are left out.
 
 ### Changed
 
+- One strip of takes everywhere (#319, under #318): a reel's clip has the head the results have (+ take, ×N, 📌, ▶ all
+  for videos, the clip in numbers, the others and all), from its first take; its + take renders a take of that very
+  clip. The scene divider keeps 📊 and loses its jump buttons. The take chosen is **circled**: Circle this take replaces
+  Use this take and Put in the film.
 - Infinite backrooms goes all out (#217): nearly sixty levels, forty ways from one to the next, forty things that happen
   on the walk, forty things of orrery's own that find the camera besides the SCPs, each with its way out (look away,
   hold your breath, run, the water, hide, the camera light, follow it, a kindness), and the hiding places, chase routes

@@ -6,7 +6,7 @@ import { annotationLines, mergeHints, shownHints } from "./annotate.js";
 import { wireHover } from "./hover.js";
 import { hintsFor } from "./remember.js";
 import { icon } from "./icons.js";
-import { applyDials, chunkInfo, dials, hasGoto, knobKey, knobsOf, withFields, nextSceneClip, plays, folderColor, pickerGroups, sceneTarget, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
+import { applyDials, chunkInfo, dials, hasGoto, knobKey, knobsOf, withFields, plays, folderColor, pickerGroups, sceneTarget, shape, stats, stripComments, PLAN_HINT, matches, templateHash } from "./model.js";
 import { drag, thumbHTML } from "./parts.js";
 import { openSave } from "./save.js";
 import { openSceneStats } from "./scenestats.js";
@@ -83,31 +83,12 @@ function syncChain(app) {
   if (name) app.data.chain = undefined;  // paintEditor loads the new chain's clips
 }
 
-// A scene's buttons in its divider (#204): generate its clip and stay on it, go to the next scene, or both. Sample
-// surfing (#206): ×N takes per Generate (for the node), and 📌, kept per scene: the takes keep the rolled prompt
-// and only the sampler's noise changes; without it every take rolls anew.
-
+// A scene's button in its divider (#204): its numbers (📊). What makes takes, + take, ×N and 📌, is in each clip's
+// strip of takes (#319), the results' head: there it makes a take of that clip.
 export function sceneActs(app) {
-  const chunks = app.chunks() || [], segment = Number(app.bridge.getSegment()), busy = !!app.state.sweepQueue, takes = takesOf(app);
-  const button = (act, name, title, off, n, extra = "") => `<button type="button" class="scene-act" data-scene-act="${act}" data-chunk="${n}" `
-    + `title="${esc(title)}" aria-label="${esc(title)}" ${extra} ${off ? "disabled" : ""}>${name.startsWith("×") ? name : icon(name)}</button>`;
-  return (c, n) => {
-    const target = sceneTarget(c, segment), next = nextSceneClip(c, chunks);
-    const none = c.last === Infinity ? "This scene repeats forever: no scene comes after it" : "No scene comes after this one";
-    const what = takes > 1 ? `${takes} takes of clip ${target + 1}` : `a take of clip ${target + 1}`;
-    // + every time: the first take of a clip or one more, as ×N says
-    return `<span class="scene-acts">${button("gen", "plus", target === null ? "This scene never plays"
-      : `Add ${what}, and stay on this scene`, target === null || busy, n)}`
-      + button("takes", `×${takes}`, `Takes per Generate: ${takes}. Click for ${TAKES[(TAKES.indexOf(takes) + 1) % TAKES.length]}; pick the best under the clip. `
-        + "Takes differ only if their seeds do (see the gear, Sample surfing)", false, n)
-      + button("keep", "pin", kept(app, n) ? "Keeps the rolled prompt: the takes change only the sampler's noise. Click to roll each take anew"
-        : "Each take rolls anew. Click to keep the rolled prompt and change only the sampler's noise", false, n, `aria-pressed="${kept(app, n)}"`)
-      + button("jump", "skip", next === null ? none : `To the next scene: Next clip becomes ${next + 1}`, next === null || busy, n)
-      + button("jumpgen", "ffwd", next === null ? none : `To the next scene, and add ${takes > 1 ? `${takes} takes` : "a take"} of its clip ${next + 1}`,
-        next === null || busy, n)
-      + button("stats", "chart", "This scene in numbers: where and how often it plays, what leads to it, what it rolls, what it made", false, n)
-      + "</span>";
-  };
+  return (c, n) => `<span class="scene-acts"><button type="button" class="scene-act" data-scene-act="stats" data-chunk="${n}" `
+    + `title="This scene in numbers: where and how often it plays, what leads to it, what it rolls, what it made" `
+    + `aria-label="This scene in numbers">${icon("chart")}</button></span>`;
 }
 
 // The seeds of N takes of clip `to` (#206): numbered on from the takes it has (seed+1, seed+2 …: reproducible),
@@ -128,10 +109,10 @@ async function sceneAct(app, act, n, button = null) {
   if (!c || app.state.sweepQueue) return;
   if (act === "takes") { app.bridge.props.orrery_takes = TAKES[(TAKES.indexOf(takesOf(app)) + 1) % TAKES.length]; return paintEditor(app); }
   if (act === "keep") { app.bridge.props.orrery_keep = { ...app.bridge.props.orrery_keep, [n]: !kept(app, n) }; return paintEditor(app); }
-  const to = act === "gen" ? sceneTarget(c, Number(app.bridge.getSegment())) : nextSceneClip(c, chunks);
+  if (act !== "gen") return;
+  const to = button?.dataset.seg != null ? Number(button.dataset.seg) : sceneTarget(c, Number(app.bridge.getSegment()));
   if (to === null) return;
   app.bridge.setSegment(to);
-  if (act === "jump") return refreshFoot(app);
   const scene = chunks.findIndex((o) => plays(o, to)), keep = kept(app, scene), base = Number(app.bridge.getSeed()) || 0;
   const offsets = surfSeeds(app, to, takesOf(app), keep);
   let queued = 0;
