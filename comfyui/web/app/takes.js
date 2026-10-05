@@ -12,6 +12,7 @@
 import { esc, highlight, LIBRARY } from "./highlight.js";
 import { icon } from "./icons.js";
 import { llmLocal } from "./miniruns.js";
+import { atCaret, caretOffset } from "./cells.js";
 import { splitCells } from "./model.js";
 
 const LIB = (name) => new RegExp(`__${name.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&")}(?:\\[[^\\]\\n]*\\])?(?:#[\\w-]+:\\$?[\\w.-]+)*(?::\\d+)?__(?:\\(([^()]*)\\))?`);
@@ -168,7 +169,9 @@ export function openTakes(app, place, near = null) {
     : picture ? "Write the selected take into the picture's exports"
     : enhance ? "Keep the selected rewrite for this roll: a run that rolls this prompt uses it instead of asking the model"
       : `Put the selected take in place of ${esc(token)}: an unsaved edit`;
-  const intro = writer ? `, at seed ${esc(String(app.bridge.getSeed()))}: ${esc(WRITERS[place.kind].hint.toLowerCase())}. ${esc(WRITERS[place.kind].goes)}`
+  const reelShot = writer && place.kind !== "continue" && /^\s*(SCENE|CHUNK)\b/im.test(app.text);  // its take goes in at the caret
+  const intro = writer ? `, at seed ${esc(String(app.bridge.getSeed()))}: ${esc(WRITERS[place.kind].hint.toLowerCase())}. `
+    + esc(reelShot ? "On a reel, Use selected puts it in under the line your cursor was on." : WRITERS[place.kind].goes)
     : tab ? ": new entries the language model writes, none it has. Steer them, ask for more, select the good ones: Add to the library writes them in."
     : `, ${picture ? "written from the picture, the prompt that made it beside it." : `at seed ${esc(String(app.bridge.getSeed()))}.`}`
       + (enhance ? " A rewrite happens at every run: Use selected keeps the one you pick for this roll, and the run uses it." : "")
@@ -187,7 +190,7 @@ export function openTakes(app, place, near = null) {
     + (choice ? `<button class="btn ghost" data-tchoice title="Put the selected takes in as a choice, {a|b|c}: every Roll picks one, so you see which works best">${icon("dice")}Insert as a choice</button>` : "")
     + `${tab ? "" : `<button class="btn${place.kind === "library" || known ? " ghost" : " primary"}" data-tuse title="${useTitle}">${icon("check")}Use selected</button>`}`
     + (known ? `<button class="btn primary" data-tlib title="Write the selected new entries into __${esc(place.what)}__, straight in">${icon("save")}Add to the library</button>`
-      : multi ? `<button class="btn primary" data-tlib title="Write the selected entries as __${esc(place.what)}__, straight into your libraries">${icon("save")}Keep as the library</button>` : "")
+      : place.kind === "library" ? `<button class="btn primary" data-tlib title="Write the selected entries as __${esc(place.what)}__, straight into your libraries">${icon("save")}Keep as the library</button>` : "")
     + "</div></div>", near);
   const list = sheet.querySelector(".take-list"), state = sheet.querySelector(".take-state"), steer = sheet.querySelector("[data-steer]");
   const sendRow = sheet.querySelector(".take-send"), galPick = sheet.querySelector(".take-gal");
@@ -315,7 +318,7 @@ export function openTakes(app, place, near = null) {
     const errors = [];
     const took = (got) => {
       if (got.error) errors.push(got.error);
-      else if (got.text && !s.takes.includes(got.text)) { s.takes.push(got.text); meta.push({ template: got.template, problem: got.problem }); }
+      else if (got.text && !s.takes.includes(got.text)) { s.takes.push(got.text); meta.push({ template: got.template, problem: got.problem, caret: !!got.at_caret }); }
       draw();
     };
     if (api) (await Promise.all(ideas.map((i) => one(i).catch((err) => ({ error: err.message }))))).forEach(took);
@@ -369,7 +372,7 @@ export function openTakes(app, place, near = null) {
   if (multi) {
     sheet.querySelector("[data-tall]").onclick = () => { s.takes.forEach((_, i) => s.picked.add(i)); draw(); };
     sheet.querySelector("[data-tnone]").onclick = () => { s.picked.clear(); draw(); };
-    lib.onclick = async () => {
+    if (lib) lib.onclick = async () => {
       const picked = [...s.picked].sort((a, b) => a - b).filter((i) => !known || from[i] === "new");
       const entries = picked.map((i) => s.takes[i]);
       try {
@@ -389,17 +392,19 @@ export function openTakes(app, place, near = null) {
     };
   }
   if (pick) pick.onclick = () => {  // #336: in place of the slot, the library, or the prompt a picture's takes replace
-    const chosenTakes = picks().map((i) => s.takes[i]), text = asChoice(chosenTakes);
-    const next = place.kind === "describe" ? meta[picks()[0]].template.replace(chosenTakes[0], text) : insertTake(app.text, place, text);
+    const chosenTakes = picks().map((i) => s.takes[i]), text = asChoice(chosenTakes), m = meta[picks()[0]];
+    const next = !writer ? insertTake(app.text, place, text) : m.caret ? atCaret(app.text, caretOffset(app), text) : m.template.replace(chosenTakes[0], text);
     app.closeSheet();
     changed(next, `${chosenTakes.length} takes are in as a choice: every Roll picks one · an unsaved edit`);
   };
   if (use) use.onclick = async () => {
     const take = s.takes[chosen()];
     if (take === undefined) return;
-    if (writer) {  // the template with the take in its place, as the server wrote it
+    if (writer) {  // the template with the take in its place, as the server wrote it; a reel's shot at the caret (#334)
+      const m = meta[chosen()];
       app.closeSheet();
-      return changed(meta[chosen()].template, `The take is in the editor${meta[chosen()].problem ? ", with a problem" : ""} · an unsaved edit`);
+      return changed(m.caret ? atCaret(app.text, caretOffset(app), take) : m.template,
+        `The take is in the editor${m.caret ? ", under the caret's line" : ""}${m.problem ? ", with a problem" : ""} · an unsaved edit`);
     }
     try {
       if (picture) {

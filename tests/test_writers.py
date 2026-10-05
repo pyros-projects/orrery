@@ -127,10 +127,12 @@ def test_a_writer_without_its_pictures_writes_from_what_came_along(home):
     assert "came along" not in writers.request(Home(home), "describe", "a fox", 1, {}, {}, given=["the picture"])  # as it expects
 
 
-def test_a_shot_writer_leaves_a_reel_alone(home):
+def test_a_shot_writer_on_a_reel_writes_from_its_head_and_goes_in_at_the_caret(home):
+    """#334: no restriction; its shot cannot take the place of every scene, so the app puts it where the caret is."""
     for task in ("story", "describe"):
-        with pytest.raises(writers.WriterError, match="reel"):
-            writers.request(Home(home), task, REEL, 1, {}, {})
+        prompt = writers.request(Home(home), task, REEL, 1, {}, {}, given=["the first frame"])
+        assert "SHOT" in prompt and writers.at_caret(task, REEL)
+    assert not writers.at_caret("continue", REEL) and not writers.at_caret("describe", "a photo of a fox")
 
 
 def test_the_texts_can_be_edited_and_go_back_to_their_default(home):

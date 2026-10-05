@@ -127,8 +127,10 @@ def write_idea(h, task: str, template: str, seed: int, idea: int, params, backen
             images = comfy._images(None, images, model)
         answer = model.complete(asked, images=images)
         text, problem = writers.check(task, template, answer)
+        caret = writers.at_caret(task, template)  # a reel's shot: the app puts it in at the caret (#334)
         result = {"task": task, "seed": seed, "idea": idea, "text": text, "problem": problem,
-                  "template": writers.apply(task, template, text) if text else None}  # the app asks before it inserts one with a problem
+                  "template": writers.apply(task, template, text) if text and not caret else None,
+                  **({"at_caret": True} if caret else {})}
     except (writers.WriterError, ValueError, RuntimeError) as err:
         result = {"task": task, "seed": seed, "idea": idea, "error": str(err), "raw": answer}
     print(f"[orrery] write · {task} · seed {seed} · idea {idea}: {result.get('error') or result.get('problem') or 'an idea'}")

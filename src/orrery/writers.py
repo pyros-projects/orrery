@@ -129,10 +129,7 @@ def request(home: Home, task: str, template: str, seed: int, libraries, weights,
     from orrery.dsl import with_inline
 
     template, libraries = with_inline(template, libraries)
-    name = task_name(task, template)
-    if name != "continue" and any(_CHUNK.match(ln) for ln in template.splitlines()):
-        raise WriterError("This writer writes one shot, and this template is a reel: its shot would take the "
-                          "place of every scene. Use Continue the reel, or a template without SCENE lines.")
+    name = task_name(task, template)  # a reel's shot writers write from its head (#334): their take goes in at the caret
     if name == "continue":
         from orrery.reel import reel_path, resolved, split_reel
 
@@ -266,6 +263,12 @@ def _compile(lines: list[str]) -> None:
 
     shots = [ln for ln in lines if not _CHUNK.match(ln) and not re.match(r"\s*(?:END ON|HANDOFF):", ln, re.IGNORECASE)]
     compile_scene("@h3 t2va 16:9\n" + "\n".join(shots), 0, {}, {}, target="h3-base")
+
+
+def at_caret(task: str, template: str) -> bool:
+    """A shot writer on a reel (#334): its shot cannot take the place of every scene, so it goes in where the caret
+    is, and the app puts it there."""
+    return task_name(task, template) != "continue" and any(_CHUNK.match(ln) for ln in template.splitlines())
 
 
 def apply(task: str, template: str, text_: str) -> str:

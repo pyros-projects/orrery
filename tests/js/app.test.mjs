@@ -1234,3 +1234,12 @@ test("several takes go in as a choice, what the language reads as its own writte
   assert.equal(insertTake(line, { kind: "slot", what: "what she carries", line: 0 }, asChoice(["a fan", "a cane"])),
     "A woman with {a fan|a cane} walks on.");
 });
+
+test("a reel's shot from a writer goes in under the caret's line, never inside it (#334)", async () => {
+  const { atCaret } = await import("../../comfyui/web/app/cells.js");
+  const reel = "SCENE a\nSHOT 5s: static\nA fox.\nSCENE b\nB.";
+  assert.equal(atCaret(reel, reel.indexOf("A fox") + 2, "SHOT 3s: static\nShe smiles."),
+    "SCENE a\nSHOT 5s: static\nA fox.\nSHOT 3s: static\nShe smiles.\nSCENE b\nB.");
+  assert.equal(atCaret(reel, null, "SHOT 3s: static\nEnd."), `${reel}\nSHOT 3s: static\nEnd.`);  // no caret: at the end
+  assert.equal(atCaret("A.\n", 0, "B."), "A.\nB.\n");
+});
