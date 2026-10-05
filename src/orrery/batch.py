@@ -23,6 +23,7 @@ from orrery.dsl import (
     _BRACE,
     _CHANCE,
     _DP_WEIGHT,
+    _ESCAPE,
     _IF,
     _LIB,
     _LIB_ONLY,
@@ -52,9 +53,24 @@ class Axis:
     options: list[str]
 
 
+_HELD = re.compile("\ue002(\\d+)\ue003")
+
+
+def _masked(text: str) -> tuple[str, list[str]]:
+    """The text with every escape (`\\{`, `\\|` …) held as a placeholder, as the expander reads it (#345), and the escapes:
+    a brace's options split where the expander splits them."""
+    held: list[str] = []
+    return _ESCAPE.sub(lambda m: held.append(m.group(0)) or f"\ue002{len(held) - 1}\ue003", text), held
+
+
+def _unmasked(text: str, held: list[str], written: bool = True) -> str:
+    """The escapes back: as written (`\\|`), or as the character they stand for (`|`)."""
+    return _HELD.sub(lambda m: held[int(m.group(1))] if written else held[int(m.group(1))][1:], text)
+
+
 def _choices(expr: str, libraries: Mapping[str, Library], what: str) -> list[str]:
-    """The options of one library reference or one brace, in their order."""
-    expr = without_directions(expr.strip())
+    """The options of one library reference or one brace, in their order; an escaped character is itself."""
+    expr, held = _masked(without_directions(expr.strip()))
     if m := _LIB_ONLY.match(expr):
         if "$" in (m.group(3) or "") + (m.group(2) or ""):
             raise ValueError(f"{what}: {expr} filters by a roll, so its entries are not known before the run.")
@@ -69,13 +85,13 @@ def _choices(expr: str, libraries: Mapping[str, Library], what: str) -> list[str
             raise ValueError(f"{what}: {expr} matches no entry.")
         return entries
     if (m := _BRACE.fullmatch(expr)) and (c := _CHANCE.fullmatch(m.group(1))) and len(split_options(m.group(1))) == 1:
-        return [c.group(2), ""]  # {30% in the rain}: with the words, without
+        return [_unmasked(c.group(2), held, False), ""]  # {30% in the rain}: with the words, without
     if (m := _BRACE.fullmatch(expr)) and not _IF.match(m.group(1).strip()) and not _MULTI.match(m.group(1)) \
             and not _RANGE.fullmatch(m.group(1)):
         out = []
         for raw in split_options(m.group(1)):
             dp, wm = _DP_WEIGHT.match(raw), _WEIGHTED.match(raw)
-            out.append((dp.group(2) if dp else wm.group(1) if wm else raw).strip())
+            out.append(_unmasked((dp.group(2) if dp else wm.group(1) if wm else raw).strip(), held, False))
         return out
     raise ValueError(f"{what}: {expr} is neither one library (__style__) nor one choice ({{dawn|noon}}); "
                      "bind it ($style = …) and name the binding.")
@@ -86,7 +102,7 @@ _SYNTAX = re.compile(r"[{}$<@]|__")  # what makes an expression roll; plain word
 
 def _one_value(expr: str) -> bool:
     """A binding dialed to one value: plain words, or a library dialed to its entry (FIX p<hex> FIX)."""
-    return not _SYNTAX.search(expr) or f"{FIX}p" in expr
+    return not _SYNTAX.search(_masked(expr)[0]) or f"{FIX}p" in expr
 
 
 def _binding(source: str, name: str, what: str) -> str:
@@ -154,11 +170,11 @@ def _fix(source: str, axis: Axis, index) -> str:
             return m.group(1) + _fix(m.group(3), Axis(axis.expr, axis.expr, axis.options), lambda _: index(0))
 
         return "\n".join(line(raw) for raw in source.split("\n"))
-    places = 0
+    places, expr = 0, _masked(axis.expr)[0]  # escapes held, as in each line (#345)
 
     def mark(m: re.Match, inner: str | None = None) -> str:
         nonlocal places
-        if without_directions(m.group(0)) != axis.expr:
+        if without_directions(m.group(0)) != expr:
             return m.group(0)
         n, places = index(places), places + 1
         if inner is not None:
@@ -170,9 +186,10 @@ def _fix(source: str, axis: Axis, index) -> str:
     def fix_line(raw: str) -> str:
         if re.match(r"\s*([:#]|@(grid|unique|size|seed|batch|rng)\b)", raw):  # the @grid / @unique line itself, comments
             return raw
-        if axis.expr.startswith("{"):
-            return _BRACE.sub(lambda m: mark(m, m.group(1)), raw)
-        return _LIB.sub(mark, raw)
+        line, held = _masked(raw)
+        if expr.startswith("{"):
+            return _unmasked(_BRACE.sub(lambda m: mark(m, m.group(1)), line), held)
+        return _unmasked(_LIB.sub(mark, line), held)
 
     return "\n".join(fix_line(raw) for raw in source.split("\n"))
 

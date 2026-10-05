@@ -224,6 +224,8 @@ checks) are left out.
 
 ### Fixed
 
+- A grid over a choice with escaped signs (#345): `\|`, `\{ \}` inside an option are part of it, as a roll reads them,
+  so `@grid` makes one cell per option instead of failing ("neither one library nor one choice", or a crash).
 - A seed that comes in through a link is the seed the app uses (#346): the node's own seed widget stays at what it was
   while the run rolls the linked one, so the editor's annotations, a sheet's "at seed …", the takes and writers over an
   API endpoint, History's and the Gallery's "use this seed", a clip's takes and Roll's batches went by a stale seed. The
