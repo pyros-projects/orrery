@@ -200,7 +200,7 @@ export function playAll(strip, button, load = (t) => t.querySelector("video")) {
   const on = !strip.classList.contains("playing");
   strip.classList.toggle("playing", on);
   button.innerHTML = on ? `${icon("stop")}stop` : `${icon("play")}all`;
-  const videos = [...strip.querySelectorAll(".take")].map(load).filter(Boolean);
+  const videos = [...strip.querySelectorAll(".take:not(.live)")].map(load).filter(Boolean);
   if (!on) return videos.forEach((v) => { if (v.dataset.made) return v.remove(); v.pause(); v.currentTime = 0.05; });  // a made one: the still again
   videos.forEach((v) => v.pause());
   Promise.all(videos.map((v) => (v.readyState >= 3 ? null : new Promise((ok) => v.addEventListener("canplay", ok, { once: true }))))).then(() => {

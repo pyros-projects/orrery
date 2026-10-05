@@ -84,7 +84,6 @@ function said(app, text = "✓ Saved", bad = false) {
 async function saveUi(app, values) {
   try {
     Object.assign(app.data, await app.api.saveUi(values));
-    if ("clip_min" in values) app.cellsSig = null;
     said(app);
   } catch (err) { said(app, err.message, true); }
 }
@@ -180,10 +179,8 @@ export const SECTION_HTML = {
       ["none", "<b>None</b>: no annotations; hovering a keyword or a library still explains it"]].map(([v, label]) =>
       `<label class="check"><input type="radio" name="oa-ann" value="${v}" ${(app.data.annotations_show || "appended") === v ? "checked" : ""}><span>${label}</span></label>`).join("")}</div>`,
 
-  clips: (app) => `<div class="field"><label class="label" for="oa-clipmin">Clip size</label>
-      <div class="row"><input class="input narrow" id="oa-clipmin" type="number" min="96" max="1600" step="8" value="${app.data.clip_min ?? 360}"><span class="muted">px: a clip's shorter side under its scene, as far as the editor is wide</span></div></div>
-    <h5 class="label">Live preview</h5>
-    <p class="muted flush">With the model wired through the Orrery Prompt, the clip being sampled plays in its box under its scene, in real time.</p>
+  clips: (app) => `<h5 class="label">Live preview</h5>
+    <p class="muted flush">With the model wired through the Orrery Prompt, the clip being sampled plays in the preview below the scenes, in real time, and small as the take being made at the end of its strip of takes.</p>
     <div class="llm-pick" role="radiogroup" aria-label="The live preview">
       <label class="check"><input type="radio" name="oa-pv" value="light" ${app.data.preview_light !== false ? "checked" : ""}><span><b>Light</b>: a few pictures, spread over the clip</span></label>
       <label class="check"><input type="radio" name="oa-pv" value="smooth" ${app.data.preview_light === false ? "checked" : ""}><span><b>Smooth</b>:
@@ -302,7 +299,6 @@ const WIRE = {
 
   clips: (app, st, view) => {
     const q = (sel) => view.querySelector(sel);
-    q("#oa-clipmin").onchange = () => saveUi(app, { clip_min: num(q("#oa-clipmin"), 360) });
     q("#oa-pvedge").onchange = () => saveUi(app, { preview_edge: num(q("#oa-pvedge"), 1024) });
     q("#oa-pvfps").onchange = () => {
       q('[name="oa-pv"][value="smooth"]').checked = true;

@@ -27,13 +27,6 @@ export function cellStart(app, ta) {
   return n;
 }
 
-// A clip's size: its shorter side `least` pixels, no wider than `width`, in the clips' aspect ratio.
-export function clipSize(least, width, ratio) {
-  let w = ratio >= 1 ? least * ratio : least;
-  if (w > width) w = width;
-  return { w: Math.max(16, Math.floor(w)), h: Math.max(16, Math.floor(w / ratio)) };
-}
-
 // The cells, the caret put back at `at` (an offset into the whole text) when given.
 export function renderCells(app, at = null) {
   const host = box(app);
@@ -46,9 +39,6 @@ export function renderCells(app, at = null) {
   areas(app).forEach((ta, i) => { ta.value = cells[i].text; ta.readOnly = !!app.state.sweepQueue; });
   app.cellsSig = null;
   paintCells(app);
-  app.cellsResize?.disconnect();
-  app.cellsResize = new ResizeObserver(() => sizeSections(app));  // a wider node, bigger clips
-  app.cellsResize.observe(host);
   if (at !== null) placeCaret(app, at);
 }
 
@@ -79,7 +69,7 @@ export function paintCells(app) {
   });
   paintStage(app);  // the preview, when what it shows changed (#305)
   const sig = JSON.stringify([chunks.map((c) => [c.first, c.last, c.segs]), (app.data.chain?.clips || []).map((c) => c.version),
-    segment, clipRatio(app), app.data.clip_min, app.data.take_min, remembered?.key, remembered?.lines, olderTakes(app),
+    segment, clipRatio(app), app.data.take_min, remembered?.key, remembered?.lines, olderTakes(app),
     Object.values(app.data.chain?.takes || {}).flat().map((t) => `${t.folder}${t.active ? "*" : ""}`),
     takesOf(app), app.bridge.props?.orrery_keep, !!app.state?.sweepQueue]);  // the strips' heads (#319)
   if (sig === app.cellsSig) { if (host.scrollTop !== top) host.scrollTop = top; return; }
@@ -94,21 +84,8 @@ export function paintCells(app) {
     body.innerHTML = (scene >= 0 ? sectionHTML(app, c) : "") + stripHTML(app, scene, source?.url);
     fillStrip(body, source?.frames);
   });
-  sizeSections(app);
   paintLive(app);  // the clip rendering now keeps its preview through a redraw
   if (host.scrollTop !== top) host.scrollTop = top;
-}
-
-// Every section's clips at the settings' clip size, as far as the section is wide.
-function sizeSections(app) {
-  const host = box(app);
-  if (!host) return;
-  const ratio = clipRatio(app), least = Number(app.data.clip_min) || 360;
-  host.querySelectorAll(".chunkmedia").forEach((m) => {
-    const { w, h } = clipSize(least, Math.max(64, m.clientWidth - 26), ratio);
-    m.style.setProperty("--clip-w", `${w}px`);
-    m.style.setProperty("--clip-h", `${h}px`);
-  });
 }
 
 function placeCaret(app, at) {

@@ -29,32 +29,14 @@ function segmentsOf(c, clips) {
   return [...made, made.length ? Math.max(...made) + 1 : c.first];
 }
 
-function clipHTML(app, s, clip, segment) {
-  const path = app.bridge.chain();
-  const title = `Clip ${s + 1}${clip ? ` · ${clip.frames ?? "?"} frames · hover to play, click to open` : " · not rendered yet"}${s === segment ? " · next" : ""}`;  // clips count from 1
-  return `<button class="tl-clip${clip ? "" : " empty"}${s === segment ? " now" : ""}" data-seg="${s}" title="${title}" ${clip ? "" : "disabled"}>`
-    + (clip ? `<img loading="lazy" alt="" src="${app.api.chainThumbURL(s, path, clip.version)}">` : "")
-    + `<span class="n">${s + 1}</span></button>`;
-}
-
 // The clips' width / height: a chain keeps one frame size; before it holds a clip, the size the template asks for.
 export function clipRatio(app) {
   const { width, height } = app.data.chain?.width && app.data.chain?.height ? app.data.chain : shape(app.text);
   return width / height;
 }
 
-// A clip in the cells view: the video itself (its first frame until hovered), at the section's size (--clip-w,
-// --clip-h); one not rendered yet is a small placeholder.
-function bigClipHTML(app, s, clip, segment) {
-  if (!clip) return clipHTML(app, s, clip, segment).replace('class="tl-clip empty', 'class="tl-clip empty small');
-  const path = app.bridge.chain(), src = app.api.chainVideoURL(s, path, clip.version);
-  return `<button class="tl-clip big${s === segment ? " now" : ""}" data-seg="${s}" title="Clip ${s + 1} · ${clip.frames ?? "?"} frames · hover to play, click to open${s === segment ? " · next" : ""}">`
-    + `<video muted loop playsinline preload="metadata" poster="${app.api.chainThumbURL(s, path, clip.version)}" src="${src}#t=0.05"></video>`
-    + `<span class="n">${s + 1}</span>${TAKE.test(clip.version || "") ? delHTML(clip.version) : ""}</button>`;
-}
-
-// A chunk's clips for its section in the cells view; the section sizes them (--clip-w, --clip-h). The frames
-// its REMEMBER: lines take come under them (remember.js stripHTML).
+// A chunk's clips for its section in the cells view: each its strip of takes (#331); the clip being made and the
+// take clicked show in the preview below. The frames its REMEMBER: lines take come under them (remember.js stripHTML).
 export function sectionHTML(app, c) {
   if (c.first === null) {
     return `<span class="muted cm-none">${!c.segs ? "never plays: a scene before it repeats forever"
@@ -62,11 +44,8 @@ export function sectionHTML(app, c) {
   }
   const clips = new Map((app.data.chain?.clips || []).map((x) => [x.segment, x]));
   const segment = Number(app.bridge.getSegment()), segs = segmentsOf(c, clips);
-  return `<div class="cm-clips">${segs.map((s) => bigClipHTML(app, s, clips.get(s), segment)).join("")}</div>`
-    + segs.map((s) => takesHTML(app, s, c, clips.has(s) || s === segment)).join("");
+  return segs.map((s) => takesHTML(app, s, c, clips.has(s) || s === segment)).join("");
 }
-
-const TAKE = /^seg_\d{4}_[0-9a-f]{8}$/;  // an Orrery Film take's folder
 
 // The × that deletes a take (#214), on hover; a click asks in place.
 function delHTML(folder) {
@@ -162,7 +141,7 @@ export function deleteQuestion(app, host) {
   const s = Number(host.dataset.seg), folder = host.querySelector("[data-del]").dataset.del;
   const takes = app.data.chain?.takes?.[s] || [], at = takes.findIndex((t) => t.folder === folder);
   if (at >= 0 && !takes[at].active) return `Delete take ${at + 1}?`;
-  const others = takes.filter((t) => t.folder !== folder);  // the clip in its box is the take in the film
+  const others = takes.filter((t) => t.folder !== folder);  // the circled take is the one in the film
   return others.length ? `Delete this take? Clip ${s + 1} then plays take ${takes.indexOf(others[others.length - 1]) + 1}.`
     : `Delete clip ${s + 1}? The film ends before it.`;
 }
@@ -190,24 +169,25 @@ export function sourceClip(app, source) {
   return clip ? { url: app.api.chainVideoURL(source, app.bridge.chain(), clip.version), frames: clip.frames ?? null } : null;
 }
 
-// The clip rendering now (#205): its tile under the scene shows the sampler's preview (a picture, or KJNodes'
-// whole clip as a video) and the step it is at. The tile is drawn again when the sections change, so this paints
-// over whatever is there; without a live clip it takes the overlay off.
+// The clip rendering now (#205): the sampler's preview and its step, large in the preview below the scenes (#305)
+// and small as the take it is making, at the end of its clip's strip of takes (#331). The strips are drawn again
+// when the sections change, so this paints over whatever is there; without a live clip it takes the tile off.
 export function paintLive(app) {
-  paintStageLive(app);  // the preview shows it too (#305)
+  paintStageLive(app);
   const host = app.view?.querySelector(".editor.cells");
   if (!host) return;
   const live = app.live;
-  host.querySelectorAll(".tl-clip.live").forEach((tile) => {
-    if (!live || tile.dataset.seg !== String(live.segment)) {
-      tile.classList.remove("live");
-      tile.querySelectorAll(".tl-live, .tl-step").forEach((el) => el.remove());
-    }
+  host.querySelectorAll(".take.live").forEach((tile) => {
+    if (!live || tile.dataset.seg !== String(live.segment)) tile.remove();
   });
-  if (!live) return;
-  const tile = host.querySelector(`.tl-clip[data-seg="${live.segment}"]`);
-  if (!tile) return;
-  tile.classList.add("live");
+  const list = live && host.querySelector(`.cm-takes[data-seg="${live.segment}"] .cm-takes-list`);
+  if (!list) return;
+  let tile = list.querySelector(".take.live");
+  if (!tile) {
+    tile = Object.assign(document.createElement("span"), { className: "take live", title: `Clip ${live.segment + 1}: the take being made` });
+    tile.dataset.seg = String(live.segment);
+    list.insertBefore(tile, list.querySelector("[data-grip]"));
+  }
   let view = tile.querySelector(".tl-live");
   if (live.url && (!view || (view.tagName === "VIDEO") !== live.video)) {
     view?.remove();
@@ -218,16 +198,12 @@ export function paintLive(app) {
   }
   if (view && live.url && view.src !== live.url) view.src = live.url;
   let step = tile.querySelector(".tl-step");
-  if (!step) {
-    step = Object.assign(document.createElement("span"), { className: "tl-step" });
-    tile.append(step);
-  }
-  const p = live.total ? live.step / live.total : 0;
-  step.textContent = live.total ? `step ${live.step} / ${live.total}` : "starting…";
-  step.style.setProperty("--p", `${Math.round(p * 100)}%`);
+  if (!step) step = tile.appendChild(Object.assign(document.createElement("span"), { className: "tl-step" }));
+  step.textContent = live.total ? `${live.step}/${live.total}` : "…";
+  step.style.setProperty("--p", `${Math.round((live.total ? live.step / live.total : 0) * 100)}%`);
 }
 
-// Hover plays a clip in place; a click opens it large. The grip at a takes strip's end sizes every take (#215).
+// Hover plays a take in place; a click shows it in the preview. The grip at a takes strip's end sizes every take (#215).
 export function wireClips(app, box) {
   box.addEventListener("pointerdown", (e) => {
     const grip = e.target.closest("[data-grip]");
@@ -260,27 +236,16 @@ export function wireClips(app, box) {
       take.prepend(v);
       return;
     }
-    const clip = e.target.closest(".tl-clip:not(.empty):not(.result)");
-    if (clip?.classList.contains("big")) { clip.querySelector("video")?.play().catch(() => {}); return; }
-    if (!clip || clip.querySelector("video")) return;
-    const v = document.createElement("video");
-    Object.assign(v, { muted: true, loop: true, autoplay: true, playsInline: true });
-    v.src = app.api.chainVideoURL(clip.dataset.seg, app.bridge.chain(), app.data.chain?.clips.find((c) => String(c.segment) === clip.dataset.seg)?.version);
-    clip.prepend(v);
   });
   box.addEventListener("pointerout", (e) => {
     const take = e.target.closest(".take[data-take]");
     if (take && !take.contains(e.relatedTarget) && !take.closest(".cm-takes.playing")) take.querySelector("video")?.remove();
-    const clip = e.target.closest(".tl-clip:not(.result)");
-    if (!clip || clip.contains(e.relatedTarget)) return;
-    if (clip.classList.contains("big")) clip.querySelector("video")?.pause();
-    else clip.querySelector("video")?.remove();
   });
   box.addEventListener("click", (e) => {
-    if (e.target.closest(".cm-takes.results, .tl-clip.result")) return;
+    if (e.target.closest(".cm-takes.results")) return;
     const head = e.target.closest(".cm-takes-head");
     if (head) {
-      const strip = head.closest(".cm-takes"), s = Number(strip.dataset.seg), count = strip.querySelectorAll(".take").length;
+      const strip = head.closest(".cm-takes"), s = Number(strip.dataset.seg), count = strip.querySelectorAll(".take[data-take]").length;
       const play = e.target.closest("[data-playall]");
       if (play) return playAll(strip, play, takeVideo(app));
       if (e.target.closest("[data-clearno]")) return head.querySelector(".ask")?.remove();
@@ -299,7 +264,7 @@ export function wireClips(app, box) {
       const v = versionOf(app, Object.values(app.data.chain?.takes || {}).flat().find((t) => t.folder === ver.dataset.ver));
       return v && useVersion(app, v);
     }
-    const host = e.target.closest(".take, .tl-clip");
+    const host = e.target.closest(".take[data-take]");
     if (e.target.closest("[data-delno]")) return host.querySelector(".ask")?.remove();
     if (e.target.closest("[data-delyes]")) return deleteTake(app, Number(host.dataset.seg), host.querySelector("[data-del]").dataset.del);
     if (e.target.closest(".ask")) return;
@@ -307,10 +272,8 @@ export function wireClips(app, box) {
       return host.insertAdjacentHTML("beforeend", `<span class="ask">${deleteQuestion(app, host)}`
         + `<span class="btn danger" role="button" data-delyes>Delete</span><span class="btn ghost" role="button" data-delno>Keep</span></span>`);
     }
-    // a click shows a take or a clip in the preview (#305); the preview's Circle this take puts it in the film
-    const take = e.target.closest(".take");
-    if (take) return showInStage(app, { seg: Number(take.dataset.seg), folder: take.dataset.take });
-    const clip = e.target.closest(".tl-clip:not(.empty)");
-    if (clip) showInStage(app, { seg: Number(clip.dataset.seg) });
+    // a click shows a take in the preview (#305); the preview's Circle this take puts it in the film
+    const take = e.target.closest(".take[data-take]");
+    if (take) showInStage(app, { seg: Number(take.dataset.seg), folder: take.dataset.take });
   });
 }

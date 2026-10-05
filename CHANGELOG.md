@@ -157,6 +157,9 @@ checks) are left out.
 
 ### Changed
 
+- A scene shows its clips as their strips of takes only (#331): the box of the clip above them is gone, the clip
+  big is in the preview, and the take being made forms at the end of its strip, small, beside the preview's big one. The
+  Clip size setting went with the box.
 - One strip of takes everywhere (#319, under #318): a reel's clip has the head the results have (+ take, ×N, 📌, ▶ all
   for videos, the clip in numbers, the others and all), from its first take; its + take renders a take of that very
   clip. The scene divider keeps 📊 and loses its jump buttons. The take chosen is **circled**: Circle this take replaces
