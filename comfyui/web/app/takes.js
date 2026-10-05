@@ -336,7 +336,7 @@ export function openTakes(app, place, near = null) {
   sheet.querySelector("[data-close]").onclick = () => app.closeSheet();
   sheet.querySelector("[data-tmore]").onclick = () => ask();
   steer.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); ask(); } });
-  if (!picture) sheet.querySelector("[data-tkeep]").onclick = () => {
+  if (!picture && !writer) sheet.querySelector("[data-tkeep]").onclick = () => {  // a writer's sheet has no Keep the direction
     if (!steer.value.trim()) return steer.focus();
     if (multi) {  // a library keeps its directions itself, not (…) in the template (#272, #275)
       place.directions = place.directions ? `${place.directions}, ${steer.value.trim()}` : steer.value.trim();
