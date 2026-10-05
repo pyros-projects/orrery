@@ -345,3 +345,29 @@ def test_the_past_comes_from_the_takes_on_the_films_path(tmp_path):
     assert film.past(tmp_path, "h3_context", 2) == {0: {"scene": 0, **kept}}
     assert film.past(tmp_path, "h3_context", 3) == {0: {"scene": 0, **kept}, 2: {"scene": 1, "bindings": {}, "handoff": None}}
     assert film.past(tmp_path, "h3_context", 0) == {} and film.past(tmp_path / "none", "h3_context", 2) == {}
+
+
+def test_takes_list_in_the_order_they_were_saved_whatever_the_clock_says(tmp_path, monkeypatch):
+    """#348: each take has its number in the run; a clock set back between two saves (WSL does) mixed them up. Takes from
+    before the numbers come first, by when they were made."""
+    from datetime import UTC, datetime, timedelta
+
+    take(tmp_path, 0)
+    old = take(tmp_path, 1)
+    meta = json.loads((old / "meta.json").read_text())
+    meta.pop("made", None)  # saved before takes had numbers
+    (old / "meta.json").write_text(json.dumps(meta))
+    start = datetime(2026, 10, 5, 12, tzinfo=UTC)
+
+    class Back(datetime):  # every save a second earlier than the one before
+        calls = 0
+
+        @classmethod
+        def now(cls, tz=None):
+            cls.calls += 1
+            return start - timedelta(seconds=cls.calls)
+
+    monkeypatch.setattr(film, "datetime", Back)
+    saved = [take(tmp_path, 1, n=24 + k) for k in range(3)]
+    assert [t["folder"] for t in film.takes(tmp_path, "h3_context")[1]] == [old.name, *(p.name for p in saved)]
+    assert [t["folder"] for t in film.tree(tmp_path, "h3_context")["takes"] if t["segment"] == 1] == [old.name, *(p.name for p in saved)]

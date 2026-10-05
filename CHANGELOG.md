@@ -224,6 +224,8 @@ checks) are left out.
 
 ### Fixed
 
+- A clip's takes list in the order they were saved (#348): each take has its number in the run, so a clock set back
+  between two saves (WSL resyncs its clock now and then) no longer mixes them up.
 - An `END ON:` under IF (#347): `IF $take is 1: END ON: …` is the scene's END ON: when the condition holds, and the clip
   after it opens there; it was ignored ("END ON: only works inside a SCENE"). `START WITH:` too.
 - A binding's escaped brace is no leftover (#353): `$k = {a \{b\} c|d}` rolled `a {b} c` with a warning that a choice

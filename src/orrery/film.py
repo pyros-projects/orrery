@@ -127,6 +127,7 @@ def save_take(output: Path | str, latent_path: str, segment: int, frames: Sequen
     np.save(tmp / "audio.npy", sound)
     np.savez(tmp / "tail.npz", video=np.asarray(tail.video, np.float32), audio=np.asarray(tail.audio, np.float32))
     (tmp / "meta.json").write_text(json.dumps({**meta, "segment": segment, "frames": count, "continues": continues,
+                                               "made": _next_made(run),
                                                "after": after, "follows": follows, "grid_offset": tail.grid_offset,
                                                **({"test": True} if test else {}),
                                                "created": datetime.now(UTC).astimezone().isoformat(timespec="microseconds")}, indent=2),
@@ -217,6 +218,21 @@ def _meta(take: Path) -> dict:
         return {}
 
 
+def _next_made(run: Path) -> int:
+    """The number of the next take in the run (#348): one more than any take there has; 1 in a new run."""
+    takes = (p for p in run.iterdir() if p.is_dir() and _TAKE.match(p.name)) if run.is_dir() else ()
+    return 1 + max((m for p in takes if isinstance(m := _meta(p).get("made"), int)), default=0)
+
+
+def _made(take: Path, meta: dict) -> tuple:
+    """The order takes were made in: by their number (#348); one saved before there were numbers by when, and before
+    the numbered ones. The clock alone mixed takes saved in a row up: WSL sets its clock back now and then."""
+    if isinstance(meta.get("made"), int):
+        return 1, meta["made"], "", 0
+    meta_file = take / "meta.json"
+    return 0, 0, meta.get("created") or "", meta_file.stat().st_mtime_ns if meta_file.exists() else 0
+
+
 def takes(output: Path | str, latent_path: str) -> dict[int, list[dict]]:
     """The takes of every segment in the active run that fit the clip before as it is now (a take made on
     another take of it would not continue it), oldest first: {segment: [{folder, seed, take, created, active,
@@ -234,9 +250,9 @@ def takes(output: Path | str, latent_path: str) -> dict[int, list[dict]]:
             out.setdefault(segment, []).append({"folder": take.name, "seed": meta.get("seed"), "take": meta.get("take") or 0,
                                                 "created": meta.get("created"), "active": clips[segment]["folder"] == take.name,
                                                 "scene": meta.get("chunk"), "template": meta.get("template"),
-                                                "_at": (meta.get("created") or "", (take / "meta.json").stat().st_mtime_ns)})
+                                                "_at": _made(take, meta)})
     for listed in out.values():
-        listed.sort(key=lambda t: t.pop("_at"))  # the order they were made in (older takes count whole seconds)
+        listed.sort(key=lambda t: t.pop("_at"))  # the order they were made in
     return out
 
 
@@ -368,9 +384,8 @@ def tree(output: Path | str, latent_path: str) -> dict:
         out.append({"folder": take.name, "segment": int(_TAKE.match(take.name).group(1)), "parent": _parent(run, take.name),
                     "seed": meta.get("seed"), "take": meta.get("take") or 0, "created": meta.get("created"),
                     "scene": meta.get("chunk"), "template": meta.get("template"), "frames": meta.get("frames"),
-                    "continues": meta.get("continues"), "test": bool(meta.get("test")),
-                    "_at": (take / "meta.json").stat().st_mtime_ns if (take / "meta.json").exists() else 0})
-    out.sort(key=lambda t: (t["segment"], t["created"] or "", t.pop("_at")))
+                    "continues": meta.get("continues"), "test": bool(meta.get("test")), "_at": _made(take, meta)})
+    out.sort(key=lambda t: (t["segment"], t.pop("_at")))
     return {"takes": out, "path": [c["folder"] for c in state.get("clips", [])], "last": state.get("last") or {}}
 
 
