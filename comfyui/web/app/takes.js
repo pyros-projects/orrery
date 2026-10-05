@@ -121,7 +121,7 @@ export function markPlace(key, on) {
 }
 
 export function openTakes(app, place, near = null) {
-  const s = { takes: [], pick: null, picked: new Set(), keep: null, busy: false, error: "", note: "" };
+  const s = { takes: [], pick: null, picked: new Set(), keep: null, busy: false, error: "", note: "", asked: 0 };
   const picture = place.kind === "picture", enhance = place.kind === "enhance";
   const known = place.kind === "entries";  // a library that exists: its rolls and new entries (#273)
   const tab = place.line == null;  // from the Libraries tab (#323): new entries only, and no line to put one on
@@ -186,7 +186,7 @@ export function openTakes(app, place, near = null) {
         const one = place.kind === "slot" || enhance;  // one take a run, each sampled anew; a library's in one run
         const runs = one ? Number(app.data.llm?.takes?.[enhance ? "enhance" : "slot"]) || 3 : 1;
         for (let i = 0; i < runs; i++) {
-          const got = await app.bridge.ask("takes", "", JSON.stringify({ ...take, have: s.takes, ...(one ? { n: 1 } : {}) }), { front: true });
+          const got = await app.bridge.ask("takes", "", JSON.stringify({ ...take, have: s.takes, asked: s.asked++, ...(one ? { n: 1 } : {}) }), { front: true });
           if (got.error) throw new Error(got.error);
           add(got);
           draw();
