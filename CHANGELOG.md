@@ -224,6 +224,11 @@ checks) are left out.
 
 ### Fixed
 
+- A seed that comes in through a link is the seed the app uses (#346): the node's own seed widget stays at what it was
+  while the run rolls the linked one, so the editor's annotations, a sheet's "at seed …", the takes and writers over an
+  API endpoint, History's and the Gallery's "use this seed", a clip's takes and Roll's batches went by a stale seed. The
+  app now reads and sets the seed where it is set: a primitive, or the widget named as the sending output, `seed`,
+  `noise_seed` or `value` on the node it comes from (through reroutes).
 - Requests to an API endpoint asked at once each adapt to what the model refuses (#333): with a model that wants
   `max_completion_tokens` (gpt-5 and later), the first takes of a sheet, or libraries written together, failed with
   "Unsupported parameter: 'max_tokens'" while the one that learned it went through.

@@ -1,7 +1,7 @@
 // The Orrery Prompt node becomes one app: prompt, presets, libraries, galaxy, help.
 import { api } from "../../scripts/api.js";
 import { app } from "../../scripts/app.js";
-import { downstream, queueSweep } from "./app/model.js";
+import { downstream, queueSweep, seedSource } from "./app/model.js";
 import { OrreryApp } from "./app/shell.js";
 
 const NO_PRESET = "(none)";
@@ -50,10 +50,20 @@ function mount(node) {
   // the control_after_generate combo that belongs to an INT widget (seed and segment each have one); newer frontends
   // name the second one control_after_generate#1, so the name is matched by its start
   const isControl = (w) => /^control_after_generate/.test(w?.name || "");
-  const controlOf = (name) => {
-    const i = node.widgets?.findIndex((w) => w.name === name) ?? -1;
-    const w = node.widgets?.[i];
-    return w?.linkedWidgets?.find(isControl) ?? (isControl(node.widgets?.[i + 1]) ? node.widgets[i + 1] : null);
+  const controlOn = (n, w) => {
+    const i = w ? (n.widgets?.indexOf(w) ?? -1) : -1;
+    return w?.linkedWidgets?.find(isControl) ?? (i >= 0 && isControl(n.widgets?.[i + 1]) ? n.widgets[i + 1] : null);
+  };
+  const controlOf = (name) => controlOn(node, find(name));
+  // the seed a run gets, where it is set: this node's, or the widget a linked seed comes from (#346)
+  const seedAt = () => seedSource(node, node.graph || app.graph);
+  const seedControl = () => { const s = seedAt(); return controlOn(s.node, s.widget); };
+  const putSeed = (value) => {
+    const { node: n, widget } = seedAt();
+    if (!widget) return;
+    widget.value = value;
+    widget.callback?.(value);
+    n.setDirtyCanvas?.(true, true);
   };
   // A new node plays a reel clip after clip; configure() restores a saved workflow's choice later. The segment and
   // its control are orrery's (#190): the footer's Next clip and Hold set them, so the node shows neither.
@@ -74,10 +84,10 @@ function mount(node) {
     props: node.properties,
     getText: () => template?.value ?? "",
     setText: (text) => { if (!sweep.on) set("template", text); },
-    getSeed: () => find("seed")?.value ?? 0,
-    setSeed: (seed) => { if (!sweep.on) set("seed", seed); },
-    setControl: (mode) => { const c = controlOf("seed"); if (c && !sweep.on) { c.value = mode; node.setDirtyCanvas?.(true, true); } },
-    getControl: () => controlOf("seed")?.value ?? "",
+    getSeed: () => seedAt().widget?.value ?? 0,
+    setSeed: (seed) => { if (!sweep.on) putSeed(seed); },
+    setControl: (mode) => { const c = seedControl(); if (c && !sweep.on) { c.value = mode; seedAt().node.setDirtyCanvas?.(true, true); } },
+    getControl: () => seedControl()?.value ?? "",
     getTarget: () => find("target")?.value || "text",
     setTarget: (target) => { if (!sweep.on) set("target", target); },
     getParams: () => { try { return JSON.parse(params?.value || "{}") || {}; } catch { return {}; } },
@@ -111,22 +121,22 @@ function mount(node) {
       const { outputs } = downstream(graphOf(node), node.id);
       if (!outputs.length) return 0;
       const id = ++batch.id;
-      const seedControl = controlOf("seed"), segmentControl = controlOf("segment");
+      const seedCtl = seedControl(), segmentControl = controlOf("segment");
       batch.done = (async () => {
-        const was = [seedControl?.value, segmentControl?.value];
+        const was = [seedCtl?.value, segmentControl?.value];
         let queued = 0;
         sweep.on = true;
         try {
-          if (seedControl) seedControl.value = "fixed";
+          if (seedCtl) seedCtl.value = "fixed";
           if (segmentControl) segmentControl.value = "fixed";
           queued = await queueSweep({
             count, seeds, mode: was[0], progress,
-            getSeed: () => find("seed")?.value, setSeed: (seed) => set("seed", seed),
+            getSeed: () => seedAt().widget?.value, setSeed: putSeed,
             queue: async (i) => { set("sweep", `${i}|${folder}`); await bridge.beforeRun?.(); await app.queuePrompt(0, 1, { queueNodeIds: outputs.map(String) }); },
             live: () => id === batch.id,
           });
         } finally {
-          if (seedControl) seedControl.value = was[0];
+          if (seedCtl) seedCtl.value = was[0];
           if (segmentControl) segmentControl.value = was[1];
           set("sweep", "");
           sweep.on = false;
