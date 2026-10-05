@@ -136,14 +136,20 @@ for the editor, in the static screenplay language (no wildcards, bindings or
 slots, which keeps it within a 4B or 8B model's reach):
 
 - **Continue the reel**: it reads every scene as it rolls at the node's seed
-  (picks filled in, with the reel's style and CAST) and writes the next
-  `SCENE`, with an `END ON:` that picks up the last one's. It is appended to
-  the reel; a screenplay without SCENE lines becomes a reel first, its shots the
-  first scene (#334).
-- **Story between frames**: it sees the pictures wired into `first_frame` and
-  `last_frame` and writes the shot that gets from one to the other (fl2va). It
-  takes the place of the shots below the header. Without a frame it is told so
-  and imagines it.
+  (picks filled in, with the reel's style and CAST) up to the scene you pick
+  (**After**: the end, or any scene), and writes the next `SCENE`, with an
+  `END ON:` that picks up that one's. A reel that plays on and on is read until
+  the scene first ends (#342). **Replace** puts it in place of the scenes after
+  it, **Insert** before them; a screenplay without SCENE lines becomes a reel
+  first, its shots the first scene (#334).
+- **Story interpolator**: what happens between a start and an end (#343).
+  **From** first_frame or any scene, **to** last_frame or any scene, **in** N
+  scenes **of** S seconds; a frame goes along as a picture, a scene as it
+  rolls. One scene from frame to frame on a screenplay without scenes is the
+  fl2va shot, in place of the shots below the header; on a reel the scenes go
+  in between, with **Replace** or **Insert**. On an image prompt it writes N
+  keyframe prompts, from first_frame to the picture the prompt makes, on a grid
+  so one Roll renders them all. Without a frame it is told so and imagines it.
 - **Prompt from image**: it sees the picture in `first_frame` and writes an
   image prompt (Krea 2), or an i2va shot when the template is `@h3`. Comments
   and `: w… h…` lines stay. Without a picture it writes from the prompt as it

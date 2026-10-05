@@ -2,12 +2,14 @@
 teaches only what it writes (the static language, no wildcards), so a small model is not confused by
 the rules of the others.
 
-    continue   the reel's scenes so far, resolved (picks filled)  →  the next SCENE
-    story      the first and the last frame                       →  the SHOT between them (fl2va)
+    continue   the reel's scenes so far, resolved (picks filled)  →  the next SCENE, after any scene
+    story      a start and an end: a frame, a scene, the prompt   →  what happens between them: the SHOT
+                                                                     between two frames (fl2va), N scenes,
+                                                                     or N keyframe prompts for an image model
     describe   a picture                                          →  an image prompt, or an i2va SHOT
 
-The prompts ship in builtin/writers/ (Markdown, one per name; describe has two, an image prompt and
-an i2va shot) and can be edited in the settings; an edit lives in the orrery home's writers/ folder
+The prompts ship in builtin/writers/ (Markdown, one per name; story has three, a shot, scenes and
+keyframes, describe two, an image prompt and an i2va shot) and can be edited in the settings; an edit lives in the orrery home's writers/ folder
 and shadows the default. The model writes once per
 ComfyUI run (a second generate in one run crashes the process), so an answer that does not fit is
 reported with what is wrong, not retried: the app shows it as an idea and asks for the next one.
@@ -19,9 +21,11 @@ from pathlib import Path
 from orrery.home import Home, write_atomic
 
 BUILTIN = Path(__file__).parent / "builtin" / "writers"
-NAMES = ("continue", "story", "describe", "describe_shot")
+NAMES = ("continue", "story", "story_scenes", "story_keyframes", "describe", "describe_shot")
 TASKS = ("continue", "story", "describe")
 DEFAULT_SECONDS = 5
+MAX_SCENES = 20  # the scenes (or keyframes) one story asks for
+FIRST, LAST, PROMPT = "first_frame", "last_frame", "prompt"  # a story's start and end besides a scene (its index)
 
 _SHOT = re.compile(r"^\s*SHOT\s+(\d+(?:\.\d+)?)\s*s\b", re.IGNORECASE)
 _CHUNK = re.compile(r"^\s*(?:SCENE|CHUNK)\b", re.IGNORECASE)
@@ -41,6 +45,7 @@ class WriterError(ValueError):
 # What a writer expects to see when nothing else is sent along (#334): the pictures its prompt names.
 EXPECTS = {"continue": [], "story": ["the first frame", "the last frame"], "describe": ["the picture"],
            "describe_shot": ["the first frame"]}
+_FRAME = {FIRST: "the first frame", LAST: "the last frame"}
 _HEADLINE = re.compile(r"\s*(#|@|\$\w+\s*=|(style|summary|context|music|lora|set|voice|keep|export)\s*:|cast\s*$)|[ \t]", re.IGNORECASE)
 
 
@@ -114,42 +119,140 @@ def _fill(task: str, values: dict) -> str:
     return re.sub(r"\{(\w+)\}", lambda m: str(values[m.group(1)]) if m.group(1) in values else m.group(0), task)
 
 
-def task_name(task: str, template: str) -> str:
+def is_reel(template: str) -> bool:
+    return any(_CHUNK.match(ln) for ln in template.splitlines())
+
+
+def options(raw: dict | None, template: str) -> dict:
+    """What a writer's sheet chose (#342, #343): `after`, the scene Continue continues after (its index; None, the
+    end); `from` and `to`, the story's start and end (a scene's index, first_frame, last_frame or the prompt);
+    `scenes`, how many it writes; `seconds`, how long each scene is."""
+    raw = raw or {}
+
+    def scene(v):
+        return isinstance(v, int) and not isinstance(v, bool) and v >= 0
+
+    def end(key, default):
+        v = raw.get(key, default)
+        return v if scene(v) or v in (FIRST, LAST, PROMPT) else default
+
+    seconds = raw.get("seconds")
+    return {"after": raw["after"] if scene(raw.get("after")) else None,
+            "from": end("from", FIRST), "to": end("to", LAST if is_h3(template) else PROMPT),
+            "scenes": max(1, min(MAX_SCENES, int(raw.get("scenes") or 1))),
+            "seconds": max(1, min(15, int(seconds))) if seconds else shot_seconds(template)}
+
+
+def task_name(task: str, template: str, opts: dict | None = None) -> str:
+    """The text a writer sends: the story writes a shot between two frames only on a screenplay without scenes,
+    one scene asked for; on a reel or for more, scenes; on an image prompt, keyframes (#343)."""
     if task not in TASKS:
         raise WriterError(f"no writer {task!r}; there are {', '.join(TASKS)}")
+    if task == "story":
+        if not is_h3(template):
+            return "story_keyframes"
+        return "story" if not is_reel(template) and (opts or {}).get("scenes", 1) == 1 else "story_scenes"
     return "describe_shot" if task == "describe" and is_h3(template) else task
 
 
+def _run(reel, path: list[tuple[int, int]], k: int, start: int = 0) -> tuple[int, int] | None:
+    """Where scene `k` first plays on the walk from clip `start` on, and how many clips have played when it ends:
+    its repeats in a row, the first play of one that repeats forever (#342). None: it does not play."""
+    at = next((t for t in range(start, len(path)) if path[t][0] == k), None)
+    if at is None:
+        return None
+    end = at + 1
+    while reel.blocks[k].repeat is not None and end < len(path) and path[end] == (k, path[end - 1][1] + 1):
+        end += 1
+    return at, end
+
+
+def _scenes(segments: list[dict]) -> str:
+    return "\n\n".join(f"SCENE {s['title'] or f'clip {i + 1}'}\n" + "\n".join(s["lines"])
+                        + (f"\nEND ON: {s['handoff']}" if s["handoff"] else "") for i, s in enumerate(segments))
+
+
+def _title(reel, k: int) -> str:
+    return f"SCENE {k + 1}" + (f" ({reel.blocks[k].title})" if 0 <= k < len(reel.blocks) and reel.blocks[k].title else "")
+
+
+def _walked(template: str, seed: int, libraries, weights, scenes: list[int | None]):
+    """The world's lines, the clips as they play at the seed as far as `scenes` need, and for each of them (an index,
+    in the order the walk meets them; None, the end) where it first plays and how many clips have played when it
+    ends. The end of a reel that plays on and on is the first time its last scene ends (#342)."""
+    from orrery.reel import reel_path, resolved, split_reel
+
+    reel = split_reel(template)
+    path, ended = reel_path(reel, seed, libraries, weights)
+    runs, start = [], 0
+    for k in scenes:
+        if k is None:
+            run = (len(path) - 1, len(path)) if ended else _run(reel, path, max(b for b, _ in path))
+        elif not 0 <= k < len(reel.blocks):
+            raise WriterError(f"The reel has {len(reel.blocks)} scenes; there is no scene {k + 1}.")
+        elif (run := _run(reel, path, k, start)) is None:
+            raise WriterError(f"{_title(reel, k)} does not play{' after ' + _title(reel, scenes[0]) if start else ''} at "
+                              "this seed: a CUT TO: jumps past it, or a scene before it plays on and on.")
+        runs.append(run)
+        start = run[1]
+    head, segments = resolved(reel, seed, libraries, weights, max((n for _, n in runs), default=0))
+    return head, segments, runs
+
+
+def _story_ends(template: str, opts: dict, given: list[str] | None, seed: int, libraries, weights) -> tuple[dict, bool]:
+    """The story's {start} and {end} (#343): a frame sent along (imagined when it did not come), a scene of the reel
+    as it plays at the seed (from: with every clip up to its end), or the picture the prompt makes. And whether the
+    prompt as it rolls is in them."""
+    frm, to = opts["from"], opts["to"]
+    came = given if given is not None else [_FRAME[k] for k in (frm, to) if k in _FRAME]
+    ends = {}
+    scenes = [k for k in (frm, to) if isinstance(k, int)]
+    if scenes:
+        if not is_reel(template):
+            raise WriterError("A story from or to a scene needs a reel: this screenplay has no SCENE lines.")
+        _, segments, runs = _walked(template, seed, libraries, weights, scenes)
+        if isinstance(frm, int):
+            n = runs[0][1]
+            last = segments[n - 1]["handoff"]
+            ends["start"] = (f"The reel so far, every clip as it was made:\n\n{_scenes(segments[:n])}\n\n"
+                             f"The start: where the last of these clips ends{f' ({last})' if last else ''}.")
+        if isinstance(to, int):
+            ends["end"] = ("The end: the scene your last one leads into, as it was made; your last scene ends where it "
+                           f"begins:\n\n{_scenes([segments[runs[-1][0]]])}")
+    rolled = _rolled(template, seed, libraries, weights) if PROMPT in (frm, to) else ""
+    for role, key in (("start", frm), ("end", to)):
+        if key == PROMPT:
+            ends[role] = f"The {role}: the picture this prompt makes:\n\n{rolled}"
+        elif key in _FRAME:
+            ends[role] = (f"The {role}: {_FRAME[key]}, a picture sent along." if _FRAME[key] in came else
+                          f"The {role}: {_FRAME[key]}, which did not come along this time: imagine it from what you know.")
+    return ends, bool(rolled)
+
+
 def request(home: Home, task: str, template: str, seed: int, libraries, weights, steer: str = "",
-            given: list[str] | None = None, prompt: bool = False) -> str:
+            given: list[str] | None = None, prompt: bool = False, opts: dict | None = None) -> str:
     """The writer's prompt, filled in for this template. `template` is the source as the node
     compiles it: dials applied, includes resolved, comments out. `given`: what the pictures sent along are, in
     order (None: what the writer expects); `steer`: the sheet's steering line (#334); `prompt`: the prompt as it
-    rolls goes along too (#335; Continue has the reel anyway)."""
+    rolls goes along too (#335; Continue has the reel anyway); `opts`: what the sheet chose (see `options`)."""
     from orrery.dsl import with_inline
 
     template, libraries = with_inline(template, libraries)
-    name = task_name(task, template)  # a reel's shot writers write from its head (#334): their take goes in at the caret
+    opts = options(opts, template)
+    name = task_name(task, template, opts)  # a reel's prompt from an image writes from its head (#334): at the caret
+    inside = False  # whether the prompt as it rolls is in the request already
     if name == "continue":
-        from orrery.reel import reel_path, resolved, split_reel
-
-        if not any(_CHUNK.match(ln) for ln in template.splitlines()):
+        if not is_reel(template):
             if not is_h3(template):
                 raise WriterError("Continue the reel writes the next scene of a screenplay (@h3), and this template "
                                   "is an image prompt.")
             template = as_reel(template)  # the screenplay is its first scene, the model writes the second
-        reel = split_reel(template)
-        path, ended = reel_path(reel, seed, libraries, weights)
-        if not ended:
-            raise WriterError("This reel plays on and on (a scene that repeats forever, or a CUT TO: without ×N), "
-                              "so there is no next scene to write.")
-        head, segments = resolved(reel, seed, libraries, weights, len(path))
-        chunks = "\n\n".join(
-            f"SCENE {s['title'] or f'clip {i + 1}'}\n" + "\n".join(s["lines"])
-            + (f"\nEND ON: {s['handoff']}" if s["handoff"] else "") for i, s in enumerate(segments))
-        last = segments[-1]["handoff"] if segments else None
-        values = {"world": _world(head), "chunks": chunks, "next": len(segments) + 1,
+        # no guardrail for a reel that plays on and on (#342): it continues after its scene's first end
+        head, segments, ((_, n),) = _walked(template, seed, libraries, weights, [opts["after"]])
+        last = segments[n - 1]["handoff"] if n else None
+        values = {"world": _world(head), "chunks": _scenes(segments[:n]), "next": n + 1,
                   "handoff": f"the last clip ended as: {last}" if last else "where the last clip ended"}
+        inside = True
     else:
         from orrery.dsl import Expander, parse
 
@@ -160,25 +263,41 @@ def request(home: Home, task: str, template: str, seed: int, libraries, weights,
                 ex.bind(m.group(1), m.group(2))
             else:
                 world.append(ex.expr(ln))
-        values = {"seconds": shot_seconds(template), "world": _world(world)}
+        n = opts["scenes"]
+        values = {"seconds": opts["seconds"], "world": _world(world),
+                  "scenes": "one scene" if n == 1 else f"{n} scenes", "keyframes": "one image prompt" if n == 1 else f"{n} image prompts"}
+        if name in ("story_scenes", "story_keyframes"):
+            ends, inside = _story_ends(template, opts, given, seed, libraries, weights)
+            values.update(ends)
     parts = [_fill(text(home, name), values).strip()]
-    if (note := _came_along(name, given, template, seed, libraries, weights)):
+    if (note := _came_along(name, given, template, seed, libraries, weights, opts)):
         parts.append(note)
-    if prompt and name != "continue" and "from this one instead" not in note:
+    if prompt and not inside and "from this one instead" not in note:
         parts.append(f"The prompt as it rolls at this seed, sent along:\n\n{_rolled(template, seed, libraries, weights)}")
     if steer.strip():
         parts.append(f"Steer it: {' '.join(steer.split())}.")
     return "\n\n".join(parts)
 
 
-def _came_along(name: str, given: list[str] | None, template: str, seed: int, libraries, weights) -> str:
-    """What the pictures sent along are, when they are not what the writer's prompt expects (#334); without the
-    pictures it needs, what to write from instead."""
-    if given is None or given == EXPECTS[name]:
-        return ""
-    said = ("The pictures that came along this time, in this order: "
+def _said(given: list[str]) -> str:
+    return ("The pictures that came along this time, in this order: "
             + "; ".join(f"Picture {i} is {what}" for i, what in enumerate(given, 1)) + "." if given
             else "No pictures came along this time.")
+
+
+def _came_along(name: str, given: list[str] | None, template: str, seed: int, libraries, weights, opts: dict) -> str:
+    """What the pictures sent along are, when they are not what the writer's prompt expects (#334); without the
+    pictures it needs, what to write from instead. A story's scenes or keyframes always say which picture is which:
+    their prompt names the frames, not the pictures (#343)."""
+    if name in ("story_scenes", "story_keyframes"):
+        expects = [_FRAME[k] for k in (opts["from"], opts["to"]) if k in _FRAME]
+        shown = expects if given is None else given
+        if not shown:  # the start or the end says what did not come
+            return ""
+        return _said(shown) + ("" if shown == expects else " Let them shape what you write.")
+    if given is None or given == EXPECTS[name]:
+        return ""
+    said = _said(given)
     if name == "continue" or set(EXPECTS[name]) <= set(given):
         return said + (" Let them shape what you write." if given else "")
     if name == "story":
@@ -220,14 +339,28 @@ def _clean(answer: str, starts: re.Pattern | None) -> list[str]:
     return lines
 
 
-def check(task: str, template: str, answer: str) -> tuple[str, str | None]:
+_LABEL = re.compile(r"^\s*(?:\d+\s*[.):]|[-*•]|keyframe\s*\d+\s*[:.)-]?)\s*", re.IGNORECASE)
+
+
+def _keyframes(lines: list[str]) -> list[str]:
+    """The keyframe prompts of an answer, one a line: without numbers, labels, quotes and a line that announces them,
+    and without the language's own signs (`{ } | $ __`), so they go on a grid as they are (#343)."""
+    out = [_LABEL.sub("", ln).strip().strip('"').strip() for ln in lines]
+    out = [re.sub(r"[{}$]", "", ln.replace("|", ",")).replace("__", "_") for ln in out]
+    return [ln for ln in out if ln and not ln.endswith(":")]
+
+
+def check(task: str, template: str, answer: str, opts: dict | None = None) -> tuple[str, str | None]:
     """(the answer as orrery takes it, what is wrong with it or None)."""
-    name = task_name(task, template)
-    starts = {"continue": _CHUNK, "story": _SHOT, "describe_shot": _SHOT}.get(name)
+    opts = options(opts, template)
+    name = task_name(task, template, opts)
+    starts = {"continue": _CHUNK, "story": _SHOT, "story_scenes": _CHUNK, "describe_shot": _SHOT}.get(name)
     lines = _clean(answer, starts)
     if name == "describe":  # one paragraph, without a "Prompt:" label or the quotes around it
         joined = re.sub(r"^(image )?prompt:\s*", "", " ".join(ln.strip() for ln in lines if ln.strip()), flags=re.IGNORECASE)
         lines = [joined.strip().strip('"').strip()] if joined.strip() else []
+    elif name == "story_keyframes":
+        lines = _keyframes(lines)
     out = "\n".join(lines).strip()
     if not out:
         return out, "The answer is empty."
@@ -235,13 +368,21 @@ def check(task: str, template: str, answer: str) -> tuple[str, str | None]:
         if pattern.search(out):
             return out, f"The answer writes {what}, which the writers leave out."
     shots, chunks = sum(1 for ln in lines if _SHOT.match(ln)), sum(1 for ln in lines if _CHUNK.match(ln))
-    if name == "continue":
+    asked = opts["scenes"]
+    if name in ("continue", "story_scenes"):
         if not _CHUNK.match(lines[0]):
             return out, "The answer does not start with a SCENE line."
-        if chunks > 1:
-            return out, f"The answer writes {chunks} scenes; one was asked for."
-        if not shots:
-            return out, "The scene has no SHOT line."
+        want = 1 if name == "continue" else asked
+        if chunks != want:
+            return out, f"The answer writes {chunks} scenes; {'one was' if want == 1 else f'{want} were'} asked for."
+        per = []  # the SHOT lines of each scene
+        for ln in lines:
+            if _CHUNK.match(ln):
+                per.append(0)
+            elif _SHOT.match(ln):
+                per[-1] += 1
+        if not all(per):
+            return out, "A scene has no SHOT line."
     elif name in ("story", "describe_shot"):
         if chunks:
             return out, "The answer writes a SCENE; one shot was asked for."
@@ -249,7 +390,9 @@ def check(task: str, template: str, answer: str) -> tuple[str, str | None]:
             return out, "The answer has no SHOT line."
     elif shots or chunks:
         return out, "The answer writes a screenplay; an image prompt was asked for."
-    if name != "describe":
+    elif name == "story_keyframes" and len(lines) != asked:
+        return out, f"The answer writes {len(lines)} keyframes; {asked} were asked for."
+    if name not in ("describe", "story_keyframes"):
         try:
             _compile(lines)
         except Exception as err:  # noqa: BLE001 - the compiler's message is what the user needs
@@ -266,24 +409,48 @@ def _compile(lines: list[str]) -> None:
 
 
 def at_caret(task: str, template: str) -> bool:
-    """A shot writer on a reel (#334): its shot cannot take the place of every scene, so it goes in where the caret
-    is, and the app puts it there."""
-    return task_name(task, template) != "continue" and any(_CHUNK.match(ln) for ln in template.splitlines())
+    """A prompt from an image on a reel (#334): its shot cannot take the place of every scene, so it goes in where the
+    caret is, and the app puts it there."""
+    return task_name(task, template) == "describe_shot" and is_reel(template)
 
 
-def apply(task: str, template: str, text_: str) -> str:
-    """The template with the writer's text in its place: a new scene at the end; a shot instead of the
-    template's shots (header, style and CAST kept); an image prompt instead of the prompt lines
-    (comments and `: w… h…` kept)."""
-    name = task_name(task, template)
+def _place(template: str, text_: str, after: int | None, until: int | None, insert: bool) -> str:
+    """The reel with `text_` after scene `after` (-1: before the first; None: at the end), in place of the scenes
+    from there up to scene `until` (None: all of them), or with them kept: `insert` (#342, #343)."""
+    lines = template.rstrip().splitlines()
+    at = [i for i, ln in enumerate(lines) if _CHUNK.match(ln)]
+
+    def line(k):
+        return at[k] if k < len(at) else len(lines)
+
+    a = len(lines) if after is None else line(after + 1)
+    b = a if insert else max(a, len(lines) if until is None else line(until))
+    before, rest = lines[:a], lines[b:]
+    while before and not before[-1].strip():
+        before.pop()
+    return "\n".join([*before, *([""] if before else []), text_.strip(), *(["", *rest] if rest else [])]) + "\n"
+
+
+def apply(task: str, template: str, text_: str, opts: dict | None = None, insert: bool = False) -> str:
+    """The template with the writer's text in its place: a new scene after the scene it continues, in place of the
+    scenes after it or with them kept (`insert`); a story's shot instead of the template's shots (header, style and
+    CAST kept), its scenes between its start and its end, its keyframes as the prompt, all of them on a grid; an
+    image prompt instead of the prompt lines (comments and `: w… h…` kept)."""
+    opts = options(opts, template)
+    name = task_name(task, template, opts)
     if name == "continue":
-        reel = template if any(_CHUNK.match(ln) for ln in template.splitlines()) else as_reel(template)
-        return f"{reel.rstrip()}\n\n{text_.strip()}\n"
+        return _place(template if is_reel(template) else as_reel(template), text_, opts["after"], None, insert)
+    if name == "story_scenes":
+        frm, to = opts["from"], opts["to"]
+        return _place(template if is_reel(template) else as_reel(template), text_,
+                      frm if isinstance(frm, int) else -1, to if isinstance(to, int) else None, insert)
     lines = template.splitlines()
     if name in ("story", "describe_shot"):
         first = next((i for i, ln in enumerate(lines) if _SHOT.match(ln)), len(lines))
         head = "\n".join(lines[:first]).rstrip()
-        return f"{head}\n\n{text_.strip()}\n" if head else f"{text_.strip()}\n"
+        kept = "\n".join(lines[first:]).strip() if insert else ""
+        body = f"{text_.strip()}\n\n{kept}" if kept else text_.strip()
+        return f"{head}\n\n{body}\n" if head else f"{body}\n"
     comments = [ln for ln in lines if ln.strip().startswith("#")]
     params = [ln for ln in lines if re.match(r"\s*(:\s*\S|@(grid|unique|size|seed|batch|rng)\b)", ln)]
     blocks, inside = [], False  # the template's own libraries stay, @lib line and entries
@@ -291,4 +458,9 @@ def apply(task: str, template: str, text_: str) -> str:
         inside = bool(re.match(r"\s*@lib\s", ln)) or (inside and (ln[:1] in (" ", "\t") or not ln.strip()))
         if inside and ln.strip():
             blocks.append(ln)
-    return "\n".join([*comments, *blocks, text_.strip(), *params]) + "\n"
+    prompt = [text_.strip()]
+    frames = [ln for ln in text_.splitlines() if ln.strip()]
+    if name == "story_keyframes" and len(frames) > 1:  # the storyboard: one Roll renders every keyframe, in order (#343)
+        prompt = [f"$keyframe = {{{'|'.join(frames)}}}", "$keyframe"]
+        params = [ln for ln in params if not re.match(r"\s*@(grid|unique)\b", ln)] + ["@grid $keyframe"]
+    return "\n".join([*comments, *blocks, *prompt, *params]) + "\n"

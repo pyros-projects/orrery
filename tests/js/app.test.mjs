@@ -942,14 +942,14 @@ test("the settings are a tab of sections, and every setting of the old sheet is 
     home: { home: "/h", setting: "/h", source: "setting" },
     llm: { source: "comfy", file: "qwen3vl_4b.safetensors", entries: 12, max_tokens: 16000, files: [{ name: "qwen3vl_4b.safetensors", size: 8e9, can_write: true }],
       api: { base_url: "https://api.openai.com/v1", model: "", key: "", key_from: "none", key_env: "OPENAI_API_KEY" } },
-    writers: Object.fromEntries(["continue", "story", "describe", "describe_shot"].map((k) => [k, { text: "t", default: "d", edited: k === "story" }])),
+    writers: Object.fromEntries(["continue", "story", "story_scenes", "story_keyframes", "describe", "describe_shot"].map((k) => [k, { text: "t", default: "d", edited: k === "story" }])),
     wcur: "continue",
   };
   const html = Object.fromEntries(SECTIONS.map(([k]) => [k, SECTION_HTML[k](app, st)]));
   const has = (k, ...bits) => bits.forEach((b) => assert.ok(html[k].includes(b), `${k} lacks ${b}`));
   has("home", 'id="oa-home"', "data-home", "Use this folder");  // moving the home keeps its own button
   has("llm", 'name="oa-src"', 'id="oa-llm"', 'id="oa-api-url"', 'id="oa-api-key"', "data-check", "data-useapi", 'id="oa-llm-n"', 'id="oa-llm-t"');
-  has("writers", 'id="oa-wr"', 'id="oa-wt"', "data-wreset", "data-wsave", "Story between frames · edited");
+  has("writers", 'id="oa-wr"', 'id="oa-wt"', "data-wreset", "data-wsave", "Story interpolator: the fl2va shot between two frames · edited");
   has("editor", 'data-flag="quickstart" checked', 'data-flag="dividers" >', 'data-flag="timeline" checked');
   has("clips", 'id="oa-pvfps" type="number" min="1" max="24" step="1" value="8"', 'value="768"', 'value="smooth" checked', 'value="numbered" checked');
   has("log", 'data-flag="log_prompts" checked');
@@ -1224,6 +1224,27 @@ test("a sheet sends along by default what its kind needs: the prompt, the story 
   assert.deepEqual([...defaultSends("entries", both, true)], []);  // the Libraries tab: the node's prompt is elsewhere
   assert.deepEqual([...defaultSends("slot", both)], ["prompt"]);  // frames only when asked (a slot names its own)
   assert.ok(promptLocked("slot") && promptLocked("continue") && !promptLocked("entries") && !promptLocked("story"));
+});
+
+test("a writer's sheet lists the scenes and says where its take goes: after a scene, in place of or before the rest (#342, #343)", async () => {
+  const { writerGoes } = await import("../../comfyui/web/app/takes.js");
+  const { sceneTitles } = await import("../../comfyui/web/app/model.js");
+  const reel = "@h3 t2va\nSCENE one\nSHOT 5s\nA.\n  SCENE two ×3\nSHOT 5s\nB.\nCHUNK three repeat forever (test)\nSHOT 5s\nC.";
+  const scenes = sceneTitles(reel);
+  assert.deepEqual(scenes, ["one", "two", "three"]);
+  assert.deepEqual(sceneTitles("a photo of a fox"), []);
+  assert.equal(writerGoes("continue", { scenes }), "After SCENE 3 (three).");  // the end
+  assert.equal(writerGoes("continue", { scenes, after: 0 }), "After SCENE 1 (one), in place of SCENE 2 (two) to SCENE 3 (three).");
+  assert.equal(writerGoes("continue", { scenes, after: 1, insert: true }), "After SCENE 2 (two): SCENE 3 (three) stays after it.");
+  assert.equal(writerGoes("continue", { scenes: [] }), "After the screenplay, which becomes the first scene.");
+  assert.equal(writerGoes("story", { scenes, from: 0, to: 2 }), "After SCENE 1 (one), in place of SCENE 2 (two).");
+  assert.equal(writerGoes("story", { scenes, from: 1, to: 2 }), "After SCENE 2 (two).");  // neighbours: nothing in between
+  assert.equal(writerGoes("story", { scenes }), "Before the first scene, in place of SCENE 1 (one) to SCENE 3 (three).");
+  assert.equal(writerGoes("story", { scenes, to: 1, insert: true }), "Before the first scene: SCENE 1 (one) stays after it.");
+  assert.equal(writerGoes("story", { scenes, insert: true }), "Before the first scene: SCENE 1 (one) to SCENE 3 (three) stay after it.");
+  assert.equal(writerGoes("story", { scenes: [] }), "In place of the shots below the header.");
+  assert.equal(writerGoes("story", { scenes: [], insert: true }), "Above the shots, which stay.");
+  assert.match(writerGoes("story", { h3: false, to: "prompt" }), /^On a grid in place of the prompt/);
 });
 
 test("several takes go in as a choice, what the language reads as its own written as itself (#336)", async () => {

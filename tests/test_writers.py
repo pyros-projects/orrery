@@ -97,10 +97,11 @@ def test_describe_writes_an_image_prompt_for_a_still(home):
     assert "screenplay" in writers.check("describe", krea, "SHOT 5s: static\nA cat.")[1]
 
 
-def test_a_reel_that_repeats_forever_has_no_next_chunk(home):
-    with pytest.raises(writers.WriterError, match="forever"):
-        writers.request(Home(home), "continue", "@h3 t2va\nCHUNK a repeat forever\nSHOT 5s\nA.", 1, {}, {})
-
+def test_a_reel_that_repeats_forever_continues_after_its_first_play(home):
+    """#342: no guardrail for a reel without end: the scene that repeats forever is read once."""
+    writers.save(Home(home), "continue", "{chunks}\nWrite clip {next}.")
+    prompt = writers.request(Home(home), "continue", "@h3 t2va\nCHUNK a repeat forever\nSHOT 5s\nA.", 1, {}, {})
+    assert prompt.count("SCENE a") == 1 and prompt.endswith("Write clip 2.")
 
 
 def test_continue_makes_a_screenplay_without_scenes_a_reel(home):
@@ -127,12 +128,13 @@ def test_a_writer_without_its_pictures_writes_from_what_came_along(home):
     assert "came along" not in writers.request(Home(home), "describe", "a fox", 1, {}, {}, given=["the picture"])  # as it expects
 
 
-def test_a_shot_writer_on_a_reel_writes_from_its_head_and_goes_in_at_the_caret(home):
-    """#334: no restriction; its shot cannot take the place of every scene, so the app puts it where the caret is."""
-    for task in ("story", "describe"):
-        prompt = writers.request(Home(home), task, REEL, 1, {}, {}, given=["the first frame"])
-        assert "SHOT" in prompt and writers.at_caret(task, REEL)
-    assert not writers.at_caret("continue", REEL) and not writers.at_caret("describe", "a photo of a fox")
+def test_a_prompt_from_an_image_on_a_reel_writes_from_its_head_and_goes_in_at_the_caret(home):
+    """#334: no restriction; its shot cannot take the place of every scene, so the app puts it where the caret is.
+    A story on a reel writes scenes between its start and its end instead (#343)."""
+    prompt = writers.request(Home(home), "describe", REEL, 1, {}, {}, given=["the first frame"])
+    assert "SHOT" in prompt and writers.at_caret("describe", REEL)
+    assert not [t for t in ("continue", "story") if writers.at_caret(t, REEL)]
+    assert not writers.at_caret("describe", "a photo of a fox")
 
 
 def test_the_texts_can_be_edited_and_go_back_to_their_default(home):
@@ -196,11 +198,109 @@ def test_the_write_node_says_what_is_missing(home, monkeypatch):
     assert images is None and "No pictures came along this time." in prompt and prompt.endswith("Steer it: in the rain.")
 
 
-def test_continue_follows_a_loop_and_refuses_one_without_end(home):
+def test_continue_follows_a_loop_and_one_without_end(home):
+    """A loop with ×1 plays through; one without end continues after its last scene's first end (#342)."""
     loop = "@h3 t2va\nCHUNK a\nSHOT 5s\nA.\nCHUNK b\nSHOT 5s\nB.\nGOTO: a ×1"
     writers.save(Home(home), "continue", "{chunks}\nWrite clip {next}.")
     prompt = writers.request(Home(home), "continue", loop, 1, {}, {})
     assert prompt.count("SCENE a") == 2 and "Write clip 5." in prompt
-    with pytest.raises(writers.WriterError, match="on and on"):
-        writers.request(Home(home), "continue", loop.replace(" ×1", ""), 1, {}, {})
+    endless = writers.request(Home(home), "continue", loop.replace(" ×1", ""), 1, {}, {})
+    assert endless.count("SCENE a") == 1 and endless.count("SCENE b") == 1 and endless.endswith("Write clip 3.")
 
+
+FILM = """@h3 t2va 16:9
+style: live-action
+SCENE one
+SHOT 5s: static
+A fox wakes.
+SFX: birds
+END ON: the fox stands
+SCENE two repeat 2
+SHOT 5s: static
+The fox hunts.
+SFX: grass
+END ON: the fox pounces
+SCENE three
+SHOT 5s: static
+The fox sleeps.
+SFX: wind
+END ON: the fox curls up
+CUT TO: one
+"""
+NEW_SCENE = "SCENE the river\nSHOT 5s: static\nThe fox drinks.\nSFX: water"
+
+
+def test_continue_after_any_scene_reads_the_reel_until_it_first_ends(home):
+    """#342: the sheet picks the scene; its repeats count, and what follows it stays out."""
+    writers.save(Home(home), "continue", "{chunks}\nWrite clip {next}, after {handoff}.")
+    prompt = writers.request(Home(home), "continue", FILM, 1, {}, {}, opts={"after": 1})
+    assert prompt.count("SCENE two") == 2 and "SCENE three" not in prompt
+    assert prompt.endswith("Write clip 4, after the last clip ended as: the fox pounces.")
+    assert writers.request(Home(home), "continue", FILM, 1, {}, {}, opts={"after": 0}).endswith("Write clip 2, after the last clip ended as: the fox stands.")
+    with pytest.raises(writers.WriterError, match="no scene 9"):
+        writers.request(Home(home), "continue", FILM, 1, {}, {}, opts={"after": 8})
+    jumped = "@h3 t2va\nSCENE a\nSHOT 5s\nA.\nCUT TO: c\nSCENE b\nSHOT 5s\nB.\nSCENE c\nSHOT 5s\nC."
+    with pytest.raises(writers.WriterError, match=r"SCENE 2 \(b\) does not play at this seed"):
+        writers.request(Home(home), "continue", jumped, 1, {}, {}, opts={"after": 1})
+
+
+def test_a_new_scene_replaces_the_scenes_after_it_or_goes_in_between(home):
+    """#342: Replace drops the scenes after the one it continues, Insert keeps them after the new one."""
+    replaced = writers.apply("continue", FILM, NEW_SCENE, {"after": 0})
+    assert replaced.endswith("END ON: the fox stands\n\n" + NEW_SCENE + "\n") and "SCENE two" not in replaced
+    inserted = writers.apply("continue", FILM, NEW_SCENE, {"after": 0}, insert=True)
+    assert "END ON: the fox stands\n\n" + NEW_SCENE + "\n\nSCENE two repeat 2\n" in inserted and "CUT TO: one" in inserted
+    assert writers.apply("continue", FILM, NEW_SCENE) == writers.apply("continue", FILM, NEW_SCENE, insert=True) == FILM + "\n" + NEW_SCENE + "\n"
+
+
+def test_the_story_runs_from_a_scene_or_a_frame_to_a_scene_or_a_frame(home):
+    """#343: its start and its end are a frame (imagined when it did not come), a scene as the reel plays it (from:
+    with every clip up to its end), N scenes of S seconds between them."""
+    h = Home(home)
+    prompt = writers.request(h, "story", FILM, 1, {}, {}, opts={"from": 0, "to": 2, "scenes": 2, "seconds": 6})
+    assert "You write 2 scenes" in prompt and "Every scene lasts 6 seconds" in prompt and "style: live-action" in prompt
+    so_far, end = prompt.split("The reel so far")[1].split("The end:")
+    assert "SCENE one" in so_far and "SCENE two" not in so_far and "where the last of these clips ends (the fox stands)" in so_far
+    assert "SCENE three" in end and "The fox sleeps." in end and "Picture" not in prompt
+    frames = writers.request(h, "story", FILM, 1, {}, {}, given=["the first frame"])
+    assert "The start: the first frame, a picture sent along." in frames and "Picture 1 is the first frame." in frames
+    assert "The end: the last frame, which did not come along this time: imagine it" in frames and "You write one scene" in frames
+    with pytest.raises(writers.WriterError, match="needs a reel"):
+        writers.request(h, "story", "@h3 fl2va\nSHOT 5s\nA.", 1, {}, {}, opts={"from": 0, "scenes": 2})
+
+
+def test_the_story_s_scenes_are_counted_and_go_between_its_start_and_its_end():
+    """#343: N scenes asked, N checked; Replace puts them in place of the scenes between, Insert after the start."""
+    two = NEW_SCENE + "\n\nSCENE the den\nSHOT 5s: static\nThe fox returns.\nSFX: leaves"
+    opts = {"from": 0, "to": 2, "scenes": 2}
+    assert writers.check("story", FILM, two, opts) == (two, None)
+    assert "1 scenes; 2 were asked for" in writers.check("story", FILM, NEW_SCENE, opts)[1]
+    assert "A scene has no SHOT" in writers.check("story", FILM, "SCENE a\nSHOT 5s: static\nA.\nSCENE b\nB.", opts)[1]
+    replaced = writers.apply("story", FILM, two, opts)
+    assert "SCENE two" not in replaced and replaced.index("SCENE one") < replaced.index("SCENE the den") < replaced.index("SCENE three")
+    inserted = writers.apply("story", FILM, two, opts, insert=True)
+    assert inserted.index("SCENE the den") < inserted.index("SCENE two") < inserted.index("SCENE three")
+    whole = writers.apply("story", FILM, two, {"scenes": 2})  # first frame to last frame: the whole reel
+    assert whole.startswith("@h3 t2va 16:9\nstyle: live-action\n\n" + NEW_SCENE) and "SCENE one" not in whole
+    fl2va = "@h3 fl2va 16:9\n\nSHOT 5s: static\nOld."
+    assert writers.apply("story", fl2va, two, {"scenes": 2}) == "@h3 fl2va 16:9\n\n" + two + "\n"  # a screenplay: its shots go
+    shot = "SHOT 5s: static\nNew."
+    assert writers.apply("story", fl2va, shot, insert=True) == "@h3 fl2va 16:9\n\nSHOT 5s: static\nNew.\n\nSHOT 5s: static\nOld.\n"
+
+
+def test_on_an_image_prompt_the_story_writes_keyframes_onto_a_grid(home):
+    """#343: from the first frame to the picture the prompt makes, N keyframe prompts; one Roll renders them all."""
+    krea = "# KREA 2 · kites\na photo of a {red|blue} kite over a beach\n: w832 h1216\n"
+    prompt = writers.request(Home(home), "story", krea, 1, {}, {}, opts={"scenes": 3}, given=["the first frame"])
+    assert "You write 3 image prompts for Krea 2" in prompt and "The start: the first frame, a picture sent along." in prompt
+    assert "The end: the picture this prompt makes:\n\na photo of a red kite over a beach" in prompt
+    assert "SHOT" not in prompt and "sent along:\n\na photo" not in writers.request(
+        Home(home), "story", krea, 1, {}, {}, opts={"scenes": 3}, prompt=True)  # the prompt is in it already
+    answer = "Here they are:\n1. A photo of a boy with a kite.\n2. The kite {lifts} | rises.\n3. The kite flies high."
+    text, problem = writers.check("story", krea, answer, {"scenes": 3})
+    assert problem is None and text == "A photo of a boy with a kite.\nThe kite lifts , rises.\nThe kite flies high."
+    assert writers.apply("story", krea, text, {"scenes": 3}) == (
+        "# KREA 2 · kites\n$keyframe = {A photo of a boy with a kite.|The kite lifts , rises.|The kite flies high.}\n"
+        "$keyframe\n: w832 h1216\n@grid $keyframe\n")
+    assert "2 keyframes; 3 were asked for" in writers.check("story", krea, "A.\nB.", {"scenes": 3})[1]
+    assert writers.apply("story", krea, "A kite.", {"scenes": 1}) == "# KREA 2 · kites\nA kite.\n: w832 h1216\n"

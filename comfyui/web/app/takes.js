@@ -13,7 +13,7 @@ import { esc, highlight, LIBRARY } from "./highlight.js";
 import { icon } from "./icons.js";
 import { llmLocal } from "./miniruns.js";
 import { atCaret, caretOffset } from "./cells.js";
-import { splitCells } from "./model.js";
+import { sceneTitles, splitCells } from "./model.js";
 
 const LIB = (name) => new RegExp(`__${name.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&")}(?:\\[[^\\]\\n]*\\])?(?:#[\\w-]+:\\$?[\\w.-]+)*(?::\\d+)?__(?:\\(([^()]*)\\))?`);
 const SAID = { slot: "the slot", library: "the library still to be written", entries: "the library", enhance: "what the line rewrites",
@@ -21,8 +21,8 @@ const SAID = { slot: "the slot", library: "the library still to be written", ent
 
 // The Write menu's writers (#334): what each writes, and where its take goes.
 export const WRITERS = {
-  continue: { label: "Continue the reel", hint: "The next scene, after the scenes as they roll at this seed", goes: "Use selected appends it to the reel as its next scene (a screenplay without scenes becomes the first)." },
-  story: { label: "Story between frames", hint: "The shot from the first frame to the last (fl2va)", goes: "Use selected puts it in place of the shots below the header." },
+  continue: { label: "Continue the reel", hint: "The next scene, after the scene you pick, as the reel plays at this seed", goes: "Use selected puts it in after that scene (a screenplay without scenes becomes the first)." },
+  story: { label: "Story interpolator", hint: "What happens between a start and an end: a frame, a scene or the prompt", goes: "Use selected puts it in between them: in a screenplay its scenes, on an image prompt its keyframes." },
   describe: { label: "Prompt from image", hint: "A prompt for the picture in first_frame", goes: "Use selected puts it in place of the prompt; comments and `: …` lines stay." },
 };
 
@@ -150,6 +150,44 @@ export function defaultSends(kind, wired, tab = false) {
   return out;
 }
 
+// Where a writer's take goes (#342, #343), in words, as its sheet's choices stand: `after` the scene Continue continues
+// after (null: the end), `from`/`to` the story's start and end (a scene's index or first_frame, last_frame, prompt),
+// `insert` whether the scenes in between stay. `scenes`: the template's scene titles; `h3`: a screenplay.
+export function writerGoes(kind, { scenes = [], h3 = true, after = null, from = "first_frame", to = "last_frame", insert = false } = {}) {
+  const name = (i) => `SCENE ${i + 1}${scenes[i] ? ` (${scenes[i]})` : ""}`;
+  const span = (a, b) => (b - a === 1 ? name(a) : `${name(a)} to ${name(b - 1)}`);
+  if (!h3) return "On a grid in place of the prompt: one Roll renders every keyframe, in order.";
+  if (!scenes.length) return kind === "continue" ? "After the screenplay, which becomes the first scene."
+    : insert ? "Above the shots, which stay." : "In place of the shots below the header.";
+  const a = kind === "continue" ? (after ?? scenes.length - 1) : typeof from === "number" ? from : -1;
+  const b = kind === "continue" || typeof to !== "number" ? scenes.length : to;
+  const where = a < 0 ? "Before the first scene" : `After ${name(a)}`;
+  if (b <= a + 1) return `${where}.`;
+  return insert ? `${where}: ${span(a + 1, b)} ${b - a > 2 ? "stay" : "stays"} after it.` : `${where}, in place of ${span(a + 1, b)}.`;
+}
+
+// The row of a writer's choices in its sheet (#342, #343); none for a writer without any.
+function writerRow(kind, scenes, h3, wo) {
+  const opt = (v, label, on) => `<option value="${v}"${on ? " selected" : ""}>${esc(label)}</option>`;
+  const scene = (on) => scenes.map((t, i) => opt(i, `SCENE ${i + 1}${t ? ` · ${t}` : ""}`, on === i)).join("");
+  const num = (k, min, max, label) => `<input type="number" class="input num" data-wo="${k}" min="${min}" max="${max}" value="${wo[k]}" aria-label="${label}">`;
+  const mode = `<span class="row take-mode" role="group" aria-label="What happens to the scenes in between">`
+    + `<button type="button" class="chip" data-tmode="replace" aria-pressed="${!wo.insert}" title="The take goes in place of the scenes in between">Replace</button>`
+    + `<button type="button" class="chip" data-tmode="insert" aria-pressed="${wo.insert}" title="The take goes in, the scenes in between stay after it">Insert</button></span>`;
+  const goes = `<span class="muted" data-tgoes>${esc(writerGoes(kind, { ...wo, scenes, h3 }))}</span>`;
+  if (kind === "continue") {
+    return scenes.length ? `<div class="row wrap take-opts"><span class="label">After</span><select class="input" data-wo="after" aria-label="The scene it continues after">`
+      + `${opt("", "the end", true)}${scene(null)}</select>${mode}${goes}</div>` : "";
+  }
+  if (kind !== "story") return "";
+  const ends = h3 ? [[opt("first_frame", "first_frame", true), scene(null)], [opt("last_frame", "last_frame", true), scene(null)]]
+    : [[opt("first_frame", "first_frame", true), opt("prompt", "the prompt", false)], [opt("prompt", "the prompt", true), opt("last_frame", "last_frame", false)]];
+  return `<div class="row wrap take-opts"><span class="label">From</span><select class="input" data-wo="from" aria-label="Where the story starts">${ends[0].join("")}</select>`
+    + `<span class="label">to</span><select class="input" data-wo="to" aria-label="Where the story ends">${ends[1].join("")}</select>`
+    + `<span class="label">in</span>${num("scenes", 1, 20, h3 ? "How many scenes" : "How many keyframes")}<span class="label">${h3 ? "scenes" : "keyframes"}</span>`
+    + (h3 ? `<span class="label">of</span>${num("seconds", 1, 15, "Seconds a scene")}<span class="label">s</span>${mode}` : "") + `${goes}</div>`;
+}
+
 export function openTakes(app, place, near = null) {
   const s = { takes: [], pick: null, picked: new Set(), keep: null, busy: false, error: "", note: "", asked: 0 };
   const picture = place.kind === "picture", enhance = place.kind === "enhance";
@@ -169,7 +207,13 @@ export function openTakes(app, place, near = null) {
     : picture ? "Write the selected take into the picture's exports"
     : enhance ? "Keep the selected rewrite for this roll: a run that rolls this prompt uses it instead of asking the model"
       : `Put the selected take in place of ${esc(token)}: an unsaved edit`;
-  const reelShot = writer && place.kind !== "continue" && /^\s*(SCENE|CHUNK)\b/im.test(app.text);  // its take goes in at the caret
+  // the writer's choices (#342, #343): the scene Continue continues after (null: the end); the story's start and end,
+  // how many scenes (keyframes on an image prompt) and how long each; whether the scenes in between stay
+  const scenes = writer ? sceneTitles(app.text) : [];
+  const h3 = /^@h3\b/i.test((app.text.split("\n").find((l) => l.trim() && !l.trim().startsWith("#")) || "").trim());
+  const wo = { after: null, from: "first_frame", to: h3 ? "last_frame" : "prompt", scenes: 1, insert: false,
+    seconds: Math.round(Number(/^\s*SHOT\s+(\d+(?:\.\d+)?)\s*s\b/im.exec(app.text)?.[1]) || 5) };
+  const reelShot = place.kind === "describe" && scenes.length > 0;  // its take goes in at the caret
   const intro = writer ? `, at seed ${esc(String(app.bridge.getSeed()))}: ${esc(WRITERS[place.kind].hint.toLowerCase())}. `
     + esc(reelShot ? "On a reel, Use selected puts it in under the line your cursor was on." : WRITERS[place.kind].goes)
     : tab ? ": new entries the language model writes, none it has. Steer them, ask for more, select the good ones: Add to the library writes them in."
@@ -180,6 +224,7 @@ export function openTakes(app, place, near = null) {
   const sheet = app.openSheet(`<div class="panel takes-panel"><div class="row spread"><h4>${icon("dice")} Takes</h4>`
     + `<button class="icon-btn" data-close title="Close">${icon("x")}</button></div>`
     + `<p class="muted flush">For ${writer ? `<b>${esc(token)}</b>` : `${SAID[place.kind]} <code>${esc(token)}</code>`}${intro}</p>`
+    + writerRow(place.kind, scenes, h3, wo)
     + (picture ? "" : '<div class="row wrap take-send" aria-label="Send along"></div><div class="take-gal" hidden></div>')
     + (multi ? `<div class="row take-sel"><button class="btn ghost slim" data-tall>All</button><button class="btn ghost slim" data-tnone>None</button><span class="muted" data-tcount></span></div>` : "")
     + `<ol class="take-list${multi ? " multi" : ""}${writer ? " long" : ""}" role="listbox" aria-label="Takes"${multi ? ' aria-multiselectable="true"' : ""}></ol><p class="muted flush take-state" role="status"></p>`
@@ -238,6 +283,29 @@ export function openTakes(app, place, near = null) {
     drawSends();
     drawGallery();
   });
+  // the writer's choices (#342, #343): the next takes are written for them; a story's start and end set the frames sent
+  const optRow = sheet.querySelector(".take-opts");
+  const framesFor = () => {
+    if (place.kind !== "story") return;
+    for (const k of ["first_frame", "last_frame"]) sends[(wo.from === k || wo.to === k) && wired(k) ? "add" : "delete"](k);
+  };
+  const drawGoes = () => { const g = optRow?.querySelector("[data-tgoes]"); if (g) g.textContent = writerGoes(place.kind, { ...wo, scenes, h3 }); };
+  optRow?.addEventListener("change", (e) => {
+    const k = e.target.dataset.wo, v = e.target.value;
+    if (!k) return;
+    if (e.target.type === "number") wo[k] = Math.max(Number(e.target.min), Math.min(Number(e.target.max), Math.round(Number(v)) || 1));
+    else wo[k] = v === "" ? null : /^\d+$/.test(v) ? Number(v) : v;
+    if (k === "from" || k === "to") { framesFor(); drawSends(); }
+    drawGoes();
+  });
+  optRow?.addEventListener("click", (e) => {
+    const m = e.target.closest("[data-tmode]");
+    if (!m) return;
+    wo.insert = m.dataset.tmode === "insert";
+    optRow.querySelectorAll("[data-tmode]").forEach((b) => b.setAttribute("aria-pressed", String(b === m)));
+    drawGoes();
+  });
+  framesFor();
   const use = sheet.querySelector("[data-tuse]"), lib = sheet.querySelector("[data-tlib]"), pick = sheet.querySelector("[data-tchoice]");
   const picks = () => [...s.picked].sort((a, b) => a - b);
   const oneLine = () => picks().every((i) => !s.takes[i].includes("\n"));
@@ -308,17 +376,22 @@ export function openTakes(app, place, near = null) {
   // over the API all at once, when the frames are files ComfyUI holds.
   const writeTakes = async () => {
     const n = Number(app.data.llm?.takes?.write) || 3, ideas = Array.from({ length: n }, () => s.asked++);
+    const options = place.kind === "continue" ? { after: wo.after } : place.kind === "story"
+      ? { from: wo.from, to: wo.to, scenes: wo.scenes, seconds: wo.seconds } : {};
     const need = sent().filter((k) => FRAMES.includes(k));
     const files = app.llmApi() ? (need.length ? (await app.bridge.frameFiles?.()) || null : { names: {}, others: [] }) : null;
     const api = !!files && !(files.others || []).some((k) => need.includes(k));  // a sent input that is no file: a run
     const one = (idea) => (api
       ? app.api.writeIdea({ task: place.kind, idea, template: app.text, seed: Number(app.bridge.getSeed()) || 0,
-        params: app.bridge.getParams(), frames: files.names, steer: steer.value, sends: sent() })
-      : app.bridge.write(place.kind, idea, app.text, steer.value, sent()));
+        params: app.bridge.getParams(), frames: files.names, steer: steer.value, sends: sent(), options })
+      : app.bridge.write(place.kind, idea, app.text, steer.value, sent(), options));
     const errors = [];
     const took = (got) => {
       if (got.error) errors.push(got.error);
-      else if (got.text && !s.takes.includes(got.text)) { s.takes.push(got.text); meta.push({ template: got.template, problem: got.problem, caret: !!got.at_caret }); }
+      else if (got.text && !s.takes.includes(got.text)) {
+        s.takes.push(got.text);
+        meta.push({ template: got.template, inserted: got.inserted, problem: got.problem, caret: !!got.at_caret });
+      }
       draw();
     };
     if (api) (await Promise.all(ideas.map((i) => one(i).catch((err) => ({ error: err.message }))))).forEach(took);
@@ -403,7 +476,7 @@ export function openTakes(app, place, near = null) {
     if (writer) {  // the template with the take in its place, as the server wrote it; a reel's shot at the caret (#334)
       const m = meta[chosen()];
       app.closeSheet();
-      return changed(m.caret ? atCaret(app.text, caretOffset(app), take) : m.template,
+      return changed(m.caret ? atCaret(app.text, caretOffset(app), take) : wo.insert ? m.inserted || m.template : m.template,
         `The take is in the editor${m.caret ? ", under the caret's line" : ""}${m.problem ? ", with a problem" : ""} · an unsaved edit`);
     }
     try {

@@ -1309,7 +1309,8 @@ def write_idea(home: Home, args: dict) -> dict:
 
     return comfy_write.write_idea(home, task, _text(args, "template"), _int(args, "seed", 0), _int(args, "idea", 0),
                                   args.get("params") or "", lambda: endpoint.backend(home, temperature), pictures_,
-                                  str(args.get("steer") or ""), sends is not None and "prompt" in sends)
+                                  str(args.get("steer") or ""), sends is not None and "prompt" in sends,
+                                  args.get("options") if isinstance(args.get("options"), dict) else None)
 
 
 def llm_takes(home: Home, args: dict) -> dict:

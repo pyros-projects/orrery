@@ -185,9 +185,11 @@ function mount(node) {
         if (wait) Object.entries(on).forEach(([ev, f]) => api.removeEventListener(ev, f));
       }
     },
-    // A writer's take in a run of its own (Orrery Write); take n samples the model at seed + n, steered (#334).
-    write: (task, idea, template, steer = "", sends = null) => bridge.mini("OrreryWrite", { task, template, idea, steer,
-      sends: sends ? JSON.stringify(sends) : "" }, { wire: ["seed", "home", "params", "first_frame", "last_frame", "video"] }),
+    // A writer's take in a run of its own (Orrery Write); take n samples the model at seed + n, steered (#334), for what
+    // its sheet chose (#342, #343).
+    write: (task, idea, template, steer = "", sends = null, options = null) => bridge.mini("OrreryWrite", { task, template, idea, steer,
+      sends: sends ? JSON.stringify(sends) : "", options: options ? JSON.stringify(options) : "" },
+    { wire: ["seed", "home", "params", "first_frame", "last_frame", "video"] }),
     // One task of the language model in a run of its own (Orrery Ask, #171): with a text encoder, a library, a run's
     // rewrites, a slot, a take at the line. It reads the node's values and wiring as the run that renders does.
     ask: (task, what = "", args = "", options = {}) => bridge.mini("OrreryAsk", { task, what, args }, { ...options, graph: true,

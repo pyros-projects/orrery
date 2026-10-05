@@ -67,14 +67,15 @@ class OrreryWrite:
                 "optional": {"idea": ("INT", {"default": 0, "min": 0, "max": 0xFFFF}),
                              "home": ("STRING", {"default": ""}), "params": ("STRING", {"default": ""}),
                              "steer": ("STRING", {"default": ""}), "sends": ("STRING", {"default": ""}),
+                             "options": ("STRING", {"default": ""}),  # what the writer's sheet chose (JSON)
                              "first_frame": ("IMAGE",), "last_frame": ("IMAGE",), "video": ("VIDEO",)}}
 
     @classmethod
     def IS_CHANGED(cls, **_):
         return float("NaN")  # every request is a new idea
 
-    def write(self, task, template, seed, idea=0, home="", params="", steer="", sends="", first_frame=None, last_frame=None,
-              video=None):
+    def write(self, task, template, seed, idea=0, home="", params="", steer="", sends="", options="", first_frame=None,
+              last_frame=None, video=None):
         from orrery import (
             comfy,  # the node pack's helpers; imported here, as comfy imports this module
         )
@@ -98,15 +99,16 @@ class OrreryWrite:
             return shown, labels
 
         result = write_idea(h, task, template, seed, idea, params, backend, pictures, steer,
-                            sent is not None and "prompt" in sent)
+                            sent is not None and "prompt" in sent, json.loads(options) if options else None)
         return {"ui": {"orrery_write": [json.dumps(result, ensure_ascii=False)]}}
 
 
 def write_idea(h, task: str, template: str, seed: int, idea: int, params, backend, frames, steer: str = "",
-               prompt: bool = False) -> dict:
-    """One idea: the text, the template with it in place, what is wrong with it, or the error. `backend` and
-    `frames` (the pictures and what each is) are called when needed, so an error before them never loads a model or
-    a picture. `steer`: the takes sheet's steering line (#334); `prompt`: the prompt as it rolls goes along (#335)."""
+               prompt: bool = False, opts: dict | None = None) -> dict:
+    """One idea: the text, the template with it in place (`template`, in place of what it replaces; `inserted`, with
+    that kept, #342), what is wrong with it, or the error. `backend` and `frames` (the pictures and what each is) are
+    called when needed, so an error before them never loads a model or a picture. `steer`: the takes sheet's
+    steering line (#334); `prompt`: the prompt as it rolls goes along (#335); `opts`: what the sheet chose (#342)."""
     from orrery import comfy
     from orrery.dsl import bindings, override, strip_comments
     from orrery.presets import resolve_includes
@@ -118,7 +120,7 @@ def write_idea(h, task: str, template: str, seed: int, idea: int, params, backen
         dials = {k: v for k, v in dials.items() if k in known}
         source = strip_comments(resolve_includes(h, override(template, dials)))
         images, given = frames()
-        asked = writers.request(h, task, source, seed, h.libraries(), h.weights(), steer, given, prompt)
+        asked = writers.request(h, task, source, seed, h.libraries(), h.weights(), steer, given, prompt, opts)
         model = backend()
         if model is None:
             raise writers.WriterError("The writers need a language model: pick one in orrery's settings (the gear "
@@ -126,10 +128,12 @@ def write_idea(h, task: str, template: str, seed: int, idea: int, params, backen
         if isinstance(images, list) and images and not isinstance(images[0], str | Path):  # pictures sent along (#335)
             images = comfy._images(None, images, model)
         answer = model.complete(asked, images=images)
-        text, problem = writers.check(task, template, answer)
+        text, problem = writers.check(task, template, answer, opts)
         caret = writers.at_caret(task, template)  # a reel's shot: the app puts it in at the caret (#334)
+        placed = text and not caret
         result = {"task": task, "seed": seed, "idea": idea, "text": text, "problem": problem,
-                  "template": writers.apply(task, template, text) if text and not caret else None,
+                  "template": writers.apply(task, template, text, opts) if placed else None,
+                  "inserted": writers.apply(task, template, text, opts, insert=True) if placed else None,
                   **({"at_caret": True} if caret else {})}
     except (writers.WriterError, ValueError, RuntimeError) as err:
         result = {"task": task, "seed": seed, "idea": idea, "error": str(err), "raw": answer}

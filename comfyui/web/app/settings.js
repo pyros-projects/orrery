@@ -23,8 +23,9 @@ export const RESETS = [
 ];
 
 // What the Write menu sends the model: each writer a prompt of its own, with only its own rules.
-const WRITER_TEXTS = { continue: "Continue the reel", story: "Story between frames", describe: "Prompt from image: an image prompt",
-  describe_shot: "Prompt from image: an @h3 i2va shot" };
+const WRITER_TEXTS = { continue: "Continue the reel", story: "Story interpolator: the fl2va shot between two frames",
+  story_scenes: "Story interpolator: scenes", story_keyframes: "Story interpolator: keyframes for an image prompt",
+  describe: "Prompt from image: an image prompt", describe_shot: "Prompt from image: an @h3 i2va shot" };
 
 // The model field: a list once the endpoint has named its models, else a text field.
 const modelField = (models, current) => (models.length
@@ -157,7 +158,7 @@ export const SECTION_HTML = {
   },
 
   writers: (app, { writers: wr, wcur }) => `<p class="muted flush">What the <b>Write</b> menu sends the language model: each writer its own prompt, with only the rules it needs.
-      <code>{world}</code> <code>{chunks}</code> <code>{next}</code> <code>{handoff}</code> <code>{seconds}</code> are filled in when it runs; Picture 1 and 2 are the frames it sees.
+      <code>{world}</code> <code>{chunks}</code> <code>{next}</code> <code>{handoff}</code> <code>{seconds}</code> and the story's <code>{start}</code> <code>{end}</code> <code>{scenes}</code> <code>{keyframes}</code> are filled in when it runs; Picture 1 and 2 are the frames it sees.
       An edit is kept in the home folder, so an update of orrery leaves it alone.</p>
     <div class="field"><div class="row"><select class="input" id="oa-wr" aria-label="Writer text">${Object.entries(WRITER_TEXTS).map(([k, label]) =>
       `<option value="${k}" ${k === wcur ? "selected" : ""}>${esc(label)}${wr[k].edited ? " · edited" : ""}</option>`).join("")}</select>
