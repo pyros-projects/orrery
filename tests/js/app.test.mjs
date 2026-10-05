@@ -1212,6 +1212,48 @@ test("Help is in pages: a start with the lessons, the language section by sectio
   assert.match(html, /Krea 2 faces/);
 });
 
+test("⏮ ⏭ in a divider go to the first clip of the scene before or after the next clip's (#341)", async () => {
+  const { chunkInfo, sceneStep } = await import("../../comfyui/web/app/model.js");
+  const chunks = chunkInfo("@h3 t2va\nSCENE a\nSHOT 5s\nA.\nSCENE b ×3\nSHOT 5s\nB.\nSCENE c\nSHOT 5s\nC.");  // clips 0 | 1 2 3 | 4
+  assert.equal(sceneStep(chunks, 2, 1), 4);  // in b: on to c
+  assert.equal(sceneStep(chunks, 2, -1), 0);  // in b: back to a
+  assert.equal(sceneStep(chunks, 0, -1), null);  // nothing before the first
+  assert.equal(sceneStep(chunks, 4, 1), null);  // nothing after the last
+  assert.equal(sceneStep(chunks, 9, -1), 4);  // past the end: back to the last scene
+});
+
+test("a scene's divider deletes the scene or duplicates it right after itself (#344)", async () => {
+  const { chunkInfo, copyScene, dropScene } = await import("../../comfyui/web/app/model.js");
+  const text = "@h3 t2va\nstyle: x\nSCENE a\nSHOT 5s\nA.\n\nSCENE b ×3\nSHOT 5s\nB.\nEND ON: b ends\n\nSCENE c\nSHOT 5s\nC.";
+  const chunks = chunkInfo(text);
+  assert.equal(dropScene(text, chunks, 1), "@h3 t2va\nstyle: x\nSCENE a\nSHOT 5s\nA.\n\nSCENE c\nSHOT 5s\nC.");
+  assert.equal(dropScene(text, chunks, 2), "@h3 t2va\nstyle: x\nSCENE a\nSHOT 5s\nA.\n\nSCENE b ×3\nSHOT 5s\nB.\nEND ON: b ends\n");
+  assert.equal(copyScene(text, chunks, 1), "@h3 t2va\nstyle: x\nSCENE a\nSHOT 5s\nA.\n\nSCENE b ×3\nSHOT 5s\nB.\nEND ON: b ends\n\n"
+    + "SCENE b ×3\nSHOT 5s\nB.\nEND ON: b ends\n\nSCENE c\nSHOT 5s\nC.");
+  assert.equal(copyScene(text, chunks, 2), `${text}\n\nSCENE c\nSHOT 5s\nC.`);  // the last: a blank line, then the copy
+  assert.equal(chunkInfo(copyScene(text, chunks, 0)).length, 4);
+});
+
+test("every scene divider has the reel's transport, in step with the footer (#341)", async () => {
+  const { sceneActs } = await import("../../comfyui/web/app/prompt.js");
+  const { chunkInfo } = await import("../../comfyui/web/app/model.js");
+  const chunks = chunkInfo("@h3 t2va\nSCENE a\nSHOT 5s\nA.\nSCENE b ×3\nSHOT 5s\nB.");
+  const app = { chunks: () => chunks, state: {}, bridge: { getSegment: () => 1, segmentHeld: () => true, props: { repeat: 2 } } };
+  const html = sceneActs(app)(chunks[0], 0);
+  const order = ["prev", "roll", "more", "next", "hold", "stats"].map((a) => html.indexOf(`data-scene-act="${a}"`));
+  assert.deepEqual([...order].sort((x, y) => x - y), order);  // ⏮ ▶ +N ⏭ 🔒 📊
+  assert.match(html, /Next clip becomes 1: the first of the scene before/);
+  assert.match(html, /data-scene-act="next"[^>]*title="No scene after this clip's"[^>]*disabled/);  // b is the last
+  assert.match(html, /title="Roll: clip 2 and the 1 after it, as Roll in the footer"/);
+  assert.match(html, />\+2<\/button>/);
+  assert.match(html, /title="A Roll plays 2 clips. Click for 4"/);
+  assert.match(html, /data-scene-act="hold"[^>]*aria-pressed="true"/);
+  assert.match(html, /data-scene-act="copy"[^>]*title="Duplicate SCENE 1 \(a\): a copy right after it"/);  // #344
+  assert.match(html, /data-scene-act="drop"[^>]*title="Delete SCENE 1 \(a\)"/);
+  app.state.sweepQueue = { done: 0, total: 4 };
+  assert.match(sceneActs(app)(chunks[0], 0), /data-scene-act="roll"[^>]*disabled/);  // a sweep is queueing
+});
+
 test("a sheet sends along by default what its kind needs: the prompt, the story both frames, a picture its frame (#335)", async () => {
   const { defaultSends, promptLocked, SOURCES } = await import("../../comfyui/web/app/takes.js");
   const both = (n) => n === "first_frame" || n === "last_frame", last = (n) => n === "last_frame", none = () => false;
