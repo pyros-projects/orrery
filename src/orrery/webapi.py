@@ -1263,7 +1263,8 @@ def write_idea(home: Home, args: dict) -> dict:
     pictures_ = lambda: comfy_write.pick_frames(task, _input_picture(frames.get("first_frame")),
                                                 _input_picture(frames.get("last_frame")))
     return comfy_write.write_idea(home, task, _text(args, "template"), _int(args, "seed", 0), _int(args, "idea", 0),
-                                  args.get("params") or "", lambda: endpoint.backend(home, temperature), pictures_)
+                                  args.get("params") or "", lambda: endpoint.backend(home, temperature), pictures_,
+                                  str(args.get("steer") or ""))
 
 
 def llm_takes(home: Home, args: dict) -> dict:

@@ -582,8 +582,12 @@ def test_the_write_menu_asks_the_endpoint_outside_the_queue(home, fake_api, tmp_
     assert body["text"] == "A tabby cat asleep on a sunlit windowsill." and body["template"].startswith("A tabby cat")
     content = fake_api.requests[-1]["messages"][0]["content"]
     assert content[0]["type"] == "image_url" and fake_api.requests[-1]["temperature"] == 0.8  # the writers' own
-    body = ok(home, webapi.write_idea, task="describe", template="a cat")
-    assert "first_frame" in body["error"]
+    fake_api.answer = lambda body: "A cat curled on a red cushion."
+    body = ok(home, webapi.write_idea, task="describe", template="a cat", steer="cosier")
+    assert body["text"] == "A cat curled on a red cushion."  # no picture wired: written from the prompt (#334)
+    said = fake_api.requests[-1]["messages"][0]["content"]
+    said = said if isinstance(said, str) else said[-1]["text"]
+    assert "No pictures came along this time" in said and said.endswith("Steer it: cosier.")
 
 
 def test_write_now_writes_the_templates_open_libraries(home, fake_api):
@@ -1012,9 +1016,9 @@ def test_the_plan_of_a_run_lists_its_language_model_tasks_in_order(home):
 
 def test_how_many_takes_each_sheet_asks_for_is_a_setting(home, fake_api):
     """#274: a count per kind in the llm settings, 1 to 12; the sheets ask for it (More too), unless they say n."""
-    assert ok(home, webapi.llm_settings)["takes"] == {"slot": 3, "enhance": 3, "rolled": 3, "new": 3}
-    saved = ok(home, webapi.llm_save, takes={"slot": 5, "enhance": 40, "new": "x"})["takes"]
-    assert saved == {"slot": 5, "enhance": 12, "rolled": 3, "new": 3}  # capped, a bad value its default
+    assert ok(home, webapi.llm_settings)["takes"] == {"slot": 3, "enhance": 3, "rolled": 3, "new": 3, "write": 3}
+    saved = ok(home, webapi.llm_save, takes={"slot": 5, "enhance": 40, "new": "x", "write": 4})["takes"]
+    assert saved == {"slot": 5, "enhance": 12, "rolled": 3, "new": 3, "write": 4}  # capped, a bad value its default; the writers' (#334)
     assert ok(home, webapi.llm_save, entries=20)["takes"]["slot"] == 5  # another setting saved keeps them
     Home(home).save_config({**Home(home).config(), "llm": {**Home(home).config()["llm"], "source": "api",
                                                             "api": {"base_url": fake_api.url, "model": "gpt-5.4-mini"}}})

@@ -38,6 +38,22 @@ class WriterError(ValueError):
     pass
 
 
+# What a writer expects to see when nothing else is sent along (#334): the pictures its prompt names.
+EXPECTS = {"continue": [], "story": ["the first frame", "the last frame"], "describe": ["the picture"],
+           "describe_shot": ["the first frame"]}
+_HEADLINE = re.compile(r"\s*(#|@|\$\w+\s*=|(style|summary|context|music|lora|set|voice|keep|export)\s*:|cast\s*$)|[ \t]", re.IGNORECASE)
+
+
+def as_reel(template: str) -> str:
+    """A screenplay without SCENE lines as a reel of one scene (#334): `SCENE the start` before its first shot,
+    or before its first line of prose when it has no SHOT line."""
+    lines = template.splitlines()
+    at = next((i for i, ln in enumerate(lines) if _SHOT.match(ln)), None)
+    if at is None:
+        at = next((i for i, ln in enumerate(lines) if ln.strip() and not _HEADLINE.match(ln)), len(lines))
+    return "\n".join([*lines[:at], "SCENE the start", *lines[at:]])
+
+
 # --- the texts --------------------------------------------------------------------------------
 
 def _edited(home: Home, name: str) -> Path:
@@ -104,9 +120,11 @@ def task_name(task: str, template: str) -> str:
     return "describe_shot" if task == "describe" and is_h3(template) else task
 
 
-def request(home: Home, task: str, template: str, seed: int, libraries, weights) -> str:
+def request(home: Home, task: str, template: str, seed: int, libraries, weights, steer: str = "",
+            given: list[str] | None = None) -> str:
     """The writer's prompt, filled in for this template. `template` is the source as the node
-    compiles it: dials applied, includes resolved, comments out."""
+    compiles it: dials applied, includes resolved, comments out. `given`: what the pictures sent along are, in
+    order (None: what the writer expects); `steer`: the sheet's steering line (#334)."""
     from orrery.dsl import with_inline
 
     template, libraries = with_inline(template, libraries)
@@ -117,9 +135,12 @@ def request(home: Home, task: str, template: str, seed: int, libraries, weights)
     if name == "continue":
         from orrery.reel import reel_path, resolved, split_reel
 
+        if not any(_CHUNK.match(ln) for ln in template.splitlines()):
+            if not is_h3(template):
+                raise WriterError("Continue the reel writes the next scene of a screenplay (@h3), and this template "
+                                  "is an image prompt.")
+            template = as_reel(template)  # the screenplay is its first scene, the model writes the second
         reel = split_reel(template)
-        if reel is None:
-            raise WriterError("Continue the reel needs a reel: a screenplay with SCENE lines.")
         path, ended = reel_path(reel, seed, libraries, weights)
         if not ended:
             raise WriterError("This reel plays on and on (a scene that repeats forever, or a CUT TO: without ×N), "
@@ -142,7 +163,31 @@ def request(home: Home, task: str, template: str, seed: int, libraries, weights)
             else:
                 world.append(ex.expr(ln))
         values = {"seconds": shot_seconds(template), "world": _world(world)}
-    return _fill(text(home, name), values).strip()
+    parts = [_fill(text(home, name), values).strip()]
+    if (note := _came_along(name, given, template, seed, libraries, weights)):
+        parts.append(note)
+    if steer.strip():
+        parts.append(f"Steer it: {' '.join(steer.split())}.")
+    return "\n\n".join(parts)
+
+
+def _came_along(name: str, given: list[str] | None, template: str, seed: int, libraries, weights) -> str:
+    """What the pictures sent along are, when they are not what the writer's prompt expects (#334); without the
+    pictures it needs, what to write from instead."""
+    if given is None or given == EXPECTS[name]:
+        return ""
+    said = ("The pictures that came along this time, in this order: "
+            + "; ".join(f"Picture {i} is {what}" for i, what in enumerate(given, 1)) + "." if given
+            else "No pictures came along this time.")
+    if name == "continue" or set(EXPECTS[name]) <= set(given):
+        return said + (" Let them shape what you write." if given else "")
+    if name == "story":
+        return f"{said} Imagine the first and the last frame from what you know, and write the shot from one to the other."
+    from orrery.dsl import expand
+
+    rolled = expand(template, seed, libraries, weights).text.strip()
+    what = "the prompt" if name == "describe" else "the shot"
+    return f"{said} Write {what} from this one instead, as the picture it makes would look:\n\n{rolled}"
 
 
 # --- what comes back --------------------------------------------------------------------------
@@ -212,7 +257,8 @@ def apply(task: str, template: str, text_: str) -> str:
     (comments and `: w… h…` kept)."""
     name = task_name(task, template)
     if name == "continue":
-        return f"{template.rstrip()}\n\n{text_.strip()}\n"
+        reel = template if any(_CHUNK.match(ln) for ln in template.splitlines()) else as_reel(template)
+        return f"{reel.rstrip()}\n\n{text_.strip()}\n"
     lines = template.splitlines()
     if name in ("story", "describe_shot"):
         first = next((i for i, ln in enumerate(lines) if _SHOT.match(ln)), len(lines))

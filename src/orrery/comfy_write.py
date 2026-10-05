@@ -16,28 +16,25 @@ from orrery.home import resolve_home
 FRAME_EDGE = 768  # the long edge of a frame the model sees: enough to read it, a few hundred tokens
 
 
-def pick_frames(task: str, first, last) -> list | None:
-    """The frames a writer shows the model (pictures of any kind), or None."""
+def pick_frames(task: str, first, last) -> tuple[list, list[str]]:
+    """The frames a writer shows the model (pictures of any kind) and what each is: the story both frames, a prompt
+    from an image the first (else the last). What is not wired is left out, never an error (#334): the writer is
+    told what came along and writes from the rest."""
     if task == "story":
-        if first is None or last is None:
-            raise writers.WriterError("The story between two frames needs the first and the last frame: wire them "
-                                      "into the Orrery Prompt's first_frame and last_frame.")
-        frames = [first, last]
+        pairs = [(first, "the first frame"), (last, "the last frame")]
     elif task == "describe":
-        if first is None and last is None:
-            raise writers.WriterError("A prompt from an image needs a picture: wire it into the Orrery Prompt's "
-                                      "first_frame.")
-        frames = [first if first is not None else last]
+        pairs = [(first if first is not None else last, "the picture")]
     else:
-        return None
-    return frames
+        return [], []
+    kept = [(f, what) for f, what in pairs if f is not None]
+    return [f for f, _ in kept], [what for _, what in kept]
 
 
 def _frames(task: str, first, last):
-    """The frames a writer shows the model, as one IMAGE batch of one size, or None."""
-    frames = pick_frames(task, first, last)
-    if frames is None:
-        return None
+    """The frames a writer shows the model, as one IMAGE batch of one size, or None; and what each is."""
+    frames, given = pick_frames(task, first, last)
+    if not frames:
+        return None, given
     import comfy.utils  # ComfyUI
     import torch
 
@@ -46,7 +43,7 @@ def _frames(task: str, first, last):
     size = (max(32, round(w * scale / 16) * 16), max(32, round(h * scale / 16) * 16))
     fitted = [comfy.utils.common_upscale(f[:1].movedim(-1, 1), size[0], size[1], "bilinear", "center").movedim(1, -1)
               for f in frames]
-    return torch.cat(fitted)
+    return torch.cat(fitted), given
 
 
 class OrreryWrite:
@@ -68,13 +65,14 @@ class OrreryWrite:
                 # idea n samples the model at seed + n; the picks it reads still roll at the node's seed
                 "optional": {"idea": ("INT", {"default": 0, "min": 0, "max": 0xFFFF}),
                              "home": ("STRING", {"default": ""}), "params": ("STRING", {"default": ""}),
+                             "steer": ("STRING", {"default": ""}),
                              "first_frame": ("IMAGE",), "last_frame": ("IMAGE",)}}
 
     @classmethod
     def IS_CHANGED(cls, **_):
         return float("NaN")  # every request is a new idea
 
-    def write(self, task, template, seed, idea=0, home="", params="", first_frame=None, last_frame=None):
+    def write(self, task, template, seed, idea=0, home="", params="", steer="", first_frame=None, last_frame=None):
         from orrery import (
             comfy,  # the node pack's helpers; imported here, as comfy imports this module
         )
@@ -84,13 +82,14 @@ class OrreryWrite:
         def backend():
             return comfy.llm_for(h, seed=(seed + idea) % 2**32, temperature=float(llm_config(h)["writer_temperature"]))
 
-        result = write_idea(h, task, template, seed, idea, params, backend, lambda: _frames(task, first_frame, last_frame))
+        result = write_idea(h, task, template, seed, idea, params, backend, lambda: _frames(task, first_frame, last_frame), steer)
         return {"ui": {"orrery_write": [json.dumps(result, ensure_ascii=False)]}}
 
 
-def write_idea(h, task: str, template: str, seed: int, idea: int, params, backend, frames) -> dict:
+def write_idea(h, task: str, template: str, seed: int, idea: int, params, backend, frames, steer: str = "") -> dict:
     """One idea: the text, the template with it in place, what is wrong with it, or the error. `backend` and
-    `frames` are called when needed, so an error before them never loads a model or a picture."""
+    `frames` (the pictures and what each is) are called when needed, so an error before them never loads a model or
+    a picture. `steer`: the takes sheet's steering line (#334)."""
     from orrery import comfy
     from orrery.dsl import bindings, override, strip_comments
     from orrery.presets import resolve_includes
@@ -101,8 +100,8 @@ def write_idea(h, task: str, template: str, seed: int, idea: int, params, backen
         dials = comfy.dial_values(params if isinstance(params, str) else json.dumps(params or {}))
         dials = {k: v for k, v in dials.items() if k in known}
         source = strip_comments(resolve_includes(h, override(template, dials)))
-        prompt = writers.request(h, task, source, seed, h.libraries(), h.weights())
-        images = frames()
+        images, given = frames()
+        prompt = writers.request(h, task, source, seed, h.libraries(), h.weights(), steer, given)
         model = backend()
         if model is None:
             raise writers.WriterError("The writers need a language model: pick one in orrery's settings (the gear "

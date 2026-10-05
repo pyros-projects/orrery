@@ -7,15 +7,23 @@
 // kept as the library (#272), one that exists offers its rolls and new entries to add (#273); its directions stay
 // with the library, never in the template (#275). With an API endpoint the server asks it directly, outside
 // ComfyUI's queue. A gallery picture's slot from `image output` (#175) opens the same sheet: its takes are written
-// from the picture, Use selected writes one into its exports.
-import { esc, LIBRARY } from "./highlight.js";
+// from the picture, Use selected writes one into its exports. The Write menu's writers open it too (#334): each take a
+// scene, a shot or a prompt, written with the whole template behind it, which Use selected puts in the editor.
+import { esc, highlight, LIBRARY } from "./highlight.js";
 import { icon } from "./icons.js";
 import { llmLocal } from "./miniruns.js";
 import { splitCells } from "./model.js";
 
 const LIB = (name) => new RegExp(`__${name.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&")}(?:\\[[^\\]\\n]*\\])?(?:#[\\w-]+:\\$?[\\w.-]+)*(?::\\d+)?__(?:\\(([^()]*)\\))?`);
 const SAID = { slot: "the slot", library: "the library still to be written", entries: "the library", enhance: "what the line rewrites",
-  picture: "the picture's slot" };
+  picture: "the picture's slot", continue: "the reel's next scene", story: "the shot between the frames", describe: "a prompt from a picture" };
+
+// The Write menu's writers (#334): what each writes, and where its take goes.
+export const WRITERS = {
+  continue: { label: "Continue the reel", hint: "The next scene, after the scenes as they roll at this seed", goes: "Use selected appends it to the reel as its next scene (a screenplay without scenes becomes the first)." },
+  story: { label: "Story between frames", hint: "The shot from the first frame to the last (fl2va)", goes: "Use selected puts it in place of the shots below the header." },
+  describe: { label: "Prompt from image", hint: "A prompt for the picture in first_frame", goes: "Use selected puts it in place of the prompt; comments and `: …` lines stay." },
+};
 
 // After a library was written from a sheet: the editor knows it now, its 🎲 goes, its rolls show.
 async function librariesChanged(app) {
@@ -124,26 +132,30 @@ export function openTakes(app, place, near = null) {
   const s = { takes: [], pick: null, picked: new Set(), keep: null, busy: false, error: "", note: "", asked: 0 };
   const picture = place.kind === "picture", enhance = place.kind === "enhance";
   const known = place.kind === "entries";  // a library that exists: its rolls and new entries (#273)
-  const tab = place.line == null;  // from the Libraries tab (#323): new entries only, and no line to put one on
+  const tab = !!place.tab;  // from the Libraries tab (#323): new entries only, and no line to put one on
+  const writer = !!WRITERS[place.kind];  // the Write menu's (#334): a take is a text with its whole template
+  const meta = [];  // writer: each take's template and what is wrong with it
   const multi = place.kind === "library" || known;  // a library's entries: several at once (#272)
   const from = [];  // known: where each take came from, "rolled", "new" or "added"
-  const token = place.kind === "slot" || picture ? `--${place.what}--` : enhance ? `> ${place.what}` : `__${place.what}__`;
-  const useTitle = picture ? "Write the selected take into the picture's exports"
+  const token = writer ? WRITERS[place.kind].label : place.kind === "slot" || picture ? `--${place.what}--` : enhance ? `> ${place.what}` : `__${place.what}__`;
+  const useTitle = writer ? `Put the selected take in: ${WRITERS[place.kind].goes.replace(/^Use selected /, "it ")} An unsaved edit`
+    : picture ? "Write the selected take into the picture's exports"
     : enhance ? "Keep the selected rewrite for this roll: a run that rolls this prompt uses it instead of asking the model"
       : `Put the selected take in place of ${esc(token)}: an unsaved edit`;
-  const intro = tab ? ": new entries the language model writes, none it has. Steer them, ask for more, select the good ones: Add to the library writes them in."
+  const intro = writer ? `, at seed ${esc(String(app.bridge.getSeed()))}: ${esc(WRITERS[place.kind].hint.toLowerCase())}. ${esc(WRITERS[place.kind].goes)}`
+    : tab ? ": new entries the language model writes, none it has. Steer them, ask for more, select the good ones: Add to the library writes them in."
     : `, ${picture ? "written from the picture, the prompt that made it beside it." : `at seed ${esc(String(app.bridge.getSeed()))}.`}`
       + (enhance ? " A rewrite happens at every run: Use selected keeps the one you pick for this roll, and the run uses it." : "")
       + (known ? " Its rolls (the one at this seed first) and new entries the language model writes, none it has. Select the new ones worth keeping: Add to the library writes them in."
         : multi ? " As many entries as a new library starts with, written as a run would. Select the ones worth keeping: Keep as the library writes them as the library, straight in." : " Click a take to select it.");
   const sheet = app.openSheet(`<div class="panel takes-panel"><div class="row spread"><h4>${icon("dice")} Takes</h4>`
     + `<button class="icon-btn" data-close title="Close">${icon("x")}</button></div>`
-    + `<p class="muted flush">For ${SAID[place.kind]} <code>${esc(token)}</code>${intro}</p>`
+    + `<p class="muted flush">For ${writer ? `<b>${esc(token)}</b>` : `${SAID[place.kind]} <code>${esc(token)}</code>`}${intro}</p>`
     + (multi ? `<div class="row take-sel"><button class="btn ghost slim" data-tall>All</button><button class="btn ghost slim" data-tnone>None</button><span class="muted" data-tcount></span></div>` : "")
-    + `<ol class="take-list${multi ? " multi" : ""}" role="listbox" aria-label="Takes"${multi ? ' aria-multiselectable="true"' : ""}></ol><p class="muted flush take-state" role="status"></p>`
+    + `<ol class="take-list${multi ? " multi" : ""}${writer ? " long" : ""}" role="listbox" aria-label="Takes"${multi ? ' aria-multiselectable="true"' : ""}></ol><p class="muted flush take-state" role="status"></p>`
     + `<div class="row take-steer"><input class="input grow" data-steer placeholder="Steer them: darker, older, as an anime character …" aria-label="Steer the takes">`
     + `<button class="btn" data-tmore>${icon("dice")}More takes</button>`
-    + (picture ? "" : `<button class="btn ghost" data-tkeep title="Write the steer into ${esc(SAID[place.kind])}'s directions, so it keeps rolling that way">${icon("pin")}Keep the direction</button>`) + "</div>"
+    + (picture || writer ? "" : `<button class="btn ghost" data-tkeep title="Write the steer into ${esc(SAID[place.kind])}'s directions, so it keeps rolling that way">${icon("pin")}Keep the direction</button>`) + "</div>"
     + `<div class="row take-use"><span class="grow"></span>${tab ? "" : `<button class="btn${multi ? " ghost" : " primary"}" data-tuse title="${useTitle}">${icon("check")}Use selected</button>`}`
     + (known ? `<button class="btn primary" data-tlib title="Write the selected new entries into __${esc(place.what)}__, straight in">${icon("save")}Add to the library</button>`
       : multi ? `<button class="btn primary" data-tlib title="Write the selected entries as __${esc(place.what)}__, straight into your libraries">${icon("save")}Keep as the library</button>` : "")
@@ -154,7 +166,8 @@ export function openTakes(app, place, near = null) {
   const chosen = () => (multi ? (s.picked.size === 1 ? [...s.picked][0] : null) : s.pick);
   const draw = () => {
     const tag = (i) => (known ? `<small class="tk ${from[i]}">${from[i] === "new" ? "new" : from[i] === "added" ? "added" : "rolled"}</small>` : "");
-    list.innerHTML = s.takes.map((t, i) => `<li class="${on(i) ? "on" : ""}" data-tpick="${i}" tabindex="0" role="option" aria-selected="${on(i)}">${esc(t)}${tag(i)}</li>`).join("");
+    const shown = (t, i) => (writer ? `<pre class="codebox">${highlight(t, app.known(), {})}</pre>${meta[i]?.problem ? `<p class="warn flush">${esc(meta[i].problem)}</p>` : ""}` : esc(t));
+    list.innerHTML = s.takes.map((t, i) => `<li class="${on(i) ? "on" : ""}" data-tpick="${i}" tabindex="0" role="option" aria-selected="${on(i)}">${shown(t, i)}${tag(i)}</li>`).join("");
     state.textContent = s.busy ? "Writing…" : s.error || s.note;
     state.classList.toggle("warn", !!s.error && !s.busy);
     sheet.querySelector("[data-tmore]").disabled = s.busy;
@@ -180,6 +193,7 @@ export function openTakes(app, place, near = null) {
         s.takes.push(...got.takes.filter((t) => !s.takes.includes(t)));
         return;
       }
+      if (writer) return await writeTakes();
       const take = { kind: place.kind, what: place.what, directions: place.directions, steer: steer.value,
         roll: s.takes.length ? "" : place.roll || "", ...(tab ? { rolls: false } : {}) };
       if (!app.llmApi() && llmLocal(app)) {  // a text encoder: in runs of their own at the queue's front (#178)
@@ -202,6 +216,25 @@ export function openTakes(app, place, near = null) {
       s.busy = false;
       draw();
     }
+  };
+  // A writer's takes (#334): each a run of its own with a text encoder (it writes once a run), at seed + its number;
+  // over the API all at once, when the frames are files ComfyUI holds.
+  const writeTakes = async () => {
+    const n = Number(app.data.llm?.takes?.write) || 3, ideas = Array.from({ length: n }, () => s.asked++);
+    const files = app.llmApi() ? (place.kind === "continue" ? { names: {} } : await app.bridge.frameFiles?.()) : null;
+    const one = (idea) => (files && !files.other
+      ? app.api.writeIdea({ task: place.kind, idea, template: app.text, seed: Number(app.bridge.getSeed()) || 0,
+        params: app.bridge.getParams(), frames: files.names, steer: steer.value })
+      : app.bridge.write(place.kind, idea, app.text, steer.value));
+    const errors = [];
+    const took = (got) => {
+      if (got.error) errors.push(got.error);
+      else if (got.text && !s.takes.includes(got.text)) { s.takes.push(got.text); meta.push({ template: got.template, problem: got.problem }); }
+      draw();
+    };
+    if (files && !files.other) (await Promise.all(ideas.map((i) => one(i).catch((err) => ({ error: err.message }))))).forEach(took);
+    else for (const i of ideas) took(await one(i).catch((err) => ({ error: err.message })));
+    if (errors.length) s.error = [...new Set(errors)].join(" ");
   };
   const changed = (text, said) => {
     const before = app.text;
@@ -272,6 +305,10 @@ export function openTakes(app, place, near = null) {
   if (use) use.onclick = async () => {
     const take = s.takes[chosen()];
     if (take === undefined) return;
+    if (writer) {  // the template with the take in its place, as the server wrote it
+      app.closeSheet();
+      return changed(meta[chosen()].template, `The take is in the editor${meta[chosen()].problem ? ", with a problem" : ""} · an unsaved edit`);
+    }
     try {
       if (picture) {
         const d = await app.api.galaxyWrite({ id: place.id, what: place.what, text: take });

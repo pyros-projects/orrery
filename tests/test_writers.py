@@ -100,8 +100,31 @@ def test_describe_writes_an_image_prompt_for_a_still(home):
 def test_a_reel_that_repeats_forever_has_no_next_chunk(home):
     with pytest.raises(writers.WriterError, match="forever"):
         writers.request(Home(home), "continue", "@h3 t2va\nCHUNK a repeat forever\nSHOT 5s\nA.", 1, {}, {})
-    with pytest.raises(writers.WriterError, match="SCENE"):
-        writers.request(Home(home), "continue", "@h3 t2va\nSHOT 5s\nA.", 1, {}, {})
+
+
+
+def test_continue_makes_a_screenplay_without_scenes_a_reel(home):
+    """#334: no restriction in the menu; the screenplay is the first scene, the model writes the second."""
+    prompt = writers.request(Home(home), "continue", "@h3 t2va\nSHOT 5s: static\nA fox sleeps.", 1, {}, {})
+    assert "SCENE the start" in prompt and "A fox sleeps." in prompt and "Write clip 2" in prompt
+    assert writers.apply("continue", "@h3 t2va\nSHOT 5s: static\nA fox sleeps.", "SCENE the hunt\nSHOT 5s: static\nIt runs.") == (
+        "@h3 t2va\nSCENE the start\nSHOT 5s: static\nA fox sleeps.\n\nSCENE the hunt\nSHOT 5s: static\nIt runs.\n")
+    with pytest.raises(writers.WriterError, match="image prompt"):
+        writers.request(Home(home), "continue", "a photo of a fox", 1, {}, {})
+
+
+def test_a_writer_without_its_pictures_writes_from_what_came_along(home):
+    """#334: the story without frames imagines them; a prompt from an image without one writes from the prompt;
+    a steer goes last."""
+    story = writers.request(Home(home), "story", "@h3 fl2va\nSHOT 5s: static\nA fox.", 1, {}, {}, given=[])
+    assert "No pictures came along this time. Imagine the first and the last frame" in story
+    assert "Picture 1 is" not in story.split("No pictures came along")[1]
+    one = writers.request(Home(home), "story", "@h3 fl2va\nSHOT 5s: static\nA fox.", 1, {}, {}, given=["the first frame"])
+    assert "Picture 1 is the first frame." in one
+    describe = writers.request(Home(home), "describe", "a photo of a red fox in snow", 1, {}, {}, steer="as a woodcut", given=[])
+    assert "Write the prompt from this one instead" in describe and "a photo of a red fox in snow" in describe
+    assert describe.endswith("Steer it: as a woodcut.")
+    assert "came along" not in writers.request(Home(home), "describe", "a fox", 1, {}, {}, given=["the picture"])  # as it expects
 
 
 def test_a_shot_writer_leaves_a_reel_alone(home):
@@ -164,8 +187,11 @@ def test_an_answer_that_does_not_fit_comes_back_as_an_idea_with_its_problem(home
 def test_the_write_node_says_what_is_missing(home, monkeypatch):
     result, _ = _write(monkeypatch, home, None, task="continue", template=REEL, seed=1)
     assert "language model" in result["error"]
-    result, asked = _write(monkeypatch, home, ["SHOT 5s: static\nA."], task="story", template="@h3 fl2va\nSHOT 5s\nA.", seed=1)
-    assert "first and the last frame" in result["error"] and not asked
+    result, asked = _write(monkeypatch, home, ["SHOT 5s: static\nA."], task="story", template="@h3 fl2va\nSHOT 5s\nA.", seed=1,
+                           steer="in the rain")
+    assert result["text"] == "SHOT 5s: static\nA."  # no frames wired: written from what came along (#334)
+    prompt, images, *_ = asked[0]
+    assert images is None and "No pictures came along this time." in prompt and prompt.endswith("Steer it: in the rain.")
 
 
 def test_continue_follows_a_loop_and_refuses_one_without_end(home):

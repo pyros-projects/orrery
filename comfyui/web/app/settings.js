@@ -147,7 +147,7 @@ export const SECTION_HTML = {
       ["every run", "<b>After every run</b>: one take each, written in as the picture is kept"]].map(([v, label]) =>
       `<label class="check"><input type="radio" name="oa-ps" value="${v}" ${(app.data.picture_slots || "gallery") === v ? "checked" : ""}><span>${label}</span></label>`).join("")}</div></div>
     <div class="field"><span class="label">Takes a 🎲 asks for</span>
-      <div class="row wrap takes-n">${[["slot", "for a <code>--slot--</code>"], ["enhance", "for <code>&gt; enhance</code>"], ["rolled", "rolled from a library"], ["new", "new for a library"]].map(([k, label]) =>
+      <div class="row wrap takes-n">${[["slot", "for a <code>--slot--</code>"], ["enhance", "for <code>&gt; enhance</code>"], ["rolled", "rolled from a library"], ["new", "new for a library"], ["write", "for the <b>Write</b> menu"]].map(([k, label]) =>
         `<label class="row"><input class="input narrow" type="number" min="1" max="12" data-takes="${k}" value="${s.takes?.[k] ?? 3}" aria-label="Takes ${k}"><span class="muted">${label}</span></label>`).join("")}</div>
       <span class="muted">More takes asks for as many again.</span></div>
     <div class="field"><label class="label" for="oa-llm-n">A library it creates starts with</label>

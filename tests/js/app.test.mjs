@@ -421,21 +421,14 @@ test("the cells view splits a reel at its CHUNK lines, and joining the cells giv
   assert.deepEqual(splitCells("no chunks\nhere"), [{ line: 0, chunk: -1, text: "no chunks\nhere" }]);
 });
 
-test("the Write menu offers a writer only where it can write", () => {
-  const app = (text, { llm = true, clip = false, frames = [] } = {}) => ({
-    text, llmActive: () => llm, bridge: { wired: (n) => n === "clip" && clip, frames: () => frames },
-  });
-  const reel = "@h3 t2va\nCHUNK a\nSHOT 5s\nA.\nCHUNK b\nSHOT 5s\nB.", fl2va = "@h3 fl2va 16:9\nSHOT 5s\nA.";
-  assert.match(writerBlock(app(reel, { llm: false }), "continue"), /language model/);
-  assert.match(writerBlock(app(reel, { llm: false, clip: true }), "continue"), /language model/);  // a wired clip counts no more (#282)
-  assert.match(writerBlock(app("@h3 t2va\nCHUNK a repeat forever\nSHOT 5s\nA."), "continue"), /forever/);
-  assert.match(writerBlock(app(fl2va), "continue"), /Needs a reel/);
-  assert.match(writerBlock(app(reel, { frames: ["first_frame", "last_frame"] }), "story"), /not for a reel/);
-  assert.match(writerBlock(app(fl2va, { frames: ["first_frame"] }), "story"), /first and the last frame/);
-  assert.equal(writerBlock(app(fl2va, { frames: ["first_frame", "last_frame"] }), "story"), "");
-  assert.match(writerBlock(app("a photo of a fox", { frames: ["first_frame", "last_frame"] }), "story"), /@h3/);
-  assert.match(writerBlock(app("a photo of a fox"), "describe"), /first_frame/);
-  assert.equal(writerBlock(app("a photo of a fox", { frames: ["last_frame"] }), "describe"), "");
+test("the Write menu greys a writer only without a language model; the sheet says the rest (#334)", () => {
+  const app = (text, { llm = true, frames = [] } = {}) => ({ text, llmActive: () => llm, bridge: { frames: () => frames } });
+  const fl2va = "@h3 fl2va 16:9\nSHOT 5s\nA.";
+  assert.match(writerBlock(app(fl2va, { llm: false }), "continue"), /language model/);
+  for (const task of ["continue", "story", "describe"]) {
+    assert.equal(writerBlock(app("a photo of a fox"), task), "");  // no reel, no frames: it opens anyway
+    assert.equal(writerBlock(app(fl2va), task), "");
+  }
 });
 
 test("a scene's + take renders the clip it plays next, else its first (#204)", async () => {
