@@ -234,3 +234,15 @@ def test_a_grid_over_a_lora_strength_is_a_lora_sweep():
     assert [expand(t, 1, LIBS, cell=c).text for c in range(3)] == ["a fox <lora:ink:0.5>", "a fox <lora:ink:0.7>",
                                                                    "a fox <lora:ink:1.0>"]
     assert batch.plan(t, LIBS) == {"runs": 3, "formula": "grid 3", "first": "{0.5|0.7|1.0}"}
+
+
+def test_a_grid_axis_on_a_choice_reads_its_escapes_as_the_expander_does():
+    """#345: an escaped | or brace is part of its option, so the grid has as many cells as the choice has options, each
+    the option with the sign written as itself."""
+    for template, cells in [("$k = {a \\| b|c}\n$k\n@grid $k", ["a | b", "c"]),
+                            ("$k = {a \\{b\\} c|d}\n$k\n@grid $k", ["a {b} c", "d"]),
+                            ("A {fox \\| wolf|bear \\{big\\}} runs.\n@grid {fox \\| wolf|bear \\{big\\}}", ["A fox | wolf runs.", "A bear {big} runs."])]:
+        assert [r.text for r in expand_batch(template, 0, 1, {})] == cells
+    assert batch.axes("$k = {a \\| b|c}\n@grid $k", {})[0].options == ["a | b", "c"]
+    assert batch.apply_grid("$k = {a \\{b\\} c|d}\n$k\n@grid $k", batch.axes("$k = {a \\{b\\} c|d}\n@grid $k", {}), 1).startswith(
+        "$k = {\x1f1\x1fa \\{b\\} c|d}")  # the escapes stay as written in the template
